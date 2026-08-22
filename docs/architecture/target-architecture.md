@@ -75,7 +75,7 @@ Citation anchors (`@launchstack/evidence`) are stable strings —
 |---|---|---|---|
 | `services/document-converter` | 8002 | routing, vision classification, page rendering, docling-backed parsing → typed `EvidenceDocument` | product-DB access, env mutation, fabricated confidence |
 | `services/transcription` | 8000 | Whisper + yt-dlp → timestamped transcripts | product-DB access |
-| `services/document-editor` | 8003 (host) | Adeu DOCX redlining (authoritative) | product-DB access |
+| `services/adeu-ai-docs-editing` | 8003 (host) | Adeu DOCX redlining (authoritative) | product-DB access |
 | `api/adeu` | — | DEPRECATED compatibility path, tested, pending owner removal decision | new callers |
 
 All services: fail-closed `X-API-Key` auth, `/health`, structured logs with
@@ -86,7 +86,7 @@ Confidence values are provider-reported or absent — never invented.
 ## Deployment topology
 
 Local (Docker Compose): `db`, `migrate`, `seaweedfs`, `transcription`,
-`document-editor`, `document-converter`, `worker`, `app`, `inngest-dev`;
+`adeu-docs-editing`, `document-converter`, `worker`, `app`, `inngest-dev`;
 profiles `ocr` (docling-serve) and `backfill`. The worker hosts the Inngest
 serve endpoint (`:8020/api/inngest`) for the non-ingestion background
 verticals; the web app only sends events.

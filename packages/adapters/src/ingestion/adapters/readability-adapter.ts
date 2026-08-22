@@ -107,9 +107,7 @@ export class ReadabilityAdapter implements SourceAdapter {
         };
     }
 
-    private async extractWithReadability(
-        html: string
-    ): Promise<{
+    private async extractWithReadability(html: string): Promise<{
         title: string;
         byline: string | null;
         content: string;

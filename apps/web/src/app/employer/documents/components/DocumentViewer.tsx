@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import {
     FileText,
     FileImage,
@@ -17,6 +18,12 @@ import {
 import type { DocumentType } from "../types";
 import { getDocumentDisplayType, type DocumentDisplayType } from "../types/document";
 import { DocxViewer } from "./DocxViewer";
+
+// The Word editor pulls in docx-preview and the review pane; only documents
+// that are actually .docx should pay for that bundle.
+const DocxEditor = dynamic(() => import("./docx").then(m => m.DocxEditor), {
+    ssr: false,
+});
 import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
@@ -203,7 +210,14 @@ export function DocumentViewer({
             case "image":
                 return <ImageViewer src={document.url} alt={document.title} minimal={minimal} />;
             case "docx":
-                return <DocxViewer url={document.url} title={document.title} />;
+                // The full editor needs a document id to scope its requests
+                // and to write edits back. Without one — a preview of
+                // something not yet persisted — fall back to read-only HTML.
+                return typeof document.id === "number" && !minimal ? (
+                    <DocxEditor documentId={document.id} title={document.title} />
+                ) : (
+                    <DocxViewer url={document.url} title={document.title} />
+                );
             case "xlsx":
                 return <XlsxViewer url={document.url} title={document.title} />;
             case "pptx":

@@ -117,7 +117,7 @@ Full details, including what degrades without which optional service, are in
 | [`packages/protocol`](packages/protocol), [`packages/evidence`](packages/evidence), [`packages/application`](packages/application), [`packages/adapters`](packages/adapters) | The layered engine (ADR-002): contracts → pure company-state logic → use cases/ports → implementations. |
 | [`packages/core`](packages/core) | The published compatibility facade over the engine packages. |
 | [`packages/features`](packages/features) | Vertical features built on the engine. |
-| [`services/`](services) | Compute services — document-converter (Node), transcription and document-editor (Python). Not part of the pnpm workspace; each manages its own dependencies. |
+| [`services/`](services) | Compute services — document-converter (Node), transcription and adeu-ai-docs-editing (Python). Not part of the pnpm workspace; each manages its own dependencies. |
 | [`scripts/`](scripts) | `ci/` for gates, `ops/` for operational tasks, `dev/` for manual developer probes. |
 
 ---
@@ -312,3 +312,12 @@ We welcome PRs — start with [CONTRIBUTING.md](CONTRIBUTING.md). A few things t
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE). By contributing you agree your contributions will be released under the same license.
+
+Third-party dependencies bundled into the published images and the compute
+services keep their own licenses; their notices are collected in
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), which is generated from the
+lockfiles:
+
+```bash
+node scripts/licenses/generate-attributions.mjs
+```

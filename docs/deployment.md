@@ -56,7 +56,7 @@ docker compose --env-file .env up
 - `migrate` — applies the ordered SQL migrations (`db:migrate`), then exits
 - `seaweedfs` — S3-compatible object storage for uploaded files
 - `transcription` — Whisper transcription + yt-dlp download (port 8000, [ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
-- `document-editor` — Adeu DOCX redlining service (host port 8003)
+- `adeu-docs-editing` — Adeu DOCX redlining service (host port 8003)
 - `document-converter` — OCR routing, vision classification, PDF rendering, docling-backed parsing (port 8002)
 - `worker` — the sole durable workflow coordinator (port 8020): consumes the transactional outbox and hosts the Inngest serve endpoint at `/api/inngest` ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md)); health at `/healthz` and `/readyz`
 - `app` — Next.js runtime (port 3000) — command acceptance and reads only
@@ -118,7 +118,7 @@ Optional integrations:
 
 - Inngest Cloud for background jobs (required in production)
 - LangSmith for LLM tracing
-- Compute services (`services/transcription`, `services/document-editor`,
+- Compute services (`services/transcription`, `services/adeu-ai-docs-editing`,
   `services/document-converter`) deployed separately to Fly.io / Railway /
   Cloud Run
 
@@ -150,7 +150,7 @@ pnpm --filter @launchstack/web db:migrate
 ```
 
 Optional: run the compute services separately and point
-`TRANSCRIPTION_SERVICE_URL`, `DOCUMENT_EDITOR_URL`, and
+`TRANSCRIPTION_SERVICE_URL`, `ADEU_SERVICE_URL`, and
 `DOCUMENT_CONVERTER_URL` at them.
 
 ## Environment Variables Summary
@@ -174,7 +174,7 @@ modes, and migration from the pre-PR variables.
 | `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
-| `DOCUMENT_EDITOR_URL` + `DOCUMENT_EDITOR_API_KEY` | Optional | DOCX redlining service (`services/document-editor`) — the names the Compose stack uses |
+| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
 | `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,

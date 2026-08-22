@@ -17,7 +17,7 @@
 >   dangling providers were removed per
 >   [ADR-004](../architecture/ADR-004-compute-service-consolidation.md). The
 >   former `sidecar/` and `ocr-router`/`ocr-worker` runtimes are now
->   `services/transcription`, `services/document-editor`, and
+>   `services/transcription`, `services/adeu-ai-docs-editing`, and
 >   `services/document-converter`.
 >
 > Read the rest of this document as the historical baseline those ADRs

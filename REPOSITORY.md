@@ -32,8 +32,7 @@ single owners.
 | `packages/features` | TS library (private) | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, and others. (`mcp`, `workflow-generation`, `rules-extraction`, `connectors` are roadmap stubs — each a README plus `export {}`, not shipped code.) |
 | `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
 | `services/transcription` | Python/FastAPI | Whisper + yt-dlp → timestamped transcripts. |
-| `services/document-editor` | Python/FastAPI | The authoritative Adeu DOCX-redlining service. |
-| `api/adeu` | Python | **DEPRECATED** duplicate of the editor service, retained tested pending an owner decision (ADR-004 §4). |
+| `services/adeu-ai-docs-editing` | Python/FastAPI | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor. |
 | `docker/` | config | SeaweedFS, Caddy, DB bootstrap. |
 | `scripts/` | mixed | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`. |
 | `docs/` | Markdown | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`). |
@@ -115,7 +114,7 @@ banned on deploy surfaces. The one engine table the refactor added:
 | GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
 | `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
 | npm packages | `packages/{protocol,evidence,application,adapters,core}` | One Changesets flow (`release.yml`); `check-package-exports.mjs` gates every core subpath. |
-| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, document-editor, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
+| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)
 
@@ -130,8 +129,10 @@ no `ignoreBuildErrors`.
 
 ## Open questions
 
-1. **`api/adeu` retirement** still needs an explicit call by its authors
-   (ADR-004 §4). Until then it stays, tested, deprecated.
+1. ~~**`api/adeu` retirement**~~ **Closed** (ADR-007). Deleted: its
+   `sys.path` import of a sibling directory was never visible to a serverless
+   bundler, so it could not have run in the environment it existed for, and no
+   caller referenced it. History remains in git.
 2. **Compose files at the root** — deferred by owner decision (unchanged).
 3. ~~**`apps/web` is two products** (marketing site + application in one route
    tree).~~ **Closed.** The public site is now `apps/landing`, deployed

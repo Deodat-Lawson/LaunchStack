@@ -32,7 +32,7 @@ Verification is currently advisory in several places:
 3. **Every runtime is tested in CI.** New jobs cover: unit tests for
    `packages/{protocol,evidence,application,adapters}` (vitest), the worker
    build, TypeScript↔JSON-Schema contract generation drift, pytest for
-   `services/transcription`, `services/document-editor`, and the `api/adeu`
+   `services/transcription`, `services/adeu-ai-docs-editing`, and the `api/adeu`
    preservation suite, typecheck/tests for `services/document-converter`, and
    a Docker Compose smoke test that boots the required Local services
    (db → migrate → worker → converter → transcription → editor), ingests a

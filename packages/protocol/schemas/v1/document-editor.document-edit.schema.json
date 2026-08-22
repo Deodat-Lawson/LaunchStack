@@ -15,6 +15,21 @@
             "string",
             "null"
           ]
+        },
+        "match_mode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "strict",
+                "first",
+                "all"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [

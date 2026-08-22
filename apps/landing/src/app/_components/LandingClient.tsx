@@ -1806,7 +1806,10 @@ function OpenSource() {
                                 name="services/document-converter/"
                                 comment="OCR routing + parsing"
                             />
-                            <TreeRow name="services/document-editor/" comment="DOCX redlining" />
+                            <TreeRow
+                                name="services/adeu-ai-docs-editing/"
+                                comment="DOCX redlining"
+                            />
                             <TreeRow
                                 name="docker-compose.yml"
                                 comment="Postgres + pgvector stack"

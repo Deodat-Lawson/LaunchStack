@@ -78,6 +78,7 @@
     "dayjs": "^1.11.18",
     "diff": "^8.0.3",
     "diff-match-patch": "^1.0.5",
+    "docx-preview": "^0.4.0",
     "docxtemplater": "^3.68.3",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",

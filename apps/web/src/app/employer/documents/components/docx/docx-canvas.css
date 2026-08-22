@@ -1,0 +1,101 @@
+/*
+ * Page chrome for the Word canvas.
+ *
+ * docx-preview emits the document's *own* stylesheet (fonts, sizes, indents,
+ * table borders) and lays each page out at its real dimensions. Everything
+ * here is the surround: the sheet of paper the page sits on, and the styling
+ * of tracked-change and comment marks so they read the way a reviewer expects.
+ *
+ * Nothing in here restyles document content. Overriding the document's own
+ * type would recreate exactly the problem this canvas replaced — a render that
+ * looks like the app rather than the file.
+ *
+ * Scoped to `.lsdocx-host`, the container the canvas renders into, so document
+ * styles can never reach app chrome.
+ */
+
+.lsdocx-host {
+    /* The page itself is white in Word and stays white here. A document is a
+       physical artifact; repainting the sheet dark would misrepresent what the
+       user would print or send, and would fight the document's own colors. */
+    --lsdocx-page: #ffffff;
+    --lsdocx-page-edge: rgba(0, 0, 0, 0.1);
+    color-scheme: light;
+}
+
+/* docx-preview derives these class names from its `className` option, which
+   DocxCanvas sets to "lsdocx" — so the wrapper is `.lsdocx-wrapper` and each
+   page is `section.lsdocx`. Changing that option renames both; keep the two in
+   step or the page chrome below silently stops applying. */
+.lsdocx-host .lsdocx-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0;
+    background: transparent;
+}
+
+/* One rendered page. */
+.lsdocx-host .lsdocx-wrapper > section.lsdocx {
+    background: var(--lsdocx-page);
+    box-shadow:
+        0 0 0 1px var(--lsdocx-page-edge),
+        0 10px 30px -12px rgba(0, 0, 0, 0.28);
+    border-radius: 2px;
+    margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lsdocx-host {
+        transition: none !important;
+    }
+}
+
+/* --- tracked changes -------------------------------------------------------
+   docx-preview marks insertions with <ins> and deletions with <del>. Word
+   shows them underlined and struck through in the author's colour; the colours
+   here come from the design tokens so they match the review pane's cards,
+   which is what lets a reviewer connect a card to a mark on the page. */
+
+.lsdocx-host ins {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    color: var(--success);
+    background: var(--success-soft);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+.lsdocx-host del {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    color: var(--danger);
+    background: var(--danger-soft);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* --- comments -------------------------------------------------------------- */
+
+.lsdocx-host .lsdocx-comment-ref,
+.lsdocx-host .lsdocx-comment-anchor,
+.lsdocx-host .docx-comment-ref,
+.lsdocx-host .docx-comment-anchor {
+    background: var(--warn-soft);
+    border-bottom: 1px dotted var(--warn);
+    cursor: help;
+}
+
+.lsdocx-host .lsdocx-comment,
+.lsdocx-host .docx-comment {
+    color: var(--ink-2);
+    font-size: 0.75rem;
+}
+
+/* Long tables and wide content scroll inside the page rather than pushing the
+   canvas sideways. */
+.lsdocx-host table {
+    max-width: 100%;
+}

@@ -6,6 +6,9 @@ export {
     diffDocxFiles,
     getBaseUrl,
     processDocumentBatch,
+    processDocumentBatchDetailed,
+    listReviewItems,
+    rejectAllChanges,
     readDocx,
     type ProcessBatchResponse,
 } from "./client";
@@ -18,4 +21,13 @@ export type {
     ProcessBatchParams,
     ReadDocxResponse,
     ReviewAction,
+    ReviewItem,
+    ReviewItemKind,
+    ReviewItemsResponse,
+    BatchResult,
+    EditReport,
+    FailedEdit,
+    MatchMode,
+    ObjectRef,
+    ProcessBatchJsonResponse,
 } from "./types";

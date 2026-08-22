@@ -55,35 +55,35 @@ function blobResponse(content: string, status = 200, headers?: Record<string, st
 }
 
 // ===========================================================================
-// getBaseUrl — DOCUMENT_EDITOR_URL is canonical (ADR-004); ADEU_SERVICE_URL
-// remains a deprecated fallback.
+// getBaseUrl — ADEU_SERVICE_URL is canonical (ADR-007); DOCUMENT_EDITOR_URL
+// remains a deprecated fallback across the service rename.
 // ===========================================================================
 describe("getBaseUrl", () => {
     afterEach(() => {
         delete process.env.DOCUMENT_EDITOR_URL;
     });
 
-    it("returns the URL when DOCUMENT_EDITOR_URL is set", () => {
+    it("returns the URL when ADEU_SERVICE_URL is set", () => {
+        process.env.ADEU_SERVICE_URL = "http://adeu-docs-editing:8000";
+        expect(getBaseUrl()).toBe("http://adeu-docs-editing:8000");
+    });
+
+    it("falls back to the deprecated DOCUMENT_EDITOR_URL", () => {
+        delete process.env.ADEU_SERVICE_URL;
         process.env.DOCUMENT_EDITOR_URL = "http://document-editor:8000";
         expect(getBaseUrl()).toBe("http://document-editor:8000");
     });
 
-    it("falls back to the deprecated ADEU_SERVICE_URL", () => {
-        delete process.env.DOCUMENT_EDITOR_URL;
-        process.env.ADEU_SERVICE_URL = "http://sidecar:8000";
-        expect(getBaseUrl()).toBe("http://sidecar:8000");
-    });
-
-    it("prefers DOCUMENT_EDITOR_URL over the deprecated name", () => {
+    it("prefers ADEU_SERVICE_URL over the deprecated name", () => {
+        process.env.ADEU_SERVICE_URL = "http://adeu-docs-editing:8000";
         process.env.DOCUMENT_EDITOR_URL = "http://document-editor:8000";
-        process.env.ADEU_SERVICE_URL = "http://sidecar:8000";
-        expect(getBaseUrl()).toBe("http://document-editor:8000");
+        expect(getBaseUrl()).toBe("http://adeu-docs-editing:8000");
     });
 
     it("throws AdeuConfigError when neither URL is set", () => {
         delete process.env.ADEU_SERVICE_URL;
         expect(() => getBaseUrl()).toThrow(AdeuConfigError);
-        expect(() => getBaseUrl()).toThrow("DOCUMENT_EDITOR_URL environment variable is not set");
+        expect(() => getBaseUrl()).toThrow("ADEU_SERVICE_URL environment variable is not set");
     });
 
     it("throws an instance of Error", () => {

@@ -1,9 +1,9 @@
 /**
  * Emits JSON Schemas for every cross-language contract into `schemas/v1/`.
  *
- * The Python services (`services/transcription`, `services/document-editor`,
- * `services/document-converter` consumers, `api/adeu`) validate their
- * pydantic models against these files in their contract tests, so a drift
+ * The Python services (`services/transcription`,
+ * `services/adeu-ai-docs-editing`, `services/document-converter` consumers)
+ * validate their pydantic models against these files in their contract tests, so a drift
  * between the zod source and the generated output is a contract break.
  *
  * Usage:
@@ -19,6 +19,7 @@ import type { z } from "zod";
 import {
     applyEditsMarkdownRequestSchema,
     applyEditsMarkdownResponseSchema,
+    batchResultSchema,
     batchSummarySchema,
     convertRequestSchema,
     diffResponseSchema,
@@ -29,6 +30,8 @@ import {
     processBatchRequestSchema,
     readDocxResponseSchema,
     renderPagesRequestSchema,
+    reviewItemSchema,
+    reviewItemsResponseSchema,
     renderPagesResponseSchema,
     routeRequestSchema,
     routeResponseSchema,
@@ -56,6 +59,9 @@ const CONTRACTS: Record<string, z.ZodType<unknown>> = {
     "document-editor.read-docx-response": readDocxResponseSchema,
     "document-editor.process-batch-request": processBatchRequestSchema,
     "document-editor.batch-summary": batchSummarySchema,
+    "document-editor.batch-result": batchResultSchema,
+    "document-editor.review-item": reviewItemSchema,
+    "document-editor.review-items-response": reviewItemsResponseSchema,
     "document-editor.apply-edits-markdown-request": applyEditsMarkdownRequestSchema,
     "document-editor.apply-edits-markdown-response": applyEditsMarkdownResponseSchema,
     "document-editor.diff-response": diffResponseSchema,

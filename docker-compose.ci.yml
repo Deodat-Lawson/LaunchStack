@@ -5,7 +5,7 @@
 #
 # Usage (CI):
 #   docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d \
-#     db migrate worker document-converter transcription document-editor
+#     db migrate worker document-converter transcription adeu-docs-editing
 
 services:
   worker:

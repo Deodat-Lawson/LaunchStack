@@ -369,6 +369,47 @@ function normalize(v: Point, fallback: Point): Point {
     return { x: v.x / len, y: v.y / len };
 }
 
+// ---------------------------------------------------------------------------
+// Incremental routing
+// ---------------------------------------------------------------------------
+
+interface RouteMemo {
+    from: DiagramNode | undefined;
+    to: DiagramNode | undefined;
+    routed: RoutedEdge;
+}
+
+/**
+ * Memo for `routeEdgeCached`, keyed on the edge object.
+ *
+ * A route is a pure function of three things: the edge, and the two nodes its
+ * ends are attached to. Nothing else on the page can change it. So the memo
+ * stores which node objects the cached route was computed from, and a hit
+ * requires all three identities to match.
+ */
+const routeCache = new WeakMap<DiagramEdge, RouteMemo>();
+
+/**
+ * `routeEdge`, recomputed only when this edge's own inputs changed.
+ *
+ * Dragging one shape on a 200-edge diagram used to re-route all 200 every
+ * frame. Now the 198 whose endpoints did not move return their previous
+ * `RoutedEdge` — the *same object*, which is what makes `EdgeView`'s `memo`
+ * actually hit. Before this, `routed` was a fresh object every frame and the
+ * memoisation never did anything.
+ */
+export function routeEdgeCached(edge: DiagramEdge, lookup: NodeLookup): RoutedEdge {
+    const from = edge.from.nodeId ? lookup(edge.from.nodeId) : undefined;
+    const to = edge.to.nodeId ? lookup(edge.to.nodeId) : undefined;
+
+    const hit = routeCache.get(edge);
+    if (hit && hit.from === from && hit.to === to) return hit.routed;
+
+    const routed = routeEdge(edge, lookup);
+    routeCache.set(edge, { from, to, routed });
+    return routed;
+}
+
 /**
  * Where a new bend dropped at `at` belongs in an edge's waypoint list.
  *

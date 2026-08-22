@@ -191,14 +191,33 @@ export function nodeCorners(n: DiagramNode): [Point, Point, Point, Point] {
  * Axis-aligned bounding box that still contains the node once rotated. Used for
  * marquee selection, `fit to screen`, and group bounds.
  */
+/**
+ * Memo for `nodeBounds`, keyed on the node object.
+ *
+ * Sound because nodes are immutable — moving one produces a new object, which
+ * misses the cache. The returned rect is shared between callers, so treat it as
+ * frozen; every call site today only reads it.
+ */
+const nodeBoundsCache = new WeakMap<DiagramNode, Rect>();
+
 export function nodeBounds(n: DiagramNode): Rect {
-    if (!n.rotation) return nodeRect(n);
-    const corners = nodeCorners(n);
-    const xs = corners.map(p => p.x);
-    const ys = corners.map(p => p.y);
-    const minX = Math.min(...xs);
-    const minY = Math.min(...ys);
-    return { x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
+    const hit = nodeBoundsCache.get(n);
+    if (hit) return hit;
+
+    let bounds: Rect;
+    if (!n.rotation) {
+        bounds = nodeRect(n);
+    } else {
+        const corners = nodeCorners(n);
+        const xs = corners.map(p => p.x);
+        const ys = corners.map(p => p.y);
+        const minX = Math.min(...xs);
+        const minY = Math.min(...ys);
+        bounds = { x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
+    }
+
+    nodeBoundsCache.set(n, bounds);
+    return bounds;
 }
 
 export function nodesBounds(nodes: readonly DiagramNode[]): Rect | null {

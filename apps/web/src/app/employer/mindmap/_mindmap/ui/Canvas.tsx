@@ -5,7 +5,7 @@ import React, { memo, useMemo, useRef } from "react";
 import { toggleCollapse } from "../model/commands";
 import { graphIndex, nodeById, nodeLookup, visibleEdges, visibleNodes } from "../model/doc";
 import { nodeBounds, nodesBounds } from "../model/geometry";
-import { routeEdge, type RoutedEdge } from "../model/routing";
+import { routeEdgeCached, type RoutedEdge } from "../model/routing";
 import { shapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { DiagramEdge, DiagramNode, Point, Rect } from "../model/types";
@@ -76,9 +76,12 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     const nodes = useMemo(() => visibleNodes(page), [page]);
     const edges = useMemo(() => visibleEdges(page), [page]);
     const lookup = useMemo(() => nodeLookup(page), [page]);
+    // `routeEdgeCached` returns the previous `RoutedEdge` object for any edge
+    // whose own inputs did not change, so this Map is rebuilt each frame but
+    // its *values* stay identical — which is what lets `EdgeView`'s memo hit.
     const routed = useMemo(() => {
         const map = new Map<string, RoutedEdge>();
-        for (const e of edges) map.set(e.id, routeEdge(e, lookup));
+        for (const e of edges) map.set(e.id, routeEdgeCached(e, lookup));
         return map;
     }, [edges, lookup]);
 

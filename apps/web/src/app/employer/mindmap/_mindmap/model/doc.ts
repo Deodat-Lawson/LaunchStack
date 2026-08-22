@@ -125,7 +125,19 @@ export interface GraphIndex {
     in: Map<string, string[]>;
 }
 
+/**
+ * Memo for `graphIndex`, keyed on the page object.
+ *
+ * Sound because pages are immutable: an edit produces a new page object, which
+ * misses the cache and recomputes. A `WeakMap` means an old page's index is
+ * collected with the page itself, so a long editing session does not grow.
+ */
+const graphIndexCache = new WeakMap<DiagramPage, GraphIndex>();
+
 export function graphIndex(page: DiagramPage): GraphIndex {
+    const hit = graphIndexCache.get(page);
+    if (hit) return hit;
+
     const out = new Map<string, string[]>();
     const inc = new Map<string, string[]>();
     const push = (m: Map<string, string[]>, key: string, value: string) => {
@@ -140,7 +152,10 @@ export function graphIndex(page: DiagramPage): GraphIndex {
         push(out, a, b);
         push(inc, b, a);
     }
-    return { out, in: inc };
+
+    const index: GraphIndex = { out, in: inc };
+    graphIndexCache.set(page, index);
+    return index;
 }
 
 export function graphChildren(page: DiagramPage, nodeId: string, index?: GraphIndex): string[] {

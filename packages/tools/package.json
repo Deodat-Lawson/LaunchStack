@@ -28,6 +28,14 @@
     "./grounded-retrieval": {
       "types": "./src/grounded-retrieval/index.ts",
       "default": "./src/grounded-retrieval/index.ts"
+    },
+    "./brand-voice": {
+      "types": "./src/brand-voice/index.ts",
+      "default": "./src/brand-voice/index.ts"
+    },
+    "./persona": {
+      "types": "./src/persona/index.ts",
+      "default": "./src/persona/index.ts"
     }
   },
   "scripts": {

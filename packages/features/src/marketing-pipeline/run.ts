@@ -5,10 +5,10 @@ import {
     getCompanyIdentity,
 } from "@launchstack/tools/company-context";
 import { generateVariants } from "./generator";
+import { extractBrandVoice } from "@launchstack/tools/brand-voice";
+import { extractTargetPersona } from "@launchstack/tools/persona";
 import { analyzeCompetitors } from "./competitor";
 import { buildMultiStrategy } from "./positioning";
-import { extractBrandVoice } from "./voice";
-import { extractTargetPersona } from "./persona";
 import { verifyClaimSources } from "./claim-verifier";
 import {
     getPerformanceHistory,

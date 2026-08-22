@@ -1,8 +1,10 @@
 export { runMarketingPipeline } from "./run";
 export { publishContent, type PublishResult } from "./publish";
 export { generateVariants, refineContent } from "./generator";
-export { extractBrandVoice } from "./voice";
-export { extractTargetPersona } from "./persona";
+// Moved to @launchstack/tools (unification PR-2); re-exported so existing
+// imports keep working. New code should import the tools.
+export { extractBrandVoice } from "@launchstack/tools/brand-voice";
+export { extractTargetPersona } from "@launchstack/tools/persona";
 export { verifyClaimSources } from "./claim-verifier";
 export {
     getPerformanceHistory,

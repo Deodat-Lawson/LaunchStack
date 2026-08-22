@@ -119,8 +119,17 @@ export const PlatformMetaSchema = z
     })
     .optional();
 
-export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
-export type FormalityLevel = z.infer<typeof FormalityLevelEnum>;
+/**
+ * Brand-voice and persona types moved to @launchstack/tools (unification
+ * PR-2); re-exported so the marketing barrel's surface is unchanged.
+ */
+export { BrandVoiceSchema, FormalityLevelEnum } from "@launchstack/tools/brand-voice";
+export type { BrandVoice, FormalityLevel } from "@launchstack/tools/brand-voice";
+export { TargetPersonaSchema } from "@launchstack/tools/persona";
+export type { TargetPersona } from "@launchstack/tools/persona";
+import { FormalityLevelEnum } from "@launchstack/tools/brand-voice";
+import type { BrandVoice } from "@launchstack/tools/brand-voice";
+import type { TargetPersona } from "@launchstack/tools/persona";
 
 export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "multi_platform"]);
 export type ContentType = z.infer<typeof ContentTypeEnum>;
@@ -171,24 +180,8 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
 }
 
 /* ──────────────────────────────────────────────────────────────
- * Brand voice, persona, content types, multi-variant types
+ * Content types, multi-variant types
  * ────────────────────────────────────────────────────────────── */
-
-export const BrandVoiceSchema = z.object({
-    toneDescriptor: z.string(),
-    vocabularyExamples: z.array(z.string()),
-    sentenceStyle: z.string(),
-    formalityLevel: FormalityLevelEnum,
-});
-export type BrandVoice = z.infer<typeof BrandVoiceSchema>;
-
-export const TargetPersonaSchema = z.object({
-    role: z.string(),
-    painPoints: z.array(z.string()),
-    priorities: z.array(z.string()),
-    languageStyle: z.string(),
-});
-export type TargetPersona = z.infer<typeof TargetPersonaSchema>;
 
 export const StrategyVariantSchema = z.object({
     variantId: z.string(),

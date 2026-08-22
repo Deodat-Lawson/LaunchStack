@@ -6,12 +6,10 @@
  */
 
 import type { BaseMessageLike } from "@langchain/core/messages";
-import {
-    invokeStructured,
-    resolveChatModel,
-    type ResolveChatModelOptions,
-} from "@launchstack/core/llm";
+import type { ResolveChatModelOptions } from "@launchstack/core/llm";
 import type { z } from "zod";
+
+import { invokeToolStructured } from "../llm";
 
 export const COMPANY_CONTEXT_MODELS = {
     dnaSynthesis: { route: "fast" },
@@ -23,7 +21,5 @@ export async function invokeCompanyContextStructured<T>(
     messages: readonly BaseMessageLike[],
     name: string
 ): Promise<{ result: T; modelId: string }> {
-    const resolved = resolveChatModel(COMPANY_CONTEXT_MODELS[stage]);
-    const result = await invokeStructured(resolved, schema, messages, { name });
-    return { result, modelId: resolved.modelId };
+    return invokeToolStructured(COMPANY_CONTEXT_MODELS[stage], schema, messages, name);
 }

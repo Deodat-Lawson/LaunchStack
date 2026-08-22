@@ -18,7 +18,7 @@ import {
 import { activePage, nodeById } from "../model/doc";
 import { trimmedOr } from "../model/strings";
 import type { EditorState } from "../model/store";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * Comment threads.
@@ -28,7 +28,6 @@ import { useEditor, useStore } from "./EditorContext";
  * duplicating or restoring a version carries the discussion with it.
  */
 
-const selectDoc = (s: EditorState) => s.doc;
 const selectSelection = (s: EditorState) => s.selection;
 
 export function CommentsPanel({
@@ -39,7 +38,7 @@ export function CommentsPanel({
     canvasSize: { w: number; h: number };
 }) {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
     const [draft, setDraft] = useState("");
     const [replyTo, setReplyTo] = useState<string | null>(null);

@@ -25,7 +25,7 @@ import { Canvas } from "./Canvas";
 import { CanvasContextMenu } from "./CanvasContextMenu";
 import { buildCommands, CommandPalette } from "./CommandPalette";
 import { CommentsPanel } from "./CommentsPanel";
-import { EditorProvider, useEditor } from "./EditorContext";
+import { EditorProvider, useCommittedDoc, useEditor } from "./EditorContext";
 import { ExportDialog, ImportDialog } from "./ExportDialog";
 import { FindBar } from "./FindBar";
 import { HistoryPanel } from "./HistoryPanel";
@@ -52,8 +52,6 @@ import { usePresence } from "./usePresence";
  * document logic lives here.
  */
 
-const selectPages = (s: EditorState) => s.doc.pages;
-const selectActivePageId = (s: EditorState) => s.doc.activePageId;
 const selectDirty = (s: EditorState) => s.dirty;
 
 export interface MindmapEditorProps {
@@ -429,9 +427,9 @@ function PresentationControls({
     onExit: () => void;
     onStep: (delta: number) => void;
 }) {
-    const pages = useEditor(selectPages);
-    const activePageId = useEditor(selectActivePageId);
-    const index = pages.findIndex(p => p.id === activePageId);
+    const doc = useCommittedDoc();
+    const pages = doc.pages;
+    const index = pages.findIndex(p => p.id === doc.activePageId);
 
     return (
         <div className="border-line bg-panel shadow-2 absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 rounded-full border px-2 py-1.5">

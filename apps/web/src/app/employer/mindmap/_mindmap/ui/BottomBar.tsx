@@ -22,7 +22,7 @@ import {
 } from "../model/commands";
 import { nextZoomStep } from "../model/geometry";
 import type { EditorState } from "../model/store";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 import { Minimap } from "./Minimap";
 
 /**
@@ -33,14 +33,15 @@ import { Minimap } from "./Minimap";
  * menu.
  */
 
-const selectPages = (s: EditorState) => s.doc.pages;
-const selectActivePageId = (s: EditorState) => s.doc.activePageId;
 const selectZoom = (s: EditorState) => s.viewport.zoom;
 
 export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number } }) {
     const store = useStore();
-    const pages = useEditor(selectPages);
-    const activePageId = useEditor(selectActivePageId);
+    // `doc.pages` is a fresh array on every frame of a drag even though the page
+    // list has not changed, so read it off the committed document instead.
+    const doc = useCommittedDoc();
+    const pages = doc.pages;
+    const activePageId = doc.activePageId;
     const zoom = useEditor(selectZoom);
     const [renaming, setRenaming] = useState<string | null>(null);
     const [showMinimap, setShowMinimap] = useState(true);

@@ -4,8 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Search, X } from "lucide-react";
 
 import { focusNode, searchDoc, setActivePage } from "../model/commands";
-import type { EditorState } from "../model/store";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useStore } from "./EditorContext";
 
 /**
  * Find on canvas.
@@ -14,8 +13,6 @@ import { useEditor, useStore } from "./EditorContext";
  * listed in a panel — on a canvas, "where is it" is the question, and a list of
  * titles does not answer it.
  */
-
-const selectDoc = (s: EditorState) => s.doc;
 
 export function FindBar({
     open,
@@ -27,7 +24,7 @@ export function FindBar({
     canvasSize: { w: number; h: number };
 }) {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const [query, setQuery] = useState("");
     const [index, setIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement | null>(null);

@@ -12,7 +12,7 @@ import { shapeDef } from "../model/shapes";
 import { nonEmpty, trimmedOr } from "../model/strings";
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The outline.
@@ -23,7 +23,6 @@ import { useEditor, useStore } from "./EditorContext";
  * listed under "Unlinked" rather than hidden.
  */
 
-const selectDoc = (s: EditorState) => s.doc;
 const selectSelection = (s: EditorState) => s.selection;
 
 interface OutlineRow {
@@ -34,7 +33,7 @@ interface OutlineRow {
 
 export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: number } }) {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
     const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 

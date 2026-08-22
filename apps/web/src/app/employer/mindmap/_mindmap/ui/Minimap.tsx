@@ -6,7 +6,7 @@ import { activePage, pageBounds, visibleNodes } from "../model/doc";
 import { expandRect, nodeBounds } from "../model/geometry";
 import type { EditorState } from "../model/store";
 import type { Rect } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * Minimap.
@@ -19,12 +19,11 @@ import { useEditor, useStore } from "./EditorContext";
 const WIDTH = 184;
 const HEIGHT = 124;
 
-const selectDoc = (s: EditorState) => s.doc;
 const selectViewport = (s: EditorState) => s.viewport;
 
 export function Minimap({ canvasSize }: { canvasSize: { w: number; h: number } }) {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const viewport = useEditor(selectViewport);
     const ref = useRef<SVGSVGElement | null>(null);
 

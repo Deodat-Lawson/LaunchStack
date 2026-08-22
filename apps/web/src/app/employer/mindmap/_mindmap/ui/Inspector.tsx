@@ -85,7 +85,7 @@ import {
     Segmented,
     Slider,
 } from "./controls";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The properties panel.
@@ -98,7 +98,6 @@ import { useEditor, useStore } from "./EditorContext";
  * the document directly.
  */
 
-const selectDoc = (s: EditorState) => s.doc;
 const selectSelection = (s: EditorState) => s.selection;
 
 /** Common value across a set, or `null` when they disagree. */
@@ -110,7 +109,7 @@ function common<T, K>(items: readonly T[], read: (item: T) => K): K | null {
 
 export function Inspector() {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
     const page = useMemo(() => activePage(doc), [doc]);
 
@@ -667,7 +666,7 @@ function ArrowSelect({
 
 function PageSettings() {
     const store = useStore();
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const page = useMemo(() => activePage(doc), [doc]);
 
     return (

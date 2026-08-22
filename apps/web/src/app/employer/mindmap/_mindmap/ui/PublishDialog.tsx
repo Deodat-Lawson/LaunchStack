@@ -16,8 +16,7 @@ import {
 import { Input } from "~/components/ui/input";
 
 import { toMarkdownOutline } from "../model/serialize";
-import type { EditorState } from "../model/store";
-import { useEditor } from "./EditorContext";
+import { useCommittedDoc } from "./EditorContext";
 
 /**
  * Publish a mindmap into the Sources library.
@@ -27,8 +26,6 @@ import { useEditor } from "./EditorContext";
  * result is chunked, embedded and citable like any other source. Re-publishing
  * the same revision is idempotent server-side.
  */
-
-const selectDoc = (s: EditorState) => s.doc;
 
 export function PublishDialog({
     open,
@@ -45,7 +42,7 @@ export function PublishDialog({
     publishedDocumentId: number | null;
     onPublished: (documentId: number) => void;
 }) {
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const [folder, setFolder] = useState(defaultFolder);
     const [busy, setBusy] = useState(false);
 

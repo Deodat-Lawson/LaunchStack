@@ -29,7 +29,7 @@ import { activePage, pageBounds, selectionBounds } from "../model/doc";
 import { toMarkdownOutline, toMermaid } from "../model/serialize";
 import type { EditorState } from "../model/store";
 import { Segmented } from "./controls";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * Export.
@@ -53,7 +53,6 @@ const FORMATS: {
     { id: "mermaid", label: "Mermaid", hint: "Flowchart code for READMEs", Icon: FileCode },
 ];
 
-const selectDoc = (s: EditorState) => s.doc;
 const selectSelection = (s: EditorState) => s.selection;
 
 export function ExportDialog({
@@ -65,7 +64,7 @@ export function ExportDialog({
     onOpenChange: (open: boolean) => void;
     getSvgElement: () => SVGSVGElement | null;
 }) {
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
     const [format, setFormat] = useState<ExportFormat>("png");
     const [scale, setScale] = useState<"1" | "2" | "4">("2");

@@ -9,7 +9,7 @@ import { labelAnchor, routeEdge } from "../model/routing";
 import { shapeTextBox } from "../model/shapes";
 import { fontFamilyCss } from "../model/text";
 import type { EditorState } from "../model/store";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * In-place text editing.
@@ -27,13 +27,12 @@ import { useEditor, useStore } from "./EditorContext";
 
 const selectEditing = (s: EditorState) => s.editing;
 const selectViewport = (s: EditorState) => s.viewport;
-const selectDoc = (s: EditorState) => s.doc;
 
 export function TextEditorOverlay() {
     const store = useStore();
     const editing = useEditor(selectEditing);
     const viewport = useEditor(selectViewport);
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const ref = useRef<HTMLTextAreaElement | null>(null);
     const [value, setValue] = useState("");
     /** Set when a keystroke already decided what happens after committing. */

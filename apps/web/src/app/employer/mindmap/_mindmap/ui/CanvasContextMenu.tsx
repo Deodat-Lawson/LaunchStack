@@ -43,7 +43,7 @@ import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { EdgeKind, ShapeCategory } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * Right-click menu.
@@ -55,12 +55,11 @@ import { useEditor, useStore } from "./EditorContext";
  */
 
 const selectSelection = (s: EditorState) => s.selection;
-const selectDoc = (s: EditorState) => s.doc;
 
 export function CanvasContextMenu({ children }: { children: React.ReactNode }) {
     const store = useStore();
     const selection = useEditor(selectSelection);
-    const doc = useEditor(selectDoc);
+    const doc = useCommittedDoc();
     const page = useMemo(() => activePage(doc), [doc]);
 
     const nodeIds = selection.filter(s => s.kind === "node").map(s => s.id);

@@ -81,6 +81,45 @@ export function usePage(): DiagramPage {
     return useMemo(() => activePage(doc), [doc]);
 }
 
+interface Committed {
+    commitId: number;
+    doc: MindmapDoc;
+}
+
+const selectCommitted = (s: EditorState): Committed => ({ commitId: s.commitId, doc: s.doc });
+
+/** Two reads are the same commit when the counter has not moved. */
+const sameCommit = (a: Committed, b: Committed): boolean => a.commitId === b.commitId;
+
+/**
+ * The document as of the last committed change.
+ *
+ * Use this instead of `useDoc` in anything that is not the canvas. While a
+ * gesture is in flight the store rewrites `doc` sixty times a second, but
+ * `commitId` holds still, so this returns the *same object reference* for the
+ * whole drag and the component does not re-render. It catches up in one render
+ * when the gesture commits.
+ *
+ * Holding the reference steady matters as much as skipping the render: every
+ * `useMemo` keyed on the returned document stays valid for the duration of the
+ * gesture too, so the outline tree and the inspector's derived lists are not
+ * rebuilt per frame either.
+ *
+ * The trade is that a panel shows the pre-gesture document until the gesture
+ * ends. That is correct for everything that is not the canvas — an outline
+ * tree does not change because a shape is mid-flight — and it is why the
+ * canvas keeps using `useDoc`.
+ */
+export function useCommittedDoc(): MindmapDoc {
+    return useEditor(selectCommitted, sameCommit).doc;
+}
+
+/** `usePage`, on committed state. */
+export function useCommittedPage(): DiagramPage {
+    const doc = useCommittedDoc();
+    return useMemo(() => activePage(doc), [doc]);
+}
+
 export function useSelection() {
     return useEditor(selectSelection);
 }

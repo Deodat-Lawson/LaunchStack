@@ -37,6 +37,118 @@ describe("subscription", () => {
     });
 });
 
+describe("commitId", () => {
+    const commit = (store: EditorStore) => store.getState().commitId;
+
+    it("ticks once for an ordinary committed edit", () => {
+        const store = newStore();
+        const before = commit(store);
+        store.update(doc => ({ ...doc, title: "Renamed" }));
+        expect(commit(store)).toBe(before + 1);
+    });
+
+    it("stays put through the preview frames of a gesture", () => {
+        const store = newStore();
+        const id = firstNodeId(store);
+        store.beginInteraction("Move");
+        const before = commit(store);
+
+        // Sixty frames of a drag: the panels must sleep through all of them.
+        for (let i = 1; i <= 60; i++) {
+            store.updatePage(
+                p => ({
+                    ...p,
+                    nodes: p.nodes.map(n => (n.id === id ? { ...n, x: i } : n)),
+                }),
+                { transient: true }
+            );
+        }
+
+        expect(commit(store)).toBe(before);
+    });
+
+    it("ticks once when the gesture commits, so the panels catch up", () => {
+        const store = newStore();
+        const id = firstNodeId(store);
+        store.beginInteraction("Move");
+        const before = commit(store);
+
+        store.updatePage(
+            p => ({ ...p, nodes: p.nodes.map(n => (n.id === id ? { ...n, x: 999 } : n)) }),
+            { transient: true }
+        );
+        store.endInteraction();
+
+        // Without this the outline and the inspector would show the shape at
+        // its pre-drag position for the rest of the session.
+        expect(commit(store)).toBe(before + 1);
+        expect(store.getState().doc.pages[0]!.nodes[0]!.x).toBe(999);
+    });
+
+    it("does not tick when a gesture changed nothing", () => {
+        const store = newStore();
+        store.beginInteraction("Move");
+        const before = commit(store);
+        store.endInteraction();
+        expect(commit(store)).toBe(before);
+    });
+
+    it("ticks for a transient write made outside a gesture", () => {
+        // `transient` means "no undo entry", and switching page uses it. That
+        // is not a preview frame — nothing will commit behind it — so it has
+        // to commit immediately or the page tabs never update.
+        const store = newStore();
+        const before = commit(store);
+
+        store.update(doc => ({ ...doc, title: "Settings changed" }), { transient: true });
+
+        expect(commit(store)).toBe(before + 1);
+    });
+
+    it("ticks when a cancelled gesture restores the document", () => {
+        const store = newStore();
+        const id = firstNodeId(store);
+        store.beginInteraction("Move");
+        store.updatePage(
+            p => ({ ...p, nodes: p.nodes.map(n => (n.id === id ? { ...n, x: 500 } : n)) }),
+            { transient: true }
+        );
+        const during = commit(store);
+
+        store.cancelInteraction();
+
+        expect(commit(store)).toBe(during + 1);
+        expect(store.getState().doc.pages[0]!.nodes[0]!.x).toBe(0);
+    });
+
+    it("ticks on undo and on redo", () => {
+        const store = newStore();
+        store.update(doc => ({ ...doc, title: "Renamed" }));
+
+        const afterEdit = commit(store);
+        store.undo();
+        expect(commit(store)).toBe(afterEdit + 1);
+
+        const afterUndo = commit(store);
+        store.redo();
+        expect(commit(store)).toBe(afterUndo + 1);
+    });
+
+    it("ticks when the whole document is replaced", () => {
+        const store = newStore();
+        const before = commit(store);
+        store.replaceDoc(docWithNode());
+        expect(commit(store)).toBe(before + 1);
+    });
+
+    it("does not tick for a write that changed nothing", () => {
+        const store = newStore();
+        const before = commit(store);
+        store.update(doc => doc);
+        expect(commit(store)).toBe(before);
+    });
+});
+
 describe("batch", () => {
     it("notifies once however many writes it contains", () => {
         const store = newStore();

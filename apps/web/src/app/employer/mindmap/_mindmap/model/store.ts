@@ -69,6 +69,16 @@ export interface TextEditTarget {
 
 export interface EditorState {
     doc: MindmapDoc;
+    /**
+     * Ticks once per *committed* document change, and stays put through the
+     * preview frames of a gesture.
+     *
+     * The canvas subscribes to `doc` because it is the only thing that can look
+     * different mid-drag. Every other panel subscribes to this instead, so the
+     * sixty frames of a drag cost them nothing and they catch up in one render
+     * when the gesture commits. See `useCommittedDoc`.
+     */
+    commitId: number;
     selection: SelectionRef[];
     viewport: Viewport;
     tool: ToolId;
@@ -135,6 +145,7 @@ export class EditorStore {
     constructor(doc: MindmapDoc) {
         this.state = {
             doc,
+            commitId: 0,
             selection: [],
             viewport: { x: -100, y: -100, zoom: 1 },
             tool: "select",
@@ -226,9 +237,31 @@ export class EditorStore {
         if (!next || next === this.state.doc) return;
 
         if (!options.transient) this.pushHistory(options);
-        this.state = { ...this.state, doc: next, dirty: true };
+        this.state = {
+            ...this.state,
+            doc: next,
+            dirty: true,
+            commitId: this.isPreviewFrame(options) ? this.state.commitId : this.state.commitId + 1,
+        };
         this.refreshHistoryFlags();
         this.emit();
+    }
+
+    /**
+     * Is this write a preview frame of a gesture still in flight?
+     *
+     * `transient` alone is the wrong test. It means "do not push an undo
+     * entry", and two things use it that are not previews at all: switching
+     * page and changing document settings. Keying the commit counter off
+     * `transient` would leave the page tabs and the settings controls showing
+     * stale state forever, because nothing would ever commit behind them.
+     *
+     * A write is a preview only when a gesture is actually open — which is
+     * exactly what `interactionBase` records. `endInteraction` then commits
+     * once, and the panels catch up in a single render.
+     */
+    private isPreviewFrame(options: CommitOptions): boolean {
+        return options.transient === true && this.interactionBase !== null;
     }
 
     /** Convenience: edit the active page. */
@@ -247,6 +280,9 @@ export class EditorStore {
         this.state = {
             ...this.state,
             doc,
+            // Always a commit, even when transient: a whole new document is
+            // never a preview frame.
+            commitId: this.state.commitId + 1,
             selection: [],
             editing: null,
             dirty: !options.transient,
@@ -320,6 +356,10 @@ export class EditorStore {
         this.undoStack.push(base);
         if (this.undoStack.length > HISTORY_LIMIT) this.undoStack.shift();
         this.redoStack = [];
+        // The gesture's frames were previews. This is the commit that wakes the
+        // panels so they catch up to where the shape actually landed — without
+        // it they would show the document as it was before the drag, forever.
+        this.state = { ...this.state, commitId: this.state.commitId + 1 };
         this.refreshHistoryFlags();
         this.emit();
     }
@@ -332,6 +372,9 @@ export class EditorStore {
         this.state = {
             ...this.state,
             doc: base.doc,
+            // Restoring the pre-gesture document is itself a commit: the panels
+            // may have committed state from mid-gesture and must be corrected.
+            commitId: this.state.commitId + 1,
             selection: base.selection,
             drag: { kind: "none" },
             marquee: null,
@@ -352,6 +395,7 @@ export class EditorStore {
         this.state = {
             ...this.state,
             doc: entry.doc,
+            commitId: this.state.commitId + 1,
             selection: entry.selection,
             editing: null,
             dirty: true,
@@ -372,6 +416,7 @@ export class EditorStore {
         this.state = {
             ...this.state,
             doc: entry.doc,
+            commitId: this.state.commitId + 1,
             selection: entry.selection,
             editing: null,
             dirty: true,

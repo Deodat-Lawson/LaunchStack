@@ -30,6 +30,23 @@ import { Toolbar } from "../ui/Toolbar";
 
 const CANVAS = { width: 1000, height: 700 };
 
+let raf: jest.SpyInstance;
+
+beforeAll(() => {
+    // Run each coalesced frame immediately: this file measures which panels
+    // render per processed move, not how moves are batched into frames.
+    raf = jest
+        .spyOn(window, "requestAnimationFrame")
+        .mockImplementation((cb: FrameRequestCallback) => {
+            cb(0);
+            return 0;
+        });
+});
+
+afterAll(() => {
+    raf.mockRestore();
+});
+
 beforeAll(() => {
     Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
         return {

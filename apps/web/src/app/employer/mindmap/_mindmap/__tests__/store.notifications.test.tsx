@@ -30,6 +30,24 @@ import { OutlinePanel } from "../ui/OutlinePanel";
 
 const CANVAS = { width: 1000, height: 700 };
 
+let raf: jest.SpyInstance;
+
+beforeAll(() => {
+    // Run each coalesced frame immediately, so this file measures the cost of a
+    // *processed* move rather than the frame scheduler. Coalescing itself — many
+    // events collapsing into one frame — is covered in pointer.coalescing.
+    raf = jest
+        .spyOn(window, "requestAnimationFrame")
+        .mockImplementation((cb: FrameRequestCallback) => {
+            cb(0);
+            return 0;
+        });
+});
+
+afterAll(() => {
+    raf.mockRestore();
+});
+
 beforeAll(() => {
     Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
         return {

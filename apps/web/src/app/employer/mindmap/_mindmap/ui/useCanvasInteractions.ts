@@ -40,6 +40,23 @@ import type { EditorStore } from "../model/store";
 import type { DiagramNode, Point, PortId, Rect, ShapeId } from "../model/types";
 
 /**
+ * The parts of a pointer move the handler actually reads.
+ *
+ * Coalescing means the handler runs after the event that produced it has been
+ * and gone, so it cannot hold the event itself — it holds this instead.
+ */
+interface MoveSample {
+    clientX: number;
+    clientY: number;
+    target: Element | null;
+    shiftKey: boolean;
+    altKey: boolean;
+}
+
+/** A frame is scheduled but its id is not known yet. Never a real frame id. */
+const PENDING_FRAME = -1;
+
+/**
  * All pointer behaviour for the canvas.
  *
  * Hit testing goes through the DOM — every rendered shape carries
@@ -176,25 +193,67 @@ export function useCanvasInteractions(
         };
     }, []);
 
+    /**
+     * Cached bounding rect of the canvas element.
+     *
+     * `getBoundingClientRect` forces a synchronous layout. One pointer move used
+     * to cost three of them — `toWorld`, `toScreen`, and a third from the
+     * presence wrapper — each interleaved with React renders that dirty layout
+     * again. That is the textbook layout-thrash pattern, and it is pure waste:
+     * the canvas cannot move under the pointer mid-gesture without one of the
+     * invalidating events below firing.
+     */
+    const rectRef = useRef<DOMRect | null>(null);
+
+    const invalidateRect = useCallback(() => {
+        rectRef.current = null;
+    }, []);
+
+    const canvasRect = useCallback((): DOMRect | null => {
+        const el = svgRef.current;
+        if (!el) return null;
+        const cached = rectRef.current;
+        if (cached) return cached;
+        const rect = el.getBoundingClientRect();
+        rectRef.current = rect;
+        return rect;
+    }, [svgRef]);
+
+    useEffect(() => {
+        const el = svgRef.current;
+        window.addEventListener("resize", invalidateRect);
+        // Capture phase: a scrolling *ancestor* moves the canvas too, and those
+        // scroll events never reach window in the bubble phase.
+        window.addEventListener("scroll", invalidateRect, true);
+
+        const observer =
+            typeof ResizeObserver === "undefined" ? null : new ResizeObserver(invalidateRect);
+        if (el && observer) observer.observe(el);
+
+        return () => {
+            window.removeEventListener("resize", invalidateRect);
+            window.removeEventListener("scroll", invalidateRect, true);
+            observer?.disconnect();
+        };
+    }, [invalidateRect, svgRef]);
+
     const toWorld = useCallback(
         (clientX: number, clientY: number): Point => {
-            const el = svgRef.current;
             const viewport = store.getState().viewport;
-            if (!el) return screenToWorld(viewport, { x: clientX, y: clientY });
-            const rect = el.getBoundingClientRect();
+            const rect = canvasRect();
+            if (!rect) return screenToWorld(viewport, { x: clientX, y: clientY });
             return screenToWorld(viewport, { x: clientX - rect.left, y: clientY - rect.top });
         },
-        [store, svgRef]
+        [canvasRect, store]
     );
 
     const toScreen = useCallback(
         (clientX: number, clientY: number): Point => {
-            const el = svgRef.current;
-            if (!el) return { x: clientX, y: clientY };
-            const rect = el.getBoundingClientRect();
+            const rect = canvasRect();
+            if (!rect) return { x: clientX, y: clientY };
             return { x: clientX - rect.left, y: clientY - rect.top };
         },
-        [svgRef]
+        [canvasRect]
     );
 
     // -----------------------------------------------------------------------
@@ -483,8 +542,8 @@ export function useCanvasInteractions(
     // Pointer move
     // -----------------------------------------------------------------------
 
-    const onPointerMove = useCallback(
-        (e: ReactPointerEvent<SVGSVGElement>) => {
+    const handleMove = useCallback(
+        (e: MoveSample) => {
             const g = gesture.current;
             const state = store.getState();
             const world = toWorld(e.clientX, e.clientY);
@@ -492,7 +551,7 @@ export function useCanvasInteractions(
 
             if (g.kind === "none") {
                 // Idle hover — drives the port dots and connector highlight.
-                const target = e.target as Element | null;
+                const target = e.target;
                 const nodeId = target?.closest("[data-node-id]")?.getAttribute("data-node-id");
                 const edgeId = target?.closest("[data-edge-id]")?.getAttribute("data-edge-id");
                 store.setHover(nodeId ?? null, edgeId ?? null);
@@ -656,7 +715,7 @@ export function useCanvasInteractions(
                 }
 
                 case "connect": {
-                    const target = e.target as Element | null;
+                    const target = e.target;
                     const overNode =
                         target?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null;
                     const overPort =
@@ -738,11 +797,82 @@ export function useCanvasInteractions(
     );
 
     // -----------------------------------------------------------------------
+    // Coalescing
+    // -----------------------------------------------------------------------
+
+    /**
+     * Pointer moves arrive faster than the screen refreshes — a 120 Hz trackpad
+     * delivers two or three per frame, and each one used to do the full round of
+     * hit testing, snapping and routing for a picture nobody would ever see.
+     * Samples are collected and processed once per animation frame instead.
+     */
+    const pending = useRef<MoveSample[]>([]);
+    const frame = useRef<number | null>(null);
+
+    const flushMoves = useCallback(() => {
+        frame.current = null;
+        const samples = pending.current;
+        if (samples.length === 0) return;
+        pending.current = [];
+
+        store.batch(() => {
+            // Ink wants every sample: a freehand stroke built from one point per
+            // frame is visibly polygonal. Every other gesture is either absolute
+            // or accumulates from an origin it stores itself, so for those only
+            // the newest sample can matter.
+            if (gesture.current.kind === "ink") {
+                for (const sample of samples) handleMove(sample);
+            } else {
+                handleMove(samples[samples.length - 1]!);
+            }
+        });
+    }, [handleMove, store]);
+
+    const onPointerMove = useCallback(
+        (e: ReactPointerEvent<SVGSVGElement>) => {
+            pending.current.push({
+                clientX: e.clientX,
+                clientY: e.clientY,
+                target: e.target as Element | null,
+                shiftKey: e.shiftKey,
+                altKey: e.altKey,
+            });
+            if (frame.current !== null) return;
+
+            // Claim the slot before scheduling. A `requestAnimationFrame` that
+            // runs its callback synchronously — jsdom stubs, some polyfills —
+            // would otherwise have `flushMoves` clear the slot and then be
+            // overwritten by the id returned here, leaving it permanently
+            // "scheduled" and dropping every later move.
+            frame.current = PENDING_FRAME;
+            const id = requestAnimationFrame(flushMoves);
+            if (frame.current === PENDING_FRAME) frame.current = id;
+        },
+        [flushMoves]
+    );
+
+    // A queued frame after unmount would touch a dead store.
+    useEffect(
+        () => () => {
+            if (frame.current !== null) cancelAnimationFrame(frame.current);
+        },
+        []
+    );
+
+    // -----------------------------------------------------------------------
     // Pointer up
     // -----------------------------------------------------------------------
 
     const onPointerUp = useCallback(
         (e: ReactPointerEvent<SVGSVGElement>) => {
+            // Land the last queued sample before ending the gesture, or the
+            // shape settles one frame behind where the pointer actually was.
+            if (frame.current !== null) {
+                cancelAnimationFrame(frame.current);
+                frame.current = null;
+            }
+            flushMoves();
+
             const g = gesture.current;
             if (g.kind === "none") return;
             const state = store.getState();
@@ -837,7 +967,7 @@ export function useCanvasInteractions(
             gesture.current = { ...IDLE };
             store.setDrag({ kind: "none" });
         },
-        [store, svgRef, toWorld]
+        [flushMoves, store, svgRef, toWorld]
     );
 
     // -----------------------------------------------------------------------
@@ -940,7 +1070,9 @@ export function useCanvasInteractions(
 
     return {
         onPointerDown: batched(onPointerDown),
-        onPointerMove: batched(onPointerMove),
+        // Not `batched`: this one only queues a sample. The writes happen in
+        // `flushMoves`, which does its own batching around the whole frame.
+        onPointerMove,
         onPointerUp: batched(onPointerUp),
         onWheel: batched(onWheel),
         onDoubleClick: batched(onDoubleClick),

@@ -3,7 +3,6 @@
  * Next.js route files may only export route fields — the factory is
  * exported for dependency-injected tests (routes.test.ts).
  */
-import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import {
@@ -14,7 +13,7 @@ import {
 import type { FounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import type { createRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
-import { safeFounderWeeklyReviewError, safeRun } from "~/server/founder-weekly-review/http";
+import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
 import { logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
 
 const CreateSchema = z.object({
@@ -53,19 +52,18 @@ export interface FounderWeeklyReviewRouteDependencies {
 export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRouteDependencies) {
     return async function POST(request: Request) {
         const { userId } = await auth();
-        if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (!userId) return fail("Unauthorized", 401);
         try {
             // Authorization precedes all workflow persistence: invalid callers must
             // never create a company-scoped collection job.
             const actor = await deps.actorResolver.resolve(userId);
             const parsed = CreateSchema.safeParse(await request.json().catch(() => null));
-            if (!parsed.success)
-                return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+            if (!parsed.success) return fail("Invalid request", 400);
             const existing = await deps.repository.getByCompanyAndRequestKey(
                 actor.companyId,
                 parsed.data.requestKey
             );
-            if (existing) return NextResponse.json({ run: safeRun(existing) }, { status: 202 });
+            if (existing) return ok({ run: safeRun(existing) }, 202);
             const { run, created } = await deps.createRunWithDispatch({
                 actor,
                 requestKey: parsed.data.requestKey,
@@ -91,9 +89,9 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
                 status: run.status,
             });
             await deps.sendDispatchRequested();
-            return NextResponse.json({ run: safeRun(run) }, { status: 202 });
+            return ok({ run: safeRun(run) }, 202);
         } catch (error) {
-            return safeFounderWeeklyReviewError(error);
+            return handleRouteError("founder-weekly-review", error);
         }
     };
 }

@@ -1,6 +1,25 @@
-import { NextResponse } from "next/server";
+/**
+ * Investor-update route plumbing, layered on the shared route contract in
+ * `~/server/api/context`.
+ *
+ * What stays here is the one thing that is genuinely about reviews: which
+ * fields of a run record are safe to put on the wire. Error mapping moved to
+ * the shared contract — every error this service throws now carries its own
+ * status, so there is nothing left for a bespoke mapper to decide.
+ */
+
 import type { FounderWeeklyReviewRunRecord } from "@launchstack/features/founder-weekly-review";
 
+export { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
+
+/**
+ * The client-facing projection of a run.
+ *
+ * Deliberately narrower than the record: the evidence snapshot, the model
+ * metadata and the internal claim ids stay server-side, and `errorMessage` is
+ * never exposed — a failed run reports its code, and the client turns that into
+ * language a founder can act on.
+ */
 export function safeRun(run: FounderWeeklyReviewRunRecord) {
     return {
         id: run.id,
@@ -15,20 +34,4 @@ export function safeRun(run: FounderWeeklyReviewRunRecord) {
         errorCode: run.status === "failed" ? run.errorCode : null,
         reviewPayload: run.reviewPayload,
     };
-}
-
-export function safeFounderWeeklyReviewError(error: unknown) {
-    const code =
-        error && typeof error === "object" && "code" in error
-            ? (error as { code?: string }).code
-            : undefined;
-    if (code === "forbidden") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    if (code === "not_found") return NextResponse.json({ error: "Not found" }, { status: 404 });
-    if (code === "invalid_transition" || code === "conflict")
-        return NextResponse.json({ error: "Conflict" }, { status: 409 });
-    if (code === "invalid_payload")
-        return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-    if (code === "evidence_collector_unavailable" || code === "infrastructure_unavailable")
-        return NextResponse.json({ error: "Generation unavailable" }, { status: 503 });
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 }

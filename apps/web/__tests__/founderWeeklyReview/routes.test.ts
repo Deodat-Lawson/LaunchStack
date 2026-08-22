@@ -7,7 +7,10 @@ jest.mock("~/server/founder-weekly-review/dispatch-service", () => ({
 }));
 
 import { createFounderWeeklyReviewPostHandler } from "~/app/api/founder-weekly-reviews/create-handler";
-import type { FounderWeeklyReviewRunRecord } from "@launchstack/features/founder-weekly-review";
+import {
+    FounderWeeklyReviewForbiddenError,
+    type FounderWeeklyReviewRunRecord,
+} from "@launchstack/features/founder-weekly-review";
 import { auth } from "@clerk/nextjs/server";
 const mockAuth = auth as unknown as jest.Mock;
 
@@ -62,14 +65,12 @@ function setup(
         .mockResolvedValue({ run: run(), dispatch: {}, created: true });
     const deps = {
         actorResolver: {
-            resolve: jest
-                .fn()
-                .mockResolvedValue({
-                    externalUserId: "u",
-                    internalUserId: 1n,
-                    companyId: 1n,
-                    role: "owner",
-                }),
+            resolve: jest.fn().mockResolvedValue({
+                externalUserId: "u",
+                internalUserId: 1n,
+                companyId: 1n,
+                role: "owner",
+            }),
         },
         evidenceCollector: collector,
         repository: { getByCompanyAndRequestKey: jest.fn().mockResolvedValue(null) },
@@ -102,7 +103,9 @@ describe("Founder Weekly Review create route", () => {
     });
     it("authorizes before validation and never collects rejected requests", async () => {
         const { handler, collector, createRunWithDispatch } = setup({
-            actorResolver: { resolve: jest.fn().mockRejectedValue({ code: "forbidden" }) },
+            actorResolver: {
+                resolve: jest.fn().mockRejectedValue(new FounderWeeklyReviewForbiddenError()),
+            },
         });
         expect(
             (await handler(new Request("http://test", { method: "POST", body: "{" }))).status
@@ -119,7 +122,7 @@ describe("Founder Weekly Review create route", () => {
             new Request("http://test", { method: "POST", body: JSON.stringify(body) })
         );
         expect(response.status).toBe(202);
-        expect((await response.json()).run.id).toBe("existing");
+        expect((await response.json()).data.run.id).toBe("existing");
         expect(collector.collectFounderWeeklyReviewEvidence).not.toHaveBeenCalled();
         expect(createRunWithDispatch).not.toHaveBeenCalled();
         expect(deps.recordRunCreated).not.toHaveBeenCalled();

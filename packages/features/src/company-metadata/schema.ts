@@ -47,8 +47,16 @@ export interface MetadataSource {
     doc_id: number;
     doc_name: string;
     extracted_at: string;
+    /**
+     * The document version the fact was read from. Required for a fact to
+     * produce a valid citation anchor; absent on facts extracted before the
+     * field existed, which stay document-level rather than inventing one.
+     */
+    version_id?: number;
     snippet_ref?: string;
     page?: number;
+    /** Verbatim supporting text, when the extractor captured one. */
+    quote?: string;
 }
 
 export interface MetadataFact<T = string> {

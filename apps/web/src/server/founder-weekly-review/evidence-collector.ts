@@ -23,6 +23,8 @@ export interface FounderWeeklyReviewEvidenceCollector {
 /** LAU-6 owns collection. This deliberately never creates an empty snapshot. */
 export class FounderWeeklyReviewEvidenceCollectorUnavailableError extends Error {
     readonly code = "evidence_collector_unavailable";
+    /** A deployment gap, not a bad request — the caller should retry later. */
+    readonly status = 503;
     constructor() {
         super("Founder weekly review evidence collection is not configured.");
     }

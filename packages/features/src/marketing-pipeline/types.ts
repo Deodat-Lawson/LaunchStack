@@ -60,22 +60,14 @@ export const KnowledgeValidationReportSchema = z.object({
 
 export type KnowledgeValidationReport = z.infer<typeof KnowledgeValidationReportSchema>;
 
-/** Structured company profile distilled from KB for marketing (issue #232). */
-export interface CompanyDNA {
-    coreMission: string;
-    keyDifferentiators: string[];
-    provenResults: string[];
-    humanStory: string;
-    technicalEdge: string;
-}
-
-export const CompanyDNASchema = z.object({
-    coreMission: z.string(),
-    keyDifferentiators: z.array(z.string()),
-    provenResults: z.array(z.string()),
-    humanStory: z.string(),
-    technicalEdge: z.string(),
-});
+/**
+ * CompanyDNA and its debug info moved to @launchstack/tools/company-context
+ * (unification PR-1); re-exported here so the marketing barrel's type surface
+ * is unchanged. New code should import from the tool directly.
+ */
+export { CompanyDNASchema } from "@launchstack/tools/company-context";
+export type { CompanyDNA, DNADebugInfo } from "@launchstack/tools/company-context";
+import type { CompanyDNA, DNADebugInfo } from "@launchstack/tools/company-context";
 
 /** Competitor landscape for marketing (issue #232). */
 export interface CompetitorAnalysis {
@@ -157,13 +149,6 @@ export const MarketingPipelineOutputSchema = z.object({
     "image/video": z.enum(["image", "video"]),
 });
 export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSchema>;
-
-/** Debug info about the DNA extraction source, included when ?debug=true. */
-export interface DNADebugInfo {
-    source: "metadata" | "rag";
-    contextUsed: string;
-    dna: CompanyDNA;
-}
 
 export interface MarketingPipelineResult extends MarketingPipelineOutput {
     research: MarketingResearchResult[];

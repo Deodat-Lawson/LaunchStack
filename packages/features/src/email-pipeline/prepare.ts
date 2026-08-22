@@ -158,7 +158,7 @@ function requireName(name?: string): string {
  */
 async function generateContextFor(companyId: number, goal?: string): Promise<string | null> {
     try {
-        const { buildCompanyKnowledgeContext } = await import("../marketing-pipeline/context");
+        const { buildCompanyKnowledgeContext } = await import("@launchstack/tools/company-context");
         return await buildCompanyKnowledgeContext({
             companyId,
             prompt: goal ?? "Review an outreach email template for this company.",

@@ -30,6 +30,7 @@ const config: NextConfig = {
     transpilePackages: [
         "@launchstack/core",
         "@launchstack/features",
+        "@launchstack/tools",
         "@launchstack/protocol",
         "@launchstack/evidence",
         "@launchstack/application",

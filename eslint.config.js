@@ -446,6 +446,58 @@ const eslintConfig = [
             ],
         },
     },
+    // @launchstack/tools holds shared, contract-typed capabilities the feature
+    // verticals compose. It sits one layer below features: tools may import
+    // core, never a vertical — features depend on tools, not the reverse.
+    // Like features it must work in any Node host.
+    {
+        files: ["packages/tools/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                            message:
+                                "@launchstack/tools must not import Next, Clerk, " +
+                                "or React. Tools run in any Node host.",
+                        },
+                        {
+                            group: ["~/*"],
+                            message: "@launchstack/tools cannot import from apps/web (~/*).",
+                        },
+                        {
+                            group: ["@launchstack/features", "@launchstack/features/*"],
+                            message:
+                                "@launchstack/tools cannot import feature verticals: " +
+                                "capabilities move down into tools, pipelines stay in " +
+                                "features. If a tool needs something from a vertical, " +
+                                "the shared piece belongs in tools.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    // Tools read configuration through injected values; process.env is allowed
+    // only in a tool's config.ts module, so credentials are read once, typed,
+    // in one visible place per tool.
+    {
+        files: ["packages/tools/src/**/*.{ts,tsx}"],
+        ignores: ["packages/tools/src/**/config.ts"],
+        rules: {
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message:
+                        "@launchstack/tools reads process.env only in a tool's " +
+                        "config.ts module.",
+                },
+            ],
+        },
+    },
     // Every chat request goes through one OpenAI-compatible transport, which
     // is the only module allowed to construct a chat client. A feature that
     // builds its own skips route resolution, declared-behavior filtering, and

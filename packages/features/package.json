@@ -153,6 +153,7 @@
     "@langchain/core": "^0.3.74",
     "@launchstack/adapters": "workspace:^",
     "@launchstack/core": "workspace:*",
+    "@launchstack/tools": "workspace:*",
     "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",

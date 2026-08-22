@@ -1,6 +1,9 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-import { buildCompanyKnowledgeContext, extractCompanyDNA } from "../marketing-pipeline/context";
+import {
+    buildCompanyKnowledgeContext,
+    extractCompanyDNA,
+} from "@launchstack/tools/company-context";
 import { invokeEmailStructured } from "./models";
 import { EmailTemplateSchema, type EmailTemplate } from "./types";
 

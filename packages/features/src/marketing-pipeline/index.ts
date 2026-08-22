@@ -11,7 +11,12 @@ export {
 } from "./performance";
 export { buildMultiStrategy } from "./positioning";
 export { analyzeCompetitors } from "./competitor";
-export { buildCompanyKnowledgeContext, extractCompanyDNA } from "./context";
+// Moved to @launchstack/tools/company-context (unification PR-1); re-exported
+// so existing route imports keep working. New code should import the tool.
+export {
+    buildCompanyKnowledgeContext,
+    extractCompanyDNA,
+} from "@launchstack/tools/company-context";
 
 // Re-export the full types surface so the @launchstack/features/marketing-pipeline
 // barrel is the single import path callers need.

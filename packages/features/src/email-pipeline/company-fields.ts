@@ -2,8 +2,9 @@ import { eq } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
 import { company } from "@launchstack/core/db/schema";
+import { readFact } from "@launchstack/tools/company-context";
 import { companyMetadata } from "../schema";
-import type { CompanyMetadataJSON, MetadataFact } from "../company-metadata";
+import type { CompanyMetadataJSON } from "../company-metadata";
 
 /**
  * Owner-company data → template merge variables (member.md Phase 2).
@@ -36,20 +37,6 @@ export interface CompanyMergeFields {
     missing: CompanyField[];
     /** Where each resolved field came from, for the audit trail. */
     provenance: Partial<Record<CompanyField, "company" | "company_metadata">>;
-}
-
-/**
- * Mirrors `readFact` in marketing-pipeline/context.ts. Duplicated deliberately:
- * that copy is module-private, and silently diverging thresholds between the two
- * pipelines would be worse than a six-line repeat. Keep these in sync.
- */
-const MIN_CONFIDENCE = 0.5;
-
-function readFact<T>(fact: MetadataFact<T> | undefined): T | undefined {
-    if (!fact) return undefined;
-    if (fact.status !== "active") return undefined;
-    if (fact.confidence < MIN_CONFIDENCE) return undefined;
-    return fact.value;
 }
 
 function clean(value: unknown): string | null {

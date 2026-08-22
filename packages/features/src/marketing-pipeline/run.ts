@@ -1,4 +1,9 @@
-import { buildCompanyKnowledgeContext, extractCompanyDNA } from "./context";
+import {
+    buildCompanyKnowledgeContext,
+    extractCompanyDNA,
+    formatCompanyIdentity,
+    getCompanyIdentity,
+} from "@launchstack/tools/company-context";
 import { generateVariants } from "./generator";
 import { analyzeCompetitors } from "./competitor";
 import { buildMultiStrategy } from "./positioning";
@@ -23,9 +28,6 @@ import type {
 } from "./types";
 import { PIPELINE_STEPS } from "./types";
 
-import { eq } from "drizzle-orm";
-import { getDb } from "@launchstack/core/db";
-import { company, category } from "@launchstack/core/db/schema";
 import { researchPlatformTrends } from "./research";
 
 const DEFAULT_PROMPT = "Generate a compelling campaign post for this platform.";
@@ -105,36 +107,13 @@ export async function runMarketingPipeline(args: {
     const normalizedInput = normalizeInput(args.input);
     const userPrompt = normalizedInput.prompt ?? DEFAULT_PROMPT;
 
-    // 1) Fetch company name, description, industry + categories (fast DB query)
-    const db = getDb();
-    const [companyRow] = await db
-        .select({
-            name: company.name,
-            description: company.description,
-            industry: company.industry,
-        })
-        .from(company)
-        .where(eq(company.id, args.companyId))
-        .limit(1);
-    const companyName = companyRow?.name ?? "Unknown Company";
-    const companyDescription = companyRow?.description ?? "";
-    const companyIndustry = companyRow?.industry ?? "";
-
-    const categoryRows = await db
-        .select({ name: category.name })
-        .from(category)
-        .where(eq(category.companyId, BigInt(args.companyId)))
-        .limit(8);
-    const categories = categoryRows.map(r => r.name).filter(Boolean);
-
-    const companyIdentity = [
-        `Company: ${companyName}.`,
-        companyDescription ? `Description: ${companyDescription}` : "",
-        companyIndustry ? `Industry: ${companyIndustry}` : "",
-        categories.length > 0 ? `Categories: ${categories.join(", ")}` : "",
-    ]
-        .filter(Boolean)
-        .join("\n");
+    // 1) Fetch company identity once (fast DB query); the parallel branches
+    // below reuse it instead of re-querying.
+    const { data: identity } = await getCompanyIdentity({ companyId: args.companyId });
+    const companyName = identity.name;
+    const companyIndustry = identity.industry;
+    const categories = identity.categories;
+    const companyIdentity = formatCompanyIdentity(identity);
 
     // 2) Run KB context, DNA, competitors, trends, brand voice, persona, performance ALL in parallel
     let research: MarketingResearchResult[] = [];
@@ -153,6 +132,7 @@ export async function runMarketingPipeline(args: {
             const ctx = await buildCompanyKnowledgeContext({
                 companyId: args.companyId,
                 prompt: userPrompt,
+                identity,
             });
             emitComplete("loading-context", t0, `Loaded knowledge for ${companyName}`);
             const snippetCount = ctx.split("\n").length;
@@ -170,6 +150,7 @@ export async function runMarketingPipeline(args: {
             const result = await extractCompanyDNA({
                 companyId: args.companyId,
                 prompt: userPrompt,
+                identity,
             });
             const diffCount = result.dna.keyDifferentiators.length;
             emitComplete(

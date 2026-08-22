@@ -19,24 +19,24 @@ single owners.
 
 ## Layout
 
-| Path | Runtime | What it is |
-| --- | --- | --- |
-| `apps/web` | Next.js 15 | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint. |
-| `apps/landing` | Next.js 15 | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment. |
-| `apps/worker` | Node (tsx) | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
-| `packages/protocol` | TS library (published) | Cross-language contracts only: zod event/EvidenceDocument/service schemas + generated JSON Schemas (`schemas/v1/`) consumed by the Python services' contract tests. |
-| `packages/evidence` | TS library (published) | Pure company-state logic: citation anchors, supersession, diffing, conflicts, reconciliation, freshness. No IO, no env. |
-| `packages/application` | TS library (published) | Use cases and ports: command acceptance, the outbox tick with bounded retries, the pipeline event dispatch table, citation building. |
-| `packages/adapters` | TS library (published) | Implementations: Postgres repositories (incl. the outbox), the ingestion pipeline stages, storage/provider/LLM adapters, HTTP clients for the compute services, the engine schema source. |
-| `packages/core` | TS library (published) | **Compatibility facade**: every historical `@launchstack/core` subpath re-exports from the packages above. No business logic — `scripts/ci/check-core-facade.mjs` enforces it. Owns the engine migrations dir (`packages/core/drizzle`, immutable history). |
-| `packages/features` | TS library (private) | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, and others. (`mcp`, `workflow-generation`, `rules-extraction`, `connectors` are roadmap stubs — each a README plus `export {}`, not shipped code.) |
-| `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
-| `services/transcription` | Python/FastAPI | Whisper + yt-dlp → timestamped transcripts. |
-| `services/document-editor` | Python/FastAPI | The authoritative Adeu DOCX-redlining service. |
-| `api/adeu` | Python | **DEPRECATED** duplicate of the editor service, retained tested pending an owner decision (ADR-004 §4). |
-| `docker/` | config | SeaweedFS, Caddy, DB bootstrap. |
-| `scripts/` | mixed | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`. |
-| `docs/` | Markdown | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`). |
+| Path                          | Runtime                | What it is                                                                                                                                                                                                                                                                                             |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `apps/web`                    | Next.js 15             | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint.                                                                                                                                                                       |
+| `apps/landing`                | Next.js 15             | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment.                                                     |
+| `apps/worker`                 | Node (tsx)             | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
+| `packages/protocol`           | TS library (published) | Cross-language contracts only: zod event/EvidenceDocument/service schemas + generated JSON Schemas (`schemas/v1/`) consumed by the Python services' contract tests.                                                                                                                                    |
+| `packages/evidence`           | TS library (published) | Pure company-state logic: citation anchors, supersession, diffing, conflicts, reconciliation, freshness. No IO, no env.                                                                                                                                                                                |
+| `packages/application`        | TS library (published) | Use cases and ports: command acceptance, the outbox tick with bounded retries, the pipeline event dispatch table, citation building.                                                                                                                                                                   |
+| `packages/adapters`           | TS library (published) | Implementations: Postgres repositories (incl. the outbox), the ingestion pipeline stages, storage/provider/LLM adapters, HTTP clients for the compute services, the engine schema source.                                                                                                              |
+| `packages/core`               | TS library (published) | **Compatibility facade**: every historical `@launchstack/core` subpath re-exports from the packages above. No business logic — `scripts/ci/check-core-facade.mjs` enforces it. Owns the engine migrations dir (`packages/core/drizzle`, immutable history).                                            |
+| `packages/features`           | TS library (private)   | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, and others. (`mcp`, `workflow-generation`, `rules-extraction`, `connectors` are roadmap stubs — each a README plus `export {}`, not shipped code.)                                    |
+| `services/document-converter` | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
+| `services/transcription`      | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
+| `services/document-editor`    | Python/FastAPI         | The authoritative Adeu DOCX-redlining service.                                                                                                                                                                                                                                                         |
+| `api/adeu`                    | Python                 | **DEPRECATED** duplicate of the editor service, retained tested pending an owner decision (ADR-004 §4).                                                                                                                                                                                                |
+| `docker/`                     | config                 | SeaweedFS, Caddy, DB bootstrap.                                                                                                                                                                                                                                                                        |
+| `scripts/`                    | mixed                  | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`.                                                                                                                                                                                                             |
+| `docs/`                       | Markdown               | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`).                                                                                                                                                                                     |
 
 > **`services/*` stays outside the pnpm workspace** (deliberate — their deps
 > must not enter every app install). They are covered by their own CI
@@ -46,7 +46,7 @@ single owners.
 ## The dependency direction (enforced)
 
 ```
-protocol ← evidence ← application ← adapters ← core(facade) ← apps/services
+protocol ← evidence ← application ← adapters ← core(facade) ← tools ← features ← apps/services
 ```
 
 ESLint blocks every illegal edge (per-package blocks in `eslint.config.js`);
@@ -55,6 +55,13 @@ keeps engine SQL free of product references. Core/evidence/application/
 adapters must not read `process.env` — configuration flows through
 `CoreConfig`/ports from the composition roots (`apps/web/src/server/engine.ts`,
 reused by the worker).
+
+`packages/tools` (`@launchstack/tools`) holds shared, contract-typed
+capabilities the feature verticals compose — a tool is _imported_, a service is
+_deployed_. Capabilities move down into tools; pipelines stay up in features
+(tools cannot import `@launchstack/features`, lint-enforced), and `process.env`
+is allowed only in a tool's `config.ts`. See `packages/tools/README.md` for the
+catalog.
 
 ## The one ingestion path (ADR-003)
 
@@ -90,7 +97,7 @@ into the Sources library** — rendered to a Markdown outline, stored through
 `uploadFile`, then handed to `processDocumentUpload`, which is the same
 ingestion path an uploaded PDF takes. There is no diagram-shaped special case in
 ingestion, and a published mindmap is chunked, embedded and citable like any
-other source. Entry points: *Add a source → Create → Mindmap*, and the Studio
+other source. Entry points: _Add a source → Create → Mindmap_, and the Studio
 feature menu.
 
 Its tables (`pdr_ai_v2_mindmaps`, `…_mindmap_revisions`, `…_mindmap_presence`)
@@ -110,12 +117,12 @@ banned on deploy surfaces. The one engine table the refactor added:
 
 ## Deploy targets
 
-| Target | Built from | Notes |
-| --- | --- | --- |
-| GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
-| `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
-| npm packages | `packages/{protocol,evidence,application,adapters,core}` | One Changesets flow (`release.yml`); `check-package-exports.mjs` gates every core subpath. |
-| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, document-editor, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
+| Target         | Built from                                               | Notes                                                                                                                                                                                                                   |
+| -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GHCR images    | `apps/web/Dockerfile`, `apps/worker/Dockerfile`          | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.**                                                                        |
+| `apps/landing` | —                                                        | The public marketing site has no deploy pipeline in this repo.                                                                                                                                                          |
+| npm packages   | `packages/{protocol,evidence,application,adapters,core}` | One Changesets flow (`release.yml`); `check-package-exports.mjs` gates every core subpath.                                                                                                                              |
+| Local          | `docker-compose.yml` via `Makefile`                      | `make up` starts the required stack: db, migrate, seaweedfs, transcription, document-editor, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)
 

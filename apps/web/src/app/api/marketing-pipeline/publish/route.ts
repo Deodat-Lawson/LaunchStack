@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { MarketingPlatformEnum } from "@launchstack/features/marketing-pipeline";
-import { publishContent } from "@launchstack/features/marketing-pipeline";
+import { markContentPublished, publishContent } from "@launchstack/features/marketing-pipeline";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -34,6 +34,21 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 { success: false, message: result.error ?? "Publish failed", platform },
                 { status: 502 }
+            );
+        }
+
+        // Record the publish against the matching history row (fire-and-forget:
+        // a failed write-back must not fail a post that already went out).
+        const companyId = Number(ctx.data.companyId);
+        if (!Number.isNaN(companyId)) {
+            void markContentPublished({
+                companyId,
+                platform,
+                message,
+                postId: result.postId,
+                postUrl: result.postUrl,
+            }).catch(err =>
+                console.warn("[marketing-pipeline/publish] history write-back failed:", err)
             );
         }
 

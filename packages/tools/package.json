@@ -52,6 +52,10 @@
     "./content-scoring": {
       "types": "./src/content-scoring/index.ts",
       "default": "./src/content-scoring/index.ts"
+    },
+    "./social-publish": {
+      "types": "./src/social-publish/index.ts",
+      "default": "./src/social-publish/index.ts"
     }
   },
   "scripts": {

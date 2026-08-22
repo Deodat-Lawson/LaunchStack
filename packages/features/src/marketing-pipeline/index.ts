@@ -10,6 +10,7 @@ export {
     getPerformanceHistory,
     buildPerformanceInsights,
     saveGeneratedContent,
+    markContentPublished,
 } from "./performance";
 export { buildMultiStrategy } from "./positioning";
 export { analyzeCompetitors } from "./competitor";

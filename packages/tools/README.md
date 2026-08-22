@@ -27,8 +27,7 @@ contract types (`ToolRunContext`, `ToolResult`, `ToolError`) live in
 | **claim-evidence**     | `@launchstack/tools/claim-evidence`     | Extract factual claims from content and look up their knowledge-base sources. Scores are `relevance` (retrieval), never "confidence"; "no source" is a null match, not a zero.                                            | marketing-pipeline                                                                 |
 | **platform-profiles**  | `@launchstack/tools/platform-profiles`  | One registry per social platform: posting guidelines, structure templates, few-shot examples, hashtag caps, hard char limits, judge reference posts.                                                                      | marketing generation + publish, evaluate route, benchmark                          |
 | **content-scoring**    | `@launchstack/tools/content-scoring`    | One versioned rubric, two consumers: the offline LLM judge (`scorePost`, never rewrites) and the live quality gate (`validatePostQuality`). Variant ranking arrives with the P2 runner.                                   | marketing generation gate, benchmark, evaluate route                               |
-
-Planned (design doc, Phase 1): `social-publish`.
+| **social-publish**     | `@launchstack/tools/social-publish`     | One `PublishAdapter` per platform (X, LinkedIn, Reddit, Bluesky) behind one registry: typed config in `config.ts`, session/token caching, profile char limits, and the platform-native `postId` on every success.         | marketing publish route (with history write-back)                                  |
 
 ## Tests
 

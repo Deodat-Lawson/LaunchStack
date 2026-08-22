@@ -47,5 +47,5 @@ Ground everything in the provided context. Return valid JSON.`
         "target_persona"
     );
 
-    return TargetPersonaSchema.parse(response);
+    return response;
 }

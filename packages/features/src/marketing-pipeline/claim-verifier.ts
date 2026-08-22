@@ -25,7 +25,7 @@ export async function verifyClaimSources(args: {
         "claim_list"
     );
 
-    const { claims } = ClaimListSchema.parse(extractResponse);
+    const { claims } = extractResponse;
     if (claims.length === 0) return [];
 
     const rag = getRag();

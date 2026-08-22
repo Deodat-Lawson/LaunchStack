@@ -49,5 +49,5 @@ Use ONLY patterns visible in the provided text. Return valid JSON.${toneHint}`
         "brand_voice"
     );
 
-    return BrandVoiceSchema.parse(response);
+    return response;
 }

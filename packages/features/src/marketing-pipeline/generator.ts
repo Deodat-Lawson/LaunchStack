@@ -324,82 +324,7 @@ Flag specific issues in "issues" array.`
         "quality_check"
     );
 
-    return QualityScoreSchema.parse(response);
-}
-
-/* ──────────────────────────────────────────────────────────────
- * Main generation
- * ────────────────────────────────────────────────────────────── */
-
-export async function generateCampaignOutput(args: {
-    platform: MarketingPlatform;
-    prompt: string;
-    companyContext: string;
-    research: MarketingResearchResult[];
-    strategy?: MessagingStrategy;
-    enableQualityGate?: boolean;
-    platformMeta?: PlatformMeta;
-}): Promise<{
-    platform: MarketingPlatform;
-    message: string;
-    "image/video": "image" | "video";
-    competitiveAngle?: string;
-    strategyUsed?: MessagingStrategy;
-}> {
-    const systemPrompt = args.strategy ? SYSTEM_PROMPT_BASE + STRATEGY_RULES : SYSTEM_PROMPT_BASE;
-
-    const response = await invokeMarketingStructured(
-        MarketingPipelineOutputSchema,
-        [
-            new SystemMessage(systemPrompt),
-            new HumanMessage(
-                buildPrompt({
-                    platform: args.platform,
-                    prompt: args.prompt,
-                    companyContext: args.companyContext,
-                    research: args.research,
-                    strategy: args.strategy,
-                    platformMeta: args.platformMeta,
-                })
-            ),
-        ],
-        "marketing_pipeline_output"
-    );
-
-    let parsed = MarketingPipelineOutputSchema.parse(response);
-
-    if (args.enableQualityGate) {
-        try {
-            const quality = await validatePostQuality(parsed.message, args.platform);
-            console.log(
-                "[marketing-pipeline] quality gate: score=%d issues=%d",
-                quality.score,
-                quality.issues.length
-            );
-            if (quality.score < QUALITY_THRESHOLD && quality.rewrite) {
-                parsed = { ...parsed, message: quality.rewrite };
-                console.log(
-                    "[marketing-pipeline] quality gate rewrote post (score was %d)",
-                    quality.score
-                );
-            }
-        } catch (err) {
-            console.warn("[marketing-pipeline] quality gate failed, using original:", err);
-        }
-    }
-
-    const out: {
-        platform: MarketingPlatform;
-        message: string;
-        "image/video": "image" | "video";
-        competitiveAngle?: string;
-        strategyUsed?: MessagingStrategy;
-    } = { ...parsed };
-    if (args.strategy) {
-        out.competitiveAngle = args.strategy.angle;
-        out.strategyUsed = args.strategy;
-    }
-    return out;
+    return response;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -495,7 +420,7 @@ export async function generateVariants(args: {
                 "marketing_pipeline_output"
             );
 
-            let parsed = MarketingPipelineOutputSchema.parse(response);
+            let parsed = response;
 
             if (args.enableQualityGate) {
                 try {
@@ -564,7 +489,7 @@ Rules:
         "refined_content"
     );
 
-    const parsed = RefinementSchema.parse(response);
+    const parsed = response;
     return {
         variantId: "refined",
         message: parsed.message,

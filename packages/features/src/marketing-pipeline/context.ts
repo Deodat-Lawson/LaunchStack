@@ -322,5 +322,5 @@ async function synthesizeDNA(context: string, userPrompt: string): Promise<Compa
         ],
         "company_dna"
     );
-    return CompanyDNASchema.parse(response);
+    return response;
 }

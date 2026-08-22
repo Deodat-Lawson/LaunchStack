@@ -140,7 +140,6 @@ Return valid JSON matching the schema.`;
         "competitor_analysis"
     );
 
-    const result = CompetitorAnalysisSchema.parse(response);
-    setCache(companyName, categories, result);
-    return result;
+    setCache(companyName, categories, response);
+    return response;
 }

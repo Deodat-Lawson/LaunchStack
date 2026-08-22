@@ -153,6 +153,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         routes: ["repo-explainer"],
     },
     {
+        id: "mindmaps",
+        tier: "tool",
+        summary: "Collaborative canvas: draw a map, share it, publish a revision.",
+        scope: "workspace",
+        routes: ["mindmaps"],
+        notes:
+            "Workspace-scoped rather than user-scoped — anyone in the company can open a map a " +
+            "colleague drew, matching how sources already behave.",
+    },
+    {
         id: "notes",
         tier: "tool",
         summary: "Freeform notes that link to sources and to each other.",

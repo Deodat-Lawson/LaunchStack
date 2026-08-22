@@ -1,0 +1,4 @@
+# Throwaway venvs the generator creates to resolve Python closures without
+# installing. The resolved reports beside them are committed so
+# `--skip-python` (and CI) work offline.
+.venv-*/

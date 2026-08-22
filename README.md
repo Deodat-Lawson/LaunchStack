@@ -312,3 +312,12 @@ We welcome PRs — start with [CONTRIBUTING.md](CONTRIBUTING.md). A few things t
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE). By contributing you agree your contributions will be released under the same license.
+
+Third-party dependencies bundled into the published images and the compute
+services keep their own licenses; their notices are collected in
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), which is generated from the
+lockfiles:
+
+```bash
+node scripts/licenses/generate-attributions.mjs
+```

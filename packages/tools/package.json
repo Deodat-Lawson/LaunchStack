@@ -36,6 +36,10 @@
     "./persona": {
       "types": "./src/persona/index.ts",
       "default": "./src/persona/index.ts"
+    },
+    "./web-research": {
+      "types": "./src/web-research/index.ts",
+      "default": "./src/web-research/index.ts"
     }
   },
   "scripts": {

@@ -1,7 +1,2 @@
-import type { SearchProviderFn } from "./types";
-import { callExa } from "./exa";
-import { callSerper } from "./serper";
-export const providerRegistry: Record<string, SearchProviderFn> = {
-    exa: callExa,
-    serper: callSerper,
-};
+/** Moved to @launchstack/tools/web-research (unification PR-3); re-exported. */
+export { providerRegistry } from "@launchstack/tools/web-research";

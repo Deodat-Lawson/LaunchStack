@@ -1,9 +1,15 @@
 import { z } from "zod";
 
-// ─── Category ────────────────────────────────────────────────────────────────
+// ─── Category (moved to @launchstack/tools/web-research, PR-3; re-exported) ──
 
-export const SearchCategoryEnum = z.enum(["fashion", "finance", "business", "tech"]);
-export type SearchCategory = z.infer<typeof SearchCategoryEnum>;
+export { SearchCategoryEnum } from "@launchstack/tools/web-research";
+export type {
+    SearchCategory,
+    PlannedQuery,
+    RawSearchResult,
+} from "@launchstack/tools/web-research";
+import { SearchCategoryEnum } from "@launchstack/tools/web-research";
+import type { SearchCategory } from "@launchstack/tools/web-research";
 
 // ─── Input ───────────────────────────────────────────────────────────────────
 
@@ -66,20 +72,5 @@ export const TrendSearchEventDataSchema = z.object({
 });
 export type TrendSearchEventData = z.infer<typeof TrendSearchEventDataSchema>;
 
-// ─── Query Planner ───────────────────────────────────────────────────────────
-
-export interface PlannedQuery {
-    searchQuery: string;
-    category: SearchCategory;
-    rationale: string;
-}
-
-// ─── Web Search ──────────────────────────────────────────────────────────────
-
-export interface RawSearchResult {
-    url: string;
-    title: string;
-    content: string;
-    score: number;
-    publishedDate?: string;
-}
+// PlannedQuery and RawSearchResult moved to @launchstack/tools/web-research
+// (re-exported above).

@@ -1,6 +1,6 @@
+import { executeSearch } from "@launchstack/tools/web-research";
 import type { PlannedQuery, TrendSearchInput, TrendSearchOutput } from "./types";
 import { planQueries } from "./query-planner";
-import { executeSearch } from "./web-search";
 import { synthesizeResults } from "./synthesizer";
 
 export type TrendSearchPipelineStage = "searching" | "synthesizing";

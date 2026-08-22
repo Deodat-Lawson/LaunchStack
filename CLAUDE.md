@@ -27,6 +27,10 @@ boundaries in `eslint.config.js`), `services/*`. pnpm workspaces.
 - Touch-it-migrate-it: when editing existing UI for feature work, convert the
   region you touch to kit + tokens; never launch a bulk rewrite.
 - Full conventions: `apps/web/README.md`.
+- The Mindmap app (`app/employer/mindmap`) has its own README and one
+  deliberate exception: shape colours are literal OKLCH values stored in the
+  document, not tokens — a token would repaint when the _viewer_ switches
+  theme and change someone else's diagram. Its chrome uses tokens normally.
 
 ## Workflow
 

@@ -22,8 +22,10 @@ import { OutlinePanel } from "../ui/OutlinePanel";
  *
  * Every subscribed component pays for each notification: `useSyncExternalStore`
  * re-runs its `getSnapshot`, which re-runs the selector and its equality check.
- * With sixteen subscribed components, one redundant notification per pointer
- * move is sixteen redundant selector runs per move.
+ * The five panels that are always on screen — canvas, tool rail, left panel,
+ * inspector and bottom bar — subscribe fourteen times between them, so one
+ * redundant notification per pointer move is fourteen redundant selector runs
+ * per move, sixty times a second.
  */
 
 const CANVAS = { width: 1000, height: 700 };
@@ -172,8 +174,10 @@ describe("what one notification costs", () => {
 
         // Each `useSyncExternalStore` in the tree is one listener, and each
         // listener re-runs its selector and equality check per notification.
-        // Three panels already cost several; the full editor mounts far more.
-        // Halving the notifications halves all of that work.
+        // These three panels alone cost several; the five that are always on
+        // screen come to fourteen. A loose lower bound rather than an exact
+        // count, so adding a panel doesn't fail an unrelated test — the point
+        // is only that the multiplier is real.
         expect(store.listenerCount()).toBeGreaterThanOrEqual(3);
 
         view.unmount();

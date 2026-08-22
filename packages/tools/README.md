@@ -25,8 +25,10 @@ contract types (`ToolRunContext`, `ToolResult`, `ToolError`) live in
 | **persona**            | `@launchstack/tools/persona`            | Synthesize a TargetPersona (role, pain points, priorities, language style) for a described audience, grounded in company knowledge.                                                                                       | marketing-pipeline                                                                 |
 | **web-research**       | `@launchstack/tools/web-research`       | Provider-pluggable web search (Exa/Serper registry, strategy selection, retry, URL dedup) plus the shared in-memory TTL cache (`createTtlCache`). Env reads live in its `config.ts`.                                      | trend-search (planning/synthesis/jobs stay there), marketing competitor + research |
 
-Planned (design doc, Phase 1): `claim-evidence`, `content-scoring`,
-`social-publish`, `platform-profiles`.
+| **claim-evidence** | `@launchstack/tools/claim-evidence` | Extract factual claims from content and look up their knowledge-base sources. Scores are `relevance` (retrieval), never "confidence"; "no source" is a null match, not a zero. | marketing-pipeline |
+
+Planned (design doc, Phase 1): `content-scoring`, `social-publish`,
+`platform-profiles`.
 
 ## Tests
 

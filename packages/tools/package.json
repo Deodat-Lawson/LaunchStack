@@ -40,6 +40,10 @@
     "./web-research": {
       "types": "./src/web-research/index.ts",
       "default": "./src/web-research/index.ts"
+    },
+    "./claim-evidence": {
+      "types": "./src/claim-evidence/index.ts",
+      "default": "./src/claim-evidence/index.ts"
     }
   },
   "scripts": {

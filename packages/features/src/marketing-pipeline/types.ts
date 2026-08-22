@@ -176,7 +176,7 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     /** All intermediate pipeline stages for transparency. */
     pipelineStages?: PipelineStages;
     /** Claim sources mapped back to KB documents. */
-    claimSources?: ClaimSource[];
+    claimSources?: CheckedClaim[];
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -204,12 +204,13 @@ export interface ContentVariant {
     mediaType: "image" | "video";
 }
 
-export interface ClaimSource {
-    claim: string;
-    sourceDoc: string;
-    chunk: string;
-    confidence: number;
-}
+/**
+ * Claim checking moved to @launchstack/tools/claim-evidence (unification
+ * PR-4) with honest semantics: `relevance` is a retrieval score (never
+ * "confidence"), and "no source found" is a null match, not a zero.
+ */
+export type { CheckedClaim, ClaimSourceMatch } from "@launchstack/tools/claim-evidence";
+import type { CheckedClaim } from "@launchstack/tools/claim-evidence";
 
 export interface PipelineStages {
     dna: CompanyDNA;
@@ -260,7 +261,7 @@ export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }
     { id: "checking-performance", label: "Checking performance history" },
     { id: "building-strategy", label: "Building messaging strategies" },
     { id: "generating-content", label: "Generating content variants" },
-    { id: "verifying-claims", label: "Verifying claim sources" },
+    { id: "verifying-claims", label: "Checking claim sources" },
 ];
 
 export type PipelineSSEEvent =

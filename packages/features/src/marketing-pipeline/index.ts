@@ -5,7 +5,7 @@ export { generateVariants, refineContent } from "./generator";
 // imports keep working. New code should import the tools.
 export { extractBrandVoice } from "@launchstack/tools/brand-voice";
 export { extractTargetPersona } from "@launchstack/tools/persona";
-export { verifyClaimSources } from "./claim-verifier";
+export { checkClaimSources } from "@launchstack/tools/claim-evidence";
 export {
     getPerformanceHistory,
     buildPerformanceInsights,

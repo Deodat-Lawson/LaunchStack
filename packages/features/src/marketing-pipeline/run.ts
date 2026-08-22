@@ -7,9 +7,9 @@ import {
 import { generateVariants } from "./generator";
 import { extractBrandVoice } from "@launchstack/tools/brand-voice";
 import { extractTargetPersona } from "@launchstack/tools/persona";
+import { checkClaimSources } from "@launchstack/tools/claim-evidence";
 import { analyzeCompetitors } from "./competitor";
 import { buildMultiStrategy } from "./positioning";
-import { verifyClaimSources } from "./claim-verifier";
 import {
     getPerformanceHistory,
     buildPerformanceInsights,
@@ -24,7 +24,7 @@ import type {
     BrandVoice,
     TargetPersona,
     ContentVariant,
-    ClaimSource,
+    CheckedClaim,
 } from "./types";
 import { PIPELINE_STEPS } from "./types";
 
@@ -452,38 +452,43 @@ export async function runMarketingPipeline(args: {
     // Pick best variant as the primary message
     const bestVariant = variants[0] ?? { message: "", mediaType: "image" as const };
 
-    // 5) Verify claim sources for the best variant
-    let claimSources: ClaimSource[] = [];
+    // 5) Look up knowledge-base sources for the best variant's claims
+    let claimSources: CheckedClaim[] = [];
     const t6 = Date.now();
     emitStart("verifying-claims");
     try {
-        claimSources = await verifyClaimSources({
+        const checked = await checkClaimSources({
             companyId: args.companyId,
             message: bestVariant.message,
         });
-        const verified = claimSources.filter(c => c.confidence > 0.5).length;
+        claimSources = checked.claims;
+        const sourced = claimSources.filter(c => c.match !== null).length;
+        const truncationNote =
+            checked.totalClaimsFound > claimSources.length
+                ? ` (checked ${claimSources.length} of ${checked.totalClaimsFound} found)`
+                : "";
         emitComplete(
             "verifying-claims",
             t6,
-            `${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""}, ${verified} verified`
+            `${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""}, ${sourced} sourced${truncationNote}`
         );
         emitData("verifying-claims", {
             claims: claimSources.map(c => ({
                 claim: c.claim.slice(0, 100),
-                sourceDoc: c.sourceDoc,
-                confidence: Math.round(c.confidence * 100),
+                sourceDoc: c.match?.sourceDoc ?? null,
+                relevance: c.match?.relevance != null ? Math.round(c.match.relevance * 100) : null,
             })),
         });
         emitThinking(
             "verifying-claims",
-            `Cross-referencing claims against the knowledge base... ${verified}/${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""} have direct source backing. ${verified === claimSources.length ? "All claims verified." : "Some claims lack strong sources — review recommended."}`
+            `Cross-referencing claims against the knowledge base... ${sourced}/${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""} have a matching source. ${sourced === claimSources.length ? "Every claim has a source." : "Some claims lack a matching source — review recommended."}`
         );
     } catch (err) {
-        console.warn("[marketing-pipeline] claim verification failed:", err);
-        emitComplete("verifying-claims", t6, "Claim verification unavailable", "failed");
+        console.warn("[marketing-pipeline] claim source lookup failed:", err);
+        emitComplete("verifying-claims", t6, "Claim source lookup unavailable", "failed");
         emitThinking(
             "verifying-claims",
-            "Claim verification unavailable — could not cross-reference claims with the knowledge base. Manual review recommended."
+            "Claim source lookup unavailable — could not cross-reference claims with the knowledge base. Manual review recommended."
         );
     }
 

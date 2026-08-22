@@ -32,11 +32,12 @@ Knowledge Base Signals:  # RAG over the company's document embeddings (top snipp
 ```
 
 > **DB provenance** (matches what generation reads): identity fields come from the
-> `company` and `category` tables; *Knowledge Base Signals* come from the RAG index
+> `company` and `category` tables; _Knowledge Base Signals_ come from the RAG index
 > over the company's uploaded documents; the optional `=== … ===` sections come
 > from the `company_metadata` JSONB.
 
 ## LinkedIn platform norms
+
 <!-- fill: longer-form professional tone, strong first line before the "…see more"
      fold, whitespace/line breaks for skimmability, 1–3 tasteful hashtags,
      clear CTA, credibility over hype -->
@@ -46,8 +47,10 @@ Knowledge Base Signals:  # RAG over the company's document embeddings (top snipp
 ## GOOD examples
 
 ### good-1
+
 **Company:** <!-- e.g. PostHog -->
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -56,15 +59,20 @@ Employee Count Range:
 Company Categories:
 Knowledge Base Signals:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's good:** <!-- one line -->
 
 ### good-2
+
 **Company:**
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -73,10 +81,13 @@ Employee Count Range:
 Company Categories:
 Knowledge Base Signals:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's good:**
 
 <!-- Repeat good-3 … good-10 (target 10, spread across >3 companies). -->
@@ -86,8 +97,10 @@ Knowledge Base Signals:
 ## BAD examples
 
 ### bad-1
+
 **Company:**
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -96,10 +109,13 @@ Employee Count Range:
 Company Categories:
 Knowledge Base Signals:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's bad:** <!-- one line: corporate cliché / feature-dump / humble-brag with no substance / ungrounded claim -->
 
 <!-- Repeat bad-2 … bad-5 (target 3–5). -->

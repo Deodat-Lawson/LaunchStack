@@ -35,11 +35,12 @@ Subreddit:               # target community context (platformMeta.subreddit)
 ```
 
 > **DB provenance** (matches what generation reads): identity fields come from the
-> `company` and `category` tables; *Knowledge Base Signals* come from the RAG index
+> `company` and `category` tables; _Knowledge Base Signals_ come from the RAG index
 > over the company's uploaded documents; the optional `=== … ===` sections come
 > from the `company_metadata` JSONB.
 
 ## Reddit platform norms
+
 <!-- fill: authentic community voice, no hashtags, no corporate-speak, value/story
      first, discloses affiliation, fits the target subreddit's culture, invites
      discussion rather than pitching -->
@@ -49,8 +50,10 @@ Subreddit:               # target community context (platformMeta.subreddit)
 ## GOOD examples
 
 ### good-1
+
 **Company:** <!-- e.g. Cursor -->
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -60,15 +63,20 @@ Company Categories:
 Knowledge Base Signals:
 Subreddit:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's good:** <!-- one line -->
 
 ### good-2
+
 **Company:**
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -78,10 +86,13 @@ Company Categories:
 Knowledge Base Signals:
 Subreddit:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's good:**
 
 <!-- Repeat good-3 … good-10 (target 10, spread across >3 companies). -->
@@ -91,8 +102,10 @@ Subreddit:
 ## BAD examples
 
 ### bad-1
+
 **Company:**
 **Company context:**
+
 ```text
 Company Name:
 Company Description:
@@ -102,10 +115,13 @@ Company Categories:
 Knowledge Base Signals:
 Subreddit:
 ```
+
 **Post:**
+
 ```text
 
 ```
+
 **Why it's bad:** <!-- one line: reads like an ad / corporate tone / breaks subreddit norms / ungrounded claim -->
 
 <!-- Repeat bad-2 … bad-5 (target 3–5). -->

@@ -49,13 +49,26 @@ export type ChangeType = (typeof CHANGE_TYPE_VALUES)[number];
 // Fact wrapper (reused on every field)
 // ============================================================================
 
-/** Where a fact was extracted from. */
+/**
+ * Where a fact was extracted from.
+ *
+ * `version_id` is what makes a fact *citable*: a citation anchor is only valid
+ * with a positive source version id, so a fact carrying only `doc_id` can be
+ * attributed to a document but never to the exact revision that said it.
+ * Optional because facts extracted before this field existed cannot be
+ * back-filled — they degrade to document-level provenance rather than
+ * fabricating a version.
+ */
 export interface MetadataSource {
     doc_id: number;
     doc_name: string;
     extracted_at: string; // ISO 8601
+    /** The document version the fact was read from. Absent on legacy facts. */
+    version_id?: number;
     snippet_ref?: string;
     page?: number;
+    /** Verbatim supporting text, when the extractor captured one. */
+    quote?: string;
 }
 
 /**

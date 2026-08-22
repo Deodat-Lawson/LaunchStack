@@ -237,9 +237,15 @@ export async function extractCompanyFacts(
     const { documentId, generate } = input;
     const db = getDb();
 
-    // 1. Fetch document name
+    // 1. Fetch document name and the version the facts will be attributed to.
+    //    Chunks below are already filtered to `currentVersionId`, so that is
+    //    the revision every extracted fact actually came from — recording it
+    //    is what lets a fact resolve to a citation anchor later.
     const [doc] = await db
-        .select({ title: documentTable.title })
+        .select({
+            title: documentTable.title,
+            currentVersionId: documentTable.currentVersionId,
+        })
         .from(documentTable)
         .where(eq(documentTable.id, documentId))
         .limit(1);
@@ -343,10 +349,18 @@ export async function extractCompanyFacts(
 
     // 5. Aggregate across all batch results
     const now = new Date().toISOString();
+    const versionId =
+        doc.currentVersionId === null || doc.currentVersionId === undefined
+            ? undefined
+            : Number(doc.currentVersionId);
     const source: MetadataSource = {
         doc_id: documentId,
         doc_name: doc.title,
         extracted_at: now,
+        // Omitted rather than zeroed when the document has no current version:
+        // a zero would pass an `if (version_id)` check and mint an anchor that
+        // points at nothing.
+        ...(versionId ? { version_id: versionId } : {}),
     };
 
     return aggregateResults(successfulResults, documentId, doc.title, now, source);

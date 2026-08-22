@@ -121,13 +121,21 @@ export function MetadataView({ embedded = false, bare = false, onActions }: Meta
     }, [fetchMetadata]);
 
     const handleFieldSave = useCallback(
-        async (field: string, value: string) => {
+        async (path: string, value: string) => {
+            // The callers already build a dotted path ("company.name",
+            // "people.0.role"); the route keys on `path`, so sending `field`
+            // failed schema validation before it reached the parser at all.
             const response = await fetch("/api/company/metadata", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ field, value }),
+                body: JSON.stringify({ path, value }),
             });
-            if (!response.ok) throw new Error("Failed to save field");
+            if (!response.ok) {
+                const detail = (await response.json().catch(() => null)) as {
+                    error?: string;
+                } | null;
+                throw new Error(detail?.error ?? "Failed to save field");
+            }
             await fetchMetadata();
         },
         [fetchMetadata]
@@ -379,7 +387,7 @@ interface MainProps {
     onDismissBanner: () => void;
     onRefresh: () => Promise<void> | void;
     onExtract: () => Promise<void> | void;
-    onFieldSave: (field: string, value: string) => Promise<void>;
+    onFieldSave: (path: string, value: string) => Promise<void>;
     onSectionChange: (id: SectionId) => void;
 }
 

@@ -9,6 +9,7 @@ const GENERATION_ROLES = new Set(["owner", "admin", "editor"]);
 
 export class FounderWeeklyReviewAuthorizationError extends Error {
     readonly code = "forbidden";
+    readonly status = 403;
 }
 
 export interface FounderWeeklyReviewActor {

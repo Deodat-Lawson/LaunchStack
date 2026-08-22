@@ -8,7 +8,12 @@ jest.mock("~/server/founder-weekly-review/dispatch-service", () => ({
 import { auth } from "@clerk/nextjs/server";
 import { createFounderWeeklyReviewGetHandler } from "~/app/api/founder-weekly-reviews/[runId]/get-handler";
 import { createFounderWeeklyReviewRetryPostHandler } from "~/app/api/founder-weekly-reviews/[runId]/retry/retry-handler";
-import type { FounderWeeklyReviewRunRecord } from "@launchstack/features/founder-weekly-review";
+import {
+    FounderWeeklyReviewForbiddenError,
+    FounderWeeklyReviewInvalidTransitionError,
+    FounderWeeklyReviewNotFoundError,
+    type FounderWeeklyReviewRunRecord,
+} from "@launchstack/features/founder-weekly-review";
 const mockAuth = auth as unknown as jest.Mock;
 const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" as const };
 function run(
@@ -73,7 +78,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
         });
         const json = await response.json();
         expect(response.status).toBe(200);
-        expect(json.run.status).toBe("failed");
+        expect(json.data.run.status).toBe("failed");
         expect(JSON.stringify(json)).not.toContain("DO NOT LEAK");
         expect(JSON.stringify(json)).not.toContain("provider secret");
     });
@@ -92,7 +97,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
         mockAuth.mockResolvedValue({ userId: "u" });
         const missing = createFounderWeeklyReviewGetHandler({
             actorResolver: { resolve: jest.fn().mockResolvedValue(actor) },
-            getRun: jest.fn().mockRejectedValue({ code: "not_found" }),
+            getRun: jest.fn().mockRejectedValue(new FounderWeeklyReviewNotFoundError("x")),
         });
         expect(
             (await missing(new Request("http://test"), { params: Promise.resolve({ runId: "x" }) }))
@@ -111,15 +116,17 @@ describe("Founder Weekly Review read and retry route handlers", () => {
                     params: Promise.resolve({ runId: "fwr_1" }),
                 })
             ).json();
-            expect(json.run).toMatchObject({ id: "fwr_1", status });
-            expect(json.run).not.toHaveProperty("evidenceSnapshot");
+            expect(json.data.run).toMatchObject({ id: "fwr_1", status });
+            expect(json.data.run).not.toHaveProperty("evidenceSnapshot");
             expect(JSON.stringify(json)).not.toContain("DO NOT LEAK");
         }
     );
     it("does not look up a run when strict actor resolution fails", async () => {
         const getRun = jest.fn();
         const handler = createFounderWeeklyReviewGetHandler({
-            actorResolver: { resolve: jest.fn().mockRejectedValue({ code: "forbidden" }) },
+            actorResolver: {
+                resolve: jest.fn().mockRejectedValue(new FounderWeeklyReviewForbiddenError()),
+            },
             getRun,
         });
         expect(
@@ -201,7 +208,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
         async status => {
             const retryRunWithDispatch = jest
                 .fn()
-                .mockRejectedValue({ code: "invalid_transition", status });
+                .mockRejectedValue(new FounderWeeklyReviewInvalidTransitionError(status, "retry"));
             const sendDispatchRequested = jest.fn(),
                 incrementRetry = jest.fn();
             const handler = createFounderWeeklyReviewRetryPostHandler({

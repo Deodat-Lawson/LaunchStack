@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs";
-import path from "node:path";
 import { z } from "zod";
+
+import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import {
@@ -19,8 +19,6 @@ export const maxDuration = 60;
  * same company-context window the generator built. Body: { message, platform }.
  */
 
-const REFERENCE_PLATFORMS = new Set(["x", "linkedin", "reddit"]);
-
 const EvaluateBodySchema = z.object({
     message: z.string().min(1).max(5000),
     platform: z.string().max(40).optional(),
@@ -32,33 +30,6 @@ const EvaluateBodySchema = z.object({
     brandVoice: z.unknown().optional(),
     targetPersona: z.unknown().optional(),
 });
-
-/** Platforms we already warned about — one missing-reference warning each. */
-const warnedMissingReferences = new Set<string>();
-
-/** Load the platform reference md (blank until curated) — empty if not found. */
-function loadReferenceMarkdown(platform: string): string {
-    if (!REFERENCE_PLATFORMS.has(platform)) return "";
-    const rel = `packages/features/src/marketing-pipeline/benchmark/references/${platform}.md`;
-    const candidates = [
-        path.resolve(process.cwd(), "../..", rel), // dev: cwd = apps/web
-        path.resolve(process.cwd(), rel), // cwd = repo root
-    ];
-    for (const p of candidates) {
-        try {
-            if (fs.existsSync(p)) return fs.readFileSync(p, "utf8");
-        } catch {
-            /* try next candidate */
-        }
-    }
-    if (!warnedMissingReferences.has(platform)) {
-        warnedMissingReferences.add(platform);
-        console.warn(
-            `[marketing-pipeline/evaluate] reference markdown for "${platform}" not found (looked in ${candidates.join(", ")}); scoring without a reference. In standalone builds this requires the outputFileTracingIncludes entry in next.config.ts.`
-        );
-    }
-    return "";
-}
 
 /**
  * Compose the same context surface the generator saw: the knowledge context
@@ -154,7 +125,7 @@ export async function POST(request: Request) {
             companyContext,
             post: message,
             // Read the reference md for the SAME platform the post was generated for.
-            referenceMarkdown: loadReferenceMarkdown(platform),
+            referenceMarkdown: REFERENCE_POSTS[platform as ReferencePlatform] ?? "",
         });
 
         return NextResponse.json({ success: true, data: scored });

@@ -6,6 +6,7 @@
  * gracefully return an error instead of crashing.
  */
 
+import { getPlatformProfile } from "@launchstack/tools/platform-profiles";
 import type { MarketingPlatform } from "./types";
 
 export type PublishResult = {
@@ -28,7 +29,9 @@ async function publishToTwitter(message: string): Promise<PublishResult> {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ text: message.slice(0, 280) }),
+            body: JSON.stringify({
+                text: message.slice(0, getPlatformProfile("x").hardCharLimit!),
+            }),
         });
 
         if (!response.ok) {
@@ -92,7 +95,7 @@ async function publishToBluesky(message: string): Promise<PublishResult> {
                 repo: session.did,
                 collection: "app.bsky.feed.post",
                 record: {
-                    text: message.slice(0, 300),
+                    text: message.slice(0, getPlatformProfile("bluesky").hardCharLimit!),
                     createdAt: new Date().toISOString(),
                 },
             }),

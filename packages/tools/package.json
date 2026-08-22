@@ -44,6 +44,14 @@
     "./claim-evidence": {
       "types": "./src/claim-evidence/index.ts",
       "default": "./src/claim-evidence/index.ts"
+    },
+    "./platform-profiles": {
+      "types": "./src/platform-profiles/index.ts",
+      "default": "./src/platform-profiles/index.ts"
+    },
+    "./content-scoring": {
+      "types": "./src/content-scoring/index.ts",
+      "default": "./src/content-scoring/index.ts"
     }
   },
   "scripts": {

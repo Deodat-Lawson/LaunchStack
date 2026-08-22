@@ -24,11 +24,11 @@ contract types (`ToolRunContext`, `ToolResult`, `ToolError`) live in
 | **brand-voice**        | `@launchstack/tools/brand-voice`        | Synthesize a BrandVoice profile (tone, vocabulary, sentence style, formality) from the company's own documents.                                                                                                           | marketing-pipeline; email tone rules (planned)                                     |
 | **persona**            | `@launchstack/tools/persona`            | Synthesize a TargetPersona (role, pain points, priorities, language style) for a described audience, grounded in company knowledge.                                                                                       | marketing-pipeline                                                                 |
 | **web-research**       | `@launchstack/tools/web-research`       | Provider-pluggable web search (Exa/Serper registry, strategy selection, retry, URL dedup) plus the shared in-memory TTL cache (`createTtlCache`). Env reads live in its `config.ts`.                                      | trend-search (planning/synthesis/jobs stay there), marketing competitor + research |
+| **claim-evidence**     | `@launchstack/tools/claim-evidence`     | Extract factual claims from content and look up their knowledge-base sources. Scores are `relevance` (retrieval), never "confidence"; "no source" is a null match, not a zero.                                            | marketing-pipeline                                                                 |
+| **platform-profiles**  | `@launchstack/tools/platform-profiles`  | One registry per social platform: posting guidelines, structure templates, few-shot examples, hashtag caps, hard char limits, judge reference posts.                                                                      | marketing generation + publish, evaluate route, benchmark                          |
+| **content-scoring**    | `@launchstack/tools/content-scoring`    | One versioned rubric, two consumers: the offline LLM judge (`scorePost`, never rewrites) and the live quality gate (`validatePostQuality`). Variant ranking arrives with the P2 runner.                                   | marketing generation gate, benchmark, evaluate route                               |
 
-| **claim-evidence** | `@launchstack/tools/claim-evidence` | Extract factual claims from content and look up their knowledge-base sources. Scores are `relevance` (retrieval), never "confidence"; "no source" is a null match, not a zero. | marketing-pipeline |
-
-Planned (design doc, Phase 1): `content-scoring`, `social-publish`,
-`platform-profiles`.
+Planned (design doc, Phase 1): `social-publish`.
 
 ## Tests
 

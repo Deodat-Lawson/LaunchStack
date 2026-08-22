@@ -109,8 +109,11 @@ export const MessagingStrategySchema = z.object({
     avoidList: z.array(z.string()),
 });
 
-export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
-export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
+// Platform vocabulary moved to @launchstack/tools/platform-profiles (PR-5).
+export { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
+export type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
+import { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
+import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
 
 export const PlatformMetaSchema = z
     .object({

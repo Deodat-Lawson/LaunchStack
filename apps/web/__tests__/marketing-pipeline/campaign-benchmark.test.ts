@@ -23,6 +23,7 @@ import {
     type ReferencePlatform,
     type ScoredPost,
 } from "@launchstack/features/marketing-pipeline/benchmark";
+import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 
 const RUN = ["1", "true"].includes((process.env.RUN_LLM_BENCHMARK ?? "").toLowerCase());
 const suite = RUN ? describe : describe.skip;
@@ -37,14 +38,10 @@ interface Candidate {
     post: string;
 }
 
-function loadReference(platform: ReferencePlatform, cache: Map<string, string>) {
-    if (!cache.has(platform)) {
-        cache.set(
-            platform,
-            fs.readFileSync(path.join(BENCH_DIR, "references", `${platform}.md`), "utf8")
-        );
-    }
-    return cache.get(platform)!;
+function loadReference(platform: ReferencePlatform) {
+    // References moved into @launchstack/tools/platform-profiles (PR-5);
+    // imported instead of read off disk.
+    return REFERENCE_POSTS[platform];
 }
 
 function mean(nums: number[]): number {
@@ -70,14 +67,13 @@ suite("campaign planner benchmark (LLM judge, raw scores)", () => {
             return;
         }
 
-        const refCache = new Map<string, string>();
         const results: (ScoredPost & { id: string })[] = [];
         for (const c of runnable) {
             const scored = await scorePost({
                 platform: c.platform,
                 companyContext: c.companyContext,
                 post: c.post,
-                referenceMarkdown: loadReference(c.platform, refCache),
+                referenceMarkdown: loadReference(c.platform),
             });
             results.push({ id: c.id, ...scored });
         }

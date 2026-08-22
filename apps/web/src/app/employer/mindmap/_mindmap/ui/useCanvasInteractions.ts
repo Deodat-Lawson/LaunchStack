@@ -923,13 +923,28 @@ export function useCanvasInteractions(
 
     const isPanning = useCallback(() => spaceHeld.current, []);
 
+    /**
+     * One input event is one logical change, however many writes it takes to
+     * express. A pointer-down can set the editing target, the selection and the
+     * drag mode; a pointer-move writes the guides and then the positions.
+     * Batching at the handler boundary — rather than inside each branch — means
+     * a new gesture cannot forget to do it.
+     */
+    const batched = useCallback(
+        <E>(handler: (event: E) => void) =>
+            (event: E): void => {
+                store.batch(() => handler(event));
+            },
+        [store]
+    );
+
     return {
-        onPointerDown,
-        onPointerMove,
-        onPointerUp,
-        onWheel,
-        onDoubleClick,
-        onContextMenu,
+        onPointerDown: batched(onPointerDown),
+        onPointerMove: batched(onPointerMove),
+        onPointerUp: batched(onPointerUp),
+        onWheel: batched(onWheel),
+        onDoubleClick: batched(onDoubleClick),
+        onContextMenu: batched(onContextMenu),
         toWorld,
         isPanning,
     };

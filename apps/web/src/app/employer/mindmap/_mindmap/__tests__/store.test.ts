@@ -37,6 +37,115 @@ describe("subscription", () => {
     });
 });
 
+describe("batch", () => {
+    it("notifies once however many writes it contains", () => {
+        const store = newStore();
+        let calls = 0;
+        store.subscribe(() => {
+            calls += 1;
+        });
+
+        store.batch(() => {
+            store.setTool("hand");
+            store.setGuides([{ axis: "v", pos: 10, from: 0, to: 50, kind: "align" }]);
+            store.update(doc => ({ ...doc, title: "Batched" }), { transient: true });
+        });
+
+        expect(calls).toBe(1);
+    });
+
+    it("applies every write in the batch", () => {
+        const store = newStore();
+        store.batch(() => {
+            store.setTool("hand");
+            store.update(doc => ({ ...doc, title: "Batched" }), { transient: true });
+        });
+
+        expect(store.getState().tool).toBe("hand");
+        expect(store.getState().doc.title).toBe("Batched");
+    });
+
+    it("stays silent when the batch wrote nothing", () => {
+        const store = newStore();
+        let calls = 0;
+        store.subscribe(() => {
+            calls += 1;
+        });
+
+        store.batch(() => {
+            // A no-op update: the store must not invent a notification.
+            store.update(doc => doc);
+        });
+
+        expect(calls).toBe(0);
+    });
+
+    it("notifies once for nested batches, at the outermost exit", () => {
+        const store = newStore();
+        const seen: string[] = [];
+        store.subscribe(() => {
+            seen.push(store.getState().doc.title);
+        });
+
+        store.batch(() => {
+            store.update(doc => ({ ...doc, title: "outer" }), { transient: true });
+            store.batch(() => {
+                store.update(doc => ({ ...doc, title: "inner" }), { transient: true });
+            });
+            expect(seen).toEqual([]); // nothing delivered yet
+        });
+
+        expect(seen).toEqual(["inner"]);
+    });
+
+    it("still delivers the notification when the batch throws", () => {
+        const store = newStore();
+        let calls = 0;
+        store.subscribe(() => {
+            calls += 1;
+        });
+
+        expect(() =>
+            store.batch(() => {
+                store.setTool("hand");
+                throw new Error("boom");
+            })
+        ).toThrow("boom");
+
+        // The write already happened, so suppressing its notification would
+        // leave every subscriber displaying stale state indefinitely.
+        expect(calls).toBe(1);
+        expect(store.getState().tool).toBe("hand");
+    });
+
+    it("is not left suspended after a throw", () => {
+        const store = newStore();
+        let calls = 0;
+
+        expect(() =>
+            store.batch(() => {
+                throw new Error("boom");
+            })
+        ).toThrow();
+
+        store.subscribe(() => {
+            calls += 1;
+        });
+        store.setTool("hand");
+
+        expect(calls).toBe(1);
+    });
+
+    it("reports its subscriber count", () => {
+        const store = newStore();
+        expect(store.listenerCount()).toBe(0);
+        const off = store.subscribe(() => undefined);
+        expect(store.listenerCount()).toBe(1);
+        off();
+        expect(store.listenerCount()).toBe(0);
+    });
+});
+
 describe("update", () => {
     it("ignores an updater that returns the same document", () => {
         const store = newStore();

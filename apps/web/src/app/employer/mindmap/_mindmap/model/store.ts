@@ -127,6 +127,10 @@ export class EditorStore {
     private redoStack: HistoryEntry[] = [];
     /** Snapshot captured at `beginInteraction`, pushed at `endInteraction`. */
     private interactionBase: HistoryEntry | null = null;
+    /** Nesting depth of `batch()`. Above zero, notifications are held back. */
+    private batchDepth = 0;
+    /** A notification was suppressed by a batch and still owes a delivery. */
+    private batchPending = false;
 
     constructor(doc: MindmapDoc) {
         this.state = {
@@ -162,7 +166,47 @@ export class EditorStore {
 
     getState = (): EditorState => this.state;
 
+    /**
+     * Run `fn`, then notify subscribers once — however many writes it made.
+     *
+     * A pointer move is one logical change to the user but two writes to the
+     * store: the alignment guides, then the shape positions. Without batching,
+     * every subscriber is woken twice per frame to re-run its selector and
+     * conclude it did not care about the first half. React already merges the
+     * resulting re-renders; what this removes is the duplicated selector work,
+     * and it establishes the invariant the rest of the performance work needs —
+     * one notification means one logical change.
+     *
+     * Nests safely. Always unwinds: if `fn` throws, the state it already
+     * changed is real, so the held notification must still go out.
+     */
+    batch(fn: () => void): void {
+        this.batchDepth += 1;
+        try {
+            fn();
+        } finally {
+            this.batchDepth -= 1;
+            if (this.batchDepth === 0 && this.batchPending) {
+                this.batchPending = false;
+                this.emitNow();
+            }
+        }
+    }
+
+    /** Number of live subscribers. Exposed for the performance tests. */
+    listenerCount(): number {
+        return this.listeners.size;
+    }
+
     private emit(): void {
+        if (this.batchDepth > 0) {
+            this.batchPending = true;
+            return;
+        }
+        this.emitNow();
+    }
+
+    private emitNow(): void {
         for (const fn of this.listeners) fn();
     }
 

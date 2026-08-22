@@ -11,15 +11,10 @@ import { type Employee } from "./types";
 
 import LoadingPage from "~/app/_components/loading";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
-import {
-    Badge,
-    Button,
-    Card,
-    PageHeader,
-    PageShell,
-    Section,
-    SelectInput,
-} from "~/app/employer/_components/primitives";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
+import { SelectInput } from "~/components/field";
 import { isManagementRole, type ManagementRole } from "~/lib/membership-roles";
 
 interface InviteCode {
@@ -288,10 +283,10 @@ export default function ManageEmployeesPage() {
                                                 </td>
                                                 <td style={{ padding: "10px 14px" }}>
                                                     <Badge
-                                                        tone={
+                                                        variant={
                                                             ic.role === "employer"
-                                                                ? "accent"
-                                                                : "neutral"
+                                                                ? "default"
+                                                                : "secondary"
                                                         }
                                                     >
                                                         {ic.role === "employer"
@@ -310,7 +305,7 @@ export default function ManageEmployeesPage() {
                                                 </td>
                                                 <td style={{ padding: "10px 14px" }}>
                                                     <Button
-                                                        variant="secondary"
+                                                        variant="outline"
                                                         onClick={() =>
                                                             void copy(
                                                                 `${window.location.origin}/signup?code=${encodeURIComponent(ic.code)}`,
@@ -337,7 +332,7 @@ export default function ManageEmployeesPage() {
                                                 <td style={{ padding: "10px 14px" }}>
                                                     <div style={{ display: "flex", gap: 6 }}>
                                                         <Button
-                                                            variant="secondary"
+                                                            variant="outline"
                                                             onClick={() =>
                                                                 void copy(
                                                                     ic.code,
@@ -367,7 +362,7 @@ export default function ManageEmployeesPage() {
                                                                 : "Code"}
                                                         </Button>
                                                         <Button
-                                                            variant="danger"
+                                                            variant="destructive"
                                                             onClick={() =>
                                                                 void handleDeactivateCode(ic.id)
                                                             }

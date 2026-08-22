@@ -1,5 +1,11 @@
 import { type Config } from "tailwindcss";
 
+// Every color resolves through the design tokens
+// (@launchstack/design-tokens/tokens.css). The relative-color wrapper
+// exists so Tailwind's `/opacity` modifiers compose with var()-backed
+// colors: bg-panel-2/30 → oklch(from var(--panel-2) l c h / 0.3).
+const token = (name: string) => `oklch(from var(--${name}) l c h / <alpha-value>)`;
+
 export default {
     content: ["./src/**/*.{ts,tsx}"],
     // next-themes stamps data-theme on <html>; this keys every `dark:`
@@ -13,9 +19,9 @@ export default {
                 mono: ["var(--font-mono)"],
             },
             borderRadius: {
-                lg: "var(--radius)",
-                md: "calc(var(--radius) - 2px)",
-                sm: "calc(var(--radius) - 4px)",
+                lg: "var(--r-md)",
+                md: "calc(var(--r-md) - 2px)",
+                sm: "calc(var(--r-md) - 4px)",
             },
             boxShadow: {
                 1: "var(--shadow-1)",
@@ -32,83 +38,52 @@ export default {
                 tooltip: "var(--z-tooltip)",
             },
             colors: {
-                // ── Canonical namespace: plain var() onto the Launchstack
-                // OKLCH tokens (@launchstack/design-tokens). No hsl()
-                // wrapper, so no `/opacity` modifiers — translucency comes
-                // from pre-mixed tokens (brand-glow, brand-soft).
                 surface: {
-                    DEFAULT: "var(--bg)",
-                    2: "var(--bg-2)",
-                    sunk: "var(--bg-sunk)",
+                    DEFAULT: token("bg"),
+                    2: token("bg-2"),
+                    sunk: token("bg-sunk"),
                 },
                 panel: {
-                    DEFAULT: "var(--panel)",
-                    2: "var(--panel-2)",
+                    DEFAULT: token("panel"),
+                    2: token("panel-2"),
                 },
                 ink: {
-                    DEFAULT: "var(--ink)",
-                    2: "var(--ink-2)",
-                    3: "var(--ink-3)",
-                    4: "var(--ink-4)",
+                    DEFAULT: token("ink"),
+                    2: token("ink-2"),
+                    3: token("ink-3"),
+                    4: token("ink-4"),
                 },
                 line: {
-                    DEFAULT: "var(--line)",
-                    2: "var(--line-2)",
+                    DEFAULT: token("line"),
+                    2: token("line-2"),
                 },
                 brand: {
-                    DEFAULT: "var(--accent)",
-                    hi: "var(--accent-2)",
-                    deep: "var(--accent-deep)",
+                    DEFAULT: token("accent"),
+                    hi: token("accent-2"),
+                    deep: token("accent-deep"),
+                    // Pre-mixed translucent tokens: no alpha modifier.
                     glow: "var(--accent-glow)",
-                    soft: "var(--accent-soft)",
-                    ink: "var(--accent-ink)",
-                    fg: "var(--accent-fg)",
+                    soft: token("accent-soft"),
+                    ink: token("accent-ink"),
+                    fg: token("accent-fg"),
                 },
-                success: "var(--success)",
-                danger: "var(--danger)",
-                warn: "var(--warn)",
-                info: "var(--info)",
-
-                // ── Deprecated shadcn compat namespace (values in
-                // src/styles/compat.css). Keeps the hsl() wrappers because
-                // the shadcn primitives rely on `/opacity` modifiers.
-                // Dies with compat.css when the primitives are re-themed.
-                background: "hsl(var(--background))",
-                foreground: "hsl(var(--foreground))",
-                card: {
-                    DEFAULT: "hsl(var(--card))",
-                    foreground: "hsl(var(--card-foreground))",
+                success: {
+                    DEFAULT: token("success"),
+                    soft: token("success-soft"),
                 },
-                popover: {
-                    DEFAULT: "hsl(var(--popover))",
-                    foreground: "hsl(var(--popover-foreground))",
+                danger: {
+                    DEFAULT: token("danger"),
+                    fg: token("danger-fg"),
+                    soft: token("danger-soft"),
                 },
-                primary: {
-                    DEFAULT: "hsl(var(--primary))",
-                    foreground: "hsl(var(--primary-foreground))",
+                warn: {
+                    DEFAULT: token("warn"),
+                    soft: token("warn-soft"),
                 },
-                secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
-                    foreground: "hsl(var(--secondary-foreground))",
+                info: {
+                    DEFAULT: token("info"),
+                    soft: token("info-soft"),
                 },
-                muted: {
-                    DEFAULT: "hsl(var(--muted))",
-                    foreground: "hsl(var(--muted-foreground))",
-                },
-                // Plain var() on purpose: the old hsl(var(--accent)) wrapped
-                // the OKLCH accent token and produced invalid CSS — shadcn
-                // hover/selected states rendered transparent.
-                accent: {
-                    DEFAULT: "var(--accent-soft)",
-                    foreground: "var(--accent-ink)",
-                },
-                destructive: {
-                    DEFAULT: "hsl(var(--destructive))",
-                    foreground: "hsl(var(--destructive-foreground))",
-                },
-                border: "hsl(var(--border))",
-                input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
             },
             keyframes: {
                 "accordion-down": {

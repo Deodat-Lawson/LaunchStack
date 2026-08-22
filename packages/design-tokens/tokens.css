@@ -13,177 +13,179 @@
    ===================================================================== */
 
 :root {
-  /* ── Primitives ─────────────────────────────────────────────── */
-  --accent-h: 285;
+    /* ── Primitives ─────────────────────────────────────────────── */
+    --accent-h: 285;
 
-  --hue-magenta: oklch(0.70 0.22 340);
-  --hue-magenta-glow: oklch(0.70 0.22 340 / 0.35);
-  --hue-teal: oklch(0.72 0.18 200);
-  --hue-teal-glow: oklch(0.72 0.18 200 / 0.28);
+    --hue-magenta: oklch(0.7 0.22 340);
+    --hue-magenta-glow: oklch(0.7 0.22 340 / 0.35);
+    --hue-teal: oklch(0.72 0.18 200);
+    --hue-teal-glow: oklch(0.72 0.18 200 / 0.28);
 
-  --r-xs: 4px;
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
-  --r-xl: 24px;
-  --r-full: 9999px;
+    --r-xs: 4px;
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 16px;
+    --r-xl: 24px;
+    --r-full: 9999px;
 
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
-  --s-7: 48px;
-  --s-8: 64px;
-  --s-9: 96px;
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 24px;
+    --s-6: 32px;
+    --s-7: 48px;
+    --s-8: 64px;
+    --s-9: 96px;
 
-  --fs-display: clamp(40px, 5.2vw, 72px);
-  --fs-h1: clamp(32px, 3.6vw, 48px);
-  --fs-h2: 28px;
-  --fs-h3: 22px;
-  --fs-h4: 18px;
-  --fs-body: 15px;
-  --fs-small: 13px;
-  --fs-micro: 11px;
-  --lh-display: 1.02;
-  --lh-heading: 1.15;
-  --lh-body: 1.55;
-  --ls-tight: -0.02em;
-  --ls-tighter: -0.035em;
-  --ls-wide: 0.04em;
+    --fs-display: clamp(40px, 5.2vw, 72px);
+    --fs-h1: clamp(32px, 3.6vw, 48px);
+    --fs-h2: 28px;
+    --fs-h3: 22px;
+    --fs-h4: 18px;
+    --fs-body: 15px;
+    --fs-small: 13px;
+    --fs-micro: 11px;
+    --lh-display: 1.02;
+    --lh-heading: 1.15;
+    --lh-body: 1.55;
+    --ls-tight: -0.02em;
+    --ls-tighter: -0.035em;
+    --ls-wide: 0.04em;
 
-  --z-base: 0;
-  --z-sticky: 100;
-  --z-nav: 200;
-  --z-dropdown: 500;
-  --z-overlay: 900;
-  --z-modal: 1000;
-  --z-toast: 1100;
-  --z-tooltip: 1200;
+    --z-base: 0;
+    --z-sticky: 100;
+    --z-nav: 200;
+    --z-dropdown: 500;
+    --z-overlay: 900;
+    --z-modal: 1000;
+    --z-toast: 1100;
+    --z-tooltip: 1200;
 
-  /* Font stacks. The next/font variables are optional per app (landing
+    /* Font stacks. The next/font variables are optional per app (landing
      does not load Inter Tight), so every var() carries a fallback —
      an unresolvable var would invalidate the whole declaration and
      drop the page to the browser default font. */
-  --font-sans:
-    var(--font-inter-tight, var(--font-inter, ui-sans-serif)),
-    var(--font-inter, ui-sans-serif),
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif:
-    var(--font-instrument-serif, Georgia),
-    "Iowan Old Style", Georgia, serif;
-  --font-mono:
-    var(--font-jetbrains-mono, ui-monospace),
-    ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --font-sans:
+        var(--font-inter-tight, var(--font-inter, ui-sans-serif)), var(--font-inter, ui-sans-serif),
+        ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-serif: var(--font-instrument-serif, Georgia), "Iowan Old Style", Georgia, serif;
+    --font-mono:
+        var(--font-jetbrains-mono, ui-monospace), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* ── Semantic: accent ───────────────────────────────────────── */
-  --accent: oklch(0.54 0.24 var(--accent-h));
-  --accent-2: oklch(0.46 0.25 var(--accent-h));
-  --accent-deep: oklch(0.38 0.22 var(--accent-h));
-  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
-  --accent-soft: oklch(0.96 0.03 var(--accent-h));
-  --accent-ink: oklch(0.42 0.20 var(--accent-h));
-  --accent-fg: oklch(0.99 0.002 285);
+    /* ── Semantic: accent ───────────────────────────────────────── */
+    --accent: oklch(0.54 0.24 var(--accent-h));
+    --accent-2: oklch(0.46 0.25 var(--accent-h));
+    --accent-deep: oklch(0.38 0.22 var(--accent-h));
+    --accent-glow: oklch(0.6 0.24 var(--accent-h) / 0.35);
+    --accent-soft: oklch(0.96 0.03 var(--accent-h));
+    --accent-ink: oklch(0.42 0.2 var(--accent-h));
+    --accent-fg: oklch(0.99 0.002 285);
 
-  /* ── Semantic: surfaces / ink / lines ───────────────────────── */
-  --bg: oklch(0.992 0.003 80);
-  --bg-2: oklch(0.985 0.004 280);
-  --bg-sunk: oklch(0.972 0.005 80);
-  --panel: #ffffff;
-  --panel-2: oklch(0.985 0.004 280);
-  --ink: oklch(0.22 0.015 280);
-  --ink-2: oklch(0.42 0.01 280);
-  --ink-3: oklch(0.60 0.008 280);
-  --ink-4: oklch(0.78 0.006 280);
-  --line: oklch(0.90 0.006 280);
-  --line-2: oklch(0.955 0.004 280);
-  --line-dot: oklch(0.78 0.012 285);
+    /* ── Semantic: surfaces / ink / lines ───────────────────────── */
+    --bg: oklch(0.992 0.003 80);
+    --bg-2: oklch(0.985 0.004 280);
+    --bg-sunk: oklch(0.972 0.005 80);
+    --panel: #ffffff;
+    --panel-2: oklch(0.985 0.004 280);
+    --ink: oklch(0.22 0.015 280);
+    --ink-2: oklch(0.42 0.01 280);
+    --ink-3: oklch(0.6 0.008 280);
+    --ink-4: oklch(0.78 0.006 280);
+    --line: oklch(0.9 0.006 280);
+    --line-2: oklch(0.955 0.004 280);
+    --line-dot: oklch(0.78 0.012 285);
 
-  --scrim: oklch(0.22 0.04 280 / 0.55);
-  --scrim-shadow: oklch(0.22 0.04 280 / 0.22);
+    --scrim: oklch(0.22 0.04 280 / 0.55);
+    --scrim-shadow: oklch(0.22 0.04 280 / 0.22);
 
-  /* ── Semantic: status ───────────────────────────────────────── */
-  --ok: oklch(0.58 0.16 150);
-  --success: var(--ok);
-  --ok-soft: oklch(0.95 0.06 150);
-  --success-soft: var(--ok-soft);
-  --danger: oklch(0.55 0.22 25);
-  --danger-soft: oklch(0.96 0.04 30);
-  --warn: oklch(0.70 0.16 75);
-  --warn-soft: oklch(0.96 0.05 80);
-  --info: oklch(0.64 0.14 235);
-  --info-soft: oklch(0.96 0.04 240);
+    /* ── Semantic: status ───────────────────────────────────────── */
+    --ok: oklch(0.58 0.16 150);
+    --success: var(--ok);
+    --ok-soft: oklch(0.95 0.06 150);
+    --success-soft: var(--ok-soft);
+    --danger: oklch(0.55 0.22 25);
+    --danger-fg: #ffffff;
+    --danger-soft: oklch(0.96 0.04 30);
+    --warn: oklch(0.7 0.16 75);
+    --warn-soft: oklch(0.96 0.05 80);
+    --info: oklch(0.64 0.14 235);
+    --info-soft: oklch(0.96 0.04 240);
 
-  /* ── Semantic: code surface (dark in both themes) ───────────── */
-  --code-bg: oklch(0.22 0.025 280);
-  --code-ink: oklch(0.94 0.005 280);
-  --code-line: oklch(0.32 0.03 280);
+    /* ── Semantic: code surface (dark in both themes) ───────────── */
+    --code-bg: oklch(0.22 0.025 280);
+    --code-bg-2: oklch(0.26 0.03 280);
+    --code-ink: oklch(0.94 0.005 280);
+    --code-ink-muted: oklch(0.6 0.02 280);
+    --code-line: oklch(0.32 0.03 280);
+    --code-accent: oklch(0.75 0.16 285);
+    --code-accent-soft: oklch(0.75 0.16 285 / 0.12);
 
-  /* ── Shadows ────────────────────────────────────────────────── */
-  --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
-  --shadow-2: 0 4px 12px oklch(0.2 0.02 285 / 0.06),
-              0 1px 2px oklch(0.2 0.02 285 / 0.04);
-  --shadow-3: 0 12px 32px oklch(0.2 0.02 285 / 0.08),
-              0 2px 6px oklch(0.2 0.02 285 / 0.05);
+    /* ── Shadows ────────────────────────────────────────────────── */
+    --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
+    --shadow-2: 0 4px 12px oklch(0.2 0.02 285 / 0.06), 0 1px 2px oklch(0.2 0.02 285 / 0.04);
+    --shadow-3: 0 12px 32px oklch(0.2 0.02 285 / 0.08), 0 2px 6px oklch(0.2 0.02 285 / 0.05);
 
-  /* ── Aliases (Drift-era names; keep resolving, prefer the canonical
+    /* ── Aliases (Drift-era names; keep resolving, prefer the canonical
         name on the left in new code) ───────────────────────────── */
-  --bg-elev: var(--panel);
-  --fg-1: var(--ink);
-  --fg-2: var(--ink-2);
-  --fg-3: var(--ink-3);
-  --fg-4: var(--ink-4);
-  --line-1: var(--line);
-  --accent-hi: var(--accent-2);
+    --bg-elev: var(--panel);
+    --fg-1: var(--ink);
+    --fg-2: var(--ink-2);
+    --fg-3: var(--ink-3);
+    --fg-4: var(--ink-4);
+    --line-1: var(--line);
+    --accent-hi: var(--accent-2);
 }
 
 [data-theme="dark"] {
-  --accent: oklch(0.72 0.19 var(--accent-h));
-  --accent-2: oklch(0.62 0.22 var(--accent-h));
-  --accent-deep: oklch(0.46 0.25 var(--accent-h));
-  --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.35);
-  --accent-soft: oklch(0.30 0.08 var(--accent-h));
-  --accent-ink: oklch(0.86 0.16 var(--accent-h));
-  --accent-fg: oklch(0.14 0.02 290);
+    --accent: oklch(0.72 0.19 var(--accent-h));
+    --accent-2: oklch(0.62 0.22 var(--accent-h));
+    --accent-deep: oklch(0.46 0.25 var(--accent-h));
+    --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.35);
+    --accent-soft: oklch(0.3 0.08 var(--accent-h));
+    --accent-ink: oklch(0.86 0.16 var(--accent-h));
+    --accent-fg: oklch(0.14 0.02 290);
 
-  --bg: oklch(0.14 0.02 290);
-  --bg-2: oklch(0.18 0.025 290);
-  --bg-sunk: oklch(0.12 0.02 290);
-  --panel: oklch(0.20 0.025 290);
-  --panel-2: oklch(0.235 0.03 290);
-  --ink: oklch(0.97 0.005 280);
-  --ink-2: oklch(0.80 0.008 280);
-  --ink-3: oklch(0.62 0.008 280);
-  --ink-4: oklch(0.45 0.008 280);
-  --line: oklch(0.32 0.04 290);
-  --line-2: oklch(0.26 0.035 290);
-  --line-dot: oklch(0.55 0.02 285);
+    --bg: oklch(0.14 0.02 290);
+    --bg-2: oklch(0.18 0.025 290);
+    --bg-sunk: oklch(0.12 0.02 290);
+    --panel: oklch(0.2 0.025 290);
+    --panel-2: oklch(0.235 0.03 290);
+    --ink: oklch(0.97 0.005 280);
+    --ink-2: oklch(0.8 0.008 280);
+    --ink-3: oklch(0.62 0.008 280);
+    --ink-4: oklch(0.45 0.008 280);
+    --line: oklch(0.32 0.04 290);
+    --line-2: oklch(0.26 0.035 290);
+    --line-dot: oklch(0.55 0.02 285);
 
-  --scrim: oklch(0.05 0.02 290 / 0.72);
-  --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
+    --scrim: oklch(0.05 0.02 290 / 0.72);
+    --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
 
-  --ok: oklch(0.72 0.16 150);
-  --ok-soft: oklch(0.28 0.08 150);
-  --danger: oklch(0.70 0.20 25);
-  --danger-soft: oklch(0.28 0.10 30);
-  --warn: oklch(0.80 0.17 75);
-  --warn-soft: oklch(0.28 0.08 80);
-  --info: oklch(0.72 0.14 235);
-  --info-soft: oklch(0.28 0.06 240);
+    --ok: oklch(0.72 0.16 150);
+    --ok-soft: oklch(0.28 0.08 150);
+    --danger: oklch(0.7 0.2 25);
+    --danger-fg: oklch(0.13 0.03 25);
+    --danger-soft: oklch(0.28 0.1 30);
+    --warn: oklch(0.8 0.17 75);
+    --warn-soft: oklch(0.28 0.08 80);
+    --info: oklch(0.72 0.14 235);
+    --info-soft: oklch(0.28 0.06 240);
 
-  --code-bg: oklch(0.12 0.02 290);
-  --code-ink: oklch(0.94 0.005 280);
-  --code-line: oklch(0.28 0.035 290);
+    --code-bg: oklch(0.12 0.02 290);
+    --code-bg-2: oklch(0.16 0.025 290);
+    --code-ink: oklch(0.94 0.005 280);
+    --code-ink-muted: oklch(0.55 0.02 285);
+    --code-line: oklch(0.28 0.035 290);
+    --code-accent: oklch(0.75 0.16 285);
+    --code-accent-soft: oklch(0.75 0.16 285 / 0.14);
 
-  --hue-magenta: oklch(0.65 0.22 330);
-  --hue-magenta-glow: oklch(0.65 0.22 330 / 0.40);
-  --hue-teal: oklch(0.70 0.18 200);
-  --hue-teal-glow: oklch(0.70 0.18 200 / 0.32);
+    --hue-magenta: oklch(0.65 0.22 330);
+    --hue-magenta-glow: oklch(0.65 0.22 330 / 0.4);
+    --hue-teal: oklch(0.7 0.18 200);
+    --hue-teal-glow: oklch(0.7 0.18 200 / 0.32);
 
-  --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
-  --shadow-2: 0 4px 12px oklch(0 0 0 / 0.5),
-              0 1px 2px oklch(0 0 0 / 0.4);
-  --shadow-3: 0 12px 32px oklch(0 0 0 / 0.55),
-              0 2px 6px oklch(0 0 0 / 0.4);
+    --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
+    --shadow-2: 0 4px 12px oklch(0 0 0 / 0.5), 0 1px 2px oklch(0 0 0 / 0.4);
+    --shadow-3: 0 12px 32px oklch(0 0 0 / 0.55), 0 2px 6px oklch(0 0 0 / 0.4);
 }

@@ -36,10 +36,11 @@ already wired to `cn` from `~/lib/utils`. Modals/popovers come from the kit
 
 - **Colors are tokens.** `var(--…)` from `@launchstack/design-tokens`, or the
   semantic Tailwind namespace: `surface/panel/ink/line/brand-*/success/
-danger/warn/info`. New hex literals trigger a lint warning; don't add any.
-- The shadcn names (`bg-background`, `text-muted-foreground`, …) live in
-  `src/styles/compat.css` — a **deprecated** quarantine that dies when the
-  kit is re-themed. Don't add to it; prefer the semantic namespace.
+danger/warn/info`. Opacity modifiers compose (`bg-panel-2/30`). New hex
+  literals trigger a lint warning; don't add any.
+- The shadcn color names (`bg-background`, `text-muted-foreground`, …) and
+  the raw purple/slate palette are **gone** — the compat quarantine was
+  deleted once the kit was re-themed. Don't reintroduce either.
 - Dark mode keys off `data-theme="dark"` on `<html>` (next-themes sets it).
   `dark:` variants and `[data-theme="dark"]` CSS both work; never branch on
   `resolvedTheme` in JS just to pick colors — use a token that flips.
@@ -61,8 +62,21 @@ hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
   by `packages/features/src/legal-templates/template-service.ts` via
   `process.cwd()`. Do not move or rename without fixing that coupling.
 - Anything a component imports goes through the bundler, not `public/`.
-- `.vercelignore` (repo root) excludes `__tests__` from deploys — a script
-  that imports test helpers will pass CI and then break every Vercel deploy.
+
+## Route areas with their own README
+
+Most features are a page and a few components. Two are large enough to document
+themselves — read the local README before changing them:
+
+| Area                          | README                               |
+| ----------------------------- | ------------------------------------ |
+| Mindmap (the diagramming app) | `src/app/employer/mindmap/README.md` |
+
+Mindmap is the one place in `apps/web` where **colours are deliberately not
+design tokens**: shape fills live inside the saved document, so they are literal
+OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
+changes theme and silently alter someone else's diagram. Its editor chrome uses
+the tokens like everything else.
 
 ## The migration boundary rule
 
@@ -76,9 +90,6 @@ migration. Nobody rewrites the ~100 inline-style files as a project.
 
 | Module                                        | Replacement                               |
 | --------------------------------------------- | ----------------------------------------- |
-| `app/employer/_components/primitives.tsx`     | `~/components/ui` + tokens                |
 | `app/employer/documents/_workspace/icons.tsx` | lucide-react + `~/components/icons/brand` |
-| `src/styles/compat.css` + shadcn color names  | semantic Tailwind namespace / tokens      |
-| `.lsw-root` wrapper class                     | inert; tokens are global now              |
 
 Lint warnings on these are a ratchet: the count only goes down.

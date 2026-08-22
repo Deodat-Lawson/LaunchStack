@@ -51,7 +51,7 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
 # Applies the ordered SQL migrations in packages/core/drizzle — the same
-# command local dev, CI and the Vercel production build run. The runner is
+# command local dev and CI run. The runner is
 # plain ESM depending only on postgres + dotenv, so this stage needs neither
 # the app source nor drizzle-kit nor tsx.
 #

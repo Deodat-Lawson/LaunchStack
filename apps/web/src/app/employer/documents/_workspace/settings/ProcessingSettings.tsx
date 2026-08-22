@@ -13,14 +13,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import {
-    Badge,
-    Card,
-    Field,
-    Section,
-    SelectInput,
-    TextInput,
-} from "~/app/employer/_components/primitives";
+import { Badge } from "~/components/ui/badge";
+import { Card, Section } from "~/components/layout/page-shell";
+import { Field, SelectInput, TextInput } from "~/components/field";
 import { StatusNote, type StatusTone } from "./ui";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 
@@ -366,7 +361,7 @@ function KeyStatus({
                 }}
             >
                 <span style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{label}</span>
-                <Badge tone={has ? "ok" : "neutral"}>{has ? "Configured" : "Not set"}</Badge>
+                <Badge variant={has ? "success" : "secondary"}>{has ? "Configured" : "Not set"}</Badge>
             </div>
             <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
                 {detail ?? (stored?.last4 ? `ending ${stored.last4}` : "—")}

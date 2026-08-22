@@ -21,7 +21,7 @@ import {
     LegalGeneratorTheme,
     legalTheme as s,
 } from "~/app/employer/documents/components/LegalGeneratorTheme";
-import { Button } from "~/app/employer/_components/primitives";
+import { Button } from "~/components/ui/button";
 import {
     usePublishedActions,
     type RegisterSectionActions,
@@ -164,7 +164,7 @@ export function MetadataView({ embedded = false, bare = false, onActions }: Meta
             busy: extracting,
             secondary: (
                 <Button
-                    variant="secondary"
+                    variant="outline"
                     onClick={() => void fetchMetadata()}
                     disabled={loading}
                     style={{ padding: "9px 14px" }}

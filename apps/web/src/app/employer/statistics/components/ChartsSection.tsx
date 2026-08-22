@@ -41,10 +41,10 @@ export function ChartsSection({ data }: ChartsSectionProps) {
             {/* Employee Trend Chart */}
             <Card className="border-none p-6 shadow-sm">
                 <div className="mb-6 flex items-center gap-3">
-                    <div className="rounded-lg bg-purple-100 p-1.5 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                    <div className="bg-brand-soft text-brand-ink rounded-lg p-1.5">
                         <Users className="h-4 w-4" />
                     </div>
-                    <h2 className="text-foreground text-sm font-bold uppercase tracking-widest">
+                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
                         Employee Growth
                     </h2>
                 </div>
@@ -63,7 +63,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                                 <stop offset="95%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-panel-2" />
                         <XAxis
                             dataKey="date"
                             tickLine={false}
@@ -102,7 +102,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                     <div className="rounded-lg bg-blue-100 p-1.5 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                         <MousePointerClick className="h-4 w-4" />
                     </div>
-                    <h2 className="text-foreground text-sm font-bold uppercase tracking-widest">
+                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
                         Document Views
                     </h2>
                 </div>
@@ -121,7 +121,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                                 <stop offset="95%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-panel-2" />
                         <XAxis
                             dataKey="date"
                             tickLine={false}

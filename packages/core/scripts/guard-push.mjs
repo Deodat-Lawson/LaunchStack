@@ -7,7 +7,7 @@
  * to change a real one: it is not reviewed, not ordered, not recorded, and it
  * will happily DROP a column to make the database match the code.
  *
- * This repo used to run push in CI, in Docker and in local dev while Vercel
+ * This repo used to run push in CI, in Docker and in local dev while
  * production ran SQL migrations — two strategies that produced provably
  * different databases. push is now allowed only against a database that the
  * migration runner has never touched.
@@ -35,7 +35,7 @@ const die = (msg) => {
 
 const allow = process.env.LAUNCHSTACK_ALLOW_PUSH === "1";
 
-for (const v of ["CI", "VERCEL", "VERCEL_ENV"]) {
+for (const v of ["CI", "GITHUB_ACTIONS"]) {
   if (process.env[v] && !allow) {
     die(
       `${v} is set — this looks like a deploy or CI environment.\n` +

@@ -128,7 +128,7 @@ export function OutlineTree({
                 {/* Horizontal connector line (for non-root items) */}
                 {depth > 0 && (
                     <div
-                        className="border-border absolute border-t"
+                        className="border-line absolute border-t"
                         style={{
                             left: `${(depth - 1) * 20 + 12 + 10}px`,
                             top: "18px",
@@ -159,7 +159,7 @@ export function OutlineTree({
                     <div className="relative">
                         {/* Vertical connector line */}
                         <div
-                            className="border-border absolute border-l"
+                            className="border-line absolute border-l"
                             style={{
                                 left: `${depth * 20 + 12 + 10}px`,
                                 top: 0,

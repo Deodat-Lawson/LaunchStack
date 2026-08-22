@@ -37,7 +37,7 @@ export default function RepoExplainerPage() {
             <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 pb-10 pt-8">
                 <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-600/10 text-purple-600 dark:bg-purple-500/15 dark:text-purple-300">
+                        <div className="bg-brand/10 text-brand-ink dark:bg-brand/15 flex h-10 w-10 items-center justify-center rounded-2xl">
                             <Network className="h-5 w-5" />
                         </div>
                         <div>
@@ -52,7 +52,7 @@ export default function RepoExplainerPage() {
                     </div>
                 </header>
 
-                <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5 dark:border-slate-800 dark:bg-slate-950/60">
+                <section className="border-line bg-panel shadow-1 rounded-2xl border p-4 md:p-5">
                     <form onSubmit={handleSubmit} className="space-y-3">
                         <div className="space-y-1.5">
                             <label
@@ -67,7 +67,7 @@ export default function RepoExplainerPage() {
                                         id="repo-url"
                                         type="text"
                                         placeholder="https://github.com/owner/repo or owner/repo"
-                                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:border-purple-400 dark:focus:ring-purple-950"
+                                        className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                         value={url}
                                         onChange={e => setUrl(e.target.value)}
                                         disabled={loading}
@@ -77,7 +77,7 @@ export default function RepoExplainerPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="inline-flex items-center justify-center gap-1.5 rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-purple-500 dark:hover:bg-purple-400"
+                                    className="bg-brand hover:bg-brand-hi dark:bg-brand dark:hover:bg-brand-hi inline-flex items-center justify-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-70"
                                 >
                                     {loading ? (
                                         <>
@@ -105,7 +105,7 @@ export default function RepoExplainerPage() {
                                 id="github-token"
                                 type="password"
                                 placeholder="<your-github-token> or fine-grained token"
-                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:border-purple-400 dark:focus:ring-purple-950"
+                                className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                 value={githubToken}
                                 onChange={e => setGithubToken(e.target.value)}
                                 disabled={loading}
@@ -126,8 +126,8 @@ export default function RepoExplainerPage() {
                                         onClick={() => setDiagramType(opt.value)}
                                         className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-all ${
                                             diagramType === opt.value
-                                                ? "border-purple-500 bg-purple-50 text-purple-700 ring-1 ring-purple-500 dark:bg-purple-900/20 dark:text-purple-300"
-                                                : "border-slate-300 bg-white text-slate-700 hover:border-purple-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                                                ? "border-brand bg-brand-soft text-brand-ink ring-brand ring-1"
+                                                : "border-line bg-panel-2 text-ink-2 hover:border-brand"
                                         } ${loading ? "cursor-not-allowed opacity-50" : ""}`}
                                     >
                                         {opt.label}
@@ -146,7 +146,7 @@ export default function RepoExplainerPage() {
                             <textarea
                                 id="instructions"
                                 placeholder='E.g. "Focus on API design and generate a UML component diagram."'
-                                className="min-h-[70px] w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:border-purple-400 dark:focus:ring-purple-950"
+                                className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow min-h-[70px] w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                 value={instructions}
                                 onChange={e => setInstructions(e.target.value)}
                                 disabled={loading}
@@ -161,7 +161,7 @@ export default function RepoExplainerPage() {
                     )}
 
                     {!error && !loading && !result && (
-                        <div className="mt-4 rounded-md border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
+                        <div className="border-line bg-surface-sunk text-ink-3 mt-4 rounded-md border border-dashed px-3 py-2 text-xs">
                             Tip: try{" "}
                             <button
                                 type="button"
@@ -188,14 +188,14 @@ export default function RepoExplainerPage() {
                 </section>
 
                 {result && (
-                    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5 dark:border-slate-800 dark:bg-slate-950/60">
+                    <section className="border-line bg-panel shadow-1 rounded-2xl border p-4 md:p-5">
                         <div className="mb-4 flex items-center justify-between gap-2">
                             <p className="text-sm font-medium text-slate-900 dark:text-slate-50">
                                 {result.repo}
                             </p>
                         </div>
                         {summary && (
-                            <div className="mb-4 rounded-md border border-slate-200 bg-slate-50/50 p-4 text-sm leading-relaxed text-slate-700 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-300">
+                            <div className="border-line bg-surface-sunk text-ink-2 mb-4 rounded-md border p-4 text-sm leading-relaxed">
                                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                     Summary
                                 </h3>
@@ -210,16 +210,16 @@ export default function RepoExplainerPage() {
                                 <MermaidDiagram code={mermaidCode} repoName={result.repo} />
                             </div>
                         ) : (
-                            <pre className="overflow-x-auto rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-300">
+                            <pre className="border-line bg-surface-sunk text-ink-2 overflow-x-auto rounded-md border p-3 text-xs">
                                 {result.explanation || "No diagram generated."}
                             </pre>
                         )}
                         {result.umlJson && (
-                            <details className="mt-4 rounded-md border border-slate-200 bg-slate-50/60 p-3 dark:border-slate-800 dark:bg-slate-950/40">
+                            <details className="border-line bg-surface-sunk mt-4 rounded-md border p-3">
                                 <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                     UML JSON response
                                 </summary>
-                                <pre className="mt-2 overflow-x-auto rounded-md border border-slate-200 bg-white p-3 text-xs text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+                                <pre className="border-line bg-panel-2 text-ink-2 mt-2 overflow-x-auto rounded-md border p-3 text-xs">
                                     {JSON.stringify(result.umlJson, null, 2)}
                                 </pre>
                             </details>

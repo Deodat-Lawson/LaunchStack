@@ -27,6 +27,10 @@ boundaries in `eslint.config.js`), `services/*`. pnpm workspaces.
 - Touch-it-migrate-it: when editing existing UI for feature work, convert the
   region you touch to kit + tokens; never launch a bulk rewrite.
 - Full conventions: `apps/web/README.md`.
+- The Mindmap app (`app/employer/mindmap`) has its own README and one
+  deliberate exception: shape colours are literal OKLCH values stored in the
+  document, not tokens — a token would repaint when the _viewer_ switches
+  theme and change someone else's diagram. Its chrome uses tokens normally.
 
 ## Workflow
 
@@ -35,6 +39,5 @@ boundaries in `eslint.config.js`), `services/*`. pnpm workspaces.
   count may only go down.
 - `public/templates/*.docx` are live production data resolved at runtime via
   `process.cwd()` — do not move them.
-- A script that imports `__tests__` helpers will pass CI but break every
-  Vercel deploy (`.vercelignore` excludes `__tests__`); keep deploy-time code
-  free of test imports.
+- Deploys are container images (`.github/workflows/docker.yml` → GHCR) and
+  Compose. There is no Vercel pipeline; nothing in the repo builds one.

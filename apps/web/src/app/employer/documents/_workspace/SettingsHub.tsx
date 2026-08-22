@@ -19,7 +19,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 
-import { Button } from "~/app/employer/_components/primitives";
+import { Button } from "~/components/ui/button";
 import { IconBuilding, IconChart, IconRobot, IconSettings, IconSlack } from "./icons";
 import { StatusNote } from "./settings/ui";
 import type { SettingsSectionActions } from "./settings/contract";

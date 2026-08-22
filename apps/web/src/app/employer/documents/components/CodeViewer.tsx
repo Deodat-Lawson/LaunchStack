@@ -123,27 +123,25 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
 
     if (loading) {
         return (
-            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-3">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-                <p className="text-muted-foreground text-sm font-medium">Loading source code...</p>
+            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
+                <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
+                <p className="text-ink-3 text-sm font-medium">Loading source code...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
+            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-foreground mb-1 text-sm font-medium">
-                        Failed to load source code
-                    </p>
-                    <p className="text-muted-foreground mb-4 text-xs">{error}</p>
+                    <p className="text-ink mb-1 text-sm font-medium">Failed to load source code</p>
+                    <p className="text-ink-3 mb-4 text-xs">{error}</p>
                     <button
                         onClick={() => void fetchCode()}
-                        className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                     >
                         <RotateCw className="h-4 w-4" />
                         Retry
@@ -156,14 +154,14 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
     const lineCount = code.split("\n").length;
 
     return (
-        <div className="flex h-full flex-col overflow-hidden bg-[#0d1117] text-[#c9d1d9]">
+        <div className="flex h-full flex-col overflow-hidden bg-[var(--code-bg)] text-[var(--code-ink)]">
             {/* Toolbar */}
-            <div className="flex flex-shrink-0 items-center justify-between border-b border-[#30363d] bg-[#161b22] px-4 py-2">
+            <div className="flex flex-shrink-0 items-center justify-between border-b border-[var(--code-line)] bg-[var(--code-bg-2)] px-4 py-2">
                 <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs font-semibold text-[#58a6ff]">
+                    <span className="font-mono text-xs font-semibold text-[var(--code-accent)]">
                         {extension ? `.${extension}` : language}
                     </span>
-                    <span className="font-mono text-[10px] text-[#8b949e]">
+                    <span className="font-mono text-[10px] text-[var(--code-ink-muted)]">
                         {lineCount} lines &middot; {(new Blob([code]).size / 1024).toFixed(1)} KB
                     </span>
                 </div>
@@ -175,7 +173,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className={`h-7 w-7 rounded-md ${showLineNumbers ? "bg-[#58a6ff]/10 text-[#58a6ff]" : "text-[#8b949e]"} hover:bg-[#58a6ff]/10 hover:text-[#58a6ff]`}
+                                    className={`h-7 w-7 rounded-md ${showLineNumbers ? "bg-[var(--code-accent-soft)] text-[var(--code-accent)]" : "text-[var(--code-ink-muted)]"} hover:bg-[var(--code-accent-soft)] hover:text-[var(--code-accent)]`}
                                     onClick={() => setShowLineNumbers(!showLineNumbers)}
                                 >
                                     <Hash className="h-3.5 w-3.5" />
@@ -191,7 +189,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className={`h-7 w-7 rounded-md ${wordWrap ? "bg-[#58a6ff]/10 text-[#58a6ff]" : "text-[#8b949e]"} hover:bg-[#58a6ff]/10 hover:text-[#58a6ff]`}
+                                    className={`h-7 w-7 rounded-md ${wordWrap ? "bg-[var(--code-accent-soft)] text-[var(--code-accent)]" : "text-[var(--code-ink-muted)]"} hover:bg-[var(--code-accent-soft)] hover:text-[var(--code-accent)]`}
                                     onClick={() => setWordWrap(!wordWrap)}
                                 >
                                     <WrapText className="h-3.5 w-3.5" />
@@ -207,7 +205,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-7 w-7 rounded-md text-[#8b949e] hover:bg-[#58a6ff]/10 hover:text-[#58a6ff]"
+                                    className="h-7 w-7 rounded-md text-[var(--code-ink-muted)] hover:bg-[var(--code-accent-soft)] hover:text-[var(--code-accent)]"
                                     onClick={() => void handleCopy()}
                                 >
                                     {copied ? (
@@ -235,10 +233,10 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                         {code.split("\n").map((line, i) => (
                             <div
                                 key={i}
-                                className="flex transition-colors duration-75 hover:bg-[#1c2128]"
+                                className="flex transition-colors duration-75 hover:bg-[var(--code-bg-2)]"
                             >
                                 {showLineNumbers && (
-                                    <span className="inline-block min-w-[3.5rem] flex-shrink-0 select-none border-r border-[#21262d] pl-4 pr-4 text-right text-[#484f58]">
+                                    <span className="inline-block min-w-[3.5rem] flex-shrink-0 select-none border-r border-[var(--code-line)] pl-4 pr-4 text-right text-[var(--code-ink-muted)]">
                                         {i + 1}
                                     </span>
                                 )}
@@ -265,17 +263,17 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                     height: 8px;
                 }
                 .custom-code-scrollbar::-webkit-scrollbar-track {
-                    background: #0d1117;
+                    background: var(--code-bg);
                 }
                 .custom-code-scrollbar::-webkit-scrollbar-thumb {
-                    background: #30363d;
+                    background: var(--code-line);
                     border-radius: 4px;
                 }
                 .custom-code-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #484f58;
+                    background: var(--code-ink-muted);
                 }
                 .custom-code-scrollbar::-webkit-scrollbar-corner {
-                    background: #0d1117;
+                    background: var(--code-bg);
                 }
             `}</style>
         </div>

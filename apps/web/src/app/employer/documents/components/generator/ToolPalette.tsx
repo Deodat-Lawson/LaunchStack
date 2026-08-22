@@ -71,8 +71,8 @@ const tools: ToolItem[] = [
         shortName: "AI",
         description: "Generate, expand, or rewrite content",
         icon: <Sparkles className="h-4 w-4" />,
-        color: "text-purple-500",
-        bgColor: "bg-purple-500/10",
+        color: "text-brand-ink",
+        bgColor: "bg-brand/10",
     },
     {
         id: "doc-research",
@@ -189,7 +189,7 @@ export function ToolPalette({
         <TooltipProvider delayDuration={0}>
             <div
                 className={cn(
-                    "bg-background border-border flex h-full flex-col border-r transition-all duration-200",
+                    "bg-surface border-line flex h-full flex-col border-r transition-all duration-200",
                     isCollapsed ? "w-[60px]" : "w-full min-w-[200px]",
                     className
                 )}
@@ -197,16 +197,14 @@ export function ToolPalette({
                 {/* Header */}
                 <div
                     className={cn(
-                        "border-border flex items-center border-b",
+                        "border-line flex items-center border-b",
                         isCollapsed ? "justify-center p-2" : "justify-between p-4"
                     )}
                 >
                     {!isCollapsed && (
                         <div>
-                            <h3 className="text-foreground text-sm font-semibold">Tools</h3>
-                            <p className="text-muted-foreground mt-0.5 text-xs">
-                                Enhance your document
-                            </p>
+                            <h3 className="text-ink text-sm font-semibold">Tools</h3>
+                            <p className="text-ink-3 mt-0.5 text-xs">Enhance your document</p>
                         </div>
                     )}
                     {onToggleCollapse && (
@@ -237,21 +235,21 @@ export function ToolPalette({
                     <Collapsible
                         open={isQuickActionsOpen}
                         onOpenChange={setIsQuickActionsOpen}
-                        className="border-border border-b"
+                        className="border-line border-b"
                     >
                         <CollapsibleTrigger asChild>
                             <Button
                                 variant="ghost"
-                                className="hover:bg-muted/50 h-auto w-full justify-between px-4 py-2"
+                                className="hover:bg-panel-2/50 h-auto w-full justify-between px-4 py-2"
                             >
                                 <span className="flex items-center gap-2 text-sm font-medium">
-                                    <Sparkles className="h-4 w-4 text-purple-500" />
+                                    <Sparkles className="text-brand-ink h-4 w-4" />
                                     Quick Actions
                                 </span>
                                 {isQuickActionsOpen ? (
-                                    <ChevronDown className="text-muted-foreground h-4 w-4" />
+                                    <ChevronDown className="text-ink-3 h-4 w-4" />
                                 ) : (
-                                    <ChevronRight className="text-muted-foreground h-4 w-4" />
+                                    <ChevronRight className="text-ink-3 h-4 w-4" />
                                 )}
                             </Button>
                         </CollapsibleTrigger>
@@ -282,7 +280,7 @@ export function ToolPalette({
                                             <TooltipContent side="bottom">
                                                 {qa.label}
                                                 {qa.requiresSelection && !hasSelection && (
-                                                    <span className="text-muted-foreground ml-1">
+                                                    <span className="text-ink-3 ml-1">
                                                         (select text)
                                                     </span>
                                                 )}
@@ -311,8 +309,7 @@ export function ToolPalette({
                                                 size="icon"
                                                 className={cn(
                                                     "relative h-11 w-full",
-                                                    isActive &&
-                                                        "border border-purple-300 bg-purple-100 dark:border-purple-700 dark:bg-purple-900/30"
+                                                    isActive && "border-brand bg-brand-soft border"
                                                 )}
                                                 onClick={() => onToolSelect(tool.id)}
                                             >
@@ -320,7 +317,7 @@ export function ToolPalette({
                                                     className={cn(
                                                         "rounded-lg p-2 transition-colors",
                                                         isActive
-                                                            ? "bg-purple-500 text-white"
+                                                            ? "bg-brand text-white"
                                                             : tool.bgColor
                                                     )}
                                                 >
@@ -329,7 +326,7 @@ export function ToolPalette({
                                                     </span>
                                                 </div>
                                                 {isActive && (
-                                                    <div className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r bg-purple-500" />
+                                                    <div className="bg-brand absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r" />
                                                 )}
                                             </Button>
                                         </TooltipTrigger>
@@ -338,7 +335,7 @@ export function ToolPalette({
                                             className="flex flex-col gap-0.5"
                                         >
                                             <span className="font-medium">{tool.name}</span>
-                                            <span className="text-muted-foreground text-xs">
+                                            <span className="text-ink-3 text-xs">
                                                 {tool.description}
                                             </span>
                                         </TooltipContent>
@@ -353,15 +350,14 @@ export function ToolPalette({
                                     variant={isActive ? "secondary" : "ghost"}
                                     className={cn(
                                         "h-auto w-full justify-start gap-3 px-3 py-2.5",
-                                        isActive &&
-                                            "border border-purple-200 bg-purple-100 dark:border-purple-800 dark:bg-purple-900/30"
+                                        isActive && "border-brand bg-brand-soft border"
                                     )}
                                     onClick={() => onToolSelect(tool.id)}
                                 >
                                     <div
                                         className={cn(
                                             "shrink-0 rounded-md p-1.5",
-                                            isActive ? "bg-purple-500 text-white" : tool.bgColor
+                                            isActive ? "bg-brand text-white" : tool.bgColor
                                         )}
                                     >
                                         <span className={cn(!isActive && tool.color)}>
@@ -372,7 +368,7 @@ export function ToolPalette({
                                         <div className="truncate text-sm font-medium">
                                             {tool.name}
                                         </div>
-                                        <div className="text-muted-foreground truncate text-xs">
+                                        <div className="text-ink-3 truncate text-xs">
                                             {tool.description}
                                         </div>
                                     </div>
@@ -384,16 +380,15 @@ export function ToolPalette({
 
                 {/* Footer Hint - Hidden when collapsed */}
                 {!isCollapsed && (
-                    <div className="border-border border-t p-3">
-                        <div className="text-muted-foreground bg-muted/50 rounded-lg p-2.5 text-xs">
+                    <div className="border-line border-t p-3">
+                        <div className="text-ink-3 bg-panel-2/50 rounded-lg p-2.5 text-xs">
                             <p className="mb-1 font-medium">Shortcuts</p>
                             <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
                                 <p>
-                                    <kbd className="bg-background rounded px-1 text-[10px]">⌘K</kbd>{" "}
-                                    AI
+                                    <kbd className="bg-surface rounded px-1 text-[10px]">⌘K</kbd> AI
                                 </p>
                                 <p>
-                                    <kbd className="bg-background rounded px-1 text-[10px]">⌘S</kbd>{" "}
+                                    <kbd className="bg-surface rounded px-1 text-[10px]">⌘S</kbd>{" "}
                                     Save
                                 </p>
                             </div>

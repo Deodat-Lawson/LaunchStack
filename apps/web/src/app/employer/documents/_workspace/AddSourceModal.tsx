@@ -1,6 +1,7 @@
 "use client";
 
 import React, { type ComponentType, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
     IconBolt,
@@ -12,11 +13,14 @@ import {
     type IconProps,
 } from "./icons";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
+// Metadata only: the Create panel posts a `templateId` and the Mindmap editor
+// builds the document on open, so the shape library never enters this bundle.
+import { TEMPLATE_META } from "~/app/employer/mindmap/_mindmap/model/template-meta";
 
 /**
- * AddSourceModal — tabbed upload/connect modal matching the Launstack
- * design handoff (`modal.jsx`). Sidebar lists Upload + Connect tabs; the
- * right panel hosts the active tab; a footer strip carries the "Save to"
+ * AddSourceModal — tabbed create/upload/connect modal matching the Launstack
+ * design handoff (`modal.jsx`). Sidebar lists Create + Upload + Connect tabs;
+ * the right panel hosts the active tab; a footer strip carries the "Save to"
  * folder picker so destination stays visible across tabs.
  *
  * Backend integration is kept unchanged:
@@ -25,6 +29,8 @@ import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
  *   - Paste: wraps the text in a `.md` File and runs the file path
  *   - URL: `/api/upload/website`
  *   - YouTube: `/api/upload/video-url`
+ *   - Mindmap: `/api/mindmaps` → navigates to the editor; the diagram becomes
+ *     a source when it is published from there.
  *   - Connectors: not yet wired (OAuth) — surfaced as coming-soon CTAs.
  */
 
@@ -196,7 +202,9 @@ export function AddSourceModal({
     };
 
     let panel: React.ReactNode = null;
-    if (tab === "files") {
+    if (tab === "mindmap") {
+        panel = <MindmapPanel folder={folder} />;
+    } else if (tab === "files") {
         panel = (
             <FilesPanel
                 kind="files"
@@ -552,6 +560,113 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                     </div>
                 </div>
             )}
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Create → Mindmap
+// ---------------------------------------------------------------------------
+
+/**
+ * Creating a mindmap does not ingest anything: it makes a document in the
+ * Mindmap app and hands the user straight to the editor. Only the template id
+ * is posted — the editor owns the template registry and builds the document on
+ * open, so a new template never needs a server change.
+ */
+function MindmapPanel({ folder }: { folder: string }) {
+    const router = useRouter();
+    const [busy, setBusy] = useState<string | null>(null);
+
+    const create = async (templateId: string, title: string) => {
+        setBusy(templateId);
+        try {
+            const res = await fetch("/api/mindmaps", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, templateId, folder }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => ({}))) as { error?: string };
+                throw new Error(body.error ?? `HTTP ${res.status}`);
+            }
+            const body = (await res.json()) as { mindmap: { id: number } };
+            router.push(`/employer/mindmap/${body.mindmap.id}`);
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Couldn't create that mindmap");
+            setBusy(null);
+        }
+    };
+
+    return (
+        <div>
+            <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
+                Draw it in the Mindmap editor, then publish it back here as a source your workspace
+                can cite. It will be filed under{" "}
+                <strong style={{ color: "var(--ink-2)" }}>{folder}</strong>.
+            </p>
+
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                    gap: 8,
+                }}
+            >
+                {TEMPLATE_META.map(template => {
+                    const isBusy = busy === template.id;
+                    return (
+                        <button
+                            key={template.id}
+                            disabled={busy !== null}
+                            onClick={() => {
+                                void create(
+                                    template.id,
+                                    template.id === "blank" ? "Untitled mindmap" : template.name
+                                );
+                            }}
+                            style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 10,
+                                padding: "10px 12px",
+                                borderRadius: 10,
+                                border: "1px solid var(--line)",
+                                background: isBusy ? "var(--accent-soft)" : "var(--panel)",
+                                textAlign: "left",
+                                cursor: busy !== null ? "wait" : "pointer",
+                                opacity: busy !== null && !isBusy ? 0.55 : 1,
+                            }}
+                        >
+                            <span style={{ fontSize: 18, lineHeight: 1.2 }} aria-hidden>
+                                {template.glyph}
+                            </span>
+                            <span style={{ minWidth: 0 }}>
+                                <span
+                                    style={{
+                                        display: "block",
+                                        fontSize: 13,
+                                        fontWeight: 600,
+                                        color: "var(--ink)",
+                                    }}
+                                >
+                                    {template.name}
+                                </span>
+                                <span
+                                    style={{
+                                        display: "block",
+                                        fontSize: 11.5,
+                                        color: "var(--ink-3)",
+                                        lineHeight: 1.4,
+                                    }}
+                                >
+                                    {isBusy ? "Opening the editor…" : template.description}
+                                </span>
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
         </div>
     );
 }

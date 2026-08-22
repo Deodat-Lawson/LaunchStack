@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
-import { Card, PageShell } from "~/app/employer/_components/primitives";
+import { Card, PageShell } from "~/components/layout/page-shell";
 
 interface EmployerData {
     name?: string;

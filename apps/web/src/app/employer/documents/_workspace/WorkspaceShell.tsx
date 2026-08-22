@@ -404,10 +404,21 @@ export function WorkspaceShell() {
     );
 
     /** Fills the main workspace with a feature and closes the drawer — used by mega-menu picks, palette, FAB pins. */
-    const expandFeature = useCallback((featureId: string) => {
-        setActiveFeatureId(featureId);
-        setStudioOpen(false);
-    }, []);
+    const expandFeature = useCallback(
+        (featureId: string) => {
+            const feature = STUDIO_FEATURES_BY_ID[featureId];
+            // Separate apps (Mindmap) own their own route: navigate rather than
+            // expanding a pane whose only content is a link to that route.
+            if (feature?.external && feature.href) {
+                setStudioOpen(false);
+                router.push(feature.href);
+                return;
+            }
+            setActiveFeatureId(featureId);
+            setStudioOpen(false);
+        },
+        [router]
+    );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
     // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal.

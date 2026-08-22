@@ -45,11 +45,7 @@
     height: 600px;
     right: -140px;
     top: 200px;
-    background: radial-gradient(
-        circle,
-        oklch(0.7 0.22 340 / 0.32) 0%,
-        transparent 65%
-    );
+    background: radial-gradient(circle, oklch(0.7 0.22 340 / 0.32) 0%, transparent 65%);
     animation: drift2 32s ease-in-out infinite alternate;
 }
 .orb3 {
@@ -57,11 +53,7 @@
     height: 560px;
     left: 30%;
     top: 780px;
-    background: radial-gradient(
-        circle,
-        oklch(0.72 0.18 200 / 0.28) 0%,
-        transparent 65%
-    );
+    background: radial-gradient(circle, oklch(0.72 0.18 200 / 0.28) 0%, transparent 65%);
     animation: drift1 38s ease-in-out infinite alternate-reverse;
 }
 @keyframes drift1 {
@@ -93,7 +85,6 @@
     opacity: 0.04;
     mix-blend-mode: multiply;
 }
-:global(.dark) .ambientGrain,
 :global([data-theme="dark"]) .ambientGrain {
     opacity: 0.06;
     mix-blend-mode: screen;
@@ -414,7 +405,9 @@
     padding: 16px 20px;
     border-bottom: 1px solid var(--line-2);
     cursor: pointer;
-    transition: background 0.12s, box-shadow 0.12s;
+    transition:
+        background 0.12s,
+        box-shadow 0.12s;
     position: relative;
     text-align: left;
     background: transparent;
@@ -484,43 +477,23 @@
     box-shadow: 0 4px 12px var(--accent-glow);
 }
 .gradient2 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.18 200),
-        oklch(0.42 0.2 220)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.2 220));
     box-shadow: 0 4px 12px oklch(0.62 0.18 200 / 0.32);
 }
 .gradient3 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.66 0.2 30),
-        oklch(0.46 0.22 30)
-    );
+    background: linear-gradient(135deg, oklch(0.66 0.2 30), oklch(0.46 0.22 30));
     box-shadow: 0 4px 12px oklch(0.66 0.2 30 / 0.32);
 }
 .gradient4 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.18 150),
-        oklch(0.42 0.16 165)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.18 150), oklch(0.42 0.16 165));
     box-shadow: 0 4px 12px oklch(0.62 0.18 150 / 0.32);
 }
 .gradient5 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.2 340),
-        oklch(0.42 0.22 340)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.2 340), oklch(0.42 0.22 340));
     box-shadow: 0 4px 12px oklch(0.62 0.2 340 / 0.32);
 }
 .gradient6 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.18 70),
-        oklch(0.42 0.16 60)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.18 70), oklch(0.42 0.16 60));
     box-shadow: 0 4px 12px oklch(0.62 0.18 70 / 0.32);
 }
 
@@ -591,25 +564,13 @@
     margin-left: 0;
 }
 .avAlt1 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.18 200),
-        oklch(0.42 0.2 220)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.2 220));
 }
 .avAlt2 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.66 0.2 30),
-        oklch(0.46 0.22 30)
-    );
+    background: linear-gradient(135deg, oklch(0.66 0.2 30), oklch(0.46 0.22 30));
 }
 .avAlt3 {
-    background: linear-gradient(
-        135deg,
-        oklch(0.62 0.18 150),
-        oklch(0.42 0.16 165)
-    );
+    background: linear-gradient(135deg, oklch(0.62 0.18 150), oklch(0.42 0.16 165));
 }
 .avMore {
     background: var(--panel-2);
@@ -717,11 +678,8 @@
     box-shadow: 0 8px 22px oklch(0 0 0 / 0.25);
 }
 .createCardPrimary {
-    background: radial-gradient(
-            ellipse 60% 90% at 0% 0%,
-            var(--accent-glow) 0%,
-            transparent 55%
-        ),
+    background:
+        radial-gradient(ellipse 60% 90% at 0% 0%, var(--accent-glow) 0%, transparent 55%),
         var(--panel);
 }
 /* Must declare real properties: empty rules are dropped by CSS modules → undefined class export */
@@ -853,7 +811,9 @@
     color: var(--ink);
     border: 1px solid var(--line);
     border-radius: 10px;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 .input:focus,
 .textarea:focus,
@@ -870,7 +830,9 @@
     border-radius: 10px;
     background: var(--bg);
     overflow: hidden;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 .urlInput:focus-within {
     border-color: var(--accent);
@@ -935,7 +897,9 @@
 }
 .swatchSelected {
     border-color: var(--ink);
-    box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+    box-shadow:
+        0 0 0 2px var(--bg),
+        0 0 0 4px var(--ink);
 }
 .swatchSelected::after {
     content: "";
@@ -1019,11 +983,15 @@
     background: linear-gradient(180deg, var(--accent), var(--accent-deep));
     color: white;
     font-weight: 600;
-    box-shadow: 0 1px 0 oklch(1 0 0 / 0.35) inset, 0 6px 18px var(--accent-glow);
+    box-shadow:
+        0 1px 0 oklch(1 0 0 / 0.35) inset,
+        0 6px 18px var(--accent-glow);
 }
 .btnAccent:hover {
     transform: translateY(-1px);
-    box-shadow: 0 1px 0 oklch(1 0 0 / 0.35) inset, 0 10px 24px var(--accent-glow);
+    box-shadow:
+        0 1px 0 oklch(1 0 0 / 0.35) inset,
+        0 10px 24px var(--accent-glow);
 }
 .btnAccent:disabled {
     opacity: 0.55;

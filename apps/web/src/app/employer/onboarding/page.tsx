@@ -13,14 +13,9 @@ import {
 } from "lucide-react";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
-import {
-    Button,
-    Card,
-    Field,
-    PageShell,
-    SelectInput,
-    TextArea,
-} from "~/app/employer/_components/primitives";
+import { Button } from "~/components/ui/button";
+import { Card, PageShell } from "~/components/layout/page-shell";
+import { Field, SelectInput, TextArea } from "~/components/field";
 
 const INDUSTRIES = [
     "Technology",
@@ -343,7 +338,7 @@ function CompanyInfoStep({
                     Skip for now
                 </Button>
                 <div style={{ flex: 1 }} />
-                <Button variant="secondary" onClick={onBack}>
+                <Button variant="outline" onClick={onBack}>
                     <ChevronLeft style={{ width: 14, height: 14 }} /> Back
                 </Button>
                 <Button onClick={onNext} disabled={isSaving}>

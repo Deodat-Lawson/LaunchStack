@@ -1,4 +1,7 @@
 import type { ComponentType } from "react";
+// New icons come from lucide-react; `./icons` below is the deprecated legacy
+// set kept for this file's existing entries (see apps/web/README.md).
+import { Network as IconMindmap } from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -215,6 +218,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=notes",
     },
     {
+        id: "mindmap",
+        label: "Mindmap",
+        Icon: IconMindmap,
+        desc: "Diagrams, mindmaps and flowcharts you can cite",
+        href: "/employer/mindmap",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -272,6 +282,11 @@ export interface StudioFeature {
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
+    /**
+     * The feature is a separate app with its own route. Picking it navigates
+     * rather than expanding a pane inside the workspace.
+     */
+    external?: boolean;
     /** When true, only visible to owner/admin membership roles — company-level management. */
     companyOnly?: boolean;
 }
@@ -328,6 +343,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Notebook",
                 Icon: IconNote,
                 desc: "Freeform notes that span every source",
+            },
+            {
+                id: "mindmap",
+                label: "Mindmap",
+                Icon: IconMindmap,
+                desc: "Diagrams, mindmaps and flowcharts — publishable as sources",
+                href: "/employer/mindmap",
+                external: true,
             },
             {
                 id: "workflows",
@@ -403,6 +426,19 @@ export interface AddSourceTab {
 }
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
+    {
+        // Authoring, not ingesting: these open the Mindmap app, and the diagram
+        // becomes a citable source once it is published back here.
+        group: "Create",
+        items: [
+            {
+                id: "mindmap",
+                label: "Mindmap",
+                Icon: IconMindmap,
+                desc: "Diagram it, then cite it",
+            },
+        ],
+    },
     {
         group: "Upload",
         items: [

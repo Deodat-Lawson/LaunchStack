@@ -317,8 +317,29 @@ export async function deleteFile(
 
   if (resolvedProvider === "s3") {
     try {
+      let key = keyOrUrl;
+      if (/^https?:\/\//i.test(keyOrUrl)) {
+        const { promoteLegacyUrlToRef } = await import(
+          "~/server/storage/legacy-promote"
+        );
+        const promoted = promoteLegacyUrlToRef({ value: keyOrUrl });
+        if (!promoted.ok) {
+          throw new StorageError(
+            `Invalid S3 object reference: ${promoted.reason}`,
+            "s3",
+          );
+        }
+        if (promoted.ref.adapter !== "s3") {
+          throw new StorageError(
+            `S3 delete received a ${promoted.ref.adapter} reference`,
+            "s3",
+          );
+        }
+        key = promoted.ref.key;
+      }
+
       const { deleteObject } = await import("~/server/storage/s3-client");
-      await deleteObject(keyOrUrl);
+      await deleteObject(key);
     } catch (err) {
       if (err instanceof StorageError) throw err;
       throw new StorageError(
@@ -472,40 +493,15 @@ export async function deleteFileByRef(ref: ObjectRef): Promise<DeleteResult> {
   }
 
   try {
-    if (adapter === "s3" || adapter === "database") {
+    if (adapter === "database") {
       await deleteFile(ref.key, adapter);
-    } else if (adapter === "vercel-blob") {
-      const { deleteFile: deleteBlobFile } = await import("~/server/storage/vercel-blob");
-      await deleteBlobFile(ref.key);
-    } else if (adapter === "uploadthing") {
-      const { deleteUploadThingFileByKey } = await import("~/server/storage/uploadthing");
-      const outcome = await deleteUploadThingFileByKey(ref.key);
-      if (outcome.outcome === "retryable") {
-        return {
-          ref,
-          outcome: "retryable",
-          errorCode: outcome.errorCode,
-          message: outcome.message,
-        };
-      }
-      if (outcome.outcome === "blocked") {
-        return {
-          ref,
-          outcome: "blocked",
-          errorCode: outcome.errorCode,
-          message: outcome.message,
-        };
-      }
-      if (outcome.outcome === "not_found") {
-        return { ref, outcome: "not_found" };
-      }
     } else {
-      return {
-        ref,
-        outcome: "rejected",
-        errorCode: "unsupported_adapter",
-        message: `Unsupported storage adapter: ${adapter}`,
-      };
+      const { createStoragePortTargetFactory } = await import(
+        "~/server/storage/create-storage-port"
+      );
+      return await createStoragePortTargetFactory(resolveStorageBackend())
+        .forAdapter(adapter)
+        .delete(ref);
     }
 
     return { ref, outcome: "deleted" };
@@ -541,10 +537,10 @@ export async function deleteManyByRef(refs: readonly ObjectRef[]): Promise<Delet
     const first = groupRefs[0];
     if (!first) continue;
 
-    if (first.adapter === "s3") {
+    if (first.adapter === "database") {
       let expectedLocationId: string;
       try {
-        expectedLocationId = resolveStorageLocationId("s3");
+        expectedLocationId = resolveStorageLocationId("database");
       } catch (err) {
         for (const ref of groupRefs) {
           results.push({
@@ -569,35 +565,19 @@ export async function deleteManyByRef(refs: readonly ObjectRef[]): Promise<Delet
         continue;
       }
 
-      const { deleteObjects: deleteObjectsInS3 } = await import("~/server/storage/s3-client");
-      const outcomes = await deleteObjectsInS3(groupRefs.map((ref) => ref.key));
-      const outcomeByKey = new Map(outcomes.map((outcome) => [outcome.key, outcome] as const));
-
       for (const ref of groupRefs) {
-        const outcome = outcomeByKey.get(ref.key);
-        if (!outcome) {
-          results.push({
-            ref,
-            outcome: "retryable",
-            errorCode: "missing_delete_outcome",
-            message: `No delete outcome returned for key "${ref.key}".`,
-          });
-          continue;
-        }
-
-        results.push({
-          ref,
-          outcome: outcome.outcome,
-          errorCode: outcome.errorCode,
-          message: outcome.message,
-        });
+        results.push(await deleteFileByRef(ref));
       }
       continue;
     }
 
-    for (const ref of groupRefs) {
-      results.push(await deleteFileByRef(ref));
-    }
+    const { createStoragePortTargetFactory } = await import(
+      "~/server/storage/create-storage-port"
+    );
+    const groupResults = await createStoragePortTargetFactory(resolveStorageBackend())
+      .forAdapter(first.adapter)
+      .deleteMany(groupRefs);
+    results.push(...groupResults);
   }
 
   return results;

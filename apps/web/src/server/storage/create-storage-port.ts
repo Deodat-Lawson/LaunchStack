@@ -8,6 +8,10 @@ import type {
   UploadResult,
 } from "@launchstack/core/storage";
 
+import { createS3TargetedPort } from "./adapters/s3-targeted-port";
+import { createUploadThingAdapter } from "./adapters/uploadthing-adapter";
+import { createVercelBlobAdapter } from "./adapters/vercel-blob-adapter";
+
 function createUnwiredAdapterTarget(
   adapter: StorageAdapter,
   provider: string,
@@ -49,7 +53,17 @@ export function createStoragePortTargetFactory(provider: string): {
 } {
   return {
     forAdapter(adapter: StorageAdapter): TargetedStoragePort {
-      return createUnwiredAdapterTarget(adapter, provider);
+      switch (adapter) {
+        case "s3":
+          return createS3TargetedPort();
+        case "vercel-blob":
+          return createVercelBlobAdapter();
+        case "uploadthing":
+          return createUploadThingAdapter();
+        case "database":
+        default:
+          return createUnwiredAdapterTarget(adapter, provider);
+      }
     },
   };
 }

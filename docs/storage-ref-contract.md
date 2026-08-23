@@ -91,6 +91,20 @@ Canonical write/read/delete flows should move toward `ObjectRef`-based calls.
 Deprecated aliases remain so existing callers can migrate incrementally without
 changing lifecycle behavior.
 
+## Database adapter read path during C3 transition
+
+For database-backed refs, `ObjectRef.key` is the numeric `fileUploads.id`
+encoded as a string. Until the database adapter is extracted, `get(ref)` on the
+app port resolves that key to `/api/files/{id}` and calls `fetchFile`, which
+adds internal service headers for a self-origin request. The `/api/files/[id]`
+route remains the single place for tenant authorization and serve-gating before
+reading the Postgres row.
+
+`forAdapter("database")` remains unwired until C3. Callers reading a database
+ref should use `getStoragePort().get(ref)` during this transition rather than
+targeting the unwired database handle or duplicating the route's authorization
+logic in another adapter.
+
 ## Lifecycle feature flags (exactly two)
 
 - `STORAGE_DELETION_LIFECYCLE_ENABLED` (intake gate, default off)

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { PipelineProgressEvent } from "@launchstack/tools/contract";
 
 /**
  * till company DNA - adds a lower level structured layer before CompanyDNA
@@ -267,30 +268,14 @@ export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }
     { id: "verifying-claims", label: "Checking claim sources" },
 ];
 
+/**
+ * Both unions derive from the shared PipelineProgressEvent (unification P2,
+ * design D5) — previously the same four variants were hand-maintained twice.
+ * The SSE protocol is the progress union plus its result/error arms.
+ */
 export type PipelineSSEEvent =
-    | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-    | {
-          type: "step_complete";
-          step: PipelineStepId;
-          durationMs: number;
-          detail?: string;
-          status?: "completed" | "skipped" | "failed";
-      }
-    | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
-    | { type: "step_thinking"; step: PipelineStepId; text: string }
+    | PipelineProgressEvent<PipelineStepId>
     | { type: "result"; success: true; data: MarketingPipelineResult }
     | { type: "error"; success: false; message: string; error?: string };
 
-export type OnPipelineProgress = (
-    event:
-        | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-        | {
-              type: "step_complete";
-              step: PipelineStepId;
-              durationMs: number;
-              detail?: string;
-              status?: "completed" | "skipped" | "failed";
-          }
-        | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
-        | { type: "step_thinking"; step: PipelineStepId; text: string }
-) => void;
+export type OnPipelineProgress = (event: PipelineProgressEvent<PipelineStepId>) => void;

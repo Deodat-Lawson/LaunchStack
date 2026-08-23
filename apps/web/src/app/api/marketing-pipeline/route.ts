@@ -11,10 +11,9 @@ export const maxDuration = 60;
 
 /**
  * Thrown from the onProgress callback when the client has disconnected.
- * `runMarketingPipeline` does not take an AbortSignal, but progress events are
- * emitted throughout the run, so throwing here stops the pipeline at the next
- * emission instead of letting it run (and bill LLM calls) to completion for
- * nobody.
+ * The pipeline also receives `request.signal` directly (its stage runner
+ * aborts between stages); this throw is the second line of defense, stopping
+ * a stage already in flight at its next progress emission.
  */
 class ClientDisconnectedError extends Error {
     constructor() {
@@ -94,6 +93,10 @@ export async function POST(request: Request) {
                         companyId,
                         input: validation.data,
                         debug,
+                        // Stops an abandoned run between stages (P2); the
+                        // onProgress throw below remains as belt-and-suspenders
+                        // for stages already in flight.
+                        signal: request.signal,
                         onProgress: progressEvent => {
                             if (request.signal.aborted) {
                                 throw new ClientDisconnectedError();

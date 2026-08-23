@@ -56,6 +56,10 @@
     "./social-publish": {
       "types": "./src/social-publish/index.ts",
       "default": "./src/social-publish/index.ts"
+    },
+    "./stage-runner": {
+      "types": "./src/stage-runner/index.ts",
+      "default": "./src/stage-runner/index.ts"
     }
   },
   "scripts": {

@@ -24,16 +24,27 @@ export interface ToolRunContext {
     runStep?: <T>(name: string, fn: () => Promise<T>) => Promise<T>;
 }
 
-export type ToolProgressEvent =
-    | { type: "step_start"; step: string; label?: string }
+export type PipelineStepStatus = "completed" | "skipped" | "failed";
+
+/**
+ * The one progress vocabulary for multi-stage pipelines (design D5): the
+ * marketing SSE protocol is this union plus its result/error arms, and other
+ * pipelines adopt it as a superset of their coarse stage callbacks. Generic
+ * over the step-id union so each pipeline keeps its narrow ids.
+ */
+export type PipelineProgressEvent<Step extends string = string> =
+    | { type: "step_start"; step: Step; label: string; parallelGroup?: number }
     | {
           type: "step_complete";
-          step: string;
+          step: Step;
           durationMs: number;
           detail?: string;
-          status?: "completed" | "skipped" | "failed";
+          status?: PipelineStepStatus;
       }
-    | { type: "step_data"; step: string; data: Record<string, unknown> };
+    | { type: "step_data"; step: Step; data: Record<string, unknown> }
+    | { type: "step_thinking"; step: Step; text: string };
+
+export type ToolProgressEvent<Step extends string = string> = PipelineProgressEvent<Step>;
 
 export interface ToolProvenance {
     /** Tool (and entry point) that produced this result, e.g. "company-context.identity". */

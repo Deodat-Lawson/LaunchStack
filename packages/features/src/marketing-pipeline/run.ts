@@ -4,11 +4,12 @@ import {
     formatCompanyIdentity,
     getCompanyIdentity,
 } from "@launchstack/tools/company-context";
-import { generateVariants } from "./generator";
 import { extractBrandVoice } from "@launchstack/tools/brand-voice";
 import { extractTargetPersona } from "@launchstack/tools/persona";
-import { checkClaimSources } from "@launchstack/tools/claim-evidence";
+import { checkClaimSources, type ClaimEvidenceResult } from "@launchstack/tools/claim-evidence";
 import { getPlatformProfile } from "@launchstack/tools/platform-profiles";
+import { runStage, type RunStageOptions } from "@launchstack/tools/stage-runner";
+import { generateVariants } from "./generator";
 import { analyzeCompetitors } from "./competitor";
 import { buildMultiStrategy } from "./positioning";
 import {
@@ -25,13 +26,13 @@ import type {
     BrandVoice,
     TargetPersona,
     ContentVariant,
-    CheckedClaim,
 } from "./types";
 import { PIPELINE_STEPS } from "./types";
 
 import { researchPlatformTrends } from "./research";
 
 const DEFAULT_PROMPT = "Generate a compelling campaign post for this platform.";
+const LOG_PREFIX = "[marketing-pipeline]";
 
 function normalizeInput(input: MarketingPipelineInput): MarketingPipelineInput {
     const prompt = input.prompt?.trim().replace(/\s+/g, " ") ?? DEFAULT_PROMPT;
@@ -70,39 +71,39 @@ function stepLabel(step: PipelineStepId): string {
     return PIPELINE_STEPS.find(s => s.id === step)?.label ?? step;
 }
 
+/**
+ * The pipeline as a set of stage definitions over @launchstack/tools/stage-runner
+ * (unification P2). Each stage declares its failure policy — "required" aborts
+ * the run, "degradable" emits a failed step and continues on its fallback —
+ * and its wire reporting (detail/data/narration) as colocated data. The runner
+ * owns timing, progress events, error policy, and cancellation; `signal`
+ * (threaded from the route's request.signal) stops an abandoned run before its
+ * next stage instead of burning tokens to completion.
+ */
 export async function runMarketingPipeline(args: {
     companyId: number;
     input: MarketingPipelineInput;
     debug?: boolean;
     onProgress?: OnPipelineProgress;
+    signal?: AbortSignal;
 }): Promise<MarketingPipelineResult> {
-    const { onProgress } = args;
+    const { onProgress, signal } = args;
     const pipelineStart = Date.now();
 
-    function emitStart(step: PipelineStepId, parallelGroup?: number) {
-        onProgress?.({ type: "step_start", step, label: stepLabel(step), parallelGroup });
-    }
-    function emitComplete(
-        step: PipelineStepId,
-        startTime: number,
-        detail?: string,
-        status: "completed" | "skipped" | "failed" = "completed"
-    ) {
-        const durationMs = Date.now() - startTime;
-        console.log(
-            "[marketing-pipeline] %s %s in %dms%s",
-            step,
-            status,
-            durationMs,
-            detail ? ` – ${detail}` : ""
-        );
-        onProgress?.({ type: "step_complete", step, durationMs, detail, status });
-    }
-    function emitData(step: PipelineStepId, data: Record<string, unknown>) {
-        onProgress?.({ type: "step_data", step, data });
-    }
-    function emitThinking(step: PipelineStepId, text: string) {
-        onProgress?.({ type: "step_thinking", step, text });
+    /** Shared runner options; every stage adds its own definition on top. */
+    function stage<S, F = S>(
+        options: Omit<
+            RunStageOptions<S, F, PipelineStepId>,
+            "label" | "onProgress" | "signal" | "logPrefix"
+        >
+    ): Promise<S | F> {
+        return runStage<S, F, PipelineStepId>({
+            ...options,
+            label: stepLabel(options.id),
+            onProgress,
+            signal,
+            logPrefix: LOG_PREFIX,
+        });
     }
 
     const normalizedInput = normalizeInput(args.input);
@@ -116,98 +117,97 @@ export async function runMarketingPipeline(args: {
     const categories = identity.categories;
     const companyIdentity = formatCompanyIdentity(identity);
 
-    // 2) Run KB context, DNA, competitors, trends, brand voice, persona, performance ALL in parallel
-    let research: MarketingResearchResult[] = [];
-    let brandVoice: BrandVoice | undefined;
-    let targetPersona: TargetPersona | undefined;
-    let performanceInsights: string[] = [];
-
-    // All steps in group 1 run concurrently
+    // 2) Research fan-out: KB context, DNA, competitors, trends, brand voice,
+    // persona, performance history — all concurrently (parallel group 1).
     const PG_GATHER = 1;
 
-    const t0 = Date.now();
-    emitStart("loading-context", PG_GATHER);
+    const [
+        companyContextBase,
+        dnaResult,
+        competitors,
+        research,
+        brandVoice,
+        targetPersona,
+        performanceInsights,
+    ] = await Promise.all([
+        stage({
+            id: "loading-context",
+            parallelGroup: PG_GATHER,
+            policy: "required",
+            run: () =>
+                buildCompanyKnowledgeContext({
+                    companyId: args.companyId,
+                    prompt: userPrompt,
+                    identity,
+                }),
+            report: ctx => {
+                const snippetCount = ctx.split("\n").length;
+                return {
+                    detail: `Loaded knowledge for ${companyName}`,
+                    data: { companyName, categories, snippetCount },
+                    narration: `Searching knowledge base for ${companyName}... Found ${snippetCount} document snippets covering their products, services, and market position.`,
+                };
+            },
+        }),
 
-    const [companyContextBase, dnaResult, competitors] = await Promise.all([
-        (async () => {
-            const ctx = await buildCompanyKnowledgeContext({
-                companyId: args.companyId,
-                prompt: userPrompt,
-                identity,
-            });
-            emitComplete("loading-context", t0, `Loaded knowledge for ${companyName}`);
-            const snippetCount = ctx.split("\n").length;
-            emitData("loading-context", { companyName, categories, snippetCount });
-            emitThinking(
-                "loading-context",
-                `Searching knowledge base for ${companyName}... Found ${snippetCount} document snippets covering their products, services, and market position.`
-            );
-            return ctx;
-        })(),
+        stage({
+            id: "extracting-dna",
+            parallelGroup: PG_GATHER,
+            policy: "required",
+            run: () =>
+                extractCompanyDNA({ companyId: args.companyId, prompt: userPrompt, identity }),
+            report: result => {
+                const diffs = result.dna.keyDifferentiators;
+                return {
+                    detail: `Found ${diffs.length} differentiator${diffs.length !== 1 ? "s" : ""} (source: ${result.debug.source})`,
+                    data: {
+                        source: result.debug.source,
+                        coreMission: result.dna.coreMission,
+                        keyDifferentiators: result.dna.keyDifferentiators,
+                        provenResults: result.dna.provenResults,
+                        technicalEdge: result.dna.technicalEdge,
+                    },
+                    narration: `Analyzing company DNA... Core mission: "${result.dna.coreMission}". Identified ${diffs.length} key differentiator${diffs.length !== 1 ? "s" : ""}: ${diffs.join("; ")}. Technical edge: "${result.dna.technicalEdge}".`,
+                };
+            },
+        }),
 
-        (async () => {
-            const t1 = Date.now();
-            emitStart("extracting-dna", PG_GATHER);
-            const result = await extractCompanyDNA({
-                companyId: args.companyId,
-                prompt: userPrompt,
-                identity,
-            });
-            const diffCount = result.dna.keyDifferentiators.length;
-            emitComplete(
-                "extracting-dna",
-                t1,
-                `Found ${diffCount} differentiator${diffCount !== 1 ? "s" : ""} (source: ${result.debug.source})`
-            );
-            emitData("extracting-dna", {
-                source: result.debug.source,
-                coreMission: result.dna.coreMission,
-                keyDifferentiators: result.dna.keyDifferentiators,
-                provenResults: result.dna.provenResults,
-                technicalEdge: result.dna.technicalEdge,
-            });
-            const diffs = result.dna.keyDifferentiators;
-            emitThinking(
-                "extracting-dna",
-                `Analyzing company DNA... Core mission: "${result.dna.coreMission}". Identified ${diffs.length} key differentiator${diffs.length !== 1 ? "s" : ""}: ${diffs.join("; ")}. Technical edge: "${result.dna.technicalEdge}".`
-            );
-            return result;
-        })(),
+        stage({
+            id: "analyzing-competitors",
+            parallelGroup: PG_GATHER,
+            policy: "required",
+            run: () =>
+                analyzeCompetitors({ companyName, categories, companyContext: companyIdentity }),
+            report: result => {
+                const compCount = result.competitors.length;
+                const compNames = result.competitors.map(c => c.name).join(", ");
+                return {
+                    detail: `Identified ${compCount} competitor${compCount !== 1 ? "s" : ""}`,
+                    data: {
+                        competitors: result.competitors.map(c => ({
+                            name: c.name,
+                            positioning: c.positioning,
+                        })),
+                        ourAdvantages: result.ourAdvantages,
+                        marketGaps: result.marketGaps,
+                    },
+                    narration: `Scanning the competitive landscape... Found ${compCount} competitor${compCount !== 1 ? "s" : ""}: ${compNames || "none identified"}. Key advantages we have: ${result.ourAdvantages.join("; ") || "none yet"}. Market gaps to exploit: ${result.marketGaps.join("; ") || "none identified"}.`,
+                };
+            },
+        }),
 
-        (async () => {
-            const t2 = Date.now();
-            emitStart("analyzing-competitors", PG_GATHER);
-            const result = await analyzeCompetitors({
-                companyName,
-                categories,
-                companyContext: companyIdentity,
-            });
-            const compCount = result.competitors.length;
-            emitComplete(
-                "analyzing-competitors",
-                t2,
-                `Identified ${compCount} competitor${compCount !== 1 ? "s" : ""}`
-            );
-            emitData("analyzing-competitors", {
-                competitors: result.competitors.map(c => ({
-                    name: c.name,
-                    positioning: c.positioning,
-                })),
-                ourAdvantages: result.ourAdvantages,
-                marketGaps: result.marketGaps,
-            });
-            const compNames = result.competitors.map(c => c.name).join(", ");
-            emitThinking(
-                "analyzing-competitors",
-                `Scanning the competitive landscape... Found ${result.competitors.length} competitor${result.competitors.length !== 1 ? "s" : ""}: ${compNames || "none identified"}. Key advantages we have: ${result.ourAdvantages.join("; ") || "none yet"}. Market gaps to exploit: ${result.marketGaps.join("; ") || "none identified"}.`
-            );
-            return result;
-        })(),
-
-        (async () => {
-            const t3 = Date.now();
-            emitStart("researching-trends", PG_GATHER);
-            try {
+        stage({
+            id: "researching-trends",
+            parallelGroup: PG_GATHER,
+            policy: "degradable",
+            fallback: {
+                value: [] as MarketingResearchResult[],
+                detail: "Trend search unavailable — continuing without trends",
+                narration:
+                    "Trend search unavailable — continuing without trends. The content will rely on company DNA and competitor insights instead.",
+                logMessage: `${LOG_PREFIX} trend research failed:`,
+            },
+            run: async () => {
                 const platformGuidelines = getPlatformProfile(normalizedInput.platform).guidelines(
                     normalizedInput.platformMeta
                 );
@@ -225,271 +225,225 @@ export async function runMarketingPipeline(args: {
                     companyIndustry,
                     maxResults: normalizedInput.maxResearchResults ?? 6,
                 });
-                const normalized = normalizeResearch(raw);
-                emitComplete(
-                    "researching-trends",
-                    t3,
-                    `Discovered ${normalized.length} trending topic${normalized.length !== 1 ? "s" : ""}`
-                );
-                emitData("researching-trends", {
-                    topics: normalized.slice(0, 4).map(r => ({ title: r.title, url: r.url })),
-                });
+                return normalizeResearch(raw);
+            },
+            report: normalized => {
                 const topicTitles = normalized
                     .slice(0, 4)
                     .map(r => r.title)
                     .join("; ");
-                emitThinking(
-                    "researching-trends",
-                    `Researching what's trending on ${normalizedInput.platform}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`
-                );
-                return normalized;
-            } catch (err) {
-                const message = err instanceof Error ? err.message : String(err);
-                console.warn("[marketing-pipeline] trend research failed:", message);
-                emitComplete(
-                    "researching-trends",
-                    t3,
-                    "Trend search unavailable — continuing without trends",
-                    "failed"
-                );
-                emitThinking(
-                    "researching-trends",
-                    "Trend search unavailable — continuing without trends. The content will rely on company DNA and competitor insights instead."
-                );
-                return [] as MarketingResearchResult[];
-            }
-        })(),
+                return {
+                    detail: `Discovered ${normalized.length} trending topic${normalized.length !== 1 ? "s" : ""}`,
+                    data: {
+                        topics: normalized.slice(0, 4).map(r => ({ title: r.title, url: r.url })),
+                    },
+                    narration: `Researching what's trending on ${normalizedInput.platform}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`,
+                };
+            },
+        }),
 
-        (async () => {
-            const tv = Date.now();
-            emitStart("extracting-voice", PG_GATHER);
-            try {
-                brandVoice = await extractBrandVoice({
+        stage<BrandVoice, undefined>({
+            id: "extracting-voice",
+            parallelGroup: PG_GATHER,
+            policy: "degradable",
+            fallback: {
+                value: undefined,
+                detail: "Using default voice",
+                narration:
+                    "Brand voice extraction failed — using a balanced default voice for content generation.",
+                logMessage: `${LOG_PREFIX} brand voice extraction failed:`,
+            },
+            run: () =>
+                extractBrandVoice({
                     companyId: args.companyId,
                     toneOverride: normalizedInput.toneOverride,
-                });
-                emitComplete("extracting-voice", tv, `Tone: ${brandVoice.toneDescriptor}`);
-                emitData("extracting-voice", {
-                    tone: brandVoice.toneDescriptor,
-                    formality: brandVoice.formalityLevel,
-                    style: brandVoice.sentenceStyle,
-                    vocabulary: brandVoice.vocabularyExamples,
-                });
-                emitThinking(
-                    "extracting-voice",
-                    `Detecting brand voice from existing content... Tone: ${brandVoice.toneDescriptor}. Formality: ${brandVoice.formalityLevel}. Writing style: ${brandVoice.sentenceStyle}.`
-                );
-            } catch (err) {
-                console.warn("[marketing-pipeline] brand voice extraction failed:", err);
-                emitComplete("extracting-voice", tv, "Using default voice", "failed");
-                emitThinking(
-                    "extracting-voice",
-                    "Brand voice extraction failed — using a balanced default voice for content generation."
-                );
-            }
-        })(),
+                }),
+            report: voice => ({
+                detail: `Tone: ${voice.toneDescriptor}`,
+                data: {
+                    tone: voice.toneDescriptor,
+                    formality: voice.formalityLevel,
+                    style: voice.sentenceStyle,
+                    vocabulary: voice.vocabularyExamples,
+                },
+                narration: `Detecting brand voice from existing content... Tone: ${voice.toneDescriptor}. Formality: ${voice.formalityLevel}. Writing style: ${voice.sentenceStyle}.`,
+            }),
+        }),
 
-        (async () => {
-            const tp = Date.now();
-            emitStart("extracting-persona", PG_GATHER);
-            try {
-                if (normalizedInput.targetAudience) {
-                    targetPersona = await extractTargetPersona({
-                        companyId: args.companyId,
-                        targetAudience: normalizedInput.targetAudience,
-                    });
-                    emitComplete("extracting-persona", tp, `Role: ${targetPersona.role}`);
-                    emitData("extracting-persona", {
-                        role: targetPersona.role,
-                        painPoints: targetPersona.painPoints,
-                        priorities: targetPersona.priorities,
-                        languageStyle: targetPersona.languageStyle,
-                    });
-                    emitThinking(
-                        "extracting-persona",
-                        `Building target persona for "${normalizedInput.targetAudience}"... Role: ${targetPersona.role}. Their top pain points: ${targetPersona.painPoints.join("; ")}. They want: ${targetPersona.priorities.join("; ")}.`
-                    );
-                } else {
-                    emitComplete(
-                        "extracting-persona",
-                        tp,
-                        "No target audience specified",
-                        "skipped"
-                    );
-                    emitThinking(
-                        "extracting-persona",
-                        "Skipping persona — no target audience specified. Content will be written for a general professional audience."
-                    );
-                }
-            } catch (err) {
-                console.warn("[marketing-pipeline] persona extraction failed:", err);
-                emitComplete("extracting-persona", tp, "Persona unavailable", "failed");
-                emitThinking(
-                    "extracting-persona",
-                    "Persona extraction failed — content will target a general audience."
-                );
-            }
-        })(),
+        stage<TargetPersona, undefined>({
+            id: "extracting-persona",
+            parallelGroup: PG_GATHER,
+            policy: "degradable",
+            skip: {
+                when: !normalizedInput.targetAudience,
+                value: undefined,
+                detail: "No target audience specified",
+                narration:
+                    "Skipping persona — no target audience specified. Content will be written for a general professional audience.",
+            },
+            fallback: {
+                value: undefined,
+                detail: "Persona unavailable",
+                narration: "Persona extraction failed — content will target a general audience.",
+                logMessage: `${LOG_PREFIX} persona extraction failed:`,
+            },
+            run: () =>
+                extractTargetPersona({
+                    companyId: args.companyId,
+                    targetAudience: normalizedInput.targetAudience!,
+                }),
+            report: persona => ({
+                detail: `Role: ${persona.role}`,
+                data: {
+                    role: persona.role,
+                    painPoints: persona.painPoints,
+                    priorities: persona.priorities,
+                    languageStyle: persona.languageStyle,
+                },
+                narration: `Building target persona for "${normalizedInput.targetAudience}"... Role: ${persona.role}. Their top pain points: ${persona.painPoints.join("; ")}. They want: ${persona.priorities.join("; ")}.`,
+            }),
+        }),
 
-        (async () => {
-            const tperf = Date.now();
-            emitStart("checking-performance", PG_GATHER);
-            try {
+        stage({
+            id: "checking-performance",
+            parallelGroup: PG_GATHER,
+            policy: "degradable",
+            fallback: {
+                value: [] as string[],
+                detail: "No performance data",
+                narration:
+                    "Could not retrieve performance data — proceeding without historical context.",
+                logMessage: `${LOG_PREFIX} performance check failed:`,
+            },
+            run: async () => {
                 const history = await getPerformanceHistory({
                     companyId: args.companyId,
                     platform: normalizedInput.platform,
                 });
-                performanceInsights = buildPerformanceInsights(history);
-                if (performanceInsights.length > 0) {
-                    emitComplete(
-                        "checking-performance",
-                        tperf,
-                        `${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}`
-                    );
-                    emitData("checking-performance", { insights: performanceInsights });
-                    emitThinking(
-                        "checking-performance",
-                        `Reviewing past campaign performance... Found ${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}: ${performanceInsights.slice(0, 3).join("; ")}. These will inform the strategy.`
-                    );
-                } else {
-                    emitComplete("checking-performance", tperf, "No history yet", "skipped");
-                    emitThinking(
-                        "checking-performance",
-                        "No past performance history yet — this is the first campaign for this platform. Will use general best practices."
-                    );
-                }
-            } catch (err) {
-                console.warn("[marketing-pipeline] performance check failed:", err);
-                emitComplete("checking-performance", tperf, "No performance data", "failed");
-                emitThinking(
-                    "checking-performance",
-                    "Could not retrieve performance data — proceeding without historical context."
-                );
-            }
-        })(),
-    ]).then(([ctx, dna, comp, res]) => {
-        research = res;
-        return [ctx, dna, comp] as const;
-    });
+                return buildPerformanceInsights(history);
+            },
+            report: insights =>
+                insights.length > 0
+                    ? {
+                          detail: `${insights.length} insight${insights.length !== 1 ? "s" : ""}`,
+                          data: { insights },
+                          narration: `Reviewing past campaign performance... Found ${insights.length} insight${insights.length !== 1 ? "s" : ""}: ${insights.slice(0, 3).join("; ")}. These will inform the strategy.`,
+                      }
+                    : {
+                          status: "skipped",
+                          detail: "No history yet",
+                          narration:
+                              "No past performance history yet — this is the first campaign for this platform. Will use general best practices.",
+                      },
+        }),
+    ]);
 
     const { dna, debug: dnaDebug } = dnaResult;
 
     // 3) Build 3 messaging strategy variants from DNA + competitors + trends + voice + persona
-    const t4 = Date.now();
-    emitStart("building-strategy");
-
     const trendsSummary = formatTrendsSummary(research);
-    const strategies = await buildMultiStrategy({
-        dna,
-        competitors,
-        trendsSummary,
-        userPrompt,
-        brandVoice,
-        targetPersona,
-        performanceInsights,
+    const strategies = await stage({
+        id: "building-strategy",
+        policy: "required",
+        run: () =>
+            buildMultiStrategy({
+                dna,
+                competitors,
+                trendsSummary,
+                userPrompt,
+                brandVoice,
+                targetPersona,
+                performanceInsights,
+            }),
+        report: built => ({
+            detail: `Built ${built.length} strategy variants`,
+            data: {
+                strategies: built.map(s => ({
+                    variantId: s.variantId,
+                    angle: s.angle,
+                    angleRationale: s.angleRationale,
+                    keyProof: s.keyProof,
+                })),
+            },
+            narration: `Crafting ${built.length} positioning strateg${built.length !== 1 ? "ies" : "y"}...\n${built.map((s, i) => `  ${i + 1}. ${s.angle} — ${s.angleRationale}`).join("\n")}`,
+        }),
     });
-    const primaryStrategy = strategies[0];
-    emitComplete("building-strategy", t4, `Built ${strategies.length} strategy variants`);
-    emitData("building-strategy", {
-        strategies: strategies.map(s => ({
-            variantId: s.variantId,
-            angle: s.angle,
-            angleRationale: s.angleRationale,
-            keyProof: s.keyProof,
-        })),
-    });
-    const strategyLines = strategies
-        .map((s, i) => `  ${i + 1}. ${s.angle} — ${s.angleRationale}`)
-        .join("\n");
-    emitThinking(
-        "building-strategy",
-        `Crafting ${strategies.length} positioning strateg${strategies.length !== 1 ? "ies" : "y"}...\n${strategyLines}`
-    );
 
     // 4) Generate content variants (one per strategy) in parallel
-    const t5 = Date.now();
-    emitStart("generating-content");
-
     const platformGuidelines = getPlatformProfile(normalizedInput.platform).guidelines(
         normalizedInput.platformMeta
     );
     const companyContext = `${companyContextBase}\n\nPlatform best practices:\n${platformGuidelines}`;
 
-    const variants: ContentVariant[] = await generateVariants({
-        platform: normalizedInput.platform,
-        prompt: userPrompt,
-        companyContext,
-        research,
-        strategies,
-        enableQualityGate: false,
-        platformMeta: normalizedInput.platformMeta ?? undefined,
-        brandVoice,
-        targetPersona,
-        contentType: normalizedInput.contentType,
+    const variants: ContentVariant[] = await stage({
+        id: "generating-content",
+        policy: "required",
+        run: () =>
+            generateVariants({
+                platform: normalizedInput.platform,
+                prompt: userPrompt,
+                companyContext,
+                research,
+                strategies,
+                enableQualityGate: false,
+                platformMeta: normalizedInput.platformMeta ?? undefined,
+                brandVoice,
+                targetPersona,
+                contentType: normalizedInput.contentType,
+            }),
+        report: generated => ({
+            detail: `Generated ${generated.length} variant${generated.length !== 1 ? "s" : ""}: ${generated.map(v => v.variantId).join(", ")}`,
+            data: {
+                variants: generated.map(v => ({
+                    variantId: v.variantId,
+                    angleRationale: v.angleRationale,
+                    charCount: v.message.length,
+                    mediaType: v.mediaType,
+                })),
+            },
+            narration: `Writing ${generated.length} content variant${generated.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${generated.map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`).join("; ")}.`,
+        }),
     });
-    emitComplete(
-        "generating-content",
-        t5,
-        `Generated ${variants.length} variant${variants.length !== 1 ? "s" : ""}: ${variants.map(v => v.variantId).join(", ")}`
-    );
-    emitData("generating-content", {
-        variants: variants.map(v => ({
-            variantId: v.variantId,
-            angleRationale: v.angleRationale,
-            charCount: v.message.length,
-            mediaType: v.mediaType,
-        })),
-    });
-    const variantSummary = variants
-        .map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`)
-        .join("; ");
-    emitThinking(
-        "generating-content",
-        `Writing ${variants.length} content variant${variants.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${variantSummary}.`
-    );
 
     // Pick best variant as the primary message
     const bestVariant = variants[0] ?? { message: "", mediaType: "image" as const };
+    const primaryStrategy =
+        strategies.find(s => "variantId" in bestVariant && s.variantId === bestVariant.variantId) ??
+        strategies[0];
 
     // 5) Look up knowledge-base sources for the best variant's claims
-    let claimSources: CheckedClaim[] = [];
-    const t6 = Date.now();
-    emitStart("verifying-claims");
-    try {
-        const checked = await checkClaimSources({
-            companyId: args.companyId,
-            message: bestVariant.message,
-        });
-        claimSources = checked.claims;
-        const sourced = claimSources.filter(c => c.match !== null).length;
-        const truncationNote =
-            checked.totalClaimsFound > claimSources.length
-                ? ` (checked ${claimSources.length} of ${checked.totalClaimsFound} found)`
-                : "";
-        emitComplete(
-            "verifying-claims",
-            t6,
-            `${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""}, ${sourced} sourced${truncationNote}`
-        );
-        emitData("verifying-claims", {
-            claims: claimSources.map(c => ({
-                claim: c.claim.slice(0, 100),
-                sourceDoc: c.match?.sourceDoc ?? null,
-                relevance: c.match?.relevance != null ? Math.round(c.match.relevance * 100) : null,
-            })),
-        });
-        emitThinking(
-            "verifying-claims",
-            `Cross-referencing claims against the knowledge base... ${sourced}/${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""} have a matching source. ${sourced === claimSources.length ? "Every claim has a source." : "Some claims lack a matching source — review recommended."}`
-        );
-    } catch (err) {
-        console.warn("[marketing-pipeline] claim source lookup failed:", err);
-        emitComplete("verifying-claims", t6, "Claim source lookup unavailable", "failed");
-        emitThinking(
-            "verifying-claims",
-            "Claim source lookup unavailable — could not cross-reference claims with the knowledge base. Manual review recommended."
-        );
-    }
+    const checked = await stage<ClaimEvidenceResult>({
+        id: "verifying-claims",
+        policy: "degradable",
+        fallback: {
+            value: { claims: [], totalClaimsFound: 0 },
+            detail: "Claim source lookup unavailable",
+            narration:
+                "Claim source lookup unavailable — could not cross-reference claims with the knowledge base. Manual review recommended.",
+            logMessage: `${LOG_PREFIX} claim source lookup failed:`,
+        },
+        run: () => checkClaimSources({ companyId: args.companyId, message: bestVariant.message }),
+        report: result => {
+            const sourced = result.claims.filter(c => c.match !== null).length;
+            const truncationNote =
+                result.totalClaimsFound > result.claims.length
+                    ? ` (checked ${result.claims.length} of ${result.totalClaimsFound} found)`
+                    : "";
+            return {
+                detail: `${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""}, ${sourced} sourced${truncationNote}`,
+                data: {
+                    claims: result.claims.map(c => ({
+                        claim: c.claim.slice(0, 100),
+                        sourceDoc: c.match?.sourceDoc ?? null,
+                        relevance:
+                            c.match?.relevance != null ? Math.round(c.match.relevance * 100) : null,
+                    })),
+                },
+                narration: `Cross-referencing claims against the knowledge base... ${sourced}/${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""} have a matching source. ${sourced === result.claims.length ? "Every claim has a source." : "Some claims lack a matching source — review recommended."}`,
+            };
+        },
+    });
+    const claimSources = checked.claims;
 
     // 6) Save to performance history (fire & forget)
     void saveGeneratedContent({
@@ -498,10 +452,10 @@ export async function runMarketingPipeline(args: {
         message: bestVariant.message,
         angle: primaryStrategy?.angle,
         contentType: normalizedInput.contentType ?? "post",
-    }).catch(err => console.warn("[marketing-pipeline] save history failed:", err));
+    }).catch(err => console.warn(`${LOG_PREFIX} save history failed:`, err));
 
     const totalMs = Date.now() - pipelineStart;
-    console.log("[marketing-pipeline] total pipeline completed in %dms", totalMs);
+    console.log(`${LOG_PREFIX} total pipeline completed in %dms`, totalMs);
 
     return {
         platform: normalizedInput.platform,

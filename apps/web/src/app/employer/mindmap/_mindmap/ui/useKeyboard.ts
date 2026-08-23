@@ -19,10 +19,11 @@ import {
     tidyUp,
     toggleLock,
     ungroupSelection,
+    setZoom,
+    zoomByStep,
     zoomToSelection,
 } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
-import { nextZoomStep } from "../model/geometry";
 import type { EditorStore } from "../model/store";
 import type { ShapeId, ToolId } from "../model/types";
 
@@ -194,7 +195,7 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                         return;
                     case "0":
                         e.preventDefault();
-                        store.setViewport({ zoom: 1 });
+                        setZoom(store, 1, ref.current.getViewportSize());
                         return;
                     case "1":
                         e.preventDefault();
@@ -207,11 +208,12 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                     case "=":
                     case "+":
                         e.preventDefault();
-                        store.setViewport({ zoom: nextZoomStep(state.viewport.zoom, 1) });
+                        zoomByStep(store, 1, ref.current.getViewportSize());
                         return;
                     case "-":
+                    case "_":
                         e.preventDefault();
-                        store.setViewport({ zoom: nextZoomStep(state.viewport.zoom, -1) });
+                        zoomByStep(store, -1, ref.current.getViewportSize());
                         return;
                     default:
                         break;
@@ -287,6 +289,20 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
             if (key === "/") {
                 e.preventDefault();
                 ref.current.onFind();
+                return;
+            }
+
+            // Bare +/- zoom, the way every canvas app does it. Safe here
+            // because this whole handler already bailed out for typing
+            // targets, so it cannot eat a minus sign someone is writing.
+            if (lower === "+" || lower === "=") {
+                e.preventDefault();
+                zoomByStep(store, 1, ref.current.getViewportSize());
+                return;
+            }
+            if (lower === "-" || lower === "_") {
+                e.preventDefault();
+                zoomByStep(store, -1, ref.current.getViewportSize());
                 return;
             }
 
@@ -371,8 +387,10 @@ export const SHORTCUTS: readonly ShortcutGroup[] = [
             { keys: "⌘0", label: "Zoom to 100%" },
             { keys: "⌘1", label: "Fit to screen" },
             { keys: "⌘2", label: "Zoom to selection" },
+            { keys: "+ / −", label: "Zoom in / out" },
             { keys: "⌘= / ⌘-", label: "Zoom in / out" },
             { keys: "⌘-scroll", label: "Zoom at the cursor" },
+            { keys: "Scroll", label: "Pan · ⇧ for sideways" },
             { keys: "⌘F or /", label: "Find on canvas" },
             { keys: "⌘K", label: "Command palette" },
             { keys: "⌘S", label: "Save now" },

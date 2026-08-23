@@ -6,7 +6,7 @@ import { Check, ChevronDown, Minus } from "lucide-react";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
-import { SWATCHES } from "../model/palette";
+import { DARK_SWATCHES, SWATCHES, THEMES } from "../model/palette";
 
 /**
  * Small inspector controls.
@@ -137,7 +137,7 @@ export function NumberField({
                 inputMode="decimal"
             />
             {suffix && (
-                <span className="text-ink-4 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px]">
+                <span className="text-ink-3 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px]">
                     {suffix}
                 </span>
             )}
@@ -233,12 +233,16 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
                 <span
                     className="border-line size-4 shrink-0 rounded-[3px] border"
                     style={{
-                        background: value === "none" ? "transparent" : value,
+                        // All longhand: React warns when a shorthand and a
+                        // longhand for the same property are both updated on a
+                        // rerender, and the shorthand can silently reset the
+                        // longhand depending on which lands first.
+                        backgroundColor: value === "none" ? "transparent" : value,
                         backgroundImage:
                             value === "none"
                                 ? "linear-gradient(45deg, var(--line) 25%, transparent 25%, transparent 75%, var(--line) 75%)"
-                                : undefined,
-                        backgroundSize: value === "none" ? "6px 6px" : undefined,
+                                : "none",
+                        backgroundSize: value === "none" ? "6px 6px" : "auto",
                     }}
                 />
                 <span className="text-ink-2 flex-1 truncate text-left text-[11px]">
@@ -308,14 +312,21 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
 }
 
 function nameForColor(value: string, tone: "fill" | "stroke" | "ink"): string {
-    const match = SWATCHES.find(s =>
-        tone === "fill"
-            ? s.fill === value
-            : tone === "stroke"
-              ? s.stroke === value
-              : s.ink === value
-    );
-    return match?.name ?? value.replace(/^oklch\(|\)$/g, "").slice(0, 16);
+    for (const set of [SWATCHES, DARK_SWATCHES]) {
+        const match = set.find(s =>
+            tone === "fill"
+                ? s.fill === value
+                : tone === "stroke"
+                  ? s.stroke === value
+                  : s.ink === value
+        );
+        if (match) return match.name;
+    }
+    // A theme's paper, or a colour someone typed in. Either way the OKLCH
+    // components are not a name — "0.992 0.003 80" tells nobody anything.
+    const theme = THEMES.find(t => t.background === value);
+    if (theme) return `${theme.name} paper`;
+    return "Custom";
 }
 
 // ---------------------------------------------------------------------------

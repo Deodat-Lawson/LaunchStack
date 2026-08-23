@@ -19,8 +19,10 @@ import {
     fitToScreen,
     renamePage,
     setActivePage,
+    setZoom,
+    zoomByStep,
+    zoomToSelection,
 } from "../model/commands";
-import { nextZoomStep } from "../model/geometry";
 import type { EditorState } from "../model/store";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 import { Minimap } from "./Minimap";
@@ -102,7 +104,12 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                                         <button
                                             type="button"
                                             aria-label={`${page.name} options`}
-                                            className="text-ink-3 hover:text-ink px-1"
+                                            // ink-2, not ink-3: this sits on
+                                            // the active tab's brand-soft
+                                            // background, which is lighter
+                                            // than the panel ink-3 is tuned
+                                            // against.
+                                            className="text-ink-2 hover:text-ink px-1"
                                         >
                                             ⋯
                                         </button>
@@ -169,8 +176,8 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                     </button>
                     <button
                         type="button"
-                        onClick={() => store.setViewport({ zoom: nextZoomStep(zoom, -1) })}
-                        title="Zoom out (⌘-)"
+                        onClick={() => zoomByStep(store, -1, canvasSize)}
+                        title="Zoom out (− or ⌘-)"
                         aria-label="Zoom out"
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md"
                     >
@@ -189,21 +196,36 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                             {[0.25, 0.5, 0.75, 1, 1.5, 2, 4].map(value => (
                                 <DropdownMenuItem
                                     key={value}
-                                    onSelect={() => store.setViewport({ zoom: value })}
+                                    onSelect={() => setZoom(store, value, canvasSize)}
                                 >
                                     {Math.round(value * 100)}%
                                 </DropdownMenuItem>
                             ))}
                             <DropdownMenuSeparator />
+                            <DropdownMenuItem onSelect={() => setZoom(store, 1, canvasSize)}>
+                                Zoom to 100%
+                                <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
+                                    ⌘0
+                                </span>
+                            </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => fitToScreen(store, canvasSize)}>
                                 Fit to screen
+                                <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
+                                    ⌘1
+                                </span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => zoomToSelection(store, canvasSize)}>
+                                Zoom to selection
+                                <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
+                                    ⌘2
+                                </span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <button
                         type="button"
-                        onClick={() => store.setViewport({ zoom: nextZoomStep(zoom, 1) })}
-                        title="Zoom in (⌘=)"
+                        onClick={() => zoomByStep(store, 1, canvasSize)}
+                        title="Zoom in (+ or ⌘=)"
                         aria-label="Zoom in"
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md"
                     >

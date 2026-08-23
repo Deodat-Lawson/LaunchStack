@@ -16,7 +16,7 @@ import {
     visibleNodes,
     withDescendants,
 } from "../model/doc";
-import { insertShape, scaleNodesToBounds } from "../model/commands";
+import { docMode, insertShape, scaleNodesToBounds } from "../model/commands";
 import { createEdge, createNode, createNodeAt } from "../model/factory";
 import {
     MAX_ZOOM,
@@ -32,7 +32,7 @@ import {
     snap as snapValue,
     zoomAt,
 } from "../model/geometry";
-import { isContainer, shapeDef } from "../model/shapes";
+import { isContainer, shapeDef, shapeHoldsText } from "../model/shapes";
 import { routeEdge, waypointInsertIndex } from "../model/routing";
 import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "../model/resize";
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
@@ -163,6 +163,22 @@ export function useCanvasInteractions(
 ): CanvasInteractions {
     const gesture = useRef<Gesture>({ ...IDLE });
     const spaceHeld = useRef(false);
+    /**
+     * What the last pointerdown actually landed on.
+     *
+     * `dblclick` cannot be trusted to say: per the DOM spec it fires on the
+     * *nearest common inclusive ancestor* of the two clicks' targets, and the
+     * first click of a double-click selects the shape, which re-renders the
+     * canvas and swaps the element under the cursor. The two targets then
+     * differ and the browser reports their common ancestor — the `<svg>` —
+     * so the handler concluded "empty canvas" and dropped a new topic on top
+     * of the shape you were trying to rename. Pointer events have no such
+     * rule, so the second pointerdown is the honest answer.
+     */
+    const lastHit = useRef<{ nodeId: string | null; edgeId: string | null }>({
+        nodeId: null,
+        edgeId: null,
+    });
     // Callbacks come from the editor shell and change identity every render;
     // routing them through a ref keeps every handler below stable.
     const cb = useRef(callbacks);
@@ -270,6 +286,15 @@ export function useCanvasInteractions(
             const screen = toScreen(e.clientX, e.clientY);
             const target = e.target as Element | null;
             const additive = e.shiftKey || e.metaKey || e.ctrlKey;
+
+            // Before any branch below can return early: a resize handle, a
+            // port and a pan all end the gesture without reaching the general
+            // hit test, and the double-click handler still needs to know what
+            // was under the pointer.
+            lastHit.current = {
+                nodeId: target?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null,
+                edgeId: target?.closest("[data-edge-id]")?.getAttribute("data-edge-id") ?? null,
+            };
 
             svgRef.current?.setPointerCapture(e.pointerId);
             store.setEditing(null);
@@ -426,6 +451,7 @@ export function useCanvasInteractions(
             if (state.tool === "ink") {
                 const node = createNode({
                     shape: "ink",
+                    mode: docMode(store),
                     x: world.x,
                     y: world.y,
                     w: 1,
@@ -932,9 +958,11 @@ export function useCanvasInteractions(
                     const rect = state.marquee;
                     store.setMarquee(null);
                     const shape = g.insertShape ?? "rectangle";
+                    let insertedId: string;
                     if (g.moved && rect && rect.w > 8 && rect.h > 8) {
                         const node = createNode({
                             shape,
+                            mode: docMode(store),
                             x: rect.x,
                             y: rect.y,
                             w: rect.w,
@@ -945,17 +973,23 @@ export function useCanvasInteractions(
                         });
                         store.selectNodes([node.id]);
                         store.endInteraction();
-                        if (shape === "text" || shape === "sticky") {
-                            cb.current.onEditText({ kind: "node", id: node.id });
-                        }
+                        insertedId = node.id;
                     } else {
                         store.cancelInteraction();
-                        const id = insertShape(store, shape, g.origin);
-                        if (shape === "text" || shape === "sticky") {
-                            cb.current.onEditText({ kind: "node", id });
-                        }
+                        insertedId = insertShape(store, shape, g.origin);
                     }
+                    // Disarm first: `setTool` clears `editing`, so opening the
+                    // label above this line would silently undo it — which is
+                    // why placing a text box or a sticky never did land you in
+                    // the field the way double-clicking one does.
                     store.setTool("select");
+                    // Drop into the label straight away. A box you have to
+                    // discover is double-clickable does not read as a container
+                    // you put words in; one with a caret in it does, and it
+                    // saves the second gesture besides.
+                    if (shapeHoldsText(shape)) {
+                        cb.current.onEditText({ kind: "node", id: insertedId });
+                    }
                     break;
                 }
 
@@ -996,8 +1030,16 @@ export function useCanvasInteractions(
         (e: ReactMouseEvent<SVGSVGElement>) => {
             const state = store.getState();
             if (state.presenting) return;
+
+            // `lastHit` first, `e.target` only as a fallback: see the ref's
+            // docblock for why the event's own target lies here. Reading the
+            // event too covers the case where a double-click arrives without a
+            // preceding pointerdown we saw (synthetic events, some a11y tools).
             const target = e.target as Element | null;
-            const nodeId = target?.closest("[data-node-id]")?.getAttribute("data-node-id");
+            const nodeId =
+                lastHit.current.nodeId ??
+                target?.closest("[data-node-id]")?.getAttribute("data-node-id") ??
+                null;
             if (nodeId) {
                 const page = activePage(state.doc);
                 const node = nodeById(page, nodeId);
@@ -1006,7 +1048,10 @@ export function useCanvasInteractions(
                 cb.current.onEditText({ kind: "node", id: nodeId });
                 return;
             }
-            const edgeId = target?.closest("[data-edge-id]")?.getAttribute("data-edge-id");
+            const edgeId =
+                lastHit.current.edgeId ??
+                target?.closest("[data-edge-id]")?.getAttribute("data-edge-id") ??
+                null;
             if (edgeId) {
                 store.setSelection([{ kind: "edge", id: edgeId }]);
                 cb.current.onEditText({ kind: "edge-label", id: edgeId, index: 0 });
@@ -1014,7 +1059,7 @@ export function useCanvasInteractions(
             }
             // Empty canvas: drop a topic where they clicked and start typing.
             const world = toWorld(e.clientX, e.clientY);
-            const node = createNodeAt("mind-branch", world);
+            const node = createNodeAt("mind-branch", world, { mode: docMode(store) });
             store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), { label: "Add topic" });
             store.selectNodes([node.id]);
             cb.current.onEditText({ kind: "node", id: node.id });
@@ -1177,6 +1222,7 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): void {
         // The new topic inherits its parent's look unless the parent is the
         // root, whose filled-pill styling would swamp a child.
         created = createNodeAt("mind-branch", world, {
+            mode: docMode(store),
             w: source && source.shape !== "mind-root" ? source.w : 160,
             h: source && source.shape !== "mind-root" ? source.h : 54,
         });

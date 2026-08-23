@@ -1,0 +1,41 @@
+/* The drawing surface does not follow the viewer's theme — its colours are
+   document data, so the same board looks the same to everyone (see the feature
+   README). The chrome drawn on top of it therefore cannot follow the viewer's
+   theme either; it has to follow *the paper*. `data-paper` is set from the
+   page background's own lightness, so a custom background works as well as a
+   named theme does.
+
+   Rebinding the semantic names here rather than editing ~50 call sites means
+   new canvas chrome is correct by default, and those components go on reading
+   `var(--accent)` like everything else in the app instead of learning a second
+   vocabulary.
+
+   Scoped to the <svg>: the rulers and the text-editing field are siblings
+   outside it and answer to the app's theme instead. */
+.paper {
+    --panel: var(--paper-panel);
+    --panel-2: var(--paper-panel-2);
+    --ink: var(--paper-ink);
+    --ink-2: var(--paper-ink-2);
+    --ink-3: var(--paper-ink-3);
+    --ink-4: var(--paper-ink-4);
+    --line: var(--paper-line);
+    --line-2: var(--paper-line-2);
+    --line-dot: var(--paper-line-dot);
+    --accent: var(--paper-accent);
+    --warn: var(--paper-warn);
+}
+
+.paper[data-paper="dark"] {
+    --paper-panel: var(--paper-dark-panel);
+    --paper-panel-2: var(--paper-dark-panel-2);
+    --paper-ink: var(--paper-dark-ink);
+    --paper-ink-2: var(--paper-dark-ink-2);
+    --paper-ink-3: var(--paper-dark-ink-3);
+    --paper-ink-4: var(--paper-dark-ink-4);
+    --paper-line: var(--paper-dark-line);
+    --paper-line-2: var(--paper-dark-line-2);
+    --paper-line-dot: var(--paper-dark-line-dot);
+    --paper-accent: var(--paper-dark-accent);
+    --paper-warn: var(--paper-dark-warn);
+}

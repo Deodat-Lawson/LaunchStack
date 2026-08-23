@@ -108,7 +108,7 @@ export function CommentsPanel({
                 </button>
             </div>
 
-            <ScrollArea className="flex-1">
+            <ScrollArea className="min-h-0 flex-1">
                 <div className="space-y-2 p-3">
                     {threads.length === 0 && (
                         <p className="text-ink-3 py-6 text-center text-[13px]">No comments yet.</p>

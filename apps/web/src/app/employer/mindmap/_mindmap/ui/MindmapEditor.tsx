@@ -11,12 +11,14 @@ import {
     X,
 } from "lucide-react";
 
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { fitToScreen, setActivePage, viewportCentre } from "../model/commands";
+import { docMode, fitToScreen, setActivePage, viewportCentre } from "../model/commands";
 import { createNodeAt } from "../model/factory";
 import { isImageFile } from "../lib/images";
+import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type EditorState } from "../model/store";
 import type { Point, ShapeId } from "../model/types";
@@ -235,11 +237,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const world = worldPointAt(e.clientX, e.clientY);
 
             if (shape) {
-                const node = createNodeAt(shape as ShapeId, world);
+                const node = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
                 });
                 store.selectNodes([node.id]);
+                // Same as placing one with the shape tool: land in the label,
+                // so a dropped box asks to be named rather than sitting blank.
+                if (shapeHoldsText(shape)) store.setEditing({ kind: "node", id: node.id });
                 return;
             }
 
@@ -283,100 +288,145 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             />
                         )}
 
-                        {!presenting && leftOpen && (
-                            <aside className="border-line bg-panel flex w-[264px] shrink-0 flex-col border-r">
-                                <nav className="border-line flex shrink-0 border-b">
-                                    <PanelTab
-                                        active={leftTab === "shapes"}
-                                        onClick={() => setLeftTab("shapes")}
-                                        icon={<Shapes className="size-3.5" />}
-                                        label="Shapes"
-                                    />
-                                    <PanelTab
-                                        active={leftTab === "outline"}
-                                        onClick={() => setLeftTab("outline")}
-                                        icon={<Layers className="size-3.5" />}
-                                        label="Outline"
-                                    />
-                                    <PanelTab
-                                        active={leftTab === "comments"}
-                                        onClick={() => setLeftTab("comments")}
-                                        icon={<MessageSquare className="size-3.5" />}
-                                        label="Comments"
-                                    />
-                                    <PanelTab
-                                        active={leftTab === "history"}
-                                        onClick={() => setLeftTab("history")}
-                                        icon={<HistoryIcon className="size-3.5" />}
-                                        label="History"
-                                    />
-                                </nav>
-                                <div className="min-h-0 flex-1">
-                                    {leftTab === "shapes" && <ShapePalette />}
-                                    {leftTab === "outline" && (
-                                        <OutlinePanel canvasSize={stageSize} />
-                                    )}
-                                    {leftTab === "comments" && (
-                                        <CommentsPanel
-                                            author={props.author}
-                                            canvasSize={stageSize}
-                                        />
-                                    )}
-                                    {leftTab === "history" && (
-                                        <HistoryPanel
-                                            mindmapId={props.mindmapId}
-                                            onRestored={autosave.setRevision}
-                                        />
-                                    )}
-                                </div>
-                            </aside>
-                        )}
-
-                        <div
-                            ref={stageRef}
-                            className="relative flex min-h-0 min-w-0 flex-1"
-                            onDragOver={e => {
-                                const types = e.dataTransfer.types;
-                                if (
-                                    types.includes("application/x-launchstack-shape") ||
-                                    types.includes("Files")
-                                ) {
-                                    e.preventDefault();
-                                    e.dataTransfer.dropEffect = "copy";
-                                }
-                            }}
-                            onDrop={onDrop}
+                        {/* The rail stays a fixed strip; only the two panels and
+                            the canvas share the remaining width. `autoSaveId`
+                            persists the split per browser, and the explicit
+                            `id`/`order` are what let a panel be unmounted by its
+                            toggle and come back the same size. */}
+                        <ResizablePanelGroup
+                            direction="horizontal"
+                            autoSaveId="mindmap-editor-panels"
+                            className="min-h-0 flex-1"
                         >
-                            <CanvasContextMenu>
-                                <div className="flex min-h-0 min-w-0 flex-1">
-                                    <Canvas
-                                        callbacks={canvasCallbacks}
-                                        peers={presence.peers}
-                                        onCursorMove={presence.reportCursor}
+                            {!presenting && leftOpen && (
+                                <>
+                                    <ResizablePanel
+                                        id="left"
+                                        order={1}
+                                        defaultSize={19}
+                                        minSize={13}
+                                        maxSize={36}
+                                        className="flex min-h-0 flex-col"
                                     >
-                                        <TextEditorOverlay />
-                                    </Canvas>
-                                </div>
-                            </CanvasContextMenu>
-
-                            <ConnectedStaleBanner staleBy={presence.staleBy} />
-
-                            <FindBar
-                                open={findOpen}
-                                onClose={() => setFindOpen(false)}
-                                canvasSize={stageSize}
-                            />
-
-                            {presenting && (
-                                <PresentationControls onExit={togglePresent} onStep={stepPage} />
+                                        <aside className="border-line bg-panel flex min-h-0 min-w-0 flex-1 flex-col border-r">
+                                            <nav className="border-line flex shrink-0 border-b">
+                                                <PanelTab
+                                                    active={leftTab === "shapes"}
+                                                    onClick={() => setLeftTab("shapes")}
+                                                    icon={<Shapes className="size-3.5" />}
+                                                    label="Shapes"
+                                                />
+                                                <PanelTab
+                                                    active={leftTab === "outline"}
+                                                    onClick={() => setLeftTab("outline")}
+                                                    icon={<Layers className="size-3.5" />}
+                                                    label="Outline"
+                                                />
+                                                <PanelTab
+                                                    active={leftTab === "comments"}
+                                                    onClick={() => setLeftTab("comments")}
+                                                    icon={<MessageSquare className="size-3.5" />}
+                                                    label="Comments"
+                                                />
+                                                <PanelTab
+                                                    active={leftTab === "history"}
+                                                    onClick={() => setLeftTab("history")}
+                                                    icon={<HistoryIcon className="size-3.5" />}
+                                                    label="History"
+                                                />
+                                            </nav>
+                                            <div className="min-h-0 flex-1">
+                                                {leftTab === "shapes" && <ShapePalette />}
+                                                {leftTab === "outline" && (
+                                                    <OutlinePanel canvasSize={stageSize} />
+                                                )}
+                                                {leftTab === "comments" && (
+                                                    <CommentsPanel
+                                                        author={props.author}
+                                                        canvasSize={stageSize}
+                                                    />
+                                                )}
+                                                {leftTab === "history" && (
+                                                    <HistoryPanel
+                                                        mindmapId={props.mindmapId}
+                                                        onRestored={autosave.setRevision}
+                                                    />
+                                                )}
+                                            </div>
+                                        </aside>
+                                    </ResizablePanel>
+                                    <ResizableHandle />
+                                </>
                             )}
-                        </div>
 
-                        {!presenting && rightOpen && (
-                            <aside className="border-line bg-panel w-[268px] shrink-0 border-l">
-                                <Inspector />
-                            </aside>
-                        )}
+                            <ResizablePanel
+                                id="canvas"
+                                order={2}
+                                minSize={30}
+                                className="flex min-h-0"
+                            >
+                                <div
+                                    ref={stageRef}
+                                    className="relative flex min-h-0 min-w-0 flex-1"
+                                    onDragOver={e => {
+                                        const types = e.dataTransfer.types;
+                                        if (
+                                            types.includes("application/x-launchstack-shape") ||
+                                            types.includes("Files")
+                                        ) {
+                                            e.preventDefault();
+                                            e.dataTransfer.dropEffect = "copy";
+                                        }
+                                    }}
+                                    onDrop={onDrop}
+                                >
+                                    <CanvasContextMenu>
+                                        <div className="flex min-h-0 min-w-0 flex-1">
+                                            <Canvas
+                                                callbacks={canvasCallbacks}
+                                                peers={presence.peers}
+                                                onCursorMove={presence.reportCursor}
+                                            >
+                                                <TextEditorOverlay />
+                                            </Canvas>
+                                        </div>
+                                    </CanvasContextMenu>
+
+                                    <ConnectedStaleBanner staleBy={presence.staleBy} />
+
+                                    <FindBar
+                                        open={findOpen}
+                                        onClose={() => setFindOpen(false)}
+                                        canvasSize={stageSize}
+                                    />
+
+                                    {presenting && (
+                                        <PresentationControls
+                                            onExit={togglePresent}
+                                            onStep={stepPage}
+                                        />
+                                    )}
+                                </div>
+                            </ResizablePanel>
+
+                            {!presenting && rightOpen && (
+                                <>
+                                    <ResizableHandle />
+                                    <ResizablePanel
+                                        id="right"
+                                        order={3}
+                                        defaultSize={19}
+                                        minSize={13}
+                                        maxSize={36}
+                                        className="flex min-h-0"
+                                    >
+                                        <aside className="border-line bg-panel min-h-0 min-w-0 flex-1 border-l">
+                                            <Inspector />
+                                        </aside>
+                                    </ResizablePanel>
+                                </>
+                            )}
+                        </ResizablePanelGroup>
                     </div>
 
                     {!presenting && <BottomBar canvasSize={stageSize} />}

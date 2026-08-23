@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
 import { z } from "zod";
 import { MarketingPlatformEnum } from "@launchstack/features/marketing-pipeline";
 import { markContentPublished, publishContent } from "@launchstack/features/marketing-pipeline";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -18,23 +18,16 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = (await request.json()) as unknown;
-        const validation = PublishSchema.safeParse(body);
+        const validation = PublishSchema.safeParse(await readJson(request));
         if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid input", errors: validation.error.flatten() },
-                { status: 400 }
-            );
+            return fail("Invalid input", 400, { errors: validation.error.flatten() });
         }
 
         const { platform, message, title } = validation.data;
         const result = await publishContent(platform, message, title);
 
         if (!result.success) {
-            return NextResponse.json(
-                { success: false, message: result.error ?? "Publish failed", platform },
-                { status: 502 }
-            );
+            return fail(result.error ?? "Publish failed", 502, { platform });
         }
 
         // Record the publish against the matching history row (fire-and-forget:
@@ -52,20 +45,8 @@ export async function POST(request: Request) {
             );
         }
 
-        return NextResponse.json({
-            success: true,
-            platform,
-            postUrl: result.postUrl,
-        });
+        return ok({ platform, postUrl: result.postUrl });
     } catch (error) {
-        console.error("[marketing-pipeline/publish] POST error:", error);
-        return NextResponse.json(
-            {
-                success: false,
-                message: "Failed to publish content",
-                error: "Failed to publish content",
-            },
-            { status: 500 }
-        );
+        return handleRouteError("marketing-pipeline/publish", error);
     }
 }

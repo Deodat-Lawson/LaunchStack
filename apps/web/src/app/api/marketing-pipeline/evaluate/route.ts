@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
@@ -9,6 +8,7 @@ import {
     type ReferencePlatform,
 } from "@launchstack/features/marketing-pipeline/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -56,36 +56,16 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        let raw: unknown;
-        try {
-            raw = (await request.json()) as unknown;
-        } catch {
-            return NextResponse.json(
-                { success: false, message: "Invalid JSON body" },
-                { status: 400 }
-            );
-        }
-
-        const parsed = EvaluateBodySchema.safeParse(raw);
+        const parsed = EvaluateBodySchema.safeParse(await readJson(request));
         if (!parsed.success) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid input",
-                    errors: parsed.error.flatten(),
-                },
-                { status: 400 }
-            );
+            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
         }
         const body = parsed.data;
 
         const message = body.message.trim();
         const platform = body.platform ?? "";
         if (!message) {
-            return NextResponse.json(
-                { success: false, message: "message is required" },
-                { status: 400 }
-            );
+            return fail("message is required", 400);
         }
 
         // The judge is typed for x/linkedin/reddit; bluesky falls back to the x
@@ -95,10 +75,7 @@ export async function POST(request: Request) {
 
         const companyId = Number(ctx.data.companyId);
         if (Number.isNaN(companyId)) {
-            return NextResponse.json(
-                { success: false, message: "Invalid company ID" },
-                { status: 400 }
-            );
+            return fail("Invalid company ID", 400);
         }
 
         // Prefer the exact knowledge context the generator used (passed from the
@@ -128,16 +105,8 @@ export async function POST(request: Request) {
             referenceMarkdown: REFERENCE_POSTS[platform as ReferencePlatform] ?? "",
         });
 
-        return NextResponse.json({ success: true, data: scored });
+        return ok(scored);
     } catch (error) {
-        console.error("[marketing-pipeline/evaluate] failed:", error);
-        return NextResponse.json(
-            {
-                success: false,
-                message: "Failed to evaluate post",
-                error: error instanceof Error ? error.message : "Unknown error",
-            },
-            { status: 500 }
-        );
+        return handleRouteError("marketing-pipeline/evaluate", error);
     }
 }

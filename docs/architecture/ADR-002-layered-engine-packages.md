@@ -36,7 +36,7 @@ apps/*, services/*     ← any of the above (never the reverse)
 - **`packages/protocol`** — cross-language contracts only: versioned zod
   schemas for the event envelope and the four pipeline events, the
   `EvidenceDocument` produced by the document-converter service, the
-  transcription and document-editor service contracts, and a generator that
+  transcription and adeu-ai-docs-editing service contracts, and a generator that
   emits JSON Schema files consumed by the Python services' contract tests.
 - **`packages/evidence`** — pure company-state logic: immutable evidence
   records, citation anchors, version diffing, supersession, conflict

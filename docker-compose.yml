@@ -11,7 +11,7 @@
 #   5433 — PostgreSQL (for local tools like psql/pgAdmin)
 #   8000 — transcription service
 #   8002 — document-converter service
-#   8003 — document-editor service
+#   8003 — adeu-docs-editing service
 #
 # Profiles:
 #   (default)      — everything Local mode requires
@@ -100,8 +100,8 @@ x-shared-env: &shared-env
   # without a configured .env — override all of them in production.
   TRANSCRIPTION_SERVICE_URL: http://transcription:8000
   TRANSCRIPTION_SERVICE_API_KEY: ${TRANSCRIPTION_SERVICE_API_KEY:-pdr_local_sidecar_key}
-  DOCUMENT_EDITOR_URL: http://document-editor:8000
-  DOCUMENT_EDITOR_API_KEY: ${DOCUMENT_EDITOR_API_KEY:-pdr_local_sidecar_key}
+  ADEU_SERVICE_URL: http://adeu-docs-editing:8000
+  ADEU_SERVICE_API_KEY: ${ADEU_SERVICE_API_KEY:-pdr_local_adeu_key}
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
@@ -210,16 +210,20 @@ services:
       retries: 5
       start_period: 120s
 
-  # Authoritative Adeu DOCX redlining service (ADR-004). api/adeu remains a
-  # deprecated compatibility path only.
-  document-editor:
+  # Authoritative Adeu DOCX redlining service (ADR-004, renamed per ADR-007).
+  # Owns the whole edit workflow, not one library call per route.
+  adeu-docs-editing:
     build:
-      context: ./services/document-editor
+      context: ./services/adeu-ai-docs-editing
       dockerfile: Dockerfile
-    container_name: pdr_ai_v2-document-editor
+    container_name: pdr_ai_v2-adeu-docs-editing
     restart: unless-stopped
     environment:
-      DOCUMENT_EDITOR_API_KEY: ${DOCUMENT_EDITOR_API_KEY:-pdr_local_sidecar_key}
+      ADEU_SERVICE_API_KEY: ${ADEU_SERVICE_API_KEY:-pdr_local_adeu_key}
+      # Only object references from these origins may be fetched (SSRF guard,
+      # ADR-004 §6) — same rule the converter enforces. Unset disables object
+      # references entirely and documents must be uploaded inline.
+      ALLOWED_FETCH_ORIGINS: ${ADEU_ALLOWED_FETCH_ORIGINS:-http://app:3000,http://seaweedfs:8333}
     ports:
       - "8003:8000"
     healthcheck:
@@ -332,7 +336,7 @@ services:
       # unreachable service, so none of them gates the app's own health.
       transcription:
         condition: service_started
-      document-editor:
+      adeu-docs-editing:
         condition: service_started
       document-converter:
         condition: service_started

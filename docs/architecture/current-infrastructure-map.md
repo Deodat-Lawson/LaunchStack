@@ -9,7 +9,7 @@
 > `apps/worker` now exist
 > ([ADR-003](./ADR-003-transactional-outbox-and-worker.md)); `sidecar/`,
 > `services/ocr-router`, and `services/ocr-worker` were consolidated into
-> `services/transcription`, `services/document-editor`, and
+> `services/transcription`, `services/adeu-ai-docs-editing`, and
 > `services/document-converter`
 > ([ADR-004](./ADR-004-compute-service-consolidation.md)); and the sidecar
 > `/embed`//`/rerank`//`/extract-entities` contracts described below were

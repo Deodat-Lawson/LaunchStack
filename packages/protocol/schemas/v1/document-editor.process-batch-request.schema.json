@@ -26,6 +26,21 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "match_mode": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "strict",
+                          "first",
+                          "all"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -77,6 +92,38 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partial": {
+          "type": "boolean"
+        },
+        "self_contained": {
+          "type": "boolean"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "filename": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "url"
+              ],
+              "additionalProperties": false
             },
             {
               "type": "null"

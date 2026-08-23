@@ -5,7 +5,16 @@
  * document's active palette, snap settings, and text defaults.
  */
 
-import { branchSwatch, HAIRLINE, INK, PAPER, STICKY_COLORS, SWATCH_BY_ID } from "./palette";
+import {
+    branchSwatch,
+    neutralsFor,
+    PAPER,
+    stickyColors,
+    readableInkOn,
+    stickyInk,
+    swatchFor,
+    type ThemeMode,
+} from "./palette";
 import { shapeDef } from "./shapes";
 import {
     DOC_SCHEMA_VERSION,
@@ -48,10 +57,14 @@ export function __resetIdCounter(): void {
 // Styles
 // ---------------------------------------------------------------------------
 
-export function defaultNodeStyle(overrides: Partial<NodeStyle> = {}): NodeStyle {
+export function defaultNodeStyle(
+    overrides: Partial<NodeStyle> = {},
+    mode: ThemeMode = "light"
+): NodeStyle {
+    const n = neutralsFor(mode);
     return {
-        fill: PAPER,
-        stroke: HAIRLINE,
+        fill: n.paper,
+        stroke: n.hairline,
         strokeWidth: 1.5,
         strokeStyle: "solid",
         opacity: 1,
@@ -61,9 +74,12 @@ export function defaultNodeStyle(overrides: Partial<NodeStyle> = {}): NodeStyle 
     };
 }
 
-export function defaultTextStyle(overrides: Partial<TextStyle> = {}): TextStyle {
+export function defaultTextStyle(
+    overrides: Partial<TextStyle> = {},
+    mode: ThemeMode = "light"
+): TextStyle {
     return {
-        color: INK,
+        color: neutralsFor(mode).ink,
         size: 14,
         family: "sans",
         bold: false,
@@ -108,18 +124,23 @@ export function defaultSettings(overrides: Partial<DocSettings> = {}): DocSettin
  * Shape-specific styling applied on top of the document defaults — a sticky
  * looks nothing like a UML class even before the user touches the inspector.
  */
-function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<TextStyle> } {
+function presetFor(
+    shape: ShapeId,
+    mode: ThemeMode = "light"
+): { style: Partial<NodeStyle>; text: Partial<TextStyle> } {
+    const n = neutralsFor(mode);
+    const sticky = stickyColors(mode);
     switch (shape) {
         case "sticky":
             return {
                 style: {
-                    fill: STICKY_COLORS[0]!,
+                    fill: sticky[0]!,
                     stroke: "none",
                     strokeWidth: 0,
                     radius: 3,
                     shadow: true,
                 },
-                text: { align: "left", valign: "top", size: 15 },
+                text: { align: "left", valign: "top", size: 15, color: stickyInk(mode) },
             };
         case "text":
             return {
@@ -127,7 +148,7 @@ function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<T
                 text: { align: "left", valign: "top", size: 16 },
             };
         case "mind-root": {
-            const sw = branchSwatch(0);
+            const sw = branchSwatch(0, mode);
             return {
                 style: {
                     fill: sw.stroke,
@@ -136,11 +157,11 @@ function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<T
                     shadow: true,
                     radius: 22,
                 },
-                text: { color: "oklch(0.99 0.002 285)", size: 18, bold: true },
+                text: { color: readableInkOn(sw.stroke), size: 18, bold: true },
             };
         }
         case "mind-branch": {
-            const sw = branchSwatch(1);
+            const sw = branchSwatch(1, mode);
             return {
                 style: { fill: sw.fill, stroke: sw.stroke, strokeWidth: 1.5, radius: 10 },
                 text: { color: sw.ink, size: 14, bold: false },
@@ -148,18 +169,20 @@ function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<T
         }
         case "mind-leaf":
             return {
-                style: { fill: "none", stroke: HAIRLINE, strokeWidth: 1.5 },
-                text: { align: "left", valign: "bottom", size: 13 },
+                style: { fill: "none", stroke: n.hairline, strokeWidth: 1.5 },
+                text: { align: "left", valign: "bottom", size: 13, color: n.ink },
             };
         case "frame":
             return {
                 style: {
-                    fill: "oklch(0.985 0.004 280)",
-                    stroke: "oklch(0.80 0.01 280)",
+                    // A frame is a slightly raised patch of paper, so it tracks
+                    // the paper rather than sitting at a fixed lightness.
+                    fill: mode === "dark" ? "oklch(0.235 0.018 285)" : "oklch(0.985 0.004 280)",
+                    stroke: mode === "dark" ? "oklch(0.36 0.02 285)" : "oklch(0.80 0.01 280)",
                     strokeWidth: 1,
                     radius: 8,
                 },
-                text: { align: "left", valign: "middle", size: 12, color: "oklch(0.50 0.01 280)" },
+                text: { align: "left", valign: "middle", size: 12, color: n.inkSoft },
             };
         case "group":
             return {
@@ -170,35 +193,43 @@ function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<T
         case "swimlane-v":
             return {
                 style: {
-                    fill: "oklch(0.99 0.003 280)",
-                    stroke: "oklch(0.78 0.012 280)",
+                    fill: mode === "dark" ? "oklch(0.22 0.015 285)" : "oklch(0.99 0.003 280)",
+                    stroke: mode === "dark" ? "oklch(0.38 0.02 285)" : "oklch(0.78 0.012 280)",
                     strokeWidth: 1.2,
                     radius: 4,
                 },
-                text: { align: "left", valign: "middle", size: 13, bold: true },
+                text: { align: "left", valign: "middle", size: 13, bold: true, color: n.ink },
             };
         case "uml-class":
         case "erd-entity":
             return {
-                style: { fill: PAPER, stroke: "oklch(0.45 0.02 280)", strokeWidth: 1.4, radius: 4 },
-                text: { align: "center", valign: "top", size: 14, bold: true },
+                style: {
+                    fill: n.paper,
+                    stroke: mode === "dark" ? "oklch(0.60 0.02 280)" : "oklch(0.45 0.02 280)",
+                    strokeWidth: 1.4,
+                    radius: 4,
+                },
+                text: { align: "center", valign: "top", size: 14, bold: true, color: n.ink },
             };
         case "uml-note":
             return {
-                style: { fill: "oklch(0.97 0.05 95)", stroke: "oklch(0.65 0.09 90)" },
-                text: { align: "left", valign: "top", size: 13 },
+                style: {
+                    fill: mode === "dark" ? "oklch(0.31 0.06 92)" : "oklch(0.97 0.05 95)",
+                    stroke: mode === "dark" ? "oklch(0.66 0.10 90)" : "oklch(0.65 0.09 90)",
+                },
+                text: { align: "left", valign: "top", size: 13, color: n.ink },
             };
         case "uml-actor":
         case "uml-interface":
             return {
-                style: { fill: PAPER, stroke: INK, strokeWidth: 1.6 },
-                text: { valign: "top", size: 13 },
+                style: { fill: n.paper, stroke: n.ink, strokeWidth: 1.6 },
+                text: { valign: "top", size: 13, color: n.ink },
             };
         case "line":
         case "ink":
         case "bracket-pair":
             return {
-                style: { fill: "none", stroke: INK, strokeWidth: 2 },
+                style: { fill: "none", stroke: n.ink, strokeWidth: 2 },
                 text: {},
             };
         case "image":
@@ -210,11 +241,11 @@ function presetFor(shape: ShapeId): { style: Partial<NodeStyle>; text: Partial<T
         case "or-junction":
         case "summing-junction":
             return {
-                style: { fill: PAPER, stroke: INK, strokeWidth: 1.5 },
-                text: { size: 12 },
+                style: { fill: n.paper, stroke: n.ink, strokeWidth: 1.5 },
+                text: { size: 12, color: n.ink },
             };
         default: {
-            const sw = SWATCH_BY_ID.violet!;
+            const sw = swatchFor("violet", mode);
             return {
                 style: { fill: sw.fill, stroke: sw.stroke, strokeWidth: 1.5 },
                 text: { color: sw.ink },
@@ -240,11 +271,14 @@ export interface CreateNodeOptions {
     parentId?: string | null;
     data?: DiagramNode["data"];
     rotation?: number;
+    /** Which paper this node is being drawn on. Defaults to light. */
+    mode?: ThemeMode;
 }
 
 export function createNode(opts: CreateNodeOptions): DiagramNode {
     const d = shapeDef(opts.shape);
-    const preset = presetFor(opts.shape);
+    const mode = opts.mode ?? "light";
+    const preset = presetFor(opts.shape, mode);
     return {
         id: makeId("n"),
         shape: opts.shape,
@@ -254,8 +288,8 @@ export function createNode(opts: CreateNodeOptions): DiagramNode {
         h: opts.h ?? d.defaultSize.h,
         rotation: opts.rotation ?? 0,
         text: opts.text ?? "",
-        style: defaultNodeStyle({ ...preset.style, ...opts.style }),
-        textStyle: defaultTextStyle({ ...preset.text, ...opts.textStyle }),
+        style: defaultNodeStyle({ ...preset.style, ...opts.style }, mode),
+        textStyle: defaultTextStyle({ ...preset.text, ...opts.textStyle }, mode),
         parentId: opts.parentId ?? null,
         locked: false,
         hidden: false,
@@ -276,11 +310,17 @@ export function createNodeAt(
 }
 
 /** A mindmap topic auto-styled for its depth. */
-export function createMindNode(depth: number, at: Point, text = ""): DiagramNode {
+export function createMindNode(
+    depth: number,
+    at: Point,
+    text = "",
+    mode: ThemeMode = "light"
+): DiagramNode {
     const shape: ShapeId = depth === 0 ? "mind-root" : depth === 1 ? "mind-branch" : "mind-branch";
-    const sw = branchSwatch(depth);
+    const sw = branchSwatch(depth, mode);
     const node = createNodeAt(shape, at, {
         text,
+        mode,
         w: depth === 0 ? 200 : depth === 1 ? 170 : 150,
         h: depth === 0 ? 76 : depth === 1 ? 56 : 48,
         style:
@@ -289,7 +329,7 @@ export function createMindNode(depth: number, at: Point, text = ""): DiagramNode
                 : { fill: sw.fill, stroke: sw.stroke },
         textStyle:
             depth === 0
-                ? { color: "oklch(0.99 0.002 285)", size: 18, bold: true }
+                ? { color: readableInkOn(sw.stroke), size: 18, bold: true }
                 : { color: sw.ink, size: depth === 1 ? 15 : 13.5, bold: depth === 1 },
         data: { depth },
     });

@@ -604,16 +604,14 @@ async function main(): Promise<void> {
                 })
                 .returning();
             for (const [index, content] of (entry.chunks ?? []).entries()) {
-                await testDb.db
-                    .insert(documentContextChunks)
-                    .values({
-                        documentId: BigInt(doc!.id),
-                        versionId: BigInt(version!.id),
-                        content,
-                        tokenCount: content.split(/\s+/).length,
-                        charCount: content.length,
-                        pageNumber: index + 1,
-                    });
+                await testDb.db.insert(documentContextChunks).values({
+                    documentId: BigInt(doc!.id),
+                    versionId: BigInt(version!.id),
+                    content,
+                    tokenCount: content.split(/\s+/).length,
+                    charCount: content.length,
+                    pageNumber: index + 1,
+                });
             }
         }
         for (const [companyId, title, timestamp] of [
@@ -624,17 +622,15 @@ async function main(): Promise<void> {
                 .insert(document)
                 .values({ companyId, url: `local://${title}`, category: "Product", title })
                 .returning();
-            await testDb.db
-                .insert(documentVersions)
-                .values({
-                    documentId: BigInt(doc!.id),
-                    versionNumber: 1,
-                    url: `local://${title}/v1`,
-                    mimeType: "text/plain",
-                    uploadedBy: "seed",
-                    changelog: title,
-                    createdAt: new Date(timestamp),
-                });
+            await testDb.db.insert(documentVersions).values({
+                documentId: BigInt(doc!.id),
+                versionNumber: 1,
+                url: `local://${title}/v1`,
+                mimeType: "text/plain",
+                uploadedBy: "seed",
+                changelog: title,
+                createdAt: new Date(timestamp),
+            });
         }
         const [seededDocuments, seededVersions, seededChunks] = await Promise.all([
             testDb.db.select().from(document),

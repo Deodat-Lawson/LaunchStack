@@ -361,7 +361,9 @@ function KeyStatus({
                 }}
             >
                 <span style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{label}</span>
-                <Badge variant={has ? "success" : "secondary"}>{has ? "Configured" : "Not set"}</Badge>
+                <Badge variant={has ? "success" : "secondary"}>
+                    {has ? "Configured" : "Not set"}
+                </Badge>
             </div>
             <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
                 {detail ?? (stored?.last4 ? `ending ${stored.last4}` : "—")}

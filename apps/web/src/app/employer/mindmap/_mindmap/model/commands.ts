@@ -44,15 +44,18 @@ import {
 import {
     clamp,
     fitViewport,
+    nextZoomStep,
     nodeBounds,
     nodesBounds,
     rectCenter,
     unionRects,
+    zoomAt,
     type ViewportLike,
 } from "./geometry";
 import { computeLayout, suggestChildPosition, type LayoutKind, type LayoutOptions } from "./layout";
-import { branchSwatch, SWATCH_BY_ID, THEME_BY_ID } from "./palette";
+import { branchSwatch, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } from "./palette";
 import { shapeDef, shapeTextBox } from "./shapes";
+import { applyThemeToDoc } from "./theme";
 import type { EditorStore } from "./store";
 import { layoutText } from "./text";
 import type {
@@ -76,13 +79,23 @@ import type {
 // Insertion
 // ---------------------------------------------------------------------------
 
+/**
+ * The paper the document is currently painted on. Every creation path asks
+ * this before minting a node — otherwise dropping a box on a dark board hands
+ * you a white one, which was the single most jarring thing about the dark
+ * themes before they existed.
+ */
+export function docMode(store: EditorStore): ThemeMode {
+    return themeMode(store.getState().doc.settings.paletteId);
+}
+
 export function insertShape(
     store: EditorStore,
     shape: ShapeId,
     at: Point,
     opts: { text?: string; w?: number; h?: number; parentId?: string | null } = {}
 ): string {
-    const node = createNodeAt(shape, at, opts);
+    const node = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
     store.updatePage(page => addNodes(page, [node]), { label: `Add ${shapeDef(shape).name}` });
     store.selectNodes([node.id]);
     return node.id;
@@ -685,46 +698,7 @@ export function toggleLock(store: EditorStore): void {
 export function applyTheme(store: EditorStore, themeId: string): void {
     const theme = THEME_BY_ID[themeId];
     if (!theme) return;
-    store.update(
-        doc => {
-            const page = activePage(doc);
-            let cycleIndex = 0;
-            const nodes = page.nodes.map(nd => {
-                if (nd.shape === "group" || nd.shape === "text" || nd.shape === "image") return nd;
-                const key = theme.cycle[cycleIndex % theme.cycle.length]!;
-                cycleIndex += 1;
-                const sw = SWATCH_BY_ID[key]!;
-                const isRoot = nd.shape === "mind-root";
-                return {
-                    ...nd,
-                    style: {
-                        ...nd.style,
-                        fill: isRoot ? sw.stroke : sw.fill,
-                        stroke: isRoot ? "none" : sw.stroke,
-                    },
-                    textStyle: {
-                        ...nd.textStyle,
-                        color: isRoot ? "oklch(0.99 0.002 285)" : sw.ink,
-                    },
-                };
-            });
-            const edges = page.edges.map(e => ({
-                ...e,
-                style: { ...e.style, stroke: theme.edgeStroke },
-            }));
-            const next: DiagramPage = {
-                ...page,
-                nodes,
-                edges,
-                background: { ...page.background, color: theme.background },
-            };
-            return {
-                ...updatePage(doc, page.id, () => next),
-                settings: { ...doc.settings, paletteId: themeId },
-            };
-        },
-        { label: `Theme: ${theme.name}` }
-    );
+    store.update(doc => applyThemeToDoc(doc, themeId), { label: `Theme: ${theme.name}` });
 }
 
 // ---------------------------------------------------------------------------
@@ -871,12 +845,14 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
     const parent = nodeById(page, parentId);
     if (!parent) return null;
     const depth = depthOf(page, parentId) + 1;
-    const sw = branchSwatch(depth);
+    const mode = themeMode(store.getState().doc.settings.paletteId);
+    const sw = branchSwatch(depth, mode);
     const size = { w: depth === 1 ? 170 : 150, h: depth === 1 ? 56 : 48 };
     const at = suggestChildPosition(page, parentId, size, "right");
 
     const child = createNode({
         shape: depth >= 3 ? "mind-leaf" : "mind-branch",
+        mode,
         x: at.x,
         y: at.y,
         w: size.w,
@@ -1109,6 +1085,27 @@ export function fitToScreen(store: EditorStore, size: { w: number; h: number }):
         return;
     }
     store.setViewport(fitViewport(bounds, size));
+}
+
+/**
+ * Step the zoom, keeping the middle of the canvas where it is.
+ *
+ * `setViewport({ zoom })` on its own scales about the world origin, so the
+ * board lurches away from you and at 400% your diagram is somewhere off past
+ * the corner. Every zoom that is not aimed at the cursor should be aimed at
+ * the centre of what you are looking at.
+ */
+export function zoomByStep(store: EditorStore, dir: 1 | -1, size: { w: number; h: number }): void {
+    const { viewport } = store.getState();
+    store.setViewport(
+        zoomAt(viewport, nextZoomStep(viewport.zoom, dir), { x: size.w / 2, y: size.h / 2 })
+    );
+}
+
+/** Jump to an exact zoom (the percentage menu), also about the centre. */
+export function setZoom(store: EditorStore, zoom: number, size: { w: number; h: number }): void {
+    const { viewport } = store.getState();
+    store.setViewport(zoomAt(viewport, zoom, { x: size.w / 2, y: size.h / 2 }));
 }
 
 export function zoomToSelection(store: EditorStore, size: { w: number; h: number }): void {

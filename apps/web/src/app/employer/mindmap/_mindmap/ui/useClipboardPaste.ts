@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { fitImageBox, isImageFile, loadImageFile } from "../lib/images";
 import { instantiate, parsePayload } from "../model/clipboard";
 import { createNodeAt } from "../model/factory";
+import { docMode } from "../model/commands";
 import { parseDoc } from "../model/serialize";
 import type { EditorStore } from "../model/store";
 import type { Point } from "../model/types";
@@ -121,6 +122,7 @@ function insertText(store: EditorStore, text: string, at: Point): void {
     const trimmed = text.trim();
     const multiline = trimmed.includes("\n");
     const node = createNodeAt(multiline ? "sticky" : "text", at, {
+        mode: docMode(store),
         text: trimmed.slice(0, 5000),
         ...(multiline ? {} : { w: Math.min(Math.max(trimmed.length * 8, 80), 520), h: 40 }),
     });

@@ -12,6 +12,7 @@ import {
     Shapes,
     Spline,
     Square,
+    RectangleHorizontal,
     StickyNote,
     Type,
     type LucideIcon,
@@ -44,6 +45,16 @@ interface ToolEntry {
 const TOOLS: readonly ToolEntry[] = [
     { id: "select", tool: "select", Icon: MousePointer2, label: "Select", hint: "V" },
     { id: "hand", tool: "hand", Icon: Hand, label: "Pan", hint: "H · hold Space" },
+    // The node and the connector are the two halves of "draw me a diagram", so
+    // they sit together at the top rather than the topic hiding in the library.
+    {
+        id: "topic",
+        tool: "shape",
+        shape: "mind-branch",
+        Icon: RectangleHorizontal,
+        label: "Topic",
+        hint: "Box you type in",
+    },
     { id: "connector", tool: "connector", Icon: Spline, label: "Connector", hint: "C" },
     { id: "text", tool: "text", Icon: Type, label: "Text", hint: "T" },
     { id: "sticky", tool: "sticky", Icon: StickyNote, label: "Sticky note", hint: "N" },
@@ -74,7 +85,11 @@ export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
     const isActive = (entry: ToolEntry) => active === `${entry.tool}:${entry.shape ?? ""}`;
 
     return (
-        <div className="border-line bg-panel flex flex-col items-center gap-1 border-r px-1.5 py-2">
+        // The editor is pinned to the viewport, so on a short window this strip
+        // is the first thing that runs out of room. Scrolling it keeps every
+        // tool reachable; without `shrink-0` on the buttons flex would instead
+        // squash 13 icons into whatever height is left.
+        <div className="border-line bg-panel flex shrink-0 flex-col items-center gap-1 overflow-y-auto border-r px-1.5 py-2">
             {TOOLS.map(entry => (
                 <ToolButton
                     key={entry.id}
@@ -84,7 +99,7 @@ export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
                 />
             ))}
 
-            <div className="bg-line my-1 h-px w-6" />
+            <div className="bg-line my-1 h-px w-6 shrink-0" />
 
             {QUICK_SHAPES.map(entry => (
                 <ToolButton
@@ -100,7 +115,7 @@ export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
                     <button
                         type="button"
                         onClick={onOpenShapes}
-                        className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 items-center justify-center rounded-md transition-colors"
+                        className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
                         aria-label="All shapes"
                     >
                         <Shapes className="size-[18px]" />
@@ -131,7 +146,7 @@ function ToolButton({
                     aria-pressed={active}
                     aria-label={entry.label}
                     className={cn(
-                        "flex size-9 items-center justify-center rounded-md transition-colors",
+                        "flex size-9 shrink-0 items-center justify-center rounded-md transition-colors",
                         active
                             ? "bg-brand text-brand-fg"
                             : "text-ink-2 hover:bg-brand-soft hover:text-brand-ink"

@@ -88,10 +88,16 @@
     --bg-sunk: oklch(0.972 0.005 80);
     --panel: #ffffff;
     --panel-2: oklch(0.985 0.004 280);
-    --ink: oklch(0.22 0.015 280);
-    --ink-2: oklch(0.42 0.01 280);
-    --ink-3: oklch(0.6 0.008 280);
-    --ink-4: oklch(0.78 0.006 280);
+    /* The ink ladder is a contrast contract, not just a lightness ramp.
+       Measured against every surface in this block (--panel, --panel-2, --bg,
+       --bg-2): ink and ink-2 are body copy and clear AA comfortably; ink-3 is
+       the smallest tier still used for real prose and must clear 4.5:1; ink-4
+       is de-emphasised UI and must clear 3:1. The old 0.60/0.78 pair measured
+       3.9:1 and 2.0:1 on white — captions nobody could read. */
+    --ink: oklch(0.22 0.015 280); /* 17.3:1 on --panel */
+    --ink-2: oklch(0.42 0.01 280); /* 8.4:1 */
+    --ink-3: oklch(0.55 0.008 280); /* 4.9:1 */
+    --ink-4: oklch(0.63 0.006 280); /* 3.4:1 — never body text */
     --line: oklch(0.9 0.006 280);
     --line-2: oklch(0.955 0.004 280);
     --line-dot: oklch(0.78 0.012 285);
@@ -120,6 +126,48 @@
     --code-line: oklch(0.32 0.03 280);
     --code-accent: oklch(0.75 0.16 285);
     --code-accent-soft: oklch(0.75 0.16 285 / 0.12);
+
+    /* ── Semantic: paper surface (follows the document, not the app) ─
+        A diagram's background and shape colours are stored in the
+        document so every viewer sees the same picture, which means the
+        mindmap canvas cannot follow the viewer's theme. Chrome painted
+        *onto* that paper — selection handles, ports, guides, arrowheads,
+        grid dots — must not follow it either: in dark theme `--ink-2`
+        rises to 0.80 lightness and would vanish against a board that
+        happens to be white.
+
+        So there are two complete sets and the canvas picks between them
+        from the page background's own lightness. Both live here and
+        neither is overridden in the dark block below — the app theme has
+        no vote. Same idea as the code surface above, which stays dark
+        whichever way the app is pointing. */
+    --paper-panel: #ffffff;
+    --paper-panel-2: oklch(0.97 0.004 280);
+    --paper-ink: oklch(0.22 0.015 280);
+    --paper-ink-2: oklch(0.42 0.01 280);
+    --paper-ink-3: oklch(0.6 0.008 280);
+    --paper-ink-4: oklch(0.78 0.006 280);
+    --paper-line: oklch(0.9 0.006 280);
+    --paper-line-2: oklch(0.955 0.004 280);
+    --paper-line-dot: oklch(0.78 0.012 285);
+    --paper-accent: oklch(0.54 0.24 var(--accent-h));
+    --paper-warn: oklch(0.7 0.16 75);
+
+    /* …and the set for a board whose own paper is dark. Selected by the
+       canvas from the page background's lightness, not by the app theme:
+       a dark board stays dark for a viewer in light mode, because the
+       background is the document's, not theirs. */
+    --paper-dark-panel: oklch(0.28 0.02 285);
+    --paper-dark-panel-2: oklch(0.24 0.018 285);
+    --paper-dark-ink: oklch(0.96 0.004 280);
+    --paper-dark-ink-2: oklch(0.84 0.008 280);
+    --paper-dark-ink-3: oklch(0.68 0.01 280);
+    --paper-dark-ink-4: oklch(0.52 0.012 280);
+    --paper-dark-line: oklch(0.42 0.02 285);
+    --paper-dark-line-2: oklch(0.32 0.018 285);
+    --paper-dark-line-dot: oklch(0.42 0.02 285);
+    --paper-dark-accent: oklch(0.76 0.18 var(--accent-h));
+    --paper-dark-warn: oklch(0.82 0.16 75);
 
     /* ── Shadows ────────────────────────────────────────────────── */
     --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
@@ -151,10 +199,12 @@
     --bg-sunk: oklch(0.12 0.02 290);
     --panel: oklch(0.2 0.025 290);
     --panel-2: oklch(0.235 0.03 290);
-    --ink: oklch(0.97 0.005 280);
-    --ink-2: oklch(0.8 0.008 280);
-    --ink-3: oklch(0.62 0.008 280);
-    --ink-4: oklch(0.45 0.008 280);
+    /* Same contract as the light ladder above. 0.45 measured 2.4:1 on
+       --panel, which is why small labels were effectively invisible here. */
+    --ink: oklch(0.97 0.005 280); /* 16.7:1 on --panel */
+    --ink-2: oklch(0.8 0.008 280); /* 9.7:1 */
+    --ink-3: oklch(0.66 0.008 280); /* 5.9:1 */
+    --ink-4: oklch(0.54 0.008 280); /* 3.6:1 — never body text */
     --line: oklch(0.32 0.04 290);
     --line-2: oklch(0.26 0.035 290);
     --line-dot: oklch(0.55 0.02 285);

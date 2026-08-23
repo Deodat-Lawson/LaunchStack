@@ -128,19 +128,13 @@ jobs:
       - name: Transcription service tests (incl. protocol contract tests)
         run: python -m pytest services/transcription/tests -q
 
-      - name: Install document-editor deps
+      - name: Install adeu-ai-docs-editing deps
         run: |
-          python -m pip install -r services/document-editor/requirements.txt
-          python -m pip install -r services/document-editor/requirements-dev.txt
+          python -m pip install -r services/adeu-ai-docs-editing/requirements.txt
+          python -m pip install -r services/adeu-ai-docs-editing/requirements-dev.txt
 
-      - name: Document-editor service tests (incl. protocol contract tests)
-        run: python -m pytest services/document-editor/tests -q
-
-      # api/adeu is deprecated but retained pending an owner decision
-      # (ADR-004 §4); its preservation suite keeps the compatibility path
-      # honest until that decision is made.
-      - name: api/adeu preservation tests
-        run: python -m pytest api/adeu/tests -q
+      - name: Adeu docs-editing service tests (incl. protocol contract tests)
+        run: python -m pytest services/adeu-ai-docs-editing/tests -q
 
   document-converter:
     runs-on: ubuntu-latest

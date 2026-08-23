@@ -1,0 +1,215 @@
+{
+ "_note": "Trimmed 'pip install --dry-run --report' for services/transcription. Regenerate with scripts/licenses/generate-attributions.mjs.",
+ "packages": [
+  {
+   "name": "fastapi",
+   "version": "0.141.1",
+   "license": "MIT"
+  },
+  {
+   "name": "uvicorn",
+   "version": "0.52.4",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "pydantic",
+   "version": "2.13.4",
+   "license": "MIT"
+  },
+  {
+   "name": "pydantic_core",
+   "version": "2.46.4",
+   "license": "MIT"
+  },
+  {
+   "name": "python-multipart",
+   "version": "0.0.32",
+   "license": "Apache-2.0"
+  },
+  {
+   "name": "openai-whisper",
+   "version": "20250625",
+   "license": "MIT"
+  },
+  {
+   "name": "yt-dlp",
+   "version": "2026.8.19",
+   "license": "Unlicense"
+  },
+  {
+   "name": "torch",
+   "version": "2.13.0",
+   "license": "Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT"
+  },
+  {
+   "name": "numpy",
+   "version": "2.5.2",
+   "license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0"
+  },
+  {
+   "name": "annotated-doc",
+   "version": "0.0.5",
+   "license": "MIT"
+  },
+  {
+   "name": "annotated-types",
+   "version": "0.8.0",
+   "license": "MIT"
+  },
+  {
+   "name": "click",
+   "version": "8.4.2",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "fsspec",
+   "version": "2026.7.0",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "h11",
+   "version": "0.16.0",
+   "license": "MIT"
+  },
+  {
+   "name": "networkx",
+   "version": "3.6.1",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "setuptools",
+   "version": "84.0.0",
+   "license": "MIT"
+  },
+  {
+   "name": "starlette",
+   "version": "1.6.0",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "anyio",
+   "version": "4.14.2",
+   "license": "MIT"
+  },
+  {
+   "name": "idna",
+   "version": "3.19",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "sympy",
+   "version": "1.14.0",
+   "license": "BSD"
+  },
+  {
+   "name": "mpmath",
+   "version": "1.3.0",
+   "license": "BSD"
+  },
+  {
+   "name": "typing_extensions",
+   "version": "4.16.0",
+   "license": "PSF-2.0"
+  },
+  {
+   "name": "typing-inspection",
+   "version": "0.4.4",
+   "license": "MIT"
+  },
+  {
+   "name": "httptools",
+   "version": "0.8.0",
+   "license": "MIT"
+  },
+  {
+   "name": "python-dotenv",
+   "version": "1.2.3",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "PyYAML",
+   "version": "6.0.3",
+   "license": "MIT"
+  },
+  {
+   "name": "uvloop",
+   "version": "0.22.1",
+   "license": "MIT License"
+  },
+  {
+   "name": "watchfiles",
+   "version": "1.2.0",
+   "license": "MIT"
+  },
+  {
+   "name": "websockets",
+   "version": "17.0.1",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "filelock",
+   "version": "3.32.3",
+   "license": "MIT"
+  },
+  {
+   "name": "Jinja2",
+   "version": "3.1.6",
+   "license": "Unknown"
+  },
+  {
+   "name": "MarkupSafe",
+   "version": "3.0.3",
+   "license": "BSD-3-Clause"
+  },
+  {
+   "name": "more-itertools",
+   "version": "11.1.0",
+   "license": "MIT"
+  },
+  {
+   "name": "numba",
+   "version": "0.67.0",
+   "license": "BSD"
+  },
+  {
+   "name": "llvmlite",
+   "version": "0.49.0",
+   "license": "BSD-2-Clause AND Apache-2.0 WITH LLVM-exception"
+  },
+  {
+   "name": "tiktoken",
+   "version": "0.14.0",
+   "license": "MIT License"
+  },
+  {
+   "name": "regex",
+   "version": "2026.7.19",
+   "license": "Apache-2.0 AND CNRI-Python"
+  },
+  {
+   "name": "requests",
+   "version": "2.34.2",
+   "license": "Apache-2.0"
+  },
+  {
+   "name": "charset-normalizer",
+   "version": "3.5.1",
+   "license": "MIT"
+  },
+  {
+   "name": "urllib3",
+   "version": "2.7.0",
+   "license": "MIT"
+  },
+  {
+   "name": "certifi",
+   "version": "2026.7.22",
+   "license": "MPL-2.0"
+  },
+  {
+   "name": "tqdm",
+   "version": "4.70.0",
+   "license": "MPL-2.0 AND MIT"
+  }
+ ]
+}

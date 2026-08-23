@@ -13,7 +13,14 @@
 
 import { createDoc, createEdge, createNode, createPage } from "./factory";
 import { runAutoLayout } from "./template-helpers";
-import { branchSwatch, STICKY_COLORS, SWATCH_BY_ID } from "./palette";
+import {
+    branchSwatch,
+    defaultThemeFor,
+    STICKY_COLORS,
+    SWATCH_BY_ID,
+    type ThemeMode,
+} from "./palette";
+import { applyThemeToDoc } from "./theme";
 import { TEMPLATE_META, type TemplateMeta } from "./template-meta";
 import type { DiagramEdge, DiagramNode, MindmapDoc, ShapeId } from "./types";
 
@@ -695,7 +702,18 @@ export function buildersMissingMetadata(): string[] {
     return Object.keys(BUILDERS).filter(id => !known.has(id));
 }
 
-export function buildTemplate(id: string, title?: string): MindmapDoc {
+/**
+ * Build a starter document.
+ *
+ * Templates are authored once, in light, and repainted on the way out — one
+ * set of builders to maintain rather than two, and the repaint is the same
+ * code path the Theme picker uses, so a seeded board and a switched board
+ * cannot drift apart. `mode` is the viewer's app theme at creation time: a
+ * choice made once and then stored, not a per-viewer render, so the board
+ * looks the same to whoever it is shared with afterwards.
+ */
+export function buildTemplate(id: string, title?: string, mode: ThemeMode = "light"): MindmapDoc {
     const t = TEMPLATE_BY_ID[id] ?? TEMPLATE_BY_ID.blank!;
-    return t.build(title);
+    const doc = t.build(title);
+    return applyThemeToDoc(doc, defaultThemeFor(mode));
 }

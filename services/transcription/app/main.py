@@ -5,7 +5,7 @@ Standalone FastAPI service for audio/video transcription via local Whisper
 
 Split out of the former `sidecar/` per ADR-004 (compute service
 consolidation): transcription and DOCX redlining have unrelated lifecycles,
-so the Adeu half now lives in `services/document-editor`.
+so the Adeu half now lives in `services/adeu-ai-docs-editing`.
 """
 
 import logging

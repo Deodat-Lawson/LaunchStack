@@ -92,6 +92,56 @@ export type QualityScore = z.infer<typeof QualityScoreSchema>;
 
 export const QUALITY_THRESHOLD = 6;
 
+// ─── Variant ranking (P2; replaces blind variants[0] when enabled) ──────────
+
+export interface VariantScore {
+    index: number;
+    /** 1–10 quality score, or null when scoring this variant failed. */
+    score: number | null;
+    issues: string[];
+}
+
+export interface VariantRanking {
+    scores: VariantScore[];
+    bestIndex: number;
+}
+
+/** Pure selection over per-variant scores — exported for tests. */
+export function buildVariantRanking(scores: Array<QualityScore | null>): VariantRanking {
+    const variantScores: VariantScore[] = scores.map((s, index) => ({
+        index,
+        score: s?.score ?? null,
+        issues: s?.issues ?? [],
+    }));
+
+    let bestIndex = 0;
+    let best = -Infinity;
+    for (const s of variantScores) {
+        if (s.score != null && s.score > best) {
+            best = s.score;
+            bestIndex = s.index;
+        }
+    }
+    return { scores: variantScores, bestIndex };
+}
+
+/**
+ * Score each variant with the quality rubric and pick the best (ties and
+ * all-scoring-failed fall back to index 0 — the pre-ranking behavior).
+ * Costs one extra LLM call per variant; callers gate it accordingly.
+ */
+export async function rankVariants(args: {
+    posts: string[];
+    platform: MarketingPlatform;
+}): Promise<VariantRanking> {
+    const settled = await Promise.allSettled(
+        args.posts.map(post => validatePostQuality(post, args.platform))
+    );
+    return buildVariantRanking(
+        settled.map(result => (result.status === "fulfilled" ? result.value : null))
+    );
+}
+
 export async function validatePostQuality(
     post: string,
     platform: MarketingPlatform

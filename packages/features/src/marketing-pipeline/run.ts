@@ -8,6 +8,7 @@ import { extractBrandVoice } from "@launchstack/tools/brand-voice";
 import { extractTargetPersona } from "@launchstack/tools/persona";
 import { checkClaimSources, type ClaimEvidenceResult } from "@launchstack/tools/claim-evidence";
 import { getPlatformProfile } from "@launchstack/tools/platform-profiles";
+import { rankVariants, type VariantRanking } from "@launchstack/tools/content-scoring";
 import { runStage, type RunStageOptions } from "@launchstack/tools/stage-runner";
 import { generateVariants } from "./generator";
 import { analyzeCompetitors } from "./competitor";
@@ -44,6 +45,7 @@ function normalizeInput(input: MarketingPipelineInput): MarketingPipelineInput {
         toneOverride: input.toneOverride,
         targetAudience: input.targetAudience,
         contentType: input.contentType,
+        enableVariantRanking: input.enableVariantRanking,
     };
 }
 
@@ -375,11 +377,14 @@ export async function runMarketingPipeline(args: {
     );
     const companyContext = `${companyContextBase}\n\nPlatform best practices:\n${platformGuidelines}`;
 
-    const variants: ContentVariant[] = await stage({
+    const generation = await stage<{
+        variants: ContentVariant[];
+        ranking: VariantRanking | null;
+    }>({
         id: "generating-content",
         policy: "required",
-        run: () =>
-            generateVariants({
+        run: async () => {
+            const variants = await generateVariants({
                 platform: normalizedInput.platform,
                 prompt: userPrompt,
                 companyContext,
@@ -390,23 +395,58 @@ export async function runMarketingPipeline(args: {
                 brandVoice,
                 targetPersona,
                 contentType: normalizedInput.contentType,
-            }),
-        report: generated => ({
-            detail: `Generated ${generated.length} variant${generated.length !== 1 ? "s" : ""}: ${generated.map(v => v.variantId).join(", ")}`,
-            data: {
-                variants: generated.map(v => ({
-                    variantId: v.variantId,
-                    angleRationale: v.angleRationale,
-                    charCount: v.message.length,
-                    mediaType: v.mediaType,
-                })),
-            },
-            narration: `Writing ${generated.length} content variant${generated.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${generated.map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`).join("; ")}.`,
-        }),
-    });
+            });
 
-    // Pick best variant as the primary message
-    const bestVariant = variants[0] ?? { message: "", mediaType: "image" as const };
+            // Opt-in ranking (P2): score each variant and pick the best. A
+            // ranking failure degrades to the pre-ranking selection.
+            let ranking: VariantRanking | null = null;
+            if (normalizedInput.enableVariantRanking && variants.length > 1) {
+                try {
+                    ranking = await rankVariants({
+                        posts: variants.map(v => v.message),
+                        platform: normalizedInput.platform,
+                    });
+                } catch (err) {
+                    console.warn(`${LOG_PREFIX} variant ranking failed:`, err);
+                }
+            }
+            return { variants, ranking };
+        },
+        report: ({ variants: generated, ranking }) => {
+            const rankedNote = ranking
+                ? ` Ranked by quality score — best: ${generated[ranking.bestIndex]?.variantId} (${ranking.scores.find(s => s.index === ranking.bestIndex)?.score ?? "?"}/10).`
+                : "";
+            return {
+                detail: `Generated ${generated.length} variant${generated.length !== 1 ? "s" : ""}: ${generated.map(v => v.variantId).join(", ")}`,
+                data: {
+                    variants: generated.map(v => ({
+                        variantId: v.variantId,
+                        angleRationale: v.angleRationale,
+                        charCount: v.message.length,
+                        mediaType: v.mediaType,
+                    })),
+                    ...(ranking
+                        ? {
+                              ranking: ranking.scores.map(sc => ({
+                                  variantId: generated[sc.index]?.variantId,
+                                  score: sc.score,
+                                  issues: sc.issues,
+                              })),
+                              bestVariantId: generated[ranking.bestIndex]?.variantId,
+                          }
+                        : {}),
+                },
+                narration: `Writing ${generated.length} content variant${generated.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${generated.map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`).join("; ")}.${rankedNote}`,
+            };
+        },
+    });
+    const variants = generation.variants;
+
+    // Pick the primary message: ranking's choice when enabled, else the first
+    // surviving variant (the pre-ranking behavior).
+    const bestVariant = (generation.ranking
+        ? variants[generation.ranking.bestIndex]
+        : variants[0]) ?? { message: "", mediaType: "image" as const };
     const primaryStrategy =
         strategies.find(s => "variantId" in bestVariant && s.variantId === bestVariant.variantId) ??
         strategies[0];

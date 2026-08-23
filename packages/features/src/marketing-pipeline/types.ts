@@ -146,6 +146,13 @@ export const MarketingPipelineInputSchema = z.object({
     toneOverride: FormalityLevelEnum.optional(),
     targetAudience: z.string().max(200).optional(),
     contentType: ContentTypeEnum.optional(),
+    /**
+     * Score every variant with the content-scoring rubric and select the best
+     * instead of blindly taking the first (P2). Default OFF: it costs one
+     * extra LLM call per variant, and flipping the default awaits benchmark
+     * evidence (design doc OQ-1; RUN_LLM_BENCHMARK=1).
+     */
+    enableVariantRanking: z.boolean().optional(),
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 

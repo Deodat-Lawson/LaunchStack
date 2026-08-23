@@ -211,7 +211,9 @@ export async function generateVariants(args: {
     targetPersona?: TargetPersona;
     contentType?: ContentType;
 }): Promise<ContentVariant[]> {
-    const results = await Promise.all(
+    // allSettled (P2): one failed generation no longer discards its siblings —
+    // survivors ship, in strategy order. Only a total failure aborts the stage.
+    const settled = await Promise.allSettled(
         args.strategies.map(async strategy => {
             const strategyAsMessaging: MessagingStrategy = {
                 angle: strategy.angle,
@@ -265,7 +267,28 @@ export async function generateVariants(args: {
         })
     );
 
-    return results;
+    const variants: ContentVariant[] = [];
+    const failures: Array<{ variantId: string; reason: unknown }> = [];
+    settled.forEach((result, i) => {
+        if (result.status === "fulfilled") {
+            variants.push(result.value);
+        } else {
+            failures.push({ variantId: args.strategies[i]!.variantId, reason: result.reason });
+        }
+    });
+
+    for (const failure of failures) {
+        console.warn(
+            `[marketing-pipeline] variant generation failed for ${failure.variantId}:`,
+            failure.reason
+        );
+    }
+
+    if (variants.length === 0) {
+        throw new Error("All variant generations failed", { cause: failures[0]?.reason });
+    }
+
+    return variants;
 }
 
 /* ──────────────────────────────────────────────────────────────

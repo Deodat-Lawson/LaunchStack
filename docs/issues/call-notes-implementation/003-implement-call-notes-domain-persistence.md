@@ -2,7 +2,7 @@
 id: MN-IMP-003
 title: Implement Call Notes Domain and Persistence
 parent: MN-IMP-000
-status: open
+status: closed
 assignee: Peace
 labels:
   - call-notes
@@ -48,3 +48,13 @@ MN-WF-002 through MN-WF-012 and MN-WF-014.
 ## Non-goals
 
 Zoom SDK/OAuth behavior, page/component implementation, model prompts, embeddings/retrieval implementation, root exports/Compose, a second note store, transcript editing, or cross-user Capture handoff.
+
+## Resolution
+
+Implemented the PostgreSQL-backed `CallNotesApplication`, durable work leasing and
+fencing, app-owned membership and `document_notes` adapters, authenticated product API
+handlers, and focused PostgreSQL conformance coverage. The shared vertical tracer and
+Call Notes suites pass against the production state machine and migrated schema.
+
+Root runtime composition, Zoom transport, production UI, and enrichment/knowledge sink
+implementations remain with their owning lanes.

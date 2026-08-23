@@ -481,6 +481,7 @@ export async function runCallNotesVerticalTracer(
     await application.execute(
         ownerCommand(started.id, {
             kind: "set_note_visibility",
+            requestId: "request-owner-visibility-company",
             visibility: "company",
         })
     );

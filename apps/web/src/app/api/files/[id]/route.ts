@@ -8,10 +8,10 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { fileUploads, users } from "@launchstack/core/db/schema";
-import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 import { checkRefServable } from "~/server/services/document-servable";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
+import { getEngine } from "~/server/engine";
 import {
   checkFileUploadTenantAccess,
   logFileTenantDecision,
@@ -150,9 +150,13 @@ export async function GET(
       { adapter: "database", key: String(fileId) },
     ];
     if (file.storageUrl) {
-      const promoted = promoteLegacyUrlToRef({ value: file.storageUrl });
-      if (promoted.ok) {
-        candidateRefs.push({ adapter: promoted.ref.adapter, key: promoted.ref.key });
+      try {
+        const promoted = promoteLegacyUrlToRef({ value: file.storageUrl });
+        if (promoted.ok) {
+          candidateRefs.push({ adapter: promoted.ref.adapter, key: promoted.ref.key });
+        }
+      } catch {
+        // The external read below will use fetchFile's legacy fallback.
       }
     }
     const gate = await checkRefServable(candidateRefs);
@@ -160,42 +164,65 @@ export async function GET(
       return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
-    // External storage (S3 or legacy Vercel Blob): proxy or redirect.
-    // Database-backed files (storageProvider === "database") fall through to
-    // the base64 branch below.
+    // External storage (S3, Vercel Blob, UploadThing, or SeaweedFS): proxy or
+    // redirect. Database-backed files (storageProvider === "database") fall
+    // through to the base64 branch below.
     if (file.storageProvider !== "database" && file.storageUrl) {
-      const needsProxy =
-        file.storageProvider === "s3" ||
-        file.storageProvider === "seaweedfs" ||
-        isPrivateBlobUrl(file.storageUrl);
+      let promoted: ReturnType<typeof promoteLegacyUrlToRef> | undefined;
+      try {
+        promoted = promoteLegacyUrlToRef({ value: file.storageUrl });
+      } catch {
+        // Missing provider configuration is treated like any other legacy
+        // promotion miss; fetchFile provides the compatibility fallback.
+        promoted = undefined;
+      }
+      let blobRes: Response;
 
-      if (needsProxy) {
-        const blobRes = await fetchFile(file.storageUrl);
-        if (!blobRes.ok) {
-          return NextResponse.json(
-            { error: "Failed to retrieve file from storage" },
-            { status: 502 }
-          );
-        }
-        const mimeType =
-          blobRes.headers.get("content-type") ??
-          file.mimeType?.trim() ??
-          inferMimeTypeFromFilename(file.filename);
-        return new NextResponse(blobRes.body, {
-          status: 200,
-          headers: {
-            "Content-Type": mimeType,
-            ...(blobRes.headers.get("content-length")
-              ? { "Content-Length": blobRes.headers.get("content-length")! }
-              : {}),
-            "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
-            "Cache-Control": "private, max-age=31536000",
-          },
+      if (
+        promoted?.ok &&
+        (promoted.ref.adapter === "vercel-blob" ||
+          promoted.ref.adapter === "uploadthing")
+      ) {
+        // Vendor-backed objects are always read through their targeted
+        // adapter, which owns provider authentication.
+        blobRes = await getEngine().storage.get(promoted.ref);
+      } else if (
+        !promoted?.ok ||
+        promoted.ref.adapter === "s3" ||
+        file.storageProvider === "s3" ||
+        file.storageProvider === "seaweedfs"
+      ) {
+        // Keep the existing S3/SeaweedFS proxy path and use the URL shim once
+        // when a legacy value cannot be promoted.
+        blobRes = await fetchFile(file.storageUrl);
+      } else {
+        // A public, promoted non-vendor URL can still be served directly.
+        return NextResponse.redirect(file.storageUrl, {
+          status: 307,
         });
       }
-      // Public external URL: redirect directly
-      return NextResponse.redirect(file.storageUrl, {
-        status: 307,
+
+      if (!blobRes.ok) {
+        return NextResponse.json(
+          { error: "Failed to retrieve file from storage" },
+          { status: 502 }
+        );
+      }
+
+      const mimeType =
+        blobRes.headers.get("content-type") ??
+        file.mimeType?.trim() ??
+        inferMimeTypeFromFilename(file.filename);
+      return new NextResponse(blobRes.body, {
+        status: 200,
+        headers: {
+          "Content-Type": mimeType,
+          ...(blobRes.headers.get("content-length")
+            ? { "Content-Length": blobRes.headers.get("content-length")! }
+            : {}),
+          "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
+          "Cache-Control": "private, max-age=31536000",
+        },
       });
     }
 

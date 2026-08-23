@@ -12,6 +12,17 @@ import * as fs from "fs";
 import * as path from "path";
 
 const mockVercelBlobPut = jest.fn();
+const mockStorageGet = jest.fn();
+const mockDocumentRef = {
+    adapter: "vercel-blob" as const,
+    storageLocationId: "vercel-blob:test-store",
+    key: "documents/original.docx",
+};
+const mockPromoteLegacyUrlToRef = jest.fn((_input: unknown) => ({
+    ok: true as const,
+    ref: mockDocumentRef,
+    confidence: "medium" as const,
+}));
 const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
 
 // ---------------------------------------------------------------------------
@@ -49,13 +60,15 @@ jest.mock("~/server/services/storage-manifest", () => ({
 jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(() => ({
         storage: {
+            get: (input: unknown, init?: RequestInit) =>
+                init === undefined ? mockStorageGet(input) : mockStorageGet(input, init),
             forAdapter: (adapter: unknown) => mockForAdapter(adapter),
         },
     })),
 }));
 
-jest.mock("~/server/storage/vercel-blob", () => ({
-    fetchBlob: jest.fn(),
+jest.mock("~/server/storage/legacy-promote", () => ({
+    promoteLegacyUrlToRef: (input: unknown) => mockPromoteLegacyUrlToRef(input),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -74,7 +87,6 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -101,7 +113,7 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
         // Create a ~3 MB buffer. Base64 encoding inflates by ~33%, so 3 MB → ~4 MB base64.
         const largeFakeDocx = Buffer.alloc(3 * 1024 * 1024, 0x41); // 3 MB of 'A'
 
-        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+        mockStorageGet.mockResolvedValueOnce({
             ok: true,
             arrayBuffer: () =>
                 Promise.resolve(

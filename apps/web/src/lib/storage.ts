@@ -133,6 +133,13 @@ function s3VarsConfigured(): boolean {
   );
 }
 
+async function getTargetedStoragePort(adapter: ObjectRef["adapter"]) {
+  const { createStoragePortTargetFactory } = await import(
+    "~/server/storage/create-storage-port"
+  );
+  return createStoragePortTargetFactory(resolveStorageBackend()).forAdapter(adapter);
+}
+
 /**
  * Resolves the active storage backend. Honors an explicit
  * NEXT_PUBLIC_STORAGE_PROVIDER setting; otherwise infers from whether the full
@@ -196,7 +203,25 @@ export async function uploadFile(input: UploadInput): Promise<UploadResult> {
   if (backend === "s3") {
     return uploadToS3(input);
   }
-  return uploadToDatabase(input);
+
+  try {
+    const target = await getTargetedStoragePort("database");
+    const result = await target.put(input);
+    return {
+      url: result.url,
+      pathname: result.pathname,
+      ref: result.ref,
+      contentType: result.contentType,
+      provider: "database",
+    };
+  } catch (err) {
+    if (err instanceof StorageError) throw err;
+    throw new StorageError(
+      err instanceof Error ? err.message : String(err),
+      "database",
+      err instanceof Error ? err : undefined,
+    );
+  }
 }
 
 async function uploadToS3(input: UploadInput): Promise<UploadResult> {
@@ -228,54 +253,6 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
     throw new StorageError(
       err instanceof Error ? err.message : String(err),
       "s3",
-      err instanceof Error ? err : undefined,
-    );
-  }
-}
-
-async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
-  try {
-    const { db } = await import("~/server/db");
-    const { fileUploads } = await import("@launchstack/core/db/schema");
-
-    const body = toBuffer(input.data);
-    const safeName = sanitizeFilename(input.filename);
-    const pathname = `documents/${randomUUID()}-${safeName || "upload"}`;
-
-    const [row] = await db
-      .insert(fileUploads)
-      .values({
-        userId: input.userId,
-        filename: input.filename,
-        mimeType: input.contentType ?? "application/octet-stream",
-        fileData: body.toString("base64"),
-        fileSize: body.length,
-        storageProvider: "database",
-        storageUrl: null,
-        storagePathname: pathname,
-      })
-      .returning({ id: fileUploads.id });
-
-    if (!row) {
-      throw new Error("Insert into fileUploads returned no row");
-    }
-
-    return {
-      url: `/api/files/${row.id}`,
-      pathname,
-      ref: {
-        adapter: "database",
-        storageLocationId: resolveStorageLocationId("database"),
-        key: String(row.id),
-      },
-      contentType: input.contentType,
-      provider: "database",
-    };
-  } catch (err) {
-    if (err instanceof StorageError) throw err;
-    throw new StorageError(
-      err instanceof Error ? err.message : String(err),
-      "database",
       err instanceof Error ? err : undefined,
     );
   }
@@ -351,7 +328,8 @@ export async function deleteFile(
     return;
   }
 
-  // database: remove the fileUploads row matching this /api/files/<id> URL
+  // Database legacy calls remain a void-returning shim around the canonical
+  // target. NOT_FOUND is still successful for this compatibility surface.
   try {
     const idFromApiUrl = /^(?:https?:\/\/[^/]+)?\/api\/files\/(\d+)$/.exec(keyOrUrl)?.[1];
     const idFromOpaqueKey = /^(\d+)$/.exec(keyOrUrl)?.[1];
@@ -364,18 +342,22 @@ export async function deleteFile(
       );
     }
 
-    const id = parseInt(rawId, 10);
-    if (isNaN(id)) {
+    const target = await getTargetedStoragePort("database");
+    const result = await target.delete({
+      adapter: "database",
+      storageLocationId: resolveStorageLocationId("database"),
+      key: rawId,
+    });
+    if (
+      result.outcome === "retryable" ||
+      result.outcome === "blocked" ||
+      result.outcome === "rejected"
+    ) {
       throw new StorageError(
-        `Invalid database file id: ${rawId}`,
+        result.message ?? `Database delete failed with outcome=${result.outcome}`,
         "database",
       );
     }
-
-    const { db } = await import("~/server/db");
-    const { fileUploads } = await import("@launchstack/core/db/schema");
-    const { eq } = await import("drizzle-orm");
-    await db.delete(fileUploads).where(eq(fileUploads.id, id));
   } catch (err) {
     if (err instanceof StorageError) throw err;
     throw new StorageError(
@@ -493,18 +475,8 @@ export async function deleteFileByRef(ref: ObjectRef): Promise<DeleteResult> {
   }
 
   try {
-    if (adapter === "database") {
-      await deleteFile(ref.key, adapter);
-    } else {
-      const { createStoragePortTargetFactory } = await import(
-        "~/server/storage/create-storage-port"
-      );
-      return await createStoragePortTargetFactory(resolveStorageBackend())
-        .forAdapter(adapter)
-        .delete(ref);
-    }
-
-    return { ref, outcome: "deleted" };
+    const target = await getTargetedStoragePort(adapter);
+    return await target.delete(ref);
   } catch (err) {
     return mapDeleteError(ref, err);
   }
@@ -537,46 +509,8 @@ export async function deleteManyByRef(refs: readonly ObjectRef[]): Promise<Delet
     const first = groupRefs[0];
     if (!first) continue;
 
-    if (first.adapter === "database") {
-      let expectedLocationId: string;
-      try {
-        expectedLocationId = resolveStorageLocationId("database");
-      } catch (err) {
-        for (const ref of groupRefs) {
-          results.push({
-            ref,
-            outcome: "blocked",
-            errorCode: "location_resolution_failed",
-            message: err instanceof Error ? err.message : String(err),
-          });
-        }
-        continue;
-      }
-
-      if (first.storageLocationId !== expectedLocationId) {
-        for (const ref of groupRefs) {
-          results.push({
-            ref,
-            outcome: "blocked",
-            errorCode: "storage_location_mismatch",
-            message: `Ref storageLocationId (${ref.storageLocationId}) does not match active adapter location (${expectedLocationId}).`,
-          });
-        }
-        continue;
-      }
-
-      for (const ref of groupRefs) {
-        results.push(await deleteFileByRef(ref));
-      }
-      continue;
-    }
-
-    const { createStoragePortTargetFactory } = await import(
-      "~/server/storage/create-storage-port"
-    );
-    const groupResults = await createStoragePortTargetFactory(resolveStorageBackend())
-      .forAdapter(first.adapter)
-      .deleteMany(groupRefs);
+    const target = await getTargetedStoragePort(first.adapter);
+    const groupResults = await target.deleteMany(groupRefs);
     results.push(...groupResults);
   }
 
@@ -681,16 +615,29 @@ export async function fetchFile(
     }
   }
 
-  // Legacy private Vercel Blob URLs — delegate to fetchBlob for auth
+  // Legacy vendor URLs — promote once and let the targeted adapter own auth.
+  // Promotion is best-effort here because this function remains a string-based
+  // compatibility shim for historical URLs that predate ObjectRef.
+  let promoted:
+    | { ok: true; ref: ObjectRef }
+    | { ok: false }
+    | undefined;
   try {
-    const { fetchBlob, isPrivateBlobUrl } = await import(
-      "~/server/storage/vercel-blob"
+    const { promoteLegacyUrlToRef } = await import(
+      "~/server/storage/legacy-promote"
     );
-    if (isPrivateBlobUrl(url)) {
-      return await fetchBlob(url, init);
-    }
+    promoted = promoteLegacyUrlToRef({ value: url });
   } catch {
-    // vercel-blob module unavailable — fall through to plain fetch
+    promoted = undefined;
+  }
+
+  if (
+    promoted?.ok &&
+    (promoted.ref.adapter === "vercel-blob" ||
+      promoted.ref.adapter === "uploadthing")
+  ) {
+    const target = await getTargetedStoragePort(promoted.ref.adapter);
+    return await target.get(promoted.ref, init);
   }
 
   // Public URLs (legacy Vercel Blob, etc.) — plain fetch

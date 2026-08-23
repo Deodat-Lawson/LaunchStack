@@ -17,10 +17,11 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
-import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { checkVersionServable } from "~/server/services/document-servable";
+import { getEngine } from "~/server/engine";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -128,14 +129,34 @@ export async function GET(
       return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
-    // Public cloud URL — redirect the browser directly and let the CDN serve.
-    // Private Vercel Blob URLs and local SeaweedFS URLs must be proxied so
-    // we can attach the private-blob auth header / reach the private network.
-    if (!isLocalStorage() && !isPrivateBlobUrl(version.url)) {
-      return NextResponse.redirect(version.url, { status: 307 });
+    let promoted: ReturnType<typeof promoteLegacyUrlToRef> | undefined;
+    try {
+      promoted = promoteLegacyUrlToRef({ value: version.url });
+    } catch {
+      // Missing provider configuration is treated like any other legacy
+      // promotion miss; fetchFile provides the compatibility fallback.
+      promoted = undefined;
+    }
+    let blobRes: Response;
+
+    if (
+      promoted?.ok &&
+      (promoted.ref.adapter === "vercel-blob" ||
+        promoted.ref.adapter === "uploadthing")
+    ) {
+      // Vendor-backed objects are always proxied through the targeted
+      // adapter; it owns provider authentication and URL generation.
+      blobRes = await getEngine().storage.get(promoted.ref);
+    } else {
+      // Keep the existing public-cloud redirect and local-storage proxy
+      // behaviour for refs that are not vendor-private. If promotion fails,
+      // use the legacy URL shim once.
+      if (promoted?.ok && !isLocalStorage()) {
+        return NextResponse.redirect(version.url, { status: 307 });
+      }
+      blobRes = await fetchFile(version.url);
     }
 
-    const blobRes = await fetchFile(version.url);
     if (!blobRes.ok) {
       return NextResponse.json(
         { error: "Failed to retrieve version file from storage" },

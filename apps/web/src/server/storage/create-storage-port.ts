@@ -45,9 +45,9 @@ function createUnwiredAdapterTarget(
 }
 
 /**
- * A2 factory skeleton: this locks the targeted-adapter surface before real
- * adapter extraction lands. The default app port can keep using existing
- * helpers for now, while future migrations call through concrete targets.
+ * Target factory for canonical storage operations. The app port and legacy
+ * compatibility shims resolve each adapter through this surface so backend
+ * selection cannot silently route a request to the primary provider.
  */
 export function createStoragePortTargetFactory(provider: string): {
   forAdapter(adapter: StorageAdapter): TargetedStoragePort;

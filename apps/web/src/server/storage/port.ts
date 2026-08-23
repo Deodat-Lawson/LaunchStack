@@ -1,12 +1,11 @@
 /**
- * Concrete StoragePort implementation that wraps the app's existing
- * storage helpers (~/lib/storage). This is what apps/web hands to
+ * Concrete StoragePort implementation that routes canonical operations through
+ * the targeted adapter factory. This is what apps/web hands to
  * createEngine so core can read and write objects without knowing
  * about S3, Vercel Blob, or the database-base64 fallback.
  *
- * The underlying storage helpers already auto-detect the active backend
- * from env; the port just adapts their shape to the StoragePort
- * interface exported by @launchstack/core.
+ * The legacy string overload still delegates to fetchFile in ~/lib/storage;
+ * canonical ObjectRef operations never bypass their targeted adapter.
  */
 
 import type {
@@ -18,13 +17,7 @@ import type {
   UploadResult,
 } from "@launchstack/core/storage";
 
-import {
-  deleteFileByRef,
-  deleteManyByRef,
-  uploadFile,
-  fetchFile,
-  resolveStorageBackend,
-} from "~/lib/storage";
+import { fetchFile, resolveStorageBackend } from "~/lib/storage";
 import { createStoragePortTargetFactory } from "./create-storage-port";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
@@ -33,25 +26,7 @@ export function createAppStoragePort(): StoragePort {
   const targets = createStoragePortTargetFactory(provider);
 
   const putImpl = async (input: UploadInput): Promise<UploadResult> => {
-    if (provider === "s3") {
-      return targets.forAdapter("s3").put(input);
-    }
-
-    // The app's uploadFile requires a userId; default to "system" for
-    // engine-initiated writes that do not carry an end-user context.
-    const result = await uploadFile({
-      filename: input.filename,
-      data: input.data,
-      contentType: input.contentType,
-      userId: input.userId ?? "system",
-    });
-    return {
-      url: result.url,
-      pathname: result.pathname,
-      ref: result.ref,
-      contentType: result.contentType,
-      provider: result.provider,
-    };
+    return targets.forAdapter(provider).put(input);
   };
 
   const getImpl = (input: ObjectRef | string, init?: RequestInit): Promise<Response> => {
@@ -59,18 +34,10 @@ export function createAppStoragePort(): StoragePort {
       return fetchFile(input, init);
     }
 
-    if (input.adapter === "database") {
-      return fetchFile(`/api/files/${input.key}`, init);
-    }
-
     return targets.forAdapter(input.adapter).get(input, init);
   };
 
   const deleteRefImpl = (ref: ObjectRef): Promise<DeleteResult> => {
-    if (ref.adapter === "database") {
-      return deleteFileByRef(ref);
-    }
-
     return targets.forAdapter(ref.adapter).delete(ref);
   };
 
@@ -99,10 +66,7 @@ export function createAppStoragePort(): StoragePort {
 
     const results: Array<DeleteResult | undefined> = new Array(refs.length);
     for (const group of groups.values()) {
-      const groupResults =
-        group.adapter === "database"
-          ? await deleteManyByRef(group.refs)
-          : await targets.forAdapter(group.adapter).deleteMany(group.refs);
+      const groupResults = await targets.forAdapter(group.adapter).deleteMany(group.refs);
 
       groupResults.forEach((result, index) => {
         const originalIndex = group.indexes[index];

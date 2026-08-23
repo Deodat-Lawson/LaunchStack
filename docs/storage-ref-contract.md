@@ -60,8 +60,9 @@ identities:
 - **Database:** select it with `NEXT_PUBLIC_STORAGE_PROVIDER=database`, or use
   the automatic database fallback when no S3 configuration is present. Its
   location identity is `database:pdr_file_uploads_v1`.
-  `forAdapter("database")` remains unwired until C3; reads use `get(ref)`,
-  which resolves through `/api/files/{id}`.
+  `forAdapter("database")` is wired through `createDatabaseAdapter`; reads use
+  `get(ref)`, which resolves through `/api/files/{id}` with internal service
+  authentication.
 
 Fixed-intent writes such as GitHub repository uploads, video transcripts, and
 `processDocument` artifacts must use
@@ -112,19 +113,18 @@ Canonical write/read/delete flows should move toward `ObjectRef`-based calls.
 Deprecated aliases remain so existing callers can migrate incrementally without
 changing lifecycle behavior.
 
-## Database adapter read path during C3 transition
+## Database adapter read path
 
 For database-backed refs, `ObjectRef.key` is the numeric `fileUploads.id`
-encoded as a string. Until the database adapter is extracted, `get(ref)` on the
-app port resolves that key to `/api/files/{id}` and calls `fetchFile`, which
-adds internal service headers for a self-origin request. The `/api/files/[id]`
-route remains the single place for tenant authorization and serve-gating before
-reading the Postgres row.
+encoded as a string. The database adapter resolves that key to
+`${APP_PUBLIC_URL}/api/files/{id}` and sends an internal service request. The
+`/api/files/[id]` route remains the single place for tenant authorization and
+serve-gating before reading the Postgres row.
 
-`forAdapter("database")` remains unwired until C3. Callers reading a database
-ref should use `getStoragePort().get(ref)` during this transition rather than
-targeting the unwired database handle or duplicating the route's authorization
-logic in another adapter.
+`forAdapter("database")` is wired through the adapter factory. Callers reading
+a database ref should use `getStoragePort().get(ref)` or
+`getStoragePort().forAdapter("database").get(ref)` rather than duplicating the
+route's authorization logic in another adapter.
 
 ## Lifecycle feature flags (exactly two)
 

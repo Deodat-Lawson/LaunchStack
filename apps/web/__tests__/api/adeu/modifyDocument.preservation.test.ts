@@ -14,6 +14,17 @@
  */
 
 const mockVercelBlobPut = jest.fn();
+const mockStorageGet = jest.fn();
+const mockDocumentRef = {
+    adapter: "vercel-blob" as const,
+    storageLocationId: "vercel-blob:test-store",
+    key: "documents/original.docx",
+};
+const mockPromoteLegacyUrlToRef = jest.fn((_input: unknown) => ({
+    ok: true as const,
+    ref: mockDocumentRef,
+    confidence: "medium" as const,
+}));
 const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
 const mockTransactionSet = jest.fn().mockReturnValue({
     where: jest.fn().mockResolvedValue([]),
@@ -47,13 +58,15 @@ jest.mock("~/server/services/storage-manifest", () => ({
 jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(() => ({
         storage: {
+            get: (input: unknown, init?: RequestInit) =>
+                init === undefined ? mockStorageGet(input) : mockStorageGet(input, init),
             forAdapter: (adapter: unknown) => mockForAdapter(adapter),
         },
     })),
 }));
 
-jest.mock("~/server/storage/vercel-blob", () => ({
-    fetchBlob: jest.fn(),
+jest.mock("~/server/storage/legacy-promote", () => ({
+    promoteLegacyUrlToRef: (input: unknown) => mockPromoteLegacyUrlToRef(input),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -72,7 +85,6 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -104,8 +116,8 @@ function makeSmallDocxBuffer(): Buffer {
 }
 
 function setupSuccessfulPipeline(docBuffer: Buffer) {
-    // Step 1: fetchBlob returns the document
-    (fetchBlob as jest.Mock).mockResolvedValueOnce({
+    // Step 1: the storage port returns the document
+    mockStorageGet.mockResolvedValueOnce({
         ok: true,
         arrayBuffer: () =>
             Promise.resolve(
@@ -232,8 +244,11 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
             step,
         });
 
-        // Preservation: fetchBlob called with the correct URL
-        expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
+        // Preservation: the URL is promoted before the storage-port read
+        expect(mockPromoteLegacyUrlToRef).toHaveBeenCalledWith({
+            value: "https://blob.store/original.docx",
+        });
+        expect(mockStorageGet).toHaveBeenCalledWith(mockDocumentRef);
     });
 
     it("passes author name and edits to processDocumentBatch", async () => {
@@ -342,7 +357,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
     it("processes edits with actions successfully", async () => {
         const docBuffer = makeSmallDocxBuffer();
 
-        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+        mockStorageGet.mockResolvedValueOnce({
             ok: true,
             arrayBuffer: () =>
                 Promise.resolve(
@@ -406,7 +421,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         const { AdeuServiceError: MockAdeuServiceError } =
             jest.requireMock("@launchstack/features/adeu");
 
-        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+        mockStorageGet.mockResolvedValueOnce({
             ok: true,
             arrayBuffer: () =>
                 Promise.resolve(
@@ -452,7 +467,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         const { AdeuServiceError: MockAdeuServiceError } =
             jest.requireMock("@launchstack/features/adeu");
 
-        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+        mockStorageGet.mockResolvedValueOnce({
             ok: true,
             arrayBuffer: () =>
                 Promise.resolve(

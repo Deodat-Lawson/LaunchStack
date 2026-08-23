@@ -1,7 +1,26 @@
-jest.mock("~/server/storage/vercel-blob", () => ({
-  isPrivateBlobUrl: jest.fn(() => false),
-  fetchBlob: jest.fn(),
-  putFile: jest.fn(),
+const mockIsS3Storage = jest.fn(() => false);
+const mockPromoteLegacyUrlToRef = jest.fn((_input: unknown) => ({
+  ok: false as const,
+  reason: "unsupported" as const,
+  quarantine: true as const,
+}));
+
+jest.mock("~/lib/storage", () => ({
+  isS3Storage: () => mockIsS3Storage(),
+}));
+
+jest.mock("~/server/storage/legacy-promote", () => ({
+  promoteLegacyUrlToRef: (input: unknown) => mockPromoteLegacyUrlToRef(input),
+}));
+
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(
+    async (_userId: unknown, defaultCompanyId: number) => defaultCompanyId,
+  ),
+}));
+
+jest.mock("~/server/services/document-servable", () => ({
+  checkDocumentServable: jest.fn().mockResolvedValue({ servable: true }),
 }));
 
 jest.mock("@clerk/nextjs/server", () => ({
@@ -38,9 +57,9 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     const mockDocuments = [
-      { id: 1, name: "Document 1", companyId: 1, content: "Content 1", currentVersionId: null },
-      { id: 2, name: "Document 2", companyId: 1, content: "Content 2", currentVersionId: null },
-      { id: 3, name: "Document 3", companyId: 1, content: "Content 3", currentVersionId: null },
+      { id: 1, name: "Document 1", companyId: 1, content: "Content 1", currentVersionId: null, url: "https://public.example/document-1" },
+      { id: 2, name: "Document 2", companyId: 1, content: "Content 2", currentVersionId: null, url: "https://public.example/document-2" },
+      { id: 3, name: "Document 3", companyId: 1, content: "Content 3", currentVersionId: null, url: "https://public.example/document-3" },
     ];
 
     // First call: user lookup
@@ -308,8 +327,8 @@ describe("POST /api/fetchDocument", () => {
 
     // Documents for company 1 only
     const mockDocuments = [
-      { id: 1, name: "Company 1 Doc", companyId: 1 },
-      { id: 2, name: "Another Company 1 Doc", companyId: 1 },
+      { id: 1, name: "Company 1 Doc", companyId: 1, url: "https://public.example/company-1-doc" },
+      { id: 2, name: "Another Company 1 Doc", companyId: 1, url: "https://public.example/company-1-doc-2" },
     ];
 
     const mockSelect = jest.fn()
@@ -353,8 +372,8 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-789" });
 
     const mockDocuments = [
-      { id: 10, name: "Company 5 Doc", companyId: 5 },
-      { id: 11, name: "Another Company 5 Doc", companyId: 5 },
+      { id: 10, name: "Company 5 Doc", companyId: 5, url: "https://public.example/company-5-doc" },
+      { id: 11, name: "Another Company 5 Doc", companyId: 5, url: "https://public.example/company-5-doc-2" },
     ];
 
     const mockSelect = jest.fn()
@@ -398,7 +417,7 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
 
     const mockDocuments = [
-      { id: 20, name: "Employee Doc", companyId: 3, currentVersionId: null },
+      { id: 20, name: "Employee Doc", companyId: 3, currentVersionId: null, url: "https://public.example/employee-doc" },
     ];
 
     const mockSelect = jest.fn()

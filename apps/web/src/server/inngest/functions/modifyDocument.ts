@@ -2,7 +2,7 @@
  * Inngest Document Modification Function
  * Background job handler for Adeu-powered DOCX redlining.
  *
- * Fetches a DOCX from Vercel Blob, sends it through the Adeu service
+ * Fetches a DOCX through the storage port, sends it through the Adeu service
  * for batch edits/review actions, stores the modified DOCX back to Blob,
  * and updates the document record in the database.
  *
@@ -24,7 +24,7 @@ import { document } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
 import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
 import { getEngine } from "~/server/engine";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 export const modifyDocument = inngest.createFunction(
@@ -62,9 +62,16 @@ export const modifyDocument = inngest.createFunction(
   async ({ event, step }) => {
     const { documentId, documentUrl, authorName, edits, actions, userId } = event.data;
 
-    // Step 1: Fetch the DOCX from Vercel Blob
+    // Step 1: Promote the legacy URL, then fetch through the storage port
     const docBuffer = await step.run("fetch-document", async () => {
-      const res = await fetchBlob(documentUrl);
+      const promoted = promoteLegacyUrlToRef({ value: documentUrl });
+      if (!promoted.ok) {
+        throw new Error(
+          `Failed to resolve document storage reference: ${promoted.reason}`,
+        );
+      }
+
+      const res = await getEngine().storage.get(promoted.ref);
       if (!res.ok) {
         throw new Error(`Failed to fetch document: HTTP ${res.status}`);
       }

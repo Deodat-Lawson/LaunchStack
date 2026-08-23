@@ -94,11 +94,11 @@ jest.mock("drizzle-orm", () => ({
   eq: jest.fn((...args: unknown[]) => args),
 }));
 
-// ─── Mock Vercel Blob (legacy read-path compat only) ─────────────────────────
+// ─── Mock Vercel Blob (legacy delete-path compat only) ──────────────────────
 
-const mockFetchBlob = jest.fn().mockResolvedValue(new Response("blob-content"));
-const mockIsPrivateBlobUrl = jest.fn((url: string) => url.includes(".private.blob."));
 const mockDeleteBlobFile = jest.fn().mockResolvedValue(undefined);
+const mockTargetPut = jest.fn();
+const mockTargetGet = jest.fn();
 const mockTargetDelete = jest.fn().mockImplementation(async (ref: unknown) => ({
   ref,
   outcome: "deleted" as const,
@@ -108,14 +108,14 @@ const mockTargetDeleteMany = jest.fn().mockImplementation(async (refs: unknown[]
 );
 
 jest.mock("~/server/storage/vercel-blob", () => ({
-  fetchBlob: (...args: unknown[]) => mockFetchBlob(...args),
-  isPrivateBlobUrl: (...args: unknown[]) => mockIsPrivateBlobUrl(...(args as [string])),
   deleteFile: (...args: unknown[]) => mockDeleteBlobFile(...args),
 }));
 
 jest.mock("~/server/storage/create-storage-port", () => ({
   createStoragePortTargetFactory: () => ({
     forAdapter: () => ({
+      put: (...args: unknown[]) => mockTargetPut(...args),
+      get: (...args: unknown[]) => mockTargetGet(...args),
       delete: (...args: unknown[]) => mockTargetDelete(...args),
       deleteMany: (...args: unknown[]) => mockTargetDeleteMany(...args),
     }),
@@ -172,8 +172,18 @@ beforeEach(() => {
   );
   mockEnsureBucketExists.mockClear().mockResolvedValue(undefined);
   mockInsertReturning.mockClear().mockImplementation(() => Promise.resolve([{ id: 42 }]));
-  mockFetchBlob.mockClear().mockResolvedValue(new Response("blob-content"));
   mockDeleteBlobFile.mockClear().mockResolvedValue(undefined);
+  mockTargetPut.mockClear().mockResolvedValue({
+    url: "/api/files/42",
+    pathname: "documents/mock-upload",
+    ref: {
+      adapter: "database" as const,
+      storageLocationId: "database:pdr_file_uploads_v1",
+      key: "42",
+    },
+    provider: "database",
+  });
+  mockTargetGet.mockClear().mockResolvedValue(new Response("blob-content"));
   mockTargetDelete.mockClear().mockImplementation(async (ref: unknown) => ({
     ref,
     outcome: "deleted" as const,
@@ -202,6 +212,51 @@ import {
   isS3Storage,
 } from "~/lib/storage";
 import { resolveStorageLocationId } from "~/lib/storage-location-id";
+
+describe("Feature: database storage shims", () => {
+  it("routes database uploadFile through the targeted adapter", async () => {
+    setProvider("database");
+
+    const result = await uploadFile({
+      filename: "database.txt",
+      data: Buffer.from("database"),
+      contentType: "text/plain",
+      userId: "user-1",
+    });
+
+    expect(mockTargetPut).toHaveBeenCalledWith({
+      filename: "database.txt",
+      data: expect.any(Buffer),
+      contentType: "text/plain",
+      userId: "user-1",
+    });
+    expect(mockTargetPut).toHaveBeenCalledTimes(1);
+    expect(mockInsertReturning).not.toHaveBeenCalled();
+    expect(result.provider).toBe("database");
+  });
+
+  it("routes database deleteManyByRef through the targeted adapter", async () => {
+    setProvider("database");
+    const refs = [
+      {
+        adapter: "database" as const,
+        storageLocationId: "database:pdr_file_uploads_v1",
+        key: "42",
+      },
+      {
+        adapter: "database" as const,
+        storageLocationId: "database:pdr_file_uploads_v1",
+        key: "43",
+      },
+    ];
+
+    const results = await deleteManyByRef(refs);
+
+    expect(mockTargetDeleteMany).toHaveBeenCalledWith(refs);
+    expect(mockTargetDelete).not.toHaveBeenCalled();
+    expect(results).toEqual(refs.map((ref) => ({ ref, outcome: "deleted" })));
+  });
+});
 
 // ─── Property 5: Upload result shape and persistence consistency ─────────────
 
@@ -302,7 +357,7 @@ describe(
           dataArb,
           userIdArb,
           async (errorMsg, filename, data, userId) => {
-            mockInsertReturning.mockRejectedValue(new Error(errorMsg));
+            mockTargetPut.mockRejectedValue(new Error(errorMsg));
 
             try {
               await uploadFile({ filename, data, userId });
@@ -350,7 +405,7 @@ describe(
       );
     });
 
-    it("fetchFile routes S3 URLs to plain fetch and legacy private-blob URLs to fetchBlob", async () => {
+    it("fetchFile routes S3 URLs to plain fetch and private-blob URLs to the targeted adapter", async () => {
       setProvider("s3");
 
       const originalFetch = global.fetch;
@@ -366,7 +421,14 @@ describe(
 
         const privateBlobUrl = "https://store.private.blob.vercel-storage.com/documents/test.pdf";
         await fetchFile(privateBlobUrl);
-        expect(mockFetchBlob).toHaveBeenCalledWith(privateBlobUrl, undefined);
+        expect(mockTargetGet).toHaveBeenCalledWith(
+          expect.objectContaining({
+            adapter: "vercel-blob",
+            storageLocationId: "vercel-blob:store-alpha",
+            key: "documents/test.pdf",
+          }),
+          undefined,
+        );
       } finally {
         global.fetch = originalFetch;
       }
@@ -571,12 +633,18 @@ describe("Feature: blob deletion routing and identity", () => {
 });
 
 describe("Feature: database deletion by canonical URL", () => {
-  it("deleteFileByUrl('/api/files/{id}') deletes the matching fileUploads row only", async () => {
+  it("deleteFileByUrl('/api/files/{id}') routes through the database adapter", async () => {
     await deleteFileByUrl("/api/files/4242");
 
-    expect(mockDelete).toHaveBeenCalledTimes(1);
-    expect(mockDelete).toHaveBeenCalledWith(["id", 4242]);
-    expect(mockDelete).not.toHaveBeenCalledWith(["id", 9999]);
+    expect(mockTargetDelete).toHaveBeenCalledTimes(1);
+    expect(mockTargetDelete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        adapter: "database",
+        storageLocationId: "database:pdr_file_uploads_v1",
+        key: "4242",
+      }),
+    );
+    expect(mockDelete).not.toHaveBeenCalled();
 
     expect(mockDeleteBlobFile).not.toHaveBeenCalled();
     expect(mockDeleteObject).not.toHaveBeenCalled();

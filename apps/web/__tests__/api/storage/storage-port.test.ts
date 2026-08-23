@@ -38,6 +38,15 @@ const mockTargets = {
     deleteMany: (...args: unknown[]) => mockTargetDeleteMany(...args),
     getSignedUrl: (...args: unknown[]) => mockTargetGetSignedUrl(...args),
   },
+  database: {
+    adapter: "database",
+    provider: "database",
+    put: (...args: unknown[]) => mockTargetPut(...args),
+    get: (...args: unknown[]) => mockTargetGet(...args),
+    delete: (...args: unknown[]) => mockTargetDelete(...args),
+    deleteMany: (...args: unknown[]) => mockTargetDeleteMany(...args),
+    getSignedUrl: (...args: unknown[]) => mockTargetGetSignedUrl(...args),
+  },
 };
 
 const mockForAdapter = jest.fn();
@@ -79,7 +88,7 @@ describe("createAppStoragePort", () => {
     mockForAdapter.mockReset().mockImplementation((adapter: keyof typeof mockTargets) => mockTargets[adapter]);
   });
 
-  it("deleteRef delegates to deleteFileByRef", async () => {
+  it("deleteRef delegates to the targeted adapter", async () => {
     const ref: ObjectRef = {
       adapter: "s3",
       storageLocationId: "s3:http://localhost:8333@bucket",
@@ -137,14 +146,14 @@ describe("createAppStoragePort", () => {
     expect(mockForAdapter).not.toHaveBeenCalledWith("s3");
   });
 
-  it("keeps the default database put on the legacy database helper", async () => {
+  it("routes the default database put through the targeted adapter", async () => {
     mockResolveStorageBackend.mockReturnValue("database");
     const ref: ObjectRef = {
       adapter: "database",
       storageLocationId: "database:pdr_file_uploads_v1",
       key: "123",
     };
-    mockUploadFile.mockResolvedValue({ ref, provider: "database" });
+    mockTargetPut.mockResolvedValue({ ref, provider: "database" });
 
     const port = createAppStoragePort();
     const input = {
@@ -154,11 +163,9 @@ describe("createAppStoragePort", () => {
     };
     const result = await port.put(input);
 
-    expect(mockUploadFile).toHaveBeenCalledWith({
-      ...input,
-      userId: "system",
-    });
-    expect(mockForAdapter).not.toHaveBeenCalled();
+    expect(mockForAdapter).toHaveBeenCalledWith("database");
+    expect(mockTargetPut).toHaveBeenCalledWith(input);
+    expect(mockUploadFile).not.toHaveBeenCalled();
     expect(result.ref).toEqual(ref);
   });
 
@@ -226,6 +233,39 @@ describe("createAppStoragePort", () => {
     expect(result).toEqual(refs.map((ref) => ({ ref, outcome: "deleted" })));
   });
 
+  it("routes database delete and deleteMany through targeted adapters", async () => {
+    const refs: ObjectRef[] = [
+      {
+        adapter: "database",
+        storageLocationId: "database:pdr_file_uploads_v1",
+        key: "123",
+      },
+      {
+        adapter: "database",
+        storageLocationId: "database:pdr_file_uploads_v1",
+        key: "456",
+      },
+    ];
+    mockTargetDelete.mockResolvedValue({ ref: refs[0], outcome: "deleted" });
+    mockTargetDeleteMany.mockResolvedValue(
+      refs.map((ref) => ({ ref, outcome: "not_found" as const })),
+    );
+
+    const port = createAppStoragePort();
+    const deleteResult = await port.deleteRef(refs[0]!);
+    const deleteManyResult = await port.deleteMany(refs);
+
+    expect(mockForAdapter).toHaveBeenCalledWith("database");
+    expect(mockTargetDelete).toHaveBeenCalledWith(refs[0]!);
+    expect(mockTargetDeleteMany).toHaveBeenCalledWith(refs);
+    expect(mockDeleteFileByRef).not.toHaveBeenCalled();
+    expect(mockDeleteManyByRef).not.toHaveBeenCalled();
+    expect(deleteResult).toEqual({ ref: refs[0]!, outcome: "deleted" });
+    expect(deleteManyResult).toEqual(
+      refs.map((ref) => ({ ref, outcome: "not_found" })),
+    );
+  });
+
   it("legacy delete shim promotes and deletes by canonical ref", async () => {
     const ref: ObjectRef = {
       adapter: "uploadthing",
@@ -251,10 +291,10 @@ describe("createAppStoragePort", () => {
     expect(target.provider).toBe("vercel-blob");
   });
 
-  it("resolves database refs through the authenticated file route", async () => {
+  it("routes database refs through the targeted adapter", async () => {
     mockResolveStorageBackend.mockReturnValue("database");
     const response = new Response("database bytes");
-    mockFetchFile.mockResolvedValue(response);
+    mockTargetGet.mockResolvedValue(response);
     const ref: ObjectRef = {
       adapter: "database",
       storageLocationId: "database:pdr_file_uploads_v1",
@@ -264,7 +304,9 @@ describe("createAppStoragePort", () => {
 
     const result = await createAppStoragePort().get(ref, init);
 
-    expect(mockFetchFile).toHaveBeenCalledWith("/api/files/123", init);
+    expect(mockForAdapter).toHaveBeenCalledWith("database");
+    expect(mockTargetGet).toHaveBeenCalledWith(ref, init);
+    expect(mockFetchFile).not.toHaveBeenCalled();
     expect(result).toBe(response);
   });
 });

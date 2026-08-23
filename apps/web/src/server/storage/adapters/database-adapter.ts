@@ -5,13 +5,11 @@
  * base64-encoded in a file_uploads row, and the ref's key is that row's id.
  * Reached through `getStoragePort().forAdapter("database")`.
  *
- * COPIED, NOT MOVED
- * -----------------
- * put and delete are the logic from lib/storage.ts's database branches,
- * reproduced here. That file is Dev A's this sprint (A3/A4 thin it down to
- * shims), and two people editing one 726-line file produces a merge conflict
- * neither can resolve with confidence. So this is a copy; A3 deletes the
- * original once the port is wired.
+ * EXTRACTED FROM THE LEGACY HELPER
+ * ---------------------------------
+ * put and delete started as the logic from lib/storage.ts's database branches.
+ * The legacy entry points now delegate through the factory, so this adapter is
+ * the single implementation rather than a second copy of the database path.
  *
  * get(ref) — WHY IT MAKES AN HTTP CALL TO OUR OWN APP
  * ---------------------------------------------------

@@ -17,27 +17,29 @@
 version: 1
 
 models:
-  # Default: Google Gemini. Reached at
-  # CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai,
-  # which is also where chat falls back when CHAT_BASE_URL is unset.
+  # Default: Google Gemini, reached through OpenRouter
+  # (CHAT_BASE_URL=https://openrouter.ai/api/v1).
   #
-  # Model ids here are the BARE ids Google's endpoint expects. The `google/`
-  # prefix belongs only to the `preset:` field, which names a bundled behavior
-  # entry — see packages/core/src/llm/presets.ts.
+  # Ids are sent to the endpoint verbatim, so they carry OpenRouter's `google/`
+  # vendor prefix. Talking to Google's own compatibility endpoint
+  # (https://generativelanguage.googleapis.com/v1beta/openai, also the fallback
+  # when CHAT_BASE_URL is unset) instead? Drop the prefix from `id:` — it
+  # expects the bare ids. The `preset:` field is unaffected either way: it names
+  # a bundled behavior entry, not a model on the endpoint.
   primary:
-    id: gemini-2.5-flash
+    id: google/gemini-2.5-flash
     preset: google/gemini-2.5-flash
 
   # The cheap tier. Its preset sets reasoning `default: none`, so routine work
   # does not pay for thinking tokens.
   fast:
-    id: gemini-2.5-flash-lite
+    id: google/gemini-2.5-flash-lite
     preset: google/gemini-2.5-flash-lite
 
   # The reasoning tier. 2.5 Pro always reasons, so its preset omits the `none`
   # level rather than claiming a capability the endpoint would reject.
   deep:
-    id: gemini-2.5-pro
+    id: google/gemini-2.5-pro
     preset: google/gemini-2.5-pro
 
   # Talking to something else instead? Any OpenAI-compatible endpoint works —

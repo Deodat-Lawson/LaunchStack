@@ -1212,6 +1212,7 @@ export function MarketingPipelineWorkspace({
         handleStartNewSession,
         handleRewriteComplete,
         handleRewriteWorkflowStateChange,
+        refineWithCompanyContext,
         handlePushToRewriteDocument,
         handleCopy,
         runPipeline,
@@ -1956,13 +1957,15 @@ export function MarketingPipelineWorkspace({
                                                             </SheetTitle>
                                                             <p className="text-ink-3 text-sm">
                                                                 Use tone, length, and audience
-                                                                options to refine the message.
-                                                                Preview and accept when you&apos;re
-                                                                happy.
+                                                                options to refine the message —
+                                                                grounded in your company context and
+                                                                brand voice. Preview and accept when
+                                                                you&apos;re happy.
                                                             </p>
                                                         </SheetHeader>
                                                         <div className="flex-1 overflow-y-auto px-6 py-4">
                                                             <RewriteWorkflow
+                                                                rewrite={refineWithCompanyContext}
                                                                 initialText={editableMessage}
                                                                 persistedState={
                                                                     activeSession?.rewriteWorkflowState

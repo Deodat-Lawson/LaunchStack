@@ -692,6 +692,37 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         }
     }, [editableMessage, result]);
 
+    /**
+     * Context-aware rewrite backend for the Refine sheet (unification P3):
+     * calls /api/marketing-pipeline/refine — grounded in the company knowledge
+     * context server-side, steered by the run's extracted brand voice —
+     * instead of the generic document rewriter.
+     */
+    const refineWithCompanyContext = useCallback(
+        async ({ text, prompt: feedback }: { text: string; prompt: string }): Promise<string> => {
+            const res = await fetch("/api/marketing-pipeline/refine", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    platform: result?.platform ?? platform,
+                    originalMessage: text,
+                    feedback: feedback.trim().slice(0, 1000) || "Improve this post.",
+                    brandVoice: result?.pipelineStages?.brandVoice,
+                }),
+            });
+            const json = (await res.json()) as {
+                success?: boolean;
+                data?: { message?: string };
+                message?: string;
+            };
+            if (!res.ok || !json.success || !json.data?.message) {
+                throw new Error(json.message ?? "Refinement failed");
+            }
+            return json.data.message;
+        },
+        [platform, result]
+    );
+
     const activeSession = sessions.find(session => session.id === activeSessionId) ?? null;
 
     return {
@@ -736,6 +767,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         handleStartNewSession,
         handleRewriteComplete,
         handleRewriteWorkflowStateChange,
+        refineWithCompanyContext,
         handlePushToRewriteDocument,
         handleCopy,
         runPipeline,

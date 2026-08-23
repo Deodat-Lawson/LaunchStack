@@ -6,6 +6,7 @@ import { toggleCollapse } from "../model/commands";
 import { graphIndex, nodeById, nodeLookup, visibleEdges, visibleNodes } from "../model/doc";
 import { nodeBounds, nodesBounds } from "../model/geometry";
 import { routeEdgeCached, type RoutedEdge } from "../model/routing";
+import { isDarkSurface } from "../model/palette";
 import { shapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { DiagramEdge, DiagramNode, Point, Rect } from "../model/types";
@@ -18,6 +19,7 @@ import { NodePorts, SelectionOverlay } from "./SelectionOverlay";
 import { CanvasDefs, ShapeView } from "./ShapeView";
 import { useCanvasInteractions, type CanvasCallbacks } from "./useCanvasInteractions";
 import { useElementSize } from "./useElementSize";
+import styles from "./Canvas.module.css";
 
 /**
  * The drawing surface.
@@ -146,6 +148,7 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
         return map;
     }, [nodes]);
 
+    const darkPaper = useMemo(() => isDarkSurface(page.background.color), [page.background.color]);
     const showRulers = doc.settings.showRulers && !render.presenting;
     const selectionRect = useMemo(
         () => (selectedNodes.length > 0 ? nodesBounds(selectedNodes) : null),
@@ -166,10 +169,24 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
         >
             <svg
                 ref={svgRef}
+                className={styles.paper}
+                // Canvas chrome is bound to the paper, not to the app theme —
+                // read from the background's own lightness so a custom colour
+                // works as well as a named theme.
+                data-paper={darkPaper ? "dark" : "light"}
                 width="100%"
                 height="100%"
                 viewBox={viewBox}
                 style={{
+                    // Absolute, so the canvas can only ever *read* its size and
+                    // never set it. An in-flow `<svg>` with a viewBox is
+                    // intrinsically sized: put one in a parent whose own height
+                    // is content-derived and the two size each other in a loop
+                    // that settles at whatever the viewBox aspect ratio asks
+                    // for. Taking it out of flow makes that unrepresentable —
+                    // the wrapper's `flex: 1` is then the only thing with a say.
+                    position: "absolute",
+                    inset: 0,
                     display: "block",
                     touchAction: "none",
                     cursor: cursorFor(render.tool, interactions.isPanning(), render.drag.kind),

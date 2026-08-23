@@ -2,11 +2,14 @@
 
 import React, { useMemo } from "react";
 
+import { useAppThemeMode } from "./useAppThemeMode";
+
 import { nodeLookup, pageBounds } from "../model/doc";
 import { expandRect } from "../model/geometry";
 import { routeEdge } from "../model/routing";
 import { shapeGeometry } from "../model/shapes";
 import { buildTemplate } from "../model/templates";
+import type { ThemeMode } from "../model/palette";
 import type { MindmapDoc } from "../model/types";
 
 /**
@@ -23,17 +26,21 @@ import type { MindmapDoc } from "../model/types";
 
 const cache = new Map<string, MindmapDoc>();
 
-function templateDoc(templateId: string): MindmapDoc {
-    const cached = cache.get(templateId);
+function templateDoc(templateId: string, mode: ThemeMode): MindmapDoc {
+    const key = `${templateId}:${mode}`;
+    const cached = cache.get(key);
     if (cached) return cached;
-    const doc = buildTemplate(templateId);
-    cache.set(templateId, doc);
+    const doc = buildTemplate(templateId, undefined, mode);
+    cache.set(key, doc);
     return doc;
 }
 
 export function TemplateThumbnail({ templateId }: { templateId: string }) {
+    // Previews are built in the same mode a new document would be seeded in,
+    // so the card is not a light board that turns dark the moment you open it.
+    const mode = useAppThemeMode();
     const { viewBox, nodes, edges, background } = useMemo(() => {
-        const doc = templateDoc(templateId);
+        const doc = templateDoc(templateId, mode);
         const page = doc.pages[0];
         if (!page) {
             return { viewBox: "0 0 100 75", nodes: [], edges: [], background: "var(--panel-2)" };
@@ -47,7 +54,7 @@ export function TemplateThumbnail({ templateId }: { templateId: string }) {
             edges: page.edges.map(e => routeEdge(e, lookup)),
             background: page.background.color,
         };
-    }, [templateId]);
+    }, [templateId, mode]);
 
     if (nodes.length === 0) {
         return (

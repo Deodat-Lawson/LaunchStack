@@ -486,7 +486,10 @@ export function WorkspaceShell() {
             data-drift-immersive="true"
             style={{
                 display: "flex",
-                height: "100vh",
+                // `dvh`, not `vh`: on mobile `100vh` is the viewport with the
+                // URL bar retracted, so the workspace's own bottom chrome ends
+                // up underneath the browser's.
+                height: "100dvh",
                 width: "100%",
                 overflow: "hidden",
                 position: "relative",

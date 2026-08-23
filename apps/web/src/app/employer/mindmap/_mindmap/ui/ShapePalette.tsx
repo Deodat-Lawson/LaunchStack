@@ -7,26 +7,46 @@ import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
 
+import { createNode } from "../model/factory";
+import { themeMode, type ThemeMode } from "../model/palette";
 import { SHAPES, SHAPE_CATEGORIES, shapeGeometry, type ShapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
-import type { ShapeCategory, ShapeId } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
+import type { NodeStyle, ShapeCategory, ShapeId } from "../model/types";
+import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The shape library.
  *
- * Previews are generated from the same `shapeGeometry` the canvas uses, so a
- * thumbnail can never show a shape the canvas would draw differently. Clicking
- * arms the shape tool; dragging drops it straight onto the canvas at the
- * pointer (handled by the editor shell's drop target).
+ * Previews are generated from the same `shapeGeometry` *and* the same
+ * `createNode` presets the canvas uses, so a thumbnail can never show a shape
+ * the canvas would draw differently — a Topic looks like a Topic here, not
+ * like the rounded rectangle it shares an outline with. Clicking arms the
+ * shape tool; dragging drops it straight onto the canvas at the pointer
+ * (handled by the editor shell's drop target).
+ *
+ * Every tile is captioned. Sixty untitled grey outlines is not a library, it
+ * is a memory test — and the two shapes people most need to tell apart
+ * (`Topic` and `Rounded rectangle`) are exactly the two an outline cannot
+ * distinguish.
  */
 
 const selectPending = (s: EditorState) => (s.tool === "shape" ? s.pendingShape : null);
 
+/** Said once per group, where the grouping is doing real work. */
+const CATEGORY_BLURB: Partial<Record<ShapeCategory, string>> = {
+    Nodes: "Type in them, connect them, let auto-layout arrange them.",
+    Annotate: "Marks on the canvas. Not part of the diagram's structure.",
+};
+
 export function ShapePalette() {
     const store = useStore();
     const pending = useEditor(selectPending);
+    const doc = useCommittedDoc();
     const [query, setQuery] = useState("");
+
+    // Previews carry the board's own theme, so a tile shows the colour you are
+    // about to get rather than a light-mode idea of it.
+    const mode = themeMode(doc.settings.paletteId);
 
     const grouped = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -62,7 +82,7 @@ export function ShapePalette() {
                 />
             </div>
 
-            <ScrollArea className="flex-1">
+            <ScrollArea className="min-h-0 flex-1">
                 <div className="px-3 pb-6 pt-3">
                     {grouped.length === 0 && (
                         <p className="text-ink-3 px-1 py-6 text-center text-[13px]">
@@ -70,15 +90,26 @@ export function ShapePalette() {
                         </p>
                     )}
                     {grouped.map(group => (
-                        <section key={group.category} className="mb-4">
-                            <h3 className="text-ink-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
+                        <section key={group.category} className="mb-5">
+                            <h3 className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
                                 {group.category}
                             </h3>
-                            <div className="grid grid-cols-4 gap-1">
+                            {CATEGORY_BLURB[group.category] && (
+                                <p className="text-ink-3 mb-2 mt-0.5 text-[11px] leading-snug">
+                                    {CATEGORY_BLURB[group.category]}
+                                </p>
+                            )}
+                            <div
+                                className={cn(
+                                    "grid grid-cols-3 gap-1",
+                                    !CATEGORY_BLURB[group.category] && "mt-2"
+                                )}
+                            >
                                 {group.shapes.map(shape => (
                                     <ShapeTile
                                         key={shape.id}
                                         shape={shape}
+                                        mode={mode}
                                         active={pending === shape.id}
                                         onSelect={() => store.setTool("shape", shape.id)}
                                     />
@@ -97,10 +128,12 @@ const TILE_H = 32;
 
 const ShapeTile = memo(function ShapeTile({
     shape,
+    mode,
     active,
     onSelect,
 }: {
     shape: ShapeDef;
+    mode: ThemeMode;
     active: boolean;
     onSelect: () => void;
 }) {
@@ -117,40 +150,72 @@ const ShapeTile = memo(function ShapeTile({
             }}
             onClick={onSelect}
             className={cn(
-                "flex aspect-square items-center justify-center rounded-md border transition-colors",
+                "flex flex-col items-center gap-1 rounded-md border px-1 pb-1 pt-1.5 transition-colors",
                 active
                     ? "border-brand bg-brand-soft"
                     : "hover:border-line hover:bg-panel-2 border-transparent"
             )}
         >
-            <ShapePreview shapeId={shape.id} />
+            <ShapePreview shapeId={shape.id} mode={mode} />
+            {/* Two lines rather than an ellipsis: "Rounded rect…" and
+                "Predefined pro…" are the names most in need of reading. */}
+            <span className="text-ink-3 line-clamp-2 w-full text-center text-[10px] leading-tight">
+                {shape.name}
+            </span>
         </button>
     );
 });
 
-/** Small outline preview, drawn from the real shape geometry. */
-export function ShapePreview({ shapeId, size = 1 }: { shapeId: ShapeId; size?: number }) {
+/**
+ * The style a freshly created node of this shape gets. Read from `createNode`
+ * rather than restated, so the swatch on the tile is the colour that will
+ * land on the canvas. Cached because `createNode` mints an id each call.
+ */
+const previewStyleCache = new Map<string, { style: NodeStyle }>();
+function previewStyle(shapeId: ShapeId, mode: ThemeMode): { style: NodeStyle } {
+    const key = `${shapeId}:${mode}`;
+    let cached = previewStyleCache.get(key);
+    if (!cached) {
+        cached = { style: createNode({ shape: shapeId, mode, x: 0, y: 0 }).style };
+        previewStyleCache.set(key, cached);
+    }
+    return cached;
+}
+
+/** Small preview, drawn from the real shape geometry and its real preset. */
+export function ShapePreview({
+    shapeId,
+    mode = "light",
+    size = 1,
+}: {
+    shapeId: ShapeId;
+    mode?: ThemeMode;
+    size?: number;
+}) {
     const w = TILE_W * size;
     const h = TILE_H * size;
     const geometry = useMemo(() => shapeGeometry(shapeId, w - 8, h - 8, 4), [shapeId, w, h]);
+    const { style } = previewStyle(shapeId, mode);
+
+    // A tile sits on the panel, not on the board, so an unfilled or unstroked
+    // preset falls back to *chrome* ink rather than the document's. Painting
+    // the board's paper behind each preview was the faithful alternative and
+    // looked like sixty loose cards; the theme still shows through every
+    // shape that has a fill of its own.
+    const fill = style.fill === "none" ? "var(--panel-2)" : style.fill;
+    const stroke = style.stroke === "none" ? "var(--ink-3)" : style.stroke;
 
     return (
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden>
             <g transform="translate(4 4)">
                 {geometry.backing?.map((d, i) => (
-                    <path
-                        key={`b${i}`}
-                        d={d}
-                        fill="var(--panel-2)"
-                        stroke="var(--ink-3)"
-                        strokeWidth={1}
-                    />
+                    <path key={`b${i}`} d={d} fill={fill} stroke={stroke} strokeWidth={1} />
                 ))}
                 {geometry.path ? (
                     <path
                         d={geometry.path}
-                        fill="var(--panel-2)"
-                        stroke="var(--ink-2)"
+                        fill={fill}
+                        stroke={stroke}
                         strokeWidth={1.2}
                         strokeLinejoin="round"
                     />
@@ -160,7 +225,7 @@ export function ShapePreview({ shapeId, size = 1 }: { shapeId: ShapeId; size?: n
                         key={`d${i}`}
                         d={d}
                         fill="none"
-                        stroke="var(--ink-2)"
+                        stroke={stroke}
                         strokeWidth={1.2}
                         strokeLinecap="round"
                     />

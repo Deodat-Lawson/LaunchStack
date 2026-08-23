@@ -61,8 +61,8 @@ import {
     ungroupSelection,
 } from "../model/commands";
 import { activePage, mapNodes, nodeById } from "../model/doc";
-import { SWATCH_BY_ID, THEMES } from "../model/palette";
 import { SHAPES } from "../model/shapes";
+import { ThemePicker } from "./ThemePicker";
 import type { EditorState } from "../model/store";
 import type {
     ArrowId,
@@ -672,27 +672,10 @@ function PageSettings() {
     return (
         <>
             <Section title="Theme">
-                <div className="grid grid-cols-2 gap-1.5">
-                    {THEMES.map(theme => (
-                        <button
-                            key={theme.id}
-                            type="button"
-                            onClick={() => applyTheme(store, theme.id)}
-                            className="border-line text-ink-2 hover:border-brand hover:bg-brand-soft flex items-center gap-2 rounded-md border px-2 py-1.5 text-left text-[12px] transition-colors"
-                        >
-                            <span className="flex gap-0.5">
-                                {theme.cycle.slice(0, 3).map(id => (
-                                    <span
-                                        key={id}
-                                        className="size-2.5 rounded-full"
-                                        style={{ background: SWATCH_BY_ID[id]?.stroke }}
-                                    />
-                                ))}
-                            </span>
-                            {theme.name}
-                        </button>
-                    ))}
-                </div>
+                <ThemePicker
+                    activeId={doc.settings.paletteId}
+                    onPick={id => applyTheme(store, id)}
+                />
             </Section>
 
             <Section title="Canvas">

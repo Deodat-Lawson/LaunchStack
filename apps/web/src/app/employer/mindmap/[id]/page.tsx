@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 
 import { useSetBreadcrumbs } from "../../_chrome/BreadcrumbContext";
 import { getMindmap, type MindmapDetail } from "../_mindmap/lib/api";
+import type { ThemeMode } from "../_mindmap/model/palette";
 import { parseDoc } from "../_mindmap/model/serialize";
 import { buildTemplate, TEMPLATE_BY_ID } from "../_mindmap/model/templates";
 import type { MindmapDoc } from "../_mindmap/model/types";
@@ -33,8 +34,13 @@ function seedDocument(mindmap: MindmapDetail): { doc: MindmapDoc; seeded: boolea
     const empty = doc.pages.every(page => page.nodes.length === 0);
     const template = mindmap.templateId ? TEMPLATE_BY_ID[mindmap.templateId] : undefined;
     if (!empty || !template || template.id === "blank") return { doc, seeded: false };
+    // Seed the board lit the way this person is working. It is stored, not
+    // re-derived per viewer, so the document stays stable once shared — and it
+    // is far better than handing someone in dark mode a white page.
+    const mode: ThemeMode =
+        document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
     return {
-        doc: { ...buildTemplate(template.id, mindmap.title), title: mindmap.title },
+        doc: { ...buildTemplate(template.id, mindmap.title, mode), title: mindmap.title },
         seeded: true,
     };
 }

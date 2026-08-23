@@ -95,7 +95,7 @@ export function HistoryPanel({
                 </Button>
             </div>
 
-            <ScrollArea className="flex-1">
+            <ScrollArea className="min-h-0 flex-1">
                 <div className="p-2">
                     {loading && (
                         <div className="text-ink-3 flex items-center justify-center gap-2 py-8 text-[13px]">

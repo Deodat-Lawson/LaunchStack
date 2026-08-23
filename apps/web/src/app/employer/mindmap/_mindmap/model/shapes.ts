@@ -140,6 +140,13 @@ export interface ShapeDef {
     container?: boolean;
     /** Rendered with no fill/stroke chrome — text or bitmap only. */
     chromeless?: boolean;
+    /**
+     * Whether the shape carries a text label. Defaults to true: nearly every
+     * shape here is a container you put words in, which is the whole point of
+     * dropping one. The exceptions are the shapes with nothing to say — a
+     * bitmap, a pen stroke, a rule.
+     */
+    holdsText?: boolean;
     /** Connectable anchors. Defaults to the four cardinal sides. */
     ports?: readonly Exclude<PortId, "auto">[];
     /** Text area in local coordinates. Defaults to the full box, inset 8px. */
@@ -1114,12 +1121,18 @@ const FLOWCHART: ShapeDef[] = [
     }),
 ];
 
-const MINDMAP: ShapeDef[] = [
+/**
+ * The shapes people reach for first: a box you type in and wire up. They lead
+ * the palette because "which one makes a labelled box I can connect?" is the
+ * question a blank canvas actually poses, and it used to be answerable only by
+ * hovering sixty identical grey outlines.
+ */
+const NODES: ShapeDef[] = [
     def({
         id: "mind-root",
         name: "Central topic",
-        category: "Mindmap",
-        keywords: ["root", "centre", "main idea"],
+        category: "Nodes",
+        keywords: ["root", "centre", "main idea", "node", "box", "container"],
         defaultSize: { w: 200, h: 76 },
         minSize: { w: 60, h: 32 },
         rounded: true,
@@ -1129,8 +1142,8 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "mind-branch",
         name: "Topic",
-        category: "Mindmap",
-        keywords: ["branch", "node", "idea"],
+        category: "Nodes",
+        keywords: ["branch", "node", "idea", "box", "container", "card", "label"],
         defaultSize: { w: 160, h: 56 },
         minSize: { w: 48, h: 26 },
         rounded: true,
@@ -1140,8 +1153,8 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "mind-leaf",
         name: "Subtopic",
-        category: "Mindmap",
-        keywords: ["leaf", "detail", "underline"],
+        category: "Nodes",
+        keywords: ["leaf", "detail", "underline", "node"],
         defaultSize: { w: 140, h: 40 },
         minSize: { w: 40, h: 22 },
         ports: ["w", "e", "n", "s"],
@@ -1159,18 +1172,23 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "sticky",
         name: "Sticky note",
-        category: "Mindmap",
-        keywords: ["post-it", "note", "memo"],
+        category: "Nodes",
+        keywords: ["post-it", "note", "memo", "node"],
         defaultSize: { w: 150, h: 150 },
         minSize: { w: 60, h: 60 },
         ports: ALL8,
         textBox: (w, h) => insetBox(w, h, 14),
         geometry: (w, h) => ({ path: roundedRect(w, h, 3) }),
     }),
+];
+
+/** Marks on the canvas rather than things in the diagram: they carry no text
+ *  box worth connecting to, and auto-layout ignores them. */
+const ANNOTATE: ShapeDef[] = [
     def({
         id: "text",
         name: "Text",
-        category: "Mindmap",
+        category: "Annotate",
         keywords: ["label", "caption", "type"],
         defaultSize: { w: 180, h: 44 },
         minSize: { w: 24, h: 18 },
@@ -1181,7 +1199,8 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "image",
         name: "Image",
-        category: "Mindmap",
+        category: "Annotate",
+        holdsText: false,
         keywords: ["picture", "photo", "screenshot"],
         defaultSize: { w: 220, h: 160 },
         minSize: { w: 24, h: 24 },
@@ -1192,7 +1211,8 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "ink",
         name: "Ink",
-        category: "Mindmap",
+        category: "Annotate",
+        holdsText: false,
         keywords: ["pen", "draw", "freehand", "scribble"],
         defaultSize: { w: 160, h: 120 },
         minSize: { w: 4, h: 4 },
@@ -1202,7 +1222,8 @@ const MINDMAP: ShapeDef[] = [
     def({
         id: "line",
         name: "Line",
-        category: "Mindmap",
+        category: "Annotate",
+        holdsText: false,
         keywords: ["rule", "divider", "separator"],
         defaultSize: { w: 200, h: 2 },
         minSize: { w: 8, h: 1 },
@@ -1521,7 +1542,8 @@ export const SHAPES: readonly ShapeDef[] = [
     ...BASIC,
     ...ARROWS,
     ...FLOWCHART,
-    ...MINDMAP,
+    ...NODES,
+    ...ANNOTATE,
     ...UML,
     ...CONTAINERS,
 ];
@@ -1529,7 +1551,8 @@ export const SHAPES: readonly ShapeDef[] = [
 export const SHAPE_BY_ID: Record<string, ShapeDef> = Object.fromEntries(SHAPES.map(s => [s.id, s]));
 
 export const SHAPE_CATEGORIES: readonly ShapeCategory[] = [
-    "Mindmap",
+    "Nodes",
+    "Annotate",
     "Basic",
     "Flowchart",
     "Arrows",
@@ -1544,6 +1567,15 @@ export function shapeDef(id: string): ShapeDef {
 
 export function shapeGeometry(id: string, w: number, h: number, radius = 0): ShapeGeometry {
     return shapeDef(id).geometry(Math.max(w, 0.01), Math.max(h, 0.01), radius);
+}
+
+/**
+ * Does this shape carry a label? Drives whether placing one drops you straight
+ * into its text editor, so a newly created box behaves like the container it
+ * looks like instead of sitting there empty.
+ */
+export function shapeHoldsText(id: string): boolean {
+    return shapeDef(id).holdsText !== false;
 }
 
 /** Local-space text area for a shape, honouring per-shape overrides. */

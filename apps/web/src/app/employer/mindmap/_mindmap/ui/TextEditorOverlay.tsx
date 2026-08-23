@@ -119,6 +119,15 @@ export function TextEditorOverlay() {
     if (!style) return null;
     const fontSize = style.size * viewport.zoom;
 
+    // The field stands in for the shape, so it has to be painted in the
+    // shape's colours — not the chrome's. `style.color` is document data and
+    // is always a dark ink, because a diagram lives on light paper; pairing it
+    // with `var(--panel)` meant dark-on-near-black in dark theme, i.e. you
+    // could not see what you were typing. An unfilled shape (text, ink,
+    // brackets) and an edge label both sit directly on the paper, so that is
+    // what they get.
+    const surface = node && node.style.fill !== "none" ? node.style.fill : page.background.color;
+
     return (
         <textarea
             ref={ref}
@@ -163,7 +172,7 @@ export function TextEditorOverlay() {
                 borderRadius: 3,
                 resize: "none",
                 overflow: "hidden",
-                background: "var(--panel)",
+                background: surface,
                 color: style.color,
                 fontSize,
                 fontFamily: fontFamilyCss(style.family),

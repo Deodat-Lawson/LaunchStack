@@ -371,6 +371,113 @@ describe("dragging", () => {
     });
 });
 
+describe("double-click", () => {
+    /**
+     * The browser fires `dblclick` on the nearest common inclusive ancestor of
+     * the two clicks' targets. Selecting a shape on the first click re-renders
+     * the canvas and swaps the element under the cursor, so the two targets
+     * differ and the reported target is the `<svg>` — which is why this used to
+     * conclude "empty canvas" and drop a new topic on the shape being renamed.
+     */
+    function doubleClickReportedOnSvg(
+        container: HTMLElement,
+        grabbed: Element,
+        at: [number, number]
+    ) {
+        const svg = svgOf(container);
+        pressOn(grabbed, at);
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", at[0], at[1], { buttons: 0 }));
+        });
+        act(() => {
+            svg.dispatchEvent(
+                new MouseEvent("dblclick", {
+                    bubbles: true,
+                    cancelable: true,
+                    clientX: at[0],
+                    clientY: at[1],
+                })
+            );
+        });
+    }
+
+    it("edits the shape under the pointer, and adds nothing", () => {
+        const { view, doc, callbacks, store } = mount();
+        const node = doc.pages[0]!.nodes[0]!;
+        const before = store.getState().doc.pages[0]!.nodes.length;
+
+        doubleClickReportedOnSvg(view.container, nodeElement(view.container, node.id), [200, 140]);
+
+        expect(callbacks.onEditText).toHaveBeenCalledWith({ kind: "node", id: node.id });
+        expect(store.getState().doc.pages[0]!.nodes).toHaveLength(before);
+    });
+
+    it("edits a connector's label rather than dropping a topic on it", () => {
+        const { view, doc, callbacks, store } = mount();
+        const edge = doc.pages[0]!.edges[0]!;
+        const edgeEl = view.container.querySelector(`[data-edge-id="${edge.id}"]`)!;
+        const before = store.getState().doc.pages[0]!.nodes.length;
+
+        doubleClickReportedOnSvg(view.container, edgeEl, [330, 150]);
+
+        expect(callbacks.onEditText).toHaveBeenCalledWith({
+            kind: "edge-label",
+            id: edge.id,
+            index: 0,
+        });
+        expect(store.getState().doc.pages[0]!.nodes).toHaveLength(before);
+    });
+
+    it("still drops a topic when the canvas really is empty there", () => {
+        const { view, callbacks, store } = mount();
+        const svg = svgOf(view.container);
+        const before = store.getState().doc.pages[0]!.nodes.length;
+
+        doubleClickReportedOnSvg(view.container, svg, [820, 620]);
+
+        const after = store.getState().doc.pages[0]!.nodes;
+        expect(after).toHaveLength(before + 1);
+        expect(callbacks.onEditText).toHaveBeenCalledWith({ kind: "node", id: after.at(-1)!.id });
+    });
+});
+
+describe("placing a shape", () => {
+    /** Arm a shape tool, then click the canvas once — no drag. */
+    function placeAt(shape: string, at: [number, number]) {
+        const mounted = mount();
+        mounted.store.setTool("shape", shape as never);
+        const svg = svgOf(mounted.view.container);
+        pressOn(svg, at);
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", at[0], at[1], { buttons: 0 }));
+        });
+        return mounted;
+    }
+
+    it("opens the label editor for a shape that holds text", () => {
+        // `setTool("select")` clears `editing`, so the order of those two calls
+        // is load-bearing: get it wrong and the caret never appears, which is
+        // what made a freshly placed box feel like a dead rectangle.
+        const { callbacks, store } = placeAt("mind-branch", [500, 400]);
+        const added = store.getState().doc.pages[0]!.nodes.at(-1)!;
+        expect(added.shape).toBe("mind-branch");
+        // The shell wires `onEditText` to `store.setEditing`; asserting the
+        // call is what pins the ordering without restating that wiring here.
+        expect(callbacks.onEditText).toHaveBeenCalledWith({ kind: "node", id: added.id });
+    });
+
+    it("leaves the tool disarmed afterwards", () => {
+        const { store } = placeAt("mind-branch", [500, 400]);
+        expect(store.getState().tool).toBe("select");
+    });
+
+    it("does not open a label editor for a shape with nothing to say", () => {
+        const { callbacks, store } = placeAt("image", [500, 400]);
+        expect(store.getState().doc.pages[0]!.nodes.at(-1)!.shape).toBe("image");
+        expect(callbacks.onEditText).not.toHaveBeenCalled();
+    });
+});
+
 describe("inspector", () => {
     it("shows page settings when nothing is selected", () => {
         mount();

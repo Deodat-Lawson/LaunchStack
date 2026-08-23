@@ -333,10 +333,18 @@ export type ShapeId =
     | "swimlane-h"
     | "swimlane-v";
 
+/**
+ * Palette grouping. `Nodes` and `Annotate` split what used to be one
+ * "Mindmap" bucket: the difference people actually need to see is not which
+ * diagram type a shape belongs to but whether it is a *thing you type in and
+ * connect* or a mark you leave on the canvas. A sticky note is a node; a
+ * caption is not.
+ */
 export type ShapeCategory =
+    | "Nodes"
+    | "Annotate"
     | "Basic"
     | "Flowchart"
-    | "Mindmap"
     | "UML & ERD"
     | "Containers"
     | "Arrows";

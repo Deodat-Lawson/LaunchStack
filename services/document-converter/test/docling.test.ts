@@ -39,7 +39,7 @@ describe("doclingConvertFile outgoing request", () => {
         expect(form).toBeInstanceOf(FormData);
         expect(form!.get("md_page_break_placeholder")).toBe(PAGE_BREAK_PLACEHOLDER);
         // Pre-existing conversion parameters stay intact.
-        expect(form!.get("to_formats")).toBe('["md"]');
+        expect(form!.get("to_formats")).toBe("md");
         expect(form!.get("do_ocr")).toBe("true");
         expect(form!.get("do_table_structure")).toBe("true");
         expect(form!.get("image_export_mode")).toBe("placeholder");

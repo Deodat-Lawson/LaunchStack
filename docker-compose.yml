@@ -95,7 +95,11 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -212,6 +216,13 @@ services:
       # Auth
       CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      ZOOM_CLIENT_ID: ${ZOOM_CLIENT_ID:-}
+      ZOOM_CLIENT_SECRET: ${ZOOM_CLIENT_SECRET:-}
+      ZOOM_WEBHOOK_SECRET: ${ZOOM_WEBHOOK_SECRET:-}
+      ZOOM_TOKEN_ENCRYPTION_KEY: ${ZOOM_TOKEN_ENCRYPTION_KEY:-}
+      ZOOM_OAUTH_REDIRECT_URI: ${ZOOM_OAUTH_REDIRECT_URI:-http://localhost:3000/api/call-notes/zoom/callback}
+      CALL_NOTES_DEMO_COMPANY_ID: ${CALL_NOTES_DEMO_COMPANY_ID:-}
+      ENABLE_NOTES_RETRIEVER: ${ENABLE_NOTES_RETRIEVER:-false}
       # Services
       UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
       NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
@@ -260,6 +271,32 @@ services:
     ports:
       - "3000:3000"
 
+  call-worker:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: apps/call-worker/Dockerfile
+    container_name: pdr_ai_v2-call-worker
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+      CALL_WORKER_ID: ${CALL_WORKER_ID:-call-worker-1}
+      CALL_WORKER_POLL_INTERVAL_MS: ${CALL_WORKER_POLL_INTERVAL_MS:-1000}
+      CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
+      ZOOM_RTMS_MAX_CONCURRENT_STREAMS: ${ZOOM_RTMS_MAX_CONCURRENT_STREAMS:-0}
+      ZM_RTMS_CLIENT: ${ZOOM_CLIENT_ID:-}
+      ZM_RTMS_SECRET: ${ZOOM_CLIENT_SECRET:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.kill(1, 0)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   inngest-dev:
     image: inngest/inngest:latest

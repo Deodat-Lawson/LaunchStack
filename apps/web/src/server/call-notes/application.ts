@@ -16,6 +16,8 @@ import {
 
 import { getEngine } from "~/server/engine";
 import { documentNotes, userCompanyMemberships, users } from "~/server/db/schema";
+import { ZoomDetectedCallSource } from "./detected-calls";
+import { createKnowledgeNoteSink } from "./knowledge-note-sink";
 
 export type { CallNotesApplication } from "@launchstack/features/call-notes";
 export { CallNotesApplicationError } from "@launchstack/features/call-notes";
@@ -213,10 +215,14 @@ export function configureWebCallNotesApplication(
 }
 
 export function getWebCallNotesApplication(): CallNotesApplication {
-    const application = holder.__launchstackWebCallNotesApplication;
-    if (!application) {
-        throw new CallNotesApplicationError("unavailable", "Call Notes is not configured");
-    }
+    const configured = holder.__launchstackWebCallNotesApplication;
+    if (configured) return configured;
+
+    const application = createWebCallNotesApplication({
+        knowledgeSink: createKnowledgeNoteSink(),
+        detectedCalls: new ZoomDetectedCallSource(),
+    });
+    holder.__launchstackWebCallNotesApplication = application;
     return application;
 }
 

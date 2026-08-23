@@ -14,10 +14,7 @@
 
 import { sql } from "drizzle-orm";
 import { T } from "~/server/db/tables";
-import {
-  BaseRetriever,
-  type BaseRetrieverInput,
-} from "@langchain/core/retrievers";
+import { BaseRetriever, type BaseRetrieverInput } from "@langchain/core/retrievers";
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 
@@ -33,33 +30,29 @@ import type { EmbeddingsProvider, SearchScope } from "../types";
 type NotesSearchScope = SearchScope | "user";
 
 interface NotesRetrieverConfig extends BaseRetrieverInput {
-  embeddings: EmbeddingsProvider;
-  topK?: number;
-  searchScope: NotesSearchScope;
+    embeddings: EmbeddingsProvider;
+    topK?: number;
+    searchScope: NotesSearchScope;
 }
 
 interface SingleDocConfig extends NotesRetrieverConfig {
-  documentId: number;
-  searchScope: "document";
+    documentId: number;
+    searchScope: "document";
 }
 interface CompanyConfig extends NotesRetrieverConfig {
-  companyId: number | string;
-  searchScope: "company";
+    companyId: number | string;
+    searchScope: "company";
 }
 interface MultiDocConfig extends NotesRetrieverConfig {
-  documentIds: number[];
-  searchScope: "multi-document";
+    documentIds: number[];
+    searchScope: "multi-document";
 }
 interface UserConfig extends NotesRetrieverConfig {
-  userId: string;
-  searchScope: "user";
+    userId: string;
+    searchScope: "user";
 }
 
-type NotesRetrieverFields =
-  | SingleDocConfig
-  | CompanyConfig
-  | MultiDocConfig
-  | UserConfig;
+type NotesRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig | UserConfig;
 
 type NoteRow = {
     note_id: number;
@@ -105,47 +98,46 @@ export function isEligibleCompanyCallNoteRow(
 }
 
 export class NotesRetriever extends BaseRetriever {
-  lc_namespace = ["rag", "retrievers", "notes"];
+    lc_namespace = ["rag", "retrievers", "notes"];
 
-  private embeddings: EmbeddingsProvider;
-  private topK: number;
-  private searchScope: NotesSearchScope;
-  private documentId?: number;
-  private companyId?: number | string;
-  private documentIds?: number[];
-  private userId?: string;
+    private embeddings: EmbeddingsProvider;
+    private topK: number;
+    private searchScope: NotesSearchScope;
+    private documentId?: number;
+    private companyId?: number | string;
+    private documentIds?: number[];
+    private userId?: string;
 
-  constructor(fields: NotesRetrieverFields) {
-    super(fields);
-    this.embeddings = fields.embeddings;
-    this.topK = fields.topK ?? 5;
-    this.searchScope = fields.searchScope;
-    if (fields.searchScope === "document") this.documentId = fields.documentId;
-    else if (fields.searchScope === "company") this.companyId = fields.companyId;
-    else if (fields.searchScope === "multi-document")
-      this.documentIds = fields.documentIds;
-    else if (fields.searchScope === "user") this.userId = fields.userId;
-  }
+    constructor(fields: NotesRetrieverFields) {
+        super(fields);
+        this.embeddings = fields.embeddings;
+        this.topK = fields.topK ?? 5;
+        this.searchScope = fields.searchScope;
+        if (fields.searchScope === "document") this.documentId = fields.documentId;
+        else if (fields.searchScope === "company") this.companyId = fields.companyId;
+        else if (fields.searchScope === "multi-document") this.documentIds = fields.documentIds;
+        else if (fields.searchScope === "user") this.userId = fields.userId;
+    }
 
-  async _getRelevantDocuments(
-    query: string,
-    _run?: CallbackManagerForRetrieverRun,
-  ): Promise<Document[]> {
-    try {
-      const embedding = await this.embeddings.embedQuery(query);
-      const short = embedding.slice(0, 512);
-      const shortLiteral = sql.raw(`'[${short.join(",")}]'::vector(512)`);
-      const fullLiteral = sql.raw(`'[${embedding.join(",")}]'::vector(1536)`);
+    async _getRelevantDocuments(
+        query: string,
+        _run?: CallbackManagerForRetrieverRun
+    ): Promise<Document[]> {
+        try {
+            const embedding = await this.embeddings.embedQuery(query);
+            const short = embedding.slice(0, 512);
+            const shortLiteral = sql.raw(`'[${short.join(",")}]'::vector(512)`);
+            const fullLiteral = sql.raw(`'[${embedding.join(",")}]'::vector(1536)`);
 
-      // Build scope predicate. documentId/companyId columns on the notes
-      // tables are varchars (user-supplied strings), so we coerce and compare
-      // with a text literal. Note: casting the runtime int to text keeps this
-      // safe against injection since we only accept numeric inputs.
-      const where = this.buildWhere();
-      if (!where) return [];
+            // Build scope predicate. documentId/companyId columns on the notes
+            // tables are varchars (user-supplied strings), so we coerce and compare
+            // with a text literal. Note: casting the runtime int to text keeps this
+            // safe against injection since we only accept numeric inputs.
+            const where = this.buildWhere();
+            if (!where) return [];
 
-      const rows = toRows<NoteRow>(
-        await db.execute<NoteRow>(sql`
+            const rows = toRows<NoteRow>(
+                await db.execute<NoteRow>(sql`
           SELECT
             ne.note_id,
             n.user_id AS note_user_id,
@@ -191,108 +183,105 @@ export class NotesRetriever extends BaseRetriever {
             )
           ORDER BY ne.embedding_short <-> ${shortLiteral}
           LIMIT ${this.topK}
-        `),
-      );
+        `)
+            );
 
-      return rows
-        .filter(
-          (r) =>
-            this.searchScope !== "company" ||
-            (this.companyId !== undefined &&
-              isEligibleCompanyCallNoteRow(r, this.companyId)),
-        )
-        .map((r) => {
-          const snippet = (r.title ? `${r.title}\n\n` : "") + (r.content ?? "");
-          const source = r.call_id === null ? "note" : "call_note";
-          return new Document({
-            pageContent: snippet,
-            metadata: {
-              source,
-              noteId: r.note_id,
-              documentId: r.document_id,
-              companyId: r.company_id,
-              versionId: r.version_id,
-              title: r.title,
-              anchor: r.anchor,
-              anchorStatus: r.anchor_status,
-              distance: r.distance,
-              searchScope: this.searchScope,
-              ...(r.call_id === null
-                ? {}
-                : {
-                    callId: r.call_id,
-                    revision: r.call_revision,
-                    deepLink: `/?feature=calls&call=${encodeURIComponent(r.call_id)}`,
-                  }),
-            },
-          });
-        });
-    } catch (err) {
-      console.error("[NotesRetriever] error:", err);
-      return [];
+            return rows
+                .filter(
+                    r =>
+                        this.searchScope !== "company" ||
+                        (this.companyId !== undefined &&
+                            isEligibleCompanyCallNoteRow(r, this.companyId))
+                )
+                .map(r => {
+                    const snippet = (r.title ? `${r.title}\n\n` : "") + (r.content ?? "");
+                    const source = r.call_id === null ? "note" : "call_note";
+                    return new Document({
+                        pageContent: snippet,
+                        metadata: {
+                            source,
+                            noteId: r.note_id,
+                            documentId: r.document_id,
+                            companyId: r.company_id,
+                            versionId: r.version_id,
+                            title: r.title,
+                            anchor: r.anchor,
+                            anchorStatus: r.anchor_status,
+                            distance: r.distance,
+                            searchScope: this.searchScope,
+                            ...(r.call_id === null
+                                ? {}
+                                : {
+                                      callId: r.call_id,
+                                      revision: r.call_revision,
+                                      deepLink: `/employer/documents?feature=calls&call=${encodeURIComponent(r.call_id)}`,
+                                  }),
+                        },
+                    });
+                });
+        } catch (err) {
+            console.error("[NotesRetriever] error:", err);
+            return [];
+        }
     }
-  }
 
-  private buildWhere(): ReturnType<typeof sql> | null {
-    if (this.searchScope === "document" && this.documentId !== undefined) {
-      const asText = String(this.documentId);
-      return sql`ne.document_id = ${asText}`;
+    private buildWhere(): ReturnType<typeof sql> | null {
+        if (this.searchScope === "document" && this.documentId !== undefined) {
+            const asText = String(this.documentId);
+            return sql`ne.document_id = ${asText}`;
+        }
+        if (this.searchScope === "company" && this.companyId !== undefined) {
+            const asText = String(this.companyId);
+            return sql`ne.company_id = ${asText}`;
+        }
+        if (this.searchScope === "multi-document" && this.documentIds?.length) {
+            const list = this.documentIds.map(n => String(n));
+            return sql`ne.document_id = ANY(${list})`;
+        }
+        if (this.searchScope === "user" && this.userId) {
+            return sql`ne.user_id = ${this.userId}`;
+        }
+        return null;
     }
-    if (this.searchScope === "company" && this.companyId !== undefined) {
-      const asText = String(this.companyId);
-      return sql`ne.company_id = ${asText}`;
-    }
-    if (
-      this.searchScope === "multi-document" &&
-      this.documentIds?.length
-    ) {
-      const list = this.documentIds.map((n) => String(n));
-      return sql`ne.document_id = ANY(${list})`;
-    }
-    if (this.searchScope === "user" && this.userId) {
-      return sql`ne.user_id = ${this.userId}`;
-    }
-    return null;
-  }
 }
 
 export function createDocumentNotesRetriever(
-  documentId: number,
-  embeddings: EmbeddingsProvider,
-  topK = 5,
+    documentId: number,
+    embeddings: EmbeddingsProvider,
+    topK = 5
 ): NotesRetriever {
-  return new NotesRetriever({
-    documentId,
-    embeddings,
-    topK,
-    searchScope: "document",
-  });
+    return new NotesRetriever({
+        documentId,
+        embeddings,
+        topK,
+        searchScope: "document",
+    });
 }
 
 export function createCompanyNotesRetriever(
-  companyId: number | string,
-  embeddings: EmbeddingsProvider,
-  topK = 5,
+    companyId: number | string,
+    embeddings: EmbeddingsProvider,
+    topK = 5
 ): NotesRetriever {
-  return new NotesRetriever({
-    companyId,
-    embeddings,
-    topK,
-    searchScope: "company",
-  });
+    return new NotesRetriever({
+        companyId,
+        embeddings,
+        topK,
+        searchScope: "company",
+    });
 }
 
 export function createMultiDocNotesRetriever(
-  documentIds: number[],
-  embeddings: EmbeddingsProvider,
-  topK = 5,
+    documentIds: number[],
+    embeddings: EmbeddingsProvider,
+    topK = 5
 ): NotesRetriever {
-  return new NotesRetriever({
-    documentIds,
-    embeddings,
-    topK,
-    searchScope: "multi-document",
-  });
+    return new NotesRetriever({
+        documentIds,
+        embeddings,
+        topK,
+        searchScope: "multi-document",
+    });
 }
 
 /**
@@ -301,14 +290,14 @@ export function createMultiDocNotesRetriever(
  * alike, since both share the same `user_id` filter.
  */
 export function createUserNotesRetriever(
-  userId: string,
-  embeddings: EmbeddingsProvider,
-  topK = 5,
+    userId: string,
+    embeddings: EmbeddingsProvider,
+    topK = 5
 ): NotesRetriever {
-  return new NotesRetriever({
-    userId,
-    embeddings,
-    topK,
-    searchScope: "user",
-  });
+    return new NotesRetriever({
+        userId,
+        embeddings,
+        topK,
+        searchScope: "user",
+    });
 }

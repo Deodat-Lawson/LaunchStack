@@ -11,6 +11,7 @@ const mockExecute = jest.fn();
 const mockGetCall = jest.fn();
 const mockSearchTranscript = jest.fn();
 const mockListDetectedCalls = jest.fn();
+const mockProcessQueuedEnrichment = jest.fn();
 
 jest.mock("@clerk/nextjs/server", () => ({
     auth: (...args: unknown[]) => mockAuth(...args),
@@ -22,6 +23,10 @@ jest.mock("~/lib/active-workspace", () => ({
 
 jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(),
+}));
+
+jest.mock("~/server/call-notes/enrichment-runner", () => ({
+    processQueuedCallNotesEnrichment: (...args: unknown[]) => mockProcessQueuedEnrichment(...args),
 }));
 
 jest.mock("~/server/call-notes/application", () => {

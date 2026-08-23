@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 
-import { CallListQuerySchema, CallNotesCommandSchema } from "@launchstack/features/call-notes";
+import {
+    CallListQuerySchema,
+    CallNotesCommandSchema,
+    callNotesZoomConnections,
+} from "@launchstack/features/call-notes";
 
 import { getActiveCompanyId } from "~/lib/active-workspace";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
 } from "~/server/call-notes/application";
+import { processQueuedCallNotesEnrichment } from "~/server/call-notes/enrichment-runner";
+import { getEngine } from "~/server/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -60,19 +67,42 @@ export async function POST(request: Request): Promise<Response> {
             return invalidRequest();
         }
 
-        // The request's actor and company are never trusted. Rebuilding these
-        // fields here also prevents a valid command from crossing tenancy when
-        // a client sends stale or malicious context values.
+        // Actor, company, and Zoom authorization are always resolved server-side.
         const requestBody =
             body !== null && typeof body === "object" && !Array.isArray(body) ? body : {};
+        const [connection] =
+            "kind" in requestBody && requestBody.kind === "start_capture"
+                ? await getEngine()
+                      .db.select({ id: callNotesZoomConnections.id })
+                      .from(callNotesZoomConnections)
+                      .where(
+                          and(
+                              eq(callNotesZoomConnections.companyId, BigInt(context.companyId)),
+                              eq(callNotesZoomConnections.userId, context.userId),
+                              eq(callNotesZoomConnections.status, "active")
+                          )
+                      )
+                      .limit(1)
+                : [];
         const parsed = CallNotesCommandSchema.safeParse({
             ...requestBody,
             companyId: context.companyId,
             actorUserId: context.userId,
+            ...("kind" in requestBody && requestBody.kind === "start_capture"
+                ? { authorizationRef: connection?.id }
+                : {}),
         });
         if (!parsed.success) return invalidRequest();
 
-        const snapshot = await getWebCallNotesApplication().execute(parsed.data);
+        let snapshot = await getWebCallNotesApplication().execute(parsed.data);
+        if (parsed.data.kind === "request_enrichment" && snapshot) {
+            await processQueuedCallNotesEnrichment(context.companyId, snapshot.id);
+            snapshot = await getWebCallNotesApplication().getCall({
+                companyId: context.companyId,
+                actorUserId: context.userId,
+                callId: snapshot.id,
+            });
+        }
         return NextResponse.json(snapshot);
     } catch (error) {
         return callNotesErrorResponse(error);

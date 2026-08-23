@@ -94,7 +94,7 @@ describe("RagPort note metadata propagation", () => {
                     noteId: 20,
                     callId: "call-20",
                     revision: 4,
-                    deepLink: "/?feature=calls&call=call-20",
+                    deepLink: "/employer/documents?feature=calls&call=call-20",
                     searchScope: "company",
                 },
             },
@@ -110,7 +110,7 @@ describe("RagPort note metadata propagation", () => {
             noteId: 20,
             callId: "call-20",
             revision: 4,
-            deepLink: "/?feature=calls&call=call-20",
+            deepLink: "/employer/documents?feature=calls&call=call-20",
         });
     });
 });

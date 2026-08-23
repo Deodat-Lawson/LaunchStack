@@ -45,9 +45,7 @@ const describeIfDatabase =
         ? describe
         : describe.skip;
 
-const RENDERED_ENRICHMENT_PROPOSAL = renderEnrichedNoteProposal(
-    CALL_NOTES_ENRICHMENT_PROPOSAL
-);
+const RENDERED_ENRICHMENT_PROPOSAL = renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL);
 const FIXED_NOW = new Date("2026-08-15T14:30:00.000Z");
 const DOCUMENT_NOTES_TABLE = sql.identifier(getTableName(documentNotes));
 
@@ -550,9 +548,9 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         });
         expect(owner.note?.visibility).toBe("private");
         expect(owner.enrichment?.proposal).toEqual(CALL_NOTES_ENRICHMENT_PROPOSAL);
-        expect(renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL).contentMarkdown).toContain(
-            "## Summary"
-        );
+        expect(
+            renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL).contentMarkdown
+        ).toContain("## Summary");
 
         const removeAttemptsBeforeDelete = knowledge.removeAttempts;
         knowledge.failNextRemove();

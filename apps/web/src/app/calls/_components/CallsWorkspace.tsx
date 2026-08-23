@@ -19,15 +19,11 @@ import {
     Users,
     X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { CallSnapshot, Gap, TranscriptSegment } from "@launchstack/features/call-notes";
 
 import styles from "../calls.module.css";
-
-function notWired(action: string) {
-    console.warn(`[calls] "${action}" is not wired yet`);
-}
 
 function companyLabel(snapshot: CallSnapshot): string {
     return `Company ${snapshot.companyId}`;
@@ -75,7 +71,12 @@ function deriveCapture(snapshot: CallSnapshot): CaptureView {
         case "connecting":
             return { badge: "Connecting", control: "connecting", statusKey: "connecting", partial };
         case "interrupted":
-            return { badge: "Reconnecting", control: "connecting", statusKey: "connecting", partial };
+            return {
+                badge: "Reconnecting",
+                control: "connecting",
+                statusKey: "connecting",
+                partial,
+            };
         case "live":
             return { badge: "Live", control: "pause", statusKey: "live", partial };
         default:
@@ -100,11 +101,32 @@ function gapDuration(gap: Gap): string {
     return remainder ? `${minutes}m ${remainder}s` : `${minutes}m`;
 }
 
-export function CallsWorkspace({ calls }: { calls: CallSnapshot[] }) {
-    const [railOpen, setRailOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState<string | null>(calls[0]?.id ?? null);
+export interface CallsWorkspaceProps {
+    calls: CallSnapshot[];
+    initialSelectedId?: string | null;
+    onSelectCall?: (callId: string) => void;
+}
 
-    const selected = calls.find((call) => call.id === selectedId) ?? calls[0] ?? null;
+export function CallsWorkspace({
+    calls,
+    initialSelectedId = null,
+    onSelectCall,
+}: CallsWorkspaceProps) {
+    const [railOpen, setRailOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(
+        initialSelectedId ?? calls[0]?.id ?? null
+    );
+
+    useEffect(() => {
+        if (selectedId && calls.some(call => call.id === selectedId)) return;
+        setSelectedId(
+            (initialSelectedId && calls.some(call => call.id === initialSelectedId)
+                ? initialSelectedId
+                : calls[0]?.id) ?? null
+        );
+    }, [calls, initialSelectedId, selectedId]);
+
+    const selected = calls.find(call => call.id === selectedId) ?? calls[0] ?? null;
 
     return (
         <div data-theme="light" className={`lsw-root ${styles.root}`}>
@@ -112,8 +134,9 @@ export function CallsWorkspace({ calls }: { calls: CallSnapshot[] }) {
                 calls={calls}
                 selectedId={selected?.id ?? null}
                 open={railOpen}
-                onSelect={(id) => {
+                onSelect={id => {
                     setSelectedId(id);
+                    onSelectCall?.(id);
                     setRailOpen(false);
                 }}
                 onClose={() => setRailOpen(false)}
@@ -152,13 +175,16 @@ function CallsRail({
 
     const normalized = query.trim().toLowerCase();
     const matches = normalized
-        ? calls.filter((call) => call.title.toLowerCase().includes(normalized))
+        ? calls.filter(call => call.title.toLowerCase().includes(normalized))
         : calls;
-    const live = matches.filter((call) => call.status === "active");
-    const recent = matches.filter((call) => call.status !== "active");
+    const live = matches.filter(call => call.status === "active");
+    const recent = matches.filter(call => call.status !== "active");
 
     return (
-        <aside className={`${styles.rail} ${open ? styles.railOpen : ""}`} aria-label="Calls library">
+        <aside
+            className={`${styles.rail} ${open ? styles.railOpen : ""}`}
+            aria-label="Calls library"
+        >
             <div className={styles.railBrand}>
                 <span className={styles.brandMark}>L</span>
                 <strong>LaunchStack</strong>
@@ -177,7 +203,8 @@ function CallsRail({
                     type="button"
                     className={styles.iconButton}
                     aria-label="Start a new capture"
-                    onClick={() => notWired("start new capture")}
+                    disabled
+                    title="Capture starts from the detected-meeting prompt in this demo"
                 >
                     <Plus size={17} />
                 </button>
@@ -188,7 +215,7 @@ function CallsRail({
                     aria-label="Search calls"
                     placeholder="Search calls"
                     value={query}
-                    onChange={(event) => setQuery(event.target.value)}
+                    onChange={event => setQuery(event.target.value)}
                 />
             </label>
 
@@ -199,7 +226,7 @@ function CallsRail({
                 {live.length ? (
                     <section>
                         <span className={styles.railLabel}>Live</span>
-                        {live.map((call) => (
+                        {live.map(call => (
                             <RailItem
                                 key={call.id}
                                 call={call}
@@ -212,7 +239,7 @@ function CallsRail({
                 {recent.length ? (
                     <section>
                         <span className={styles.railLabel}>Recent</span>
-                        {recent.map((call) => (
+                        {recent.map(call => (
                             <RailItem
                                 key={call.id}
                                 call={call}
@@ -283,9 +310,7 @@ function CallPanel({ snapshot, onMenu }: { snapshot: CallSnapshot; onMenu: () =>
                 >
                     <span className={styles.statusDot} aria-hidden="true" />
                     {capture.badge}
-                    {capture.partial ? (
-                        <span className={styles.partialLabel}>Partial</span>
-                    ) : null}
+                    {capture.partial ? <span className={styles.partialLabel}>Partial</span> : null}
                 </span>
 
                 <div className={styles.headerSpacer} />
@@ -298,7 +323,8 @@ function CallPanel({ snapshot, onMenu }: { snapshot: CallSnapshot; onMenu: () =>
                             type="button"
                             className={styles.titleButton}
                             aria-label="Rename call"
-                            onClick={() => notWired("rename call")}
+                            disabled
+                            title="Call rename is not available in the auto-start demo"
                         >
                             <h1>{snapshot.title}</h1>
                         </button>
@@ -324,7 +350,11 @@ function CallPanel({ snapshot, onMenu }: { snapshot: CallSnapshot; onMenu: () =>
                 <div className={styles.panelContent}>
                     <section className={styles.note} aria-label="Call note">
                         <div className={styles.noteHeading}>
-                            <div className={styles.noteSwitcher} role="tablist" aria-label="Note views">
+                            <div
+                                className={styles.noteSwitcher}
+                                role="tablist"
+                                aria-label="Note views"
+                            >
                                 <button
                                     type="button"
                                     role="tab"
@@ -347,7 +377,9 @@ function CallPanel({ snapshot, onMenu }: { snapshot: CallSnapshot; onMenu: () =>
                                     {enrichmentReady ? <span className={styles.readyDot} /> : null}
                                 </button>
                             </div>
-                            <small>{snapshot.note ? saveLabel(snapshot.note.saveState) : "Private"}</small>
+                            <small>
+                                {snapshot.note ? saveLabel(snapshot.note.saveState) : "Private"}
+                            </small>
                         </div>
 
                         {noteView === "notes" ? (
@@ -387,14 +419,24 @@ function saveLabel(state: "saved" | "saving" | "failed"): string {
 function CaptureControls({ control }: { control: CaptureControl }) {
     if (control === "pause")
         return (
-            <button type="button" className={styles.controlButton} onClick={() => notWired("pause")}>
+            <button
+                type="button"
+                className={styles.controlButton}
+                disabled
+                title="Pause from Zoom during the auto-start demo"
+            >
                 <Pause size={14} />
                 Pause
             </button>
         );
     if (control === "resume")
         return (
-            <button type="button" className={styles.primaryButton} onClick={() => notWired("resume")}>
+            <button
+                type="button"
+                className={styles.primaryButton}
+                disabled
+                title="Resume from Zoom during the auto-start demo"
+            >
                 <Play size={14} />
                 Resume
             </button>
@@ -411,7 +453,8 @@ function CaptureControls({ control }: { control: CaptureControl }) {
             <button
                 type="button"
                 className={styles.controlButton}
-                onClick={() => notWired("retry capture")}
+                disabled
+                title="Retry is not available in the auto-start demo"
             >
                 <RefreshCcw size={14} />
                 Retry capture
@@ -419,7 +462,12 @@ function CaptureControls({ control }: { control: CaptureControl }) {
         );
     if (control === "none") return null;
     return (
-        <button type="button" className={styles.controlButton} onClick={() => notWired("start")}>
+        <button
+            type="button"
+            className={styles.controlButton}
+            disabled
+            title="Start from the detected-meeting prompt"
+        >
             <Play size={14} />
             Start
         </button>
@@ -438,7 +486,12 @@ function NoteBody({ snapshot }: { snapshot: CallSnapshot }) {
         );
     }
     return (
-        <div className={styles.noteEditor} role="textbox" aria-label="Call note" aria-readonly="true">
+        <div
+            className={styles.noteEditor}
+            role="textbox"
+            aria-label="Call note"
+            aria-readonly="true"
+        >
             {snapshot.note.contentMarkdown || "Write notes here…"}
         </div>
     );
@@ -451,7 +504,9 @@ function EnhancedBody({ snapshot }: { snapshot: CallSnapshot }) {
             <div className={styles.enhancedEmpty}>
                 <Sparkles size={18} />
                 <strong>AI enhancement starts after capture</strong>
-                <span>The transcript and your notes stay separate until the suggestion is ready.</span>
+                <span>
+                    The transcript and your notes stay separate until the suggestion is ready.
+                </span>
             </div>
         );
     }
@@ -465,7 +520,8 @@ function EnhancedBody({ snapshot }: { snapshot: CallSnapshot }) {
                 <button
                     type="button"
                     className={styles.controlButton}
-                    onClick={() => notWired("accept/reject enrichment")}
+                    disabled
+                    title="Enrichment review wiring is pending final integration"
                 >
                     Review suggestion
                 </button>
@@ -475,9 +531,7 @@ function EnhancedBody({ snapshot }: { snapshot: CallSnapshot }) {
     );
 }
 
-type TimelineEntry =
-    | { type: "segment"; segment: TranscriptSegment }
-    | { type: "gap"; gap: Gap };
+type TimelineEntry = { type: "segment"; segment: TranscriptSegment } | { type: "gap"; gap: Gap };
 
 function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
     const [open, setOpen] = useState(false);
@@ -489,7 +543,7 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
 
     const matchedSegments = isSearching
         ? snapshot.transcript.filter(
-              (segment) =>
+              segment =>
                   (segment.speakerName ?? "").toLowerCase().includes(normalized) ||
                   segment.text.toLowerCase().includes(normalized)
           )
@@ -501,7 +555,9 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
             timeline.push({ type: "segment", segment });
         }
     } else {
-        const sortedGaps = [...snapshot.gaps].sort((a, b) => a.startedAt.localeCompare(b.startedAt));
+        const sortedGaps = [...snapshot.gaps].sort((a, b) =>
+            a.startedAt.localeCompare(b.startedAt)
+        );
         let gapIndex = 0;
         for (const segment of snapshot.transcript) {
             while (gapIndex < sortedGaps.length) {
@@ -525,7 +581,7 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
                     type="button"
                     className={styles.transcriptToggle}
                     aria-expanded={open}
-                    onClick={() => setOpen((value) => !value)}
+                    onClick={() => setOpen(value => !value)}
                 >
                     <span className={styles.toggleIcon}>
                         {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
@@ -534,7 +590,8 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
                         <strong>Transcript</strong>
                         <small>
                             <ShieldCheck size={12} />
-                            {snapshot.transcript.length} segments · shared with {companyLabel(snapshot)}
+                            {snapshot.transcript.length} segments · shared with{" "}
+                            {companyLabel(snapshot)}
                         </small>
                     </span>
                 </button>
@@ -545,7 +602,7 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
                             aria-label="Search transcript"
                             placeholder="Search transcript"
                             value={query}
-                            onChange={(event) => setQuery(event.target.value)}
+                            onChange={event => setQuery(event.target.value)}
                         />
                     </label>
                 ) : partial ? (
@@ -556,13 +613,13 @@ function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
             {open ? (
                 <div className={styles.transcriptBody} aria-label="Transcript segments">
                     {timeline.length ? (
-                        timeline.map((entry) =>
+                        timeline.map(entry =>
                             entry.type === "segment" ? (
                                 <SegmentRow
                                     key={`segment-${entry.segment.id}`}
                                     segment={entry.segment}
                                     bookmark={snapshot.bookmarks.find(
-                                        (item) => item.segmentId === entry.segment.id
+                                        item => item.segmentId === entry.segment.id
                                     )}
                                 />
                             ) : (
@@ -604,7 +661,8 @@ function SegmentRow({
                 type="button"
                 className={`${styles.bookmarkButton} ${bookmark ? styles.bookmarkSaved : ""}`}
                 aria-label="Bookmark segment"
-                onClick={() => notWired("bookmark segment")}
+                disabled
+                title="Bookmark editing is pending final integration"
             >
                 <Bookmark size={14} fill={bookmark ? "currentColor" : "none"} />
             </button>

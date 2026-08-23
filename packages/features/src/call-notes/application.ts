@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
 import { createHash, randomUUID } from "node:crypto";
+import { isDeepStrictEqual } from "node:util";
 
 import type { DbClient } from "@launchstack/core/db";
 
@@ -23,11 +24,8 @@ import {
     type CompleteEnrichmentInput,
     type DetectedCallCandidate,
     type EnrichmentInput,
-    type EnrichmentResult,
     type Gap,
     type GapKind,
-    type KnowledgeNote,
-    type NoteVisibility,
     type ParticipantIdentity,
     type TranscriptSearchQuery,
     type TranscriptSegment,
@@ -180,7 +178,7 @@ function isApplicationError(error: unknown): error is CallNotesApplicationError 
 }
 
 function providerTime(value: number | null): number {
-    return value === null ? Number.POSITIVE_INFINITY : value;
+    return value ?? Number.POSITIVE_INFINITY;
 }
 
 function sortTranscriptRows<
@@ -274,7 +272,7 @@ function toCallNote(
     return {
         documentNoteId: normalized.id,
         ownerUserId: call.noteOwnerUserId,
-        visibility: call.noteVisibility as NoteVisibility,
+        visibility: call.noteVisibility,
         knowledgeIncluded: call.knowledgeIncluded,
         revision: call.currentNoteRevision,
         title: normalized.title,
@@ -337,7 +335,8 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         });
         this.deepLink =
             options.callDeepLink ??
-            ((_companyId, callId) => `/?feature=calls&call=${encodeURIComponent(callId)}`);
+            ((_companyId, callId) =>
+                `/employer/documents?feature=calls&call=${encodeURIComponent(callId)}`);
     }
 
     async execute(command: CallNotesCommand): Promise<CallSnapshot | null> {
@@ -496,7 +495,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
     async completeEnrichment(input: CompleteEnrichmentInput): Promise<void> {
         const parsed = CompleteEnrichmentInputSchema.parse(input);
         const company = companyNumber(parsed.companyId);
-        const result = parsed.result as EnrichmentResult;
+        const result = parsed.result;
         const [call] = await this.options.db
             .select()
             .from(callNotesCalls)
@@ -677,7 +676,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         if (command.kind !== "update_note" && command.kind !== "accept_enrichment") {
             return undefined;
         }
-        let callId: string = command.callId;
+        const callId: string = command.callId;
         let revision: number | null = null;
         if (command.kind === "update_note") {
             revision = command.baseRevision + 1;
@@ -1353,11 +1352,48 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .for("update")
                 .limit(1);
             if (!run) throw new CallNotesApplicationError("not_found", "Enrichment run not found");
+            if (run.status === "accepted") {
+                const [acceptedRevision] = await tx
+                    .select()
+                    .from(callNotesNoteRevisions)
+                    .where(
+                        and(
+                            eq(callNotesNoteRevisions.callId, command.callId),
+                            eq(callNotesNoteRevisions.enrichmentRunId, run.id)
+                        )
+                    )
+                    .limit(1);
+                if (
+                    !acceptedRevision ||
+                    acceptedRevision.contentMarkdown !== command.contentMarkdown ||
+                    !isDeepStrictEqual(acceptedRevision.contentRich, command.contentRich)
+                ) {
+                    throw new CallNotesApplicationError(
+                        "conflict",
+                        "Accepted enrichment content does not match the committed revision"
+                    );
+                }
+                const reindex =
+                    call.knowledgeIncluded && call.noteVisibility === "company"
+                        ? await this.workItems.enqueue(
+                              {
+                                  companyId: command.companyId,
+                                  callId: command.callId,
+                                  kind: "reindex",
+                                  idempotencyKey: `reindex:${command.callId}:${acceptedRevision.revision}`,
+                                  payload: {
+                                      callId: command.callId,
+                                      revision: acceptedRevision.revision,
+                                  },
+                              },
+                              tx as unknown as DbClient
+                          )
+                        : null;
+                return { reindexId: reindex?.id ?? null };
+            }
             if (run.status !== "ready") {
                 throw new CallNotesApplicationError(
-                    run.status === "accepted" || run.status === "rejected"
-                        ? "conflict"
-                        : "invalid_transition",
+                    run.status === "rejected" ? "conflict" : "invalid_transition",
                     "Enrichment is not reviewable"
                 );
             }
@@ -2269,7 +2305,8 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         const isNoteOwner = call.noteOwnerUserId === actorUserId;
         const isCaptureUser = captureConnection?.userId === actorUserId;
         const isCompanyAdmin = membershipRole === "owner" || membershipRole === "admin";
-        const canDelete = isCompanyAdmin || (isNoteOwner && call.status === "failed" && rows.length === 0);
+        const canDelete =
+            isCompanyAdmin || (isNoteOwner && call.status === "failed" && rows.length === 0);
         const gapRows = await this.options.db
             .select()
             .from(callNotesGaps)

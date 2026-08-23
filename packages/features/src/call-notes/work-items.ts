@@ -5,8 +5,8 @@ import type { DbClient } from "@launchstack/core/db";
 
 import {
     callNotesWorkItems,
-    callNotesWorkItemKindEnum,
-    callNotesWorkItemStatusEnum,
+    type callNotesWorkItemKindEnum,
+    type callNotesWorkItemStatusEnum,
     type CallNotesWorkItemRow,
 } from "./schema";
 import type { CallNotesClock, CallNotesIdSource } from "./ports";
@@ -212,7 +212,7 @@ export class CallNotesWorkItems {
                 })
                 .where(eq(callNotesWorkItems.id, candidate.id))
                 .returning();
-            if (!claimed || !claimed.leaseToken || !claimed.leaseOwner || !claimed.leaseExpiresAt) {
+            if (!claimed?.leaseToken || !claimed.leaseOwner || !claimed.leaseExpiresAt) {
                 throw new CallNotesWorkItemError(
                     "invalid",
                     `Unable to claim work item ${candidate.id}`
@@ -302,7 +302,7 @@ export class CallNotesWorkItems {
                     )
                 )
                 .returning();
-            if (!claimed || !claimed.leaseToken || !claimed.leaseOwner || !claimed.leaseExpiresAt) {
+            if (!claimed?.leaseToken || !claimed.leaseOwner || !claimed.leaseExpiresAt) {
                 throw new CallNotesWorkItemError(
                     "invalid",
                     `Unable to claim work item ${candidate.id}`

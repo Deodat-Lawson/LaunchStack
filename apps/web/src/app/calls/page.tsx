@@ -1,6 +1,5 @@
-import { CallsWorkspace } from "./_components/CallsWorkspace";
-import { sampleCalls } from "./_fixtures/callSnapshots";
+import { redirect } from "next/navigation";
 
 export default function CallsPage() {
-    return <CallsWorkspace calls={sampleCalls} />;
+    redirect("/employer/documents?feature=calls");
 }

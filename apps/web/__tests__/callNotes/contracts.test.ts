@@ -126,9 +126,7 @@ describe("Call Notes contract baseline", () => {
         expect(() => CallSnapshotSchema.parse(snapshot)).toThrow(
             "Private-note projections must redact enrichment"
         );
-        expect(() =>
-            CallSnapshotSchema.parse({ ...snapshot, enrichment: null })
-        ).not.toThrow();
+        expect(() => CallSnapshotSchema.parse({ ...snapshot, enrichment: null })).not.toThrow();
     });
 
     it("exercises start, Pause, and Resume through the capture-source conformance suite", async () => {

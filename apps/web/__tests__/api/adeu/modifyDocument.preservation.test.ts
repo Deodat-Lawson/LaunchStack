@@ -13,16 +13,47 @@
  * Requirements: 3.1, 3.2, 3.4
  */
 
+const mockVercelBlobPut = jest.fn();
+const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
+const mockTransactionSet = jest.fn().mockReturnValue({
+    where: jest.fn().mockResolvedValue([]),
+});
+
 jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: jest.fn(async (callback: (tx: unknown) => unknown) =>
+            callback({
+                select: jest.fn(() => ({
+                    from: jest.fn(() => ({
+                        where: jest.fn().mockResolvedValue([{ companyId: 1n }]),
+                    })),
+                })),
+                update: jest.fn(() => ({
+                    set: mockTransactionSet,
+                })),
+            }),
+        ),
     },
+}));
+
+jest.mock("~/server/services/storage-manifest", () => ({
+    findObjectByRef: jest.fn().mockResolvedValue(undefined),
+    registerArtifactEdge: jest.fn().mockResolvedValue(undefined),
+    registerObject: jest.fn().mockResolvedValue({ id: 1, companyId: 1n }),
+}));
+
+jest.mock("~/server/engine", () => ({
+    getEngine: jest.fn(() => ({
+        storage: {
+            forAdapter: (adapter: unknown) => mockForAdapter(adapter),
+        },
+    })),
 }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
     fetchBlob: jest.fn(),
-    putFile: jest.fn(),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -41,7 +72,7 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
+import { fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -98,10 +129,15 @@ function setupSuccessfulPipeline(docBuffer: Buffer) {
         file: modifiedBlob,
     });
 
-    // Step 3: putFile stores the modified DOCX
-    (putFile as jest.Mock).mockResolvedValueOnce({
+    // Step 3: the targeted Vercel Blob port stores the modified DOCX
+    mockVercelBlobPut.mockResolvedValueOnce({
         url: "https://blob.store/documents/modified-42.docx",
         pathname: "documents/modified-42.docx",
+        ref: {
+            adapter: "vercel-blob",
+            storageLocationId: "vercel-blob:test-store",
+            key: "documents/modified-42.docx",
+        },
     });
 
     // DB update succeeds
@@ -233,9 +269,9 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         );
     });
 
-    it("stores modified DOCX via putFile and updates DB with url and updatedAt", async () => {
+    it("stores modified DOCX via the targeted Vercel Blob port and updates DB", async () => {
         const docBuffer = makeSmallDocxBuffer();
-        const { mockSet } = setupSuccessfulPipeline(docBuffer);
+        setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
         const handler = (modifyDocument as unknown as { fn: Function }).fn;
@@ -252,8 +288,9 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
             step,
         });
 
-        // Preservation: putFile is called to store the modified DOCX
-        expect(putFile).toHaveBeenCalledWith(
+        // Preservation: the targeted Vercel Blob port stores the modified DOCX
+        expect(mockForAdapter).toHaveBeenCalledWith("vercel-blob");
+        expect(mockVercelBlobPut).toHaveBeenCalledWith(
             expect.objectContaining({
                 filename: expect.stringContaining("modified-42"),
                 contentType:
@@ -261,9 +298,8 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
             }),
         );
 
-        // Preservation: DB is updated with url and updatedAt
-        expect(db.update).toHaveBeenCalled();
-        expect(mockSet).toHaveBeenCalledWith(
+        // Preservation: the transaction updates the DB with url and updatedAt
+        expect(mockTransactionSet).toHaveBeenCalledWith(
             expect.objectContaining({
                 url: "https://blob.store/documents/modified-42.docx",
                 updatedAt: expect.any(Date),
@@ -328,9 +364,14 @@ describe("Preservation: Single-user document edit completes correctly", () => {
             file: new Blob([Buffer.from("modified")]),
         });
 
-        (putFile as jest.Mock).mockResolvedValueOnce({
+        mockVercelBlobPut.mockResolvedValueOnce({
             url: "https://blob.store/modified.docx",
             pathname: "modified.docx",
+            ref: {
+                adapter: "vercel-blob",
+                storageLocationId: "vercel-blob:test-store",
+                key: "documents/modified.docx",
+            },
         });
 
         const mockWhere = jest.fn().mockResolvedValue([]);

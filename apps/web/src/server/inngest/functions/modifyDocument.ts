@@ -23,7 +23,8 @@ import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
 import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
-import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
+import { getEngine } from "~/server/engine";
+import { fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 export const modifyDocument = inngest.createFunction(
@@ -86,12 +87,14 @@ export const modifyDocument = inngest.createFunction(
 
         // Fix 1.1: store modified DOCX in blob storage instead of returning
         // raw base64, keeping step output well under Inngest's 4 MB limit
-        const stored = await putFile({
-          filename: `adeu-modified-${documentId}.docx`,
-          data: modifiedBuffer,
-          contentType:
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
+        const stored = await getEngine().storage
+          .forAdapter("vercel-blob")
+          .put({
+            filename: `adeu-modified-${documentId}.docx`,
+            data: modifiedBuffer,
+            contentType:
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          });
 
         return {
           summary,

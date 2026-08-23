@@ -116,6 +116,27 @@ describe("createAppStoragePort", () => {
     expect(result.ref).toEqual(ref);
   });
 
+  it("requires explicit forAdapter targeting for fixed-intent Vercel Blob writes", async () => {
+    const input = {
+      filename: "artifact.md",
+      data: Buffer.from("artifact"),
+      contentType: "text/markdown",
+    };
+    const ref: ObjectRef = {
+      adapter: "vercel-blob",
+      storageLocationId: "vercel-blob:store-alpha",
+      key: "documents/artifact.md",
+    };
+    mockTargetPut.mockResolvedValue({ ref, provider: "vercel-blob" });
+
+    const port = createAppStoragePort();
+    await port.forAdapter("vercel-blob").put(input);
+
+    expect(mockForAdapter).toHaveBeenCalledWith("vercel-blob");
+    expect(mockTargetPut).toHaveBeenCalledWith(input);
+    expect(mockForAdapter).not.toHaveBeenCalledWith("s3");
+  });
+
   it("keeps the default database put on the legacy database helper", async () => {
     mockResolveStorageBackend.mockReturnValue("database");
     const ref: ObjectRef = {

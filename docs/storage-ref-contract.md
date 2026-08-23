@@ -46,6 +46,27 @@ Legacy aliases still recognized by runtime and env parsing:
 
 Current limitation note: URL minting is path-style today. With `STORAGE_S3_FORCE_PATH_STYLE=false`, signed requests can be virtual-hosted-style, but minted object URLs remain path-style until `getObjectUrl` gains virtual-host formatting.
 
+## Non-S3 adapter env
+
+The non-S3 adapters use the following environment variables and location
+identities:
+
+- **Vercel Blob:** `BLOB_READ_WRITE_TOKEN`. The store id is
+  `token.split("_")[3]`, so the location identity is
+  `vercel-blob:{storeId}`.
+- **UploadThing:** `UPLOADTHING_TOKEN`. Its app id and optional region form the
+  location identity `uploadthing:{appId}[@region]`. The browser upload SDK is
+  outside the storage port.
+- **Database:** select it with `NEXT_PUBLIC_STORAGE_PROVIDER=database`, or use
+  the automatic database fallback when no S3 configuration is present. Its
+  location identity is `database:pdr_file_uploads_v1`.
+  `forAdapter("database")` remains unwired until C3; reads use `get(ref)`,
+  which resolves through `/api/files/{id}`.
+
+Fixed-intent writes such as GitHub repository uploads, video transcripts, and
+`processDocument` artifacts must use
+`forAdapter("vercel-blob")`, not the default `put()`.
+
 ## Delete outcomes
 
 Deletion uses per-ref outcome reporting (`DeleteResult.outcome`):

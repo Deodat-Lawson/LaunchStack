@@ -19,7 +19,7 @@ import {
     GitHubAuthError,
     GitHubRateLimitError,
 } from "~/server/services/github-repo";
-import { putFile } from "~/server/storage/vercel-blob";
+import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -95,11 +95,13 @@ export async function POST(request: Request) {
             );
 
             // Store the ZIP in blob storage
-            const blob = await putFile({
-                filename,
-                data: zipBuffer,
-                contentType: "application/zip",
-            });
+            const blob = await getEngine().storage
+                .forAdapter("vercel-blob")
+                .put({
+                    filename,
+                    data: zipBuffer,
+                    contentType: "application/zip",
+                });
 
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({

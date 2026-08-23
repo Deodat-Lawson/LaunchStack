@@ -1,6 +1,15 @@
 import { randomUUID } from "node:crypto";
 
-import type { DeleteResult, ObjectRef, StoragePort, UploadInput, UploadResult } from "./types";
+import type {
+  DeleteResult,
+  GetSignedUrlOptions,
+  ObjectRef,
+  StorageAdapter,
+  StoragePort,
+  TargetedStoragePort,
+  UploadInput,
+  UploadResult,
+} from "./types";
 
 export interface InMemoryStoredObject {
   ref: ObjectRef;
@@ -29,6 +38,8 @@ export interface CreateInMemoryStoragePortOptions {
   urlBase?: string;
 }
 
+type InMemoryGetInput = ObjectRef | string;
+
 function makeRefKey(ref: ObjectRef): string {
   return `${ref.adapter}::${ref.storageLocationId}::${ref.key}`;
 }
@@ -41,6 +52,10 @@ function toUrl(base: string, pathname: string): string {
   return `${base.replace(/\/+$/, "")}/${pathname.replace(/^\/+/, "")}`;
 }
 
+function coerceKey(input: string): string {
+  return input.replace(/\s+/g, "-");
+}
+
 /**
  * Test-only in-memory StoragePort implementation.
  *
@@ -50,9 +65,9 @@ function toUrl(base: string, pathname: string): string {
 export function createInMemoryStoragePort(
   options: CreateInMemoryStoragePortOptions = {},
 ): InMemoryStoragePort {
-  const adapter = options.adapter ?? "database";
-  const storageLocationId = options.storageLocationId ?? "memory:default";
-  const provider = options.provider ?? `memory:${adapter}`;
+  const defaultAdapter = options.adapter ?? "database";
+  const defaultStorageLocationId = options.storageLocationId ?? `memory:${defaultAdapter}`;
+  const provider = options.provider ?? `memory:${defaultAdapter}`;
   const urlBase = options.urlBase ?? "memory://storage";
 
   const objects = new Map<string, InMemoryStoredObject>();
@@ -73,6 +88,43 @@ export function createInMemoryStoragePort(
     objects.set(refKey, stored);
     urlToRefKey.set(url, refKey);
     return stored;
+  };
+
+  const resolveStorageLocationId = (targetAdapter: StorageAdapter): string => {
+    if (targetAdapter === defaultAdapter) {
+      return defaultStorageLocationId;
+    }
+    return `memory:${targetAdapter}`;
+  };
+
+  const resolveStoredObject = (input: InMemoryGetInput): InMemoryStoredObject | undefined => {
+    if (typeof input !== "string") {
+      return objects.get(makeRefKey(input));
+    }
+
+    const refKeyByUrl = urlToRefKey.get(input);
+    if (refKeyByUrl) {
+      return objects.get(refKeyByUrl);
+    }
+
+    const syntheticRef: ObjectRef = {
+      adapter: defaultAdapter,
+      storageLocationId: resolveStorageLocationId(defaultAdapter),
+      key: input,
+    };
+    return objects.get(makeRefKey(syntheticRef));
+  };
+
+  const getImpl = async (input: InMemoryGetInput): Promise<Response> => {
+    const stored = resolveStoredObject(input);
+    if (!stored) {
+      return new Response("Not Found", { status: 404 });
+    }
+
+    return new Response(new Uint8Array(stored.data), {
+      status: 200,
+      headers: stored.contentType ? { "content-type": stored.contentType } : undefined,
+    });
   };
 
   const deleteRefImpl = async (ref: ObjectRef): Promise<DeleteResult> => {
@@ -99,77 +151,116 @@ export function createInMemoryStoragePort(
     return results;
   };
 
+  const deleteLegacyImpl = async (urlOrKey: string): Promise<void> => {
+    const stored = resolveStoredObject(urlOrKey);
+    if (!stored) {
+      return;
+    }
+    await deleteRefImpl(stored.ref);
+  };
+
+  const getSignedUrlImpl = async (
+    ref: ObjectRef,
+    opts?: GetSignedUrlOptions,
+  ): Promise<string> => {
+    const stored = resolveStoredObject(ref);
+    const url = stored?.url ?? toUrl(urlBase, ref.key);
+    const expiresIn = opts?.expiresIn;
+    return expiresIn ? `${url}?expiresIn=${expiresIn}` : url;
+  };
+
+  const putForAdapter = async (
+    targetAdapter: StorageAdapter,
+    input: UploadInput,
+  ): Promise<UploadResult> => {
+    const pathname = `documents/${randomUUID()}-${coerceKey(input.filename)}`;
+    const ref: ObjectRef = {
+      adapter: targetAdapter,
+      storageLocationId: resolveStorageLocationId(targetAdapter),
+      key: pathname,
+    };
+    const stored = seedObject({
+      ref,
+      data: input.data,
+      contentType: input.contentType,
+      pathname,
+    });
+
+    return {
+      url: stored.url,
+      pathname: stored.pathname,
+      ref,
+      contentType: stored.contentType,
+      provider,
+    };
+  };
+
+  const createTargetedPort = (targetAdapter: StorageAdapter): TargetedStoragePort => ({
+    adapter: targetAdapter,
+    provider,
+    put(input: UploadInput): Promise<UploadResult> {
+      return putForAdapter(targetAdapter, input);
+    },
+    get(ref: ObjectRef, init?: RequestInit): Promise<Response> {
+      void init;
+      return getImpl(ref);
+    },
+    delete(ref: ObjectRef): Promise<DeleteResult> {
+      return deleteRefImpl(ref);
+    },
+    deleteMany(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
+      return deleteManyImpl(refs);
+    },
+    getSignedUrl(ref: ObjectRef, opts?: GetSignedUrlOptions): Promise<string> {
+      return getSignedUrlImpl(ref, opts);
+    },
+  });
+
+  async function deleteImpl(ref: ObjectRef): Promise<DeleteResult>;
+  async function deleteImpl(urlOrKey: string): Promise<void>;
+  async function deleteImpl(input: ObjectRef | string): Promise<DeleteResult | void> {
+    if (typeof input === "string") {
+      await deleteLegacyImpl(input);
+      return;
+    }
+
+    return deleteRefImpl(input);
+  }
+
   return {
     provider,
 
-    async upload(input: UploadInput): Promise<UploadResult> {
-      const pathname = `documents/${randomUUID()}-${input.filename.replace(/\s+/g, "-")}`;
-      const ref: ObjectRef = {
-        adapter,
-        storageLocationId,
-        key: pathname,
-      };
-      const stored = seedObject({
-        ref,
-        data: input.data,
-        contentType: input.contentType,
-        pathname,
-      });
-
-      return {
-        url: stored.url,
-        pathname: stored.pathname,
-        ref,
-        contentType: stored.contentType,
-        provider,
-      };
+    put(input: UploadInput): Promise<UploadResult> {
+      return putForAdapter(defaultAdapter, input);
     },
 
-    async download(urlOrKey: string): Promise<Response> {
-      const refKeyByUrl = urlToRefKey.get(urlOrKey);
-      let stored: InMemoryStoredObject | undefined;
+    get(input: InMemoryGetInput, init?: RequestInit): Promise<Response> {
+      void init;
+      return getImpl(input);
+    },
 
-      if (refKeyByUrl) {
-        stored = objects.get(refKeyByUrl);
-      } else {
-        const syntheticRef: ObjectRef = {
-          adapter,
-          storageLocationId,
-          key: urlOrKey,
-        };
-        stored = objects.get(makeRefKey(syntheticRef));
-      }
+    delete: deleteImpl,
 
-      if (!stored) {
-        return new Response("Not Found", { status: 404 });
-      }
+    getSignedUrl(ref: ObjectRef, opts?: GetSignedUrlOptions): Promise<string> {
+      return getSignedUrlImpl(ref, opts);
+    },
 
-      return new Response(new Uint8Array(stored.data), {
-        status: 200,
-        headers: stored.contentType ? { "content-type": stored.contentType } : undefined,
-      });
+    forAdapter(targetAdapter: StorageAdapter): TargetedStoragePort {
+      return createTargetedPort(targetAdapter);
+    },
+
+    async upload(input: UploadInput): Promise<UploadResult> {
+      return putForAdapter(defaultAdapter, input);
+    },
+
+    async download(urlOrKey: string, init?: RequestInit): Promise<Response> {
+      void init;
+      return getImpl(urlOrKey);
     },
 
     deleteRef: deleteRefImpl,
 
     deleteMany: deleteManyImpl,
-
-    async delete(urlOrKey: string): Promise<void> {
-      const refKeyByUrl = urlToRefKey.get(urlOrKey);
-      if (refKeyByUrl) {
-        const stored = objects.get(refKeyByUrl);
-        if (!stored) return;
-        await deleteRefImpl(stored.ref);
-        return;
-      }
-
-      const ref: ObjectRef = {
-        adapter,
-        storageLocationId,
-        key: urlOrKey,
-      };
-      await deleteRefImpl(ref);
-    },
 
     seedObject,
 

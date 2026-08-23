@@ -4,10 +4,10 @@ import { document, users, fileUploads } from "@launchstack/core/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { validateRequestBody, UserIdSchema } from "~/lib/validation";
 import { auth } from '@clerk/nextjs/server';
-import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { checkDocumentServable } from "~/server/services/document-servable";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -153,8 +153,18 @@ export async function POST(request: Request) {
                 ?? mimeFromFile
                 ?? inferMimeFromName(doc.title)
                 ?? inferMimeFromName(doc.url);
-            const needsProxy = isPrivateBlobUrl(doc.url)
-                || (isS3Storage() && doc.url.startsWith("http"));
+            let promoted: ReturnType<typeof promoteLegacyUrlToRef> | undefined;
+            try {
+                promoted = promoteLegacyUrlToRef({ value: doc.url });
+            } catch {
+                promoted = undefined;
+            }
+            const needsProxy = promoted?.ok
+                && (
+                    promoted.ref.adapter === "vercel-blob"
+                    || promoted.ref.adapter === "uploadthing"
+                    || (promoted.ref.adapter === "s3" && isS3Storage())
+                );
             const url = needsProxy
                 ? `/api/documents/${Number(doc.id)}/content`
                 : doc.url;

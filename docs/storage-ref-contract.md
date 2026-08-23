@@ -9,6 +9,7 @@ This document captures the frozen storage contract used by server-side upload/de
 - `storageLocationId` is server-resolved from configured adapter environment.
 - Clients do not guess, derive, or mint `storageLocationId`.
 - `ObjectRef` is opaque and immutable once minted.
+- New `STORAGE_S3_*` env vars take precedence over legacy S3 env names; legacy names remain supported for compatibility.
 
 ## ObjectRef
 
@@ -24,6 +25,48 @@ This document captures the frozen storage contract used by server-side upload/de
 - Vercel Blob: `vercel-blob:{storeId}` where `storeId = token.split("_")[3]`
 - Database: `database:pdr_file_uploads_v1`
 - UploadThing: `uploadthing:{appId}[@region]`
+
+## S3-compatible env var reference (B5)
+
+S3 adapter configuration accepts the `STORAGE_S3_*` names below (legacy names remain supported; precedence rules are defined in A1):
+
+- `STORAGE_S3_ENDPOINT` — provider/API endpoint used for SDK calls.
+- `STORAGE_S3_PUBLIC_ENDPOINT` — optional public/base URL for minted object URLs.
+- `STORAGE_S3_REGION` — region value for request signing.
+- `STORAGE_S3_ACCESS_KEY` — access key id credential.
+- `STORAGE_S3_SECRET_KEY` — secret access key credential.
+- `STORAGE_S3_BUCKET_NAME` — bucket/container name.
+- `STORAGE_S3_FORCE_PATH_STYLE` — optional boolean, defaults to path-style (`true`).
+- `STORAGE_S3_ENSURE_BUCKET_EXISTS` — optional boolean, default `false` (opt-in bucket bootstrap).
+
+Legacy aliases still recognized by runtime and env parsing:
+
+- `NEXT_PUBLIC_S3_ENDPOINT`, `S3_PUBLIC_ENDPOINT`
+- `S3_REGION`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET_NAME`
+
+Current limitation note: URL minting is path-style today. With `STORAGE_S3_FORCE_PATH_STYLE=false`, signed requests can be virtual-hosted-style, but minted object URLs remain path-style until `getObjectUrl` gains virtual-host formatting.
+
+## Non-S3 adapter env
+
+The non-S3 adapters use the following environment variables and location
+identities:
+
+- **Vercel Blob:** `BLOB_READ_WRITE_TOKEN`. The store id is
+  `token.split("_")[3]`, so the location identity is
+  `vercel-blob:{storeId}`.
+- **UploadThing:** `UPLOADTHING_TOKEN`. Its app id and optional region form the
+  location identity `uploadthing:{appId}[@region]`. The browser upload SDK is
+  outside the storage port.
+- **Database:** select it with `NEXT_PUBLIC_STORAGE_PROVIDER=database`, or use
+  the automatic database fallback when no S3 configuration is present. Its
+  location identity is `database:pdr_file_uploads_v1`.
+  `forAdapter("database")` is wired through `createDatabaseAdapter`; reads use
+  `get(ref)`, which resolves through `/api/files/{id}` with internal service
+  authentication.
+
+Fixed-intent writes such as GitHub repository uploads, video transcripts, and
+`processDocument` artifacts must use
+`forAdapter("vercel-blob")`, not the default `put()`.
 
 ## Delete outcomes
 
@@ -47,6 +90,41 @@ Worker/state mapping (frozen):
 
 Blocked/rejected outcomes are terminal for that adapter attempt and must not fall
 through to another adapter.
+
+## Port surface
+
+The storage contract now distinguishes canonical methods from compatibility
+aliases:
+
+- Canonical methods:
+  - `put`
+  - `get`
+  - `delete`
+  - `deleteMany`
+  - `getSignedUrl`
+- Explicit adapter targeting:
+  - `getStoragePort().forAdapter(adapter)`
+- Deprecated compatibility aliases:
+  - `upload`
+  - `download`
+  - `deleteRef`
+
+Canonical write/read/delete flows should move toward `ObjectRef`-based calls.
+Deprecated aliases remain so existing callers can migrate incrementally without
+changing lifecycle behavior.
+
+## Database adapter read path
+
+For database-backed refs, `ObjectRef.key` is the numeric `fileUploads.id`
+encoded as a string. The database adapter resolves that key to
+`${APP_PUBLIC_URL}/api/files/{id}` and sends an internal service request. The
+`/api/files/[id]` route remains the single place for tenant authorization and
+serve-gating before reading the Postgres row.
+
+`forAdapter("database")` is wired through the adapter factory. Callers reading
+a database ref should use `getStoragePort().get(ref)` or
+`getStoragePort().forAdapter("database").get(ref)` rather than duplicating the
+route's authorization logic in another adapter.
 
 ## Lifecycle feature flags (exactly two)
 
@@ -72,4 +150,9 @@ Dominance rules:
 
 ## Deferred port scope
 
-The frozen lifecycle contract covers provider-owned identity and deletion. Full naming parity for `put`, `get`, and `getSignedUrl` is intentionally deferred; the current `StoragePort` continues to expose `upload` and `download` until existing ingestion callers can migrate without a compatibility break. New deletion and manifest code must use `ObjectRef`, `deleteRef`, and `deleteMany`; the legacy URL `delete` method remains only as a promotion shim for historical rows.
+The frozen lifecycle contract still covers provider-owned identity and deletion.
+This contract update only locks the canonical method names and adapter-targeting
+shape; it does not by itself rewire existing app call sites. New deletion and
+manifest code must continue to use `ObjectRef` and `deleteMany`, while the
+legacy URL `delete` overload remains a promotion shim for historical rows until
+downstream migration work lands.

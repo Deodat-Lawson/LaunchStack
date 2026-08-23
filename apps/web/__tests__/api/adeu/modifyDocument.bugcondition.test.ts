@@ -11,6 +11,20 @@
 import * as fs from "fs";
 import * as path from "path";
 
+const mockVercelBlobPut = jest.fn();
+const mockStorageGet = jest.fn();
+const mockDocumentRef = {
+    adapter: "vercel-blob" as const,
+    storageLocationId: "vercel-blob:test-store",
+    key: "documents/original.docx",
+};
+const mockPromoteLegacyUrlToRef = jest.fn((_input: unknown) => ({
+    ok: true as const,
+    ref: mockDocumentRef,
+    confidence: "medium" as const,
+}));
+const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
+
 // ---------------------------------------------------------------------------
 // We import the real modifyDocument to inspect its config/structure.
 // Mocks are only needed for tests that actually execute the handler.
@@ -20,12 +34,41 @@ jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: jest.fn(async (callback: (tx: unknown) => unknown) =>
+            callback({
+                select: jest.fn(() => ({
+                    from: jest.fn(() => ({
+                        where: jest.fn().mockResolvedValue([{ companyId: 1n }]),
+                    })),
+                })),
+                update: jest.fn(() => ({
+                    set: jest.fn(() => ({
+                        where: jest.fn().mockResolvedValue([]),
+                    })),
+                })),
+            }),
+        ),
     },
 }));
 
-jest.mock("~/server/storage/vercel-blob", () => ({
-    fetchBlob: jest.fn(),
-    putFile: jest.fn(),
+jest.mock("~/server/services/storage-manifest", () => ({
+    findObjectByRef: jest.fn().mockResolvedValue(undefined),
+    registerArtifactEdge: jest.fn().mockResolvedValue(undefined),
+    registerObject: jest.fn().mockResolvedValue({ id: 1, companyId: 1n }),
+}));
+
+jest.mock("~/server/engine", () => ({
+    getEngine: jest.fn(() => ({
+        storage: {
+            get: (input: unknown, init?: RequestInit) =>
+                init === undefined ? mockStorageGet(input) : mockStorageGet(input, init),
+            forAdapter: (adapter: unknown) => mockForAdapter(adapter),
+        },
+    })),
+}));
+
+jest.mock("~/server/storage/legacy-promote", () => ({
+    promoteLegacyUrlToRef: (input: unknown) => mockPromoteLegacyUrlToRef(input),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -44,7 +87,6 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -71,7 +113,7 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
         // Create a ~3 MB buffer. Base64 encoding inflates by ~33%, so 3 MB → ~4 MB base64.
         const largeFakeDocx = Buffer.alloc(3 * 1024 * 1024, 0x41); // 3 MB of 'A'
 
-        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+        mockStorageGet.mockResolvedValueOnce({
             ok: true,
             arrayBuffer: () =>
                 Promise.resolve(
@@ -93,9 +135,14 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
             file: modifiedBlob,
         });
 
-        (putFile as jest.Mock).mockResolvedValueOnce({
+        mockVercelBlobPut.mockResolvedValueOnce({
             url: "https://blob.store/modified.docx",
             pathname: "modified.docx",
+            ref: {
+                adapter: "vercel-blob",
+                storageLocationId: "vercel-blob:test-store",
+                key: "documents/modified.docx",
+            },
         });
 
         const mockWhere = jest.fn().mockResolvedValue([]);
@@ -254,18 +301,20 @@ describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", 
         expect(modifyStepChunk).not.toMatch(/db\s*\.\s*update\s*\(/);
     });
 
-    it("update-document-record step contains the db.update call", () => {
+    it("update-document-record step contains the database update call", () => {
         const sourceFile = fs.readFileSync(
             path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
             "utf-8",
         );
 
-        // FIX: The dedicated update step should contain db.update
+        // FIX: The dedicated update step should contain the transaction update
         const updateStepStart = sourceFile.indexOf('step.run("update-document-record"');
         expect(updateStepStart).toBeGreaterThan(-1);
 
-        const updateStepChunk = sourceFile.slice(updateStepStart, updateStepStart + 400);
-        expect(updateStepChunk).toMatch(/db\s*\.\s*update\s*\(/);
+        const updateStepEnd = sourceFile.indexOf("return nextBlobUrl;", updateStepStart);
+        expect(updateStepEnd).toBeGreaterThan(updateStepStart);
+        const updateStepChunk = sourceFile.slice(updateStepStart, updateStepEnd);
+        expect(updateStepChunk).toMatch(/(?:db|tx)\s*\.\s*update\s*\(/);
     });
 });
 

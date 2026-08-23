@@ -2,7 +2,7 @@
  * Inngest Document Modification Function
  * Background job handler for Adeu-powered DOCX redlining.
  *
- * Fetches a DOCX from Vercel Blob, sends it through the Adeu service
+ * Fetches a DOCX through the storage port, sends it through the Adeu service
  * for batch edits/review actions, stores the modified DOCX back to Blob,
  * and updates the document record in the database.
  *
@@ -23,7 +23,8 @@ import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
 import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
-import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
+import { getEngine } from "~/server/engine";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 export const modifyDocument = inngest.createFunction(
@@ -61,9 +62,16 @@ export const modifyDocument = inngest.createFunction(
   async ({ event, step }) => {
     const { documentId, documentUrl, authorName, edits, actions, userId } = event.data;
 
-    // Step 1: Fetch the DOCX from Vercel Blob
+    // Step 1: Promote the legacy URL, then fetch through the storage port
     const docBuffer = await step.run("fetch-document", async () => {
-      const res = await fetchBlob(documentUrl);
+      const promoted = promoteLegacyUrlToRef({ value: documentUrl });
+      if (!promoted.ok) {
+        throw new Error(
+          `Failed to resolve document storage reference: ${promoted.reason}`,
+        );
+      }
+
+      const res = await getEngine().storage.get(promoted.ref);
       if (!res.ok) {
         throw new Error(`Failed to fetch document: HTTP ${res.status}`);
       }
@@ -86,12 +94,14 @@ export const modifyDocument = inngest.createFunction(
 
         // Fix 1.1: store modified DOCX in blob storage instead of returning
         // raw base64, keeping step output well under Inngest's 4 MB limit
-        const stored = await putFile({
-          filename: `adeu-modified-${documentId}.docx`,
-          data: modifiedBuffer,
-          contentType:
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
+        const stored = await getEngine().storage
+          .forAdapter("vercel-blob")
+          .put({
+            filename: `adeu-modified-${documentId}.docx`,
+            data: modifiedBuffer,
+            contentType:
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          });
 
         return {
           summary,

@@ -1,9 +1,11 @@
 export type {
 	DeleteOutcome,
 	DeleteResult,
+	GetSignedUrlOptions,
 	ObjectRef,
 	StorageAdapter,
 	StoragePort,
+	TargetedStoragePort,
 	UploadInput,
 	UploadResult,
 } from "./types";

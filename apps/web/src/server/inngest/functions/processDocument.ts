@@ -14,7 +14,7 @@ import { document, ocrJobs } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
 import { requestDocumentDeletionAndDispatch } from "~/server/services/storage-deletion-coordinator";
 import { isStorageDeletionLifecycleEnabled } from "~/server/services/storage-deletion-flags";
-import { putFile } from "~/server/storage/vercel-blob";
+import { getEngine } from "~/server/engine";
 import { fetchFile } from "~/lib/storage";
 
 import type {
@@ -434,11 +434,13 @@ export const uploadDocument = inngest.createFunction(
                 `[ProcessDocument] Storing extracted file: ${entryPath} (${(fileBuffer.length / 1024).toFixed(1)}KB, mime=${fileMime ?? "unknown"})`,
               );
 
-              const blob = await putFile({
-                filename: baseName,
-                data: fileBuffer,
-                contentType: fileMime,
-              });
+              const blob = await getEngine().storage
+                .forAdapter("vercel-blob")
+                .put({
+                  filename: baseName,
+                  data: fileBuffer,
+                  contentType: fileMime,
+                });
               const child = await db.transaction(async (tx) => {
                 const [newDoc] = await tx
                   .insert(document)
@@ -552,11 +554,13 @@ export const uploadDocument = inngest.createFunction(
               : []),
           ].join("\n");
 
-          const summaryBlob = await putFile({
-            filename: `_summary_${archiveName}.md`,
-            data: Buffer.from(summaryText, "utf-8"),
-            contentType: "text/markdown",
-          });
+          const summaryBlob = await getEngine().storage
+            .forAdapter("vercel-blob")
+            .put({
+              filename: `_summary_${archiveName}.md`,
+              data: Buffer.from(summaryText, "utf-8"),
+              contentType: "text/markdown",
+            });
 
           const summaryJobId = `ocr-${Date.now().toString(36)}-summary`;
           const summary = await db.transaction(async (tx) => {

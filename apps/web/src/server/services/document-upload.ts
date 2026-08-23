@@ -12,7 +12,6 @@ import {
 } from "@launchstack/features/voice";
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
-import { putFile } from "~/server/storage/vercel-blob";
 import {
   detectStorageType,
   toAbsoluteUrl,
@@ -520,11 +519,13 @@ export async function processVideoUrlUpload({
   const documentName = title || transcriptionResult.title || "Video Transcription";
 
   // 2. Store the transcript as a text file in blob storage
-  const textBlob = await putFile({
-    filename: `${documentName}-transcription.txt`,
-    data: Buffer.from(transcriptionResult.text, "utf-8"),
-    contentType: "text/plain",
-  });
+  const textBlob = await getEngine().storage
+    .forAdapter("vercel-blob")
+    .put({
+      filename: `${documentName}-transcription.txt`,
+      data: Buffer.from(transcriptionResult.text, "utf-8"),
+      contentType: "text/plain",
+    });
 
   const transcriptionMetadata = {
     source: "whisper-ytdlp",

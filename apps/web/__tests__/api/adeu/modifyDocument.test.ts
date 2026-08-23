@@ -3,16 +3,64 @@
  * Tests event registration, step execution, error handling, and DB updates.
  */
 
+const mockVercelBlobPut = jest.fn();
+const mockStorageGet = jest.fn();
+const mockDocumentRef = {
+  adapter: "vercel-blob" as const,
+  storageLocationId: "vercel-blob:test-store",
+  key: "documents/original.docx",
+};
+type MockPromotion =
+  | { ok: true; ref: typeof mockDocumentRef; confidence: "medium" }
+  | { ok: false; reason: "unsupported"; quarantine: true };
+const mockPromoteLegacyUrlToRef = jest.fn(
+  (_input: unknown): MockPromotion => ({
+    ok: true,
+    ref: mockDocumentRef,
+    confidence: "medium",
+  }),
+);
+const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
+
 jest.mock("~/server/db", () => ({
   db: {
     update: jest.fn(),
     select: jest.fn(),
+    transaction: jest.fn(async (callback: (tx: unknown) => unknown) =>
+      callback({
+        select: jest.fn(() => ({
+          from: jest.fn(() => ({
+            where: jest.fn().mockResolvedValue([{ companyId: 1n }]),
+          })),
+        })),
+        update: jest.fn(() => ({
+          set: jest.fn(() => ({
+            where: jest.fn().mockResolvedValue([]),
+          })),
+        })),
+      }),
+    ),
   },
 }));
 
-jest.mock("~/server/storage/vercel-blob", () => ({
-  fetchBlob: jest.fn(),
-  putFile: jest.fn(),
+jest.mock("~/server/services/storage-manifest", () => ({
+  findObjectByRef: jest.fn().mockResolvedValue(undefined),
+  registerArtifactEdge: jest.fn().mockResolvedValue(undefined),
+  registerObject: jest.fn().mockResolvedValue({ id: 1, companyId: 1n }),
+}));
+
+jest.mock("~/server/engine", () => ({
+  getEngine: jest.fn(() => ({
+    storage: {
+      get: (input: unknown, init?: RequestInit) =>
+        init === undefined ? mockStorageGet(input) : mockStorageGet(input, init),
+      forAdapter: (adapter: unknown) => mockForAdapter(adapter),
+    },
+  })),
+}));
+
+jest.mock("~/server/storage/legacy-promote", () => ({
+  promoteLegacyUrlToRef: (input: unknown) => mockPromoteLegacyUrlToRef(input),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -31,7 +79,7 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
+import { getEngine } from "~/server/engine";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -105,9 +153,9 @@ describe("modifyDocument Inngest function", () => {
   // Step 1: fetch-document
   // =========================================================================
   describe("fetch-document step", () => {
-    it("fetches document from Blob URL", async () => {
+    it("promotes the document URL and fetches it through the storage port", async () => {
       const docContent = Buffer.from("test-docx-content");
-      (fetchBlob as jest.Mock).mockResolvedValueOnce({
+      mockStorageGet.mockResolvedValueOnce({
         ok: true,
         arrayBuffer: () => Promise.resolve(docContent.buffer.slice(
           docContent.byteOffset,
@@ -122,9 +170,14 @@ describe("modifyDocument Inngest function", () => {
         file: modifiedBlob,
       });
 
-      (putFile as jest.Mock).mockResolvedValueOnce({
+      mockVercelBlobPut.mockResolvedValueOnce({
         url: "https://blob.store/modified.docx",
         pathname: "documents/modified.docx",
+        ref: {
+          adapter: "vercel-blob",
+          storageLocationId: "vercel-blob:test-store",
+          key: "documents/modified.docx",
+        },
       });
 
       const mockSet = jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) });
@@ -146,26 +199,54 @@ describe("modifyDocument Inngest function", () => {
       expect(handler).toBeDefined();
       await handler({ event, step });
 
-      expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
+      expect(mockPromoteLegacyUrlToRef).toHaveBeenCalledWith({
+        value: "https://blob.store/original.docx",
+      });
+      expect(mockStorageGet).toHaveBeenCalledWith(mockDocumentRef);
+      expect(mockForAdapter).toHaveBeenCalledWith("vercel-blob");
     });
 
-    it("throws when Blob fetch returns non-ok", async () => {
-      (fetchBlob as jest.Mock).mockResolvedValueOnce({
+    it("throws when a storage-port fetch returns non-ok", async () => {
+      mockStorageGet.mockResolvedValueOnce({
         ok: false,
         status: 404,
       });
 
       const step = createMockStep();
 
-      // The step.run should throw when fetchBlob returns non-ok
+      // The step.run should throw when the storage port returns non-ok
       await expect(
         step.run("fetch-document", async () => {
-          const res = await fetchBlob("https://blob.store/missing.docx");
+          const res = await getEngine().storage.get(mockDocumentRef);
           if (!(res as Response).ok) {
             throw new Error(`Failed to fetch document: HTTP ${(res as Response).status}`);
           }
         })
       ).rejects.toThrow("Failed to fetch document: HTTP 404");
+    });
+
+    it("fails closed when the document URL cannot be promoted", async () => {
+      mockPromoteLegacyUrlToRef.mockReturnValueOnce({
+        ok: false,
+        reason: "unsupported",
+        quarantine: true,
+      });
+
+      const handler = (modifyDocument as unknown as { fn: Function }).fn;
+      await expect(
+        handler({
+          event: {
+            data: {
+              documentId: 42,
+              documentUrl: "https://unknown.example/original.docx",
+              authorName: "Test Author",
+              edits: [],
+            },
+          },
+          step: createMockStep(),
+        }),
+      ).rejects.toThrow("Failed to resolve document storage reference: unsupported");
+      expect(mockStorageGet).not.toHaveBeenCalled();
     });
   });
 
@@ -302,9 +383,14 @@ describe("modifyDocument Inngest function", () => {
   describe("store-result step", () => {
     it("uploads modified DOCX to Blob and updates DB", async () => {
       const storedUrl = "https://blob.store/documents/modified-42.docx";
-      (putFile as jest.Mock).mockResolvedValueOnce({
+      mockVercelBlobPut.mockResolvedValueOnce({
         url: storedUrl,
         pathname: "documents/modified-42.docx",
+        ref: {
+          adapter: "vercel-blob",
+          storageLocationId: "vercel-blob:test-store",
+          key: "documents/modified-42.docx",
+        },
       });
 
       const mockWhere = jest.fn().mockResolvedValue([]);
@@ -317,7 +403,7 @@ describe("modifyDocument Inngest function", () => {
       const result = await step.run("store-result", async () => {
         const modifiedBuffer = Buffer.from(fileBase64, "base64");
 
-        const stored = await putFile({
+        const stored = await mockVercelBlobPut({
           filename: "modified-42.docx",
           data: modifiedBuffer,
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -329,7 +415,7 @@ describe("modifyDocument Inngest function", () => {
       });
 
       expect(result).toBe(storedUrl);
-      expect(putFile).toHaveBeenCalledWith(
+      expect(mockVercelBlobPut).toHaveBeenCalledWith(
         expect.objectContaining({
           filename: "modified-42.docx",
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -339,13 +425,13 @@ describe("modifyDocument Inngest function", () => {
     });
 
     it("throws when Blob upload fails", async () => {
-      (putFile as jest.Mock).mockRejectedValueOnce(new Error("Upload quota exceeded"));
+      mockVercelBlobPut.mockRejectedValueOnce(new Error("Upload quota exceeded"));
 
       const step = createMockStep();
 
       await expect(
         step.run("store-result", async () => {
-          await putFile({
+          await mockVercelBlobPut({
             filename: "test.docx",
             data: Buffer.from("data"),
           });

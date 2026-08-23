@@ -3,9 +3,10 @@ import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
-import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isS3Storage } from "~/lib/storage";
 import { checkDocumentServable } from "~/server/services/document-servable";
+import { getEngine } from "~/server/engine";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -64,11 +65,33 @@ export async function GET(_request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
-    if (!isS3Storage() && !isPrivateBlobUrl(doc.url)) {
-      return NextResponse.redirect(doc.url, { status: 307 });
+    let promoted: ReturnType<typeof promoteLegacyUrlToRef> | undefined;
+    try {
+      promoted = promoteLegacyUrlToRef({ value: doc.url });
+    } catch {
+      // Missing provider configuration is treated like any other legacy
+      // promotion miss; fetchFile provides the compatibility fallback.
+      promoted = undefined;
+    }
+    let blobRes: Response;
+
+    if (
+      promoted?.ok &&
+      (promoted.ref.adapter === "vercel-blob" ||
+        promoted.ref.adapter === "uploadthing")
+    ) {
+      // Private vendor objects must be read by the adapter so provider auth
+      // and URL construction stay behind the storage port.
+      blobRes = await getEngine().storage.get(promoted.ref);
+    } else {
+      // Preserve the existing S3/database redirect-vs-proxy behaviour. An
+      // unpromotable legacy URL takes the string shim once as a last resort.
+      if (promoted?.ok && !isS3Storage()) {
+        return NextResponse.redirect(doc.url, { status: 307 });
+      }
+      blobRes = await fetchFile(doc.url);
     }
 
-    const blobRes = await fetchFile(doc.url);
     if (!blobRes.ok) {
       return NextResponse.json(
         { error: "Failed to retrieve document from storage" },

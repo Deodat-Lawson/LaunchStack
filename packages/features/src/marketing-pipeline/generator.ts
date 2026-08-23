@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getPlatformProfile, type PlatformMeta } from "@launchstack/tools/platform-profiles";
+import { buildVoiceDirective } from "@launchstack/tools/brand-voice";
+import { buildPersonaDirective } from "@launchstack/tools/persona";
 import { QUALITY_THRESHOLD, validatePostQuality } from "@launchstack/tools/content-scoring";
 import { invokeMarketingStructured } from "./models";
 import type {
@@ -148,32 +150,6 @@ function buildPrompt(args: {
         "- Return JSON matching the schema exactly."
     );
     return parts.join("\n");
-}
-
-/* ──────────────────────────────────────────────────────────────
- * Voice & persona directives
- * ────────────────────────────────────────────────────────────── */
-
-function buildVoiceDirective(voice: BrandVoice): string {
-    return [
-        "\n## Brand Voice Directive",
-        `Tone: ${voice.toneDescriptor}`,
-        `Formality: ${voice.formalityLevel}`,
-        `Style: ${voice.sentenceStyle}`,
-        `Use these characteristic phrases when natural: ${voice.vocabularyExamples.join(", ")}`,
-        "Match this voice throughout the post.",
-    ].join("\n");
-}
-
-function buildPersonaDirective(persona: TargetPersona): string {
-    return [
-        "\n## Audience Persona Directive",
-        `Writing for: ${persona.role}`,
-        `Their pain points: ${persona.painPoints.join("; ")}`,
-        `They prioritize: ${persona.priorities.join("; ")}`,
-        `Speak to them: ${persona.languageStyle}`,
-        "Address their specific concerns. Make it feel written for them.",
-    ].join("\n");
 }
 
 /* ──────────────────────────────────────────────────────────────

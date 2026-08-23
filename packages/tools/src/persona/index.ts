@@ -57,6 +57,18 @@ Ground everything in the provided context. Return valid JSON.`
     ];
 }
 
+/** Prompt directive appended to a generation system prompt. */
+export function buildPersonaDirective(persona: TargetPersona): string {
+    return [
+        "\n## Audience Persona Directive",
+        `Writing for: ${persona.role}`,
+        `Their pain points: ${persona.painPoints.join("; ")}`,
+        `They prioritize: ${persona.priorities.join("; ")}`,
+        `Speak to them: ${persona.languageStyle}`,
+        "Address their specific concerns. Make it feel written for them.",
+    ].join("\n");
+}
+
 export async function extractTargetPersona(args: {
     companyId: number;
     targetAudience: string;

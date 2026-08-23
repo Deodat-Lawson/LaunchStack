@@ -66,6 +66,18 @@ Use ONLY patterns visible in the provided text. Return valid JSON.${toneHint}`
     ];
 }
 
+/** Prompt directive appended to a generation system prompt — shared by marketing and email. */
+export function buildVoiceDirective(voice: BrandVoice): string {
+    return [
+        "\n## Brand Voice Directive",
+        `Tone: ${voice.toneDescriptor}`,
+        `Formality: ${voice.formalityLevel}`,
+        `Style: ${voice.sentenceStyle}`,
+        `Use these characteristic phrases when natural: ${voice.vocabularyExamples.join(", ")}`,
+        "Match this voice throughout the post.",
+    ].join("\n");
+}
+
 export async function extractBrandVoice(args: {
     companyId: number;
     toneOverride?: FormalityLevel;

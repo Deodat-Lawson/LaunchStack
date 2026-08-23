@@ -7,6 +7,7 @@
 // The Inngest function calls this and handles persistence separately.
 // This can also be invoked directly by AI agents for synchronous use.
 
+import type { PipelineProgressEvent } from "@launchstack/tools/contract";
 import type { ProspectorOutput } from "./types";
 import { DEFAULT_SEARCH_RADIUS, FoursquareCategoryIdSchema } from "./types";
 import { resolveLocation } from "./location-resolver";
@@ -20,7 +21,18 @@ export type ClientProspectorPipelineStage = "planning" | "searching" | "scoring"
 
 export interface RunClientProspectorOptions {
     onStageChange?: (stage: ClientProspectorPipelineStage) => Promise<void> | void;
+    /**
+     * Shared progress protocol (unification P3, design D5) — a superset of
+     * onStageChange with labels, durations, and statuses.
+     */
+    onProgress?: (event: PipelineProgressEvent<ClientProspectorPipelineStage>) => void;
 }
+
+const STAGE_LABELS: Record<ClientProspectorPipelineStage, string> = {
+    planning: "Planning searches",
+    searching: "Searching places",
+    scoring: "Scoring leads",
+};
 
 export interface RunClientProspectorInput {
     query: string;
@@ -54,7 +66,16 @@ export async function runClientProspector(
 
     // Step 2: Plan searches — LLM decides what Foursquare queries to run
     await options.onStageChange?.("planning");
+    options.onProgress?.({ type: "step_start", step: "planning", label: STAGE_LABELS.planning });
+    const planStart = Date.now();
     const plannedSearches = await planSearches(input.query, input.companyContext, input.categories);
+    options.onProgress?.({
+        type: "step_complete",
+        step: "planning",
+        durationMs: Date.now() - planStart,
+        detail: `${plannedSearches.length} search${plannedSearches.length !== 1 ? "es" : ""} planned`,
+        status: "completed",
+    });
 
     console.log(
         `[prospector] Planned ${plannedSearches.length} searches:`,
@@ -63,12 +84,23 @@ export async function runClientProspector(
 
     // Step 3: Search — call Foursquare Places API for each planned search
     await options.onStageChange?.("searching");
+    options.onProgress?.({ type: "step_start", step: "searching", label: STAGE_LABELS.searching });
+    const searchStart = Date.now();
     const rawPlaces = await executePlaceSearch(plannedSearches, resolvedLocation, radius, {
         excludeChains: input.excludeChains ?? true,
+    });
+    options.onProgress?.({
+        type: "step_complete",
+        step: "searching",
+        durationMs: Date.now() - searchStart,
+        detail: `${rawPlaces.length} place${rawPlaces.length !== 1 ? "s" : ""} found`,
+        status: "completed",
     });
 
     // Step 4: Score — LLM ranks and scores the results by relevance
     await options.onStageChange?.("scoring");
+    options.onProgress?.({ type: "step_start", step: "scoring", label: STAGE_LABELS.scoring });
+    const scoreStart = Date.now();
     const resolvedCategories =
         providedCategoryIds.length > 0
             ? providedCategoryIds
@@ -79,6 +111,13 @@ export async function runClientProspector(
         input.companyContext,
         resolvedCategories
     );
+    options.onProgress?.({
+        type: "step_complete",
+        step: "scoring",
+        durationMs: Date.now() - scoreStart,
+        detail: `${results.length} lead${results.length !== 1 ? "s" : ""} scored`,
+        status: "completed",
+    });
 
     return {
         results,

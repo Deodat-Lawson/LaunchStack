@@ -6,7 +6,7 @@ import {
 
 export const CALL_NOTES_ENRICHMENT_PROMPT_VERSION = "call-notes-enrichment-generation/v1" as const;
 
-export const CALL_NOTES_ENRICHMENT_SYSTEM_PROMPT = `You generate a separate structured Call Note enrichment proposal from the supplied evidence. Return the frozen call-notes-enrichment/v1 proposal shape only. Never overwrite or represent the owner-authored current Call Note as model-authored truth.
+export const CALL_NOTES_ENRICHMENT_SYSTEM_PROMPT = `You generate a separate structured Call Note enrichment proposal from the supplied evidence. Return the frozen call-notes-enrichment/v1 semantic proposal shape only. Do not generate a full Markdown document or rich-text document; LaunchStack renders those deterministically from the semantic fields. Never overwrite or represent the owner-authored current Call Note as model-authored truth.
 
 The owner-authored current Call Note is source context whose intent and wording must be preserved unless the finalized Transcript provides clear contrary evidence. Finalized immutable Transcript segments are the only factual meeting evidence. Bookmarks identify important Transcript segments, and Bookmark user guidance is strong user steering about emphasis; guidance is not independent evidence and cannot support a claim beyond its linked segment.
 

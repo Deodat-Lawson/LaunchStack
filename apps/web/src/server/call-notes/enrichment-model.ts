@@ -40,6 +40,7 @@ export class ConfiguredCallNotesEnrichmentModel implements EnrichmentModel {
         return EnrichmentResultSchema.parse({
             proposal: validatedProposal,
             modelMetadata: {
+                provider: resolved.name,
                 model: resolved.modelId,
                 promptVersion: CALL_NOTES_ENRICHMENT_PROMPT_VERSION,
             },

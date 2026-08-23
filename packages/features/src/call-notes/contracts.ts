@@ -230,6 +230,13 @@ export const EnrichedNoteProposalSchema = z.object({
         .min(1)
         .max(100),
     summary: z.string().min(1).max(20_000),
+    decisions: z
+        .array(
+            z.object({
+                text: z.string().min(1).max(2000),
+            })
+        )
+        .max(100),
     actionItems: z
         .array(
             z.object({
@@ -258,13 +265,11 @@ export const EnrichedNoteProposalSchema = z.object({
             })
         )
         .max(100),
-    contentMarkdown: MarkdownSchema,
-    contentRich: RichTextSchema,
 });
 export type EnrichedNoteProposal = z.infer<typeof EnrichedNoteProposalSchema>;
 
 export const ModelMetadataSchema = z.object({
-    provider: z.string().min(1).max(128).optional(),
+    provider: z.string().min(1).max(128),
     model: z.string().min(1).max(256),
     promptVersion: z.string().min(1).max(128),
     completionId: z.string().min(1).max(256).optional(),
@@ -280,8 +285,44 @@ export const EnrichmentRunSchema = z.object({
     modelMetadata: ModelMetadataSchema.nullable(),
     createdAt: TimestampSchema,
     resolvedAt: TimestampSchema.nullable(),
+}).superRefine((run, context) => {
+    const requiresArtifacts =
+        run.status === "ready" || run.status === "accepted" || run.status === "rejected";
+    if (requiresArtifacts && run.proposal === null) {
+        context.addIssue({
+            code: "custom",
+            path: ["proposal"],
+            message: `${run.status} enrichment requires a proposal`,
+        });
+    }
+    if (requiresArtifacts && run.modelMetadata === null) {
+        context.addIssue({
+            code: "custom",
+            path: ["modelMetadata"],
+            message: `${run.status} enrichment requires model metadata`,
+        });
+    }
+    if ((run.status === "accepted" || run.status === "rejected") && run.resolvedAt === null) {
+        context.addIssue({
+            code: "custom",
+            path: ["resolvedAt"],
+            message: `${run.status} enrichment requires a resolution timestamp`,
+        });
+    }
 });
 export type EnrichmentRun = z.infer<typeof EnrichmentRunSchema>;
+
+export const ViewerCapabilitiesSchema = z.object({
+    canEditNote: z.boolean(),
+    canControlCapture: z.boolean(),
+    canBookmark: z.boolean(),
+    canRequestEnrichment: z.boolean(),
+    canResolveEnrichment: z.boolean(),
+    canChangeVisibility: z.boolean(),
+    canChangeKnowledgeInclusion: z.boolean(),
+    canDelete: z.boolean(),
+});
+export type ViewerCapabilities = z.infer<typeof ViewerCapabilitiesSchema>;
 
 export const CaptureSnapshotSchema = z.object({
     id: IdSchema,
@@ -302,6 +343,7 @@ export const CallSnapshotSchema = z.object({
     title: z.string().min(1).max(512),
     status: CallStatusSchema,
     capture: CaptureSnapshotSchema,
+    viewerCapabilities: ViewerCapabilitiesSchema,
     transcript: z.array(TranscriptSegmentSchema),
     gaps: z.array(GapSchema),
     bookmarks: z.array(BookmarkSchema),
@@ -309,6 +351,14 @@ export const CallSnapshotSchema = z.object({
     enrichment: EnrichmentRunSchema.nullable(),
     createdAt: TimestampSchema,
     updatedAt: TimestampSchema,
+}).superRefine((snapshot, context) => {
+    if (snapshot.note === null && snapshot.enrichment !== null) {
+        context.addIssue({
+            code: "custom",
+            path: ["enrichment"],
+            message: "Private-note projections must redact enrichment",
+        });
+    }
 });
 export type CallSnapshot = z.infer<typeof CallSnapshotSchema>;
 export const DetectedCallCandidateSchema = z.object({

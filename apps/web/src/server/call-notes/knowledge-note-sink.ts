@@ -8,7 +8,7 @@ import {
 
 import { db } from "~/server/db";
 import { callNotesCalls, documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
-import { requestNoteEmbedding } from "~/server/notes/embed-note";
+import { embedNote } from "~/server/notes/embed-note";
 
 type KnowledgeNoteSinkErrorCode =
     | "call_not_found"
@@ -104,7 +104,7 @@ class DrizzleKnowledgeNoteStore implements KnowledgeNoteStore {
     }
 
     async enqueueEmbedding(documentNoteId: number, companyId: bigint): Promise<void> {
-        await requestNoteEmbedding(documentNoteId, "updated", companyId);
+        await embedNote(documentNoteId);
     }
 }
 

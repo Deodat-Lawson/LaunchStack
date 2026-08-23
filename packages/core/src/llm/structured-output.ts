@@ -103,7 +103,7 @@ function extractJson(text: string): unknown {
 
 async function invokeJsonFallback<T>(
   resolved: ResolvedChatModel,
-  schema: z.ZodType<T>,
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
   messages: readonly BaseMessageLike[],
   options: StructuredOutputOptions,
 ): Promise<T> {
@@ -147,7 +147,7 @@ async function invokeJsonFallback<T>(
  */
 export async function invokeStructured<T>(
   resolved: ResolvedChatModel,
-  schema: z.ZodType<T>,
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
   messages: readonly BaseMessageLike[],
   options: StructuredOutputOptions,
 ): Promise<T> {

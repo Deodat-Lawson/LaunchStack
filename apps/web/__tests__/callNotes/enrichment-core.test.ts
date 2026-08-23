@@ -100,6 +100,7 @@ const GROUNDED_PROPOSAL = EnrichedNoteProposalSchema.parse({
         },
     ],
     summary: "Onboarding time is a stated launch risk.",
+    decisions: [],
     actionItems: [
         {
             text: "Send the revised onboarding checklist.",
@@ -121,8 +122,6 @@ const GROUNDED_PROPOSAL = EnrichedNoteProposalSchema.parse({
         },
     ],
     conflicts: [],
-    contentMarkdown: "## Onboarding launch risk\nMaya needs onboarding time reduced.",
-    contentRich: { type: "doc", content: [] },
 });
 
 function citationProposal(
@@ -395,10 +394,10 @@ describe("ConfiguredCallNotesEnrichmentModel", () => {
 
         expect(() => EnrichmentResultSchema.parse(result)).not.toThrow();
         expect(result.modelMetadata).toEqual({
+            provider: "configured-label",
             model: "configured-reasoning-model",
             promptVersion: CALL_NOTES_ENRICHMENT_PROMPT_VERSION,
         });
-        expect(result.modelMetadata).not.toHaveProperty("provider");
         expect(result.modelMetadata).not.toHaveProperty("completionId");
     });
 });

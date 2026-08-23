@@ -72,7 +72,7 @@ export const callNotesZoomConnections = pgTable(
         userId: varchar("user_id", { length: 256 }).notNull(),
         zoomAccountId: varchar("zoom_account_id", { length: 256 }).notNull(),
         zoomUserId: varchar("zoom_user_id", { length: 256 }).notNull(),
-        encryptedAccessToken: text("encrypted_access_token").notNull(),
+        encryptedAccessToken: text("encrypted_access_token"),
         encryptedRefreshToken: text("encrypted_refresh_token"),
         tokenExpiresAt: timestamp("token_expires_at", { withTimezone: true }),
         scopes: text("scopes").array().notNull().default([]),
@@ -82,6 +82,7 @@ export const callNotesZoomConnections = pgTable(
         })
             .notNull()
             .default("active"),
+        disconnectedAt: timestamp("disconnected_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

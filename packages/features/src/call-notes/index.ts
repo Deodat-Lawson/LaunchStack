@@ -3,3 +3,4 @@ export * from "./ports";
 export * from "./testing";
 export * from "./application";
 export * from "./work-items";
+export * from "./enrichment";

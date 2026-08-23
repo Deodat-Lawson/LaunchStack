@@ -23,7 +23,7 @@ function knowledgeNote(overrides: Partial<KnowledgeNote> = {}): KnowledgeNote {
         revision: 3,
         title: "Founder sync",
         contentMarkdown: "## Canonical owner note\n\nApproved outcome.",
-        deepLink: "/calls/call-42",
+        deepLink: "/?feature=calls&call=call-42",
         ...overrides,
     };
 }

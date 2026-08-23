@@ -13,6 +13,7 @@ import {
     CompleteEnrichmentInputSchema,
     DetectedCallCandidateSchema,
     runCallNotesVerticalTracer,
+    renderEnrichedNoteProposal,
     type CallListQuery,
     type CallNotesApplication,
     type CallNotesCommand,
@@ -44,6 +45,9 @@ const describeIfDatabase =
         ? describe
         : describe.skip;
 
+const RENDERED_ENRICHMENT_PROPOSAL = renderEnrichedNoteProposal(
+    CALL_NOTES_ENRICHMENT_PROPOSAL
+);
 const FIXED_NOW = new Date("2026-08-15T14:30:00.000Z");
 const DOCUMENT_NOTES_TABLE = sql.identifier(getTableName(documentNotes));
 
@@ -545,8 +549,9 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             callId: finalSnapshot.id,
         });
         expect(owner.note?.visibility).toBe("private");
-        expect(owner.enrichment?.proposal?.contentMarkdown).toBe(
-            CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown
+        expect(owner.enrichment?.proposal).toEqual(CALL_NOTES_ENRICHMENT_PROPOSAL);
+        expect(renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL).contentMarkdown).toContain(
+            "## Summary"
         );
 
         const removeAttemptsBeforeDelete = knowledge.removeAttempts;
@@ -948,8 +953,8 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             kind: "accept_enrichment",
             callId: started.id,
             enrichmentRunId: ready.enrichment.id,
-            contentMarkdown: CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown,
-            contentRich: CALL_NOTES_ENRICHMENT_PROPOSAL.contentRich,
+            contentMarkdown: RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown,
+            contentRich: RENDERED_ENRICHMENT_PROPOSAL.contentRich,
         });
         await expectApplicationCode(application.execute(acceptance), "unavailable");
         const committed = await application.getCall({
@@ -1026,8 +1031,8 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 kind: "accept_enrichment",
                 callId: started.id,
                 enrichmentRunId: requested.enrichment.id,
-                contentMarkdown: CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown,
-                contentRich: CALL_NOTES_ENRICHMENT_PROPOSAL.contentRich,
+                contentMarkdown: RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown,
+                contentRich: RENDERED_ENRICHMENT_PROPOSAL.contentRich,
             });
             const reject = CallNotesCommandSchema.parse({
                 ...CALL_NOTES_START_COMMAND,
@@ -1077,13 +1082,13 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 expect(runRows[0]?.status).toBe("accepted");
                 expect(callRows[0]?.current_note_revision).toBe(1);
                 expect(canonical[0]?.contentMarkdown).toBe(
-                    CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown
+                    RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown
                 );
                 expect(revisions).toEqual([
                     expect.objectContaining({ revision: 0, content_markdown: "" }),
                     expect.objectContaining({
                         revision: 1,
-                        content_markdown: CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown,
+                        content_markdown: RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown,
                     }),
                 ]);
             } else {

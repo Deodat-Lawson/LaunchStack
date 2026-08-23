@@ -35,6 +35,7 @@ import type {
   EmbeddingsProvider,
   SearchScope,
 } from "../types";
+import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
 
 const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
 const DEFAULT_WEIGHTS_3: number[] = [0.3, 0.5, 0.2];

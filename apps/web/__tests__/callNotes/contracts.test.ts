@@ -5,13 +5,16 @@ import {
     CALL_NOTES_ENRICHMENT_PROPOSAL,
     CALL_NOTES_FIXTURE_IDS,
     CALL_NOTES_START_COMMAND,
+    CALL_NOTES_SCHEMA_VERSION,
     CallNotesCommandSchema,
     CallStatusSchema,
     CaptureEventSchema,
+    CallSnapshotSchema,
     DetectedCallCandidateSchema,
     EnrichedNoteProposalSchema,
     assertCaptureSourceContract,
     createScriptedCaptureSource,
+    renderEnrichedNoteProposal,
 } from "@launchstack/features/call-notes";
 
 import type { CaptureAttemptHandle, CaptureSource } from "@launchstack/features/call-notes";
@@ -66,7 +69,66 @@ describe("Call Notes contract baseline", () => {
         expect(proposal.actionItems).toEqual([
             expect.objectContaining({ ownerName: "Alex Founder" }),
         ]);
-        expect(proposal.contentMarkdown).toContain("## Summary");
+        expect(proposal).not.toHaveProperty("contentMarkdown");
+        expect(renderEnrichedNoteProposal(proposal).contentMarkdown).toContain("## Summary");
+    });
+
+    it("fails closed when a private-note projection carries enrichment", () => {
+        const viewerCapabilities = {
+            canEditNote: false,
+            canControlCapture: false,
+            canBookmark: false,
+            canRequestEnrichment: false,
+            canResolveEnrichment: false,
+            canChangeVisibility: false,
+            canChangeKnowledgeInclusion: false,
+            canDelete: false,
+        };
+        const snapshot = {
+            schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+            id: "call-private",
+            companyId: "1",
+            provider: "zoom",
+            occurrenceKey: "zoom-occurrence-private",
+            title: "Private call",
+            status: "completed",
+            capture: {
+                id: "capture-private",
+                desiredMode: "running",
+                lifecycle: "completed",
+                outcome: "complete",
+                activeAttemptId: null,
+                attemptCount: 1,
+            },
+            viewerCapabilities,
+            transcript: [],
+            gaps: [],
+            bookmarks: [],
+            note: null,
+            enrichment: {
+                id: "enrichment-private",
+                status: "ready",
+                baseNoteRevision: 1,
+                transcriptFingerprint: "a".repeat(64),
+                proposal: CALL_NOTES_ENRICHMENT_PROPOSAL,
+                modelMetadata: {
+                    provider: "fixture",
+                    model: "fixture-model",
+                    promptVersion: "call-notes/v1",
+                },
+                createdAt: "2026-08-15T14:30:00.000Z",
+                resolvedAt: null,
+            },
+            createdAt: "2026-08-15T14:00:00.000Z",
+            updatedAt: "2026-08-15T14:30:00.000Z",
+        };
+
+        expect(() => CallSnapshotSchema.parse(snapshot)).toThrow(
+            "Private-note projections must redact enrichment"
+        );
+        expect(() =>
+            CallSnapshotSchema.parse({ ...snapshot, enrichment: null })
+        ).not.toThrow();
     });
 
     it("exercises start, Pause, and Resume through the capture-source conformance suite", async () => {

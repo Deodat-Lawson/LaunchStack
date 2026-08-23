@@ -14,6 +14,7 @@ import {
     type CaptureEvent,
     type KnowledgeNote,
 } from "./contracts";
+import { renderEnrichedNoteProposal } from "./enrichment";
 import type {
     CallNotesApplication,
     CaptureAttemptHandle,
@@ -225,6 +226,7 @@ export const CALL_NOTES_ENRICHMENT_PROPOSAL = EnrichedNoteProposalSchema.parse({
         },
     ],
     summary: "The onboarding checklist and a short walkthrough should unblock the launch.",
+    decisions: [],
     actionItems: [
         {
             text: "Send the revised onboarding checklist.",
@@ -234,9 +236,6 @@ export const CALL_NOTES_ENRICHMENT_PROPOSAL = EnrichedNoteProposalSchema.parse({
     ],
     bookmarkPassages: [],
     conflicts: [],
-    contentMarkdown:
-        "## Onboarding launch risk\nMaya needs onboarding time reduced before the September launch.\n\n## Next step\nAlex will send a revised onboarding checklist by Friday.\n\n## Summary\nThe onboarding checklist and a short walkthrough should unblock the launch.",
-    contentRich: { type: "doc", content: [] },
 });
 
 export const CALL_NOTES_START_COMMAND: Extract<CallNotesCommand, { kind: "start_capture" }> =
@@ -514,13 +513,14 @@ export async function runCallNotesVerticalTracer(
         callId: started.id,
     });
     invariant(current.enrichment?.status === "ready", "enrichment proposal was not reviewable");
+    const renderedProposal = renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL);
 
     await application.execute(
         ownerCommand(started.id, {
             kind: "accept_enrichment",
             enrichmentRunId: current.enrichment.id,
-            contentMarkdown: CALL_NOTES_ENRICHMENT_PROPOSAL.contentMarkdown,
-            contentRich: CALL_NOTES_ENRICHMENT_PROPOSAL.contentRich,
+            contentMarkdown: renderedProposal.contentMarkdown,
+            contentRich: renderedProposal.contentRich,
         })
     );
     await application.execute(

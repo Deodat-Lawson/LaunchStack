@@ -337,7 +337,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         });
         this.deepLink =
             options.callDeepLink ??
-            ((companyId, callId) => `/companies/${companyId}/call-notes/${callId}`);
+            ((_companyId, callId) => `/?feature=calls&call=${encodeURIComponent(callId)}`);
     }
 
     async execute(command: CallNotesCommand): Promise<CallSnapshot | null> {
@@ -2254,6 +2254,22 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .from(callNotesParticipants)
             .where(eq(callNotesParticipants.callId, call.id));
         const transcript = toTranscriptSegments(rows, participants);
+        const membershipRole = await this.options.memberships.getRole(
+            call.companyId.toString(),
+            actorUserId
+        );
+        if (!membershipRole) {
+            throw new CallNotesApplicationError("not_found", "Call not found");
+        }
+        const [captureConnection] = await this.options.db
+            .select({ userId: callNotesZoomConnections.userId })
+            .from(callNotesZoomConnections)
+            .where(eq(callNotesZoomConnections.id, capture.captureUserConnectionId))
+            .limit(1);
+        const isNoteOwner = call.noteOwnerUserId === actorUserId;
+        const isCaptureUser = captureConnection?.userId === actorUserId;
+        const isCompanyAdmin = membershipRole === "owner" || membershipRole === "admin";
+        const canDelete = isCompanyAdmin || (isNoteOwner && call.status === "failed" && rows.length === 0);
         const gapRows = await this.options.db
             .select()
             .from(callNotesGaps)
@@ -2312,6 +2328,16 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 outcome: capture.outcome,
                 activeAttemptId: capture.activeAttemptId,
                 attemptCount: attempts.length,
+            },
+            viewerCapabilities: {
+                canEditNote: isNoteOwner,
+                canControlCapture: isCaptureUser,
+                canBookmark: isNoteOwner,
+                canRequestEnrichment: isNoteOwner,
+                canResolveEnrichment: isNoteOwner,
+                canChangeVisibility: isNoteOwner,
+                canChangeKnowledgeInclusion: isNoteOwner,
+                canDelete,
             },
             transcript,
             gaps: toGaps(gapRows),

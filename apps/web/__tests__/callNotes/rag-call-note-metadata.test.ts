@@ -85,7 +85,7 @@ describe("RagPort note metadata propagation", () => {
         expect(result?.metadata).not.toHaveProperty("callId");
     });
 
-    it("preserves Call Note source, noteId, callId, and revision", async () => {
+    it("preserves Call Note source, identity, revision, and deep link", async () => {
         mockCompanyEnsembleSearch.mockResolvedValueOnce([
             {
                 pageContent: "Accepted Call Note",
@@ -94,6 +94,7 @@ describe("RagPort note metadata propagation", () => {
                     noteId: 20,
                     callId: "call-20",
                     revision: 4,
+                    deepLink: "/?feature=calls&call=call-20",
                     searchScope: "company",
                 },
             },
@@ -109,7 +110,7 @@ describe("RagPort note metadata propagation", () => {
             noteId: 20,
             callId: "call-20",
             revision: 4,
+            deepLink: "/?feature=calls&call=call-20",
         });
-        expect(result?.metadata).not.toHaveProperty("deepLink");
     });
 });

@@ -231,7 +231,6 @@ export class NotesRetriever extends BaseRetriever {
       console.error("[NotesRetriever] error:", err);
       return [];
     }
-    }
   }
 
   private buildWhere(): ReturnType<typeof sql> | null {

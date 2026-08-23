@@ -3,16 +3,46 @@
  * Tests event registration, step execution, error handling, and DB updates.
  */
 
+const mockVercelBlobPut = jest.fn();
+const mockForAdapter = jest.fn((_adapter: unknown) => ({ put: mockVercelBlobPut }));
+
 jest.mock("~/server/db", () => ({
   db: {
     update: jest.fn(),
     select: jest.fn(),
+    transaction: jest.fn(async (callback: (tx: unknown) => unknown) =>
+      callback({
+        select: jest.fn(() => ({
+          from: jest.fn(() => ({
+            where: jest.fn().mockResolvedValue([{ companyId: 1n }]),
+          })),
+        })),
+        update: jest.fn(() => ({
+          set: jest.fn(() => ({
+            where: jest.fn().mockResolvedValue([]),
+          })),
+        })),
+      }),
+    ),
   },
+}));
+
+jest.mock("~/server/services/storage-manifest", () => ({
+  findObjectByRef: jest.fn().mockResolvedValue(undefined),
+  registerArtifactEdge: jest.fn().mockResolvedValue(undefined),
+  registerObject: jest.fn().mockResolvedValue({ id: 1, companyId: 1n }),
+}));
+
+jest.mock("~/server/engine", () => ({
+  getEngine: jest.fn(() => ({
+    storage: {
+      forAdapter: (adapter: unknown) => mockForAdapter(adapter),
+    },
+  })),
 }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
   fetchBlob: jest.fn(),
-  putFile: jest.fn(),
 }));
 
 jest.mock("@launchstack/features/adeu", () => ({
@@ -31,7 +61,7 @@ jest.mock("@launchstack/features/adeu", () => ({
 
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
-import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
+import { fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
@@ -122,9 +152,14 @@ describe("modifyDocument Inngest function", () => {
         file: modifiedBlob,
       });
 
-      (putFile as jest.Mock).mockResolvedValueOnce({
+      mockVercelBlobPut.mockResolvedValueOnce({
         url: "https://blob.store/modified.docx",
         pathname: "documents/modified.docx",
+        ref: {
+          adapter: "vercel-blob",
+          storageLocationId: "vercel-blob:test-store",
+          key: "documents/modified.docx",
+        },
       });
 
       const mockSet = jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) });
@@ -147,6 +182,7 @@ describe("modifyDocument Inngest function", () => {
       await handler({ event, step });
 
       expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
+      expect(mockForAdapter).toHaveBeenCalledWith("vercel-blob");
     });
 
     it("throws when Blob fetch returns non-ok", async () => {
@@ -302,9 +338,14 @@ describe("modifyDocument Inngest function", () => {
   describe("store-result step", () => {
     it("uploads modified DOCX to Blob and updates DB", async () => {
       const storedUrl = "https://blob.store/documents/modified-42.docx";
-      (putFile as jest.Mock).mockResolvedValueOnce({
+      mockVercelBlobPut.mockResolvedValueOnce({
         url: storedUrl,
         pathname: "documents/modified-42.docx",
+        ref: {
+          adapter: "vercel-blob",
+          storageLocationId: "vercel-blob:test-store",
+          key: "documents/modified-42.docx",
+        },
       });
 
       const mockWhere = jest.fn().mockResolvedValue([]);
@@ -317,7 +358,7 @@ describe("modifyDocument Inngest function", () => {
       const result = await step.run("store-result", async () => {
         const modifiedBuffer = Buffer.from(fileBase64, "base64");
 
-        const stored = await putFile({
+        const stored = await mockVercelBlobPut({
           filename: "modified-42.docx",
           data: modifiedBuffer,
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -329,7 +370,7 @@ describe("modifyDocument Inngest function", () => {
       });
 
       expect(result).toBe(storedUrl);
-      expect(putFile).toHaveBeenCalledWith(
+      expect(mockVercelBlobPut).toHaveBeenCalledWith(
         expect.objectContaining({
           filename: "modified-42.docx",
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -339,13 +380,13 @@ describe("modifyDocument Inngest function", () => {
     });
 
     it("throws when Blob upload fails", async () => {
-      (putFile as jest.Mock).mockRejectedValueOnce(new Error("Upload quota exceeded"));
+      mockVercelBlobPut.mockRejectedValueOnce(new Error("Upload quota exceeded"));
 
       const step = createMockStep();
 
       await expect(
         step.run("store-result", async () => {
-          await putFile({
+          await mockVercelBlobPut({
             filename: "test.docx",
             data: Buffer.from("data"),
           });

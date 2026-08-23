@@ -7,7 +7,7 @@ import {
 } from "@launchstack/features/call-notes";
 
 import { db } from "~/server/db";
-import { callNotesCalls, documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
+import { callNotesCalls, documentNotes } from "~/server/db/schema";
 import { embedNote } from "~/server/notes/embed-note";
 
 type KnowledgeNoteSinkErrorCode =
@@ -56,8 +56,7 @@ export interface CanonicalDocumentNoteState {
 export interface KnowledgeNoteStore {
     findCall(companyId: bigint, callId: string): Promise<KnowledgeCallState | null>;
     findDocumentNote(documentNoteId: number): Promise<CanonicalDocumentNoteState | null>;
-    removeProjection(documentNoteId: number): Promise<void>;
-    enqueueEmbedding(documentNoteId: number, companyId: bigint): Promise<void>;
+    reconcileProjection(documentNoteId: number, companyId: bigint): Promise<void>;
 }
 
 class DrizzleKnowledgeNoteStore implements KnowledgeNoteStore {
@@ -97,13 +96,7 @@ class DrizzleKnowledgeNoteStore implements KnowledgeNoteStore {
         return note ?? null;
     }
 
-    async removeProjection(documentNoteId: number): Promise<void> {
-        await db
-            .delete(documentNoteEmbeddings)
-            .where(eq(documentNoteEmbeddings.noteId, documentNoteId));
-    }
-
-    async enqueueEmbedding(documentNoteId: number, companyId: bigint): Promise<void> {
+    async reconcileProjection(documentNoteId: number, _companyId: bigint): Promise<void> {
         await embedNote(documentNoteId);
     }
 }
@@ -229,10 +222,7 @@ export class LaunchStackKnowledgeNoteSink implements KnowledgeNoteSink {
         }
         requireCanonicalDocumentNote(canonical, note);
 
-        // Fail closed while durable work is pending: an older projection must
-        // not remain retrievable after the canonical revision changes.
-        await this.store.removeProjection(note.documentNoteId);
-        await this.store.enqueueEmbedding(note.documentNoteId, companyId);
+        await this.store.reconcileProjection(note.documentNoteId, companyId);
     }
 
     async remove(companyIdInput: string, callId: string): Promise<void> {
@@ -246,7 +236,7 @@ export class LaunchStackKnowledgeNoteSink implements KnowledgeNoteSink {
         }
 
         if (call.documentNoteId !== null) {
-            await this.store.removeProjection(call.documentNoteId);
+            await this.store.reconcileProjection(call.documentNoteId, companyId);
         }
     }
 }

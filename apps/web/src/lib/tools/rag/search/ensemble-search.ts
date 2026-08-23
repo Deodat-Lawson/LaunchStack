@@ -36,6 +36,7 @@ import type {
   EmbeddingsProvider,
   SearchScope,
 } from "../types";
+import { env } from "~/env";
 import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
 
 const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
@@ -52,10 +53,7 @@ const NOTES_MAX_CANDIDATES = 8;
 const SIDECAR_URL = process.env.SIDECAR_URL;
 
 function isGraphRetrievalEnabled(): boolean {
-  return (
-    process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
-    process.env.ENABLE_GRAPH_RETRIEVER === "1"
-  );
+  return env.server.ENABLE_GRAPH_RETRIEVER === true;
 }
 
 /**
@@ -64,10 +62,7 @@ function isGraphRetrievalEnabled(): boolean {
  * empty-notes paths run the SQL query anyway and just add noise.
  */
 function isNotesRetrievalEnabled(): boolean {
-  return (
-    process.env.ENABLE_NOTES_RETRIEVER === "true" ||
-    process.env.ENABLE_NOTES_RETRIEVER === "1"
-  );
+  return env.server.ENABLE_NOTES_RETRIEVER === true;
 }
 
 export function createOpenAIEmbeddings(): EmbeddingsProvider {

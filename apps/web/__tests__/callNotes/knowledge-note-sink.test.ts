@@ -74,19 +74,15 @@ class FakeKnowledgeNoteStore implements KnowledgeNoteStore {
         return this.note?.id === documentNoteId ? this.note : null;
     }
 
-    async removeProjection(documentNoteId: number): Promise<void> {
-        this.operations.push(`remove-projection:${documentNoteId}`);
-        this.projectionPresent = false;
-    }
-
-    async enqueueEmbedding(documentNoteId: number, companyId: bigint): Promise<void> {
-        this.operations.push(`enqueue:${documentNoteId}:${companyId}`);
+    async reconcileProjection(documentNoteId: number, companyId: bigint): Promise<void> {
+        this.operations.push(`reconcile:${documentNoteId}:${companyId}`);
+        this.projectionPresent = this.call?.knowledgeIncluded === true;
         this.embeddingRequests.push({ noteId: documentNoteId, companyId });
     }
 }
 
 describe("LaunchStackKnowledgeNoteSink", () => {
-    it("removes the stale projection and enqueues the current accepted Call Note", async () => {
+    it("reconciles the current accepted Call Note projection", async () => {
         const store = new FakeKnowledgeNoteStore();
         const sink = createKnowledgeNoteSink(store);
 
@@ -95,10 +91,9 @@ describe("LaunchStackKnowledgeNoteSink", () => {
         expect(store.operations).toEqual([
             "find-call:42:call-42",
             "find-note:314",
-            "remove-projection:314",
-            "enqueue:314:42",
+            "reconcile:314:42",
         ]);
-        expect(store.projectionPresent).toBe(false);
+        expect(store.projectionPresent).toBe(true);
         expect(store.embeddingRequests).toEqual([{ noteId: NOTE_ID, companyId: COMPANY_ID }]);
     });
 
@@ -206,8 +201,9 @@ describe("LaunchStackKnowledgeNoteSink", () => {
         ).rejects.toMatchObject({ code: "wrong_company" });
     });
 
-    it("remove deletes only the retrieval projection", async () => {
+    it("remove reconciles only the retrieval projection", async () => {
         const store = new FakeKnowledgeNoteStore();
+        store.call = callState({ knowledgeIncluded: false });
         const originalCall = structuredClone(store.call);
         const originalNote = structuredClone(store.note);
 
@@ -216,7 +212,7 @@ describe("LaunchStackKnowledgeNoteSink", () => {
         expect(store.projectionPresent).toBe(false);
         expect(store.call).toEqual(originalCall);
         expect(store.note).toEqual(originalNote);
-        expect(store.embeddingRequests).toHaveLength(0);
+        expect(store.embeddingRequests).toEqual([{ noteId: NOTE_ID, companyId: COMPANY_ID }]);
     });
 
     it("does not send Transcript, Bookmark, or proposal content into the embedding request", async () => {
@@ -239,13 +235,13 @@ describe("LaunchStackKnowledgeNoteSink", () => {
         expect(store.note).toEqual(originalNote);
     });
 
-    it("stays fail closed when durable enqueue fails after projection removal", async () => {
+    it("keeps the existing projection when reconciliation fails", async () => {
         const store = new FakeKnowledgeNoteStore();
-        store.enqueueEmbedding = jest.fn().mockRejectedValue(new Error("outbox unavailable"));
+        store.reconcileProjection = jest.fn().mockRejectedValue(new Error("embedding unavailable"));
 
         await expect(createKnowledgeNoteSink(store).upsert(knowledgeNote())).rejects.toThrow(
-            "outbox unavailable"
+            "embedding unavailable"
         );
-        expect(store.projectionPresent).toBe(false);
+        expect(store.projectionPresent).toBe(true);
     });
 });

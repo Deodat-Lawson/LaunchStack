@@ -122,6 +122,10 @@ const serverSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  ENABLE_NOTES_RETRIEVER: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
   NEO4J_URI: optionalString(),
   NEO4J_USERNAME: optionalString(),
   NEO4J_PASSWORD: optionalString(),
@@ -307,6 +311,7 @@ function parseServerEnv() {
     OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "MARKER" | "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+    ENABLE_NOTES_RETRIEVER: process.env.ENABLE_NOTES_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,

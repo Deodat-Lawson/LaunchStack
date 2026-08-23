@@ -262,14 +262,14 @@ class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
       const current: NoteEmbeddingSnapshot = { note, call: call ?? null };
       const freshness = evaluateEmbeddingFreshness(snapshot, current);
 
+      if (freshness === "stale") {
+        // A stale worker never removes a projection owned by a newer revision.
+        return "stale";
+      }
       if (freshness !== "written") {
-        // Call Note projections fail closed. Ordinary notes retain their last
-        // good vector while the newer canonical update/event converges.
-        if (freshness !== "stale" || snapshot.call !== null || current.call !== null) {
-          await tx
-            .delete(documentNoteEmbeddings)
-            .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
-        }
+        await tx
+          .delete(documentNoteEmbeddings)
+          .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
         return freshness;
       }
 

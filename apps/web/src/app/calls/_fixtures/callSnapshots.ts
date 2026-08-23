@@ -1,5 +1,27 @@
 import { CallSnapshotSchema, type CallSnapshot } from "@launchstack/features/call-notes";
 
+const ownerCapabilities = {
+    canEditNote: true,
+    canControlCapture: true,
+    canBookmark: true,
+    canRequestEnrichment: true,
+    canResolveEnrichment: true,
+    canChangeVisibility: true,
+    canChangeKnowledgeInclusion: true,
+    canDelete: false,
+} as const;
+
+const readOnlyCapabilities = {
+    canEditNote: false,
+    canControlCapture: false,
+    canBookmark: false,
+    canRequestEnrichment: false,
+    canResolveEnrichment: false,
+    canChangeVisibility: false,
+    canChangeKnowledgeInclusion: false,
+    canDelete: false,
+} as const;
+
 // base input that the variants below extend.
 const baseCallInput = {
     schemaVersion: "call-notes/v1",
@@ -17,6 +39,7 @@ const baseCallInput = {
         activeAttemptId: null,
         attemptCount: 1,
     },
+    viewerCapabilities: ownerCapabilities,
     transcript: [
         {
             id: "segment-1",
@@ -105,6 +128,7 @@ export const failedCall: CallSnapshot = CallSnapshotSchema.parse({
         activeAttemptId: null,
         attemptCount: 2,
     },
+    viewerCapabilities: { ...ownerCapabilities, canDelete: true },
     transcript: [],
     gaps: [],
     bookmarks: [],
@@ -170,6 +194,7 @@ export const redactedCall: CallSnapshot = CallSnapshotSchema.parse({
     occurrenceKey: "zoom-redacted-1",
     title: "Private 1:1",
     note: null,
+    viewerCapabilities: readOnlyCapabilities,
 });
 
 // a call whose AI-enhanced proposal is ready to review
@@ -189,6 +214,7 @@ export const enrichmentReadyCall: CallSnapshot = CallSnapshotSchema.parse({
                 { heading: "Pricing", markdown: "Discussed the tier structure.", ownerContextLabels: [] },
             ],
             summary: "The team agreed to finalize the pricing tiers by Friday; Hank will draft the enterprise tier.",
+            decisions: [],
             actionItems: [{ text: "Draft the enterprise tier", ownerName: "Hank", dueDate: "2026-08-28" }],
             bookmarkPassages: [
                 {
@@ -204,10 +230,12 @@ export const enrichmentReadyCall: CallSnapshot = CallSnapshotSchema.parse({
                 },
             ],
             conflicts: [],
-            contentMarkdown: "The team agreed to finalize the pricing tiers by Friday.",
-            contentRich: {},
         },
-        modelMetadata: { model: "claude-sonnet", promptVersion: "calls-v1" },
+        modelMetadata: {
+            provider: "fixture",
+            model: "claude-sonnet",
+            promptVersion: "calls-v1",
+        },
         createdAt: "2026-08-21T14:15:00.000Z",
         resolvedAt: null,
     },

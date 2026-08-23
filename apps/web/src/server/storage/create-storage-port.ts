@@ -8,6 +8,7 @@ import type {
   UploadResult,
 } from "@launchstack/core/storage";
 
+import { createDatabaseAdapter } from "./adapters/database-adapter";
 import { createS3TargetedPort } from "./adapters/s3-targeted-port";
 import { createUploadThingAdapter } from "./adapters/uploadthing-adapter";
 import { createVercelBlobAdapter } from "./adapters/vercel-blob-adapter";
@@ -61,7 +62,11 @@ export function createStoragePortTargetFactory(provider: string): {
         case "uploadthing":
           return createUploadThingAdapter();
         case "database":
+          return createDatabaseAdapter();
         default:
+          // Unreachable while StorageAdapter has exactly these four members.
+          // Kept so that adding a fifth adapter fails loudly at runtime
+          // instead of silently resolving to whichever backend is primary.
           return createUnwiredAdapterTarget(adapter, provider);
       }
     },

@@ -73,6 +73,17 @@ function streamOf(text: string): ReadableStream<Uint8Array> {
 }
 
 describe("vercel-blob adapter", () => {
+  // process.env is shared by every test file that runs in the same jest
+  // worker. One test here deletes BLOB_READ_WRITE_TOKEN deliberately, and a
+  // deletion that outlives this file would silently change the environment
+  // another file runs in.
+  const originalBlobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+  afterAll(() => {
+    if (originalBlobToken === undefined) delete process.env.BLOB_READ_WRITE_TOKEN;
+    else process.env.BLOB_READ_WRITE_TOKEN = originalBlobToken;
+  });
+
   beforeEach(async () => {
     jest.resetModules();
 

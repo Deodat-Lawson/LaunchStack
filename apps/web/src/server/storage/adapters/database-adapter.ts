@@ -39,7 +39,6 @@
 
 import { randomUUID } from "node:crypto";
 import { eq, inArray } from "drizzle-orm";
-import { fileUploads } from "@launchstack/core/db/schema";
 
 import type {
   DeleteResult,
@@ -50,12 +49,29 @@ import type {
   UploadResult,
 } from "@launchstack/core/storage";
 
-import { db } from "~/server/db";
 import { env } from "~/env";
 import { resolveStorageLocationId } from "~/lib/storage-location-id";
 import { internalServiceHeaders } from "~/server/storage/internal-service-auth";
 
 const ADAPTER = "database" as const;
+
+/**
+ * Loaded on demand, not at module scope.
+ *
+ * ~/server/db pulls in the engine, which pulls in ~/env — so a static import
+ * here would mean that merely *importing* this adapter drags the whole
+ * application graph along with it. lib/storage.ts's database branch used
+ * dynamic imports for exactly this reason; copying the logic without copying
+ * that property was a regression, and it immediately broke an unrelated test
+ * that imports the adapter factory.
+ */
+async function getDb() {
+  const [{ db }, { fileUploads }] = await Promise.all([
+    import("~/server/db"),
+    import("@launchstack/core/db/schema"),
+  ]);
+  return { db, fileUploads };
+}
 
 function sanitizeFilename(filename: string): string {
   return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
@@ -127,6 +143,7 @@ export function createDatabaseAdapter(): TargetedStoragePort {
     }
 
     try {
+      const { db, fileUploads } = await getDb();
       const removed = await db
         .delete(fileUploads)
         .where(eq(fileUploads.id, id))
@@ -161,6 +178,7 @@ export function createDatabaseAdapter(): TargetedStoragePort {
       const safeName = sanitizeFilename(input.filename);
       const pathname = `documents/${randomUUID()}-${safeName || "upload"}`;
 
+      const { db, fileUploads } = await getDb();
       const [row] = await db
         .insert(fileUploads)
         .values({
@@ -261,6 +279,7 @@ export function createDatabaseAdapter(): TargetedStoragePort {
         // Unlike the provider APIs, a SQL delete can report exactly which rows
         // it removed — so every ref gets its true outcome from one statement,
         // with no per-item fallback needed and no guessing.
+        const { db, fileUploads } = await getDb();
         const removed = await db
           .delete(fileUploads)
           .where(inArray(fileUploads.id, [...byId.keys()]))

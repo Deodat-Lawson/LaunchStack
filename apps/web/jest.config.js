@@ -18,6 +18,8 @@ export const config = {
         "^@launchstack/core/(.*)$": "<rootDir>/../../packages/core/src/$1",
         "^@launchstack/features$": "<rootDir>/../../packages/features/src/index.ts",
         "^@launchstack/features/(.*)$": "<rootDir>/../../packages/features/src/$1",
+        "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
+        "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",
         "^@launchstack/protocol$": "<rootDir>/../../packages/protocol/src/index.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
         "^@launchstack/application$": "<rootDir>/../../packages/application/src/index.ts",

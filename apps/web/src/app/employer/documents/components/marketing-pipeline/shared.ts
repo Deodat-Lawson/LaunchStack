@@ -89,11 +89,18 @@ export interface ContentVariantUI {
     mediaType: "image" | "video";
 }
 
+export interface ClaimSourceMatchUI {
+    sourceDoc: string;
+    excerpt: string;
+    /** Retrieval score of the match — relevance, not a truth judgment. */
+    relevance: number | null;
+}
+
 export interface ClaimSourceUI {
     claim: string;
-    sourceDoc: string;
-    chunk: string;
-    confidence: number;
+    /** Best knowledge-base match; null when no source was found. */
+    match: ClaimSourceMatchUI | null;
+    error?: boolean;
 }
 
 export interface StrategyVariantUI {

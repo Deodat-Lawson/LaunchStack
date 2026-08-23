@@ -30,25 +30,25 @@ benchmark/
    candidate post to the judge (`gpt-4o`, temp 0) and returns raw per-criterion
    scores, an overall score, and a rationale — **no rewrite**.
    evaluation criteria:
-    groundedness
+   groundedness
 
-    specificity
+   specificity
 
-    brand voice
+   brand voice
 
-    audience relevance
+   audience relevance
 
-    goal alignment
+   goal alignment
 
-    platform structure
+   platform structure
 
-    hook strength
+   hook strength
 
-    cta quality
+   cta quality
 
-    cliche generic
+   cliche generic
 
-    citation coverage
+   citation coverage
 
 3. The runner aggregates scores and writes `results.json` under
    `docs/pipeline/benchmarks/<runId>/`.
@@ -71,7 +71,7 @@ endpoint) is read from the repo-root `.env` — see `setup.ts`. Without
 
 ## Next steps (not in this slice)
 
-- Fill `references/*.md`  and add real candidates / wire Mode-A generation.
+- Fill `references/*.md` and add real candidates / wire Mode-A generation.
 - Judge stability: N-sample median + recorded variance.
 - Cost/token axis + Score-vs-cost frontier chart (deferred for now).
 - Baseline + regression CI gate.

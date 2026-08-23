@@ -3,73 +3,11 @@ import { invokeMarketingStructured } from "./models";
 import type {
     CompanyDNA,
     CompetitorAnalysis,
-    MessagingStrategy,
     StrategyVariant,
     BrandVoice,
     TargetPersona,
 } from "./types";
-import { MessagingStrategySchema, MultiStrategySchema } from "./types";
-
-/**
- * Build a single MessagingStrategy from company DNA, competitor analysis, and optional trend summary.
- */
-export async function buildMessagingStrategy(args: {
-    dna: CompanyDNA;
-    competitors: CompetitorAnalysis;
-    trendsSummary?: string;
-    userPrompt?: string;
-}): Promise<MessagingStrategy> {
-    const { dna, competitors, trendsSummary = "", userPrompt = "" } = args;
-
-    const MAX_COMPETITORS = 3;
-    const MAX_WEAKNESSES = 2;
-    const MAX_TRENDS_CHARS = 800;
-
-    const topCompetitors = competitors.competitors.slice(0, MAX_COMPETITORS);
-
-    const contextParts: string[] = [
-        "## Company DNA",
-        `Mission: ${dna.coreMission}`,
-        `Differentiators: ${dna.keyDifferentiators.join("; ")}`,
-        `Proven results: ${dna.provenResults.join("; ")}`,
-        `Human story: ${dna.humanStory}`,
-        `Technical edge: ${dna.technicalEdge}`,
-        "",
-        "## Competitor landscape",
-        ...topCompetitors.map(
-            c =>
-                `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`
-        ),
-        `Our advantages: ${competitors.ourAdvantages.join("; ")}`,
-        `Market gaps: ${competitors.marketGaps.join("; ")}`,
-        `Messaging to avoid: ${competitors.messagingAntiPatterns.join("; ")}`,
-    ];
-    if (trendsSummary.trim()) {
-        const trimmed = trendsSummary.trim().slice(0, MAX_TRENDS_CHARS);
-        contextParts.push("", "## Platform / trend context", trimmed);
-    }
-    if (userPrompt.trim()) {
-        contextParts.push("", "## User request", userPrompt.trim());
-    }
-
-    const systemPrompt = `You are a messaging strategist. Given company DNA, competitor analysis, and optional trend context, produce a single MessagingStrategy.
-
-Rules:
-- angle: one clear positioning angle (1–2 sentences) that differentiates us from competitors and fits our DNA.
-- keyProof: 2–4 concrete proof points (metrics, outcomes, differentiators) from company DNA to support the angle. NEVER cite external company products as proof.
-- humanHook: a relatable scenario or emotional hook using "we", "our team", or a generic role. NEVER invent named characters or fabricate testimonials.
-- avoidList: 3–5 phrases or themes we must avoid (clichés, competitor overlap, weak claims).
-
-Use ONLY information from the provided context. If context is sparse, keep claims honest and general. Return valid JSON matching the schema.`;
-
-    const response = await invokeMarketingStructured(
-        MessagingStrategySchema,
-        [new SystemMessage(systemPrompt), new HumanMessage(contextParts.join("\n"))],
-        "messaging_strategy"
-    );
-
-    return MessagingStrategySchema.parse(response);
-}
+import { MultiStrategySchema } from "./types";
 
 function buildContextBlock(args: {
     dna: CompanyDNA;
@@ -187,6 +125,5 @@ Return valid JSON with a "variants" array of exactly 3 objects.`;
         "multi_strategy"
     );
 
-    const parsed = MultiStrategySchema.parse(response);
-    return parsed.variants;
+    return response.variants;
 }

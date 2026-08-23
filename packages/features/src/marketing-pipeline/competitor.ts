@@ -1,7 +1,6 @@
-import { createHash } from "node:crypto";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { executeSearch } from "@launchstack/features/trend-search/web-search";
-import type { PlannedQuery } from "@launchstack/features/trend-search";
+import { createTtlCache, executeSearch } from "@launchstack/tools/web-research";
+import type { PlannedQuery } from "@launchstack/tools/web-research";
 import { invokeMarketingStructured } from "./models";
 import type { CompetitorAnalysis } from "./types";
 import { CompetitorAnalysisSchema } from "./types";
@@ -12,40 +11,13 @@ import { CompetitorAnalysisSchema } from "./types";
 
 const COMPETITOR_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-interface CompetitorCacheEntry {
-    result: CompetitorAnalysis;
-    expiresAt: number;
-}
-
-const cache = new Map<string, CompetitorCacheEntry>();
+const cache = createTtlCache<CompetitorAnalysis>({
+    ttlMs: COMPETITOR_CACHE_TTL_MS,
+    maxEntries: 50,
+});
 
 function buildCacheKey(companyName: string, categories: string[]): string {
-    const normalized = `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
-    return createHash("sha256").update(normalized).digest("hex");
-}
-
-function pruneCache(): void {
-    const now = Date.now();
-    for (const [key, entry] of cache.entries()) {
-        if (entry.expiresAt <= now) cache.delete(key);
-    }
-}
-
-function getCached(companyName: string, categories: string[]): CompetitorAnalysis | null {
-    const key = buildCacheKey(companyName, categories);
-    const entry = cache.get(key);
-    if (!entry) return null;
-    if (entry.expiresAt <= Date.now()) {
-        cache.delete(key);
-        return null;
-    }
-    return entry.result;
-}
-
-function setCache(companyName: string, categories: string[], result: CompetitorAnalysis): void {
-    if (cache.size > 50) pruneCache();
-    const key = buildCacheKey(companyName, categories);
-    cache.set(key, { result, expiresAt: Date.now() + COMPETITOR_CACHE_TTL_MS });
+    return `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -89,7 +61,7 @@ export async function analyzeCompetitors(args: {
 }): Promise<CompetitorAnalysis> {
     const { companyName, categories, companyContext = "" } = args;
 
-    const cached = getCached(companyName, categories);
+    const cached = cache.get(buildCacheKey(companyName, categories));
     if (cached) {
         console.log("[marketing-pipeline] competitor analysis cache HIT for %s", companyName);
         return cached;
@@ -140,7 +112,6 @@ Return valid JSON matching the schema.`;
         "competitor_analysis"
     );
 
-    const result = CompetitorAnalysisSchema.parse(response);
-    setCache(companyName, categories, result);
-    return result;
+    cache.set(buildCacheKey(companyName, categories), response);
+    return response;
 }

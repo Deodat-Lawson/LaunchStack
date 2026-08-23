@@ -47,6 +47,7 @@
     "@launchstack/core": "workspace:*",
     "@launchstack/design-tokens": "workspace:*",
     "@launchstack/features": "workspace:*",
+    "@launchstack/tools": "workspace:*",
     "@launchstack/protocol": "workspace:^",
     "@mozilla/readability": "^0.6.0",
     "@neondatabase/serverless": "^1.0.1",

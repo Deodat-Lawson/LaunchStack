@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -151,17 +151,14 @@
   },
   "dependencies": {
     "@langchain/core": "^0.3.74",
-    "@langchain/openai": "^0.6.11",
     "@launchstack/adapters": "workspace:^",
     "@launchstack/core": "workspace:*",
+    "@launchstack/tools": "workspace:*",
     "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",
-    "openai": "^4.62.1",
     "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {},
-  "peerDependenciesMeta": {},
-  "devDependencies": {}
+  "peerDependenciesMeta": {}
 }

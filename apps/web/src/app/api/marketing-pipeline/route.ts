@@ -1,20 +1,19 @@
-import { NextResponse } from "next/server";
 import {
     MarketingPipelineInputSchema,
     runMarketingPipeline,
 } from "@launchstack/features/marketing-pipeline";
 import type { PipelineSSEEvent } from "@launchstack/features/marketing-pipeline";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { fail, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 /**
  * Thrown from the onProgress callback when the client has disconnected.
- * `runMarketingPipeline` does not take an AbortSignal, but progress events are
- * emitted throughout the run, so throwing here stops the pipeline at the next
- * emission instead of letting it run (and bill LLM calls) to completion for
- * nobody.
+ * The pipeline also receives `request.signal` directly (its stage runner
+ * aborts between stages); this throw is the second line of defense, stopping
+ * a stage already in flight at its next progress emission.
  */
 class ClientDisconnectedError extends Error {
     constructor() {
@@ -28,37 +27,14 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        let body: unknown;
-        try {
-            body = (await request.json()) as unknown;
-        } catch {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid JSON body",
-                    error: "Request body must be valid JSON",
-                },
-                { status: 400 }
-            );
-        }
-        const validation = MarketingPipelineInputSchema.safeParse(body);
+        const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
         if (!validation.success) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid input",
-                    errors: validation.error.flatten(),
-                },
-                { status: 400 }
-            );
+            return fail("Invalid input", 400, { errors: validation.error.flatten() });
         }
 
         const companyId = Number(ctx.data.companyId);
         if (Number.isNaN(companyId)) {
-            return NextResponse.json(
-                { success: false, message: "Invalid company ID" },
-                { status: 400 }
-            );
+            return fail("Invalid company ID", 400);
         }
 
         const url = new URL(request.url);
@@ -94,6 +70,10 @@ export async function POST(request: Request) {
                         companyId,
                         input: validation.data,
                         debug,
+                        // Stops an abandoned run between stages (P2); the
+                        // onProgress throw below remains as belt-and-suspenders
+                        // for stages already in flight.
+                        signal: request.signal,
                         onProgress: progressEvent => {
                             if (request.signal.aborted) {
                                 throw new ClientDisconnectedError();
@@ -161,13 +141,6 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         console.error("[marketing-pipeline] POST error:", error);
-
-        return NextResponse.json(
-            {
-                success: false,
-                message: "Failed to run marketing pipeline",
-            },
-            { status: 500, headers: { "Content-Type": "application/json" } }
-        );
+        return fail("Failed to run marketing pipeline", 500);
     }
 }

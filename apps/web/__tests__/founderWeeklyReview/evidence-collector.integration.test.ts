@@ -183,7 +183,7 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
             workspaceTimezone: "UTC",
         });
 
-        expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v1");
+        expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v2");
         expect(snapshot.workspaceTimezone).toBe("UTC");
         expect(snapshot.items.map(i => i.sourceId)).toEqual([
             `document_change:doc:${docA}:version:${docAVersion1}`,

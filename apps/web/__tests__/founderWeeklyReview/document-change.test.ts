@@ -248,11 +248,14 @@ describe("Week 3 document change domain logic", () => {
             )
         ).resolves.toEqual([
             expect.objectContaining({
+                sourceId: expect.stringMatching(/^document_change:group:/),
                 sourceTimestamp: "2026-02-02T00:00:00.000Z",
                 metadata: expect.objectContaining({
                     previousVersionId: 1,
                     currentVersionId: 2,
-                    changeType: "modified",
+                    category: "uncertain",
+                    materialityMethod: "deterministic",
+                    rawChangeCount: 1,
                 }),
             }),
         ]);

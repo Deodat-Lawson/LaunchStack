@@ -56,16 +56,16 @@ Every repository method accepts `companyId` explicitly and includes it in SQL pr
 
 ## Contract versions
 
-- Evidence snapshot: `founder-weekly-review-evidence/v1`
-- Review payload: `founder-weekly-review/v1`
+- Evidence snapshot: `founder-weekly-review-evidence/v2` (v1 remains readable)
+- Review payload: `founder-weekly-review/v2` (v1 remains readable)
 
 ## Evidence collection (LAU-6)
 
 Evidence `sourceType` is a provenance and citation-safety classification, not a
 generic document label. The production collector currently emits:
 
-- `document_change` for every company-scoped document version created in the
-  reporting period;
+- `document_change` for material condensed change groups derived from adjacent
+  company-scoped historical version pairs in the reporting period;
 - `customer_feedback` for cited, exact-version sections of documents whose
   stored category is exactly `Customer Feedback`; and
 - `founder_context` for non-empty request-time founder input, with the actor
@@ -82,6 +82,11 @@ collection. Optional-source absence and result truncation become bounded source
 warnings, while successful evidence remains in the snapshot. The evidence
 collector acquires and normalizes evidence only; it does not own review
 lifecycle, dispatch, persistence, or generation.
+
+Snapshot v2 is the immutable audit boundary. It retains raw document changes,
+version-pair and alignment provenance, deterministic structural groups, and
+materiality/analyzer decisions. Generation consumes a separate bounded
+projection; prompt-size budgets never mutate or replace the snapshot.
 
 ## Current V1 product decision
 

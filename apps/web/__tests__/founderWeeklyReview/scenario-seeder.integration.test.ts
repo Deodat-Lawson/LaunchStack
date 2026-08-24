@@ -139,7 +139,7 @@ describeIfDatabase("seedScenario -> collector", () => {
 
             // The in-window v1 -> v2 pair is comparable, so it yields change evidence.
             expect(itemsOfType("document_change").map(item => item.title)).toEqual([
-                "Pricing Page",
+                "Pricing Page — Tiers",
             ]);
 
             // One customer_feedback item per processed section.

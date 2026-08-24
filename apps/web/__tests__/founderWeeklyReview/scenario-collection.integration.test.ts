@@ -140,6 +140,34 @@ function assertEvidenceExpectations(
     for (const code of evidence.forbiddenWarningCodes ?? []) expect(reported).not.toContain(code);
 }
 
+function assertDocumentChangeExpectations(
+    scenario: FounderWeeklyReviewScenario,
+    snapshot: FounderWeeklyReviewEvidenceSnapshot
+): void {
+    const expected = scenario.expect.documentChanges;
+    if (!expected) return;
+    expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v2");
+    if (snapshot.schemaVersion !== "founder-weekly-review-evidence/v2") return;
+
+    const groups = snapshot.documentChangeAudit.groups;
+    if (expected.min !== undefined) expect(groups.length).toBeGreaterThanOrEqual(expected.min);
+    if (expected.max !== undefined) expect(groups.length).toBeLessThanOrEqual(expected.max);
+    for (const category of expected.requiredCategories ?? []) {
+        expect(groups.some(group => group.category === category)).toBe(true);
+    }
+    if (expected.requireNoInventedBaseline) {
+        expect(groups).toHaveLength(0);
+        expect(snapshot.documentChangeAudit.rawChanges).toHaveLength(0);
+    }
+
+    const rawIds = new Set(
+        snapshot.documentChangeAudit.rawChanges.map(change => change.rawChangeId)
+    );
+    for (const group of groups) {
+        expect(group.rawChangeIds.every(rawChangeId => rawIds.has(rawChangeId))).toBe(true);
+    }
+}
+
 function assertSourceSemantics(
     scenario: FounderWeeklyReviewScenario,
     snapshot: FounderWeeklyReviewEvidenceSnapshot,
@@ -275,8 +303,9 @@ describeIfDatabase("founder weekly review scenarios (provider-free collection)",
 
     it.each(SCENARIOS)("%s satisfies its declared expectations", async name => {
         const { scenario, snapshot, seeded } = await collect(name);
-        expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v1");
+        expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v2");
         assertEvidenceExpectations(scenario, snapshot);
+        assertDocumentChangeExpectations(scenario, snapshot);
         assertSourceSemantics(scenario, snapshot, seeded);
         await assertReviewExpectations(scenario, snapshot);
     });

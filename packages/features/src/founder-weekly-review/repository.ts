@@ -15,6 +15,7 @@ import {
     type FounderWeeklyReviewClaimInput,
     type FounderWeeklyReviewCollectionClaimInput,
     type FounderWeeklyReviewEvidenceSnapshot,
+    type FounderWeeklyReviewEvidenceSchemaVersion,
     type FounderWeeklyReviewGenerationFailure,
     type FounderWeeklyReviewModelMetadata,
     type FounderWeeklyReviewOperationRecord,
@@ -67,7 +68,7 @@ function mapRunRow(row: FounderWeeklyReviewRunRow): FounderWeeklyReviewRunRecord
             ? parseFounderWeeklyReviewEvidenceSnapshot(row.evidenceSnapshot)
             : null,
         evidenceSchemaVersion:
-            row.evidenceSchemaVersion as typeof FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+            row.evidenceSchemaVersion as FounderWeeklyReviewEvidenceSchemaVersion,
         collectionInput: parseFounderWeeklyReviewCollectionInput(row.collectionInput),
         collectionClaimId: row.collectionClaimId ?? null,
         collectionStartedAt: row.collectionStartedAt ?? null,
@@ -137,7 +138,9 @@ export class FounderWeeklyReviewRepository {
                 reviewPayload: null,
                 reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
                 evidenceSnapshot: input.evidenceSnapshot ?? null,
-                evidenceSchemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+                evidenceSchemaVersion:
+                    input.evidenceSnapshot?.schemaVersion ??
+                    FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
                 collectionInput: input.collectionInput ?? {
                     workspaceTimezone: input.evidenceSnapshot?.workspaceTimezone ?? "UTC",
                     actorExternalUserId: input.createdByActorId.replace(/^user:/, ""),

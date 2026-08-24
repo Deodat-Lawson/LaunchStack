@@ -57,6 +57,32 @@ describe("founder weekly review scenario contract", () => {
                 },
             })
         ).toThrow(/exact must satisfy min\/max/);
+        expect(() =>
+            FounderWeeklyReviewScenarioSchema.parse({
+                ...base,
+                expect: { documentChanges: { min: 2, max: 1 } },
+            })
+        ).toThrow(/min must not exceed max/);
+    });
+
+    it("requires document-change assertions to be falsifiable and consistent", () => {
+        expect(() =>
+            FounderWeeklyReviewScenarioSchema.parse({
+                ...base,
+                expect: { documentChanges: {} },
+            })
+        ).toThrow(/documentChanges must assert something/);
+        expect(() =>
+            FounderWeeklyReviewScenarioSchema.parse({
+                ...base,
+                expect: {
+                    documentChanges: {
+                        min: 1,
+                        requireNoInventedBaseline: true,
+                    },
+                },
+            })
+        ).toThrow(/cannot require document-change groups/);
     });
 
     it("requires exactly one company under review", () => {

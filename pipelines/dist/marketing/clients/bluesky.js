@@ -23,9 +23,11 @@ class BlueskyClient {
         });
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Bluesky auth failed: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `Bluesky auth failed: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
-        const session = (await response.json());
+        const session = await response.json();
         this.session = session;
         this.sessionExpiry = Date.now() + 55 * 60 * 1000; // 55 minutes
         return session;
@@ -52,7 +54,9 @@ class BlueskyClient {
         });
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Bluesky API error: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `Bluesky API error: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
         return response.json();
     }
@@ -66,18 +70,17 @@ class BlueskyClient {
             });
             return searchData.posts
                 .filter(post => {
-                // Filter posts with some engagement (at least 2 likes or 1 repost)
-                return post.likeCount >= 2 || post.repostCount >= 1;
-            })
-                .map((post) => ({
-                title: this.extractTitle(post.record.text),
-                url: this.generatePostUrl(post),
-                snippet: this.formatPostSnippet(post),
-                source: "bluesky",
-            }))
+                    // Filter posts with some engagement (at least 2 likes or 1 repost)
+                    return post.likeCount >= 2 || post.repostCount >= 1;
+                })
+                .map(post => ({
+                    title: this.extractTitle(post.record.text),
+                    url: this.generatePostUrl(post),
+                    snippet: this.formatPostSnippet(post),
+                    source: "bluesky",
+                }))
                 .slice(0, maxResults);
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("Bluesky search error:", error);
             return [];
         }
@@ -92,15 +95,14 @@ class BlueskyClient {
             return feedData.feed
                 .map(item => item.post)
                 .filter(post => post.likeCount >= 5) // Higher threshold for trending
-                .map((post) => ({
-                title: this.extractTitle(post.record.text),
-                url: this.generatePostUrl(post),
-                snippet: this.formatPostSnippet(post),
-                source: "bluesky",
-            }))
+                .map(post => ({
+                    title: this.extractTitle(post.record.text),
+                    url: this.generatePostUrl(post),
+                    snippet: this.formatPostSnippet(post),
+                    source: "bluesky",
+                }))
                 .slice(0, maxResults);
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("Bluesky trending feed error:", error);
             return [];
         }
@@ -124,10 +126,8 @@ class BlueskyClient {
         const now = new Date();
         const diffMs = now.getTime() - date.getTime();
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        if (diffHours < 1)
-            return "< 1h ago";
-        if (diffHours < 24)
-            return `${diffHours}h ago`;
+        if (diffHours < 1) return "< 1h ago";
+        if (diffHours < 24) return `${diffHours}h ago`;
         const diffDays = Math.floor(diffHours / 24);
         return `${diffDays}d ago`;
     }

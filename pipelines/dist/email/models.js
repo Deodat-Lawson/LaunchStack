@@ -2,7 +2,7 @@
  * Shared provider-neutral structured response entry point for the email
  * pipeline (mirrors marketing-pipeline/models.ts).
  */
-import { invokeStructured, resolveChatModel, } from "@launchstack/llm";
+import { invokeStructured, resolveChatModel } from "@launchstack/llm";
 /** Per-stage resolution options for the email pipeline (swap here to change models). */
 export const EMAIL_MODELS = {
     templateGeneration: { route: "default", temperature: 0.4 },

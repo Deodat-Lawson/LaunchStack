@@ -49,10 +49,17 @@ export async function resolveLocation(location) {
         route: "fast",
         temperature: 0,
     });
-    const response = await invokeStructured(resolved, GeocodingOutputSchema, [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(`Geocode this location: "${trimmed}"`)], { name: "geocode_location" });
+    const response = await invokeStructured(
+        resolved,
+        GeocodingOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(`Geocode this location: "${trimmed}"`)],
+        { name: "geocode_location" }
+    );
     // Check for the "UNKNOWN" sentinel
     if (response.resolvedName === "UNKNOWN" || (response.lat === 0 && response.lng === 0)) {
-        throw new Error(`Could not geocode location: "${trimmed}". Please provide valid coordinates as { lat, lng } or a recognizable city/region name.`);
+        throw new Error(
+            `Could not geocode location: "${trimmed}". Please provide valid coordinates as { lat, lng } or a recognizable city/region name.`
+        );
     }
     return { lat: response.lat, lng: response.lng };
 }

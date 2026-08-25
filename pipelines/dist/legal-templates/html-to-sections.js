@@ -17,11 +17,9 @@ export function parseLegalDocumentHtmlToSections(html) {
         const id = `section-${index}`;
         if (tag === "h1") {
             sections.push({ id, type: "title", content: inner });
-        }
-        else if (tag === "h2") {
+        } else if (tag === "h2") {
             sections.push({ id, type: "heading", content: inner });
-        }
-        else {
+        } else {
             sections.push({ id, type: "paragraph", content: inner });
         }
         index++;

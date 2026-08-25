@@ -70,11 +70,18 @@ export function validateRecipients(recipients, options = {}) {
             issues.push(err("duplicate", `"${key}" appears more than once.`));
         }
         if (suppressed.has(key)) {
-            issues.push(err("suppressed", `"${key}" is on the suppression list (unsubscribed or bounced).`));
+            issues.push(
+                err("suppressed", `"${key}" is on the suppression list (unsubscribed or bounced).`)
+            );
         }
         for (const field of required) {
             if (!resolveRecipientField(recipient, field)) {
-                issues.push(warn("missing_field", `No value for "${field}"; the template will fall back to a default.`));
+                issues.push(
+                    warn(
+                        "missing_field",
+                        `No value for "${field}"; the template will fall back to a default.`
+                    )
+                );
             }
         }
         if (hasErrors(issues)) {
@@ -83,8 +90,7 @@ export function validateRecipients(recipients, options = {}) {
         }
         seen.add(key);
         valid.push(recipient);
-        if (issues.length > 0)
-            warnings.push({ recipient, issues });
+        if (issues.length > 0) warnings.push({ recipient, issues });
     }
     return { valid, rejected, warnings };
 }
@@ -95,10 +101,9 @@ export function validateRecipients(recipients, options = {}) {
 export function resolveRecipientField(recipient, field) {
     // Note: an empty/whitespace value must collapse to null, so `??` would be
     // wrong here — it only replaces null/undefined and would let "" through.
-    const nonEmpty = (value) => {
+    const nonEmpty = value => {
         const trimmed = value?.trim();
-        if (!trimmed)
-            return null;
+        if (!trimmed) return null;
         return trimmed;
     };
     switch (field) {
@@ -144,23 +149,42 @@ export function validateTemplate(template, options = {}) {
         issues.push(err("subject_crlf", "Subject contains a line break (header-injection risk)."));
     }
     if (subject.length > SUBJECT_MAX_CHARS) {
-        issues.push(err("subject_too_long", `Subject is ${subject.length} characters; the limit is ${SUBJECT_MAX_CHARS}.`));
-    }
-    else if (subject.length > SUBJECT_RECOMMENDED_CHARS) {
-        issues.push(warn("subject_long", `Subject is ${subject.length} characters; most clients truncate around ${SUBJECT_RECOMMENDED_CHARS}.`));
+        issues.push(
+            err(
+                "subject_too_long",
+                `Subject is ${subject.length} characters; the limit is ${SUBJECT_MAX_CHARS}.`
+            )
+        );
+    } else if (subject.length > SUBJECT_RECOMMENDED_CHARS) {
+        issues.push(
+            warn(
+                "subject_long",
+                `Subject is ${subject.length} characters; most clients truncate around ${SUBJECT_RECOMMENDED_CHARS}.`
+            )
+        );
     }
     if (!body.trim()) {
         issues.push(err("body_empty", "Body is empty."));
     }
     if (!templateTokens(template).includes(unsubscribeToken)) {
-        issues.push(err("missing_unsubscribe_token", `Body must include {{${unsubscribeToken}}} so every email carries an unsubscribe link.`));
+        issues.push(
+            err(
+                "missing_unsubscribe_token",
+                `Body must include {{${unsubscribeToken}}} so every email carries an unsubscribe link.`
+            )
+        );
     }
     // `variables` is what the generator claims it used; a mismatch means the
     // declared contract and the actual body have drifted apart.
     const declared = new Set(template?.variables ?? []);
     for (const token of templateTokens(template)) {
         if (!declared.has(token)) {
-            issues.push(warn("undeclared_variable", `{{${token}}} is used but not listed in template.variables.`));
+            issues.push(
+                warn(
+                    "undeclared_variable",
+                    `{{${token}}} is used but not listed in template.variables.`
+                )
+            );
         }
     }
     return issues;
@@ -177,20 +201,28 @@ export function validateRendered(rendered, options) {
     const body = rendered?.body ?? "";
     const leftover = [...new Set([...unresolvedTokens(subject), ...unresolvedTokens(body)])];
     if (leftover.length > 0) {
-        issues.push(err("unresolved_tokens", `Unresolved merge tokens: ${leftover.map(t => `{{${t}}}`).join(", ")}.`));
+        issues.push(
+            err(
+                "unresolved_tokens",
+                `Unresolved merge tokens: ${leftover.map(t => `{{${t}}}`).join(", ")}.`
+            )
+        );
     }
-    if (!subject.trim())
-        issues.push(err("subject_empty", "Rendered subject is empty."));
+    if (!subject.trim()) issues.push(err("subject_empty", "Rendered subject is empty."));
     if (CRLF_RE.test(subject)) {
         issues.push(err("subject_crlf", "Rendered subject contains a line break."));
     }
-    if (!body.trim())
-        issues.push(err("body_empty", "Rendered body is empty."));
+    if (!body.trim()) issues.push(err("body_empty", "Rendered body is empty."));
     if (options.unsubscribeUrl && !body.includes(options.unsubscribeUrl)) {
         issues.push(err("missing_unsubscribe", "Rendered body has no unsubscribe link."));
     }
     if (options.senderIdentity && !body.includes(options.senderIdentity)) {
-        issues.push(err("missing_sender_identity", "Rendered body is missing the sender identity required by CAN-SPAM."));
+        issues.push(
+            err(
+                "missing_sender_identity",
+                "Rendered body is missing the sender identity required by CAN-SPAM."
+            )
+        );
     }
     return issues;
 }
@@ -198,7 +230,9 @@ export function validateRendered(rendered, options) {
 export function assertSendable(rendered, options) {
     const issues = validateRendered(rendered, options).filter(i => i.severity === "error");
     if (issues.length > 0) {
-        throw new Error(`[email-pipeline] refusing to send: ${issues.map(i => i.message).join(" ")}`);
+        throw new Error(
+            `[email-pipeline] refusing to send: ${issues.map(i => i.message).join(" ")}`
+        );
     }
 }
 //# sourceMappingURL=validators.js.map

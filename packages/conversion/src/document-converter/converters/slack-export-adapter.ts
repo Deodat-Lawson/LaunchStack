@@ -1,3 +1,4 @@
+import type { ExtractedTable } from "../../ocr-processing/types";
 import type { SourceAdapter, SourceAdapterOptions, StandardizedDocument } from "../../types";
 import { isGitHubExport, processGitHubExport } from "./github-export-adapter";
 
@@ -66,7 +67,7 @@ export class JsonExportAdapter implements SourceAdapter {
         const pages: {
             pageNumber: number;
             textBlocks: string[];
-            tables: import("../../ocr-processing/types").ExtractedTable[];
+            tables: ExtractedTable[];
         }[] = [];
         let cursor = 0;
         let pageNum = 1;
@@ -137,7 +138,7 @@ export class JsonExportAdapter implements SourceAdapter {
             return {
                 pageNumber: idx + 1,
                 textBlocks: [header + lines.join("\n\n")],
-                tables: [] as import("../../ocr-processing/types").ExtractedTable[],
+                tables: [] as ExtractedTable[],
             };
         });
 

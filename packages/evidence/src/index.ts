@@ -30,7 +30,12 @@ export {
     type SourceVersionMeta,
 } from "./version-supersession";
 
-export { diffVersions, type ChunkFingerprint, type ChunkMove, type VersionDiff } from "./version-diff";
+export {
+    diffVersions,
+    type ChunkFingerprint,
+    type ChunkMove,
+    type VersionDiff,
+} from "./version-diff";
 
 export {
     computeFreshness,

@@ -2,216 +2,264 @@ export declare const marketingContentHistory: import("drizzle-orm/pg-core").PgTa
     name: "marketing_content_history";
     schema: undefined;
     columns: {
-        id: import("drizzle-orm/pg-core").PgColumn<{
-            name: "id";
-            tableName: "marketing_content_history";
-            dataType: "number";
-            columnType: "PgBigSerial53";
-            data: number;
-            driverParam: number;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        companyId: import("drizzle-orm/pg-core").PgColumn<{
-            name: "company_id";
-            tableName: "marketing_content_history";
-            dataType: "bigint";
-            columnType: "PgBigInt64";
-            data: bigint;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        platform: import("drizzle-orm/pg-core").PgColumn<{
-            name: "platform";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {
-            length: 20;
-        }>;
-        message: import("drizzle-orm/pg-core").PgColumn<{
-            name: "message";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        angle: import("drizzle-orm/pg-core").PgColumn<{
-            name: "angle";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {
-            length: 500;
-        }>;
-        contentType: import("drizzle-orm/pg-core").PgColumn<{
-            name: "content_type";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {
-            length: 50;
-        }>;
-        metadata: import("drizzle-orm/pg-core").PgColumn<{
-            name: "metadata";
-            tableName: "marketing_content_history";
-            dataType: "json";
-            columnType: "PgJsonb";
-            data: unknown;
-            driverParam: unknown;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        impressions: import("drizzle-orm/pg-core").PgColumn<{
-            name: "impressions";
-            tableName: "marketing_content_history";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        engagements: import("drizzle-orm/pg-core").PgColumn<{
-            name: "engagements";
-            tableName: "marketing_content_history";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        clicks: import("drizzle-orm/pg-core").PgColumn<{
-            name: "clicks";
-            tableName: "marketing_content_history";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        createdAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "created_at";
-            tableName: "marketing_content_history";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        updatedAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "updated_at";
-            tableName: "marketing_content_history";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
+        id: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "id";
+                tableName: "marketing_content_history";
+                dataType: "number";
+                columnType: "PgBigSerial53";
+                data: number;
+                driverParam: number;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: true;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        companyId: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "company_id";
+                tableName: "marketing_content_history";
+                dataType: "bigint";
+                columnType: "PgBigInt64";
+                data: bigint;
+                driverParam: string;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        platform: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "platform";
+                tableName: "marketing_content_history";
+                dataType: "string";
+                columnType: "PgVarchar";
+                data: string;
+                driverParam: string;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {
+                length: 20;
+            }
+        >;
+        message: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "message";
+                tableName: "marketing_content_history";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        angle: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "angle";
+                tableName: "marketing_content_history";
+                dataType: "string";
+                columnType: "PgVarchar";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {
+                length: 500;
+            }
+        >;
+        contentType: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "content_type";
+                tableName: "marketing_content_history";
+                dataType: "string";
+                columnType: "PgVarchar";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {
+                length: 50;
+            }
+        >;
+        metadata: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "metadata";
+                tableName: "marketing_content_history";
+                dataType: "json";
+                columnType: "PgJsonb";
+                data: unknown;
+                driverParam: unknown;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        impressions: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "impressions";
+                tableName: "marketing_content_history";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        engagements: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "engagements";
+                tableName: "marketing_content_history";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        clicks: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "clicks";
+                tableName: "marketing_content_history";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        createdAt: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "created_at";
+                tableName: "marketing_content_history";
+                dataType: "date";
+                columnType: "PgTimestamp";
+                data: Date;
+                driverParam: string;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
+        updatedAt: import("drizzle-orm/pg-core").PgColumn<
+            {
+                name: "updated_at";
+                tableName: "marketing_content_history";
+                dataType: "date";
+                columnType: "PgTimestamp";
+                data: Date;
+                driverParam: string;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            },
+            {},
+            {}
+        >;
     };
     dialect: "pg";
 }>;

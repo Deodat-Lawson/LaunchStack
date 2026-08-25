@@ -8,7 +8,7 @@
 const TOKEN_RE = /\{\{\s*([\w.]+)\s*\}\}/g;
 /** Replace {{token}} with vars[token]; leave unknown tokens intact (so the guard catches them). */
 export function renderTokens(text, vars) {
-    return (text ?? "").replace(TOKEN_RE, (_m, key) => key in vars ? vars[key] : `{{${key}}}`);
+    return (text ?? "").replace(TOKEN_RE, (_m, key) => (key in vars ? vars[key] : `{{${key}}}`));
 }
 /** Any {{tokens}} still present after rendering (must be empty before sending). */
 export function unresolvedTokens(text) {
@@ -30,8 +30,7 @@ function recipientVars(recipient) {
     if (name) {
         vars.name = name;
         const first = name.split(/\s+/)[0];
-        if (first)
-            vars.firstName = first;
+        if (first) vars.firstName = first;
     }
     const company = recipient?.company?.trim();
     if (company) {
@@ -39,12 +38,10 @@ function recipientVars(recipient) {
         vars.recipientCompany = company;
     }
     const notes = recipient?.contextNotes?.trim();
-    if (notes)
-        vars.contextNotes = notes;
+    if (notes) vars.contextNotes = notes;
     for (const [k, v] of Object.entries(recipient?.vars ?? {})) {
         const value = typeof v === "string" ? v.trim() : "";
-        if (value)
-            vars[k] = value;
+        if (value) vars[k] = value;
     }
     return vars;
 }
@@ -92,8 +89,10 @@ export function mergeStrict(template, recipient, options = {}) {
         ...new Set([...unresolvedTokens(rendered.subject), ...unresolvedTokens(rendered.body)]),
     ];
     if (leftover.length > 0) {
-        throw new Error(`[email-pipeline] unresolved merge tokens for ${recipient?.email ?? "unknown recipient"}: ` +
-            leftover.map(t => `{{${t}}}`).join(", "));
+        throw new Error(
+            `[email-pipeline] unresolved merge tokens for ${recipient?.email ?? "unknown recipient"}: ` +
+                leftover.map(t => `{{${t}}}`).join(", ")
+        );
     }
     return rendered;
 }

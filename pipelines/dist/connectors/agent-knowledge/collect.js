@@ -20,8 +20,7 @@ export async function readKnowledgeItem(item) {
     let raw;
     try {
         raw = await readFile(item.location.origin, "utf8");
-    }
-    catch (error) {
+    } catch (error) {
         return { sourceId: item.sourceId, reason: "unreadable", detail: describeError(error) };
     }
     if (looksBinary(raw)) {
@@ -42,10 +41,8 @@ export async function collectAgentKnowledge(discovered) {
     const skipped = [];
     for (const candidate of discovered) {
         const result = await readKnowledgeItem(candidate);
-        if (isSkipped(result))
-            skipped.push(result);
-        else
-            items.push(result);
+        if (isSkipped(result)) skipped.push(result);
+        else items.push(result);
     }
     return { items, skipped };
 }

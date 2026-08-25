@@ -107,9 +107,7 @@ jest.mock("~/server/collab/personas", () => ({
 }));
 
 jest.mock("~/server/collab/runtime", () => {
-    const engine = jest.requireActual<typeof import("@launchstack/collab")>(
-        "@launchstack/collab"
-    );
+    const engine = jest.requireActual<typeof import("@launchstack/collab")>("@launchstack/collab");
     return {
         listMeetingsForCompany: () =>
             Promise.resolve([...mockCtx.harness.meetings.values()].map(m => m.row)),

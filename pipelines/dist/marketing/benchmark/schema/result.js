@@ -106,11 +106,13 @@ export const BaselineComparisonSchema = z.object({
     thresholds: RegressionThresholdsSchema,
     meanScoreDelta: z.number(), // candidate - baseline (negative = worse)
     regressions: z
-        .array(z.object({
-        fixtureId: z.string(),
-        criterionId: CriterionIdEnum.nullable(), // null = aggregate regression
-        delta: z.number(),
-    }))
+        .array(
+            z.object({
+                fixtureId: z.string(),
+                criterionId: CriterionIdEnum.nullable(), // null = aggregate regression
+                delta: z.number(),
+            })
+        )
         .default([]),
     newFailures: z.array(z.string()).default([]), // fixtureIds newly failing
     /** CI fails iff true — set only when a defined threshold is breached. */

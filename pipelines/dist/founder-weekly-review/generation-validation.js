@@ -8,70 +8,80 @@ export class FounderWeeklyReviewGenerationValidationError extends Error {
 }
 /** Sources in the current model that can establish a reporting-period event. */
 const TEMPORAL_EVIDENCE_SOURCE_TYPES = new Set(["document_change"]);
-const isTemporalEvidenceSource = (source) => source !== undefined && TEMPORAL_EVIDENCE_SOURCE_TYPES.has(source.sourceType ?? "");
+const isTemporalEvidenceSource = source =>
+    source !== undefined && TEMPORAL_EVIDENCE_SOURCE_TYPES.has(source.sourceType ?? "");
 export function assertUniqueSnapshotSourceIds(evidenceSnapshot) {
     const sourceIds = evidenceSnapshot.items.map(item => item.sourceId);
     if (new Set(sourceIds).size !== sourceIds.length) {
-        throw new FounderWeeklyReviewGenerationValidationError("Evidence snapshot contains duplicate source IDs.");
+        throw new FounderWeeklyReviewGenerationValidationError(
+            "Evidence snapshot contains duplicate source IDs."
+        );
     }
 }
 export function validateFounderWeeklyReviewV2Citations(payload, evidenceSnapshot) {
     const evidenceBySourceId = new Map(evidenceSnapshot.items.map(item => [item.sourceId, item]));
-    const factualSections = [
-        "whatChanged",
-        "whatShipped",
-        "whatCustomersSaid",
-        "currentBlockers",
-    ];
+    const factualSections = ["whatChanged", "whatShipped", "whatCustomersSaid", "currentBlockers"];
     for (const sectionName of factualSections) {
         const section = payload.sections[sectionName];
-        if (section.state === "no_evidence")
-            continue;
+        if (section.state === "no_evidence") continue;
         for (const [itemIndex, item] of section.items.entries()) {
             assertCitations(item.sourceIds, evidenceBySourceId, item.kind);
             if (item.kind === "contradictory_evidence" && item.sourceIds.length < 2) {
-                throw new FounderWeeklyReviewGenerationValidationError(`${sectionName} contradictory_evidence must cite at least two sources.`);
+                throw new FounderWeeklyReviewGenerationValidationError(
+                    `${sectionName} contradictory_evidence must cite at least two sources.`
+                );
             }
             if (sectionName === "whatCustomersSaid") {
                 for (const sourceId of item.sourceIds) {
                     const source = evidenceBySourceId.get(sourceId);
                     if (source?.sourceType === "founder_context") {
-                        throw new FounderWeeklyReviewGenerationValidationError("founder_context must never be presented as customer feedback.", [
-                            {
-                                code: "founder_context_used_as_customer_feedback",
-                                section: sectionName,
-                                itemIndex,
-                                sourceId,
-                            },
-                        ]);
+                        throw new FounderWeeklyReviewGenerationValidationError(
+                            "founder_context must never be presented as customer feedback.",
+                            [
+                                {
+                                    code: "founder_context_used_as_customer_feedback",
+                                    section: sectionName,
+                                    itemIndex,
+                                    sourceId,
+                                },
+                            ]
+                        );
                     }
                     if (source?.sourceType !== "customer_feedback") {
-                        throw new FounderWeeklyReviewGenerationValidationError(`whatCustomersSaid may cite only customer_feedback evidence; received "${sourceId}".`, [
-                            {
-                                code: "customer_signals_requires_customer_feedback",
-                                section: sectionName,
-                                itemIndex,
-                                sourceId,
-                            },
-                        ]);
+                        throw new FounderWeeklyReviewGenerationValidationError(
+                            `whatCustomersSaid may cite only customer_feedback evidence; received "${sourceId}".`,
+                            [
+                                {
+                                    code: "customer_signals_requires_customer_feedback",
+                                    section: sectionName,
+                                    itemIndex,
+                                    sourceId,
+                                },
+                            ]
+                        );
                     }
                 }
             }
             if (sectionName === "whatChanged" || sectionName === "whatShipped") {
                 const sources = item.sourceIds.map(sourceId => evidenceBySourceId.get(sourceId));
-                const workspaceOnly = sources.length > 0 &&
+                const workspaceOnly =
+                    sources.length > 0 &&
                     sources.every(source => source?.sourceType === "workspace_document");
-                const workspaceWithoutTemporalEvidence = sources.some(source => source?.sourceType === "workspace_document") &&
+                const workspaceWithoutTemporalEvidence =
+                    sources.some(source => source?.sourceType === "workspace_document") &&
                     !sources.some(isTemporalEvidenceSource);
                 if (workspaceOnly || workspaceWithoutTemporalEvidence) {
-                    throw new FounderWeeklyReviewGenerationValidationError(`${sectionName} requires temporal evidence in addition to workspace_document context.`, item.sourceIds.map(sourceId => ({
-                        code: workspaceOnly
-                            ? "workspace_document_only_temporal_claim"
-                            : `${sectionName === "whatChanged" ? "what_changed" : "what_shipped"}_requires_temporal_evidence`,
-                        section: sectionName,
-                        itemIndex,
-                        sourceId,
-                    })));
+                    throw new FounderWeeklyReviewGenerationValidationError(
+                        `${sectionName} requires temporal evidence in addition to workspace_document context.`,
+                        item.sourceIds.map(sourceId => ({
+                            code: workspaceOnly
+                                ? "workspace_document_only_temporal_claim"
+                                : `${sectionName === "whatChanged" ? "what_changed" : "what_shipped"}_requires_temporal_evidence`,
+                            section: sectionName,
+                            itemIndex,
+                            sourceId,
+                        }))
+                    );
                 }
             }
         }
@@ -81,7 +91,9 @@ export function validateFounderWeeklyReviewV2Citations(payload, evidenceSnapshot
         for (const item of priorities.items) {
             assertCitations(item.sourceIds, evidenceBySourceId, item.kind);
             if (item.kind !== "recommendation") {
-                throw new FounderWeeklyReviewGenerationValidationError("nextPriorities may contain recommendations only.");
+                throw new FounderWeeklyReviewGenerationValidationError(
+                    "nextPriorities may contain recommendations only."
+                );
             }
         }
     }
@@ -89,14 +101,20 @@ export function validateFounderWeeklyReviewV2Citations(payload, evidenceSnapshot
 }
 function assertCitations(sourceIds, evidenceBySourceId, itemKind) {
     if (sourceIds.length === 0) {
-        throw new FounderWeeklyReviewGenerationValidationError(`${itemKind} must cite at least one evidence source.`);
+        throw new FounderWeeklyReviewGenerationValidationError(
+            `${itemKind} must cite at least one evidence source.`
+        );
     }
     if (new Set(sourceIds).size !== sourceIds.length) {
-        throw new FounderWeeklyReviewGenerationValidationError(`${itemKind} contains duplicate source citations.`);
+        throw new FounderWeeklyReviewGenerationValidationError(
+            `${itemKind} contains duplicate source citations.`
+        );
     }
     for (const sourceId of sourceIds) {
         if (!evidenceBySourceId.has(sourceId)) {
-            throw new FounderWeeklyReviewGenerationValidationError(`${itemKind} cites source ID "${sourceId}" that is absent from the evidence snapshot.`);
+            throw new FounderWeeklyReviewGenerationValidationError(
+                `${itemKind} cites source ID "${sourceId}" that is absent from the evidence snapshot.`
+            );
         }
     }
 }

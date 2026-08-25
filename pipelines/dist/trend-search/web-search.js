@@ -4,8 +4,7 @@ const MAX_RETRIES = 2;
 function normalizeUrl(url) {
     try {
         return new URL(url).href;
-    }
-    catch {
+    } catch {
         return url.trim();
     }
 }
@@ -18,24 +17,29 @@ async function runSubQueryWithRetry(query, provider) {
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
             return await provider(query);
-        }
-        catch (err) {
+        } catch (err) {
             lastError = err instanceof Error ? err : new Error(String(err));
             if (attempt < MAX_RETRIES) {
-                console.warn(`[web-search] Sub-query failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${query.slice(0, 50)}..."`, lastError.message);
-            }
-            else {
-                console.error(`[web-search] Sub-query failed after ${MAX_RETRIES + 1} attempts: "${query.slice(0, 50)}..."`, lastError);
+                console.warn(
+                    `[web-search] Sub-query failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${query.slice(0, 50)}..."`,
+                    lastError.message
+                );
+            } else {
+                console.error(
+                    `[web-search] Sub-query failed after ${MAX_RETRIES + 1} attempts: "${query.slice(0, 50)}..."`,
+                    lastError
+                );
             }
         }
     }
-    if (lastError)
-        return [];
+    if (lastError) return [];
     console.warn(`[web-search] Zero results for sub-query: "${query.slice(0, 80)}..."`);
     return [];
 }
 async function executeWithProvider(subQueries, provider) {
-    const perQueryResults = await Promise.all(subQueries.map(sub => runSubQueryWithRetry(sub.searchQuery, provider)));
+    const perQueryResults = await Promise.all(
+        subQueries.map(sub => runSubQueryWithRetry(sub.searchQuery, provider))
+    );
     const seenUrls = new Set();
     const combined = [];
     for (const results of perQueryResults) {
@@ -50,8 +54,7 @@ async function executeWithProvider(subQueries, provider) {
     return combined;
 }
 function resolveStrategy(override) {
-    if (override)
-        return override;
+    if (override) return override;
     const fromEnv = process.env.SEARCH_PROVIDER;
     if (fromEnv === "serper" || fromEnv === "fallback" || fromEnv === "parallel") {
         return fromEnv;
@@ -70,7 +73,8 @@ export async function executeSearch(subQueries, strategyOverride) {
     const strategy = resolveStrategy(strategyOverride);
     const hasExaKey = Boolean(process.env.EXA_API_KEY);
     const hasSerperKey = Boolean(process.env.SERPER_API_KEY);
-    const useSerper = hasSerperKey &&
+    const useSerper =
+        hasSerperKey &&
         (strategy === "serper" || strategy === "fallback" || strategy === "parallel");
     if (!useSerper && strategy === "serper") {
         console.warn("[web-search] SERPER_API_KEY not set; downgrading strategy to exa.");
@@ -112,7 +116,9 @@ export async function executeSearch(subQueries, strategyOverride) {
         if (primaryResults.length > 0) {
             return { results: primaryResults, providerUsed: "serper" };
         }
-        console.warn("[web-search] Serper returned no results for all sub-queries, falling back to Exa.");
+        console.warn(
+            "[web-search] Serper returned no results for all sub-queries, falling back to Exa."
+        );
         if (!exaProvider) {
             return { results: [], providerUsed: "none" };
         }
@@ -125,17 +131,17 @@ export async function executeSearch(subQueries, strategyOverride) {
     // Parallel: query both providers and merge results
     if (strategy === "parallel") {
         const providers = [];
-        if (serperProvider)
-            providers.push({ name: "serper", fn: serperProvider });
-        if (exaProvider)
-            providers.push({ name: "exa", fn: exaProvider });
+        if (serperProvider) providers.push({ name: "serper", fn: serperProvider });
+        if (exaProvider) providers.push({ name: "exa", fn: exaProvider });
         if (providers.length === 0) {
             return { results: [], providerUsed: "none" };
         }
-        const resultsPerProvider = await Promise.all(providers.map(async (p) => ({
-            name: p.name,
-            results: await executeWithProvider(subQueries, p.fn),
-        })));
+        const resultsPerProvider = await Promise.all(
+            providers.map(async p => ({
+                name: p.name,
+                results: await executeWithProvider(subQueries, p.fn),
+            }))
+        );
         // First URL wins per provider order (Serper then Exa). Do not compare
         // `score` across providers — Exa and Serper use different scales.
         const byUrl = new Map();
@@ -151,11 +157,9 @@ export async function executeSearch(subQueries, strategyOverride) {
         let providerUsed;
         if (hasExaKey && hasSerperKey) {
             providerUsed = "exa+serper";
-        }
-        else if (hasSerperKey) {
+        } else if (hasSerperKey) {
             providerUsed = "serper";
-        }
-        else {
+        } else {
             providerUsed = "none";
         }
         return { results: merged, providerUsed };

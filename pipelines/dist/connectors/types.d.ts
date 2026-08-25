@@ -45,7 +45,13 @@ export interface SkippedKnowledgeItem {
     readonly reason: SkipReason;
     readonly detail?: string;
 }
-export type SkipReason = "unchanged" | "too-large" | "empty" | "excluded" | "unreadable" | "limit-reached";
+export type SkipReason =
+    | "unchanged"
+    | "too-large"
+    | "empty"
+    | "excluded"
+    | "unreadable"
+    | "limit-reached";
 /**
  * Host-supplied destination for scanned knowledge.
  *

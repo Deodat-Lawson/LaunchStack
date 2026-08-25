@@ -4,7 +4,7 @@ import { sendCampaign } from "./send.js";
 import { prepareEmailCampaign } from "./prepare.js";
 import { isSuppressed } from "./db.js";
 import { createUnsubscribeToken } from "./unsubscribe-token.js";
-import { CampaignLifecycleError, } from "./types.js";
+import { CampaignLifecycleError } from "./types.js";
 /**
  * Legacy one-shot pipeline: generate → review → render a PREVIEW.
  *
@@ -24,9 +24,13 @@ import { CampaignLifecycleError, } from "./types.js";
  */
 export async function runEmailCampaign(args) {
     if (args.mode === "send") {
-        throw new CampaignLifecycleError("Real sending has moved to the staged campaign API. Create a campaign, " +
-            "approve a template version, then POST /api/email-campaigns/{id}/send " +
-            "with an Idempotency-Key.", "one_shot_send_removed", 410);
+        throw new CampaignLifecycleError(
+            "Real sending has moved to the staged campaign API. Create a campaign, " +
+                "approve a template version, then POST /api/email-campaigns/{id}/send " +
+                "with an Idempotency-Key.",
+            "one_shot_send_removed",
+            410
+        );
     }
     const persist = args.persist ?? true;
     // A persisted preview still produces a real, reviewable template version —
@@ -40,8 +44,7 @@ export async function runEmailCampaign(args) {
             recipients: args.recipients,
             actorUserId: args.actorUserId ?? null,
         });
-        if (!prepared.review)
-            throw new Error("Template review did not run");
+        if (!prepared.review) throw new Error("Template review did not run");
         return {
             campaignId: prepared.campaign.id,
             template: prepared.template,
@@ -71,7 +74,8 @@ function previewResults(args, template) {
         recipients: args.recipients,
         mode: "dry_run",
         senderIdentity: args.senderIdentity,
-        unsubscribeUrl: email => `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
+        unsubscribeUrl: email =>
+            `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
         isSuppressed: email => isSuppressed(args.companyId, email),
     });
 }

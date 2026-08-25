@@ -1471,8 +1471,7 @@ const SECTION_BUILDERS = {
 };
 export function buildEditorSections(template, data) {
     const builder = SECTION_BUILDERS[template.id];
-    if (builder)
-        return builder(data);
+    if (builder) return builder(data);
     return [
         {
             id: "content",

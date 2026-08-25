@@ -19,17 +19,21 @@ export const config = {
         "^@launchstack/engine/(.*)$": "<rootDir>/../../packages/engine/src/$1",
         "^@launchstack/runtime$": "<rootDir>/../../packages/runtime/src/index.ts",
         "^@launchstack/runtime/errors$": "<rootDir>/../../packages/runtime/src/errors.ts",
-        "^@launchstack/runtime/storage$": "<rootDir>/../../packages/runtime/src/storage-port/index.ts",
-        "^@launchstack/runtime/jobs$": "<rootDir>/../../packages/runtime/src/job-dispatcher-port/index.ts",
+        "^@launchstack/runtime/storage$":
+            "<rootDir>/../../packages/runtime/src/storage-port/index.ts",
+        "^@launchstack/runtime/jobs$":
+            "<rootDir>/../../packages/runtime/src/job-dispatcher-port/index.ts",
         "^@launchstack/runtime/slot$": "<rootDir>/../../packages/runtime/src/singleton-slot.ts",
-        "^@launchstack/runtime/wire-version$": "<rootDir>/../../packages/runtime/src/wire-version.ts",
+        "^@launchstack/runtime/wire-version$":
+            "<rootDir>/../../packages/runtime/src/wire-version.ts",
         "^@launchstack/store$": "<rootDir>/../../packages/store/src/index.ts",
         "^@launchstack/store/client$": "<rootDir>/../../packages/store/src/db/index.ts",
         "^@launchstack/store/schema$": "<rootDir>/../../packages/store/src/db/schema.ts",
         "^@launchstack/store/schema/(.*)$": "<rootDir>/../../packages/store/src/db/schema/$1",
         "^@launchstack/store/tables$": "<rootDir>/../../packages/store/src/db/tables.ts",
         "^@launchstack/store/pg-vector$": "<rootDir>/../../packages/store/src/db/pgVector.ts",
-        "^@launchstack/store/backfills$": "<rootDir>/../../packages/store/src/db/backfills/index.ts",
+        "^@launchstack/store/backfills$":
+            "<rootDir>/../../packages/store/src/db/backfills/index.ts",
         "^@launchstack/store/crypto$": "<rootDir>/../../packages/store/src/crypto/index.ts",
         "^@launchstack/store/credits$": "<rootDir>/../../packages/store/src/credits/index.ts",
         "^@launchstack/llm$": "<rootDir>/../../packages/llm/src/index.ts",
@@ -39,24 +43,35 @@ export const config = {
         "^@launchstack/llm/providers/(.*)$": "<rootDir>/../../packages/llm/src/providers/$1",
         "^@launchstack/llm/(.*)$": "<rootDir>/../../packages/llm/src/$1",
         "^@launchstack/conversion$": "<rootDir>/../../packages/conversion/src/index.ts",
-        "^@launchstack/conversion/ocr$": "<rootDir>/../../packages/conversion/src/ocr-processing/index.ts",
-        "^@launchstack/conversion/ocr/adapters/(.*)$": "<rootDir>/../../packages/conversion/src/ocr-processing/adapters/$1",
-        "^@launchstack/conversion/ocr/(.*)$": "<rootDir>/../../packages/conversion/src/ocr-processing/$1",
-        "^@launchstack/conversion/document-converter$": "<rootDir>/../../packages/conversion/src/document-converter/index.ts",
-        "^@launchstack/conversion/document-converter/(.*)$": "<rootDir>/../../packages/conversion/src/document-converter/$1",
-        "^@launchstack/conversion/audio-transcription$": "<rootDir>/../../packages/conversion/src/audio-transcription/index.ts",
-        "^@launchstack/conversion/video-transcription$": "<rootDir>/../../packages/conversion/src/video-transcription/index.ts",
+        "^@launchstack/conversion/ocr$":
+            "<rootDir>/../../packages/conversion/src/ocr-processing/index.ts",
+        "^@launchstack/conversion/ocr/adapters/(.*)$":
+            "<rootDir>/../../packages/conversion/src/ocr-processing/adapters/$1",
+        "^@launchstack/conversion/ocr/(.*)$":
+            "<rootDir>/../../packages/conversion/src/ocr-processing/$1",
+        "^@launchstack/conversion/document-converter$":
+            "<rootDir>/../../packages/conversion/src/document-converter/index.ts",
+        "^@launchstack/conversion/document-converter/(.*)$":
+            "<rootDir>/../../packages/conversion/src/document-converter/$1",
+        "^@launchstack/conversion/audio-transcription$":
+            "<rootDir>/../../packages/conversion/src/audio-transcription/index.ts",
+        "^@launchstack/conversion/video-transcription$":
+            "<rootDir>/../../packages/conversion/src/video-transcription/index.ts",
         "^@launchstack/conversion/(.*)$": "<rootDir>/../../packages/conversion/src/$1",
         "^@launchstack/indexing$": "<rootDir>/../../packages/indexing/src/index.ts",
-        "^@launchstack/indexing/doc-ingestion$": "<rootDir>/../../packages/indexing/src/doc-ingestion/index.ts",
-        "^@launchstack/indexing/knowledge-graph$": "<rootDir>/../../packages/indexing/src/knowledge-graph/index.ts",
+        "^@launchstack/indexing/doc-ingestion$":
+            "<rootDir>/../../packages/indexing/src/doc-ingestion/index.ts",
+        "^@launchstack/indexing/knowledge-graph$":
+            "<rootDir>/../../packages/indexing/src/knowledge-graph/index.ts",
         "^@launchstack/indexing/(.*)$": "<rootDir>/../../packages/indexing/src/$1",
         "^@launchstack/search$": "<rootDir>/../../packages/search/src/index.ts",
-        "^@launchstack/search/retrievers$": "<rootDir>/../../packages/search/src/retrievers/index.ts",
+        "^@launchstack/search/retrievers$":
+            "<rootDir>/../../packages/search/src/retrievers/index.ts",
         "^@launchstack/search/reranking$": "<rootDir>/../../packages/search/src/reranking/index.ts",
         "^@launchstack/search/(.*)$": "<rootDir>/../../packages/search/src/$1",
         "^@launchstack/orchestration$": "<rootDir>/../../packages/orchestration/src/index.ts",
-        "^@launchstack/orchestration/pipeline-events$": "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",
+        "^@launchstack/orchestration/pipeline-events$":
+            "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",
         "^@launchstack/orchestration/(.*)$": "<rootDir>/../../packages/orchestration/src/$1",
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",

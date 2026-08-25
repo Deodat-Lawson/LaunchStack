@@ -41,7 +41,6 @@ export function parseOcrProvider(provider?: string): OcrProvider | undefined {
     return parsed.success ? parsed.data : undefined;
 }
 
-
 export const EVENT_TYPES = [
     "source.version.created",
     "evidence.version.extracted",

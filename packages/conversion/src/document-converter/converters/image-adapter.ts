@@ -131,7 +131,9 @@ export class ImageAdapter implements SourceAdapter {
     }
 
     private async processWithLandingAI(input: string | Buffer) {
-        const { createLandingAIAdapter } = await import("../../ocr-processing/adapters/landingAdapter");
+        const { createLandingAIAdapter } = await import(
+            "../../ocr-processing/adapters/landingAdapter"
+        );
         const adapter = createLandingAIAdapter();
 
         const url = this.resolveUrl(input);

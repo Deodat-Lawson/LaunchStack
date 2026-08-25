@@ -116,7 +116,8 @@ export const TEMPLATE_REGISTRY = {
         id: "founders_agreement",
         name: "Founders Agreement",
         file: "templates/founders-agreement-template.docx",
-        description: "Equity splits, roles, vesting, decision-making, and dissolution among co-founders",
+        description:
+            "Equity splits, roles, vesting, decision-making, and dissolution among co-founders",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Legal Name", type: "text", required: true },
@@ -219,7 +220,8 @@ export const TEMPLATE_REGISTRY = {
         id: "ip_assignment",
         name: "IP Assignment Agreement",
         file: "templates/ip-assignment-template.docx",
-        description: "Assigns pre-existing intellectual property from a founder or employee to the company",
+        description:
+            "Assigns pre-existing intellectual property from a founder or employee to the company",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "assignor_name", label: "Assignor Name", type: "text", required: true },
@@ -280,7 +282,8 @@ export const TEMPLATE_REGISTRY = {
         id: "service_agreement",
         name: "Service Agreement",
         file: "templates/service-agreement-template.docx",
-        description: "Engaging vendors or service providers for defined work with payment terms and IP ownership",
+        description:
+            "Engaging vendors or service providers for defined work with payment terms and IP ownership",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "client_name", label: "Client Name", type: "text", required: true },
@@ -357,7 +360,8 @@ export const TEMPLATE_REGISTRY = {
         id: "contractor_agreement",
         name: "Independent Contractor Agreement",
         file: "templates/contractor-agreement-template.docx",
-        description: "Engaging freelancers with clear non-employee classification, scope, and IP terms",
+        description:
+            "Engaging freelancers with clear non-employee classification, scope, and IP terms",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -440,7 +444,8 @@ export const TEMPLATE_REGISTRY = {
         id: "safe",
         name: "SAFE (Simple Agreement for Future Equity)",
         file: "templates/safe-template.docx",
-        description: "YC-style pre-seed/seed fundraising instrument with valuation cap and discount",
+        description:
+            "YC-style pre-seed/seed fundraising instrument with valuation cap and discount",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -563,7 +568,8 @@ export const TEMPLATE_REGISTRY = {
         id: "employment_contract",
         name: "Employment Contract / Offer Letter",
         file: "templates/employment-contract-template.docx",
-        description: "Formal employment terms including compensation, benefits, equity, and termination provisions",
+        description:
+            "Formal employment terms including compensation, benefits, equity, and termination provisions",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -642,7 +648,8 @@ export const TEMPLATE_REGISTRY = {
         id: "employee_nda",
         name: "Employee NDA / Confidentiality Agreement",
         file: "templates/employee-nda-template.docx",
-        description: "Protects company secrets with obligations tailored to the employment relationship",
+        description:
+            "Protects company secrets with obligations tailored to the employment relationship",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -809,7 +816,8 @@ export const TEMPLATE_REGISTRY = {
         id: "non_compete",
         name: "Non-Compete / Non-Solicitation Agreement",
         file: "templates/non-compete-template.docx",
-        description: "Prevents employees from competing with the company or soliciting its clients and employees",
+        description:
+            "Prevents employees from competing with the company or soliciting its clients and employees",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -877,7 +885,8 @@ export const TEMPLATE_REGISTRY = {
         id: "privacy_policy",
         name: "Privacy Policy",
         file: "templates/privacy-policy-template.docx",
-        description: "Required policy for any product or service collecting user data (GDPR/CCPA aware)",
+        description:
+            "Required policy for any product or service collecting user data (GDPR/CCPA aware)",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -930,7 +939,8 @@ export const TEMPLATE_REGISTRY = {
         id: "terms_of_service",
         name: "Terms of Service",
         file: "templates/terms-of-service-template.docx",
-        description: "Governs use of a product or platform including liability, IP, and dispute resolution",
+        description:
+            "Governs use of a product or platform including liability, IP, and dispute resolution",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -1004,7 +1014,8 @@ export const TEMPLATE_REGISTRY = {
         id: "termination_letter",
         name: "Employee Termination / Layoff Letter",
         file: "templates/termination-letter-template.docx",
-        description: "Formal notice of employment termination with severance, benefits, and next steps",
+        description:
+            "Formal notice of employment termination with severance, benefits, and next steps",
         fields: [
             { key: "letter_date", label: "Letter Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },
@@ -1079,7 +1090,8 @@ export const TEMPLATE_REGISTRY = {
         id: "severance_agreement",
         name: "Severance Agreement",
         file: "templates/severance-agreement-template.docx",
-        description: "Separation terms including severance pay, benefits continuation, and release of claims",
+        description:
+            "Separation terms including severance pay, benefits continuation, and release of claims",
         fields: [
             { key: "effective_date", label: "Effective Date", type: "date", required: true },
             { key: "company_name", label: "Company Name", type: "text", required: true },

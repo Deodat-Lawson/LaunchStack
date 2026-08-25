@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { DEFAULT_RETRY_POLICY, retryDelayMs, runOutboxTick } from "./outbox-tick";
 import type { ClaimedEvent, OutboxStorePort } from "../ports";

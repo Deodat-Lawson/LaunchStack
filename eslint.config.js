@@ -224,7 +224,11 @@ const eslintConfig = [
     // builds its own skips route resolution, declared-behavior filtering, and
     // usage normalization — and can silently borrow an unrelated API key.
     {
-        files: ["packages/**/src/**/*.{ts,tsx}", "pipelines/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
+        files: [
+            "packages/**/src/**/*.{ts,tsx}",
+            "pipelines/src/**/*.{ts,tsx}",
+            "apps/web/src/**/*.{ts,tsx}",
+        ],
         ignores: ["packages/llm/src/openai-compatible-transport.ts"],
         rules: {
             "no-restricted-imports": ["error", { paths: chatClientImportBans }],
@@ -317,14 +321,24 @@ const eslintConfig = [
             {
                 files: ["packages/runtime/src/**/*.ts", "packages/evidence/src/**/*.ts"],
                 rules: {
-                    ...restrict([legacyBan, frameworkBan, noPipelines, only([], "runtime/evidence")]),
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "runtime/evidence"),
+                    ]),
                     ...noEnv,
                 },
             },
             {
                 files: ["packages/store/src/**/*.ts"],
                 rules: {
-                    ...restrict([legacyBan, frameworkBan, noPipelines, only(["runtime"], "@launchstack/store")]),
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime"], "@launchstack/store"),
+                    ]),
                     ...noEnv,
                 },
             },
@@ -332,7 +346,12 @@ const eslintConfig = [
                 files: ["packages/llm/src/**/*.ts"],
                 ignores: ["packages/llm/src/openai-compatible-transport.ts"],
                 rules: {
-                    ...restrict([legacyBan, frameworkBan, noPipelines, only(["runtime", "store"], "@launchstack/llm")]),
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime", "store"], "@launchstack/llm"),
+                    ]),
                     ...noEnv,
                 },
             },
@@ -367,7 +386,10 @@ const eslintConfig = [
                         legacyBan,
                         frameworkBan,
                         noPipelines,
-                        only(["runtime", "store", "llm", "orchestration"], "@launchstack/conversion"),
+                        only(
+                            ["runtime", "store", "llm", "orchestration"],
+                            "@launchstack/conversion"
+                        ),
                     ]),
                     ...noEnv,
                 },
@@ -402,7 +424,12 @@ const eslintConfig = [
             {
                 files: ["packages/collab/src/**/*.ts"],
                 rules: {
-                    ...restrict([legacyBan, frameworkBan, noPipelines, only([], "@launchstack/collab")]),
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/collab"),
+                    ]),
                     ...noEnv,
                 },
             },

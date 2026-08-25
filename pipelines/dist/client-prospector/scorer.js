@@ -54,11 +54,15 @@ RULES:
 - Consider business category, name, description, and location when scoring.`;
 function buildHumanPrompt(rawPlaces, query, companyContext, categories) {
     const placesBlock = rawPlaces
-        .map(p => `- fsqId: "${p.fsqId}"\n  Name: ${p.name}\n  Address: ${p.formattedAddress || p.address}\n  Categories: ${p.categories.map(c => c.name).join(", ")}\n  Description: ${p.description ?? "N/A"}\n  Website: ${p.website ?? "N/A"}`)
+        .map(
+            p =>
+                `- fsqId: "${p.fsqId}"\n  Name: ${p.name}\n  Address: ${p.formattedAddress || p.address}\n  Categories: ${p.categories.map(c => c.name).join(", ")}\n  Description: ${p.description ?? "N/A"}\n  Website: ${p.website ?? "N/A"}`
+        )
         .join("\n\n");
-    const categoryBlock = categories.length > 0
-        ? `Target categories: ${categories.join(", ")}`
-        : "No specific category filter.";
+    const categoryBlock =
+        categories.length > 0
+            ? `Target categories: ${categories.join(", ")}`
+            : "No specific category filter.";
     return `PROSPECTING QUERY: ${query}
 
 COMPANY CONTEXT: ${companyContext}
@@ -89,7 +93,12 @@ export async function scoreLeads(rawPlaces, query, companyContext, categories) {
         temperature: 0.2,
     });
     const humanPrompt = buildHumanPrompt(rawPlaces, query, companyContext, categories);
-    const response = await invokeStructured(resolved, ScorerOutputSchema, [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)], { name: "scored_prospects" });
+    const response = await invokeStructured(
+        resolved,
+        ScorerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "scored_prospects" }
+    );
     // Build a lookup map for raw places by fsqId
     const placeMap = new Map(rawPlaces.map(p => [p.fsqId, p]));
     // Map scored results back to full ProspectResult objects,
@@ -99,7 +108,9 @@ export async function scoreLeads(rawPlaces, query, companyContext, categories) {
     for (const scored of response.prospects) {
         // Skip duplicate fsqIds — LLM sometimes reuses the same ID with different rationales
         if (seenIds.has(scored.fsqId)) {
-            console.warn(`[scorer] Duplicate fsqId in LLM output: ${scored.fsqId}, keeping first occurrence.`);
+            console.warn(
+                `[scorer] Duplicate fsqId in LLM output: ${scored.fsqId}, keeping first occurrence.`
+            );
             continue;
         }
         const raw = placeMap.get(scored.fsqId);
@@ -110,7 +121,9 @@ export async function scoreLeads(rawPlaces, query, companyContext, categories) {
         }
         // Validate that the LLM's name matches the actual place — catches cross-contamination
         if (scored.name !== raw.name) {
-            console.warn(`[scorer] Name mismatch for fsqId ${scored.fsqId}: LLM said "${scored.name}", actual is "${raw.name}". Using actual data; rationale may be inaccurate.`);
+            console.warn(
+                `[scorer] Name mismatch for fsqId ${scored.fsqId}: LLM said "${scored.name}", actual is "${raw.name}". Using actual data; rationale may be inaccurate.`
+            );
         }
         seenIds.add(scored.fsqId);
         results.push({

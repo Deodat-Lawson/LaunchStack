@@ -35,7 +35,11 @@ export declare const DEFAULT_FALLBACKS: Readonly<Record<string, string>>;
  */
 export declare function createMerge(options?: MergeOptions): MergeFn;
 /** One-shot convenience wrapper around {@link createMerge}. */
-export declare function merge(template: EmailTemplate, recipient: Recipient, options?: MergeOptions): RenderedEmail;
+export declare function merge(
+    template: EmailTemplate,
+    recipient: Recipient,
+    options?: MergeOptions
+): RenderedEmail;
 /**
  * Merge and refuse to return a half-filled email.
  *
@@ -43,7 +47,11 @@ export declare function merge(template: EmailTemplate, recipient: Recipient, opt
  * `{{firstName}}` is more damaging than one that never went out, so an
  * unresolved token throws rather than degrading.
  */
-export declare function mergeStrict(template: EmailTemplate, recipient: Recipient, options?: MergeOptions): RenderedEmail;
+export declare function mergeStrict(
+    template: EmailTemplate,
+    recipient: Recipient,
+    options?: MergeOptions
+): RenderedEmail;
 /**
  * Original default renderer, kept so `send.ts` and any existing caller keep
  * working. New code should use {@link createMerge}, which also resolves company

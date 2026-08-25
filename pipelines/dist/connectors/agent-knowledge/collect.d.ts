@@ -8,7 +8,11 @@ export interface CollectedAgentKnowledge {
     readonly skipped: readonly SkippedKnowledgeItem[];
 }
 export declare function hashContent(content: string): string;
-export declare function readKnowledgeItem(item: DiscoveredKnowledgeItem): Promise<KnowledgeItem | SkippedKnowledgeItem>;
+export declare function readKnowledgeItem(
+    item: DiscoveredKnowledgeItem
+): Promise<KnowledgeItem | SkippedKnowledgeItem>;
 /** Read every discovered item, keeping failures as skips rather than throwing. */
-export declare function collectAgentKnowledge(discovered: readonly DiscoveredKnowledgeItem[]): Promise<CollectedAgentKnowledge>;
+export declare function collectAgentKnowledge(
+    discovered: readonly DiscoveredKnowledgeItem[]
+): Promise<CollectedAgentKnowledge>;
 //# sourceMappingURL=collect.d.ts.map

@@ -1,4 +1,11 @@
-import type { CompanyDNA, CompetitorAnalysis, MessagingStrategy, StrategyVariant, BrandVoice, TargetPersona } from "./types.js";
+import type {
+    CompanyDNA,
+    CompetitorAnalysis,
+    MessagingStrategy,
+    StrategyVariant,
+    BrandVoice,
+    TargetPersona,
+} from "./types.js";
 /**
  * Build a single MessagingStrategy from company DNA, competitor analysis, and optional trend summary.
  */

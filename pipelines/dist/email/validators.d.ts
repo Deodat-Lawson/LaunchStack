@@ -49,7 +49,10 @@ export interface ValidateRecipientsOptions {
  * Duplicates are resolved by keeping the first occurrence — the same rule
  * `combineRecipients` uses, so ingestion and validation agree.
  */
-export declare function validateRecipients(recipients: Recipient[], options?: ValidateRecipientsOptions): RecipientListResult;
+export declare function validateRecipients(
+    recipients: Recipient[],
+    options?: ValidateRecipientsOptions
+): RecipientListResult;
 /**
  * Value a recipient can supply for a merge token, or null.
  * Kept in sync with the variable map built in `merge.ts`.
@@ -66,7 +69,10 @@ export interface ValidateTemplateOptions {
  * Compliance lives here because a template missing its unsubscribe token can
  * never produce a compliant email, whatever the recipient data looks like.
  */
-export declare function validateTemplate(template: EmailTemplate, options?: ValidateTemplateOptions): ValidationIssue[];
+export declare function validateTemplate(
+    template: EmailTemplate,
+    options?: ValidateTemplateOptions
+): ValidationIssue[];
 export interface ValidateRenderedOptions {
     senderIdentity: string;
     unsubscribeUrl: string;
@@ -77,7 +83,13 @@ export interface ValidateRenderedOptions {
  * A half-filled email — `Hi {{firstName}},` — is worse than no email, so an
  * unresolved token is an error, never a warning.
  */
-export declare function validateRendered(rendered: RenderedEmail, options: ValidateRenderedOptions): ValidationIssue[];
+export declare function validateRendered(
+    rendered: RenderedEmail,
+    options: ValidateRenderedOptions
+): ValidationIssue[];
 /** Throwing form, for call sites that must not proceed on a bad render. */
-export declare function assertSendable(rendered: RenderedEmail, options: ValidateRenderedOptions): void;
+export declare function assertSendable(
+    rendered: RenderedEmail,
+    options: ValidateRenderedOptions
+): void;
 //# sourceMappingURL=validators.d.ts.map

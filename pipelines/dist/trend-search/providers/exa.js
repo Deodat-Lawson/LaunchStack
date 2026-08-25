@@ -29,20 +29,22 @@ export async function callExa(query) {
     });
     if (!response.ok) {
         const text = await response.text().catch(() => "");
-        throw new Error(`Exa API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`);
+        throw new Error(
+            `Exa API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
+        );
     }
-    const data = (await response.json());
+    const data = await response.json();
     if (!data.results || !Array.isArray(data.results)) {
         return [];
     }
     return data.results
-        .filter((item) => Boolean(item?.url))
+        .filter(item => Boolean(item?.url))
         .map(item => ({
-        url: item.url,
-        title: item.title ?? "Untitled",
-        content: item.text ?? "",
-        score: typeof item.score === "number" ? item.score : 0,
-        ...(item.publishedDate != null && { publishedDate: item.publishedDate }),
-    }));
+            url: item.url,
+            title: item.title ?? "Untitled",
+            content: item.text ?? "",
+            score: typeof item.score === "number" ? item.score : 0,
+            ...(item.publishedDate != null && { publishedDate: item.publishedDate }),
+        }));
 }
 //# sourceMappingURL=exa.js.map

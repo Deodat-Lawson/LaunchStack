@@ -8,14 +8,17 @@ describes the repository as it actually is today.
 Launchstack is a **cited company-memory system**: sources go in through one
 ingestion path, immutable evidence comes out, and answers cite that evidence
 with stable anchors. The repository holds two private applications (web and
-worker), five publishable engine packages, one private product package
-(`packages/features`), and three compute services.
+worker), thirteen publishable feature packages under `packages/` (the
+bricks), one publishable compositions package at `pipelines/` (level two:
+chains of bricks toward business outcomes), and three compute services.
 
-The 2026-08 refactor (ADR-002 … ADR-006) replaced the previous
-mid-transition layout: the engine now lives in layered packages with an
-enforced dependency direction, durable work runs in a dedicated worker
-through a transactional outbox, and the OCR/transcription/DOCX services have
-single owners.
+The 2026-08 refactors (ADR-002 … ADR-008) replaced the previous layouts in
+two steps: first layered engine packages with an enforced dependency
+direction, a dedicated worker over a transactional outbox, and single-owner
+compute services; then ADR-008 reorganized the packages **by feature** —
+each package owns its tools, its wire contracts, and its clients — and the
+kind-based packages (protocol/application/adapters/core) were deleted
+outright, since nothing was ever published under the old names.
 
 ## Layout
 
@@ -24,12 +27,20 @@ single owners.
 | `apps/web` | Next.js 15 | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint. |
 | `apps/landing` | Next.js 15 | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment. |
 | `apps/worker` | Node (tsx) | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
-| `packages/protocol` | TS library (published) | Cross-language contracts only: zod event/EvidenceDocument/service schemas + generated JSON Schemas (`schemas/v1/`) consumed by the Python services' contract tests. |
-| `packages/evidence` | TS library (published) | Pure company-state logic: citation anchors, supersession, diffing, conflicts, reconciliation, freshness. No IO, no env. |
-| `packages/application` | TS library (published) | Use cases and ports: command acceptance, the outbox tick with bounded retries, the pipeline event dispatch table, citation building. |
-| `packages/adapters` | TS library (published) | Implementations: Postgres repositories (incl. the outbox), the ingestion pipeline stages, storage/provider/LLM adapters, HTTP clients for the compute services, the engine schema source. |
-| `packages/core` | TS library (published) | **Compatibility facade**: every historical `@launchstack/core` subpath re-exports from the packages above. No business logic — `scripts/ci/check-core-facade.mjs` enforces it. Owns the engine migrations dir (`packages/core/drizzle`, immutable history). |
-| `packages/features` | TS library (private) | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, and others. (`mcp`, `workflow-generation`, `rules-extraction`, `connectors` are roadmap stubs — each a README plus `export {}`, not shipped code.) |
+| `packages/runtime` | TS library (published) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing. |
+| `packages/evidence` | TS library (published) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies. |
+| `packages/store` | TS library (published) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history). |
+| `packages/llm` | TS library (published) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport. |
+| `packages/orchestration` | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports. |
+| `packages/conversion` | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router. |
+| `packages/indexing` | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer). |
+| `packages/search` | TS library (published) | Question → cited answer: BM25 + vector ensemble behind a replaceable port, reranking, the citation builder. |
+| `packages/editing` | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client. |
+| `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
+| `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
+| `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |
+| `packages/design-tokens` | CSS (published) | The design contract: primitives feeding semantic tokens, one file, no build step. |
+| `pipelines/` | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced). |
 | `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
 | `services/transcription` | Python/FastAPI | Whisper + yt-dlp → timestamped transcripts. |
 | `services/adeu-ai-docs-editing` | Python/FastAPI | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor. |
@@ -45,15 +56,25 @@ single owners.
 ## The dependency direction (enforced)
 
 ```
-protocol ← evidence ← application ← adapters ← core(facade) ← apps/services
+runtime  evidence          ← bottom: ports/slots/errors · pure domain math
+store  llm                 ← persistence · model calls (embeddings live here)
+orchestration              ← events, outbox, tick, source acceptance
+conversion                 ← any source → EvidenceDocument
+indexing                   ← EvidenceDocument → chunks, vectors, graph
+search                     ← question → cited answer
+engine                     ← createEngine() aggregate
+pipelines/  apps/          ← compositions and products (never imported by bricks)
 ```
 
-ESLint blocks every illegal edge (per-package blocks in `eslint.config.js`);
-`check-core-facade.mjs` keeps core re-exports-only; `check-schema-boundary.mjs`
-keeps engine SQL free of product references. Core/evidence/application/
-adapters must not read `process.env` — configuration flows through
-`CoreConfig`/ports from the composition roots (`apps/web/src/server/engine.ts`,
-reused by the worker).
+ESLint blocks every illegal edge with composed per-package blocks in
+`eslint.config.js`, plus a **flat ban on the deleted legacy names**
+(`@launchstack/{core,protocol,application,adapters,features}`) — the ban
+that replaced the facade ratchet. `check-schema-boundary.mjs` keeps engine
+SQL free of product references. Engine packages must not read
+`process.env` (two documented exceptions: the transcription and adeu
+clients, inherited from the old features tier) — configuration flows
+through `CoreConfig` from the composition roots
+(`apps/web/src/server/engine.ts`, reused by the worker).
 
 ## The one ingestion path (ADR-003)
 
@@ -103,7 +124,7 @@ Unchanged from before (see `CONTRIBUTING.md`): engine set in
 `packages/core/drizzle` (ledger `_launchstack_migrations`; schema source now
 `packages/adapters/src/db/schema/`), product set in `apps/web/drizzle`
 (ledger `_launchstack_web_migrations`). Forward-only, checksummed, applied
-by `packages/core/scripts/migrate.mjs` everywhere. `drizzle-kit push` stays
+by `packages/store/scripts/migrate.mjs` everywhere. `drizzle-kit push` stays
 banned on deploy surfaces. The one engine table the refactor added:
 `pdr_ai_v2_event_outbox`.
 
@@ -113,14 +134,14 @@ banned on deploy surfaces. The one engine table the refactor added:
 | --- | --- | --- |
 | GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
 | `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
-| npm packages | `packages/{protocol,evidence,application,adapters,core}` | One Changesets flow (`release.yml`); `check-package-exports.mjs` gates every core subpath. |
+| npm packages | every `packages/*` + `pipelines/` | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports). |
 | Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)
 
 `pnpm lint` · `pnpm -r typecheck` · package tests
 (`pnpm --filter @launchstack/<pkg> test`) · full web Jest suite ·
-`next build` (type errors fail it) · protocol `schemas:check` ·
+`next build` (type errors fail it) · schema-generator `schemas:check` ·
 Python service pytest suites · converter vitest suite ·
 migration gates (journal, drift, DML/destructive, parity, upgrade) ·
 Docker Compose smoke with an end-to-end cited-ingestion script

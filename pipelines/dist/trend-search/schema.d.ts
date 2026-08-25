@@ -70,7 +70,7 @@ export declare const trendSearchJobs: import("drizzle-orm/pg-core").PgTableWithC
             tableName: "trend_search_jobs";
             dataType: "string";
             columnType: "PgVarchar";
-            data: "queued" | "failed" | "completed" | "planning" | "searching" | "synthesizing";
+            data: "queued" | "completed" | "failed" | "planning" | "searching" | "synthesizing";
             driverParam: string;
             notNull: true;
             hasDefault: true;

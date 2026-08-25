@@ -47,11 +47,21 @@ export function mergeCompanyMetadata(existing, extracted) {
     }
     // ---- Services ----
     if (extracted.facts.services) {
-        merged.services = mergeNamedArray(merged.services, extracted.facts.services, "services", diff);
+        merged.services = mergeNamedArray(
+            merged.services,
+            extracted.facts.services,
+            "services",
+            diff
+        );
     }
     // ---- Projects ----
     if (extracted.facts.projects) {
-        merged.projects = mergeNamedArray(merged.projects, extracted.facts.projects, "projects", diff);
+        merged.projects = mergeNamedArray(
+            merged.projects,
+            extracted.facts.projects,
+            "projects",
+            diff
+        );
     }
     // ---- Legal ----
     if (extracted.facts.legal) {
@@ -94,15 +104,11 @@ function shouldReplace(existing, incoming) {
     const existingRank = PRIORITY_RANK[existing.priority] ?? 2;
     const incomingRank = PRIORITY_RANK[incoming.priority] ?? 2;
     // Higher priority (lower rank number) wins
-    if (incomingRank < existingRank)
-        return true;
-    if (incomingRank > existingRank)
-        return false;
+    if (incomingRank < existingRank) return true;
+    if (incomingRank > existingRank) return false;
     // Same priority — higher confidence wins
-    if (incoming.confidence > existing.confidence)
-        return true;
-    if (incoming.confidence < existing.confidence)
-        return false;
+    if (incoming.confidence > existing.confidence) return true;
+    if (incoming.confidence < existing.confidence) return false;
     // Same confidence — newer wins
     return incoming.last_updated > existing.last_updated;
 }
@@ -122,15 +128,13 @@ function deprecate(fact) {
 function mergeCompanyInfo(existing, incoming, diff) {
     const result = { ...existing };
     for (const [key, incomingFact] of Object.entries(incoming)) {
-        if (!incomingFact)
-            continue;
+        if (!incomingFact) continue;
         const existingFact = existing[key];
         if (!existingFact) {
             // New fact — add it
             result[key] = incomingFact;
             diff.added.push({ path: `company.${key}`, new: incomingFact });
-        }
-        else if (shouldReplace(existingFact, incomingFact)) {
+        } else if (shouldReplace(existingFact, incomingFact)) {
             // Incoming wins — replace and record diff
             result[key] = incomingFact;
             diff.updated.push({
@@ -177,14 +181,12 @@ function mergeNamedArray(existing, incoming, section, diff) {
                 path: `${section}[${newIndex}]`,
                 new: incomingEntry.name,
             });
-        }
-        else {
+        } else {
             // Existing entry — merge fields
             const mergedEntry = { ...match.entry };
             const idx = match.index;
             for (const [field, incomingFact] of Object.entries(incomingEntry)) {
-                if (field === "subprojects")
-                    continue; // handled separately below
+                if (field === "subprojects") continue; // handled separately below
                 if (!incomingFact || typeof incomingFact !== "object" || !("value" in incomingFact))
                     continue;
                 const existingFact = match.entry[field];
@@ -195,8 +197,7 @@ function mergeNamedArray(existing, incoming, section, diff) {
                         path: `${section}[${idx}].${field}`,
                         new: typed,
                     });
-                }
-                else if (shouldReplace(existingFact, typed)) {
+                } else if (shouldReplace(existingFact, typed)) {
                     mergedEntry[field] = typed;
                     diff.updated.push({
                         path: `${section}[${idx}].${field}`,
@@ -212,7 +213,12 @@ function mergeNamedArray(existing, incoming, section, diff) {
             // Merge subprojects if present on projects
             if ("subprojects" in incomingEntry && incomingEntry.subprojects) {
                 const existingSubs = match.entry.subprojects ?? [];
-                mergedEntry.subprojects = mergeNamedArray(existingSubs, incomingEntry.subprojects, `${section}[${idx}].subprojects`, diff);
+                mergedEntry.subprojects = mergeNamedArray(
+                    existingSubs,
+                    incomingEntry.subprojects,
+                    `${section}[${idx}].subprojects`,
+                    diff
+                );
             }
             result[idx] = mergedEntry;
         }
@@ -227,8 +233,7 @@ function mergeMarkets(existing, incoming, diff) {
     const categories = ["primary", "verticals", "geographies"];
     for (const cat of categories) {
         const incomingFacts = incoming[cat];
-        if (!incomingFacts || incomingFacts.length === 0)
-            continue;
+        if (!incomingFacts || incomingFacts.length === 0) continue;
         const existingFacts = existing[cat] ?? [];
         // Index existing by normalised value
         const existingValues = new Map();
@@ -245,8 +250,7 @@ function mergeMarkets(existing, incoming, diff) {
                     path: `markets.${cat}[${merged.length - 1}]`,
                     new: incomingFact,
                 });
-            }
-            else if (shouldReplace(existingFact, incomingFact)) {
+            } else if (shouldReplace(existingFact, incomingFact)) {
                 const idx = merged.indexOf(existingFact);
                 merged[idx] = incomingFact;
                 diff.updated.push({
@@ -270,8 +274,7 @@ function mergePolicies(existing, incoming, diff) {
         if (!existingFact) {
             result[key] = incomingFact;
             diff.added.push({ path: `policies.${key}`, new: incomingFact });
-        }
-        else if (shouldReplace(existingFact, incomingFact)) {
+        } else if (shouldReplace(existingFact, incomingFact)) {
             result[key] = incomingFact;
             diff.updated.push({
                 path: `policies.${key}`,

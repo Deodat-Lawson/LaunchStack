@@ -11,7 +11,7 @@ export const trendSearchCache = pgTable("trend_search_cache", {
     output: jsonb("output").notNull(),
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
-        .default(sql `CURRENT_TIMESTAMP`)
+        .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
 });
 //# sourceMappingURL=cache-schema.js.map

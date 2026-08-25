@@ -5,7 +5,11 @@ import { buildMultiStrategy } from "./positioning.js";
 import { extractBrandVoice } from "./voice.js";
 import { extractTargetPersona } from "./persona.js";
 import { verifyClaimSources } from "./claim-verifier.js";
-import { getPerformanceHistory, buildPerformanceInsights, saveGeneratedContent, } from "./performance.js";
+import {
+    getPerformanceHistory,
+    buildPerformanceInsights,
+    saveGeneratedContent,
+} from "./performance.js";
 import { PIPELINE_STEPS } from "./types.js";
 import { eq } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
@@ -29,15 +33,14 @@ function normalizeResearch(research) {
         .filter(r => Boolean(r.url))
         .slice(0, 12)
         .map(r => ({
-        ...r,
-        title: r.title.trim().replace(/\s+/g, " ").slice(0, 180),
-        snippet: r.snippet.trim().replace(/\s+/g, " ").slice(0, 500),
-        url: r.url.trim(),
-    }));
+            ...r,
+            title: r.title.trim().replace(/\s+/g, " ").slice(0, 180),
+            snippet: r.snippet.trim().replace(/\s+/g, " ").slice(0, 500),
+            url: r.url.trim(),
+        }));
 }
 function formatTrendsSummary(research) {
-    if (!research.length)
-        return "";
+    if (!research.length) return "";
     return research
         .slice(0, 6)
         .map(r => `${r.title}: ${r.snippet.slice(0, 180)}`)
@@ -54,7 +57,13 @@ export async function runMarketingPipeline(args) {
     }
     function emitComplete(step, startTime, detail, status = "completed") {
         const durationMs = Date.now() - startTime;
-        console.log("[marketing-pipeline] %s %s in %dms%s", step, status, durationMs, detail ? ` – ${detail}` : "");
+        console.log(
+            "[marketing-pipeline] %s %s in %dms%s",
+            step,
+            status,
+            durationMs,
+            detail ? ` – ${detail}` : ""
+        );
         onProgress?.({ type: "step_complete", step, durationMs, detail, status });
     }
     function emitData(step, data) {
@@ -69,10 +78,10 @@ export async function runMarketingPipeline(args) {
     const db = getDb();
     const [companyRow] = await db
         .select({
-        name: company.name,
-        description: company.description,
-        industry: company.industry,
-    })
+            name: company.name,
+            description: company.description,
+            industry: company.industry,
+        })
         .from(company)
         .where(eq(company.id, args.companyId))
         .limit(1);
@@ -111,7 +120,10 @@ export async function runMarketingPipeline(args) {
             emitComplete("loading-context", t0, `Loaded knowledge for ${companyName}`);
             const snippetCount = ctx.split("\n").length;
             emitData("loading-context", { companyName, categories, snippetCount });
-            emitThinking("loading-context", `Searching knowledge base for ${companyName}... Found ${snippetCount} document snippets covering their products, services, and market position.`);
+            emitThinking(
+                "loading-context",
+                `Searching knowledge base for ${companyName}... Found ${snippetCount} document snippets covering their products, services, and market position.`
+            );
             return ctx;
         })(),
         (async () => {
@@ -122,7 +134,11 @@ export async function runMarketingPipeline(args) {
                 prompt: userPrompt,
             });
             const diffCount = result.dna.keyDifferentiators.length;
-            emitComplete("extracting-dna", t1, `Found ${diffCount} differentiator${diffCount !== 1 ? "s" : ""} (source: ${result.debug.source})`);
+            emitComplete(
+                "extracting-dna",
+                t1,
+                `Found ${diffCount} differentiator${diffCount !== 1 ? "s" : ""} (source: ${result.debug.source})`
+            );
             emitData("extracting-dna", {
                 source: result.debug.source,
                 coreMission: result.dna.coreMission,
@@ -131,7 +147,10 @@ export async function runMarketingPipeline(args) {
                 technicalEdge: result.dna.technicalEdge,
             });
             const diffs = result.dna.keyDifferentiators;
-            emitThinking("extracting-dna", `Analyzing company DNA... Core mission: "${result.dna.coreMission}". Identified ${diffs.length} key differentiator${diffs.length !== 1 ? "s" : ""}: ${diffs.join("; ")}. Technical edge: "${result.dna.technicalEdge}".`);
+            emitThinking(
+                "extracting-dna",
+                `Analyzing company DNA... Core mission: "${result.dna.coreMission}". Identified ${diffs.length} key differentiator${diffs.length !== 1 ? "s" : ""}: ${diffs.join("; ")}. Technical edge: "${result.dna.technicalEdge}".`
+            );
             return result;
         })(),
         (async () => {
@@ -143,7 +162,11 @@ export async function runMarketingPipeline(args) {
                 companyContext: companyIdentity,
             });
             const compCount = result.competitors.length;
-            emitComplete("analyzing-competitors", t2, `Identified ${compCount} competitor${compCount !== 1 ? "s" : ""}`);
+            emitComplete(
+                "analyzing-competitors",
+                t2,
+                `Identified ${compCount} competitor${compCount !== 1 ? "s" : ""}`
+            );
             emitData("analyzing-competitors", {
                 competitors: result.competitors.map(c => ({
                     name: c.name,
@@ -153,14 +176,20 @@ export async function runMarketingPipeline(args) {
                 marketGaps: result.marketGaps,
             });
             const compNames = result.competitors.map(c => c.name).join(", ");
-            emitThinking("analyzing-competitors", `Scanning the competitive landscape... Found ${result.competitors.length} competitor${result.competitors.length !== 1 ? "s" : ""}: ${compNames || "none identified"}. Key advantages we have: ${result.ourAdvantages.join("; ") || "none yet"}. Market gaps to exploit: ${result.marketGaps.join("; ") || "none identified"}.`);
+            emitThinking(
+                "analyzing-competitors",
+                `Scanning the competitive landscape... Found ${result.competitors.length} competitor${result.competitors.length !== 1 ? "s" : ""}: ${compNames || "none identified"}. Key advantages we have: ${result.ourAdvantages.join("; ") || "none yet"}. Market gaps to exploit: ${result.marketGaps.join("; ") || "none identified"}.`
+            );
             return result;
         })(),
         (async () => {
             const t3 = Date.now();
             emitStart("researching-trends", PG_GATHER);
             try {
-                const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform, normalizedInput.platformMeta);
+                const platformGuidelines = buildPlatformGuidelines(
+                    normalizedInput.platform,
+                    normalizedInput.platformMeta
+                );
                 const basicContext = [
                     companyIdentity,
                     "",
@@ -176,7 +205,11 @@ export async function runMarketingPipeline(args) {
                     maxResults: normalizedInput.maxResearchResults ?? 6,
                 });
                 const normalized = normalizeResearch(raw);
-                emitComplete("researching-trends", t3, `Discovered ${normalized.length} trending topic${normalized.length !== 1 ? "s" : ""}`);
+                emitComplete(
+                    "researching-trends",
+                    t3,
+                    `Discovered ${normalized.length} trending topic${normalized.length !== 1 ? "s" : ""}`
+                );
                 emitData("researching-trends", {
                     topics: normalized.slice(0, 4).map(r => ({ title: r.title, url: r.url })),
                 });
@@ -184,14 +217,24 @@ export async function runMarketingPipeline(args) {
                     .slice(0, 4)
                     .map(r => r.title)
                     .join("; ");
-                emitThinking("researching-trends", `Researching what's trending on ${normalizedInput.platform}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`);
+                emitThinking(
+                    "researching-trends",
+                    `Researching what's trending on ${normalizedInput.platform}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`
+                );
                 return normalized;
-            }
-            catch (err) {
+            } catch (err) {
                 const message = err instanceof Error ? err.message : String(err);
                 console.warn("[marketing-pipeline] trend research failed:", message);
-                emitComplete("researching-trends", t3, "Trend search unavailable — continuing without trends", "failed");
-                emitThinking("researching-trends", "Trend search unavailable — continuing without trends. The content will rely on company DNA and competitor insights instead.");
+                emitComplete(
+                    "researching-trends",
+                    t3,
+                    "Trend search unavailable — continuing without trends",
+                    "failed"
+                );
+                emitThinking(
+                    "researching-trends",
+                    "Trend search unavailable — continuing without trends. The content will rely on company DNA and competitor insights instead."
+                );
                 return [];
             }
         })(),
@@ -210,12 +253,17 @@ export async function runMarketingPipeline(args) {
                     style: brandVoice.sentenceStyle,
                     vocabulary: brandVoice.vocabularyExamples,
                 });
-                emitThinking("extracting-voice", `Detecting brand voice from existing content... Tone: ${brandVoice.toneDescriptor}. Formality: ${brandVoice.formalityLevel}. Writing style: ${brandVoice.sentenceStyle}.`);
-            }
-            catch (err) {
+                emitThinking(
+                    "extracting-voice",
+                    `Detecting brand voice from existing content... Tone: ${brandVoice.toneDescriptor}. Formality: ${brandVoice.formalityLevel}. Writing style: ${brandVoice.sentenceStyle}.`
+                );
+            } catch (err) {
                 console.warn("[marketing-pipeline] brand voice extraction failed:", err);
                 emitComplete("extracting-voice", tv, "Using default voice", "failed");
-                emitThinking("extracting-voice", "Brand voice extraction failed — using a balanced default voice for content generation.");
+                emitThinking(
+                    "extracting-voice",
+                    "Brand voice extraction failed — using a balanced default voice for content generation."
+                );
             }
         })(),
         (async () => {
@@ -234,17 +282,29 @@ export async function runMarketingPipeline(args) {
                         priorities: targetPersona.priorities,
                         languageStyle: targetPersona.languageStyle,
                     });
-                    emitThinking("extracting-persona", `Building target persona for "${normalizedInput.targetAudience}"... Role: ${targetPersona.role}. Their top pain points: ${targetPersona.painPoints.join("; ")}. They want: ${targetPersona.priorities.join("; ")}.`);
+                    emitThinking(
+                        "extracting-persona",
+                        `Building target persona for "${normalizedInput.targetAudience}"... Role: ${targetPersona.role}. Their top pain points: ${targetPersona.painPoints.join("; ")}. They want: ${targetPersona.priorities.join("; ")}.`
+                    );
+                } else {
+                    emitComplete(
+                        "extracting-persona",
+                        tp,
+                        "No target audience specified",
+                        "skipped"
+                    );
+                    emitThinking(
+                        "extracting-persona",
+                        "Skipping persona — no target audience specified. Content will be written for a general professional audience."
+                    );
                 }
-                else {
-                    emitComplete("extracting-persona", tp, "No target audience specified", "skipped");
-                    emitThinking("extracting-persona", "Skipping persona — no target audience specified. Content will be written for a general professional audience.");
-                }
-            }
-            catch (err) {
+            } catch (err) {
                 console.warn("[marketing-pipeline] persona extraction failed:", err);
                 emitComplete("extracting-persona", tp, "Persona unavailable", "failed");
-                emitThinking("extracting-persona", "Persona extraction failed — content will target a general audience.");
+                emitThinking(
+                    "extracting-persona",
+                    "Persona extraction failed — content will target a general audience."
+                );
             }
         })(),
         (async () => {
@@ -257,19 +317,30 @@ export async function runMarketingPipeline(args) {
                 });
                 performanceInsights = buildPerformanceInsights(history);
                 if (performanceInsights.length > 0) {
-                    emitComplete("checking-performance", tperf, `${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}`);
+                    emitComplete(
+                        "checking-performance",
+                        tperf,
+                        `${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}`
+                    );
                     emitData("checking-performance", { insights: performanceInsights });
-                    emitThinking("checking-performance", `Reviewing past campaign performance... Found ${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}: ${performanceInsights.slice(0, 3).join("; ")}. These will inform the strategy.`);
-                }
-                else {
+                    emitThinking(
+                        "checking-performance",
+                        `Reviewing past campaign performance... Found ${performanceInsights.length} insight${performanceInsights.length !== 1 ? "s" : ""}: ${performanceInsights.slice(0, 3).join("; ")}. These will inform the strategy.`
+                    );
+                } else {
                     emitComplete("checking-performance", tperf, "No history yet", "skipped");
-                    emitThinking("checking-performance", "No past performance history yet — this is the first campaign for this platform. Will use general best practices.");
+                    emitThinking(
+                        "checking-performance",
+                        "No past performance history yet — this is the first campaign for this platform. Will use general best practices."
+                    );
                 }
-            }
-            catch (err) {
+            } catch (err) {
                 console.warn("[marketing-pipeline] performance check failed:", err);
                 emitComplete("checking-performance", tperf, "No performance data", "failed");
-                emitThinking("checking-performance", "Could not retrieve performance data — proceeding without historical context.");
+                emitThinking(
+                    "checking-performance",
+                    "Could not retrieve performance data — proceeding without historical context."
+                );
             }
         })(),
     ]).then(([ctx, dna, comp, res]) => {
@@ -303,11 +374,17 @@ export async function runMarketingPipeline(args) {
     const strategyLines = strategies
         .map((s, i) => `  ${i + 1}. ${s.angle} — ${s.angleRationale}`)
         .join("\n");
-    emitThinking("building-strategy", `Crafting ${strategies.length} positioning strateg${strategies.length !== 1 ? "ies" : "y"}...\n${strategyLines}`);
+    emitThinking(
+        "building-strategy",
+        `Crafting ${strategies.length} positioning strateg${strategies.length !== 1 ? "ies" : "y"}...\n${strategyLines}`
+    );
     // 4) Generate content variants (one per strategy) in parallel
     const t5 = Date.now();
     emitStart("generating-content");
-    const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform, normalizedInput.platformMeta);
+    const platformGuidelines = buildPlatformGuidelines(
+        normalizedInput.platform,
+        normalizedInput.platformMeta
+    );
     const companyContext = `${companyContextBase}\n\nPlatform best practices:\n${platformGuidelines}`;
     const variants = await generateVariants({
         platform: normalizedInput.platform,
@@ -321,7 +398,11 @@ export async function runMarketingPipeline(args) {
         targetPersona,
         contentType: normalizedInput.contentType,
     });
-    emitComplete("generating-content", t5, `Generated ${variants.length} variant${variants.length !== 1 ? "s" : ""}: ${variants.map(v => v.variantId).join(", ")}`);
+    emitComplete(
+        "generating-content",
+        t5,
+        `Generated ${variants.length} variant${variants.length !== 1 ? "s" : ""}: ${variants.map(v => v.variantId).join(", ")}`
+    );
     emitData("generating-content", {
         variants: variants.map(v => ({
             variantId: v.variantId,
@@ -333,7 +414,10 @@ export async function runMarketingPipeline(args) {
     const variantSummary = variants
         .map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`)
         .join("; ");
-    emitThinking("generating-content", `Writing ${variants.length} content variant${variants.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${variantSummary}.`);
+    emitThinking(
+        "generating-content",
+        `Writing ${variants.length} content variant${variants.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${variantSummary}.`
+    );
     // Pick best variant as the primary message
     const bestVariant = variants[0] ?? { message: "", mediaType: "image" };
     // 5) Verify claim sources for the best variant
@@ -346,7 +430,11 @@ export async function runMarketingPipeline(args) {
             message: bestVariant.message,
         });
         const verified = claimSources.filter(c => c.confidence > 0.5).length;
-        emitComplete("verifying-claims", t6, `${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""}, ${verified} verified`);
+        emitComplete(
+            "verifying-claims",
+            t6,
+            `${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""}, ${verified} verified`
+        );
         emitData("verifying-claims", {
             claims: claimSources.map(c => ({
                 claim: c.claim.slice(0, 100),
@@ -354,12 +442,17 @@ export async function runMarketingPipeline(args) {
                 confidence: Math.round(c.confidence * 100),
             })),
         });
-        emitThinking("verifying-claims", `Cross-referencing claims against the knowledge base... ${verified}/${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""} have direct source backing. ${verified === claimSources.length ? "All claims verified." : "Some claims lack strong sources — review recommended."}`);
-    }
-    catch (err) {
+        emitThinking(
+            "verifying-claims",
+            `Cross-referencing claims against the knowledge base... ${verified}/${claimSources.length} claim${claimSources.length !== 1 ? "s" : ""} have direct source backing. ${verified === claimSources.length ? "All claims verified." : "Some claims lack strong sources — review recommended."}`
+        );
+    } catch (err) {
         console.warn("[marketing-pipeline] claim verification failed:", err);
         emitComplete("verifying-claims", t6, "Claim verification unavailable", "failed");
-        emitThinking("verifying-claims", "Claim verification unavailable — could not cross-reference claims with the knowledge base. Manual review recommended.");
+        emitThinking(
+            "verifying-claims",
+            "Claim verification unavailable — could not cross-reference claims with the knowledge base. Manual review recommended."
+        );
     }
     // 6) Save to performance history (fire & forget)
     void saveGeneratedContent({
@@ -383,11 +476,11 @@ export async function runMarketingPipeline(args) {
         competitiveAngle: primaryStrategy?.angle,
         strategyUsed: primaryStrategy
             ? {
-                angle: primaryStrategy.angle,
-                keyProof: primaryStrategy.keyProof,
-                humanHook: primaryStrategy.humanHook,
-                avoidList: primaryStrategy.avoidList,
-            }
+                  angle: primaryStrategy.angle,
+                  keyProof: primaryStrategy.keyProof,
+                  humanHook: primaryStrategy.humanHook,
+                  avoidList: primaryStrategy.avoidList,
+              }
             : undefined,
         ...(args.debug ? { dnaDebug } : {}),
         variants,
@@ -417,7 +510,11 @@ function buildPlatformGuidelines(platform, platformMeta) {
                 "- Invite discussion with an authentic question at the end.",
             ];
             if (platformMeta?.subreddit) {
-                lines.push("", `Target subreddit: ${platformMeta.subreddit}`, "Tailor your tone, vocabulary, and content depth to match this subreddit's norms and audience expectations.");
+                lines.push(
+                    "",
+                    `Target subreddit: ${platformMeta.subreddit}`,
+                    "Tailor your tone, vocabulary, and content depth to match this subreddit's norms and audience expectations."
+                );
             }
             return lines.join("\n");
         }

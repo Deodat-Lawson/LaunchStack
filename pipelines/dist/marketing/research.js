@@ -1,5 +1,8 @@
 import { runTrendSearch } from "@launchstack/pipelines/trend-search";
-import { getCachedTrendSearch, setCachedTrendSearch, } from "@launchstack/pipelines/trend-search/cache";
+import {
+    getCachedTrendSearch,
+    setCachedTrendSearch,
+} from "@launchstack/pipelines/trend-search/cache";
 function buildTrendQueries(platform, companyName, prompt, companyIndustry) {
     const year = new Date().getFullYear();
     const industryHint = companyIndustry ? ` ${companyIndustry}` : "";
@@ -26,8 +29,12 @@ export async function researchPlatformTrends(args) {
     try {
         const cached = getCachedTrendSearch(prompt, companyContext);
         const preBuiltQueries = buildTrendQueries(platform, companyName, prompt, companyIndustry);
-        const trendOutput = cached ??
-            (await runTrendSearch({ query: prompt, companyContext, categories: undefined }, { preBuiltQueries }));
+        const trendOutput =
+            cached ??
+            (await runTrendSearch(
+                { query: prompt, companyContext, categories: undefined },
+                { preBuiltQueries }
+            ));
         if (!cached) {
             setCachedTrendSearch(prompt, companyContext, trendOutput);
         }
@@ -40,8 +47,7 @@ export async function researchPlatformTrends(args) {
             // still groups results under the chosen channel.
             source: platform,
         }));
-    }
-    catch (error) {
+    } catch (error) {
         console.warn("[marketing-pipeline] trend search failed:", error);
         return [];
     }

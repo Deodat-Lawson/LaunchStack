@@ -6,5 +6,8 @@ export interface EditorSection {
     content: string;
     editable?: boolean;
 }
-export declare function buildEditorSections(template: LegalTemplate, data: Record<string, string>): EditorSection[];
+export declare function buildEditorSections(
+    template: LegalTemplate,
+    data: Record<string, string>
+): EditorSection[];
 //# sourceMappingURL=section-builders.d.ts.map

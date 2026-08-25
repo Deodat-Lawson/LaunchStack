@@ -21,9 +21,10 @@ export async function generateTemplate(args) {
     // A blank goal falls back too, not just a missing one — `??` would send an
     // empty string straight into the prompt.
     const trimmedGoal = args.goal?.trim() ?? "";
-    const goal = trimmedGoal.length > 0
-        ? trimmedGoal
-        : "Introduce our company to a relevant prospect and offer to help.";
+    const goal =
+        trimmedGoal.length > 0
+            ? trimmedGoal
+            : "Introduce our company to a relevant prospect and offer to help.";
     const [context, dna] = await Promise.all([
         buildCompanyKnowledgeContext({ companyId: args.companyId, prompt: goal }),
         extractCompanyDNA({ companyId: args.companyId, prompt: goal })
@@ -33,10 +34,17 @@ export async function generateTemplate(args) {
     const companyContext = dna
         ? `${context}\n\n=== Company DNA ===\n${JSON.stringify(dna, null, 2)}`
         : context;
-    const { result: template, modelId } = await invokeEmailStructured("templateGeneration", EmailTemplateSchema, [
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(`Campaign goal: ${goal}\n\nSender company context (single source of truth):\n${companyContext}`),
-    ], "email_template");
+    const { result: template, modelId } = await invokeEmailStructured(
+        "templateGeneration",
+        EmailTemplateSchema,
+        [
+            new SystemMessage(SYSTEM_PROMPT),
+            new HumanMessage(
+                `Campaign goal: ${goal}\n\nSender company context (single source of truth):\n${companyContext}`
+            ),
+        ],
+        "email_template"
+    );
     return { template, companyContext, modelId };
 }
 //# sourceMappingURL=generator.js.map

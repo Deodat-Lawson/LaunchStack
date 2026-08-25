@@ -4,10 +4,7 @@ import path from "node:path";
 import { z } from "zod";
 
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
-import {
-    scorePost,
-    type ReferencePlatform,
-} from "@launchstack/pipelines/marketing/benchmark";
+import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

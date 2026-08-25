@@ -4,11 +4,7 @@
  */
 
 import type { BaseMessageLike } from "@langchain/core/messages";
-import {
-    invokeStructured,
-    resolveChatModel,
-    type ResolveChatModelOptions,
-} from "@launchstack/llm";
+import { invokeStructured, resolveChatModel, type ResolveChatModelOptions } from "@launchstack/llm";
 import type { z } from "zod";
 
 /** Per-stage resolution options for the email pipeline (swap here to change models). */

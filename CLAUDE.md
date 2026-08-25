@@ -1,8 +1,10 @@
 # CLAUDE.md
 
 Monorepo: `apps/web` (the application), `apps/landing` (marketing site),
-`packages/*` (layered engine — see `REPOSITORY.md` and the lint-enforced
-boundaries in `eslint.config.js`), `services/*`. pnpm workspaces.
+`packages/*` (the bricks — feature packages, see `REPOSITORY.md` and the
+lint-enforced boundaries in `eslint.config.js`), `pipelines/` (the
+compositions — product verticals; may import bricks, never the reverse),
+`services/*` (foreign runtimes). pnpm workspaces.
 
 ## Frontend rules (apps/web, apps/landing)
 

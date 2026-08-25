@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, smallint, text, timestamp, varchar, bigint } from "drizzle-orm/pg-core";
+import { smallint, text, timestamp, varchar, bigint } from "drizzle-orm/pg-core";
 
 import { company } from "./base";
 import { pgTable } from "./helpers";

@@ -35,25 +35,24 @@ export type Judge = (ctx: EvalContext) => Promise<CriterionScore>;
  * A registered scorer for one criterion. The runner keeps a registry of these,
  * keyed by criterionId, and picks per the fixture's CriterionSpec.method.
  */
-export type Scorer = {
-    kind: "deterministic";
-    criterionId: CriterionId;
-    run: DeterministicAssertion;
-} | {
-    kind: "judge";
-    criterionId: CriterionId;
-    run: Judge;
-};
+export type Scorer =
+    | {
+          kind: "deterministic";
+          criterionId: CriterionId;
+          run: DeterministicAssertion;
+      }
+    | {
+          kind: "judge";
+          criterionId: CriterionId;
+          run: Judge;
+      };
 /**
  * Generation adapter — how the runner turns a fixture into raw variants.
  * Mode A calls the generator directly with fixture context; Mode B runs the
  * full pipeline against a seeded company. Both satisfy this signature so the
  * runner is mode-agnostic. OWNER: lead.
  */
-export type GenerateFn = (args: {
-    fixture: Fixture;
-    company: CompanyFixture;
-}) => Promise<{
+export type GenerateFn = (args: { fixture: Fixture; company: CompanyFixture }) => Promise<{
     variants: VariantOutput[];
     latencyMs: number;
     tokenUsage: {

@@ -26,7 +26,7 @@ class RedditClient {
         if (!response.ok) {
             throw new Error(`Reddit auth failed: ${response.status} ${response.statusText}`);
         }
-        const data = (await response.json());
+        const data = await response.json();
         this.accessToken = data.access_token;
         this.tokenExpiry = Date.now() + (data.expires_in - 60) * 1000; // Refresh 1 min early
         return this.accessToken;
@@ -53,23 +53,21 @@ class RedditClient {
                         "User-Agent": userAgent,
                     },
                 });
-                if (!response.ok)
-                    continue;
-                const data = (await response.json());
+                if (!response.ok) continue;
+                const data = await response.json();
                 const posts = data.data.children
                     .filter(post => post.data.score > 50) // Filter by engagement
-                    .map((post) => ({
-                    title: post.data.title,
-                    url: `https://reddit.com${post.data.permalink}`,
-                    snippet: post.data.selftext.slice(0, 300) ||
-                        `${post.data.score} upvotes, ${post.data.num_comments} comments in r/${post.data.subreddit}`,
-                    source: "reddit",
-                }));
+                    .map(post => ({
+                        title: post.data.title,
+                        url: `https://reddit.com${post.data.permalink}`,
+                        snippet:
+                            post.data.selftext.slice(0, 300) ||
+                            `${post.data.score} upvotes, ${post.data.num_comments} comments in r/${post.data.subreddit}`,
+                        source: "reddit",
+                    }));
                 results.push(...posts);
-                if (results.length >= maxResults)
-                    break;
-            }
-            catch (error) {
+                if (results.length >= maxResults) break;
+            } catch (error) {
                 console.warn("Reddit search error:", error);
                 continue;
             }

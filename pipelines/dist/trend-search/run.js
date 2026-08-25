@@ -9,7 +9,8 @@ import { synthesizeResults } from "./synthesizer.js";
  */
 export async function runTrendSearch(input, options = {}) {
     const categories = input.categories;
-    const plannedQueries = options.preBuiltQueries ??
+    const plannedQueries =
+        options.preBuiltQueries ??
         (await planQueries(input.query, input.companyContext, categories));
     // Step 2: Execute web searches
     await options.onStageChange?.("searching");
@@ -18,7 +19,12 @@ export async function runTrendSearch(input, options = {}) {
     // Step 3: Synthesize results
     await options.onStageChange?.("synthesizing");
     const resolvedCategories = categories ?? [...new Set(plannedQueries.map(q => q.category))];
-    const results = await synthesizeResults(rawResults, input.query, input.companyContext, resolvedCategories);
+    const results = await synthesizeResults(
+        rawResults,
+        input.query,
+        input.companyContext,
+        resolvedCategories
+    );
     return {
         results,
         metadata: {

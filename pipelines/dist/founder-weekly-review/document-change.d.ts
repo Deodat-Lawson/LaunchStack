@@ -38,12 +38,28 @@ export type ChunkAlignment = {
     changeType: "added" | "removed" | "modified" | "unchanged";
     previousChunk?: VersionChunk;
     currentChunk?: VersionChunk;
-    alignmentMethod: "content_hash" | "structure_path" | "section_title" | "structural_position" | "text_similarity" | "unmatched";
+    alignmentMethod:
+        | "content_hash"
+        | "structure_path"
+        | "section_title"
+        | "structural_position"
+        | "text_similarity"
+        | "unmatched";
     similarityScore?: number;
 };
 /** Select only adjacent pairs whose current version is in the reporting period. */
-export declare function selectVersionPairsForReportingPeriod(versions: readonly DocumentVersionForComparison[], startInclusive: Date, endExclusive: Date): VersionPair[];
+export declare function selectVersionPairsForReportingPeriod(
+    versions: readonly DocumentVersionForComparison[],
+    startInclusive: Date,
+    endExclusive: Date
+): VersionPair[];
 /** Deterministic one-to-one alignment without embeddings or model calls. */
-export declare function alignVersionChunks(previousChunks: readonly VersionChunk[], currentChunks: readonly VersionChunk[]): ChunkAlignment[];
-export declare function buildDocumentChangeEvidence(pair: VersionPair, alignments: readonly ChunkAlignment[]): FounderWeeklyReviewEvidenceItem[];
+export declare function alignVersionChunks(
+    previousChunks: readonly VersionChunk[],
+    currentChunks: readonly VersionChunk[]
+): ChunkAlignment[];
+export declare function buildDocumentChangeEvidence(
+    pair: VersionPair,
+    alignments: readonly ChunkAlignment[]
+): FounderWeeklyReviewEvidenceItem[];
 //# sourceMappingURL=document-change.d.ts.map

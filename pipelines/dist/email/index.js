@@ -14,7 +14,24 @@ export * from "./dispatch.js";
 export * from "./automation.js";
 /** One-shot orchestration (legacy `/api/email-pipeline/send`). */
 export * from "./run.js";
-export { addSuppression, appendTemplateVersion, claimAutomationCampaign, createCampaign, freezeRecipients, reclaimAbandonedAttempts, isSuppressed, getCampaign, listCampaigns, listTemplateVersions, getTemplateVersion, getLatestTemplateVersion, listApprovals, listRecipients, upsertRecipients, listSendAttempts, } from "./db.js";
+export {
+    addSuppression,
+    appendTemplateVersion,
+    claimAutomationCampaign,
+    createCampaign,
+    freezeRecipients,
+    reclaimAbandonedAttempts,
+    isSuppressed,
+    getCampaign,
+    listCampaigns,
+    listTemplateVersions,
+    getTemplateVersion,
+    getLatestTemplateVersion,
+    listApprovals,
+    listRecipients,
+    upsertRecipients,
+    listSendAttempts,
+} from "./db.js";
 /* member.md — recipients, validation, company field mapping, seed templates. */
 export * from "./recipients.js";
 export * from "./validators.js";

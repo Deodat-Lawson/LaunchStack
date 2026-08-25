@@ -16,7 +16,9 @@ class LinkedInClient {
         });
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`LinkedIn API error: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `LinkedIn API error: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
         return response.json();
     }
@@ -34,15 +36,14 @@ class LinkedInClient {
             }
             return data.elements
                 .filter(post => this.isRelevantPost(post, query))
-                .map((post) => ({
-                title: this.extractTitle(post),
-                url: this.generatePostUrl(post.id),
-                snippet: this.formatPostSnippet(post),
-                source: "linkedin",
-            }))
+                .map(post => ({
+                    title: this.extractTitle(post),
+                    url: this.generatePostUrl(post.id),
+                    snippet: this.formatPostSnippet(post),
+                    source: "linkedin",
+                }))
                 .slice(0, maxResults);
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("LinkedIn search error:", error);
             // Return empty array instead of throwing to allow fallback to web search
             return [];
@@ -80,10 +81,11 @@ class LinkedInClient {
             // This is a fallback approach using LinkedIn's public search
             // Note: This requires careful rate limiting and may have restrictions
             // For now, we'll return an empty array and log that manual implementation is needed
-            console.warn("LinkedIn content search requires manual implementation due to API restrictions");
+            console.warn(
+                "LinkedIn content search requires manual implementation due to API restrictions"
+            );
             return [];
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("LinkedIn content search error:", error);
             return [];
         }

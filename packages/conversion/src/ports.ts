@@ -12,10 +12,7 @@ import type {
 } from "./document-converter/wire";
 import type { EvidenceDocument } from "./evidence-document";
 import type { TranscribeResponse } from "./audio-transcription/wire";
-import type {
-    VideoTranscribeRequest,
-    VideoTranscribeResponse,
-} from "./video-transcription/wire";
+import type { VideoTranscribeRequest, VideoTranscribeResponse } from "./video-transcription/wire";
 
 export interface DocumentConverterPort {
     route(req: RouteRequest): Promise<RouteResponse>;

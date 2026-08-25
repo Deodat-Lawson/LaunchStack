@@ -29,19 +29,18 @@ class TwitterClient {
             }
             return data.data
                 .filter(tweet => {
-                // Filter by engagement (at least 5 likes or 2 retweets)
-                const metrics = tweet.public_metrics;
-                return metrics && (metrics.like_count >= 5 || metrics.retweet_count >= 2);
-            })
-                .map((tweet) => ({
-                title: tweet.text.slice(0, 100) + (tweet.text.length > 100 ? "..." : ""),
-                url: `https://twitter.com/i/status/${tweet.id}`,
-                snippet: this.formatTweetSnippet(tweet),
-                source: "x",
-            }))
+                    // Filter by engagement (at least 5 likes or 2 retweets)
+                    const metrics = tweet.public_metrics;
+                    return metrics && (metrics.like_count >= 5 || metrics.retweet_count >= 2);
+                })
+                .map(tweet => ({
+                    title: tweet.text.slice(0, 100) + (tweet.text.length > 100 ? "..." : ""),
+                    url: `https://twitter.com/i/status/${tweet.id}`,
+                    snippet: this.formatTweetSnippet(tweet),
+                    source: "x",
+                }))
                 .slice(0, maxResults);
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("Twitter search error:", error);
             return [];
         }
@@ -51,16 +50,14 @@ class TwitterClient {
             // Note: Trends endpoint requires Twitter API v1.1 and may need different authentication
             // For now, we'll focus on tweet search which provides good trending content
             return [];
-        }
-        catch (error) {
+        } catch (error) {
             console.warn("Twitter trends error:", error);
             return [];
         }
     }
     formatTweetSnippet(tweet) {
         const metrics = tweet.public_metrics;
-        if (!metrics)
-            return tweet.text.slice(0, 300);
+        if (!metrics) return tweet.text.slice(0, 300);
         const engagement = `${metrics.like_count} likes, ${metrics.retweet_count} retweets, ${metrics.reply_count} replies`;
         return `${tweet.text.slice(0, 250)}... [${engagement}]`;
     }

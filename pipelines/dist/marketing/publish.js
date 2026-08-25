@@ -27,15 +27,14 @@ async function publishToTwitter(message) {
                 error: `Twitter API ${response.status}: ${errText}`,
             };
         }
-        const data = (await response.json());
+        const data = await response.json();
         const tweetId = data.data?.id;
         return {
             success: true,
             platform: "x",
             postUrl: tweetId ? `https://twitter.com/i/status/${tweetId}` : undefined,
         };
-    }
-    catch (err) {
+    } catch (err) {
         return {
             success: false,
             platform: "x",
@@ -50,11 +49,14 @@ async function publishToBluesky(message) {
         return { success: false, platform: "bluesky", error: "Bluesky credentials not configured" };
     }
     try {
-        const sessionRes = await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ identifier: handle, password }),
-        });
+        const sessionRes = await fetch(
+            "https://bsky.social/xrpc/com.atproto.server.createSession",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ identifier: handle, password }),
+            }
+        );
         if (!sessionRes.ok) {
             return {
                 success: false,
@@ -62,7 +64,7 @@ async function publishToBluesky(message) {
                 error: `Bluesky auth failed: ${sessionRes.status}`,
             };
         }
-        const session = (await sessionRes.json());
+        const session = await sessionRes.json();
         const postRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", {
             method: "POST",
             headers: {
@@ -86,15 +88,14 @@ async function publishToBluesky(message) {
                 error: `Bluesky post failed: ${errText}`,
             };
         }
-        const postData = (await postRes.json());
+        const postData = await postRes.json();
         const rkey = postData.uri?.split("/").pop();
         return {
             success: true,
             platform: "bluesky",
             postUrl: rkey ? `https://bsky.app/profile/${handle}/post/${rkey}` : undefined,
         };
-    }
-    catch (err) {
+    } catch (err) {
         return {
             success: false,
             platform: "bluesky",
@@ -132,7 +133,7 @@ async function publishToReddit(message, title) {
                 error: `Reddit auth failed: ${tokenRes.status}`,
             };
         }
-        const tokenData = (await tokenRes.json());
+        const tokenData = await tokenRes.json();
         const postTitle = title ?? message.split("\n")[0]?.slice(0, 300) ?? "Marketing Post";
         const submitRes = await fetch("https://oauth.reddit.com/api/submit", {
             method: "POST",
@@ -158,7 +159,7 @@ async function publishToReddit(message, title) {
         // Reddit's /api/submit returns HTTP 200 even for failed submissions,
         // reporting problems in the body's `json.errors` array — so a 200 must
         // be inspected before it can be treated as success.
-        const submitData = (await submitRes.json().catch(() => null));
+        const submitData = await submitRes.json().catch(() => null);
         const submitErrors = submitData?.json?.errors ?? [];
         if (submitErrors.length > 0) {
             const first = submitErrors[0];
@@ -170,8 +171,7 @@ async function publishToReddit(message, title) {
             platform: "reddit",
             postUrl: submitData?.json?.data?.url,
         };
-    }
-    catch (err) {
+    } catch (err) {
         return {
             success: false,
             platform: "reddit",
@@ -191,12 +191,10 @@ async function resolveLinkedInPersonId(token) {
             headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
-            const data = (await res.json());
-            if (data.sub)
-                return data.sub;
+            const data = await res.json();
+            if (data.sub) return data.sub;
         }
-    }
-    catch {
+    } catch {
         // fall through to the legacy endpoint
     }
     try {
@@ -207,12 +205,10 @@ async function resolveLinkedInPersonId(token) {
             },
         });
         if (res.ok) {
-            const data = (await res.json());
-            if (data.id)
-                return data.id;
+            const data = await res.json();
+            if (data.id) return data.id;
         }
-    }
-    catch {
+    } catch {
         // ignore — handled by the null return below
     }
     return null;
@@ -289,8 +285,7 @@ async function publishToLinkedIn(message) {
             platform: "linkedin",
             postUrl: postUrn ? `https://www.linkedin.com/feed/update/${postUrn}` : undefined,
         };
-    }
-    catch (err) {
+    } catch (err) {
         return {
             success: false,
             platform: "linkedin",

@@ -98,16 +98,15 @@ function platformTemplate(platform) {
 }
 // helper to convert MarketingResearchResult[] into a compact text block
 function formatTrendReferences(research) {
-    if (!research.length)
-        return "None available.";
+    if (!research.length) return "None available.";
     return research
         .slice(0, 6)
         .map((r, i) => {
-        const title = (r.title ?? "Untitled").trim().slice(0, 140);
-        const snippet = (r.snippet ?? "").trim().replace(/\s+/g, " ").slice(0, 260);
-        const url = (r.url ?? "").trim();
-        return `${i + 1}) ${title}\n   ${snippet}${url ? `\n   ${url}` : ""}`;
-    })
+            const title = (r.title ?? "Untitled").trim().slice(0, 140);
+            const snippet = (r.snippet ?? "").trim().replace(/\s+/g, " ").slice(0, 260);
+            const url = (r.url ?? "").trim();
+            return `${i + 1}) ${title}\n   ${snippet}${url ? `\n   ${url}` : ""}`;
+        })
         .join("\n");
 }
 function formatStrategyBlock(strategy) {
@@ -212,19 +211,48 @@ function buildPrompt(args) {
         formatTrendReferences(args.research),
     ];
     if (args.strategy) {
-        parts.push("", "Messaging strategy (use this angle and proof; respect avoid list):", formatStrategyBlock(args.strategy));
+        parts.push(
+            "",
+            "Messaging strategy (use this angle and proof; respect avoid list):",
+            formatStrategyBlock(args.strategy)
+        );
     }
     if (args.platformMeta?.subreddit) {
-        parts.push("", `Target subreddit: ${args.platformMeta.subreddit}`, "Tailor your tone and content to match this subreddit's norms and audience.");
+        parts.push(
+            "",
+            `Target subreddit: ${args.platformMeta.subreddit}`,
+            "Tailor your tone and content to match this subreddit's norms and audience."
+        );
     }
     if (args.platformMeta?.hashtags?.length) {
-        parts.push("", `Preferred hashtags (incorporate naturally if relevant): ${args.platformMeta.hashtags.join(", ")}`);
+        parts.push(
+            "",
+            `Preferred hashtags (incorporate naturally if relevant): ${args.platformMeta.hashtags.join(", ")}`
+        );
     }
-    parts.push("", platformTemplate(args.platform), "", PLATFORM_EXAMPLES[args.platform] ?? "", "", "Task:", args.strategy
-        ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
-        : "- Pick ONE angle — a tension, trend, or insight — and commit to it.", "- Open with a hook that creates curiosity or contrast. Never open with an announcement or generic statement.", "- Build a short narrative arc: hook → insight/story → takeaway → CTA/question.", "- Write as a person sharing what they've learned, not a brand listing features.", "- NEVER list features as bullet points. Weave capabilities into the narrative naturally.", "- NEVER acknowledge product weaknesses or areas under development.", "- Ground all product claims in the company context. Reframe anything unsupported as an industry observation.", "- End with exactly ONE question or CTA, not two.", `- Use at most ${args.platform === "linkedin" ? 3 : args.platform === "x" ? 2 : 0} hashtags. Fewer is better.`, args.platformMeta?.hashtags?.length
-        ? "- Prefer the user's preferred hashtags over generic ones."
-        : "", "- Return JSON matching the schema exactly.");
+    parts.push(
+        "",
+        platformTemplate(args.platform),
+        "",
+        PLATFORM_EXAMPLES[args.platform] ?? "",
+        "",
+        "Task:",
+        args.strategy
+            ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
+            : "- Pick ONE angle — a tension, trend, or insight — and commit to it.",
+        "- Open with a hook that creates curiosity or contrast. Never open with an announcement or generic statement.",
+        "- Build a short narrative arc: hook → insight/story → takeaway → CTA/question.",
+        "- Write as a person sharing what they've learned, not a brand listing features.",
+        "- NEVER list features as bullet points. Weave capabilities into the narrative naturally.",
+        "- NEVER acknowledge product weaknesses or areas under development.",
+        "- Ground all product claims in the company context. Reframe anything unsupported as an industry observation.",
+        "- End with exactly ONE question or CTA, not two.",
+        `- Use at most ${args.platform === "linkedin" ? 3 : args.platform === "x" ? 2 : 0} hashtags. Fewer is better.`,
+        args.platformMeta?.hashtags?.length
+            ? "- Prefer the user's preferred hashtags over generic ones."
+            : "",
+        "- Return JSON matching the schema exactly."
+    );
     return parts.join("\n");
 }
 /* ──────────────────────────────────────────────────────────────
@@ -237,8 +265,10 @@ const QualityScoreSchema = z.object({
 });
 const QUALITY_THRESHOLD = 6;
 async function validatePostQuality(post, platform) {
-    const response = await invokeMarketingStructured(QualityScoreSchema, [
-        new SystemMessage(`You are a social media copy editor. Score this ${platform} post 1-10 on these criteria:
+    const response = await invokeMarketingStructured(
+        QualityScoreSchema,
+        [
+            new SystemMessage(`You are a social media copy editor. Score this ${platform} post 1-10 on these criteria:
 1. Hook strength (does the first line stop the scroll?)
 2. Authenticity (does it sound like a person, not a brand?)
 3. Platform fit (does it match ${platform} conventions?)
@@ -247,8 +277,10 @@ async function validatePostQuality(post, platform) {
 
 If score < ${QUALITY_THRESHOLD}, provide a "rewrite" field with an improved version that fixes the issues.
 Flag specific issues in "issues" array.`),
-        new HumanMessage(post),
-    ], "quality_check");
+            new HumanMessage(post),
+        ],
+        "quality_check"
+    );
     return QualityScoreSchema.parse(response);
 }
 /* ──────────────────────────────────────────────────────────────
@@ -256,28 +288,40 @@ Flag specific issues in "issues" array.`),
  * ────────────────────────────────────────────────────────────── */
 export async function generateCampaignOutput(args) {
     const systemPrompt = args.strategy ? SYSTEM_PROMPT_BASE + STRATEGY_RULES : SYSTEM_PROMPT_BASE;
-    const response = await invokeMarketingStructured(MarketingPipelineOutputSchema, [
-        new SystemMessage(systemPrompt),
-        new HumanMessage(buildPrompt({
-            platform: args.platform,
-            prompt: args.prompt,
-            companyContext: args.companyContext,
-            research: args.research,
-            strategy: args.strategy,
-            platformMeta: args.platformMeta,
-        })),
-    ], "marketing_pipeline_output");
+    const response = await invokeMarketingStructured(
+        MarketingPipelineOutputSchema,
+        [
+            new SystemMessage(systemPrompt),
+            new HumanMessage(
+                buildPrompt({
+                    platform: args.platform,
+                    prompt: args.prompt,
+                    companyContext: args.companyContext,
+                    research: args.research,
+                    strategy: args.strategy,
+                    platformMeta: args.platformMeta,
+                })
+            ),
+        ],
+        "marketing_pipeline_output"
+    );
     let parsed = MarketingPipelineOutputSchema.parse(response);
     if (args.enableQualityGate) {
         try {
             const quality = await validatePostQuality(parsed.message, args.platform);
-            console.log("[marketing-pipeline] quality gate: score=%d issues=%d", quality.score, quality.issues.length);
+            console.log(
+                "[marketing-pipeline] quality gate: score=%d issues=%d",
+                quality.score,
+                quality.issues.length
+            );
             if (quality.score < QUALITY_THRESHOLD && quality.rewrite) {
                 parsed = { ...parsed, message: quality.rewrite };
-                console.log("[marketing-pipeline] quality gate rewrote post (score was %d)", quality.score);
+                console.log(
+                    "[marketing-pipeline] quality gate rewrote post (score was %d)",
+                    quality.score
+                );
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.warn("[marketing-pipeline] quality gate failed, using original:", err);
         }
     }
@@ -332,49 +376,54 @@ function contentTypeTemplate(type) {
  * Multi-variant generation (one per strategy)
  * ────────────────────────────────────────────────────────────── */
 export async function generateVariants(args) {
-    const results = await Promise.all(args.strategies.map(async (strategy) => {
-        const strategyAsMessaging = {
-            angle: strategy.angle,
-            keyProof: strategy.keyProof,
-            humanHook: strategy.humanHook,
-            avoidList: strategy.avoidList,
-        };
-        let systemPrompt = SYSTEM_PROMPT_BASE + STRATEGY_RULES;
-        if (args.brandVoice)
-            systemPrompt += buildVoiceDirective(args.brandVoice);
-        if (args.targetPersona)
-            systemPrompt += buildPersonaDirective(args.targetPersona);
-        systemPrompt += contentTypeTemplate(args.contentType);
-        const response = await invokeMarketingStructured(MarketingPipelineOutputSchema, [
-            new SystemMessage(systemPrompt),
-            new HumanMessage(buildPrompt({
-                platform: args.platform,
-                prompt: args.prompt,
-                companyContext: args.companyContext,
-                research: args.research,
-                strategy: strategyAsMessaging,
-                platformMeta: args.platformMeta,
-            })),
-        ], "marketing_pipeline_output");
-        let parsed = MarketingPipelineOutputSchema.parse(response);
-        if (args.enableQualityGate) {
-            try {
-                const quality = await validatePostQuality(parsed.message, args.platform);
-                if (quality.score < QUALITY_THRESHOLD && quality.rewrite) {
-                    parsed = { ...parsed, message: quality.rewrite };
+    const results = await Promise.all(
+        args.strategies.map(async strategy => {
+            const strategyAsMessaging = {
+                angle: strategy.angle,
+                keyProof: strategy.keyProof,
+                humanHook: strategy.humanHook,
+                avoidList: strategy.avoidList,
+            };
+            let systemPrompt = SYSTEM_PROMPT_BASE + STRATEGY_RULES;
+            if (args.brandVoice) systemPrompt += buildVoiceDirective(args.brandVoice);
+            if (args.targetPersona) systemPrompt += buildPersonaDirective(args.targetPersona);
+            systemPrompt += contentTypeTemplate(args.contentType);
+            const response = await invokeMarketingStructured(
+                MarketingPipelineOutputSchema,
+                [
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(
+                        buildPrompt({
+                            platform: args.platform,
+                            prompt: args.prompt,
+                            companyContext: args.companyContext,
+                            research: args.research,
+                            strategy: strategyAsMessaging,
+                            platformMeta: args.platformMeta,
+                        })
+                    ),
+                ],
+                "marketing_pipeline_output"
+            );
+            let parsed = MarketingPipelineOutputSchema.parse(response);
+            if (args.enableQualityGate) {
+                try {
+                    const quality = await validatePostQuality(parsed.message, args.platform);
+                    if (quality.score < QUALITY_THRESHOLD && quality.rewrite) {
+                        parsed = { ...parsed, message: quality.rewrite };
+                    }
+                } catch {
+                    // keep original
                 }
             }
-            catch {
-                // keep original
-            }
-        }
-        return {
-            variantId: strategy.variantId,
-            angleRationale: strategy.angleRationale,
-            message: parsed.message,
-            mediaType: parsed["image/video"],
-        };
-    }));
+            return {
+                variantId: strategy.variantId,
+                angleRationale: strategy.angleRationale,
+                message: parsed.message,
+                mediaType: parsed["image/video"],
+            };
+        })
+    );
     return results;
 }
 /* ──────────────────────────────────────────────────────────────
@@ -394,17 +443,22 @@ Rules:
 - Never invent product capabilities not in the company context.
 - feedbackApplied: one sentence summarizing what you changed.
 - Return JSON matching the schema.`;
-    if (args.brandVoice)
-        systemPrompt += buildVoiceDirective(args.brandVoice);
-    const response = await invokeMarketingStructured(RefinementSchema, [
-        new SystemMessage(systemPrompt),
-        new HumanMessage([
-            `Platform: ${args.platform}`,
-            `Original post:\n${args.originalMessage}`,
-            `\nUser feedback: ${args.feedback}`,
-            `\nCompany context:\n${args.companyContext}`,
-        ].join("\n")),
-    ], "refined_content");
+    if (args.brandVoice) systemPrompt += buildVoiceDirective(args.brandVoice);
+    const response = await invokeMarketingStructured(
+        RefinementSchema,
+        [
+            new SystemMessage(systemPrompt),
+            new HumanMessage(
+                [
+                    `Platform: ${args.platform}`,
+                    `Original post:\n${args.originalMessage}`,
+                    `\nUser feedback: ${args.feedback}`,
+                    `\nCompany context:\n${args.companyContext}`,
+                ].join("\n")
+            ),
+        ],
+        "refined_content"
+    );
     const parsed = RefinementSchema.parse(response);
     return {
         variantId: "refined",

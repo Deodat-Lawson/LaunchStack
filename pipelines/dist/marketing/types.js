@@ -54,11 +54,13 @@ export const CompanyDNASchema = z.object({
     technicalEdge: z.string(),
 });
 export const CompetitorAnalysisSchema = z.object({
-    competitors: z.array(z.object({
-        name: z.string(),
-        positioning: z.string(),
-        weaknesses: z.array(z.string()),
-    })),
+    competitors: z.array(
+        z.object({
+            name: z.string(),
+            positioning: z.string(),
+            weaknesses: z.array(z.string()),
+        })
+    ),
     ourAdvantages: z.array(z.string()),
     marketGaps: z.array(z.string()),
     messagingAntiPatterns: z.array(z.string()),
@@ -72,9 +74,9 @@ export const MessagingStrategySchema = z.object({
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export const PlatformMetaSchema = z
     .object({
-    subreddit: z.string().max(100).optional(),
-    hashtags: z.array(z.string().max(50)).max(5).optional(),
-})
+        subreddit: z.string().max(100).optional(),
+        hashtags: z.array(z.string().max(50)).max(5).optional(),
+    })
     .optional();
 export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
 export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "multi_platform"]);

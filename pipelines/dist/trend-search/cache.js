@@ -21,8 +21,7 @@ function prune() {
 export function getCachedTrendSearch(query, companyContext) {
     const key = buildCacheKey(query, companyContext);
     const entry = cache.get(key);
-    if (!entry)
-        return null;
+    if (!entry) return null;
     if (entry.expiresAt <= Date.now()) {
         cache.delete(key);
         return null;

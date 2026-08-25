@@ -27,6 +27,8 @@
     },
     "files": [
         "dist",
+        "drizzle",
+        "scripts",
         "README.md",
         "LICENSE"
     ],
@@ -116,6 +118,9 @@
     },
     "devDependencies": {
         "typescript": "^5.9.2",
-        "vitest": "^3.0.5"
+        "vitest": "^3.0.5",
+        "dotenv": "^17.2.2",
+        "drizzle-kit": "0.31.10",
+        "tsx": "^4.19.2"
     }
 }

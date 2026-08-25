@@ -1,4 +1,7 @@
-import type { FounderWeeklyReviewEvidenceItem, FounderWeeklyReviewEvidenceSnapshot } from "./contracts.js";
+import type {
+    FounderWeeklyReviewEvidenceItem,
+    FounderWeeklyReviewEvidenceSnapshot,
+} from "./contracts.js";
 export declare const FOUNDER_WEEKLY_REVIEW_EVIDENCE_ENVELOPE_VERSION: "founder-weekly-review-evidence-envelope/v1";
 export declare const FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET: Readonly<{
     totalSerializedCharacters: 72000;
@@ -12,7 +15,10 @@ export declare const FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET: Readonly<
 }>;
 type SourceType = FounderWeeklyReviewEvidenceItem["sourceType"];
 type MetadataValue = FounderWeeklyReviewEvidenceItem["metadata"][string];
-export type FounderWeeklyReviewPromptEvidenceItem = Pick<FounderWeeklyReviewEvidenceItem, "sourceId" | "sourceType" | "title" | "excerpt"> & {
+export type FounderWeeklyReviewPromptEvidenceItem = Pick<
+    FounderWeeklyReviewEvidenceItem,
+    "sourceId" | "sourceType" | "title" | "excerpt"
+> & {
     sourceTimestamp: string | null;
     metadata: Record<string, MetadataValue>;
 };
@@ -35,10 +41,16 @@ export declare class FounderWeeklyReviewGenerationEvidenceBudgetError extends Er
     readonly code = "generation_evidence_budget_exceeded";
     constructor(message?: string);
 }
-export declare function buildFounderWeeklyReviewPromptEvidenceItem(item: FounderWeeklyReviewEvidenceItem): FounderWeeklyReviewPromptEvidenceItem;
+export declare function buildFounderWeeklyReviewPromptEvidenceItem(
+    item: FounderWeeklyReviewEvidenceItem
+): FounderWeeklyReviewPromptEvidenceItem;
 /** Builds a bounded prompt projection without mutating the immutable snapshot. */
-export declare function buildGenerationEvidenceEnvelope(snapshot: FounderWeeklyReviewEvidenceSnapshot): GenerationEvidenceEnvelope;
+export declare function buildGenerationEvidenceEnvelope(
+    snapshot: FounderWeeklyReviewEvidenceSnapshot
+): GenerationEvidenceEnvelope;
 /** Local invariant check used immediately before prompt serialization/provider invocation. */
-export declare function assertGenerationEvidenceEnvelopeWithinBudget(envelope: GenerationEvidenceEnvelope): void;
+export declare function assertGenerationEvidenceEnvelopeWithinBudget(
+    envelope: GenerationEvidenceEnvelope
+): void;
 export {};
 //# sourceMappingURL=generation-evidence-envelope.d.ts.map

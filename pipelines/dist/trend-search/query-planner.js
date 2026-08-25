@@ -34,9 +34,10 @@ RULES:
    - Company-relevant terms drawn from the company context so results are relevant to the company.
 5. Output exactly: searchQuery (string), category (one of fashion, finance, business, tech), rationale (short explanation).`;
 function buildHumanPrompt(query, companyContext, categories) {
-    const categoryBlock = categories && categories.length > 0
-        ? `Restrict to these categories only: ${categories.join(", ")}. Every planned query must use one of these categories.`
-        : "Infer appropriate categories from the query and company context. Use only: fashion, finance, business, tech.";
+    const categoryBlock =
+        categories && categories.length > 0
+            ? `Restrict to these categories only: ${categories.join(", ")}. Every planned query must use one of these categories.`
+            : "Infer appropriate categories from the query and company context. Use only: fashion, finance, business, tech.";
     return `QUERY:
 ${query}
 
@@ -57,7 +58,12 @@ export async function planQueries(query, companyContext, categories) {
     // Build the human prompt
     const humanPrompt = buildHumanPrompt(query, companyContext, categories);
     // Invoke the structured model
-    const response = await invokeStructured(resolved, QueryPlannerOutputSchema, [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)], { name: "query_plan" });
+    const response = await invokeStructured(
+        resolved,
+        QueryPlannerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "query_plan" }
+    );
     return response.plannedQueries;
 }
 //# sourceMappingURL=query-planner.js.map

@@ -59,17 +59,11 @@ export const CODEX_LAYOUT = {
 export const TOOL_LAYOUTS = [CLAUDE_CODE_LAYOUT, CODEX_LAYOUT];
 export function layoutFor(toolId) {
     const layout = TOOL_LAYOUTS.find(candidate => candidate.toolId === toolId);
-    if (!layout)
-        throw new Error(`Unknown agent tool: ${toolId}`);
+    if (!layout) throw new Error(`Unknown agent tool: ${toolId}`);
     return layout;
 }
 /** Text-ish extensions a knowledge file may carry. */
-export const KNOWLEDGE_EXTENSIONS = new Set([
-    ".md",
-    ".markdown",
-    ".mdx",
-    ".txt",
-]);
+export const KNOWLEDGE_EXTENSIONS = new Set([".md", ".markdown", ".mdx", ".txt"]);
 /** Extensions only readable when `includeConfig` is on. */
 export const CONFIG_EXTENSIONS = new Set([".json", ".toml", ".yaml", ".yml"]);
 /**
@@ -123,8 +117,7 @@ export const DENIED_DIRECTORIES = new Set([
 ]);
 export function isDeniedFilename(name) {
     const lower = name.toLowerCase();
-    if (DENIED_FILENAMES.has(lower))
-        return true;
+    if (DENIED_FILENAMES.has(lower)) return true;
     return DENIED_FILENAME_PATTERNS.some(pattern => pattern.test(lower));
 }
 export function isDeniedDirectory(name) {

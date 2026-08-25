@@ -11,5 +11,8 @@ export interface RunTrendSearchOptions {
  * Pure pipeline execution — no DB writes, no side effects.
  * Callers (e.g. Inngest) own persistence and status tracking.
  */
-export declare function runTrendSearch(input: TrendSearchInput, options?: RunTrendSearchOptions): Promise<TrendSearchOutput>;
+export declare function runTrendSearch(
+    input: TrendSearchInput,
+    options?: RunTrendSearchOptions
+): Promise<TrendSearchOutput>;
 //# sourceMappingURL=run.d.ts.map

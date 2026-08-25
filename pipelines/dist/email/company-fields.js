@@ -29,17 +29,13 @@ export const COMPANY_FIELDS = [
  */
 const MIN_CONFIDENCE = 0.5;
 function readFact(fact) {
-    if (!fact)
-        return undefined;
-    if (fact.status !== "active")
-        return undefined;
-    if (fact.confidence < MIN_CONFIDENCE)
-        return undefined;
+    if (!fact) return undefined;
+    if (fact.status !== "active") return undefined;
+    if (fact.confidence < MIN_CONFIDENCE) return undefined;
     return fact.value;
 }
 function clean(value) {
-    if (typeof value !== "string")
-        return null;
+    if (typeof value !== "string") return null;
     const v = value.trim().replace(/\s+/g, " ");
     return v.length > 0 ? v : null;
 }
@@ -47,12 +43,10 @@ function clean(value) {
 function joinPhrase(items, max = 3) {
     const kept = items
         .map(clean)
-        .filter((v) => Boolean(v))
+        .filter(v => Boolean(v))
         .slice(0, max);
-    if (kept.length === 0)
-        return null;
-    if (kept.length === 1)
-        return kept[0];
+    if (kept.length === 0) return null;
+    if (kept.length === 1) return kept[0];
     return `${kept.slice(0, -1).join(", ")} and ${kept[kept.length - 1]}`;
 }
 /**
@@ -66,17 +60,16 @@ export async function buildCompanyMergeFields(companyId) {
     const fields = {};
     const provenance = {};
     const set = (key, value, source) => {
-        if (!value || fields[key])
-            return;
+        if (!value || fields[key]) return;
         fields[key] = value;
         provenance[key] = source;
     };
     const [row] = await db
         .select({
-        name: company.name,
-        description: company.description,
-        industry: company.industry,
-    })
+            name: company.name,
+            description: company.description,
+            industry: company.industry,
+        })
         .from(company)
         .where(eq(company.id, companyId))
         .limit(1);
@@ -97,27 +90,26 @@ export async function buildCompanyMergeFields(companyId) {
         // Services are the closest grounded stand-in for "what we do differently".
         const services = (md.services ?? [])
             .map(s => clean(readFact(s?.name)))
-            .filter((v) => Boolean(v));
+            .filter(v => Boolean(v));
         set("differentiators", joinPhrase(services), "company_metadata");
         // A delivered project is the most defensible proof point available.
         const projects = (md.projects ?? [])
             .map(p => {
-            const name = clean(readFact(p?.name));
-            const detail = clean(readFact(p?.description));
-            if (!name)
-                return null;
-            return detail ? `${name} — ${detail}` : name;
-        })
-            .filter((v) => Boolean(v));
+                const name = clean(readFact(p?.name));
+                const detail = clean(readFact(p?.description));
+                if (!name) return null;
+                return detail ? `${name} — ${detail}` : name;
+            })
+            .filter(v => Boolean(v));
         set("proofPoint", projects[0] ?? null, "company_metadata");
         // Certifications are a fallback proof point when there are no projects.
         if (!fields.proofPoint) {
             const policies = Object.entries(md.policies ?? {})
                 .map(([key, fact]) => {
-                const value = clean(readFact(fact));
-                return value ? `${key}: ${value}` : null;
-            })
-                .filter((v) => Boolean(v));
+                    const value = clean(readFact(fact));
+                    return value ? `${key}: ${value}` : null;
+                })
+                .filter(v => Boolean(v));
             set("proofPoint", policies[0] ?? null, "company_metadata");
         }
     }

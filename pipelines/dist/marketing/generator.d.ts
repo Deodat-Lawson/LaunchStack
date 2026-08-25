@@ -1,4 +1,14 @@
-import type { MarketingPlatform, MarketingResearchResult, MessagingStrategy, BrandVoice, TargetPersona, ContentType, StrategyVariant, ContentVariant, RefinementResult } from "./types.js";
+import type {
+    MarketingPlatform,
+    MarketingResearchResult,
+    MessagingStrategy,
+    BrandVoice,
+    TargetPersona,
+    ContentType,
+    StrategyVariant,
+    ContentVariant,
+    RefinementResult,
+} from "./types.js";
 interface PlatformMeta {
     subreddit?: string;
     hashtags?: string[];

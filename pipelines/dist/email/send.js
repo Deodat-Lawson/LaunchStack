@@ -38,7 +38,7 @@ export async function sendCampaign(args) {
     const minGapMs = mode === "send" ? Math.ceil(60000 / Math.max(1, args.ratePerMinute ?? 60)) : 0;
     const results = [];
     let lastHeartbeat = Date.now();
-    const settle = async (result) => {
+    const settle = async result => {
         results.push(result);
         await args.record?.(result);
     };
@@ -126,8 +126,7 @@ export async function sendCampaign(args) {
                 subject: rendered.subject,
                 providerMessageId: messageId,
             });
-        }
-        catch (err) {
+        } catch (err) {
             await settle({
                 recipientEmail: email,
                 status: "failed",
@@ -135,8 +134,7 @@ export async function sendCampaign(args) {
                 error: err instanceof Error ? err.message : "send failed",
             });
         }
-        if (minGapMs)
-            await new Promise(res => setTimeout(res, minGapMs));
+        if (minGapMs) await new Promise(res => setTimeout(res, minGapMs));
     }
     return results;
 }

@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-    reconcile,
-    type CitationAnchor,
-    type EvidenceAssertion,
-    type FactRecord,
-} from "../index";
+import { reconcile, type CitationAnchor, type EvidenceAssertion, type FactRecord } from "../index";
 
 const anchor = (sourceId: number, sourceVersionId: number, page = 1): CitationAnchor => ({
     sourceId,

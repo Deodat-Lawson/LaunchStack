@@ -11,7 +11,10 @@ export { createAzureAdapter } from "@launchstack/conversion/ocr/adapters/azureAd
 export { createLandingAIAdapter } from "@launchstack/conversion/ocr/adapters/landingAdapter";
 
 // Complexity analysis & Vision-based routing
-export { determineDocumentRouting, type RoutingDecision } from "@launchstack/conversion/ocr/complexity";
+export {
+    determineDocumentRouting,
+    type RoutingDecision,
+} from "@launchstack/conversion/ocr/complexity";
 
 // Chunking
 export {

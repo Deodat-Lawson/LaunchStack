@@ -1,8 +1,14 @@
 import { approveEmailCampaign } from "./approve.js";
 import { dispatchEmailCampaign } from "./dispatch.js";
 import { prepareEmailCampaign } from "./prepare.js";
-import { claimAutomationCampaign, getLatestTemplateVersion, getTemplateVersion, listRecipients, upsertRecipients, } from "./db.js";
-import { CampaignLifecycleError, } from "./types.js";
+import {
+    claimAutomationCampaign,
+    getLatestTemplateVersion,
+    getTemplateVersion,
+    listRecipients,
+    upsertRecipients,
+} from "./db.js";
+import { CampaignLifecycleError } from "./types.js";
 /**
  * Resolve the automation policy from server configuration.
  *
@@ -25,7 +31,11 @@ export function resolveAutomationPolicy(env = process.env) {
 export async function runAutomatedEmailCampaign(args) {
     const runKey = args.idempotencyKey?.trim();
     if (!runKey) {
-        throw new CampaignLifecycleError("An idempotency key is required to start an automated run", "idempotency_key_required", 400);
+        throw new CampaignLifecycleError(
+            "An idempotency key is required to start an automated run",
+            "idempotency_key_required",
+            400
+        );
     }
     // ── claim (BEFORE generation) ─────────────────────────────────────────────
     const { campaign, created } = await claimAutomationCampaign({
@@ -45,14 +55,13 @@ export async function runAutomatedEmailCampaign(args) {
     const existing = created
         ? null
         : ((campaign.approvedVersionId
-            ? await getTemplateVersion(campaign.id, campaign.approvedVersionId)
-            : null) ?? (await getLatestTemplateVersion(campaign.id)));
+              ? await getTemplateVersion(campaign.id, campaign.approvedVersionId)
+              : null) ?? (await getLatestTemplateVersion(campaign.id)));
     if (existing) {
         version = existing;
         review = existing.review;
         await upsertRecipients(campaign.id, args.recipients);
-    }
-    else {
+    } else {
         const prepared = await prepareEmailCampaign({
             companyId: args.companyId,
             campaignId: campaign.id,
@@ -63,7 +72,7 @@ export async function runAutomatedEmailCampaign(args) {
         version = prepared.version;
         review = prepared.review;
     }
-    const blocked = (reason) => ({
+    const blocked = reason => ({
         campaign,
         version,
         review,
@@ -75,7 +84,9 @@ export async function runAutomatedEmailCampaign(args) {
     });
     // ── policy ────────────────────────────────────────────────────────────────
     if (args.policy.requireReviewPass && version.reviewVerdict !== "pass") {
-        return blocked(`AI review verdict was "${version.reviewVerdict ?? "none"}" — automated sending requires a passing review.`);
+        return blocked(
+            `AI review verdict was "${version.reviewVerdict ?? "none"}" — automated sending requires a passing review.`
+        );
     }
     if (args.policy.maxRecipients !== null) {
         // Enforce against the STORED audience, not this request's batch: resumed
@@ -83,7 +94,9 @@ export async function runAutomatedEmailCampaign(args) {
         // `args.recipients.length` would let successive batches step past the cap.
         const audience = await listRecipients(campaign.id);
         if (audience.length > args.policy.maxRecipients) {
-            return blocked(`Stored recipient count ${audience.length} exceeds the automation limit of ${args.policy.maxRecipients}.`);
+            return blocked(
+                `Stored recipient count ${audience.length} exceeds the automation limit of ${args.policy.maxRecipients}.`
+            );
         }
     }
     // ── approve (recorded as automation, never as a person) ───────────────────
@@ -94,10 +107,11 @@ export async function runAutomatedEmailCampaign(args) {
         approvedBy: args.actorUserId ?? null,
         approvedByEmail: args.actorEmail ?? null,
         approvedByKind: "automation",
-        overrideReason: version.reviewVerdict === "pass"
-            ? null
-            : (args.policy.overrideReason ??
-                "Automated run: policy does not require a passing review."),
+        overrideReason:
+            version.reviewVerdict === "pass"
+                ? null
+                : (args.policy.overrideReason ??
+                  "Automated run: policy does not require a passing review."),
     });
     // ── dispatch (same key: the send stage is idempotent per campaign) ────────
     const dispatched = await dispatchEmailCampaign({

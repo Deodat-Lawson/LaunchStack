@@ -10,31 +10,38 @@ export const trendSearchJobStatusEnum = [
     "completed",
     "failed",
 ];
-export const trendSearchJobs = pgTable("trend_search_jobs", {
-    id: varchar("id", { length: 256 }).primaryKey(),
-    companyId: bigint("company_id", { mode: "bigint" })
-        .notNull()
-        .references(() => company.id, { onDelete: "cascade" }),
-    userId: varchar("user_id", { length: 256 }).notNull(),
-    status: varchar("status", {
-        length: 50,
-        enum: trendSearchJobStatusEnum,
+export const trendSearchJobs = pgTable(
+    "trend_search_jobs",
+    {
+        id: varchar("id", { length: 256 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        userId: varchar("user_id", { length: 256 }).notNull(),
+        status: varchar("status", {
+            length: 50,
+            enum: trendSearchJobStatusEnum,
+        })
+            .notNull()
+            .default("queued"),
+        query: text("query").notNull(),
+        companyContext: text("company_context").notNull(),
+        categories: jsonb("categories").$type(),
+        results: jsonb("results").$type(),
+        errorMessage: text("error_message"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        completedAt: timestamp("completed_at", { withTimezone: true }),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    table => ({
+        companyIdIdx: index("trend_search_jobs_company_id_idx").on(table.companyId),
+        statusIdx: index("trend_search_jobs_status_idx").on(table.status),
+        companyStatusIdx: index("trend_search_jobs_company_status_idx").on(
+            table.companyId,
+            table.status
+        ),
     })
-        .notNull()
-        .default("queued"),
-    query: text("query").notNull(),
-    companyContext: text("company_context").notNull(),
-    categories: jsonb("categories").$type(),
-    results: jsonb("results").$type(),
-    errorMessage: text("error_message"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-        .default(sql `CURRENT_TIMESTAMP`)
-        .notNull(),
-    completedAt: timestamp("completed_at", { withTimezone: true }),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
-}, table => ({
-    companyIdIdx: index("trend_search_jobs_company_id_idx").on(table.companyId),
-    statusIdx: index("trend_search_jobs_status_idx").on(table.status),
-    companyStatusIdx: index("trend_search_jobs_company_status_idx").on(table.companyId, table.status),
-}));
+);
 //# sourceMappingURL=schema.js.map

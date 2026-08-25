@@ -41,7 +41,10 @@ export class FounderWeeklyReviewForbiddenError extends FounderWeeklyReviewError 
 }
 export class FounderWeeklyReviewInvalidTransitionError extends FounderWeeklyReviewError {
     constructor(fromStatus, action) {
-        super(`Cannot ${action} founder weekly review run from status "${fromStatus}".`, "invalid_transition");
+        super(
+            `Cannot ${action} founder weekly review run from status "${fromStatus}".`,
+            "invalid_transition"
+        );
     }
 }
 export class FounderWeeklyReviewConflictError extends FounderWeeklyReviewError {
@@ -56,7 +59,10 @@ export class FounderWeeklyReviewInvalidPayloadError extends FounderWeeklyReviewE
 }
 export class FounderWeeklyReviewClaimOwnershipMismatchError extends FounderWeeklyReviewError {
     constructor(runId) {
-        super(`Generation claim ownership mismatch for founder weekly review run "${runId}".`, "claim_ownership_mismatch");
+        super(
+            `Generation claim ownership mismatch for founder weekly review run "${runId}".`,
+            "claim_ownership_mismatch"
+        );
     }
 }
 //# sourceMappingURL=errors.js.map

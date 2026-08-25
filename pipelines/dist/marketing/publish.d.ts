@@ -16,5 +16,9 @@ export type PublishResult = {
  * Publish generated marketing content to the specified platform.
  * Returns a result object indicating success/failure with optional post URL.
  */
-export declare function publishContent(platform: MarketingPlatform, message: string, title?: string): Promise<PublishResult>;
+export declare function publishContent(
+    platform: MarketingPlatform,
+    message: string,
+    title?: string
+): Promise<PublishResult>;
 //# sourceMappingURL=publish.d.ts.map

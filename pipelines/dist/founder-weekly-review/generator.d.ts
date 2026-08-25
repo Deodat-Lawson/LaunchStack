@@ -1,5 +1,9 @@
 import type { ZodType } from "zod";
-import { type FounderWeeklyReviewEvidenceSnapshot, type FounderWeeklyReviewModelMetadata, type FounderWeeklyReviewV2Payload } from "./contracts.js";
+import {
+    type FounderWeeklyReviewEvidenceSnapshot,
+    type FounderWeeklyReviewModelMetadata,
+    type FounderWeeklyReviewV2Payload,
+} from "./contracts.js";
 export interface FounderWeeklyReviewResolvedGenerationMetadata {
     provider: string;
     model: string;
@@ -27,5 +31,7 @@ export interface GenerateFounderWeeklyReviewResult {
     reviewPayload: FounderWeeklyReviewV2Payload;
     modelMetadata: FounderWeeklyReviewModelMetadata;
 }
-export declare function generateFounderWeeklyReview(input: GenerateFounderWeeklyReviewInput): Promise<GenerateFounderWeeklyReviewResult>;
+export declare function generateFounderWeeklyReview(
+    input: GenerateFounderWeeklyReviewInput
+): Promise<GenerateFounderWeeklyReviewResult>;
 //# sourceMappingURL=generator.d.ts.map

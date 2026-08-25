@@ -369,9 +369,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
 
     it("returns validation error without throwing on 422", async () => {
         const docBuffer = makeSmallDocxBuffer();
-        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-            "@launchstack/editing"
-        );
+        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock("@launchstack/editing");
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({
             ok: true,
@@ -416,9 +414,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
 
     it("throws on 500 to allow Inngest retry", async () => {
         const docBuffer = makeSmallDocxBuffer();
-        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-            "@launchstack/editing"
-        );
+        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock("@launchstack/editing");
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({
             ok: true,

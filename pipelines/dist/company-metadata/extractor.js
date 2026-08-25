@@ -67,19 +67,16 @@ const BOILERPLATE_PATTERNS = [
 function isBoilerplate(content) {
     const trimmed = content.trim();
     // Too short to contain meaningful facts
-    if (trimmed.length < MIN_CHUNK_CHARS)
-        return true;
+    if (trimmed.length < MIN_CHUNK_CHARS) return true;
     // Check against boilerplate patterns
     for (const pattern of BOILERPLATE_PATTERNS) {
-        if (pattern.test(trimmed))
-            return true;
+        if (pattern.test(trimmed)) return true;
     }
     // TOC heuristic: many lines that end with page numbers (e.g., "Introduction ... 3")
     const lines = trimmed.split("\n").filter(l => l.trim().length > 0);
     if (lines.length >= 3) {
         const tocLines = lines.filter(l => /\.{2,}\s*\d+\s*$/.test(l) || /\s{3,}\d+\s*$/.test(l));
-        if (tocLines.length / lines.length > 0.6)
-            return true;
+        if (tocLines.length / lines.length > 0.6) return true;
     }
     return false;
 }
@@ -127,34 +124,38 @@ const LegalSchema = z.object({
 const ExtractionOutputSchema = z.object({
     company: z
         .object({
-        name: MetadataFactSchema.nullable(),
-        industry: MetadataFactSchema.nullable(),
-        founded_year: MetadataFactSchema.nullable(),
-        headquarters: MetadataFactSchema.nullable(),
-        description: MetadataFactSchema.nullable(),
-        website: MetadataFactSchema.nullable(),
-        size: MetadataFactSchema.nullable(),
-    })
+            name: MetadataFactSchema.nullable(),
+            industry: MetadataFactSchema.nullable(),
+            founded_year: MetadataFactSchema.nullable(),
+            headquarters: MetadataFactSchema.nullable(),
+            description: MetadataFactSchema.nullable(),
+            website: MetadataFactSchema.nullable(),
+            size: MetadataFactSchema.nullable(),
+        })
         .describe("Core company-level facts"),
     people: z.array(PersonSchema).describe("Key people mentioned"),
     services: z.array(ServiceSchema).describe("Products or services offered"),
     markets: z
         .object({
-        primary: z.array(MetadataFactSchema).nullable(),
-        verticals: z.array(MetadataFactSchema).nullable(),
-        geographies: z.array(MetadataFactSchema).nullable(),
-    })
+            primary: z.array(MetadataFactSchema).nullable(),
+            verticals: z.array(MetadataFactSchema).nullable(),
+            geographies: z.array(MetadataFactSchema).nullable(),
+        })
         .describe("Target markets, verticals, and geographies"),
     projects: z.array(ProjectSchema).describe("Projects and subprojects"),
     policies: z
-        .array(z.object({
-        key: z.string().describe("Policy identifier, e.g. 'SOC2', 'GDPR', 'HIPAA'"),
-        fact: MetadataFactSchema,
-    }))
+        .array(
+            z.object({
+                key: z.string().describe("Policy identifier, e.g. 'SOC2', 'GDPR', 'HIPAA'"),
+                fact: MetadataFactSchema,
+            })
+        )
         .describe("Company policies, certifications, or compliance facts"),
     legal: z
         .array(LegalSchema)
-        .describe("Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"),
+        .describe(
+            "Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"
+        ),
 });
 /**
  * Extract company metadata facts from a single document using chunk-level
@@ -171,9 +172,9 @@ export async function extractCompanyFacts(input) {
     //    is what lets a fact resolve to a citation anchor later.
     const [doc] = await db
         .select({
-        title: documentTable.title,
-        currentVersionId: documentTable.currentVersionId,
-    })
+            title: documentTable.title,
+            currentVersionId: documentTable.currentVersionId,
+        })
         .from(documentTable)
         .where(eq(documentTable.id, documentId))
         .limit(1);
@@ -200,13 +201,18 @@ export async function extractCompanyFacts(input) {
     // authoritative chunks to extract from.
     const chunks = await db
         .select({
-        content: documentContextChunks.content,
-        pageNumber: documentContextChunks.pageNumber,
-        semanticType: documentContextChunks.semanticType,
-    })
+            content: documentContextChunks.content,
+            pageNumber: documentContextChunks.pageNumber,
+            semanticType: documentContextChunks.semanticType,
+        })
         .from(documentContextChunks)
         .innerJoin(documentTable, eq(documentContextChunks.documentId, documentTable.id))
-        .where(and(eq(documentContextChunks.documentId, BigInt(documentId)), eq(documentContextChunks.versionId, documentTable.currentVersionId)));
+        .where(
+            and(
+                eq(documentContextChunks.documentId, BigInt(documentId)),
+                eq(documentContextChunks.versionId, documentTable.currentVersionId)
+            )
+        );
     if (chunks.length === 0) {
         console.warn(`[CompanyMetadataExtractor] No chunks for document ${documentId}`);
         return null;
@@ -225,26 +231,44 @@ export async function extractCompanyFacts(input) {
         return true;
     });
     if (filteredChunks.length === 0) {
-        console.warn(`[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`);
+        console.warn(
+            `[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`
+        );
         return null;
     }
     // 3. Split into batches
-    const batches = splitIntoBatches(filteredChunks.map(c => c.content), CHUNKS_PER_BATCH);
-    console.log(`[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`);
+    const batches = splitIntoBatches(
+        filteredChunks.map(c => c.content),
+        CHUNKS_PER_BATCH
+    );
+    console.log(
+        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`
+    );
     // 4. Extract from each batch in parallel (capped concurrency)
-    const batchResults = await runWithConcurrency(batches.map((batch, idx) => () => callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)), MAX_CONCURRENCY);
+    const batchResults = await runWithConcurrency(
+        batches.map(
+            (batch, idx) => () =>
+                callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)
+        ),
+        MAX_CONCURRENCY
+    );
     // Filter out failed/empty batches
-    const successfulResults = batchResults.filter((r) => r !== null);
+    const successfulResults = batchResults.filter(r => r !== null);
     if (successfulResults.length === 0) {
-        console.warn(`[CompanyMetadataExtractor] All ${batches.length} batch extractions returned empty for document ${documentId}`);
+        console.warn(
+            `[CompanyMetadataExtractor] All ${batches.length} batch extractions returned empty for document ${documentId}`
+        );
         return null;
     }
-    console.log(`[CompanyMetadataExtractor] ${successfulResults.length}/${batches.length} batches returned facts`);
+    console.log(
+        `[CompanyMetadataExtractor] ${successfulResults.length}/${batches.length} batches returned facts`
+    );
     // 5. Aggregate across all batch results
     const now = new Date().toISOString();
-    const versionId = doc.currentVersionId === null || doc.currentVersionId === undefined
-        ? undefined
-        : Number(doc.currentVersionId);
+    const versionId =
+        doc.currentVersionId === null || doc.currentVersionId === undefined
+            ? undefined
+            : Number(doc.currentVersionId);
     const source = {
         doc_id: documentId,
         doc_name: doc.title,
@@ -304,13 +328,20 @@ async function callLLM(generate, documentName, batchContent, batchIndex, totalBa
     try {
         return await generate({
             system: EXTRACTION_SYSTEM_PROMPT,
-            prompt: buildChunkExtractionPrompt(documentName, batchContent, batchIndex, totalBatches),
+            prompt: buildChunkExtractionPrompt(
+                documentName,
+                batchContent,
+                batchIndex,
+                totalBatches
+            ),
             schema: ExtractionOutputSchema,
             schemaName: "company_metadata_extraction",
         });
-    }
-    catch (error) {
-        console.error(`[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`, error);
+    } catch (error) {
+        console.error(
+            `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,
+            error
+        );
         return null;
     }
 }
@@ -330,9 +361,7 @@ function aggregateResults(batchResults, documentId, documentName, extractedAt, s
         "size",
     ];
     for (const field of companyFields) {
-        const candidates = batchResults
-            .map(r => r.company[field])
-            .filter((f) => f != null);
+        const candidates = batchResults.map(r => r.company[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
             const boosted = boostConfidence(best.confidence, candidates.length);
@@ -340,11 +369,26 @@ function aggregateResults(batchResults, documentId, documentName, extractedAt, s
         }
     }
     // ---- People: merge by normalised name ----
-    const people = mergeNamedEntries(batchResults.flatMap(r => r.people), extractedAt, source, hydratePersonEntry);
+    const people = mergeNamedEntries(
+        batchResults.flatMap(r => r.people),
+        extractedAt,
+        source,
+        hydratePersonEntry
+    );
     // ---- Services: merge by normalised name ----
-    const services = mergeNamedEntries(batchResults.flatMap(r => r.services), extractedAt, source, hydrateServiceEntry);
+    const services = mergeNamedEntries(
+        batchResults.flatMap(r => r.services),
+        extractedAt,
+        source,
+        hydrateServiceEntry
+    );
     // ---- Projects: merge by normalised name ----
-    const projects = mergeNamedEntries(batchResults.flatMap(r => r.projects), extractedAt, source, hydrateProjectEntry);
+    const projects = mergeNamedEntries(
+        batchResults.flatMap(r => r.projects),
+        extractedAt,
+        source,
+        hydrateProjectEntry
+    );
     // ---- Markets: union unique values per category ----
     const markets = {};
     const marketCategories = ["primary", "verticals", "geographies"];
@@ -352,7 +396,9 @@ function aggregateResults(batchResults, documentId, documentName, extractedAt, s
         const allFacts = batchResults.flatMap(r => r.markets[cat] ?? []);
         const unique = deduplicateByValue(allFacts);
         if (unique.length > 0) {
-            markets[cat] = unique.map(u => hydrate(u.best, boostConfidence(u.best.confidence, u.count), extractedAt, source));
+            markets[cat] = unique.map(u =>
+                hydrate(u.best, boostConfidence(u.best.confidence, u.count), extractedAt, source)
+            );
         }
     }
     // ---- Policies: merge by key, highest confidence wins ----
@@ -367,7 +413,12 @@ function aggregateResults(batchResults, documentId, documentName, extractedAt, s
         }
     }
     // ---- Legal: merge by normalised name ----
-    const legal = mergeNamedEntries(batchResults.flatMap(r => r.legal), extractedAt, source, hydrateLegalEntry);
+    const legal = mergeNamedEntries(
+        batchResults.flatMap(r => r.legal),
+        extractedAt,
+        source,
+        hydrateLegalEntry
+    );
     // ---- Assemble ----
     return {
         document_id: documentId,
@@ -412,8 +463,7 @@ function pickHighestConfidence(candidates) {
 }
 /** Boost confidence when a fact is confirmed by multiple batches. */
 function boostConfidence(base, mentionCount) {
-    if (mentionCount <= 1)
-        return base;
+    if (mentionCount <= 1) return base;
     return Math.min(1.0, base + MULTI_MENTION_BOOST * (mentionCount - 1));
 }
 /** Deduplicate an array of raw facts by normalised value, tracking mention count. */
@@ -424,8 +474,7 @@ function deduplicateByValue(facts) {
         const existing = map.get(key);
         if (!existing) {
             map.set(key, { best: fact, count: 1 });
-        }
-        else {
+        } else {
             existing.count++;
             if (fact.confidence > existing.best.confidence) {
                 existing.best = fact;
@@ -445,8 +494,7 @@ function mergeNamedEntries(entries, extractedAt, source, hydrateEntry) {
         const group = groups.get(key);
         if (group) {
             group.push(entry);
-        }
-        else {
+        } else {
             groups.set(key, [entry]);
         }
     }
@@ -460,10 +508,15 @@ function hydratePersonEntry(group, extractedAt, source) {
     };
     const optionalFields = ["role", "email", "phone", "department"];
     for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f) => f != null);
+        const candidates = group.map(g => g[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
     return entry;
@@ -476,10 +529,15 @@ function hydrateServiceEntry(group, extractedAt, source) {
     };
     const optionalFields = ["description", "status"];
     for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f) => f != null);
+        const candidates = group.map(g => g[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
     return entry;
@@ -492,16 +550,26 @@ function hydrateProjectEntry(group, extractedAt, source) {
     };
     const optionalFields = ["description", "status"];
     for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f) => f != null);
+        const candidates = group.map(g => g[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
     // Merge subprojects across all mentions of this project
     const allSubprojects = group.flatMap(g => g.subprojects ?? []);
     if (allSubprojects.length > 0) {
-        entry.subprojects = mergeNamedEntries(allSubprojects, extractedAt, source, hydrateSubprojectEntry);
+        entry.subprojects = mergeNamedEntries(
+            allSubprojects,
+            extractedAt,
+            source,
+            hydrateSubprojectEntry
+        );
     }
     return entry;
 }
@@ -513,10 +581,15 @@ function hydrateSubprojectEntry(group, extractedAt, source) {
     };
     const optionalFields = ["description", "status"];
     for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f) => f != null);
+        const candidates = group.map(g => g[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
     return entry;
@@ -536,10 +609,15 @@ function hydrateLegalEntry(group, extractedAt, source) {
         "status",
     ];
     for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f) => f != null);
+        const candidates = group.map(g => g[field]).filter(f => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
     return entry;

@@ -13,7 +13,11 @@ import {
     type RouterDecisionResult,
     type StoredSection,
 } from "@launchstack/conversion/ocr/processor";
-import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "@launchstack/conversion/ocr/chunker";
+import {
+    prepareForEmbedding,
+    mergeWithEmbeddings,
+    getTotalChunkSize,
+} from "@launchstack/conversion/ocr/chunker";
 import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import {
@@ -24,7 +28,12 @@ import {
 import type { DocumentChunk, PageContent, PipelineResult } from "@launchstack/conversion/ocr/types";
 import { getDb } from "@launchstack/store/client";
 import { ocrJobs, documentContextChunks } from "@launchstack/store/schema";
-import { creditsDebitSafe, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "@launchstack/store/credits";
+import {
+    creditsDebitSafe,
+    embeddingTokens,
+    ocrTokens,
+    ocrProviderToTokenKey,
+} from "@launchstack/store/credits";
 
 import type {
     DocIngestionToolInput,

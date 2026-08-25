@@ -5,9 +5,13 @@ import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getDb } from "@launchstack/store/client";
 import { company, category } from "@launchstack/store/schema";
-import { getRag, } from "@launchstack/search";
+import { getRag } from "@launchstack/search";
 import { invokeMarketingStructured } from "./models.js";
-import { CompanyDNASchema, KnowledgeValidationReportSchema, NormalizedCompanyKnowledgeSchema, } from "./types.js";
+import {
+    CompanyDNASchema,
+    KnowledgeValidationReportSchema,
+    NormalizedCompanyKnowledgeSchema,
+} from "./types.js";
 const DEFAULT_TOP_K = 4;
 function cleanSnippet(text, maxLen = 500) {
     return text.trim().replace(/\s+/g, " ").slice(0, maxLen);
@@ -34,21 +38,20 @@ function searchResultToCitation(result) {
     };
 }
 function formatEvidenceForPrompt(results) {
-    if (!results.length)
-        return "No evidence retrieved.";
+    if (!results.length) return "No evidence retrieved.";
     return results
         .map((r, i) => {
-        const citation = searchResultToCitation(r);
-        return [
-            `Evidence ${i + 1}:`,
-            `Title: ${citation.title ?? "Unknown"}`,
-            `Document ID: ${String(citation.documentId ?? "Unknown")}`,
-            `Page: ${citation.page ?? "Unknown"}`,
-            `Section: ${citation.sectionPath ?? "Unknown"}`,
-            `Source type: ${citation.sourceType ?? "Unknown"}`,
-            `Snippet: ${citation.snippet}`,
-        ].join("\n");
-    })
+            const citation = searchResultToCitation(r);
+            return [
+                `Evidence ${i + 1}:`,
+                `Title: ${citation.title ?? "Unknown"}`,
+                `Document ID: ${String(citation.documentId ?? "Unknown")}`,
+                `Page: ${citation.page ?? "Unknown"}`,
+                `Section: ${citation.sectionPath ?? "Unknown"}`,
+                `Source type: ${citation.sourceType ?? "Unknown"}`,
+                `Snippet: ${citation.snippet}`,
+            ].join("\n");
+        })
         .join("\n\n");
 }
 async function getCompanyMetadata(companyId) {
@@ -80,15 +83,20 @@ export async function retrieveCompanyKnowledgeEvidence(args) {
         weights: [0.4, 0.6],
     };
     const queries = buildKnowledgeQueries(baseMeta, prompt);
-    const resultsPerQuery = await Promise.all(queries.map(async (query) => {
-        try {
-            return await rag.companyEnsembleSearch(query, options);
-        }
-        catch (error) {
-            console.warn("[marketing-pipeline] evidence retrieval failed for query:", query, error);
-            return [];
-        }
-    }));
+    const resultsPerQuery = await Promise.all(
+        queries.map(async query => {
+            try {
+                return await rag.companyEnsembleSearch(query, options);
+            } catch (error) {
+                console.warn(
+                    "[marketing-pipeline] evidence retrieval failed for query:",
+                    query,
+                    error
+                );
+                return [];
+            }
+        })
+    );
     const flattened = resultsPerQuery.flat();
     const seen = new Set();
     const deduped = [];
@@ -133,7 +141,11 @@ Return valid JSON exactly matching the schema.`;
         "Evidence:",
         evidenceBlock,
     ].join("\n");
-    const response = await invokeMarketingStructured(NormalizedCompanyKnowledgeSchema, [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)], "normalized_company_knowledge");
+    const response = await invokeMarketingStructured(
+        NormalizedCompanyKnowledgeSchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)],
+        "normalized_company_knowledge"
+    );
     return NormalizedCompanyKnowledgeSchema.parse(response);
 }
 /**
@@ -163,7 +175,11 @@ Return valid JSON exactly matching the schema.`;
         "Retrieved evidence:",
         evidenceBlock,
     ].join("\n");
-    const response = await invokeMarketingStructured(KnowledgeValidationReportSchema, [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)], "knowledge_validation_report");
+    const response = await invokeMarketingStructured(
+        KnowledgeValidationReportSchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)],
+        "knowledge_validation_report"
+    );
     return KnowledgeValidationReportSchema.parse(response);
 }
 /**
@@ -196,7 +212,11 @@ Return valid JSON exactly matching the schema.`;
         "Evidence:",
         evidenceBlock,
     ].join("\n");
-    const response = await invokeMarketingStructured(NormalizedCompanyKnowledgeSchema, [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)], "revised_normalized_company_knowledge");
+    const response = await invokeMarketingStructured(
+        NormalizedCompanyKnowledgeSchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(humanPrompt)],
+        "revised_normalized_company_knowledge"
+    );
     return NormalizedCompanyKnowledgeSchema.parse(response);
 }
 /**
@@ -241,22 +261,28 @@ export async function buildValidatedCompanyKnowledge(args) {
  * expected by marketing pipeline
  */
 export function mapValidatedKnowledgeToCompanyDNA(knowledge) {
-    const coreMission = knowledge.whatItDoes && knowledge.whatItDoes !== "Not specified"
-        ? knowledge.targetAudience.length > 0
-            ? `${knowledge.whatItDoes} for ${knowledge.targetAudience.join(", ")}.`
-            : knowledge.whatItDoes
-        : "Not specified";
-    const provenResults = dedupeStrings([...knowledge.proofPoints, ...knowledge.outcomes]).slice(0, 5);
-    const humanStory = knowledge.founderStory && knowledge.founderStory !== "Not specified"
-        ? knowledge.founderStory
-        : knowledge.brandValues.length > 0
-            ? `Values signaled: ${knowledge.brandValues.join(", ")}`
+    const coreMission =
+        knowledge.whatItDoes && knowledge.whatItDoes !== "Not specified"
+            ? knowledge.targetAudience.length > 0
+                ? `${knowledge.whatItDoes} for ${knowledge.targetAudience.join(", ")}.`
+                : knowledge.whatItDoes
             : "Not specified";
-    const technicalEdge = knowledge.technicalEdge && knowledge.technicalEdge !== "Not specified"
-        ? knowledge.technicalEdge
-        : knowledge.capabilities.length > 0
-            ? `Capabilities include ${knowledge.capabilities.slice(0, 3).join(", ")}.`
-            : "Not specified";
+    const provenResults = dedupeStrings([...knowledge.proofPoints, ...knowledge.outcomes]).slice(
+        0,
+        5
+    );
+    const humanStory =
+        knowledge.founderStory && knowledge.founderStory !== "Not specified"
+            ? knowledge.founderStory
+            : knowledge.brandValues.length > 0
+              ? `Values signaled: ${knowledge.brandValues.join(", ")}`
+              : "Not specified";
+    const technicalEdge =
+        knowledge.technicalEdge && knowledge.technicalEdge !== "Not specified"
+            ? knowledge.technicalEdge
+            : knowledge.capabilities.length > 0
+              ? `Capabilities include ${knowledge.capabilities.slice(0, 3).join(", ")}.`
+              : "Not specified";
     return CompanyDNASchema.parse({
         coreMission,
         keyDifferentiators: knowledge.keyDifferentiators.slice(0, 5),

@@ -17,9 +17,11 @@ export const FounderWeeklyReviewStatusSchema = z.enum([
 function isRealCalendarDate(value) {
     const [year, month, day] = value.split("-").map(Number);
     const date = new Date(Date.UTC(year, month - 1, day));
-    return (date.getUTCFullYear() === year &&
+    return (
+        date.getUTCFullYear() === year &&
         date.getUTCMonth() === month - 1 &&
-        date.getUTCDate() === day);
+        date.getUTCDate() === day
+    );
 }
 const CalendarDateSchema = z
     .string()
@@ -35,8 +37,7 @@ export function isValidTimeZone(timeZone) {
     try {
         new Intl.DateTimeFormat("en-US", { timeZone });
         return true;
-    }
-    catch {
+    } catch {
         return false;
     }
 }
@@ -48,21 +49,21 @@ export const WorkspaceTimezoneSchema = z
 /** Durable, request-derived inputs needed to collect evidence after the HTTP response. */
 export const FounderWeeklyReviewCollectionInputSchema = z
     .object({
-    workspaceTimezone: WorkspaceTimezoneSchema,
-    founderContext: z.string().min(1).max(4000).optional(),
-    actorExternalUserId: z.string().min(1).max(256),
-})
+        workspaceTimezone: WorkspaceTimezoneSchema,
+        founderContext: z.string().min(1).max(4000).optional(),
+        actorExternalUserId: z.string().min(1).max(256),
+    })
     .strict();
 export const FounderWeeklyReviewOperationTypeSchema = z.enum(["retry"]);
 export const ReportingPeriodSchema = z
     .object({
-    start: CalendarDateSchema,
-    end: CalendarDateSchema,
-})
+        start: CalendarDateSchema,
+        end: CalendarDateSchema,
+    })
     .refine(value => value.start <= value.end, {
-    message: "Reporting period start must be on or before end",
-    path: ["end"],
-});
+        message: "Reporting period start must be on or before end",
+        path: ["end"],
+    });
 const SerializableMetadataPrimitiveSchema = z.union([
     z.string().max(512),
     z.number().finite(),
@@ -154,52 +155,52 @@ function v2SourceIdsSchema(minimum) {
         .min(minimum)
         .max(20)
         .superRefine((sourceIds, context) => {
-        if (new Set(sourceIds).size !== sourceIds.length) {
-            context.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "sourceIds must be unique",
-            });
-        }
-    });
+            if (new Set(sourceIds).size !== sourceIds.length) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "sourceIds must be unique",
+                });
+            }
+        });
 }
 export const FounderWeeklyReviewV2ObservedFactSchema = z
     .object({
-    kind: z.literal("observed_fact"),
-    text: z.string().min(1).max(2000),
-    sourceIds: v2SourceIdsSchema(1),
-    confidence: V2ConfidenceSchema,
-})
+        kind: z.literal("observed_fact"),
+        text: z.string().min(1).max(2000),
+        sourceIds: v2SourceIdsSchema(1),
+        confidence: V2ConfidenceSchema,
+    })
     .strict();
 export const FounderWeeklyReviewV2ContradictoryEvidenceSchema = z
     .object({
-    kind: z.literal("contradictory_evidence"),
-    text: z.string().min(1).max(2000),
-    sourceIds: v2SourceIdsSchema(2),
-    confidence: V2ConfidenceSchema,
-})
+        kind: z.literal("contradictory_evidence"),
+        text: z.string().min(1).max(2000),
+        sourceIds: v2SourceIdsSchema(2),
+        confidence: V2ConfidenceSchema,
+    })
     .strict();
 export const FounderWeeklyReviewV2RecommendationSchema = z
     .object({
-    kind: z.literal("recommendation"),
-    label: z.literal("Recommendation"),
-    text: z.string().min(1).max(2000),
-    rationale: z.string().min(1).max(2000).optional(),
-    sourceIds: v2SourceIdsSchema(1),
-    confidence: V2ConfidenceSchema,
-})
+        kind: z.literal("recommendation"),
+        label: z.literal("Recommendation"),
+        text: z.string().min(1).max(2000),
+        rationale: z.string().min(1).max(2000).optional(),
+        sourceIds: v2SourceIdsSchema(1),
+        confidence: V2ConfidenceSchema,
+    })
     .strict();
 export const FounderWeeklyReviewV2NoEvidenceSchema = z
     .object({
-    code: z.string().min(1).max(64),
-    message: z.string().min(1).max(512),
-    cta: z.string().min(1).max(512),
-})
+        code: z.string().min(1).max(64),
+        message: z.string().min(1).max(512),
+        cta: z.string().min(1).max(512),
+    })
     .strict();
 const FounderWeeklyReviewV2NoEvidenceSectionSchema = z
     .object({
-    state: z.literal("no_evidence"),
-    noEvidence: FounderWeeklyReviewV2NoEvidenceSchema,
-})
+        state: z.literal("no_evidence"),
+        noEvidence: FounderWeeklyReviewV2NoEvidenceSchema,
+    })
     .strict();
 const FounderWeeklyReviewV2FactualItemSchema = z.union([
     FounderWeeklyReviewV2ObservedFactSchema,
@@ -208,34 +209,34 @@ const FounderWeeklyReviewV2FactualItemSchema = z.union([
 const FounderWeeklyReviewV2FactualSectionSchema = z.union([
     z
         .object({
-        state: z.literal("evidence"),
-        items: z.array(FounderWeeklyReviewV2FactualItemSchema).min(1).max(100),
-    })
+            state: z.literal("evidence"),
+            items: z.array(FounderWeeklyReviewV2FactualItemSchema).min(1).max(100),
+        })
         .strict(),
     FounderWeeklyReviewV2NoEvidenceSectionSchema,
 ]);
 const FounderWeeklyReviewV2PrioritySectionSchema = z.union([
     z
         .object({
-        state: z.literal("evidence"),
-        items: z.array(FounderWeeklyReviewV2RecommendationSchema).min(1).max(100),
-    })
+            state: z.literal("evidence"),
+            items: z.array(FounderWeeklyReviewV2RecommendationSchema).min(1).max(100),
+        })
         .strict(),
     FounderWeeklyReviewV2NoEvidenceSectionSchema,
 ]);
 export const FounderWeeklyReviewV2PayloadSchema = z
     .object({
-    schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION),
-    sections: z
-        .object({
-        whatChanged: FounderWeeklyReviewV2FactualSectionSchema,
-        whatShipped: FounderWeeklyReviewV2FactualSectionSchema,
-        whatCustomersSaid: FounderWeeklyReviewV2FactualSectionSchema,
-        currentBlockers: FounderWeeklyReviewV2FactualSectionSchema,
-        nextPriorities: FounderWeeklyReviewV2PrioritySectionSchema,
+        schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION),
+        sections: z
+            .object({
+                whatChanged: FounderWeeklyReviewV2FactualSectionSchema,
+                whatShipped: FounderWeeklyReviewV2FactualSectionSchema,
+                whatCustomersSaid: FounderWeeklyReviewV2FactualSectionSchema,
+                currentBlockers: FounderWeeklyReviewV2FactualSectionSchema,
+                nextPriorities: FounderWeeklyReviewV2PrioritySectionSchema,
+            })
+            .strict(),
     })
-        .strict(),
-})
     .strict();
 export const FounderWeeklyReviewPayloadSchema = z.union([
     FounderWeeklyReviewV1PayloadSchema,

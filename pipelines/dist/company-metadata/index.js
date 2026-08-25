@@ -42,8 +42,7 @@ export async function runCompanyMetadataTool(input) {
         // 3. Merge extracted facts into canonical metadata
         const mergeResult = mergeCompanyMetadata(current, extracted);
         return { success: true, result: mergeResult };
-    }
-    catch (error) {
+    } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.error(`[CompanyMetadataTool] Failed for document ${documentId}:`, error);
         return { success: false, error: message };

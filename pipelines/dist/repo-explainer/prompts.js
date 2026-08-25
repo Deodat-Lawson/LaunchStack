@@ -41,8 +41,7 @@ export function buildFilesToExploreUserPrompt(tree) {
     return FILES_TO_EXPLORE_USER_TEMPLATE.replace("{tree}", tree);
 }
 export function parsePathsFromResponse(text) {
-    if (!text?.trim())
-        return [];
+    if (!text?.trim()) return [];
     let raw = text.trim();
     // Strip code fences if the model wrapped the output
     if (raw.startsWith("```")) {
@@ -52,13 +51,11 @@ export function parsePathsFromResponse(text) {
     const paths = [];
     for (const lineRaw of raw.split("\n")) {
         let line = lineRaw.trim();
-        if (!line || line.startsWith("#") || line.startsWith("<"))
-            continue;
+        if (!line || line.startsWith("#") || line.startsWith("<")) continue;
         // Strip bullets like "- path"
         line = line.replace(/^[\-\*]\s+/, "").trim();
         // Very simple guard: ignore lines that look like sentences
-        if (!line || line.includes(" "))
-            continue;
+        if (!line || line.includes(" ")) continue;
         paths.push(line);
     }
     return paths;
@@ -125,7 +122,8 @@ const DIAGRAM_TYPE_INSTRUCTIONS = {
 - KEEP IT SIMPLE — clarity over completeness.`,
 };
 export function getSystemPrompt(diagramType = "architecture") {
-    const diagramLabel = diagramType === "er" ? "ER" : diagramType.charAt(0).toUpperCase() + diagramType.slice(1);
+    const diagramLabel =
+        diagramType === "er" ? "ER" : diagramType.charAt(0).toUpperCase() + diagramType.slice(1);
     return `You are a software architect. Produce a brief summary AND a Mermaid ${diagramLabel} diagram for the repository.
 
 You MUST output BOTH sections in this exact order:
@@ -154,15 +152,16 @@ Repository context:
 `;
 /** Extract the summary from the response (before the mermaid block). */
 export function extractSummary(text) {
-    if (!text?.trim())
-        return null;
+    if (!text?.trim()) return null;
     const trimmed = text.trim().replace(/\\n/g, "\n");
     // Try "## Summary" ... "## Diagram" or "## Summary" ... ```mermaid
-    const sectionMatch = /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i.exec(trimmed);
+    const sectionMatch =
+        /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i.exec(
+            trimmed
+        );
     if (sectionMatch?.[1]) {
         const s = sectionMatch[1].trim();
-        if (s.length > 20)
-            return s;
+        if (s.length > 20) return s;
     }
     // Fallback: text before the first ```mermaid block
     const mermaidIdx = trimmed.search(/```mermaid/i);
@@ -170,20 +169,19 @@ export function extractSummary(text) {
         const before = trimmed.slice(0, mermaidIdx).trim();
         // Remove leading ## or headers, get clean intro
         const cleaned = before.replace(/^#+\s*Summary\s*:?\s*\n?/i, "").trim();
-        if (cleaned.length > 20)
-            return cleaned;
+        if (cleaned.length > 20) return cleaned;
     }
     return null;
 }
 /** Extract mermaid code from response (handles ```mermaid ... ``` or raw mermaid). */
 export function extractMermaidCode(text) {
-    if (!text?.trim())
-        return null;
+    if (!text?.trim()) return null;
     const trimmed = text.trim();
     const match = /```mermaid\s*\n?([\s\S]*?)```/i.exec(trimmed);
-    if (match?.[1])
-        return match[1].trim();
-    if (/^\s*(graph|flowchart|classDiagram|sequenceDiagram|stateDiagram|erDiagram)\s/i.test(trimmed)) {
+    if (match?.[1]) return match[1].trim();
+    if (
+        /^\s*(graph|flowchart|classDiagram|sequenceDiagram|stateDiagram|erDiagram)\s/i.test(trimmed)
+    ) {
         return trimmed;
     }
     return null;

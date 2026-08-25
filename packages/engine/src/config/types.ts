@@ -57,7 +57,6 @@ export interface CreditsConfig {
     metering?: MeteringMode;
 }
 
-
 export interface LlmConfig {
     /**
      * Chat: one OpenAI-compatible endpoint plus the model definitions and route
@@ -122,8 +121,6 @@ export interface EmbeddingsConfig {
     // this repository ever implemented.
 }
 
-
-
 export interface Neo4jConfig {
     uri: string;
     user: string;
@@ -150,4 +147,3 @@ export interface ProviderCapabilityOverride {
     apiKey?: string;
     model?: string;
 }
-

@@ -19,7 +19,10 @@ export async function buildMessagingStrategy(args) {
         `Technical edge: ${dna.technicalEdge}`,
         "",
         "## Competitor landscape",
-        ...topCompetitors.map(c => `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`),
+        ...topCompetitors.map(
+            c =>
+                `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`
+        ),
         `Our advantages: ${competitors.ourAdvantages.join("; ")}`,
         `Market gaps: ${competitors.marketGaps.join("; ")}`,
         `Messaging to avoid: ${competitors.messagingAntiPatterns.join("; ")}`,
@@ -40,14 +43,26 @@ Rules:
 - avoidList: 3–5 phrases or themes we must avoid (clichés, competitor overlap, weak claims).
 
 Use ONLY information from the provided context. If context is sparse, keep claims honest and general. Return valid JSON matching the schema.`;
-    const response = await invokeMarketingStructured(MessagingStrategySchema, [new SystemMessage(systemPrompt), new HumanMessage(contextParts.join("\n"))], "messaging_strategy");
+    const response = await invokeMarketingStructured(
+        MessagingStrategySchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(contextParts.join("\n"))],
+        "messaging_strategy"
+    );
     return MessagingStrategySchema.parse(response);
 }
 function buildContextBlock(args) {
     const MAX_COMPETITORS = 3;
     const MAX_WEAKNESSES = 2;
     const MAX_TRENDS_CHARS = 800;
-    const { dna, competitors, trendsSummary = "", userPrompt = "", brandVoice, targetPersona, performanceInsights, } = args;
+    const {
+        dna,
+        competitors,
+        trendsSummary = "",
+        userPrompt = "",
+        brandVoice,
+        targetPersona,
+        performanceInsights,
+    } = args;
     const topCompetitors = competitors.competitors.slice(0, MAX_COMPETITORS);
     const contextParts = [
         "## Company DNA",
@@ -58,21 +73,42 @@ function buildContextBlock(args) {
         `Technical edge: ${dna.technicalEdge}`,
         "",
         "## Competitor landscape",
-        ...topCompetitors.map(c => `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`),
+        ...topCompetitors.map(
+            c =>
+                `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`
+        ),
         `Our advantages: ${competitors.ourAdvantages.join("; ")}`,
         `Market gaps: ${competitors.marketGaps.join("; ")}`,
         `Messaging to avoid: ${competitors.messagingAntiPatterns.join("; ")}`,
     ];
     if (brandVoice) {
-        contextParts.push("", "## Brand voice", `Tone: ${brandVoice.toneDescriptor}`, `Style: ${brandVoice.sentenceStyle}`, `Formality: ${brandVoice.formalityLevel}`, brandVoice.vocabularyExamples.length > 0
-            ? `Characteristic phrases: ${brandVoice.vocabularyExamples.join(", ")}`
-            : "");
+        contextParts.push(
+            "",
+            "## Brand voice",
+            `Tone: ${brandVoice.toneDescriptor}`,
+            `Style: ${brandVoice.sentenceStyle}`,
+            `Formality: ${brandVoice.formalityLevel}`,
+            brandVoice.vocabularyExamples.length > 0
+                ? `Characteristic phrases: ${brandVoice.vocabularyExamples.join(", ")}`
+                : ""
+        );
     }
     if (targetPersona) {
-        contextParts.push("", "## Target audience", `Role: ${targetPersona.role}`, `Pain points: ${targetPersona.painPoints.join("; ")}`, `Priorities: ${targetPersona.priorities.join("; ")}`, `Language style: ${targetPersona.languageStyle}`);
+        contextParts.push(
+            "",
+            "## Target audience",
+            `Role: ${targetPersona.role}`,
+            `Pain points: ${targetPersona.painPoints.join("; ")}`,
+            `Priorities: ${targetPersona.priorities.join("; ")}`,
+            `Language style: ${targetPersona.languageStyle}`
+        );
     }
     if (trendsSummary.trim()) {
-        contextParts.push("", "## Platform / trend context", trendsSummary.trim().slice(0, MAX_TRENDS_CHARS));
+        contextParts.push(
+            "",
+            "## Platform / trend context",
+            trendsSummary.trim().slice(0, MAX_TRENDS_CHARS)
+        );
     }
     if (performanceInsights && performanceInsights.length > 0) {
         contextParts.push("", "## Past performance insights", ...performanceInsights);
@@ -104,7 +140,11 @@ For EACH variant provide:
 CRITICAL: Use ONLY information from the provided company DNA and context. Never cite external company products (like Snowflake, AWS, etc.) as your proof points — those are competitors, not evidence. If the company context is sparse, keep proof points general and honest.
 
 Return valid JSON with a "variants" array of exactly 3 objects.`;
-    const response = await invokeMarketingStructured(MultiStrategySchema, [new SystemMessage(systemPrompt), new HumanMessage(buildContextBlock(args))], "multi_strategy");
+    const response = await invokeMarketingStructured(
+        MultiStrategySchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(buildContextBlock(args))],
+        "multi_strategy"
+    );
     const parsed = MultiStrategySchema.parse(response);
     return parsed.variants;
 }

@@ -21,5 +21,8 @@ import type { CompanyMetadataJSON, ExtractedCompanyFacts, MergeResult } from "./
  *
  * Both inputs are treated as immutable — a new object is returned.
  */
-export declare function mergeCompanyMetadata(existing: CompanyMetadataJSON, extracted: ExtractedCompanyFacts): MergeResult;
+export declare function mergeCompanyMetadata(
+    existing: CompanyMetadataJSON,
+    extracted: ExtractedCompanyFacts
+): MergeResult;
 //# sourceMappingURL=merger.d.ts.map

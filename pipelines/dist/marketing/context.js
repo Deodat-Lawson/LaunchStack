@@ -3,7 +3,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getDb } from "@launchstack/store/client";
 import { category, company } from "@launchstack/store/schema";
 import { companyMetadata } from "../schema.js";
-import { getRag, } from "@launchstack/search";
+import { getRag } from "@launchstack/search";
 import { invokeMarketingStructured } from "./models.js";
 import { CompanyDNASchema } from "./types.js";
 const DIFFERENTIATOR_QUERY_PARTS = [
@@ -40,8 +40,7 @@ export async function buildCompanyKnowledgeContext(args) {
             .slice(0, 6)
             .map(row => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 400))
             .filter(Boolean);
-    }
-    catch (error) {
+    } catch (error) {
         console.warn("[marketing-pipeline] company KB context retrieval failed:", error);
     }
     const contextParts = [
@@ -50,9 +49,11 @@ export async function buildCompanyKnowledgeContext(args) {
         ...(companyInfo?.industry ? [`Industry / Sector: ${companyInfo.industry}`] : []),
         `Employee Count Range: ${companyInfo?.numberOfEmployees ?? "Unknown"}`,
         `Company Categories: ${categoryNames.length > 0 ? categoryNames.join(", ") : "None"}`,
-        `Knowledge Base Signals: ${kbSnippets.length > 0
-            ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ")
-            : "No matching KB snippets found"}`,
+        `Knowledge Base Signals: ${
+            kbSnippets.length > 0
+                ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ")
+                : "No matching KB snippets found"
+        }`,
     ];
     return contextParts.join("\n");
 }
@@ -61,12 +62,18 @@ export async function extractCompanyDNA(args) {
     // Try metadata-first approach
     const metadataContext = await buildMetadataContext(companyId);
     if (metadataContext) {
-        console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
+        console.log(
+            "[marketing-pipeline] extractCompanyDNA: using METADATA for company %d",
+            companyId
+        );
         const dna = await synthesizeDNA(metadataContext, prompt);
         return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
     }
     // Fallback: dual RAG extraction for companies without metadata
-    console.log("[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)", companyId);
+    console.log(
+        "[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)",
+        companyId
+    );
     const ragContext = await buildRAGContext(companyId, prompt);
     const dna = await synthesizeDNA(ragContext, prompt);
     return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
@@ -77,12 +84,9 @@ export async function extractCompanyDNA(args) {
 const MIN_CONFIDENCE = 0.5;
 /** Read active fact value if confidence meets threshold. */
 function readFact(fact) {
-    if (!fact)
-        return undefined;
-    if (fact.status !== "active")
-        return undefined;
-    if (fact.confidence < MIN_CONFIDENCE)
-        return undefined;
+    if (!fact) return undefined;
+    if (fact.status !== "active") return undefined;
+    if (fact.confidence < MIN_CONFIDENCE) return undefined;
     return fact.value;
 }
 /**
@@ -96,8 +100,7 @@ async function buildMetadataContext(companyId) {
         .from(companyMetadata)
         .where(eq(companyMetadata.companyId, BigInt(companyId)))
         .limit(1);
-    if (!row?.metadata)
-        return null;
+    if (!row?.metadata) return null;
     const md = row.metadata;
     const parts = [];
     // Company info
@@ -108,29 +111,22 @@ async function buildMetadataContext(companyId) {
     const founded = readFact(md.company.founded_year);
     const hq = readFact(md.company.headquarters);
     parts.push("=== Company ===");
-    if (name)
-        parts.push(`Name: ${name}`);
-    if (description)
-        parts.push(`Description: ${description}`);
-    if (industry)
-        parts.push(`Industry: ${industry}`);
-    if (size)
-        parts.push(`Size: ${size}`);
-    if (founded)
-        parts.push(`Founded: ${founded}`);
-    if (hq)
-        parts.push(`Headquarters: ${hq}`);
+    if (name) parts.push(`Name: ${name}`);
+    if (description) parts.push(`Description: ${description}`);
+    if (industry) parts.push(`Industry: ${industry}`);
+    if (size) parts.push(`Size: ${size}`);
+    if (founded) parts.push(`Founded: ${founded}`);
+    if (hq) parts.push(`Headquarters: ${hq}`);
     // Services → differentiators and technical edge
     if (md.services.length > 0) {
         const serviceLines = md.services
-            .map((s) => {
-            const sName = readFact(s.name);
-            const sDesc = readFact(s.description);
-            if (!sName)
-                return null;
-            return sDesc ? `- ${sName}: ${sDesc}` : `- ${sName}`;
-        })
-            .filter((v) => v != null);
+            .map(s => {
+                const sName = readFact(s.name);
+                const sDesc = readFact(s.description);
+                if (!sName) return null;
+                return sDesc ? `- ${sName}: ${sDesc}` : `- ${sName}`;
+            })
+            .filter(v => v != null);
         if (serviceLines.length > 0) {
             parts.push("", "=== Services & Products ===", ...serviceLines);
         }
@@ -138,16 +134,15 @@ async function buildMetadataContext(companyId) {
     // Projects → proven results
     if (md.projects.length > 0) {
         const projectLines = md.projects
-            .map((p) => {
-            const pName = readFact(p.name);
-            const pDesc = readFact(p.description);
-            const pStatus = readFact(p.status);
-            if (!pName)
-                return null;
-            const detail = [pDesc, pStatus].filter(Boolean).join(" | ");
-            return detail ? `- ${pName}: ${detail}` : `- ${pName}`;
-        })
-            .filter((v) => v != null);
+            .map(p => {
+                const pName = readFact(p.name);
+                const pDesc = readFact(p.description);
+                const pStatus = readFact(p.status);
+                if (!pName) return null;
+                const detail = [pDesc, pStatus].filter(Boolean).join(" | ");
+                return detail ? `- ${pName}: ${detail}` : `- ${pName}`;
+            })
+            .filter(v => v != null);
         if (projectLines.length > 0) {
             parts.push("", "=== Projects & Outcomes ===", ...projectLines);
         }
@@ -156,14 +151,13 @@ async function buildMetadataContext(companyId) {
     if (md.people.length > 0) {
         const personLines = md.people
             .slice(0, 8)
-            .map((p) => {
-            const pName = readFact(p.name);
-            const pRole = readFact(p.role);
-            if (!pName)
-                return null;
-            return pRole ? `- ${pName} (${pRole})` : `- ${pName}`;
-        })
-            .filter((v) => v != null);
+            .map(p => {
+                const pName = readFact(p.name);
+                const pRole = readFact(p.role);
+                if (!pName) return null;
+                return pRole ? `- ${pName} (${pRole})` : `- ${pName}`;
+            })
+            .filter(v => v != null);
         if (personLines.length > 0) {
             parts.push("", "=== Key People ===", ...personLines);
         }
@@ -171,23 +165,16 @@ async function buildMetadataContext(companyId) {
     // Markets → differentiators
     const marketParts = [];
     if (md.markets.primary?.length) {
-        const vals = md.markets.primary.map(f => readFact(f)).filter((v) => v != null);
-        if (vals.length)
-            marketParts.push(`Primary markets: ${vals.join(", ")}`);
+        const vals = md.markets.primary.map(f => readFact(f)).filter(v => v != null);
+        if (vals.length) marketParts.push(`Primary markets: ${vals.join(", ")}`);
     }
     if (md.markets.verticals?.length) {
-        const vals = md.markets.verticals
-            .map(f => readFact(f))
-            .filter((v) => v != null);
-        if (vals.length)
-            marketParts.push(`Verticals: ${vals.join(", ")}`);
+        const vals = md.markets.verticals.map(f => readFact(f)).filter(v => v != null);
+        if (vals.length) marketParts.push(`Verticals: ${vals.join(", ")}`);
     }
     if (md.markets.geographies?.length) {
-        const vals = md.markets.geographies
-            .map(f => readFact(f))
-            .filter((v) => v != null);
-        if (vals.length)
-            marketParts.push(`Geographies: ${vals.join(", ")}`);
+        const vals = md.markets.geographies.map(f => readFact(f)).filter(v => v != null);
+        if (vals.length) marketParts.push(`Geographies: ${vals.join(", ")}`);
     }
     if (marketParts.length > 0) {
         parts.push("", "=== Markets ===", ...marketParts);
@@ -197,10 +184,10 @@ async function buildMetadataContext(companyId) {
     if (policyEntries.length > 0) {
         const policyLines = policyEntries
             .map(([key, fact]) => {
-            const val = readFact(fact);
-            return val ? `- ${key}: ${val}` : null;
-        })
-            .filter((v) => v != null);
+                const val = readFact(fact);
+                return val ? `- ${key}: ${val}` : null;
+            })
+            .filter(v => v != null);
         if (policyLines.length > 0) {
             parts.push("", "=== Policies & Certifications ===", ...policyLines);
         }
@@ -243,8 +230,7 @@ async function buildRAGContext(companyId, prompt) {
             .slice(0, 4)
             .map(r => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
             .filter(Boolean);
-    }
-    catch (error) {
+    } catch (error) {
         console.warn("[marketing-pipeline] extractCompanyDNA RAG failed:", error);
     }
     const combinedSnippets = [...new Set([...generalSnippets, ...differentiatorSnippets])];
@@ -266,10 +252,14 @@ Rules:
 - technicalEdge: one simple sentence on how it works or why it's better; keep it non-technical.
 Return valid JSON matching the schema.`;
 async function synthesizeDNA(context, userPrompt) {
-    const response = await invokeMarketingStructured(CompanyDNASchema, [
-        new SystemMessage(DNA_SYSTEM_PROMPT),
-        new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
-    ], "company_dna");
+    const response = await invokeMarketingStructured(
+        CompanyDNASchema,
+        [
+            new SystemMessage(DNA_SYSTEM_PROMPT),
+            new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
+        ],
+        "company_dna"
+    );
     return CompanyDNASchema.parse(response);
 }
 //# sourceMappingURL=context.js.map

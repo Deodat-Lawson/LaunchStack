@@ -92,7 +92,7 @@ export declare const clientProspectorJobs: import("drizzle-orm/pg-core").PgTable
             tableName: "client_prospector_jobs";
             dataType: "string";
             columnType: "PgVarchar";
-            data: "queued" | "failed" | "completed" | "planning" | "searching" | "scoring";
+            data: "queued" | "completed" | "failed" | "planning" | "searching" | "scoring";
             driverParam: string;
             notNull: true;
             hasDefault: true;

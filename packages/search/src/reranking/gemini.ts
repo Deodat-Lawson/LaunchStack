@@ -1,6 +1,10 @@
 import type { ProviderResult } from "@launchstack/llm/providers";
 import type { RerankProvider, RerankResult } from "./index";
-import { getCapabilityConfig, resolveEndpoint, resolveModel } from "@launchstack/llm/providers/registry";
+import {
+    getCapabilityConfig,
+    resolveEndpoint,
+    resolveModel,
+} from "@launchstack/llm/providers/registry";
 import { GEMINI_FAST_MODEL } from "@launchstack/llm/types";
 
 /**

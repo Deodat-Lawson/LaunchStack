@@ -27,8 +27,7 @@ export function resolveReportingPeriodBounds(period, workspaceTimezone) {
 function assertValidTimeZone(timeZone) {
     try {
         new Intl.DateTimeFormat("en-US", { timeZone });
-    }
-    catch {
+    } catch {
         throw new Error(`Invalid workspace timezone: ${timeZone}`);
     }
 }

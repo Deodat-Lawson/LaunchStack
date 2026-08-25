@@ -1,4 +1,9 @@
-export type StatusStage = "validating" | "fetching_tree" | "exploring_files" | "fetching_files" | "generating_explanation";
+export type StatusStage =
+    | "validating"
+    | "fetching_tree"
+    | "exploring_files"
+    | "fetching_files"
+    | "generating_explanation";
 export interface RepoInfo {
     owner: string;
     repoName: string;

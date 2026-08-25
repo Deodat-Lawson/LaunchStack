@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { MarketingPlatformEnum, ContentTypeEnum, FormalityLevelEnum } from "../../types.js";
-import { KnowledgeStateEnum, ContentCategoryEnum, CampaignGoalEnum, CriterionIdEnum, ScoringMethodEnum, ExpectedFailureModeEnum, } from "./enums.js";
+import {
+    KnowledgeStateEnum,
+    ContentCategoryEnum,
+    CampaignGoalEnum,
+    CriterionIdEnum,
+    ScoringMethodEnum,
+    ExpectedFailureModeEnum,
+} from "./enums.js";
 /**
  * Fixture schema — the version-controlled definition of one evaluation case.
  *

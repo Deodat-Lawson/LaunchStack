@@ -25,11 +25,13 @@ export const ReviewCriterionEnum = z.enum([
 ]);
 /** Output of the LLM review call — scores only, never a rewrite. */
 export const TemplateReviewSchema = z.object({
-    scores: z.array(z.object({
-        criterion: ReviewCriterionEnum,
-        score: z.number().min(0).max(100),
-        rationale: z.string(),
-    })),
+    scores: z.array(
+        z.object({
+            criterion: ReviewCriterionEnum,
+            score: z.number().min(0).max(100),
+            rationale: z.string(),
+        })
+    ),
     issues: z.array(z.string()),
     verdict: z.enum(["pass", "revise"]),
     summary: z.string(),
@@ -67,8 +69,5 @@ export class CampaignLifecycleError extends Error {
     }
 }
 /** Statuses that must block any future delivery to the same address. */
-export const DELIVERED_OR_IN_FLIGHT = new Set([
-    "sent",
-    "queued",
-]);
+export const DELIVERED_OR_IN_FLIGHT = new Set(["sent", "queued"]);
 //# sourceMappingURL=types.js.map

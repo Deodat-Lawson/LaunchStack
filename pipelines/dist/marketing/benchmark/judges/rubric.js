@@ -26,16 +26,22 @@ export const JUDGE_CRITERIA = [
 ];
 /** One-line definition per criterion, injected into the judge prompt. */
 export const CRITERION_GUIDE = {
-    groundedness: "Every factual claim is supported by the company context. Anything not in the context is ungrounded — score down hard for invented facts, metrics, or features.",
-    specificity: "Concrete, company/product-specific details rather than generic filler that could apply to any company.",
+    groundedness:
+        "Every factual claim is supported by the company context. Anything not in the context is ungrounded — score down hard for invented facts, metrics, or features.",
+    specificity:
+        "Concrete, company/product-specific details rather than generic filler that could apply to any company.",
     brand_voice: "Matches the company's tone and style implied by its context.",
     audience_relevance: "Speaks directly to the intended audience's priorities and pain points.",
-    goal_alignment: "Serves the campaign goal (awareness / engagement / conversion / signups / community).",
+    goal_alignment:
+        "Serves the campaign goal (awareness / engagement / conversion / signups / community).",
     platform_structure: "Fits the platform's norms, length, and formatting conventions.",
     hook_strength: "The opening line earns attention and stops the scroll.",
-    cta_quality: "Clear, appropriate call to action when one is warranted (do not penalize its absence when the goal doesn't need one).",
-    cliche_generic: "Free of clichés, hype words, and generic AI phrasing. Higher score = cleaner, more human.",
-    citation_coverage: "Claims that need evidence reference or point to it when the platform/goal expects proof.",
+    cta_quality:
+        "Clear, appropriate call to action when one is warranted (do not penalize its absence when the goal doesn't need one).",
+    cliche_generic:
+        "Free of clichés, hype words, and generic AI phrasing. Higher score = cleaner, more human.",
+    citation_coverage:
+        "Claims that need evidence reference or point to it when the platform/goal expects proof.",
 };
 const CriterionEnum = z.enum(JUDGE_CRITERIA);
 /** Structured-output shape the judge must return (no rewrite field). */
@@ -59,8 +65,7 @@ export const JudgeResultSchema = z.object({
                     code: z.ZodIssueCode.custom,
                     message: `missing score for criterion "${criterion}"`,
                 });
-            }
-            else if (n > 1) {
+            } else if (n > 1) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: `duplicate scores (${n}) for criterion "${criterion}"`,

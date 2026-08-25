@@ -27,35 +27,42 @@ async function executeSearchWithRetries(search, location, radius, apiKey, option
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
             return await callFoursquare(search, location, radius, apiKey, options);
-        }
-        catch (err) {
+        } catch (err) {
             lastError = err instanceof Error ? err : new Error(String(err));
             if (attempt < MAX_RETRIES) {
-                console.warn(`[place-search] Search failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${search.searchQuery.slice(0, 50)}..."`, lastError.message);
+                console.warn(
+                    `[place-search] Search failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${search.searchQuery.slice(0, 50)}..."`,
+                    lastError.message
+                );
             }
         }
     }
-    console.error(`[place-search] Search failed after ${MAX_RETRIES + 1} attempts: "${search.searchQuery.slice(0, 50)}..."`, lastError);
+    console.error(
+        `[place-search] Search failed after ${MAX_RETRIES + 1} attempts: "${search.searchQuery.slice(0, 50)}..."`,
+        lastError
+    );
     return [];
 }
 // Closed-bucket values that indicate a business is no longer operating
 const CLOSED_BUCKETS = new Set(["VeryLikelyClosed", "LikelyClosed"]);
 function mapFoursquarePlace(place) {
-    if (!place.fsq_place_id || !place.name)
-        return null;
+    if (!place.fsq_place_id || !place.name) return null;
     // Filter out closed businesses
     if (place.date_closed) {
-        console.log(`[place-search] Skipping closed place: "${place.name}" (closed ${place.date_closed})`);
+        console.log(
+            `[place-search] Skipping closed place: "${place.name}" (closed ${place.date_closed})`
+        );
         return null;
     }
     if (place.closed_bucket && CLOSED_BUCKETS.has(place.closed_bucket)) {
-        console.log(`[place-search] Skipping likely-closed place: "${place.name}" (${place.closed_bucket})`);
+        console.log(
+            `[place-search] Skipping likely-closed place: "${place.name}" (${place.closed_bucket})`
+        );
         return null;
     }
     const lat = place.latitude;
     const lng = place.longitude;
-    if (lat == null || lng == null)
-        return null;
+    if (lat == null || lng == null) return null;
     return {
         fsqId: place.fsq_place_id,
         name: place.name,
@@ -106,13 +113,15 @@ async function callFoursquare(search, location, radius, apiKey, options) {
     });
     if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Foursquare API error: ${response.status} ${response.statusText} - ${text}`);
+        throw new Error(
+            `Foursquare API error: ${response.status} ${response.statusText} - ${text}`
+        );
     }
-    const data = (await response.json());
+    const data = await response.json();
     if (!data.results || !Array.isArray(data.results)) {
         return [];
     }
-    return data.results.map(mapFoursquarePlace).filter((p) => p !== null);
+    return data.results.map(mapFoursquarePlace).filter(p => p !== null);
 }
 // ─── Public API ──────────────────────────────────────────────────────────────
 /**
@@ -128,19 +137,28 @@ export async function executePlaceSearch(searches, location, radius, options = {
     const seenIds = new Set();
     const combined = [];
     const excludeChains = options.excludeChains ?? true; // default: exclude chains
-    const settledSearches = await Promise.allSettled(searches.map(search => executeSearchWithRetries(search, location, radius, apiKey, { excludeChains })));
+    const settledSearches = await Promise.allSettled(
+        searches.map(search =>
+            executeSearchWithRetries(search, location, radius, apiKey, { excludeChains })
+        )
+    );
     for (const [index, settled] of settledSearches.entries()) {
         const search = searches[index];
         if (!search) {
             continue;
         }
         if (settled.status === "rejected") {
-            console.error(`[place-search] Search promise rejected unexpectedly: "${search.searchQuery.slice(0, 50)}..."`, settled.reason);
+            console.error(
+                `[place-search] Search promise rejected unexpectedly: "${search.searchQuery.slice(0, 50)}..."`,
+                settled.reason
+            );
             continue;
         }
         const results = settled.value;
         if (results.length === 0) {
-            console.warn(`[place-search] Zero results for search: "${search.searchQuery.slice(0, 80)}..."`);
+            console.warn(
+                `[place-search] Zero results for search: "${search.searchQuery.slice(0, 80)}..."`
+            );
             continue;
         }
         for (const place of results) {

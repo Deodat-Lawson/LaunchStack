@@ -232,9 +232,8 @@ describe("modifyDocument Inngest function", () => {
         });
 
         it("returns validationError on 422 without throwing", async () => {
-            const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-                "@launchstack/editing"
-            );
+            const { AdeuServiceError: MockAdeuServiceError } =
+                jest.requireMock("@launchstack/editing");
             (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
                 new MockAdeuServiceError(422, "Edit 1: target not found")
             );
@@ -276,9 +275,8 @@ describe("modifyDocument Inngest function", () => {
         });
 
         it("throws on 500 to allow Inngest retry", async () => {
-            const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-                "@launchstack/editing"
-            );
+            const { AdeuServiceError: MockAdeuServiceError } =
+                jest.requireMock("@launchstack/editing");
             (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
                 new MockAdeuServiceError(500, "Internal error")
             );
@@ -307,9 +305,8 @@ describe("modifyDocument Inngest function", () => {
         });
 
         it("throws on network failure to allow Inngest retry", async () => {
-            const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-                "@launchstack/editing"
-            );
+            const { AdeuServiceError: MockAdeuServiceError } =
+                jest.requireMock("@launchstack/editing");
             (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
                 new MockAdeuServiceError(0, "ECONNREFUSED")
             );

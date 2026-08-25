@@ -16,280 +16,237 @@ import { z } from "zod";
  *   - contradictory: conflicts with a supported fact (tests contradictory-knowledge handling)
  *   - distractor:    plausible but irrelevant (should not be cited as proof)
  */
-export declare const SourceFactSchema: z.ZodObject<{
-    id: z.ZodString;
-    text: z.ZodString;
-    kind: z.ZodDefault<z.ZodEnum<["supported", "contradictory", "distractor"]>>;
-    /** A concrete metric/number a deterministic groundedness check can string-match. */
-    metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-}, "strip", z.ZodTypeAny, {
-    kind: "supported" | "contradictory" | "distractor";
-    text: string;
-    id: string;
-    metric: string | null;
-}, {
-    text: string;
-    id: string;
-    kind?: "supported" | "contradictory" | "distractor" | undefined;
-    metric?: string | null | undefined;
-}>;
+export declare const SourceFactSchema: z.ZodObject<
+    {
+        id: z.ZodString;
+        text: z.ZodString;
+        kind: z.ZodDefault<z.ZodEnum<["supported", "contradictory", "distractor"]>>;
+        /** A concrete metric/number a deterministic groundedness check can string-match. */
+        metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
+        kind: "supported" | "contradictory" | "distractor";
+        text: string;
+        id: string;
+        metric: string | null;
+    },
+    {
+        text: string;
+        id: string;
+        kind?: "supported" | "contradictory" | "distractor" | undefined;
+        metric?: string | null | undefined;
+    }
+>;
 export type SourceFact = z.infer<typeof SourceFactSchema>;
 /**
  * A synthetic company used for generation. In Mode A the runner builds the
  * company-context string from `docs`; in Mode B it seeds these into a test DB.
  * Docs live as real files in the repo (ticket: "documents inside repo").
  */
-export declare const CompanyFixtureSchema: z.ZodObject<{
-    ref: z.ZodString;
-    version: z.ZodString;
-    knowledgeState: z.ZodEnum<["strong", "sparse", "missing", "contradictory"]>;
-    name: z.ZodString;
-    description: z.ZodString;
-    industry: z.ZodString;
-    categories: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    /** KB documents relative to this company's folder. */
-    docs: z.ZodDefault<z.ZodArray<z.ZodObject<{
-        path: z.ZodString;
-        title: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        path: string;
-        title: string;
-    }, {
-        path: string;
-        title: string;
-    }>, "many">>;
-    /** Ground-truth facts for groundedness/citation scoring. */
-    sourceFacts: z.ZodDefault<z.ZodArray<z.ZodObject<{
-        id: z.ZodString;
-        text: z.ZodString;
-        kind: z.ZodDefault<z.ZodEnum<["supported", "contradictory", "distractor"]>>;
-        /** A concrete metric/number a deterministic groundedness check can string-match. */
-        metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-    }, "strip", z.ZodTypeAny, {
-        kind: "supported" | "contradictory" | "distractor";
-        text: string;
-        id: string;
-        metric: string | null;
-    }, {
-        text: string;
-        id: string;
-        kind?: "supported" | "contradictory" | "distractor" | undefined;
-        metric?: string | null | undefined;
-    }>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    name: string;
-    description: string;
-    industry: string;
-    ref: string;
-    categories: string[];
-    version: string;
-    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
-    docs: {
-        path: string;
-        title: string;
-    }[];
-    sourceFacts: {
-        kind: "supported" | "contradictory" | "distractor";
-        text: string;
-        id: string;
-        metric: string | null;
-    }[];
-}, {
-    name: string;
-    description: string;
-    industry: string;
-    ref: string;
-    version: string;
-    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
-    categories?: string[] | undefined;
-    docs?: {
-        path: string;
-        title: string;
-    }[] | undefined;
-    sourceFacts?: {
-        text: string;
-        id: string;
-        kind?: "supported" | "contradictory" | "distractor" | undefined;
-        metric?: string | null | undefined;
-    }[] | undefined;
-}>;
+export declare const CompanyFixtureSchema: z.ZodObject<
+    {
+        ref: z.ZodString;
+        version: z.ZodString;
+        knowledgeState: z.ZodEnum<["strong", "sparse", "missing", "contradictory"]>;
+        name: z.ZodString;
+        description: z.ZodString;
+        industry: z.ZodString;
+        categories: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        /** KB documents relative to this company's folder. */
+        docs: z.ZodDefault<
+            z.ZodArray<
+                z.ZodObject<
+                    {
+                        path: z.ZodString;
+                        title: z.ZodString;
+                    },
+                    "strip",
+                    z.ZodTypeAny,
+                    {
+                        path: string;
+                        title: string;
+                    },
+                    {
+                        path: string;
+                        title: string;
+                    }
+                >,
+                "many"
+            >
+        >;
+        /** Ground-truth facts for groundedness/citation scoring. */
+        sourceFacts: z.ZodDefault<
+            z.ZodArray<
+                z.ZodObject<
+                    {
+                        id: z.ZodString;
+                        text: z.ZodString;
+                        kind: z.ZodDefault<z.ZodEnum<["supported", "contradictory", "distractor"]>>;
+                        /** A concrete metric/number a deterministic groundedness check can string-match. */
+                        metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
+                    },
+                    "strip",
+                    z.ZodTypeAny,
+                    {
+                        kind: "supported" | "contradictory" | "distractor";
+                        text: string;
+                        id: string;
+                        metric: string | null;
+                    },
+                    {
+                        text: string;
+                        id: string;
+                        kind?: "supported" | "contradictory" | "distractor" | undefined;
+                        metric?: string | null | undefined;
+                    }
+                >,
+                "many"
+            >
+        >;
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
+        name: string;
+        description: string;
+        industry: string;
+        ref: string;
+        categories: string[];
+        version: string;
+        knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
+        docs: {
+            path: string;
+            title: string;
+        }[];
+        sourceFacts: {
+            kind: "supported" | "contradictory" | "distractor";
+            text: string;
+            id: string;
+            metric: string | null;
+        }[];
+    },
+    {
+        name: string;
+        description: string;
+        industry: string;
+        ref: string;
+        version: string;
+        knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
+        categories?: string[] | undefined;
+        docs?:
+            | {
+                  path: string;
+                  title: string;
+              }[]
+            | undefined;
+        sourceFacts?:
+            | {
+                  text: string;
+                  id: string;
+                  kind?: "supported" | "contradictory" | "distractor" | undefined;
+                  metric?: string | null | undefined;
+              }[]
+            | undefined;
+    }
+>;
 export type CompanyFixture = z.infer<typeof CompanyFixtureSchema>;
 /**
  * Generation inputs for a case. Extends the product's MarketingPipelineInput
  * with benchmark-only knobs (category/goal + failure-injection toggles).
  */
-export declare const FixtureInputsSchema: z.ZodObject<{
-    platform: z.ZodEnum<["x", "linkedin", "reddit", "bluesky"]>;
-    prompt: z.ZodString;
-    contentType: z.ZodDefault<z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>>;
-    contentCategory: z.ZodEnum<["product_launch", "thought_leadership", "educational", "customer_proof", "community_discussion"]>;
-    campaignGoal: z.ZodEnum<["awareness", "engagement", "conversion", "signups", "community"]>;
-    targetAudience: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-    toneOverride: z.ZodDefault<z.ZodNullable<z.ZodEnum<["formal", "conversational", "technical", "bold"]>>>;
-    /** Failure/fallback injection (ticket: unavailable research, missing history). */
-    simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
-    simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
-    prompt: string;
-    targetAudience: string | null;
-    toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-    contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-    campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-    simulateNoResearch: boolean;
-    simulateNoPerformanceHistory: boolean;
-}, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
-    prompt: string;
-    contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-    campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-    contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
-    targetAudience?: string | null | undefined;
-    toneOverride?: "bold" | "technical" | "formal" | "conversational" | null | undefined;
-    simulateNoResearch?: boolean | undefined;
-    simulateNoPerformanceHistory?: boolean | undefined;
-}>;
-export type FixtureInputs = z.infer<typeof FixtureInputsSchema>;
-/**
- * Deterministic expectations for the output. Everything here can be checked
- * without a model — this is where most of the member's assertions read from.
- */
-export declare const ExpectedConstraintsSchema: z.ZodObject<{
-    maxChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-    minChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-    requireCta: z.ZodDefault<z.ZodBoolean>;
-    requireLink: z.ZodDefault<z.ZodBoolean>;
-    hashtags: z.ZodDefault<z.ZodNullable<z.ZodObject<{
-        min: z.ZodNumber;
-        max: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        max: number;
-        min: number;
-    }, {
-        max: number;
-        min: number;
-    }>>>;
-    requireCitations: z.ZodDefault<z.ZodBoolean>;
-    minCitations: z.ZodDefault<z.ZodNumber>;
-    /** Must appear (e.g. product name) — feeds specificity. */
-    requiredKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    /** Must NOT appear — fixture-specific clichés or claims known to be unsupported. */
-    forbiddenPhrases: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    /** Max pairwise similarity [0..1] between variants — feeds diversity. */
-    maxVariantSimilarity: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-    /** Groundedness gate: if false, any unsupported claim fails the case. */
-    allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    hashtags: {
-        max: number;
-        min: number;
-    } | null;
-    maxChars: number | null;
-    minChars: number | null;
-    requireCta: boolean;
-    requireLink: boolean;
-    requireCitations: boolean;
-    minCitations: number;
-    requiredKeywords: string[];
-    forbiddenPhrases: string[];
-    maxVariantSimilarity: number | null;
-    allowUnsupportedClaims: boolean;
-}, {
-    hashtags?: {
-        max: number;
-        min: number;
-    } | null | undefined;
-    maxChars?: number | null | undefined;
-    minChars?: number | null | undefined;
-    requireCta?: boolean | undefined;
-    requireLink?: boolean | undefined;
-    requireCitations?: boolean | undefined;
-    minCitations?: number | undefined;
-    requiredKeywords?: string[] | undefined;
-    forbiddenPhrases?: string[] | undefined;
-    maxVariantSimilarity?: number | null | undefined;
-    allowUnsupportedClaims?: boolean | undefined;
-}>;
-export type ExpectedConstraints = z.infer<typeof ExpectedConstraintsSchema>;
-/** Per-fixture config for one criterion: how to score it and how to pass/fail. */
-export declare const CriterionSpecSchema: z.ZodObject<{
-    id: z.ZodEnum<["groundedness", "unsupported_claims", "specificity", "brand_voice", "audience_relevance", "goal_alignment", "platform_structure", "hook_strength", "cta_quality", "cliche_generic", "citation_coverage", "variant_quality", "variant_diversity"]>;
-    method: z.ZodEnum<["deterministic", "judge"]>;
-    enabled: z.ZodDefault<z.ZodBoolean>;
-    weight: z.ZodDefault<z.ZodNumber>;
-    /** Minimum acceptable normalized score [0..1] on this fixture (null = no gate). */
-    minScore: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-    /** If true, failing this criterion fails the whole case regardless of aggregate. */
-    required: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-    weight: number;
-    required: boolean;
-    enabled: boolean;
-    method: "deterministic" | "judge";
-    minScore: number | null;
-}, {
-    id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-    method: "deterministic" | "judge";
-    weight?: number | undefined;
-    required?: boolean | undefined;
-    enabled?: boolean | undefined;
-    minScore?: number | null | undefined;
-}>;
-export type CriterionSpec = z.infer<typeof CriterionSpecSchema>;
-export declare const FixtureSchema: z.ZodObject<{
-    id: z.ZodString;
-    fixtureVersion: z.ZodString;
-    description: z.ZodString;
-    companyRef: z.ZodString;
-    inputs: z.ZodObject<{
+export declare const FixtureInputsSchema: z.ZodObject<
+    {
         platform: z.ZodEnum<["x", "linkedin", "reddit", "bluesky"]>;
         prompt: z.ZodString;
-        contentType: z.ZodDefault<z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>>;
-        contentCategory: z.ZodEnum<["product_launch", "thought_leadership", "educational", "customer_proof", "community_discussion"]>;
+        contentType: z.ZodDefault<
+            z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>
+        >;
+        contentCategory: z.ZodEnum<
+            [
+                "product_launch",
+                "thought_leadership",
+                "educational",
+                "customer_proof",
+                "community_discussion",
+            ]
+        >;
         campaignGoal: z.ZodEnum<["awareness", "engagement", "conversion", "signups", "community"]>;
         targetAudience: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-        toneOverride: z.ZodDefault<z.ZodNullable<z.ZodEnum<["formal", "conversational", "technical", "bold"]>>>;
+        toneOverride: z.ZodDefault<
+            z.ZodNullable<z.ZodEnum<["formal", "conversational", "technical", "bold"]>>
+        >;
         /** Failure/fallback injection (ticket: unavailable research, missing history). */
         simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
         simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
         contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
         targetAudience: string | null;
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-        contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
+        contentCategory:
+            | "product_launch"
+            | "thought_leadership"
+            | "educational"
+            | "customer_proof"
+            | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         simulateNoResearch: boolean;
         simulateNoPerformanceHistory: boolean;
-    }, {
+    },
+    {
         platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
-        contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
+        contentCategory:
+            | "product_launch"
+            | "thought_leadership"
+            | "educational"
+            | "customer_proof"
+            | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
         targetAudience?: string | null | undefined;
         toneOverride?: "bold" | "technical" | "formal" | "conversational" | null | undefined;
         simulateNoResearch?: boolean | undefined;
         simulateNoPerformanceHistory?: boolean | undefined;
-    }>;
-    expectedConstraints: z.ZodObject<{
+    }
+>;
+export type FixtureInputs = z.infer<typeof FixtureInputsSchema>;
+/**
+ * Deterministic expectations for the output. Everything here can be checked
+ * without a model — this is where most of the member's assertions read from.
+ */
+export declare const ExpectedConstraintsSchema: z.ZodObject<
+    {
         maxChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
         minChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
         requireCta: z.ZodDefault<z.ZodBoolean>;
         requireLink: z.ZodDefault<z.ZodBoolean>;
-        hashtags: z.ZodDefault<z.ZodNullable<z.ZodObject<{
-            min: z.ZodNumber;
-            max: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            max: number;
-            min: number;
-        }, {
-            max: number;
-            min: number;
-        }>>>;
+        hashtags: z.ZodDefault<
+            z.ZodNullable<
+                z.ZodObject<
+                    {
+                        min: z.ZodNumber;
+                        max: z.ZodNumber;
+                    },
+                    "strip",
+                    z.ZodTypeAny,
+                    {
+                        max: number;
+                        min: number;
+                    },
+                    {
+                        max: number;
+                        min: number;
+                    }
+                >
+            >
+        >;
         requireCitations: z.ZodDefault<z.ZodBoolean>;
         minCitations: z.ZodDefault<z.ZodNumber>;
         /** Must appear (e.g. product name) — feeds specificity. */
@@ -300,7 +257,10 @@ export declare const FixtureSchema: z.ZodObject<{
         maxVariantSimilarity: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
         /** Groundedness gate: if false, any unsupported claim fails the case. */
         allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
         hashtags: {
             max: number;
             min: number;
@@ -315,11 +275,15 @@ export declare const FixtureSchema: z.ZodObject<{
         forbiddenPhrases: string[];
         maxVariantSimilarity: number | null;
         allowUnsupportedClaims: boolean;
-    }, {
-        hashtags?: {
-            max: number;
-            min: number;
-        } | null | undefined;
+    },
+    {
+        hashtags?:
+            | {
+                  max: number;
+                  min: number;
+              }
+            | null
+            | undefined;
         maxChars?: number | null | undefined;
         minChars?: number | null | undefined;
         requireCta?: boolean | undefined;
@@ -330,9 +294,29 @@ export declare const FixtureSchema: z.ZodObject<{
         forbiddenPhrases?: string[] | undefined;
         maxVariantSimilarity?: number | null | undefined;
         allowUnsupportedClaims?: boolean | undefined;
-    }>;
-    criteria: z.ZodArray<z.ZodObject<{
-        id: z.ZodEnum<["groundedness", "unsupported_claims", "specificity", "brand_voice", "audience_relevance", "goal_alignment", "platform_structure", "hook_strength", "cta_quality", "cliche_generic", "citation_coverage", "variant_quality", "variant_diversity"]>;
+    }
+>;
+export type ExpectedConstraints = z.infer<typeof ExpectedConstraintsSchema>;
+/** Per-fixture config for one criterion: how to score it and how to pass/fail. */
+export declare const CriterionSpecSchema: z.ZodObject<
+    {
+        id: z.ZodEnum<
+            [
+                "groundedness",
+                "unsupported_claims",
+                "specificity",
+                "brand_voice",
+                "audience_relevance",
+                "goal_alignment",
+                "platform_structure",
+                "hook_strength",
+                "cta_quality",
+                "cliche_generic",
+                "citation_coverage",
+                "variant_quality",
+                "variant_diversity",
+            ]
+        >;
         method: z.ZodEnum<["deterministic", "judge"]>;
         enabled: z.ZodDefault<z.ZodBoolean>;
         weight: z.ZodDefault<z.ZodNumber>;
@@ -340,238 +324,291 @@ export declare const FixtureSchema: z.ZodObject<{
         minScore: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
         /** If true, failing this criterion fails the whole case regardless of aggregate. */
         required: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
+        id:
+            | "brand_voice"
+            | "groundedness"
+            | "unsupported_claims"
+            | "specificity"
+            | "audience_relevance"
+            | "goal_alignment"
+            | "platform_structure"
+            | "hook_strength"
+            | "cta_quality"
+            | "cliche_generic"
+            | "citation_coverage"
+            | "variant_quality"
+            | "variant_diversity";
         weight: number;
         required: boolean;
         enabled: boolean;
         method: "deterministic" | "judge";
         minScore: number | null;
-    }, {
-        id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
+    },
+    {
+        id:
+            | "brand_voice"
+            | "groundedness"
+            | "unsupported_claims"
+            | "specificity"
+            | "audience_relevance"
+            | "goal_alignment"
+            | "platform_structure"
+            | "hook_strength"
+            | "cta_quality"
+            | "cliche_generic"
+            | "citation_coverage"
+            | "variant_quality"
+            | "variant_diversity";
         method: "deterministic" | "judge";
         weight?: number | undefined;
         required?: boolean | undefined;
         enabled?: boolean | undefined;
         minScore?: number | null | undefined;
-    }>, "many">;
-    expectedFailureMode: z.ZodDefault<z.ZodEnum<["none", "graceful_degrade", "hard_fail"]>>;
-    /** Fact ids (from the company) this post may legitimately cite. */
-    relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-}, "strip", z.ZodTypeAny, {
-    notes: string | null;
-    id: string;
-    description: string;
-    fixtureVersion: string;
-    companyRef: string;
-    inputs: {
-        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
-        prompt: string;
-        targetAudience: string | null;
-        toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-        contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-        campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-        simulateNoResearch: boolean;
-        simulateNoPerformanceHistory: boolean;
-    };
-    expectedConstraints: {
-        hashtags: {
-            max: number;
-            min: number;
-        } | null;
-        maxChars: number | null;
-        minChars: number | null;
-        requireCta: boolean;
-        requireLink: boolean;
-        requireCitations: boolean;
-        minCitations: number;
-        requiredKeywords: string[];
-        forbiddenPhrases: string[];
-        maxVariantSimilarity: number | null;
-        allowUnsupportedClaims: boolean;
-    };
-    criteria: {
-        id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-        weight: number;
-        required: boolean;
-        enabled: boolean;
-        method: "deterministic" | "judge";
-        minScore: number | null;
-    }[];
-    expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
-    relevantFactIds: string[];
-}, {
-    id: string;
-    description: string;
-    fixtureVersion: string;
-    companyRef: string;
-    inputs: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
-        prompt: string;
-        contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-        campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-        contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
-        targetAudience?: string | null | undefined;
-        toneOverride?: "bold" | "technical" | "formal" | "conversational" | null | undefined;
-        simulateNoResearch?: boolean | undefined;
-        simulateNoPerformanceHistory?: boolean | undefined;
-    };
-    expectedConstraints: {
-        hashtags?: {
-            max: number;
-            min: number;
-        } | null | undefined;
-        maxChars?: number | null | undefined;
-        minChars?: number | null | undefined;
-        requireCta?: boolean | undefined;
-        requireLink?: boolean | undefined;
-        requireCitations?: boolean | undefined;
-        minCitations?: number | undefined;
-        requiredKeywords?: string[] | undefined;
-        forbiddenPhrases?: string[] | undefined;
-        maxVariantSimilarity?: number | null | undefined;
-        allowUnsupportedClaims?: boolean | undefined;
-    };
-    criteria: {
-        id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-        method: "deterministic" | "judge";
-        weight?: number | undefined;
-        required?: boolean | undefined;
-        enabled?: boolean | undefined;
-        minScore?: number | null | undefined;
-    }[];
-    notes?: string | null | undefined;
-    expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
-    relevantFactIds?: string[] | undefined;
-}>;
-export type Fixture = z.infer<typeof FixtureSchema>;
-/** Top-level dataset manifest — pins the whole fixture set for reproducibility. */
-export declare const FixtureSetSchema: z.ZodObject<{
-    version: z.ZodString;
-    fixtures: z.ZodArray<z.ZodObject<{
+    }
+>;
+export type CriterionSpec = z.infer<typeof CriterionSpecSchema>;
+export declare const FixtureSchema: z.ZodObject<
+    {
         id: z.ZodString;
         fixtureVersion: z.ZodString;
         description: z.ZodString;
         companyRef: z.ZodString;
-        inputs: z.ZodObject<{
-            platform: z.ZodEnum<["x", "linkedin", "reddit", "bluesky"]>;
-            prompt: z.ZodString;
-            contentType: z.ZodDefault<z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>>;
-            contentCategory: z.ZodEnum<["product_launch", "thought_leadership", "educational", "customer_proof", "community_discussion"]>;
-            campaignGoal: z.ZodEnum<["awareness", "engagement", "conversion", "signups", "community"]>;
-            targetAudience: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-            toneOverride: z.ZodDefault<z.ZodNullable<z.ZodEnum<["formal", "conversational", "technical", "bold"]>>>;
-            /** Failure/fallback injection (ticket: unavailable research, missing history). */
-            simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
-            simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            prompt: string;
-            targetAudience: string | null;
-            toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-            campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-            simulateNoResearch: boolean;
-            simulateNoPerformanceHistory: boolean;
-        }, {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            prompt: string;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-            campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-            contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
-            targetAudience?: string | null | undefined;
-            toneOverride?: "bold" | "technical" | "formal" | "conversational" | null | undefined;
-            simulateNoResearch?: boolean | undefined;
-            simulateNoPerformanceHistory?: boolean | undefined;
-        }>;
-        expectedConstraints: z.ZodObject<{
-            maxChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-            minChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-            requireCta: z.ZodDefault<z.ZodBoolean>;
-            requireLink: z.ZodDefault<z.ZodBoolean>;
-            hashtags: z.ZodDefault<z.ZodNullable<z.ZodObject<{
-                min: z.ZodNumber;
-                max: z.ZodNumber;
-            }, "strip", z.ZodTypeAny, {
-                max: number;
-                min: number;
-            }, {
-                max: number;
-                min: number;
-            }>>>;
-            requireCitations: z.ZodDefault<z.ZodBoolean>;
-            minCitations: z.ZodDefault<z.ZodNumber>;
-            /** Must appear (e.g. product name) — feeds specificity. */
-            requiredKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            /** Must NOT appear — fixture-specific clichés or claims known to be unsupported. */
-            forbiddenPhrases: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            /** Max pairwise similarity [0..1] between variants — feeds diversity. */
-            maxVariantSimilarity: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-            /** Groundedness gate: if false, any unsupported claim fails the case. */
-            allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            hashtags: {
-                max: number;
-                min: number;
-            } | null;
-            maxChars: number | null;
-            minChars: number | null;
-            requireCta: boolean;
-            requireLink: boolean;
-            requireCitations: boolean;
-            minCitations: number;
-            requiredKeywords: string[];
-            forbiddenPhrases: string[];
-            maxVariantSimilarity: number | null;
-            allowUnsupportedClaims: boolean;
-        }, {
-            hashtags?: {
-                max: number;
-                min: number;
-            } | null | undefined;
-            maxChars?: number | null | undefined;
-            minChars?: number | null | undefined;
-            requireCta?: boolean | undefined;
-            requireLink?: boolean | undefined;
-            requireCitations?: boolean | undefined;
-            minCitations?: number | undefined;
-            requiredKeywords?: string[] | undefined;
-            forbiddenPhrases?: string[] | undefined;
-            maxVariantSimilarity?: number | null | undefined;
-            allowUnsupportedClaims?: boolean | undefined;
-        }>;
-        criteria: z.ZodArray<z.ZodObject<{
-            id: z.ZodEnum<["groundedness", "unsupported_claims", "specificity", "brand_voice", "audience_relevance", "goal_alignment", "platform_structure", "hook_strength", "cta_quality", "cliche_generic", "citation_coverage", "variant_quality", "variant_diversity"]>;
-            method: z.ZodEnum<["deterministic", "judge"]>;
-            enabled: z.ZodDefault<z.ZodBoolean>;
-            weight: z.ZodDefault<z.ZodNumber>;
-            /** Minimum acceptable normalized score [0..1] on this fixture (null = no gate). */
-            minScore: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
-            /** If true, failing this criterion fails the whole case regardless of aggregate. */
-            required: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-            weight: number;
-            required: boolean;
-            enabled: boolean;
-            method: "deterministic" | "judge";
-            minScore: number | null;
-        }, {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-            method: "deterministic" | "judge";
-            weight?: number | undefined;
-            required?: boolean | undefined;
-            enabled?: boolean | undefined;
-            minScore?: number | null | undefined;
-        }>, "many">;
+        inputs: z.ZodObject<
+            {
+                platform: z.ZodEnum<["x", "linkedin", "reddit", "bluesky"]>;
+                prompt: z.ZodString;
+                contentType: z.ZodDefault<
+                    z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>
+                >;
+                contentCategory: z.ZodEnum<
+                    [
+                        "product_launch",
+                        "thought_leadership",
+                        "educational",
+                        "customer_proof",
+                        "community_discussion",
+                    ]
+                >;
+                campaignGoal: z.ZodEnum<
+                    ["awareness", "engagement", "conversion", "signups", "community"]
+                >;
+                targetAudience: z.ZodDefault<z.ZodNullable<z.ZodString>>;
+                toneOverride: z.ZodDefault<
+                    z.ZodNullable<z.ZodEnum<["formal", "conversational", "technical", "bold"]>>
+                >;
+                /** Failure/fallback injection (ticket: unavailable research, missing history). */
+                simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
+                simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
+            },
+            "strip",
+            z.ZodTypeAny,
+            {
+                contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+                platform: "x" | "linkedin" | "reddit" | "bluesky";
+                prompt: string;
+                targetAudience: string | null;
+                toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
+                contentCategory:
+                    | "product_launch"
+                    | "thought_leadership"
+                    | "educational"
+                    | "customer_proof"
+                    | "community_discussion";
+                campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
+                simulateNoResearch: boolean;
+                simulateNoPerformanceHistory: boolean;
+            },
+            {
+                platform: "x" | "linkedin" | "reddit" | "bluesky";
+                prompt: string;
+                contentCategory:
+                    | "product_launch"
+                    | "thought_leadership"
+                    | "educational"
+                    | "customer_proof"
+                    | "community_discussion";
+                campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
+                contentType?:
+                    | "email"
+                    | "post"
+                    | "thread"
+                    | "ad_copy"
+                    | "multi_platform"
+                    | undefined;
+                targetAudience?: string | null | undefined;
+                toneOverride?:
+                    | "bold"
+                    | "technical"
+                    | "formal"
+                    | "conversational"
+                    | null
+                    | undefined;
+                simulateNoResearch?: boolean | undefined;
+                simulateNoPerformanceHistory?: boolean | undefined;
+            }
+        >;
+        expectedConstraints: z.ZodObject<
+            {
+                maxChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                minChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                requireCta: z.ZodDefault<z.ZodBoolean>;
+                requireLink: z.ZodDefault<z.ZodBoolean>;
+                hashtags: z.ZodDefault<
+                    z.ZodNullable<
+                        z.ZodObject<
+                            {
+                                min: z.ZodNumber;
+                                max: z.ZodNumber;
+                            },
+                            "strip",
+                            z.ZodTypeAny,
+                            {
+                                max: number;
+                                min: number;
+                            },
+                            {
+                                max: number;
+                                min: number;
+                            }
+                        >
+                    >
+                >;
+                requireCitations: z.ZodDefault<z.ZodBoolean>;
+                minCitations: z.ZodDefault<z.ZodNumber>;
+                /** Must appear (e.g. product name) — feeds specificity. */
+                requiredKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+                /** Must NOT appear — fixture-specific clichés or claims known to be unsupported. */
+                forbiddenPhrases: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+                /** Max pairwise similarity [0..1] between variants — feeds diversity. */
+                maxVariantSimilarity: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                /** Groundedness gate: if false, any unsupported claim fails the case. */
+                allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
+            },
+            "strip",
+            z.ZodTypeAny,
+            {
+                hashtags: {
+                    max: number;
+                    min: number;
+                } | null;
+                maxChars: number | null;
+                minChars: number | null;
+                requireCta: boolean;
+                requireLink: boolean;
+                requireCitations: boolean;
+                minCitations: number;
+                requiredKeywords: string[];
+                forbiddenPhrases: string[];
+                maxVariantSimilarity: number | null;
+                allowUnsupportedClaims: boolean;
+            },
+            {
+                hashtags?:
+                    | {
+                          max: number;
+                          min: number;
+                      }
+                    | null
+                    | undefined;
+                maxChars?: number | null | undefined;
+                minChars?: number | null | undefined;
+                requireCta?: boolean | undefined;
+                requireLink?: boolean | undefined;
+                requireCitations?: boolean | undefined;
+                minCitations?: number | undefined;
+                requiredKeywords?: string[] | undefined;
+                forbiddenPhrases?: string[] | undefined;
+                maxVariantSimilarity?: number | null | undefined;
+                allowUnsupportedClaims?: boolean | undefined;
+            }
+        >;
+        criteria: z.ZodArray<
+            z.ZodObject<
+                {
+                    id: z.ZodEnum<
+                        [
+                            "groundedness",
+                            "unsupported_claims",
+                            "specificity",
+                            "brand_voice",
+                            "audience_relevance",
+                            "goal_alignment",
+                            "platform_structure",
+                            "hook_strength",
+                            "cta_quality",
+                            "cliche_generic",
+                            "citation_coverage",
+                            "variant_quality",
+                            "variant_diversity",
+                        ]
+                    >;
+                    method: z.ZodEnum<["deterministic", "judge"]>;
+                    enabled: z.ZodDefault<z.ZodBoolean>;
+                    weight: z.ZodDefault<z.ZodNumber>;
+                    /** Minimum acceptable normalized score [0..1] on this fixture (null = no gate). */
+                    minScore: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                    /** If true, failing this criterion fails the whole case regardless of aggregate. */
+                    required: z.ZodDefault<z.ZodBoolean>;
+                },
+                "strip",
+                z.ZodTypeAny,
+                {
+                    id:
+                        | "brand_voice"
+                        | "groundedness"
+                        | "unsupported_claims"
+                        | "specificity"
+                        | "audience_relevance"
+                        | "goal_alignment"
+                        | "platform_structure"
+                        | "hook_strength"
+                        | "cta_quality"
+                        | "cliche_generic"
+                        | "citation_coverage"
+                        | "variant_quality"
+                        | "variant_diversity";
+                    weight: number;
+                    required: boolean;
+                    enabled: boolean;
+                    method: "deterministic" | "judge";
+                    minScore: number | null;
+                },
+                {
+                    id:
+                        | "brand_voice"
+                        | "groundedness"
+                        | "unsupported_claims"
+                        | "specificity"
+                        | "audience_relevance"
+                        | "goal_alignment"
+                        | "platform_structure"
+                        | "hook_strength"
+                        | "cta_quality"
+                        | "cliche_generic"
+                        | "citation_coverage"
+                        | "variant_quality"
+                        | "variant_diversity";
+                    method: "deterministic" | "judge";
+                    weight?: number | undefined;
+                    required?: boolean | undefined;
+                    enabled?: boolean | undefined;
+                    minScore?: number | null | undefined;
+                }
+            >,
+            "many"
+        >;
         expectedFailureMode: z.ZodDefault<z.ZodEnum<["none", "graceful_degrade", "hard_fail"]>>;
         /** Fact ids (from the company) this post may legitimately cite. */
         relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
-    }, "strip", z.ZodTypeAny, {
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
         notes: string | null;
         id: string;
         description: string;
@@ -583,7 +620,12 @@ export declare const FixtureSetSchema: z.ZodObject<{
             prompt: string;
             targetAudience: string | null;
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
+            contentCategory:
+                | "product_launch"
+                | "thought_leadership"
+                | "educational"
+                | "customer_proof"
+                | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             simulateNoResearch: boolean;
             simulateNoPerformanceHistory: boolean;
@@ -605,7 +647,20 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims: boolean;
         };
         criteria: {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
+            id:
+                | "brand_voice"
+                | "groundedness"
+                | "unsupported_claims"
+                | "specificity"
+                | "audience_relevance"
+                | "goal_alignment"
+                | "platform_structure"
+                | "hook_strength"
+                | "cta_quality"
+                | "cliche_generic"
+                | "citation_coverage"
+                | "variant_quality"
+                | "variant_diversity";
             weight: number;
             required: boolean;
             enabled: boolean;
@@ -614,7 +669,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         }[];
         expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
         relevantFactIds: string[];
-    }, {
+    },
+    {
         id: string;
         description: string;
         fixtureVersion: string;
@@ -622,7 +678,12 @@ export declare const FixtureSetSchema: z.ZodObject<{
         inputs: {
             platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
+            contentCategory:
+                | "product_launch"
+                | "thought_leadership"
+                | "educational"
+                | "customer_proof"
+                | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
             targetAudience?: string | null | undefined;
@@ -631,10 +692,13 @@ export declare const FixtureSetSchema: z.ZodObject<{
             simulateNoPerformanceHistory?: boolean | undefined;
         };
         expectedConstraints: {
-            hashtags?: {
-                max: number;
-                min: number;
-            } | null | undefined;
+            hashtags?:
+                | {
+                      max: number;
+                      min: number;
+                  }
+                | null
+                | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
             requireCta?: boolean | undefined;
@@ -647,7 +711,20 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims?: boolean | undefined;
         };
         criteria: {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
+            id:
+                | "brand_voice"
+                | "groundedness"
+                | "unsupported_claims"
+                | "specificity"
+                | "audience_relevance"
+                | "goal_alignment"
+                | "platform_structure"
+                | "hook_strength"
+                | "cta_quality"
+                | "cliche_generic"
+                | "citation_coverage"
+                | "variant_quality"
+                | "variant_diversity";
             method: "deterministic" | "judge";
             weight?: number | undefined;
             required?: boolean | undefined;
@@ -657,99 +734,565 @@ export declare const FixtureSetSchema: z.ZodObject<{
         notes?: string | null | undefined;
         expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
         relevantFactIds?: string[] | undefined;
-    }>, "many">;
-}, "strip", z.ZodTypeAny, {
-    version: string;
-    fixtures: {
-        notes: string | null;
-        id: string;
-        description: string;
-        fixtureVersion: string;
-        companyRef: string;
-        inputs: {
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            prompt: string;
-            targetAudience: string | null;
-            toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-            campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-            simulateNoResearch: boolean;
-            simulateNoPerformanceHistory: boolean;
-        };
-        expectedConstraints: {
-            hashtags: {
-                max: number;
-                min: number;
-            } | null;
-            maxChars: number | null;
-            minChars: number | null;
-            requireCta: boolean;
-            requireLink: boolean;
-            requireCitations: boolean;
-            minCitations: number;
-            requiredKeywords: string[];
-            forbiddenPhrases: string[];
-            maxVariantSimilarity: number | null;
-            allowUnsupportedClaims: boolean;
-        };
-        criteria: {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-            weight: number;
-            required: boolean;
-            enabled: boolean;
-            method: "deterministic" | "judge";
-            minScore: number | null;
+    }
+>;
+export type Fixture = z.infer<typeof FixtureSchema>;
+/** Top-level dataset manifest — pins the whole fixture set for reproducibility. */
+export declare const FixtureSetSchema: z.ZodObject<
+    {
+        version: z.ZodString;
+        fixtures: z.ZodArray<
+            z.ZodObject<
+                {
+                    id: z.ZodString;
+                    fixtureVersion: z.ZodString;
+                    description: z.ZodString;
+                    companyRef: z.ZodString;
+                    inputs: z.ZodObject<
+                        {
+                            platform: z.ZodEnum<["x", "linkedin", "reddit", "bluesky"]>;
+                            prompt: z.ZodString;
+                            contentType: z.ZodDefault<
+                                z.ZodEnum<["post", "thread", "ad_copy", "email", "multi_platform"]>
+                            >;
+                            contentCategory: z.ZodEnum<
+                                [
+                                    "product_launch",
+                                    "thought_leadership",
+                                    "educational",
+                                    "customer_proof",
+                                    "community_discussion",
+                                ]
+                            >;
+                            campaignGoal: z.ZodEnum<
+                                ["awareness", "engagement", "conversion", "signups", "community"]
+                            >;
+                            targetAudience: z.ZodDefault<z.ZodNullable<z.ZodString>>;
+                            toneOverride: z.ZodDefault<
+                                z.ZodNullable<
+                                    z.ZodEnum<["formal", "conversational", "technical", "bold"]>
+                                >
+                            >;
+                            /** Failure/fallback injection (ticket: unavailable research, missing history). */
+                            simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
+                            simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
+                        },
+                        "strip",
+                        z.ZodTypeAny,
+                        {
+                            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+                            platform: "x" | "linkedin" | "reddit" | "bluesky";
+                            prompt: string;
+                            targetAudience: string | null;
+                            toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
+                            contentCategory:
+                                | "product_launch"
+                                | "thought_leadership"
+                                | "educational"
+                                | "customer_proof"
+                                | "community_discussion";
+                            campaignGoal:
+                                | "awareness"
+                                | "engagement"
+                                | "conversion"
+                                | "signups"
+                                | "community";
+                            simulateNoResearch: boolean;
+                            simulateNoPerformanceHistory: boolean;
+                        },
+                        {
+                            platform: "x" | "linkedin" | "reddit" | "bluesky";
+                            prompt: string;
+                            contentCategory:
+                                | "product_launch"
+                                | "thought_leadership"
+                                | "educational"
+                                | "customer_proof"
+                                | "community_discussion";
+                            campaignGoal:
+                                | "awareness"
+                                | "engagement"
+                                | "conversion"
+                                | "signups"
+                                | "community";
+                            contentType?:
+                                | "email"
+                                | "post"
+                                | "thread"
+                                | "ad_copy"
+                                | "multi_platform"
+                                | undefined;
+                            targetAudience?: string | null | undefined;
+                            toneOverride?:
+                                | "bold"
+                                | "technical"
+                                | "formal"
+                                | "conversational"
+                                | null
+                                | undefined;
+                            simulateNoResearch?: boolean | undefined;
+                            simulateNoPerformanceHistory?: boolean | undefined;
+                        }
+                    >;
+                    expectedConstraints: z.ZodObject<
+                        {
+                            maxChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                            minChars: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                            requireCta: z.ZodDefault<z.ZodBoolean>;
+                            requireLink: z.ZodDefault<z.ZodBoolean>;
+                            hashtags: z.ZodDefault<
+                                z.ZodNullable<
+                                    z.ZodObject<
+                                        {
+                                            min: z.ZodNumber;
+                                            max: z.ZodNumber;
+                                        },
+                                        "strip",
+                                        z.ZodTypeAny,
+                                        {
+                                            max: number;
+                                            min: number;
+                                        },
+                                        {
+                                            max: number;
+                                            min: number;
+                                        }
+                                    >
+                                >
+                            >;
+                            requireCitations: z.ZodDefault<z.ZodBoolean>;
+                            minCitations: z.ZodDefault<z.ZodNumber>;
+                            /** Must appear (e.g. product name) — feeds specificity. */
+                            requiredKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+                            /** Must NOT appear — fixture-specific clichés or claims known to be unsupported. */
+                            forbiddenPhrases: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+                            /** Max pairwise similarity [0..1] between variants — feeds diversity. */
+                            maxVariantSimilarity: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                            /** Groundedness gate: if false, any unsupported claim fails the case. */
+                            allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
+                        },
+                        "strip",
+                        z.ZodTypeAny,
+                        {
+                            hashtags: {
+                                max: number;
+                                min: number;
+                            } | null;
+                            maxChars: number | null;
+                            minChars: number | null;
+                            requireCta: boolean;
+                            requireLink: boolean;
+                            requireCitations: boolean;
+                            minCitations: number;
+                            requiredKeywords: string[];
+                            forbiddenPhrases: string[];
+                            maxVariantSimilarity: number | null;
+                            allowUnsupportedClaims: boolean;
+                        },
+                        {
+                            hashtags?:
+                                | {
+                                      max: number;
+                                      min: number;
+                                  }
+                                | null
+                                | undefined;
+                            maxChars?: number | null | undefined;
+                            minChars?: number | null | undefined;
+                            requireCta?: boolean | undefined;
+                            requireLink?: boolean | undefined;
+                            requireCitations?: boolean | undefined;
+                            minCitations?: number | undefined;
+                            requiredKeywords?: string[] | undefined;
+                            forbiddenPhrases?: string[] | undefined;
+                            maxVariantSimilarity?: number | null | undefined;
+                            allowUnsupportedClaims?: boolean | undefined;
+                        }
+                    >;
+                    criteria: z.ZodArray<
+                        z.ZodObject<
+                            {
+                                id: z.ZodEnum<
+                                    [
+                                        "groundedness",
+                                        "unsupported_claims",
+                                        "specificity",
+                                        "brand_voice",
+                                        "audience_relevance",
+                                        "goal_alignment",
+                                        "platform_structure",
+                                        "hook_strength",
+                                        "cta_quality",
+                                        "cliche_generic",
+                                        "citation_coverage",
+                                        "variant_quality",
+                                        "variant_diversity",
+                                    ]
+                                >;
+                                method: z.ZodEnum<["deterministic", "judge"]>;
+                                enabled: z.ZodDefault<z.ZodBoolean>;
+                                weight: z.ZodDefault<z.ZodNumber>;
+                                /** Minimum acceptable normalized score [0..1] on this fixture (null = no gate). */
+                                minScore: z.ZodDefault<z.ZodNullable<z.ZodNumber>>;
+                                /** If true, failing this criterion fails the whole case regardless of aggregate. */
+                                required: z.ZodDefault<z.ZodBoolean>;
+                            },
+                            "strip",
+                            z.ZodTypeAny,
+                            {
+                                id:
+                                    | "brand_voice"
+                                    | "groundedness"
+                                    | "unsupported_claims"
+                                    | "specificity"
+                                    | "audience_relevance"
+                                    | "goal_alignment"
+                                    | "platform_structure"
+                                    | "hook_strength"
+                                    | "cta_quality"
+                                    | "cliche_generic"
+                                    | "citation_coverage"
+                                    | "variant_quality"
+                                    | "variant_diversity";
+                                weight: number;
+                                required: boolean;
+                                enabled: boolean;
+                                method: "deterministic" | "judge";
+                                minScore: number | null;
+                            },
+                            {
+                                id:
+                                    | "brand_voice"
+                                    | "groundedness"
+                                    | "unsupported_claims"
+                                    | "specificity"
+                                    | "audience_relevance"
+                                    | "goal_alignment"
+                                    | "platform_structure"
+                                    | "hook_strength"
+                                    | "cta_quality"
+                                    | "cliche_generic"
+                                    | "citation_coverage"
+                                    | "variant_quality"
+                                    | "variant_diversity";
+                                method: "deterministic" | "judge";
+                                weight?: number | undefined;
+                                required?: boolean | undefined;
+                                enabled?: boolean | undefined;
+                                minScore?: number | null | undefined;
+                            }
+                        >,
+                        "many"
+                    >;
+                    expectedFailureMode: z.ZodDefault<
+                        z.ZodEnum<["none", "graceful_degrade", "hard_fail"]>
+                    >;
+                    /** Fact ids (from the company) this post may legitimately cite. */
+                    relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+                    notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
+                },
+                "strip",
+                z.ZodTypeAny,
+                {
+                    notes: string | null;
+                    id: string;
+                    description: string;
+                    fixtureVersion: string;
+                    companyRef: string;
+                    inputs: {
+                        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+                        platform: "x" | "linkedin" | "reddit" | "bluesky";
+                        prompt: string;
+                        targetAudience: string | null;
+                        toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
+                        contentCategory:
+                            | "product_launch"
+                            | "thought_leadership"
+                            | "educational"
+                            | "customer_proof"
+                            | "community_discussion";
+                        campaignGoal:
+                            | "awareness"
+                            | "engagement"
+                            | "conversion"
+                            | "signups"
+                            | "community";
+                        simulateNoResearch: boolean;
+                        simulateNoPerformanceHistory: boolean;
+                    };
+                    expectedConstraints: {
+                        hashtags: {
+                            max: number;
+                            min: number;
+                        } | null;
+                        maxChars: number | null;
+                        minChars: number | null;
+                        requireCta: boolean;
+                        requireLink: boolean;
+                        requireCitations: boolean;
+                        minCitations: number;
+                        requiredKeywords: string[];
+                        forbiddenPhrases: string[];
+                        maxVariantSimilarity: number | null;
+                        allowUnsupportedClaims: boolean;
+                    };
+                    criteria: {
+                        id:
+                            | "brand_voice"
+                            | "groundedness"
+                            | "unsupported_claims"
+                            | "specificity"
+                            | "audience_relevance"
+                            | "goal_alignment"
+                            | "platform_structure"
+                            | "hook_strength"
+                            | "cta_quality"
+                            | "cliche_generic"
+                            | "citation_coverage"
+                            | "variant_quality"
+                            | "variant_diversity";
+                        weight: number;
+                        required: boolean;
+                        enabled: boolean;
+                        method: "deterministic" | "judge";
+                        minScore: number | null;
+                    }[];
+                    expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
+                    relevantFactIds: string[];
+                },
+                {
+                    id: string;
+                    description: string;
+                    fixtureVersion: string;
+                    companyRef: string;
+                    inputs: {
+                        platform: "x" | "linkedin" | "reddit" | "bluesky";
+                        prompt: string;
+                        contentCategory:
+                            | "product_launch"
+                            | "thought_leadership"
+                            | "educational"
+                            | "customer_proof"
+                            | "community_discussion";
+                        campaignGoal:
+                            | "awareness"
+                            | "engagement"
+                            | "conversion"
+                            | "signups"
+                            | "community";
+                        contentType?:
+                            | "email"
+                            | "post"
+                            | "thread"
+                            | "ad_copy"
+                            | "multi_platform"
+                            | undefined;
+                        targetAudience?: string | null | undefined;
+                        toneOverride?:
+                            | "bold"
+                            | "technical"
+                            | "formal"
+                            | "conversational"
+                            | null
+                            | undefined;
+                        simulateNoResearch?: boolean | undefined;
+                        simulateNoPerformanceHistory?: boolean | undefined;
+                    };
+                    expectedConstraints: {
+                        hashtags?:
+                            | {
+                                  max: number;
+                                  min: number;
+                              }
+                            | null
+                            | undefined;
+                        maxChars?: number | null | undefined;
+                        minChars?: number | null | undefined;
+                        requireCta?: boolean | undefined;
+                        requireLink?: boolean | undefined;
+                        requireCitations?: boolean | undefined;
+                        minCitations?: number | undefined;
+                        requiredKeywords?: string[] | undefined;
+                        forbiddenPhrases?: string[] | undefined;
+                        maxVariantSimilarity?: number | null | undefined;
+                        allowUnsupportedClaims?: boolean | undefined;
+                    };
+                    criteria: {
+                        id:
+                            | "brand_voice"
+                            | "groundedness"
+                            | "unsupported_claims"
+                            | "specificity"
+                            | "audience_relevance"
+                            | "goal_alignment"
+                            | "platform_structure"
+                            | "hook_strength"
+                            | "cta_quality"
+                            | "cliche_generic"
+                            | "citation_coverage"
+                            | "variant_quality"
+                            | "variant_diversity";
+                        method: "deterministic" | "judge";
+                        weight?: number | undefined;
+                        required?: boolean | undefined;
+                        enabled?: boolean | undefined;
+                        minScore?: number | null | undefined;
+                    }[];
+                    notes?: string | null | undefined;
+                    expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
+                    relevantFactIds?: string[] | undefined;
+                }
+            >,
+            "many"
+        >;
+    },
+    "strip",
+    z.ZodTypeAny,
+    {
+        version: string;
+        fixtures: {
+            notes: string | null;
+            id: string;
+            description: string;
+            fixtureVersion: string;
+            companyRef: string;
+            inputs: {
+                contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+                platform: "x" | "linkedin" | "reddit" | "bluesky";
+                prompt: string;
+                targetAudience: string | null;
+                toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
+                contentCategory:
+                    | "product_launch"
+                    | "thought_leadership"
+                    | "educational"
+                    | "customer_proof"
+                    | "community_discussion";
+                campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
+                simulateNoResearch: boolean;
+                simulateNoPerformanceHistory: boolean;
+            };
+            expectedConstraints: {
+                hashtags: {
+                    max: number;
+                    min: number;
+                } | null;
+                maxChars: number | null;
+                minChars: number | null;
+                requireCta: boolean;
+                requireLink: boolean;
+                requireCitations: boolean;
+                minCitations: number;
+                requiredKeywords: string[];
+                forbiddenPhrases: string[];
+                maxVariantSimilarity: number | null;
+                allowUnsupportedClaims: boolean;
+            };
+            criteria: {
+                id:
+                    | "brand_voice"
+                    | "groundedness"
+                    | "unsupported_claims"
+                    | "specificity"
+                    | "audience_relevance"
+                    | "goal_alignment"
+                    | "platform_structure"
+                    | "hook_strength"
+                    | "cta_quality"
+                    | "cliche_generic"
+                    | "citation_coverage"
+                    | "variant_quality"
+                    | "variant_diversity";
+                weight: number;
+                required: boolean;
+                enabled: boolean;
+                method: "deterministic" | "judge";
+                minScore: number | null;
+            }[];
+            expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
+            relevantFactIds: string[];
         }[];
-        expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
-        relevantFactIds: string[];
-    }[];
-}, {
-    version: string;
-    fixtures: {
-        id: string;
-        description: string;
-        fixtureVersion: string;
-        companyRef: string;
-        inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            prompt: string;
-            contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
-            campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
-            contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
-            targetAudience?: string | null | undefined;
-            toneOverride?: "bold" | "technical" | "formal" | "conversational" | null | undefined;
-            simulateNoResearch?: boolean | undefined;
-            simulateNoPerformanceHistory?: boolean | undefined;
-        };
-        expectedConstraints: {
-            hashtags?: {
-                max: number;
-                min: number;
-            } | null | undefined;
-            maxChars?: number | null | undefined;
-            minChars?: number | null | undefined;
-            requireCta?: boolean | undefined;
-            requireLink?: boolean | undefined;
-            requireCitations?: boolean | undefined;
-            minCitations?: number | undefined;
-            requiredKeywords?: string[] | undefined;
-            forbiddenPhrases?: string[] | undefined;
-            maxVariantSimilarity?: number | null | undefined;
-            allowUnsupportedClaims?: boolean | undefined;
-        };
-        criteria: {
-            id: "brand_voice" | "groundedness" | "unsupported_claims" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "variant_quality" | "variant_diversity";
-            method: "deterministic" | "judge";
-            weight?: number | undefined;
-            required?: boolean | undefined;
-            enabled?: boolean | undefined;
-            minScore?: number | null | undefined;
+    },
+    {
+        version: string;
+        fixtures: {
+            id: string;
+            description: string;
+            fixtureVersion: string;
+            companyRef: string;
+            inputs: {
+                platform: "x" | "linkedin" | "reddit" | "bluesky";
+                prompt: string;
+                contentCategory:
+                    | "product_launch"
+                    | "thought_leadership"
+                    | "educational"
+                    | "customer_proof"
+                    | "community_discussion";
+                campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
+                contentType?:
+                    | "email"
+                    | "post"
+                    | "thread"
+                    | "ad_copy"
+                    | "multi_platform"
+                    | undefined;
+                targetAudience?: string | null | undefined;
+                toneOverride?:
+                    | "bold"
+                    | "technical"
+                    | "formal"
+                    | "conversational"
+                    | null
+                    | undefined;
+                simulateNoResearch?: boolean | undefined;
+                simulateNoPerformanceHistory?: boolean | undefined;
+            };
+            expectedConstraints: {
+                hashtags?:
+                    | {
+                          max: number;
+                          min: number;
+                      }
+                    | null
+                    | undefined;
+                maxChars?: number | null | undefined;
+                minChars?: number | null | undefined;
+                requireCta?: boolean | undefined;
+                requireLink?: boolean | undefined;
+                requireCitations?: boolean | undefined;
+                minCitations?: number | undefined;
+                requiredKeywords?: string[] | undefined;
+                forbiddenPhrases?: string[] | undefined;
+                maxVariantSimilarity?: number | null | undefined;
+                allowUnsupportedClaims?: boolean | undefined;
+            };
+            criteria: {
+                id:
+                    | "brand_voice"
+                    | "groundedness"
+                    | "unsupported_claims"
+                    | "specificity"
+                    | "audience_relevance"
+                    | "goal_alignment"
+                    | "platform_structure"
+                    | "hook_strength"
+                    | "cta_quality"
+                    | "cliche_generic"
+                    | "citation_coverage"
+                    | "variant_quality"
+                    | "variant_diversity";
+                method: "deterministic" | "judge";
+                weight?: number | undefined;
+                required?: boolean | undefined;
+                enabled?: boolean | undefined;
+                minScore?: number | null | undefined;
+            }[];
+            notes?: string | null | undefined;
+            expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
+            relevantFactIds?: string[] | undefined;
         }[];
-        notes?: string | null | undefined;
-        expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
-        relevantFactIds?: string[] | undefined;
-    }[];
-}>;
+    }
+>;
 export type FixtureSet = z.infer<typeof FixtureSetSchema>;
 //# sourceMappingURL=fixture.d.ts.map

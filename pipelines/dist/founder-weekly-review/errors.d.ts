@@ -1,4 +1,10 @@
-export type FounderWeeklyReviewErrorCode = "not_found" | "forbidden" | "invalid_transition" | "conflict" | "invalid_payload" | "claim_ownership_mismatch";
+export type FounderWeeklyReviewErrorCode =
+    | "not_found"
+    | "forbidden"
+    | "invalid_transition"
+    | "conflict"
+    | "invalid_payload"
+    | "claim_ownership_mismatch";
 export declare class FounderWeeklyReviewError extends Error {
     readonly code: FounderWeeklyReviewErrorCode;
     /**

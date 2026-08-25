@@ -37,7 +37,7 @@ async function githubJsonFetch(url, githubToken, init) {
         const text = await res.text().catch(() => "");
         throw new Error(`GitHub API error ${res.status} for ${url}: ${text.slice(0, 500)}`);
     }
-    return (await res.json());
+    return await res.json();
 }
 async function githubTextFetch(url, githubToken, init) {
     const res = await fetch(url, {
@@ -56,7 +56,9 @@ async function githubTextFetch(url, githubToken, init) {
     }
     if (!res.ok) {
         const text = await res.text().catch(() => "");
-        throw new Error(`GitHub raw contents error ${res.status} for ${url}: ${text.slice(0, 500)}`);
+        throw new Error(
+            `GitHub raw contents error ${res.status} for ${url}: ${text.slice(0, 500)}`
+        );
     }
     return await res.text();
 }
@@ -73,13 +75,11 @@ function buildHierarchicalTree(flat) {
         const segments = item.path.split("/");
         let current = root;
         segments.forEach((segment, index) => {
-            if (!segment)
-                return;
+            if (!segment) return;
             const isLast = index === segments.length - 1;
             if (isLast) {
                 current[segment] = { _type: item.type };
-            }
-            else {
+            } else {
                 current[segment] ??= { _type: "tree", children: {} };
                 current[segment].children ??= {};
                 current = current[segment].children;
@@ -89,8 +89,7 @@ function buildHierarchicalTree(flat) {
     return root;
 }
 function formatTreeRecursively(node, prefix, lines, depth, maxDepth) {
-    if (maxDepth !== null && depth >= maxDepth)
-        return;
+    if (maxDepth !== null && depth >= maxDepth) return;
     const names = Object.keys(node).sort();
     names.forEach((name, idx) => {
         const data = node[name];
@@ -121,13 +120,13 @@ async function fetchDirectoryTreeWithDepth(repo, depth = TREE_DEPTH, githubToken
 }
 async function listDirectoryFiles(repo, path = "", githubToken, ref) {
     const cleanPath = path.replace(/^\/+/, "").replace(/\/+$/, "");
-    const url = new URL(`https://api.github.com/repos/${repo.owner}/${repo.repoName}/contents/${cleanPath}`);
-    if (ref)
-        url.searchParams.set("ref", ref);
+    const url = new URL(
+        `https://api.github.com/repos/${repo.owner}/${repo.repoName}/contents/${cleanPath}`
+    );
+    if (ref) url.searchParams.set("ref", ref);
     // The GitHub contents API returns an array of entries for directories.
     const data = await githubJsonFetch(url.toString(), githubToken);
-    if (!Array.isArray(data))
-        return [];
+    if (!Array.isArray(data)) return [];
     const files = [];
     for (const entry of data) {
         if (entry?.type === "file" && typeof entry.path === "string") {
@@ -137,20 +136,19 @@ async function listDirectoryFiles(repo, path = "", githubToken, ref) {
     return files;
 }
 async function getFileContents(repo, path, githubToken, ref) {
-    const url = new URL(`https://api.github.com/repos/${repo.owner}/${repo.repoName}/contents/${path}`);
-    if (ref)
-        url.searchParams.set("ref", ref);
+    const url = new URL(
+        `https://api.github.com/repos/${repo.owner}/${repo.repoName}/contents/${path}`
+    );
+    if (ref) url.searchParams.set("ref", ref);
     const text = await githubTextFetch(url.toString(), githubToken);
-    if (!text)
-        return null;
+    if (!text) return null;
     return text;
 }
 export async function getRepoContext(repo, ref, githubToken, statusCallback, diagramType) {
     try {
         let totalChars = 0;
         const parts = [];
-        if (statusCallback)
-            statusCallback("fetching_tree");
+        if (statusCallback) statusCallback("fetching_tree");
         let tree = await fetchDirectoryTreeWithDepth(repo, TREE_DEPTH, githubToken, ref);
         if (tree.length > 10_000) {
             tree = "(Tree content cropped to 10k characters)\n" + tree.slice(0, 10_000);
@@ -159,28 +157,34 @@ export async function getRepoContext(repo, ref, githubToken, statusCallback, dia
         totalChars += tree.length;
         const rootFiles = await listDirectoryFiles(repo, "", githubToken, ref);
         const rootImportant = IMPORTANT_FILES.filter(f => rootFiles.includes(f));
-        if (statusCallback)
-            statusCallback("exploring_files");
-        const llmPaths = await getFilesToExplore(tree, `${repo.owner}/${repo.repoName}`, diagramType);
-        const merged = Array.from(new Map([...rootImportant, ...llmPaths].map(p => [p, true])).keys()).slice(0, MAX_FILES_TO_FETCH);
+        if (statusCallback) statusCallback("exploring_files");
+        const llmPaths = await getFilesToExplore(
+            tree,
+            `${repo.owner}/${repo.repoName}`,
+            diagramType
+        );
+        const merged = Array.from(
+            new Map([...rootImportant, ...llmPaths].map(p => [p, true])).keys()
+        ).slice(0, MAX_FILES_TO_FETCH);
         if (!merged.length) {
             return {
                 context: "No key documentation files found in root.",
                 success: true,
             };
         }
-        if (statusCallback)
-            statusCallback("fetching_files");
-        const contents = await Promise.all(merged.map(p => getFileContents(repo, p, githubToken, ref)));
+        if (statusCallback) statusCallback("fetching_files");
+        const contents = await Promise.all(
+            merged.map(p => getFileContents(repo, p, githubToken, ref))
+        );
         for (let i = 0; i < merged.length; i += 1) {
             const path = merged[i];
             let content = contents[i];
-            if (!content)
-                continue;
+            if (!content) continue;
             if (content.length > MAX_FILE_CHARS) {
                 content = content.slice(0, MAX_FILE_CHARS) + "\n... (file truncated for length)\n";
             }
-            const addition = "================================================\n" +
+            const addition =
+                "================================================\n" +
                 `FILE: ${path}\n` +
                 "================================================\n" +
                 content +
@@ -193,9 +197,9 @@ export async function getRepoContext(repo, ref, githubToken, statusCallback, dia
             totalChars += addition.length;
         }
         return { context: parts.join("\n"), success: true };
-    }
-    catch (error) {
-        const message = error instanceof Error ? error.message : "Unknown error building repo context";
+    } catch (error) {
+        const message =
+            error instanceof Error ? error.message : "Unknown error building repo context";
         return { context: message, success: false, error: message };
     }
 }

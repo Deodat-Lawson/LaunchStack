@@ -25,15 +25,17 @@ export async function callSerper(query) {
     });
     if (!response.ok) {
         const text = await response.text().catch(() => "");
-        throw new Error(`Serper API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`);
+        throw new Error(
+            `Serper API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
+        );
     }
-    const data = (await response.json());
+    const data = await response.json();
     const items = Array.isArray(data.news) ? data.news : [];
     if (items.length === 0) {
         console.warn("[web-search] Serper returned no news results.");
         return [];
     }
-    const filtered = items.filter((item) => Boolean(item?.link));
+    const filtered = items.filter(item => Boolean(item?.link));
     if (filtered.length === 0) {
         console.warn("[web-search] Serper returned no news results.");
         return [];

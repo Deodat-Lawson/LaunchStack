@@ -1,7 +1,7 @@
 jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: jest.fn(),
 }));
-jest.mock("@launchstack/core/llm", () => ({
+jest.mock("@launchstack/llm", () => ({
     invokeStructured: jest.fn(),
 }));
 
@@ -14,9 +14,9 @@ import {
     parseFounderWeeklyReviewPayload,
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewV2Payload,
-} from "@launchstack/features/founder-weekly-review";
-import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/features/founder-weekly-review";
-import { invokeStructured } from "@launchstack/core/llm";
+} from "@launchstack/pipelines/founder-weekly-review";
+import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/pipelines/founder-weekly-review";
+import { invokeStructured } from "@launchstack/llm";
 import { z } from "zod";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
 import { resolveConfiguredChatModel } from "~/lib/models";

@@ -32,7 +32,7 @@ import { z } from "zod";
 import {
     ReportingPeriodSchema,
     type FounderWeeklyReviewEvidenceItem,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 export const FOUNDER_WEEKLY_REVIEW_SCENARIO_SCHEMA_VERSION =
     "founder-weekly-review-scenario/v1" as const;

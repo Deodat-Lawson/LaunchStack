@@ -7,7 +7,7 @@ import {
     documentMetadata,
     documentRetrievalChunks,
     documentStructure,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
 
 /**

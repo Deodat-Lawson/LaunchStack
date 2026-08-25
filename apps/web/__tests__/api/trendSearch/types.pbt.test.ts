@@ -8,7 +8,7 @@ import {
     TrendSearchInputSchema,
     TrendSearchEventDataSchema,
     SearchCategoryEnum,
-} from "@launchstack/features/trend-search";
+} from "@launchstack/pipelines/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

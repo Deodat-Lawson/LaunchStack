@@ -3,7 +3,7 @@ import {
     parseInternalFileId,
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
-import { configureOcr } from "@launchstack/core/ocr/config";
+import { configureOcr } from "@launchstack/conversion/ocr/config";
 
 const mockDbSelect = jest.fn();
 

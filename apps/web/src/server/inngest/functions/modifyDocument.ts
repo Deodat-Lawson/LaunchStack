@@ -20,9 +20,9 @@
 import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { db } from "~/server/db";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
-import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
+import { processDocumentBatch, AdeuServiceError } from "@launchstack/editing";
 
 export const modifyDocument = inngest.createFunction(
     {

@@ -28,4 +28,4 @@ export type {
     EmbeddingsProvider,
     RAGSearchResult,
     RAGSearchInput,
-} from "@launchstack/core/rag/search-types";
+} from "@launchstack/search/search-types";

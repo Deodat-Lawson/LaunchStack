@@ -14,7 +14,7 @@
 
 import { NextResponse } from "next/server";
 
-import { COLLAB_API_PREFIX, type HubHttpRequest } from "@launchstack/core/collab";
+import { COLLAB_API_PREFIX, type HubHttpRequest } from "@launchstack/collab";
 import { getHub } from "~/server/collab/runtime";
 
 export const dynamic = "force-dynamic";

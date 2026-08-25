@@ -8,14 +8,14 @@
  * restructure the old singleton will be rewritten to delegate here.
  */
 
-import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
+import { createEngine, type CoreConfig, type Engine } from "@launchstack/engine";
 
 import { env } from "~/env";
-import { configureProviders } from "@launchstack/core/providers/registry";
-import { configureSecretBox } from "@launchstack/core/crypto";
-import { configureOcr } from "@launchstack/core/ocr/config";
-import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
-import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
+import { configureProviders } from "@launchstack/llm/providers/registry";
+import { configureSecretBox } from "@launchstack/store/crypto";
+import { configureOcr } from "@launchstack/conversion/ocr/config";
+import { configureEmbeddingIndexRegistry } from "@launchstack/llm/embeddings";
+import { configureCompanyEmbeddingDefaults } from "@launchstack/llm/embeddings";
 import { createAppStoragePort } from "./storage/port";
 import { createAppCreditsPort } from "./credits/port";
 import { getMeteringMode, logDeploymentModeOnce } from "./deployment";

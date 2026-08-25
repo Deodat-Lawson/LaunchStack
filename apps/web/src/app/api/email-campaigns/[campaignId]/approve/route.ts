@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { approveEmailCampaign } from "@launchstack/features/email-pipeline";
+import { approveEmailCampaign } from "@launchstack/pipelines/email";
 
 import {
     fail,

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../server/db/index";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { eq } from "drizzle-orm";
 
-import { getRedactedCredentials } from "@launchstack/core/embeddings";
+import { getRedactedCredentials } from "@launchstack/llm/embeddings";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET() {

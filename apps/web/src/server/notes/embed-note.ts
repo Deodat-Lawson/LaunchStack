@@ -11,7 +11,7 @@
 
 import { eq } from "drizzle-orm";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
 import { type NoteAnchor } from "~/server/db/schema";
@@ -197,8 +197,8 @@ export async function requestNoteEmbedding(
     return;
   }
 
-  const { DrizzleOutboxStore } = await import("@launchstack/adapters");
-  const { eventIds, PROTOCOL_VERSION } = await import("@launchstack/protocol");
+  const { DrizzleOutboxStore } = await import("@launchstack/engine");
+  const { eventIds, PROTOCOL_VERSION } = await import("@launchstack/orchestration/pipeline-events");
   const { getEngine } = await import("~/server/engine");
   const engine = getEngine();
   const store = new DrizzleOutboxStore(engine.db, console);

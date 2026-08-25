@@ -10,7 +10,7 @@
  * `./chat-models`, which nothing on the env path touches.
  */
 
-import { GEMINI_BASE_URL, type ChatEndpointConfig } from "@launchstack/core/llm/types";
+import { GEMINI_BASE_URL, type ChatEndpointConfig } from "@launchstack/llm/types";
 
 /**
  * Environment the chat layer reads.

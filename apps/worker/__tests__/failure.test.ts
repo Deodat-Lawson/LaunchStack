@@ -9,8 +9,9 @@
 import { Column, Param, is } from "drizzle-orm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { ClaimedEvent, LoggerPort } from "@launchstack/application";
-import { document, ocrJobs } from "@launchstack/core/db/schema";
+import type { ClaimedEvent } from "@launchstack/orchestration";
+import type { LoggerPort } from "@launchstack/runtime";
+import { document, ocrJobs } from "@launchstack/store/schema";
 
 type Predicate = { columns: string[]; params: unknown[] };
 
@@ -97,7 +98,7 @@ const fakeDb = {
     }),
 };
 
-vi.mock("@launchstack/core/db", () => ({
+vi.mock("@launchstack/store/client", () => ({
     getDb: () => {
         getDbCalls.count += 1;
         return fakeDb;

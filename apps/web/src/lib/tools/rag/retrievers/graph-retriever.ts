@@ -24,7 +24,7 @@ import {
     kgEntityMentions,
     kgRelationships,
     documentSections,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 
 const currentVersionPredicate = (
     versionColumn: SQLWrapper,

@@ -7,9 +7,10 @@
  */
 import { and, eq, inArray } from "drizzle-orm";
 
-import type { ClaimedEvent, LoggerPort } from "@launchstack/application";
-import { getDb } from "@launchstack/core/db";
-import { document, ocrJobs } from "@launchstack/core/db/schema";
+import type { ClaimedEvent } from "@launchstack/orchestration";
+import type { LoggerPort } from "@launchstack/runtime";
+import { getDb } from "@launchstack/store/client";
+import { document, ocrJobs } from "@launchstack/store/schema";
 
 const JOB_BEARING_EVENTS = new Set([
     "source.version.created",

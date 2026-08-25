@@ -3,7 +3,7 @@ import {
     isInternalFileUrl,
     originsEqual,
     parseInternalFileId,
-} from "@launchstack/core/crypto";
+} from "@launchstack/store/crypto";
 
 describe("internal file URL helpers", () => {
     it.each([

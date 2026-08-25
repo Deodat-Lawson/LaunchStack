@@ -16,7 +16,7 @@ import {
     configureChatModels,
     parseChatModelsYaml,
     type ChatModelsConfig,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 import {
     DEFAULT_CHAT_CONFIG_PATH,
     findIgnoredModelVariables,

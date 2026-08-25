@@ -5,7 +5,8 @@
  * Embedding consumes `note.embedding.requested`, replacing the
  * fire-and-forget `void embedNote(...)` calls in web request handlers.
  */
-import type { LoggerPort, NoteEmbeddingPort, NoteRehydrationPort } from "@launchstack/application";
+import type { NoteEmbeddingPort, NoteRehydrationPort } from "@launchstack/orchestration";
+import type { LoggerPort } from "@launchstack/runtime";
 
 import { rehydrateNotesForDocument } from "~/server/notes/rehydrate-anchors";
 import { embedNote } from "~/server/notes/embed-note";

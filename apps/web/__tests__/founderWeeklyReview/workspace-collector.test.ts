@@ -1,4 +1,4 @@
-import { FounderWeeklyReviewEvidenceService } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewEvidenceService } from "@launchstack/pipelines/founder-weekly-review";
 
 describe("workspace document collection", () => {
     it("skips retrieval for blank Founder Context", async () => {

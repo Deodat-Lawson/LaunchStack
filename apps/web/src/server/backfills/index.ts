@@ -1,4 +1,4 @@
-import { type Backfill } from "@launchstack/core/db/backfills";
+import { type Backfill } from "@launchstack/store/backfills";
 import { getTableName, sql } from "drizzle-orm";
 // Product tables: notes live on the application side of the boundary.
 import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";

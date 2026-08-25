@@ -1,5 +1,5 @@
 import { db } from "~/server/db/index";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";

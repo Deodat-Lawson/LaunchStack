@@ -13,7 +13,7 @@ import {
     ScriptedAgentRuntime,
     type AgentPersona,
     type MeetingOrchestrator,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 interface Harness {
     store: InMemoryChannelStore;
@@ -107,8 +107,8 @@ jest.mock("~/server/collab/personas", () => ({
 }));
 
 jest.mock("~/server/collab/runtime", () => {
-    const engine = jest.requireActual<typeof import("@launchstack/core/collab")>(
-        "@launchstack/core/collab"
+    const engine = jest.requireActual<typeof import("@launchstack/collab")>(
+        "@launchstack/collab"
     );
     return {
         listMeetingsForCompany: () =>

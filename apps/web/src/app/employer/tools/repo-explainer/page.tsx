@@ -4,7 +4,7 @@ import { Loader2, Network, Share2 } from "lucide-react";
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { useRepoExplainer } from "./useRepoExplainer";
-import type { DiagramType } from "@launchstack/features/repo-explainer";
+import type { DiagramType } from "@launchstack/pipelines/repo-explainer";
 
 const DIAGRAM_TYPE_OPTIONS: { value: DiagramType; label: string }[] = [
     { value: "architecture", label: "Architecture" },

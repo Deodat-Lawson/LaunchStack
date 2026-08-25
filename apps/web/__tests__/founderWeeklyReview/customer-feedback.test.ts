@@ -1,7 +1,7 @@
 import {
     mapCustomerFeedbackChunkToEvidenceItem,
     type CustomerFeedbackChunkRow,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 function row(content: string | null): CustomerFeedbackChunkRow {
     return {

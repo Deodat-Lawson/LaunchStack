@@ -10,9 +10,9 @@ import {
     parsePastedRecipients,
     parseRecipientCsv,
     type IngestResult,
-} from "@launchstack/features/email-pipeline/recipients";
-import { createMerge } from "@launchstack/features/email-pipeline/merge";
-import { SEED_TEMPLATES } from "@launchstack/features/email-pipeline/templates";
+} from "@launchstack/pipelines/email/recipients";
+import { createMerge } from "@launchstack/pipelines/email/merge";
+import { SEED_TEMPLATES } from "@launchstack/pipelines/email/templates";
 import {
     hasErrors,
     templateTokens,
@@ -20,13 +20,13 @@ import {
     validateRendered,
     validateTemplate,
     type ValidationIssue,
-} from "@launchstack/features/email-pipeline/validators";
+} from "@launchstack/pipelines/email/validators";
 import type {
     EmailTemplate,
     Recipient,
     SendResult,
     TemplateReview,
-} from "@launchstack/features/email-pipeline/types";
+} from "@launchstack/pipelines/email/types";
 
 /**
  * Email outreach workspace (member.md Phase 4).

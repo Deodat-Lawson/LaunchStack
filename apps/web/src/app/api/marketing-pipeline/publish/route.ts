@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { MarketingPlatformEnum } from "@launchstack/features/marketing-pipeline";
-import { publishContent } from "@launchstack/features/marketing-pipeline";
+import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
+import { publishContent } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

@@ -9,7 +9,7 @@
 import { and, asc, eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 
-import type { AgentPersona } from "@launchstack/core/collab";
+import type { AgentPersona } from "@launchstack/collab";
 import { collabAgentPersona } from "~/server/db/schema";
 import { db } from "~/server/db";
 

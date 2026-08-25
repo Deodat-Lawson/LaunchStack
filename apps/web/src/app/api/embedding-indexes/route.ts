@@ -4,7 +4,7 @@ import {
     getEmbeddingIndexRegistry,
     type EmbeddingIndexConfig,
     type EmbeddingProvider,
-} from "@launchstack/core/embeddings";
+} from "@launchstack/llm/embeddings";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // "sidecar" is gone from EmbeddingProvider (ADR-004 §5 removed the phantom

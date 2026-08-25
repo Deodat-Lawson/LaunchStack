@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "../../../server/db/index";
-import { company, document } from "@launchstack/core/db/schema";
+import { company, document } from "@launchstack/store/schema";
 import { validateRequestBody, UpdateCompanySchema } from "~/lib/validation";
 import {
     getCompanyCredentialsPlaintext,
     upsertCompanyCredentials,
-} from "@launchstack/core/embeddings";
+} from "@launchstack/llm/embeddings";
 import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
-import { beginReindex, getCompanyReindexState } from "@launchstack/core/embeddings";
+import { beginReindex, getCompanyReindexState } from "@launchstack/llm/embeddings";
 import { inngest } from "~/server/inngest/client";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 

@@ -12,7 +12,7 @@ import {
     parseRecipientCsv,
     prospectContextNotes,
     recipientsFromProspects,
-} from "@launchstack/features/email-pipeline/recipients";
+} from "@launchstack/pipelines/email/recipients";
 
 describe("looksLikeEmail", () => {
     it.each(["ada@example.com", "ada.lovelace+tag@sub.example.co.uk", "  spaced@example.com  "])(

@@ -9,7 +9,7 @@ import {
 } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/types";
 import { db } from "~/server/db/index";
-import { document, documentSections } from "@launchstack/core/db/schema";
+import { document, documentSections } from "@launchstack/store/schema";
 import { hybridSearchWithRRF } from "~/app/api/agents/predictive-document-analysis/services/hybridSearch";
 import { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
 

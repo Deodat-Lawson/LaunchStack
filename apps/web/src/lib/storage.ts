@@ -6,7 +6,7 @@ import {
     isInternalFileUrl,
     parseInternalFileId,
     signFileAccessToken,
-} from "@launchstack/core/crypto";
+} from "@launchstack/store/crypto";
 
 import { env } from "~/env";
 
@@ -143,7 +143,7 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
         // undefined mid-init. getEngine() is immune (function declaration).
         const { getEngine } = await import("~/server/engine");
         const db = getEngine().db;
-        const { fileUploads } = await import("@launchstack/core/db/schema");
+        const { fileUploads } = await import("@launchstack/store/schema");
 
         const body = toBuffer(input.data);
         const safeName = sanitizeFilename(input.filename);
@@ -239,7 +239,7 @@ export async function deleteFile(keyOrUrl: string, provider?: StorageBackend): P
         // undefined mid-init. getEngine() is immune (function declaration).
         const { getEngine } = await import("~/server/engine");
         const db = getEngine().db;
-        const { fileUploads } = await import("@launchstack/core/db/schema");
+        const { fileUploads } = await import("@launchstack/store/schema");
         const { eq } = await import("drizzle-orm");
         await db.delete(fileUploads).where(eq(fileUploads.id, id));
     } catch (err) {

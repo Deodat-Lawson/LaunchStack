@@ -1,9 +1,9 @@
 import { EnsembleRetriever } from "langchain/retrievers/ensemble";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
-import { createEmbeddingModel } from "@launchstack/core/embeddings";
-import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getRerankProvider, isRerankConfigured } from "@launchstack/core/providers/reranking";
+import { createEmbeddingModel } from "@launchstack/llm/embeddings";
+import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
+import { getRerankProvider, isRerankConfigured } from "@launchstack/search/reranking";
 import { env } from "~/env";
 import {
     createDocumentVectorRetriever,

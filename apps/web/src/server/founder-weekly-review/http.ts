@@ -8,7 +8,7 @@
  * status, so there is nothing left for a bespoke mapper to decide.
  */
 
-import type { FounderWeeklyReviewRunRecord } from "@launchstack/features/founder-weekly-review";
+import type { FounderWeeklyReviewRunRecord } from "@launchstack/pipelines/founder-weekly-review";
 
 export { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 

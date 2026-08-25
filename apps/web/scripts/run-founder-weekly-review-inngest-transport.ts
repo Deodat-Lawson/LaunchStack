@@ -13,9 +13,9 @@ import {
     document,
     documentContextChunks,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { founderWeeklyReviewDispatches } from "~/server/db/schema";
-import { FounderWeeklyReviewRepository } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewRepository } from "@launchstack/pipelines/founder-weekly-review";
 
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";

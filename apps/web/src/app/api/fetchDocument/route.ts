@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
-import { document, fileUploads } from "@launchstack/core/db/schema";
+import { document, fileUploads } from "@launchstack/store/schema";
 import { eq, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";

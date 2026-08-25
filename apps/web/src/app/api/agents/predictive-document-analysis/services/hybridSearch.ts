@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { and, inArray, sql, eq } from "drizzle-orm";
-import { document, documentSections } from "@launchstack/core/db/schema";
+import { document, documentSections } from "@launchstack/store/schema";
 import { getEmbeddings } from "~/app/api/agents/predictive-document-analysis/utils/embeddings";
 import { truncateText } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import type { DocumentMatch } from "~/app/api/agents/predictive-document-analysis/types";

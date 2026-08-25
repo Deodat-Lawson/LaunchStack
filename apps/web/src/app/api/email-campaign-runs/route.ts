@@ -1,7 +1,7 @@
 import {
     resolveAutomationPolicy,
     runAutomatedEmailCampaign,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import { AutomatedRunSchema } from "../email-campaigns/_lib/schemas";
 

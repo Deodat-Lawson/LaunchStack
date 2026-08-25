@@ -9,9 +9,9 @@
 import {
     createDoclingAdapter,
     parseMarkdownTable,
-} from "@launchstack/core/ocr/adapters/ossAdapter";
-import { configureOcr } from "@launchstack/core/ocr/config";
-import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/core/crypto";
+} from "@launchstack/conversion/ocr/adapters/ossAdapter";
+import { configureOcr } from "@launchstack/conversion/ocr/config";
+import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
 
 const CONVERTER_URL = "http://test-converter:8002";
 const API_KEY = "test-converter-key";

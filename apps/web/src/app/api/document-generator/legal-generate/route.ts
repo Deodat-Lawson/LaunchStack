@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/features/legal-templates";
-import { generateDocument } from "@launchstack/features/legal-templates/template-service";
+import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/pipelines/legal-templates";
+import { generateDocument } from "@launchstack/pipelines/legal-templates/template-service";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

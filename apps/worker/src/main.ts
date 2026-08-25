@@ -19,8 +19,8 @@ import {
     createPipelineProcessor,
     runOutboxTick,
     DEFAULT_RETRY_POLICY,
-} from "@launchstack/application";
-import { DocIngestionPipeline, DrizzleOutboxStore } from "@launchstack/adapters";
+} from "@launchstack/orchestration";
+import { DocIngestionPipeline, DrizzleOutboxStore } from "@launchstack/engine";
 
 import { parseWorkerEnv, resolveChatModelsConfig } from "./env";
 import { createLogger } from "./logger";

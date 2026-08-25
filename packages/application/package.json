@@ -1,45 +1,32 @@
 {
-  "name": "@launchstack/application",
-  "version": "0.0.0",
-  "description": "Launchstack use cases: commands, queries, and the ports they depend on. Workspace identity is translated to plain company ids at this boundary; implementations live in @launchstack/adapters (ADR-002).",
-  "license": "Apache-2.0",
-  "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "name": "@launchstack/application",
+    "version": "0.0.0",
+    "description": "Launchstack use cases: commands, queries, and the ports they depend on. Workspace identity is translated to plain company ids at this boundary; implementations live in @launchstack/adapters (ADR-002).",
+    "license": "Apache-2.0",
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
     "exports": {
-      ".": {
+        ".": "./src/index.ts",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
         "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "./package.json": "./package.json"
-    }
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
-    "clean": "rm -rf dist .tsbuildinfo",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "@launchstack/evidence": "workspace:^",
-    "@launchstack/protocol": "workspace:^",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.2",
-    "vitest": "^3.0.5"
-  }
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./package.json": "./package.json"
+        }
+    },
+    "dependencies": {},
+    "private": true
 }

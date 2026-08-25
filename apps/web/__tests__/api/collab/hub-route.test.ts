@@ -13,7 +13,7 @@ import {
     InMemoryChannelStore,
     MeetingHub,
     signRequest,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const SECRET = "route-mount-secret";
 

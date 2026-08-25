@@ -27,15 +27,15 @@ import {
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { legalTheme as lt } from "./LegalGeneratorTheme";
-import type { EditorSection } from "@launchstack/features/legal-templates";
-import type { TemplateField } from "@launchstack/features/legal-templates";
+import type { EditorSection } from "@launchstack/pipelines/legal-templates";
+import type { TemplateField } from "@launchstack/pipelines/legal-templates";
 import {
     type FieldValidationError,
     buildTemplateFieldDataForDocx,
     extractFieldValuesFromSections,
     validateDocument,
-} from "@launchstack/features/legal-templates";
-import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
+} from "@launchstack/pipelines/legal-templates";
+import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 
 interface LegalDocumentEditorProps {
     initialTitle: string;

@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { FounderWeeklyReviewEvidenceService } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewEvidenceService } from "@launchstack/pipelines/founder-weekly-review";
 
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 

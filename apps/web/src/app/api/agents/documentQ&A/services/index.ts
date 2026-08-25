@@ -22,7 +22,7 @@ export {
     selectChatRoute,
     getEmbeddings,
 } from "./models";
-export { describeChatError } from "@launchstack/core/llm";
+export { describeChatError } from "@launchstack/llm";
 export { ChatRoutes, isChatRoute } from "./types";
 
 // RLM Search (hierarchical, cost-aware retrieval for large documents)

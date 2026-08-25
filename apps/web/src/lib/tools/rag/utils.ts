@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
 import type { SearchResult } from "./types";
 

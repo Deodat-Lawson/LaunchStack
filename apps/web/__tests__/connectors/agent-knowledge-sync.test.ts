@@ -8,13 +8,13 @@ import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { syncAgentKnowledge } from "@launchstack/features/connectors/agent-knowledge";
+import { syncAgentKnowledge } from "@launchstack/pipelines/connectors/agent-knowledge";
 import type {
     DiscoveredKnowledgeItem,
     KnowledgeItem,
     KnowledgeSink,
     StoredKnowledgeItem,
-} from "@launchstack/features/connectors";
+} from "@launchstack/pipelines/connectors";
 
 let root: string;
 let home: string;

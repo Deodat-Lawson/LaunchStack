@@ -8,7 +8,7 @@
  * the other.
  */
 
-import { HttpSlackClient, type SlackClient } from "@launchstack/core/collab";
+import { HttpSlackClient, type SlackClient } from "@launchstack/collab";
 import { env } from "~/env";
 
 const globalForSlack = globalThis as unknown as { __collabSlackClient?: SlackClient | null };

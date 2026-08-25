@@ -28,10 +28,10 @@ import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/core/db/schema";
-import { parseProvider } from "@launchstack/core/ocr/trigger";
-import { buildInternalFileUrl } from "@launchstack/core/crypto";
-import { getOcrConfig } from "@launchstack/core/ocr/config";
+import { document, documentVersions } from "@launchstack/store/schema";
+import { parseProvider } from "@launchstack/conversion/ocr/trigger";
+import { buildInternalFileUrl } from "@launchstack/store/crypto";
+import { getOcrConfig } from "@launchstack/conversion/ocr/config";
 import { getEngine } from "~/server/engine";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import { validateRequestBody } from "~/lib/validation";

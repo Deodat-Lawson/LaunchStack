@@ -6,7 +6,7 @@ import { eq, sql } from "drizzle-orm";
 
 jest.mock("~/server/engine", () => {
     const databaseUrl = process.env.DATABASE_URL;
-    const coreDb = jest.requireActual<{ createDb: typeof createDb }>("@launchstack/core/db");
+    const coreDb = jest.requireActual<{ createDb: typeof createDb }>("@launchstack/store/client");
     const engineDb = databaseUrl
         ? coreDb.createDb({
               url: databaseUrl,
@@ -19,7 +19,7 @@ jest.mock("~/server/engine", () => {
     };
 });
 
-import { createDb, type Db } from "@launchstack/core/db";
+import { createDb, type Db } from "@launchstack/store/client";
 import {
     company as companyTable,
     document,
@@ -29,7 +29,7 @@ import {
     documentRetrievalChunks,
     documentStructure,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { repairDocumentVersions } from "~/server/backfills/document-version-repair";
 

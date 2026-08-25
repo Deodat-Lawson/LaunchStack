@@ -9,8 +9,9 @@
  */
 import { and, eq } from "drizzle-orm";
 
-import type { CompanyProjectionPort, LoggerPort } from "@launchstack/application";
-import { runCompanyMetadataTool } from "@launchstack/features/company-metadata";
+import type { CompanyProjectionPort } from "@launchstack/orchestration";
+import type { LoggerPort } from "@launchstack/runtime";
+import { runCompanyMetadataTool } from "@launchstack/pipelines/company-metadata";
 
 import { db } from "~/server/db";
 import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";

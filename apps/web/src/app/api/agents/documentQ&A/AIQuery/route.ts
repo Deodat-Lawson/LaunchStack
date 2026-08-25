@@ -10,11 +10,11 @@ import {
     type DocumentSearchOptions,
     type SearchResult,
 } from "~/lib/tools/rag";
-import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {

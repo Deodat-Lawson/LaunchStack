@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { category } from "@launchstack/core/db/schema";
+import { category } from "@launchstack/store/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";

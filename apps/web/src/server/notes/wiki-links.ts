@@ -22,7 +22,7 @@ import {
   noteLinks,
   type NoteLinkTargetType,
 } from "~/server/db/schema";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
 
 /**

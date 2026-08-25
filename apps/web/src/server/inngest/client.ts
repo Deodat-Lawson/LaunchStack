@@ -1,8 +1,8 @@
 import { EventSchemas, Inngest } from "inngest";
 import { chatConfigMiddleware } from "./chat-config-middleware";
-import type { TrendSearchEventData } from "@launchstack/features/trend-search";
-import type { ProspectorEventData } from "@launchstack/features/client-prospector";
-import type { DocumentEdit, ReviewAction } from "@launchstack/features/adeu";
+import type { TrendSearchEventData } from "@launchstack/pipelines/trend-search";
+import type { ProspectorEventData } from "@launchstack/pipelines/client-prospector";
+import type { DocumentEdit, ReviewAction } from "@launchstack/editing";
 
 // Retired event types (ADR-003): document/process.requested,
 // company-metadata/extract.requested and notes-anchors/rehydrate.requested

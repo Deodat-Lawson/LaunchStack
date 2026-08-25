@@ -1,4 +1,4 @@
-import type * as CoreLlm from "@launchstack/core/llm";
+import type * as CoreLlm from "@launchstack/llm";
 
 const mockStructuredInvoke = jest
     .fn<Promise<{ missingDocuments: never[]; recommendations: never[] }>, []>()
@@ -32,8 +32,8 @@ jest.mock("~/lib/rate-limiter", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/llm", () => {
-    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+jest.mock("@launchstack/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/llm");
     return {
         __esModule: true,
         ...actual,
@@ -109,7 +109,7 @@ jest.mock("~/server/inngest/client", () => ({
 import { POST } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as streamPOST } from "~/app/api/agents/predictive-document-analysis/stream/route";
 import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnalysis";
-import { document, documentContextChunks, pdfChunks } from "@launchstack/core/db/schema";
+import { document, documentContextChunks, pdfChunks } from "@launchstack/store/schema";
 import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 
 import * as AnalysisEngine from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";

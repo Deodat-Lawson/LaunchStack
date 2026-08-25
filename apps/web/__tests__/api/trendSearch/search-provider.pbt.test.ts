@@ -9,10 +9,10 @@
  */
 
 import * as fc from "fast-check";
-import { callSerper } from "@launchstack/features/trend-search/providers/serper";
-import { executeSearch } from "@launchstack/features/trend-search/web-search";
-import type { PlannedQuery, RawSearchResult } from "@launchstack/features/trend-search";
-import type { ProviderStrategy } from "@launchstack/features/trend-search/providers/types";
+import { callSerper } from "@launchstack/pipelines/trend-search/providers/serper";
+import { executeSearch } from "@launchstack/pipelines/trend-search/web-search";
+import type { PlannedQuery, RawSearchResult } from "@launchstack/pipelines/trend-search";
+import type { ProviderStrategy } from "@launchstack/pipelines/trend-search/providers/types";
 
 const EXA_URL = "https://api.exa.ai/search";
 const SERPER_URL = "https://google.serper.dev/news";

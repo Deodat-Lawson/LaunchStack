@@ -31,7 +31,7 @@ jest.mock("~/server/db/schema", () => ({
   },
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
   document: {
     id: "document.id",
     title: "document.title",

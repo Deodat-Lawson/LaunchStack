@@ -13,11 +13,11 @@ import {
     type MultiDocSearchOptions,
     type SearchResult,
 } from "~/lib/tools/rag";
-import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -37,11 +37,11 @@ import {
     resolveConfiguredChatModel,
     selectChatRoute,
 } from "~/lib/models";
-import { normalizeTokenUsage } from "@launchstack/core/llm";
+import { normalizeTokenUsage } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
-import { isMeteringEnabled } from "@launchstack/core/credits";
+import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 

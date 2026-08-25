@@ -19,10 +19,10 @@ import {
     type PublicChatConfig,
     type ResolveChatModelOptions,
     type ResolvedChatModel,
-} from "@launchstack/core/llm";
-import { createEmbeddingModel } from "@launchstack/core/embeddings";
-import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
-import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+} from "@launchstack/llm";
+import { createEmbeddingModel } from "@launchstack/llm/embeddings";
+import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
+import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 import { configureAppChatModels } from "~/server/chat-models";
 import { env } from "~/env";

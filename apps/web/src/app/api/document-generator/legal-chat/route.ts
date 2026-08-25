@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { describeChatError } from "@launchstack/core/llm";
+import { describeChatError } from "@launchstack/llm";
 import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
-import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
-import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
+import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
+import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

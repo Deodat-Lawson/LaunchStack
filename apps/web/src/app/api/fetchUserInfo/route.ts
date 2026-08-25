@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";

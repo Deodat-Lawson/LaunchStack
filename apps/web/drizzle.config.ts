@@ -33,8 +33,8 @@ for (const value of Object.values(productSchema)) {
 export default {
     schema: [
         "./src/server/db/schema/*.ts",
-        "../../packages/features/src/*/schema.ts",
-        "../../packages/features/src/*/cache-schema.ts",
+        "../../pipelines/src/*/schema.ts",
+        "../../pipelines/src/*/cache-schema.ts",
     ],
     out: "./drizzle",
     dialect: "postgresql",

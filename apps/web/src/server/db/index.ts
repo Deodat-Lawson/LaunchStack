@@ -10,7 +10,7 @@
 
 import { getEngine } from "~/server/engine";
 
-export { toRows } from "@launchstack/core/db";
+export { toRows } from "@launchstack/store/client";
 
 // Proxy so the engine is only built when `db` is actually used at runtime
 // (not at import time). Keeps env validation lazy for tooling that imports

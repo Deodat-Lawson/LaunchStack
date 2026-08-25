@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { addSuppression, verifyUnsubscribeToken } from "@launchstack/features/email-pipeline";
+import { addSuppression, verifyUnsubscribeToken } from "@launchstack/pipelines/email";
 
 export const runtime = "nodejs";
 

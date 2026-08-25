@@ -7,7 +7,7 @@
 
 import { NextResponse } from "next/server";
 
-import { buildMinutes } from "@launchstack/core/collab";
+import { buildMinutes } from "@launchstack/collab";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 import { getChannelStore } from "~/server/collab/store";

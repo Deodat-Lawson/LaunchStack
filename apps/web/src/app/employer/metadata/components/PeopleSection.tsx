@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Mail, Phone, Briefcase, AlertCircle, FileText, Pencil } from "lucide-react";
 import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
 import m from "./metadata.module.css";
-import type { PersonEntry, MetadataFact } from "@launchstack/features/company-metadata";
+import type { PersonEntry, MetadataFact } from "@launchstack/pipelines/company-metadata";
 
 interface PeopleSectionProps {
     people: PersonEntry[];

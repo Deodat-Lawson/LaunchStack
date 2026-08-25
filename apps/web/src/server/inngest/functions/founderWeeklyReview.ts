@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { NonRetriableError } from "inngest";
 import { inngest } from "../client";
-import { FounderWeeklyReviewWorkerService } from "@launchstack/features/founder-weekly-review";
-import { generateFounderWeeklyReview } from "@launchstack/features/founder-weekly-review";
-import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewWorkerService } from "@launchstack/pipelines/founder-weekly-review";
+import { generateFounderWeeklyReview } from "@launchstack/pipelines/founder-weekly-review";
+import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/pipelines/founder-weekly-review";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
 import { canonicalFounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import {

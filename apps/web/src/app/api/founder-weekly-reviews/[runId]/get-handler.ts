@@ -4,7 +4,7 @@
  * dependency-injected tests (read-retry-route.test.ts).
  */
 import { auth } from "@clerk/nextjs/server";
-import type { FounderWeeklyReviewUserService } from "@launchstack/features/founder-weekly-review";
+import type { FounderWeeklyReviewUserService } from "@launchstack/pipelines/founder-weekly-review";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
 

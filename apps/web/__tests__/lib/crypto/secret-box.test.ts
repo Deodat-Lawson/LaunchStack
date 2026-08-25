@@ -4,7 +4,7 @@ import {
     decryptSecret,
     MissingSecretsKeyError,
     CiphertextDecodeError,
-} from "@launchstack/core/crypto";
+} from "@launchstack/store/crypto";
 
 function setKey() {
     // Deterministic 32-byte key for tests — never use in production. The slot

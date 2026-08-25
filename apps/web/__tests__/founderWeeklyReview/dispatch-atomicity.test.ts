@@ -1,12 +1,12 @@
 jest.mock("~/server/db", () => ({ db: { transaction: jest.fn() } }));
 import { eq } from "drizzle-orm";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { founderWeeklyReviewDispatches, founderWeeklyReviewRuns } from "~/server/db/schema";
 import {
     FounderWeeklyReviewEvidenceSnapshotSchema,
     FounderWeeklyReviewRepository,
     FounderWeeklyReviewWorkerService,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 

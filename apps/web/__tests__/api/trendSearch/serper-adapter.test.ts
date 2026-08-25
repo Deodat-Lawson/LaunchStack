@@ -5,7 +5,7 @@
 
 const mockFetch = jest.fn();
 
-import { callSerper } from "@launchstack/features/trend-search/providers/serper";
+import { callSerper } from "@launchstack/pipelines/trend-search/providers/serper";
 
 // callSerper reads SERPER_API_KEY from process.env directly.
 const ORIGINAL_SERPER_KEY = process.env.SERPER_API_KEY;

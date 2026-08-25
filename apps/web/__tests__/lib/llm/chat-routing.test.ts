@@ -8,7 +8,7 @@ import {
     resolveChatRoute,
     selectChatRoute,
     type ChatModelsConfig,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 
 const endpoint = { baseUrl: "https://endpoint.example/v1", apiKey: "k" };
 

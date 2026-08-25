@@ -1,4 +1,4 @@
-import type * as CoreDb from "@launchstack/core/db";
+import type * as CoreDb from "@launchstack/store/client";
 
 import { randomUUID } from "node:crypto";
 
@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 
 jest.mock("~/server/engine", () => {
     const databaseUrl = process.env.DATABASE_URL;
-    const coreDb = jest.requireActual<typeof CoreDb>("@launchstack/core/db");
+    const coreDb = jest.requireActual<typeof CoreDb>("@launchstack/store/client");
     const engineDb = databaseUrl
         ? coreDb.createDb({
               url: databaseUrl,
@@ -22,7 +22,7 @@ jest.mock("~/server/engine", () => {
     };
 });
 
-import type { EmbeddingIndexConfig } from "@launchstack/core/embeddings";
+import type { EmbeddingIndexConfig } from "@launchstack/llm/embeddings";
 import {
     company,
     document,
@@ -31,7 +31,7 @@ import {
     documentMetadata,
     documentRetrievalChunks,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { createDocumentVectorRetriever } from "~/lib/tools/rag/retrievers/vector-retriever";
 import { db } from "~/server/db/index";
 

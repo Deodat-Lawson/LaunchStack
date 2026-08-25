@@ -40,7 +40,7 @@ jest.mock("drizzle-orm", () => ({
     sql: jest.fn(() => "sql"),
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     category: { id: "id", name: "name", companyId: "companyId" },
     company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
     users: { userId: "userId", role: "role", companyId: "companyId" },
@@ -159,7 +159,7 @@ describe("Feature: local-s3-migration, Property 11: Bootstrap API storage provid
                         and: jest.fn((...args: unknown[]) => args),
                         eq: jest.fn((...args: unknown[]) => args),
                     }));
-                    jest.doMock("@launchstack/core/db/schema", () => ({
+                    jest.doMock("@launchstack/store/schema", () => ({
                         category: { id: "id", name: "name", companyId: "companyId" },
                         company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
                         users: { userId: "userId", role: "role", companyId: "companyId" },

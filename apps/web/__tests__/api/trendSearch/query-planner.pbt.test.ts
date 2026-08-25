@@ -4,12 +4,12 @@
  * Validates: Requirements 1.2, 1.3, 2.1
  */
 
-import type * as CoreLlm from "@launchstack/core/llm";
+import type * as CoreLlm from "@launchstack/llm";
 
 const mockInvoke = jest.fn<Promise<unknown>, []>();
 
-jest.mock("@launchstack/core/llm", () => {
-    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+jest.mock("@launchstack/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/llm");
     return {
         __esModule: true,
         ...actual,
@@ -38,9 +38,9 @@ jest.mock("@launchstack/core/llm", () => {
 });
 
 import * as fc from "fast-check";
-import { planQueries } from "@launchstack/features/trend-search/query-planner";
-import { SearchCategoryEnum } from "@launchstack/features/trend-search";
-import type { SearchCategory } from "@launchstack/features/trend-search";
+import { planQueries } from "@launchstack/pipelines/trend-search/query-planner";
+import { SearchCategoryEnum } from "@launchstack/pipelines/trend-search";
+import type { SearchCategory } from "@launchstack/pipelines/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

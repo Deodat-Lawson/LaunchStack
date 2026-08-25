@@ -14,8 +14,8 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/core/db/schema";
-import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/core/crypto";
+import { fileUploads } from "@launchstack/store/schema";
+import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";

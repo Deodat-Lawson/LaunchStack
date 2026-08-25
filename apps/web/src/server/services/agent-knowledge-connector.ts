@@ -15,15 +15,15 @@ import {
     type AgentKnowledgeScan,
     type AgentKnowledgeScanOptions,
     type AgentKnowledgeSyncResult,
-} from "@launchstack/features/connectors/agent-knowledge";
+} from "@launchstack/pipelines/connectors/agent-knowledge";
 import type {
     DiscoveredKnowledgeItem,
     KnowledgeItem,
     KnowledgeSink,
     StoredKnowledgeItem,
-} from "@launchstack/features/connectors";
-import { document } from "@launchstack/core/db/schema";
-import { resolveIngestIndexKey } from "@launchstack/core/embeddings";
+} from "@launchstack/pipelines/connectors";
+import { document } from "@launchstack/store/schema";
+import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
 import { db } from "~/server/db";
 import { env } from "~/env";

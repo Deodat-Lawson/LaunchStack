@@ -211,15 +211,15 @@ describe("env.ts stays a light import", () => {
     function resolveSpec(spec: string, from: string): string | null {
         let base: string;
         if (spec.startsWith("~/")) base = join(WEB_SRC, spec.slice(2));
-        else if (spec === "@launchstack/core") base = join(CORE_SRC, "index");
-        else if (spec.startsWith("@launchstack/core/"))
-            base = join(CORE_SRC, spec.slice("@launchstack/core/".length));
+        else if (spec === "@launchstack/engine") base = join(CORE_SRC, "index");
+        else if (spec.startsWith("@launchstack/engine/"))
+            base = join(CORE_SRC, spec.slice("@launchstack/engine/".length));
         // ADR-002: core subpaths are stubs re-exporting @launchstack/adapters —
         // follow the facade into the implementation or the walk stops at a stub
         // and this guard passes vacuously.
-        else if (spec === "@launchstack/adapters") base = join(ADAPTERS_SRC, "index");
-        else if (spec.startsWith("@launchstack/adapters/"))
-            base = join(ADAPTERS_SRC, spec.slice("@launchstack/adapters/".length));
+        else if (spec === "@launchstack/engine") base = join(ADAPTERS_SRC, "index");
+        else if (spec.startsWith("@launchstack/engine/"))
+            base = join(ADAPTERS_SRC, spec.slice("@launchstack/engine/".length));
         else if (spec.startsWith(".")) base = join(from, "..", spec);
         else return null;
 

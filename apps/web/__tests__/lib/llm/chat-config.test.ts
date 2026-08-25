@@ -6,7 +6,7 @@ import {
     listChatModelPresets,
     parseChatModelsYaml,
     type ChatEndpointConfig,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 
 const endpoint: ChatEndpointConfig = {
     baseUrl: "https://endpoint.example/v1",

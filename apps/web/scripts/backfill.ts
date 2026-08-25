@@ -14,8 +14,8 @@
 
 import "dotenv/config";
 
-import { createDb } from "@launchstack/core/db";
-import { backfillStatus, runBackfill } from "@launchstack/core/db/backfills";
+import { createDb } from "@launchstack/store/client";
+import { backfillStatus, runBackfill } from "@launchstack/store/backfills";
 
 import { BACKFILLS } from "../src/server/backfills";
 import { getEngine } from "../src/server/engine";

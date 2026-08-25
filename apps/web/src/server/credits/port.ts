@@ -9,7 +9,7 @@
  * unexpected throw surfaces as a warning rather than breaking the caller.
  */
 
-import type { CreditsPort, DebitInput } from "@launchstack/core/credits";
+import type { CreditsPort, DebitInput } from "@launchstack/store/credits";
 import { debitTokens } from "~/lib/credits";
 
 export function createAppCreditsPort(): CreditsPort {

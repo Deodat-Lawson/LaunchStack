@@ -17,7 +17,7 @@ import {
     verifySlackRequest,
     type AgentPersona,
     type SlackEventEnvelope,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const PM: AgentPersona = {
     id: "pm",

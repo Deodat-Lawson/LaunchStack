@@ -7,7 +7,7 @@
  * call would make them slow, costly and non-deterministic.
  */
 
-import type { EmailTemplate, TemplateReview } from "@launchstack/features/email-pipeline";
+import type { EmailTemplate, TemplateReview } from "@launchstack/pipelines/email";
 
 interface GeneratedTemplate {
     template: EmailTemplate;
@@ -20,10 +20,10 @@ interface GeneratedTemplate {
 const mockGenerateTemplate = jest.fn<Promise<GeneratedTemplate>, []>();
 const mockReviewTemplate = jest.fn<Promise<TemplateReview>, []>();
 
-jest.mock("@launchstack/features/email-pipeline/generator", () => ({
+jest.mock("@launchstack/pipelines/email/generator", () => ({
     generateTemplate: () => mockGenerateTemplate(),
 }));
-jest.mock("@launchstack/features/email-pipeline/reviewer", () => ({
+jest.mock("@launchstack/pipelines/email/reviewer", () => ({
     reviewTemplate: () => mockReviewTemplate(),
 }));
 
@@ -33,7 +33,7 @@ import {
     runAutomatedEmailCampaign,
     type AutomationPolicy,
     type SendAdapter,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import { createEmailPipelineTestDatabase, type EmailPipelineTestDatabase } from "./testDb";
 

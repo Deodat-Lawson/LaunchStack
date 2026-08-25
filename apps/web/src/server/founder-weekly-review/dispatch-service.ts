@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "~/server/db";
-import type { DbClient } from "@launchstack/core/db";
+import type { DbClient } from "@launchstack/store/client";
 import {
     founderWeeklyReviewDispatches,
     type FounderWeeklyReviewDispatchRow,
@@ -14,7 +14,7 @@ import {
     type ReportingPeriod,
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewCollectionInput,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 export type FounderWeeklyReviewDispatch = Pick<
     FounderWeeklyReviewDispatchRow,

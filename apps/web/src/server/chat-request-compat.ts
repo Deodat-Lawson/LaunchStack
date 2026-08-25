@@ -1,4 +1,4 @@
-import type { ResolvedChatModel } from "@launchstack/core/llm";
+import type { ResolvedChatModel } from "@launchstack/llm";
 
 export interface DeprecatedChatSelection {
     /** Pre-PR per-request provider selector. No longer meaningful. */

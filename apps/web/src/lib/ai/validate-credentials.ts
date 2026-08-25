@@ -1,4 +1,4 @@
-import type { EmbeddingIndexConfig, CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+import type { EmbeddingIndexConfig, CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 
 export interface CredentialCheckResult {
     ok: boolean;
@@ -23,7 +23,7 @@ export async function validateEmbeddingCredentials(
     // paid only when validation actually runs, which is rare (only when the
     // settings save was called with ?validate=true).
     const { createEmbeddingModel, resolveEmbeddingIndex } = await import(
-        "@launchstack/core/embeddings"
+        "@launchstack/llm/embeddings"
     );
 
     let index: EmbeddingIndexConfig;

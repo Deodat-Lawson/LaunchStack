@@ -10,7 +10,7 @@
 
 import { NextResponse } from "next/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import { z } from "zod";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";

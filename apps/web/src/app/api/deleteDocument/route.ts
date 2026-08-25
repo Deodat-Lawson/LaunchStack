@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../../server/db/index";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { deleteDocumentCore } from "~/server/services/document-delete";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";

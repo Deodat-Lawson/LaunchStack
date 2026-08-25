@@ -18,7 +18,7 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     agentAiChatbotChat: {
         id: "chat.id",
         userId: "chat.userId",

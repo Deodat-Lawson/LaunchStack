@@ -5,7 +5,7 @@
  * because it reads process.env at import time, which is apps/web policy.
  */
 
-export type { TokenService } from "@launchstack/core/credits";
+export type { TokenService } from "@launchstack/store/credits";
 export {
     TOKEN_COSTS,
     embeddingTokens,
@@ -14,7 +14,7 @@ export {
     estimateTranscriptionTokens,
     ocrTokens,
     ocrProviderToTokenKey,
-} from "@launchstack/core/credits";
+} from "@launchstack/store/credits";
 
 /** Default signup bonus: 10 million tokens */
 export const TOKEN_SIGNUP_BONUS = parseInt(process.env.TOKEN_SIGNUP_BONUS ?? "10000000", 10);

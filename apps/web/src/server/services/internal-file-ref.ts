@@ -13,12 +13,12 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/core/db/schema";
-import { isInternalFileUrl, parseInternalFileId as parseFileId } from "@launchstack/core/crypto";
-import { getOcrConfig } from "@launchstack/core/ocr/config";
-import type { OCRProvider } from "@launchstack/core/ocr/types";
+import { fileUploads } from "@launchstack/store/schema";
+import { isInternalFileUrl, parseInternalFileId as parseFileId } from "@launchstack/store/crypto";
+import { getOcrConfig } from "@launchstack/conversion/ocr/config";
+import type { OCRProvider } from "@launchstack/conversion/ocr/types";
 
-export { parseInternalFileId } from "@launchstack/core/crypto";
+export { parseInternalFileId } from "@launchstack/store/crypto";
 
 /** Fallback origin when APP_PUBLIC_URL is unset — the in-cluster app service. */
 const DEFAULT_APP_ORIGIN = "http://app:3000";

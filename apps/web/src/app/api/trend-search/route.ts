@@ -3,8 +3,8 @@ import type { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
 import { inngest } from "~/server/inngest/client";
-import { TrendSearchInputSchema } from "@launchstack/features/trend-search";
-import { createJob, getJobsByCompanyId } from "@launchstack/features/trend-search/db";
+import { TrendSearchInputSchema } from "@launchstack/pipelines/trend-search";
+import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/trend-search/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────

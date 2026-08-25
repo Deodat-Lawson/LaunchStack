@@ -4,8 +4,8 @@
  */
 
 import { POST } from "~/app/api/legal/apply-edits/route";
-import { processDocumentBatch, readDocx } from "@launchstack/features/adeu";
-import type { BatchSummary } from "@launchstack/features/adeu";
+import { processDocumentBatch, readDocx } from "@launchstack/editing";
+import type { BatchSummary } from "@launchstack/editing";
 
 const mockRequireWorkspaceContext = jest.fn();
 
@@ -14,7 +14,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
 }));
 
 // Mock Adeu client
-jest.mock("@launchstack/features/adeu", () => ({
+jest.mock("@launchstack/editing", () => ({
     processDocumentBatch: jest.fn(),
     readDocx: jest.fn(),
     AdeuServiceError: class AdeuServiceError extends Error {

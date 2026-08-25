@@ -28,7 +28,7 @@ import { and, asc, eq, isNotNull, sql } from "drizzle-orm";
 import DiffMatchPatch from "diff-match-patch";
 
 import { db } from "~/server/db";
-import { documentContextChunks } from "@launchstack/core/db/schema";
+import { documentContextChunks } from "@launchstack/store/schema";
 import { type NoteAnchor, type AnchorStatus } from "~/server/db/schema";
 import { documentNotes } from "~/server/db/schema";
 import { requestNoteEmbedding } from "./embed-note";

@@ -11,8 +11,8 @@
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import type { BaseMessage } from "@langchain/core/messages";
 
-import type { CollabChatFn, CollabChatMessage } from "@launchstack/core/collab";
-import { normalizeModelContent } from "@launchstack/core/llm";
+import type { CollabChatFn, CollabChatMessage } from "@launchstack/collab";
+import { normalizeModelContent } from "@launchstack/llm";
 import { resolveConfiguredChatModel } from "~/lib/models";
 
 function toLangChain(message: CollabChatMessage): BaseMessage {

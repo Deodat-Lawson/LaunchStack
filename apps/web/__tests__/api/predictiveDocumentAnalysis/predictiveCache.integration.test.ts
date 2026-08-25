@@ -118,13 +118,13 @@ jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
-import { createDb, type Db } from "@launchstack/core/db";
+import { createDb, type Db } from "@launchstack/store/client";
 import {
     company,
     document,
     documentContextChunks,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { POST as postPredictiveAnalysis } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as postPredictiveAnalysisStream } from "~/app/api/agents/predictive-document-analysis/stream/route";

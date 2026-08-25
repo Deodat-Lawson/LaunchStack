@@ -1,5 +1,5 @@
 import { GET } from "~/app/api/files/[id]/route";
-import { signFileAccessToken } from "@launchstack/core/crypto";
+import { signFileAccessToken } from "@launchstack/store/crypto";
 import type { WorkspaceContext, WorkspaceContextResult } from "~/lib/require-workspace-context";
 
 const SECRET = "route-file-access-secret";

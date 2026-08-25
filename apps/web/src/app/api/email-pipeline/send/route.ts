@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { runEmailCampaign, RecipientSchema } from "@launchstack/features/email-pipeline";
+import { runEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 import { resolveActor } from "../../email-campaigns/_lib/context";
 
 export const runtime = "nodejs";

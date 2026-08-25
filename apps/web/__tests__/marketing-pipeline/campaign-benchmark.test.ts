@@ -22,7 +22,7 @@ import {
     JUDGE_CRITERIA,
     type ReferencePlatform,
     type ScoredPost,
-} from "@launchstack/features/marketing-pipeline/benchmark";
+} from "@launchstack/pipelines/marketing/benchmark";
 
 const RUN = ["1", "true"].includes((process.env.RUN_LLM_BENCHMARK ?? "").toLowerCase());
 const suite = RUN ? describe : describe.skip;

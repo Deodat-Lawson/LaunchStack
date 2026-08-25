@@ -14,7 +14,7 @@ import {
     ScriptedAgentRuntime,
     signSlackRequest,
     type SlackChannelBridge,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const SIGNING_SECRET = "slack-signing-secret";
 const SLACK_CHANNEL = "C_PRICING";

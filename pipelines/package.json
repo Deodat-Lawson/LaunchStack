@@ -1,0 +1,210 @@
+{
+    "name": "@launchstack/pipelines",
+    "version": "0.1.0",
+    "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Nine verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, and the repo explainer.",
+    "license": "Apache-2.0",
+    "type": "module",
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./schema": "./src/schema.ts",
+        "./legal-templates": "./src/legal-templates/index.ts",
+        "./legal-templates/template-service": "./src/legal-templates/template-service.ts",
+        "./repo-explainer": "./src/repo-explainer/index.ts",
+        "./company-metadata": "./src/company-metadata/index.ts",
+        "./trend-search": "./src/trend-search/index.ts",
+        "./trend-search/db": "./src/trend-search/db.ts",
+        "./trend-search/run": "./src/trend-search/run.ts",
+        "./trend-search/web-search": "./src/trend-search/web-search.ts",
+        "./trend-search/cache": "./src/trend-search/cache.ts",
+        "./trend-search/synthesizer": "./src/trend-search/synthesizer.ts",
+        "./trend-search/query-planner": "./src/trend-search/query-planner.ts",
+        "./trend-search/providers/serper": "./src/trend-search/providers/serper.ts",
+        "./trend-search/providers/registry": "./src/trend-search/providers/registry.ts",
+        "./trend-search/providers/types": "./src/trend-search/providers/types.ts",
+        "./client-prospector": "./src/client-prospector/index.ts",
+        "./client-prospector/db": "./src/client-prospector/db.ts",
+        "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
+        "./marketing": "./src/marketing/index.ts",
+        "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
+        "./email": "./src/email/index.ts",
+        "./email/types": "./src/email/types.ts",
+        "./email/merge": "./src/email/merge.ts",
+        "./email/recipients": "./src/email/recipients.ts",
+        "./email/validators": "./src/email/validators.ts",
+        "./email/templates": "./src/email/templates.ts",
+        "./email/company-fields": "./src/email/company-fields.ts",
+        "./email/send": "./src/email/send.ts",
+        "./connectors": "./src/connectors/index.ts",
+        "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./schema": {
+                "types": "./dist/schema.d.ts",
+                "default": "./dist/schema.js"
+            },
+            "./legal-templates": {
+                "types": "./dist/legal-templates/index.d.ts",
+                "default": "./dist/legal-templates/index.js"
+            },
+            "./legal-templates/template-service": {
+                "types": "./dist/legal-templates/template-service.d.ts",
+                "default": "./dist/legal-templates/template-service.js"
+            },
+            "./repo-explainer": {
+                "types": "./dist/repo-explainer/index.d.ts",
+                "default": "./dist/repo-explainer/index.js"
+            },
+            "./company-metadata": {
+                "types": "./dist/company-metadata/index.d.ts",
+                "default": "./dist/company-metadata/index.js"
+            },
+            "./trend-search": {
+                "types": "./dist/trend-search/index.d.ts",
+                "default": "./dist/trend-search/index.js"
+            },
+            "./trend-search/db": {
+                "types": "./dist/trend-search/db.d.ts",
+                "default": "./dist/trend-search/db.js"
+            },
+            "./trend-search/run": {
+                "types": "./dist/trend-search/run.d.ts",
+                "default": "./dist/trend-search/run.js"
+            },
+            "./trend-search/web-search": {
+                "types": "./dist/trend-search/web-search.d.ts",
+                "default": "./dist/trend-search/web-search.js"
+            },
+            "./trend-search/cache": {
+                "types": "./dist/trend-search/cache.d.ts",
+                "default": "./dist/trend-search/cache.js"
+            },
+            "./trend-search/synthesizer": {
+                "types": "./dist/trend-search/synthesizer.d.ts",
+                "default": "./dist/trend-search/synthesizer.js"
+            },
+            "./trend-search/query-planner": {
+                "types": "./dist/trend-search/query-planner.d.ts",
+                "default": "./dist/trend-search/query-planner.js"
+            },
+            "./trend-search/providers/serper": {
+                "types": "./dist/trend-search/providers/serper.d.ts",
+                "default": "./dist/trend-search/providers/serper.js"
+            },
+            "./trend-search/providers/registry": {
+                "types": "./dist/trend-search/providers/registry.d.ts",
+                "default": "./dist/trend-search/providers/registry.js"
+            },
+            "./trend-search/providers/types": {
+                "types": "./dist/trend-search/providers/types.d.ts",
+                "default": "./dist/trend-search/providers/types.js"
+            },
+            "./client-prospector": {
+                "types": "./dist/client-prospector/index.d.ts",
+                "default": "./dist/client-prospector/index.js"
+            },
+            "./client-prospector/db": {
+                "types": "./dist/client-prospector/db.d.ts",
+                "default": "./dist/client-prospector/db.js"
+            },
+            "./founder-weekly-review": {
+                "types": "./dist/founder-weekly-review/index.d.ts",
+                "default": "./dist/founder-weekly-review/index.js"
+            },
+            "./marketing": {
+                "types": "./dist/marketing/index.d.ts",
+                "default": "./dist/marketing/index.js"
+            },
+            "./marketing/benchmark": {
+                "types": "./dist/marketing/benchmark/index.d.ts",
+                "default": "./dist/marketing/benchmark/index.js"
+            },
+            "./email": {
+                "types": "./dist/email/index.d.ts",
+                "default": "./dist/email/index.js"
+            },
+            "./email/types": {
+                "types": "./dist/email/types.d.ts",
+                "default": "./dist/email/types.js"
+            },
+            "./email/merge": {
+                "types": "./dist/email/merge.d.ts",
+                "default": "./dist/email/merge.js"
+            },
+            "./email/recipients": {
+                "types": "./dist/email/recipients.d.ts",
+                "default": "./dist/email/recipients.js"
+            },
+            "./email/validators": {
+                "types": "./dist/email/validators.d.ts",
+                "default": "./dist/email/validators.js"
+            },
+            "./email/templates": {
+                "types": "./dist/email/templates.d.ts",
+                "default": "./dist/email/templates.js"
+            },
+            "./email/company-fields": {
+                "types": "./dist/email/company-fields.d.ts",
+                "default": "./dist/email/company-fields.js"
+            },
+            "./email/send": {
+                "types": "./dist/email/send.d.ts",
+                "default": "./dist/email/send.js"
+            },
+            "./connectors": {
+                "types": "./dist/connectors/index.d.ts",
+                "default": "./dist/connectors/index.js"
+            },
+            "./connectors/agent-knowledge": {
+                "types": "./dist/connectors/agent-knowledge/index.d.ts",
+                "default": "./dist/connectors/agent-knowledge/index.js"
+            },
+            "./package.json": "./package.json"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@launchstack/runtime": "workspace:^",
+        "@launchstack/store": "workspace:^",
+        "@launchstack/llm": "workspace:^",
+        "@launchstack/conversion": "workspace:^",
+        "@launchstack/indexing": "workspace:^",
+        "@launchstack/search": "workspace:^",
+        "@launchstack/orchestration": "workspace:^",
+        "@launchstack/editing": "workspace:^",
+        "@launchstack/engine": "workspace:^",
+        "@langchain/core": "^0.3.74",
+        "@langchain/openai": "^0.6.11",
+        "dayjs": "^1.11.18",
+        "docxtemplater": "^3.68.3",
+        "drizzle-orm": "^0.45.1",
+        "openai": "^4.62.1",
+        "pizzip": "^3.2.0",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5"
+    }
+}

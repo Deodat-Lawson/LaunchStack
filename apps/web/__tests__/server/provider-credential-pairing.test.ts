@@ -9,9 +9,9 @@
  * with nothing at all.
  */
 
-import { configureProviders, resolveEndpoint } from "@launchstack/core/providers/registry";
-import { configureAuxiliaryOpenAI, getOpenAIClient } from "@launchstack/core/llm";
-import { GEMINI_BASE_URL } from "@launchstack/core/llm/types";
+import { configureProviders, resolveEndpoint } from "@launchstack/llm/providers/registry";
+import { configureAuxiliaryOpenAI, getOpenAIClient } from "@launchstack/llm";
+import { GEMINI_BASE_URL } from "@launchstack/llm/types";
 
 const OPENAI_KEY = "sk-proj-not-a-real-key";
 const GOOGLE_KEY = "AIza-not-a-real-key";
@@ -126,7 +126,7 @@ describe("the unpaired resolvers are gone", () => {
         // resolveBaseUrl/resolveApiKey resolved independently, which is exactly how
         // a key reached a service it did not belong to. Deleted rather than fixed,
         // so no future caller can reintroduce the split.
-        const registry = await import("@launchstack/core/providers/registry");
+        const registry = await import("@launchstack/llm/providers/registry");
 
         expect("resolveBaseUrl" in registry).toBe(false);
         expect("resolveApiKey" in registry).toBe(false);

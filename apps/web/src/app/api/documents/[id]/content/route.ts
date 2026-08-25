@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isS3Storage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

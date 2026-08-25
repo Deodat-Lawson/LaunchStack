@@ -3,7 +3,7 @@
  * {"level","time","msg",...fields}. Matches the LoggerPort shape the
  * application layer expects, so the same instance threads everywhere.
  */
-import type { LoggerPort } from "@launchstack/application";
+import type { LoggerPort } from "@launchstack/runtime";
 
 type Level = "debug" | "info" | "warn" | "error";
 

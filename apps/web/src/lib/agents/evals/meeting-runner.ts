@@ -17,7 +17,7 @@ import {
     summarizeMeetingEvals,
     type MeetingEvalResult,
     type MeetingEvalSuiteReport,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 import { MEETING_EVAL_SCENARIOS, type MeetingEvalScenario } from "./meeting-scenarios";
 

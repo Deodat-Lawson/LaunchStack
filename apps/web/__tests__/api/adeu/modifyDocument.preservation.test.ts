@@ -25,7 +25,7 @@ jest.mock("~/server/storage/vercel-blob", () => ({
     putFile: jest.fn(),
 }));
 
-jest.mock("@launchstack/features/adeu", () => ({
+jest.mock("@launchstack/editing", () => ({
     processDocumentBatch: jest.fn(),
     AdeuServiceError: class AdeuServiceError extends Error {
         statusCode: number;
@@ -42,7 +42,7 @@ jest.mock("@launchstack/features/adeu", () => ({
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
-import { processDocumentBatch } from "@launchstack/features/adeu";
+import { processDocumentBatch } from "@launchstack/editing";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -370,7 +370,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
     it("returns validation error without throwing on 422", async () => {
         const docBuffer = makeSmallDocxBuffer();
         const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-            "@launchstack/features/adeu"
+            "@launchstack/editing"
         );
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({
@@ -417,7 +417,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
     it("throws on 500 to allow Inngest retry", async () => {
         const docBuffer = makeSmallDocxBuffer();
         const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock(
-            "@launchstack/features/adeu"
+            "@launchstack/editing"
         );
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({

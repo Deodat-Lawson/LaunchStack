@@ -9,8 +9,8 @@ import {
     listSendAttempts,
     upsertRecipients,
     type SendAdapter,
-} from "@launchstack/features/email-pipeline";
-import { emailSendAttempts, emailSends } from "@launchstack/features/schema";
+} from "@launchstack/pipelines/email";
+import { emailSendAttempts, emailSends } from "@launchstack/pipelines/schema";
 
 import { createEmailPipelineTestDatabase, type EmailPipelineTestDatabase } from "./testDb";
 

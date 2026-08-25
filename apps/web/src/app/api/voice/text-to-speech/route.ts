@@ -4,7 +4,7 @@ import {
     CLOUD_TTS_DEFAULT_VOICE,
     CLOUD_TTS_ENDPOINT,
     CLOUD_TTS_MAX_INPUT_BYTES,
-} from "@launchstack/core/llm/types";
+} from "@launchstack/llm/types";
 import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

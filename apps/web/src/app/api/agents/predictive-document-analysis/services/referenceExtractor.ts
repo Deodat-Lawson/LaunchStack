@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import type {
     PdfChunk,
     DocumentReference,

@@ -10,7 +10,7 @@ const useStandalone = process.env.STANDALONE_BUILD === "1" || process.platform !
 const config: NextConfig = {
     // Standalone output for Docker deployment (smaller production image).
     // outputFileTracingRoot pins the workspace root so Next traces workspace
-    // packages (@launchstack/core, @launchstack/features) into the standalone
+    // packages (@launchstack/engine, @launchstack/pipelines) into the standalone
     // bundle instead of inferring the root and emitting noisy warnings.
     output: useStandalone ? "standalone" : undefined,
     outputFileTracingRoot: useStandalone ? path.join(__dirname, "../../") : undefined,
@@ -28,12 +28,18 @@ const config: NextConfig = {
 
     // Workspace packages ship raw TypeScript; Next's SWC transpiles on demand.
     transpilePackages: [
-        "@launchstack/core",
-        "@launchstack/features",
-        "@launchstack/protocol",
+        "@launchstack/engine",
+        "@launchstack/runtime",
+        "@launchstack/store",
+        "@launchstack/llm",
+        "@launchstack/conversion",
+        "@launchstack/indexing",
+        "@launchstack/search",
+        "@launchstack/orchestration",
+        "@launchstack/collab",
+        "@launchstack/editing",
         "@launchstack/evidence",
-        "@launchstack/application",
-        "@launchstack/adapters",
+        "@launchstack/pipelines",
     ],
 
     // Production builds fail on type errors (ADR-006). Lint runs as its own
@@ -122,7 +128,7 @@ const config: NextConfig = {
     // the files into the standalone output explicitly.
     outputFileTracingIncludes: {
         "/api/marketing-pipeline/evaluate": [
-            "../../packages/features/src/marketing-pipeline/benchmark/references/**",
+            "../../pipelines/src/marketing/benchmark/references/**",
         ],
     },
 

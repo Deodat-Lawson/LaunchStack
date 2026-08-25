@@ -24,7 +24,7 @@ jest.mock("~/server/db/index", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/embeddings", () => ({
+jest.mock("@launchstack/llm/embeddings", () => ({
     getCompanyCredentialsPlaintext: jest.fn(),
     upsertCompanyCredentials: jest.fn(),
     beginReindex: jest.fn(),

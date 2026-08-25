@@ -8,7 +8,7 @@ import {
     extractSummary,
     type RepoInfo,
     type RepoExplanationRequest,
-} from "@launchstack/features/repo-explainer";
+} from "@launchstack/pipelines/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {

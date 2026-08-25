@@ -1,18 +1,18 @@
 import { and, asc, eq, sql } from "drizzle-orm";
-import { getDb, type DbClient } from "@launchstack/core/db";
+import { getDb, type DbClient } from "@launchstack/store/client";
 import {
     createEmbeddingModel,
     resolveEmbeddingIndex,
     type EmbeddingsProvider,
-} from "@launchstack/core/embeddings";
-import { document, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
+} from "@launchstack/llm/embeddings";
+import { document, documentContextChunks, documentStructure } from "@launchstack/store/schema";
 import {
     MAX_WORKSPACE_RETRIEVAL_CANDIDATES,
     normalizeFounderContextRetrievalQuery,
     type WorkspaceDocumentHit,
     type WorkspaceDocumentRetrievalInput,
     type WorkspaceDocumentRetrievalResult,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 export interface FounderWeeklyReviewWorkspaceDocumentStore {
     retrieveRelevantCurrentDocumentChunks(

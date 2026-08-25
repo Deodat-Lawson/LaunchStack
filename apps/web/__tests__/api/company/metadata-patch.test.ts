@@ -14,7 +14,7 @@
 import { PATCH } from "~/app/api/company/metadata/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
-import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
+import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
 
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");

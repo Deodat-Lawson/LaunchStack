@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import { sql } from "drizzle-orm";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import {
     FounderWeeklyReviewConflictError,
     FounderWeeklyReviewEvidenceSnapshotSchema,
@@ -14,7 +14,7 @@ import {
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewPayload,
     type FounderWeeklyReviewV2Payload,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 

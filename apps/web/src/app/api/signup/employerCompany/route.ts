@@ -1,11 +1,11 @@
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
-import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
+import { upsertCompanyCredentials } from "@launchstack/llm/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 

@@ -4,7 +4,7 @@ import {
     listCampaigns,
     prepareEmailCampaign,
     RecipientSchema,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, readJson, resolveActor } from "./_lib/context";
 

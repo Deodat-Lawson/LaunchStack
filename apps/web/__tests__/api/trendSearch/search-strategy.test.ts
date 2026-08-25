@@ -4,8 +4,8 @@
  * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 4.3, 6.1, 6.2
  */
 
-import { executeSearch } from "@launchstack/features/trend-search/web-search";
-import type { PlannedQuery } from "@launchstack/features/trend-search";
+import { executeSearch } from "@launchstack/pipelines/trend-search/web-search";
+import type { PlannedQuery } from "@launchstack/pipelines/trend-search";
 
 const EXA_URL = "https://api.exa.ai/search";
 const SERPER_URL = "https://google.serper.dev/news";

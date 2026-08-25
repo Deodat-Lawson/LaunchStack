@@ -3,7 +3,7 @@ import { and, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { uploadBatchFiles } from "@launchstack/core/db/schema";
+import { uploadBatchFiles } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

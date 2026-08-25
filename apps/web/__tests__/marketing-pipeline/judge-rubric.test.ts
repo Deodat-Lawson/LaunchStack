@@ -6,7 +6,7 @@
 import {
     JUDGE_CRITERIA,
     JudgeResultSchema,
-} from "@launchstack/features/marketing-pipeline/benchmark";
+} from "@launchstack/pipelines/marketing/benchmark";
 
 function fullScores() {
     return JUDGE_CRITERIA.map(criterion => ({

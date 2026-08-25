@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { CheckCircle, Clock, XCircle, Pencil, FileText } from "lucide-react";
 import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
 import m from "./metadata.module.css";
-import type { ServiceEntry, MetadataFact } from "@launchstack/features/company-metadata";
+import type { ServiceEntry, MetadataFact } from "@launchstack/pipelines/company-metadata";
 
 interface ServicesSectionProps {
     services: ServiceEntry[];

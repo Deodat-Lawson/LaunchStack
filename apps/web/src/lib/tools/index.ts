@@ -3,6 +3,6 @@ export {
     type DocIngestionToolInput,
     type DocIngestionToolResult,
     type DocIngestionToolRuntimeOptions,
-} from "@launchstack/features/doc-ingestion";
+} from "@launchstack/indexing/doc-ingestion";
 
 export * from "./rag";

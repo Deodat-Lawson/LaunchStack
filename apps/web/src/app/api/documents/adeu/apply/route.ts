@@ -25,10 +25,10 @@ import {
     rejectAllChanges,
     type DocumentEdit,
     type ReviewAction,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 import { eq } from "drizzle-orm";
 
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";

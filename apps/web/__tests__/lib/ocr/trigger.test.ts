@@ -1,4 +1,4 @@
-import { parseProvider } from "@launchstack/core/ocr/trigger";
+import { parseProvider } from "@launchstack/conversion/ocr/trigger";
 
 describe("parseProvider", () => {
     it.each(["DOCLING", "docling"])("accepts OSS provider override %s", provider => {

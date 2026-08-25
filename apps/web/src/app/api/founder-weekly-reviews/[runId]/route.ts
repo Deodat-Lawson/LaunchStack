@@ -1,4 +1,4 @@
-import { FounderWeeklyReviewUserService } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewUserService } from "@launchstack/pipelines/founder-weekly-review";
 import { productionFounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import { createFounderWeeklyReviewGetHandler } from "./get-handler";
 

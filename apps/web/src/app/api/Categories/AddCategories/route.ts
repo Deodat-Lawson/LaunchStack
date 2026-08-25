@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { category } from "@launchstack/core/db/schema";
+import { category } from "@launchstack/store/schema";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";

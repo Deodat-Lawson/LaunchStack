@@ -1,4 +1,4 @@
-import type { MeteringMode } from "@launchstack/core/credits";
+import type { MeteringMode } from "@launchstack/store/credits";
 import { env } from "~/env";
 
 /**

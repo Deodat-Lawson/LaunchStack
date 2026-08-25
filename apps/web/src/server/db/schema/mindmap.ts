@@ -13,8 +13,8 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import { company } from "@launchstack/core/db/schema";
-import { pgTable } from "@launchstack/core/db/schema/helpers";
+import { company } from "@launchstack/store/schema";
+import { pgTable } from "@launchstack/store/schema/helpers";
 
 /**
  * Mindmap — the diagramming app.

@@ -2,8 +2,8 @@ import { writeFileSync } from "node:fs";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { ChatConfigurationError } from "@launchstack/core/llm";
-import { GEMINI_BASE_URL } from "@launchstack/core/llm/types";
+import { ChatConfigurationError } from "@launchstack/llm";
+import { GEMINI_BASE_URL } from "@launchstack/llm/types";
 import {
     getAppChatModelsConfig,
     resetAppChatModelsCache,

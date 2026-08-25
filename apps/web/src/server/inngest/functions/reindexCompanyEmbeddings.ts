@@ -19,16 +19,16 @@ import { T } from "~/server/db/tables";
 
 import { inngest } from "../client";
 import { db } from "~/server/db";
-import { company, document, documentRetrievalChunks } from "@launchstack/core/db/schema";
+import { company, document, documentRetrievalChunks } from "@launchstack/store/schema";
 import {
     resolveEmbeddingIndex,
     isLegacyEmbeddingIndex,
     type EmbeddingIndexConfig,
-} from "@launchstack/core/embeddings";
-import { createEmbeddingModel } from "@launchstack/core/embeddings";
-import { storeDimensionTableEmbeddings } from "@launchstack/core/embeddings";
-import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
-import { completeReindex, failReindex } from "@launchstack/core/embeddings";
+} from "@launchstack/llm/embeddings";
+import { createEmbeddingModel } from "@launchstack/llm/embeddings";
+import { storeDimensionTableEmbeddings } from "@launchstack/llm/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
+import { completeReindex, failReindex } from "@launchstack/llm/embeddings";
 
 const BATCH_SIZE = 64;
 

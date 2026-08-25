@@ -49,7 +49,7 @@ class HuggingFaceEmbeddings implements EmbeddingsProvider {
                 );
             }
 
-            const data = (await response.json()) as unknown;
+            const data: unknown = await response.json();
             if (!Array.isArray(data) || !data.every(value => typeof value === "number")) {
                 throw new Error("Hugging Face embeddings response was not a number vector");
             }

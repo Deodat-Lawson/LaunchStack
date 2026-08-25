@@ -73,6 +73,8 @@ scripts/ops/start-database.sh
 # Workspace package build outputs (rebuilt inside container)
 packages/*/dist
 packages/*/.tsbuildinfo
+pipelines/dist
+pipelines/.tsbuildinfo
 
 # Services with their own build contexts
 services

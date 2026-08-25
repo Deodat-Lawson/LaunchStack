@@ -21,16 +21,16 @@ if (!DATABASE_URL) {
 const TIMEOUT_MS = Number(process.env.E2E_TIMEOUT_MS ?? 180_000);
 
 const { createDb, configureDatabase } = await import(
-  "../../packages/core/src/db/index.ts"
+  "../../packages/store/src/db/index.ts"
 );
 const { createDocumentLifecycle } = await import(
-  "../../packages/adapters/src/ingestion/source-lifecycle.ts"
+  "../../packages/orchestration/src/source-lifecycle/lifecycle.ts"
 );
 const { createCompanyBM25Retriever } = await import(
-  "../../packages/core/src/rag/retrievers/bm25-retriever.ts"
+  "../../packages/search/src/retrievers/bm25-retriever.ts"
 );
 const { buildCitations } = await import(
-  "../../packages/application/src/citations.ts"
+  "../../packages/search/src/citation-builder.ts"
 );
 
 const handle = createDb({ url: DATABASE_URL });

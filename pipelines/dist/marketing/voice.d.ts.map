@@ -1,0 +1,1 @@
+{"version":3,"file":"voice.d.ts","sourceRoot":"","sources":["../../src/marketing/voice.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,UAAU,EAAE,cAAc,EAAE,MAAM,SAAS,CAAC;AAG1D,wBAAsB,iBAAiB,CAAC,IAAI,EAAE;IAC1C,SAAS,EAAE,MAAM,CAAC;IAClB,YAAY,CAAC,EAAE,cAAc,CAAC;CACjC,GAAG,OAAO,CAAC,UAAU,CAAC,CA2CtB"}

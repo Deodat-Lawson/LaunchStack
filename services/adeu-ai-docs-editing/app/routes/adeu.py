@@ -19,7 +19,7 @@ which forced one full document round trip *per edit* to re-read the text it
 needed. Doing it here — where the document is already parsed — collapses a
 batch of N edits back into a single call.
 
-Wire formats: the v1 shapes stay frozen (packages/protocol/schemas/v1/
+Wire formats: the v1 shapes stay frozen (packages/schema-generator/schemas/v1/
 document-editor.*.schema.json, tests/test_contract.py). Everything else is
 additive.
 """

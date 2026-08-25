@@ -79,28 +79,27 @@ jobs:
       - name: Typecheck (all workspace packages, worker included)
         run: pnpm typecheck
 
-      # @launchstack/core is a compatibility facade (ADR-002): its src may
-      # contain nothing but re-exports of the layered engine packages.
-      - name: Core facade check
-        run: node scripts/ci/check-core-facade.mjs
+      # Contracts live inside their features (ADR-008); the schema generator
+      # emits the one bundle the Python services test against.
+      - name: Generated wire schemas match the zod source
+        run: pnpm --filter @launchstack/schema-generator schemas:check
 
-      - name: Generated protocol schemas match the zod source
-        run: pnpm --filter @launchstack/protocol schemas:check
-
-      - name: Engine package unit + contract tests
+      - name: Feature package unit + contract tests
         run: >-
-          pnpm --filter @launchstack/protocol
-          --filter @launchstack/evidence
-          --filter @launchstack/application
+          pnpm --filter @launchstack/evidence
+          --filter @launchstack/conversion
+          --filter @launchstack/search
           --filter @launchstack/worker test
 
       # Includes the outbox + lifecycle integration tests against the real
       # migrated database above (replay, retry/backoff, dead-letter,
       # supersession, stale-claim reclaim).
-      - name: Adapter tests (integration, real Postgres)
+      - name: Orchestration + indexing tests (integration, real Postgres)
         env:
           TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
-        run: pnpm --filter @launchstack/adapters test
+        run: >-
+          pnpm --filter @launchstack/orchestration
+          --filter @launchstack/indexing test
 
       # Blocking and complete (ADR-006): the nine formerly-excluded legacy
       # suites are fixed and run with everything else.
@@ -240,21 +239,21 @@ jobs:
 
       - name: Journal and snapshot integrity
         run: |
-          pnpm --filter @launchstack/core db:check
+          pnpm --filter @launchstack/store db:check
           pnpm --filter @launchstack/web exec drizzle-kit check
-          node packages/core/scripts/check-journal.mjs --set=product
+          node packages/store/scripts/check-journal.mjs --set=product
 
       - name: Regenerate and assert no diff
         run: |
-          pnpm --filter @launchstack/core exec drizzle-kit generate --name=ci_drift_probe
+          pnpm --filter @launchstack/store exec drizzle-kit generate --name=ci_drift_probe
           pnpm --filter @launchstack/web exec drizzle-kit generate --name=ci_drift_probe
           # --porcelain, not `git diff`: drift shows up as an UNTRACKED .sql
           # file, which `git diff` would not report.
-          if [ -n "$(git status --porcelain -- packages/core/drizzle apps/web/drizzle)" ]; then
+          if [ -n "$(git status --porcelain -- packages/store/drizzle apps/web/drizzle)" ]; then
             echo "::error::The TypeScript schema and the committed migrations disagree."
-            echo "Run: pnpm --filter @launchstack/core db:generate --name=<describe-your-change>"
-            git status --porcelain -- packages/core/drizzle apps/web/drizzle
-            git --no-pager diff -- packages/core/drizzle apps/web/drizzle
+            echo "Run: pnpm --filter @launchstack/store db:generate --name=<describe-your-change>"
+            git status --porcelain -- packages/store/drizzle apps/web/drizzle
+            git --no-pager diff -- packages/store/drizzle apps/web/drizzle
             exit 1
           fi
 
@@ -274,7 +273,7 @@ jobs:
           # checkout was shallow, the base commit was absent, `git diff` died,
           # and the empty result meant the loop inspected nothing while the step
           # reported success. Both gates below were silently vacuous.
-          if ! changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' 'apps/web/drizzle/*.sql'); then
+          if ! changed=$(git diff --name-only "$base"...HEAD -- 'packages/store/drizzle/*.sql' 'apps/web/drizzle/*.sql'); then
             echo "::error::Could not diff migrations against $base. The gate cannot run, so it fails."
             exit 1
           fi
@@ -300,7 +299,7 @@ jobs:
       - name: Ban drizzle-kit push on deploy paths
         run: node scripts/ci/check-no-push.mjs
 
-      # @launchstack/core is published: `packages/core/drizzle` must build a
+      # @launchstack/store is published: `packages/store/drizzle` must build a
       # working database on its own, which holds only while no engine table
       # references a product table.
       - name: Engine/product schema boundary
@@ -347,12 +346,12 @@ jobs:
           done
 
       # The engine set must stand alone: that is what an open-source consumer
-      # embedding @launchstack/core applies, without any product tables.
+      # embedding @launchstack/store applies, without any product tables.
       - name: Engine migrations alone build a usable database
         run: |
           psql "$PGURL/postgres" -c "CREATE DATABASE ls_engine_only"
-          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/core db:migrate
-          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/core db:verify
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/store db:migrate
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/store db:verify
           dangling=$(psql "$PGURL/ls_engine_only" -tAc "SELECT count(*) FROM pg_constraint c WHERE c.contype='f' AND NOT EXISTS (SELECT 1 FROM pg_class t WHERE t.oid=c.confrelid)")
           [ "$dangling" = "0" ] || { echo "::error::engine schema has $dangling dangling FK(s)"; exit 1; }
 
@@ -379,7 +378,7 @@ jobs:
           # Both configs push into the same empty database: engine tables first
           # so the product config's foreign keys resolve.
           DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
-            pnpm --filter @launchstack/core exec drizzle-kit push --force
+            pnpm --filter @launchstack/store exec drizzle-kit push --force
           DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
             pnpm --filter @launchstack/web exec drizzle-kit push --force
 
@@ -397,8 +396,8 @@ jobs:
           dump ls_push  > /tmp/from_typescript.sql
           if ! diff -u /tmp/from_migrations.sql /tmp/from_typescript.sql > /tmp/drift.diff; then
             echo "::error::Migrations do not reproduce the TypeScript schema."
-            echo "  left  = built from packages/core/drizzle"
-            echo "  right = built from packages/core/src/db/schema.ts"
+            echo "  left  = built from packages/store/drizzle"
+            echo "  right = built from packages/store/src/db/schema.ts"
             cat /tmp/drift.diff
             exit 1
           fi
@@ -444,22 +443,22 @@ jobs:
       - name: Apply the previous release's migrations, then HEAD's on top
         run: |
           TAG=$(git tag --list 'v*' --sort=-v:refname | head -n1)
-          if [ -z "$TAG" ] || ! git cat-file -e "$TAG:packages/core/drizzle" 2>/dev/null; then
-            echo "No prior tag carrying packages/core/drizzle — skipping."
+          if [ -z "$TAG" ] || ! git cat-file -e "$TAG:packages/store/drizzle" 2>/dev/null; then
+            echo "No prior tag carrying packages/store/drizzle — skipping."
             echo "This job becomes meaningful once a release is tagged after the squash."
             exit 0
           fi
           echo "upgrading from $TAG"
           psql "$PGURL/postgres" -c "CREATE DATABASE ls_upgrade"
           rm -rf /tmp/prev && mkdir -p /tmp/prev
-          git archive "$TAG" packages/core/drizzle packages/core/scripts apps/web/drizzle \
+          git archive "$TAG" packages/store/drizzle packages/store/scripts apps/web/drizzle \
             | tar -x -C /tmp/prev
 
           # Previous release, both sets — engine first.
-          DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/core/scripts/migrate.mjs
+          DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/store/scripts/migrate.mjs
           if [ -d /tmp/prev/apps/web/drizzle ]; then
             DATABASE_URL="$PGURL/ls_upgrade" \
-              node /tmp/prev/packages/core/scripts/migrate.mjs --set=product
+              node /tmp/prev/packages/store/scripts/migrate.mjs --set=product
           fi
           # Then HEAD's, both sets.
           DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:migrate
@@ -522,10 +521,5 @@ jobs:
       - name: Build web app
         run: pnpm --filter @launchstack/web build
 
-      - name: Build publishable engine packages
-        run: >-
-          pnpm --filter @launchstack/protocol
-          --filter @launchstack/evidence
-          --filter @launchstack/application
-          --filter @launchstack/adapters
-          --filter @launchstack/core build
+      - name: Build publishable packages
+        run: pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build

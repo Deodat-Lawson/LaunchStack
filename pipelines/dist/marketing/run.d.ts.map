@@ -1,0 +1,1 @@
+{"version":3,"file":"run.d.ts","sourceRoot":"","sources":["../../src/marketing/run.ts"],"names":[],"mappings":"AAYA,OAAO,KAAK,EACR,sBAAsB,EACtB,uBAAuB,EAEvB,kBAAkB,EAMrB,MAAM,SAAS,CAAC;AA+CjB,wBAAsB,oBAAoB,CAAC,IAAI,EAAE;IAC7C,SAAS,EAAE,MAAM,CAAC;IAClB,KAAK,EAAE,sBAAsB,CAAC;IAC9B,KAAK,CAAC,EAAE,OAAO,CAAC;IAChB,UAAU,CAAC,EAAE,kBAAkB,CAAC;CACnC,GAAG,OAAO,CAAC,uBAAuB,CAAC,CAgenC"}

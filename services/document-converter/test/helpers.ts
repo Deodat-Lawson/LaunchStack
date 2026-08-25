@@ -109,7 +109,7 @@ export function forbiddenFetch(
 
 const schemaPath = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
-    "../../../packages/protocol/schemas/v1/evidence-document.schema.json"
+    "../../../packages/schema-generator/schemas/v1/evidence-document.schema.json"
 );
 
 const ajv = new Ajv({ strict: false, allErrors: true });

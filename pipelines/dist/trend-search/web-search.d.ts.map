@@ -1,0 +1,1 @@
+{"version":3,"file":"web-search.d.ts","sourceRoot":"","sources":["../../src/trend-search/web-search.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,YAAY,EAAmB,MAAM,SAAS,CAAC;AAE7D,OAAO,KAAK,EACR,gBAAgB,EAChB,qBAAqB,EAGxB,MAAM,mBAAmB,CAAC;AA+F3B,wBAAsB,aAAa,CAC/B,UAAU,EAAE,YAAY,EAAE,EAC1B,gBAAgB,CAAC,EAAE,gBAAgB,GACpC,OAAO,CAAC,qBAAqB,CAAC,CA2HhC"}

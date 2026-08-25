@@ -18,17 +18,26 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .pnpmfile.cjs ./
 COPY patches ./patches
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/worker/package.json ./apps/worker/package.json
-COPY packages/core/package.json ./packages/core/package.json
-COPY packages/features/package.json ./packages/features/package.json
-COPY packages/protocol/package.json ./packages/protocol/package.json
-COPY packages/evidence/package.json ./packages/evidence/package.json
-COPY packages/application/package.json ./packages/application/package.json
-COPY packages/adapters/package.json ./packages/adapters/package.json
+COPY packages/runtime/package.json ./packages/runtime/
+COPY packages/evidence/package.json ./packages/evidence/
+COPY packages/store/package.json ./packages/store/
+COPY packages/llm/package.json ./packages/llm/
+COPY packages/conversion/package.json ./packages/conversion/
+COPY packages/indexing/package.json ./packages/indexing/
+COPY packages/search/package.json ./packages/search/
+COPY packages/orchestration/package.json ./packages/orchestration/
+COPY packages/editing/package.json ./packages/editing/
+COPY packages/collab/package.json ./packages/collab/
+COPY packages/engine/package.json ./packages/engine/
+COPY packages/schema-generator/package.json ./packages/schema-generator/
+COPY packages/design-tokens/package.json ./packages/design-tokens/
+COPY pipelines/package.json ./pipelines/
 
 RUN pnpm install --frozen-lockfile
 
 COPY tsconfig.base.json ./
 COPY packages ./packages
+COPY pipelines ./pipelines
 COPY apps/web ./apps/web
 COPY apps/worker ./apps/worker
 

@@ -1,45 +1,45 @@
 {
-  "name": "launchstack",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "description": "Launchstack monorepo root. This is a workspace, not an application — it holds no app code and runs no server. Target a package explicitly: pnpm --filter @launchstack/web dev. See REPOSITORY.md. `build`, `build:landing` and `db:migrate` are convenience aliases that delegate to @launchstack/web or @launchstack/landing; everything else lives in the package that owns it.",
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "pnpm --filter @launchstack/web build",
-    "build:landing": "pnpm --filter @launchstack/landing build",
-    "db:migrate": "pnpm --filter @launchstack/web db:migrate",
-    "check": "eslint . && pnpm -r typecheck",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "typecheck": "pnpm -r typecheck",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "postinstall": "echo 'postinstall: no-op'",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "release": "pnpm --filter @launchstack/protocol --filter @launchstack/evidence --filter @launchstack/application --filter @launchstack/adapters --filter @launchstack/core build && changeset publish"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.31.0",
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.35.0",
-    "@types/eslint": "^9.6.1",
-    "@types/node": "^24.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.42.0",
-    "@typescript-eslint/parser": "^8.42.0",
-    "eslint": "^9.34.0",
-    "eslint-config-next": "^15.5.2",
-    "eslint-plugin-drizzle": "^0.2.3",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.2"
-  },
-  "packageManager": "pnpm@10.15.1",
-  "pnpm": {
-    "patchedDependencies": {
-      "drizzle-kit@0.31.10": "patches/drizzle-kit@0.31.10.patch"
+    "name": "launchstack",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Launchstack monorepo root. This is a workspace, not an application \u2014 it holds no app code and runs no server. Target a package explicitly: pnpm --filter @launchstack/web dev. See REPOSITORY.md. `build`, `build:landing` and `db:migrate` are convenience aliases that delegate to @launchstack/web or @launchstack/landing; everything else lives in the package that owns it.",
+    "license": "Apache-2.0",
+    "scripts": {
+        "build": "pnpm --filter @launchstack/web build",
+        "build:landing": "pnpm --filter @launchstack/landing build",
+        "db:migrate": "pnpm --filter @launchstack/web db:migrate",
+        "check": "eslint . && pnpm -r typecheck",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "typecheck": "pnpm -r typecheck",
+        "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+        "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+        "postinstall": "echo 'postinstall: no-op'",
+        "changeset": "changeset",
+        "version": "changeset version",
+        "release": "pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build && changeset publish"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.31.0",
+        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/js": "^9.35.0",
+        "@types/eslint": "^9.6.1",
+        "@types/node": "^24.3.1",
+        "@typescript-eslint/eslint-plugin": "^8.42.0",
+        "@typescript-eslint/parser": "^8.42.0",
+        "eslint": "^9.34.0",
+        "eslint-config-next": "^15.5.2",
+        "eslint-plugin-drizzle": "^0.2.3",
+        "prettier": "^3.6.2",
+        "prettier-plugin-tailwindcss": "^0.6.14",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.2"
+    },
+    "packageManager": "pnpm@10.15.1",
+    "pnpm": {
+        "patchedDependencies": {
+            "drizzle-kit@0.31.10": "patches/drizzle-kit@0.31.10.patch"
+        }
     }
-  }
 }

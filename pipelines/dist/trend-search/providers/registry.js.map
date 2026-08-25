@@ -1,0 +1,1 @@
+{"version":3,"file":"registry.js","sourceRoot":"","sources":["../../../src/trend-search/providers/registry.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,OAAO,EAAE,MAAM,OAAO,CAAC;AAChC,OAAO,EAAE,UAAU,EAAE,MAAM,UAAU,CAAC;AACtC,MAAM,CAAC,MAAM,gBAAgB,GAAqC;IAC9D,GAAG,EAAE,OAAO;IACZ,MAAM,EAAE,UAAU;CACrB,CAAC"}

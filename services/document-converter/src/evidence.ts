@@ -1,6 +1,6 @@
 /**
  * Map docling-serve markdown into an EvidenceDocument
- * (packages/protocol/schemas/v1/evidence-document.schema.json).
+ * (packages/schema-generator/schemas/v1/evidence-document.schema.json).
  *
  * Honesty rules (ADR-004):
  * - Pages split ONLY on explicit page-break markers (form-feed,

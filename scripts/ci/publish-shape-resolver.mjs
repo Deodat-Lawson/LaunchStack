@@ -1,36 +1,39 @@
 /**
- * Module-resolution hook for scripts/ci/check-package-exports.mjs (ADR-002).
+ * Module-resolution hook for scripts/ci/check-package-exports.mjs (ADR-008).
  *
- * @launchstack/core is a facade: its dist re-exports from the four sibling
- * engine packages. An npm consumer resolves those siblings through each
- * package's *published* exports map (publishConfig.exports → dist/). In the
- * workspace, however, node_modules symlinks resolve through the packages'
+ * The feature packages depend on each other (conversion → orchestration →
+ * store → runtime, …). An npm consumer resolves those dependencies through
+ * each package's *published* exports map (publishConfig.exports → dist/).
+ * In the workspace, node_modules symlinks resolve through the packages'
  * DEV exports maps, which point at src/*.ts — un-loadable under plain Node.
  *
- * This hook reproduces the published resolution: any import of
- * @launchstack/{protocol,evidence,application,adapters} is mapped through
- * that package's publishConfig.exports onto its built dist/ output, exactly
- * what `pnpm pack` + `npm install` would produce. Relative imports inside
- * dist and third-party packages resolve normally.
+ * This hook reproduces the published resolution: any import of a workspace
+ * @launchstack/* package is mapped through that package's publishConfig
+ * exports onto its built dist/ output, exactly what `pnpm pack` +
+ * `npm install` would produce. Relative imports inside dist and third-party
+ * packages resolve normally.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const ROOT = new URL("../../", import.meta.url).pathname;
-const SIBLINGS = ["protocol", "evidence", "application", "adapters"];
 
 const packages = new Map();
-for (const name of SIBLINGS) {
-  const dir = join(ROOT, "packages", name);
-  const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
-  packages.set(`@launchstack/${name}`, {
-    dir,
-    exports: pkg.publishConfig?.exports ?? pkg.exports,
-  });
+function registerDir(dir) {
+  const pkgPath = join(dir, "package.json");
+  if (!existsSync(pkgPath)) return;
+  const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+  if (!pkg.name?.startsWith("@launchstack/")) return;
+  if (pkg.private || !pkg.publishConfig?.exports) return;
+  packages.set(pkg.name, { dir, exports: pkg.publishConfig.exports });
 }
+for (const entry of readdirSync(join(ROOT, "packages"))) {
+  registerDir(join(ROOT, "packages", entry));
+}
+registerDir(join(ROOT, "pipelines"));
 
-/** Resolve a subpath ("." or "./db/index") against a published exports map. */
+/** Resolve a subpath ("." or "./client") against a published exports map. */
 function matchExport(exportsMap, subpath) {
   const exact = exportsMap[subpath];
   if (exact !== undefined) {
@@ -60,12 +63,15 @@ function matchExport(exportsMap, subpath) {
 }
 
 export function resolve(specifier, context, nextResolve) {
-  const m = /^(@launchstack\/[a-z-]+)(?:\/(.+))?$/.exec(specifier);
-  if (m && packages.has(m[1])) {
-    const { dir, exports } = packages.get(m[1]);
-    const subpath = m[2] ? `./${m[2]}` : ".";
-    const target = matchExport(exports, subpath);
-    if (target) {
+  for (const [name, { dir, exports: exportsMap }] of packages) {
+    if (specifier === name || specifier.startsWith(`${name}/`)) {
+      const subpath = specifier === name ? "." : `./${specifier.slice(name.length + 1)}`;
+      const target = matchExport(exportsMap, subpath);
+      if (!target) {
+        throw new Error(
+          `[publish-shape-resolver] ${specifier}: no publishConfig export for "${subpath}"`,
+        );
+      }
       return {
         url: pathToFileURL(join(dir, target)).href,
         shortCircuit: true,

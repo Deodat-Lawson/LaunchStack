@@ -2,15 +2,15 @@
 /**
  * Enforces the engine/product schema boundary.
  *
- * @launchstack/core is published and open source. For a consumer to embed it,
- * `packages/core/drizzle` must build a working database on its own — which
+ * @launchstack/store is published and open source. For a consumer to embed it,
+ * `packages/store/drizzle` must build a working database on its own — which
  * holds only while no engine table references a product table.
  *
  * The dependency is one-way by design:
  *
  *     apps/web  ─┐
- *                ├──> packages/core   (engine tables)
- *  packages/features ─┘
+ *                ├──> packages/store  (engine tables)
+ *  pipelines/ ────────┘
  *
  * ESLint already forbids core from importing `~/*` or `@launchstack/features`,
  * which is what a foreign key would require. This check is the schema-level
@@ -24,7 +24,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const ENGINE_DIR = "packages/core/drizzle";
+const ENGINE_DIR = "packages/store/drizzle";
 const PRODUCT_DIR = "apps/web/drizzle";
 
 const problems = [];
@@ -83,7 +83,7 @@ if (problems.length > 0) {
   console.error("::error::engine/product schema boundary violated\n");
   problems.forEach((p) => console.error(`  - ${p}`));
   console.error(
-    "\nThe engine must stand alone: `packages/core/drizzle` is what an embedding\n" +
+    "\nThe engine must stand alone: `packages/store/drizzle` is what an embedding\n" +
       "consumer applies. Product tables may point at engine tables, never the reverse.",
   );
   process.exit(1);

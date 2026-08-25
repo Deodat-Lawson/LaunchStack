@@ -6,17 +6,16 @@ import { getTableName, is } from "drizzle-orm";
 import { PgTable } from "drizzle-orm/pg-core";
 import { type Config } from "drizzle-kit";
 
-// ADR-002: the engine schema source moved to @launchstack/adapters; this
-// package remains the home of the immutable migration history under
-// ./drizzle, so the config points across the workspace at the moved source.
-import * as engineSchema from "../adapters/src/db/schema";
+// The engine schema source and the immutable migration history live together
+// in this package (ADR-008): src/db/schema is the source, ./drizzle the ledger.
+import * as engineSchema from "./src/db/schema";
 
 dotenv.config({
     path: resolve(fileURLToPath(new URL(".", import.meta.url)), "../../.env"),
 });
 
 /**
- * Engine migration set — the tables @launchstack/core publishes.
+ * Engine migration set — the tables @launchstack/store publishes.
  *
  * `tablesFilter` is derived from the schema rather than a `pdr_ai_v2_*` glob:
  * engine and product tables share one database and one prefix, so a glob would
@@ -31,7 +30,7 @@ for (const value of Object.values(engineSchema)) {
 }
 
 export default {
-    schema: "../adapters/src/db/schema.ts",
+    schema: "./src/db/schema.ts",
     out: "./drizzle",
     dialect: "postgresql",
 

@@ -49,16 +49,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # All five publishable engine packages (ADR-002): core's facade
-      # re-exports resolve against the other four on npm, so they release
-      # together through one changesets flow.
-      - name: Build engine packages
-        run: >-
-          pnpm --filter @launchstack/protocol
-          --filter @launchstack/evidence
-          --filter @launchstack/application
-          --filter @launchstack/adapters
-          --filter @launchstack/core build
+      # All publishable feature packages (ADR-008) release together through
+      # one changesets flow — the engine aggregate resolves against the
+      # feature packages on npm.
+      - name: Build publishable packages
+        run: pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build
 
       # publint validates the exports map against the tarball, but does NOT
       # follow relative specifiers inside the emitted JS. A tarball once passed
@@ -67,11 +62,11 @@ jobs:
       - name: Verify every export is loadable under Node ESM
         run: node scripts/ci/check-package-exports.mjs
 
-      - name: Validate packed tarball
+      - name: Validate packed tarball (engine aggregate)
         run: |
-          cd packages/core
+          cd packages/engine
           pnpm pack --pack-destination ./
-          TARBALL=$(ls launchstack-core-*.tgz)
+          TARBALL=$(ls launchstack-engine-*.tgz)
           npx --yes publint ./${TARBALL}
           npx --yes @arethetypeswrong/cli ./${TARBALL} || true
 

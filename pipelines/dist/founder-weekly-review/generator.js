@@ -1,0 +1,125 @@
+import { createHash } from "node:crypto";
+import { FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION, FounderWeeklyReviewV2PayloadSchema, } from "./contracts.js";
+import { assertUniqueSnapshotSourceIds, FounderWeeklyReviewGenerationValidationError, validateFounderWeeklyReviewV2Citations, } from "./generation-validation.js";
+import { buildFounderWeeklyReviewPrompt, FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION, FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT, } from "./prompts.js";
+import { buildGenerationEvidenceEnvelope, } from "./generation-evidence-envelope.js";
+export async function generateFounderWeeklyReview(input) {
+    const { evidenceSnapshot, generate } = input;
+    assertUniqueSnapshotSourceIds(evidenceSnapshot);
+    const evidenceEnvelope = buildGenerationEvidenceEnvelope(evidenceSnapshot);
+    const prompt = buildFounderWeeklyReviewPrompt(evidenceSnapshot, evidenceEnvelope);
+    const promptHash = createHash("sha256")
+        .update(FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT)
+        .update(prompt)
+        .digest("hex");
+    if (evidenceEnvelope.items.length === 0) {
+        return {
+            reviewPayload: buildEmptyReview(),
+            modelMetadata: buildMetadata({
+                provider: "skipped",
+                model: "none",
+                capability: "founderWeeklyReview",
+                temperature: 0,
+            }, promptHash, true, evidenceEnvelope.diagnostics),
+        };
+    }
+    const initial = await generate({
+        system: FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
+        prompt,
+        schema: FounderWeeklyReviewV2PayloadSchema,
+        schemaName: "founder_weekly_review_v2",
+        generationPhase: "initial",
+    });
+    let result = initial;
+    let reviewPayload;
+    try {
+        reviewPayload = validateFounderWeeklyReviewV2Citations(FounderWeeklyReviewV2PayloadSchema.parse(initial.object), evidenceSnapshot);
+        logGenerationValidation("initial", initial.metadata, "passed");
+    }
+    catch (error) {
+        if (!(error instanceof FounderWeeklyReviewGenerationValidationError))
+            throw error;
+        logGenerationValidation("initial", initial.metadata, "failed");
+        const repaired = await generate({
+            system: FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
+            prompt: buildSemanticRepairPrompt(initial.object, evidenceEnvelope.items, error),
+            schema: FounderWeeklyReviewV2PayloadSchema,
+            schemaName: "founder_weekly_review_v2",
+            generationPhase: "semantic-repair",
+        });
+        result = repaired;
+        try {
+            reviewPayload = validateFounderWeeklyReviewV2Citations(FounderWeeklyReviewV2PayloadSchema.parse(repaired.object), evidenceSnapshot);
+            logGenerationValidation("semantic-repair", repaired.metadata, "passed");
+        }
+        catch (repairError) {
+            logGenerationValidation("semantic-repair", repaired.metadata, "failed");
+            throw repairError;
+        }
+    }
+    return {
+        reviewPayload,
+        modelMetadata: buildMetadata(result.metadata, promptHash, false, evidenceEnvelope.diagnostics),
+    };
+}
+function buildSemanticRepairPrompt(candidate, evidenceItems, error) {
+    const errors = error.details.length > 0 ? error.details : [{ code: "report_validation_failed" }];
+    const sources = evidenceItems.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
+    return [
+        "Correct the complete canonical Founder Weekly Review JSON candidate below.",
+        "Customer Signals may cite only customer_feedback sources.",
+        "founder_context is founder-provided direction, not customer testimony.",
+        "Remove a customer claim if it lacks customer_feedback support.",
+        "Do not invent or substitute a source ID.",
+        "Return the complete corrected canonical JSON object only.",
+        `Validation errors: ${JSON.stringify(errors)}`,
+        `Source IDs and source types: ${JSON.stringify(sources)}`,
+        `Previous canonical candidate: ${JSON.stringify(candidate)}`,
+    ].join("\n");
+}
+function logGenerationValidation(phase, metadata, result) {
+    console.info(`[fwr] generation phase=${phase} provider=${metadata.provider} model=${metadata.model} validation=${result}`);
+}
+function buildMetadata(metadata, promptHash, skipped, diagnostics) {
+    return {
+        provider: metadata.provider,
+        model: metadata.model,
+        capability: metadata.capability,
+        ...(metadata.temperature === undefined ? {} : { temperature: metadata.temperature }),
+        promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
+        promptHash,
+        evidenceSchemaVersion: "founder-weekly-review-evidence/v1",
+        reviewPayloadSchemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
+        ...(metadata.providerRequestId ? { completionId: metadata.providerRequestId } : {}),
+        attributes: {
+            ...(skipped ? { generationSkipped: true } : {}),
+            ...(metadata.finishReason ? { finishReason: metadata.finishReason } : {}),
+            ...(metadata.usage ? { usage: JSON.stringify(metadata.usage) } : {}),
+            evidenceEnvelopeOriginalItems: diagnostics.originalItemCount,
+            evidenceEnvelopeSelectedItems: diagnostics.selectedItemCount,
+            evidenceEnvelopeExcludedItems: diagnostics.excludedItemCount,
+            evidenceEnvelopeCharacters: diagnostics.serializedCharacterCount,
+            evidenceEnvelopeEstimatedTokens: diagnostics.estimatedTokenCount,
+            evidenceEnvelopeTruncated: diagnostics.truncated,
+            evidenceEnvelopeSelectedByType: JSON.stringify(diagnostics.selectedBySourceType),
+            evidenceEnvelopeExcludedByType: JSON.stringify(diagnostics.excludedBySourceType),
+        },
+    };
+}
+function buildEmptyReview() {
+    const noEvidence = (message, cta) => ({
+        state: "no_evidence",
+        noEvidence: { code: "no_relevant_evidence", message, cta },
+    });
+    return {
+        schemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
+        sections: {
+            whatChanged: noEvidence("No change evidence was supplied for this period.", "Add document changes or founder notes for this reporting period."),
+            whatShipped: noEvidence("No shipment evidence was supplied for this period.", "Add release notes, deployment records, or GitHub activity."),
+            whatCustomersSaid: noEvidence("No customer feedback was supplied for this period.", "Add customer calls, support feedback, or survey evidence."),
+            currentBlockers: noEvidence("No blocker evidence was supplied for this period.", "Add founder context, project notes, or issue evidence describing blockers."),
+            nextPriorities: noEvidence("No evidence is available to ground priorities.", "Add evidence for this period before requesting recommended priorities."),
+        },
+    };
+}
+//# sourceMappingURL=generator.js.map

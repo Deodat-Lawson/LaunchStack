@@ -1,0 +1,1 @@
+{"version":3,"file":"persona.d.ts","sourceRoot":"","sources":["../../src/marketing/persona.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,SAAS,CAAC;AAG7C,wBAAsB,oBAAoB,CAAC,IAAI,EAAE;IAC7C,SAAS,EAAE,MAAM,CAAC;IAClB,cAAc,EAAE,MAAM,CAAC;CAC1B,GAAG,OAAO,CAAC,aAAa,CAAC,CAyCzB"}

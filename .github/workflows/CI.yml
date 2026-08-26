@@ -74,6 +74,10 @@ jobs:
       # Blocking (ADR-006). The legacy `continue-on-error` here hid a fully
       # red lint state on main for months.
       - name: Lint
+        env:
+            # The type-aware lint over 14 packages + 2 apps exceeds the
+            # default Node heap (exit 134 on the stock runner).
+            NODE_OPTIONS: --max-old-space-size=6144
         run: pnpm lint
 
       - name: Typecheck (all workspace packages, worker included)

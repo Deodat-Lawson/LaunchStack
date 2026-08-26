@@ -46,21 +46,18 @@ export const KnowledgeValidationReportSchema = z.object({
     missingCriticalFields: z.array(z.string()).default([]),
     revisionNotes: z.array(z.string()).default([]),
 });
-export const CompanyDNASchema = z.object({
-    coreMission: z.string(),
-    keyDifferentiators: z.array(z.string()),
-    provenResults: z.array(z.string()),
-    humanStory: z.string(),
-    technicalEdge: z.string(),
-});
+/**
+ * CompanyDNA and its debug info moved to @launchstack/tools/company-context
+ * (unification PR-1); re-exported here so the marketing barrel's type surface
+ * is unchanged. New code should import from the tool directly.
+ */
+export { CompanyDNASchema } from "@launchstack/tools/company-context";
 export const CompetitorAnalysisSchema = z.object({
-    competitors: z.array(
-        z.object({
-            name: z.string(),
-            positioning: z.string(),
-            weaknesses: z.array(z.string()),
-        })
-    ),
+    competitors: z.array(z.object({
+        name: z.string(),
+        positioning: z.string(),
+        weaknesses: z.array(z.string()),
+    })),
     ourAdvantages: z.array(z.string()),
     marketGaps: z.array(z.string()),
     messagingAntiPatterns: z.array(z.string()),
@@ -71,14 +68,22 @@ export const MessagingStrategySchema = z.object({
     humanHook: z.string(),
     avoidList: z.array(z.string()),
 });
-export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
+// Platform vocabulary moved to @launchstack/tools/platform-profiles (PR-5).
+export { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
+import { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
 export const PlatformMetaSchema = z
     .object({
-        subreddit: z.string().max(100).optional(),
-        hashtags: z.array(z.string().max(50)).max(5).optional(),
-    })
+    subreddit: z.string().max(100).optional(),
+    hashtags: z.array(z.string().max(50)).max(5).optional(),
+})
     .optional();
-export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
+/**
+ * Brand-voice and persona types moved to @launchstack/tools (unification
+ * PR-2); re-exported so the marketing barrel's surface is unchanged.
+ */
+export { BrandVoiceSchema, FormalityLevelEnum } from "@launchstack/tools/brand-voice";
+export { TargetPersonaSchema } from "@launchstack/tools/persona";
+import { FormalityLevelEnum } from "@launchstack/tools/brand-voice";
 export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "multi_platform"]);
 export const MarketingPipelineInputSchema = z.object({
     platform: MarketingPlatformEnum,
@@ -88,6 +93,13 @@ export const MarketingPipelineInputSchema = z.object({
     toneOverride: FormalityLevelEnum.optional(),
     targetAudience: z.string().max(200).optional(),
     contentType: ContentTypeEnum.optional(),
+    /**
+     * Score every variant with the content-scoring rubric and select the best
+     * instead of blindly taking the first (P2). Default OFF: it costs one
+     * extra LLM call per variant, and flipping the default awaits benchmark
+     * evidence (design doc OQ-1; RUN_LLM_BENCHMARK=1).
+     */
+    enableVariantRanking: z.boolean().optional(),
 });
 export const MarketingPipelineOutputSchema = z.object({
     platform: MarketingPlatformEnum,
@@ -95,20 +107,8 @@ export const MarketingPipelineOutputSchema = z.object({
     "image/video": z.enum(["image", "video"]),
 });
 /* ──────────────────────────────────────────────────────────────
- * Brand voice, persona, content types, multi-variant types
+ * Content types, multi-variant types
  * ────────────────────────────────────────────────────────────── */
-export const BrandVoiceSchema = z.object({
-    toneDescriptor: z.string(),
-    vocabularyExamples: z.array(z.string()),
-    sentenceStyle: z.string(),
-    formalityLevel: FormalityLevelEnum,
-});
-export const TargetPersonaSchema = z.object({
-    role: z.string(),
-    painPoints: z.array(z.string()),
-    priorities: z.array(z.string()),
-    languageStyle: z.string(),
-});
 export const StrategyVariantSchema = z.object({
     variantId: z.string(),
     angleRationale: z.string(),
@@ -130,6 +130,6 @@ export const PIPELINE_STEPS = [
     { id: "checking-performance", label: "Checking performance history" },
     { id: "building-strategy", label: "Building messaging strategies" },
     { id: "generating-content", label: "Generating content variants" },
-    { id: "verifying-claims", label: "Verifying claim sources" },
+    { id: "verifying-claims", label: "Checking claim sources" },
 ];
 //# sourceMappingURL=types.js.map

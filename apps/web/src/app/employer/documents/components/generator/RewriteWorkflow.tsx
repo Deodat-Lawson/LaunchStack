@@ -25,6 +25,61 @@ interface RewriteWorkflowProps {
     onCancel: () => void;
     persistedState?: Partial<RewriteWorkflowStateSnapshot>;
     onStateChange?: (state: RewriteWorkflowStateSnapshot) => void;
+    /**
+     * Custom rewrite backend; receives the source text and the composed
+     * prompt, returns the full rewritten text (throw to surface an error).
+     * Defaults to the generic document-generator route — the marketing
+     * workspace injects the context-aware /api/marketing-pipeline/refine.
+     */
+    rewrite?: (args: { text: string; prompt: string }) => Promise<string>;
+}
+
+/** The generic rewrite backend (the pre-injection behavior, verbatim). */
+async function defaultRewrite(args: { text: string; prompt: string }): Promise<string> {
+    let response: Response;
+    try {
+        response = await fetch("/api/document-generator/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                action: "rewrite",
+                content: args.text,
+                prompt: args.prompt,
+                options: {
+                    tone: "professional",
+                    length: "medium",
+                    audience: "general",
+                },
+            }),
+        });
+    } catch {
+        throw new Error("Network error occurred");
+    }
+
+    const responseText = await response.text();
+    let data: {
+        success: boolean;
+        message?: string;
+        generatedContent?: string;
+        error?: string;
+    };
+    try {
+        // Known response shape of our AI generation route.
+        data = JSON.parse(responseText) as typeof data;
+    } catch {
+        throw new Error(
+            responseText.slice(0, 120) || "Server returned an invalid response. Please try again."
+        );
+    }
+
+    if (
+        data.success &&
+        typeof data.generatedContent === "string" &&
+        data.generatedContent.trim().length > 0
+    ) {
+        return data.generatedContent;
+    }
+    throw new Error(data.message ?? data.error ?? "Failed to rewrite text");
 }
 
 export type WorkflowStep = "input" | "options" | "preview" | "complete";
@@ -249,6 +304,7 @@ function assembleFinalText(sections: Section[]): string {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function RewriteWorkflow({
+    rewrite,
     initialText = "",
     onComplete,
     onCancel,
@@ -446,81 +502,43 @@ export function RewriteWorkflow({
         setError(null);
 
         try {
-            const response = await fetch("/api/document-generator/generate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    action: "rewrite",
-                    content: text,
-                    prompt: composedPrompt,
-                    options: {
-                        tone: "professional",
-                        length: "medium",
-                        audience: "general",
-                    },
-                }),
+            const generated = await (rewrite ?? defaultRewrite)({
+                text,
+                prompt: composedPrompt,
             });
-
-            const responseText = await response.text();
-            let data: {
-                success: boolean;
-                message?: string;
-                generatedContent?: string;
-                error?: string;
-            };
-            try {
-                // Known response shape of our AI generation route.
-                data = JSON.parse(responseText) as typeof data;
-            } catch {
-                setError(
-                    responseText.slice(0, 120) ||
-                        "Server returned an invalid response. Please try again."
+            setProposedText(generated);
+            setSections(prev => {
+                const proposals = mapResponseToProposals(prev, generated);
+                return proposals.map(sec => {
+                    // Sections the user did not select: preserve original, mark unchanged.
+                    if (!sec.selected) {
+                        return { ...sec, proposed: "", status: "unchanged" as const };
+                    }
+                    // Sections that came back blank or matched the source: nothing to review.
+                    if (!sec.proposed.trim() || sec.proposed.trim() === sec.original.trim()) {
+                        return { ...sec, status: "unchanged" as const };
+                    }
+                    return { ...sec, status: "pending" as const };
+                });
+            });
+            // Jump the user to the first pending section so they can start reviewing.
+            setCurrentSectionId(prev => {
+                const proposals = mapResponseToProposals(sections, generated);
+                const pending = proposals.find(
+                    sec =>
+                        sec.selected &&
+                        sec.proposed.trim() &&
+                        sec.proposed.trim() !== sec.original.trim()
                 );
-                return;
-            }
-
-            if (
-                data.success &&
-                typeof data.generatedContent === "string" &&
-                data.generatedContent.trim().length > 0
-            ) {
-                const generated = data.generatedContent;
-                setProposedText(generated);
-                setSections(prev => {
-                    const proposals = mapResponseToProposals(prev, generated);
-                    return proposals.map(sec => {
-                        // Sections the user did not select: preserve original, mark unchanged.
-                        if (!sec.selected) {
-                            return { ...sec, proposed: "", status: "unchanged" as const };
-                        }
-                        // Sections that came back blank or matched the source: nothing to review.
-                        if (!sec.proposed.trim() || sec.proposed.trim() === sec.original.trim()) {
-                            return { ...sec, status: "unchanged" as const };
-                        }
-                        return { ...sec, status: "pending" as const };
-                    });
-                });
-                // Jump the user to the first pending section so they can start reviewing.
-                setCurrentSectionId(prev => {
-                    const proposals = mapResponseToProposals(sections, generated);
-                    const pending = proposals.find(
-                        sec =>
-                            sec.selected &&
-                            sec.proposed.trim() &&
-                            sec.proposed.trim() !== sec.original.trim()
-                    );
-                    return pending?.id ?? prev;
-                });
-            } else {
-                setError(data.message ?? data.error ?? "Failed to rewrite text");
-            }
+                return pending?.id ?? prev;
+            });
         } catch (err) {
             console.error("Rewrite request failed", err);
-            setError("Network error occurred");
+            setError(err instanceof Error && err.message ? err.message : "Network error occurred");
         } finally {
             setIsProcessing(false);
         }
-    }, [composedPrompt, sections, selectedCount, text]);
+    }, [composedPrompt, rewrite, sections, selectedCount, text]);
 
     const handleApply = useCallback(() => {
         onComplete(assembleFinalText(sections));

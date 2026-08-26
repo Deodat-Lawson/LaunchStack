@@ -676,7 +676,7 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
 
     if (claims.length === 0) return null;
 
-    const verified = claims.filter(c => c.confidence > 0.5);
+    const sourced = claims.filter(c => c.match !== null);
 
     return (
         <div className={styles.strategyCard}>
@@ -687,7 +687,7 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
             >
                 <FileText size={14} />
                 <span>
-                    Claim verification ({verified.length}/{claims.length} verified)
+                    Claim sources ({sourced.length}/{claims.length} sourced)
                 </span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
@@ -700,25 +700,33 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                                 marginBottom: "0.5rem",
                                 padding: "0.5rem",
                                 borderRadius: "0.375rem",
-                                background:
-                                    claim.confidence > 0.5
-                                        ? "var(--success-soft)"
-                                        : "var(--warn-soft)",
+                                background: claim.match
+                                    ? "var(--success-soft)"
+                                    : "var(--warn-soft)",
                                 fontSize: "0.8125rem",
                             }}
                         >
                             <div style={{ fontWeight: 600, marginBottom: "0.125rem" }}>
-                                {claim.confidence > 0.5 ? "✓" : "?"} {claim.claim}
+                                {claim.match ? "✓" : "?"} {claim.claim}
                             </div>
                             <div style={{ color: "var(--ink-3)" }}>
-                                Source: {claim.sourceDoc}
-                                {claim.confidence > 0 && (
-                                    <span style={{ marginLeft: "0.5rem" }}>
-                                        ({Math.round(claim.confidence * 100)}% match)
-                                    </span>
+                                {claim.match ? (
+                                    <>
+                                        Source: {claim.match.sourceDoc}
+                                        {claim.match.relevance != null && (
+                                            <span style={{ marginLeft: "0.5rem" }}>
+                                                ({Math.round(claim.match.relevance * 100)}%
+                                                relevance)
+                                            </span>
+                                        )}
+                                    </>
+                                ) : claim.error ? (
+                                    "Source lookup failed — review manually"
+                                ) : (
+                                    "No matching source found in the knowledge base"
                                 )}
                             </div>
-                            {claim.chunk && (
+                            {claim.match?.excerpt && (
                                 <div
                                     style={{
                                         marginTop: "0.25rem",
@@ -727,7 +735,7 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                                         fontSize: "0.75rem",
                                     }}
                                 >
-                                    &ldquo;{claim.chunk}&rdquo;
+                                    &ldquo;{claim.match.excerpt}&rdquo;
                                 </div>
                             )}
                         </div>
@@ -1204,6 +1212,7 @@ export function MarketingPipelineWorkspace({
         handleStartNewSession,
         handleRewriteComplete,
         handleRewriteWorkflowStateChange,
+        refineWithCompanyContext,
         handlePushToRewriteDocument,
         handleCopy,
         runPipeline,
@@ -1948,13 +1957,15 @@ export function MarketingPipelineWorkspace({
                                                             </SheetTitle>
                                                             <p className="text-ink-3 text-sm">
                                                                 Use tone, length, and audience
-                                                                options to refine the message.
-                                                                Preview and accept when you&apos;re
-                                                                happy.
+                                                                options to refine the message —
+                                                                grounded in your company context and
+                                                                brand voice. Preview and accept when
+                                                                you&apos;re happy.
                                                             </p>
                                                         </SheetHeader>
                                                         <div className="flex-1 overflow-y-auto px-6 py-4">
                                                             <RewriteWorkflow
+                                                                rewrite={refineWithCompanyContext}
                                                                 initialText={editableMessage}
                                                                 persistedState={
                                                                     activeSession?.rewriteWorkflowState

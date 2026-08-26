@@ -16,7 +16,7 @@ export declare const EMAIL_MODELS: {
     };
 };
 /** Bump when generation/review prompts change — recorded per campaign. */
-export declare const EMAIL_PROMPT_VERSION = "2026-08-01.1";
+export declare const EMAIL_PROMPT_VERSION = "2026-08-23.1";
 /**
  * Resolve the stage's model and run one structured call. Returns the parsed
  * result plus the wire model id, so callers can record exactly which model

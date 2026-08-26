@@ -1,24 +1,8 @@
 /**
- * Marketing content publisher — sends generated content to platform APIs.
- * Currently supports Twitter/X, Reddit, LinkedIn, and Bluesky.
- *
- * Each publisher is behind an env-var gate so missing credentials
- * gracefully return an error instead of crashing.
+ * Moved to @launchstack/tools/social-publish (unification PR-6): platform
+ * publishing is a shared capability with per-platform adapters, typed config,
+ * and token caching. Re-exported so existing imports keep working. New code
+ * should import the tool directly.
  */
-import type { MarketingPlatform } from "./types.js";
-export type PublishResult = {
-    success: boolean;
-    platform: MarketingPlatform;
-    postUrl?: string;
-    error?: string;
-};
-/**
- * Publish generated marketing content to the specified platform.
- * Returns a result object indicating success/failure with optional post URL.
- */
-export declare function publishContent(
-    platform: MarketingPlatform,
-    message: string,
-    title?: string
-): Promise<PublishResult>;
+export { publishContent, publishToPlatform, type PublishRequest, type PublishResult, } from "@launchstack/tools/social-publish";
 //# sourceMappingURL=publish.d.ts.map

@@ -16,10 +16,10 @@ source is the local filesystem, so a sync is immediate.
 
 What it picks up:
 
-| Tool | Global (`~`) | Per project |
-| --- | --- | --- |
+| Tool        | Global (`~`)                                                                                                                        | Per project                                                                             |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Claude Code | `.claude/CLAUDE.md`, `.claude/MEMORY.md`, `agents/`, `commands/`, `skills/`, `memory/`, `output-styles/`, `projects/<slug>/memory/` | `CLAUDE.md`, `CLAUDE.local.md`, `.claude/{agents,commands,skills,memory,output-styles}` |
-| Codex | `.codex/AGENTS.md`, `.codex/instructions.md`, `prompts/`, `memories/` | `AGENTS.md`, `.codex/{AGENTS.md,prompts,memories}` |
+| Codex       | `.codex/AGENTS.md`, `.codex/instructions.md`, `prompts/`, `memories/`                                                               | `AGENTS.md`, `.codex/{AGENTS.md,prompts,memories}`                                      |
 
 `projects/<slug>/memory/` is the one place the connector reaches into
 `~/.claude/projects/`, which otherwise holds session transcripts. It is a
@@ -30,8 +30,8 @@ walk — so the `.jsonl` transcripts sitting beside it stay out of reach.
 import { syncAgentKnowledge } from "@launchstack/features/connectors/agent-knowledge";
 
 const report = await syncAgentKnowledge({
-    projects: [{ dir: "/srv/checkouts/launchstack" }],
-    sink: myKnowledgeSink,
+  projects: [{ dir: "/srv/checkouts/launchstack" }],
+  sink: myKnowledgeSink,
 });
 ```
 

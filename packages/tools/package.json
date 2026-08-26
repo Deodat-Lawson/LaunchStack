@@ -1,0 +1,148 @@
+{
+    "name": "@launchstack/tools",
+    "version": "0.1.0",
+    "type": "module",
+    "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed \u2014 a brick above search, below the pipelines tier.",
+    "license": "Apache-2.0",
+    "engines": {
+        "node": ">=20"
+    },
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./contract": {
+            "types": "./src/contract.ts",
+            "default": "./src/contract.ts"
+        },
+        "./company-context": {
+            "types": "./src/company-context/index.ts",
+            "default": "./src/company-context/index.ts"
+        },
+        "./company-context/schema": {
+            "types": "./src/company-context/schema.ts",
+            "default": "./src/company-context/schema.ts"
+        },
+        "./grounded-retrieval": {
+            "types": "./src/grounded-retrieval/index.ts",
+            "default": "./src/grounded-retrieval/index.ts"
+        },
+        "./brand-voice": {
+            "types": "./src/brand-voice/index.ts",
+            "default": "./src/brand-voice/index.ts"
+        },
+        "./persona": {
+            "types": "./src/persona/index.ts",
+            "default": "./src/persona/index.ts"
+        },
+        "./web-research": {
+            "types": "./src/web-research/index.ts",
+            "default": "./src/web-research/index.ts"
+        },
+        "./claim-evidence": {
+            "types": "./src/claim-evidence/index.ts",
+            "default": "./src/claim-evidence/index.ts"
+        },
+        "./platform-profiles": {
+            "types": "./src/platform-profiles/index.ts",
+            "default": "./src/platform-profiles/index.ts"
+        },
+        "./content-scoring": {
+            "types": "./src/content-scoring/index.ts",
+            "default": "./src/content-scoring/index.ts"
+        },
+        "./social-publish": {
+            "types": "./src/social-publish/index.ts",
+            "default": "./src/social-publish/index.ts"
+        },
+        "./stage-runner": {
+            "types": "./src/stage-runner/index.ts",
+            "default": "./src/stage-runner/index.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@langchain/core": "^0.3.74",
+        "@launchstack/llm": "workspace:^",
+        "@launchstack/search": "workspace:^",
+        "@launchstack/store": "workspace:^",
+        "drizzle-orm": "^0.45.1",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./contract": {
+                "types": "./dist/contract.d.ts",
+                "default": "./dist/contract.js"
+            },
+            "./company-context": {
+                "types": "./dist/company-context/index.d.ts",
+                "default": "./dist/company-context/index.js"
+            },
+            "./company-context/schema": {
+                "types": "./dist/company-context/schema.d.ts",
+                "default": "./dist/company-context/schema.js"
+            },
+            "./grounded-retrieval": {
+                "types": "./dist/grounded-retrieval/index.d.ts",
+                "default": "./dist/grounded-retrieval/index.js"
+            },
+            "./brand-voice": {
+                "types": "./dist/brand-voice/index.d.ts",
+                "default": "./dist/brand-voice/index.js"
+            },
+            "./persona": {
+                "types": "./dist/persona/index.d.ts",
+                "default": "./dist/persona/index.js"
+            },
+            "./web-research": {
+                "types": "./dist/web-research/index.d.ts",
+                "default": "./dist/web-research/index.js"
+            },
+            "./claim-evidence": {
+                "types": "./dist/claim-evidence/index.d.ts",
+                "default": "./dist/claim-evidence/index.js"
+            },
+            "./platform-profiles": {
+                "types": "./dist/platform-profiles/index.d.ts",
+                "default": "./dist/platform-profiles/index.js"
+            },
+            "./content-scoring": {
+                "types": "./dist/content-scoring/index.d.ts",
+                "default": "./dist/content-scoring/index.js"
+            },
+            "./social-publish": {
+                "types": "./dist/social-publish/index.d.ts",
+                "default": "./dist/social-publish/index.js"
+            },
+            "./stage-runner": {
+                "types": "./dist/stage-runner/index.d.ts",
+                "default": "./dist/stage-runner/index.js"
+            },
+            "./package.json": "./package.json"
+        }
+    }
+}

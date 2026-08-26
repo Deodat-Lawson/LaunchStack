@@ -91,3 +91,41 @@ export async function saveGeneratedContent(args: {
             contentType: args.contentType ?? "post",
         });
 }
+
+/**
+ * Record a successful publish against the newest history row with the same
+ * content (unification PR-6). Message-equality matching is best-effort: a
+ * post edited after generation won't match and the write-back is skipped —
+ * acceptable until history rows carry an id through the UI flow.
+ */
+export async function markContentPublished(args: {
+    companyId: number;
+    platform: MarketingPlatform;
+    message: string;
+    postId?: string;
+    postUrl?: string;
+}): Promise<void> {
+    const db = getDb();
+    const [row] = await db
+        .select({ id: marketingContentHistory.id })
+        .from(marketingContentHistory)
+        .where(
+            and(
+                eq(marketingContentHistory.companyId, BigInt(args.companyId)),
+                eq(marketingContentHistory.platform, args.platform),
+                eq(marketingContentHistory.message, args.message)
+            )
+        )
+        .orderBy(desc(marketingContentHistory.createdAt))
+        .limit(1);
+    if (!row) return;
+
+    await db
+        .update(marketingContentHistory)
+        .set({
+            postId: args.postId ?? null,
+            postUrl: args.postUrl ?? null,
+            publishedAt: new Date(),
+        })
+        .where(eq(marketingContentHistory.id, row.id));
+}

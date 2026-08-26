@@ -1,7 +1,3 @@
-import { callExa } from "./exa.js";
-import { callSerper } from "./serper.js";
-export const providerRegistry = {
-    exa: callExa,
-    serper: callSerper,
-};
+/** Moved to @launchstack/tools/web-research (unification PR-3); re-exported. */
+export { providerRegistry } from "@launchstack/tools/web-research";
 //# sourceMappingURL=registry.js.map

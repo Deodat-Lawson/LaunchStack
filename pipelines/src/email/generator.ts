@@ -1,6 +1,10 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-import { buildCompanyKnowledgeContext, extractCompanyDNA } from "../marketing/context";
+import {
+    buildCompanyKnowledgeContext,
+    extractCompanyDNA,
+} from "@launchstack/tools/company-context";
+import { buildVoiceDirective, extractBrandVoice } from "@launchstack/tools/brand-voice";
 import { invokeEmailStructured } from "./models";
 import { EmailTemplateSchema, type EmailTemplate } from "./types";
 
@@ -33,11 +37,14 @@ export async function generateTemplate(args: {
             ? trimmedGoal
             : "Introduce our company to a relevant prospect and offer to help.";
 
-    const [context, dna] = await Promise.all([
+    const [context, dna, voice] = await Promise.all([
         buildCompanyKnowledgeContext({ companyId: args.companyId, prompt: goal }),
         extractCompanyDNA({ companyId: args.companyId, prompt: goal })
             .then(r => r.dna)
             .catch(() => null),
+        // Real BrandVoice instead of prose tone rules (unification P3);
+        // best-effort — no voice keeps the pre-P3 prompt exactly.
+        extractBrandVoice({ companyId: args.companyId }).catch(() => null),
     ]);
 
     const companyContext = dna
@@ -48,7 +55,7 @@ export async function generateTemplate(args: {
         "templateGeneration",
         EmailTemplateSchema,
         [
-            new SystemMessage(SYSTEM_PROMPT),
+            new SystemMessage(voice ? SYSTEM_PROMPT + buildVoiceDirective(voice) : SYSTEM_PROMPT),
             new HumanMessage(
                 `Campaign goal: ${goal}\n\nSender company context (single source of truth):\n${companyContext}`
             ),

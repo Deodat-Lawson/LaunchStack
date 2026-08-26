@@ -30,6 +30,7 @@ COPY packages/editing/package.json ./packages/editing/
 COPY packages/collab/package.json ./packages/collab/
 COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/
+COPY packages/tools/package.json ./packages/tools/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
 COPY pipelines/package.json ./pipelines/
 

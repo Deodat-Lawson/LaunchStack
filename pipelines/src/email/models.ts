@@ -14,7 +14,7 @@ export const EMAIL_MODELS = {
 } as const satisfies Record<string, ResolveChatModelOptions>;
 
 /** Bump when generation/review prompts change — recorded per campaign. */
-export const EMAIL_PROMPT_VERSION = "2026-08-01.1";
+export const EMAIL_PROMPT_VERSION = "2026-08-23.1";
 
 /**
  * Resolve the stage's model and run one structured call. Returns the parsed

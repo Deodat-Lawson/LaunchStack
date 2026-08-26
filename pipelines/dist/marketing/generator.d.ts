@@ -1,33 +1,5 @@
-import type {
-    MarketingPlatform,
-    MarketingResearchResult,
-    MessagingStrategy,
-    BrandVoice,
-    TargetPersona,
-    ContentType,
-    StrategyVariant,
-    ContentVariant,
-    RefinementResult,
-} from "./types.js";
-interface PlatformMeta {
-    subreddit?: string;
-    hashtags?: string[];
-}
-export declare function generateCampaignOutput(args: {
-    platform: MarketingPlatform;
-    prompt: string;
-    companyContext: string;
-    research: MarketingResearchResult[];
-    strategy?: MessagingStrategy;
-    enableQualityGate?: boolean;
-    platformMeta?: PlatformMeta;
-}): Promise<{
-    platform: MarketingPlatform;
-    message: string;
-    "image/video": "image" | "video";
-    competitiveAngle?: string;
-    strategyUsed?: MessagingStrategy;
-}>;
+import { type PlatformMeta } from "@launchstack/tools/platform-profiles";
+import type { MarketingPlatform, MarketingResearchResult, BrandVoice, TargetPersona, ContentType, StrategyVariant, ContentVariant, RefinementResult } from "./types.js";
 export declare function generateVariants(args: {
     platform: MarketingPlatform;
     prompt: string;
@@ -47,5 +19,4 @@ export declare function refineContent(args: {
     companyContext: string;
     brandVoice?: BrandVoice;
 }): Promise<RefinementResult>;
-export {};
 //# sourceMappingURL=generator.d.ts.map

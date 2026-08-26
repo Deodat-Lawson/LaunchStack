@@ -2,40 +2,20 @@
  * In-memory cache for trend search results.
  * Reduces redundant API calls (Exa/Serper) and LLM work when the same
  * query + company context is used within the TTL window.
+ *
+ * Mechanism lives in @launchstack/tools/web-research (`createTtlCache`,
+ * unification PR-3); this module owns the trend-search key shape and TTL.
  */
-import { createHash } from "node:crypto";
+import { createTtlCache } from "@launchstack/tools/web-research";
 const TTL_MS = 60 * 60 * 1000; // 1 hour – trends don't change that fast
-const cache = new Map();
+const cache = createTtlCache({ ttlMs: TTL_MS, maxEntries: 100 });
 function buildCacheKey(query, companyContext) {
-    const normalized = `${query.trim().replace(/\s+/g, " ")}::${companyContext.trim().replace(/\s+/g, " ")}`;
-    return createHash("sha256").update(normalized).digest("hex");
-}
-function prune() {
-    const now = Date.now();
-    for (const [key, entry] of cache.entries()) {
-        if (entry.expiresAt <= now) {
-            cache.delete(key);
-        }
-    }
+    return `${query.trim().replace(/\s+/g, " ")}::${companyContext.trim().replace(/\s+/g, " ")}`;
 }
 export function getCachedTrendSearch(query, companyContext) {
-    const key = buildCacheKey(query, companyContext);
-    const entry = cache.get(key);
-    if (!entry) return null;
-    if (entry.expiresAt <= Date.now()) {
-        cache.delete(key);
-        return null;
-    }
-    return entry.output;
+    return cache.get(buildCacheKey(query, companyContext));
 }
 export function setCachedTrendSearch(query, companyContext, output) {
-    if (cache.size > 100) {
-        prune();
-    }
-    const key = buildCacheKey(query, companyContext);
-    cache.set(key, {
-        output,
-        expiresAt: Date.now() + TTL_MS,
-    });
+    cache.set(buildCacheKey(query, companyContext), output);
 }
 //# sourceMappingURL=cache.js.map

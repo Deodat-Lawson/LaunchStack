@@ -1,37 +1,17 @@
-import { createHash } from "node:crypto";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { executeSearch } from "@launchstack/pipelines/trend-search/web-search";
+import { createTtlCache, executeSearch } from "@launchstack/tools/web-research";
 import { invokeMarketingStructured } from "./models.js";
 import { CompetitorAnalysisSchema } from "./types.js";
 /* ──────────────────────────────────────────────────────────────
  * In-memory cache — competitor landscape changes slowly.
  * ────────────────────────────────────────────────────────────── */
 const COMPETITOR_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const cache = new Map();
+const cache = createTtlCache({
+    ttlMs: COMPETITOR_CACHE_TTL_MS,
+    maxEntries: 50,
+});
 function buildCacheKey(companyName, categories) {
-    const normalized = `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
-    return createHash("sha256").update(normalized).digest("hex");
-}
-function pruneCache() {
-    const now = Date.now();
-    for (const [key, entry] of cache.entries()) {
-        if (entry.expiresAt <= now) cache.delete(key);
-    }
-}
-function getCached(companyName, categories) {
-    const key = buildCacheKey(companyName, categories);
-    const entry = cache.get(key);
-    if (!entry) return null;
-    if (entry.expiresAt <= Date.now()) {
-        cache.delete(key);
-        return null;
-    }
-    return entry.result;
-}
-function setCache(companyName, categories, result) {
-    if (cache.size > 50) pruneCache();
-    const key = buildCacheKey(companyName, categories);
-    cache.set(key, { result, expiresAt: Date.now() + COMPETITOR_CACHE_TTL_MS });
+    return `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
 }
 /* ──────────────────────────────────────────────────────────────
  * Search query builder
@@ -60,7 +40,7 @@ function buildCompetitorQueries(companyName, categories, companyDescription) {
  * ────────────────────────────────────────────────────────────── */
 export async function analyzeCompetitors(args) {
     const { companyName, categories, companyContext = "" } = args;
-    const cached = getCached(companyName, categories);
+    const cached = cache.get(buildCacheKey(companyName, categories));
     if (cached) {
         console.log("[marketing-pipeline] competitor analysis cache HIT for %s", companyName);
         return cached;
@@ -72,14 +52,13 @@ export async function analyzeCompetitors(args) {
         if (results.length > 0) {
             rawContext +=
                 "\n\nWeb search results (competitors / market):\n" +
-                results
-                    .slice(0, 12)
-                    .map(
-                        (r, i) => `${i + 1}. [${r.title}] ${r.content.slice(0, 200)}... (${r.url})`
-                    )
-                    .join("\n\n");
+                    results
+                        .slice(0, 12)
+                        .map((r, i) => `${i + 1}. [${r.title}] ${r.content.slice(0, 200)}... (${r.url})`)
+                        .join("\n\n");
         }
-    } catch (error) {
+    }
+    catch (error) {
         console.warn("[marketing-pipeline] competitor web search failed:", error);
     }
     if (!rawContext.trim()) {
@@ -100,13 +79,8 @@ Rules:
 - messagingAntiPatterns: 2-4 clichés or messages competitors use that we should avoid.
 
 Return valid JSON matching the schema.`;
-    const response = await invokeMarketingStructured(
-        CompetitorAnalysisSchema,
-        [new SystemMessage(systemPrompt), new HumanMessage(rawContext)],
-        "competitor_analysis"
-    );
-    const result = CompetitorAnalysisSchema.parse(response);
-    setCache(companyName, categories, result);
-    return result;
+    const response = await invokeMarketingStructured(CompetitorAnalysisSchema, [new SystemMessage(systemPrompt), new HumanMessage(rawContext)], "competitor_analysis");
+    cache.set(buildCacheKey(companyName, categories), response);
+    return response;
 }
 //# sourceMappingURL=competitor.js.map

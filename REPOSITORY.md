@@ -39,6 +39,7 @@ outright, since nothing was ever published under the old names.
 | `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
 | `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
 | `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |
+| `packages/tools` | TS library | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `search`, never a vertical. |
 | `packages/design-tokens` | CSS (published) | The design contract: primitives feeding semantic tokens, one file, no build step. |
 | `pipelines/` | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced). |
 | `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
@@ -76,6 +77,13 @@ clients, inherited from the old features tier) — configuration flows
 through `CoreConfig` from the composition roots
 (`apps/web/src/server/engine.ts`, reused by the worker).
 
+`packages/tools` (`@launchstack/tools`) holds shared, contract-typed
+capabilities the feature verticals compose — a tool is _imported_, a service is
+_deployed_. Capabilities move down into tools; pipelines stay up in features
+(tools cannot import `@launchstack/features`, lint-enforced), and `process.env`
+is allowed only in a tool's `config.ts`. See `packages/tools/README.md` for the
+catalog.
+
 ## The one ingestion path (ADR-003)
 
 ```
@@ -110,7 +118,7 @@ into the Sources library** — rendered to a Markdown outline, stored through
 `uploadFile`, then handed to `processDocumentUpload`, which is the same
 ingestion path an uploaded PDF takes. There is no diagram-shaped special case in
 ingestion, and a published mindmap is chunked, embedded and citable like any
-other source. Entry points: *Add a source → Create → Mindmap*, and the Studio
+other source. Entry points: _Add a source → Create → Mindmap_, and the Studio
 feature menu.
 
 Its tables (`pdr_ai_v2_mindmaps`, `…_mindmap_revisions`, `…_mindmap_presence`)

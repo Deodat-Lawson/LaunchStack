@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { PipelineProgressEvent } from "@launchstack/tools/contract";
 
 /**
  * till company DNA - adds a lower level structured layer before CompanyDNA
@@ -60,22 +61,14 @@ export const KnowledgeValidationReportSchema = z.object({
 
 export type KnowledgeValidationReport = z.infer<typeof KnowledgeValidationReportSchema>;
 
-/** Structured company profile distilled from KB for marketing (issue #232). */
-export interface CompanyDNA {
-    coreMission: string;
-    keyDifferentiators: string[];
-    provenResults: string[];
-    humanStory: string;
-    technicalEdge: string;
-}
-
-export const CompanyDNASchema = z.object({
-    coreMission: z.string(),
-    keyDifferentiators: z.array(z.string()),
-    provenResults: z.array(z.string()),
-    humanStory: z.string(),
-    technicalEdge: z.string(),
-});
+/**
+ * CompanyDNA and its debug info moved to @launchstack/tools/company-context
+ * (unification PR-1); re-exported here so the marketing barrel's type surface
+ * is unchanged. New code should import from the tool directly.
+ */
+export { CompanyDNASchema } from "@launchstack/tools/company-context";
+export type { CompanyDNA, DNADebugInfo } from "@launchstack/tools/company-context";
+import type { CompanyDNA, DNADebugInfo } from "@launchstack/tools/company-context";
 
 /** Competitor landscape for marketing (issue #232). */
 export interface CompetitorAnalysis {
@@ -117,8 +110,11 @@ export const MessagingStrategySchema = z.object({
     avoidList: z.array(z.string()),
 });
 
-export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
-export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
+// Platform vocabulary moved to @launchstack/tools/platform-profiles (PR-5).
+export { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
+export type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
+import { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
+import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
 
 export const PlatformMetaSchema = z
     .object({
@@ -127,8 +123,17 @@ export const PlatformMetaSchema = z
     })
     .optional();
 
-export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
-export type FormalityLevel = z.infer<typeof FormalityLevelEnum>;
+/**
+ * Brand-voice and persona types moved to @launchstack/tools (unification
+ * PR-2); re-exported so the marketing barrel's surface is unchanged.
+ */
+export { BrandVoiceSchema, FormalityLevelEnum } from "@launchstack/tools/brand-voice";
+export type { BrandVoice, FormalityLevel } from "@launchstack/tools/brand-voice";
+export { TargetPersonaSchema } from "@launchstack/tools/persona";
+export type { TargetPersona } from "@launchstack/tools/persona";
+import { FormalityLevelEnum } from "@launchstack/tools/brand-voice";
+import type { BrandVoice } from "@launchstack/tools/brand-voice";
+import type { TargetPersona } from "@launchstack/tools/persona";
 
 export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "multi_platform"]);
 export type ContentType = z.infer<typeof ContentTypeEnum>;
@@ -141,6 +146,13 @@ export const MarketingPipelineInputSchema = z.object({
     toneOverride: FormalityLevelEnum.optional(),
     targetAudience: z.string().max(200).optional(),
     contentType: ContentTypeEnum.optional(),
+    /**
+     * Score every variant with the content-scoring rubric and select the best
+     * instead of blindly taking the first (P2). Default OFF: it costs one
+     * extra LLM call per variant, and flipping the default awaits benchmark
+     * evidence (design doc OQ-1; RUN_LLM_BENCHMARK=1).
+     */
+    enableVariantRanking: z.boolean().optional(),
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 
@@ -157,13 +169,6 @@ export const MarketingPipelineOutputSchema = z.object({
     "image/video": z.enum(["image", "video"]),
 });
 export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSchema>;
-
-/** Debug info about the DNA extraction source, included when ?debug=true. */
-export interface DNADebugInfo {
-    source: "metadata" | "rag";
-    contextUsed: string;
-    dna: CompanyDNA;
-}
 
 export interface MarketingPipelineResult extends MarketingPipelineOutput {
     research: MarketingResearchResult[];
@@ -182,28 +187,12 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     /** All intermediate pipeline stages for transparency. */
     pipelineStages?: PipelineStages;
     /** Claim sources mapped back to KB documents. */
-    claimSources?: ClaimSource[];
+    claimSources?: CheckedClaim[];
 }
 
 /* ──────────────────────────────────────────────────────────────
- * Brand voice, persona, content types, multi-variant types
+ * Content types, multi-variant types
  * ────────────────────────────────────────────────────────────── */
-
-export const BrandVoiceSchema = z.object({
-    toneDescriptor: z.string(),
-    vocabularyExamples: z.array(z.string()),
-    sentenceStyle: z.string(),
-    formalityLevel: FormalityLevelEnum,
-});
-export type BrandVoice = z.infer<typeof BrandVoiceSchema>;
-
-export const TargetPersonaSchema = z.object({
-    role: z.string(),
-    painPoints: z.array(z.string()),
-    priorities: z.array(z.string()),
-    languageStyle: z.string(),
-});
-export type TargetPersona = z.infer<typeof TargetPersonaSchema>;
 
 export const StrategyVariantSchema = z.object({
     variantId: z.string(),
@@ -226,12 +215,13 @@ export interface ContentVariant {
     mediaType: "image" | "video";
 }
 
-export interface ClaimSource {
-    claim: string;
-    sourceDoc: string;
-    chunk: string;
-    confidence: number;
-}
+/**
+ * Claim checking moved to @launchstack/tools/claim-evidence (unification
+ * PR-4) with honest semantics: `relevance` is a retrieval score (never
+ * "confidence"), and "no source found" is a null match, not a zero.
+ */
+export type { CheckedClaim, ClaimSourceMatch } from "@launchstack/tools/claim-evidence";
+import type { CheckedClaim } from "@launchstack/tools/claim-evidence";
 
 export interface PipelineStages {
     dna: CompanyDNA;
@@ -282,33 +272,17 @@ export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }
     { id: "checking-performance", label: "Checking performance history" },
     { id: "building-strategy", label: "Building messaging strategies" },
     { id: "generating-content", label: "Generating content variants" },
-    { id: "verifying-claims", label: "Verifying claim sources" },
+    { id: "verifying-claims", label: "Checking claim sources" },
 ];
 
+/**
+ * Both unions derive from the shared PipelineProgressEvent (unification P2,
+ * design D5) — previously the same four variants were hand-maintained twice.
+ * The SSE protocol is the progress union plus its result/error arms.
+ */
 export type PipelineSSEEvent =
-    | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-    | {
-          type: "step_complete";
-          step: PipelineStepId;
-          durationMs: number;
-          detail?: string;
-          status?: "completed" | "skipped" | "failed";
-      }
-    | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
-    | { type: "step_thinking"; step: PipelineStepId; text: string }
+    | PipelineProgressEvent<PipelineStepId>
     | { type: "result"; success: true; data: MarketingPipelineResult }
     | { type: "error"; success: false; message: string; error?: string };
 
-export type OnPipelineProgress = (
-    event:
-        | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-        | {
-              type: "step_complete";
-              step: PipelineStepId;
-              durationMs: number;
-              detail?: string;
-              status?: "completed" | "skipped" | "failed";
-          }
-        | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
-        | { type: "step_thinking"; step: PipelineStepId; text: string }
-) => void;
+export type OnPipelineProgress = (event: PipelineProgressEvent<PipelineStepId>) => void;

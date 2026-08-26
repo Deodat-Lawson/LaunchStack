@@ -1,1 +1,1 @@
-{"version":3,"file":"registry.d.ts","sourceRoot":"","sources":["../../../src/trend-search/providers/registry.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAGhD,eAAO,MAAM,gBAAgB,EAAE,MAAM,CAAC,MAAM,EAAE,gBAAgB,CAG7D,CAAC"}
+{"version":3,"file":"registry.d.ts","sourceRoot":"","sources":["../../../src/trend-search/providers/registry.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,OAAO,EAAE,gBAAgB,EAAE,MAAM,iCAAiC,CAAC"}

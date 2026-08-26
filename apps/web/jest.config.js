@@ -77,6 +77,8 @@ export const config = {
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
+        "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
+        "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",
         "^@launchstack/pipelines$": "<rootDir>/../../pipelines/src/index.ts",
         "^@launchstack/pipelines/(.*)$": "<rootDir>/../../pipelines/src/$1",
         "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",

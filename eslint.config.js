@@ -454,6 +454,22 @@ const eslintConfig = [
                     ]),
                 },
             },
+            // @launchstack/tools — shared, contract-typed capabilities the
+            // verticals compose. A brick above search, below pipelines; may
+            // read process.env (social/web-research provider keys, inherited
+            // from the features tier where these capabilities were born).
+            {
+                files: ["packages/tools/src/**/*.{ts,tsx}"],
+                rules: restrict([
+                    legacyBan,
+                    frameworkBan,
+                    noPipelines,
+                    only(
+                        ["runtime", "evidence", "store", "llm", "search", "conversion"],
+                        "@launchstack/tools"
+                    ),
+                ]),
+            },
             // The transcription clients (from the voice vertical) and the adeu
             // client (from the old features tier) resolve their service
             // endpoints from the environment — the documented env exceptions

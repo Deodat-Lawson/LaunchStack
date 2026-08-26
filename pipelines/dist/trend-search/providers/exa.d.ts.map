@@ -1,1 +1,1 @@
-{"version":3,"file":"exa.d.ts","sourceRoot":"","sources":["../../../src/trend-search/providers/exa.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,UAAU,CAAC;AAiBhD;;;;GAIG;AACH,wBAAsB,OAAO,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,CAAC,eAAe,EAAE,CAAC,CA6CvE"}
+{"version":3,"file":"exa.d.ts","sourceRoot":"","sources":["../../../src/trend-search/providers/exa.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,OAAO,EAAE,OAAO,EAAE,MAAM,iCAAiC,CAAC"}

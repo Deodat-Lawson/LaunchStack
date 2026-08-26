@@ -40,6 +40,7 @@ const config: NextConfig = {
         "@launchstack/editing",
         "@launchstack/evidence",
         "@launchstack/pipelines",
+        "@launchstack/tools",
     ],
 
     // Production builds fail on type errors (ADR-006). Lint runs as its own
@@ -123,14 +124,6 @@ const config: NextConfig = {
         ];
     },
 
-    // The evaluate route reads benchmark reference markdown from the features
-    // package at runtime via fs; Next's tracer can't see those reads, so pull
-    // the files into the standalone output explicitly.
-    outputFileTracingIncludes: {
-        "/api/marketing-pipeline/evaluate": [
-            "../../pipelines/src/marketing/benchmark/references/**",
-        ],
-    },
 
     outputFileTracingExcludes: {
         "/*": [

@@ -9,7 +9,7 @@ export const EMAIL_MODELS = {
     templateReview: { route: "default", temperature: 0 },
 };
 /** Bump when generation/review prompts change — recorded per campaign. */
-export const EMAIL_PROMPT_VERSION = "2026-08-01.1";
+export const EMAIL_PROMPT_VERSION = "2026-08-23.1";
 /**
  * Resolve the stage's model and run one structured call. Returns the parsed
  * result plus the wire model id, so callers can record exactly which model

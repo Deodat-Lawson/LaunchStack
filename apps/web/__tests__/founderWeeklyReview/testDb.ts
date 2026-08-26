@@ -17,7 +17,7 @@ const repoRoot = join(webDir, "..", "..");
  * then product. The product set has foreign keys into engine tables, so
  * applying apps/web/drizzle alone fails on the first one.
  */
-const MIGRATION_SETS = [join(repoRoot, "packages", "core", "drizzle"), join(webDir, "drizzle")];
+const MIGRATION_SETS = [join(repoRoot, "packages", "store", "drizzle"), join(webDir, "drizzle")];
 
 interface JournalEntry {
     idx: number;

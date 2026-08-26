@@ -2,7 +2,7 @@ import {
     mapDocumentVersionToEvidenceItem,
     FounderWeeklyReviewEvidenceItemSchema,
     type DocumentVersionRow,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 function completeRow(): DocumentVersionRow {
     return {

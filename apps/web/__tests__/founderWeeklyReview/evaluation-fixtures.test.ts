@@ -3,7 +3,7 @@ import {
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewV2Payload,
     generateFounderWeeklyReview,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 const period = { start: "2026-07-06", end: "2026-07-12" };
 function fixture(

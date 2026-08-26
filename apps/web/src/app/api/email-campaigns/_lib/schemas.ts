@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { RecipientSchema } from "@launchstack/features/email-pipeline";
+import { RecipientSchema } from "@launchstack/pipelines/email";
 
 /**
  * Request schemas for the campaign lifecycle routes.

@@ -1,0 +1,208 @@
+{
+    "name": "@launchstack/conversion",
+    "version": "0.1.0",
+    "description": "Any source in, ingestable evidence out: the document converter with one converter per supported type and its wire contract, audio and video transcription (each with its own folder, contract, and client), OCR primitives and provider adapters, archive expansion, the extraction router, and the EvidenceDocument every converter promises to emit.",
+    "license": "Apache-2.0",
+    "type": "module",
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./evidence-document": "./src/evidence-document.ts",
+        "./ports": "./src/ports.ts",
+        "./document-converter": "./src/document-converter/index.ts",
+        "./document-converter/wire": "./src/document-converter/wire.ts",
+        "./document-converter/client": "./src/document-converter/client.ts",
+        "./document-converter/converters": "./src/document-converter/converters/index.ts",
+        "./audio-transcription": "./src/audio-transcription/index.ts",
+        "./video-transcription": "./src/video-transcription/index.ts",
+        "./extraction-router": "./src/extraction-router.ts",
+        "./archive-expansion": "./src/archive-expansion.ts",
+        "./types": "./src/types.ts",
+        "./service-client": "./src/service-client.ts",
+        "./transcription-service": "./src/transcription-service.ts",
+        "./ocr": "./src/ocr-processing/index.ts",
+        "./ocr/types": "./src/ocr-processing/types.ts",
+        "./ocr/config": "./src/ocr-processing/config.ts",
+        "./ocr/trigger": "./src/ocr-processing/trigger.ts",
+        "./ocr/complexity": "./src/ocr-processing/complexity.ts",
+        "./ocr/enrichment": "./src/ocr-processing/enrichment.ts",
+        "./ocr/adapters/azureAdapter": "./src/ocr-processing/adapters/azureAdapter.ts",
+        "./ocr/adapters/datalabAdapter": "./src/ocr-processing/adapters/datalabAdapter.ts",
+        "./ocr/adapters/landingAdapter": "./src/ocr-processing/adapters/landingAdapter.ts",
+        "./ocr/adapters/ossAdapter": "./src/ocr-processing/adapters/ossAdapter.ts",
+        "./package.json": "./package.json",
+        "./ocr/config-types": "./src/ocr-processing/config-types.ts",
+        "./heading-chunker": "./src/heading-chunker.ts",
+        "./ocr/processor": "./src/ocr-processing/processor.ts",
+        "./ocr/chunker": "./src/ocr-processing/chunker.ts",
+        "./ocr/code-chunker": "./src/ocr-processing/code-chunker.ts"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./evidence-document": {
+                "types": "./dist/evidence-document.d.ts",
+                "default": "./dist/evidence-document.js"
+            },
+            "./ports": {
+                "types": "./dist/ports.d.ts",
+                "default": "./dist/ports.js"
+            },
+            "./document-converter": {
+                "types": "./dist/document-converter/index.d.ts",
+                "default": "./dist/document-converter/index.js"
+            },
+            "./document-converter/wire": {
+                "types": "./dist/document-converter/wire.d.ts",
+                "default": "./dist/document-converter/wire.js"
+            },
+            "./document-converter/client": {
+                "types": "./dist/document-converter/client.d.ts",
+                "default": "./dist/document-converter/client.js"
+            },
+            "./document-converter/converters": {
+                "types": "./dist/document-converter/converters/index.d.ts",
+                "default": "./dist/document-converter/converters/index.js"
+            },
+            "./audio-transcription": {
+                "types": "./dist/audio-transcription/index.d.ts",
+                "default": "./dist/audio-transcription/index.js"
+            },
+            "./video-transcription": {
+                "types": "./dist/video-transcription/index.d.ts",
+                "default": "./dist/video-transcription/index.js"
+            },
+            "./extraction-router": {
+                "types": "./dist/extraction-router.d.ts",
+                "default": "./dist/extraction-router.js"
+            },
+            "./archive-expansion": {
+                "types": "./dist/archive-expansion.d.ts",
+                "default": "./dist/archive-expansion.js"
+            },
+            "./types": {
+                "types": "./dist/types.d.ts",
+                "default": "./dist/types.js"
+            },
+            "./service-client": {
+                "types": "./dist/service-client.d.ts",
+                "default": "./dist/service-client.js"
+            },
+            "./transcription-service": {
+                "types": "./dist/transcription-service.d.ts",
+                "default": "./dist/transcription-service.js"
+            },
+            "./ocr": {
+                "types": "./dist/ocr-processing/index.d.ts",
+                "default": "./dist/ocr-processing/index.js"
+            },
+            "./ocr/types": {
+                "types": "./dist/ocr-processing/types.d.ts",
+                "default": "./dist/ocr-processing/types.js"
+            },
+            "./ocr/config": {
+                "types": "./dist/ocr-processing/config.d.ts",
+                "default": "./dist/ocr-processing/config.js"
+            },
+            "./ocr/trigger": {
+                "types": "./dist/ocr-processing/trigger.d.ts",
+                "default": "./dist/ocr-processing/trigger.js"
+            },
+            "./ocr/complexity": {
+                "types": "./dist/ocr-processing/complexity.d.ts",
+                "default": "./dist/ocr-processing/complexity.js"
+            },
+            "./ocr/enrichment": {
+                "types": "./dist/ocr-processing/enrichment.d.ts",
+                "default": "./dist/ocr-processing/enrichment.js"
+            },
+            "./ocr/adapters/azureAdapter": {
+                "types": "./dist/ocr-processing/adapters/azureAdapter.d.ts",
+                "default": "./dist/ocr-processing/adapters/azureAdapter.js"
+            },
+            "./ocr/adapters/datalabAdapter": {
+                "types": "./dist/ocr-processing/adapters/datalabAdapter.d.ts",
+                "default": "./dist/ocr-processing/adapters/datalabAdapter.js"
+            },
+            "./ocr/adapters/landingAdapter": {
+                "types": "./dist/ocr-processing/adapters/landingAdapter.d.ts",
+                "default": "./dist/ocr-processing/adapters/landingAdapter.js"
+            },
+            "./ocr/adapters/ossAdapter": {
+                "types": "./dist/ocr-processing/adapters/ossAdapter.d.ts",
+                "default": "./dist/ocr-processing/adapters/ossAdapter.js"
+            },
+            "./package.json": "./package.json",
+            "./ocr/config-types": {
+                "types": "./dist/ocr-processing/config-types.d.ts",
+                "default": "./dist/ocr-processing/config-types.js"
+            },
+            "./heading-chunker": {
+                "types": "./dist/heading-chunker.d.ts",
+                "default": "./dist/heading-chunker.js"
+            },
+            "./ocr/processor": {
+                "types": "./dist/ocr-processing/processor.d.ts",
+                "default": "./dist/ocr-processing/processor.js"
+            },
+            "./ocr/chunker": {
+                "types": "./dist/ocr-processing/chunker.d.ts",
+                "default": "./dist/ocr-processing/chunker.js"
+            },
+            "./ocr/code-chunker": {
+                "types": "./dist/ocr-processing/code-chunker.d.ts",
+                "default": "./dist/ocr-processing/code-chunker.js"
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@launchstack/runtime": "workspace:^",
+        "@launchstack/store": "workspace:^",
+        "@launchstack/llm": "workspace:^",
+        "@mozilla/readability": "^0.6.0",
+        "cheerio": "^1.2.0",
+        "jsdom": "^29.0.2",
+        "jszip": "^3.10.1",
+        "mammoth": "^1.11.0",
+        "pdf-lib": "^1.17.1",
+        "pdfjs-serverless": "^1.0.1",
+        "turndown": "^7.2.1",
+        "xlsx": "^0.18.5",
+        "zod": "^3.23.8",
+        "drizzle-orm": "^0.45.1",
+        "@launchstack/orchestration": "workspace:^"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5",
+        "@types/jsdom": "^28.0.1",
+        "@types/turndown": "^5.0.6"
+    },
+    "peerDependencies": {
+        "tesseract.js": "^7.0.0"
+    },
+    "peerDependenciesMeta": {
+        "tesseract.js": {
+            "optional": true
+        }
+    }
+}

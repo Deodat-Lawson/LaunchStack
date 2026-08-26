@@ -19,8 +19,8 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import { pgTable } from "@launchstack/core/db/schema/helpers";
-import { company, document, documentVersions } from "@launchstack/core/db/schema";
+import { pgTable } from "@launchstack/store/schema/helpers";
+import { company, document, documentVersions } from "@launchstack/store/schema";
 
 export const ChatHistory = pgTable(
     "chat_history",

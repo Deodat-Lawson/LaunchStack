@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import { DuckDuckGoSearch } from "@langchain/community/tools/duckduckgo_search";
 import type {
     PdfChunk,
@@ -23,7 +23,7 @@ import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analy
 import { validatePredictiveAnalysis } from "~/lib/agents/supervisor";
 import pLimit from "p-limit";
 import { db } from "~/server/db/index";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { and, eq, ne } from "drizzle-orm";
 import stringSimilarity from "string-similarity-js";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";

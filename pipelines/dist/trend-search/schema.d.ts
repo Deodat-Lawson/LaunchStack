@@ -1,0 +1,231 @@
+import type { InferSelectModel } from "drizzle-orm";
+export type SearchCategory = "fashion" | "finance" | "business" | "tech";
+export interface SearchResult {
+    sourceUrl: string;
+    summary: string;
+    description: string;
+}
+export declare const trendSearchJobStatusEnum: readonly ["queued", "planning", "searching", "synthesizing", "completed", "failed"];
+export declare const trendSearchJobs: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "trend_search_jobs";
+    schema: undefined;
+    columns: {
+        id: import("drizzle-orm/pg-core").PgColumn<{
+            name: "id";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgVarchar";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 256;
+        }>;
+        companyId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "company_id";
+            tableName: "trend_search_jobs";
+            dataType: "bigint";
+            columnType: "PgBigInt64";
+            data: bigint;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        userId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "user_id";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgVarchar";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 256;
+        }>;
+        status: import("drizzle-orm/pg-core").PgColumn<{
+            name: "status";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgVarchar";
+            data: "queued" | "completed" | "failed" | "planning" | "searching" | "synthesizing";
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: ["queued", "planning", "searching", "synthesizing", "completed", "failed"];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 50;
+        }>;
+        query: import("drizzle-orm/pg-core").PgColumn<{
+            name: "query";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        companyContext: import("drizzle-orm/pg-core").PgColumn<{
+            name: "company_context";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        categories: import("drizzle-orm/pg-core").PgColumn<{
+            name: "categories";
+            tableName: "trend_search_jobs";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: SearchCategory[];
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            $type: SearchCategory[];
+        }>;
+        results: import("drizzle-orm/pg-core").PgColumn<{
+            name: "results";
+            tableName: "trend_search_jobs";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: SearchResult[];
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            $type: SearchResult[];
+        }>;
+        errorMessage: import("drizzle-orm/pg-core").PgColumn<{
+            name: "error_message";
+            tableName: "trend_search_jobs";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "created_at";
+            tableName: "trend_search_jobs";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        completedAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "completed_at";
+            tableName: "trend_search_jobs";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "updated_at";
+            tableName: "trend_search_jobs";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+export type TrendSearchJob = InferSelectModel<typeof trendSearchJobs>;
+//# sourceMappingURL=schema.d.ts.map

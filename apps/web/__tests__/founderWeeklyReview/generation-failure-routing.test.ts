@@ -12,7 +12,7 @@ jest.mock("~/server/db", () => ({ db: {} }));
 // import graph does not drag in the ESM-only env loader.
 jest.mock("~/lib/models", () => ({ resolveConfiguredChatModel: jest.fn() }));
 
-import type { FounderWeeklyReviewWorkerService } from "@launchstack/features/founder-weekly-review";
+import type { FounderWeeklyReviewWorkerService } from "@launchstack/pipelines/founder-weekly-review";
 import { handleFounderWeeklyReviewGenerationFailure } from "~/server/inngest/functions/founderWeeklyReview";
 
 type Status = "queued" | "collecting" | "generating" | "draft" | "published" | "failed";

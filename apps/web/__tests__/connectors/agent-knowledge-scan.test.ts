@@ -12,7 +12,7 @@ import path from "node:path";
 import {
     collectAgentKnowledge,
     scanAgentKnowledge,
-} from "@launchstack/features/connectors/agent-knowledge";
+} from "@launchstack/pipelines/connectors/agent-knowledge";
 
 const NUL = String.fromCharCode(0);
 

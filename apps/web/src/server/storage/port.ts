@@ -9,7 +9,7 @@
  * interface exported by @launchstack/core.
  */
 
-import type { StoragePort, UploadInput, UploadResult } from "@launchstack/core/storage";
+import type { StoragePort, UploadInput, UploadResult } from "@launchstack/runtime/storage";
 
 import { uploadFile, fetchFile, deleteFileByUrl, resolveStorageBackend } from "~/lib/storage";
 

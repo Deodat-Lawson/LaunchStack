@@ -1,6 +1,6 @@
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import { performExaSearch } from "./exaSearch";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import type { WebSearchResult, WebSearchAgentInput, WebSearchAgentResult } from "./types";

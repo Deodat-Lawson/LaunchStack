@@ -4,7 +4,7 @@ import {
     listRecipients,
     listSendAttempts,
     listTemplateVersions,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, parseCampaignId, resolveActor } from "../_lib/context";
 

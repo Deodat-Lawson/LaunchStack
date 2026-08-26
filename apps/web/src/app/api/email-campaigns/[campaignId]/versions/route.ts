@@ -5,7 +5,7 @@ import {
     getCampaign,
     listTemplateVersions,
     prepareEmailCampaign,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import {
     fail,

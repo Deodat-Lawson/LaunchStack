@@ -3,7 +3,7 @@
 import React from "react";
 import { FileText, Pencil } from "lucide-react";
 import m from "./metadata.module.css";
-import type { LegalEntry } from "@launchstack/features/company-metadata";
+import type { LegalEntry } from "@launchstack/pipelines/company-metadata";
 
 interface LegalSectionProps {
     legal: LegalEntry[];

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { dispatchEmailCampaign, RecipientSchema } from "@launchstack/features/email-pipeline";
+import { dispatchEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 
 import {
     fail,

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { generateTemplate, reviewTemplate } from "@launchstack/features/email-pipeline";
+import { generateTemplate, reviewTemplate } from "@launchstack/pipelines/email";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

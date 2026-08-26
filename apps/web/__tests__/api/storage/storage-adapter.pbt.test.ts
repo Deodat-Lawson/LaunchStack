@@ -83,7 +83,7 @@ jest.mock("~/server/engine", () => ({
     getEngine: () => ({ db: mockDb }),
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     fileUploads: { id: "id" },
 }));
 

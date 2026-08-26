@@ -2,9 +2,13 @@
 # their own deps (including @huggingface/transformers); pulling them into this
 # workspace would add them to every app install. Trade-off: they are not
 # covered by `pnpm -r typecheck`. See REPOSITORY.md.
+#
+# pipelines/ is the compositions tier — one package, out of packages/ by
+# design: bricks and compositions are different kinds of things.
 packages:
   - apps/*
   - packages/*
+  - pipelines
 
 patchedDependencies:
   drizzle-kit@0.31.10: patches/drizzle-kit@0.31.10.patch

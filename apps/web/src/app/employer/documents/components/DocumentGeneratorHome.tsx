@@ -14,7 +14,7 @@ import {
     UserCheck,
     Gavel,
 } from "lucide-react";
-import { TEMPLATE_REGISTRY, type TemplateField } from "@launchstack/features/legal-templates";
+import { TEMPLATE_REGISTRY, type TemplateField } from "@launchstack/pipelines/legal-templates";
 import { legalTheme as s } from "./LegalGeneratorTheme";
 
 export interface DocumentTemplate {

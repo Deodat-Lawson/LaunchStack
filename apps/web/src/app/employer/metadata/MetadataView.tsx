@@ -37,7 +37,7 @@ import type {
     CompanyInfo,
     CompanyMetadataJSON,
     MetadataFact,
-} from "@launchstack/features/company-metadata";
+} from "@launchstack/pipelines/company-metadata";
 
 interface MetadataResponse {
     metadata: CompanyMetadataJSON | null;

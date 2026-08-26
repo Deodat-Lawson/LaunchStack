@@ -9,7 +9,7 @@ import {
     type FounderWeeklyReviewRepository,
     ReportingPeriodSchema,
     WorkspaceTimezoneSchema,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import type { FounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import type { createRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";

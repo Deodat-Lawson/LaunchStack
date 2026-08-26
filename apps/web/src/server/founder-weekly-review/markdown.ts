@@ -3,7 +3,7 @@ import {
     type FounderWeeklyReviewEvidenceItem,
     type FounderWeeklyReviewPayload,
     type FounderWeeklyReviewV2Payload,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 type RenderableRun = {
     reportingPeriod: { start: string; end: string };

@@ -8,8 +8,8 @@ import {
     determineDocumentRouting,
     renderPagesToImages,
     selectSamplePages,
-} from "@launchstack/core/ocr/complexity";
-import { configureOcr } from "@launchstack/core/ocr/config";
+} from "@launchstack/conversion/ocr/complexity";
+import { configureOcr } from "@launchstack/conversion/ocr/config";
 
 describe("OCR Complexity Module", () => {
     describe("selectSamplePages", () => {

@@ -16,7 +16,7 @@ import {
     Settings,
     Link as LinkIcon,
 } from "lucide-react";
-import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
+import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
 import { legalTheme as s } from "./LegalGeneratorTheme";
 

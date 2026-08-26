@@ -5,7 +5,7 @@
  * (createMarkerAdapter was removed by ADR-004 — it silently aliased Docling.)
  */
 
-export { createAzureAdapter } from "@launchstack/core/ocr/adapters/azureAdapter";
-export { createLandingAIAdapter } from "@launchstack/core/ocr/adapters/landingAdapter";
-export { createDatalabAdapter } from "@launchstack/core/ocr/adapters/datalabAdapter";
-export { createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
+export { createAzureAdapter } from "@launchstack/conversion/ocr/adapters/azureAdapter";
+export { createLandingAIAdapter } from "@launchstack/conversion/ocr/adapters/landingAdapter";
+export { createDatalabAdapter } from "@launchstack/conversion/ocr/adapters/datalabAdapter";
+export { createDoclingAdapter } from "@launchstack/conversion/ocr/adapters/ossAdapter";

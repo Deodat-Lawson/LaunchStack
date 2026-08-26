@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { and, eq, asc } from "drizzle-orm";
 import { db } from "~/server/db";
-import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { document, documentContextChunks } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface RouteParams {

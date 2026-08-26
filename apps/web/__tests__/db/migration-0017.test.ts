@@ -6,7 +6,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const MIGRATIONS_DIR = join(__dirname, "..", "..", "..", "..", "packages", "core", "drizzle");
+const MIGRATIONS_DIR = join(__dirname, "..", "..", "..", "..", "packages", "store", "drizzle");
 const TAG = "20260809142627_file_uploads_company_id";
 const FILENAME = `${TAG}.sql`;
 const LIFECYCLE = "20260808223719_document_creation_lifecycle.sql";

@@ -8,7 +8,7 @@ export const maxDuration = 60;
 
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/core/db/schema";
+import { fileUploads } from "@launchstack/store/schema";
 import { uploadFile, resolveStorageBackend } from "~/lib/storage";
 import { isUploadAccepted } from "~/lib/upload-accepted";
 import { DOCUMENT_LIMITS } from "~/lib/constants";

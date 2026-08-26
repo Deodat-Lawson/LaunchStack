@@ -12,7 +12,7 @@ import {
     acceptAllChanges,
     applyEditsAsMarkdown,
     diffDocxFiles,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 
 // ---------------------------------------------------------------------------
 // Mock fetch globally

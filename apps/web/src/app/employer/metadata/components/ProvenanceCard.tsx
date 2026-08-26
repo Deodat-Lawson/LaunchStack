@@ -3,7 +3,7 @@
 import React from "react";
 import { FileText, Clock, Pencil } from "lucide-react";
 import m from "./metadata.module.css";
-import type { ProvenanceInfo } from "@launchstack/features/company-metadata";
+import type { ProvenanceInfo } from "@launchstack/pipelines/company-metadata";
 
 interface ProvenanceCardProps {
     provenance: ProvenanceInfo;

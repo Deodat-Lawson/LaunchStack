@@ -3,10 +3,7 @@
  * rubric criterion — no missing, no duplicated, no unknown criterion ids.
  */
 
-import {
-    JUDGE_CRITERIA,
-    JudgeResultSchema,
-} from "@launchstack/features/marketing-pipeline/benchmark";
+import { JUDGE_CRITERIA, JudgeResultSchema } from "@launchstack/pipelines/marketing/benchmark";
 
 function fullScores() {
     return JUDGE_CRITERIA.map(criterion => ({

@@ -13,8 +13,8 @@ import { writeFile, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { routeDocument, normalizeDocument } from "@launchstack/core/ocr/processor";
-import { ingestDocument } from "@launchstack/core/ingestion/router";
+import { routeDocument, normalizeDocument } from "@launchstack/conversion/ocr/processor";
+import { ingestDocument } from "@launchstack/conversion/extraction-router";
 
 export const runtime = "nodejs";
 // Keep benchmarks within the 300s default shared by current Vercel plans.

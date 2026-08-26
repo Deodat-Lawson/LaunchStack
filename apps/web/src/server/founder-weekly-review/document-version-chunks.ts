@@ -1,15 +1,15 @@
 import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
-import { getDb, type DbClient } from "@launchstack/core/db";
+import { getDb, type DbClient } from "@launchstack/store/client";
 import {
     document,
     documentContextChunks,
     documentStructure,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import type {
     DocumentVersionForComparison,
     VersionChunk,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 export type VersionChunkLoad =
     | { state: "complete"; chunks: VersionChunk[]; warnings: string[] }

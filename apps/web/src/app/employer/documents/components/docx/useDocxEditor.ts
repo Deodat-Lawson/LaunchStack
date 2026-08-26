@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import type { ReviewItem } from "@launchstack/features/adeu";
+import type { ReviewItem } from "@launchstack/editing";
 
 /**
  * A reviewer's unit of decision.

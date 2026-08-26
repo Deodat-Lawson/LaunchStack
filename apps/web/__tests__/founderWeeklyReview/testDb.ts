@@ -5,9 +5,9 @@ import { join } from "node:path";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 
-import * as coreSchema from "@launchstack/core/db/schema";
-import * as featuresSchema from "@launchstack/features/schema";
-import type { DbClient } from "@launchstack/core/db";
+import * as coreSchema from "@launchstack/store/schema";
+import * as featuresSchema from "@launchstack/pipelines/schema";
+import type { DbClient } from "@launchstack/store/client";
 
 const webDir = join(__dirname, "..", "..");
 const repoRoot = join(webDir, "..", "..");

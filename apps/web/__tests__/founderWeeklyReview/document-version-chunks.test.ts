@@ -3,7 +3,7 @@ import {
     document,
     documentContextChunks,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 

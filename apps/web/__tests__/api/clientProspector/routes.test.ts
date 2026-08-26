@@ -31,7 +31,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
 }));
 
 // Mock the schema export so drizzle-orm's eq() doesn't fail.
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     users: { userId: "userId" },
 }));
 
@@ -39,7 +39,7 @@ jest.mock("@launchstack/core/db/schema", () => ({
 const mockCreateJob = jest.fn();
 const mockGetJobById = jest.fn();
 const mockGetJobsByCompanyId = jest.fn();
-jest.mock("@launchstack/features/client-prospector/db", () => ({
+jest.mock("@launchstack/pipelines/client-prospector/db", () => ({
     createJob: (...args: unknown[]) => mockCreateJob(...args),
     getJobById: (...args: unknown[]) => mockGetJobById(...args),
     getJobsByCompanyId: (...args: unknown[]) => mockGetJobsByCompanyId(...args),

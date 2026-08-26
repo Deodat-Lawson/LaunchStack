@@ -1,4 +1,4 @@
-import { FounderWeeklyReviewEvidenceSnapshotSchema } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewEvidenceSnapshotSchema } from "@launchstack/pipelines/founder-weekly-review";
 
 const period = { start: "2026-02-16", end: "2026-02-28" };
 const make = (items: unknown[]) =>

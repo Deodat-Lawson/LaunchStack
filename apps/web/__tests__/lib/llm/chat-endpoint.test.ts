@@ -18,7 +18,7 @@ import {
     resolveChatModel,
     StructuredOutputError,
     type ChatModelsConfig,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 
 interface Capture {
     path: string;

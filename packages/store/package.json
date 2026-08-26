@@ -1,0 +1,126 @@
+{
+    "name": "@launchstack/store",
+    "version": "0.1.0",
+    "description": "LaunchStack's shared persistence: the Drizzle client bound to the engine schema (25 tables), the raw postgres.js client, sealed credential storage, signed file-access tokens, per-workspace credit metering, and one-off backfills. Owns the engine migration ledger (drizzle/, ledger _launchstack_migrations). Configuration is injected \u2014 nothing here reads process.env.",
+    "license": "Apache-2.0",
+    "type": "module",
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./client": "./src/db/index.ts",
+        "./schema": "./src/db/schema.ts",
+        "./schema/base": "./src/db/schema/base.ts",
+        "./schema/helpers": "./src/db/schema/helpers.ts",
+        "./schema/company-credentials": "./src/db/schema/company-credentials.ts",
+        "./schema/knowledge-graph": "./src/db/schema/knowledge-graph.ts",
+        "./schema/ops": "./src/db/schema/ops.ts",
+        "./schema/outbox": "./src/db/schema/outbox.ts",
+        "./schema/rlm-knowledge-base": "./src/db/schema/rlm-knowledge-base.ts",
+        "./tables": "./src/db/tables.ts",
+        "./pg-vector": "./src/db/pgVector.ts",
+        "./backfills": "./src/db/backfills/index.ts",
+        "./crypto": "./src/crypto/index.ts",
+        "./credits": "./src/credits/index.ts",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "drizzle",
+        "scripts",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./client": {
+                "types": "./dist/db/index.d.ts",
+                "default": "./dist/db/index.js"
+            },
+            "./schema": {
+                "types": "./dist/db/schema.d.ts",
+                "default": "./dist/db/schema.js"
+            },
+            "./schema/base": {
+                "types": "./dist/db/schema/base.d.ts",
+                "default": "./dist/db/schema/base.js"
+            },
+            "./schema/helpers": {
+                "types": "./dist/db/schema/helpers.d.ts",
+                "default": "./dist/db/schema/helpers.js"
+            },
+            "./schema/company-credentials": {
+                "types": "./dist/db/schema/company-credentials.d.ts",
+                "default": "./dist/db/schema/company-credentials.js"
+            },
+            "./schema/knowledge-graph": {
+                "types": "./dist/db/schema/knowledge-graph.d.ts",
+                "default": "./dist/db/schema/knowledge-graph.js"
+            },
+            "./schema/ops": {
+                "types": "./dist/db/schema/ops.d.ts",
+                "default": "./dist/db/schema/ops.js"
+            },
+            "./schema/outbox": {
+                "types": "./dist/db/schema/outbox.d.ts",
+                "default": "./dist/db/schema/outbox.js"
+            },
+            "./schema/rlm-knowledge-base": {
+                "types": "./dist/db/schema/rlm-knowledge-base.d.ts",
+                "default": "./dist/db/schema/rlm-knowledge-base.js"
+            },
+            "./tables": {
+                "types": "./dist/db/tables.d.ts",
+                "default": "./dist/db/tables.js"
+            },
+            "./pg-vector": {
+                "types": "./dist/db/pgVector.d.ts",
+                "default": "./dist/db/pgVector.js"
+            },
+            "./backfills": {
+                "types": "./dist/db/backfills/index.d.ts",
+                "default": "./dist/db/backfills/index.js"
+            },
+            "./crypto": {
+                "types": "./dist/crypto/index.d.ts",
+                "default": "./dist/crypto/index.js"
+            },
+            "./credits": {
+                "types": "./dist/credits/index.d.ts",
+                "default": "./dist/credits/index.js"
+            },
+            "./package.json": "./package.json"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run",
+        "db:generate": "drizzle-kit generate",
+        "db:migrate": "node ./scripts/migrate.mjs",
+        "db:verify": "node ./scripts/migrate.mjs --verify",
+        "db:check": "node ./scripts/check-journal.mjs"
+    },
+    "dependencies": {
+        "@launchstack/runtime": "workspace:^",
+        "drizzle-orm": "^0.45.1",
+        "postgres": "^3.4.7",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5",
+        "dotenv": "^17.2.2",
+        "drizzle-kit": "0.31.10",
+        "tsx": "^4.19.2"
+    }
+}

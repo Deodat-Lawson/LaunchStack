@@ -194,45 +194,6 @@ const eslintConfig = [
         },
         rules: typescriptEslint.configs["disable-type-checked"].rules,
     },
-    // @launchstack/core is the published compatibility facade (ADR-002):
-    // every file under its src is a re-export stub over @launchstack/adapters
-    // and friends (scripts/ci/check-core-facade.mjs enforces the stub shape).
-    // The import bans stay so a stub can never quietly grow a framework
-    // dependency, and the process ban stays — stubs read no env.
-    {
-        files: ["packages/core/src/**/*.{ts,tsx}"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
-                            message:
-                                "@launchstack/core must stay framework-agnostic. " +
-                                "No Next, Clerk, React, or UI libraries in core.",
-                        },
-                        {
-                            group: ["~/*", "@launchstack/features", "@launchstack/features/*"],
-                            message:
-                                "@launchstack/core cannot depend on apps/web (~/*) " +
-                                "or @launchstack/features. Features depend on core, " +
-                                "not the other way around.",
-                        },
-                    ],
-                },
-            ],
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message:
-                        "@launchstack/core must not read process.env. " +
-                        "Accept runtime config through CoreConfig / configure* hooks.",
-                },
-            ],
-        },
-    },
     // Tests and dev-harness scripts interact with jest/vitest mocks and
     // ad-hoc JSON, where the type-aware `no-unsafe-*` family is ~all noise.
     // This is a scoped RULE policy, not a bypass: every other rule (including
@@ -258,257 +219,295 @@ const eslintConfig = [
             "@typescript-eslint/no-non-null-assertion": "off",
         },
     },
-    // Layered engine packages (ADR-002). Dependency direction is strict:
-    //   protocol ← evidence ← application ← adapters ← core/apps/services.
-    // Each layer may import only the layers to its left; nothing below the
-    // app boundary may import Next, Clerk, React, apps/web (~/*), or
-    // @launchstack/features.
-    {
-        files: ["packages/protocol/src/**/*.ts"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: [
-                                "@launchstack/*",
-                                "~/*",
-                                "next",
-                                "next/*",
-                                "@clerk/*",
-                                "react",
-                                "node:*",
-                            ],
-                            message:
-                                "@launchstack/protocol is contracts only: zod and " +
-                                "nothing else — no other workspace package, no " +
-                                "Node built-ins, no frameworks.",
-                        },
-                    ],
-                },
-            ],
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message: "@launchstack/protocol must not read the environment.",
-                },
-            ],
-        },
-    },
-    {
-        files: ["packages/evidence/src/**/*.ts"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: [
-                                "@launchstack/core",
-                                "@launchstack/core/*",
-                                "@launchstack/application",
-                                "@launchstack/application/*",
-                                "@launchstack/adapters",
-                                "@launchstack/adapters/*",
-                                "@launchstack/features",
-                                "@launchstack/features/*",
-                                "~/*",
-                                "next",
-                                "next/*",
-                                "@clerk/*",
-                                "react",
-                                "node:*",
-                            ],
-                            message:
-                                "@launchstack/evidence is pure domain logic: it may " +
-                                "import @launchstack/protocol and nothing else.",
-                        },
-                    ],
-                },
-            ],
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message: "@launchstack/evidence must not read the environment.",
-                },
-            ],
-        },
-    },
-    {
-        files: ["packages/application/src/**/*.ts"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: [
-                                "@launchstack/core",
-                                "@launchstack/core/*",
-                                "@launchstack/adapters",
-                                "@launchstack/adapters/*",
-                                "@launchstack/features",
-                                "@launchstack/features/*",
-                                "~/*",
-                                "next",
-                                "next/*",
-                                "@clerk/*",
-                                "react",
-                                "drizzle-orm",
-                                "drizzle-orm/*",
-                                "postgres",
-                            ],
-                            message:
-                                "@launchstack/application holds use cases and ports " +
-                                "only. It may import protocol + evidence; database " +
-                                "and framework code belongs in adapters/apps.",
-                        },
-                    ],
-                },
-            ],
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message:
-                        "@launchstack/application must not read the environment — " +
-                        "configuration arrives through injected ports.",
-                },
-            ],
-        },
-    },
-    {
-        files: ["packages/adapters/src/**/*.ts"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: [
-                                "@launchstack/features",
-                                "@launchstack/features/*",
-                                "~/*",
-                                "next",
-                                "next/*",
-                                "@clerk/*",
-                                "react",
-                                "react-dom",
-                            ],
-                            message:
-                                "@launchstack/adapters implements ports over " +
-                                "infrastructure. It must stay host-agnostic: no " +
-                                "Next/Clerk/React, no apps/web, no features.",
-                        },
-                    ],
-                },
-            ],
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message:
-                        "@launchstack/adapters must not read process.env — " +
-                        "configuration is injected by the composition roots.",
-                },
-            ],
-        },
-    },
-    // @launchstack/features builds vertical features on top of core. It can
-    // read process.env, but must not depend on Next / Clerk / React (those
-    // live in apps/web — features should work in any Node host).
-    {
-        files: ["packages/features/src/**/*.{ts,tsx}"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
-                            message:
-                                "@launchstack/features must not import Next, Clerk, " +
-                                "or React. Those belong in apps/web. Feature code " +
-                                "has to work in any Node host.",
-                        },
-                        {
-                            group: ["~/*"],
-                            message:
-                                "@launchstack/features cannot import from apps/web " +
-                                "(~/*). Rewrite as a relative import inside the " +
-                                "feature or as an @launchstack/core subpath.",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    // @launchstack/tools holds shared, contract-typed capabilities the feature
-    // verticals compose. It sits one layer below features: tools may import
-    // core, never a vertical — features depend on tools, not the reverse.
-    // Like features it must work in any Node host.
-    {
-        files: ["packages/tools/src/**/*.{ts,tsx}"],
-        rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: [
-                        {
-                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
-                            message:
-                                "@launchstack/tools must not import Next, Clerk, " +
-                                "or React. Tools run in any Node host.",
-                        },
-                        {
-                            group: ["~/*"],
-                            message: "@launchstack/tools cannot import from apps/web (~/*).",
-                        },
-                        {
-                            group: ["@launchstack/features", "@launchstack/features/*"],
-                            message:
-                                "@launchstack/tools cannot import feature verticals: " +
-                                "capabilities move down into tools, pipelines stay in " +
-                                "features. If a tool needs something from a vertical, " +
-                                "the shared piece belongs in tools.",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    // Tools read configuration through injected values; process.env is allowed
-    // only in a tool's config.ts module, so credentials are read once, typed,
-    // in one visible place per tool.
-    {
-        files: ["packages/tools/src/**/*.{ts,tsx}"],
-        ignores: ["packages/tools/src/**/config.ts"],
-        rules: {
-            "no-restricted-globals": [
-                "error",
-                {
-                    name: "process",
-                    message:
-                        "@launchstack/tools reads process.env only in a tool's " +
-                        "config.ts module.",
-                },
-            ],
-        },
-    },
     // Every chat request goes through one OpenAI-compatible transport, which
     // is the only module allowed to construct a chat client. A feature that
     // builds its own skips route resolution, declared-behavior filtering, and
     // usage normalization — and can silently borrow an unrelated API key.
     {
-        files: ["packages/**/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
-        ignores: ["packages/adapters/src/llm/openai-compatible-transport.ts"],
+        files: [
+            "packages/**/src/**/*.{ts,tsx}",
+            "pipelines/src/**/*.{ts,tsx}",
+            "apps/web/src/**/*.{ts,tsx}",
+        ],
+        ignores: ["packages/llm/src/openai-compatible-transport.ts"],
         rules: {
             "no-restricted-imports": ["error", { paths: chatClientImportBans }],
         },
     },
+
+    // ── Feature-package boundaries (ADR-008) ─────────────────────────────
+    // Flat config REPLACES no-restricted-imports per matching block, so each
+    // scope below composes every ban that applies to it: the legacy-name ban
+    // (the flat ban that replaced the facade ratchet), the framework ban, the
+    // tier ban, the per-package dependency direction, and the chat-transport
+    // path bans from above.
+    ...(() => {
+        const legacyBan = {
+            group: [
+                "@launchstack/core",
+                "@launchstack/core/*",
+                "@launchstack/protocol",
+                "@launchstack/protocol/*",
+                "@launchstack/application",
+                "@launchstack/application/*",
+                "@launchstack/adapters",
+                "@launchstack/adapters/*",
+                "@launchstack/features",
+                "@launchstack/features/*",
+            ],
+            message:
+                "Deleted package (ADR-008). Import the owning feature package " +
+                "instead: store/llm/conversion/indexing/search/orchestration/" +
+                "editing/collab/runtime/engine/pipelines.",
+        };
+        const frameworkBan = {
+            group: ["next/*", "next", "@clerk/*", "react", "react-dom", "~/*"],
+            message:
+                "Engine packages must stay framework-agnostic: no Next, Clerk, " +
+                "React, or apps/web imports below the app boundary.",
+        };
+        const noPipelines = {
+            group: ["@launchstack/pipelines", "@launchstack/pipelines/*"],
+            message:
+                "Bricks must not import compositions: pipelines/* may import " +
+                "packages/*, never the reverse (ADR-008).",
+        };
+        const only = (allowed, name) => ({
+            group: [
+                "engine",
+                "runtime",
+                "evidence",
+                "store",
+                "llm",
+                "conversion",
+                "indexing",
+                "search",
+                "orchestration",
+                "editing",
+                "collab",
+                "schema-generator",
+                "pipelines",
+                "design-tokens",
+            ]
+                .filter(p => !allowed.includes(p))
+                .flatMap(p => [`@launchstack/${p}`, `@launchstack/${p}/*`]),
+            message:
+                `${name} may import only ${allowed.length ? allowed.join(", ") : "nothing"} ` +
+                "(ADR-008 dependency direction).",
+        });
+        const noEnv = {
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message:
+                        "Engine packages must not read process.env — configuration " +
+                        "is injected by the composition roots (CoreConfig / configure* hooks).",
+                },
+            ],
+        };
+        const restrict = patterns => ({
+            "no-restricted-imports": ["error", { paths: chatClientImportBans, patterns }],
+        });
+        return [
+            // The flat legacy ban, everywhere.
+            {
+                files: ["**/*.{ts,tsx,mjs}"],
+                ignores: ["**/node_modules/**", "**/dist/**"],
+                rules: {
+                    "no-restricted-imports": ["error", { patterns: [legacyBan] }],
+                },
+            },
+            {
+                files: ["packages/runtime/src/**/*.ts", "packages/evidence/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "runtime/evidence"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/store/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime"], "@launchstack/store"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/llm/src/**/*.ts"],
+                ignores: ["packages/llm/src/openai-compatible-transport.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime", "store"], "@launchstack/llm"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            // The transport file keeps the boundary patterns but not the
+            // chat-client paths ban — it IS the one allowed constructor.
+            {
+                files: ["packages/llm/src/openai-compatible-transport.ts"],
+                rules: {
+                    "no-restricted-imports": [
+                        "error",
+                        { patterns: [legacyBan, frameworkBan, noPipelines] },
+                    ],
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/orchestration/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime", "store"], "@launchstack/orchestration"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/conversion/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(
+                            ["runtime", "store", "llm", "orchestration"],
+                            "@launchstack/conversion"
+                        ),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/indexing/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(
+                            ["runtime", "store", "llm", "orchestration", "conversion"],
+                            "@launchstack/indexing"
+                        ),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/search/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(["runtime", "store", "llm", "evidence"], "@launchstack/search"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/collab/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/engine/src/**/*.ts"],
+                rules: {
+                    ...restrict([legacyBan, frameworkBan, noPipelines]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/schema-generator/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only(
+                            ["runtime", "conversion", "orchestration", "editing"],
+                            "@launchstack/schema-generator"
+                        ),
+                    ]),
+                },
+            },
+            // @launchstack/tools — shared, contract-typed capabilities the
+            // verticals compose. A brick above search, below pipelines; may
+            // read process.env (social/web-research provider keys, inherited
+            // from the features tier where these capabilities were born).
+            {
+                files: ["packages/tools/src/**/*.{ts,tsx}"],
+                rules: restrict([
+                    legacyBan,
+                    frameworkBan,
+                    noPipelines,
+                    only(
+                        ["runtime", "evidence", "store", "llm", "search", "conversion"],
+                        "@launchstack/tools"
+                    ),
+                ]),
+            },
+            // The transcription clients (from the voice vertical) and the adeu
+            // client (from the old features tier) resolve their service
+            // endpoints from the environment — the documented env exceptions
+            // below the composition root (ADR-008).
+            {
+                files: [
+                    "packages/conversion/src/transcription-service.ts",
+                    "packages/conversion/src/audio-transcription/providers/**/*.ts",
+                    "packages/editing/src/**/*.ts",
+                ],
+                rules: {
+                    "no-restricted-globals": "off",
+                },
+            },
+            // pipelines/ — the compositions tier. May import any brick; can
+            // read process.env (product verticals, not engine code); must not
+            // import Next / Clerk / React or apps/web.
+            {
+                files: ["pipelines/src/**/*.{ts,tsx}"],
+                rules: restrict([
+                    legacyBan,
+                    {
+                        group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                        message:
+                            "@launchstack/pipelines must not import Next, Clerk, or React. " +
+                            "Those belong in apps/web. A composition has to work in any Node host.",
+                    },
+                    {
+                        group: ["~/*"],
+                        message:
+                            "@launchstack/pipelines cannot import from apps/web (~/*). " +
+                            "Rewrite as a relative import inside the vertical or as a " +
+                            "feature-package import.",
+                    },
+                ]),
+            },
+        ];
+    })(),
     // Design-system guardrails (see apps/web/README.md). Two tiers so that
     // error- and warn-level restrictions can coexist on the same files
     // (one rule id holds one severity): hard boundaries live in the base

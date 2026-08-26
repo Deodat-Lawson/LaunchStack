@@ -14,7 +14,7 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/core/db/schema";
+import { document, documentVersions } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";

@@ -3,7 +3,7 @@
  * the branching logic in resolve / begin / complete / fail.
  */
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     company: {
         id: "company.id",
         activeEmbeddingIndexKey: "company.active_embedding_index_key",
@@ -17,7 +17,7 @@ jest.mock("@launchstack/core/db/schema", () => ({
     },
 }));
 
-import { configureDatabase, type DbClient } from "@launchstack/core/db";
+import { configureDatabase, type DbClient } from "@launchstack/store/client";
 import {
     beginReindex,
     completeReindex,
@@ -25,7 +25,7 @@ import {
     getCompanyReindexState,
     resolveIngestIndexKey,
     resolveQueryIndexKey,
-} from "@launchstack/core/embeddings";
+} from "@launchstack/llm/embeddings";
 
 const selectMock = jest.fn();
 const updateMock = jest.fn();

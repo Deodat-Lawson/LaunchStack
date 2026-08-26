@@ -14,9 +14,9 @@ import {
     renderTokens,
     simpleMerge,
     unresolvedTokens,
-} from "@launchstack/features/email-pipeline/merge";
-import { RecipientSchema } from "@launchstack/features/email-pipeline/types";
-import type { EmailTemplate } from "@launchstack/features/email-pipeline/types";
+} from "@launchstack/pipelines/email/merge";
+import { RecipientSchema } from "@launchstack/pipelines/email/types";
+import type { EmailTemplate } from "@launchstack/pipelines/email/types";
 
 const recipient = (over: Record<string, unknown> = {}) =>
     RecipientSchema.parse({ email: "ada@example.com", ...over });

@@ -18,7 +18,7 @@ import {
     startHubServer,
     type AgentPersona,
     type HubServerHandle,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const SECRET = "integration-secret";
 

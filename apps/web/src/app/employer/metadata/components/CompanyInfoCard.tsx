@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
 import m from "./metadata.module.css";
-import type { CompanyInfo, MetadataFact } from "@launchstack/features/company-metadata";
+import type { CompanyInfo, MetadataFact } from "@launchstack/pipelines/company-metadata";
 
 type AnyMetadataFact = MetadataFact<string> | MetadataFact<number> | MetadataFact<unknown>;
 

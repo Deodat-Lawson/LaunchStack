@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { listReviewItems } from "@launchstack/features/adeu";
+import { listReviewItems } from "@launchstack/editing";
 
 import { adeuErrorResponse, loadDocument } from "../_shared";
 

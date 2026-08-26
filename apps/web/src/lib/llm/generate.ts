@@ -4,7 +4,7 @@
  */
 
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import type { GenerateStructuredInput } from "./types";
 

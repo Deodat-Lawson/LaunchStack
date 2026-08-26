@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 

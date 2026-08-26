@@ -7,12 +7,12 @@
  * Validates: Requirements 4.1, 4.2, 4.3, 4.5
  */
 
-import type * as CoreLlm from "@launchstack/core/llm";
+import type * as CoreLlm from "@launchstack/llm";
 
 const mockInvoke = jest.fn<Promise<unknown>, []>();
 
-jest.mock("@launchstack/core/llm", () => {
-    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+jest.mock("@launchstack/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/llm");
     return {
         __esModule: true,
         ...actual,
@@ -41,8 +41,8 @@ jest.mock("@launchstack/core/llm", () => {
 });
 
 import * as fc from "fast-check";
-import { synthesizeResults } from "@launchstack/features/trend-search/synthesizer";
-import type { RawSearchResult, SearchCategory } from "@launchstack/features/trend-search";
+import { synthesizeResults } from "@launchstack/pipelines/trend-search/synthesizer";
+import type { RawSearchResult, SearchCategory } from "@launchstack/pipelines/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

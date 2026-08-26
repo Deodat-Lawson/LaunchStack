@@ -13,7 +13,7 @@ import {
     verifyRequest,
     HEADER_SIGNATURE,
     HEADER_TIMESTAMP,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const SECRET = "shared-secret-between-the-two-machines";
 const PATH = `${COLLAB_API_PREFIX}/nodes/poll`;

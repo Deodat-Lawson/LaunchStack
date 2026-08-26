@@ -1,14 +1,14 @@
 /**
  * Local mirror of the FROZEN wire contracts in
- * `packages/protocol/schemas/v1/converter.*.schema.json` and
+ * `packages/schema-generator/schemas/v1/converter.*.schema.json` and
  * `evidence-document.schema.json` (semantics documented in
- * `packages/protocol/src/converter.ts` / `evidence-document.ts`).
+ * `packages/conversion/src/document-converter/wire.ts` / `evidence-document.ts`).
  *
  * This service deliberately lives outside the pnpm workspace, so the shapes
  * are restated here. The vitest suite validates produced EvidenceDocuments
  * against the canonical JSON Schema with ajv, so drift fails the build.
  *
- * Per `packages/protocol/src/version.ts`, request parsing is non-strict:
+ * Per `packages/runtime/src/wire-version.ts`, request parsing is non-strict:
  * unknown fields are stripped, not rejected, so ADDING an optional field
  * upstream stays backward compatible.
  */

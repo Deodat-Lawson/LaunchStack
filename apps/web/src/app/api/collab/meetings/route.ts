@@ -5,7 +5,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import type { AgentPersona } from "@launchstack/core/collab";
+import type { AgentPersona } from "@launchstack/collab";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { createMeetingForCompany, listMeetingsForCompany } from "~/server/collab/runtime";
 import { ensureStarterPersonas, listPersonas } from "~/server/collab/personas";

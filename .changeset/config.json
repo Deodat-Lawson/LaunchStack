@@ -10,7 +10,6 @@
   "ignore": [
     "@launchstack/web",
     "@launchstack/worker",
-    "@launchstack/features",
     "@launchstack/landing"
   ]
 }

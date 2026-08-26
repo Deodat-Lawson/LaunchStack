@@ -15,7 +15,7 @@ import type {
     MetadataFact,
     Visibility,
     Usage,
-} from "@launchstack/features/company-metadata";
+} from "@launchstack/pipelines/company-metadata";
 import {
     forbiddenForRole,
     isManagementRole,

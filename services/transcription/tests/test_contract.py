@@ -1,6 +1,6 @@
 """
 Contract tests: the transcription service's pydantic wire models must satisfy
-the frozen JSON Schemas in packages/protocol/schemas/v1. A field added,
+the frozen JSON Schemas in packages/schema-generator/schemas/v1. A field added,
 removed, or retyped on either side fails here instead of drifting silently.
 """
 
@@ -18,14 +18,14 @@ from app.routes.transcribe import TranscribeResponse, TranscriptSegment
 
 
 def _schema_dir() -> Path:
-    """Locate packages/protocol/schemas/v1 by walking up from this file, so
+    """Locate packages/schema-generator/schemas/v1 by walking up from this file, so
     the tests work regardless of the pytest invocation directory."""
     for parent in Path(__file__).resolve().parents:
-        candidate = parent / "packages" / "protocol" / "schemas" / "v1"
+        candidate = parent / "packages" / "schema-generator" / "schemas" / "v1"
         if candidate.is_dir():
             return candidate
     raise RuntimeError(
-        "Could not locate packages/protocol/schemas/v1 above " + __file__
+        "Could not locate packages/schema-generator/schemas/v1 above " + __file__
     )
 
 

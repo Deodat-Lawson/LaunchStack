@@ -2,8 +2,8 @@ import { POST } from "~/app/api/documents/[id]/versions/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
-import { getOcrConfig } from "@launchstack/core/ocr/config";
-import { parseProvider } from "@launchstack/core/ocr/trigger";
+import { getOcrConfig } from "@launchstack/conversion/ocr/config";
+import { parseProvider } from "@launchstack/conversion/ocr/trigger";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import {
     authorizeInternalFileRef,
@@ -59,7 +59,7 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     document: {
         id: "document.id",
     },
@@ -70,11 +70,11 @@ jest.mock("@launchstack/core/db/schema", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/ocr/config", () => ({
+jest.mock("@launchstack/conversion/ocr/config", () => ({
     getOcrConfig: jest.fn(),
 }));
 
-jest.mock("@launchstack/core/ocr/trigger", () => ({
+jest.mock("@launchstack/conversion/ocr/trigger", () => ({
     parseProvider: jest.fn((provider?: string) => (provider ? provider.toUpperCase() : undefined)),
 }));
 

@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-import {
-    listCampaigns,
-    prepareEmailCampaign,
-    RecipientSchema,
-} from "@launchstack/features/email-pipeline";
+import { listCampaigns, prepareEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, readJson, resolveActor } from "./_lib/context";
 

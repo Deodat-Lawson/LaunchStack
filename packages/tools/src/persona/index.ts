@@ -9,7 +9,7 @@
 
 import { HumanMessage, SystemMessage, type BaseMessageLike } from "@langchain/core/messages";
 import { z } from "zod";
-import type { ResolveChatModelOptions } from "@launchstack/core/llm";
+import type { ResolveChatModelOptions } from "@launchstack/llm";
 
 import {
     formatSnippetBlock,

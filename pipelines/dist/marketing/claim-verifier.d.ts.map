@@ -1,0 +1,1 @@
+{"version":3,"file":"claim-verifier.d.ts","sourceRoot":"","sources":["../../src/marketing/claim-verifier.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,SAAS,CAAC;AAM3C,wBAAsB,kBAAkB,CAAC,IAAI,EAAE;IAC3C,SAAS,EAAE,MAAM,CAAC;IAClB,OAAO,EAAE,MAAM,CAAC;CACnB,GAAG,OAAO,CAAC,WAAW,EAAE,CAAC,CA2CzB"}

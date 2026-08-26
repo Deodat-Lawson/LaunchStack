@@ -6,7 +6,7 @@ import {
     FounderWeeklyReviewEvidenceItemSchema,
     type DocumentVersionForComparison,
     type VersionChunk,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 const version = (
     documentId: bigint,

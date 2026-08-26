@@ -4,7 +4,7 @@
  * checks and optionally an LLM call for deeper validation.
  */
 
-import { runGuardrails, type GuardrailResult } from "@launchstack/core/guardrails";
+import { runGuardrails, type GuardrailResult } from "@launchstack/llm/guardrails";
 
 export type AgentType = "predictive-analysis" | "document-qa";
 

@@ -19,8 +19,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import {
     ProspectorInputSchema,
     DEFAULT_SEARCH_RADIUS,
-} from "@launchstack/features/client-prospector";
-import { createJob, getJobsByCompanyId } from "@launchstack/features/client-prospector/db";
+} from "@launchstack/pipelines/client-prospector";
+import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/client-prospector/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────

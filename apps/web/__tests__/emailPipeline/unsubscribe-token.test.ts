@@ -2,7 +2,7 @@ import {
     UnsubscribeSecretMissingError,
     createUnsubscribeToken,
     verifyUnsubscribeToken,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 /**
  * The unsubscribe link is the one URL in this system handed to strangers, and

@@ -18,7 +18,7 @@ import type { Readable } from "node:stream";
 import { networkInterfaces } from "node:os";
 import { resolve } from "node:path";
 
-import { HubClient, type ChannelMessage, type MeetingState } from "@launchstack/core/collab";
+import { HubClient, type ChannelMessage, type MeetingState } from "@launchstack/collab";
 
 const SECRET = "two-machine-shared-secret";
 // Jest transpiles to CJS, so `__dirname` is the reliable anchor here.

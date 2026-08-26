@@ -1,4 +1,4 @@
-import { createUnsubscribeToken, isSuppressed } from "@launchstack/features/email-pipeline";
+import { createUnsubscribeToken, isSuppressed } from "@launchstack/pipelines/email";
 
 import { createEmailPipelineTestDatabase, type EmailPipelineTestDatabase } from "./testDb";
 

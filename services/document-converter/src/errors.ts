@@ -1,6 +1,6 @@
 /**
  * Typed service errors, serialized as the uniform envelope defined in
- * packages/protocol/schemas/v1/service-error.schema.json:
+ * packages/schema-generator/schemas/v1/service-error.schema.json:
  *
  *   { "error": { "code", "message", "traceId?" } }
  */

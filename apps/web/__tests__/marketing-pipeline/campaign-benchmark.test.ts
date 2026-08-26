@@ -2,7 +2,7 @@
  * Campaign Planner benchmark runner — raw LLM-judge scores.
  *
  * Scores each candidate post in
- *   packages/features/src/marketing-pipeline/benchmark/candidates.sample.json
+ *   pipelines/src/marketing/benchmark/candidates.sample.json
  * against its platform reference (references/<platform>.md), using the LLM judge
  * (scores only — never rewrites). Writes machine-readable results and prints a
  * per-post + per-criterion summary — the raw-score core of the benchmark.
@@ -22,14 +22,14 @@ import {
     JUDGE_CRITERIA,
     type ReferencePlatform,
     type ScoredPost,
-} from "@launchstack/features/marketing-pipeline/benchmark";
+} from "@launchstack/pipelines/marketing/benchmark";
 import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 
 const RUN = ["1", "true"].includes((process.env.RUN_LLM_BENCHMARK ?? "").toLowerCase());
 const suite = RUN ? describe : describe.skip;
 
 const REPO_ROOT = path.resolve(__dirname, "../../../..");
-const BENCH_DIR = path.join(REPO_ROOT, "packages/features/src/marketing-pipeline/benchmark");
+const BENCH_DIR = path.join(REPO_ROOT, "pipelines/src/marketing/benchmark");
 
 interface Candidate {
     id: string;

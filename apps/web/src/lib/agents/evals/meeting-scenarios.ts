@@ -9,7 +9,7 @@
  * good input is not a scoring function.
  */
 
-import type { AgentPersona, TurnPolicy } from "@launchstack/core/collab";
+import type { AgentPersona, TurnPolicy } from "@launchstack/collab";
 
 export interface MeetingEvalScenario {
     id: string;

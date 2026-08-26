@@ -19,7 +19,7 @@ import {
     documentStructure,
     kgEntityMentions,
     workspaceResults,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import {
     ChatHistory,
     documentReferenceResolution,

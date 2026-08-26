@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Pin } from "lucide-react";
-import type { Priority } from "@launchstack/features/company-metadata";
+import type { Priority } from "@launchstack/pipelines/company-metadata";
 
 interface PriorityBadgeProps {
     priority: Priority;

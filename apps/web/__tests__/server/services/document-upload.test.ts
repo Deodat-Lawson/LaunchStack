@@ -1,11 +1,11 @@
-jest.mock("@launchstack/features/voice", () => ({
+jest.mock("@launchstack/conversion", () => ({
     shouldTranscribeFile: jest.fn(() => true),
     transcribeAudioFromUrl: jest.fn(),
     isVideoUrl: jest.fn(() => false),
     transcribeVideoFromUrl: jest.fn(),
 }));
 
-jest.mock("@launchstack/core/embeddings", () => ({
+jest.mock("@launchstack/llm/embeddings", () => ({
     resolveIngestIndexKey: jest.fn(),
 }));
 
@@ -31,16 +31,16 @@ jest.mock("~/lib/credits", () => ({
 
 // Default to a self-hosted deployment, which is what an unset DEPLOYMENT_MODE
 // resolves to. Individual tests override this to exercise the cloud gate.
-jest.mock("@launchstack/core/credits", () => ({
+jest.mock("@launchstack/store/credits", () => ({
     isMeteringEnforced: jest.fn(() => false),
 }));
 
-import { transcribeAudioFromUrl, shouldTranscribeFile } from "@launchstack/features/voice";
+import { transcribeAudioFromUrl, shouldTranscribeFile } from "@launchstack/conversion";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { createDocumentLifecycle } from "~/server/services/document-creation";
 import { hasTokens } from "~/lib/credits";
-import { isMeteringEnforced } from "@launchstack/core/credits";
+import { isMeteringEnforced } from "@launchstack/store/credits";
 
 const mockTranscribeAudioFromUrl = transcribeAudioFromUrl as jest.Mock;
 const mockUploadFile = uploadFile as jest.Mock;

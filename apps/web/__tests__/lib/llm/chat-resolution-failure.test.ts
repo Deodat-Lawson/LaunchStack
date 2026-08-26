@@ -18,7 +18,7 @@ import {
     ChatConfigurationError,
     ChatRouteUnavailableError,
     InvalidReasoningControlError,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 import { describeChatResolutionFailure } from "~/lib/models";
 
 describe("describeChatResolutionFailure", () => {

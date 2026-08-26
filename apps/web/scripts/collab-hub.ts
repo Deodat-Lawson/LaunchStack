@@ -25,7 +25,7 @@ import {
     type AgentPersona,
     type AgentRuntime,
     type TurnPolicy,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 interface MeetingSpec {
     title: string;

@@ -9,7 +9,7 @@ import {
     type FounderWeeklyReviewEvidenceItem,
     type FounderWeeklyReviewEvidenceSnapshot,
     type GenerationEvidenceEnvelope,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 function snapshot(items: FounderWeeklyReviewEvidenceItem[]): FounderWeeklyReviewEvidenceSnapshot {
     return {

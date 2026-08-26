@@ -5,10 +5,10 @@
  * are tested on positive, negative, empty and malformed input.
  */
 
-import { createMerge } from "@launchstack/features/email-pipeline/merge";
-import { RecipientSchema } from "@launchstack/features/email-pipeline/types";
-import type { EmailTemplate } from "@launchstack/features/email-pipeline/types";
-import { SEED_TEMPLATES, seedTemplate } from "@launchstack/features/email-pipeline/templates";
+import { createMerge } from "@launchstack/pipelines/email/merge";
+import { RecipientSchema } from "@launchstack/pipelines/email/types";
+import type { EmailTemplate } from "@launchstack/pipelines/email/types";
+import { SEED_TEMPLATES, seedTemplate } from "@launchstack/pipelines/email/templates";
 import {
     SUBJECT_MAX_CHARS,
     SUBJECT_RECOMMENDED_CHARS,
@@ -20,7 +20,7 @@ import {
     validateRecipients,
     validateRendered,
     validateTemplate,
-} from "@launchstack/features/email-pipeline/validators";
+} from "@launchstack/pipelines/email/validators";
 
 const recipient = (over: Record<string, unknown> = {}) =>
     RecipientSchema.parse({ email: "ada@example.com", ...over });

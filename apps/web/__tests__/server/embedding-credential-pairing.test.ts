@@ -1,7 +1,7 @@
 import {
     configureCompanyEmbeddingDefaults,
     resolveEffectiveEmbeddingConfig,
-} from "@launchstack/core/embeddings";
+} from "@launchstack/llm/embeddings";
 
 /**
  * A credential and the endpoint it is sent to must come from the same source.

@@ -10,7 +10,7 @@ import {
     documentContextChunks,
     documentStructure,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { founderWeeklyReviewDispatches, founderWeeklyReviewRuns } from "~/server/db/schema";
 import {
     FounderWeeklyReviewEvidenceService,
@@ -19,7 +19,7 @@ import {
     FounderWeeklyReviewWorkerService,
     generateFounderWeeklyReview,
     validateFounderWeeklyReviewV2Citations,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
 import { StrictCurrentWorkspaceDocumentStore } from "~/server/founder-weekly-review/workspace-document-store";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";

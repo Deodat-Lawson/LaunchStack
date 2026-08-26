@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { refineContent } from "@launchstack/features/marketing-pipeline";
-import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
-import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";
+import { refineContent } from "@launchstack/pipelines/marketing";
+import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
+import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 

@@ -45,7 +45,7 @@ jest.mock("~/server/db/index", () => ({
     },
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("@launchstack/store/schema", () => ({
     document: {
         id: "document.id",
         title: "document.title",
@@ -94,7 +94,7 @@ jest.mock("~/lib/tools/rag", () => ({
     createDocumentVectorRetriever: jest.fn(),
 }));
 
-jest.mock("@launchstack/core/embeddings", () => ({
+jest.mock("@launchstack/llm/embeddings", () => ({
     resolveEmbeddingIndex: () => ({ indexKey: "default" }),
     isLegacyEmbeddingIndex: () => false,
     getCompanyEmbeddingConfig: jest.fn().mockResolvedValue(null),
@@ -133,14 +133,14 @@ jest.mock("~/server/chat-request-compat", () => ({
     validateDeprecatedChatSelection: () => ({ ok: true }),
 }));
 
-jest.mock("@launchstack/core/llm", () => ({
+jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => ({ inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
 }));
 
 // Model/provider tables are still needed by the real request schema.
-jest.mock("@launchstack/core/llm/types", () => ({
-    ...jest.requireActual("@launchstack/core/llm/types"),
+jest.mock("@launchstack/llm/types", () => ({
+    ...jest.requireActual("@launchstack/llm/types"),
 }));
 
 jest.mock("~/lib/credits", () => ({
@@ -148,7 +148,7 @@ jest.mock("~/lib/credits", () => ({
     llmChatTokens: () => 0,
 }));
 
-jest.mock("@launchstack/core/credits", () => ({
+jest.mock("@launchstack/store/credits", () => ({
     isMeteringEnabled: () => false,
 }));
 

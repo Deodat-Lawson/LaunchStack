@@ -14,12 +14,21 @@ WORKDIR /app
 FROM base AS deps
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .pnpmfile.cjs ./
 COPY patches ./patches/
-COPY packages/core/package.json ./packages/core/
-COPY packages/features/package.json ./packages/features/
-COPY packages/protocol/package.json ./packages/protocol/
+COPY packages/runtime/package.json ./packages/runtime/
 COPY packages/evidence/package.json ./packages/evidence/
-COPY packages/application/package.json ./packages/application/
-COPY packages/adapters/package.json ./packages/adapters/
+COPY packages/store/package.json ./packages/store/
+COPY packages/llm/package.json ./packages/llm/
+COPY packages/conversion/package.json ./packages/conversion/
+COPY packages/indexing/package.json ./packages/indexing/
+COPY packages/search/package.json ./packages/search/
+COPY packages/orchestration/package.json ./packages/orchestration/
+COPY packages/editing/package.json ./packages/editing/
+COPY packages/collab/package.json ./packages/collab/
+COPY packages/engine/package.json ./packages/engine/
+COPY packages/schema-generator/package.json ./packages/schema-generator/
+COPY packages/tools/package.json ./packages/tools/
+COPY packages/design-tokens/package.json ./packages/design-tokens/
+COPY pipelines/package.json ./pipelines/
 COPY apps/web/package.json ./apps/web/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
@@ -31,6 +40,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 FROM deps AS builder
 COPY tsconfig.base.json ./
 COPY packages ./packages
+COPY pipelines ./pipelines
 # apps/web only — apps/worker has its own image and apps/landing is not
 # containerized at all. `.dockerignore` already excludes landing; naming the
 # directory explicitly makes it structural rather than a matter of ignore-file
@@ -50,7 +60,7 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
     pnpm --filter @launchstack/web build
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
-# Applies the ordered SQL migrations in packages/core/drizzle — the same
+# Applies the ordered SQL migrations in packages/store/drizzle — the same
 # command local dev and CI run. The runner is
 # plain ESM depending only on postgres + dotenv, so this stage needs neither
 # the app source nor drizzle-kit nor tsx.
@@ -63,11 +73,11 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
 # the app compiling at all. `docker compose up migrate` is now fast and cannot
 # be broken by a TypeScript error in the web app.
 FROM deps AS migrate
-COPY packages/core/drizzle ./packages/core/drizzle
-COPY packages/core/scripts ./packages/core/scripts
+COPY packages/store/drizzle ./packages/store/drizzle
+COPY packages/store/scripts ./packages/store/scripts
 COPY apps/web/drizzle ./apps/web/drizzle
 
-WORKDIR /app/packages/core
+WORKDIR /app/packages/store
 # Engine set first, then product: product migrations carry foreign keys into
 # engine tables, so the order is load-bearing, not cosmetic.
 CMD ["sh", "-c", "node scripts/migrate.mjs && node scripts/migrate.mjs --set=product"]

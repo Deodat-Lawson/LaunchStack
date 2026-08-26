@@ -20,9 +20,9 @@ import {
     applyEditsAsMarkdown,
     diffDocxFiles,
     AdeuServiceError,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 
-import type { BatchSummary } from "@launchstack/features/adeu";
+import type { BatchSummary } from "@launchstack/editing";
 
 // ---------------------------------------------------------------------------
 // Mock fetch globally

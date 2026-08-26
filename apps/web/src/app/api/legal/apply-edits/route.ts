@@ -14,7 +14,7 @@ import {
     AdeuConfigError,
     AdeuServiceError,
     type DocumentEdit,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

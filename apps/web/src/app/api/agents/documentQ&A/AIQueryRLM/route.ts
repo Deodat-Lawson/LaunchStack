@@ -19,7 +19,7 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -33,7 +33,7 @@ import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
 import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
-import type { SemanticType } from "@launchstack/core/db/schema";
+import type { SemanticType } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";

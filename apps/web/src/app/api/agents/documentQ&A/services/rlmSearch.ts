@@ -22,10 +22,10 @@ import {
     type TokenBudgetOptions,
 } from "~/lib/tools/rag/retrievers";
 import { getEmbeddings } from "./models";
-import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { db } from "~/server/db";
-import { document, type SemanticType, type PreviewType } from "@launchstack/core/db/schema";
+import { document, type SemanticType, type PreviewType } from "@launchstack/store/schema";
 
 // ============================================================================
 // Types

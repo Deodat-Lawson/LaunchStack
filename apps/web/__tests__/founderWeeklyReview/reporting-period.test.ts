@@ -1,4 +1,4 @@
-import { resolveReportingPeriodBounds } from "@launchstack/features/founder-weekly-review";
+import { resolveReportingPeriodBounds } from "@launchstack/pipelines/founder-weekly-review";
 
 describe("resolveReportingPeriodBounds", () => {
     it("resolves midnight-to-midnight bounds in the workspace timezone", () => {

@@ -11,7 +11,7 @@ import {
     vector,
     bigserial,
 } from "drizzle-orm/pg-core";
-import { pgTable } from "@launchstack/core/db/schema/helpers";
+import { pgTable } from "@launchstack/store/schema/helpers";
 
 /**
  * Sticky-note style annotations attached to a document.

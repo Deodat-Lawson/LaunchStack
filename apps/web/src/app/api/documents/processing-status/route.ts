@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { ocrJobs } from "@launchstack/core/db/schema";
+import { ocrJobs } from "@launchstack/store/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

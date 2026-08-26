@@ -18,7 +18,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const FEATURES_SRC = path.resolve(__dirname, "../../../../packages/features/src");
+const FEATURES_SRC = path.resolve(__dirname, "../../../../pipelines/src");
 
 function walk(dir: string): string[] {
     const out: string[] = [];

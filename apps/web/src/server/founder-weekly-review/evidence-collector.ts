@@ -3,7 +3,7 @@ import {
     FounderWeeklyReviewEvidenceSnapshotSchema,
     type FounderWeeklyReviewEvidenceSnapshot,
     type ReportingPeriod,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "./document-version-chunks";
 import { StrictCurrentWorkspaceDocumentStore } from "./workspace-document-store";
 

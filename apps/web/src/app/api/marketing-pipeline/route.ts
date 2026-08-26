@@ -1,8 +1,8 @@
 import {
     MarketingPipelineInputSchema,
     runMarketingPipeline,
-} from "@launchstack/features/marketing-pipeline";
-import type { PipelineSSEEvent } from "@launchstack/features/marketing-pipeline";
+} from "@launchstack/pipelines/marketing";
+import type { PipelineSSEEvent } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, readJson } from "~/server/api/responses";
 

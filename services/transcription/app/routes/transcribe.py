@@ -2,7 +2,7 @@
 POST /transcribe — Transcribe audio files to text.
 Replaces external speech-to-text API calls with local Whisper inference.
 
-Wire format frozen: packages/protocol/schemas/v1/transcription.transcribe-response.schema.json
+Wire format frozen: packages/schema-generator/schemas/v1/transcription.transcribe-response.schema.json
 """
 
 from fastapi import APIRouter, Depends, File, Request, UploadFile, HTTPException

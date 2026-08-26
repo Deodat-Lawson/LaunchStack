@@ -8,7 +8,7 @@ import {
     ProspectorInputSchema,
     ProspectorEventDataSchema,
     LatLngSchema,
-} from "@launchstack/features/client-prospector";
+} from "@launchstack/pipelines/client-prospector";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

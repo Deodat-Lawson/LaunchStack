@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { configureRag, type RagPort, type RagSearchResult } from "@launchstack/core/rag";
+import { configureRag, type RagPort, type RagSearchResult } from "@launchstack/search";
 import { lookUpClaim } from "@launchstack/tools/claim-evidence";
 
 function port(impl: RagPort["companyEnsembleSearch"]): RagPort {

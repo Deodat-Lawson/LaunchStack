@@ -14,7 +14,7 @@ import {
     type ChannelMessage,
     type MeetingConfig,
     type MeetingState,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 import { MEETING_EVAL_SCENARIOS } from "~/lib/agents/evals/meeting-scenarios";
 import {

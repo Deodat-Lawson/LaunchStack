@@ -12,7 +12,7 @@ jest.mock("~/env", () => ({
 }));
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
 jest.mock("~/lib/storage", () => ({ uploadFile: jest.fn() }));
-jest.mock("@launchstack/core/embeddings", () => ({ resolveIngestIndexKey: jest.fn() }));
+jest.mock("@launchstack/llm/embeddings", () => ({ resolveIngestIndexKey: jest.fn() }));
 jest.mock("~/server/services/document-creation", () => ({
     createDocumentLifecycle: jest.fn(),
     createDocumentVersionLifecycle: jest.fn(),
@@ -26,8 +26,8 @@ jest.mock("~/server/db", () => ({
     db: { update: (table: unknown) => mockDbUpdate(table) },
 }));
 
-import type { KnowledgeItem } from "@launchstack/features/connectors";
-import { resolveIngestIndexKey } from "@launchstack/core/embeddings";
+import type { KnowledgeItem } from "@launchstack/pipelines/connectors";
+import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
 import { uploadFile } from "~/lib/storage";
 import {

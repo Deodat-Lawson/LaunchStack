@@ -22,7 +22,7 @@ import {
     FounderWeeklyReviewEvidenceSnapshotSchema,
     generateFounderWeeklyReview,
     type FounderWeeklyReviewEvidenceSnapshot,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
 import { StrictCurrentWorkspaceDocumentStore } from "~/server/founder-weekly-review/workspace-document-store";
 

@@ -18,9 +18,9 @@ import { BaseRetriever, type BaseRetrieverInput } from "@langchain/core/retrieve
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import { db } from "~/server/db/index";
-import { document, documentSections } from "@launchstack/core/db/schema";
+import { document, documentSections } from "@launchstack/store/schema";
 import { inArray, and, eq, sql, type SQLWrapper } from "drizzle-orm";
-import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/core/graph";
+import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/indexing/knowledge-graph";
 import neo4j, { type Session } from "neo4j-driver";
 import { getEngine } from "~/server/engine";
 

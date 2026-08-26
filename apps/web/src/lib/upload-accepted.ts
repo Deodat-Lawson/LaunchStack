@@ -4,7 +4,7 @@
  * types that can be meaningfully processed are allowed.
  */
 
-import { EXTENSION_TO_SOURCE_TYPE, MIME_TO_SOURCE_TYPE } from "@launchstack/core/ingestion/types";
+import { EXTENSION_TO_SOURCE_TYPE, MIME_TO_SOURCE_TYPE } from "@launchstack/conversion/types";
 
 const EMAIL_SOURCE = "email";
 const UNKNOWN_SOURCE = "unknown";

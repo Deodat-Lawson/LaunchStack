@@ -3,7 +3,7 @@
 import React from "react";
 import { Target, MapPin, Layers } from "lucide-react";
 import m from "./metadata.module.css";
-import type { MarketsInfo, MetadataFact } from "@launchstack/features/company-metadata";
+import type { MarketsInfo, MetadataFact } from "@launchstack/pipelines/company-metadata";
 
 interface MarketsSectionProps {
     markets: MarketsInfo;

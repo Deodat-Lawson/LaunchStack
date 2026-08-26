@@ -20,7 +20,7 @@
 
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import type { ResolveChatModelOptions } from "@launchstack/core/llm";
+import type { ResolveChatModelOptions } from "@launchstack/llm";
 
 import { retrieveCompanySnippets, SNIPPET_POLICIES } from "../grounded-retrieval";
 import { invokeToolStructured } from "../llm";

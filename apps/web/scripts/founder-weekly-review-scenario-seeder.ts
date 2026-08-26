@@ -1,13 +1,13 @@
 import { createHash } from "node:crypto";
 
-import type { DbClient } from "@launchstack/core/db";
+import type { DbClient } from "@launchstack/store/client";
 import {
     company,
     document,
     documentContextChunks,
     documentStructure,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { eq, sql } from "drizzle-orm";
 
 import type { FounderWeeklyReviewScenario } from "../test-fixtures/founder-weekly-review/scenarios/contracts";

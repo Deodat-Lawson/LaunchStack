@@ -13,7 +13,7 @@
  *     that thin context is better than no result.
  */
 
-import { getRag, type CompanySearchOptions, type RagSearchResult } from "@launchstack/core/rag";
+import { getRag, type CompanySearchOptions, type RagSearchResult } from "@launchstack/search";
 
 export interface SnippetPolicy {
     topK: number;

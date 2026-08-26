@@ -29,7 +29,7 @@ import {
     type MeetingState,
     type SlackClient,
     type TurnPolicy,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 import { collabChannel, collabMeeting, collabNode } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { env } from "~/env";

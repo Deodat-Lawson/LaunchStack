@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { MarketingPlatformEnum } from "@launchstack/features/marketing-pipeline";
-import { markContentPublished, publishContent } from "@launchstack/features/marketing-pipeline";
+import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
+import { markContentPublished, publishContent } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 

@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/core/db/schema";
+import { document, documentVersions } from "@launchstack/store/schema";
 
 type TargetResult = { ok: true } | { ok: false; response: NextResponse };
 

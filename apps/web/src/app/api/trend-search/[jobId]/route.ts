@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getJobById } from "@launchstack/features/trend-search/db";
+import { getJobById } from "@launchstack/pipelines/trend-search/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ jobId: string }> }) {

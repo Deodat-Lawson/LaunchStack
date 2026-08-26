@@ -6,8 +6,8 @@
  */
 
 import * as fc from "fast-check";
-import { executeSearch } from "@launchstack/features/trend-search/web-search";
-import type { PlannedQuery, SearchCategory } from "@launchstack/features/trend-search";
+import { executeSearch } from "@launchstack/pipelines/trend-search/web-search";
+import type { PlannedQuery, SearchCategory } from "@launchstack/pipelines/trend-search";
 
 // Providers read API keys from process.env directly, so manipulate process.env
 // (not a mocked ~/env module) in these tests.

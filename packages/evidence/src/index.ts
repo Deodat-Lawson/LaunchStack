@@ -8,7 +8,7 @@
  *
  * This package must stay pure: no database, no HTTP, no Node built-ins, no
  * environment access, and no ambient time — clocks are always parameters.
- * Its only permitted dependency is `@launchstack/protocol`.
+ * It depends on nothing at all.
  */
 export {
     anchorKey,
@@ -21,16 +21,21 @@ export {
     type PageSpan,
     type ParsedAnchorKey,
     type TimeSpan,
-} from "./anchors";
+} from "./citation-anchors";
 
 export {
     isSuperseded,
     resolveCurrentVersion,
     supersessionChain,
     type SourceVersionMeta,
-} from "./versioning";
+} from "./version-supersession";
 
-export { diffVersions, type ChunkFingerprint, type ChunkMove, type VersionDiff } from "./diffing";
+export {
+    diffVersions,
+    type ChunkFingerprint,
+    type ChunkMove,
+    type VersionDiff,
+} from "./version-diff";
 
 export {
     computeFreshness,
@@ -38,9 +43,9 @@ export {
     isValidFreshnessPolicy,
     type FreshnessPolicy,
     type FreshnessTier,
-} from "./freshness";
+} from "./version-freshness";
 
-export { normalizeFactValue, type EvidenceAssertion } from "./assertions";
+export { normalizeFactValue, type EvidenceAssertion } from "./fact-assertions";
 
 export {
     compareAssertionRecency,
@@ -51,7 +56,7 @@ export {
     type DetectConflictsOptions,
     type FactConflict,
     type RecencyRanked,
-} from "./conflicts";
+} from "./fact-conflicts";
 
 export {
     reconcile,
@@ -60,4 +65,4 @@ export {
     type ReconcileOptions,
     type ReconcileResult,
     type SupersededValue,
-} from "./reconciliation";
+} from "./fact-ledger";

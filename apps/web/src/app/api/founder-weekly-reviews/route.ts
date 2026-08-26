@@ -1,4 +1,4 @@
-import { FounderWeeklyReviewRepository } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewRepository } from "@launchstack/pipelines/founder-weekly-review";
 import { productionFounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import { createRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
 import { inngest } from "~/server/inngest/client";

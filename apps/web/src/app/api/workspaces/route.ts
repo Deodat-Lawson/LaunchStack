@@ -3,7 +3,7 @@ import { eq, desc, count } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { ensureTokenAccount } from "~/lib/credits";
 import { setActiveWorkspaceCookie, getActiveCompanyId } from "~/lib/active-workspace";

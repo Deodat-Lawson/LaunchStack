@@ -3,7 +3,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq, desc, count } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
 

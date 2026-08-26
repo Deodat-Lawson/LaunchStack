@@ -1,4 +1,4 @@
-import { signFileAccessToken, verifyFileAccessToken } from "@launchstack/core/crypto";
+import { signFileAccessToken, verifyFileAccessToken } from "@launchstack/store/crypto";
 
 const SECRET = "test-file-access-secret";
 

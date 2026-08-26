@@ -68,7 +68,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Generate a cited investor update for a reporting period.",
         scope: "workspace",
-        feature: "@launchstack/features/founder-weekly-review",
+        feature: "@launchstack/pipelines/founder-weekly-review",
         routes: ["founder-weekly-reviews"],
         notes:
             "Resolves its actor through a vertical-specific resolver rather than the shared " +
@@ -79,7 +79,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Generate an email from a template, review it, and send it to a recipient list.",
         scope: "mixed",
-        feature: "@launchstack/features/email-pipeline",
+        feature: "@launchstack/pipelines/email",
         routes: ["email-campaigns", "email-campaign-runs", "email-pipeline"],
         unscopedRoutes: {
             "email-pipeline/unsubscribe/[token]":
@@ -94,7 +94,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Find and score prospective customers in a place and category.",
         scope: "workspace",
-        feature: "@launchstack/features/client-prospector",
+        feature: "@launchstack/pipelines/client-prospector",
         routes: ["client-prospector"],
         notes: "Backend and background job complete; no UI exists yet.",
     },
@@ -103,7 +103,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Draft platform-specific posts grounded in company documents.",
         scope: "workspace",
-        feature: "@launchstack/features/marketing-pipeline",
+        feature: "@launchstack/pipelines/marketing",
         routes: ["marketing-pipeline"],
     },
     {
@@ -111,7 +111,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Research a market question against the web and synthesise a brief.",
         scope: "workspace",
-        feature: "@launchstack/features/trend-search",
+        feature: "@launchstack/pipelines/trend-search",
         routes: ["trend-search"],
         notes: "Backend and background job complete; no UI exists yet.",
     },
@@ -120,7 +120,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Generate legal documents from templates and redline existing ones.",
         scope: "workspace",
-        feature: "@launchstack/features/legal-templates",
+        feature: "@launchstack/pipelines/legal-templates",
         routes: ["legal"],
         notes:
             "The legal-specific half of document-generator (legal-generate, legal-chat) " +
@@ -149,7 +149,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         tier: "tool",
         summary: "Explain a code repository and diagram its architecture.",
         scope: "workspace",
-        feature: "@launchstack/features/repo-explainer",
+        feature: "@launchstack/pipelines/repo-explainer",
         routes: ["repo-explainer"],
     },
     {
@@ -222,7 +222,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "The company's own facts: profile, extracted metadata, history.",
         scope: "workspace",
-        feature: "@launchstack/features/company-metadata",
+        feature: "@launchstack/pipelines/company-metadata",
         routes: ["company", "fetchCompany", "updateCompany"],
         notes: "Read by most tools to ground generation; written by the projection worker.",
     },
@@ -242,7 +242,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "Speech to text and text to speech.",
         scope: "workspace",
-        feature: "@launchstack/features/voice",
+        feature: "@launchstack/conversion",
         routes: ["voice"],
         notes: "Used by a few tools rather than most — capture and narration, not core.",
     },
@@ -251,7 +251,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "Register an external body of knowledge as a source.",
         scope: "workspace",
-        feature: "@launchstack/features/connectors",
+        feature: "@launchstack/pipelines/connectors",
         routes: ["connectors"],
         notes: "One connector today, environment-gated.",
     },

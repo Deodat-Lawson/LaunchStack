@@ -1,4 +1,4 @@
-import type { PublicChatConfig } from "@launchstack/core/llm";
+import type { PublicChatConfig } from "@launchstack/llm";
 
 // jest.mock is hoisted; only `mock*`-prefixed names may be referenced inside it.
 const mockPublicChatConfig = jest.fn<PublicChatConfig, []>();

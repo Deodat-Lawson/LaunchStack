@@ -14,4 +14,4 @@ export {
     createDocumentBM25Retriever,
     createCompanyBM25Retriever,
     createMultiDocBM25Retriever,
-} from "@launchstack/core/rag/retrievers";
+} from "@launchstack/search/retrievers";

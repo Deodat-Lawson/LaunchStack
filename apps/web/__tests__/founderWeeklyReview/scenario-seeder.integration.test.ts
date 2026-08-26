@@ -14,8 +14,8 @@
 
 import { eq } from "drizzle-orm";
 
-import { document } from "@launchstack/core/db/schema";
-import { FounderWeeklyReviewEvidenceService } from "@launchstack/features/founder-weekly-review";
+import { document } from "@launchstack/store/schema";
+import { FounderWeeklyReviewEvidenceService } from "@launchstack/pipelines/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
 
 import { parseScenario } from "../../scripts/founder-weekly-review-scenario-loader";

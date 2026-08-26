@@ -3,7 +3,7 @@ import {
     normalizeFounderContextRetrievalQuery,
     selectWorkspaceDocumentHits,
     type WorkspaceDocumentHit,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 
 const hit = (
     documentId: bigint,

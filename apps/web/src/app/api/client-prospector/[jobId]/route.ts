@@ -7,7 +7,7 @@
 
 import { NextResponse } from "next/server";
 
-import { getJobById } from "@launchstack/features/client-prospector/db";
+import { getJobById } from "@launchstack/pipelines/client-prospector/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ jobId: string }> }) {

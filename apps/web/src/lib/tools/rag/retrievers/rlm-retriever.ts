@@ -32,8 +32,8 @@ import {
     type SemanticType,
     type PreviewType,
     type ResultType,
-} from "@launchstack/core/db/schema";
-import { isLegacyEmbeddingIndex, type EmbeddingIndexConfig } from "@launchstack/core/embeddings";
+} from "@launchstack/store/schema";
+import { isLegacyEmbeddingIndex, type EmbeddingIndexConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "../types";
 
 const currentVersionPredicate = (

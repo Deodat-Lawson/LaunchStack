@@ -59,17 +59,18 @@ const CHAT_MODEL_IMPORT =
     /^\s*import\s+[^;]*\b(ChatOpenAI|ChatAnthropic|ChatGoogleGenerativeAI|ChatOllama)\b[^;]*from\s+["']@langchain\//m;
 
 describe("chat SDK imports", () => {
-    // ADR-002: the transport implementation lives in @launchstack/adapters;
-    // @launchstack/core's llm subpath is a re-export stub over it.
-    const TRANSPORT = join("packages", "adapters", "src", "llm", "openai-compatible-transport.ts");
+    // ADR-008: the transport lives in @launchstack/llm.
+    const TRANSPORT = join("packages", "llm", "src", "openai-compatible-transport.ts");
 
     it("restricts chat model construction to the single transport module", () => {
-        const offenders = [...sourceFiles("packages"), ...sourceFiles("apps/web/src")].filter(
-            file => {
-                if (relative(TRANSPORT, file) === "") return false;
-                return CHAT_MODEL_IMPORT.test(read(file));
-            }
-        );
+        const offenders = [
+            ...sourceFiles("packages"),
+            ...sourceFiles("pipelines/src"),
+            ...sourceFiles("apps/web/src"),
+        ].filter(file => {
+            if (relative(TRANSPORT, file) === "") return false;
+            return CHAT_MODEL_IMPORT.test(read(file));
+        });
 
         expect(offenders).toEqual([]);
     });
@@ -82,17 +83,16 @@ describe("chat SDK imports", () => {
 });
 
 describe("chat consumers use the resolver", () => {
-    const consumers = [
-        ...sourceFiles("apps/web/src"),
-        ...sourceFiles("packages/features/src"),
-    ].filter(file => {
-        const source = read(file);
-        return (
-            /resolveChatModel|resolveConfiguredChatModel|invokeStructured/.test(source) &&
-            !file.endsWith("chat-model-factory.ts") &&
-            !file.endsWith("structured-output.ts")
-        );
-    });
+    const consumers = [...sourceFiles("apps/web/src"), ...sourceFiles("pipelines/src")].filter(
+        file => {
+            const source = read(file);
+            return (
+                /resolveChatModel|resolveConfiguredChatModel|invokeStructured/.test(source) &&
+                !file.endsWith("chat-model-factory.ts") &&
+                !file.endsWith("structured-output.ts")
+            );
+        }
+    );
 
     it("finds the expected consumers", () => {
         expect(consumers.length).toBeGreaterThan(10);
@@ -205,22 +205,45 @@ describe("env.ts stays a light import", () => {
      * cold-start and bundle cost for a client most of them never construct.
      */
     const WEB_SRC = "apps/web/src";
-    const CORE_SRC = "packages/core/src";
-    const ADAPTERS_SRC = "packages/adapters/src";
+
+    // ADR-008: packages resolve through their own dev exports maps, so the
+    // walk follows exactly what the bundler would — no hand-maintained
+    // subpath table to drift.
+    const exportMaps = new Map<string, { dir: string; exports: Record<string, string> }>();
+    for (const [name, dir] of [
+        ...readdirSync(join(repoRoot, "packages")).map(
+            p => [`@launchstack/${p}`, join("packages", p)] as const
+        ),
+        ["@launchstack/pipelines", "pipelines"] as const,
+    ]) {
+        try {
+            const pkg = JSON.parse(read(join(dir, "package.json"))) as {
+                name?: string;
+                exports?: Record<string, unknown>;
+            };
+            if (!pkg.name?.startsWith("@launchstack/") || !pkg.exports) continue;
+            const flat: Record<string, string> = {};
+            for (const [sub, target] of Object.entries(pkg.exports)) {
+                if (typeof target === "string") flat[sub] = target;
+            }
+            exportMaps.set(pkg.name, { dir, exports: flat });
+        } catch {
+            // not a package dir
+        }
+    }
 
     function resolveSpec(spec: string, from: string): string | null {
         let base: string;
         if (spec.startsWith("~/")) base = join(WEB_SRC, spec.slice(2));
-        else if (spec === "@launchstack/core") base = join(CORE_SRC, "index");
-        else if (spec.startsWith("@launchstack/core/"))
-            base = join(CORE_SRC, spec.slice("@launchstack/core/".length));
-        // ADR-002: core subpaths are stubs re-exporting @launchstack/adapters —
-        // follow the facade into the implementation or the walk stops at a stub
-        // and this guard passes vacuously.
-        else if (spec === "@launchstack/adapters") base = join(ADAPTERS_SRC, "index");
-        else if (spec.startsWith("@launchstack/adapters/"))
-            base = join(ADAPTERS_SRC, spec.slice("@launchstack/adapters/".length));
-        else if (spec.startsWith(".")) base = join(from, "..", spec);
+        else if (spec.startsWith("@launchstack/")) {
+            const name = spec.split("/").slice(0, 2).join("/");
+            const entry = exportMaps.get(name);
+            if (!entry) return null;
+            const sub = spec === name ? "." : `./${spec.slice(name.length + 1)}`;
+            const target = entry.exports[sub];
+            if (!target) return null;
+            return join(entry.dir, target);
+        } else if (spec.startsWith(".")) base = join(from, "..", spec);
         else return null;
 
         for (const candidate of [`${base}.ts`, `${base}.tsx`, join(base, "index.ts")]) {

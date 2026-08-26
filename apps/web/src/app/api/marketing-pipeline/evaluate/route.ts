@@ -2,11 +2,11 @@ import { z } from "zod";
 
 import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 
-import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
+import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import {
     scorePost,
     type ReferencePlatform,
-} from "@launchstack/features/marketing-pipeline/benchmark";
+} from "@launchstack/pipelines/marketing/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 

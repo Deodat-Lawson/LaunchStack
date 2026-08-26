@@ -4,10 +4,10 @@ import {
     document,
     documentContextChunks,
     documentVersions,
-} from "@launchstack/core/db/schema";
+} from "@launchstack/store/schema";
 import { StrictCurrentWorkspaceDocumentStore } from "~/server/founder-weekly-review/workspace-document-store";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
-import { FounderWeeklyReviewEvidenceService } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewEvidenceService } from "@launchstack/pipelines/founder-weekly-review";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeDb =

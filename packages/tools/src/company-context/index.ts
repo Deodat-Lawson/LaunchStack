@@ -18,8 +18,8 @@
 
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getDb } from "@launchstack/core/db";
-import { category, company } from "@launchstack/core/db/schema";
+import { getDb } from "@launchstack/store/client";
+import { category, company } from "@launchstack/store/schema";
 
 import { runTool, type ToolResult } from "../contract";
 import {

@@ -6,7 +6,7 @@
  */
 
 import type { BaseMessageLike } from "@langchain/core/messages";
-import type { ResolveChatModelOptions } from "@launchstack/core/llm";
+import type { ResolveChatModelOptions } from "@launchstack/llm";
 import type { z } from "zod";
 
 import { invokeToolStructured } from "../llm";

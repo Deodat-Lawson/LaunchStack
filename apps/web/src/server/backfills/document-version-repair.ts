@@ -17,7 +17,7 @@
 
 import { sql } from "drizzle-orm";
 
-import type { DbClient } from "@launchstack/core/db";
+import type { DbClient } from "@launchstack/store/client";
 
 type QueryResult = {
     count?: number;

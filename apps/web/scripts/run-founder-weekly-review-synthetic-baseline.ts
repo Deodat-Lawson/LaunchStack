@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 import { ZodError } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { eq } from "drizzle-orm";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { founderWeeklyReviewDispatches, founderWeeklyReviewRuns } from "~/server/db/schema";
 import {
     FounderWeeklyReviewRepository,
@@ -14,7 +14,7 @@ import {
     FounderWeeklyReviewV2PayloadSchema,
     generateFounderWeeklyReview,
     type FounderWeeklyReviewStructuredGenerator,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
 import { syntheticFounderWeeklyReviewFixtures } from "./founder-weekly-review-synthetic-fixtures";

@@ -28,8 +28,8 @@ jest.mock("~/server/db", () => ({
 
 // Mock the pipeline function so we control what it returns; preserve other
 // exports (schemas, types) so the Inngest wrapper can still import them.
-jest.mock("@launchstack/features/client-prospector", () => {
-    const actual = jest.requireActual("@launchstack/features/client-prospector");
+jest.mock("@launchstack/pipelines/client-prospector", () => {
+    const actual = jest.requireActual("@launchstack/pipelines/client-prospector");
     return {
         ...actual,
         runClientProspector: jest.fn(),
@@ -40,8 +40,8 @@ jest.mock("@launchstack/features/client-prospector", () => {
 // can redirect them to our in-memory store per test iteration.
 // We keep the rest of the module (createClientProspectorJobHelpers, etc.)
 // as the real implementation.
-jest.mock("@launchstack/features/client-prospector/db", () => {
-    const actual = jest.requireActual("@launchstack/features/client-prospector/db");
+jest.mock("@launchstack/pipelines/client-prospector/db", () => {
+    const actual = jest.requireActual("@launchstack/pipelines/client-prospector/db");
 
     return {
         ...actual,
@@ -50,16 +50,16 @@ jest.mock("@launchstack/features/client-prospector/db", () => {
     };
 });
 
-import { createClientProspectorJobHelpers } from "@launchstack/features/client-prospector/db";
-import * as clientProspectorDb from "@launchstack/features/client-prospector/db";
+import { createClientProspectorJobHelpers } from "@launchstack/pipelines/client-prospector/db";
+import * as clientProspectorDb from "@launchstack/pipelines/client-prospector/db";
 import { clientProspectorJob } from "~/server/inngest/functions/clientProspector";
-import { runClientProspector } from "@launchstack/features/client-prospector";
+import { runClientProspector } from "@launchstack/pipelines/client-prospector";
 import type {
     LatLng,
     ProspectorJobStatus,
     ProspectorOutput,
     ProspectResult,
-} from "@launchstack/features/client-prospector";
+} from "@launchstack/pipelines/client-prospector";
 
 // ─── In-memory store ─────────────────────────────────────────────────────────
 // Same pattern as persistence.pbt.test.ts — mirrors the real Drizzle store

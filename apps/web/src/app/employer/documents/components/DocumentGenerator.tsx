@@ -16,14 +16,14 @@ import { LegalChatbot } from "./LegalChatbot";
 import { LegalGeneratorTheme, legalTheme } from "./LegalGeneratorTheme";
 import { Loader2 } from "lucide-react";
 import type { Citation } from "./generator";
-import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
-import type { EditorSection } from "@launchstack/features/legal-templates";
-import { parseLegalDocumentHtmlToSections } from "@launchstack/features/legal-templates";
+import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
+import type { EditorSection } from "@launchstack/pipelines/legal-templates";
+import { parseLegalDocumentHtmlToSections } from "@launchstack/pipelines/legal-templates";
 import {
     buildEditorSections,
     buildTemplateFieldDataForDocx,
     extractFieldValuesFromSections,
-} from "@launchstack/features/legal-templates";
+} from "@launchstack/pipelines/legal-templates";
 
 interface GeneratedDocument {
     id: string;

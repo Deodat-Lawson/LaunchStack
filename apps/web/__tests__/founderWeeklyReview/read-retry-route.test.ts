@@ -13,7 +13,7 @@ import {
     FounderWeeklyReviewInvalidTransitionError,
     FounderWeeklyReviewNotFoundError,
     type FounderWeeklyReviewRunRecord,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 const mockAuth = auth as unknown as jest.Mock;
 const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" as const };
 function run(

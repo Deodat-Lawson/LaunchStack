@@ -6,7 +6,7 @@ import {
     dispatchEmailCampaign,
     upsertRecipients,
     type SendAdapter,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 import { createEmailPipelineTestDatabase, type EmailPipelineTestDatabase } from "./testDb";
 

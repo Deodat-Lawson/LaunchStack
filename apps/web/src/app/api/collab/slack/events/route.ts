@@ -20,7 +20,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
-import { verifySlackRequest, type SlackEventEnvelope } from "@launchstack/core/collab";
+import { verifySlackRequest, type SlackEventEnvelope } from "@launchstack/collab";
 import { collabMeeting } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { getMeetingBridge, getMeetingRuntime } from "~/server/collab/runtime";

@@ -12,9 +12,9 @@
  * Pure: no DB, no network. `sendCampaign` is driven directly.
  */
 
-import { sendCampaign } from "@launchstack/features/email-pipeline/send";
-import { RecipientSchema } from "@launchstack/features/email-pipeline/types";
-import type { EmailTemplate, SendResult } from "@launchstack/features/email-pipeline/types";
+import { sendCampaign } from "@launchstack/pipelines/email/send";
+import { RecipientSchema } from "@launchstack/pipelines/email/types";
+import type { EmailTemplate, SendResult } from "@launchstack/pipelines/email/types";
 
 const recipient = (over: Record<string, unknown> = {}) =>
     RecipientSchema.parse({ email: "ada@example.com", ...over });

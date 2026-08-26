@@ -20,7 +20,7 @@ import type {
     ChannelStore,
     MessageListener,
     ReadOptions,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 import { db } from "~/server/db";
 
 type ChannelRow = typeof collabChannel.$inferSelect;

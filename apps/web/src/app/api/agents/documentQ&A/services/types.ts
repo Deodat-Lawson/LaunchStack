@@ -22,7 +22,7 @@ export {
     isChatRoute,
     type ChatRoute,
     type ChatCapability,
-} from "@launchstack/core/llm/types";
+} from "@launchstack/llm/types";
 
 // ============================================================================
 // Response Style Types

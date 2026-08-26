@@ -26,7 +26,7 @@ import {
     ScriptedAgentRuntime,
     type AgentRuntime,
     type CollabChatFn,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 interface WorkerEnv {
     hubUrl: string;

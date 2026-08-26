@@ -11,7 +11,7 @@ import {
     invokeStructured,
     resolveChatModel,
     type ResolveChatModelOptions,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 import type { z } from "zod";
 
 export async function invokeToolStructured<T>(

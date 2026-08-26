@@ -4,8 +4,8 @@ Uses yt-dlp to extract audio from YouTube and other video platforms,
 then transcribes via the local Whisper model.
 
 Wire format frozen:
-- packages/protocol/schemas/v1/transcription.video-request.schema.json
-- packages/protocol/schemas/v1/transcription.video-response.schema.json
+- packages/schema-generator/schemas/v1/transcription.video-request.schema.json
+- packages/schema-generator/schemas/v1/transcription.video-response.schema.json
 """
 
 import os

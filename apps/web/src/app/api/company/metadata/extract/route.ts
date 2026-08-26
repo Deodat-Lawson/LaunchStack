@@ -17,12 +17,12 @@ import { NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
+import { document as documentTable, documentContextChunks } from "@launchstack/store/schema";
 import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
-import { extractCompanyFacts } from "@launchstack/features/company-metadata";
-import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
-import { createEmptyMetadata } from "@launchstack/features/company-metadata";
-import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/features/company-metadata";
+import { extractCompanyFacts } from "@launchstack/pipelines/company-metadata";
+import { mergeCompanyMetadata } from "@launchstack/pipelines/company-metadata";
+import { createEmptyMetadata } from "@launchstack/pipelines/company-metadata";
+import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/pipelines/company-metadata";
 import { generateStructured } from "~/lib/llm";
 import {
     forbiddenForRole,

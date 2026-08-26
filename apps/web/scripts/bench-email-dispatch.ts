@@ -18,8 +18,8 @@ import { fileURLToPath } from "node:url";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 
-import * as coreSchema from "@launchstack/core/db/schema";
-import { configureDatabase, type DbClient } from "@launchstack/core/db";
+import * as coreSchema from "@launchstack/store/schema";
+import { configureDatabase, type DbClient } from "@launchstack/store/client";
 import {
     addSuppression,
     appendTemplateVersion,
@@ -28,7 +28,7 @@ import {
     dispatchEmailCampaign,
     upsertRecipients,
     type SendAdapter,
-} from "@launchstack/features/email-pipeline";
+} from "@launchstack/pipelines/email";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MIGRATION = join(HERE, "..", "drizzle", "20260814050513_email_pipeline.sql");

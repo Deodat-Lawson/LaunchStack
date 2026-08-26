@@ -24,8 +24,8 @@ import { NextResponse } from "next/server";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { kgEntities, kgEntityMentions, kgRelationships } from "@launchstack/core/db/schema";
-import { getNeo4jSession, isNeo4jConfigured } from "@launchstack/core/graph";
+import { kgEntities, kgEntityMentions, kgRelationships } from "@launchstack/store/schema";
+import { getNeo4jSession, isNeo4jConfigured } from "@launchstack/indexing/knowledge-graph";
 import { getEngine } from "~/server/engine";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

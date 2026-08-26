@@ -18,7 +18,7 @@ import {
     sequentialIdFactory,
     type AgentPersona,
     type ChannelMessage,
-} from "@launchstack/core/collab";
+} from "@launchstack/collab";
 
 const PM: AgentPersona = {
     id: "pm",

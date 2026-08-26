@@ -13,7 +13,7 @@
 
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import type { ResolveChatModelOptions } from "@launchstack/core/llm";
+import type { ResolveChatModelOptions } from "@launchstack/llm";
 
 import { invokeToolStructured } from "../llm";
 import type { MarketingPlatform, ReferencePlatform } from "../platform-profiles";

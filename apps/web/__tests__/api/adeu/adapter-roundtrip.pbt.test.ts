@@ -14,14 +14,14 @@ import {
     acceptAllChanges,
     applyEditsAsMarkdown,
     diffDocxFiles,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 
 import type {
     ReadDocxResponse,
     BatchSummary,
     ApplyEditsMarkdownResponse,
     DiffResponse,
-} from "@launchstack/features/adeu";
+} from "@launchstack/editing";
 
 const mockFetch = jest.fn();
 global.fetch = mockFetch;

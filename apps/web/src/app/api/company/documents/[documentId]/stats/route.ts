@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/store/schema";
 import { users, documentViews } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";

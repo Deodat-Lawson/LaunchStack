@@ -1,10 +1,10 @@
 jest.mock("~/server/db", () => ({ db: { transaction: jest.fn() } }));
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import {
     FounderWeeklyReviewEvidenceSnapshotSchema,
     FounderWeeklyReviewRepository,
     FounderWeeklyReviewWorkerService,
-} from "@launchstack/features/founder-weekly-review";
+} from "@launchstack/pipelines/founder-weekly-review";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 

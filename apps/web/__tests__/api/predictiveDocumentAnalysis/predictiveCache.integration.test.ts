@@ -548,11 +548,25 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
                 data: { phase: "queued", totalChunks: 1 },
             });
 
+            // The route emits a status frame per poll, so a loaded runner can
+            // fit extra polls inside the timeout window. The contract under
+            // test is that the stream ends with a timeout error within bounds
+            // — not the exact frame cadence — so read until the error arrives.
             const timeoutStart = Date.now();
-            const timeoutRead = await reader.read();
+            let sawError = false;
+            while (Date.now() - timeoutStart < 5_000) {
+                const read = await reader.read();
+                if (read.done) break;
+                if (!read.value) throw new Error("Predictive SSE timeout response was empty");
+                const event = decodeSseEvent(read.value);
+                if (event.type === "error") {
+                    sawError = true;
+                    break;
+                }
+                expect(event).toMatchObject({ type: "status" });
+            }
             const elapsedMs = Date.now() - timeoutStart;
-            if (!timeoutRead.value) throw new Error("Predictive SSE timeout response was empty");
-            expect(decodeSseEvent(timeoutRead.value)).toMatchObject({ type: "error" });
+            expect(sawError).toBe(true);
             expect(elapsedMs).toBeLessThan(2_500);
         } finally {
             if (reader) await reader.cancel();

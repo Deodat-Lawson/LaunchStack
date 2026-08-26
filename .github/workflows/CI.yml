@@ -180,14 +180,14 @@ jobs:
       - name: Build service images
         run: >-
           docker compose -f docker-compose.yml -f docker-compose.ci.yml build
-          migrate worker document-converter transcription document-editor
+          migrate worker document-converter transcription adeu-docs-editing
 
       - name: Boot the stack
         env:
           CLERK_SECRET_KEY: sk_test_ci_placeholder
         run: >-
           docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
-          db migrate worker document-converter transcription document-editor
+          db migrate worker document-converter transcription adeu-docs-editing
 
       - name: Wait for service health
         run: |
@@ -201,7 +201,7 @@ jobs:
           wait_healthy http://localhost:8020/healthz   # worker
           wait_healthy http://localhost:8002/health    # document-converter
           wait_healthy http://localhost:8000/health    # transcription
-          wait_healthy http://localhost:8003/health    # document-editor
+          wait_healthy http://localhost:8003/health    # adeu-docs-editing
           curl -fsS http://localhost:8020/readyz
 
       - name: End-to-end ingestion + cited query

@@ -58,21 +58,21 @@ SOFTWARE.
 
 Everything in the pnpm workspace's production dependency tree, which is what CI builds into the two published images.
 
-**1181 runtime packages.**
+**1225 runtime packages.**
 
 | License | Packages |
 | --- | ---: |
-| MIT | 765 |
-| Apache-2.0 | 239 |
-| ISC | 70 |
-| BSD-3-Clause | 35 |
-| BSD-2-Clause | 17 |
+| MIT | 807 |
+| Apache-2.0 | 241 |
+| ISC | 71 |
+| BSD-3-Clause | 36 |
 | Unknown | 17 |
+| BSD-2-Clause | 16 |
 | BlueOak-1.0.0 | 8 |
 | BSD | 8 |
 | MIT-0 | 3 |
-| Unlicense | 3 |
 | MIT/X11 | 2 |
+| Unlicense | 2 |
 | (AFL-2.1 OR BSD-3-Clause) | 1 |
 | (Apache-2.0 AND BSD-3-Clause) | 1 |
 | (MIT AND Zlib) | 1 |
@@ -169,6 +169,15 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@babel/template` | 7.27.2 | MIT |
 | `@babel/traverse` | 7.28.5 | MIT |
 | `@babel/types` | 7.28.5 | MIT |
+| `@better-auth/core` | 1.7.2 | MIT |
+| `@better-auth/drizzle-adapter` | 1.7.2 | MIT |
+| `@better-auth/kysely-adapter` | 1.7.2 | MIT |
+| `@better-auth/memory-adapter` | 1.7.2 | MIT |
+| `@better-auth/mongo-adapter` | 1.7.2 | MIT |
+| `@better-auth/prisma-adapter` | 1.7.2 | MIT |
+| `@better-auth/telemetry` | 1.7.2 | MIT |
+| `@better-auth/utils` | 0.4.2, 0.5.0 | MIT |
+| `@better-fetch/fetch` | 1.3.1 | MIT |
 | `@braintree/sanitize-url` | 7.1.2 | MIT |
 | `@bramus/specificity` | 2.4.2 | MIT |
 | `@browserbasehq/sdk` | 2.16.0 | Apache-2.0 |
@@ -180,17 +189,13 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@chevrotain/regexp-to-ast` | 11.1.2 | Apache-2.0 |
 | `@chevrotain/types` | 11.1.2 | Apache-2.0 |
 | `@chevrotain/utils` | 11.1.2 | Apache-2.0 |
-| `@clerk/backend` | 2.12.1 | MIT |
-| `@clerk/clerk-react` | 5.46.1 | MIT |
-| `@clerk/nextjs` | 6.31.9 | MIT |
-| `@clerk/shared` | 3.24.1 | MIT |
-| `@clerk/types` | 4.95.1 | MIT |
 | `@csstools/color-helpers` | 6.0.2 | MIT-0 |
 | `@csstools/css-calc` | 3.2.0 | MIT |
 | `@csstools/css-color-parser` | 4.1.0 | MIT |
 | `@csstools/css-parser-algorithms` | 4.0.0 | MIT |
 | `@csstools/css-syntax-patches-for-csstree` | 1.1.3 | MIT-0 |
 | `@csstools/css-tokenizer` | 4.0.0 | MIT |
+| `@drizzle-team/brocli` | 0.10.2 | Apache-2.0 |
 | `@effect/platform` | 0.90.3 | MIT |
 | `@emailjs/browser` | 4.4.1 | BSD-3-Clause |
 | `@esbuild-kit/core-utils` | 3.3.2 | MIT |
@@ -225,7 +230,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@jridgewell/trace-mapping` | 0.3.30 | MIT |
 | `@js-sdsl/ordered-map` | 4.4.2 | MIT |
 | `@langchain/anthropic` | 0.3.34 | MIT |
-| `@langchain/community` | 0.3.54 | MIT |
+| `@langchain/community` | 0.3.54, 0.3.59 | MIT |
 | `@langchain/core` | 0.3.74 | MIT |
 | `@langchain/google-genai` | 0.2.18 | MIT |
 | `@langchain/langgraph` | 0.4.9 | MIT |
@@ -244,6 +249,8 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@neondatabase/serverless` | 1.0.1 | MIT |
 | `@next/env` | 15.5.7 | MIT |
 | `@next/swc-darwin-arm64` | 15.5.7 | MIT |
+| `@noble/ciphers` | 2.4.0 | MIT |
+| `@noble/hashes` | 2.4.0 | MIT |
 | `@nodelib/fs.scandir` | 2.1.5 | MIT |
 | `@nodelib/fs.stat` | 2.0.5 | MIT |
 | `@nodelib/fs.walk` | 1.2.8 | MIT |
@@ -382,6 +389,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@radix-ui/react-use-size` | 1.1.1, 1.1.4 | MIT |
 | `@radix-ui/react-visually-hidden` | 1.2.3 | MIT |
 | `@radix-ui/rect` | 1.1.1, 1.1.3 | MIT |
+| `@rollup/rollup-darwin-arm64` | 4.62.4 | MIT |
 | `@smithy/chunked-blob-reader` | 5.2.2 | Apache-2.0 |
 | `@smithy/chunked-blob-reader-native` | 4.2.3 | Apache-2.0 |
 | `@smithy/config-resolver` | 4.4.14 | Apache-2.0 |
@@ -432,7 +440,6 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@smithy/util-utf8` | 2.3.0, 4.2.2 | Apache-2.0 |
 | `@smithy/util-waiter` | 4.2.15 | Apache-2.0 |
 | `@smithy/uuid` | 1.1.2 | Apache-2.0 |
-| `@stablelib/base64` | 1.0.1 | MIT |
 | `@standard-schema/spec` | 1.0.0-beta.4, 1.1.0 | MIT |
 | `@swc/helpers` | 0.5.15 | Apache-2.0 |
 | `@tiptap/core` | 3.22.4 | MIT |
@@ -470,6 +477,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@traceloop/instrumentation-anthropic` | 0.20.0 | Apache-2.0 |
 | `@types/aws-lambda` | 8.10.162 | MIT |
 | `@types/bunyan` | 1.8.11 | MIT |
+| `@types/chai` | 5.2.3 | MIT |
 | `@types/connect` | 3.4.38 | MIT |
 | `@types/d3` | 7.4.3 | MIT |
 | `@types/d3-array` | 3.2.1 | MIT |
@@ -503,7 +511,8 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@types/d3-transition` | 3.0.9 | MIT |
 | `@types/d3-zoom` | 3.0.8 | MIT |
 | `@types/debug` | 4.1.13 | MIT |
-| `@types/estree` | 1.0.8 | MIT |
+| `@types/deep-eql` | 4.0.2 | MIT |
+| `@types/estree` | 1.0.8, 1.0.9 | MIT |
 | `@types/estree-jsx` | 1.0.5 | MIT |
 | `@types/geojson` | 7946.0.16 | MIT |
 | `@types/hast` | 3.0.4 | MIT |
@@ -534,6 +543,13 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@upsetjs/venn.js` | 2.0.0 | MIT |
 | `@vercel/analytics` | 1.6.1 | MPL-2.0 |
 | `@vercel/blob` | 2.3.0 | Apache-2.0 |
+| `@vitest/expect` | 3.2.7 | MIT |
+| `@vitest/mocker` | 3.2.7 | MIT |
+| `@vitest/pretty-format` | 3.2.7 | MIT |
+| `@vitest/runner` | 3.2.7 | MIT |
+| `@vitest/snapshot` | 3.2.7 | MIT |
+| `@vitest/spy` | 3.2.7 | MIT |
+| `@vitest/utils` | 3.2.7 | MIT |
 | `@xmldom/xmldom` | 0.8.11, 0.9.8 | MIT |
 | `abort-controller` | 3.0.0 | MIT |
 | `abort-controller-x` | 0.4.3 | MIT |
@@ -550,6 +566,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `argparse` | 0.1.16, 1.0.10 | MIT |
 | `argparse` | 2.0.1 | Python-2.0 |
 | `aria-hidden` | 1.2.6 | MIT |
+| `assertion-error` | 2.0.1 | MIT |
 | `async` | 0.2.10 | MIT |
 | `async-retry` | 1.3.3 | MIT |
 | `asynckit` | 0.4.0 | MIT |
@@ -560,6 +577,9 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `balanced-match` | 1.0.2 | MIT |
 | `base64-js` | 1.5.1 | MIT |
 | `baseline-browser-mapping` | 2.9.19 | Apache-2.0 |
+| `bcryptjs` | 3.0.3 | BSD-3-Clause |
+| `better-auth` | 1.7.2 | MIT |
+| `better-call` | 1.4.0 | MIT |
 | `bidi-js` | 1.0.3 | MIT |
 | `bignumber.js` | 9.0.0, 9.3.1 | MIT |
 | `binary-extensions` | 2.3.0 | MIT |
@@ -576,6 +596,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `buffer` | 6.0.3 | MIT |
 | `buffer-equal-constant-time` | 1.0.1 | BSD-3-Clause |
 | `buffer-from` | 1.1.2 | MIT |
+| `cac` | 6.7.14 | MIT |
 | `call-bind-apply-helpers` | 1.0.2 | MIT |
 | `camelcase` | 6.3.0 | MIT |
 | `camelcase-css` | 2.0.1 | MIT |
@@ -583,12 +604,14 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `canonicalize` | 1.0.8 | Apache-2.0 |
 | `ccount` | 2.0.1 | MIT |
 | `cfb` | 1.2.2 | Apache-2.0 |
+| `chai` | 5.3.3 | MIT |
 | `chalk` | 4.1.2 | MIT |
 | `character-entities` | 2.0.2 | MIT |
 | `character-entities-html4` | 2.1.0 | MIT |
 | `character-entities-legacy` | 3.0.0 | MIT |
 | `character-reference-invalid` | 2.0.1 | MIT |
 | `charenc` | 0.0.2 | BSD-3-Clause |
+| `check-error` | 2.1.3 | MIT |
 | `cheerio` | 1.2.0 | MIT |
 | `cheerio-select` | 2.1.0 | BSD-2-Clause |
 | `chevrotain` | 11.1.2 | Apache-2.0 |
@@ -615,7 +638,6 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `confbox` | 0.1.8 | MIT |
 | `console-table-printer` | 2.14.6 | MIT |
 | `convert-source-map` | 2.0.0 | MIT |
-| `cookie` | 1.0.2 | MIT |
 | `cookie-jar` | 0.2.0 | Unknown |
 | `core-util-is` | 1.0.3 | MIT |
 | `cose-base` | 1.0.3, 2.2.0 | MIT |
@@ -678,9 +700,11 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `decimal.js` | 10.6.0 | MIT |
 | `decimal.js-light` | 2.5.1 | MIT |
 | `decode-named-character-reference` | 1.2.0 | MIT |
+| `deep-eql` | 5.0.2 | MIT |
 | `deepmerge` | 4.3.1 | MIT |
 | `define-data-property` | 1.1.4 | MIT |
 | `define-properties` | 1.2.1 | MIT |
+| `defu` | 6.1.7 | MIT |
 | `delaunator` | 5.0.1 | ISC |
 | `delayed-stream` | 0.0.5 | Unknown |
 | `delayed-stream` | 1.0.0 | MIT |
@@ -703,6 +727,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `dompurify` | 3.3.2 | (MPL-2.0 OR Apache-2.0) |
 | `domutils` | 3.2.2 | BSD-2-Clause |
 | `dotenv` | 16.6.1, 17.3.1 | BSD-2-Clause |
+| `drizzle-kit` | 0.31.10 | MIT |
 | `drizzle-orm` | 0.45.1 | Apache-2.0 |
 | `duck` | 0.1.12 | BSD |
 | `duck-duck-scrape` | 2.2.7 | MIT |
@@ -716,7 +741,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `entities` | 4.5.0, 6.0.1, 7.0.1, 8.0.0 | BSD-2-Clause |
 | `es-define-property` | 1.0.1 | MIT |
 | `es-errors` | 1.3.0 | MIT |
-| `es-module-lexer` | 2.3.1 | MIT |
+| `es-module-lexer` | 1.7.0, 2.3.1 | MIT |
 | `es-object-atoms` | 1.1.1 | MIT |
 | `es-set-tostringtag` | 2.1.0 | MIT |
 | `es6-error` | 4.1.1 | MIT |
@@ -725,19 +750,21 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `escape-string-regexp` | 4.0.0, 5.0.0 | MIT |
 | `esprima` | 1.0.4 | BSD |
 | `estree-util-is-identifier-name` | 3.0.0 | MIT |
+| `estree-walker` | 3.0.3 | MIT |
 | `event-target-shim` | 5.0.1 | MIT |
 | `eventemitter3` | 4.0.7 | MIT |
 | `events` | 3.3.0 | MIT |
+| `expect-type` | 1.4.0 | Apache-2.0 |
 | `expr-eval` | 2.0.2 | MIT |
 | `extend` | 3.0.2 | MIT |
 | `eyes` | 0.1.8 | Unknown |
 | `fast-check` | 3.23.2 | MIT |
 | `fast-equals` | 5.4.0 | MIT |
 | `fast-glob` | 3.3.3 | MIT |
-| `fast-sha256` | 1.3.0 | Unlicense |
 | `fast-xml-builder` | 1.1.4 | MIT |
 | `fast-xml-parser` | 4.5.7, 5.5.8 | MIT |
 | `fastq` | 1.19.1 | ISC |
+| `fdir` | 6.5.0 | MIT |
 | `fetch-blob` | 3.2.0 | MIT |
 | `file-selector` | 0.6.0 | MIT |
 | `file-type` | 16.5.4 | MIT |
@@ -768,7 +795,6 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `get-tsconfig` | 4.10.1 | MIT |
 | `glob` | 10.4.5, 10.5.0 | ISC |
 | `glob-parent` | 5.1.2, 6.0.2 | ISC |
-| `glob-to-regexp` | 0.4.1 | BSD-2-Clause |
 | `global-agent` | 3.0.0 | BSD-3-Clause |
 | `globalthis` | 1.0.4 | MIT |
 | `google-logging-utils` | 1.1.3 | Apache-2.0 |
@@ -837,10 +863,10 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `isexe` | 2.0.0 | ISC |
 | `isstream` | 0.1.2 | MIT |
 | `jackspeak` | 3.4.3 | BlueOak-1.0.0 |
-| `jiti` | 1.21.7 | MIT |
-| `js-cookie` | 3.0.5 | MIT |
+| `jiti` | 1.21.7, 2.5.1 | MIT |
+| `jose` | 6.2.10 | MIT |
 | `js-tiktoken` | 1.0.21 | MIT |
-| `js-tokens` | 4.0.0 | MIT |
+| `js-tokens` | 4.0.0, 9.0.1 | MIT |
 | `js-yaml` | 2.1.3, 4.1.0, 4.1.1 | MIT |
 | `jsdom` | 29.0.2 | MIT |
 | `jsesc` | 3.1.0 | MIT |
@@ -857,6 +883,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `jws` | 4.0.1 | MIT |
 | `katex` | 0.16.25 | MIT |
 | `khroma` | 2.1.0 | Unknown |
+| `kysely` | 0.29.5 | MIT |
 | `langchain` | 0.3.33 | MIT |
 | `langium` | 4.2.1 | MIT |
 | `langsmith` | 0.3.67 | MIT |
@@ -880,15 +907,18 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `longest-streak` | 3.1.0 | MIT |
 | `loose-envify` | 1.4.0 | MIT |
 | `lop` | 0.4.2 | BSD-2-Clause |
+| `loupe` | 3.2.1 | MIT |
 | `lru-cache` | 11.3.5 | BlueOak-1.0.0 |
 | `lru-cache` | 5.1.1, 10.4.3 | ISC |
 | `lucide-react` | 0.487.0 | ISC |
+| `magic-string` | 0.30.21 | MIT |
 | `make-cancellable-promise` | 2.0.0 | MIT |
 | `make-event-props` | 2.0.0 | MIT |
 | `mammoth` | 1.11.0 | BSD-2-Clause |
 | `markdown-table` | 3.0.4 | MIT |
 | `marked` | 16.4.2, 17.0.3 | MIT |
 | `matcher` | 3.0.0 | MIT |
+| `math-expression-evaluator` | 2.0.7 | MIT |
 | `math-intrinsics` | 1.1.0 | MIT |
 | `MD5` | 1.3.0 | BSD-3-Clause |
 | `mdast-util-find-and-replace` | 3.0.2 | MIT |
@@ -963,6 +993,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `mysql` | 2.18.1 | MIT |
 | `mz` | 2.7.0 | MIT |
 | `nanoid` | 3.3.11 | MIT |
+| `nanostores` | 1.5.2 | MIT |
 | `needle` | 3.3.1 | MIT |
 | `neo-async` | 2.6.2 | MIT |
 | `neo4j-driver` | 6.0.1 | Apache-2.0 |
@@ -1017,6 +1048,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `path-parse` | 1.0.7 | MIT |
 | `path-scurry` | 1.11.1 | BlueOak-1.0.0 |
 | `pathe` | 2.0.3 | MIT |
+| `pathval` | 2.0.1 | MIT |
 | `pdf-lib` | 1.17.1 | MIT |
 | `pdf-parse` | 1.1.1 | MIT |
 | `pdfjs-dist` | 5.4.296, 5.4.530 | Apache-2.0 |
@@ -1026,7 +1058,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `pg-protocol` | 1.10.3 | MIT |
 | `pg-types` | 2.2.0 | MIT |
 | `picocolors` | 1.1.1 | ISC |
-| `picomatch` | 2.3.1 | MIT |
+| `picomatch` | 2.3.1, 4.0.5 | MIT |
 | `pify` | 2.3.0 | MIT |
 | `pino` | 10.3.1 | MIT |
 | `pino-abstract-transport` | 3.0.0 | MIT |
@@ -1122,7 +1154,9 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `rimraf` | 5.0.10 | ISC |
 | `roarr` | 2.15.4 | BSD-3-Clause |
 | `robust-predicates` | 3.0.2 | Unlicense |
+| `rollup` | 4.62.4 | MIT |
 | `rope-sequence` | 1.3.4 | MIT |
+| `rou3` | 0.9.2 | MIT |
 | `roughjs` | 4.6.6 | MIT |
 | `run-parallel` | 1.2.0 | MIT |
 | `rw` | 1.3.3 | BSD-3-Clause |
@@ -1138,11 +1172,12 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `semver-compare` | 1.0.0 | MIT |
 | `serialize-error` | 7.0.1 | MIT |
 | `serialize-error-cjs` | 0.1.4 | MIT-0 |
-| `server-only` | 0.0.1 | MIT |
+| `set-cookie-parser` | 3.1.2 | MIT |
 | `setimmediate` | 1.0.5 | MIT |
 | `sharp` | 0.33.5, 0.34.3 | Apache-2.0 |
 | `shebang-command` | 2.0.0 | MIT |
 | `shebang-regex` | 3.0.0 | MIT |
+| `siginfo` | 2.0.0 | ISC |
 | `signal-exit` | 4.1.0 | ISC |
 | `simple-swizzle` | 0.2.2 | MIT |
 | `simple-wcswidth` | 1.1.2 | MIT |
@@ -1159,13 +1194,14 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `sqlstring` | 2.3.1 | MIT |
 | `ssf` | 0.11.2 | Apache-2.0 |
 | `stack-trace` | 0.0.10 | MIT |
-| `standardwebhooks` | 1.0.0 | MIT |
+| `stackback` | 0.0.2 | MIT |
 | `std-env` | 3.9.0 | MIT |
 | `string_decoder` | 1.1.1, 1.3.0 | MIT |
 | `string-similarity-js` | 2.1.4 | MIT |
 | `string-width` | 4.2.3, 5.1.2 | MIT |
 | `stringify-entities` | 4.0.4 | MIT |
 | `strip-ansi` | 5.2.0, 6.0.1 | MIT |
+| `strip-literal` | 3.1.0 | MIT |
 | `strnum` | 1.1.2, 2.2.2 | MIT |
 | `strtok3` | 6.3.0 | MIT |
 | `style-to-js` | 1.1.21 | MIT |
@@ -1175,7 +1211,6 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `sucrase` | 3.35.0 | MIT |
 | `supports-color` | 7.2.0 | MIT |
 | `supports-preserve-symlinks-flag` | 1.0.0 | MIT |
-| `swr` | 2.3.4 | MIT |
 | `symbol-tree` | 3.2.4 | MIT |
 | `systeminformation` | 5.32.0 | MIT |
 | `tailwind-merge` | 3.4.0 | MIT |
@@ -1191,7 +1226,12 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `thread-stream` | 4.0.0 | MIT |
 | `throttleit` | 2.1.0 | MIT |
 | `tiny-invariant` | 1.3.3 | MIT |
-| `tinyexec` | 1.0.2 | MIT |
+| `tinybench` | 2.9.0 | MIT |
+| `tinyexec` | 0.3.2, 1.0.2 | MIT |
+| `tinyglobby` | 0.2.17 | MIT |
+| `tinypool` | 1.1.1 | MIT |
+| `tinyrainbow` | 2.0.0 | MIT |
+| `tinyspy` | 4.0.4 | MIT |
 | `tldts` | 7.0.28 | MIT |
 | `tldts-core` | 7.0.28 | MIT |
 | `to-regex-range` | 5.0.1 | MIT |
@@ -1238,6 +1278,9 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `vfile-location` | 5.0.3 | MIT |
 | `vfile-message` | 4.0.3 | MIT |
 | `victory-vendor` | 36.9.2 | MIT AND ISC |
+| `vite` | 7.3.6 | MIT |
+| `vite-node` | 3.2.4 | MIT |
+| `vitest` | 3.2.7 | MIT |
 | `vscode-jsonrpc` | 8.2.0 | MIT |
 | `vscode-languageserver` | 9.0.1 | MIT |
 | `vscode-languageserver-protocol` | 3.17.5 | MIT |
@@ -1257,6 +1300,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `whatwg-mimetype` | 4.0.0, 5.0.0 | MIT |
 | `whatwg-url` | 5.0.0, 16.0.1 | MIT |
 | `which` | 2.0.2 | ISC |
+| `why-is-node-running` | 2.3.0 | MIT |
 | `winston` | 0.7.3 | MIT |
 | `wmf` | 1.0.2 | Apache-2.0 |
 | `word` | 0.3.0 | Apache-2.0 |
@@ -1279,7 +1323,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `yargs-parser` | 21.1.1 | ISC |
 | `yocto-queue` | 1.2.1 | MIT |
 | `zlibjs` | 0.3.1 | MIT |
-| `zod` | 3.25.76 | MIT |
+| `zod` | 3.25.76, 4.5.4 | MIT |
 | `zod-to-json-schema` | 3.25.2 | ISC |
 | `zwitch` | 2.0.4 | MIT |
 
@@ -1526,9 +1570,9 @@ Python service: DOCX tracked-change editing, review-item enumeration, CriticMark
 | `caio` | 0.12.2 | Apache-2.0 |
 | `certifi` | 2026.7.22 | MPL-2.0 |
 | `cffi` | 2.1.1 | MIT-0 |
-| `click` | 8.4.2 | BSD-3-Clause |
-| `cryptography` | 50.0.0 | Apache-2.0 OR BSD-3-Clause |
-| `cyclopts` | 4.23.2 | Apache-2.0 |
+| `click` | 8.5.0 | BSD-3-Clause |
+| `cryptography` | 50.0.1 | Apache-2.0 OR BSD-3-Clause |
+| `cyclopts` | 4.23.3 | Apache-2.0 |
 | `diff-match-patch` | 20241021 | Unknown |
 | `dnspython` | 2.8.0 | ISC |
 | `docstring_parser` | 0.18.0 | MIT |
@@ -1549,7 +1593,7 @@ Python service: DOCX tracked-change editing, review-item enumeration, CriticMark
 | `jaraco.context` | 6.1.2 | MIT |
 | `jaraco.functools` | 4.6.0 | MIT |
 | `Jinja2` | 3.1.6 | Unknown |
-| `joserfc` | 1.7.4 | BSD-3-Clause |
+| `joserfc` | 1.7.5 | BSD-3-Clause |
 | `jsonref` | 1.1.0 | MIT |
 | `jsonschema` | 4.26.0 | MIT |
 | `jsonschema-path` | 0.5.0 | Apache-2.0 |
@@ -1558,20 +1602,20 @@ Python service: DOCX tracked-change editing, review-item enumeration, CriticMark
 | `lxml` | 6.1.2 | BSD-3-Clause |
 | `markdown-it-py` | 4.2.0 | Unknown |
 | `MarkupSafe` | 3.0.3 | BSD-3-Clause |
-| `mcp` | 2.0.0 | MIT |
-| `mcp-types` | 2.0.0 | MIT |
+| `mcp` | 2.1.1 | MIT |
+| `mcp-types` | 2.1.1 | MIT |
 | `mdurl` | 0.1.2 | Unknown |
 | `more-itertools` | 11.1.0 | MIT |
 | `openapi-pydantic` | 0.5.1 | MIT |
 | `opentelemetry-api` | 1.44.0 | Apache-2.0 |
 | `packaging` | 26.3 | Apache-2.0 OR BSD-2-Clause |
 | `pathable` | 0.6.0 | Apache-2.0 |
-| `platformdirs` | 4.11.3 | MIT |
+| `platformdirs` | 4.11.5 | MIT |
 | `prefab-ui` | 0.20.2 | Apache-2.0 |
 | `py-key-value-aio` | 0.4.5 | Apache-2.0 |
 | `pycparser` | 3.0 | BSD-3-Clause |
-| `pydantic` | 2.13.4 | MIT |
-| `pydantic_core` | 2.46.4 | MIT |
+| `pydantic` | 2.13.5 | MIT |
+| `pydantic_core` | 2.46.5 | MIT |
 | `pydantic-settings` | 2.15.0 | MIT |
 | `Pygments` | 2.21.0 | BSD-2-Clause |
 | `PyJWT` | 2.13.0 | MIT |
@@ -1596,7 +1640,7 @@ Python service: DOCX tracked-change editing, review-item enumeration, CriticMark
 | `uvicorn` | 0.52.4 | BSD-3-Clause |
 | `uvloop` | 0.22.1 | MIT License |
 | `watchfiles` | 1.2.0 | MIT |
-| `websockets` | 17.0.1 | BSD-3-Clause |
+| `websockets` | 17.1 | BSD-3-Clause |
 
 </details>
 
@@ -1638,9 +1682,9 @@ Python service: Whisper transcription and yt-dlp download. `torch` is installed 
 | `anyio` | 4.14.2 | MIT |
 | `certifi` | 2026.7.22 | MPL-2.0 |
 | `charset-normalizer` | 3.5.1 | MIT |
-| `click` | 8.4.2 | BSD-3-Clause |
+| `click` | 8.5.0 | BSD-3-Clause |
 | `fastapi` | 0.141.1 | MIT |
-| `filelock` | 3.32.3 | MIT |
+| `filelock` | 3.32.4 | MIT |
 | `fsspec` | 2026.7.0 | BSD-3-Clause |
 | `h11` | 0.16.0 | MIT |
 | `httptools` | 0.8.0 | MIT |
@@ -1654,8 +1698,8 @@ Python service: Whisper transcription and yt-dlp download. `torch` is installed 
 | `numba` | 0.67.0 | BSD |
 | `numpy` | 2.5.2 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 |
 | `openai-whisper` | 20250625 | MIT |
-| `pydantic` | 2.13.4 | MIT |
-| `pydantic_core` | 2.46.4 | MIT |
+| `pydantic` | 2.13.5 | MIT |
+| `pydantic_core` | 2.46.5 | MIT |
 | `python-dotenv` | 1.2.3 | BSD-3-Clause |
 | `python-multipart` | 0.0.32 | Apache-2.0 |
 | `PyYAML` | 6.0.3 | MIT |
@@ -1673,7 +1717,7 @@ Python service: Whisper transcription and yt-dlp download. `torch` is installed 
 | `uvicorn` | 0.52.4 | BSD-3-Clause |
 | `uvloop` | 0.22.1 | MIT License |
 | `watchfiles` | 1.2.0 | MIT |
-| `websockets` | 17.0.1 | BSD-3-Clause |
+| `websockets` | 17.1 | BSD-3-Clause |
 | `yt-dlp` | 2026.8.19 | Unlicense |
 
 </details>

@@ -11,7 +11,7 @@ import { MindmapGallery } from "~/app/employer/mindmap/_mindmap/ui/MindmapGaller
 /**
  * Local harness for the mindmap editor. It reproduces the real chrome chain —
  * employer layout → DriftShell → ToolsStudioShell → editor — so layout work
- * here is layout work there, but skips Clerk so the canvas can be driven
+ * here is layout work there, but skips auth so the canvas can be driven
  * without a session. Gated to non-production by the server page.
  *
  * `?template=flowchart` picks a starter document; the default is the mindmap.

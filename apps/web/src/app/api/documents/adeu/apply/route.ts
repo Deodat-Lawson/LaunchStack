@@ -32,6 +32,7 @@ import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
+import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import { DOCX_MIME, adeuErrorResponse, loadDocument } from "../_shared";
 
 export const runtime = "nodejs";
@@ -78,6 +79,24 @@ export async function POST(request: Request) {
 
     const loaded = await loadDocument(documentId);
     if (!loaded.ok) return loaded.response;
+
+    // Phase 1 of Drive-linked files: while a document lives in Google Drive,
+    // in-app writes are refused rather than silently forking it. Phase 2
+    // replaces this with pull → replay → push.
+    const driveLink = await getActiveDriveLink(documentId);
+    if (driveLink) {
+        return NextResponse.json(
+            {
+                success: false,
+                error: "linked_to_google_drive",
+                message:
+                    "This document is linked to Google Drive and edited there. " +
+                    "Sync or unlink it before editing in-app.",
+                driveUrl: driveLink.driveWebViewLink,
+            },
+            { status: 409 }
+        );
+    }
 
     try {
         let modified: Buffer;

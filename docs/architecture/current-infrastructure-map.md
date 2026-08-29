@@ -70,7 +70,7 @@ services have independent requirements files.
 
 | Path                  | Runtime               | Responsibility                                                                                            | Main entry point                                       | Current deployment path                                                  |
 | --------------------- | --------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `apps/web`            | Next.js 15 / Node 20  | Browser UI, Clerk auth, 119 HTTP API handlers, engine composition, storage adapters, nine background jobs | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | Vercel or root `Dockerfile`                                              |
+| `apps/web`            | Next.js 15 / Node 20  | Browser UI, first-party auth (better-auth), 119 HTTP API handlers, engine composition, storage adapters, nine background jobs | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | Vercel or root `Dockerfile`                                              |
 | `services/ocr-router` | Express / Node 20     | OCR provider routing and PDF page rendering                                                               | `src/server.ts` on `:8002`                             | Its Dockerfile; Compose default stack                                    |
 | `services/ocr-worker` | FastAPI / Python 3.12 | Thin `/parse/docling` and `/parse/marker` façade                                                          | `app/main.py` on `:8001`                               | Its Dockerfile; Compose `ocr` profile                                    |
 | `sidecar`             | FastAPI / Python 3.12 | DOCX redlining through Adeu and local audio/video transcription through Whisper                           | `app/main.py` on `:8000`                               | Its Dockerfile; Compose default stack                                    |
@@ -127,7 +127,7 @@ dependency model.
 
 `connectors`, `mcp`, `rules-extraction`, and `workflow-generation` are currently
 roadmap scaffolds. Features may read environment variables, but they may not
-import Next.js, Clerk, React, or `apps/web`.
+import Next.js, React, auth modules, or `apps/web`.
 
 ### `apps/web`
 
@@ -143,7 +143,7 @@ Its internal layers are:
 | `src/server/services`                   | Application services for documents/uploads                                  |
 | `src/server/notes`                      | Notes and wiki-link domain logic                                            |
 | `src/lib`                               | Shared browser/server utilities plus transitional legacy implementations    |
-| `src/middleware.ts`                     | Clerk authentication, role routing, workspace routing, and direct DB lookup |
+| `src/middleware.ts`                     | Session authentication, role routing, workspace routing, and direct DB lookup |
 
 The compatibility layer remains material: 113 web source files still import
 the legacy `~/server/db` façade, while 154 import `@launchstack/core` directly.
@@ -180,7 +180,6 @@ do not need to change in order to reorganize the implementation behind them.
 ```mermaid
 flowchart LR
   Browser["Browser / API client"] --> Web["apps/web<br/>Next.js host"]
-  Clerk["Clerk"] --> Web
 
   Web --> Features["@launchstack/features"]
   Features --> Core["@launchstack/core"]
@@ -245,7 +244,7 @@ Inngest Cloud is expected to call the Vercel deployment.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.
-- Clerk owns authentication. Middleware reads PostgreSQL directly to enforce
+- better-auth (in-process, same PostgreSQL) owns authentication. Middleware reads PostgreSQL directly to enforce
   employer/employee routing and workspace selection.
 - Object storage is selected at runtime: Vercel Blob, S3-compatible storage, or
   a database fallback. Docker uses SeaweedFS as the S3-compatible implementation.

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
     const hits = await searchNotes({
-      userId: ctx.data.clerkUserId,
+      userId: ctx.data.authUserId,
       query,
       scope,
       documentId: body.documentId,

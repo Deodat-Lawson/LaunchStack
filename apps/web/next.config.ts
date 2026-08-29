@@ -38,6 +38,7 @@ const config: NextConfig = {
         "@launchstack/orchestration",
         "@launchstack/collab",
         "@launchstack/editing",
+        "@launchstack/google-drive",
         "@launchstack/evidence",
         "@launchstack/pipelines",
         "@launchstack/tools",
@@ -123,7 +124,6 @@ const config: NextConfig = {
             },
         ];
     },
-
 
     outputFileTracingExcludes: {
         "/*": [

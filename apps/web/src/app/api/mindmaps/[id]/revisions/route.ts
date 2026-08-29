@@ -76,7 +76,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
                 nodeCount: stats.nodeCount,
                 edgeCount: stats.edgeCount,
                 searchText: stats.searchText,
-                updatedByUserId: ctx.data.clerkUserId,
+                updatedByUserId: ctx.data.authUserId,
                 updatedAt: new Date(),
             })
             .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
@@ -89,7 +89,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
                 mindmapId: id,
                 revision: nextRevision,
                 doc: snapshot.doc,
-                authorUserId: ctx.data.clerkUserId,
+                authorUserId: ctx.data.authUserId,
                 label: `Restored from v${snapshot.revision}`,
                 nodeCount: stats.nodeCount,
             });

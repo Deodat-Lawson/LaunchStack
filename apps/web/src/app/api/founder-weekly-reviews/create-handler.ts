@@ -3,7 +3,7 @@
  * Next.js route files may only export route fields — the factory is
  * exported for dependency-injected tests (routes.test.ts).
  */
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 import {
     type FounderWeeklyReviewRepository,
@@ -51,7 +51,8 @@ export interface FounderWeeklyReviewRouteDependencies {
 
 export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRouteDependencies) {
     return async function POST(request: Request) {
-        const { userId } = await auth();
+        const session = await getServerSession();
+        const userId = session?.user.id;
         if (!userId) return fail("Unauthorized", 401);
         try {
             // Authorization precedes all workflow persistence: invalid callers must

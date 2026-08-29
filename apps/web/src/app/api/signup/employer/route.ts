@@ -4,17 +4,17 @@ import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { validateRequestBody, EmployerSignupSchema } from "~/lib/validation";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
 
         const validation = await validateRequestBody(request, EmployerSignupSchema);
         if (!validation.success) return validation.response;
         const { name, email, employerPasskey, companyName } = validation.data;
-        const userId = identity.data.clerkUserId;
+        const userId = identity.data.authUserId;
 
         let companyId: bigint;
         const [existingCompany] = await db

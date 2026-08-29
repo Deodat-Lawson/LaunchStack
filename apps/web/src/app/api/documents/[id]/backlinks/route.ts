@@ -32,7 +32,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
             .where(
                 and(
                     eq(noteLinks.targetDocumentId, documentId),
-                    eq(documentNotes.userId, ctx.data.clerkUserId)
+                    eq(documentNotes.userId, ctx.data.authUserId)
                 )
             )
             .orderBy(desc(noteLinks.createdAt));

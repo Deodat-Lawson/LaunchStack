@@ -736,7 +736,7 @@ export async function POST(request: Request) {
             try {
                 if (searchScope === "document" && authorizedDocument) {
                     await db.insert(ChatHistory).values({
-                        UserId: ctx.data.clerkUserId,
+                        UserId: ctx.data.authUserId,
                         documentId: BigInt(authorizedDocument.id),
                         documentTitle: authorizedDocument.title,
                         question: question,

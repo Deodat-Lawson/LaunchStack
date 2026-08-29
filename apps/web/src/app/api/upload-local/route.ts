@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         // file_uploads row, and /api/files/[id] reads it back to enforce ownership.
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
-        const userId = ctx.data.clerkUserId;
+        const userId = ctx.data.authUserId;
 
         // Parse multipart form data
         const formData = await request.formData();

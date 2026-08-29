@@ -8,9 +8,10 @@ describes the repository as it actually is today.
 Launchstack is a **cited company-memory system**: sources go in through one
 ingestion path, immutable evidence comes out, and answers cite that evidence
 with stable anchors. The repository holds two private applications (web and
-worker), thirteen publishable feature packages under `packages/` (the
+worker), fifteen publishable feature packages under `packages/` (the
 bricks), one publishable compositions package at `pipelines/` (level two:
-chains of bricks toward business outcomes), and three compute services.
+chains of bricks toward business outcomes), and three compute services
+(plus two off-the-shelf service images, docling-serve and gotenberg).
 
 The 2026-08 refactors (ADR-002 … ADR-008) replaced the previous layouts in
 two steps: first layered engine packages with an enforced dependency
@@ -22,32 +23,34 @@ outright, since nothing was ever published under the old names.
 
 ## Layout
 
-| Path | Runtime | What it is |
-| --- | --- | --- |
-| `apps/web` | Next.js 15 | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint. |
-| `apps/landing` | Next.js 15 | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment. |
-| `apps/worker` | Node (tsx) | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
-| `packages/runtime` | TS library (published) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing. |
-| `packages/evidence` | TS library (published) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies. |
-| `packages/store` | TS library (published) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history). |
-| `packages/llm` | TS library (published) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport. |
-| `packages/orchestration` | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports. |
-| `packages/conversion` | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router. |
-| `packages/indexing` | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer). |
-| `packages/retrieval` | TS library (published) | Question → cited answer (renamed from `search`): every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, notes, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`. |
-| `packages/editing` | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client. |
-| `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
-| `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
-| `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |
-| `packages/tools` | TS library | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical. |
-| `packages/design-tokens` | CSS (published) | The design contract: primitives feeding semantic tokens, one file, no build step. |
-| `pipelines/` | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced). |
-| `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
-| `services/transcription` | Python/FastAPI | Whisper + yt-dlp → timestamped transcripts. |
-| `services/adeu-ai-docs-editing` | Python/FastAPI | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor. |
-| `docker/` | config | SeaweedFS, Caddy, DB bootstrap. |
-| `scripts/` | mixed | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`. |
-| `docs/` | Markdown | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`). |
+| Path                                  | Runtime                | What it is                                                                                                                                                                                                                                                                                             |
+| ------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `apps/web`                            | Next.js 15             | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint.                                                                                                                                                                       |
+| `apps/landing`                        | Next.js 15             | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment.                                                     |
+| `apps/worker`                         | Node (tsx)             | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
+| `packages/runtime`                    | TS library (published) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing.                                                                                                                                                  |
+| `packages/evidence`                   | TS library (published) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies.                                                                                                                                          |
+| `packages/store`                      | TS library (published) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history).                                                                             |
+| `packages/llm`                        | TS library (published) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport.                                                                                                                  |
+| `packages/orchestration`              | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports.                                                                                                                        |
+| `packages/conversion`                 | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router.                                                                                         |
+| `packages/indexing`                   | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer).                                                                                                                                                                              |
+| `packages/retrieval`                 | TS library (published) | Question → cited answer (renamed from `search`): every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`.                                   |
+| `packages/editing`                    | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client.                                                                                                                                                                                                                         |
+| `packages/document-conversion-engine` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env.                                                                                                                                   |
+| `packages/google-drive`               | TS library (published) | Thin typed client for the Google Drive v3 REST API and Google OAuth 2.0 token endpoints — the wire layer for Drive-linked documents. Framework-free; credentials injected, never read from the environment.                                                                                            |
+| `packages/collab`                     | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only.                                                                                                                                                                                                             |
+| `packages/engine`                     | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface.                                                                                                                                                                                                        |
+| `packages/schema-generator`           | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                                                    |
+| `packages/tools`                      | TS library             | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
+| `packages/design-tokens`              | CSS (published)        | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
+| `pipelines/`                          | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
+| `services/document-converter`         | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
+| `services/transcription`              | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
+| `services/adeu-ai-docs-editing`       | Python/FastAPI         | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor.                                                                                                                               |
+| `docker/`                             | config                 | SeaweedFS, Caddy, DB bootstrap.                                                                                                                                                                                                                                                                        |
+| `scripts/`                            | mixed                  | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`.                                                                                                                                                                                                             |
+| `docs/`                               | Markdown               | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`).                                                                                                                                                                                     |
 
 > **`services/*` stays outside the pnpm workspace** (deliberate — their deps
 > must not enter every app install). They are covered by their own CI
@@ -138,12 +141,12 @@ banned on deploy surfaces. The one engine table the refactor added:
 
 ## Deploy targets
 
-| Target | Built from | Notes |
-| --- | --- | --- |
-| GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
-| `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
-| npm packages | every `packages/*` + `pipelines/` | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports). |
-| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
+| Target         | Built from                                      | Notes                                                                                                                                                                                                                                |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GHCR images    | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.**                                                                                     |
+| `apps/landing` | —                                               | The public marketing site has no deploy pipeline in this repo.                                                                                                                                                                       |
+| npm packages   | every `packages/*` + `pipelines/`               | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports).                                                                                         |
+| Local          | `docker-compose.yml` via `Makefile`             | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, gotenberg, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)
 
@@ -176,15 +179,14 @@ no `ignoreBuildErrors`.
    the worker cannot disagree about metering.
 5. **`employerPasskey`/`employeePasskey`** remain plaintext columns on
    `company` — pre-existing; needs a hashing migration + backfill.
-6. **Clerk is a hard dependency.** `CLERK_SECRET_KEY` and
-   `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` are `requiredString()`, so a self-hoster
-   needs a Clerk account and an air-gapped deployment is impossible. The
-   coupling is small — `clerkMiddleware` in `middleware.ts`, `auth()` behind
-   `lib/require-workspace-context.ts` (the single chokepoint for 227 call
-   sites), `<ClerkProvider>`, four UI components and ~12 `useAuth`/`useUser`
-   hooks — with no `clerkClient`, no `@clerk/backend`, and no webhook route.
-   Tenancy is already entirely our own Postgres (`users`,
-   `userCompanyMemberships`, `company`, plus the `pdr_active_company` cookie),
-   so an `AuthPort` in `apps/web` with a Clerk adapter proven to be a no-op is
-   a tractable first step. Deliberately not bundled with the self-hosting work:
-   it moves a security boundary and deserves its own review.
+6. **~~Clerk is a hard dependency.~~ Resolved (2026-08): auth is first-party.**
+   Clerk was replaced by better-auth running inside `apps/web` against the
+   same Postgres (`pdr_ai_v2_auth_*` tables) — no external auth service, no
+   account required, air-gapped deployments work. The predicted `AuthPort`
+   turned out to be unnecessary: because tenancy was already entirely our own
+   Postgres (`users`, `userCompanyMemberships`, `company`, plus the
+   `pdr_active_company` cookie), the swap was confined to the
+   `lib/require-workspace-context.ts` chokepoint, `middleware.ts`, and the
+   auth UI. `users.userId` now holds an opaque auth subject ID; rows imported
+   from Clerk keep their original `user_…` strings
+   (`apps/web/scripts/import-clerk-users.ts`).

@@ -21,7 +21,7 @@ export async function PATCH(
     try {
         const { toolCallId } = await params;
 
-        const owned = await assertToolCallOwnedByUser(toolCallId, ctx.data.clerkUserId);
+        const owned = await assertToolCallOwnedByUser(toolCallId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateToolCallSchema);

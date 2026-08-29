@@ -35,8 +35,7 @@ export async function GET(request: Request) {
                 folder: searchParams.get("folder") ?? undefined,
                 search: nonEmpty(searchParams.get("q")),
                 starredOnly: searchParams.get("starred") === "1",
-                createdByUserId:
-                    searchParams.get("mine") === "1" ? ctx.data.clerkUserId : undefined,
+                createdByUserId: searchParams.get("mine") === "1" ? ctx.data.authUserId : undefined,
                 limit: Number(searchParams.get("limit")) || undefined,
             }),
             listFolders(ctx.data.companyId),
@@ -75,8 +74,8 @@ export async function POST(request: Request) {
             .insert(mindmaps)
             .values({
                 companyId: ctx.data.companyId,
-                createdByUserId: ctx.data.clerkUserId,
-                updatedByUserId: ctx.data.clerkUserId,
+                createdByUserId: ctx.data.authUserId,
+                updatedByUserId: ctx.data.authUserId,
                 title: nonEmpty(body.title) ?? "Untitled mindmap",
                 description: body.description ?? null,
                 templateId: body.templateId ?? null,

@@ -18,6 +18,7 @@ import { document, documentVersions } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getActiveDriveLink } from "~/server/services/google-drive/links";
 
 export async function POST(
     request: Request,
@@ -50,6 +51,22 @@ export async function POST(
 
             if (!doc || doc.companyId !== ctx.data.companyId) {
                 return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            }
+
+            // Phase 1 of Drive-linked files: reverting a linked document
+            // in-app would silently diverge from its Drive copy.
+            const driveLink = await getActiveDriveLink(documentId);
+            if (driveLink) {
+                return NextResponse.json(
+                    {
+                        error: "linked_to_google_drive",
+                        details:
+                            "This document is linked to Google Drive and edited there. " +
+                            "Sync or unlink it before restoring a version in-app.",
+                        driveUrl: driveLink.driveWebViewLink,
+                    },
+                    { status: 409 }
+                );
             }
 
             // Look up the target version and verify it actually belongs to this
@@ -116,7 +133,7 @@ export async function POST(
 
             console.log(
                 `[Versions] Reverted doc=${documentId} to v${targetVersion.versionNumber} ` +
-                    `(versionId=${targetVersion.id}) by user=${ctx.data.clerkUserId}`
+                    `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
             );
 
             return NextResponse.json(

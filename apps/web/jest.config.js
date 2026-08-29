@@ -5,8 +5,13 @@ export const config = {
     transform: {
         "^.+\\.(ts|tsx|js|jsx|mjs)$": ["babel-jest", { configFile: "./jest.babel.config.cjs" }],
     },
+    // Two patterns because pnpm: hoisted paths look like node_modules/<pkg>,
+    // the real files live under node_modules/.pnpm/<pkg>@<version>/… (scoped
+    // packages flatten to @scope+name). A file is skipped when EITHER pattern
+    // matches, so each carries the same whitelist in its own spelling.
     transformIgnorePatterns: [
-        "node_modules/(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-.*|micromark.*|mdast.*|hast-.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table)/)",
+        "node_modules/(?!\\.pnpm/)(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-.*|micromark.*|mdast.*|hast-.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table|better-auth|@better-auth|@better-fetch|@noble|nanostores|kysely|defu|rou3|uncrypto|jose)/)",
+        "node_modules/\\.pnpm/(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-|micromark|mdast|hast-|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table|better-auth|@better-auth\\+|@better-fetch\\+|@noble\\+|nanostores|kysely|defu|rou3|uncrypto|jose)[@.a-z-]*@)",
     ],
     // Keep ~/* pointed at apps/web src. The @launchstack/* mappings resolve the
     // workspace subpaths (e.g. @launchstack/core/ocr/trigger → the TS source)
@@ -82,6 +87,7 @@ export const config = {
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
+        "^@launchstack/document-conversion-engine$": "<rootDir>/../../packages/document-conversion-engine/src/index.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",

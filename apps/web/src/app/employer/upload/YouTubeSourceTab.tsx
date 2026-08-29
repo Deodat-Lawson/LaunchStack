@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 

@@ -1,7 +1,7 @@
 export { MainDeployment } from "./MainDeployment";
 export { DockerDeploymentPage } from "./DockerDeploymentPage";
 export { VercelDeploymentPage } from "./VercelDeploymentPage";
-export { ClerkSetupPage } from "./ClerkSetupPage";
+export { AuthSetupPage } from "./AuthSetupPage";
 export { InngestPage } from "./InngestPage";
 export { LangChainPage } from "./LangChainPage";
 export { ExaPage } from "./ExaPage";

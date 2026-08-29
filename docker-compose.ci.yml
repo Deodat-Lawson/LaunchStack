@@ -18,8 +18,7 @@ services:
       # Satisfies env validation; never called in the smoke.
       CHAT_BASE_URL: https://ci.invalid/v1
       CHAT_API_KEY: chat-ci-placeholder
-      CLERK_SECRET_KEY: sk_test_ci_placeholder
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2kuY2xlcmsuYWNjb3VudHMuZGV2JA==
+      BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
       INNGEST_EVENT_KEY: ci-placeholder
       # The smoke ingests data: URLs — no object storage involved.
       NEXT_PUBLIC_STORAGE_PROVIDER: database

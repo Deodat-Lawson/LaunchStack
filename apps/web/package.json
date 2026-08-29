@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
-    "description": "Launchstack Next.js application \u2014 hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
+    "description": "Launchstack Next.js application — hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
     "license": "Apache-2.0",
     "scripts": {
         "prebuild": "node ./scripts/copy-pdf-worker.mjs",
@@ -153,6 +153,7 @@
         "@testing-library/react": "^16.3.0",
         "@testing-library/user-event": "^14.6.1",
         "@types/diff-match-patch": "^1.0.36",
+        "@types/hast": "^3.0.5",
         "@types/jest": "^30.0.0",
         "@types/jsdom": "^28.0.1",
         "@types/react": "^19.1.12",

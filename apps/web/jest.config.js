@@ -1,3 +1,43 @@
+// The ESM-only unified/remark/rehype dependency graph that react-markdown
+// pulls in. These must be transformed by babel for jest to require them.
+const esmMarkdownDeps = [
+    "react-markdown",
+    "remark-[\\w-]+",
+    "rehype-[\\w-]+",
+    "micromark[\\w-]*",
+    "mdast-util[\\w-]*",
+    "unist-[\\w-]+",
+    "hast-util[\\w-]*",
+    "unified",
+    "bail",
+    "is-plain-obj",
+    "trough",
+    "vfile[\\w-]*",
+    "devlop",
+    "html-url-attributes",
+    "property-information",
+    "space-separated-tokens",
+    "comma-separated-tokens",
+    "ccount",
+    "escape-string-regexp",
+    "markdown-table",
+    "decode-named-character-reference",
+    "character-entities[\\w-]*",
+    "character-reference-invalid",
+    "parse-entities",
+    "stringify-entities",
+    "is-decimal",
+    "is-hexadecimal",
+    "is-alphanumerical",
+    "is-alphabetical",
+    "trim-lines",
+    "longest-streak",
+    "zwitch",
+    "estree-util[\\w-]*",
+    "hastscript",
+    "web-namespaces",
+];
+
 /** @type {import('jest').Config} */
 export const config = {
     testEnvironment: "node",
@@ -5,8 +45,12 @@ export const config = {
     transform: {
         "^.+\\.(ts|tsx|js|jsx|mjs)$": ["babel-jest", { configFile: "./jest.babel.config.cjs" }],
     },
+    // pnpm resolves packages to node_modules/.pnpm/<name>@<version>/node_modules/<name>,
+    // so the allowlist needs one pattern for the .pnpm store path and one for
+    // plain layouts.
     transformIgnorePatterns: [
-        "node_modules/(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-.*|micromark.*|mdast.*|hast-.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table)/)",
+        `node_modules/(?!\\.pnpm|(?:${esmMarkdownDeps.join("|")})/)`,
+        `node_modules/\\.pnpm/(?!(?:${esmMarkdownDeps.join("|")})@)`,
     ],
     // Keep ~/* pointed at apps/web src. The @launchstack/* mappings resolve the
     // workspace subpaths (e.g. @launchstack/core/ocr/trigger → the TS source)

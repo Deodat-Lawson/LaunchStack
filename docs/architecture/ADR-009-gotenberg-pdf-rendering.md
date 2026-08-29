@@ -34,7 +34,7 @@ as a Compose service** — LibreOffice and Chromium behind one multipart HTTP
 API. Like `docling-serve`, it is an off-the-shelf image, so there is no
 `services/` directory: the deployment unit is the Compose entry.
 
-**One brick owns the wire: `packages/export-engine`** (`@launchstack/export-engine`),
+**One brick owns the wire: `packages/document-conversion-engine`** (`@launchstack/document-conversion-engine`),
 the typed client — `officeToPdf` (LibreOffice), `htmlToPdf` /
 `markdownToPdf` (Chromium), `health`, and typed errors carrying Gotenberg's
 trace id. Unlike the adeu client it reads **no environment**: connection
@@ -81,7 +81,7 @@ indistinguishable, service 4xx relayed, service 5xx an opaque 502.
   honest 503 with a working HTML export next to it. New PDF features must
   target the service. (pdf-lib itself stays a dependency — the mindmap's
   SVG→PDF export still uses it.)
-- `@launchstack/export-engine` joins the published set and the lint boundary
+- `@launchstack/document-conversion-engine` joins the published set and the lint boundary
   table (imports nothing, nothing below pipelines/apps imports it).
 - PDF → DOCX (the opposite direction) is deliberately out of scope:
   LibreOffice's PDF import is line-per-paragraph noise. The credible path

@@ -284,7 +284,7 @@ const eslintConfig = [
                 "search",
                 "orchestration",
                 "editing",
-                "export-engine",
+                "document-conversion-engine",
                 "collab",
                 "schema-generator",
                 "pipelines",
@@ -434,18 +434,18 @@ const eslintConfig = [
                     ...noEnv,
                 },
             },
-            // @launchstack/export-engine — the Gotenberg client (ADR-009).
+            // @launchstack/document-conversion-engine — the Gotenberg client (ADR-009).
             // Bottom-of-graph like collab, and unlike the editing client it
             // has no env exception: connection settings are injected by the
             // composition root.
             {
-                files: ["packages/export-engine/src/**/*.ts"],
+                files: ["packages/document-conversion-engine/src/**/*.ts"],
                 rules: {
                     ...restrict([
                         legacyBan,
                         frameworkBan,
                         noPipelines,
-                        only([], "@launchstack/export-engine"),
+                        only([], "@launchstack/document-conversion-engine"),
                     ]),
                     ...noEnv,
                 },

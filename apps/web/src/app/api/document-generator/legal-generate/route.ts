@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/pipelines/legal-templates";
 import { generateDocument } from "@launchstack/pipelines/legal-templates/template-service";
-import { RenderingServiceError } from "@launchstack/export-engine";
+import { RenderingServiceError } from "@launchstack/document-conversion-engine";
 import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

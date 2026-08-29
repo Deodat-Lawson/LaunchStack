@@ -1,5 +1,5 @@
 {
-  "name": "@launchstack/export-engine",
+  "name": "@launchstack/document-conversion-engine",
   "version": "0.1.0",
   "description": "PDF rendering (ADR-009): the typed client for the Gotenberg document-rendering service — Office documents to PDF via LibreOffice, HTML and Markdown to PDF via Chromium.",
   "license": "Apache-2.0",

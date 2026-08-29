@@ -45,7 +45,7 @@ jest.mock("~/server/db", () => ({
     db: { select: () => mockSelectBuilder() },
 }));
 
-import { RenderingServiceError } from "@launchstack/export-engine";
+import { RenderingServiceError } from "@launchstack/document-conversion-engine";
 import { GET } from "~/app/api/documents/pdf/route";
 
 function request(query = "documentId=7"): Request {

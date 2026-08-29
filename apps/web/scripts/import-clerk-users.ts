@@ -84,6 +84,7 @@ function normalize(raw: ClerkUser, index: number): NormalizedUser {
 
     const name =
         [raw.first_name, raw.last_name].filter(Boolean).join(" ").trim() ||
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- an empty-string username must fall through to email, same as the empty joined name above; ?? would import "" as a display name
         raw.username?.trim() ||
         email;
 

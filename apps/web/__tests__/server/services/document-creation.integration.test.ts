@@ -48,7 +48,7 @@ import {
     type SourceVersionCreatedEvent,
 } from "@launchstack/orchestration/pipeline-events";
 import { db } from "~/server/db";
-import { getDocumentChunks, RLMRetriever } from "~/lib/tools/rag/retrievers";
+import { getDocumentChunks, RLMRetriever } from "@launchstack/retrieval/algorithms";
 import {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,

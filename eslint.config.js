@@ -419,7 +419,14 @@ const eslintConfig = [
                         legacyBan,
                         frameworkBan,
                         noPipelines,
-                        only(["runtime", "store", "llm", "evidence"], "@launchstack/retrieval"),
+                        // "indexing" is here for exactly one edge: the graph
+                        // algorithm's Neo4j backend reuses indexing's graph
+                        // client (isNeo4jConfigured/getNeo4jSession). Indexing
+                        // sits below retrieval in the DAG, so the edge is legal.
+                        only(
+                            ["runtime", "store", "llm", "evidence", "indexing"],
+                            "@launchstack/retrieval"
+                        ),
                     ]),
                     ...noEnv,
                 },

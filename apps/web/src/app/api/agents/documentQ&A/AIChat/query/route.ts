@@ -5,14 +5,16 @@ import { and, eq, inArray } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
-    createDocumentVectorRetriever,
     documentEnsembleSearch,
     multiDocEnsembleSearch,
-    type CompanySearchOptions,
-    type DocumentSearchOptions,
-    type MultiDocSearchOptions,
-    type SearchResult,
-} from "~/lib/tools/rag";
+} from "~/server/rag/ensemble";
+import { createDocumentVectorRetriever } from "@launchstack/retrieval/algorithms/vector";
+import type {
+    CompanySearchOptions,
+    DocumentSearchOptions,
+    MultiDocSearchOptions,
+    SearchResult,
+} from "@launchstack/retrieval/search-types";
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";

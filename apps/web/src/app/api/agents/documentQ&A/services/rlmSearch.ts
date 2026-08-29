@@ -20,7 +20,7 @@ import {
     type SectionWithCost,
     type SectionPreview,
     type TokenBudgetOptions,
-} from "~/lib/tools/rag/retrievers";
+} from "@launchstack/retrieval/algorithms/rlm";
 import { getEmbeddings } from "./models";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";

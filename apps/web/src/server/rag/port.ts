@@ -1,8 +1,13 @@
 /**
- * Concrete RagPort implementation that wraps the app's existing ensemble
- * search pipeline in ~/lib/tools/rag. This is what apps/web hands to
- * createEngine so features can run retrieval queries without importing
- * the RAG stack directly.
+ * Concrete RagPort implementation wrapping @launchstack/retrieval's ensemble
+ * search. This is what apps/web hands to createEngine so features can run
+ * retrieval queries without importing the retrieval stack directly.
+ *
+ * Imports go through ~/server/rag/ensemble (not the package) on purpose:
+ * that module configures the ensemble — env flags, the app's notes leg —
+ * at load, so a registered port implies a configured ensemble. The worst
+ * retrieval failure is a silent one (ragCompanySearchSafe degrades a broken
+ * port to empty context, not an error), so registration is logged loudly.
  *
  * The embedding model is created once per search call — the underlying
  * createOpenAIEmbeddings() is cheap to construct and the pipeline mutates
@@ -13,11 +18,14 @@ import type { RagPort, CompanySearchOptions, RagSearchResult } from "@launchstac
 import {
     companyEnsembleSearch,
     createOpenAIEmbeddings,
-    type CompanySearchOptions as AppCompanySearchOptions,
-    type SearchResult as AppSearchResult,
-} from "~/lib/tools/rag";
+} from "~/server/rag/ensemble";
+import type {
+    CompanySearchOptions as AppCompanySearchOptions,
+    SearchResult as AppSearchResult,
+} from "@launchstack/retrieval/search-types";
 
 export function createAppRagPort(): RagPort {
+    console.log("[rag/port] RagPort registered (ensemble configured via ~/server/rag/ensemble)");
     return {
         async companyEnsembleSearch(
             query: string,

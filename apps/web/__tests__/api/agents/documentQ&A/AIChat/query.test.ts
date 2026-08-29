@@ -9,7 +9,7 @@
 import { POST } from "~/app/api/agents/documentQ&A/AIChat/query/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
-import { companyEnsembleSearch, documentEnsembleSearch } from "~/lib/tools/rag";
+import { companyEnsembleSearch, documentEnsembleSearch } from "~/server/rag/ensemble";
 
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");
@@ -87,10 +87,13 @@ jest.mock("~/app/api/agents/predictive-document-analysis/services/annOptimizer",
 
 const RETRIEVED = [{ pageContent: "chunk text", metadata: { page: 1 } }];
 
-jest.mock("~/lib/tools/rag", () => ({
+jest.mock("~/server/rag/ensemble", () => ({
     companyEnsembleSearch: jest.fn(),
     documentEnsembleSearch: jest.fn(),
     multiDocEnsembleSearch: jest.fn(),
+}));
+
+jest.mock("@launchstack/retrieval/algorithms/vector", () => ({
     createDocumentVectorRetriever: jest.fn(),
 }));
 

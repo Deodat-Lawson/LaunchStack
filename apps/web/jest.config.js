@@ -66,8 +66,14 @@ export const config = {
         "^@launchstack/indexing/(.*)$": "<rootDir>/../../packages/indexing/src/$1",
         "^@launchstack/retrieval$": "<rootDir>/../../packages/retrieval/src/index.ts",
         "^@launchstack/retrieval/retrievers$":
-            "<rootDir>/../../packages/retrieval/src/retrievers/index.ts",
-        "^@launchstack/retrieval/reranking$": "<rootDir>/../../packages/retrieval/src/reranking/index.ts",
+            "<rootDir>/../../packages/retrieval/src/algorithms/index.ts",
+        "^@launchstack/retrieval/reranking$":
+            "<rootDir>/../../packages/retrieval/src/algorithms/reranking/index.ts",
+        "^@launchstack/retrieval/citation-builder$":
+            "<rootDir>/../../packages/retrieval/src/tools/citation-builder/index.ts",
+        "^@launchstack/retrieval/algorithms$":
+            "<rootDir>/../../packages/retrieval/src/algorithms/index.ts",
+        "^@launchstack/retrieval/tools$": "<rootDir>/../../packages/retrieval/src/tools/index.ts",
         "^@launchstack/retrieval/(.*)$": "<rootDir>/../../packages/retrieval/src/$1",
         "^@launchstack/orchestration$": "<rootDir>/../../packages/orchestration/src/index.ts",
         "^@launchstack/orchestration/pipeline-events$":

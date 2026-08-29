@@ -9,11 +9,21 @@
     "types": "./src/index.ts",
     "exports": {
         ".": "./src/index.ts",
-        "./retrievers": "./src/retrievers/index.ts",
+        "./algorithms": "./src/algorithms/index.ts",
+        "./algorithms/bm25": "./src/algorithms/bm25/index.ts",
+        "./algorithms/vector": "./src/algorithms/vector/index.ts",
+        "./algorithms/ensemble": "./src/algorithms/ensemble/index.ts",
+        "./algorithms/rlm": "./src/algorithms/rlm/index.ts",
+        "./algorithms/graph": "./src/algorithms/graph/index.ts",
+        "./algorithms/reranking": "./src/algorithms/reranking/index.ts",
+        "./tools": "./src/tools/index.ts",
+        "./tools/citation-builder": "./src/tools/citation-builder/index.ts",
+        "./tools/rag-search-tool": "./src/tools/rag-search-tool/index.ts",
         "./search-types": "./src/search-types.ts",
         "./types": "./src/types.ts",
-        "./reranking": "./src/reranking/index.ts",
-        "./citation-builder": "./src/citation-builder.ts",
+        "./retrievers": "./src/algorithms/index.ts",
+        "./reranking": "./src/algorithms/reranking/index.ts",
+        "./citation-builder": "./src/tools/citation-builder/index.ts",
         "./package.json": "./package.json"
     },
     "files": [
@@ -30,9 +40,45 @@
                 "types": "./dist/index.d.ts",
                 "default": "./dist/index.js"
             },
-            "./retrievers": {
-                "types": "./dist/retrievers/index.d.ts",
-                "default": "./dist/retrievers/index.js"
+            "./algorithms": {
+                "types": "./dist/algorithms/index.d.ts",
+                "default": "./dist/algorithms/index.js"
+            },
+            "./algorithms/bm25": {
+                "types": "./dist/algorithms/bm25/index.d.ts",
+                "default": "./dist/algorithms/bm25/index.js"
+            },
+            "./algorithms/vector": {
+                "types": "./dist/algorithms/vector/index.d.ts",
+                "default": "./dist/algorithms/vector/index.js"
+            },
+            "./algorithms/ensemble": {
+                "types": "./dist/algorithms/ensemble/index.d.ts",
+                "default": "./dist/algorithms/ensemble/index.js"
+            },
+            "./algorithms/rlm": {
+                "types": "./dist/algorithms/rlm/index.d.ts",
+                "default": "./dist/algorithms/rlm/index.js"
+            },
+            "./algorithms/graph": {
+                "types": "./dist/algorithms/graph/index.d.ts",
+                "default": "./dist/algorithms/graph/index.js"
+            },
+            "./algorithms/reranking": {
+                "types": "./dist/algorithms/reranking/index.d.ts",
+                "default": "./dist/algorithms/reranking/index.js"
+            },
+            "./tools": {
+                "types": "./dist/tools/index.d.ts",
+                "default": "./dist/tools/index.js"
+            },
+            "./tools/citation-builder": {
+                "types": "./dist/tools/citation-builder/index.d.ts",
+                "default": "./dist/tools/citation-builder/index.js"
+            },
+            "./tools/rag-search-tool": {
+                "types": "./dist/tools/rag-search-tool/index.d.ts",
+                "default": "./dist/tools/rag-search-tool/index.js"
             },
             "./search-types": {
                 "types": "./dist/search-types.d.ts",
@@ -42,13 +88,17 @@
                 "types": "./dist/types.d.ts",
                 "default": "./dist/types.js"
             },
+            "./retrievers": {
+                "types": "./dist/algorithms/index.d.ts",
+                "default": "./dist/algorithms/index.js"
+            },
             "./reranking": {
-                "types": "./dist/reranking/index.d.ts",
-                "default": "./dist/reranking/index.js"
+                "types": "./dist/algorithms/reranking/index.d.ts",
+                "default": "./dist/algorithms/reranking/index.js"
             },
             "./citation-builder": {
-                "types": "./dist/citation-builder.d.ts",
-                "default": "./dist/citation-builder.js"
+                "types": "./dist/tools/citation-builder/index.d.ts",
+                "default": "./dist/tools/citation-builder/index.js"
             },
             "./package.json": "./package.json"
         }
@@ -63,8 +113,10 @@
         "@launchstack/runtime": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/llm": "workspace:^",
+        "@launchstack/indexing": "workspace:^",
         "@langchain/community": "^0.3.56",
         "@langchain/core": "^0.3.74",
+        "langchain": "^0.3.33",
         "drizzle-orm": "^0.45.1",
         "zod": "^3.23.8",
         "@launchstack/evidence": "workspace:^"
@@ -72,5 +124,13 @@
     "devDependencies": {
         "typescript": "^5.9.2",
         "vitest": "^3.0.5"
+    },
+    "peerDependencies": {
+        "neo4j-driver": "^6.0.0"
+    },
+    "peerDependenciesMeta": {
+        "neo4j-driver": {
+            "optional": true
+        }
     }
 }

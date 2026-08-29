@@ -12,7 +12,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveConfiguredChatModel } from "~/lib/models";
-import { createUserNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
+import { createUserNotesRetriever } from "~/server/notes/notes-retriever";
 import {
     EMBEDDING_DIM,
     EMBEDDING_MODEL,

@@ -1,5 +1,5 @@
 import { buildCitations, type RetrievedEvidence } from "@launchstack/retrieval";
-import type { SearchResult } from "~/lib/tools/rag";
+import type { SearchResult } from "@launchstack/retrieval/search-types";
 import type { SourceReference } from "./types";
 
 const STOPWORDS = new Set([

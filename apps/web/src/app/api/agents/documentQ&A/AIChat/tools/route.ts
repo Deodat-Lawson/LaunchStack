@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         const owned = await assertToolCallParentsOwnedByUser(
             messageId,
             taskId,
-            ctx.data.clerkUserId
+            ctx.data.authUserId
         );
         if (!owned.success) return owned.response;
 
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         const owned = await assertToolCallParentsOwnedByUser(
             messageId,
             taskId,
-            ctx.data.clerkUserId
+            ctx.data.authUserId
         );
         if (!owned.success) return owned.response;
 
@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
             const rowOwned = await assertToolCallParentsOwnedByUser(
                 toolCall.messageId,
                 toolCall.taskId,
-                ctx.data.clerkUserId
+                ctx.data.authUserId
             );
             if (rowOwned.success) authorizedToolCalls.push(toolCall);
         }

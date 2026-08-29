@@ -7,7 +7,7 @@ import {
     createForbiddenError,
     createNotFoundError,
 } from "~/lib/api-utils";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -18,15 +18,15 @@ export async function GET() {
     let dbQueryMs: number | null = null;
     let outcome = "ok";
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) {
             outcome = "unauthorized";
             return identity.response;
         }
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
         const dbStart = Date.now();
-        const [userInfo] = await db.select().from(users).where(eq(users.userId, clerkUserId));
+        const [userInfo] = await db.select().from(users).where(eq(users.userId, authUserId));
         dbQueryMs = Date.now() - dbStart;
 
         if (!userInfo) {

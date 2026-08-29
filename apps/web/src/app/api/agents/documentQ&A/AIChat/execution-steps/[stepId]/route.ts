@@ -21,7 +21,7 @@ export async function PATCH(
     try {
         const { stepId } = await params;
 
-        const owned = await assertStepOwnedByUser(stepId, ctx.data.clerkUserId);
+        const owned = await assertStepOwnedByUser(stepId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateExecutionStepSchema);

@@ -8,7 +8,7 @@ import {
     MainDeployment,
     DockerDeploymentPage,
     VercelDeploymentPage,
-    ClerkSetupPage,
+    AuthSetupPage,
     InngestPage,
     LangChainPage,
     ExaPage,
@@ -93,8 +93,8 @@ const DeploymentPage = () => {
                 return <DockerDeploymentPage {...props} />;
             case "vercel":
                 return <VercelDeploymentPage {...props} />;
-            case "clerk":
-                return <ClerkSetupPage {...props} />;
+            case "auth":
+                return <AuthSetupPage {...props} />;
             case "inngest":
                 return <InngestPage {...props} />;
             case "langchain":

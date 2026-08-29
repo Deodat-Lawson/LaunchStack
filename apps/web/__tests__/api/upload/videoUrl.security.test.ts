@@ -38,7 +38,7 @@ function mockAuthenticated() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "user_session",
+            authUserId: "user_session",
             userPk: BigInt(21),
             companyId: BigInt(4),
             role: "owner",

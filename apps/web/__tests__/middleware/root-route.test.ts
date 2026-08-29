@@ -7,43 +7,31 @@
  * app/page.tsx.
  *
  * The reason is the loop these tests exist to prevent. The role lookup fails
- * open (its catch logs and falls through), and Clerk's <SignIn> honours
- * forceRedirectUrl="/" when a session already exists. So if middleware were to
- * hand an *authenticated* request at `/` on to a page component that redirects
- * to /signin, an unreachable database would produce
+ * open (its catch logs and falls through), and the sign-in page bounces an
+ * already-authenticated visitor back to "/". So if middleware were to hand an
+ * *authenticated* request at `/` on to a page component that redirects to
+ * /signin, an unreachable database would produce
  * `/` -> /signin -> / -> /signin -> ... forever.
  */
 
-import { NextRequest, type NextResponse } from "next/server";
-import type * as ClerkServer from "@clerk/nextjs/server";
+import { NextRequest } from "next/server";
 
-type MiddlewareHandler = (
-    auth: (() => Promise<{ userId: string | null }>) & { protect: jest.Mock },
-    req: NextRequest
-) => Promise<NextResponse | undefined>;
+const mockGetSession = jest.fn<Promise<{ user: { id: string } } | null>, []>();
 
-type HandlerHolder = { __middlewareHandler?: MiddlewareHandler };
+jest.mock("~/server/auth", () => ({
+    getSessionFromHeaders: () => mockGetSession(),
+}));
 
-jest.mock("@clerk/nextjs/server", () => {
-    const actual = jest.requireActual<typeof ClerkServer>("@clerk/nextjs/server");
-    return {
-        ...actual,
-        clerkMiddleware: (handler: MiddlewareHandler) => {
-            (globalThis as HandlerHolder).__middlewareHandler = handler;
-            return handler;
-        },
-    };
-});
-
-import "~/middleware";
-
-const handler = (globalThis as HandlerHolder).__middlewareHandler!;
+import middleware from "~/middleware";
 
 function run(pathname: string, userId: string | null) {
-    const auth = Object.assign(async () => ({ userId }), {
-        protect: jest.fn(),
+    mockGetSession.mockResolvedValue(userId ? { user: { id: userId } } : null);
+    // The middleware only consults the session when a session cookie exists
+    // (the anonymous fast-path), so an authenticated request must carry one.
+    const req = new NextRequest(new URL(`http://localhost${pathname}`), {
+        headers: userId ? { cookie: "better-auth.session_token=tok" } : {},
     });
-    return handler(auth, new NextRequest(new URL(`http://localhost${pathname}`)));
+    return middleware(req);
 }
 
 describe("middleware at /", () => {
@@ -58,7 +46,7 @@ describe("middleware at /", () => {
         // No DATABASE_URL under Jest, so the role lookup throws and the handler
         // takes its fail-open path. The property that matters is that it does not
         // answer with a /signin redirect — that edge is what would close the loop.
-        const response = await run("/", "clerk_abc");
+        const response = await run("/", "user_abc");
 
         expect(response?.headers.get("location")).not.toBe("http://localhost/signin");
     });

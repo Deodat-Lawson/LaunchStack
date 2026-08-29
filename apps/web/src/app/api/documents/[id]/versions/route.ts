@@ -123,7 +123,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
 
     return {
         ok: true,
-        userId: ctx.data.clerkUserId,
+        userId: ctx.data.authUserId,
         companyId: ctx.data.companyId,
         doc,
     };

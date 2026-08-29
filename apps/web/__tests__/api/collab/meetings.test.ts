@@ -68,12 +68,13 @@ const mockCtx: {
     script: {},
 };
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () =>
-        Promise.resolve({
-            userId: mockCtx.userId,
-            sessionClaims: { name: "Alex Chen" },
-        }),
+jest.mock("~/server/auth", () => ({
+    getServerSession: () =>
+        Promise.resolve(
+            mockCtx.userId
+                ? { user: { id: mockCtx.userId, name: "Alex Chen", email: "alex@example.com" } }
+                : null
+        ),
 }));
 
 jest.mock("~/lib/require-workspace-context", () => ({
@@ -82,7 +83,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
             ? Promise.resolve({
                   success: true,
                   data: {
-                      clerkUserId: mockCtx.userId,
+                      authUserId: mockCtx.userId,
                       userPk: 1n,
                       companyId: mockCtx.companyId,
                       role: "owner",

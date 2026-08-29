@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
         const chats = await db
             .select()
             .from(agentAiChatbotChat)
-            .where(eq(agentAiChatbotChat.userId, ctx.data.clerkUserId))
+            .where(eq(agentAiChatbotChat.userId, ctx.data.authUserId))
             .orderBy(desc(agentAiChatbotChat.updatedAt));
 
         return NextResponse.json({
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         const chatId = randomUUID();
         const insertValues = {
             id: chatId,
-            userId: ctx.data.clerkUserId,
+            userId: ctx.data.authUserId,
             title,
             // CreateChatSchema already narrows these to their literal unions; the
             // non-null assertions cover the schema's optional-with-default fields.
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             await db.insert(agentAiChatbotDocument).values({
                 id: documentId.toString(),
                 chatId: chatId,
-                userId: ctx.data.clerkUserId,
+                userId: ctx.data.authUserId,
                 title: title,
                 kind: "text",
             });

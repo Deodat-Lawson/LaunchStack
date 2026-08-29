@@ -13,7 +13,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: jest.fn().mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "test-user-123",
+            authUserId: "test-user-123",
             userPk: BigInt(1),
             companyId: BigInt(1),
             role: "owner",
@@ -152,8 +152,10 @@ describe("Feature: local-s3-migration, Property 11: Bootstrap API storage provid
 
                     // Reset modules to pick up new env
                     jest.resetModules();
-                    jest.doMock("@clerk/nextjs/server", () => ({
-                        auth: jest.fn().mockResolvedValue({ userId: "test-user-123" }),
+                    jest.doMock("~/server/auth", () => ({
+                        getServerSession: jest
+                            .fn()
+                            .mockResolvedValue({ user: { id: "test-user-123" } }),
                     }));
                     jest.doMock("drizzle-orm", () => ({
                         and: jest.fn((...args: unknown[]) => args),

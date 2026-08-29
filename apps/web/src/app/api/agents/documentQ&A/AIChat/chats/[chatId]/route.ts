@@ -26,7 +26,7 @@ export async function GET(
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         // Get chat details
@@ -83,7 +83,7 @@ export async function PATCH(
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateChatSchema);
@@ -129,7 +129,7 @@ export async function DELETE(
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         await db.delete(agentAiChatbotChat).where(eq(agentAiChatbotChat.id, chatId));

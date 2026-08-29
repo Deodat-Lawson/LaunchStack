@@ -2,7 +2,7 @@
 // GET  /api/client-prospector — List all prospecting jobs for the user's company
 //
 // POST flow:
-//   1. Authenticate the user via Clerk
+//   1. Authenticate the user's session
 //   2. Validate the request body (query, companyContext, location, etc.)
 //   3. Resolve the location to lat/lng if the user sent a string like "Austin, TX"
 //   4. Look up the user's company_id from the users table
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         {
             maxRequests: 10,
             windowMs: 15 * 60 * 1000,
-            keyGenerator: () => `client-prospector:${ctx.data.clerkUserId}`,
+            keyGenerator: () => `client-prospector:${ctx.data.authUserId}`,
         },
         async () => {
             try {
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
                 const input = parsed.data;
 
                 const companyId = ctx.data.companyId;
-                const userId = ctx.data.clerkUserId;
+                const userId = ctx.data.authUserId;
                 const jobId = uuidv4();
                 const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
                 const queuedLocation =

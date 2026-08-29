@@ -26,7 +26,7 @@ export const ChatHistory = pgTable(
     "chat_history",
     {
         id: bigserial("id", { mode: "number" }).primaryKey(),
-        UserId: varchar("user_id", { length: 256 }).notNull(), // Clerk user ID
+        UserId: varchar("user_id", { length: 256 }).notNull(), // auth subject ID (users.userId)
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),

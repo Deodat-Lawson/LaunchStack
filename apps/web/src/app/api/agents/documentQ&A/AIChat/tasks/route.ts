@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         if (!validation.success) return validation.response;
         const { chatId, description, objective, priority, metadata } = validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const taskId = randomUUID();
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "chatId is required" }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const tasks = await db

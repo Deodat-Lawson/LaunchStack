@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
-    "description": "Launchstack Next.js application \u2014 hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
+    "description": "Launchstack Next.js application — hosts the engine (via @launchstack/core) and all vertical features behind first-party better-auth sessions.",
     "license": "Apache-2.0",
     "scripts": {
         "prebuild": "node ./scripts/copy-pdf-worker.mjs",
@@ -32,7 +32,6 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1004.0",
         "@aws-sdk/s3-request-presigner": "^3.1004.0",
-        "@clerk/nextjs": "^6.31.9",
         "@esbuild-kit/core-utils": "^3.3.2",
         "@esbuild-kit/esm-loader": "^2.6.5",
         "@huggingface/inference": "^4.13.15",
@@ -80,6 +79,8 @@
         "@uploadthing/react": "^7.3.3",
         "@vercel/analytics": "^1.6.1",
         "@vercel/blob": "^2.3.0",
+        "bcryptjs": "^3.0.3",
+        "better-auth": "^1.7.2",
         "cheerio": "^1.2.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "*",

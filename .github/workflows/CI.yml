@@ -92,7 +92,7 @@ jobs:
         run: >-
           pnpm --filter @launchstack/evidence
           --filter @launchstack/conversion
-          --filter @launchstack/search
+          --filter @launchstack/retrieval
           --filter @launchstack/worker test
 
       # Includes the outbox + lifecycle integration tests against the real

@@ -1,4 +1,4 @@
-import { buildCitations, type RetrievedEvidence } from "@launchstack/search";
+import { buildCitations, type RetrievedEvidence } from "@launchstack/retrieval";
 import type { SearchResult } from "~/lib/tools/rag";
 import type { SourceReference } from "./types";
 
@@ -190,7 +190,7 @@ function getRelevance(metadata: Record<string, unknown>): number | undefined {
  * compatibility but is now populated from the REAL retrieval relevance
  * (`relevance`, the reranker's score) and omitted entirely when no such score
  * exists. Rows that carry full identity (documentId + versionId) are also
- * anchored via @launchstack/search's `buildCitations`, yielding a stable
+ * anchored via @launchstack/retrieval's `buildCitations`, yielding a stable
  * `anchorKey`. The frontend reads `snippet`/`documentId`/`page`, which are
  * unchanged.
  */

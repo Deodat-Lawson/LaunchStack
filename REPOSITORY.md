@@ -34,12 +34,12 @@ outright, since nothing was ever published under the old names.
 | `packages/orchestration` | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports. |
 | `packages/conversion` | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router. |
 | `packages/indexing` | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer). |
-| `packages/search` | TS library (published) | Question → cited answer: BM25 + vector ensemble behind a replaceable port, reranking, the citation builder. |
+| `packages/retrieval` | TS library (published) | Question → cited answer (renamed from `search`): every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, notes, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`. |
 | `packages/editing` | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client. |
 | `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
 | `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
 | `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |
-| `packages/tools` | TS library | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `search`, never a vertical. |
+| `packages/tools` | TS library | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical. |
 | `packages/design-tokens` | CSS (published) | The design contract: primitives feeding semantic tokens, one file, no build step. |
 | `pipelines/` | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced). |
 | `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
@@ -62,7 +62,7 @@ store  llm                 ← persistence · model calls (embeddings live here)
 orchestration              ← events, outbox, tick, source acceptance
 conversion                 ← any source → EvidenceDocument
 indexing                   ← EvidenceDocument → chunks, vectors, graph
-search                     ← question → cited answer
+retrieval                  ← question → cited answer
 engine                     ← createEngine() aggregate
 pipelines/  apps/          ← compositions and products (never imported by bricks)
 ```

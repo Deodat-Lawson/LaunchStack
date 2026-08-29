@@ -64,11 +64,11 @@ export const config = {
         "^@launchstack/indexing/knowledge-graph$":
             "<rootDir>/../../packages/indexing/src/knowledge-graph/index.ts",
         "^@launchstack/indexing/(.*)$": "<rootDir>/../../packages/indexing/src/$1",
-        "^@launchstack/search$": "<rootDir>/../../packages/search/src/index.ts",
-        "^@launchstack/search/retrievers$":
-            "<rootDir>/../../packages/search/src/retrievers/index.ts",
-        "^@launchstack/search/reranking$": "<rootDir>/../../packages/search/src/reranking/index.ts",
-        "^@launchstack/search/(.*)$": "<rootDir>/../../packages/search/src/$1",
+        "^@launchstack/retrieval$": "<rootDir>/../../packages/retrieval/src/index.ts",
+        "^@launchstack/retrieval/retrievers$":
+            "<rootDir>/../../packages/retrieval/src/retrievers/index.ts",
+        "^@launchstack/retrieval/reranking$": "<rootDir>/../../packages/retrieval/src/reranking/index.ts",
+        "^@launchstack/retrieval/(.*)$": "<rootDir>/../../packages/retrieval/src/$1",
         "^@launchstack/orchestration$": "<rootDir>/../../packages/orchestration/src/index.ts",
         "^@launchstack/orchestration/pipeline-events$":
             "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",

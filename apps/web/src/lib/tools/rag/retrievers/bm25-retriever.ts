@@ -14,4 +14,4 @@ export {
     createDocumentBM25Retriever,
     createCompanyBM25Retriever,
     createMultiDocBM25Retriever,
-} from "@launchstack/search/retrievers";
+} from "@launchstack/retrieval/retrievers";

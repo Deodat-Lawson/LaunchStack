@@ -11,4 +11,4 @@ export {
     createDocumentVectorRetriever,
     createCompanyVectorRetriever,
     createMultiDocVectorRetriever,
-} from "@launchstack/search/retrievers";
+} from "@launchstack/retrieval/retrievers";

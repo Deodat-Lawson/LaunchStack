@@ -21,7 +21,7 @@ export function getRag(): RagPort {
     const port = portSlot.get();
     if (!port) {
         throw new Error(
-            "[@launchstack/adapters/rag] No RagPort registered. Pass `rag.port` to createEngine, or call configureRag(port) directly."
+            "[@launchstack/retrieval] No RagPort registered. Pass `rag.port` to createEngine, or call configureRag(port) directly."
         );
     }
     return port;
@@ -40,7 +40,7 @@ export async function ragCompanySearchSafe(
     try {
         return await port.companyEnsembleSearch(query, options);
     } catch (err) {
-        console.warn("[@launchstack/adapters/rag] companyEnsembleSearch failed:", err);
+        console.warn("[@launchstack/retrieval] companyEnsembleSearch failed:", err);
         return [];
     }
 }

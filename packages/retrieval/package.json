@@ -1,5 +1,5 @@
 {
-    "name": "@launchstack/search",
+    "name": "@launchstack/retrieval",
     "version": "0.1.0",
     "description": "Question in, cited answer out: hybrid retrieval (BM25 + vector ensemble behind a replaceable port), second-pass reranking, and the citation builder that turns permission-scoped retrieval rows into stable anchored citations.",
     "license": "Apache-2.0",

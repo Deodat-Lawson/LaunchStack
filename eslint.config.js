@@ -254,11 +254,14 @@ const eslintConfig = [
                 "@launchstack/adapters/*",
                 "@launchstack/features",
                 "@launchstack/features/*",
+                "@launchstack/search",
+                "@launchstack/search/*",
             ],
             message:
-                "Deleted package (ADR-008). Import the owning feature package " +
-                "instead: store/llm/conversion/indexing/search/orchestration/" +
-                "editing/collab/runtime/engine/pipelines.",
+                "Deleted package (ADR-008) or renamed brick " +
+                "(@launchstack/search → @launchstack/retrieval). Import the " +
+                "owning feature package instead: store/llm/conversion/indexing/" +
+                "retrieval/orchestration/editing/collab/runtime/engine/pipelines.",
         };
         const frameworkBan = {
             group: ["next/*", "next", "@clerk/*", "react", "react-dom", "~/*"],
@@ -281,7 +284,7 @@ const eslintConfig = [
                 "llm",
                 "conversion",
                 "indexing",
-                "search",
+                "retrieval",
                 "orchestration",
                 "editing",
                 "collab",
@@ -410,13 +413,13 @@ const eslintConfig = [
                 },
             },
             {
-                files: ["packages/search/src/**/*.ts"],
+                files: ["packages/retrieval/src/**/*.ts"],
                 rules: {
                     ...restrict([
                         legacyBan,
                         frameworkBan,
                         noPipelines,
-                        only(["runtime", "store", "llm", "evidence"], "@launchstack/search"),
+                        only(["runtime", "store", "llm", "evidence"], "@launchstack/retrieval"),
                     ]),
                     ...noEnv,
                 },
@@ -455,7 +458,7 @@ const eslintConfig = [
                 },
             },
             // @launchstack/tools — shared, contract-typed capabilities the
-            // verticals compose. A brick above search, below pipelines; may
+            // verticals compose. A brick above retrieval, below pipelines; may
             // read process.env (social/web-research provider keys, inherited
             // from the features tier where these capabilities were born).
             {
@@ -465,7 +468,7 @@ const eslintConfig = [
                     frameworkBan,
                     noPipelines,
                     only(
-                        ["runtime", "evidence", "store", "llm", "search", "conversion"],
+                        ["runtime", "evidence", "store", "llm", "retrieval", "conversion"],
                         "@launchstack/tools"
                     ),
                 ]),

@@ -27,10 +27,10 @@ const { createDocumentLifecycle } = await import(
   "../../packages/orchestration/src/source-lifecycle/lifecycle.ts"
 );
 const { createCompanyBM25Retriever } = await import(
-  "../../packages/search/src/retrievers/bm25-retriever.ts"
+  "../../packages/retrieval/src/retrievers/bm25-retriever.ts"
 );
 const { buildCitations } = await import(
-  "../../packages/search/src/citation-builder.ts"
+  "../../packages/retrieval/src/citation-builder.ts"
 );
 
 const handle = createDb({ url: DATABASE_URL });

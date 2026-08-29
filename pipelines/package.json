@@ -194,7 +194,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/runtime": "workspace:^",
-        "@launchstack/search": "workspace:^",
+        "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",
         "dayjs": "^1.11.18",

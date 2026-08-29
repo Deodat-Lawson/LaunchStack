@@ -3,7 +3,7 @@ import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
 import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
-import { getRerankProvider, isRerankConfigured } from "@launchstack/search/reranking";
+import { getRerankProvider, isRerankConfigured } from "@launchstack/retrieval/reranking";
 import { env } from "~/env";
 import {
     createDocumentVectorRetriever,

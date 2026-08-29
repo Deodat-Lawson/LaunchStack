@@ -9,7 +9,7 @@
  * per-query options anyway.
  */
 
-import type { RagPort, CompanySearchOptions, RagSearchResult } from "@launchstack/search";
+import type { RagPort, CompanySearchOptions, RagSearchResult } from "@launchstack/retrieval";
 import {
     companyEnsembleSearch,
     createOpenAIEmbeddings,

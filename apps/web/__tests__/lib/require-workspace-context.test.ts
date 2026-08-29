@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
+import type { NextResponse } from "next/server";
 import { requireWorkspaceContext, requireAuthIdentity } from "~/lib/require-workspace-context";
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn<Promise<{ userId: string | null }>, []>();
+const mockGetServerSession = jest.fn<Promise<{ user: { id: string } } | null>, []>();
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => mockAuth(),
+jest.mock("~/server/auth", () => ({
+    getServerSession: () => mockGetServerSession(),
 }));
 
 const mockDbSelect = jest.fn();
@@ -63,8 +63,8 @@ describe("requireWorkspaceContext", () => {
         jest.clearAllMocks();
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+    it("returns 401 when there is no session", async () => {
+        mockGetServerSession.mockResolvedValue(null);
 
         const result = await requireWorkspaceContext();
 
@@ -77,7 +77,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns 401 when session exists but no users row", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([]);
 
         const result = await requireWorkspaceContext();
@@ -91,7 +91,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns 403 when user status is not verified", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 1, companyId: BigInt(10), role: "employer", status: "pending" }]);
 
         const result = await requireWorkspaceContext();
@@ -105,7 +105,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns context with default company when no cookie is set", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
         setupMembershipQuery([{ role: "owner" }]);
@@ -123,7 +123,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns context with cookie company when membership is valid", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(20));
         setupMembershipQuery([{ role: "editor" }]);
@@ -138,7 +138,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns 403 when the resolved default company has no membership", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
         setupMembershipQuery([]);
@@ -154,7 +154,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("uses membership role when membership row exists", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
         setupMembershipQuery([{ role: "editor" }]);
@@ -168,7 +168,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("never falls back to the legacy users.role", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
         setupMembershipQuery([{ role: "editor" }]);
@@ -183,7 +183,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns 500 when resolveActiveCompanyForUser throws", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockRejectedValue(new Error("DB connection failed"));
 
@@ -202,7 +202,7 @@ describe("requireWorkspaceContext", () => {
     });
 
     it("returns 403 when resolveActiveCompanyForUser returns null", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_abc" } });
         setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
         mockResolveActiveCompanyForUser.mockResolvedValue(null as unknown as bigint);
 
@@ -230,8 +230,8 @@ describe("requireAuthIdentity", () => {
         jest.clearAllMocks();
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+    it("returns 401 when there is no session", async () => {
+        mockGetServerSession.mockResolvedValue(null);
 
         const result = await requireAuthIdentity();
 
@@ -244,7 +244,7 @@ describe("requireAuthIdentity", () => {
     });
 
     it("returns authUserId when session exists", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_xyz" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_xyz" } });
 
         const result = await requireAuthIdentity();
 
@@ -255,7 +255,7 @@ describe("requireAuthIdentity", () => {
     });
 
     it("does not query the database", async () => {
-        mockAuth.mockResolvedValue({ userId: "clerk_xyz" });
+        mockGetServerSession.mockResolvedValue({ user: { id: "clerk_xyz" } });
 
         await requireAuthIdentity();
 

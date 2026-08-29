@@ -1,9 +1,25 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
+import { getSessionFromHeaders } from "~/server/auth";
+
+// Same matching semantics as the Clerk helper this file used to import:
+// a literal path, or a "(.*)"-suffixed prefix (which, like path-to-regexp,
+// matches the bare prefix and anything after it).
+const createRouteMatcher = (patterns: string[]) => {
+    const matchers = patterns.map(pattern =>
+        pattern.endsWith("(.*)") ? { prefix: pattern.slice(0, -"(.*)".length) } : { exact: pattern }
+    );
+    return (req: NextRequest) => {
+        const pathname = req.nextUrl.pathname;
+        return matchers.some(m =>
+            "exact" in m ? pathname === m.exact : pathname.startsWith(m.prefix)
+        );
+    };
+};
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -28,13 +44,16 @@ const isProtectedRoute = createRouteMatcher(["/employer(.*)", "/employee(.*)", "
 // site moved to apps/landing; / was removed because it now redirects.
 const isPublicRoute = createRouteMatcher(["/signup", "/signin"]);
 
-// Everything under /api requires a Clerk session unless it is listed here.
+// Everything under /api requires a session unless it is listed here.
 // Adding a route to this list means "no session required" — the route itself
 // is then responsible for whatever authentication it needs.
 const isPublicApiRoute = createRouteMatcher([
+    // Session establishment is by definition pre-session: sign-in/out/up,
+    // password reset, and social callbacks all live here.
+    "/api/auth(.*)",
     // Uptime probes.
     "/api/health",
-    // Authenticated by provider signature, not by a Clerk session.
+    // Authenticated by provider signature, not by a session.
     "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
     "/api/inngest",
@@ -42,20 +61,20 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/invite-codes/validate",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     "/api/ocr/benchmark",
-    // Prometheus scrapes without a Clerk session; the route requires
+    // Prometheus scrapes without a session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     "/api/metrics",
     // UploadThing posts its onUploadComplete callback here server-to-server
     // with no session. Every branch of the file router calls auth() itself.
     "/api/uploadthing(.*)",
     // Serves database-backed files to both the browser and the OCR worker;
-    // the route accepts a Clerk session or a signed per-file token.
+    // the route accepts a session or a signed per-file token.
     "/api/files(.*)",
-    // Machine auth via COLLAB_HUB_SECRET HMAC, not a Clerk session.
+    // Machine auth via COLLAB_HUB_SECRET HMAC, not a session.
     "/api/collab/hub(.*)",
     // Slack Events API verifies the signing secret on the raw body.
     "/api/collab/slack/events",
-    // Clicked from a mail client, which has no Clerk session — the route's own
+    // Clicked from a mail client, which has no session — the route's own
     // docblock says so. Without this entry the /api/* default-deny below
     // answered every unsubscribe click with a JSON 401, which is also an
     // RFC 8058 one-click compliance problem. The token is an HMAC we issued
@@ -120,18 +139,32 @@ const setCachedMiddlewareUser = (userId: string, value: CachedUserValue) => {
     });
 };
 
-export default clerkMiddleware(async (auth, req) => {
+export default async function middleware(req: NextRequest) {
     const requestStart = Date.now();
     let dbQueryMs: number | null = null;
-    const { userId } = await auth();
+    // Fast-path: no session cookie at all means anonymous — skip the session
+    // lookup entirely. With a cookie present, getSession answers from the
+    // signed cookie cache most of the time and hits Postgres only when the
+    // cache has expired.
+    let userId: string | null = null;
+    if (getSessionCookie(req)) {
+        try {
+            const session = await getSessionFromHeaders(req.headers);
+            userId = session?.user.id ?? null;
+        } catch (error) {
+            // An unreadable session is treated as signed out, mirroring how
+            // the DB-failure catch below degrades instead of erroring.
+            console.error("Middleware session read failed:", error);
+        }
+    }
     const pathname = req.nextUrl.pathname;
 
     try {
         // API routes: default-deny. Anything not on the allowlist needs a
-        // session. auth.protect() is deliberately not used here — it answers
-        // with a 404 page (or a redirect to /signin), which is the wrong shape
-        // for an API client. Resolution stops at "is there a session"; company
-        // and role checks belong in the handlers, via requireWorkspaceContext.
+        // session, answered with a JSON 401 rather than the page-shaped
+        // redirect below — a redirect is the wrong shape for an API client.
+        // Resolution stops at "is there a session"; company and role checks
+        // belong in the handlers, via requireWorkspaceContext.
         if (pathname.startsWith("/api/")) {
             if (!userId && !isPublicApiRoute(req)) {
                 return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -150,15 +183,15 @@ export default clerkMiddleware(async (auth, req) => {
         // Handled here rather than only in app/page.tsx so the redirect happens
         // BEFORE the database lookup below. A signed-in session plus an
         // unreachable database falls through that lookup's catch, and if the
-        // page component were the only redirect, / -> /signin -> (Clerk honours
-        // forceRedirectUrl on an active session) -> / would loop forever.
+        // page component were the only redirect, / -> /signin -> (the signin
+        // page bounces an active session back) -> / would loop forever.
         if (!userId && pathname === "/") {
             return NextResponse.redirect(new URL("/signin", req.url));
         }
 
         // Protect routes that require authentication
-        if (isProtectedRoute(req) && !isPublicRoute(req)) {
-            await auth.protect({ unauthenticatedUrl: new URL("/signin", req.url).toString() });
+        if (!userId && isProtectedRoute(req) && !isPublicRoute(req)) {
+            return NextResponse.redirect(new URL("/signin", req.url));
         }
 
         // Route authenticated users based on their DB role + status
@@ -199,7 +232,7 @@ export default clerkMiddleware(async (auth, req) => {
                 }
 
                 if (!existingUser) {
-                    // User exists in Clerk but not in DB – send to signup to finish registration
+                    // Authenticated but no DB row yet – send to signup to finish registration
                     if (pathname !== "/signup") {
                         return NextResponse.redirect(new URL("/signup?from=signin", req.url));
                     }
@@ -255,7 +288,7 @@ export default clerkMiddleware(async (auth, req) => {
             console.info(`[perf] middleware path=${pathname} total=${totalMs}ms db=${dbSegment}`);
         }
     }
-});
+}
 
 // A path missing from the matcher is not a public path — it just means the
 // middleware never sees it, so the handler is the only thing standing between

@@ -15,8 +15,9 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, and } from "drizzle-orm";
+
+import { getServerSession } from "~/server/auth";
 
 import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
@@ -27,6 +28,7 @@ import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 // ---------------------------------------------------------------------------
 
 export type WorkspaceContext = {
+    /** Opaque auth subject ID (better-auth user id; imported rows keep their Clerk-era strings). */
     authUserId: string;
     userPk: bigint;
     companyId: bigint;
@@ -81,7 +83,8 @@ function internalError(): WorkspaceFailure {
  * resolved company. The role always comes from that membership.
  */
 export async function requireWorkspaceContext(): Promise<WorkspaceContextResult> {
-    const { userId: authUserId } = await auth();
+    const session = await getServerSession();
+    const authUserId = session?.user.id;
     if (!authUserId) {
         return unauthorized();
     }
@@ -108,9 +111,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
     try {
         companyId = await resolveActiveCompanyForUser(user.id, user.companyId, user.status);
     } catch {
-        console.error(
-            `[requireWorkspaceContext] Failed to resolve company for user ${authUserId}`
-        );
+        console.error(`[requireWorkspaceContext] Failed to resolve company for user ${authUserId}`);
         return internalError();
     }
 
@@ -170,12 +171,13 @@ export function forbiddenForRole(): NextResponse {
 // ---------------------------------------------------------------------------
 
 /**
- * Session-only check — no DB, no company resolution. Returns the Clerk
- * user id or 401. Used by signup / check-registration routes that operate
- * before a user row exists.
+ * Session-only check — no DB beyond the session lookup, no company
+ * resolution. Returns the auth subject id or 401. Used by signup /
+ * check-registration routes that operate before a user row exists.
  */
 export async function requireAuthIdentity(): Promise<AuthIdentityResult> {
-    const { userId: authUserId } = await auth();
+    const session = await getServerSession();
+    const authUserId = session?.user.id;
     if (!authUserId) {
         return {
             success: false,

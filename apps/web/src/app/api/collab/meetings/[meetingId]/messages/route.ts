@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -41,11 +41,9 @@ export async function POST(
     const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
     if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
 
-    const { sessionClaims } = await auth();
-    const displayName =
-        (sessionClaims?.name as string | undefined) ??
-        (sessionClaims?.email as string | undefined) ??
-        "Teammate";
+    const session = await getServerSession();
+    const trimmedName = session?.user.name.trim();
+    const displayName = trimmedName?.length ? trimmedName : (session?.user.email ?? "Teammate");
 
     try {
         const message = await runtime.orchestrator.postHumanMessage({

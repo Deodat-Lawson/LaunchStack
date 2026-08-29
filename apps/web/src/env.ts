@@ -61,7 +61,21 @@ const serverSchema = z.object({
     HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
     HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
     HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
-    CLERK_SECRET_KEY: requiredString(),
+    // Signs session cookies and verification tokens. Generate with:
+    //   openssl rand -base64 32
+    // Rotating it invalidates every live session (users just sign in again).
+    BETTER_AUTH_SECRET: requiredString(),
+    // Public origin of the app (e.g. https://app.example.com). Optional in
+    // dev — better-auth infers http://localhost from the request — but set it
+    // in any deployment behind a proxy so callback URLs and trusted origins
+    // resolve to the outside hostname.
+    BETTER_AUTH_URL: optionalString(),
+    // Optional social sign-in. Auth works credentials-only without these;
+    // a provider appears on the sign-in page only when both halves are set.
+    AUTH_GOOGLE_CLIENT_ID: optionalString(),
+    AUTH_GOOGLE_CLIENT_SECRET: optionalString(),
+    AUTH_GITHUB_CLIENT_ID: optionalString(),
+    AUTH_GITHUB_CLIENT_SECRET: optionalString(),
     BLOB_READ_WRITE_TOKEN: optionalString(),
     UPLOADTHING_TOKEN: optionalString(),
     DATALAB_API_KEY: optionalString(),
@@ -312,7 +326,6 @@ const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
 });
 
 const clientSchema = z.object({
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: requiredString(),
     NEXT_PUBLIC_UPLOADTHING_ENABLED: z.preprocess(
         val => val === "true" || val === "1",
         z.boolean().optional()
@@ -360,7 +373,12 @@ function parseServerEnv() {
         HUGGINGFACE_EMBEDDING_MODEL: process.env.HUGGINGFACE_EMBEDDING_MODEL,
         HUGGINGFACE_EMBEDDING_DIMENSION: process.env.HUGGINGFACE_EMBEDDING_DIMENSION,
         HUGGINGFACE_EMBEDDING_VERSION: process.env.HUGGINGFACE_EMBEDDING_VERSION,
-        CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+        AUTH_GOOGLE_CLIENT_ID: process.env.AUTH_GOOGLE_CLIENT_ID,
+        AUTH_GOOGLE_CLIENT_SECRET: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+        AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,
+        AUTH_GITHUB_CLIENT_SECRET: process.env.AUTH_GITHUB_CLIENT_SECRET,
         BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
         UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
         DATALAB_API_KEY: process.env.DATALAB_API_KEY,
@@ -502,7 +520,6 @@ function parseServerEnv() {
 export const env = {
     server: parseServerEnv(),
     client: parseEnv(clientSchema, {
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
         NEXT_PUBLIC_UPLOADTHING_ENABLED: process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"

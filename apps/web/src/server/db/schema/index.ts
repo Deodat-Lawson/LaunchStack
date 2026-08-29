@@ -8,6 +8,7 @@
  * barrel deliberately does not re-export them, so which side of the boundary a
  * table lives on stays obvious at the import site.
  */
+export * from "./auth";
 export * from "./identity";
 export * from "./document-features";
 export * from "./agent-ai";

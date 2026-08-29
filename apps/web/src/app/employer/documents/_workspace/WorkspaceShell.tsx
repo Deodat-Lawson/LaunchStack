@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
@@ -421,11 +422,15 @@ export function WorkspaceShell() {
     );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
-    // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal.
+    // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal;
+    // `?connector=<provider>&result=connected|denied|error` is a connector OAuth
+    // return leg — reopen the modal on that provider's tab and toast the outcome.
     const featureParam = searchParams.get("feature");
     const addParam = searchParams.get("add");
+    const connectorParam = searchParams.get("connector");
+    const connectorResultParam = searchParams.get("result");
     useEffect(() => {
-        if (!featureParam && !addParam) return;
+        if (!featureParam && !addParam && !connectorParam) return;
         if (legacyRedirect) return;
         if (featureParam && FEATURE_IDS.has(featureParam)) {
             expandFeature(featureParam);
@@ -433,12 +438,48 @@ export function WorkspaceShell() {
         if (addParam) {
             setAddOpen(true);
         }
+        if (connectorParam) {
+            const tabByProvider: Record<string, string> = {
+                "google-drive": "drive",
+                slack: "slack",
+                github: "github",
+            };
+            const label: Record<string, string> = {
+                "google-drive": "Google Drive",
+                slack: "Slack",
+                github: "GitHub",
+            };
+            const tab = tabByProvider[connectorParam];
+            const name = label[connectorParam] ?? connectorParam;
+            if (tab) {
+                setAddTab(tab);
+                setAddOpen(true);
+            }
+            if (connectorResultParam === "connected") {
+                toast.success(`${name} connected`);
+            } else if (connectorResultParam === "denied") {
+                toast.info(`${name} connection was cancelled`);
+            } else {
+                toast.error(`${name} connection failed — try again`);
+            }
+        }
         const params = new URLSearchParams(searchParams.toString());
         params.delete("feature");
         params.delete("add");
+        params.delete("connector");
+        params.delete("result");
         const query = params.toString();
         router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
-    }, [featureParam, addParam, legacyRedirect, expandFeature, router, searchParams]);
+    }, [
+        featureParam,
+        addParam,
+        connectorParam,
+        connectorResultParam,
+        legacyRedirect,
+        expandFeature,
+        router,
+        searchParams,
+    ]);
 
     // Keyboard shortcuts
     useEffect(() => {

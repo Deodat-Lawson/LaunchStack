@@ -9,6 +9,7 @@
  * table lives on stays obvious at the import site.
  */
 export * from "./identity";
+export * from "./connectors";
 export * from "./document-features";
 export * from "./agent-ai";
 export * from "./collab";

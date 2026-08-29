@@ -39,6 +39,7 @@
         "./email/send": "./src/email/send.ts",
         "./connectors": "./src/connectors/index.ts",
         "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
+        "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
         "./package.json": "./package.json"
     },
     "files": [

@@ -21,6 +21,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
@@ -67,8 +68,18 @@ export async function POST(request: Request) {
                     `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`
             );
 
+            // A token pasted into the form wins; otherwise the workspace's
+            // GitHub connection covers private repos without pasting anything.
+            const effectiveToken =
+                accessToken ?? (await getCompanyAccessToken(ctx.data.companyId, "github"));
+
             // Download the repository as a ZIP
-            const zipBuffer = await downloadGitHubRepoZip(owner, repo, branch, accessToken);
+            const zipBuffer = await downloadGitHubRepoZip(
+                owner,
+                repo,
+                branch,
+                effectiveToken ?? undefined
+            );
 
             const filename = `${owner}-${repo}.zip`;
 

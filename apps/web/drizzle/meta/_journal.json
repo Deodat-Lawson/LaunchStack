@@ -57,6 +57,13 @@
       "when": 1787442919298,
       "tag": "20260822235519_marketing-history-publish-writeback",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788034138114,
+      "tag": "20260829200858_workspace_connections",
+      "breakpoints": true
     }
   ]
 }

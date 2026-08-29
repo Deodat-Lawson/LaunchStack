@@ -13,6 +13,7 @@ import {
     type IconProps,
 } from "./icons";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
+import { DriveConnectPanel } from "./DriveConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
 import { TEMPLATE_META } from "~/app/employer/mindmap/_mindmap/model/template-meta";
@@ -31,7 +32,9 @@ import { TEMPLATE_META } from "~/app/employer/mindmap/_mindmap/model/template-me
  *   - YouTube: `/api/upload/video-url`
  *   - Mindmap: `/api/mindmaps` → navigates to the editor; the diagram becomes
  *     a source when it is published from there.
- *   - Connectors: not yet wired (OAuth) — surfaced as coming-soon CTAs.
+ *   - Connectors: Drive/Slack/GitHub start the workspace OAuth flow at
+ *     `/api/connectors/<provider>/oauth/start`; Gmail/Notion/Dropbox remain
+ *     coming-soon CTAs.
  */
 
 export interface AddSourceModalProps {
@@ -232,6 +235,8 @@ export function AddSourceModal({
         panel = <UrlPanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+    } else if (tab === "drive") {
+        panel = <DriveConnectPanel tab={active} />;
     } else {
         panel = <ConnectPanel tab={active} />;
     }
@@ -1656,11 +1661,62 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
 }
 
 // ---------------------------------------------------------------------------
-// Connect panel (Gmail/Notion/Drive/Slack/GitHub/Dropbox) — not yet wired
+// Connect panel. Google Drive / Slack / GitHub connect via workspace OAuth
+// (management role required, tokens live server-side only); the rest are
+// coming-soon CTAs.
 // ---------------------------------------------------------------------------
 
 interface ConnectPanelProps {
     tab: AddSourceTab;
+}
+
+/**
+ * Tab id → connector provider for the providers this generic panel serves.
+ * Drive has its own panel (DriveConnectPanel) with the Picker and sync
+ * controls, so it is deliberately absent here.
+ */
+const CONNECTABLE_PROVIDERS: Record<string, string> = {
+    slack: "slack",
+    github: "github",
+};
+
+interface ConnectorsOverview {
+    providers: Record<string, { configured: boolean }>;
+    connections: Array<{
+        id: string;
+        provider: string;
+        displayName: string | null;
+        status: string;
+        statusDetail: string | null;
+        grantedBy: string | null;
+        createdAt: string;
+    }>;
+}
+
+function useConnectorsOverview(enabled: boolean) {
+    const [data, setData] = useState<ConnectorsOverview | null>(null);
+    const [loading, setLoading] = useState(enabled);
+
+    const refresh = React.useCallback(async () => {
+        setLoading(true);
+        try {
+            const res = await fetch("/api/connectors");
+            if (res.ok) {
+                const payload = (await res.json()) as { data?: ConnectorsOverview };
+                setData(payload.data ?? null);
+            }
+        } catch {
+            // The panel degrades to the coming-soon state; nothing to surface.
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (enabled) void refresh();
+    }, [enabled, refresh]);
+
+    return { data, loading, refresh };
 }
 
 const PROVIDER_PERKS: Record<string, string[]> = {
@@ -1685,6 +1741,31 @@ function ConnectPanel({ tab }: ConnectPanelProps) {
     const Icon = meta?.Icon ?? tab.Icon;
     const color = meta?.color ?? "var(--accent)";
     const perks = PROVIDER_PERKS[tab.id] ?? [];
+    const provider = CONNECTABLE_PROVIDERS[tab.id];
+    const overview = useConnectorsOverview(Boolean(provider));
+    const [disconnecting, setDisconnecting] = useState<string | null>(null);
+
+    const configured = provider ? (overview.data?.providers[provider]?.configured ?? false) : false;
+    const connections = provider
+        ? (overview.data?.connections ?? []).filter(row => row.provider === provider)
+        : [];
+
+    const disconnect = async (connectionId: string) => {
+        setDisconnecting(connectionId);
+        try {
+            const res = await fetch(`/api/connectors/connections/${connectionId}`, {
+                method: "DELETE",
+            });
+            if (res.ok) {
+                toast.success(`${tab.label} disconnected`);
+                await overview.refresh();
+            } else {
+                toast.error(`Could not disconnect ${tab.label}`);
+            }
+        } finally {
+            setDisconnecting(null);
+        }
+    };
     return (
         <div>
             <div
@@ -1749,26 +1830,126 @@ function ConnectPanel({ tab }: ConnectPanelProps) {
                     </li>
                 ))}
             </ul>
-            <button
-                disabled
-                style={{
-                    width: "100%",
-                    padding: 12,
-                    borderRadius: 10,
-                    background: "var(--line)",
-                    color: "var(--ink-3)",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
-                    cursor: "not-allowed",
-                }}
-                title="Coming soon"
-            >
-                <Icon size={16} /> Connect {tab.label} — coming soon
-            </button>
+            {provider && connections.length > 0 && (
+                <ul
+                    style={{
+                        margin: 0,
+                        padding: 0,
+                        listStyle: "none",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                        marginBottom: 14,
+                    }}
+                >
+                    {connections.map(row => (
+                        <li
+                            key={row.id}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                                padding: "10px 12px",
+                                border: "1px solid var(--line)",
+                                borderRadius: 10,
+                                fontSize: 13,
+                            }}
+                        >
+                            <span
+                                style={{
+                                    color:
+                                        row.status === "active"
+                                            ? "var(--accent)"
+                                            : "var(--danger, var(--ink-3))",
+                                }}
+                            >
+                                <IconCheck size={14} />
+                            </span>
+                            <span style={{ flex: 1, minWidth: 0 }}>
+                                <span style={{ fontWeight: 600 }}>
+                                    {row.displayName ?? tab.label}
+                                </span>
+                                <span style={{ color: "var(--ink-3)" }}>
+                                    {row.status !== "active"
+                                        ? ` · ${row.status} — reconnect`
+                                        : row.grantedBy
+                                          ? ` · connected by ${row.grantedBy}`
+                                          : ""}
+                                </span>
+                            </span>
+                            <button
+                                onClick={() => void disconnect(row.id)}
+                                disabled={disconnecting === row.id}
+                                style={{
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    color: "var(--ink-2)",
+                                    padding: "4px 10px",
+                                    borderRadius: 8,
+                                    border: "1px solid var(--line)",
+                                    cursor: disconnecting === row.id ? "wait" : "pointer",
+                                }}
+                            >
+                                {disconnecting === row.id ? "Removing…" : "Disconnect"}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {provider && configured ? (
+                <a
+                    href={`/api/connectors/${provider}/oauth/start`}
+                    style={{
+                        width: "100%",
+                        padding: 12,
+                        borderRadius: 10,
+                        background: "var(--accent)",
+                        color: "white",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 8,
+                        textDecoration: "none",
+                    }}
+                >
+                    <Icon size={16} />
+                    {connections.length > 0
+                        ? `Connect another ${tab.label} account`
+                        : `Connect ${tab.label}`}
+                </a>
+            ) : (
+                <button
+                    disabled
+                    style={{
+                        width: "100%",
+                        padding: 12,
+                        borderRadius: 10,
+                        background: "var(--line)",
+                        color: "var(--ink-3)",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 8,
+                        cursor: "not-allowed",
+                    }}
+                    title={
+                        provider
+                            ? "Ask your administrator to add this provider's OAuth keys — steps in .env.example"
+                            : "Coming soon"
+                    }
+                >
+                    <Icon size={16} />
+                    {overview.loading && provider
+                        ? "Checking…"
+                        : provider
+                          ? `Connect ${tab.label} — not configured on this server`
+                          : `Connect ${tab.label} — coming soon`}
+                </button>
+            )}
         </div>
     );
 }

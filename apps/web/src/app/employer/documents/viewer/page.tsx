@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import LoadingPage from "~/app/_components/loading";
 import type { DocumentType } from "../types";

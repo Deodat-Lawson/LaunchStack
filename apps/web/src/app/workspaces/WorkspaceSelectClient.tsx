@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { SignOutButton } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -149,6 +149,7 @@ export function WorkspaceSelectClient({
     pendingInvites = [],
 }: Props) {
     const router = useRouter();
+    const { signOut } = useAuth();
     const { theme, setTheme, resolvedTheme } = useTheme();
     const isDark = (resolvedTheme ?? theme) === "dark";
     // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
@@ -365,11 +366,13 @@ export function WorkspaceSelectClient({
                         <polyline points="6 9 12 15 18 9" />
                     </svg>
                 </div>
-                <SignOutButton>
-                    <button className={styles.signout} type="button">
-                        Sign out
-                    </button>
-                </SignOutButton>
+                <button
+                    className={styles.signout}
+                    type="button"
+                    onClick={() => void signOut({ redirectUrl: "/signin" })}
+                >
+                    Sign out
+                </button>
                 <button
                     type="button"
                     className={styles.iconBtn}

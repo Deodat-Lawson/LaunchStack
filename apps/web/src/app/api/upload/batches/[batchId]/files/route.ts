@@ -50,7 +50,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const { files } = validation.data;
 
-        const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId);
+        const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId);
         if (!batch) {
             return NextResponse.json({ error: "Batch not found" }, { status: 404 });
         }
@@ -93,7 +93,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                 .where(
                     and(
                         eq(uploadBatchFiles.batchId, batchId),
-                        eq(uploadBatchFiles.userId, ctx.data.clerkUserId),
+                        eq(uploadBatchFiles.userId, ctx.data.authUserId),
                         whereClause,
                         inArray(uploadBatchFiles.status, ["queued", "uploaded", "failed"])
                     )
@@ -125,7 +125,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         await refreshBatchAggregates(batchId);
 
-        const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
+        const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!refreshedBatch) {
             return NextResponse.json({ error: "Batch not found after update" }, { status: 404 });
         }

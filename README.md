@@ -29,7 +29,7 @@ pnpm install
 cp .env.example .env
 ```
 
-`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL` and `CLERK_SECRET_KEY`. Chat needs no variable at all: with `CHAT_BASE_URL` unset it defaults to Google Gemini's OpenAI-compatible endpoint, authenticated with `GOOGLE_AI_API_KEY`. Set `CHAT_BASE_URL` (plus `CHAT_API_KEY`) to reach anything else. There is still no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat, and none of them is forwarded to the Gemini default — a key names who you are, not where the request goes, and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
+`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL` and `BETTER_AUTH_SECRET` (generate one with `openssl rand -base64 32`). Chat needs no variable at all: with `CHAT_BASE_URL` unset it defaults to Google Gemini's OpenAI-compatible endpoint, authenticated with `GOOGLE_AI_API_KEY`. Set `CHAT_BASE_URL` (plus `CHAT_API_KEY`) to reach anything else. There is still no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat, and none of them is forwarded to the Gemini default — a key names who you are, not where the request goes, and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
 
 ### With Docker (recommended)
 
@@ -215,7 +215,7 @@ await engine.close();   // graceful shutdown
 
 [`apps/web`](apps/web) is a Next.js app built on the engine. It demonstrates:
 
-- Clerk employer/employee auth with role-aware middleware
+- First-party employer/employee auth (better-auth, in the app's own Postgres) with role-aware middleware
 - Document upload + optional OCR (`NATIVE_PDF`, Docling, Azure, Landing.AI, Datalab)
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)

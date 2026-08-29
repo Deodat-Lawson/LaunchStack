@@ -162,22 +162,22 @@ Model ids, per-model behavior, and route assignments live in
 [Chat Models](./chat-models.md) for presets, route inheritance, reasoning
 modes, and migration from the pre-PR variables.
 
-| Variable                                                                            | Required    | Description                                                                                                                                                                                                                                                        |
-| ----------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `DATABASE_URL`                                                                      | Yes         | PostgreSQL connection string                                                                                                                                                                                                                                       |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`                                                 | Yes         | Clerk publishable key                                                                                                                                                                                                                                              |
-| `CLERK_SECRET_KEY`                                                                  | Yes         | Clerk secret key                                                                                                                                                                                                                                                   |
-| `CHAT_BASE_URL`                                                                     | Yes         | The OpenAI-compatible chat endpoint every route talks to                                                                                                                                                                                                           |
-| `CHAT_API_KEY`                                                                      | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints                                                                                                                                                                                              |
-| `CHAT_MODELS_CONFIG`                                                                | Optional    | Path to the chat model configuration file. Defaults to `config/chat-models.yaml`                                                                                                                                                                                   |
-| `OPENAI_API_KEY` or `AI_API_KEY`                                                    | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat                                                                                                                  |
-| `INNGEST_EVENT_KEY`                                                                 | Cloud only  | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox                                                 |
-| `BLOB_READ_WRITE_TOKEN`                                                             | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately                                                                                                                                   |
-| `UPLOADTHING_TOKEN`                                                                 | Optional    | UploadThing legacy uploader                                                                                                                                                                                                                                        |
-| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY`                       | Optional    | Whisper transcription service (`services/transcription`) — the names the Compose stack uses                                                                                                                                                                        |
-| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY`                                         | Optional    | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses                                                                                                                                                                        |
-| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY`                             | Optional    | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses                                                                                                                                                                     |
-| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional    | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
+| `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
+| `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
+| `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
+| `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
+| `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
+| `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
+| `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
+| `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
+| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
+| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
+| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
+| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 `OCR_WORKER_URL`) are being phased out per
@@ -202,7 +202,7 @@ being picked up.
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
 - [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate`, or the Compose `migrate` service / a one-shot job on the image)
-- [ ] Clerk and the selected chat provider/model validated
+- [ ] Sign-in (better-auth) and the selected chat provider/model validated
 - [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used (endpoint served by the worker)

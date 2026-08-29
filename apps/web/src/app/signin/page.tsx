@@ -2,7 +2,8 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { useAuth, SignIn, SignOutButton } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
+import { SignInForm } from "~/app/_components/CredentialsForm";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { LANDING_URL } from "~/config/landing";
@@ -11,9 +12,9 @@ import { LANDING_URL } from "~/config/landing";
  * Sign-in page.
  *
  * Launchstack design (OKLCH tokens, Inter + Instrument Serif, accent-purple).
- * Uses Clerk's <SignIn> embedded component; everything around it is a thin
- * branded shell that tells solo founders / devs / students what they're
- * signing into. No enterprise "50+ companies" pitch.
+ * The credentials form talks to our own better-auth endpoints; everything
+ * around it is a thin branded shell that tells solo founders / devs /
+ * students what they're signing into. No enterprise "50+ companies" pitch.
  */
 const SigninPage: React.FC = () => {
     const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
@@ -90,7 +91,7 @@ const SigninPage: React.FC = () => {
                         ) : isSignedIn ? (
                             <AlreadySignedIn />
                         ) : (
-                            <SignIn routing="hash" forceRedirectUrl="/" signUpUrl="/signup" />
+                            <SignInForm />
                         )}
 
                         <div
@@ -133,22 +134,23 @@ const SigninPage: React.FC = () => {
 };
 
 /**
- * Rendered when Clerk reports an active session on the sign-in page.
+ * Rendered when the client sees an active session on the sign-in page.
  *
  * This is the cycle breaker, not a cosmetic nicety. `/` redirects here for
- * anonymous visitors, and <SignIn> honours forceRedirectUrl="/" when a session
- * already exists — so handing an already-signed-in user back to <SignIn> closes
- * a loop that the browser will spin on forever. It fires in two real cases:
+ * anonymous visitors, and a successful sign-in hands the user straight back
+ * to "/" — so bouncing an already-signed-in user between the two closes a
+ * loop that the browser will spin on forever. It fires in two real cases:
  *
  *   1. The middleware's role lookup threw (database down) and it failed open,
  *      so it never fanned the user out to their dashboard.
- *   2. Server and client disagree about the session — a Clerk key mismatch
- *      between deployments, a handshake in flight, or clock skew.
+ *   2. Server and client disagree about the session — a secret mismatch
+ *      between deployments, a cookie in flight, or clock skew.
  *
  * Both are degraded states, so this offers manual versions of the two things
  * the app would otherwise have done automatically.
  */
 function AlreadySignedIn() {
+    const { signOut } = useAuth();
     return (
         <div
             style={{
@@ -183,23 +185,22 @@ function AlreadySignedIn() {
                 >
                     Continue
                 </Link>
-                <SignOutButton redirectUrl={LANDING_URL}>
-                    <button
-                        type="button"
-                        style={{
-                            background: "transparent",
-                            color: "var(--ink-3)",
-                            fontWeight: 600,
-                            fontSize: 13,
-                            padding: "9px 16px",
-                            borderRadius: 8,
-                            border: "1px solid var(--line)",
-                            cursor: "pointer",
-                        }}
-                    >
-                        Sign out
-                    </button>
-                </SignOutButton>
+                <button
+                    type="button"
+                    onClick={() => void signOut({ redirectUrl: LANDING_URL })}
+                    style={{
+                        background: "transparent",
+                        color: "var(--ink-3)",
+                        fontWeight: 600,
+                        fontSize: 13,
+                        padding: "9px 16px",
+                        borderRadius: 8,
+                        border: "1px solid var(--line)",
+                        cursor: "pointer",
+                    }}
+                >
+                    Sign out
+                </button>
             </div>
         </div>
     );

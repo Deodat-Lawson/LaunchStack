@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     }
     const input = parsed.data;
 
-    const { companyId, clerkUserId } = ctx.data;
+    const { companyId, authUserId } = ctx.data;
     // A workspace that has never opened the Agents pane still gets a usable
     // roster, so "start a meeting" never dead-ends on an empty picker.
     const roster = await ensureStarterPersonas(companyId).catch(() => listPersonas(companyId));
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
 
     const { row, orchestrator } = await createMeetingForCompany({
         companyId,
-        createdByUserId: clerkUserId,
+        createdByUserId: authUserId,
         title: input.title,
         objective: input.objective,
         agenda: input.agenda,

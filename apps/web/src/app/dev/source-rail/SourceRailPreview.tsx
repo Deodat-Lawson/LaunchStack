@@ -38,7 +38,7 @@ const FIXTURE_FOLDERS: WorkspaceFolder[] = [
 
 /**
  * Local harness for the source-rail context menu. Production auth is skipped so
- * the menu can be exercised without a Clerk session. Gated by the server page.
+ * the menu can be exercised without a session. Gated by the server page.
  */
 export function SourceRailPreview() {
     const [sources, setSources] = useState(FIXTURE_SOURCES);

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Bug, Mail, MessageSquare, Phone, Send } from "lucide-react";
 

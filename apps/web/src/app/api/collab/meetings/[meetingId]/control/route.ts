@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -45,13 +45,11 @@ export async function POST(
     if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
 
     const { orchestrator } = runtime;
-    // Display name is cosmetic for takeover; keep Clerk claims as a best-effort
-    // label without using them for authorization.
-    const { sessionClaims } = await auth();
-    const displayName =
-        (sessionClaims?.name as string | undefined) ??
-        (sessionClaims?.email as string | undefined) ??
-        "Facilitator";
+    // Display name is cosmetic for takeover; keep the session profile as a
+    // best-effort label without using it for authorization.
+    const session = await getServerSession();
+    const trimmedName = session?.user.name.trim();
+    const displayName = trimmedName?.length ? trimmedName : (session?.user.email ?? "Facilitator");
 
     try {
         switch (parsed.data.action) {
@@ -72,7 +70,7 @@ export async function POST(
                 break;
             case "takeover":
                 await orchestrator.takeOver({
-                    humanId: ctx.data.clerkUserId,
+                    humanId: ctx.data.authUserId,
                     displayName,
                     asPersonaId: parsed.data.asPersonaId,
                 });

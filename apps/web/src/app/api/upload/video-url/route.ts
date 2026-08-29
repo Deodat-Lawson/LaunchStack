@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
         try {
             const result = await processVideoUrlUpload({
-                user: { userId: ctx.data.clerkUserId, companyId: ctx.data.companyId },
+                user: { userId: ctx.data.authUserId, companyId: ctx.data.companyId },
                 videoUrl,
                 requestUrl: request.url,
                 category,

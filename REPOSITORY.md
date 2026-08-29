@@ -178,15 +178,14 @@ no `ignoreBuildErrors`.
    the worker cannot disagree about metering.
 5. **`employerPasskey`/`employeePasskey`** remain plaintext columns on
    `company` — pre-existing; needs a hashing migration + backfill.
-6. **Clerk is a hard dependency.** `CLERK_SECRET_KEY` and
-   `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` are `requiredString()`, so a self-hoster
-   needs a Clerk account and an air-gapped deployment is impossible. The
-   coupling is small — `clerkMiddleware` in `middleware.ts`, `auth()` behind
-   `lib/require-workspace-context.ts` (the single chokepoint for 227 call
-   sites), `<ClerkProvider>`, four UI components and ~12 `useAuth`/`useUser`
-   hooks — with no `clerkClient`, no `@clerk/backend`, and no webhook route.
-   Tenancy is already entirely our own Postgres (`users`,
-   `userCompanyMemberships`, `company`, plus the `pdr_active_company` cookie),
-   so an `AuthPort` in `apps/web` with a Clerk adapter proven to be a no-op is
-   a tractable first step. Deliberately not bundled with the self-hosting work:
-   it moves a security boundary and deserves its own review.
+6. **~~Clerk is a hard dependency.~~ Resolved (2026-08): auth is first-party.**
+   Clerk was replaced by better-auth running inside `apps/web` against the
+   same Postgres (`pdr_ai_v2_auth_*` tables) — no external auth service, no
+   account required, air-gapped deployments work. The predicted `AuthPort`
+   turned out to be unnecessary: because tenancy was already entirely our own
+   Postgres (`users`, `userCompanyMemberships`, `company`, plus the
+   `pdr_active_company` cookie), the swap was confined to the
+   `lib/require-workspace-context.ts` chokepoint, `middleware.ts`, and the
+   auth UI. `users.userId` now holds an opaque auth subject ID; rows imported
+   from Clerk keep their original `user_…` strings
+   (`apps/web/scripts/import-clerk-users.ts`).

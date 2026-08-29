@@ -7,8 +7,8 @@
  * `NextRequest` into the framework-agnostic shape the hub already accepts, and
  * rebuilds the canonical `/collab/v1/...` path the worker signed.
  *
- * Authentication is the hub's own HMAC, not Clerk: the caller is a machine
- * holding `COLLAB_HUB_SECRET`, not a browser session. Clerk-authenticated
+ * Authentication is the hub's own HMAC, not a user session: the caller is a machine
+ * holding `COLLAB_HUB_SECRET`, not a browser session. Session-authenticated
  * humans use the `/api/collab/meetings/**` routes instead.
  */
 

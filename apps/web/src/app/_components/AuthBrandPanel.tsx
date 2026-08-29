@@ -6,7 +6,7 @@ import { FileSearch, MessagesSquare, Sparkles } from "lucide-react";
 /**
  * Launchstack auth-side brand panel.
  *
- * Used by /signin and /signup as the right-hand panel next to the Clerk form.
+ * Used by /signin and /signup as the right-hand panel next to the auth form.
  * Styled with the `.lsw-root` OKLCH tokens so both themes render correctly.
  * Tone is tuned for solo founders, indie developers, and students — not the
  * enterprise "5k documents / 50+ companies / bank-level security" pitch.

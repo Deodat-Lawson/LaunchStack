@@ -43,7 +43,7 @@ function mockCtx(role: string, companyId = BigInt(7)) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "user-123",
+            authUserId: "user-123",
             userPk: BigInt(1),
             companyId,
             role,

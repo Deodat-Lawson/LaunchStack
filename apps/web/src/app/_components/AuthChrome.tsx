@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useAuth, useUser, UserButton } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-client";
+import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
 import { LANDING_URL } from "~/config/landing";
@@ -69,13 +70,10 @@ export function AuthChrome() {
                             marginLeft: 4,
                         }}
                     >
-                        {user.primaryEmailAddress?.emailAddress ?? user.fullName ?? "Signed in"}
+                        {user.email || "Signed in"}
                     </span>
-                    <UserButton
-                        // A just-signed-out user is a public-site audience.
-                        afterSignOutUrl={LANDING_URL}
-                        appearance={{ elements: { avatarBox: "w-8 h-8" } }}
-                    />
+                    {/* A just-signed-out user is a public-site audience. */}
+                    <UserMenu afterSignOutUrl={LANDING_URL} />
                 </>
             )}
         </nav>

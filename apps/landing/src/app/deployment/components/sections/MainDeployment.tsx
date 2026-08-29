@@ -201,20 +201,12 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     <StepCard
                         icon={<Shield size={16} />}
-                        title="Clerk"
+                        title="Auth secret"
                         body={
                             <>
-                                Sign up at{" "}
-                                <a
-                                    href="https://dashboard.clerk.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={link}
-                                >
-                                    dashboard.clerk.com
-                                </a>
-                                , create an application, and copy the <strong>Publishable</strong>{" "}
-                                and <strong>Secret</strong> keys.
+                                Auth is built in — no external service. Generate the session secret
+                                with <strong>openssl rand -base64 32</strong> and set it as{" "}
+                                <strong>BETTER_AUTH_SECRET</strong>.
                             </>
                         }
                     />
@@ -337,14 +329,7 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             </Section>
 
             <Section title="Video walkthroughs" subtitle="Short clips for the trickier steps.">
-                <div style={gridCols(2)}>
-                    <DemoCard
-                        icon={<Play size={14} />}
-                        title="Clerk setup"
-                        src="/deployment-demos/clerk-setup.mov"
-                        path="public/deployment-demos/clerk-setup.mov"
-                    />
-                </div>
+                <div style={gridCols(2)}></div>
             </Section>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 24 }}>
@@ -363,9 +348,9 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
                 <div className={styles.calloutInfo}>
                     <Shield size={18} className={styles.calloutInfoIcon} style={{ marginTop: 1 }} />
                     <div>
-                        Need help with Clerk? Open the <strong>Clerk Authentication</strong> tab in
-                        the sidebar for a full walkthrough including redirect URLs and production
-                        keys.
+                        Auth questions? Open the <strong>Authentication</strong> tab in the sidebar
+                        for the full setup — secret generation, proxied deployments, and optional
+                        social sign-in.
                     </div>
                 </div>
             </div>
@@ -595,8 +580,8 @@ const gridCols = (n: number): React.CSSProperties => ({
 
 const QUICKSTART_ENV = `DATABASE_URL="postgresql://user:password@host:5432/db?sslmode=require"
 
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
-CLERK_SECRET_KEY=<your-clerk-secret-key>
+# Auth is built in (better-auth) — generate with: openssl rand -base64 32
+BETTER_AUTH_SECRET=<the-generated-secret>
 
 # One OpenAI-compatible endpoint — Gemini shown, see Chat Models for others.
 # Model ids and route assignments live in apps/web/config/chat-models.yaml.

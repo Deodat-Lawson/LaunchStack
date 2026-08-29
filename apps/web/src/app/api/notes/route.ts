@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     // Scope to the active workspace. Legacy rows with null companyId still
     // surface for the owning user so old notes are not silently dropped.
     const conditions = [
-      eq(documentNotes.userId, ctx.data.clerkUserId),
+      eq(documentNotes.userId, ctx.data.authUserId),
       or(
         eq(documentNotes.companyId, companyIdStr),
         isNull(documentNotes.companyId),
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     let semanticIds: number[] | null = null;
     if (search) {
       const hits = await searchNotes({
-        userId: ctx.data.clerkUserId,
+        userId: ctx.data.authUserId,
         query: search,
         scope: documentId ? "document" : "company",
         documentId: documentId ?? undefined,
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
     const [note] = await db
       .insert(documentNotes)
       .values({
-        userId: ctx.data.clerkUserId,
+        userId: ctx.data.authUserId,
         documentId: body.documentId ?? null,
         companyId: String(ctx.data.companyId),
         versionId: versionIdBigint,

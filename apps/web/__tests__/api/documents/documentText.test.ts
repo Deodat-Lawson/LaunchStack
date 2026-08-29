@@ -67,7 +67,7 @@ const requireWorkspaceContextMock = requireWorkspaceContext as jest.MockedFuncti
 const selectMock = jest.spyOn(db, "select") as unknown as SelectMock;
 
 const CTX: WorkspaceContext = {
-    clerkUserId: "user-1",
+    authUserId: "user-1",
     userPk: 7n,
     companyId: 10n,
     role: "employer",

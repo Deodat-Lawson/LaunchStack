@@ -58,12 +58,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             filename,
             data: Buffer.from(markdown, "utf8"),
             contentType: "text/markdown",
-            userId: ctx.data.clerkUserId,
+            userId: ctx.data.authUserId,
             companyId: ctx.data.companyId,
         });
 
         const upload = await processDocumentUpload({
-            user: { userId: ctx.data.clerkUserId, companyId: ctx.data.companyId },
+            user: { userId: ctx.data.authUserId, companyId: ctx.data.companyId },
             documentName: map.title,
             rawDocumentUrl: stored.url,
             // Re-publishing the same revision must not create a second source.
@@ -80,7 +80,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             .set({
                 publishedDocumentId: BigInt(upload.document.id),
                 publishedAt: new Date(),
-                updatedByUserId: ctx.data.clerkUserId,
+                updatedByUserId: ctx.data.authUserId,
             })
             .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
             .returning();

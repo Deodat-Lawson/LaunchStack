@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FileText, HelpCircle, BookOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import LoadingPage from "~/app/_components/loading";
 import { EmployeeNavbar } from "~/app/employee/_components/employee-navbar";

@@ -36,9 +36,9 @@ export const mindmaps = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        /** Clerk user id of the creator. */
+        /** Auth subject id of the creator. */
         createdByUserId: varchar("created_by_user_id", { length: 256 }).notNull(),
-        /** Clerk user id of whoever saved last, for the "edited by" line. */
+        /** Auth subject id of whoever saved last, for the "edited by" line. */
         updatedByUserId: varchar("updated_by_user_id", { length: 256 }),
 
         title: varchar("title", { length: 300 }).notNull(),

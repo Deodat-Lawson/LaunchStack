@@ -55,7 +55,7 @@ function request(query = "documentId=7"): Request {
 function grantContext() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: { companyId: "42", clerkUserId: "user_1" },
+        data: { companyId: "42", authUserId: "user_1" },
     });
 }
 

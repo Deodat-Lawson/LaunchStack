@@ -11,7 +11,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "~/lib/auth-client";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, Section } from "~/components/layout/page-shell";
@@ -216,14 +216,10 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
             >
                 <Card>
                     <Field label="Full name">
-                        <TextInput value={user?.fullName ?? ""} disabled readOnly />
+                        <TextInput value={user?.name ?? ""} disabled readOnly />
                     </Field>
                     <Field label="Email">
-                        <TextInput
-                            value={user?.emailAddresses[0]?.emailAddress ?? ""}
-                            disabled
-                            readOnly
-                        />
+                        <TextInput value={user?.email ?? ""} disabled readOnly />
                     </Field>
                 </Card>
             </Section>

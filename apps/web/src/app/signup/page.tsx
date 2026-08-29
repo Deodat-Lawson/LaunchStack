@@ -3,7 +3,8 @@
 import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SignUp, useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-client";
+import { SignUpForm } from "~/app/_components/CredentialsForm";
 import {
     AlertCircle,
     ArrowRight,
@@ -19,7 +20,7 @@ import { AuthChrome } from "~/app/_components/AuthChrome";
 /**
  * Sign-up page.
  *
- * Solo-first flow. After the user authenticates via Clerk, they see three
+ * Solo-first flow. After the user authenticates, they see three
  * clearly-ranked paths:
  *
  *   1. Start solo (default, one click) — auto-provisions a workspace using
@@ -126,8 +127,8 @@ const SignupPage: React.FC = () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        name: user.fullName ?? user.username,
-                        email: user.emailAddresses[0]?.emailAddress,
+                        name: user.name,
+                        email: user.email,
                         inviteCode: code,
                     }),
                 });
@@ -178,16 +179,16 @@ const SignupPage: React.FC = () => {
         if (!userId || !user) return;
         setSoloError(null);
         setIsCreatingSolo(true);
-        const firstName =
-            user.firstName ?? user.fullName?.split(" ")[0] ?? user.username ?? "Personal";
+        const firstWord = user.name.trim().split(/\s+/)[0];
+        const firstName = firstWord?.length ? firstWord : "Personal";
         const workspaceName = `${firstName}'s workspace`;
         try {
             const response = await fetch("/api/signup/employerCompany", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: user.fullName ?? user.username,
-                    email: user.emailAddresses[0]?.emailAddress,
+                    name: user.name,
+                    email: user.email,
                     companyName: workspaceName,
                     numberOfEmployees: "1",
                     embeddingIndexKey: defaultIndexKey,
@@ -226,8 +227,8 @@ const SignupPage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: user.fullName ?? user.username,
-                    email: user.emailAddresses[0]?.emailAddress,
+                    name: user.name,
+                    email: user.email,
                     companyName: teamName.trim(),
                     numberOfEmployees: teamSize || "2",
                     embeddingIndexKey: defaultIndexKey,
@@ -280,9 +281,10 @@ const SignupPage: React.FC = () => {
         </div>
     );
 
-    const soloName = user?.firstName ?? user?.fullName?.split(" ")[0] ?? user?.username ?? null;
+    const soloFirstWord = (user?.name ?? "").trim().split(/\s+/)[0];
+    const soloName = soloFirstWord?.length ? soloFirstWord : null;
 
-    // ── Not yet authenticated: show Clerk SignUp ──
+    // ── Not yet authenticated: show the sign-up form ──
     if (isAuthLoaded && !userId) {
         return (
             <Shell>
@@ -294,7 +296,7 @@ const SignupPage: React.FC = () => {
                             One account covers your solo workspace — and any team you might create
                             down the road.
                         </SubHeadline>
-                        <SignUp routing="hash" forceRedirectUrl="/" signInUrl="/signin" />
+                        <SignUpForm />
                         <div style={bottomLinkStyle}>
                             Already have an account?{" "}
                             <Link href="/signin" style={linkStyle}>

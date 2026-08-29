@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         {
             maxRequests: 10,
             windowMs: 15 * 60 * 1000,
-            keyGenerator: () => `client-prospector:${ctx.data.clerkUserId}`,
+            keyGenerator: () => `client-prospector:${ctx.data.authUserId}`,
         },
         async () => {
             try {
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
                 const input = parsed.data;
 
                 const companyId = ctx.data.companyId;
-                const userId = ctx.data.clerkUserId;
+                const userId = ctx.data.authUserId;
                 const jobId = uuidv4();
                 const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
                 const queuedLocation =

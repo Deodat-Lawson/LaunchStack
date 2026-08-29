@@ -4,13 +4,13 @@ import { eq, and, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
         const { id: rawId } = await params;
         let companyId: bigint;
@@ -26,7 +26,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
         const [user] = await db
             .select({ id: users.id })
             .from(users)
-            .where(eq(users.userId, clerkUserId));
+            .where(eq(users.userId, authUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }

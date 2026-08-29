@@ -110,7 +110,7 @@ jest.mock("~/lib/rate-limiter", () => ({
 }));
 
 const CTX: WorkspaceContext = {
-  clerkUserId: "user-a",
+  authUserId: "user-a",
   userPk: BigInt(7),
   companyId: BigInt(5),
   role: "editor",

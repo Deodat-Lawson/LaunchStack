@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
         try {
             const result = await createUploadBatch({
-                userId: ctx.data.clerkUserId,
+                userId: ctx.data.authUserId,
                 companyId: ctx.data.companyId,
                 metadata: metadata ?? null,
                 files,

@@ -57,11 +57,11 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
  * legacy default without membership; verified accounts receive null unless
  * the cookie or default points to a current membership.
  */
-export async function getActiveCompanyId(clerkUserId: string): Promise<bigint | null> {
+export async function getActiveCompanyId(authUserId: string): Promise<bigint | null> {
     const [user] = await db
         .select({ id: users.id, companyId: users.companyId, status: users.status })
         .from(users)
-        .where(eq(users.userId, clerkUserId));
+        .where(eq(users.userId, authUserId));
 
     if (!user) {
         throw new Error("User not found in database");
@@ -132,16 +132,16 @@ export async function resolveActiveCompanyForUser(
  * user may do inside this tenant.
  */
 export async function getActiveCompanyContext(
-    clerkUserId: string
+    authUserId: string
 ): Promise<{ companyId: bigint; role: string; userId: bigint }> {
-    const companyId = await getActiveCompanyId(clerkUserId);
+    const companyId = await getActiveCompanyId(authUserId);
     if (companyId === null) {
-        throw new Error(`User ${clerkUserId} has no active workspace`);
+        throw new Error(`User ${authUserId} has no active workspace`);
     }
     const [user] = await db
         .select({ id: users.id })
         .from(users)
-        .where(eq(users.userId, clerkUserId));
+        .where(eq(users.userId, authUserId));
 
     if (!user) throw new Error("User not found");
 
@@ -157,7 +157,7 @@ export async function getActiveCompanyContext(
         );
 
     if (!membership) {
-        throw new Error(`User ${clerkUserId} has no membership in company ${companyId}`);
+        throw new Error(`User ${authUserId} has no membership in company ${companyId}`);
     }
 
     return {

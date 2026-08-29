@@ -98,7 +98,7 @@ export async function GET(request: Request) {
         const templateId = searchParams.get("templateId");
 
         const conditions = [
-            eq(generatedDocuments.userId, ctx.data.clerkUserId),
+            eq(generatedDocuments.userId, ctx.data.authUserId),
             eq(generatedDocuments.companyId, ctx.data.companyId),
         ];
         if (templateId) {
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
         const [newDocument] = await db
             .insert(generatedDocuments)
             .values({
-                userId: ctx.data.clerkUserId,
+                userId: ctx.data.authUserId,
                 companyId: ctx.data.companyId,
                 title,
                 content,
@@ -224,7 +224,7 @@ export async function PUT(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.userId, ctx.data.authUserId),
                     eq(generatedDocuments.companyId, ctx.data.companyId)
                 )
             )
@@ -304,7 +304,7 @@ export async function DELETE(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.userId, ctx.data.authUserId),
                     eq(generatedDocuments.companyId, ctx.data.companyId)
                 )
             )

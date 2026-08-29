@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       const [note] = await db
         .insert(documentNotes)
         .values({
-          userId: ctx.data.clerkUserId,
+          userId: ctx.data.authUserId,
           companyId,
           documentId: sourceCtx.documentId ?? null,
           versionId: versionIdBigint,

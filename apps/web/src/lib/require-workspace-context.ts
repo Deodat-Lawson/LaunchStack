@@ -7,7 +7,7 @@
  *   every product API route. Returns the full `WorkspaceContext` or a typed
  *   error response (401 / 403 / 500).
  *
- * - `requireClerkIdentity()` — session only, no DB. Used by signup /
+ * - `requireAuthIdentity()` — session only, no DB. Used by signup /
  *   check-registration routes that operate before a user row exists.
  *
  * Callers use the same `{ success, data } | { success, response }` pattern
@@ -27,7 +27,7 @@ import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 // ---------------------------------------------------------------------------
 
 export type WorkspaceContext = {
-    clerkUserId: string;
+    authUserId: string;
     userPk: bigint;
     companyId: bigint;
     role: string;
@@ -38,10 +38,10 @@ type WorkspaceSuccess = { success: true; data: WorkspaceContext };
 type WorkspaceFailure = { success: false; response: NextResponse };
 export type WorkspaceContextResult = WorkspaceSuccess | WorkspaceFailure;
 
-type ClerkIdentity = { clerkUserId: string };
-type IdentitySuccess = { success: true; data: ClerkIdentity };
+type AuthIdentity = { authUserId: string };
+type IdentitySuccess = { success: true; data: AuthIdentity };
 type IdentityFailure = { success: false; response: NextResponse };
-export type ClerkIdentityResult = IdentitySuccess | IdentityFailure;
+export type AuthIdentityResult = IdentitySuccess | IdentityFailure;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -81,8 +81,8 @@ function internalError(): WorkspaceFailure {
  * resolved company. The role always comes from that membership.
  */
 export async function requireWorkspaceContext(): Promise<WorkspaceContextResult> {
-    const { userId: clerkUserId } = await auth();
-    if (!clerkUserId) {
+    const { userId: authUserId } = await auth();
+    if (!authUserId) {
         return unauthorized();
     }
 
@@ -94,7 +94,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
             status: users.status,
         })
         .from(users)
-        .where(eq(users.userId, clerkUserId));
+        .where(eq(users.userId, authUserId));
 
     if (!user) {
         return unauthorized();
@@ -109,13 +109,13 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
         companyId = await resolveActiveCompanyForUser(user.id, user.companyId, user.status);
     } catch {
         console.error(
-            `[requireWorkspaceContext] Failed to resolve company for user ${clerkUserId}`
+            `[requireWorkspaceContext] Failed to resolve company for user ${authUserId}`
         );
         return internalError();
     }
 
     if (companyId == null) {
-        console.error(`[requireWorkspaceContext] Null company for user ${clerkUserId}`);
+        console.error(`[requireWorkspaceContext] Null company for user ${authUserId}`);
         return forbidden();
     }
 
@@ -142,7 +142,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
     return {
         success: true,
         data: {
-            clerkUserId,
+            authUserId,
             userPk,
             companyId,
             role: membership.role,
@@ -166,7 +166,7 @@ export function forbiddenForRole(): NextResponse {
 }
 
 // ---------------------------------------------------------------------------
-// requireClerkIdentity
+// requireAuthIdentity
 // ---------------------------------------------------------------------------
 
 /**
@@ -174,9 +174,9 @@ export function forbiddenForRole(): NextResponse {
  * user id or 401. Used by signup / check-registration routes that operate
  * before a user row exists.
  */
-export async function requireClerkIdentity(): Promise<ClerkIdentityResult> {
-    const { userId: clerkUserId } = await auth();
-    if (!clerkUserId) {
+export async function requireAuthIdentity(): Promise<AuthIdentityResult> {
+    const { userId: authUserId } = await auth();
+    if (!authUserId) {
         return {
             success: false,
             response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
@@ -185,6 +185,6 @@ export async function requireClerkIdentity(): Promise<ClerkIdentityResult> {
 
     return {
         success: true,
-        data: { clerkUserId },
+        data: { authUserId },
     };
 }

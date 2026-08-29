@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         // Record the document view
         await db.insert(documentViews).values({
             documentId: BigInt(documentId),
-            userId: ctx.data.clerkUserId,
+            userId: ctx.data.authUserId,
             companyId: ctx.data.companyId,
         });
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         await db
             .update(users)
             .set({ lastActiveAt: new Date() })
-            .where(eq(users.userId, ctx.data.clerkUserId));
+            .where(eq(users.userId, ctx.data.authUserId));
 
         return NextResponse.json(
             { success: true, message: "View tracked successfully" },

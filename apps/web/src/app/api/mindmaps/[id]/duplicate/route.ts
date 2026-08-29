@@ -25,8 +25,8 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             .insert(mindmaps)
             .values({
                 companyId: ctx.data.companyId,
-                createdByUserId: ctx.data.clerkUserId,
-                updatedByUserId: ctx.data.clerkUserId,
+                createdByUserId: ctx.data.authUserId,
+                updatedByUserId: ctx.data.authUserId,
                 title: `${source.title} copy`.slice(0, 300),
                 description: source.description,
                 templateId: source.templateId,

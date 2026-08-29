@@ -317,7 +317,7 @@ function resetPredictiveFixtures() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "user-1",
+            authUserId: "user-1",
             userPk: BigInt(1),
             companyId: BigInt(7),
             role: "owner",

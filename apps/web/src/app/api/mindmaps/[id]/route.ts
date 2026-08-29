@@ -93,7 +93,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         const nextRevision = savingDoc ? current.revision + 1 : current.revision;
 
         const patch: Partial<typeof mindmaps.$inferInsert> = {
-            updatedByUserId: ctx.data.clerkUserId,
+            updatedByUserId: ctx.data.authUserId,
             updatedAt: new Date(),
         };
         if (body.title !== undefined) patch.title = body.title.trim();
@@ -134,7 +134,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
                     mindmapId: id,
                     revision: nextRevision,
                     doc: body.doc,
-                    authorUserId: ctx.data.clerkUserId,
+                    authorUserId: ctx.data.authUserId,
                     label: body.snapshotLabel,
                     nodeCount: stats.nodeCount,
                 });
@@ -180,7 +180,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
         const [row] = await db
             .update(mindmaps)
-            .set({ deletedAt: new Date(), updatedByUserId: ctx.data.clerkUserId })
+            .set({ deletedAt: new Date(), updatedByUserId: ctx.data.authUserId })
             .where(scope)
             .returning({ id: mindmaps.id });
         if (!row) return notFound();

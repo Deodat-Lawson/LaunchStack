@@ -13,7 +13,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: jest.fn().mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "test-user-123",
+            authUserId: "test-user-123",
             userPk: BigInt(1),
             companyId: BigInt(1),
             role: "owner",

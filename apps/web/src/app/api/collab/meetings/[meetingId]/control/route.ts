@@ -72,7 +72,7 @@ export async function POST(
                 break;
             case "takeover":
                 await orchestrator.takeOver({
-                    humanId: ctx.data.clerkUserId,
+                    humanId: ctx.data.authUserId,
                     displayName,
                     asPersonaId: parsed.data.asPersonaId,
                 });

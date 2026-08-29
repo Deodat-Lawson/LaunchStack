@@ -49,7 +49,7 @@ export async function POST(
 
     try {
         const message = await runtime.orchestrator.postHumanMessage({
-            humanId: ctx.data.clerkUserId,
+            humanId: ctx.data.authUserId,
             displayName,
             text: parsed.data.text,
             asPersonaId: parsed.data.asPersonaId,

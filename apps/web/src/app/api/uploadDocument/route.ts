@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId: ctx.data.clerkUserId,
+                    userId: ctx.data.authUserId,
                     companyId: ctx.data.companyId,
                 },
                 documentName,

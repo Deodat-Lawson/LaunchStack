@@ -82,7 +82,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
             ? Promise.resolve({
                   success: true,
                   data: {
-                      clerkUserId: mockCtx.userId,
+                      authUserId: mockCtx.userId,
                       userPk: 1n,
                       companyId: mockCtx.companyId,
                       role: "owner",

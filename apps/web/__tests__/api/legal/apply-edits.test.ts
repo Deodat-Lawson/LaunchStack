@@ -43,7 +43,7 @@ const mockReadDocx = readDocx as jest.MockedFunction<typeof readDocx>;
 const VERIFIED_CTX = {
     success: true as const,
     data: {
-        clerkUserId: "user123",
+        authUserId: "user123",
         userPk: BigInt(1),
         companyId: BigInt(1),
         role: "employer",

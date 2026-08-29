@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireWorkspaceContext, requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext, requireAuthIdentity } from "~/lib/require-workspace-context";
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -114,7 +114,7 @@ describe("requireWorkspaceContext", () => {
 
         expect(result.success).toBe(true);
         if (result.success) {
-            expect(result.data.clerkUserId).toBe("clerk_abc");
+            expect(result.data.authUserId).toBe("clerk_abc");
             expect(result.data.userPk).toBe(BigInt(7));
             expect(result.data.companyId).toBe(BigInt(10));
             expect(result.data.role).toBe("owner");
@@ -222,10 +222,10 @@ describe("requireWorkspaceContext", () => {
 });
 
 // ---------------------------------------------------------------------------
-// requireClerkIdentity
+// requireAuthIdentity
 // ---------------------------------------------------------------------------
 
-describe("requireClerkIdentity", () => {
+describe("requireAuthIdentity", () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
@@ -233,7 +233,7 @@ describe("requireClerkIdentity", () => {
     it("returns 401 when there is no Clerk session", async () => {
         mockAuth.mockResolvedValue({ userId: null });
 
-        const result = await requireClerkIdentity();
+        const result = await requireAuthIdentity();
 
         expect(result.success).toBe(false);
         if (!result.success) {
@@ -243,21 +243,21 @@ describe("requireClerkIdentity", () => {
         }
     });
 
-    it("returns clerkUserId when session exists", async () => {
+    it("returns authUserId when session exists", async () => {
         mockAuth.mockResolvedValue({ userId: "clerk_xyz" });
 
-        const result = await requireClerkIdentity();
+        const result = await requireAuthIdentity();
 
         expect(result.success).toBe(true);
         if (result.success) {
-            expect(result.data.clerkUserId).toBe("clerk_xyz");
+            expect(result.data.authUserId).toBe("clerk_xyz");
         }
     });
 
     it("does not query the database", async () => {
         mockAuth.mockResolvedValue({ userId: "clerk_xyz" });
 
-        await requireClerkIdentity();
+        await requireAuthIdentity();
 
         expect(mockDbSelect).not.toHaveBeenCalled();
         expect(mockResolveActiveCompanyForUser).not.toHaveBeenCalled();

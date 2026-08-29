@@ -73,7 +73,7 @@ export async function resolveApiActor(): Promise<ActorResult> {
     return {
         ok: true,
         actor: {
-            externalUserId: ctx.data.clerkUserId,
+            externalUserId: ctx.data.authUserId,
             userId: Number(ctx.data.userPk),
             email: requestingUser.email ?? null,
             name: requestingUser.name ?? null,

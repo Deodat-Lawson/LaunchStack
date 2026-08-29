@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
 import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 /**
  * GET /api/signup/check-registration
@@ -14,9 +14,9 @@ import { requireClerkIdentity } from "~/lib/require-workspace-context";
  */
 export async function GET() {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
         const [existingUser] = await db
             .select({
@@ -25,7 +25,7 @@ export async function GET() {
                 companyId: users.companyId,
             })
             .from(users)
-            .where(eq(users.userId, clerkUserId));
+            .where(eq(users.userId, authUserId));
 
         if (!existingUser) {
             return createSuccessResponse({ registered: false });

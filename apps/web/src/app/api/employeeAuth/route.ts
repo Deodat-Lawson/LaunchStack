@@ -7,15 +7,15 @@ import {
     createForbiddenError,
     createNotFoundError,
 } from "~/lib/api-utils";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
-        const [userInfo] = await db.select().from(users).where(eq(users.userId, clerkUserId));
+        const [userInfo] = await db.select().from(users).where(eq(users.userId, authUserId));
 
         if (!userInfo) {
             return createNotFoundError("User account not found. Please contact support.");

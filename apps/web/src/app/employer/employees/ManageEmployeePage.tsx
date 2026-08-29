@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { Check, Copy, Link2, Plus, Trash2 } from "lucide-react";
 
 import EmployeeTable from "./CurrentEmployeeTable";

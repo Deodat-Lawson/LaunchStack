@@ -50,7 +50,7 @@ const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
 >;
 
 const VERIFIED_DATA: WorkspaceContext = {
-    clerkUserId: "user-1",
+    authUserId: "user-1",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",
@@ -144,7 +144,7 @@ describe("POST /api/uploadDocument", () => {
         });
         expect(processDocumentUploadMock).toHaveBeenCalledWith(
             expect.objectContaining({
-                user: { userId: ctx.clerkUserId, companyId: ctx.companyId },
+                user: { userId: ctx.authUserId, companyId: ctx.companyId },
                 documentName: body.documentName,
                 rawDocumentUrl: body.documentUrl,
                 category: body.category,
@@ -188,7 +188,7 @@ describe("POST /api/uploadDocument", () => {
         });
         expect(processDocumentUploadMock).toHaveBeenCalledWith(
             expect.objectContaining({
-                user: { userId: ctx.clerkUserId, companyId: ctx.companyId },
+                user: { userId: ctx.authUserId, companyId: ctx.companyId },
                 preferredProvider: "azure",
                 creationKey: `upload:${body.documentUrl}`,
             })
@@ -216,7 +216,7 @@ describe("POST /api/uploadDocument", () => {
             expect(json.error).toBe("Failed to start document processing");
             expect(processDocumentUploadMock).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    user: { userId: ctx.clerkUserId, companyId: ctx.companyId },
+                    user: { userId: ctx.authUserId, companyId: ctx.companyId },
                     creationKey: `upload:${body.documentUrl}`,
                 })
             );
@@ -304,7 +304,7 @@ describe("POST /api/uploadDocument", () => {
         expect(json.success).toBe(true);
         expect(processDocumentUploadMock).toHaveBeenCalledWith(
             expect.objectContaining({
-                user: { userId: ctx.clerkUserId, companyId: ctx.companyId },
+                user: { userId: ctx.authUserId, companyId: ctx.companyId },
                 rawDocumentUrl: body.documentUrl,
                 creationKey: `upload:${body.documentUrl}`,
             })

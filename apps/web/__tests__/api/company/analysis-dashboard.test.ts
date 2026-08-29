@@ -133,7 +133,7 @@ jest.mock("drizzle-orm", () => {
 });
 
 const OWNER_CTX: WorkspaceContext = {
-    clerkUserId: "clerk_owner",
+    authUserId: "clerk_owner",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",

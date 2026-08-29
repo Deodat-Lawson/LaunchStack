@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";

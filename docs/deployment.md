@@ -164,8 +164,8 @@ modes, and migration from the pre-PR variables.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk publishable key |
-| `CLERK_SECRET_KEY` | Yes | Clerk secret key |
+| `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
+| `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
 | `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
 | `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
@@ -200,7 +200,7 @@ being picked up.
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
 - [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate`, or the Compose `migrate` service / a one-shot job on the image)
-- [ ] Clerk and the selected chat provider/model validated
+- [ ] Sign-in (better-auth) and the selected chat provider/model validated
 - [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used (endpoint served by the worker)

@@ -7,7 +7,7 @@ import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { ensureTokenAccount } from "~/lib/credits";
 import { setActiveWorkspaceCookie, getActiveCompanyId } from "~/lib/active-workspace";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
@@ -27,14 +27,14 @@ const CreateWorkspaceSchema = z.object({
 
 export async function GET() {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
         const [user] = await db
             .select({ id: users.id, defaultCompanyId: users.companyId })
             .from(users)
-            .where(eq(users.userId, clerkUserId));
+            .where(eq(users.userId, authUserId));
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -71,7 +71,7 @@ export async function GET() {
 
         // Null activeCompanyId is a recoverable stale-cookie state: still list
         // memberships so the client can pick a workspace (same as the page).
-        const activeCompanyId = await getActiveCompanyId(clerkUserId);
+        const activeCompanyId = await getActiveCompanyId(authUserId);
 
         return NextResponse.json({
             activeCompanyId: activeCompanyId?.toString() ?? null,
@@ -95,9 +95,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
-        const clerkUserId = identity.data.clerkUserId;
+        const authUserId = identity.data.authUserId;
 
         const json: unknown = await request.json().catch(() => ({}));
         const parsed = CreateWorkspaceSchema.safeParse(json);
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
         const [user] = await db
             .select({ id: users.id, name: users.name, email: users.email, status: users.status })
             .from(users)
-            .where(eq(users.userId, clerkUserId));
+            .where(eq(users.userId, authUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }

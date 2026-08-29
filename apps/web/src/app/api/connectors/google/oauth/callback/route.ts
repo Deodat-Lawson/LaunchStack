@@ -83,7 +83,7 @@ export async function GET(request: Request) {
         const [userRow] = await db
             .select({ id: users.id })
             .from(users)
-            .where(eq(users.userId, ctx.data.clerkUserId))
+            .where(eq(users.userId, ctx.data.authUserId))
             .limit(1);
 
         await upsertGoogleConnection({

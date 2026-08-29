@@ -65,7 +65,7 @@ export async function GET(request: Request, { params }: RouteParams) {
             return NextResponse.json({ error: "Invalid file ID" }, { status: 400 });
         }
 
-        // Token path: the OCR worker has no Clerk session but carries a
+        // Token path: the OCR worker has no session but carries a
         // short-lived HMAC token scoped to this file id.
         const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
         const hasValidToken = verifyFileAccessToken(

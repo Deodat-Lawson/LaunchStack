@@ -133,7 +133,7 @@ export async function POST(
 
             console.log(
                 `[Versions] Reverted doc=${documentId} to v${targetVersion.versionNumber} ` +
-                    `(versionId=${targetVersion.id}) by user=${ctx.data.clerkUserId}`
+                    `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
             );
 
             return NextResponse.json(

@@ -83,8 +83,7 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
     const appOnlyCmd = `docker build -f apps/web/Dockerfile -t pdr-ai-app .
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
-  -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \\
-  -e NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" \\
+  -e BETTER_AUTH_SECRET="$BETTER_AUTH_SECRET" \\
   -e CHAT_BASE_URL="$CHAT_BASE_URL" \\
   -e CHAT_API_KEY="$CHAT_API_KEY" \\
   -e BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" \\
@@ -186,8 +185,7 @@ docker run --rm -p 3000:3000 \\
                         number={1}
                         title="Create .env"
                         description="Set the required variables at the project root. Compose wires DATABASE_URL, object storage (SeaweedFS), and the compute-service URLs itself."
-                        code={`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
-CLERK_SECRET_KEY=<your-clerk-secret-key>
+                        code={`BETTER_AUTH_SECRET=<openssl rand -base64 32>
 CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 CHAT_API_KEY=<your-google-ai-key>
 # Models and routes live in apps/web/config/chat-models.yaml,
@@ -198,7 +196,7 @@ CHAT_API_KEY=<your-google-ai-key>
 # INNGEST_EVENT_KEY=dev-placeholder`}
                         onCopy={() =>
                             copyToClipboard(
-                                `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>`,
+                                `BETTER_AUTH_SECRET=<openssl rand -base64 32>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>`,
                                 "docker-1"
                             )
                         }

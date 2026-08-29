@@ -149,7 +149,7 @@ export async function DELETE(
 
             console.log(
                 `[Versions] Deleted doc=${documentId} v${targetVersion.versionNumber} ` +
-                    `(versionId=${targetVersion.id}) by user=${ctx.data.clerkUserId}`
+                    `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
             );
 
             return NextResponse.json(

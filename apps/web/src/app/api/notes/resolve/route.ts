@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const companyId = String(ctx.data.companyId);
     const candidates = await searchWikiLinkCandidates(title, {
       companyId,
-      userId: ctx.data.clerkUserId,
+      userId: ctx.data.authUserId,
       limit: 10,
     });
 

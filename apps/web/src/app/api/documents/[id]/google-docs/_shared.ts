@@ -26,7 +26,7 @@ export function fail(status: number, error: string, message?: string): NextRespo
 export interface DriveRouteContext {
     documentId: number;
     companyId: bigint;
-    clerkUserId: string;
+    authUserId: string;
     userPk: bigint | null;
     doc: { id: number; title: string; fileType: string | null; mimeType: string | null };
 }
@@ -79,7 +79,7 @@ export async function authorizeDriveRoute(
     const [userRow] = await db
         .select({ id: users.id })
         .from(users)
-        .where(eq(users.userId, ctx.data.clerkUserId))
+        .where(eq(users.userId, ctx.data.authUserId))
         .limit(1);
 
     return {
@@ -87,7 +87,7 @@ export async function authorizeDriveRoute(
         data: {
             documentId,
             companyId,
-            clerkUserId: ctx.data.clerkUserId,
+            authUserId: ctx.data.authUserId,
             userPk: userRow ? BigInt(userRow.id) : null,
             doc,
         },

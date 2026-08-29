@@ -20,10 +20,6 @@
 #                    returns a typed 503 and text-file ingestion still works.
 #   --profile backfill — on-demand data backfills
 
-x-app-build-args: &app-build-args
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-  # OPENAI_API_KEY removed — passed only as runtime env var, never baked into image layers
-
 # Environment shared by the app (command acceptance + reads) and the worker
 # (durable execution). One authority so the two processes can never disagree
 # about providers, storage, or service endpoints.
@@ -60,8 +56,8 @@ x-shared-env: &shared-env
   TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
   # Auth (the worker inherits these transitively through the shared
   # composition root — see ADR-002 consequences; it never uses them)
-  CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+  BETTER_AUTH_URL: ${BETTER_AUTH_URL:-}
   # Services
   UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
   NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
@@ -106,7 +102,7 @@ x-shared-env: &shared-env
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
   # Lets the document converter (and the app's own server-side fetches) read
-  # database-backed /api/files URLs, which otherwise require a Clerk session
+  # database-backed /api/files URLs, which otherwise require a session
   # they do not have. Signed by whichever process mints the URL, so app and
   # worker must share the same value. Database-backed ingestion fails closed
   # without it, so a local default is provided — override in production.
@@ -141,8 +137,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: migrate
-      args:
-        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -162,8 +156,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: builder
-      args:
-        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -323,8 +315,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: runner
-      args:
-        <<: *app-build-args
     container_name: pdr_ai_v2-app
     restart: unless-stopped
     depends_on:

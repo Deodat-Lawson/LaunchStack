@@ -43,7 +43,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const { preferredProvider, category, embeddingIndexKey } = validation.data;
 
-        const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
+        const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!batch) {
             return NextResponse.json({ error: "Batch not found" }, { status: 404 });
         }
@@ -111,7 +111,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
                 try {
                     const uploadResult = await processDocumentUpload({
-                        user: { userId: ctx.data.clerkUserId, companyId: batch.companyId },
+                        user: { userId: ctx.data.authUserId, companyId: batch.companyId },
                         documentName: file.filename,
                         rawDocumentUrl: file.storageUrl,
                         creationKey: `batch:${batchId}:file:${file.id}`,
@@ -161,7 +161,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             (result): result is Extract<FileProcessResult, { status: "failed" }> =>
                 result.status === "failed"
         );
-        const currentBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
+        const currentBatch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         const activeFiles =
             currentBatch?.files.some(
                 file =>
@@ -188,7 +188,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             }
         }
 
-        const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
+        const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!refreshedBatch) {
             return NextResponse.json({ error: "Batch not found after commit" }, { status: 404 });
         }

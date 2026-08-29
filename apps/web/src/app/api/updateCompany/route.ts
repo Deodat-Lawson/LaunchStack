@@ -129,7 +129,7 @@ export async function POST(request: Request) {
                             data: {
                                 companyId: companyIdNum,
                                 pendingIndexKey: embeddingIndexKey,
-                                triggeredByUserId: ctx.data.clerkUserId,
+                                triggeredByUserId: ctx.data.authUserId,
                             },
                         });
                     } catch (sendErr) {

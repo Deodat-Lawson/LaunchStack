@@ -37,7 +37,7 @@ export async function GET(
       .where(
         and(
           eq(documentNotes.id, id),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
+          eq(documentNotes.userId, ctx.data.authUserId),
           inWorkspace,
         ),
       );
@@ -63,7 +63,7 @@ export async function GET(
       .where(
         and(
           eq(noteLinks.targetNoteId, id),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
+          eq(documentNotes.userId, ctx.data.authUserId),
           inWorkspace,
         ),
       )

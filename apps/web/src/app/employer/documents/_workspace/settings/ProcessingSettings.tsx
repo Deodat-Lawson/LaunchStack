@@ -210,10 +210,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
         <>
             {status && <StatusNote tone={status.tone}>{status.message}</StatusNote>}
 
-            <Section
-                title="Identity"
-                description="Your Clerk profile. Update it from your account page."
-            >
+            <Section title="Identity" description="Your account profile.">
                 <Card>
                     <Field label="Full name">
                         <TextInput value={user?.name ?? ""} disabled readOnly />

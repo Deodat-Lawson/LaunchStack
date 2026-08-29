@@ -1,7 +1,7 @@
 /**
  * Ownership checks for AI Chat resources.
  *
- * Chat rows are keyed by Clerk userId (no companyId on this table). Every
+ * Chat rows are keyed by auth userId (no companyId on this table). Every
  * by-id / chatId-scoped handler must call one of these helpers after
  * requireWorkspaceContext so a verified user cannot IDOR another user's chat.
  */

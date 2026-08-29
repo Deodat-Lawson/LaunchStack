@@ -8,7 +8,7 @@ import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 /**
  * GET /api/signup/check-registration
- * Auth required – checks whether the current Clerk user already
+ * Auth required – checks whether the signed-in user already
  * has a record in the `users` table (i.e. is already registered
  * with a company).
  */

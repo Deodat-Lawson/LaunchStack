@@ -28,12 +28,12 @@ export * from "./responses";
 /** The caller, resolved to an internal user row and an active workspace. */
 export interface ApiActor {
     /**
-     * The Clerk id. Needed by services that persist who asked for something —
+     * The auth subject id. Needed by services that persist who asked for something —
      * an internal row id is not stable across a re-seeded database, and a
      * stored actor reference should survive one.
      */
     externalUserId: string;
-    /** `users.id` — the internal row id, not the Clerk id. */
+    /** `users.id` — the internal row id, not the auth subject id. */
     userId: number;
     email: string | null;
     name: string | null;

@@ -193,7 +193,7 @@ const serverSchema = z.object({
     // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
-    // without a Clerk session. Required alongside OCR_WORKER_URL when documents
+    // without a session. Required alongside OCR_WORKER_URL when documents
     // are stored in the database; without it those fetches get a 401.
     // Generate with:
     //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"

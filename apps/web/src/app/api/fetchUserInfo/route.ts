@@ -9,7 +9,7 @@ import { requireAuthIdentity } from "~/lib/require-workspace-context";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 /**
- * Profile lookup for the signed-in Clerk user — including unverified /
+ * Profile lookup for the signed-in user — including unverified /
  * pending-approval accounts. Uses requireAuthIdentity (not workspace
  * context) so pending pages can load name/company/submission date.
  *

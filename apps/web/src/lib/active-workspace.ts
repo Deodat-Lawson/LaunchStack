@@ -8,12 +8,12 @@
  *
  * Server code that previously did:
  *
- *   const [u] = await db.select().from(users).where(eq(users.userId, clerkId));
+ *   const [u] = await db.select().from(users).where(eq(users.userId, authUserId));
  *   const companyId = u.companyId;
  *
  * should now do:
  *
- *   const companyId = await getActiveCompanyId(clerkId);
+ *   const companyId = await getActiveCompanyId(authUserId);
  */
 
 import { cookies } from "next/headers";
@@ -53,7 +53,7 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
 };
 
 /**
- * Resolve the active companyId for a Clerk user. Pending accounts may use the
+ * Resolve the active companyId for a signed-in user. Pending accounts may use the
  * legacy default without membership; verified accounts receive null unless
  * the cookie or default points to a current membership.
  */

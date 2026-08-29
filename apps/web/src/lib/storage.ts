@@ -299,7 +299,7 @@ function internalFileOrigin(): string {
 }
 
 /**
- * `/api/files/{id}` requires a Clerk session or a signed token. Server-side
+ * `/api/files/{id}` requires a session or a signed token. Server-side
  * callers (OCR adapters, page counting, VLM enrichment, archive expansion)
  * have no session, so every internal file reference is rebuilt canonically
  * and signed here — one place, rather than at each of the ~6 call sites that

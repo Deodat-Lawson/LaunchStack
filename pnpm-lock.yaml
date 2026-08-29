@@ -168,6 +168,9 @@ importers:
       '@launchstack/engine':
         specifier: workspace:^
         version: link:../../packages/engine
+      '@launchstack/google-drive':
+        specifier: workspace:^
+        version: link:../../packages/google-drive
       '@launchstack/indexing':
         specifier: workspace:^
         version: link:../../packages/indexing
@@ -308,7 +311,7 @@ importers:
         version: 11.11.1
       inngest:
         specifier: ^3.54.2
-        version: 3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
+        version: 3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
       jsdom:
         specifier: ^29.0.2
         version: 29.0.2
@@ -576,7 +579,7 @@ importers:
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
       inngest:
         specifier: ^3.54.2
-        version: 3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
+        version: 3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76)
       tsx:
         specifier: ^4.20.5
         version: 4.21.0
@@ -720,6 +723,19 @@ importers:
         version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2)(tsx@4.21.0)(yaml@2.9.0)
 
   packages/evidence:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2)(tsx@4.21.0)(yaml@2.9.0)
+
+  packages/google-drive:
+    dependencies:
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -19233,7 +19249,7 @@ snapshots:
 
   inline-style-parser@0.2.7: {}
 
-  inngest@3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76):
+  inngest@3.54.2(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(next@15.5.7(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.3)(zod@3.25.76):
     dependencies:
       '@bufbuild/protobuf': 2.12.1
       '@inngest/ai': 0.1.7

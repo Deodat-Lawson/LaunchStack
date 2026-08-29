@@ -284,6 +284,7 @@ const eslintConfig = [
                 "search",
                 "orchestration",
                 "editing",
+                "google-drive",
                 "collab",
                 "schema-generator",
                 "pipelines",
@@ -429,6 +430,18 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/google-drive/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/google-drive"),
                     ]),
                     ...noEnv,
                 },

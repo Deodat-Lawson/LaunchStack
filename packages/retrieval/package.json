@@ -20,6 +20,8 @@
         "./tools": "./src/tools/index.ts",
         "./tools/citation-builder": "./src/tools/citation-builder/index.ts",
         "./tools/rag-search-tool": "./src/tools/rag-search-tool/index.ts",
+        "./tools/grounded-retrieval": "./src/tools/grounded-retrieval/index.ts",
+        "./tools/rlm-search": "./src/tools/rlm-search/index.ts",
         "./search-types": "./src/search-types.ts",
         "./types": "./src/types.ts",
         "./retrievers": "./src/algorithms/index.ts",
@@ -84,6 +86,14 @@
             "./tools/rag-search-tool": {
                 "types": "./dist/tools/rag-search-tool/index.d.ts",
                 "default": "./dist/tools/rag-search-tool/index.js"
+            },
+            "./tools/grounded-retrieval": {
+                "types": "./dist/tools/grounded-retrieval/index.d.ts",
+                "default": "./dist/tools/grounded-retrieval/index.js"
+            },
+            "./tools/rlm-search": {
+                "types": "./dist/tools/rlm-search/index.d.ts",
+                "default": "./dist/tools/rlm-search/index.js"
             },
             "./search-types": {
                 "types": "./dist/search-types.d.ts",

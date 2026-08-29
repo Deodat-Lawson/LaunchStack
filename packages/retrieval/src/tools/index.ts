@@ -5,3 +5,5 @@
 
 export * from "./citation-builder";
 export * from "./rag-search-tool";
+export * from "./grounded-retrieval";
+export * from "./rlm-search";

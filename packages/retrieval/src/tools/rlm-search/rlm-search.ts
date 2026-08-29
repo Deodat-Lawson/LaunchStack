@@ -20,11 +20,10 @@ import {
     type SectionWithCost,
     type SectionPreview,
     type TokenBudgetOptions,
-} from "@launchstack/retrieval/algorithms/rlm";
-import { getEmbeddings } from "./models";
-import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
+} from "../../algorithms/rlm";
+import { createEmbeddingModel, resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/store/client";
 import { document, type SemanticType, type PreviewType } from "@launchstack/store/schema";
 
 // ============================================================================
@@ -110,7 +109,7 @@ export async function performRLMSearch(
     console.log(`🔍 [RLM Search] Starting search for document ${documentId}`);
     console.log(`   Token budget: ${maxTokens}, Prioritize: ${prioritize}`);
 
-    const [documentRecord] = await db
+    const [documentRecord] = await getDb()
         .select({
             companyId: document.companyId,
         })
@@ -125,7 +124,7 @@ export async function performRLMSearch(
     const needsEmbeddings = prioritize === "relevance";
     const embeddingIndex = resolveEmbeddingIndex(embeddingIndexKey, companyConfig ?? undefined);
     const embeddings = needsEmbeddings
-        ? getEmbeddings(embeddingIndex.indexKey, companyConfig ?? undefined)
+        ? createEmbeddingModel(embeddingIndex, companyConfig ?? undefined)
         : undefined;
     const retriever = createRLMRetriever(embeddings, embeddingIndex);
 

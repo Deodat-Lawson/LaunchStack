@@ -143,9 +143,8 @@ const serverSchema = z.object({
     SIDECAR_API_KEY: optionalString(),
     ADEU_SERVICE_URL: optionalString(),
     // Gotenberg PDF rendering (ADR-009) — DOCX/Office → PDF via LibreOffice,
-    // HTML/Markdown → PDF via Chromium. Unset, PDF downloads of Word documents
-    // return a typed 503 and the document-generator export falls back to its
-    // plain-text pdf-lib renderer.
+    // HTML/Markdown → PDF via Chromium. Gotenberg is the one PDF owner:
+    // unset, every PDF-producing route returns a typed 503.
     GOTENBERG_SERVICE_URL: optionalString(),
     // Basic-auth pair for the service (it runs with --api-enable-basic-auth,
     // failing closed like the other compute services' X-API-Key). Both or

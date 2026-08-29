@@ -56,12 +56,13 @@ exceptions this time.
 - JavaScript is off (`--chromium-disable-javascript`): nothing the product
   renders needs it, and user HTML must not get a scripting engine.
 
-**Three call sites, each degrading differently by design:**
+**Three call sites, one absence behavior — Gotenberg is the only way to a
+PDF, and without it every PDF format is a typed 503:**
 
 | Caller                                                    | Path                                      | Without Gotenberg                                                                   |
 | --------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------- |
 | `GET /api/documents/pdf?documentId=`                      | DOCX and friends → LibreOffice → download | typed 503; DOCX download unaffected                                                 |
-| `api/document-generator/export` (`format: "pdf"`)         | the export's own styled HTML → Chromium   | falls back to the old pdf-lib text rendering                                        |
+| `api/document-generator/export` (`format: "pdf"`)         | the export's own styled HTML → Chromium   | typed 503 — HTML/Markdown/text exports unaffected                                   |
 | `api/document-generator/legal-generate` (`format: "pdf"`) | generated DOCX → LibreOffice              | typed 503 — a legal document with approximated layout is worse than an honest error |
 
 The documents route follows the adeu routes' shape: `documentId` in,
@@ -75,8 +76,11 @@ indistinguishable, service 4xx relayed, service 5xx an opaque 502.
   host for `pnpm dev` against the Docker backend.
 - The export route's HTML and PDF outputs can no longer drift: both render
   `buildHtmlDocument`.
-- The old pdf-lib renderer survives as the export fallback only. New PDF
-  features must target the service, not extend it.
+- The pdf-lib text renderer in the export route is deleted, not demoted:
+  an unstyled hand-drawn PDF is a worse artifact of the product than an
+  honest 503 with a working HTML export next to it. New PDF features must
+  target the service. (pdf-lib itself stays a dependency — the mindmap's
+  SVG→PDF export still uses it.)
 - `@launchstack/rendering` joins the published set and the lint boundary
   table (imports nothing, nothing below pipelines/apps imports it).
 - PDF → DOCX (the opposite direction) is deliberately out of scope:

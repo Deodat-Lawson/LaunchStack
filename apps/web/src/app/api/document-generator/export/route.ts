@@ -3,8 +3,8 @@
  *
  * Export documents to various formats:
  * - PDF (the styled HTML rendered through the Gotenberg service, ADR-009;
- *   falls back to a plain-text pdf-lib rendering when Gotenberg is not
- *   deployed or unreachable, so minimal stacks still export)
+ *   a typed 503 when the service is not deployed — Gotenberg is the one
+ *   PDF owner)
  * - Markdown (raw markdown)
  * - HTML (rendered from markdown or raw HTML)
  * - Plain Text
@@ -13,19 +13,14 @@
  */
 
 import { NextResponse } from "next/server";
-import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
-import { PAPER_SIZES } from "@launchstack/rendering";
+import { PAPER_SIZES, RenderingServiceError } from "@launchstack/rendering";
 import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
 turndown.keep(["u"]);
 
-// Helper function to create RGB color for pdf-lib
-function rgb(r: number, g: number, b: number) {
-    return { type: 1 as const, red: r, green: g, blue: b };
-}
 import { z } from "zod";
 
 /** Detect if content is HTML (from WYSIWYG editor). */
@@ -93,7 +88,7 @@ const ExportSchema = z.object({
         .optional(),
 });
 
-// Simple markdown to text converter for PDF
+// Simple markdown to text converter for the plain-text export
 function markdownToText(markdown: string): string {
     return (
         markdown
@@ -241,144 +236,6 @@ function buildHtmlDocument(
     return markdownToHtml(htmlContent, title, extraCss);
 }
 
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
-// Generate PDF from markdown content
-// Note: pdf-lib types are incomplete, causing false positive ESLint errors
-async function generatePDF(
-    title: string,
-    content: string,
-    options: { pageSize?: "letter" | "a4"; fontSize?: number; bibliography?: string }
-): Promise<Uint8Array> {
-    const pdfDoc = await PDFDocument.create();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const font: any = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const boldFont: any = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
-
-    const fontSize = options.fontSize ?? 12;
-    const lineHeight = fontSize * 1.4;
-
-    // Page dimensions
-    const pageWidth = options.pageSize === "a4" ? 595 : 612; // A4 or Letter
-    const pageHeight = options.pageSize === "a4" ? 842 : 792;
-    const margin = 72; // 1 inch margins
-    const maxWidth = pageWidth - margin * 2;
-
-    // Convert markdown to plain text for PDF
-    const plainText = markdownToText(content);
-    const lines = plainText.split("\n");
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let page: any = pdfDoc.addPage([pageWidth, pageHeight]);
-    let y = pageHeight - margin;
-
-    // Add title
-    page.drawText(title, {
-        x: margin,
-        y: y,
-        size: fontSize + 8,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-    });
-    y -= lineHeight * 2;
-
-    // Add content
-    for (const line of lines) {
-        if (y < margin + lineHeight) {
-            // New page needed
-            page = pdfDoc.addPage([pageWidth, pageHeight]);
-            y = pageHeight - margin;
-        }
-
-        // Word wrap
-        const words = line.split(" ");
-        let currentLine = "";
-
-        for (const word of words) {
-            const testLine = currentLine ? `${currentLine} ${word}` : word;
-            const width = font.widthOfTextAtSize(testLine, fontSize);
-
-            if (width > maxWidth && currentLine) {
-                page.drawText(currentLine, {
-                    x: margin,
-                    y: y,
-                    size: fontSize,
-                    font: font,
-                    color: rgb(0, 0, 0),
-                });
-                y -= lineHeight;
-                currentLine = word;
-
-                if (y < margin + lineHeight) {
-                    page = pdfDoc.addPage([pageWidth, pageHeight]);
-                    y = pageHeight - margin;
-                }
-            } else {
-                currentLine = testLine;
-            }
-        }
-
-        if (currentLine) {
-            page.drawText(currentLine, {
-                x: margin,
-                y: y,
-                size: fontSize,
-                font: font,
-                color: rgb(0, 0, 0),
-            });
-            y -= lineHeight;
-        }
-
-        // Extra spacing for paragraphs
-        if (!line.trim()) {
-            y -= lineHeight * 0.5;
-        }
-    }
-
-    // Add bibliography if provided
-    if (options.bibliography) {
-        y -= lineHeight * 2;
-
-        if (y < margin + lineHeight * 4) {
-            page = pdfDoc.addPage([pageWidth, pageHeight]);
-            y = pageHeight - margin;
-        }
-
-        page.drawText("References", {
-            x: margin,
-            y: y,
-            size: fontSize + 4,
-            font: boldFont,
-            color: rgb(0, 0, 0),
-        });
-        y -= lineHeight * 1.5;
-
-        const bibLines = options.bibliography.split("\n");
-        for (const bibLine of bibLines) {
-            if (!bibLine.trim()) continue;
-
-            if (y < margin + lineHeight) {
-                page = pdfDoc.addPage([pageWidth, pageHeight]);
-                y = pageHeight - margin;
-            }
-
-            // Simple text drawing for bibliography (would need word wrap for long entries)
-            const truncatedLine = bibLine.length > 100 ? bibLine.slice(0, 97) + "..." : bibLine;
-            page.drawText(truncatedLine, {
-                x: margin,
-                y: y,
-                size: fontSize - 1,
-                font: font,
-                color: rgb(0, 0, 0),
-            });
-            y -= lineHeight;
-        }
-    }
-
-    return pdfDoc.save();
-}
-/* eslint-enable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
-
 export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
@@ -403,45 +260,55 @@ export async function POST(request: Request) {
 
         switch (format) {
             case "pdf": {
-                // Preferred path: the same styled HTML the html export ships,
-                // printed by Gotenberg's Chromium (ADR-009). The pdf-lib text
-                // rendering below is the degraded mode for stacks without the
-                // service — a legible PDF beats a 503 on an export button.
-                let rendered: Uint8Array | null = null;
+                // The same styled HTML the html export ships, printed by
+                // Gotenberg's Chromium (ADR-009). Gotenberg is the one PDF
+                // owner — without it this format is a typed 503, same as the
+                // documents and legal-generate routes.
                 const gotenberg = getGotenbergClient();
-                if (gotenberg) {
-                    try {
-                        const html = buildHtmlDocument(title, content, {
-                            // The pdf-lib path always appends a provided
-                            // bibliography; keep that contract.
-                            includeCitations: Boolean(options?.bibliography),
-                            bibliography: options?.bibliography,
-                            fontSize: options?.fontSize,
-                        });
-                        const result = await gotenberg.htmlToPdf({
-                            html,
-                            pageProperties: {
-                                ...(options?.pageSize === "a4"
-                                    ? PAPER_SIZES.a4
-                                    : PAPER_SIZES.letter),
-                                printBackground: true,
+                if (!gotenberg) {
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            error: "service_not_configured",
+                            message:
+                                "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL " +
+                                "(and its basic-auth pair), or export as HTML instead.",
+                        },
+                        { status: 503 }
+                    );
+                }
+                const html = buildHtmlDocument(title, content, {
+                    // The old renderer always appended a provided
+                    // bibliography; keep that contract.
+                    includeCitations: Boolean(options?.bibliography),
+                    bibliography: options?.bibliography,
+                    fontSize: options?.fontSize,
+                });
+                try {
+                    const result = await gotenberg.htmlToPdf({
+                        html,
+                        pageProperties: {
+                            ...(options?.pageSize === "a4" ? PAPER_SIZES.a4 : PAPER_SIZES.letter),
+                            printBackground: true,
+                        },
+                    });
+                    exportedContent = result.pdf;
+                } catch (err) {
+                    if (err instanceof RenderingServiceError) {
+                        const status =
+                            err.statusCode >= 400 && err.statusCode < 500 ? err.statusCode : 502;
+                        const trace = err.trace ? ` (trace ${err.trace})` : "";
+                        return NextResponse.json(
+                            {
+                                success: false,
+                                error: "rendering_failed",
+                                message: `${err.detail}${trace}`,
                             },
-                        });
-                        rendered = result.pdf;
-                    } catch (err) {
-                        console.warn(
-                            "[Export] Gotenberg render failed, falling back to text PDF:",
-                            err
+                            { status }
                         );
                     }
+                    throw err;
                 }
-                exportedContent =
-                    rendered ??
-                    (await generatePDF(title, content, {
-                        pageSize: options?.pageSize,
-                        fontSize: options?.fontSize,
-                        bibliography: options?.bibliography,
-                    }));
                 contentType = "application/pdf";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
                 break;

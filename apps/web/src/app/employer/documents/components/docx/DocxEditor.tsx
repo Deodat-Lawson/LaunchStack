@@ -6,6 +6,7 @@ import {
     Check,
     Download,
     Eye,
+    FileDown,
     EyeOff,
     Loader2,
     MessageSquare,
@@ -269,6 +270,16 @@ export function DocxEditor({ documentId, title, leading, className }: DocxEditor
                             className="flex h-full w-full items-center justify-center"
                         >
                             <Download className="h-4 w-4" aria-hidden="true" />
+                        </a>
+                    </ToolbarButton>
+                    <ToolbarButton label="Download as PDF" onClick={() => void 0}>
+                        <a
+                            href={`/api/documents/pdf?documentId=${documentId}`}
+                            download
+                            aria-label="Download document as PDF"
+                            className="flex h-full w-full items-center justify-center"
+                        >
+                            <FileDown className="h-4 w-4" aria-hidden="true" />
                         </a>
                     </ToolbarButton>
                     <ToolbarButton

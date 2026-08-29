@@ -44,6 +44,7 @@
         "@launchstack/collab": "workspace:^",
         "@launchstack/conversion": "workspace:^",
         "@launchstack/design-tokens": "workspace:*",
+        "@launchstack/document-conversion-engine": "workspace:^",
         "@launchstack/editing": "workspace:^",
         "@launchstack/engine": "workspace:^",
         "@launchstack/google-drive": "workspace:^",

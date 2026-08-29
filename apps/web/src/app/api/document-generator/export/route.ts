@@ -2,7 +2,9 @@
  * Document Generator - Export API
  *
  * Export documents to various formats:
- * - PDF (using pdf-lib)
+ * - PDF (the styled HTML rendered through the Gotenberg service, ADR-009;
+ *   a typed 503 when the service is not deployed — Gotenberg is the one
+ *   PDF owner)
  * - Markdown (raw markdown)
  * - HTML (rendered from markdown or raw HTML)
  * - Plain Text
@@ -11,17 +13,14 @@
  */
 
 import { NextResponse } from "next/server";
-import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
+import { PAPER_SIZES, RenderingServiceError } from "@launchstack/document-conversion-engine";
+import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
 turndown.keep(["u"]);
 
-// Helper function to create RGB color for pdf-lib
-function rgb(r: number, g: number, b: number) {
-    return { type: 1 as const, red: r, green: g, blue: b };
-}
 import { z } from "zod";
 
 /** Detect if content is HTML (from WYSIWYG editor). */
@@ -89,7 +88,7 @@ const ExportSchema = z.object({
         .optional(),
 });
 
-// Simple markdown to text converter for PDF
+// Simple markdown to text converter for the plain-text export
 function markdownToText(markdown: string): string {
     return (
         markdown
@@ -115,7 +114,7 @@ function markdownToText(markdown: string): string {
 }
 
 // Simple markdown to HTML converter
-function markdownToHtml(markdown: string, title: string): string {
+function markdownToHtml(markdown: string, title: string, extraCss = ""): string {
     const html = markdown
         // Escape HTML
         .replace(/&/g, "&amp;")
@@ -182,7 +181,7 @@ function markdownToHtml(markdown: string, title: string): string {
         blockquote { border-left: 3px solid #ccc; margin: 1em 0; padding-left: 1em; color: #666; }
         @media print {
             body { max-width: none; padding: 0; }
-        }
+        }${extraCss}
     </style>
 </head>
 <body>
@@ -191,143 +190,51 @@ ${html}
 </html>`;
 }
 
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
-// Generate PDF from markdown content
-// Note: pdf-lib types are incomplete, causing false positive ESLint errors
-async function generatePDF(
+/**
+ * The complete standalone HTML document the html and pdf exports share —
+ * one styling so "export as HTML" and "export as PDF" cannot drift apart.
+ */
+function buildHtmlDocument(
     title: string,
     content: string,
-    options: { pageSize?: "letter" | "a4"; fontSize?: number; bibliography?: string }
-): Promise<Uint8Array> {
-    const pdfDoc = await PDFDocument.create();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const font: any = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const boldFont: any = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+    options?: { includeCitations?: boolean; bibliography?: string; fontSize?: number }
+): string {
+    const extraCss = options?.fontSize
+        ? `\n        body { font-size: ${options.fontSize}pt; }`
+        : "";
 
-    const fontSize = options.fontSize ?? 12;
-    const lineHeight = fontSize * 1.4;
-
-    // Page dimensions
-    const pageWidth = options.pageSize === "a4" ? 595 : 612; // A4 or Letter
-    const pageHeight = options.pageSize === "a4" ? 842 : 792;
-    const margin = 72; // 1 inch margins
-    const maxWidth = pageWidth - margin * 2;
-
-    // Convert markdown to plain text for PDF
-    const plainText = markdownToText(content);
-    const lines = plainText.split("\n");
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let page: any = pdfDoc.addPage([pageWidth, pageHeight]);
-    let y = pageHeight - margin;
-
-    // Add title
-    page.drawText(title, {
-        x: margin,
-        y: y,
-        size: fontSize + 8,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-    });
-    y -= lineHeight * 2;
-
-    // Add content
-    for (const line of lines) {
-        if (y < margin + lineHeight) {
-            // New page needed
-            page = pdfDoc.addPage([pageWidth, pageHeight]);
-            y = pageHeight - margin;
-        }
-
-        // Word wrap
-        const words = line.split(" ");
-        let currentLine = "";
-
-        for (const word of words) {
-            const testLine = currentLine ? `${currentLine} ${word}` : word;
-            const width = font.widthOfTextAtSize(testLine, fontSize);
-
-            if (width > maxWidth && currentLine) {
-                page.drawText(currentLine, {
-                    x: margin,
-                    y: y,
-                    size: fontSize,
-                    font: font,
-                    color: rgb(0, 0, 0),
-                });
-                y -= lineHeight;
-                currentLine = word;
-
-                if (y < margin + lineHeight) {
-                    page = pdfDoc.addPage([pageWidth, pageHeight]);
-                    y = pageHeight - margin;
-                }
-            } else {
-                currentLine = testLine;
-            }
-        }
-
-        if (currentLine) {
-            page.drawText(currentLine, {
-                x: margin,
-                y: y,
-                size: fontSize,
-                font: font,
-                color: rgb(0, 0, 0),
-            });
-            y -= lineHeight;
-        }
-
-        // Extra spacing for paragraphs
-        if (!line.trim()) {
-            y -= lineHeight * 0.5;
-        }
+    if (isHtml(content)) {
+        const refs =
+            options?.includeCitations && options.bibliography
+                ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
+                : "";
+        const bodyContent = content.trim() + refs;
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body { font-family: Georgia, serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333; }
+        h1,h2,h3,h4,h5,h6 { font-family: system-ui, sans-serif; margin-top: 1.5em; margin-bottom: 0.5em; }
+        p { margin: 1em 0; }
+        ul,ol { margin: 1em 0; padding-left: 2em; }
+        li { margin: 0.5em 0; }
+        [style*="text-align:center"] { text-align: center; }
+        [style*="text-align:right"] { text-align: right; }${extraCss}
+    </style>
+</head>
+<body>${bodyContent}</body>
+</html>`;
     }
 
-    // Add bibliography if provided
-    if (options.bibliography) {
-        y -= lineHeight * 2;
-
-        if (y < margin + lineHeight * 4) {
-            page = pdfDoc.addPage([pageWidth, pageHeight]);
-            y = pageHeight - margin;
-        }
-
-        page.drawText("References", {
-            x: margin,
-            y: y,
-            size: fontSize + 4,
-            font: boldFont,
-            color: rgb(0, 0, 0),
-        });
-        y -= lineHeight * 1.5;
-
-        const bibLines = options.bibliography.split("\n");
-        for (const bibLine of bibLines) {
-            if (!bibLine.trim()) continue;
-
-            if (y < margin + lineHeight) {
-                page = pdfDoc.addPage([pageWidth, pageHeight]);
-                y = pageHeight - margin;
-            }
-
-            // Simple text drawing for bibliography (would need word wrap for long entries)
-            const truncatedLine = bibLine.length > 100 ? bibLine.slice(0, 97) + "..." : bibLine;
-            page.drawText(truncatedLine, {
-                x: margin,
-                y: y,
-                size: fontSize - 1,
-                font: font,
-                color: rgb(0, 0, 0),
-            });
-            y -= lineHeight;
-        }
+    let htmlContent = content;
+    if (options?.includeCitations && options.bibliography) {
+        htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
     }
-
-    return pdfDoc.save();
+    return markdownToHtml(htmlContent, title, extraCss);
 }
-/* eslint-enable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
 
 export async function POST(request: Request) {
     try {
@@ -352,15 +259,60 @@ export async function POST(request: Request) {
         let filename: string;
 
         switch (format) {
-            case "pdf":
-                exportedContent = await generatePDF(title, content, {
-                    pageSize: options?.pageSize,
-                    fontSize: options?.fontSize,
+            case "pdf": {
+                // The same styled HTML the html export ships, printed by
+                // Gotenberg's Chromium (ADR-009). Gotenberg is the one PDF
+                // owner — without it this format is a typed 503, same as the
+                // documents and legal-generate routes.
+                const gotenberg = getGotenbergClient();
+                if (!gotenberg) {
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            error: "service_not_configured",
+                            message:
+                                "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL " +
+                                "(and its basic-auth pair), or export as HTML instead.",
+                        },
+                        { status: 503 }
+                    );
+                }
+                const html = buildHtmlDocument(title, content, {
+                    // The old renderer always appended a provided
+                    // bibliography; keep that contract.
+                    includeCitations: Boolean(options?.bibliography),
                     bibliography: options?.bibliography,
+                    fontSize: options?.fontSize,
                 });
+                try {
+                    const result = await gotenberg.htmlToPdf({
+                        html,
+                        pageProperties: {
+                            ...(options?.pageSize === "a4" ? PAPER_SIZES.a4 : PAPER_SIZES.letter),
+                            printBackground: true,
+                        },
+                    });
+                    exportedContent = result.pdf;
+                } catch (err) {
+                    if (err instanceof RenderingServiceError) {
+                        const status =
+                            err.statusCode >= 400 && err.statusCode < 500 ? err.statusCode : 502;
+                        const trace = err.trace ? ` (trace ${err.trace})` : "";
+                        return NextResponse.json(
+                            {
+                                success: false,
+                                error: "rendering_failed",
+                                message: `${err.detail}${trace}`,
+                            },
+                            { status }
+                        );
+                    }
+                    throw err;
+                }
                 contentType = "application/pdf";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
                 break;
+            }
 
             case "markdown":
                 let mdContent = toMarkdown(content);
@@ -373,37 +325,10 @@ export async function POST(request: Request) {
                 break;
 
             case "html":
-                if (isHtml(content)) {
-                    const refs =
-                        options?.includeCitations && options.bibliography
-                            ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
-                            : "";
-                    const bodyContent = content.trim() + refs;
-                    exportedContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-    <style>
-        body { font-family: Georgia, serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333; }
-        h1,h2,h3,h4,h5,h6 { font-family: system-ui, sans-serif; margin-top: 1.5em; margin-bottom: 0.5em; }
-        p { margin: 1em 0; }
-        ul,ol { margin: 1em 0; padding-left: 2em; }
-        li { margin: 0.5em 0; }
-        [style*="text-align:center"] { text-align: center; }
-        [style*="text-align:right"] { text-align: right; }
-    </style>
-</head>
-<body>${bodyContent}</body>
-</html>`;
-                } else {
-                    let htmlContent = content;
-                    if (options?.includeCitations && options.bibliography) {
-                        htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
-                    }
-                    exportedContent = markdownToHtml(htmlContent, title);
-                }
+                exportedContent = buildHtmlDocument(title, content, {
+                    includeCitations: options?.includeCitations,
+                    bibliography: options?.bibliography,
+                });
                 contentType = "text/html";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.html`;
                 break;

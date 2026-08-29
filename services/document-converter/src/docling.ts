@@ -1,6 +1,6 @@
 /**
  * docling-serve client — the consolidation of the old ocr-worker's
- * docling_runner.py. Same conversion parameters (to_formats=["md"], do_ocr,
+ * docling_runner.py. Same conversion parameters (to_formats=md, do_ocr,
  * do_table_structure, image_export_mode=placeholder); failures surface as
  * typed ServiceErrors instead of opaque 500s.
  */
@@ -25,7 +25,10 @@ export const doclingConvertFile: DoclingConvert = async (config, file, filename)
 
     const form = new FormData();
     form.append("files", new Blob([new Uint8Array(file)]), filename);
-    form.append("to_formats", '["md"]');
+    // One repeated form field per format. docling-serve validates each entry
+    // against its OutputFormat enum, so a JSON-encoded array ("[\"md\"]")
+    // arrives as a single bogus member and the request fails 422.
+    form.append("to_formats", "md");
     form.append("do_ocr", "true");
     form.append("do_table_structure", "true");
     form.append("image_export_mode", "placeholder");

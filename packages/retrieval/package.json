@@ -12,6 +12,7 @@
         "./algorithms": "./src/algorithms/index.ts",
         "./algorithms/bm25": "./src/algorithms/bm25/index.ts",
         "./algorithms/vector": "./src/algorithms/vector/index.ts",
+        "./algorithms/fusion": "./src/algorithms/fusion/index.ts",
         "./algorithms/ensemble": "./src/algorithms/ensemble/index.ts",
         "./algorithms/rlm": "./src/algorithms/rlm/index.ts",
         "./algorithms/graph": "./src/algorithms/graph/index.ts",
@@ -51,6 +52,10 @@
             "./algorithms/vector": {
                 "types": "./dist/algorithms/vector/index.d.ts",
                 "default": "./dist/algorithms/vector/index.js"
+            },
+            "./algorithms/fusion": {
+                "types": "./dist/algorithms/fusion/index.d.ts",
+                "default": "./dist/algorithms/fusion/index.js"
             },
             "./algorithms/ensemble": {
                 "types": "./dist/algorithms/ensemble/index.d.ts",

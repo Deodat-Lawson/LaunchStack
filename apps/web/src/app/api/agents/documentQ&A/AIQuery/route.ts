@@ -2,9 +2,8 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
+import { ANNOptimizer, createDocumentVectorRetriever } from "@launchstack/retrieval/algorithms/vector";
 import { documentEnsembleSearch } from "~/server/rag/ensemble";
-import { createDocumentVectorRetriever } from "@launchstack/retrieval/algorithms/vector";
 import type {
     RetrievalMethod,
     DocumentSearchOptions,

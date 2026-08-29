@@ -6,6 +6,7 @@
 
 export * from "./bm25";
 export * from "./vector";
+export * from "./fusion";
 export * from "./ensemble";
 export * from "./rlm";
 export * from "./graph";

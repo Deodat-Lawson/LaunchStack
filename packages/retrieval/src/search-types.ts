@@ -117,7 +117,7 @@ export interface ANNResult {
     confidence: number;
 }
 
-export type ANNStrategy = "hnsw" | "ivf" | "hybrid" | "prefiltered";
+export type ANNStrategy = "hnsw" | "ivf" | "hybrid" | "prefiltered" | "matryoshka";
 
 export interface ANNConfig {
     strategy: ANNStrategy;

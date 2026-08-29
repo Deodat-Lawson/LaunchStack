@@ -78,12 +78,6 @@ jest.mock("~/server/metrics/registry", () => ({
     qaRequestDuration: { startTimer: () => jest.fn() },
 }));
 
-jest.mock("~/app/api/agents/predictive-document-analysis/services/annOptimizer", () => ({
-    __esModule: true,
-    default: class {
-        searchSimilarChunks = jest.fn().mockResolvedValue([]);
-    },
-}));
 
 const RETRIEVED = [{ pageContent: "chunk text", metadata: { page: 1 } }];
 
@@ -95,6 +89,9 @@ jest.mock("~/server/rag/ensemble", () => ({
 
 jest.mock("@launchstack/retrieval/algorithms/vector", () => ({
     createDocumentVectorRetriever: jest.fn(),
+    ANNOptimizer: class {
+        searchSimilarChunks = jest.fn().mockResolvedValue([]);
+    },
 }));
 
 jest.mock("@launchstack/llm/embeddings", () => ({

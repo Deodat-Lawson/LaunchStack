@@ -23,3 +23,9 @@ for.
 
 **Surface.** `create{Document,Company,MultiDoc}BM25Retriever`, plus the raw
 chunk fetchers (`get*Chunks`, `chunksToDocuments`) the fallback path reuses.
+
+**FTS variant.** `fts.ts` is the SQL-side sibling: `to_tsquery` OR-matching
+ranked by `ts_rank`, returning a plain ranked list instead of LangChain
+Documents. The fusion folder's hybrid search uses it when it needs page-level
+ranks without retriever machinery. Different scoring model than BM25 (no
+term-frequency saturation), same job: literal-term relevance.

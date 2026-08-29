@@ -15,7 +15,7 @@ import React, { useMemo, useState } from "react";
 import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
 import { ContextMenu } from "./ContextMenu";
 import { buildSourceMenuItems } from "./sourceContextMenu";
-import { ADD_TABS, DOC_DOMAINS, SOURCE_META } from "./types";
+import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
 /** A blank category reads as "Unfiled" everywhere in this surface. */
@@ -386,8 +386,6 @@ export function KnowledgePane({
                         onOpenMenu={openSourceMenu}
                     />
                 )}
-
-                <ConnectorStrip onOpenAdd={onOpenAdd} />
             </div>
             {menu && (
                 <ContextMenu
@@ -941,7 +939,7 @@ function Td({ children, muted }: { children?: React.ReactNode; muted?: boolean }
 }
 
 // ---------------------------------------------------------------------------
-// Empty state + connectors
+// Empty state
 // ---------------------------------------------------------------------------
 
 function EmptyState({
@@ -1015,77 +1013,5 @@ function EmptyState({
                 </button>
             )}
         </div>
-    );
-}
-
-/**
- * Ways knowledge gets in. Rendered at the bottom of the corpus rather than
- * behind a separate "Sources" destination — adding is part of browsing.
- */
-function ConnectorStrip({ onOpenAdd }: { onOpenAdd: (tabId?: string) => void }) {
-    return (
-        <section style={{ marginTop: 32 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
-                <h3 className="serif" style={{ fontSize: 17, margin: 0, color: "var(--ink)" }}>
-                    Bring in more
-                </h3>
-                <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                    Uploads are indexed immediately; connectors keep syncing.
-                </span>
-            </div>
-
-            {ADD_TABS.map(group => (
-                <div key={group.group} style={{ marginBottom: 14 }}>
-                    <div
-                        className="mono"
-                        style={{
-                            fontSize: 9.5,
-                            fontWeight: 700,
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--ink-3)",
-                            marginBottom: 7,
-                        }}
-                    >
-                        {group.group}
-                    </div>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                        {group.items.map(item => (
-                            <button
-                                key={item.id}
-                                onClick={() => onOpenAdd(item.id)}
-                                title={item.desc}
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    padding: "8px 12px",
-                                    borderRadius: 9,
-                                    border: "1px solid var(--line)",
-                                    background: "var(--panel)",
-                                    color: "var(--ink-2)",
-                                    fontSize: 12,
-                                    transition: "border-color 120ms, background 120ms",
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.borderColor = "var(--accent)";
-                                    e.currentTarget.style.background = "var(--panel-2)";
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.borderColor = "var(--line)";
-                                    e.currentTarget.style.background = "var(--panel)";
-                                }}
-                            >
-                                <item.Icon size={14} style={{ color: "var(--ink-3)" }} />
-                                <span style={{ fontWeight: 500 }}>{item.label}</span>
-                                <span style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
-                                    {item.desc}
-                                </span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            ))}
-        </section>
     );
 }

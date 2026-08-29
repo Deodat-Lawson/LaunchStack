@@ -46,6 +46,7 @@
         "@launchstack/design-tokens": "workspace:*",
         "@launchstack/editing": "workspace:^",
         "@launchstack/engine": "workspace:^",
+        "@launchstack/google-drive": "workspace:^",
         "@launchstack/indexing": "workspace:^",
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",

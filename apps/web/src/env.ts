@@ -280,6 +280,21 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
+    // Drive-linked files: PDFs and Word docs manually editable via a durable
+    // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
+    // OAuth client below exists — the GCP consent screen is the one real
+    // lead-time item, so the flag ships off by default.
+    GOOGLE_DOCS_EDITING_ENABLED: optionalString(),
+    GOOGLE_OAUTH_CLIENT_ID: optionalString(),
+    GOOGLE_OAUTH_CLIENT_SECRET: optionalString(),
+    // Absolute callback URL registered on the GCP OAuth client. Defaults to
+    // `${APP_PUBLIC_URL}/api/connectors/google/oauth/callback`, falling back
+    // to the request origin in dev.
+    GOOGLE_OAUTH_REDIRECT_URL: optionalString(),
+    // Quiet period before the reconciler pulls a Drive revision (minutes,
+    // default 10) — Docs autosaves per keystroke; a settled revision becomes
+    // one document version instead of eight.
+    GOOGLE_DOCS_SETTLE_MINUTES: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -460,6 +475,11 @@ function parseServerEnv() {
             | "sidecar"
             | undefined,
         TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
+        GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
+        GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
+        GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,

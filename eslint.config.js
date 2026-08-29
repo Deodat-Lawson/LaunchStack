@@ -285,6 +285,7 @@ const eslintConfig = [
                 "orchestration",
                 "editing",
                 "document-conversion-engine",
+                "google-drive",
                 "collab",
                 "schema-generator",
                 "pipelines",
@@ -446,6 +447,18 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/document-conversion-engine"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/google-drive/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/google-drive"),
                     ]),
                     ...noEnv,
                 },

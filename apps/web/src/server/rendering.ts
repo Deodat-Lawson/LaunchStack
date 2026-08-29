@@ -1,18 +1,18 @@
 /**
  * Composition root for the Gotenberg PDF-rendering client (ADR-009).
  *
- * @launchstack/rendering reads no environment — the connection settings are
+ * @launchstack/export-engine reads no environment — the connection settings are
  * resolved here, once, so every route renders PDFs through the same client
  * and a missing deployment shows up as `null` rather than a mid-request
  * throw. `null` is a real state, not an error: minimal stacks run without
- * Gotenberg and callers degrade with a typed 503 or a fallback renderer.
+ * Gotenberg and every PDF caller degrades with the same typed 503.
  */
 
 import {
     createGotenbergClient,
     RenderingConfigError,
     type GotenbergClient,
-} from "@launchstack/rendering";
+} from "@launchstack/export-engine";
 
 import { env } from "~/env";
 

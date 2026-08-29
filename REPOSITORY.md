@@ -37,7 +37,7 @@ outright, since nothing was ever published under the old names.
 | `packages/indexing` | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer). |
 | `packages/search` | TS library (published) | Question → cited answer: BM25 + vector ensemble behind a replaceable port, reranking, the citation builder. |
 | `packages/editing` | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client. |
-| `packages/rendering` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env. |
+| `packages/export-engine` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env. |
 | `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
 | `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
 | `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |

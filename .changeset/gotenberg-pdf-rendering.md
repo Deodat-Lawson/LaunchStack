@@ -1,5 +1,5 @@
 ---
-"@launchstack/rendering": minor
+"@launchstack/export-engine": minor
 ---
 
 New package (ADR-009): the typed client for the Gotenberg document-rendering

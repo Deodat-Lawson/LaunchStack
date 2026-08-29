@@ -14,7 +14,7 @@
 
 import { NextResponse } from "next/server";
 import TurndownService from "turndown";
-import { PAPER_SIZES, RenderingServiceError } from "@launchstack/rendering";
+import { PAPER_SIZES, RenderingServiceError } from "@launchstack/export-engine";
 import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

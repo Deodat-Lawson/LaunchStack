@@ -21,7 +21,7 @@ engine                       ← createEngine(): the one-install aggregate
 ```
 
 Beside the spine: **collab** (agent meetings, node builtins only),
-**editing** (tracked-changes Word editing), **rendering** (the Gotenberg
+**editing** (tracked-changes Word editing), **export-engine** (the Gotenberg
 PDF-rendering client — Office/HTML/Markdown → PDF), **schema-generator**
 (walks the feature wire contracts, emits the one schemas/v1 bundle the
 Python services test against), **design-tokens** (pure CSS).

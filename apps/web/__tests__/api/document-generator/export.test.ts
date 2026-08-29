@@ -17,7 +17,7 @@ jest.mock("~/server/rendering", () => ({
     getGotenbergClient: () => mockGetGotenbergClient(),
 }));
 
-import { RenderingServiceError } from "@launchstack/rendering";
+import { RenderingServiceError } from "@launchstack/export-engine";
 import { POST } from "~/app/api/document-generator/export/route";
 
 function request(body: Record<string, unknown>): Request {

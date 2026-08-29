@@ -1,17 +1,17 @@
-# @launchstack/rendering
+# @launchstack/export-engine
 
 PDF rendering (ADR-009): the typed client for the Gotenberg document-rendering service — Office documents to PDF via LibreOffice, HTML and Markdown to PDF via Chromium. It deliberately does not contain conversion into evidence — nothing here produces ingestable output; it turns a document the product already has into the PDF a user downloads.
 
 ## Install
 
 ```bash
-pnpm add @launchstack/rendering
+pnpm add @launchstack/export-engine
 ```
 
 ## Use
 
 ```ts
-import { createGotenbergClient, PAPER_SIZES } from "@launchstack/rendering";
+import { createGotenbergClient, PAPER_SIZES } from "@launchstack/export-engine";
 
 const client = createGotenbergClient({
   baseUrl: "http://gotenberg:3000",

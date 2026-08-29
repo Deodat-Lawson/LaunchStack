@@ -18,7 +18,7 @@ import {
     OFFICE_CONVERTIBLE_EXTENSIONS,
     RenderingConfigError,
     RenderingServiceError,
-} from "@launchstack/rendering";
+} from "@launchstack/export-engine";
 import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { getGotenbergClient } from "~/server/rendering";

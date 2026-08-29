@@ -76,7 +76,7 @@ export const config = {
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
-        "^@launchstack/rendering$": "<rootDir>/../../packages/rendering/src/index.ts",
+        "^@launchstack/export-engine$": "<rootDir>/../../packages/export-engine/src/index.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",

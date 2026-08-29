@@ -78,7 +78,6 @@ jest.mock("~/server/metrics/registry", () => ({
     qaRequestDuration: { startTimer: () => jest.fn() },
 }));
 
-
 const RETRIEVED = [{ pageContent: "chunk text", metadata: { page: 1 } }];
 
 jest.mock("~/server/rag/ensemble", () => ({

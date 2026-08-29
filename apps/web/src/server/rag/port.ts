@@ -15,10 +15,7 @@
  */
 
 import type { RagPort, CompanySearchOptions, RagSearchResult } from "@launchstack/retrieval";
-import {
-    companyEnsembleSearch,
-    createOpenAIEmbeddings,
-} from "~/server/rag/ensemble";
+import { companyEnsembleSearch, createOpenAIEmbeddings } from "~/server/rag/ensemble";
 import type {
     CompanySearchOptions as AppCompanySearchOptions,
     SearchResult as AppSearchResult,

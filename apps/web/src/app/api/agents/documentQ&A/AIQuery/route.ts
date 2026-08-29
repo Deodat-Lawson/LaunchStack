@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { ANNOptimizer, createDocumentVectorRetriever } from "@launchstack/retrieval/algorithms/vector";
+import {
+    ANNOptimizer,
+    createDocumentVectorRetriever,
+} from "@launchstack/retrieval/algorithms/vector";
 import { documentEnsembleSearch } from "~/server/rag/ensemble";
 import type {
     RetrievalMethod,

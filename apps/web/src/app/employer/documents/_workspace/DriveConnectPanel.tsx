@@ -233,8 +233,8 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 <div style={{ fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
                     Google Drive is not configured on this server
                 </div>
-                Ask your operator to set <code>GOOGLE_DRIVE_CLIENT_ID</code>,{" "}
-                <code>GOOGLE_DRIVE_CLIENT_SECRET</code> and the Picker keys — the steps are in{" "}
+                Ask your operator to set <code>GOOGLE_OAUTH_CLIENT_ID</code>,{" "}
+                <code>GOOGLE_OAUTH_CLIENT_SECRET</code> and the Picker keys — the steps are in{" "}
                 <code>.env.example</code> under &ldquo;Workspace connections&rdquo;.
             </div>
         );
@@ -283,7 +283,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 </div>
                 <button
                     onClick={() => {
-                        window.location.href = `${BASE}/oauth/start`;
+                        window.location.href = "/api/connectors/google/oauth/start";
                     }}
                     style={{ ...buttonStyle("primary", false), width: "100%", padding: 12 }}
                 >

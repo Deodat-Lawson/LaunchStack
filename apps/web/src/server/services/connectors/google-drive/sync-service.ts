@@ -10,13 +10,14 @@ import {
     syncGoogleDrive,
     type GoogleDriveSyncResult,
 } from "@launchstack/pipelines/connectors/google-drive";
+import { GoogleAuthError } from "@launchstack/google-drive";
 
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
-import { getConnectionAccessToken, getConnectionById } from "../connection-store";
-import { ConnectorGrantRevokedError } from "../providers/types";
+import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
+import { getConnectionById } from "../connection-store";
 import {
     claimSyncLease,
     ensureSyncState,
@@ -47,7 +48,7 @@ function reportCounts(report: GoogleDriveSyncResult): Record<string, unknown> {
 }
 
 export async function runGoogleDriveSync(
-    connectionId: bigint,
+    connectionId: number,
     options?: { readonly force?: boolean }
 ): Promise<GoogleDriveSyncRunResult> {
     const connection = await getConnectionById(connectionId);
@@ -58,8 +59,8 @@ export async function runGoogleDriveSync(
         return { outcome: "skipped", reason: `connection is ${connection.status} — reconnect` };
     }
 
-    // Older connections (or a lost race on connect) may not have the state
-    // row yet; the lease below needs one to claim.
+    // A fresh connection has no state row yet (the first full sync also
+    // needs no cursor); the lease below needs one to claim.
     await ensureSyncState(connectionId);
 
     if (!(await claimSyncLease(connectionId))) {
@@ -67,14 +68,19 @@ export async function runGoogleDriveSync(
     }
 
     try {
-        const accessToken = await getConnectionAccessToken(connection);
+        const accessToken = await getAccessTokenForConnection(connection);
         const client = createDriveClient({ accessToken });
 
-        // The sink attributes uploads to the granting user's Clerk identity.
+        // The sink attributes uploads to the granting user's auth identity.
+        if (connection.grantedByUserId == null) {
+            throw new Error(
+                "The user who connected Google Drive left the workspace — reconnect required"
+            );
+        }
         const [granter] = await db
-            .select({ clerkUserId: users.userId })
+            .select({ authUserId: users.userId })
             .from(users)
-            .where(eq(users.id, connection.grantedByUserPk))
+            .where(eq(users.id, Number(connection.grantedByUserId)))
             .limit(1);
         if (!granter) {
             throw new Error("The user who connected Google Drive no longer exists");
@@ -87,7 +93,7 @@ export async function runGoogleDriveSync(
             createGoogleDriveSink({
                 companyId: connection.companyId,
                 connectionId,
-                userId: granter.clerkUserId,
+                userId: granter.authUserId,
             }),
         ]);
 
@@ -116,7 +122,7 @@ export async function runGoogleDriveSync(
         return { outcome: report.dirty ? "synced" : "clean", report };
     } catch (error) {
         const message =
-            error instanceof ConnectorGrantRevokedError
+            error instanceof GoogleAuthError && error.invalidGrant
                 ? "Google access was revoked — reconnect required"
                 : error instanceof Error
                   ? error.message

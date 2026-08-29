@@ -61,7 +61,21 @@ const serverSchema = z.object({
     HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
     HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
     HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
-    CLERK_SECRET_KEY: requiredString(),
+    // Signs session cookies and verification tokens. Generate with:
+    //   openssl rand -base64 32
+    // Rotating it invalidates every live session (users just sign in again).
+    BETTER_AUTH_SECRET: requiredString(),
+    // Public origin of the app (e.g. https://app.example.com). Optional in
+    // dev — better-auth infers http://localhost from the request — but set it
+    // in any deployment behind a proxy so callback URLs and trusted origins
+    // resolve to the outside hostname.
+    BETTER_AUTH_URL: optionalString(),
+    // Optional social sign-in. Auth works credentials-only without these;
+    // a provider appears on the sign-in page only when both halves are set.
+    AUTH_GOOGLE_CLIENT_ID: optionalString(),
+    AUTH_GOOGLE_CLIENT_SECRET: optionalString(),
+    AUTH_GITHUB_CLIENT_ID: optionalString(),
+    AUTH_GITHUB_CLIENT_SECRET: optionalString(),
     BLOB_READ_WRITE_TOKEN: optionalString(),
     UPLOADTHING_TOKEN: optionalString(),
     DATALAB_API_KEY: optionalString(),
@@ -122,11 +136,11 @@ const serverSchema = z.object({
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
     // that provider; the redirect URI to register is
-    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback.
+    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback (slack, github).
     // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
     // is nowhere safe to put a token, so the connector declines to exist.
-    GOOGLE_DRIVE_CLIENT_ID: optionalString(),
-    GOOGLE_DRIVE_CLIENT_SECRET: optionalString(),
+    // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
+    // with Drive-linked files.)
     // Slack app client pair (OAuth v2 bot install). Distinct from
     // SLACK_BOT_TOKEN below, which remains the deployment-global fallback.
     SLACK_CLIENT_ID: optionalString(),
@@ -196,7 +210,7 @@ const serverSchema = z.object({
     // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
-    // without a Clerk session. Required alongside OCR_WORKER_URL when documents
+    // without a session. Required alongside OCR_WORKER_URL when documents
     // are stored in the database; without it those fetches get a 401.
     // Generate with:
     //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -283,6 +297,21 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
+    // Drive-linked files: PDFs and Word docs manually editable via a durable
+    // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
+    // OAuth client below exists — the GCP consent screen is the one real
+    // lead-time item, so the flag ships off by default.
+    GOOGLE_DOCS_EDITING_ENABLED: optionalString(),
+    GOOGLE_OAUTH_CLIENT_ID: optionalString(),
+    GOOGLE_OAUTH_CLIENT_SECRET: optionalString(),
+    // Absolute callback URL registered on the GCP OAuth client. Defaults to
+    // `${APP_PUBLIC_URL}/api/connectors/google/oauth/callback`, falling back
+    // to the request origin in dev.
+    GOOGLE_OAUTH_REDIRECT_URL: optionalString(),
+    // Quiet period before the reconciler pulls a Drive revision (minutes,
+    // default 10) — Docs autosaves per keystroke; a settled revision becomes
+    // one document version instead of eight.
+    GOOGLE_DOCS_SETTLE_MINUTES: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -329,7 +358,6 @@ const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
 });
 
 const clientSchema = z.object({
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: requiredString(),
     NEXT_PUBLIC_UPLOADTHING_ENABLED: z.preprocess(
         val => val === "true" || val === "1",
         z.boolean().optional()
@@ -382,7 +410,12 @@ function parseServerEnv() {
         HUGGINGFACE_EMBEDDING_MODEL: process.env.HUGGINGFACE_EMBEDDING_MODEL,
         HUGGINGFACE_EMBEDDING_DIMENSION: process.env.HUGGINGFACE_EMBEDDING_DIMENSION,
         HUGGINGFACE_EMBEDDING_VERSION: process.env.HUGGINGFACE_EMBEDDING_VERSION,
-        CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+        AUTH_GOOGLE_CLIENT_ID: process.env.AUTH_GOOGLE_CLIENT_ID,
+        AUTH_GOOGLE_CLIENT_SECRET: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+        AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,
+        AUTH_GITHUB_CLIENT_SECRET: process.env.AUTH_GITHUB_CLIENT_SECRET,
         BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
         UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
         DATALAB_API_KEY: process.env.DATALAB_API_KEY,
@@ -417,8 +450,6 @@ function parseServerEnv() {
         DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,
         AGENT_KNOWLEDGE_PROJECT_ROOTS: process.env.AGENT_KNOWLEDGE_PROJECT_ROOTS,
-        GOOGLE_DRIVE_CLIENT_ID: process.env.GOOGLE_DRIVE_CLIENT_ID,
-        GOOGLE_DRIVE_CLIENT_SECRET: process.env.GOOGLE_DRIVE_CLIENT_SECRET,
         SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
@@ -470,6 +501,11 @@ function parseServerEnv() {
             | "sidecar"
             | undefined,
         TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
+        GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
+        GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
+        GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
@@ -530,7 +566,6 @@ function parseServerEnv() {
 export const env = {
     server: parseServerEnv(),
     client: parseEnv(clientSchema, {
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
         NEXT_PUBLIC_UPLOADTHING_ENABLED: process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"

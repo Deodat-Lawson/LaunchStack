@@ -1,13 +1,14 @@
 /**
- * The connection row: encrypted token lifecycle for every provider. Tokens
- * are AES-256-GCM ciphertext via secret-box; the plaintext never leaves this
- * module except as a live access token.
+ * The connection row: encrypted token lifecycle for the generic providers
+ * (Slack, GitHub). Tokens are AES-256-GCM ciphertext via secret-box; the
+ * plaintext never leaves this module except as a live access token. Google
+ * rows live in the same table but their token lifecycle belongs to
+ * `~/server/services/google-drive/connections` — this module delegates to it
+ * so consumers get one `getCompanyAccessToken` across providers.
  *
- * Refresh needs no lock. Google refresh tokens are not rotated on use, so a
- * concurrent refresh is a benign last-write-wins on the cache. Slack/GitHub
- * DO rotate refresh tokens when rotation/expiry is enabled — there a race
- * loses the older refresh token, which surfaces as a reconnect; acceptable
- * until either provider's rotation mode is actually enabled on a deployment.
+ * Refresh needs no lock: Slack/GitHub tokens only rotate when the provider's
+ * rotation mode is enabled, and there a lost race surfaces as a reconnect —
+ * acceptable until a deployment actually enables rotation.
  */
 
 import { and, asc, eq } from "drizzle-orm";
@@ -21,10 +22,10 @@ import {
     type ConnectorProvider,
 } from "~/server/db/schema/connectors";
 import { getEngine } from "~/server/engine";
-import { getConnectorConfig, PROVIDER_MODULES } from "./config";
+import { getConnectorConfig, isOAuthProvider, PROVIDER_MODULES } from "./config";
 import { ConnectorGrantRevokedError, type ProviderGrant } from "./providers/types";
 
-/** Refresh when the cached access token is within this window of expiry. */
+/** Refresh when the stored access token is within this window of expiry. */
 const ACCESS_TOKEN_EXPIRY_BUFFER_MS = 60 * 1000;
 
 export async function listConnectionsForCompany(
@@ -69,7 +70,7 @@ export async function listActiveConnectionsForProvider(
         );
 }
 
-export async function getConnectionById(id: bigint): Promise<ConnectorConnection | null> {
+export async function getConnectionById(id: number): Promise<ConnectorConnection | null> {
     const [row] = await db
         .select()
         .from(connectorConnections)
@@ -81,7 +82,7 @@ export async function getConnectionById(id: bigint): Promise<ConnectorConnection
 export interface UpsertConnectionParams {
     readonly companyId: bigint;
     readonly provider: ConnectorProvider;
-    readonly grantedByUserPk: number;
+    readonly grantedByUserId: bigint | null;
     readonly grant: ProviderGrant;
 }
 
@@ -101,16 +102,16 @@ export async function upsertConnection(
     const values = {
         companyId: params.companyId,
         provider: params.provider,
-        grantedByUserPk: params.grantedByUserPk,
+        grantedByUserId: params.grantedByUserId,
         providerAccountId: params.grant.providerAccountId,
-        displayName: params.grant.displayName,
+        providerAccountEmail: params.grant.displayName,
         scopes: params.grant.scopes,
         accessTokenCiphertext: access.ciphertext,
         accessTokenExpiresAt: params.grant.accessTokenExpiresAt,
         refreshTokenCiphertext: refresh?.ciphertext ?? null,
         encryptionKeyVersion: access.keyVersion,
         status: "active" as const,
-        statusDetail: null,
+        lastRefreshError: null,
     };
 
     const [row] = await db
@@ -129,19 +130,15 @@ export async function upsertConnection(
     return row;
 }
 
-export async function markConnectionStatus(
-    connectionId: bigint,
-    status: "active" | "suspended" | "revoked" | "error",
-    detail?: string | null
-): Promise<void> {
+export async function markConnectionRevoked(connectionId: number, reason: string): Promise<void> {
     await db
         .update(connectorConnections)
         .set({
-            status,
-            statusDetail: detail ?? null,
-            ...(status === "revoked"
-                ? { accessTokenCiphertext: null, accessTokenExpiresAt: null }
-                : {}),
+            status: "revoked",
+            lastRefreshError: reason,
+            accessTokenCiphertext: null,
+            accessTokenExpiresAt: null,
+            updatedAt: new Date(),
         })
         .where(eq(connectorConnections.id, connectionId));
 }
@@ -152,7 +149,7 @@ export async function markConnectionStatus(
  * the row is gone either way.
  */
 export async function deleteConnection(
-    connectionId: bigint
+    connectionId: number
 ): Promise<{ accessToken: string | null; refreshToken: string | null } | null> {
     getEngine();
     const connection = await getConnectionById(connectionId);
@@ -173,12 +170,20 @@ export async function deleteConnection(
 }
 
 /**
- * A live access token for this connection — the stored token when it does not
- * expire or is still fresh, refreshed (and re-cached) otherwise. Marks the
- * connection revoked and rethrows when the provider reports the grant dead.
+ * A live access token for a Slack/GitHub connection — the stored token when
+ * it does not expire or is still fresh, refreshed (and re-stored) otherwise.
+ * Marks the connection revoked and rethrows when the provider reports the
+ * grant dead. Google rows are served by
+ * `~/server/services/google-drive/connections`.
  */
 export async function getConnectionAccessToken(connection: ConnectorConnection): Promise<string> {
     getEngine();
+
+    if (!isOAuthProvider(connection.provider)) {
+        throw new Error(
+            `getConnectionAccessToken serves Slack/GitHub; ${connection.provider} has its own accessor`
+        );
+    }
 
     const fresh =
         connection.accessTokenExpiresAt == null ||
@@ -197,7 +202,7 @@ export async function getConnectionAccessToken(connection: ConnectorConnection):
         );
     }
 
-    const provider = connection.provider as ConnectorProvider;
+    const provider = connection.provider;
     const config = getConnectorConfig(provider);
     if (!config) throw new Error(`The ${provider} connector is not configured`);
 
@@ -226,7 +231,7 @@ export async function getConnectionAccessToken(connection: ConnectorConnection):
         return refreshed.accessToken;
     } catch (error) {
         if (error instanceof ConnectorGrantRevokedError) {
-            await markConnectionStatus(connection.id, "revoked", error.message);
+            await markConnectionRevoked(connection.id, error.message);
         }
         throw error;
     }
@@ -244,6 +249,12 @@ export async function getCompanyAccessToken(
     const connection = await getActiveConnection(companyId, provider);
     if (!connection) return null;
     try {
+        if (provider === "google-drive") {
+            const { getAccessTokenForConnection } = await import(
+                "~/server/services/google-drive/connections"
+            );
+            return await getAccessTokenForConnection(connection);
+        }
         return await getConnectionAccessToken(connection);
     } catch (error) {
         console.error(

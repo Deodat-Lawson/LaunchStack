@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-client";
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
@@ -517,10 +517,11 @@ export function WorkspaceShell() {
     // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
     if (legacyRedirect) return <LoadingPage />;
 
-    const userName =
-        user?.fullName ?? [user?.firstName, user?.lastName].filter(Boolean).join(" ") ?? undefined;
-    const userEmail = user?.primaryEmailAddress?.emailAddress;
-    const initials = initialsOf(user?.firstName, user?.lastName, userEmail);
+    const trimmedName = user?.name.trim();
+    const userName = trimmedName?.length ? trimmedName : undefined;
+    const [firstName, ...restNames] = (userName ?? "").split(/\s+/);
+    const userEmail = user?.email;
+    const initials = initialsOf(firstName, restNames.at(-1), userEmail);
 
     return (
         <div

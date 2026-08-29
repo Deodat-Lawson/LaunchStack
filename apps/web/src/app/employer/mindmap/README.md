@@ -176,7 +176,7 @@ vanish from every exported PNG.
 
 `/dev/mindmap` mounts the editor inside the real chrome chain — employer layout
 → `DriftShell` → `ToolsStudioShell` → editor — with a template document and
-`/api/mindmaps/*` answered locally, so the canvas can be driven without a Clerk
+`/api/mindmaps/*` answered locally, so the canvas can be driven without a real
 session or a row in the database. `?template=flowchart` picks a starter (ids in
 `model/template-meta.ts`); `?view=gallery` shows the index page, which shares
 the same shell and therefore the same layout bugs. The route 404s in

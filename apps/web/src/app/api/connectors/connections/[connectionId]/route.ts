@@ -1,17 +1,22 @@
 /**
  * Disconnect a workspace connection.
  *
- * DELETE — management-gated. Removes the row, then best-effort revokes the
- * grant at the provider so a copied token dies with the connection. Cross-
- * tenant deletes are impossible: the row must belong to the caller's active
+ * DELETE — management-gated. Removes the row; for Slack/GitHub it then
+ * best-effort revokes the grant at the provider so a copied token dies with
+ * the connection (Google rows are simply deleted — the Drive services own no
+ * revocation endpoint, matching DELETE /api/connectors/google). Cross-tenant
+ * deletes are impossible: the row must belong to the caller's active
  * workspace.
  */
 
 import { createNotFoundError, createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import type { ConnectorProvider } from "~/server/db/schema/connectors";
-import { getConnectorConfig, PROVIDER_MODULES } from "~/server/services/connectors/config";
+import {
+    getConnectorConfig,
+    isOAuthProvider,
+    PROVIDER_MODULES,
+} from "~/server/services/connectors/config";
 import { deleteConnection, getConnectionById } from "~/server/services/connectors/connection-store";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 
@@ -27,10 +32,8 @@ export async function DELETE(
             if (!guard.ok) return guard.response;
 
             const { connectionId } = await params;
-            let id: bigint;
-            try {
-                id = BigInt(connectionId);
-            } catch {
+            const id = Number(connectionId);
+            if (!Number.isSafeInteger(id) || id <= 0) {
                 return createNotFoundError("Connection not found.");
             }
 
@@ -39,23 +42,21 @@ export async function DELETE(
                 return createNotFoundError("Connection not found.");
             }
 
-            const provider = connection.provider as ConnectorProvider;
+            const provider = connection.provider;
             const tokens = await deleteConnection(id);
 
             // Best-effort provider-side revocation; the row is already gone.
-            // Google kills the whole grant when the refresh token is revoked;
             // Slack's auth.revoke and GitHub's grant delete want the access token.
             let revoked = false;
-            const config = getConnectorConfig(provider, new URL(request.url).origin);
-            const token =
-                provider === "google-drive"
-                    ? (tokens?.refreshToken ?? tokens?.accessToken)
-                    : (tokens?.accessToken ?? tokens?.refreshToken);
-            if (config && token) {
-                try {
-                    revoked = await PROVIDER_MODULES[provider].revokeToken(config, token);
-                } catch (error) {
-                    console.error(`[connectors] ${provider} revocation failed:`, error);
+            if (isOAuthProvider(provider)) {
+                const config = getConnectorConfig(provider, new URL(request.url).origin);
+                const token = tokens?.accessToken ?? tokens?.refreshToken;
+                if (config && token) {
+                    try {
+                        revoked = await PROVIDER_MODULES[provider].revokeToken(config, token);
+                    } catch (error) {
+                        console.error(`[connectors] ${provider} revocation failed:`, error);
+                    }
                 }
             }
 

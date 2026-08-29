@@ -21,7 +21,7 @@ import {
 /** A lease older than this is stale — the holder crashed or was killed. */
 const SYNC_LEASE_STALE_MS = 10 * 60 * 1000;
 
-export async function getSyncState(connectionId: bigint): Promise<GoogleDriveSyncState | null> {
+export async function getSyncState(connectionId: number): Promise<GoogleDriveSyncState | null> {
     const [row] = await db
         .select()
         .from(googleDriveSyncState)
@@ -32,7 +32,7 @@ export async function getSyncState(connectionId: bigint): Promise<GoogleDriveSyn
 
 /** Idempotent: the row is created on connect and survives re-auth. */
 export async function ensureSyncState(
-    connectionId: bigint,
+    connectionId: number,
     startPageToken?: string
 ): Promise<void> {
     await db
@@ -47,7 +47,7 @@ export async function ensureSyncState(
 }
 
 /** True when this call claimed the lease; false when another sync holds it. */
-export async function claimSyncLease(connectionId: bigint): Promise<boolean> {
+export async function claimSyncLease(connectionId: number): Promise<boolean> {
     const staleBefore = new Date(Date.now() - SYNC_LEASE_STALE_MS);
     const claimed = await db
         .update(googleDriveSyncState)
@@ -74,7 +74,7 @@ export interface ReleaseSyncLeaseParams {
 }
 
 export async function releaseSyncLease(
-    connectionId: bigint,
+    connectionId: number,
     params: ReleaseSyncLeaseParams
 ): Promise<void> {
     await db
@@ -92,7 +92,7 @@ export async function releaseSyncLease(
 
 // ── Picked items ─────────────────────────────────────────────────────
 
-export async function listPickedItems(connectionId: bigint): Promise<GoogleDrivePickedItem[]> {
+export async function listPickedItems(connectionId: number): Promise<GoogleDrivePickedItem[]> {
     return db
         .select()
         .from(googleDrivePickedItem)
@@ -108,7 +108,7 @@ export interface PickedItemInput {
 }
 
 export async function addPickedItems(
-    connectionId: bigint,
+    connectionId: number,
     items: readonly PickedItemInput[],
     addedByUserPk: number
 ): Promise<void> {
@@ -138,7 +138,7 @@ export async function addPickedItems(
 }
 
 export async function removePickedItems(
-    connectionId: bigint,
+    connectionId: number,
     fileIds: readonly string[]
 ): Promise<void> {
     if (fileIds.length === 0) return;

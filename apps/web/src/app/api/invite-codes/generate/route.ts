@@ -31,7 +31,7 @@ export async function POST(request: Request) {
                 code,
                 companyId: ctx.data.companyId,
                 role,
-                createdBy: ctx.data.clerkUserId,
+                createdBy: ctx.data.authUserId,
             })
             .returning();
 

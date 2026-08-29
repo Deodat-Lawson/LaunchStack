@@ -14,10 +14,8 @@ import {
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isConnectorConfigured } from "~/server/services/connectors/config";
-import {
-    getConnectionAccessToken,
-    listConnectionsForCompany,
-} from "~/server/services/connectors/connection-store";
+import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
 import {
     notConfiguredResponse,
     requireConnectorAdmin,
@@ -47,7 +45,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 return createNotFoundError("No active Google Drive connection.");
             }
 
-            const accessToken = await getConnectionAccessToken(connection);
+            const accessToken = await getAccessTokenForConnection(connection);
             return createSuccessResponse({ accessToken });
         } catch (error) {
             return handleApiError(error);

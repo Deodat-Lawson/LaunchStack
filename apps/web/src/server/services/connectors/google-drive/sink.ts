@@ -36,7 +36,7 @@ const CREATION_KEY_PREFIX = "connector:google-drive:";
 
 export interface GoogleDriveSinkContext {
     readonly companyId: bigint;
-    readonly connectionId: bigint;
+    readonly connectionId: number;
     readonly userId: string;
     readonly category?: string;
     readonly embeddingIndexKey?: string;
@@ -56,7 +56,7 @@ interface StoredMetadata {
     readonly syncedAt: string;
 }
 
-function creationKeyFor(connectionId: bigint, item: DiscoveredKnowledgeItem): string {
+function creationKeyFor(connectionId: number, item: DiscoveredKnowledgeItem): string {
     return `${CREATION_KEY_PREFIX}${connectionId}:${item.sourceId}`;
 }
 
@@ -211,7 +211,7 @@ export async function createGoogleDriveSink(
 /** Source ids (Drive file ids) this connection has already ingested. */
 export async function listKnownSourceIds(
     companyId: bigint,
-    connectionId: bigint
+    connectionId: number
 ): Promise<string[]> {
     const rows = await db
         .select({ sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'` })
@@ -233,7 +233,7 @@ export async function listKnownSourceIds(
  */
 export async function markMissingDocuments(
     companyId: bigint,
-    connectionId: bigint,
+    connectionId: number,
     sourceIds: readonly string[]
 ): Promise<void> {
     if (sourceIds.length === 0) return;

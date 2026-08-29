@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         const { taskId, stepNumber, stepType, description, reasoning, input, output } =
             validation.data;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const stepId = randomUUID();
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "taskId is required" }, { status: 400 });
         }
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const steps = await db

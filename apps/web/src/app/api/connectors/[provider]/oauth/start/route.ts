@@ -1,14 +1,18 @@
 /**
- * Start a provider OAuth flow: build the consent URL with an HMAC-signed
- * state, double the nonce into an httpOnly cookie, and redirect.
+ * Start a Slack/GitHub OAuth flow: build the consent URL with an HMAC-signed
+ * state, double the nonce into an httpOnly cookie, and redirect. Google Drive
+ * connects through its own flow at /api/connectors/google/oauth/start.
  */
 
 import { NextResponse } from "next/server";
 
 import { createValidationError } from "~/lib/api-utils";
 import { handleApiError } from "~/lib/api-utils";
-import { isConnectorProvider } from "~/server/db/schema/connectors";
-import { getConnectorConfig, PROVIDER_MODULES } from "~/server/services/connectors/config";
+import {
+    getConnectorConfig,
+    isOAuthProvider,
+    PROVIDER_MODULES,
+} from "~/server/services/connectors/config";
 import {
     createNonce,
     oauthNonceCookieName,
@@ -25,8 +29,12 @@ export const runtime = "nodejs";
 export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
     try {
         const { provider } = await params;
-        if (!isConnectorProvider(provider)) {
-            return createValidationError(`Unknown connector provider: ${provider}`);
+        if (!isOAuthProvider(provider)) {
+            return createValidationError(
+                provider === "google-drive"
+                    ? "Google Drive connects via /api/connectors/google/oauth/start."
+                    : `Unknown connector provider: ${provider}`
+            );
         }
 
         const guard = await requireConnectorAdmin();

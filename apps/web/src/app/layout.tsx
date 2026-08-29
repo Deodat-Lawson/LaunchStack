@@ -5,7 +5,6 @@ import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 
 import { type Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 
 // The marketing metadata that used to live here — keywords, OG card, Twitter
@@ -42,19 +41,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <ClerkProvider>
-            <html
-                lang="en"
-                className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
-                suppressHydrationWarning
-            >
-                <body suppressHydrationWarning>
-                    <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-                        {children}
-                        <CloudAnalytics />
-                    </ThemeProvider>
-                </body>
-            </html>
-        </ClerkProvider>
+        <html
+            lang="en"
+            className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+            suppressHydrationWarning
+        >
+            <body suppressHydrationWarning>
+                <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+                    {children}
+                    <CloudAnalytics />
+                </ThemeProvider>
+            </body>
+        </html>
     );
 }

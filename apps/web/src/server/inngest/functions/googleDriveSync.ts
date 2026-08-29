@@ -24,7 +24,7 @@ export const googleDriveSyncJob = inngest.createFunction(
     },
     { event: "google-drive/sync.requested" },
     async ({ event, step }) => {
-        const connectionId = BigInt(event.data.connectionId);
+        const connectionId = Number(event.data.connectionId);
 
         const result = await step.run("sync", () =>
             runGoogleDriveSync(connectionId, { force: event.data.force })

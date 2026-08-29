@@ -3,7 +3,7 @@
  * route files may only export route fields — the factory is exported for
  * dependency-injected tests (read-retry-route.test.ts).
  */
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import type { retryRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
@@ -26,7 +26,8 @@ export function createFounderWeeklyReviewRetryPostHandler(
         request: Request,
         { params }: { params: Promise<{ runId: string }> }
     ) {
-        const { userId } = await auth();
+        const session = await getServerSession();
+        const userId = session?.user.id;
         if (!userId) return fail("Unauthorized", 401);
         const parsed = RetrySchema.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return fail("Invalid request", 400);

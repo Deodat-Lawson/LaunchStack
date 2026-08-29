@@ -30,7 +30,7 @@ export async function requireConnectorAdmin(): Promise<ConnectorAdminResult> {
 }
 
 const ENV_PAIRS: Record<ConnectorProvider, string> = {
-    "google-drive": "GOOGLE_DRIVE_CLIENT_ID and GOOGLE_DRIVE_CLIENT_SECRET",
+    "google-drive": "GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET",
     slack: "SLACK_CLIENT_ID and SLACK_CLIENT_SECRET",
     github: "GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET",
 };

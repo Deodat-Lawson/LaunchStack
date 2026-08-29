@@ -65,7 +65,7 @@ Before the second pass:
    Wait until the stack is ready (migrate completes, app listens, worker healthy at **http://localhost:8020/healthz**). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
 
 3. **Test accounts**
-   - Reuse the same Employer/Employee accounts (Clerk and DB are shared if you point to the same DB) or create fresh ones.
+   - Reuse the same Employer/Employee accounts (auth and app rows live in the same DB) or create fresh ones.
 
 Run the **same checklist** (sections 1–5, and optionally 6) again. Note any differences from Run 1 (e.g. upload paths, API base URL, env-only features).
 
@@ -77,7 +77,7 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 |---|--------|--------|----------|
 | 1.1 | Landing page loads | `/` |
 | 1.2 | Sign up link | Click “Start Free Trial” / `/signup` | Navigates to signup. |
-| 1.3 | Sign in link | Nav or `/signin` | Sign-in form (Clerk). |
+| 1.3 | Sign in link | Nav or `/signin` | Sign-in form (email + password). |
 | 1.4 | Contact | `/contact` | Contact page loads. |
 | 1.5 | About | `/about` | About page loads. |
 | 1.6 | Pricing | `/pricing` | Pricing page loads. |
@@ -90,8 +90,8 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 | # | Check | Steps | Expected |
 |---|--------|--------|----------|
-| 2.1.1 | New employer signup | Go to `/signup`, complete Clerk signup, choose Employer, submit. | User created in DB as employer (or owner), then redirected to `/employer/home` or `/employer/pending-approval` depending on approval flow. |
-| 2.1.2 | New employee signup | Go to `/signup`, complete Clerk signup, choose Employee, submit. | User created as employee, redirected to `/employee/documents` or `/employee/pending-approval`. |
+| 2.1.1 | New employer signup | Go to `/signup`, create an account (name/email/password), choose Employer, submit. | User created in DB as employer (or owner), then redirected to `/employer/home` or `/employer/pending-approval` depending on approval flow. |
+| 2.1.2 | New employee signup | Go to `/signup`, create an account (name/email/password), choose Employee, submit. | User created as employee, redirected to `/employee/documents` or `/employee/pending-approval`. |
 | 2.1.3 | Already in DB | Sign up with email that already exists in DB (with role). | Appropriate error or redirect (no duplicate role flip). |
 
 ### 2.2 Sign in & redirects

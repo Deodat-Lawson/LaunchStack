@@ -1,9 +1,10 @@
 /**
- * OAuth return leg. Session-gated: the Clerk `__session` cookie is
- * SameSite=Lax, so it rides along on the provider's top-level GET redirect —
- * no middleware allowlist entry is needed. The state must verify (HMAC +
- * TTL), match the nonce cookie, AND name the signed-in user — three separate
- * forgeries required to bind someone else's account to a workspace.
+ * OAuth return leg for Slack/GitHub (Google Drive has its own at
+ * /api/connectors/google/oauth/callback). Session-gated: the auth session
+ * cookie is SameSite=Lax, so it rides along on the provider's top-level GET
+ * redirect — no middleware allowlist entry is needed. The state must verify
+ * (HMAC + TTL), match the nonce cookie, AND name the signed-in user — three
+ * separate forgeries required to bind someone else's account to a workspace.
  *
  * Every exit is a redirect back to the documents workspace with
  * `connector=` / `result=` queries the UI turns into a toast; OAuth
@@ -13,13 +14,15 @@
 
 import { NextResponse } from "next/server";
 
-import { createDriveClient } from "@launchstack/pipelines/connectors/google-drive";
 import { timingSafeStringEqual } from "@launchstack/store/crypto";
 
-import { isConnectorProvider, type ConnectorProvider } from "~/server/db/schema/connectors";
-import { getConnectorConfig, PROVIDER_MODULES } from "~/server/services/connectors/config";
+import {
+    getConnectorConfig,
+    isOAuthProvider,
+    PROVIDER_MODULES,
+    type OAuthProvider,
+} from "~/server/services/connectors/config";
 import { upsertConnection } from "~/server/services/connectors/connection-store";
-import { ensureSyncState } from "~/server/services/connectors/google-drive/store";
 import { oauthNonceCookieName, verifyState } from "~/server/services/connectors/oauth-state";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 
@@ -27,7 +30,7 @@ export const runtime = "nodejs";
 
 function backToDocuments(
     request: Request,
-    provider: ConnectorProvider | null,
+    provider: OAuthProvider | null,
     result: string
 ): NextResponse {
     const url = new URL("/employer/documents", new URL(request.url).origin);
@@ -49,7 +52,7 @@ function readCookie(request: Request, name: string): string | null {
 
 export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
     const { provider } = await params;
-    if (!isConnectorProvider(provider)) {
+    if (!isOAuthProvider(provider)) {
         return backToDocuments(request, null, "error");
     }
 
@@ -89,19 +92,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
     try {
         const grant = await PROVIDER_MODULES[provider].exchangeCode(config, code);
 
-        const connection = await upsertConnection({
+        await upsertConnection({
             companyId: guard.ctx.companyId,
             provider,
-            grantedByUserPk: Number(guard.ctx.userPk),
+            grantedByUserId: guard.ctx.userPk,
             grant,
         });
-
-        if (provider === "google-drive") {
-            // Seed the changes-feed cursor now so the first sync's dirty-check
-            // starts from the moment of connection, not from a fabricated past.
-            const client = createDriveClient({ accessToken: grant.accessToken });
-            await ensureSyncState(connection.id, await client.getStartPageToken());
-        }
 
         return backToDocuments(request, provider, "connected");
     } catch (error) {

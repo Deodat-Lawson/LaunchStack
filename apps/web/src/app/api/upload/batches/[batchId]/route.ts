@@ -12,7 +12,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ bat
         return NextResponse.json({ error: "Batch ID is required" }, { status: 400 });
     }
 
-    const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
+    const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
     if (!batch) {
         return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }

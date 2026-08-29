@@ -36,6 +36,12 @@ jest.mock("~/server/services/document-creation", () => ({
     createDocumentVersionLifecycle: jest.fn(),
 }));
 
+// Drive-linked documents refuse in-app version uploads with a 409; these
+// tests exercise the unlinked path, so the guard reports no link.
+jest.mock("~/server/services/google-drive/links", () => ({
+    getActiveDriveLink: jest.fn().mockResolvedValue(null),
+}));
+
 jest.mock("~/server/services/internal-file-ref", () => {
     class MockUploadAuthorizationError extends Error {
         status: number;
@@ -84,7 +90,7 @@ jest.mock("drizzle-orm", () => ({
 }));
 
 const workspaceContext = {
-    clerkUserId: "user-1",
+    authUserId: "user-1",
     userPk: BigInt(7),
     companyId: BigInt(10),
     role: "owner" as const,

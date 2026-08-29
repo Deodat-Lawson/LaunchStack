@@ -5,12 +5,12 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 /**
- * Profile lookup for the signed-in Clerk user — including unverified /
- * pending-approval accounts. Uses requireClerkIdentity (not workspace
+ * Profile lookup for the signed-in user — including unverified /
+ * pending-approval accounts. Uses requireAuthIdentity (not workspace
  * context) so pending pages can load name/company/submission date.
  *
  * The company reported here is the *active* workspace, matching what the
@@ -20,13 +20,13 @@ import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
  */
 export async function POST() {
     try {
-        const identity = await requireClerkIdentity();
+        const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
 
         const [userInfo] = await db
             .select()
             .from(users)
-            .where(eq(users.userId, identity.data.clerkUserId));
+            .where(eq(users.userId, identity.data.authUserId));
 
         if (!userInfo) {
             return NextResponse.json({ error: "Invalid user." }, { status: 401 });

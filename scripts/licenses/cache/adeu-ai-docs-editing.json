@@ -18,12 +18,12 @@
   },
   {
    "name": "mcp",
-   "version": "2.0.0",
+   "version": "2.1.1",
    "license": "MIT"
   },
   {
    "name": "mcp-types",
-   "version": "2.0.0",
+   "version": "2.1.1",
    "license": "MIT"
   },
   {
@@ -48,12 +48,12 @@
   },
   {
    "name": "pydantic",
-   "version": "2.13.4",
+   "version": "2.13.5",
    "license": "MIT"
   },
   {
    "name": "pydantic_core",
-   "version": "2.46.4",
+   "version": "2.46.5",
    "license": "MIT"
   },
   {
@@ -128,12 +128,12 @@
   },
   {
    "name": "click",
-   "version": "8.4.2",
+   "version": "8.5.0",
    "license": "BSD-3-Clause"
   },
   {
    "name": "cyclopts",
-   "version": "4.23.2",
+   "version": "4.23.3",
    "license": "Apache-2.0"
   },
   {
@@ -188,12 +188,12 @@
   },
   {
    "name": "joserfc",
-   "version": "1.7.4",
+   "version": "1.7.5",
    "license": "BSD-3-Clause"
   },
   {
    "name": "cryptography",
-   "version": "50.0.0",
+   "version": "50.0.1",
    "license": "Apache-2.0 OR BSD-3-Clause"
   },
   {
@@ -258,7 +258,7 @@
   },
   {
    "name": "platformdirs",
-   "version": "4.11.3",
+   "version": "4.11.5",
    "license": "MIT"
   },
   {
@@ -383,7 +383,7 @@
   },
   {
    "name": "websockets",
-   "version": "17.0.1",
+   "version": "17.1",
    "license": "BSD-3-Clause"
   },
   {

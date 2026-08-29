@@ -61,7 +61,7 @@ export async function POST(
             await inngest.send({
                 name: "google-drive/sync.requested",
                 data: {
-                    connectionId: connection.id.toString(),
+                    connectionId: String(connection.id),
                     companyId: guard.ctx.companyId.toString(),
                     force: parsed.data.force,
                 },

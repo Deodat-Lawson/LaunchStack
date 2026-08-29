@@ -15,18 +15,17 @@ import { createHmac, hkdfSync, randomBytes } from "node:crypto";
 import { timingSafeStringEqual } from "@launchstack/store/crypto";
 
 import { env } from "~/env";
-import type { ConnectorProvider } from "~/server/db/schema/connectors";
-import { isConnectorProvider } from "~/server/db/schema/connectors";
+import { isOAuthProvider, type OAuthProvider } from "./config";
 
 export const OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
 
 /** Scoped per provider so parallel connect flows cannot clobber each other. */
-export function oauthNonceCookieName(provider: ConnectorProvider): string {
+export function oauthNonceCookieName(provider: OAuthProvider): string {
     return `connector_oauth_nonce_${provider.replace(/-/g, "_")}`;
 }
 
 export interface OAuthStatePayload {
-    readonly provider: ConnectorProvider;
+    readonly provider: OAuthProvider;
     readonly companyId: string;
     readonly userPk: number;
     readonly nonce: string;
@@ -72,7 +71,7 @@ export function verifyState(state: string, now: number = Date.now()): OAuthState
     }
     if (
         typeof payload.provider !== "string" ||
-        !isConnectorProvider(payload.provider) ||
+        !isOAuthProvider(payload.provider) ||
         typeof payload.companyId !== "string" ||
         typeof payload.userPk !== "number" ||
         typeof payload.nonce !== "string" ||

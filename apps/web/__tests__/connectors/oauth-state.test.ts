@@ -23,7 +23,7 @@ import {
 } from "~/server/services/connectors/oauth-state";
 
 const PAYLOAD = {
-    provider: "google-drive" as const,
+    provider: "slack" as const,
     companyId: "42",
     userPk: 7,
     nonce: "nonce-1",
@@ -48,10 +48,10 @@ describe("oauth state", () => {
         expect(verifyState("garbage")).toBeNull();
     });
 
-    it("rejects an unknown provider even when correctly signed", () => {
+    it("rejects a provider outside the generic layer even when correctly signed", () => {
         const state = signState({
             ...PAYLOAD,
-            provider: "dropbox" as unknown as typeof PAYLOAD.provider,
+            provider: "google-drive" as unknown as typeof PAYLOAD.provider,
         });
         expect(verifyState(state)).toBeNull();
     });
@@ -73,7 +73,7 @@ describe("oauth state", () => {
     });
 
     it("scopes the nonce cookie per provider", () => {
-        expect(oauthNonceCookieName("google-drive")).toBe("connector_oauth_nonce_google_drive");
+        expect(oauthNonceCookieName("github")).toBe("connector_oauth_nonce_github");
         expect(oauthNonceCookieName("github")).not.toBe(oauthNonceCookieName("slack"));
     });
 });

@@ -28,7 +28,14 @@ export async function GET(request: Request) {
 
             const connections = await listConnectionsForCompany(ctx.data.companyId);
 
-            const grantorPks = [...new Set(connections.map(row => row.grantedByUserPk))];
+            const grantorPks = [
+                ...new Set(
+                    connections
+                        .map(row => row.grantedByUserId)
+                        .filter((id): id is bigint => id != null)
+                        .map(id => Number(id))
+                ),
+            ];
             const grantors =
                 grantorPks.length > 0
                     ? await db
@@ -41,12 +48,15 @@ export async function GET(request: Request) {
             return createSuccessResponse({
                 providers: getConnectorProvidersStatus(),
                 connections: connections.map(row => ({
-                    id: row.id.toString(),
+                    id: String(row.id),
                     provider: row.provider,
-                    displayName: row.displayName,
+                    displayName: row.providerAccountEmail,
                     status: row.status,
-                    statusDetail: row.statusDetail,
-                    grantedBy: grantorById.get(row.grantedByUserPk)?.name ?? null,
+                    statusDetail: row.lastRefreshError,
+                    grantedBy:
+                        row.grantedByUserId != null
+                            ? (grantorById.get(Number(row.grantedByUserId))?.name ?? null)
+                            : null,
                     createdAt: row.createdAt.toISOString(),
                 })),
             });

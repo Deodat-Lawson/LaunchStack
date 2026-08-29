@@ -8,7 +8,7 @@
  * `AGENT_KNOWLEDGE_CONNECTOR_ENABLED` and on the caller owning the workspace.
  */
 
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { eq } from "drizzle-orm";
 import type { NextResponse } from "next/server";
 import { z } from "zod";
@@ -62,7 +62,8 @@ interface Caller {
 type CallerResult = { ok: true; caller: Caller } | { ok: false; response: NextResponse };
 
 async function resolveCaller(): Promise<CallerResult> {
-    const { userId } = await auth();
+    const session = await getServerSession();
+    const userId = session?.user.id;
     if (!userId) {
         return { ok: false, response: createUnauthorizedError("Authentication required.") };
     }

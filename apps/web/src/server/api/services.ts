@@ -268,6 +268,7 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         summary: "Accounts, workspaces, membership, invitations.",
         scope: "mixed",
         routes: [
+            "auth",
             "workspaces",
             "signup",
             "employerAuth",
@@ -279,6 +280,7 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
             "fetchUserInfo",
         ],
         unscopedRoutes: {
+            "auth/*": "better-auth's own surface — sign-in/out/up, sessions, password reset.",
             "signup/*": "Runs before a user row or membership exists.",
             workspaces: "Selecting a workspace cannot require one to already be active.",
             "workspaces/[id]/switch": "Changes which workspace is active.",

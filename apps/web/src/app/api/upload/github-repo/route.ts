@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.authUserId}`
             );
 
             // A token pasted into the form wins; otherwise the workspace's
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId: ctx.data.clerkUserId,
+                    userId: ctx.data.authUserId,
                     companyId: ctx.data.companyId,
                 },
                 documentName: `${owner}/${repo}`,

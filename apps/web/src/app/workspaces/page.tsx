@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq, desc, count } from "drizzle-orm";
+
+import { getServerSession } from "~/server/auth";
 
 import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
@@ -16,7 +17,8 @@ export default async function WorkspacesPage({
 }: {
     searchParams: Promise<{ from?: string }>;
 }) {
-    const { userId } = await auth();
+    const session = await getServerSession();
+    const userId = session?.user.id;
     if (!userId) redirect("/signin");
 
     const [user] = await db.select({ id: users.id }).from(users).where(eq(users.userId, userId));
@@ -52,7 +54,6 @@ export default async function WorkspacesPage({
         .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
     const activeCompanyId = await getActiveCompanyId(userId);
-    const clerkUser = await currentUser();
     const params = await searchParams;
     const fromSignup = params.from === "signup";
 
@@ -70,14 +71,9 @@ export default async function WorkspacesPage({
         isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
     }));
 
-    // `?? ""` first so the `||` fallthrough (which must also skip empty
-    // strings, e.g. a blank fullName) operates on non-nullable strings.
-    const accountName =
-        (clerkUser?.fullName ?? "") ||
-        [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-        (clerkUser?.username ?? "") ||
-        "You";
-    const accountEmail = clerkUser?.primaryEmailAddress?.emailAddress ?? "";
+    // `.trim()` so a whitespace-only name still falls through to "You".
+    const accountName = session.user.name.trim() || "You";
+    const accountEmail = session.user.email;
 
     return (
         <WorkspaceSelectClient

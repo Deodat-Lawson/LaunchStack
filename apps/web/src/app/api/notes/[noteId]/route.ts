@@ -3,11 +3,11 @@ import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
 import { eq, and, or, isNull } from "drizzle-orm";
 
-function noteOwnershipFilter(noteId: number, clerkUserId: string, companyId: bigint) {
+function noteOwnershipFilter(noteId: number, authUserId: string, companyId: bigint) {
   const companyIdStr = String(companyId);
   return and(
     eq(documentNotes.id, noteId),
-    eq(documentNotes.userId, clerkUserId),
+    eq(documentNotes.userId, authUserId),
     or(
       eq(documentNotes.companyId, companyIdStr),
       isNull(documentNotes.companyId),
@@ -39,7 +39,7 @@ export async function GET(
       .select()
       .from(documentNotes)
       .where(
-        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+        noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId),
       );
 
     if (!note) {
@@ -88,7 +88,7 @@ export async function PUT(
         ...(body.tags !== undefined && { tags: body.tags }),
       })
       .where(
-        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+        noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId),
       )
       .returning();
 
@@ -164,7 +164,7 @@ export async function DELETE(
     const [deleted] = await db
       .delete(documentNotes)
       .where(
-        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+        noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId),
       )
       .returning();
 

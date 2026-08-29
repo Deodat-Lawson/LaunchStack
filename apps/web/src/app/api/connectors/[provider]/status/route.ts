@@ -50,9 +50,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             return createSuccessResponse({
                 configured: true,
                 connected: true,
-                connectionId: connection.id.toString(),
+                connectionId: String(connection.id),
                 status: connection.status,
-                accountEmail: connection.displayName,
+                accountEmail: connection.providerAccountEmail,
                 pickedItems: pickedItems.map(item => ({
                     fileId: item.fileId,
                     kind: item.kind,

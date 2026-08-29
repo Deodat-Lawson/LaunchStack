@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         const input = parsed.data;
 
         const companyId = ctx.data.companyId;
-        const userId = ctx.data.clerkUserId;
+        const userId = ctx.data.authUserId;
         const jobId = uuidv4();
 
         // Create job record in DB

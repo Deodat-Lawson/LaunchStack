@@ -8,9 +8,10 @@ describes the repository as it actually is today.
 Launchstack is a **cited company-memory system**: sources go in through one
 ingestion path, immutable evidence comes out, and answers cite that evidence
 with stable anchors. The repository holds two private applications (web and
-worker), thirteen publishable feature packages under `packages/` (the
+worker), fourteen publishable feature packages under `packages/` (the
 bricks), one publishable compositions package at `pipelines/` (level two:
-chains of bricks toward business outcomes), and three compute services.
+chains of bricks toward business outcomes), and three compute services
+(plus two off-the-shelf service images, docling-serve and gotenberg).
 
 The 2026-08 refactors (ADR-002 … ADR-008) replaced the previous layouts in
 two steps: first layered engine packages with an enforced dependency
@@ -36,6 +37,7 @@ outright, since nothing was ever published under the old names.
 | `packages/indexing` | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer). |
 | `packages/search` | TS library (published) | Question → cited answer: BM25 + vector ensemble behind a replaceable port, reranking, the citation builder. |
 | `packages/editing` | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client. |
+| `packages/rendering` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env. |
 | `packages/collab` | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only. |
 | `packages/engine` | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface. |
 | `packages/schema-generator` | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against. |
@@ -143,7 +145,7 @@ banned on deploy surfaces. The one engine table the refactor added:
 | GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
 | `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
 | npm packages | every `packages/*` + `pipelines/` | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports). |
-| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
+| Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, gotenberg, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)
 

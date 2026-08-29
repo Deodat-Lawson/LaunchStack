@@ -51,6 +51,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/pipelines": "workspace:^",
+        "@launchstack/rendering": "workspace:^",
         "@launchstack/runtime": "workspace:^",
         "@launchstack/schema-generator": "workspace:^",
         "@launchstack/search": "workspace:^",

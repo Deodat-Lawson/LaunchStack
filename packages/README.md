@@ -21,9 +21,10 @@ engine                       ← createEngine(): the one-install aggregate
 ```
 
 Beside the spine: **collab** (agent meetings, node builtins only),
-**editing** (tracked-changes Word editing), **schema-generator** (walks the
-feature wire contracts, emits the one schemas/v1 bundle the Python services
-test against), **design-tokens** (pure CSS).
+**editing** (tracked-changes Word editing), **rendering** (the Gotenberg
+PDF-rendering client — Office/HTML/Markdown → PDF), **schema-generator**
+(walks the feature wire contracts, emits the one schemas/v1 bundle the
+Python services test against), **design-tokens** (pure CSS).
 
 Reaching for a starting point: install `@launchstack/engine` for everything
 behind one `createEngine(config)`, or the single brick you need. Every

@@ -142,6 +142,16 @@ const serverSchema = z.object({
     SIDECAR_URL: optionalString(),
     SIDECAR_API_KEY: optionalString(),
     ADEU_SERVICE_URL: optionalString(),
+    // Gotenberg PDF rendering (ADR-009) — DOCX/Office → PDF via LibreOffice,
+    // HTML/Markdown → PDF via Chromium. Unset, PDF downloads of Word documents
+    // return a typed 503 and the document-generator export falls back to its
+    // plain-text pdf-lib renderer.
+    GOTENBERG_SERVICE_URL: optionalString(),
+    // Basic-auth pair for the service (it runs with --api-enable-basic-auth,
+    // failing closed like the other compute services' X-API-Key). Both or
+    // neither — a lone half is a configuration error at client construction.
+    GOTENBERG_SERVICE_USERNAME: optionalString(),
+    GOTENBERG_SERVICE_PASSWORD: optionalString(),
     // services/document-converter (ADR-004) — the consolidated OCR routing,
     // vision classification, PDF page rendering, and Docling parsing service.
     // When set, DOCLING becomes available and DoclingIngestionAdapter takes
@@ -398,6 +408,9 @@ function parseServerEnv() {
         SIDECAR_URL: process.env.SIDECAR_URL,
         SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
         ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,
+        GOTENBERG_SERVICE_URL: process.env.GOTENBERG_SERVICE_URL,
+        GOTENBERG_SERVICE_USERNAME: process.env.GOTENBERG_SERVICE_USERNAME,
+        GOTENBERG_SERVICE_PASSWORD: process.env.GOTENBERG_SERVICE_PASSWORD,
         DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
         DOCUMENT_CONVERTER_API_KEY: process.env.DOCUMENT_CONVERTER_API_KEY,
         OCR_WORKER_URL: process.env.OCR_WORKER_URL,

@@ -2,7 +2,9 @@
  * Document Generator - Export API
  *
  * Export documents to various formats:
- * - PDF (using pdf-lib)
+ * - PDF (the styled HTML rendered through the Gotenberg service, ADR-009;
+ *   falls back to a plain-text pdf-lib rendering when Gotenberg is not
+ *   deployed or unreachable, so minimal stacks still export)
  * - Markdown (raw markdown)
  * - HTML (rendered from markdown or raw HTML)
  * - Plain Text
@@ -13,6 +15,8 @@
 import { NextResponse } from "next/server";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
+import { PAPER_SIZES } from "@launchstack/rendering";
+import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
@@ -115,7 +119,7 @@ function markdownToText(markdown: string): string {
 }
 
 // Simple markdown to HTML converter
-function markdownToHtml(markdown: string, title: string): string {
+function markdownToHtml(markdown: string, title: string, extraCss = ""): string {
     const html = markdown
         // Escape HTML
         .replace(/&/g, "&amp;")
@@ -182,13 +186,59 @@ function markdownToHtml(markdown: string, title: string): string {
         blockquote { border-left: 3px solid #ccc; margin: 1em 0; padding-left: 1em; color: #666; }
         @media print {
             body { max-width: none; padding: 0; }
-        }
+        }${extraCss}
     </style>
 </head>
 <body>
 ${html}
 </body>
 </html>`;
+}
+
+/**
+ * The complete standalone HTML document the html and pdf exports share —
+ * one styling so "export as HTML" and "export as PDF" cannot drift apart.
+ */
+function buildHtmlDocument(
+    title: string,
+    content: string,
+    options?: { includeCitations?: boolean; bibliography?: string; fontSize?: number }
+): string {
+    const extraCss = options?.fontSize
+        ? `\n        body { font-size: ${options.fontSize}pt; }`
+        : "";
+
+    if (isHtml(content)) {
+        const refs =
+            options?.includeCitations && options.bibliography
+                ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
+                : "";
+        const bodyContent = content.trim() + refs;
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body { font-family: Georgia, serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333; }
+        h1,h2,h3,h4,h5,h6 { font-family: system-ui, sans-serif; margin-top: 1.5em; margin-bottom: 0.5em; }
+        p { margin: 1em 0; }
+        ul,ol { margin: 1em 0; padding-left: 2em; }
+        li { margin: 0.5em 0; }
+        [style*="text-align:center"] { text-align: center; }
+        [style*="text-align:right"] { text-align: right; }${extraCss}
+    </style>
+</head>
+<body>${bodyContent}</body>
+</html>`;
+    }
+
+    let htmlContent = content;
+    if (options?.includeCitations && options.bibliography) {
+        htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
+    }
+    return markdownToHtml(htmlContent, title, extraCss);
 }
 
 /* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
@@ -352,15 +402,50 @@ export async function POST(request: Request) {
         let filename: string;
 
         switch (format) {
-            case "pdf":
-                exportedContent = await generatePDF(title, content, {
-                    pageSize: options?.pageSize,
-                    fontSize: options?.fontSize,
-                    bibliography: options?.bibliography,
-                });
+            case "pdf": {
+                // Preferred path: the same styled HTML the html export ships,
+                // printed by Gotenberg's Chromium (ADR-009). The pdf-lib text
+                // rendering below is the degraded mode for stacks without the
+                // service — a legible PDF beats a 503 on an export button.
+                let rendered: Uint8Array | null = null;
+                const gotenberg = getGotenbergClient();
+                if (gotenberg) {
+                    try {
+                        const html = buildHtmlDocument(title, content, {
+                            // The pdf-lib path always appends a provided
+                            // bibliography; keep that contract.
+                            includeCitations: Boolean(options?.bibliography),
+                            bibliography: options?.bibliography,
+                            fontSize: options?.fontSize,
+                        });
+                        const result = await gotenberg.htmlToPdf({
+                            html,
+                            pageProperties: {
+                                ...(options?.pageSize === "a4"
+                                    ? PAPER_SIZES.a4
+                                    : PAPER_SIZES.letter),
+                                printBackground: true,
+                            },
+                        });
+                        rendered = result.pdf;
+                    } catch (err) {
+                        console.warn(
+                            "[Export] Gotenberg render failed, falling back to text PDF:",
+                            err
+                        );
+                    }
+                }
+                exportedContent =
+                    rendered ??
+                    (await generatePDF(title, content, {
+                        pageSize: options?.pageSize,
+                        fontSize: options?.fontSize,
+                        bibliography: options?.bibliography,
+                    }));
                 contentType = "application/pdf";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
                 break;
+            }
 
             case "markdown":
                 let mdContent = toMarkdown(content);
@@ -373,37 +458,10 @@ export async function POST(request: Request) {
                 break;
 
             case "html":
-                if (isHtml(content)) {
-                    const refs =
-                        options?.includeCitations && options.bibliography
-                            ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
-                            : "";
-                    const bodyContent = content.trim() + refs;
-                    exportedContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-    <style>
-        body { font-family: Georgia, serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333; }
-        h1,h2,h3,h4,h5,h6 { font-family: system-ui, sans-serif; margin-top: 1.5em; margin-bottom: 0.5em; }
-        p { margin: 1em 0; }
-        ul,ol { margin: 1em 0; padding-left: 2em; }
-        li { margin: 0.5em 0; }
-        [style*="text-align:center"] { text-align: center; }
-        [style*="text-align:right"] { text-align: right; }
-    </style>
-</head>
-<body>${bodyContent}</body>
-</html>`;
-                } else {
-                    let htmlContent = content;
-                    if (options?.includeCitations && options.bibliography) {
-                        htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
-                    }
-                    exportedContent = markdownToHtml(htmlContent, title);
-                }
+                exportedContent = buildHtmlDocument(title, content, {
+                    includeCitations: options?.includeCitations,
+                    bibliography: options?.bibliography,
+                });
                 contentType = "text/html";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.html`;
                 break;

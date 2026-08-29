@@ -284,6 +284,7 @@ const eslintConfig = [
                 "search",
                 "orchestration",
                 "editing",
+                "rendering",
                 "collab",
                 "schema-generator",
                 "pipelines",
@@ -429,6 +430,22 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            // @launchstack/rendering — the Gotenberg client (ADR-009).
+            // Bottom-of-graph like collab, and unlike the editing client it
+            // has no env exception: connection settings are injected by the
+            // composition root.
+            {
+                files: ["packages/rendering/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/rendering"),
                     ]),
                     ...noEnv,
                 },

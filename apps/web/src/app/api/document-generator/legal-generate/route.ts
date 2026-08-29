@@ -2,14 +2,18 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/pipelines/legal-templates";
 import { generateDocument } from "@launchstack/pipelines/legal-templates/template-service";
+import { RenderingServiceError } from "@launchstack/rendering";
+import { getGotenbergClient } from "~/server/rendering";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
+// "pdf" adds a LibreOffice round trip through Gotenberg on top of templating.
+export const maxDuration = 60;
 
 const GenerateSchema = z.object({
     templateId: z.string(),
     data: z.record(z.string()),
-    format: z.enum(["docx", "json"]).default("json"),
+    format: z.enum(["docx", "pdf", "json"]).default("json"),
 });
 
 export async function GET() {
@@ -70,6 +74,60 @@ export async function POST(request: Request) {
                     "Content-Disposition": `attachment; filename="${result.filename}"`,
                 },
             });
+        }
+
+        // The generated DOCX rendered to PDF by Gotenberg's LibreOffice
+        // (ADR-009). No fallback here — a legal document with approximated
+        // layout is worse than an honest 503, unlike the free-form export.
+        if (format === "pdf") {
+            if (!result.document) {
+                return NextResponse.json(
+                    { success: false, error: "Template produced no document" },
+                    { status: 500 }
+                );
+            }
+            const gotenberg = getGotenbergClient();
+            if (!gotenberg) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: "service_not_configured",
+                        message:
+                            "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL (and " +
+                            "its basic-auth pair), or download the document as DOCX instead.",
+                    },
+                    { status: 503 }
+                );
+            }
+            try {
+                const { pdf } = await gotenberg.officeToPdf({
+                    file: result.document,
+                    filename: result.filename,
+                });
+                const pdfName = result.filename.replace(/\.docx$/i, ".pdf");
+                return new NextResponse(new Uint8Array(pdf), {
+                    status: 200,
+                    headers: {
+                        "Content-Type": "application/pdf",
+                        "Content-Disposition": `attachment; filename="${pdfName}"`,
+                    },
+                });
+            } catch (err) {
+                if (err instanceof RenderingServiceError) {
+                    const status =
+                        err.statusCode >= 400 && err.statusCode < 500 ? err.statusCode : 502;
+                    const trace = err.trace ? ` (trace ${err.trace})` : "";
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            error: "rendering_failed",
+                            message: `${err.detail}${trace}`,
+                        },
+                        { status }
+                    );
+                }
+                throw err;
+            }
         }
 
         const sections = buildEditorSections(template, data);

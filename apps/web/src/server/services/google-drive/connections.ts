@@ -143,6 +143,11 @@ export async function getAccessTokenForConnection(
     if (cached && cached.expiresAt > Date.now()) return cached.token;
 
     getEngine();
+    if (!connection.refreshTokenCiphertext) {
+        // Slack/GitHub rows persist the access token instead; a Google row
+        // without a refresh token is corrupt either way.
+        throw new GoogleNotConnectedError();
+    }
     const refreshToken = decryptSecret(connection.refreshTokenCiphertext);
     try {
         const token = await refreshAccessToken({ app: getGoogleOAuthApp(), refreshToken });

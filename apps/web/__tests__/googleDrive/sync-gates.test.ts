@@ -131,6 +131,8 @@ function connection(overrides: Partial<ConnectorConnection> = {}): ConnectorConn
         providerAccountEmail: "founder@example.com",
         grantedByUserId: BigInt(3),
         refreshTokenCiphertext: "ct",
+        accessTokenCiphertext: null,
+        accessTokenExpiresAt: null,
         encryptionKeyVersion: 1,
         scopes: "drive.file",
         status: "active",

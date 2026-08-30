@@ -16,24 +16,29 @@ import { users } from "~/server/db/schema";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     GOOGLE_DRIVE_SCOPES,
+    GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
-    isDriveLinkingEnabled,
+    isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
 
-import { OAUTH_STATE_COOKIE } from "../start/route";
-
+/**
+ * Lands on the shared connector return leg (`?connector=&result=`) so the
+ * workspace shell reopens the Drive panel and toasts the outcome — the same
+ * path the Slack/GitHub callbacks take.
+ */
 function redirectToWorkspace(request: Request, flag: string): NextResponse {
+    const result = flag === "connected" ? "connected" : flag === "cancelled" ? "denied" : "error";
     const response = NextResponse.redirect(
-        new URL(`/employer/documents?googleDrive=${flag}`, request.url)
+        new URL(`/employer/documents?connector=google-drive&result=${result}`, request.url)
     );
-    response.cookies.delete(OAUTH_STATE_COOKIE);
+    response.cookies.delete(GOOGLE_OAUTH_STATE_COOKIE);
     return response;
 }
 
 export async function GET(request: Request) {
-    if (!isDriveLinkingEnabled()) {
+    if (!isGoogleConnectConfigured()) {
         return NextResponse.json({ error: "feature_disabled" }, { status: 404 });
     }
 

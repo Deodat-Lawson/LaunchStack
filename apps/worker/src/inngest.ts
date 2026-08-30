@@ -21,6 +21,10 @@ import {
     founderWeeklyReviewDispatchReconciler,
     founderWeeklyReviewGenerationJob,
 } from "~/server/inngest/functions/founderWeeklyReview";
+import {
+    googleDriveSyncCron,
+    googleDriveSyncJob,
+} from "~/server/inngest/functions/googleDriveSync";
 
 export function createInngestHandler() {
     return serve({
@@ -36,6 +40,8 @@ export function createInngestHandler() {
             founderWeeklyReviewDispatcher,
             founderWeeklyReviewDispatchReconciler,
             founderWeeklyReviewGenerationJob,
+            googleDriveSyncJob,
+            googleDriveSyncCron,
         ],
     });
 }

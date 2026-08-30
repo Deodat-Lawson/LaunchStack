@@ -11,6 +11,7 @@ import {
 } from "@launchstack/pipelines/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import {
     createSuccessResponse,
     createForbiddenError,
@@ -98,8 +99,11 @@ export async function POST(request: Request) {
         const { owner, repo } = parsedUrl;
         // `?? ""` first so the `||` fallthrough (which must also skip empty
         // strings, e.g. an empty header or env var) operates on plain strings.
+        // Precedence: a token the user typed for this request, then the
+        // workspace's GitHub connection, then the deployment-global PAT.
         const githubToken =
             (request.headers.get("X-GitHub-Token") ?? "") ||
+            ((await getCompanyAccessToken(ctx.data.companyId, "github")) ?? "") ||
             (env.server.GITHUB_TOKEN ?? "") ||
             null;
 

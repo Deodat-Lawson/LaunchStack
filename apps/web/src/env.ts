@@ -132,6 +132,23 @@ const serverSchema = z.object({
     // are always in scope when the connector is enabled; this governs
     // project-scoped roots only.
     AGENT_KNOWLEDGE_PROJECT_ROOTS: optionalString(),
+    // Workspace connections (OAuth). All optional — with no client pair set a
+    // provider's Connect button renders "not configured" and its routes
+    // decline. Each pair comes from an OAuth app the deployment registers with
+    // that provider; the redirect URI to register is
+    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
+    // is nowhere safe to put a token, so the connector declines to exist.
+    // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
+    // with Drive-linked files.)
+    // Slack app client pair (OAuth v2 bot install). Distinct from
+    // SLACK_BOT_TOKEN below, which remains the deployment-global fallback.
+    SLACK_CLIENT_ID: optionalString(),
+    SLACK_CLIENT_SECRET: optionalString(),
+    // GitHub OAuth app pair. GITHUB_OAUTH_* to keep clear of GITHUB_TOKEN,
+    // the deployment-global PAT fallback used by the repo explainer.
+    GITHUB_OAUTH_CLIENT_ID: optionalString(),
+    GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
     // services/transcription (ADR-004) — Whisper transcription + yt-dlp
     // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
     // or when transcribing video-platform URLs.
@@ -356,6 +373,11 @@ const clientSchema = z.object({
     ),
     NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
     NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+    // Google Picker needs a browser API key (restricted to the Picker API) and
+    // the Cloud project number — setAppId is what registers the drive.file
+    // grant for picked items to our OAuth client.
+    NEXT_PUBLIC_GOOGLE_API_KEY: optionalString(),
+    NEXT_PUBLIC_GOOGLE_APP_ID: optionalString(),
 });
 
 const skipValidation =
@@ -437,6 +459,10 @@ function parseServerEnv() {
         DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,
         AGENT_KNOWLEDGE_PROJECT_ROOTS: process.env.AGENT_KNOWLEDGE_PROJECT_ROOTS,
+        SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+        SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+        GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
+        GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
         SIDECAR_URL: process.env.SIDECAR_URL,
         SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
         ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,
@@ -558,5 +584,7 @@ export const env = {
             | "database"
             | undefined,
         NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+        NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+        NEXT_PUBLIC_GOOGLE_APP_ID: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
     }),
 };

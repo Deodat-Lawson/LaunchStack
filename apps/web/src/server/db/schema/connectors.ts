@@ -1,12 +1,20 @@
 /**
- * Product schema: third-party connector connections and Drive-linked files.
+ * Product schema: third-party connector connections, Drive-linked files, and
+ * the Drive knowledge-sync satellites.
  *
  * Connections are workspace-scoped and user-attributed (the workspace owns the
  * grant; the row records who made it): users belong to multiple workspaces,
- * every consumer of the synced data is company-owned, and the reconciler runs
- * in the worker with no user session. One table serves every OAuth provider —
- * `provider` discriminates — so Slack/GitHub connections later reuse it
- * unchanged.
+ * every consumer of the synced data is company-owned, and the reconciler and
+ * sync jobs run in the worker with no user session. One table serves every
+ * OAuth provider — `provider` discriminates — Google Drive, Slack, and GitHub
+ * today.
+ *
+ * Token shape varies by provider. Google issues a refresh token and short
+ * -lived access tokens (cached in-process by the Drive services); Slack bot
+ * tokens and GitHub OAuth tokens are long-lived credentials with no refresh
+ * token unless rotation is enabled — so `refreshTokenCiphertext` is nullable
+ * and `accessTokenCiphertext` persists the credential itself (plus a rotated
+ * refresh token when the provider hands one out).
  *
  * A document has at most one Drive link, ever: re-linking after an unlink
  * updates the same row (new driveFileId), so `document_id` is simply unique.
@@ -19,6 +27,7 @@ import {
     boolean,
     index,
     integer,
+    jsonb,
     text,
     timestamp,
     uniqueIndex,
@@ -30,6 +39,14 @@ import { company, document, documentVersions } from "@launchstack/store/schema";
 
 import { users } from "./identity";
 
+/** Providers a workspace can connect. Route segments and DB values alike. */
+export const CONNECTOR_PROVIDERS = ["google-drive", "slack", "github"] as const;
+export type ConnectorProvider = (typeof CONNECTOR_PROVIDERS)[number];
+
+export function isConnectorProvider(value: string): value is ConnectorProvider {
+    return (CONNECTOR_PROVIDERS as readonly string[]).includes(value);
+}
+
 export const connectorConnections = pgTable(
     "connector_connections",
     {
@@ -39,17 +56,34 @@ export const connectorConnections = pgTable(
             .references(() => company.id, { onDelete: "cascade" }),
         /** e.g. "google-drive"; discriminates providers within one table. */
         provider: varchar("provider", { length: 32 }).notNull(),
-        /** Stable account id at the provider (Google: the OpenID `sub`). */
+        /**
+         * Stable account id at the provider (Google: the OpenID `sub`;
+         * Slack: the team id; GitHub: the user id).
+         */
         providerAccountId: varchar("provider_account_id", { length: 256 }).notNull(),
-        /** Display-only; the stable identity is providerAccountId. */
+        /**
+         * Display-only; the stable identity is providerAccountId. Google: the
+         * account email; Slack: the team name; GitHub: the login.
+         */
         providerAccountEmail: varchar("provider_account_email", { length: 256 }),
         /** Attribution, not ownership — the connection survives the user. */
         grantedByUserId: bigint("granted_by_user_id", { mode: "bigint" }).references(
             () => users.id,
             { onDelete: "set null" }
         ),
-        /** Secret-box output (AES-256-GCM, key-versioned envelope). */
-        refreshTokenCiphertext: text("refresh_token_ciphertext").notNull(),
+        /**
+         * Secret-box output (AES-256-GCM, key-versioned envelope). Null for
+         * providers that issue no refresh token (Slack/GitHub without
+         * rotation) — there `accessTokenCiphertext` IS the credential.
+         */
+        refreshTokenCiphertext: text("refresh_token_ciphertext"),
+        /**
+         * For Google this stays null (access tokens are cached in-process);
+         * for Slack/GitHub it persists the long-lived token.
+         */
+        accessTokenCiphertext: text("access_token_ciphertext"),
+        /** Null when the stored access token does not expire. */
+        accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
         encryptionKeyVersion: integer("encryption_key_version").notNull().default(1),
         scopes: varchar("scopes", { length: 512 }).notNull(),
         /** 'active' | 'revoked' — revoked means reconnect is the only fix. */
@@ -126,6 +160,58 @@ export const documentDriveLinks = pgTable(
     })
 );
 
+/**
+ * Google Drive knowledge-sync bookkeeping — the changes-feed cursor and the
+ * sync lease for picked-item ingestion. One row per Drive connection, created
+ * on connect; distinct from documentDriveLinks, which tracks per-document
+ * editing links.
+ */
+export const googleDriveSyncState = pgTable("google_drive_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    /** Drive changes-feed cursor; advances only inside the sync lease. */
+    startPageToken: varchar("start_page_token", { length: 64 }),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, skipped, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
+/**
+ * What the admin selected in the Google Picker; under the drive.file scope
+ * these are the entire universe the knowledge sync can see.
+ */
+export const googleDrivePickedItem = pgTable(
+    "google_drive_picked_item",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        fileId: varchar("file_id", { length: 128 }).notNull(),
+        /** file | folder */
+        kind: varchar("kind", { length: 8 }).notNull(),
+        name: text("name").notNull(),
+        mimeType: varchar("mime_type", { length: 255 }),
+        addedByUserPk: bigint("added_by_user_pk", { mode: "number" }).references(() => users.id),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionFileUnique: uniqueIndex("gdrive_picked_conn_file_idx").on(
+            table.connectionId,
+            table.fileId
+        ),
+        connectionIdx: index("gdrive_picked_connection_idx").on(table.connectionId),
+    })
+);
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -155,3 +241,5 @@ export const documentDriveLinksRelations = relations(documentDriveLinks, ({ one 
 
 export type ConnectorConnection = InferSelectModel<typeof connectorConnections>;
 export type DocumentDriveLink = InferSelectModel<typeof documentDriveLinks>;
+export type GoogleDriveSyncState = InferSelectModel<typeof googleDriveSyncState>;
+export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedItem>;

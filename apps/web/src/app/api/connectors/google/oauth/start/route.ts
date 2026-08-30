@@ -15,15 +15,14 @@ import { buildAuthorizationUrl } from "@launchstack/google-drive";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     GOOGLE_DRIVE_SCOPES,
+    GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
-    isDriveLinkingEnabled,
+    isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
 
-export const OAUTH_STATE_COOKIE = "gdrive_oauth_state";
-
 export async function GET(request: Request) {
-    if (!isDriveLinkingEnabled()) {
+    if (!isGoogleConnectConfigured()) {
         return NextResponse.json({ error: "feature_disabled" }, { status: 404 });
     }
 
@@ -45,7 +44,7 @@ export async function GET(request: Request) {
     });
 
     const response = NextResponse.redirect(url);
-    response.cookies.set(OAUTH_STATE_COOKIE, nonce, {
+    response.cookies.set(GOOGLE_OAUTH_STATE_COOKIE, nonce, {
         httpOnly: true,
         sameSite: "lax",
         secure: new URL(request.url).protocol === "https:",

@@ -16,13 +16,12 @@ import { users } from "~/server/db/schema";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     GOOGLE_DRIVE_SCOPES,
+    OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
     isDriveLinkingEnabled,
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
-
-import { OAUTH_STATE_COOKIE } from "../start/route";
 
 function redirectToWorkspace(request: Request, flag: string): NextResponse {
     const response = NextResponse.redirect(

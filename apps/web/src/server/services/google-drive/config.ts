@@ -13,6 +13,13 @@ import { env } from "~/env";
 export const GOOGLE_DRIVE_PROVIDER = "google-drive";
 
 /**
+ * CSRF nonce cookie for the OAuth flow. Lives here, not in the route file:
+ * Next.js route modules may only export handler fields, and `next build`
+ * enforces that where plain typechecking does not.
+ */
+export const OAUTH_STATE_COOKIE = "gdrive_oauth_state";
+
+/**
  * drive.file only: the app can touch files it created, nothing else in the
  * user's Drive. openid+email identify which Google account holds the files.
  */

@@ -23,6 +23,7 @@ COPY packages/indexing/package.json ./packages/indexing/
 COPY packages/search/package.json ./packages/search/
 COPY packages/orchestration/package.json ./packages/orchestration/
 COPY packages/editing/package.json ./packages/editing/
+COPY packages/google-drive/package.json ./packages/google-drive/
 COPY packages/collab/package.json ./packages/collab/
 COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/

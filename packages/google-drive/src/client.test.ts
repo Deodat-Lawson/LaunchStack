@@ -50,7 +50,7 @@ describe("token endpoints", () => {
         expect(token.refresh_token).toBe("rt");
         const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
         expect(url).toBe("https://oauth2.googleapis.com/token");
-        const body = String(init.body);
+        const body = init.body as string;
         expect(body).toContain("grant_type=authorization_code");
         expect(body).toContain("code=the-code");
     });

@@ -17,6 +17,7 @@ export * from "./collab";
 export * from "./credits";
 export * from "./document-notes";
 export * from "./mindmap";
+export * from "./artifacts";
 
 // Feature-vertical tables live in packages/features (a package cannot import
 // from an app). Same side of the boundary, same product migration set.

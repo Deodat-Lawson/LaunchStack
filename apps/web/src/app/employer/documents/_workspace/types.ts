@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
 // set kept for this file's existing entries (see apps/web/README.md).
-import { Network as IconMindmap } from "lucide-react";
+import { AppWindow as IconArtifact, Network as IconMindmap } from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -243,6 +243,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/mindmap",
     },
     {
+        id: "artifacts",
+        label: "Claude Artifacts",
+        Icon: IconArtifact,
+        desc: "Pages and diagrams imported from Claude",
+        href: "/employer/artifacts",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -368,6 +375,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconMindmap,
                 desc: "Diagrams, mindmaps and flowcharts — publishable as sources",
                 href: "/employer/mindmap",
+                external: true,
+            },
+            {
+                id: "artifacts",
+                label: "Claude Artifacts",
+                Icon: IconArtifact,
+                desc: "Import pages and diagrams built in Claude, and manage them here",
+                href: "/employer/artifacts",
                 external: true,
             },
             {

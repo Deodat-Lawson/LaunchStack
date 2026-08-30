@@ -163,6 +163,17 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
             "colleague drew, matching how sources already behave.",
     },
     {
+        id: "artifacts",
+        tier: "tool",
+        summary: "Import pages, diagrams, and snippets built in Claude; view them sandboxed.",
+        scope: "workspace",
+        routes: ["artifacts"],
+        notes:
+            "Bodies are stored inline and rendered in an iframe sandboxed without " +
+            "allow-same-origin — the app's one untrusted-HTML surface. The raw route serves " +
+            "attachment-only for the same reason.",
+    },
+    {
         id: "notes",
         tier: "tool",
         summary: "Freeform notes that link to sources and to each other.",

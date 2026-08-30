@@ -64,6 +64,13 @@
       "when": 1788032041550,
       "tag": "20260829193401_lowly_silverclaw",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788035698409,
+      "tag": "20260829203458_claude_artifacts",
+      "breakpoints": true
     }
   ]
 }

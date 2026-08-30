@@ -15,12 +15,11 @@ import { buildAuthorizationUrl } from "@launchstack/google-drive";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     GOOGLE_DRIVE_SCOPES,
+    OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
     isDriveLinkingEnabled,
 } from "~/server/services/google-drive/config";
-
-export const OAUTH_STATE_COOKIE = "gdrive_oauth_state";
 
 export async function GET(request: Request) {
     if (!isDriveLinkingEnabled()) {

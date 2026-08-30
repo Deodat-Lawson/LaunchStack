@@ -32,6 +32,8 @@ COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/
 COPY packages/tools/package.json ./packages/tools/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
+COPY packages/document-conversion-engine/package.json ./packages/document-conversion-engine/
+COPY packages/google-drive/package.json ./packages/google-drive/
 COPY pipelines/package.json ./pipelines/
 
 RUN pnpm install --frozen-lockfile

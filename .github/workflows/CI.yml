@@ -58,6 +58,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
 
+      # Cheap, dependency-free, and fails fast: a workspace package missing
+      # from a Dockerfile deps layer otherwise surfaces ~2 minutes into the
+      # image build as an unresolvable dependency the package does declare.
+      - name: Dockerfile deps layers cover every workspace manifest
+        run: node scripts/ci/check-dockerfile-manifests.mjs
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

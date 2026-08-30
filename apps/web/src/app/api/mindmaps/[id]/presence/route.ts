@@ -79,7 +79,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             .insert(mindmapPresence)
             .values({
                 mindmapId: id,
-                userId: ctx.data.clerkUserId,
+                userId: ctx.data.authUserId,
                 displayName:
                     typeof body.displayName === "string" ? body.displayName.slice(0, 256) : null,
                 pageId: typeof body.pageId === "string" ? body.pageId.slice(0, 64) : null,
@@ -109,7 +109,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             .where(
                 and(
                     eq(mindmapPresence.mindmapId, id),
-                    ne(mindmapPresence.userId, ctx.data.clerkUserId),
+                    ne(mindmapPresence.userId, ctx.data.authUserId),
                     gt(mindmapPresence.lastSeenAt, cutoff)
                 )
             )
@@ -154,7 +154,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
             .where(
                 and(
                     eq(mindmapPresence.mindmapId, id),
-                    eq(mindmapPresence.userId, ctx.data.clerkUserId)
+                    eq(mindmapPresence.userId, ctx.data.authUserId)
                 )
             );
         return NextResponse.json({ left: true }, { status: 200 });

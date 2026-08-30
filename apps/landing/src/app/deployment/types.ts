@@ -19,7 +19,7 @@ export type DeploymentSection =
     | "main"
     | "docker"
     | "vercel"
-    | "clerk"
+    | "auth"
     | "inngest"
     | "langchain"
     | "exa"
@@ -70,8 +70,8 @@ export const SECTIONS: SectionConfig[] = [
         group: "Get started",
     },
     {
-        id: "clerk",
-        title: "Clerk Authentication",
+        id: "auth",
+        title: "Authentication",
         icon: React.createElement(Shield, { className: "w-4 h-4" }),
         badge: "Core",
         group: "Get started",

@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.authUserId}`
             );
 
             // Download the repository as a ZIP
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId: ctx.data.clerkUserId,
+                    userId: ctx.data.authUserId,
                     companyId: ctx.data.companyId,
                 },
                 documentName: `${owner}/${repo}`,

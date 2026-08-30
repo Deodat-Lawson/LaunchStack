@@ -12,6 +12,7 @@
 #   8000 — transcription service
 #   8002 — document-converter service
 #   8003 — adeu-docs-editing service
+#   8004 — gotenberg PDF-rendering service
 #
 # Profiles:
 #   (default)      — everything Local mode requires
@@ -19,10 +20,6 @@
 #                    PDFs/Office docs (~800MB RAM). Without it, /convert
 #                    returns a typed 503 and text-file ingestion still works.
 #   --profile backfill — on-demand data backfills
-
-x-app-build-args: &app-build-args
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-  # OPENAI_API_KEY removed — passed only as runtime env var, never baked into image layers
 
 # Environment shared by the app (command acceptance + reads) and the worker
 # (durable execution). One authority so the two processes can never disagree
@@ -60,8 +57,8 @@ x-shared-env: &shared-env
   TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
   # Auth (the worker inherits these transitively through the shared
   # composition root — see ADR-002 consequences; it never uses them)
-  CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+  BETTER_AUTH_URL: ${BETTER_AUTH_URL:-}
   # Services
   UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
   NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
@@ -105,8 +102,14 @@ x-shared-env: &shared-env
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+  # Gotenberg PDF rendering (ADR-009). Basic auth instead of X-API-Key —
+  # that is the auth Gotenberg ships — but the same fail-closed local-default
+  # contract as the other services: override the password in production.
+  GOTENBERG_SERVICE_URL: http://gotenberg:3000
+  GOTENBERG_SERVICE_USERNAME: launchstack
+  GOTENBERG_SERVICE_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}
   # Lets the document converter (and the app's own server-side fetches) read
-  # database-backed /api/files URLs, which otherwise require a Clerk session
+  # database-backed /api/files URLs, which otherwise require a session
   # they do not have. Signed by whichever process mints the URL, so app and
   # worker must share the same value. Database-backed ingestion fails closed
   # without it, so a local default is provided — override in production.
@@ -141,8 +144,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: migrate
-      args:
-        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -162,8 +163,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: builder
-      args:
-        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -252,6 +251,43 @@ services:
       retries: 5
       start_period: 120s
 
+  # Gotenberg PDF rendering (ADR-009): DOCX/Office → PDF via LibreOffice,
+  # HTML/Markdown → PDF via Chromium. Off-the-shelf image, like docling-serve.
+  # Auth fails closed (--api-enable-basic-auth + the shared-env pair), and the
+  # Chromium deny-list blocks fetches of private-network resources referenced
+  # from user HTML — the SSRF guard the other services express as
+  # ALLOWED_FETCH_ORIGINS. JavaScript is off: nothing the product renders
+  # needs it, and user HTML must not get a scripting engine.
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: pdr_ai_v2-gotenberg
+    restart: unless-stopped
+    command:
+      - gotenberg
+      - --api-timeout=60s
+      - --api-enable-basic-auth
+      - --chromium-disable-javascript=true
+      - --libreoffice-restart-after=10
+      # First alternative is Gotenberg's own default (block file: outside its
+      # /tmp working dir) — overriding the flag replaces it, so it is repeated.
+      - >-
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+    environment:
+      GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
+      GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}
+    ports:
+      - "8004:3000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS -u launchstack:$${GOTENBERG_API_BASIC_AUTH_PASSWORD} http://localhost:3000/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   # Document converter (ADR-004): routing decisions, vision classification,
   # PDF page rendering, and docling-backed parsing with typed
   # EvidenceDocument output. Replaces the old ocr-router + ocr-worker pair.
@@ -323,8 +359,6 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: runner
-      args:
-        <<: *app-build-args
     container_name: pdr_ai_v2-app
     restart: unless-stopped
     depends_on:
@@ -339,6 +373,8 @@ services:
       adeu-docs-editing:
         condition: service_started
       document-converter:
+        condition: service_started
+      gotenberg:
         condition: service_started
     volumes:
       # Chat model configuration is non-secret and edited far more often than

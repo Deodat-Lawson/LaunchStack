@@ -50,7 +50,7 @@ const DB_FILE_LEGACY = {
 };
 
 const VERIFIED_DATA: WorkspaceContext = {
-    clerkUserId: "clerk_abc",
+    authUserId: "clerk_abc",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",

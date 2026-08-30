@@ -1,6 +1,9 @@
-// The ESM-only unified/remark/rehype dependency graph that react-markdown
-// pulls in. These must be transformed by babel for jest to require them.
-const esmMarkdownDeps = [
+// ESM-only packages jest must run through babel: the unified/remark/rehype
+// graph that react-markdown pulls in, plus better-auth and its dependency
+// graph. Entries are regex fragments; scoped packages use a `[\w+.-]*` tail so
+// one spelling matches both the hoisted dir (@scope/name) and pnpm's
+// flattened store dir (@scope+name@version).
+const esmDeps = [
     "react-markdown",
     "remark-[\\w-]+",
     "rehype-[\\w-]+",
@@ -36,6 +39,16 @@ const esmMarkdownDeps = [
     "estree-util[\\w-]*",
     "hastscript",
     "web-namespaces",
+    "better-auth",
+    "@better-auth[\\w+.-]*",
+    "@better-fetch[\\w+.-]*",
+    "@noble[\\w+.-]*",
+    "nanostores",
+    "kysely",
+    "defu",
+    "rou3",
+    "uncrypto",
+    "jose",
 ];
 
 /** @type {import('jest').Config} */
@@ -45,12 +58,12 @@ export const config = {
     transform: {
         "^.+\\.(ts|tsx|js|jsx|mjs)$": ["babel-jest", { configFile: "./jest.babel.config.cjs" }],
     },
-    // pnpm resolves packages to node_modules/.pnpm/<name>@<version>/node_modules/<name>,
-    // so the allowlist needs one pattern for the .pnpm store path and one for
-    // plain layouts.
+    // Two patterns because pnpm: hoisted paths look like node_modules/<pkg>,
+    // the real files live under node_modules/.pnpm/<pkg>@<version>/… — a file
+    // is skipped when EITHER pattern matches, so both carry the same list.
     transformIgnorePatterns: [
-        `node_modules/(?!\\.pnpm|(?:${esmMarkdownDeps.join("|")})/)`,
-        `node_modules/\\.pnpm/(?!(?:${esmMarkdownDeps.join("|")})@)`,
+        `node_modules/(?!\\.pnpm|(?:${esmDeps.join("|")})/)`,
+        `node_modules/\\.pnpm/(?!(?:${esmDeps.join("|")})@)`,
     ],
     // Keep ~/* pointed at apps/web src. The @launchstack/* mappings resolve the
     // workspace subpaths (e.g. @launchstack/core/ocr/trigger → the TS source)
@@ -120,6 +133,7 @@ export const config = {
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
+        "^@launchstack/document-conversion-engine$": "<rootDir>/../../packages/document-conversion-engine/src/index.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",

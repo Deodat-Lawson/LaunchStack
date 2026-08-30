@@ -18,7 +18,7 @@ jest.mock("~/env", () => ({
         return mockEnv;
     },
 }));
-jest.mock("@clerk/nextjs/server", () => ({ auth: jest.fn() }));
+jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("~/server/db", () => ({
     db: {
         select: () => ({ from: () => ({ where: () => Promise.resolve(mockUserRows.rows) }) }),
@@ -32,7 +32,7 @@ jest.mock("~/server/services/agent-knowledge-connector", () => ({
 
 import path from "node:path";
 
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 
 import { GET, POST } from "~/app/api/connectors/agent-knowledge/route";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
@@ -41,7 +41,7 @@ import {
     runAgentKnowledgeSync,
 } from "~/server/services/agent-knowledge-connector";
 
-const mockAuth = auth as unknown as jest.Mock;
+const mockAuth = getServerSession as unknown as jest.Mock;
 const mockResolveCompany = resolveActiveCompanyForUser as jest.Mock;
 const mockPreview = previewAgentKnowledge as jest.Mock;
 const mockSync = runAgentKnowledgeSync as jest.Mock;
@@ -77,7 +77,7 @@ beforeEach(() => {
     mockEnv.server.AGENT_KNOWLEDGE_CONNECTOR_ENABLED = "true";
     mockEnv.server.AGENT_KNOWLEDGE_PROJECT_ROOTS = ROOT;
     mockUserRows.rows = [{ id: 1n, role: "owner", companyId: 7n }];
-    mockAuth.mockResolvedValue({ userId: "user_abc" });
+    mockAuth.mockResolvedValue({ user: { id: "user_abc" } });
     mockResolveCompany.mockResolvedValue(7n);
     mockPreview.mockResolvedValue({ roots: [], items: [], skipped: [], truncated: false });
     mockSync.mockResolvedValue({
@@ -99,7 +99,7 @@ beforeEach(() => {
 
 describe("POST /api/connectors/agent-knowledge", () => {
     it("rejects an unauthenticated call before touching the filesystem", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockAuth.mockResolvedValue(null);
 
         const response = await POST(postRequest({}));
 

@@ -248,7 +248,7 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
         mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: {
-                clerkUserId: "clerk_predictive_cache_test",
+                authUserId: "clerk_predictive_cache_test",
                 userPk: BigInt(1),
                 companyId: BigInt(companyId),
                 role: "owner",

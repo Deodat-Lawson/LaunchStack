@@ -1,7 +1,7 @@
 /**
  * Ownership checks for AI Chat resources.
  *
- * Chat rows are keyed by Clerk userId (no companyId on this table). Every
+ * Chat rows are keyed by auth userId (no companyId on this table). Every
  * by-id / chatId-scoped handler must call one of these helpers after
  * requireWorkspaceContext so a verified user cannot IDOR another user's chat.
  */
@@ -31,12 +31,12 @@ function notFound(entity = "Chat"): OwnedFailure {
 
 export async function assertChatOwnedByUser(
     chatId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string; userId: string }>> {
     const [chat] = await db
         .select({ id: agentAiChatbotChat.id, userId: agentAiChatbotChat.userId })
         .from(agentAiChatbotChat)
-        .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, clerkUserId)))
+        .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, authUserId)))
         .limit(1);
 
     if (!chat) return notFound("Chat");
@@ -45,7 +45,7 @@ export async function assertChatOwnedByUser(
 
 export async function assertTaskOwnedByUser(
     taskId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string; chatId: string }>> {
     const [row] = await db
         .select({
@@ -57,7 +57,7 @@ export async function assertTaskOwnedByUser(
             agentAiChatbotChat,
             and(
                 eq(agentAiChatbotChat.id, agentAiChatbotTask.chatId),
-                eq(agentAiChatbotChat.userId, clerkUserId)
+                eq(agentAiChatbotChat.userId, authUserId)
             )
         )
         .where(eq(agentAiChatbotTask.id, taskId))
@@ -69,7 +69,7 @@ export async function assertTaskOwnedByUser(
 
 export async function assertMessageOwnedByUser(
     messageId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string; chatId: string }>> {
     const [row] = await db
         .select({
@@ -81,7 +81,7 @@ export async function assertMessageOwnedByUser(
             agentAiChatbotChat,
             and(
                 eq(agentAiChatbotChat.id, agentAiChatbotMessage.chatId),
-                eq(agentAiChatbotChat.userId, clerkUserId)
+                eq(agentAiChatbotChat.userId, authUserId)
             )
         )
         .where(eq(agentAiChatbotMessage.id, messageId))
@@ -100,20 +100,20 @@ export async function assertMessageOwnedByUser(
 export async function assertToolCallParentsOwnedByUser(
     messageId: string | null | undefined,
     taskId: string | null | undefined,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ chatId: string }>> {
     if (!messageId && !taskId) return notFound("Tool call");
 
     let chatId: string | null = null;
 
     if (messageId) {
-        const owned = await assertMessageOwnedByUser(messageId, clerkUserId);
+        const owned = await assertMessageOwnedByUser(messageId, authUserId);
         if (!owned.success) return owned;
         chatId = owned.data.chatId;
     }
 
     if (taskId) {
-        const owned = await assertTaskOwnedByUser(taskId, clerkUserId);
+        const owned = await assertTaskOwnedByUser(taskId, authUserId);
         if (!owned.success) return owned;
         if (chatId !== null && chatId !== owned.data.chatId) {
             return notFound("Tool call");
@@ -133,9 +133,9 @@ export async function assertToolCallParentsOwnedByUser(
 export async function assertMessageInChat(
     messageId: string,
     chatId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string; chatId: string }>> {
-    const owned = await assertMessageOwnedByUser(messageId, clerkUserId);
+    const owned = await assertMessageOwnedByUser(messageId, authUserId);
     if (!owned.success) return owned;
 
     if (owned.data.chatId !== chatId) return notFound("Message");
@@ -145,7 +145,7 @@ export async function assertMessageInChat(
 
 export async function assertToolCallOwnedByUser(
     toolCallId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string }>> {
     const [toolCall] = await db
         .select({
@@ -164,7 +164,7 @@ export async function assertToolCallOwnedByUser(
     const owned = await assertToolCallParentsOwnedByUser(
         toolCall.messageId,
         toolCall.taskId,
-        clerkUserId
+        authUserId
     );
     if (!owned.success) return owned;
 
@@ -173,7 +173,7 @@ export async function assertToolCallOwnedByUser(
 
 export async function assertStepOwnedByUser(
     stepId: string,
-    clerkUserId: string
+    authUserId: string
 ): Promise<OwnedResult<{ id: string; taskId: string }>> {
     const [step] = await db
         .select({
@@ -186,7 +186,7 @@ export async function assertStepOwnedByUser(
 
     if (!step) return notFound("Execution step");
 
-    const owned = await assertTaskOwnedByUser(step.taskId, clerkUserId);
+    const owned = await assertTaskOwnedByUser(step.taskId, authUserId);
     if (!owned.success) return owned;
 
     return { success: true, data: step };

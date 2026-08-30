@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         const { chatId, memoryType, key, value, importance, embedding, expiresAt } =
             validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const memoryId = randomUUID();
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "chatId is required" }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const whereConditions = memoryType

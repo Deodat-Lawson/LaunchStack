@@ -21,7 +21,7 @@ export async function GET(
     try {
         const { taskId } = await params;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const [task] = await db
@@ -62,7 +62,7 @@ export async function PATCH(
     try {
         const { taskId } = await params;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateTaskSchema);

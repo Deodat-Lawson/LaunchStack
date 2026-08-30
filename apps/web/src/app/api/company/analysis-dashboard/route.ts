@@ -67,7 +67,7 @@ export async function GET() {
         await db
             .update(users)
             .set({ lastActiveAt: new Date() })
-            .where(eq(users.userId, ctx.data.clerkUserId));
+            .where(eq(users.userId, ctx.data.authUserId));
 
         if (!isManagementRole(ctx.data.role)) {
             outcome = "forbidden";

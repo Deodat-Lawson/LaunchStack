@@ -53,8 +53,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Windows, but being explicit keeps the Docker path deterministic).
 ENV STANDALONE_BUILD=1
 
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
 
 RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
     pnpm --filter @launchstack/web build

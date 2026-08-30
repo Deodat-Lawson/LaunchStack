@@ -99,7 +99,7 @@ export async function POST(request: Request) {
             baseMetadata,
             debug,
             isIncremental,
-            ctx.data.clerkUserId
+            ctx.data.authUserId
         );
     } catch (error) {
         console.error("[company-metadata] POST /extract error:", error);

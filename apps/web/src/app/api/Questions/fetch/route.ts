@@ -50,7 +50,7 @@ export async function POST(request: Request) {
             .from(ChatHistory)
             .where(
                 and(
-                    eq(ChatHistory.UserId, ctx.data.clerkUserId),
+                    eq(ChatHistory.UserId, ctx.data.authUserId),
                     eq(ChatHistory.documentId, BigInt(targetDocument.id))
                 )
             );

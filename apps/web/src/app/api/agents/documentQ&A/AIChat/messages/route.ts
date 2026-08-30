@@ -21,11 +21,11 @@ export async function POST(request: NextRequest) {
         if (!validation.success) return validation.response;
         const { chatId, role, content, messageType, parentMessageId } = validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         if (parentMessageId) {
-            const parent = await assertMessageInChat(parentMessageId, chatId, ctx.data.clerkUserId);
+            const parent = await assertMessageInChat(parentMessageId, chatId, ctx.data.authUserId);
             if (!parent.success) return parent.response;
         }
 
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "chatId is required" }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
         const messages = await db

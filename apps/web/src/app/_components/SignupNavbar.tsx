@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useAuth, useUser, UserButton } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-client";
+import { UserMenu } from "~/components/UserMenu";
 import styles from "../../styles/navbar.module.css";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
@@ -25,20 +26,10 @@ export function SignupNavbar() {
                         {isLoaded && isSignedIn && user && (
                             <div className={styles.userSection}>
                                 <span className={styles.userName}>
-                                    {user.fullName ??
-                                        user.primaryEmailAddress?.emailAddress ??
-                                        user.username ??
-                                        "User"}
+                                    {user.name.trim() || user.email || "User"}
                                 </span>
-                                <UserButton
-                                    // A just-signed-out user is a public-site audience.
-                                    afterSignOutUrl={LANDING_URL}
-                                    appearance={{
-                                        elements: {
-                                            avatarBox: "w-8 h-8",
-                                        },
-                                    }}
-                                />
+                                {/* A just-signed-out user is a public-site audience. */}
+                                <UserMenu afterSignOutUrl={LANDING_URL} />
                             </div>
                         )}
                     </div>

@@ -284,6 +284,8 @@ const eslintConfig = [
                 "search",
                 "orchestration",
                 "editing",
+                "document-conversion-engine",
+                "google-drive",
                 "collab",
                 "schema-generator",
                 "pipelines",
@@ -429,6 +431,34 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            // @launchstack/document-conversion-engine — the Gotenberg client (ADR-009).
+            // Bottom-of-graph like collab, and unlike the editing client it
+            // has no env exception: connection settings are injected by the
+            // composition root.
+            {
+                files: ["packages/document-conversion-engine/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/document-conversion-engine"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            {
+                files: ["packages/google-drive/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/google-drive"),
                     ]),
                     ...noEnv,
                 },

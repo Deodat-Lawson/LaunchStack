@@ -1,11 +1,11 @@
-jest.mock("@clerk/nextjs/server", () => ({ auth: jest.fn() }));
+jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("~/server/founder-weekly-review/actor-resolver", () => ({
     productionFounderWeeklyReviewActorResolver: { resolve: jest.fn() },
 }));
 jest.mock("~/server/founder-weekly-review/dispatch-service", () => ({
     retryRunWithDispatch: jest.fn(),
 }));
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import { createFounderWeeklyReviewGetHandler } from "~/app/api/founder-weekly-reviews/[runId]/get-handler";
 import { createFounderWeeklyReviewRetryPostHandler } from "~/app/api/founder-weekly-reviews/[runId]/retry/retry-handler";
 import {
@@ -14,7 +14,7 @@ import {
     FounderWeeklyReviewNotFoundError,
     type FounderWeeklyReviewRunRecord,
 } from "@launchstack/pipelines/founder-weekly-review";
-const mockAuth = auth as unknown as jest.Mock;
+const mockAuth = getServerSession as unknown as jest.Mock;
 const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" as const };
 function run(
     status: FounderWeeklyReviewRunRecord["status"] = "queued"
@@ -66,7 +66,7 @@ function run(
     };
 }
 describe("Founder Weekly Review read and retry route handlers", () => {
-    beforeEach(() => mockAuth.mockResolvedValue({ userId: "u" }));
+    beforeEach(() => mockAuth.mockResolvedValue({ user: { id: "u" } }));
     it("read authenticates before lookup and returns safe status payloads", async () => {
         const getRun = jest.fn().mockResolvedValue(run("failed"));
         const handler = createFounderWeeklyReviewGetHandler({
@@ -83,7 +83,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
         expect(JSON.stringify(json)).not.toContain("provider secret");
     });
     it("read returns 401 without lookup and maps company-scoped absence to 404", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockAuth.mockResolvedValue(null);
         const getRun = jest.fn();
         const handler = createFounderWeeklyReviewGetHandler({
             actorResolver: { resolve: jest.fn() },
@@ -94,7 +94,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
                 .status
         ).toBe(401);
         expect(getRun).not.toHaveBeenCalled();
-        mockAuth.mockResolvedValue({ userId: "u" });
+        mockAuth.mockResolvedValue({ user: { id: "u" } });
         const missing = createFounderWeeklyReviewGetHandler({
             actorResolver: { resolve: jest.fn().mockResolvedValue(actor) },
             getRun: jest.fn().mockRejectedValue(new FounderWeeklyReviewNotFoundError("x")),
@@ -178,7 +178,7 @@ describe("Founder Weekly Review read and retry route handlers", () => {
         expect(incrementRetry).toHaveBeenCalledTimes(1);
     });
     it("retry rejects auth before mutation or notification", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockAuth.mockResolvedValue(null);
         const retryRunWithDispatch = jest.fn(),
             sendDispatchRequested = jest.fn(),
             incrementRetry = jest.fn();

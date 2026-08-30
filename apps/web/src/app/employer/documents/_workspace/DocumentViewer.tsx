@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
+import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
@@ -614,6 +615,9 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
+                    {typeof source.documentId === "number" && source.documentId > 0 && (
+                        <GoogleDriveBanner documentId={source.documentId} />
+                    )}
                     {viewingOld && (
                         <div
                             style={{

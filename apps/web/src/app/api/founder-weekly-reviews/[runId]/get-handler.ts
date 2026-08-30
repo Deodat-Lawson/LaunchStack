@@ -3,7 +3,7 @@
  * files may only export route fields — the factory is exported for
  * dependency-injected tests (read-retry-route.test.ts).
  */
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
 import type { FounderWeeklyReviewUserService } from "@launchstack/pipelines/founder-weekly-review";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
@@ -21,7 +21,8 @@ export function createFounderWeeklyReviewGetHandler(deps: FounderWeeklyReviewGet
         _request: Request,
         { params }: { params: Promise<{ runId: string }> }
     ) {
-        const { userId } = await auth();
+        const session = await getServerSession();
+        const userId = session?.user.id;
         if (!userId) return fail("Unauthorized", 401);
         try {
             const actor = await deps.actorResolver.resolve(userId);

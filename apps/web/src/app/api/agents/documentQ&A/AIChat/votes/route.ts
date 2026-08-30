@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
         if (!validation.success) return validation.response;
         const { chatId, messageId, isUpvoted, feedback } = validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
-        const message = await assertMessageInChat(messageId, chatId, ctx.data.clerkUserId);
+        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId);
         if (!message.success) return message.response;
 
         // Check if vote already exists
@@ -99,10 +99,10 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
         if (!owned.success) return owned.response;
 
-        const message = await assertMessageInChat(messageId, chatId, ctx.data.clerkUserId);
+        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId);
         if (!message.success) return message.response;
 
         const [vote] = await db

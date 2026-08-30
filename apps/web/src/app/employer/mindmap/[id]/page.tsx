@@ -2,7 +2,7 @@
 
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "~/lib/auth-client";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -111,8 +111,7 @@ export default function MindmapEditorPage({ params }: { params: Promise<{ id: st
         );
     }
 
-    const author =
-        user?.fullName ?? user?.primaryEmailAddress?.emailAddress ?? user?.username ?? "You";
+    const author = user?.name?.trim() ?? user?.email ?? "You";
 
     return (
         <MindmapEditor

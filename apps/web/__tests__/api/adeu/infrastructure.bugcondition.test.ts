@@ -21,11 +21,20 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
 
         // FIX: OPENAI_API_KEY should NOT be in the build args anchor as an actual key-value pair.
         // It should only be a runtime env var, never baked into image layers.
+        //
+        // The anchor itself became empty and was deleted when the auth
+        // migration removed its last entry (the Clerk publishable key), so
+        // the strongest form of the fix now holds: no build args exist for
+        // a secret to leak into. Assert both shapes so the anchor coming
+        // back with OPENAI_API_KEY in it would still fail.
         const buildArgsSection =
             /x-app-build-args:.*?&app-build-args\n([\s\S]*?)(?=\nservices:|\n\S)/.exec(content);
-        expect(buildArgsSection).not.toBeNull();
+        if (buildArgsSection === null) {
+            expect(content).not.toContain("x-app-build-args");
+            return;
+        }
 
-        const buildArgs = buildArgsSection![1]!;
+        const buildArgs = buildArgsSection[1]!;
         // Filter out comment lines (lines starting with #) before checking
         const nonCommentLines = buildArgs
             .split("\n")

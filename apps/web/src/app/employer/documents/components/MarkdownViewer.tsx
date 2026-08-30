@@ -11,11 +11,21 @@ import type { ElementContent } from "hast";
 import { Loader2, AlertTriangle, RotateCw, Copy, Check, List, Code2, BookOpen } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
+import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
 import { CodeViewer } from "./CodeViewer";
 
 interface MarkdownViewerProps {
     url: string;
     title: string;
+    /** Cited passage to locate, scroll to, and highlight in the rendered view. */
+    highlight?: ViewerHighlight | null;
+}
+
+interface HighlightRect {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
 }
 
 interface TocItem {
@@ -149,7 +159,7 @@ function MermaidBlock({ code }: { code: string }) {
     return <div className="md-mermaid" dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
-export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
+export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerProps) {
     const [content, setContent] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -158,6 +168,7 @@ export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
     const [tocOpen, setTocOpen] = useState(true);
     const [toc, setToc] = useState<TocItem[]>([]);
     const [activeHeading, setActiveHeading] = useState<string | null>(null);
+    const [citeRects, setCiteRects] = useState<HighlightRect[]>([]);
     const articleRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -199,6 +210,41 @@ export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
         });
         setToc(items);
     }, [content, loading, viewMode]);
+
+    // Locate the cited passage in the rendered document, draw overlay rects
+    // over it, and scroll it into view. Rects are positioned relative to the
+    // article so they track the text through container scrolling.
+    useEffect(() => {
+        if (!highlight || loading || viewMode !== "rendered") {
+            setCiteRects([]);
+            return;
+        }
+        const root = articleRef.current;
+        if (!root) return;
+        const range = findTextRange(root, citationNeedles(highlight.text, highlight.matchText));
+        if (!range) {
+            setCiteRects([]);
+            return;
+        }
+        const rootRect = root.getBoundingClientRect();
+        const rects = Array.from(range.getClientRects())
+            .filter(r => r.width > 0 && r.height > 0)
+            .map(r => ({
+                top: r.top - rootRect.top,
+                left: r.left - rootRect.left,
+                width: r.width,
+                height: r.height,
+            }));
+        setCiteRects(rects);
+
+        const startEl =
+            range.startContainer.nodeType === Node.ELEMENT_NODE
+                ? (range.startContainer as Element)
+                : range.startContainer.parentElement;
+        // Instant, not smooth: a citation can sit thousands of pixels down a
+        // long document, and an animated scroll there is slow and disorienting.
+        startEl?.scrollIntoView?.({ block: "center" });
+    }, [highlight, content, loading, viewMode]);
 
     // Scroll spy: light up the outline entry for the heading in view.
     useEffect(() => {
@@ -369,6 +415,19 @@ export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 <div ref={scrollRef} className="min-w-0 flex-1 overflow-y-auto">
                     <div ref={articleRef} className="md-doc">
+                        {citeRects.map((r, i) => (
+                            <div
+                                key={`cite-${i}`}
+                                aria-hidden
+                                className="md-cite-highlight"
+                                style={{
+                                    top: r.top,
+                                    left: r.left,
+                                    width: r.width,
+                                    height: r.height,
+                                }}
+                            />
+                        ))}
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm, remarkMath]}
                             rehypePlugins={[rehypeKatex]}
@@ -460,6 +519,7 @@ export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
             <style jsx global>{`
                 /* ── Document typography ─────────────────────────────── */
                 .md-doc {
+                    position: relative;
                     max-width: 780px;
                     margin: 0 auto;
                     padding: 40px 48px 96px;
@@ -467,6 +527,28 @@ export function MarkdownViewer({ url, title }: MarkdownViewerProps) {
                     line-height: 1.75;
                     color: var(--ink-2);
                     overflow-wrap: break-word;
+                }
+                .md-doc .md-cite-highlight {
+                    position: absolute;
+                    background: oklch(0.85 0.16 95 / 0.4);
+                    outline: 1.5px solid oklch(0.7 0.15 95);
+                    border-radius: 3px;
+                    pointer-events: none;
+                    mix-blend-mode: multiply;
+                    animation: md-cite-pulse 900ms ease-out 1;
+                }
+                [data-theme="dark"] .md-doc .md-cite-highlight {
+                    background: oklch(0.75 0.15 95 / 0.28);
+                    outline-color: oklch(0.75 0.15 95 / 0.7);
+                    mix-blend-mode: normal;
+                }
+                @keyframes md-cite-pulse {
+                    0% {
+                        outline-width: 4px;
+                    }
+                    100% {
+                        outline-width: 1.5px;
+                    }
                 }
                 .md-doc h1,
                 .md-doc h2,

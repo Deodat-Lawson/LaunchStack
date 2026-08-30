@@ -1,6 +1,8 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { MarkdownViewer } from "~/app/employer/documents/components/MarkdownViewer";
+import type { ViewerHighlight } from "~/lib/find-text-range";
 
 /**
  * Local harness for the markdown document viewer. The fixture exercises every
@@ -88,10 +90,50 @@ export async function retrieve(query: string, k = 10): Promise<Chunk[]> {
 
 const DATA_URL = `data:text/markdown;charset=utf-8,${encodeURIComponent(FIXTURE)}`;
 
+/**
+ * Simulated citation snippets, raw-chunk-style: whitespace-normalized source
+ * markdown with the syntax markers the renderer consumes, exactly what the
+ * retrieval pipeline hands the viewer.
+ */
+const SIMULATED_CITATIONS = [
+    "The corpus is only as useful as the day-one reading experience. If the first upload looks broken, nobody adds a second one.",
+    "| Recall@10 | 0.71 | 0.80 |",
+    "Re-embedding storms when a large folder is renamed",
+] as const;
+
 export function MarkdownViewerPreview() {
+    const [highlight, setHighlight] = useState<ViewerHighlight | null>(null);
+    const nonce = useRef(0);
+    const citeIndex = useRef(0);
+
     return (
         <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-            <MarkdownViewer url={DATA_URL} title="q3-retrieval-plan.md" />
+            <button
+                type="button"
+                data-testid="simulate-citation"
+                onClick={() => {
+                    nonce.current += 1;
+                    const text =
+                        SIMULATED_CITATIONS[citeIndex.current % SIMULATED_CITATIONS.length]!;
+                    citeIndex.current += 1;
+                    setHighlight({ text, nonce: nonce.current });
+                }}
+                style={{
+                    position: "fixed",
+                    right: 16,
+                    bottom: 16,
+                    zIndex: 50,
+                    padding: "8px 14px",
+                    borderRadius: 8,
+                    background: "var(--accent)",
+                    color: "white",
+                    fontSize: 12,
+                    fontWeight: 600,
+                }}
+            >
+                Simulate citation click
+            </button>
+            <MarkdownViewer url={DATA_URL} title="q3-retrieval-plan.md" highlight={highlight} />
         </div>
     );
 }

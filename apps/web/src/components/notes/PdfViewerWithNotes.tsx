@@ -10,6 +10,11 @@ import {
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import {
+    citationNeedles,
+    findTextRange,
+    type ViewerHighlight,
+} from "~/lib/find-text-range";
 
 /**
  * react-pdf ships `pdfjs-dist` as a transitive dep but expects the host app to
@@ -81,6 +86,12 @@ interface Props {
     ) => void;
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
+    /**
+     * A cited passage to locate in the text layer, scroll to, and highlight.
+     * The page hint narrows the search; without one every page is scanned.
+     * Located once per `nonce` — a repeat click re-runs the jump.
+     */
+    citationHighlight?: ViewerHighlight | null;
 }
 
 interface SelectionDraft {
@@ -105,6 +116,7 @@ export function PdfViewerWithNotes({
     onCreateAnchoredNote,
     onAiCapture,
     onNotePinClick,
+    citationHighlight,
 }: Props) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageGeometry, setPageGeometry] = useState<Map<number, PageGeometry>>(
@@ -114,6 +126,15 @@ export function PdfViewerWithNotes({
         null,
     );
     const [loadError, setLoadError] = useState<string | null>(null);
+    /** Quads for the located citation passage, rendered as a distinct overlay. */
+    const [citeOverlay, setCiteOverlay] = useState<{
+        page: number;
+        quads: PdfQuad[];
+    } | null>(null);
+    /** Bumped whenever a page's text layer finishes rendering — retriggers the locate effect. */
+    const [textLayerVersion, setTextLayerVersion] = useState(0);
+    const locatedNonce = useRef<number | null>(null);
+    const scrolledNonce = useRef<number | null>(null);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
@@ -156,6 +177,86 @@ export function PdfViewerWithNotes({
             el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     }, [scrollToNoteId, notes]);
+
+    // Locate a cited passage. Text layers render asynchronously page by page,
+    // so this effect re-runs on every textLayerVersion bump until the passage
+    // is found (or the citation changes). The page hint is searched first and
+    // scrolled to immediately so the user sees movement while layers render.
+    useEffect(() => {
+        if (!citationHighlight) {
+            setCiteOverlay(null);
+            locatedNonce.current = null;
+            scrolledNonce.current = null;
+            return;
+        }
+        if (locatedNonce.current === citationHighlight.nonce) return;
+
+        // Provisional scroll to the hinted page, once per citation.
+        const hintedPage = citationHighlight.page ?? null;
+        if (hintedPage && scrolledNonce.current !== citationHighlight.nonce) {
+            const el = pageRefs.current.get(hintedPage);
+            if (el) {
+                el.scrollIntoView({ block: "start" });
+                scrolledNonce.current = citationHighlight.nonce;
+            }
+        }
+
+        const needles = citationNeedles(
+            citationHighlight.text,
+            citationHighlight.matchText,
+        );
+        const candidatePages: number[] = hintedPage
+            ? [
+                  hintedPage,
+                  ...Array.from(pageRefs.current.keys()).filter(
+                      (p) => p !== hintedPage,
+                  ),
+              ]
+            : Array.from(pageRefs.current.keys()).sort((a, b) => a - b);
+
+        for (const pageNumber of candidatePages) {
+            const pageEl = pageRefs.current.get(pageNumber);
+            const geom = pageGeometry.get(pageNumber);
+            if (!pageEl || !geom) continue;
+            const textLayer = pageEl.querySelector(
+                ".react-pdf__Page__textContent",
+            );
+            if (!textLayer) continue;
+
+            const range = findTextRange(textLayer, needles);
+            if (!range) continue;
+
+            const pageRect = pageEl.getBoundingClientRect();
+            const rects = Array.from(range.getClientRects()).filter(
+                (r) => r.width > 0 && r.height > 0,
+            );
+            if (rects.length === 0) continue;
+
+            const quads: PdfQuad[] = rects.map((r) => [
+                (r.left - pageRect.left) / geom.width,
+                (r.top - pageRect.top) / geom.height,
+                (r.right - pageRect.left) / geom.width,
+                (r.bottom - pageRect.top) / geom.height,
+            ]);
+
+            locatedNonce.current = citationHighlight.nonce;
+            setCiteOverlay({ page: pageNumber, quads });
+
+            // Jump the first highlight rect into the upper third. Instant,
+            // not smooth — the passage can be many pages away.
+            const container = containerRef.current;
+            const firstQuad = quads[0];
+            if (container && firstQuad) {
+                container.scrollTo({
+                    top:
+                        pageEl.offsetTop +
+                        firstQuad[1] * geom.height -
+                        container.clientHeight / 3,
+                });
+            }
+            return;
+        }
+    }, [citationHighlight, pageGeometry, textLayerVersion]);
 
     // Capture text selections as anchor candidates. A selection is valid when
     // it falls entirely within one rendered page and has at least one rect
@@ -305,11 +406,19 @@ export function PdfViewerWithNotes({
                                         else pageRefs.current.delete(pageNum);
                                     }}
                                     onRenderSuccess={onPageRenderSuccess}
+                                    onTextLayerReady={() =>
+                                        setTextLayerVersion((v) => v + 1)
+                                    }
                                     notesOnPage={notes.filter(
                                         (n) => n.page === pageNum && n.quads.length > 0,
                                     )}
                                     highlightedNoteId={scrollToNoteId ?? null}
                                     onNotePinClick={onNotePinClick}
+                                    citeQuads={
+                                        citeOverlay?.page === pageNum
+                                            ? citeOverlay.quads
+                                            : null
+                                    }
                                 />
                             ),
                         )}
@@ -421,6 +530,10 @@ interface PdfPageProps {
     notesOnPage: PdfNoteLite[];
     highlightedNoteId: number | null;
     onNotePinClick?: (noteId: number) => void;
+    /** Fires when this page's text layer has rendered and is searchable. */
+    onTextLayerReady: () => void;
+    /** Located citation quads to paint on this page, if any. */
+    citeQuads: PdfQuad[] | null;
 }
 
 function PdfPage({
@@ -430,6 +543,8 @@ function PdfPage({
     notesOnPage,
     highlightedNoteId,
     onNotePinClick,
+    onTextLayerReady,
+    citeQuads,
 }: PdfPageProps) {
     const [size, setSize] = useState<{ w: number; h: number } | null>(null);
 
@@ -459,6 +574,7 @@ function PdfPage({
                         height: page.height,
                     });
                 }}
+                onRenderTextLayerSuccess={onTextLayerReady}
             />
             {size &&
                 notesOnPage.map((note, idx) => (
@@ -472,6 +588,27 @@ function PdfPage({
                         onClick={() => onNotePinClick?.(note.id)}
                     />
                 ))}
+            {size &&
+                citeQuads?.map((q, i) => {
+                    const [x1, y1, x2, y2] = q;
+                    return (
+                        <div
+                            key={`cite-${i}`}
+                            style={{
+                                position: "absolute",
+                                left: x1 * size.w,
+                                top: y1 * size.h,
+                                width: (x2 - x1) * size.w,
+                                height: (y2 - y1) * size.h,
+                                background: "oklch(0.85 0.16 95 / 0.4)",
+                                outline: "1.5px solid oklch(0.7 0.15 95)",
+                                borderRadius: 2,
+                                pointerEvents: "none",
+                                mixBlendMode: "multiply",
+                            }}
+                        />
+                    );
+                })}
         </div>
     );
 }

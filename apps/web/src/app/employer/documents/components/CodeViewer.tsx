@@ -5,11 +5,14 @@ import "highlight.js/styles/github-dark-dimmed.min.css";
 import { Loader2, AlertTriangle, RotateCw, Copy, Check, WrapText, Hash } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
+import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
 
 interface CodeViewerProps {
     url: string;
     title: string;
     mimeType?: string;
+    /** Cited passage to locate, scroll to, and highlight. */
+    highlight?: ViewerHighlight | null;
 }
 
 const EXTENSION_TO_HLJS: Record<string, string> = {
@@ -70,7 +73,7 @@ function detectExtension(title: string, url: string): string {
     return match?.[1]?.toLowerCase() ?? "";
 }
 
-export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps) {
+export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }: CodeViewerProps) {
     const [code, setCode] = useState<string>("");
     const [highlightedHtml, setHighlightedHtml] = useState<string>("");
     const [loading, setLoading] = useState(true);
@@ -78,6 +81,9 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
     const [copied, setCopied] = useState(false);
     const [wordWrap, setWordWrap] = useState(false);
     const [showLineNumbers, setShowLineNumbers] = useState(true);
+    const [citeRects, setCiteRects] = useState<
+        { top: number; left: number; width: number; height: number }[]
+    >([]);
     const codeRef = useRef<HTMLPreElement>(null);
 
     const language = detectLanguage(title, url);
@@ -110,6 +116,38 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
     useEffect(() => {
         void fetchCode();
     }, [fetchCode]);
+
+    // Locate a cited passage in the rendered code, overlay it, scroll to it.
+    // Re-measures when layout-affecting toggles (wrap, line numbers) change.
+    useEffect(() => {
+        if (!highlight || loading) {
+            setCiteRects([]);
+            return;
+        }
+        const pre = codeRef.current;
+        if (!pre) return;
+        const range = findTextRange(pre, citationNeedles(highlight.text, highlight.matchText));
+        if (!range) {
+            setCiteRects([]);
+            return;
+        }
+        const preRect = pre.getBoundingClientRect();
+        setCiteRects(
+            Array.from(range.getClientRects())
+                .filter(r => r.width > 0 && r.height > 0)
+                .map(r => ({
+                    top: r.top - preRect.top,
+                    left: r.left - preRect.left,
+                    width: r.width,
+                    height: r.height,
+                }))
+        );
+        const startEl =
+            range.startContainer.nodeType === Node.ELEMENT_NODE
+                ? (range.startContainer as Element)
+                : range.startContainer.parentElement;
+        startEl?.scrollIntoView?.({ block: "center" });
+    }, [highlight, loading, highlightedHtml, wordWrap, showLineNumbers]);
 
     const handleCopy = useCallback(async () => {
         try {
@@ -227,8 +265,25 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
             <div className="custom-code-scrollbar flex-1 overflow-auto">
                 <pre
                     ref={codeRef}
-                    className={`m-0 p-0 font-mono text-[13px] leading-[1.6] ${wordWrap ? "whitespace-pre-wrap break-words" : "whitespace-pre"}`}
+                    className={`relative m-0 p-0 font-mono text-[13px] leading-[1.6] ${wordWrap ? "whitespace-pre-wrap break-words" : "whitespace-pre"}`}
                 >
+                    {citeRects.map((r, i) => (
+                        <span
+                            key={`cite-${i}`}
+                            aria-hidden
+                            style={{
+                                position: "absolute",
+                                top: r.top,
+                                left: r.left,
+                                width: r.width,
+                                height: r.height,
+                                background: "oklch(0.75 0.15 95 / 0.25)",
+                                outline: "1.5px solid oklch(0.75 0.15 95 / 0.7)",
+                                borderRadius: 3,
+                                pointerEvents: "none",
+                            }}
+                        />
+                    ))}
                     <code className={`hljs language-${language}`}>
                         {code.split("\n").map((line, i) => (
                             <div
@@ -236,7 +291,10 @@ export function CodeViewer({ url, title, mimeType: _mimeType }: CodeViewerProps)
                                 className="flex transition-colors duration-75 hover:bg-[var(--code-bg-2)]"
                             >
                                 {showLineNumbers && (
-                                    <span className="inline-block min-w-[3.5rem] flex-shrink-0 select-none border-r border-[var(--code-line)] pl-4 pr-4 text-right text-[var(--code-ink-muted)]">
+                                    <span
+                                        aria-hidden
+                                        className="inline-block min-w-[3.5rem] flex-shrink-0 select-none border-r border-[var(--code-line)] pl-4 pr-4 text-right text-[var(--code-ink-muted)]"
+                                    >
                                         {i + 1}
                                     </span>
                                 )}

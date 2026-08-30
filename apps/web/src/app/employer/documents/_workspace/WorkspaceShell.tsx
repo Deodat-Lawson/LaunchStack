@@ -23,7 +23,14 @@ import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
 import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
-import type { ComposerSend, ThreadMessage, WorkspaceFolder, WorkspaceSource } from "./types";
+import type {
+    CitationHighlight,
+    ComposerSend,
+    ThreadMessage,
+    ThreadReference,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "./types";
 
 /**
  * Legacy `?view=X` URL params that used to drive the deleted DocumentViewerShell.
@@ -135,6 +142,9 @@ export function WorkspaceShell() {
     const [newFolderOpen, setNewFolderOpen] = useState(false);
     const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
     const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
+    /** Cited passage to locate + highlight when the viewer was opened from a citation. */
+    const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
+    const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
@@ -253,16 +263,18 @@ export function WorkspaceShell() {
 
             if (data.success) {
                 const citations = (data.references ?? [])
-                    .map(r => {
+                    .map((r): ThreadReference | null => {
                         const src = sources.find(s => s.documentId === Number(r.documentId));
                         return src
                             ? {
                                   sourceId: src.id,
                                   snippet: r.snippet ?? "",
+                                  page: r.page,
+                                  matchText: r.matchText,
                               }
                             : null;
                     })
-                    .filter((c): c is { sourceId: string; snippet: string } => Boolean(c))
+                    .filter((c): c is ThreadReference => Boolean(c))
                     .slice(0, 4);
 
                 setThread(prev => [
@@ -292,8 +304,26 @@ export function WorkspaceShell() {
     );
 
     const handleOpenSource = useCallback((source: WorkspaceSource) => {
+        setViewerHighlight(null);
         setViewerSource(source);
     }, []);
+
+    /** A citation click opens the cited document with the passage highlighted. */
+    const handleOpenCitation = useCallback(
+        (cite: ThreadReference) => {
+            const src = sources.find(s => s.id === cite.sourceId);
+            if (!src) return;
+            citationNonce.current += 1;
+            setViewerHighlight({
+                text: cite.snippet,
+                matchText: cite.matchText,
+                page: cite.page ?? null,
+                nonce: citationNonce.current,
+            });
+            setViewerSource(src);
+        },
+        [sources]
+    );
 
     const handleRenameDoc = useCallback(
         async (docId: number, nextTitle: string): Promise<boolean> => {
@@ -565,6 +595,7 @@ export function WorkspaceShell() {
                     thread={thread}
                     sendMessage={sendMessage}
                     isSending={isSending}
+                    onOpenCitation={handleOpenCitation}
                     onOpenAdd={() => setAddOpen(true)}
                     onNewChat={() => setThread([])}
                     openPalette={() => setPalOpen(true)}
@@ -723,7 +754,11 @@ export function WorkspaceShell() {
             {viewerSource && (
                 <DocumentViewer
                     source={viewerSource}
-                    onClose={() => setViewerSource(null)}
+                    highlight={viewerHighlight}
+                    onClose={() => {
+                        setViewerSource(null);
+                        setViewerHighlight(null);
+                    }}
                     onRename={handleRenameDoc}
                     onDelete={id => void handleDeleteDoc(id)}
                     onAskAbout={handleAskAbout}

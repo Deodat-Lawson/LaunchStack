@@ -16,6 +16,7 @@ import {
     IconArrowUp,
     IconBolt,
     IconBrain,
+    IconChevronRight,
     IconFile,
     IconGlobe,
     IconGraph,
@@ -37,6 +38,7 @@ import {
     type ComposerSend,
     type EphemeralAttachment,
     type ThreadMessage,
+    type ThreadReference,
     type WorkspaceSource,
 } from "./types";
 
@@ -150,9 +152,11 @@ function renderText(txt: string) {
 interface MessageProps {
     msg: ThreadMessage;
     sources: WorkspaceSource[];
+    /** Opens the cited document scrolled to (and highlighting) the cited passage. */
+    onOpenCitation?: (cite: ThreadReference) => void;
 }
 
-function Message({ msg, sources }: MessageProps) {
+function Message({ msg, sources, onOpenCitation }: MessageProps) {
     const isUser = msg.role === "user";
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
@@ -285,13 +289,30 @@ function Message({ msg, sources }: MessageProps) {
                         const meta = SOURCE_META[s.type];
                         const Icon = meta.Icon;
                         return (
-                            <div
+                            <button
                                 key={i}
+                                type="button"
+                                onClick={() => onOpenCitation?.(c)}
+                                title="Open the source at this passage"
                                 style={{
                                     display: "flex",
+                                    alignItems: "flex-start",
                                     gap: 10,
-                                    padding: "8px 0",
+                                    width: "100%",
+                                    textAlign: "left",
+                                    padding: "8px 8px",
+                                    margin: "0 -8px",
+                                    borderRadius: 8,
                                     borderTop: i > 0 ? "1px solid var(--line)" : "none",
+                                    background: "transparent",
+                                    cursor: onOpenCitation ? "pointer" : "default",
+                                    transition: "background 120ms",
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.background = "var(--panel)";
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.background = "transparent";
                                 }}
                             >
                                 <div
@@ -311,15 +332,42 @@ function Message({ msg, sources }: MessageProps) {
                                 >
                                     <Icon size={12} />
                                 </div>
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
                                     <div
                                         style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 6,
                                             fontSize: 12,
                                             fontWeight: 600,
                                             color: "var(--ink)",
                                         }}
                                     >
-                                        {s.title}
+                                        <span
+                                            style={{
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                            }}
+                                        >
+                                            {s.title}
+                                        </span>
+                                        {typeof c.page === "number" && (
+                                            <span
+                                                className="mono"
+                                                style={{
+                                                    flexShrink: 0,
+                                                    fontSize: 10,
+                                                    fontWeight: 600,
+                                                    padding: "1px 6px",
+                                                    borderRadius: 4,
+                                                    background: "var(--accent-soft)",
+                                                    color: "var(--accent-ink)",
+                                                }}
+                                            >
+                                                p. {c.page}
+                                            </span>
+                                        )}
                                     </div>
                                     <div
                                         style={{
@@ -332,7 +380,16 @@ function Message({ msg, sources }: MessageProps) {
                                         {c.snippet}
                                     </div>
                                 </div>
-                            </div>
+                                <span
+                                    style={{
+                                        color: "var(--ink-3)",
+                                        flexShrink: 0,
+                                        alignSelf: "center",
+                                    }}
+                                >
+                                    <IconChevronRight size={12} />
+                                </span>
+                            </button>
                         );
                     })}
                 </div>
@@ -1302,6 +1359,8 @@ export interface AskPanelProps {
     thread: ThreadMessage[];
     sendMessage: (send: ComposerSend) => void;
     isSending: boolean;
+    /** Opens the cited document scrolled to (and highlighting) the cited passage. */
+    onOpenCitation?: (cite: ThreadReference) => void;
     onOpenAdd: () => void;
     onNewChat: () => void;
     openPalette: () => void;
@@ -1330,6 +1389,7 @@ export function AskPanel({
     thread,
     sendMessage,
     isSending,
+    onOpenCitation,
     onOpenAdd,
     onNewChat,
     openPalette,
@@ -1505,7 +1565,12 @@ export function AskPanel({
                             ) : (
                                 <>
                                     {thread.map((m, i) => (
-                                        <Message key={i} msg={m} sources={sources} />
+                                        <Message
+                                            key={i}
+                                            msg={m}
+                                            sources={sources}
+                                            onOpenCitation={onOpenCitation}
+                                        />
                                     ))}
                                     {showTyping && <TypingIndicator />}
                                 </>

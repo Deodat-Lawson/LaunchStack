@@ -10,6 +10,7 @@
  */
 export * from "./auth";
 export * from "./identity";
+export * from "./connectors";
 export * from "./document-features";
 export * from "./agent-ai";
 export * from "./collab";

@@ -9,12 +9,112 @@
  * and where to put it.
  */
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
+import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { Code, StatusNote, StatusRow } from "./ui";
+
+interface GoogleConnectionStatus {
+    enabled: boolean;
+    connected: boolean;
+    accountEmail?: string | null;
+    connectUrl?: string;
+}
+
+function GoogleDriveSection() {
+    const [status, setStatus] = useState<GoogleConnectionStatus | null>(null);
+    const [busy, setBusy] = useState(false);
+
+    const refresh = useCallback(async () => {
+        try {
+            const res = await fetch("/api/connectors/google");
+            setStatus(res.ok ? ((await res.json()) as GoogleConnectionStatus) : null);
+        } catch {
+            setStatus(null);
+        }
+    }, []);
+
+    useEffect(() => {
+        void refresh();
+    }, [refresh]);
+
+    const disconnect = useCallback(async () => {
+        setBusy(true);
+        try {
+            await fetch("/api/connectors/google", { method: "DELETE" });
+        } finally {
+            setBusy(false);
+            void refresh();
+        }
+    }, [refresh]);
+
+    return (
+        <Section
+            title="Google Drive"
+            description="Link PDFs and Word documents to Google Drive so they can be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs. Settled edits sync back as document versions."
+        >
+            <Card>
+                {!status ? (
+                    <StatusNote tone="muted">Checking configuration…</StatusNote>
+                ) : !status.enabled ? (
+                    <StatusRow
+                        label="Drive linking"
+                        ok={false}
+                        detail={
+                            <>
+                                Set <Code>GOOGLE_DOCS_EDITING_ENABLED=true</Code>,{" "}
+                                <Code>GOOGLE_OAUTH_CLIENT_ID</Code> and{" "}
+                                <Code>GOOGLE_OAUTH_CLIENT_SECRET</Code> (a GCP OAuth client with the{" "}
+                                <Code>drive.file</Code> scope) to enable this feature.
+                            </>
+                        }
+                    />
+                ) : (
+                    <>
+                        <StatusRow
+                            label="Workspace account"
+                            ok={status.connected}
+                            detail={
+                                status.connected ? (
+                                    <>
+                                        Connected as <Code>{status.accountEmail ?? "unknown"}</Code>
+                                        . Linked files live in this account&apos;s My Drive.
+                                    </>
+                                ) : (
+                                    "No Google account is connected for this workspace yet."
+                                )
+                            }
+                        />
+                        <div style={{ display: "flex", gap: 8, paddingTop: 10 }}>
+                            <Button
+                                size="sm"
+                                variant={status.connected ? "outline" : "default"}
+                                asChild
+                            >
+                                <a href={status.connectUrl ?? "/api/connectors/google/oauth/start"}>
+                                    {status.connected ? "Reconnect" : "Connect Google Drive"}
+                                </a>
+                            </Button>
+                            {status.connected && (
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => void disconnect()}
+                                    disabled={busy}
+                                >
+                                    {busy ? "Disconnecting…" : "Disconnect"}
+                                </Button>
+                            )}
+                        </div>
+                    </>
+                )}
+            </Card>
+        </Section>
+    );
+}
 
 const SLACK_COMMANDS: Array<[string, string]> = [
     ["!takeover [@agent]", "Pause the agents and take the floor, optionally in an agent's seat"],
@@ -46,6 +146,8 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
 
     return (
         <>
+            <GoogleDriveSection />
+
             <Section
                 title="Slack"
                 description="Hold a meeting in a real Slack channel. Agent turns are posted there, and anything a person writes back lands in the same transcript."

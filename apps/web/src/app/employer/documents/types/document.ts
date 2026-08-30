@@ -7,7 +7,8 @@ export type DocumentDisplayType =
     | "docx" // Word documents (.doc, .docx, .odt)
     | "xlsx" // Spreadsheets (.xls, .xlsx, .ods, .csv)
     | "pptx" // Presentations (.ppt, .pptx, .odp)
-    | "text" // Plain text, HTML, Markdown
+    | "text" // Plain text, HTML
+    | "markdown" // Markdown documents (.md, .markdown) — rendered, not shown as source
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
     | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
@@ -82,6 +83,8 @@ export function getDocumentDisplayType(doc: {
         )
             return "xlsx";
         if (mime.startsWith("audio/") || mime === "video/mp4") return "audio";
+        // Before the code prefixes: "text/x-" would otherwise claim text/x-markdown.
+        if (mime === "text/markdown" || mime === "text/x-markdown") return "markdown";
         if (CODE_MIME_PREFIXES.some(p => mime.startsWith(p) || mime === p)) return "code";
         if (mime.startsWith("text/") || mime === "application/csv") return "text";
         if (mime === "application/zip" || mime === "application/x-zip-compressed") return "zip";
@@ -93,8 +96,9 @@ export function getDocumentDisplayType(doc: {
     if (/\.(docx?|odt)\b/.test(src)) return "docx";
     if (/\.(pptx?|odp)\b/.test(src)) return "pptx";
     if (/\.(xlsx?|ods)\b/.test(src)) return "xlsx";
+    if (/\.(md|markdown|mdown|mkd)\b/.test(src)) return "markdown";
     if (CODE_EXTENSIONS_RE.test(src)) return "code";
-    if (/\.(txt|md|html?|csv)\b/.test(src)) return "text";
+    if (/\.(txt|html?|csv)\b/.test(src)) return "text";
     if (/\.zip\b/.test(src)) return "zip";
     return "unknown";
 }

@@ -115,6 +115,24 @@ export interface WorkspaceFolder {
 export interface ThreadReference {
     sourceId: string;
     snippet: string;
+    /** Page number (1-based) in the cited document, when the chunk carried one. */
+    page?: number;
+    /** The retrieval match phrase — a more precise highlight target than the snippet. */
+    matchText?: string;
+}
+
+/**
+ * A "jump to the cited passage" request for the document viewer. `nonce`
+ * distinguishes repeat clicks on the same citation so the viewer re-scrolls.
+ */
+export interface CitationHighlight {
+    /** The cited snippet — the primary text to locate and highlight. */
+    text: string;
+    /** Narrower match phrase to fall back to when the snippet can't be located. */
+    matchText?: string;
+    /** Page hint for paginated documents (1-based). */
+    page?: number | null;
+    nonce: number;
 }
 
 /**

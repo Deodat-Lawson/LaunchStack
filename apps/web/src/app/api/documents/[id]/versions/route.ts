@@ -38,6 +38,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import {
     authorizeInternalFileRef,
     UploadAuthorizationError,
@@ -140,6 +141,24 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             if (!authResult.ok) return authResult.response;
 
             const { userId, doc } = authResult;
+
+            // Phase 1 of Drive-linked files: a linked document's editing
+            // surface is its Drive copy — direct version uploads would fork
+            // it. (The sync service itself writes through the lifecycle
+            // directly, so this guard never blocks a pull.)
+            const driveLink = await getActiveDriveLink(parsed.documentId);
+            if (driveLink) {
+                return NextResponse.json(
+                    {
+                        error: "linked_to_google_drive",
+                        details:
+                            "This document is linked to Google Drive and edited there. " +
+                            "Sync or unlink it before uploading a version in-app.",
+                        driveUrl: driveLink.driveWebViewLink,
+                    },
+                    { status: 409 }
+                );
+            }
 
             const validation = await validateRequestBody(request, CreateVersionSchema);
             if (!validation.success) {

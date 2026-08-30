@@ -35,7 +35,7 @@ import { db } from "~/server/db";
 import { env } from "~/env";
 import { createCollabChatFn } from "./chat";
 import { getChannelStore, type PostgresChannelStore } from "./store";
-import { getSlackClient } from "./slack";
+import { getSlackClientForCompany } from "./slack";
 
 type MeetingRow = typeof collabMeeting.$inferSelect;
 
@@ -158,13 +158,14 @@ function buildRuntimes(): AgentRuntime[] {
 async function buildBridge(
     config: MeetingConfig,
     orchestrator: MeetingOrchestrator,
-    store: PostgresChannelStore
+    store: PostgresChannelStore,
+    companyId: bigint
 ): Promise<SlackChannelBridge | null> {
     if (!config.slack?.enabled) return null;
-    const slack: SlackClient | null = getSlackClient();
+    const slack: SlackClient | null = await getSlackClientForCompany(companyId);
     if (!slack) {
         console.warn(
-            `[collab] meeting ${config.id} asks for a Slack mirror but SLACK_BOT_TOKEN is unset`
+            `[collab] meeting ${config.id} asks for a Slack mirror but the workspace has no Slack connection and SLACK_BOT_TOKEN is unset`
         );
         return null;
     }
@@ -237,7 +238,7 @@ export async function getMeetingRuntime(
         drainPersist();
     });
 
-    const bridge = await buildBridge(config, orchestrator, store);
+    const bridge = await buildBridge(config, orchestrator, store, row.companyId);
     meetingCache().set(meetingId, {
         orchestrator,
         bridge,

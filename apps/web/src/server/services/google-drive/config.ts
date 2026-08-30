@@ -12,6 +12,9 @@ import { env } from "~/env";
 
 export const GOOGLE_DRIVE_PROVIDER = "google-drive";
 
+/** CSRF nonce cookie for the Google OAuth round trip (set by /oauth/start). */
+export const GOOGLE_OAUTH_STATE_COOKIE = "gdrive_oauth_state";
+
 /**
  * drive.file only: the app can touch files it created, nothing else in the
  * user's Drive. openid+email identify which Google account holds the files.
@@ -43,9 +46,17 @@ function flagEnabled(): boolean {
 }
 
 export function isDriveLinkingEnabled(): boolean {
-    return Boolean(
-        flagEnabled() && env.server.GOOGLE_OAUTH_CLIENT_ID && env.server.GOOGLE_OAUTH_CLIENT_SECRET
-    );
+    return Boolean(flagEnabled() && isGoogleConnectConfigured());
+}
+
+/**
+ * The connect flow gates on the OAuth pair alone: a connection now also powers
+ * the Drive knowledge sync (picked files → knowledge base), which works
+ * without GOOGLE_DOCS_EDITING_ENABLED. The Drive-links routes and reconciler
+ * keep the stricter isDriveLinkingEnabled() gate.
+ */
+export function isGoogleConnectConfigured(): boolean {
+    return Boolean(env.server.GOOGLE_OAUTH_CLIENT_ID && env.server.GOOGLE_OAUTH_CLIENT_SECRET);
 }
 
 export function getGoogleOAuthApp(): GoogleOAuthApp {

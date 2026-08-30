@@ -88,6 +88,16 @@ export type FounderWeeklyReviewGenerationEvent = {
     };
 };
 
+export type GoogleDriveSyncEvent = {
+    name: "google-drive/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 export type Events =
     | TrendSearchEvent
     | ClientProspectorEvent
@@ -96,7 +106,8 @@ export type Events =
     | DocumentModifyEvent
     | WebsiteCrawlEvent
     | FounderWeeklyReviewDispatchEvent
-    | FounderWeeklyReviewGenerationEvent;
+    | FounderWeeklyReviewGenerationEvent
+    | GoogleDriveSyncEvent;
 
 /**
  * Create the Inngest client.

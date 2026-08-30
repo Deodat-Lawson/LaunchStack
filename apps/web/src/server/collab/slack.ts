@@ -10,6 +10,7 @@
 
 import { HttpSlackClient, type SlackClient } from "@launchstack/collab";
 import { env } from "~/env";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 
 const globalForSlack = globalThis as unknown as { __collabSlackClient?: SlackClient | null };
 
@@ -21,6 +22,18 @@ export function getSlackClient(): SlackClient | null {
     const botToken = env.server.SLACK_BOT_TOKEN;
     globalForSlack.__collabSlackClient = botToken ? new HttpSlackClient({ botToken }) : null;
     return globalForSlack.__collabSlackClient;
+}
+
+/**
+ * The workspace's own Slack connection wins over the deployment-global
+ * SLACK_BOT_TOKEN, which stays as the fallback so existing self-hosts keep
+ * working. Not cached: the token can rotate or be revoked between calls, and
+ * HttpSlackClient construction is trivial.
+ */
+export async function getSlackClientForCompany(companyId: bigint): Promise<SlackClient | null> {
+    const botToken = await getCompanyAccessToken(companyId, "slack");
+    if (botToken) return new HttpSlackClient({ botToken });
+    return getSlackClient();
 }
 
 export function getSlackSigningSecret(): string | null {

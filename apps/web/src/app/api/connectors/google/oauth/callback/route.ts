@@ -22,7 +22,7 @@ import {
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
 
-import { OAUTH_STATE_COOKIE } from "../start/route";
+import { OAUTH_STATE_COOKIE } from "~/server/services/google-drive/config";
 
 function redirectToWorkspace(request: Request, flag: string): NextResponse {
     const response = NextResponse.redirect(

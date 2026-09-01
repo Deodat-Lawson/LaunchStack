@@ -1,64 +1,67 @@
-# Chat model configuration.
+# Chat model configuration. Mounted read-only into the app and the worker, so
+# changing a model is an edit plus a restart — never an image rebuild.
 #
-# Non-secret only. The endpoint URL lives in CHAT_BASE_URL and its credential
-# in CHAT_API_KEY; point CHAT_MODELS_CONFIG at another file to use one instead
-# of this. Every model here is served by that single OpenAI-compatible
-# endpoint — "compatible" meaning it implements the OpenAI
-# /chat/completions protocol, not that it is any HTTP API at all.
+# `id` is the id your endpoint serves. CHAT_BASE_URL points at OpenRouter,
+# which accepts both the bare id and the vendor-prefixed form; the prefixed
+# form is written here because it is unambiguous about which vendor serves it.
 #
-# A model must either reference a bundled preset or declare its behavior in
-# full. Nothing is inferred from the model id: a name that merely resembles a
-# known model gets no capabilities. Anything you write under `behavior` is
-# authoritative and overrides the preset in both directions, so
-# `nativeStructuredOutput: []` genuinely turns that off.
-#
-# See docs/chat-models.md for the full reference.
-
+# The Gemini 3.x models have no entry in packages/llm/src/presets.ts, so
+# `primary` and `fast` declare their behavior in full. A model with neither a
+# preset nor a `behavior` block is a startup error by design — an unknown model
+# is never silently classified as text-only.
 version: 1
 
 models:
-  # Default: Google Gemini. Reached at
-  # CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai,
-  # which is also where chat falls back when CHAT_BASE_URL is unset.
-  #
-  # Model ids here are the BARE ids Google's endpoint expects. The `google/`
-  # prefix belongs only to the `preset:` field, which names a bundled behavior
-  # entry — see packages/core/src/llm/presets.ts.
-  primary:
-    id: gemini-2.5-flash
-    preset: google/gemini-2.5-flash
+    # Vision route inherits this model, so it must declare image input.
+    primary:
+        id: google/gemini-3.7-flash
+        behavior:
+            input: [text, image]
+            image:
+                mimeTypes: [image/png, image/jpeg, image/webp, image/heic]
+            reasoning:
+                mode: effort
+                levels:
+                    none: { reasoning_effort: "none" }
+                    low: { reasoning_effort: "low" }
+                    medium: { reasoning_effort: "medium" }
+                    high: { reasoning_effort: "high" }
+                default: "medium"
+            nativeStructuredOutput: [json-object, json-schema, tool-calling]
+            parameters:
+                temperature: supported
+                systemMessages: supported
+                streaming: supported
+                maxOutputTokens: supported
 
-  # The cheap tier. Its preset sets reasoning `default: none`, so routine work
-  # does not pay for thinking tokens.
-  fast:
-    id: gemini-2.5-flash-lite
-    preset: google/gemini-2.5-flash-lite
+    # The cheap tier. `mode: none` is deliberate rather than asserted: the
+    # lite models' reasoning surface was not verified against this endpoint,
+    # and an over-claimed capability surfaces as a confusing runtime error.
+    # The fast route never asks for reasoning, so nothing is lost.
+    fast:
+        id: google/gemini-3.5-flash-lite
+        behavior:
+            input: [text, image]
+            image:
+                mimeTypes: [image/png, image/jpeg, image/webp, image/heic]
+            reasoning:
+                mode: none
+            nativeStructuredOutput: [json-object, json-schema, tool-calling]
+            parameters:
+                temperature: supported
+                systemMessages: supported
+                streaming: supported
+                maxOutputTokens: supported
 
-  # The reasoning tier. 2.5 Pro always reasons, so its preset omits the `none`
-  # level rather than claiming a capability the endpoint would reject.
-  deep:
-    id: gemini-2.5-pro
-    preset: google/gemini-2.5-pro
-
-  # Talking to something else instead? Any OpenAI-compatible endpoint works —
-  # set CHAT_BASE_URL and replace the models above. With OpenRouter the ids
-  # carry a vendor prefix and a bundled preset may not exist, in which case
-  # declare `behavior` in full instead of referencing one:
-  #
-  #   primary:
-  #     id: moonshotai/kimi-k3
-  #     behavior:
-  #       input: [text, image]
-  #       nativeStructuredOutput: [json-schema, tool-calling]
-  #       parameters: { temperature: supported, streaming: supported }
+    # The reasoning route. No 3.7-generation Pro model is published, so this
+    # stays on the 2.5 preset, whose reasoning contract is a verified catalog
+    # entry rather than an assertion made here.
+    deep:
+        id: google/gemini-2.5-pro
+        preset: google/gemini-2.5-pro
 
 routes:
-  # `default` is required. `fast` inherits it unless assigned.
-  #
-  # `reasoning` and `vision` inherit `default` only when that model declares
-  # the capability. gemini-2.5-flash declares both, so both would work
-  # unassigned; `reasoning` is pointed at the Pro tier deliberately.
-  default: primary
-  fast: fast
-  reasoning: deep
-  vision: primary
+    default: primary
+    fast: fast
+    reasoning: deep
+    vision: primary

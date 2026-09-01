@@ -44,7 +44,10 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 ## Option 1: Docker Compose (full stack)
 
-Recommended for local and self-hosted deployments.
+Recommended for local and self-hosted deployments. For the production
+single-VM variant (GHCR images, Caddy TLS, no Whisper/Docling/Inngest-dev
+containers), layer `docker-compose.prod.yml` on top — see
+[`docs/runbooks/azure-lean-deploy.md`](./runbooks/azure-lean-deploy.md).
 
 ```bash
 docker compose --env-file .env up

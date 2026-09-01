@@ -15,6 +15,7 @@ import {
     Music,
     History,
     BookOpen,
+    MessagesSquare,
 } from "lucide-react";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -32,6 +33,12 @@ const DocxEditor = dynamic(() => import("./docx").then(m => m.DocxEditor), {
 const MarkdownViewer = dynamic(() => import("./MarkdownViewer").then(m => m.MarkdownViewer), {
     ssr: false,
 });
+
+// Imported agent sessions render as conversations, not documents.
+const ConversationViewer = dynamic(
+    () => import("./ConversationViewer").then(m => m.ConversationViewer),
+    { ssr: false }
+);
 import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
@@ -65,6 +72,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     pptx: "Presentation",
     text: "Text / HTML",
     markdown: "Markdown",
+    conversation: "Agent Session",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
@@ -79,6 +87,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     pptx: Presentation,
     text: FileCode,
     markdown: BookOpen,
+    conversation: MessagesSquare,
     code: FileCode,
     zip: Archive,
     audio: Music,
@@ -243,6 +252,8 @@ export function DocumentViewer({
                         highlight={highlight}
                     />
                 );
+            case "conversation":
+                return <ConversationViewer document={document} />;
             case "code":
                 return (
                     <CodeViewer

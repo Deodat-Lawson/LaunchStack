@@ -31,12 +31,7 @@ export {
 
 export { parseClaudeSession } from "./parse-claude";
 export { parseCodexSession } from "./parse-codex";
-export {
-    PEEK_WINDOW_BYTES,
-    peekSessionFile,
-    peekSessions,
-    type SessionPeek,
-} from "./peek";
+export { PEEK_WINDOW_BYTES, peekSessionFile, peekSessions, type SessionPeek } from "./peek";
 export { renderSessionMarkdown, sessionDisplayTitle } from "./render";
 
 export {

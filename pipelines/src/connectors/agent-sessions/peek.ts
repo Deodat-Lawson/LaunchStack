@@ -178,9 +178,7 @@ export async function peekSessionFile(
 ): Promise<SessionPeek> {
     const windows = await readWindows(absolutePath);
     if (!windows) return EMPTY_PEEK;
-    return tool === "codex"
-        ? peekCodex(windows.head)
-        : peekClaude(windows.head, windows.tail);
+    return tool === "codex" ? peekCodex(windows.head) : peekClaude(windows.head, windows.tail);
 }
 
 /** Peek many discovered sessions with bounded concurrency, keyed by sourceId. */
@@ -189,7 +187,10 @@ export async function peekSessions(
     options: { readonly concurrency?: number } = {}
 ): Promise<Map<string, SessionPeek>> {
     const peeks = new Map<string, SessionPeek>();
-    const limit = Math.max(1, Math.min(options.concurrency ?? DEFAULT_PEEK_CONCURRENCY, items.length));
+    const limit = Math.max(
+        1,
+        Math.min(options.concurrency ?? DEFAULT_PEEK_CONCURRENCY, items.length)
+    );
     let cursor = 0;
 
     const workers = Array.from({ length: limit }, async () => {

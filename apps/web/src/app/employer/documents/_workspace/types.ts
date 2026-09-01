@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
 // set kept for this file's existing entries (see apps/web/README.md).
-import { AppWindow as IconArtifact, Network as IconMindmap } from "lucide-react";
+import {
+    AppWindow as IconArtifact,
+    MessagesSquare as IconSessions,
+    Network as IconMindmap,
+} from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -250,6 +254,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/artifacts",
     },
     {
+        id: "agent-sessions",
+        label: "Coding sessions",
+        Icon: IconSessions,
+        desc: "Import Claude Code and Codex conversations",
+        href: "/employer/agent-sessions",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -386,6 +397,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 external: true,
             },
             {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
+                href: "/employer/agent-sessions",
+                external: true,
+            },
+            {
                 id: "workflows",
                 label: "Workflow Generation",
                 Icon: IconWorkflow,
@@ -497,6 +516,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
             { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
             { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Claude Code & Codex transcripts",
+            },
             { id: "dropbox", label: "Dropbox", Icon: IconDropbox, desc: "Folders stay in sync" },
         ],
     },

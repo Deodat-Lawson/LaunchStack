@@ -144,6 +144,14 @@ export async function createAgentSessionsSink(
         },
 
         async store(item: KnowledgeItem): Promise<StoredKnowledgeItem> {
+            // The connector renders every session to Markdown text; binary
+            // content here means a wiring mistake, not a session.
+            if (typeof item.content !== "string") {
+                throw new Error(
+                    `agent-sessions sink received binary content for ${item.sourceId}`
+                );
+            }
+            const content = item.content;
             const syncedAt = new Date().toISOString();
             const baseCreationKey = creationKeyFor(item);
             const filename = blobFilenameFor(item);
@@ -168,9 +176,10 @@ export async function createAgentSessionsSink(
 
             const blob = await uploadFile({
                 filename,
-                data: Buffer.from(item.content, "utf-8"),
+                data: Buffer.from(content, "utf-8"),
                 contentType: item.mimeType,
                 userId: context.userId,
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 
@@ -215,7 +224,7 @@ export async function createAgentSessionsSink(
                 // of stacking a new one on every call.
                 creationKey: `${baseCreationKey}:v:${item.contentHash}`,
                 mimeType: item.mimeType,
-                fileSize: Buffer.byteLength(item.content, "utf-8"),
+                fileSize: Buffer.byteLength(content, "utf-8"),
                 changelog: `Re-synced from ${metaString(item, "toolLabel", "agent")} on ${syncedAt}`,
                 originalFilename: filename,
                 embeddingIndexKey,

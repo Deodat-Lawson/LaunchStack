@@ -26,7 +26,7 @@ jest.mock("~/server/db", () => ({
 }));
 jest.mock("~/lib/active-workspace", () => ({ resolveActiveCompanyForUser: jest.fn() }));
 jest.mock("~/server/services/agent-sessions-connector", () => ({
-    previewAgentSessions: jest.fn(),
+    previewAgentSessionsDetailed: jest.fn(),
     runAgentSessionsSync: jest.fn(),
 }));
 
@@ -35,13 +35,13 @@ import { getServerSession } from "~/server/auth";
 import { GET, POST } from "~/app/api/connectors/agent-sessions/route";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import {
-    previewAgentSessions,
+    previewAgentSessionsDetailed,
     runAgentSessionsSync,
 } from "~/server/services/agent-sessions-connector";
 
 const mockAuth = getServerSession as unknown as jest.Mock;
 const mockResolveCompany = resolveActiveCompanyForUser as jest.Mock;
-const mockPreview = previewAgentSessions as jest.Mock;
+const mockPreview = previewAgentSessionsDetailed as jest.Mock;
 const mockSync = runAgentSessionsSync as jest.Mock;
 
 interface ApiBody {
@@ -49,6 +49,7 @@ interface ApiBody {
     data: {
         counts?: Record<string, number>;
         items?: { relativePath: string; projectSlug: string | null }[];
+        missing?: string[];
     };
 }
 
@@ -155,10 +156,42 @@ describe("POST /api/connectors/agent-sessions", () => {
         expect(response.status).toBe(400);
         expect(mockSync).not.toHaveBeenCalled();
     });
+
+    it("imports a selected session and reports ids the machine no longer has", async () => {
+        const known = "agent-sessions://claude-code/aaaaaaaa-1111-4111-8111-111111111111";
+        const gone = "agent-sessions://codex/bbbbbbbb-2222-4222-8222-222222222222";
+        mockSync.mockResolvedValue({
+            connectorId: "agent-sessions",
+            startedAt: "2026-08-30T10:00:00.000Z",
+            finishedAt: "2026-08-30T10:00:01.000Z",
+            durationMs: 1000,
+            discovered: 1,
+            stored: [{ sourceId: known, documentId: 1, versionId: 1, jobId: "j1", revised: false }],
+            skipped: [],
+            failed: [],
+            scan: { roots: [], items: [], skipped: [], truncated: false },
+            truncated: false,
+        });
+
+        const response = await POST(postRequest({ sourceIds: [known, gone] }));
+
+        expect(response.status).toBe(202);
+        expect(mockSync).toHaveBeenCalledWith(
+            expect.objectContaining({ sourceIds: [known, gone] })
+        );
+        expect((await readBody(response)).data.missing).toEqual([gone]);
+    });
+
+    it("rejects a sourceId from a different scheme", async () => {
+        const response = await POST(postRequest({ sourceIds: ["file:///etc/passwd"] }));
+
+        expect(response.status).toBe(400);
+        expect(mockSync).not.toHaveBeenCalled();
+    });
 });
 
 describe("GET /api/connectors/agent-sessions", () => {
-    it("previews without file contents or absolute paths", async () => {
+    it("previews the workspace-aware session list, scoped to the caller's company", async () => {
         mockPreview.mockResolvedValue({
             roots: [
                 {
@@ -171,17 +204,18 @@ describe("GET /api/connectors/agent-sessions", () => {
             items: [
                 {
                     sourceId: "agent-sessions://claude-code/aaaaaaaa-1111-4111-8111-111111111111",
-                    title: "Claude Code session aaaaaaaa",
-                    kind: "session",
+                    tool: "claude-code",
+                    title: "Deploy pipeline chat",
+                    preview: "How do I deploy this?",
+                    projectSlug: "-Users-me-app",
+                    projectPath: "/Users/me/app",
+                    gitBranch: "main",
                     bytes: 1200,
                     modifiedAt: "2026-08-01T00:00:00.000Z",
-                    location: {
-                        origin: "/h/.claude/projects/-Users-me-app/aaaaaaaa.jsonl",
-                        relativePath: "projects/-Users-me-app/aaaaaaaa.jsonl",
-                    },
-                    metadata: { projectSlug: "-Users-me-app" },
-                    connectorId: "agent-sessions",
-                    mimeType: "text/markdown",
+                    relativePath: "projects/-Users-me-app/aaaaaaaa.jsonl",
+                    archived: false,
+                    active: false,
+                    imported: null,
                 },
             ],
             skipped: [],
@@ -192,13 +226,16 @@ describe("GET /api/connectors/agent-sessions", () => {
         const payload = await readBody(response);
 
         expect(response.status).toBe(200);
+        expect(mockPreview).toHaveBeenCalledWith(7n, expect.any(Object));
         expect(payload.data.items).toEqual([
             expect.objectContaining({
                 relativePath: "projects/-Users-me-app/aaaaaaaa.jsonl",
                 projectSlug: "-Users-me-app",
+                title: "Deploy pipeline chat",
+                imported: null,
             }),
         ]);
-        // The preview must not hand back transcript text or the absolute path.
+        // The preview must not hand back the server's absolute file paths.
         expect(JSON.stringify(payload.data.items)).not.toContain("origin");
         expect(mockSync).not.toHaveBeenCalled();
     });

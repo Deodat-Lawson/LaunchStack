@@ -13,8 +13,8 @@ import {
     truncateText,
 } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
-import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
-import { hybridSearchWithRRF } from "~/app/api/agents/predictive-document-analysis/services/hybridSearch";
+import { ANNOptimizer } from "@launchstack/retrieval/algorithms/vector";
+import { hybridSearchWithRRF } from "@launchstack/retrieval/algorithms/fusion";
 
 type MatchCandidate = {
     documentId: number;
@@ -97,7 +97,9 @@ export async function findSuggestedCompanyDocuments(
             const searchQuery = `${missingDoc.documentType} ${missingDoc.documentName}`;
             const [contextMatches, hybridMatches] = await Promise.all([
                 findOptimizedContextualMatches(missingDoc, otherDocIds),
-                hybridSearchWithRRF(searchQuery, otherDocIds, 6).catch(() => [] as DocumentMatch[]),
+                hybridSearchWithRRF(searchQuery, otherDocIds, 6, getEmbeddings).catch(
+                    () => [] as DocumentMatch[]
+                ),
             ]);
 
             const allContextMatches = [...contextMatches, ...hybridMatches];

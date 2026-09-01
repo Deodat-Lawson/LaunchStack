@@ -5,6 +5,8 @@
  * silently nor inconsistently.
  */
 
+import { generateEmbeddings, type EmbeddingsProvider } from "@launchstack/llm/embeddings";
+
 export const EMBEDDING_MODEL = "text-embedding-3-large";
 export const EMBEDDING_DIM = 1536;
 export const EMBEDDING_SHORT_DIM = 512;
@@ -42,3 +44,33 @@ export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
   return { apiKey: undefined, baseURL: undefined };
 }
 
+
+/**
+ * The notes pipeline's one embeddings provider, generated through
+ * @launchstack/llm's embedding service — no direct HTTP client here. Returns
+ * null when no endpoint pair is configured so each caller keeps its own
+ * skip/warn semantics (embedding a note is best-effort; searching without
+ * an endpoint just returns nothing).
+ */
+export function createNotesEmbeddingsProvider(): EmbeddingsProvider | null {
+  const { apiKey, baseURL } = resolveEmbeddingConfig();
+  if (!apiKey || !baseURL) return null;
+
+  const config = {
+    apiKey,
+    baseUrl: baseURL,
+    model: EMBEDDING_MODEL,
+    dimensions: EMBEDDING_DIM,
+  };
+
+  return {
+    embedQuery: async (query: string) => {
+      const { embeddings } = await generateEmbeddings([query], config);
+      return embeddings[0] ?? [];
+    },
+    embedDocuments: async (documents: string[]) => {
+      const { embeddings } = await generateEmbeddings(documents, config);
+      return embeddings;
+    },
+  };
+}

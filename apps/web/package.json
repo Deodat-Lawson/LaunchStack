@@ -54,7 +54,7 @@
         "@launchstack/pipelines": "workspace:^",
         "@launchstack/runtime": "workspace:^",
         "@launchstack/schema-generator": "workspace:^",
-        "@launchstack/search": "workspace:^",
+        "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",
         "@mozilla/readability": "^0.6.0",

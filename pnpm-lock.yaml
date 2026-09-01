@@ -183,15 +183,15 @@ importers:
       '@launchstack/pipelines':
         specifier: workspace:^
         version: link:../../pipelines
+      '@launchstack/retrieval':
+        specifier: workspace:^
+        version: link:../../packages/retrieval
       '@launchstack/runtime':
         specifier: workspace:^
         version: link:../../packages/runtime
       '@launchstack/schema-generator':
         specifier: workspace:^
         version: link:../../packages/schema-generator
-      '@launchstack/search':
-        specifier: workspace:^
-        version: link:../../packages/search
       '@launchstack/store':
         specifier: workspace:^
         version: link:../../packages/store
@@ -571,15 +571,15 @@ importers:
       '@launchstack/pipelines':
         specifier: workspace:^
         version: link:../../pipelines
+      '@launchstack/retrieval':
+        specifier: workspace:^
+        version: link:../../packages/retrieval
       '@launchstack/runtime':
         specifier: workspace:^
         version: link:../../packages/runtime
       '@launchstack/schema-generator':
         specifier: workspace:^
         version: link:../../packages/schema-generator
-      '@launchstack/search':
-        specifier: workspace:^
-        version: link:../../packages/search
       '@launchstack/store':
         specifier: workspace:^
         version: link:../../packages/store
@@ -720,12 +720,12 @@ importers:
       '@launchstack/orchestration':
         specifier: workspace:^
         version: link:../orchestration
+      '@launchstack/retrieval':
+        specifier: workspace:^
+        version: link:../retrieval
       '@launchstack/runtime':
         specifier: workspace:^
         version: link:../runtime
-      '@launchstack/search':
-        specifier: workspace:^
-        version: link:../search
       '@launchstack/store':
         specifier: workspace:^
         version: link:../store
@@ -861,6 +861,49 @@ importers:
         specifier: ^3.0.5
         version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2(@noble/hashes@2.4.0))(tsx@4.21.0)(yaml@2.9.0)
 
+  packages/retrieval:
+    dependencies:
+      '@langchain/community':
+        specifier: ^0.3.56
+        version: 0.3.59(d2cd0da04fa74a59c40878b8ffb084da)
+      '@langchain/core':
+        specifier: ^0.3.74
+        version: 0.3.74(@opentelemetry/api@1.9.1)(@opentelemetry/exporter-trace-otlp-proto@0.220.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))(openai@5.12.2(ws@8.21.1)(zod@3.25.76))
+      '@launchstack/evidence':
+        specifier: workspace:^
+        version: link:../evidence
+      '@launchstack/indexing':
+        specifier: workspace:^
+        version: link:../indexing
+      '@launchstack/llm':
+        specifier: workspace:^
+        version: link:../llm
+      '@launchstack/runtime':
+        specifier: workspace:^
+        version: link:../runtime
+      '@launchstack/store':
+        specifier: workspace:^
+        version: link:../store
+      drizzle-orm:
+        specifier: ^0.45.1
+        version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
+      langchain:
+        specifier: ^0.3.33
+        version: 0.3.33(16022a5e08c627e041522716ef8432a7)
+      neo4j-driver:
+        specifier: ^6.0.0
+        version: 6.0.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2(@noble/hashes@2.4.0))(tsx@4.21.0)(yaml@2.9.0)
+
   packages/runtime:
     devDependencies:
       typescript:
@@ -894,40 +937,6 @@ importers:
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.5
-        version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2(@noble/hashes@2.4.0))(tsx@4.21.0)(yaml@2.9.0)
-
-  packages/search:
-    dependencies:
-      '@langchain/community':
-        specifier: ^0.3.56
-        version: 0.3.59(d2cd0da04fa74a59c40878b8ffb084da)
-      '@langchain/core':
-        specifier: ^0.3.74
-        version: 0.3.74(@opentelemetry/api@1.9.1)(@opentelemetry/exporter-trace-otlp-proto@0.220.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))(openai@5.12.2(ws@8.21.1)(zod@3.25.76))
-      '@launchstack/evidence':
-        specifier: workspace:^
-        version: link:../evidence
-      '@launchstack/llm':
-        specifier: workspace:^
-        version: link:../llm
-      '@launchstack/runtime':
-        specifier: workspace:^
-        version: link:../runtime
-      '@launchstack/store':
-        specifier: workspace:^
-        version: link:../store
-      drizzle-orm:
-        specifier: ^0.45.1
-        version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
-      zod:
-        specifier: ^3.23.8
-        version: 3.25.76
-    devDependencies:
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
@@ -974,9 +983,9 @@ importers:
       '@launchstack/llm':
         specifier: workspace:^
         version: link:../llm
-      '@launchstack/search':
+      '@launchstack/retrieval':
         specifier: workspace:^
-        version: link:../search
+        version: link:../retrieval
       '@launchstack/store':
         specifier: workspace:^
         version: link:../store
@@ -1020,12 +1029,12 @@ importers:
       '@launchstack/orchestration':
         specifier: workspace:^
         version: link:../packages/orchestration
+      '@launchstack/retrieval':
+        specifier: workspace:^
+        version: link:../packages/retrieval
       '@launchstack/runtime':
         specifier: workspace:^
         version: link:../packages/runtime
-      '@launchstack/search':
-        specifier: workspace:^
-        version: link:../packages/search
       '@launchstack/store':
         specifier: workspace:^
         version: link:../packages/store
@@ -2703,18 +2712,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@grpc/grpc-js@1.13.4':
-    resolution: {integrity: sha512-GsFaMXCkMqkKIvwCQjCrwH+GHbPKBjhwo/8ZuUkWHqbI73Kky9I+pQltrlT0+MWpedCoosda53lgjYfyEPgxBg==}
-    engines: {node: '>=12.10.0'}
-
   '@grpc/grpc-js@1.14.4':
     resolution: {integrity: sha512-k9Dj3DV/itK9D06Y8f190Qgop7/Ui+D0njFV3LHMPwPT75DpXLQohE9Wmz0QElrJnzsjB7KPWiKJbOl7IPDArQ==}
     engines: {node: '>=12.10.0'}
-
-  '@grpc/proto-loader@0.7.15':
-    resolution: {integrity: sha512-tMXdRCfYVixjuFK+Hk0Q1s38gV9zDiDJfWL3h1rv4Qc39oILCu1TRTDt7+fGUI8K4G1Fj125Hx/ru3azECWTyQ==}
-    engines: {node: '>=6'}
-    hasBin: true
 
   '@grpc/proto-loader@0.8.1':
     resolution: {integrity: sha512-wtF6h+DY6M3YaDBPAmvuuA6jV8Sif9MjtOI5euKFWRgCDl5PeDpPsHR9u2l6St5ceY8AZgoNDww5+HvEsXFsGg==}
@@ -13668,22 +13668,10 @@ snapshots:
     dependencies:
       graphql: 16.11.0
 
-  '@grpc/grpc-js@1.13.4':
-    dependencies:
-      '@grpc/proto-loader': 0.7.15
-      '@js-sdsl/ordered-map': 4.4.2
-
   '@grpc/grpc-js@1.14.4':
     dependencies:
       '@grpc/proto-loader': 0.8.1
       '@js-sdsl/ordered-map': 4.4.2
-
-  '@grpc/proto-loader@0.7.15':
-    dependencies:
-      lodash.camelcase: 4.3.0
-      long: 5.3.2
-      protobufjs: 7.5.4
-      yargs: 17.7.2
 
   '@grpc/proto-loader@0.8.1':
     dependencies:
@@ -21012,7 +21000,7 @@ snapshots:
 
   nice-grpc@2.1.12:
     dependencies:
-      '@grpc/grpc-js': 1.13.4
+      '@grpc/grpc-js': 1.14.4
       abort-controller-x: 0.4.3
       nice-grpc-common: 2.0.2
 

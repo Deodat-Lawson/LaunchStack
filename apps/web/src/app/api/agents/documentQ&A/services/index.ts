@@ -34,7 +34,7 @@ export {
     getSectionsByPath,
     type RLMSearchOptions,
     type RLMSearchResult,
-} from "./rlmSearch";
+} from "@launchstack/retrieval/tools/rlm-search";
 
 // Types - Centralized export from types.ts
 export type {

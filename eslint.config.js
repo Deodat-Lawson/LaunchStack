@@ -254,11 +254,14 @@ const eslintConfig = [
                 "@launchstack/adapters/*",
                 "@launchstack/features",
                 "@launchstack/features/*",
+                "@launchstack/search",
+                "@launchstack/search/*",
             ],
             message:
-                "Deleted package (ADR-008). Import the owning feature package " +
-                "instead: store/llm/conversion/indexing/search/orchestration/" +
-                "editing/collab/runtime/engine/pipelines.",
+                "Deleted package (ADR-008) or renamed brick " +
+                "(@launchstack/search → @launchstack/retrieval). Import the " +
+                "owning feature package instead: store/llm/conversion/indexing/" +
+                "retrieval/orchestration/editing/collab/runtime/engine/pipelines.",
         };
         const frameworkBan = {
             group: ["next/*", "next", "@clerk/*", "react", "react-dom", "~/*"],
@@ -281,7 +284,7 @@ const eslintConfig = [
                 "llm",
                 "conversion",
                 "indexing",
-                "search",
+                "retrieval",
                 "orchestration",
                 "editing",
                 "document-conversion-engine",
@@ -412,13 +415,20 @@ const eslintConfig = [
                 },
             },
             {
-                files: ["packages/search/src/**/*.ts"],
+                files: ["packages/retrieval/src/**/*.ts"],
                 rules: {
                     ...restrict([
                         legacyBan,
                         frameworkBan,
                         noPipelines,
-                        only(["runtime", "store", "llm", "evidence"], "@launchstack/search"),
+                        // "indexing" is here for exactly one edge: the graph
+                        // algorithm's Neo4j backend reuses indexing's graph
+                        // client (isNeo4jConfigured/getNeo4jSession). Indexing
+                        // sits below retrieval in the DAG, so the edge is legal.
+                        only(
+                            ["runtime", "store", "llm", "evidence", "indexing"],
+                            "@launchstack/retrieval"
+                        ),
                     ]),
                     ...noEnv,
                 },
@@ -485,7 +495,7 @@ const eslintConfig = [
                 },
             },
             // @launchstack/tools — shared, contract-typed capabilities the
-            // verticals compose. A brick above search, below pipelines; may
+            // verticals compose. A brick above retrieval, below pipelines; may
             // read process.env (social/web-research provider keys, inherited
             // from the features tier where these capabilities were born).
             {
@@ -495,7 +505,7 @@ const eslintConfig = [
                     frameworkBan,
                     noPipelines,
                     only(
-                        ["runtime", "evidence", "store", "llm", "search", "conversion"],
+                        ["runtime", "evidence", "store", "llm", "retrieval", "conversion"],
                         "@launchstack/tools"
                     ),
                 ]),

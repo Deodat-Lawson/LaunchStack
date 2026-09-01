@@ -34,7 +34,7 @@ const config: NextConfig = {
         "@launchstack/llm",
         "@launchstack/conversion",
         "@launchstack/indexing",
-        "@launchstack/search",
+        "@launchstack/retrieval",
         "@launchstack/orchestration",
         "@launchstack/collab",
         "@launchstack/editing",

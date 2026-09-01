@@ -16,7 +16,7 @@ import {
 import { configureStorage } from "@launchstack/runtime";
 import { configureJobDispatcher } from "@launchstack/runtime";
 import { configureCredits, configureMetering } from "@launchstack/store/credits";
-import { configureRag } from "@launchstack/search";
+import { configureRag } from "@launchstack/retrieval";
 import { configureChatModels } from "@launchstack/llm";
 import { configureAuxiliaryOpenAI } from "@launchstack/llm";
 import { configureVlmEnrichment } from "@launchstack/conversion/ocr";

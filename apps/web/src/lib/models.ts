@@ -23,7 +23,7 @@ import {
 import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
-import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
+import type { EmbeddingsProvider } from "@launchstack/retrieval/search-types";
 import { configureAppChatModels } from "~/server/chat-models";
 import { env } from "~/env";
 

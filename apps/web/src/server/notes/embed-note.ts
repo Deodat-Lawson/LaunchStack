@@ -10,17 +10,16 @@
  */
 
 import { eq } from "drizzle-orm";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { document } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
 import { type NoteAnchor } from "~/server/db/schema";
 import { documentNotes, documentNoteEmbeddings } from "~/server/db/schema";
 import {
+  createNotesEmbeddingsProvider,
   EMBEDDING_DIM,
   EMBEDDING_MODEL,
   EMBEDDING_SHORT_DIM,
-  resolveEmbeddingConfig,
 } from "./embedding-config";
 
 /**
@@ -71,9 +70,9 @@ export async function embedNote(noteId: number): Promise<void> {
       return;
     }
 
-    // Both halves or neither — see resolveEmbeddingConfig.
-    const { apiKey, baseURL } = resolveEmbeddingConfig();
-    if (!apiKey || !baseURL) {
+    // Both halves or neither — see createNotesEmbeddingsProvider.
+    const provider = createNotesEmbeddingsProvider();
+    if (!provider) {
       console.warn(
         "[embedNote] no embedding endpoint configured (EMBEDDING_API_BASE_URL " +
           "+ EMBEDDING_API_KEY, or AI_BASE_URL + AI_API_KEY) — skipping",
@@ -81,14 +80,7 @@ export async function embedNote(noteId: number): Promise<void> {
       return;
     }
 
-    const client = new OpenAIEmbeddings({
-      openAIApiKey: apiKey,
-      modelName: EMBEDDING_MODEL,
-      dimensions: EMBEDDING_DIM,
-      configuration: { baseURL },
-    });
-
-    const [embedding] = await client.embedDocuments([embeddingText]);
+    const embedding = await provider.embedQuery(embeddingText);
     if (!embedding || embedding.length !== EMBEDDING_DIM) {
       console.warn(
         `[embedNote] unexpected embedding length ${embedding?.length ?? "null"}`,

@@ -9,14 +9,22 @@ import {
 } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/types";
 import { db } from "~/server/db/index";
+import { getDb } from "@launchstack/store/client";
 import { document, documentSections } from "@launchstack/store/schema";
-import { hybridSearchWithRRF } from "~/app/api/agents/predictive-document-analysis/services/hybridSearch";
+import { hybridSearchWithRRF } from "@launchstack/retrieval/algorithms/fusion";
 import { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
 
 jest.mock("~/server/db/index", () => ({
     db: {
         select: jest.fn(),
     },
+}));
+
+// The moved fusion/strategy algorithms reach the database through the store
+// client, not the app's ~/server/db proxy — same chain mock, second seam.
+jest.mock("@launchstack/store/client", () => ({
+    getDb: jest.fn(),
+    toRows: (rows: unknown) => rows,
 }));
 
 jest.mock("~/app/api/agents/predictive-document-analysis/utils/embeddings", () => ({
@@ -88,7 +96,7 @@ type QueryChain = {
 };
 
 function mockPredictiveSelects(): void {
-    (db.select as jest.Mock).mockImplementation(() => {
+    const makeSelect = () => {
         let source: unknown;
         let condition: unknown;
         const query: QueryChain = {
@@ -117,7 +125,9 @@ function mockPredictiveSelects(): void {
             },
         };
         return query;
-    });
+    };
+    (db.select as jest.Mock).mockImplementation(makeSelect);
+    (getDb as jest.Mock).mockImplementation(() => ({ select: makeSelect }));
 }
 
 describe("predictive current-version retrieval", () => {
@@ -127,7 +137,7 @@ describe("predictive current-version retrieval", () => {
     });
 
     it("excludes historical chunks from hybrid results", async () => {
-        const results = await hybridSearchWithRRF("schedule a", [2], 8);
+        const results = await hybridSearchWithRRF("schedule a", [2], 8, async () => []);
 
         expect(results).toHaveLength(1);
         expect(results[0]?.content).toBe(currentChunk.content);

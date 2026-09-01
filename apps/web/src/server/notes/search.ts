@@ -7,14 +7,12 @@
 
 import { sql } from "drizzle-orm";
 import { T } from "~/server/db/tables";
-import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { db, toRows } from "~/server/db/index";
 import {
+  createNotesEmbeddingsProvider,
   EMBEDDING_DIM,
-  EMBEDDING_MODEL,
   EMBEDDING_SHORT_DIM,
-  resolveEmbeddingConfig,
 } from "./embedding-config";
 
 export type NoteSearchScope = "user" | "document" | "company";
@@ -69,19 +67,11 @@ export async function searchNotes(
   const trimmed = query.trim();
   if (!trimmed) return [];
 
-  // Both halves or neither — an endpoint without a key, or a key without an
-  // endpoint, would let the SDK fall back to its own vendor default.
-  const { apiKey, baseURL } = resolveEmbeddingConfig();
-  if (!apiKey || !baseURL) return [];
+  // Both halves or neither — see createNotesEmbeddingsProvider.
+  const provider = createNotesEmbeddingsProvider();
+  if (!provider) return [];
 
-  const client = new OpenAIEmbeddings({
-    openAIApiKey: apiKey,
-    modelName: EMBEDDING_MODEL,
-    dimensions: EMBEDDING_DIM,
-    configuration: { baseURL },
-  });
-
-  const embedding = await client.embedQuery(trimmed);
+  const embedding = await provider.embedQuery(trimmed);
   if (!embedding || embedding.length !== EMBEDDING_DIM) return [];
   const short = embedding.slice(0, EMBEDDING_SHORT_DIM);
 

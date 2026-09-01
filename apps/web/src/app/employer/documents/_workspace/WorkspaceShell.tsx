@@ -8,6 +8,7 @@ import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
 import { LANDING_URL } from "~/config/landing";
+import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
@@ -134,6 +135,14 @@ export function WorkspaceShell() {
 
     const [selected, setSelected] = useState<string[]>([]);
     const [thread, setThread] = useState<ThreadMessage[]>([]);
+    /**
+     * Set when this chat continues an imported agent session (`?continue=<docId>`):
+     * the transcript's tail travels as conversationHistory on every send, and
+     * the transcript document itself is pinned as a retrieval source.
+     */
+    const [continuation, setContinuation] = useState<{ title: string; context: string } | null>(
+        null
+    );
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     const [addOpen, setAddOpen] = useState(false);
@@ -221,8 +230,64 @@ export function WorkspaceShell() {
 
     const { sendQuery, loading: isSending } = useAIChat();
 
+    /**
+     * Pick up an imported agent session where it left off: pin the transcript
+     * document as a source, load its tail into the continuation context, and
+     * open the thread with a note saying so. Fired by `?continue=<docId>` from
+     * the conversation viewer and the sessions browser.
+     */
+    const startContinuation = useCallback(async (docId: number) => {
+        setActiveFeatureId("chat");
+        setSelected(prev => (prev.includes(`d${docId}`) ? prev : [`d${docId}`, ...prev]));
+        try {
+            const res = await fetch("/api/fetchDocument", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: "{}",
+            });
+            if (!res.ok) throw new Error(`Failed to fetch documents (${res.status})`);
+            const docs = (await res.json()) as { id: number; title: string; url: string }[];
+            const doc = docs.find(d => d.id === docId);
+            if (!doc) throw new Error("Document not found");
+
+            const contentRes = await fetch(doc.url);
+            if (!contentRes.ok) throw new Error(`Failed to load transcript (${contentRes.status})`);
+            const parsed = parseSessionTranscript(await contentRes.text());
+            const title = parsed.title ?? doc.title;
+
+            setContinuation({ title, context: buildContinuationContext(parsed) });
+            setThread(prev => [
+                ...prev,
+                {
+                    role: "assistant",
+                    text: `Continuing **${title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.`,
+                    refs: [`d${docId}`],
+                },
+            ]);
+        } catch {
+            toast.error("Couldn't load the imported session to continue it");
+        }
+    }, []);
+
     const sendMessage = useCallback(
         async (send: ComposerSend) => {
+            // When continuing an imported session, every send carries the
+            // imported tail plus the newest in-app turns. The tail-slice cap
+            // keeps recency when the thread outgrows the budget.
+            const conversationHistory = continuation
+                ? [
+                      continuation.context,
+                      ...thread
+                          .slice(-8)
+                          .map(
+                              m =>
+                                  `${m.role === "user" ? "User" : "Assistant"}: ${m.text.slice(0, 1000)}`
+                          ),
+                  ]
+                      .join("\n\n")
+                      .slice(-12000)
+                : undefined;
+
             setThread(prev => [
                 ...prev,
                 {
@@ -254,6 +319,7 @@ export function WorkspaceShell() {
                 companyId: scope === "company" ? (companyId ?? undefined) : undefined,
                 enableWebSearch: send.webSearch,
                 thinkingMode: send.thinking,
+                conversationHistory,
                 attachments: send.attachments.map(a => ({
                     url: a.url,
                     name: a.name,
@@ -301,7 +367,7 @@ export function WorkspaceShell() {
                 ]);
             }
         },
-        [sources, sendQuery, companyId]
+        [sources, sendQuery, companyId, continuation, thread]
     );
 
     const handleOpenSource = useCallback((source: WorkspaceSource) => {
@@ -459,14 +525,20 @@ export function WorkspaceShell() {
     const addParam = searchParams.get("add");
     const connectorParam = searchParams.get("connector");
     const connectorResultParam = searchParams.get("result");
+    // `?continue=<docId>` — continue an imported agent session in this chat.
+    const continueParam = searchParams.get("continue");
     useEffect(() => {
-        if (!featureParam && !addParam && !connectorParam) return;
+        if (!featureParam && !addParam && !connectorParam && !continueParam) return;
         if (legacyRedirect) return;
         if (featureParam && FEATURE_IDS.has(featureParam)) {
             expandFeature(featureParam);
         }
         if (addParam) {
             setAddOpen(true);
+        }
+        if (continueParam) {
+            const docId = Number.parseInt(continueParam, 10);
+            if (Number.isFinite(docId)) void startContinuation(docId);
         }
         if (connectorParam) {
             const tabByProvider: Record<string, string> = {
@@ -498,6 +570,7 @@ export function WorkspaceShell() {
         params.delete("add");
         params.delete("connector");
         params.delete("result");
+        params.delete("continue");
         const query = params.toString();
         router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
     }, [
@@ -505,8 +578,10 @@ export function WorkspaceShell() {
         addParam,
         connectorParam,
         connectorResultParam,
+        continueParam,
         legacyRedirect,
         expandFeature,
+        startContinuation,
         router,
         searchParams,
     ]);
@@ -638,7 +713,10 @@ export function WorkspaceShell() {
                     isSending={isSending}
                     onOpenCitation={handleOpenCitation}
                     onOpenAdd={() => setAddOpen(true)}
-                    onNewChat={() => setThread([])}
+                    onNewChat={() => {
+                        setThread([]);
+                        setContinuation(null);
+                    }}
                     openPalette={() => setPalOpen(true)}
                     onStudioNavigate={href => router.push(href)}
                     userInitials={initials}

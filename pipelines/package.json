@@ -39,6 +39,7 @@
         "./email/send": "./src/email/send.ts",
         "./connectors": "./src/connectors/index.ts",
         "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
+        "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
         "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
         "./package.json": "./package.json"
     },
@@ -175,6 +176,10 @@
             "./connectors/agent-knowledge": {
                 "types": "./dist/connectors/agent-knowledge/index.d.ts",
                 "default": "./dist/connectors/agent-knowledge/index.js"
+            },
+            "./connectors/agent-sessions": {
+                "types": "./dist/connectors/agent-sessions/index.d.ts",
+                "default": "./dist/connectors/agent-sessions/index.js"
             },
             "./package.json": "./package.json"
         }

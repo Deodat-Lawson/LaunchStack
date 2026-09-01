@@ -9,6 +9,7 @@ export type DocumentDisplayType =
     | "pptx" // Presentations (.ppt, .pptx, .odp)
     | "text" // Plain text, HTML
     | "markdown" // Markdown documents (.md, .markdown) — rendered, not shown as source
+    | "conversation" // Imported agent-session transcripts — rendered as a chat, not a document
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
     | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
@@ -60,7 +61,17 @@ export function getDocumentDisplayType(doc: {
     url: string;
     title: string;
     mimeType?: string;
+    /**
+     * When present, the agent-sessions connector marker inside it upgrades a
+     * markdown transcript to the conversation display. Callers that only have
+     * url/title/mime keep getting the plain classification.
+     */
+    ocrMetadata?: { connector?: unknown; [key: string]: unknown } | null;
 }): DocumentDisplayType {
+    // Imported agent sessions are stored as text/markdown, but they read as
+    // conversations — the sink's connector marker outranks the mime sniff.
+    if (doc.ocrMetadata?.connector === "agent-sessions") return "conversation";
+
     // Check title first — transcription documents are stored as text/plain but should render as audio
     if (doc.title.toLowerCase().includes("(transcription)")) return "audio";
 

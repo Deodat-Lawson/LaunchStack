@@ -132,6 +132,11 @@ const serverSchema = z.object({
     // are always in scope when the connector is enabled; this governs
     // project-scoped roots only.
     AGENT_KNOWLEDGE_PROJECT_ROOTS: optionalString(),
+    // Agent-sessions connector. Imports Claude Code / Codex session transcripts
+    // from `~/.claude/projects` and `~/.codex/sessions` on the machine running
+    // this server. Same trust model as the agent-knowledge connector, so the
+    // same default: off unless a deployment explicitly opts in.
+    AGENT_SESSIONS_CONNECTOR_ENABLED: optionalString(),
     // Workspace connections (OAuth). All optional — with no client pair set a
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
@@ -459,6 +464,7 @@ function parseServerEnv() {
         DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,
         AGENT_KNOWLEDGE_PROJECT_ROOTS: process.env.AGENT_KNOWLEDGE_PROJECT_ROOTS,
+        AGENT_SESSIONS_CONNECTOR_ENABLED: process.env.AGENT_SESSIONS_CONNECTOR_ENABLED,
         SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,

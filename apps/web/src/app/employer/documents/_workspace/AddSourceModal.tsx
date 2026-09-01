@@ -2,6 +2,7 @@
 
 import React, { type ComponentType, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MessagesSquare } from "lucide-react";
 import { toast } from "sonner";
 import {
     IconBolt,
@@ -237,6 +238,8 @@ export function AddSourceModal({
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
         panel = <DriveConnectPanel tab={active} />;
+    } else if (tab === "agent-sessions") {
+        panel = <AgentSessionsLinkPanel />;
     } else {
         panel = <ConnectPanel tab={active} />;
     }
@@ -1735,6 +1738,58 @@ const PROVIDER_PERKS: Record<string, string[]> = {
     github: ["Code, issues, PRs, and READMEs", "Private repos supported", "Updates on each push"],
     dropbox: ["Pick folders — kept in sync", "All file types indexed", "Shared folders supported"],
 };
+
+/**
+ * Coding sessions have a real browser page rather than a modal flow — this
+ * panel is the signpost to it.
+ */
+function AgentSessionsLinkPanel() {
+    const router = useRouter();
+    return (
+        <div style={{ display: "grid", placeItems: "center", height: "100%", padding: 24 }}>
+            <div style={{ maxWidth: 420, textAlign: "center" }}>
+                <div
+                    style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 14,
+                        display: "grid",
+                        placeItems: "center",
+                        margin: "0 auto 14px",
+                        background: "var(--brand-soft)",
+                        color: "var(--brand-ink)",
+                    }}
+                >
+                    <MessagesSquare style={{ width: 22, height: 22 }} />
+                </div>
+                <div style={{ fontWeight: 650, fontSize: 15, color: "var(--ink)" }}>
+                    Coding sessions
+                </div>
+                <p style={{ fontSize: 13, color: "var(--ink-3)", margin: "8px 0 16px" }}>
+                    Browse every Claude Code and Codex conversation on this machine, import the ones
+                    worth keeping, and continue them in chat. Imported sessions land here in the
+                    “Agent Sessions” folder.
+                </p>
+                <button
+                    type="button"
+                    onClick={() => router.push("/employer/agent-sessions")}
+                    style={{
+                        border: "none",
+                        borderRadius: 10,
+                        padding: "9px 16px",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        background: "var(--brand)",
+                        color: "var(--brand-fg)",
+                    }}
+                >
+                    Open the sessions browser
+                </button>
+            </div>
+        </div>
+    );
+}
 
 function ConnectPanel({ tab }: ConnectPanelProps) {
     const meta = SOURCE_META[tab.id as keyof typeof SOURCE_META];

@@ -82,8 +82,11 @@ function normalize(raw: ClerkUser, index: number): NormalizedUser {
     const email = primary?.email_address?.trim().toLowerCase();
     if (!email) throw new Error(`export[${index}] (${raw.id}): no email address`);
 
+    // `||` is deliberate: an empty joined name or username must fall through,
+    // and `??` would keep the empty string.
     const name =
         [raw.first_name, raw.last_name].filter(Boolean).join(" ").trim() ||
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         raw.username?.trim() ||
         email;
 

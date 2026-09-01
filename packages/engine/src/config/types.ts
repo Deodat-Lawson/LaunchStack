@@ -9,7 +9,7 @@ export type { LoggerPort } from "@launchstack/runtime";
 import type { LoggerPort } from "@launchstack/runtime";
 import type { JobDispatcherPort } from "@launchstack/runtime";
 import type { CreditsPort, MeteringMode } from "@launchstack/store/credits";
-import type { RagPort } from "@launchstack/search";
+import type { RagPort } from "@launchstack/retrieval";
 import type { ChatModelsConfig } from "@launchstack/llm";
 import type { AuxiliaryOpenAIConfig } from "@launchstack/llm";
 

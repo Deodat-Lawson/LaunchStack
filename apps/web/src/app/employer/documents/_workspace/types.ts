@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
 // set kept for this file's existing entries (see apps/web/README.md).
-import { Network as IconMindmap } from "lucide-react";
+import { AppWindow as IconArtifact, Network as IconMindmap } from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -115,6 +115,24 @@ export interface WorkspaceFolder {
 export interface ThreadReference {
     sourceId: string;
     snippet: string;
+    /** Page number (1-based) in the cited document, when the chunk carried one. */
+    page?: number;
+    /** The retrieval match phrase — a more precise highlight target than the snippet. */
+    matchText?: string;
+}
+
+/**
+ * A "jump to the cited passage" request for the document viewer. `nonce`
+ * distinguishes repeat clicks on the same citation so the viewer re-scrolls.
+ */
+export interface CitationHighlight {
+    /** The cited snippet — the primary text to locate and highlight. */
+    text: string;
+    /** Narrower match phrase to fall back to when the snippet can't be located. */
+    matchText?: string;
+    /** Page hint for paginated documents (1-based). */
+    page?: number | null;
+    nonce: number;
 }
 
 /**
@@ -223,6 +241,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconMindmap,
         desc: "Diagrams, mindmaps and flowcharts you can cite",
         href: "/employer/mindmap",
+    },
+    {
+        id: "artifacts",
+        label: "Claude Artifacts",
+        Icon: IconArtifact,
+        desc: "Pages and diagrams imported from Claude",
+        href: "/employer/artifacts",
     },
     {
         id: "audit",
@@ -350,6 +375,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconMindmap,
                 desc: "Diagrams, mindmaps and flowcharts — publishable as sources",
                 href: "/employer/mindmap",
+                external: true,
+            },
+            {
+                id: "artifacts",
+                label: "Claude Artifacts",
+                Icon: IconArtifact,
+                desc: "Import pages and diagrams built in Claude, and manage them here",
+                href: "/employer/artifacts",
                 external: true,
             },
             {

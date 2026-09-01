@@ -137,6 +137,23 @@ const serverSchema = z.object({
     // this server. Same trust model as the agent-knowledge connector, so the
     // same default: off unless a deployment explicitly opts in.
     AGENT_SESSIONS_CONNECTOR_ENABLED: optionalString(),
+    // Workspace connections (OAuth). All optional — with no client pair set a
+    // provider's Connect button renders "not configured" and its routes
+    // decline. Each pair comes from an OAuth app the deployment registers with
+    // that provider; the redirect URI to register is
+    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
+    // is nowhere safe to put a token, so the connector declines to exist.
+    // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
+    // with Drive-linked files.)
+    // Slack app client pair (OAuth v2 bot install). Distinct from
+    // SLACK_BOT_TOKEN below, which remains the deployment-global fallback.
+    SLACK_CLIENT_ID: optionalString(),
+    SLACK_CLIENT_SECRET: optionalString(),
+    // GitHub OAuth app pair. GITHUB_OAUTH_* to keep clear of GITHUB_TOKEN,
+    // the deployment-global PAT fallback used by the repo explainer.
+    GITHUB_OAUTH_CLIENT_ID: optionalString(),
+    GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
     // services/transcription (ADR-004) — Whisper transcription + yt-dlp
     // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
     // or when transcribing video-platform URLs.
@@ -161,6 +178,15 @@ const serverSchema = z.object({
     SIDECAR_URL: optionalString(),
     SIDECAR_API_KEY: optionalString(),
     ADEU_SERVICE_URL: optionalString(),
+    // Gotenberg PDF rendering (ADR-009) — DOCX/Office → PDF via LibreOffice,
+    // HTML/Markdown → PDF via Chromium. Gotenberg is the one PDF owner:
+    // unset, every PDF-producing route returns a typed 503.
+    GOTENBERG_SERVICE_URL: optionalString(),
+    // Basic-auth pair for the service (it runs with --api-enable-basic-auth,
+    // failing closed like the other compute services' X-API-Key). Both or
+    // neither — a lone half is a configuration error at client construction.
+    GOTENBERG_SERVICE_USERNAME: optionalString(),
+    GOTENBERG_SERVICE_PASSWORD: optionalString(),
     // services/document-converter (ADR-004) — the consolidated OCR routing,
     // vision classification, PDF page rendering, and Docling parsing service.
     // When set, DOCLING becomes available and DoclingIngestionAdapter takes
@@ -285,6 +311,21 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
+    // Drive-linked files: PDFs and Word docs manually editable via a durable
+    // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
+    // OAuth client below exists — the GCP consent screen is the one real
+    // lead-time item, so the flag ships off by default.
+    GOOGLE_DOCS_EDITING_ENABLED: optionalString(),
+    GOOGLE_OAUTH_CLIENT_ID: optionalString(),
+    GOOGLE_OAUTH_CLIENT_SECRET: optionalString(),
+    // Absolute callback URL registered on the GCP OAuth client. Defaults to
+    // `${APP_PUBLIC_URL}/api/connectors/google/oauth/callback`, falling back
+    // to the request origin in dev.
+    GOOGLE_OAUTH_REDIRECT_URL: optionalString(),
+    // Quiet period before the reconciler pulls a Drive revision (minutes,
+    // default 10) — Docs autosaves per keystroke; a settled revision becomes
+    // one document version instead of eight.
+    GOOGLE_DOCS_SETTLE_MINUTES: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -337,6 +378,11 @@ const clientSchema = z.object({
     ),
     NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
     NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+    // Google Picker needs a browser API key (restricted to the Picker API) and
+    // the Cloud project number — setAppId is what registers the drive.file
+    // grant for picked items to our OAuth client.
+    NEXT_PUBLIC_GOOGLE_API_KEY: optionalString(),
+    NEXT_PUBLIC_GOOGLE_APP_ID: optionalString(),
 });
 
 const skipValidation =
@@ -419,9 +465,16 @@ function parseServerEnv() {
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,
         AGENT_KNOWLEDGE_PROJECT_ROOTS: process.env.AGENT_KNOWLEDGE_PROJECT_ROOTS,
         AGENT_SESSIONS_CONNECTOR_ENABLED: process.env.AGENT_SESSIONS_CONNECTOR_ENABLED,
+        SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+        SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+        GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
+        GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
         SIDECAR_URL: process.env.SIDECAR_URL,
         SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
         ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,
+        GOTENBERG_SERVICE_URL: process.env.GOTENBERG_SERVICE_URL,
+        GOTENBERG_SERVICE_USERNAME: process.env.GOTENBERG_SERVICE_USERNAME,
+        GOTENBERG_SERVICE_PASSWORD: process.env.GOTENBERG_SERVICE_PASSWORD,
         DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
         DOCUMENT_CONVERTER_API_KEY: process.env.DOCUMENT_CONVERTER_API_KEY,
         OCR_WORKER_URL: process.env.OCR_WORKER_URL,
@@ -466,6 +519,11 @@ function parseServerEnv() {
             | "sidecar"
             | undefined,
         TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
+        GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
+        GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
+        GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
@@ -532,5 +590,7 @@ export const env = {
             | "database"
             | undefined,
         NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+        NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+        NEXT_PUBLIC_GOOGLE_APP_ID: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
     }),
 };

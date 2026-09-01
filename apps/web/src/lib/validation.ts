@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 
+import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+
 export const createErrorResponse = (message: string, status = 400) => {
     return NextResponse.json(
         {
@@ -683,3 +685,42 @@ export const PublishMindmapSchema = z.object({
     /** Markdown rendering of the map, produced by the editor. */
     markdown: z.string().min(1).max(5_000_000),
 });
+
+// ============================================================================
+// Claude artifacts (imported pages, diagrams, and snippets)
+// ============================================================================
+
+export const ImportArtifactSchema = z
+    .object({
+        title: z.string().min(1).max(300).optional(),
+        description: z.string().max(2000).optional(),
+        folder: z.string().min(1).max(256).optional(),
+        /** Provenance — usually a claude.ai share link. Kept even for pastes. */
+        sourceUrl: z.string().url().max(2048).optional(),
+        /** The artifact body, when pasting or uploading a file. */
+        content: z.string().min(1).max(MAX_ARTIFACT_BYTES).optional(),
+        /** How the body arrived, for provenance display; `url` is set server-side. */
+        importMethod: z.enum(["paste", "upload"]).optional(),
+        /** Explicit type; detected from the body when omitted. */
+        artifactType: z.enum(ARTIFACT_TYPES).optional(),
+        /** Fetch the body from `sourceUrl` server-side instead of sending it. */
+        fetchFromUrl: z.boolean().optional(),
+    })
+    .refine(data => data.content !== undefined || (data.fetchFromUrl && data.sourceUrl), {
+        message: "Provide artifact content, or set fetchFromUrl with a sourceUrl",
+    });
+
+export const UpdateArtifactSchema = z
+    .object({
+        title: z.string().min(1).max(300).optional(),
+        description: z.string().max(2000).nullable().optional(),
+        folder: z.string().min(1).max(256).optional(),
+        starred: z.boolean().optional(),
+        sourceUrl: z.string().url().max(2048).nullable().optional(),
+        artifactType: z.enum(ARTIFACT_TYPES).optional(),
+        /** Replace the body (re-derives size, hash, and search text). */
+        content: z.string().min(1).max(MAX_ARTIFACT_BYTES).optional(),
+        /** Bring the artifact back out of the trash. */
+        restore: z.boolean().optional(),
+    })
+    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });

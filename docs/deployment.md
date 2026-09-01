@@ -58,6 +58,7 @@ docker compose --env-file .env up
 - `transcription` — Whisper transcription + yt-dlp download (port 8000, [ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
 - `adeu-docs-editing` — Adeu DOCX redlining service (host port 8003)
 - `document-converter` — OCR routing, vision classification, PDF rendering, docling-backed parsing (port 8002)
+- `gotenberg` — PDF rendering: DOCX/Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium (host port 8004, [ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md))
 - `worker` — the sole durable workflow coordinator (port 8020): consumes the transactional outbox and hosts the Inngest serve endpoint at `/api/inngest` ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md)); health at `/healthz` and `/readyz`
 - `app` — Next.js runtime (port 3000) — command acceptance and reads only
 - `inngest-dev` — Inngest dev server (dashboard at `http://localhost:8288`), polling `http://worker:8020/api/inngest`
@@ -176,6 +177,7 @@ modes, and migration from the pre-PR variables.
 | `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
 | `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
 | `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
+| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 `OCR_WORKER_URL`) are being phased out per

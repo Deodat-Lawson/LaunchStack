@@ -40,6 +40,7 @@
         "./connectors": "./src/connectors/index.ts",
         "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
         "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
+        "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
         "./package.json": "./package.json"
     },
     "files": [
@@ -199,7 +200,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/runtime": "workspace:^",
-        "@launchstack/search": "workspace:^",
+        "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",
         "dayjs": "^1.11.18",

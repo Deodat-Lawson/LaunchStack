@@ -38,9 +38,29 @@ export interface DiscoveredKnowledgeItem {
 
 /** A discovered item whose contents have been read. */
 export interface KnowledgeItem extends DiscoveredKnowledgeItem {
-    readonly content: string;
-    /** sha256 of `content`. Drives change detection. */
+    /**
+     * Text connectors produce a string; remote connectors that carry binary
+     * formats (PDF, DOCX, images) produce raw bytes. Sinks that only handle
+     * text must narrow and reject bytes rather than coerce them.
+     */
+    readonly content: string | Uint8Array;
+    /**
+     * Stable fingerprint of `content`. Text connectors use sha256 of the text;
+     * remote connectors may use the provider's revision identity (md5Checksum,
+     * headRevisionId) so change detection needs no download. Opaque to the
+     * host — only equality matters.
+     */
     readonly contentHash: string;
+}
+
+/** Byte length of an item's content, whichever form it takes. */
+export function contentByteLength(content: string | Uint8Array): number {
+    return typeof content === "string" ? Buffer.byteLength(content, "utf-8") : content.byteLength;
+}
+
+/** Content as a Buffer, ready for blob upload. */
+export function contentToBuffer(content: string | Uint8Array): Buffer {
+    return typeof content === "string" ? Buffer.from(content, "utf-8") : Buffer.from(content);
 }
 
 /** An item the scan deliberately passed over, and why. */

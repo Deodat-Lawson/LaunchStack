@@ -15,11 +15,16 @@ import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnal
 import { reindexCompanyEmbeddingsJob } from "~/server/inngest/functions/reindexCompanyEmbeddings";
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
+import { googleDriveSyncReconciler } from "~/server/inngest/functions/googleDriveSyncReconciler";
 import {
     founderWeeklyReviewDispatcher,
     founderWeeklyReviewDispatchReconciler,
     founderWeeklyReviewGenerationJob,
 } from "~/server/inngest/functions/founderWeeklyReview";
+import {
+    googleDriveSyncCron,
+    googleDriveSyncJob,
+} from "~/server/inngest/functions/googleDriveSync";
 
 export function createInngestHandler() {
     return serve({
@@ -31,9 +36,12 @@ export function createInngestHandler() {
             reindexCompanyEmbeddingsJob,
             modifyDocument,
             crawlWebsite,
+            googleDriveSyncReconciler,
             founderWeeklyReviewDispatcher,
             founderWeeklyReviewDispatchReconciler,
             founderWeeklyReviewGenerationJob,
+            googleDriveSyncJob,
+            googleDriveSyncCron,
         ],
     });
 }

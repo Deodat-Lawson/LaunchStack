@@ -2,7 +2,7 @@ import {
     buildReferences,
     extractRecommendedPages,
 } from "~/app/api/agents/documentQ&A/services/references";
-import type { SearchResult } from "~/lib/tools/rag";
+import type { SearchResult } from "@launchstack/retrieval/search-types";
 
 describe("references service", () => {
     it("extracts sorted unique recommended pages and ignores invalid values", () => {

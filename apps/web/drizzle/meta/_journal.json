@@ -64,6 +64,27 @@
       "when": 1788032041550,
       "tag": "20260829193401_lowly_silverclaw",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788036212629,
+      "tag": "20260829204332_google_drive_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788037408131,
+      "tag": "20260829210328_workspace_connections_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1788118573347,
+      "tag": "20260830193613_claude_artifacts",
+      "breakpoints": true
     }
   ]
 }

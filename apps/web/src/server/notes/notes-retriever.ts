@@ -1,0 +1,243 @@
+/**
+ * Retriever for user-authored sticky notes on documents.
+ *
+ * Mirrors VectorRetriever's shape so note hits can be unioned into the
+ * ensemble retriever without bespoke plumbing. Queries `documentNoteEmbeddings`
+ * by cosine distance on `embedding_short` (Matryoshka-sliced), with a strict
+ * scope filter on `documentId` / `companyId` and — in multi-doc mode — the
+ * set of docs the user is asking about.
+ *
+ * Produces LangChain `Document`s with `source: "note"` and a back-reference
+ * to the note id, so downstream consumers can render the note's title +
+ * anchor quote in citations.
+ */
+
+import { sql } from "drizzle-orm";
+import { T } from "~/server/db/tables";
+import { BaseRetriever, type BaseRetrieverInput } from "@langchain/core/retrievers";
+import { Document } from "@langchain/core/documents";
+import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
+
+import { db, toRows } from "~/server/db/index";
+import type { EmbeddingsProvider, SearchScope } from "@launchstack/retrieval/search-types";
+
+/**
+ * Notes retrievers extend the global `SearchScope` with a "user" branch so
+ * Studio's Notebook + Ask My Notes can pull freeform notes that aren't tied
+ * to any document. Keeping it local avoids leaking the user-scope concept
+ * into the document RAG pipeline.
+ */
+type NotesSearchScope = SearchScope | "user";
+
+interface NotesRetrieverConfig extends BaseRetrieverInput {
+    embeddings: EmbeddingsProvider;
+    topK?: number;
+    searchScope: NotesSearchScope;
+}
+
+interface SingleDocConfig extends NotesRetrieverConfig {
+    documentId: number;
+    searchScope: "document";
+}
+interface CompanyConfig extends NotesRetrieverConfig {
+    companyId: number | string;
+    searchScope: "company";
+}
+interface MultiDocConfig extends NotesRetrieverConfig {
+    documentIds: number[];
+    searchScope: "multi-document";
+}
+interface UserConfig extends NotesRetrieverConfig {
+    userId: string;
+    /** Active workspace — keeps the user's notes from other workspaces out. */
+    companyId: number | string;
+    searchScope: "user";
+}
+
+type NotesRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig | UserConfig;
+
+type NoteRow = {
+    note_id: number;
+    document_id: string | null;
+    company_id: string | null;
+    version_id: string | null;
+    content: string;
+    title: string | null;
+    content_markdown: string | null;
+    anchor: unknown;
+    anchor_status: string | null;
+    distance: number;
+};
+
+export class NotesRetriever extends BaseRetriever {
+    lc_namespace = ["rag", "retrievers", "notes"];
+
+    private embeddings: EmbeddingsProvider;
+    private topK: number;
+    private searchScope: NotesSearchScope;
+    private documentId?: number;
+    private companyId?: number | string;
+    private documentIds?: number[];
+    private userId?: string;
+
+    constructor(fields: NotesRetrieverFields) {
+        super(fields);
+        this.embeddings = fields.embeddings;
+        this.topK = fields.topK ?? 5;
+        this.searchScope = fields.searchScope;
+        if (fields.searchScope === "document") this.documentId = fields.documentId;
+        else if (fields.searchScope === "company") this.companyId = fields.companyId;
+        else if (fields.searchScope === "multi-document") this.documentIds = fields.documentIds;
+        else if (fields.searchScope === "user") {
+            this.userId = fields.userId;
+            this.companyId = fields.companyId;
+        }
+    }
+
+    async _getRelevantDocuments(
+        query: string,
+        _run?: CallbackManagerForRetrieverRun
+    ): Promise<Document[]> {
+        try {
+            const embedding = await this.embeddings.embedQuery(query);
+            const short = embedding.slice(0, 512);
+            const shortLiteral = sql.raw(`'[${short.join(",")}]'::vector(512)`);
+            const fullLiteral = sql.raw(`'[${embedding.join(",")}]'::vector(1536)`);
+
+            // Build scope predicate. documentId/companyId columns on the notes
+            // tables are varchars (user-supplied strings), so we coerce and compare
+            // with a text literal. Note: casting the runtime int to text keeps this
+            // safe against injection since we only accept numeric inputs.
+            const where = this.buildWhere();
+            if (!where) return [];
+
+            const rows = toRows<NoteRow>(
+                await db.execute<NoteRow>(sql`
+          SELECT
+            ne.note_id,
+            ne.document_id,
+            ne.company_id,
+            ne.version_id,
+            ne.content,
+            n.title,
+            n.content_markdown,
+            n.anchor,
+            n.anchor_status,
+            (ne.embedding <-> ${fullLiteral}) as distance
+          FROM ${T.noteEmbeddings} ne
+          JOIN ${T.notes} n ON n.id = ne.note_id
+          WHERE ${where}
+            AND ne.embedding IS NOT NULL
+            AND ne.embedding_short IS NOT NULL
+            AND COALESCE(n.anchor_status, 'resolved') <> 'orphaned'
+          ORDER BY ne.embedding_short <-> ${shortLiteral}
+          LIMIT ${this.topK}
+        `)
+            );
+
+            return rows.map(r => {
+                const snippet = (r.title ? `${r.title}\n\n` : "") + (r.content ?? "");
+                return new Document({
+                    pageContent: snippet,
+                    metadata: {
+                        source: "note",
+                        noteId: r.note_id,
+                        documentId: r.document_id,
+                        companyId: r.company_id,
+                        versionId: r.version_id,
+                        title: r.title,
+                        anchor: r.anchor,
+                        anchorStatus: r.anchor_status,
+                        distance: r.distance,
+                        searchScope: this.searchScope,
+                    },
+                });
+            });
+        } catch (err) {
+            console.error("[NotesRetriever] error:", err);
+            return [];
+        }
+    }
+
+    private buildWhere(): ReturnType<typeof sql> | null {
+        if (this.searchScope === "document" && this.documentId !== undefined) {
+            const asText = String(this.documentId);
+            return sql`ne.document_id = ${asText}`;
+        }
+        if (this.searchScope === "company" && this.companyId !== undefined) {
+            const asText = String(this.companyId);
+            return sql`ne.company_id = ${asText}`;
+        }
+        if (this.searchScope === "multi-document" && this.documentIds?.length) {
+            const list = this.documentIds.map(n => String(n));
+            return sql`ne.document_id = ANY(${list})`;
+        }
+        if (this.searchScope === "user" && this.userId) {
+            // Legacy rows predate the company stamp and stay visible to their owner,
+            // matching how the notes list and semantic search treat them.
+            const asText = String(this.companyId ?? "");
+            return sql`ne.user_id = ${this.userId} AND (ne.company_id = ${asText} OR ne.company_id IS NULL)`;
+        }
+        return null;
+    }
+}
+
+export function createDocumentNotesRetriever(
+    documentId: number,
+    embeddings: EmbeddingsProvider,
+    topK = 5
+): NotesRetriever {
+    return new NotesRetriever({
+        documentId,
+        embeddings,
+        topK,
+        searchScope: "document",
+    });
+}
+
+export function createCompanyNotesRetriever(
+    companyId: number | string,
+    embeddings: EmbeddingsProvider,
+    topK = 5
+): NotesRetriever {
+    return new NotesRetriever({
+        companyId,
+        embeddings,
+        topK,
+        searchScope: "company",
+    });
+}
+
+export function createMultiDocNotesRetriever(
+    documentIds: number[],
+    embeddings: EmbeddingsProvider,
+    topK = 5
+): NotesRetriever {
+    return new NotesRetriever({
+        documentIds,
+        embeddings,
+        topK,
+        searchScope: "multi-document",
+    });
+}
+
+/**
+ * Retrieve notes scoped to a single user within their active workspace —
+ * used by Notebook semantic search and Ask My Notes. Pulls freeform (no
+ * `documentId`) and anchored notes alike, since both share the same
+ * `user_id` filter.
+ */
+export function createUserNotesRetriever(
+    userId: string,
+    companyId: number | string,
+    embeddings: EmbeddingsProvider,
+    topK = 5
+): NotesRetriever {
+    return new NotesRetriever({
+        userId,
+        companyId,
+        embeddings,
+        topK,
+        searchScope: "user",
+    });
+}

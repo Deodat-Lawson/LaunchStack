@@ -1,3 +1,56 @@
+// ESM-only packages jest must run through babel: the unified/remark/rehype
+// graph that react-markdown pulls in, plus better-auth and its dependency
+// graph. Entries are regex fragments; scoped packages use a `[\w+.-]*` tail so
+// one spelling matches both the hoisted dir (@scope/name) and pnpm's
+// flattened store dir (@scope+name@version).
+const esmDeps = [
+    "react-markdown",
+    "remark-[\\w-]+",
+    "rehype-[\\w-]+",
+    "micromark[\\w-]*",
+    "mdast-util[\\w-]*",
+    "unist-[\\w-]+",
+    "hast-util[\\w-]*",
+    "unified",
+    "bail",
+    "is-plain-obj",
+    "trough",
+    "vfile[\\w-]*",
+    "devlop",
+    "html-url-attributes",
+    "property-information",
+    "space-separated-tokens",
+    "comma-separated-tokens",
+    "ccount",
+    "escape-string-regexp",
+    "markdown-table",
+    "decode-named-character-reference",
+    "character-entities[\\w-]*",
+    "character-reference-invalid",
+    "parse-entities",
+    "stringify-entities",
+    "is-decimal",
+    "is-hexadecimal",
+    "is-alphanumerical",
+    "is-alphabetical",
+    "trim-lines",
+    "longest-streak",
+    "zwitch",
+    "estree-util[\\w-]*",
+    "hastscript",
+    "web-namespaces",
+    "better-auth",
+    "@better-auth[\\w+.-]*",
+    "@better-fetch[\\w+.-]*",
+    "@noble[\\w+.-]*",
+    "nanostores",
+    "kysely",
+    "defu",
+    "rou3",
+    "uncrypto",
+    "jose",
+];
+
 /** @type {import('jest').Config} */
 export const config = {
     testEnvironment: "node",
@@ -6,12 +59,11 @@ export const config = {
         "^.+\\.(ts|tsx|js|jsx|mjs)$": ["babel-jest", { configFile: "./jest.babel.config.cjs" }],
     },
     // Two patterns because pnpm: hoisted paths look like node_modules/<pkg>,
-    // the real files live under node_modules/.pnpm/<pkg>@<version>/… (scoped
-    // packages flatten to @scope+name). A file is skipped when EITHER pattern
-    // matches, so each carries the same whitelist in its own spelling.
+    // the real files live under node_modules/.pnpm/<pkg>@<version>/… — a file
+    // is skipped when EITHER pattern matches, so both carry the same list.
     transformIgnorePatterns: [
-        "node_modules/(?!\\.pnpm/)(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-.*|micromark.*|mdast.*|hast-.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table|better-auth|@better-auth|@better-fetch|@noble|nanostores|kysely|defu|rou3|uncrypto|jose)/)",
-        "node_modules/\\.pnpm/(?!(react-markdown|remark-gfm|remark-math|rehype-katex|unified|bail|is-plain-obj|trough|vfile|unist-|micromark|mdast|hast-|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|ccount|escape-string-regexp|markdown-table|better-auth|@better-auth\\+|@better-fetch\\+|@noble\\+|nanostores|kysely|defu|rou3|uncrypto|jose)[@.a-z-]*@)",
+        `node_modules/(?!\\.pnpm|(?:${esmDeps.join("|")})/)`,
+        `node_modules/\\.pnpm/(?!(?:${esmDeps.join("|")})@)`,
     ],
     // Keep ~/* pointed at apps/web src. The @launchstack/* mappings resolve the
     // workspace subpaths (e.g. @launchstack/core/ocr/trigger → the TS source)
@@ -69,11 +121,17 @@ export const config = {
         "^@launchstack/indexing/knowledge-graph$":
             "<rootDir>/../../packages/indexing/src/knowledge-graph/index.ts",
         "^@launchstack/indexing/(.*)$": "<rootDir>/../../packages/indexing/src/$1",
-        "^@launchstack/search$": "<rootDir>/../../packages/search/src/index.ts",
-        "^@launchstack/search/retrievers$":
-            "<rootDir>/../../packages/search/src/retrievers/index.ts",
-        "^@launchstack/search/reranking$": "<rootDir>/../../packages/search/src/reranking/index.ts",
-        "^@launchstack/search/(.*)$": "<rootDir>/../../packages/search/src/$1",
+        "^@launchstack/retrieval$": "<rootDir>/../../packages/retrieval/src/index.ts",
+        "^@launchstack/retrieval/retrievers$":
+            "<rootDir>/../../packages/retrieval/src/algorithms/index.ts",
+        "^@launchstack/retrieval/reranking$":
+            "<rootDir>/../../packages/retrieval/src/algorithms/reranking/index.ts",
+        "^@launchstack/retrieval/citation-builder$":
+            "<rootDir>/../../packages/retrieval/src/tools/citation-builder/index.ts",
+        "^@launchstack/retrieval/algorithms$":
+            "<rootDir>/../../packages/retrieval/src/algorithms/index.ts",
+        "^@launchstack/retrieval/tools$": "<rootDir>/../../packages/retrieval/src/tools/index.ts",
+        "^@launchstack/retrieval/(.*)$": "<rootDir>/../../packages/retrieval/src/$1",
         "^@launchstack/orchestration$": "<rootDir>/../../packages/orchestration/src/index.ts",
         "^@launchstack/orchestration/pipeline-events$":
             "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",
@@ -81,6 +139,7 @@ export const config = {
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
+        "^@launchstack/document-conversion-engine$": "<rootDir>/../../packages/document-conversion-engine/src/index.ts",
         "^@launchstack/evidence$": "<rootDir>/../../packages/evidence/src/index.ts",
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",

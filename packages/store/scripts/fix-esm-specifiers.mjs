@@ -9,7 +9,7 @@
  * files are real ESM and Node requires a full path with an extension. Without
  * this step:
  *
- *   import("@launchstack/search/retrievers")
+ *   import("@launchstack/retrieval/retrievers")
  *   → ERR_MODULE_NOT_FOUND: Cannot find module '.../dist/rag/retrievers/vector-retriever'
  *
  * `publint` does NOT catch this — it validates the exports map against the

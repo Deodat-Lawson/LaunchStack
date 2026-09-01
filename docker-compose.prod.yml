@@ -1,0 +1,102 @@
+# Production overlay — the "lean" single-VM deployment (see
+# docs/runbooks/azure-lean-deploy.md).
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d
+#
+# What it changes relative to the local stack:
+#   - app + worker run the GHCR images published by .github/workflows/docker.yml
+#     (only `migrate` still builds locally — its target is the light deps stage).
+#   - No self-hosted Whisper and no Docling: transcription resolves to the
+#     cloud provider (packages/llm registry default) and OCR routes to the
+#     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
+#     containers move behind opt-in profiles.
+#   - No Inngest dev server. INNGEST_DEV is cleared; set INNGEST_EVENT_KEY /
+#     INNGEST_SIGNING_KEY to enable the background verticals via Inngest Cloud
+#     (ingestion itself runs through the outbox and needs neither).
+#   - Caddy terminates TLS for ${DOMAIN} (app, plus /api/inngest on the
+#     worker) and files.${DOMAIN} (SeaweedFS object URLs, anonymous read).
+#   - No service publishes a host port except Caddy; the NSG only admits
+#     22/80/443 anyway, but the containers shouldn't offer more than the
+#     firewall happens to block.
+
+services:
+  app:
+    image: ghcr.io/deodat-lawson/launchstack-web:latest
+    build: !reset null
+    ports: !reset []
+    depends_on: !reset
+      migrate:
+        condition: service_completed_successfully
+      seaweedfs:
+        condition: service_started
+      adeu-docs-editing:
+        condition: service_started
+      document-converter:
+        condition: service_started
+    environment:
+      INNGEST_DEV: ""
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      # Public object-URL origin. Also the SDK endpoint — the app reaches its
+      # own SeaweedFS through Caddy so that stored URLs and fetch checks agree
+      # on one origin (lib/storage matches URLs by this prefix).
+      NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
+      NEXT_PUBLIC_APP_URL: https://${DOMAIN}
+
+  worker:
+    image: ghcr.io/deodat-lawson/launchstack-web-worker:latest
+    build: !reset null
+    ports: !reset []
+    environment:
+      INNGEST_DEV: ""
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
+
+  db:
+    ports: !reset []
+
+  # The base stack leaves seaweedfs with Docker's default restart policy, so a
+  # single failed start (a slow db, a host reboot) leaves object storage down
+  # until someone notices. Every other service here is unless-stopped.
+  seaweedfs:
+    restart: unless-stopped
+
+  adeu-docs-editing:
+    ports: !reset []
+
+  document-converter:
+    ports: !reset []
+
+  # Added to the base stack by ADR-009; same rule as the others.
+  gotenberg:
+    ports: !reset []
+
+  # Self-hosted Whisper — excluded from the lean stack. Re-enable with
+  # `--profile whisper` and TRANSCRIPTION_PROVIDER=sidecar.
+  transcription:
+    profiles: ["whisper"]
+    ports: !reset []
+
+  # Dev-only Inngest server; production uses Inngest Cloud (or none).
+  inngest-dev:
+    profiles: ["inngest-dev"]
+
+  caddy:
+    image: caddy:2
+    container_name: pdr_ai_v2-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
+  caddy_config:

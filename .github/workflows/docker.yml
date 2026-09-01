@@ -138,6 +138,9 @@ jobs:
         env:
           SKIP_ENV_VALIDATION: "1"
           STANDALONE_BUILD: "1"
+          # better-auth throws on the default secret during `next build`, and
+          # SKIP_ENV_VALIDATION only bypasses the zod schema, not that check.
+          BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
         run: pnpm --filter @launchstack/web build
 
       - name: Set up Docker Buildx

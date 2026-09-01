@@ -29,7 +29,11 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, resolve as resolvePath } from "node:path";
 
 const ROOT = resolvePath(import.meta.dirname, "../..");
-const DOCKERFILES = ["apps/web/Dockerfile", "apps/worker/Dockerfile"];
+const DOCKERFILES = [
+    "apps/web/Dockerfile",
+    "apps/web/Dockerfile.prebuilt",
+    "apps/worker/Dockerfile",
+];
 
 /** Workspace dirs that ship a package.json, as the Dockerfiles address them. */
 function workspaceManifests() {

@@ -29,6 +29,7 @@ below use these names.
 | VM | `<VM_NAME>` — Standard_D2as_v7 (2 vCPU / 8 GB), Ubuntu 24.04 |
 | Public IP | `<PUBLIC_IP>` (static) |
 | SSH | `ssh <ADMIN_USER>@<PUBLIC_IP>` |
+| Open ports | 22, 80, 443 (Azure NSG) — nothing else is reachable from outside |
 | Stack location | `/home/<ADMIN_USER>/LaunchStack` |
 | OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, F0 free tier (500 pages/month) |
 | Secrets | Key Vault `<VAULT_NAME>` |

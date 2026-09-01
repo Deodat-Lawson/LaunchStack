@@ -20,7 +20,7 @@ COPY packages/store/package.json ./packages/store/
 COPY packages/llm/package.json ./packages/llm/
 COPY packages/conversion/package.json ./packages/conversion/
 COPY packages/indexing/package.json ./packages/indexing/
-COPY packages/search/package.json ./packages/search/
+COPY packages/retrieval/package.json ./packages/retrieval/
 COPY packages/orchestration/package.json ./packages/orchestration/
 COPY packages/editing/package.json ./packages/editing/
 COPY packages/collab/package.json ./packages/collab/

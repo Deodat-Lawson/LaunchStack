@@ -182,6 +182,14 @@ services:
         condition: service_healthy
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      # The filer stores its metadata in Postgres, and docker/filer.toml is a
+      # static file mounted read-only — its `password` line can only carry the
+      # local default. SeaweedFS overlays any filer.toml key from
+      # WEED_<SECTION>_<KEY>, so this is what actually authenticates the filer.
+      # Without it, every deployment that sets a real POSTGRES_PASSWORD (i.e.
+      # every production one) crash-loops on `failed SASL auth` and object
+      # storage never comes up.
+      WEED_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
       S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
     volumes:

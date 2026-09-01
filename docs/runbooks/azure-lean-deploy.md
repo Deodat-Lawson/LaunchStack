@@ -16,27 +16,29 @@ pgvector, object storage, the document services — still runs on your own box.
 
 ---
 
-## Current live instance
+## Your deployment's inventory
+
+Fill this in once and the rest of the guide refers back to it. The commands
+below use these names.
 
 | | |
 |---|---|
-| **URL** | https://20.110.112.248.sslip.io |
-| **Files origin** | https://files.20.110.112.248.sslip.io |
-| Resource group | `launchstack-prod` (subscription "Azure subscription 1") |
-| VM | `launchstack-vm` — Standard_D2as_v7 (2 vCPU / 8 GB), Ubuntu 24.04, eastus2 |
-| Public IP | `20.110.112.248` (static) |
-| SSH | `ssh launchstack@20.110.112.248` |
-| Open ports | 22, 80, 443 (Azure NSG) |
-| Stack location | `/home/launchstack/LaunchStack` |
-| OCR | `launchstack-docintel` — Azure Document Intelligence, **F0 free tier (500 pages/month)** |
-| Backups | Storage account `lsbackup0fd637`, container `db-backups`, 30-day retention |
+| **URL** | `https://<DOMAIN>` |
+| **Files origin** | `https://files.<DOMAIN>` |
+| Resource group | `<RESOURCE_GROUP>` |
+| VM | `<VM_NAME>` — Standard_D2as_v7 (2 vCPU / 8 GB), Ubuntu 24.04 |
+| Public IP | `<PUBLIC_IP>` (static) |
+| SSH | `ssh <ADMIN_USER>@<PUBLIC_IP>` |
+| Stack location | `/home/<ADMIN_USER>/LaunchStack` |
+| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, F0 free tier (500 pages/month) |
+| Secrets | Key Vault `<VAULT_NAME>` |
+| Backups | Storage account `<BACKUP_ACCOUNT>`, container `db-backups`, 30-day retention |
 
-`*.sslip.io` is wildcard DNS that resolves any `<ip>.sslip.io` name to that IP —
-it gives a real, publicly valid HTTPS hostname with no registrar. Swapping in
-your own domain is a two-minute change; see
+**On hostnames without a domain.** `*.sslip.io` is wildcard DNS that resolves
+any `<ip>.sslip.io` name to that IP, so `https://<PUBLIC_IP>.sslip.io` gives a
+publicly valid HTTPS hostname with no registrar. Certificates issue normally.
+Swapping in your own domain later is the substitution in
 [Moving to your own domain](#moving-to-your-own-domain).
-
----
 
 ## Prerequisites
 
@@ -54,17 +56,17 @@ your own domain is a two-minute change; see
 ## Step 1 — Provision the Azure resources
 
 ```bash
-az group create -n launchstack-prod -l eastus2
+az group create -n <RESOURCE_GROUP> -l eastus2
 
 az vm create \
-  -g launchstack-prod -n launchstack-vm -l eastus2 \
+  -g <RESOURCE_GROUP> -n <VM_NAME> -l eastus2 \
   --image Ubuntu2404 --size Standard_D2as_v7 \
   --os-disk-size-gb 64 --storage-sku StandardSSD_LRS \
   --public-ip-sku Standard --public-ip-address-allocation static \
   --admin-username launchstack --generate-ssh-keys \
   --custom-data cloud-init.yaml
 
-az vm open-port -g launchstack-prod -n launchstack-vm --port 80,443 --priority 900
+az vm open-port -g <RESOURCE_GROUP> -n <VM_NAME> --port 80,443 --priority 900
 ```
 
 with `cloud-init.yaml` installing Docker on first boot:
@@ -97,10 +99,10 @@ Then provision OCR (free tier) and the backup storage account:
 az provider register --namespace Microsoft.CognitiveServices   # once per subscription
 
 az cognitiveservices account create \
-  -n launchstack-docintel -g launchstack-prod \
+  -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> \
   --kind FormRecognizer --sku F0 -l eastus2 --yes
 
-az storage account create -n <unique-name> -g launchstack-prod -l eastus2 \
+az storage account create -n <unique-name> -g <RESOURCE_GROUP> -l eastus2 \
   --sku Standard_LRS --kind StorageV2 --access-tier Cool --allow-blob-public-access false
 az storage container create -n db-backups --account-name <unique-name>
 ```
@@ -110,7 +112,7 @@ az storage container create -n db-backups --account-name <unique-name>
 ## Step 2 — Install the stack on the VM
 
 ```bash
-ssh launchstack@<PUBLIC_IP>
+ssh <ADMIN_USER>@<PUBLIC_IP>
 git clone --depth 1 https://github.com/Deodat-Lawson/LaunchStack.git
 ```
 
@@ -121,7 +123,7 @@ of what is committed on `main`.
 
 ## Step 3 — Configure `.env`
 
-Create `/home/launchstack/LaunchStack/.env` (mode `600`, never committed).
+Create `/home/<ADMIN_USER>/LaunchStack/.env` (mode `600`, never committed).
 
 **Generate every internal secret** — do not ship the `pdr_local_*` defaults from
 `docker-compose.yml`. They exist so `make up` works locally and are marked
@@ -246,7 +248,7 @@ Then in a browser:
 Images publish to GHCR on every push to `main`.
 
 ```bash
-ssh launchstack@<PUBLIC_IP> 'cd LaunchStack && git pull && \
+ssh <ADMIN_USER>@<PUBLIC_IP> 'cd LaunchStack && git pull && \
   docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env pull app worker && \
   docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d --build'
 ```
@@ -261,7 +263,7 @@ changes on its own.
 ## Secrets: Azure Key Vault
 
 `.env` on the VM is a **derived artifact**. The source of record is Key Vault
-`launchstack-kv-a9be20`, which holds 29 secrets (empty-valued variables are not
+`<VAULT_NAME>`, which holds 29 secrets (empty-valued variables are not
 stored — Key Vault rejects empty values, and Compose treats absent and empty
 identically through its `${VAR:-}` defaults).
 
@@ -270,7 +272,7 @@ the app reads plain environment variables, so rather than touch application
 code, a script regenerates the `.env` Compose already consumes.
 
 **No credential is stored on the VM.** The VM has a system-assigned managed
-identity (`55e2e28d-7476-48db-b199-2e8c8b68a8aa`) holding exactly one role on
+identity (`<VM_PRINCIPAL_ID>`) holding exactly one role on
 the vault — `Key Vault Secrets User`, read-only. The token comes from IMDS
 (`169.254.169.254`), which only answers processes on that machine. Writes are
 refused with HTTP 403; the seeding step used a temporary
@@ -279,7 +281,7 @@ refused with HTTP 403; the seeding step used a temporary
 Regenerate `.env` before bringing the stack up:
 
 ```bash
-python3 ~/sync-env-from-keyvault.py launchstack-kv-a9be20
+python3 ~/sync-env-from-keyvault.py <VAULT_NAME>
 ```
 
 It writes atomically via a temp file, saves the previous copy as `.env.bak`,
@@ -304,7 +306,7 @@ dashes, so the reverse mapping is unambiguous.
 
 ## Backups and restore
 
-`/home/launchstack/backup-db.sh` runs nightly at **03:10 UTC** via cron: it
+`/home/<ADMIN_USER>/backup-db.sh` runs nightly at **03:10 UTC** via cron: it
 pipes `pg_dump` of `pdr_ai_v2` through gzip into the `db-backups` container
 using a **write-only SAS token** (valid ~2 years — rotate before mid-2028). A
 storage lifecycle policy deletes blobs after 30 days. Check `~/backup.log`.
@@ -331,7 +333,7 @@ early on; revisit when originals become irreplaceable.
 
    ```bash
    cd ~/LaunchStack
-   sed -i "s/20.110.112.248.sslip.io/app.example.com/g" .env
+   sed -i "s/<PUBLIC_IP>.sslip.io/app.example.com/g" .env
    docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d \
      --force-recreate app worker caddy
    ```
@@ -352,10 +354,10 @@ alive, or rewrite `document_versions.url` if you migrate before real traffic.
   `TRANSCRIPTION_PROVIDER=sidecar`. Budget ~1.5 GB.
 - **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`.
   Budget ~1.2 GB.
-- Either one needs a bigger VM first: stop it, `az vm resize -g launchstack-prod
-  -n launchstack-vm --size Standard_D4as_v7` (16 GB), start it.
+- Either one needs a bigger VM first: stop it, `az vm resize -g <RESOURCE_GROUP>
+  -n <VM_NAME> --size Standard_D4as_v7` (16 GB), start it.
 - **Document Intelligence** F0 caps at 500 pages/month. Upgrade in place:
-  `az cognitiveservices account update -n launchstack-docintel -g launchstack-prod --sku S0`.
+  `az cognitiveservices account update -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> --sku S0`.
 - **Managed Postgres** (Azure Flexible Server, ~$15/mo and up) is the first
   upgrade worth buying once you have users whose data you cannot lose — it
   brings real backups and point-in-time restore.

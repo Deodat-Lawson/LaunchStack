@@ -56,7 +56,9 @@ export type SkipReason =
     | "empty"
     | "excluded"
     | "unreadable"
-    | "limit-reached";
+    | "limit-reached"
+    /** The file is still being written to (modified within the quiescence window). */
+    | "active";
 
 /**
  * Host-supplied destination for scanned knowledge.

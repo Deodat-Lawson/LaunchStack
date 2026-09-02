@@ -58,6 +58,10 @@ const SignupPage: React.FC = () => {
     // ── Solo flow ──
     const [isCreatingSolo, setIsCreatingSolo] = useState(false);
     const [soloError, setSoloError] = useState<string | null>(null);
+    // Pre-filled from the server with a name that is free at the time of
+    // asking, then owned by the person: they can rename it before creating.
+    const [soloWorkspaceName, setSoloWorkspaceName] = useState("");
+    const [isSuggestingName, setIsSuggestingName] = useState(true);
 
     // ── Invite flow ──
     const [inviteCode, setInviteCode] = useState("");
@@ -161,6 +165,32 @@ const SignupPage: React.FC = () => {
         [userId, user, router]
     );
 
+    // ── Suggest a workspace name that is actually available ──
+    useEffect(() => {
+        if (!isAuthLoaded || !userId) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/signup/workspace-name-suggestion");
+                if (!res.ok) throw new Error(String(res.status));
+                const data = (await res.json()) as { name?: string };
+                if (!cancelled && data.name) setSoloWorkspaceName(data.name);
+            } catch {
+                // A suggestion is a convenience, not a gate. Fall back to the
+                // local guess and let the server reject it if it is taken.
+                if (!cancelled) {
+                    const first = (user?.name ?? "").trim().split(/\s+/)[0];
+                    setSoloWorkspaceName(first ? `${first}'s workspace` : "My workspace");
+                }
+            } finally {
+                if (!cancelled) setIsSuggestingName(false);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [isAuthLoaded, userId, user]);
+
     // ── Auto-join when arriving via ?code=XYZ ──
     useEffect(() => {
         if (!isAuthLoaded || autoJoinTriggered.current) return;
@@ -177,11 +207,13 @@ const SignupPage: React.FC = () => {
     // ── Solo: one-click workspace creation ──
     const startSolo = async () => {
         if (!userId || !user) return;
+        const workspaceName = soloWorkspaceName.trim();
+        if (!workspaceName) {
+            setSoloError("Give your workspace a name.");
+            return;
+        }
         setSoloError(null);
         setIsCreatingSolo(true);
-        const firstWord = user.name.trim().split(/\s+/)[0];
-        const firstName = firstWord?.length ? firstWord : "Personal";
-        const workspaceName = `${firstName}'s workspace`;
         try {
             const response = await fetch("/api/signup/employerCompany", {
                 method: "POST",
@@ -338,7 +370,9 @@ const SignupPage: React.FC = () => {
 
                     {mode === "solo" && (
                         <SoloCard
-                            workspaceName={soloName ? `${soloName}'s workspace` : "Your workspace"}
+                            workspaceName={soloWorkspaceName}
+                            onWorkspaceNameChange={setSoloWorkspaceName}
+                            isSuggesting={isSuggestingName}
                             onStart={() => void startSolo()}
                             isCreating={isCreatingSolo}
                             error={soloError}
@@ -629,11 +663,15 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
 
 function SoloCard({
     workspaceName,
+    onWorkspaceNameChange,
+    isSuggesting,
     onStart,
     isCreating,
     error,
 }: {
     workspaceName: string;
+    onWorkspaceNameChange: (v: string) => void;
+    isSuggesting: boolean;
     onStart: () => void;
     isCreating: boolean;
     error: string | null;
@@ -672,20 +710,38 @@ function SoloCard({
                     marginBottom: 14,
                 }}
             >
-                We&apos;ll spin up{" "}
-                <span
-                    style={{
-                        color: "var(--ink-2)",
-                        fontWeight: 600,
-                    }}
-                >
-                    {workspaceName}
-                </span>{" "}
-                for you. No billing, no team setup — just you, your sources, and an AI that knows
-                them.
+                No billing, no team setup — just you, your sources, and an AI that knows them. Name
+                it whatever you like; you can change it later.
             </div>
+            <label
+                htmlFor="solo-workspace-name"
+                style={{
+                    display: "block",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "var(--ink-2)",
+                    marginBottom: 6,
+                }}
+            >
+                Workspace name
+            </label>
+            <input
+                id="solo-workspace-name"
+                value={workspaceName}
+                onChange={e => onWorkspaceNameChange(e.target.value)}
+                disabled={isSuggesting || isCreating}
+                placeholder={isSuggesting ? "Finding an available name…" : "My workspace"}
+                maxLength={256}
+                style={{ ...inputStyle, marginBottom: 14 }}
+            />
             {error && <ErrorBanner>{error}</ErrorBanner>}
-            <button onClick={onStart} disabled={isCreating} style={primaryButtonStyle(isCreating)}>
+            <button
+                onClick={onStart}
+                disabled={isCreating || isSuggesting || workspaceName.trim().length === 0}
+                style={primaryButtonStyle(
+                    isCreating || isSuggesting || workspaceName.trim().length === 0
+                )}
+            >
                 {isCreating ? (
                     <>
                         <Spinner /> Setting things up…

@@ -29,7 +29,10 @@ export async function POST(request: Request) {
         } = validation.data;
         const userId = identity.data.authUserId;
 
-        // Check if company already exists
+        // Names are unique only by this check — the column carries no database
+        // constraint. The signup form pre-fills an available suggestion and
+        // lets the person edit it, so a conflict here is now something they
+        // can see and fix rather than a dead end.
         const [existingCompany] = await db
             .select()
             .from(company)

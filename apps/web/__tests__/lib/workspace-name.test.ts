@@ -1,4 +1,4 @@
-import { generateUniqueCompanyName } from "~/lib/workspace-slug";
+import { suggestAvailableCompanyName } from "~/lib/workspace-slug";
 
 const mockSelect = jest.fn();
 let queuedRows: unknown[][] = [];
@@ -17,48 +17,60 @@ jest.mock("drizzle-orm", () => ({
     eq: (...args: unknown[]) => ({ op: "eq", args }),
 }));
 
+const TAKEN = [{ id: 1 }];
+const FREE: unknown[] = [];
+
 beforeEach(() => {
     queuedRows = [];
     mockSelect.mockReset();
-    // Each call resolves to the next queued result set.
     mockSelect.mockImplementation(() => ({
         from: () => ({
-            where: () => Promise.resolve(queuedRows.shift() ?? []),
+            where: () => Promise.resolve(queuedRows.shift() ?? FREE),
         }),
     }));
 });
 
-describe("generateUniqueCompanyName", () => {
-    it("returns the name unchanged when nothing holds it", async () => {
-        queuedRows = [[]];
-        await expect(generateUniqueCompanyName("Timothy's workspace")).resolves.toBe(
+describe("suggestAvailableCompanyName", () => {
+    it("keeps the preferred name when nobody holds it", async () => {
+        queuedRows = [FREE];
+        await expect(suggestAvailableCompanyName("Timothy's workspace")).resolves.toBe(
             "Timothy's workspace"
         );
     });
 
-    it("suffixes past a single collision", async () => {
-        queuedRows = [[{ id: 1 }], []];
-        await expect(generateUniqueCompanyName("Timothy's workspace")).resolves.toBe(
-            "Timothy's workspace 2"
-        );
+    it("appends a random token when the preferred name is taken", async () => {
+        queuedRows = [TAKEN, FREE];
+        const result = await suggestAvailableCompanyName("Timothy's workspace");
+        expect(result).toMatch(/^Timothy's workspace [a-hjkmnp-z2-9]{4}$/);
     });
 
-    it("keeps counting past consecutive collisions", async () => {
-        queuedRows = [[{ id: 1 }], [{ id: 2 }], [{ id: 3 }], []];
-        await expect(generateUniqueCompanyName("Timothy's workspace")).resolves.toBe(
-            "Timothy's workspace 4"
-        );
+    it("does not leak a count — two collisions do not produce a '2'", async () => {
+        queuedRows = [TAKEN, FREE];
+        const result = await suggestAvailableCompanyName("Acme");
+        expect(result).not.toBe("Acme 2");
+        expect(result.startsWith("Acme ")).toBe(true);
     });
 
-    it("trims before comparing, so padding cannot smuggle a duplicate through", async () => {
-        queuedRows = [[]];
-        await expect(generateUniqueCompanyName("  Acme  ")).resolves.toBe("Acme");
+    it("keeps drawing tokens while they collide", async () => {
+        queuedRows = [TAKEN, TAKEN, TAKEN, FREE];
+        const result = await suggestAvailableCompanyName("Busy");
+        expect(result).toMatch(/^Busy [a-hjkmnp-z2-9]{4}$/);
     });
 
-    it("gives up on a suffix rather than looping forever", async () => {
-        // 50 attempts all taken.
-        queuedRows = Array.from({ length: 50 }, () => [{ id: 1 }]);
-        const result = await generateUniqueCompanyName("Busy");
-        expect(result).toMatch(/^Busy \d{10,}$/);
+    it("trims the preferred name before checking", async () => {
+        queuedRows = [FREE];
+        await expect(suggestAvailableCompanyName("   Acme   ")).resolves.toBe("Acme");
+    });
+
+    it("falls back to a default when handed nothing usable", async () => {
+        queuedRows = [FREE];
+        await expect(suggestAvailableCompanyName("   ")).resolves.toBe("My workspace");
+    });
+
+    it("terminates rather than looping when every draw collides", async () => {
+        queuedRows = Array.from({ length: 13 }, () => TAKEN);
+        const result = await suggestAvailableCompanyName("Unlucky");
+        expect(result.startsWith("Unlucky ")).toBe(true);
+        expect(result.length).toBeGreaterThan("Unlucky ".length);
     });
 });

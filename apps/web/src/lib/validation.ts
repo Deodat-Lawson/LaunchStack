@@ -313,13 +313,6 @@ export const EmployerCompanySignupSchema = z.object({
     embeddingHuggingFaceApiKey: z.string().nullish(),
     embeddingOllamaBaseUrl: z.string().nullish(),
     embeddingOllamaModel: z.string().nullish(),
-    /**
-     * Set only by callers that generated the name themselves and give the user
-     * no way to change it (the solo signup path). A hand-typed name still gets
-     * the "already exists" error, which is the useful answer when someone chose
-     * the word.
-     */
-    autoRenameOnConflict: z.boolean().optional().default(false),
 });
 
 export const EmployerSignupSchema = z.object({

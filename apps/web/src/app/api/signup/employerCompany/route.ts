@@ -6,7 +6,7 @@ import { handleApiError, createSuccessResponse, createValidationError } from "~/
 import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/llm/embeddings";
-import { generateUniqueSlug } from "~/lib/workspace-slug";
+import { generateUniqueSlug, generateUniqueCompanyName } from "~/lib/workspace-slug";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
@@ -26,27 +26,35 @@ export async function POST(request: Request) {
             embeddingHuggingFaceApiKey,
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
+            autoRenameOnConflict,
         } = validation.data;
         const userId = identity.data.authUserId;
 
-        // Check if company already exists
+        // Check if company already exists. Names are unique only by this
+        // check — the column carries no database constraint — so a caller that
+        // generated the name itself can ask for it to be uniquified instead of
+        // being turned away from a collision it cannot see or edit.
         const [existingCompany] = await db
             .select()
             .from(company)
             .where(eq(company.name, companyName));
 
-        if (existingCompany) {
+        if (existingCompany && !autoRenameOnConflict) {
             return createValidationError(
                 "Company already exists. Please use a different company name."
             );
         }
 
-        const slug = await generateUniqueSlug(companyName);
+        const resolvedCompanyName = existingCompany
+            ? await generateUniqueCompanyName(companyName)
+            : companyName;
+
+        const slug = await generateUniqueSlug(resolvedCompanyName);
 
         const [newCompany] = await db
             .insert(company)
             .values({
-                name: companyName,
+                name: resolvedCompanyName,
                 slug,
                 // `?? ""` first so the `||` default (which must also catch
                 // empty strings) operates on a plain string.

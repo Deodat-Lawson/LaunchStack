@@ -192,6 +192,10 @@ const SignupPage: React.FC = () => {
                     companyName: workspaceName,
                     numberOfEmployees: "1",
                     embeddingIndexKey: defaultIndexKey,
+                    // This name is derived from the account's first name and
+                    // there is no field to edit it, so a collision with another
+                    // user's workspace must not be the user's problem.
+                    autoRenameOnConflict: true,
                 }),
             });
             if (!response.ok) {

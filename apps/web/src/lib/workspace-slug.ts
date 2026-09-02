@@ -44,3 +44,35 @@ export async function generateUniqueSlug(name: string): Promise<string> {
     }
     return `${base}-${Date.now()}`;
 }
+
+/**
+ * Pick a workspace *name* that no company is using yet, suffixing on
+ * collision the way `generateUniqueSlug` does for the handle.
+ *
+ * Only for names the user did not choose. The solo signup path derives
+ * "<FirstName>'s workspace" and offers no field to edit it, so a collision
+ * there is unresolvable by the person hitting it — two users named Timothy on
+ * the same instance and the second can never create a solo workspace. When a
+ * name was typed by hand, the caller should keep reporting the conflict
+ * instead: silently renaming what someone deliberately entered is worse than
+ * telling them it is taken.
+ *
+ * Note company.name carries no database uniqueness constraint — only
+ * company.slug must be unique. This mirrors the route's application-level
+ * check rather than any storage rule.
+ */
+export async function generateUniqueCompanyName(name: string): Promise<string> {
+    const base = name.trim();
+    let candidate = base;
+    let n = 1;
+    for (let attempt = 0; attempt < 50; attempt++) {
+        const [existing] = await db
+            .select({ id: company.id })
+            .from(company)
+            .where(eq(company.name, candidate));
+        if (!existing) return candidate;
+        n += 1;
+        candidate = `${base} ${n}`;
+    }
+    return `${base} ${Date.now()}`;
+}

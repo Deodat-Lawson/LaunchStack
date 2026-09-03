@@ -1,3 +1,4 @@
+import { normalizeFolderPath } from "~/lib/folders/path";
 import {
     shouldTranscribeFile,
     transcribeAudioFromUrl,
@@ -125,7 +126,9 @@ export async function processDocumentUpload({
               ? toAbsoluteUrl(rawDocumentUrl, requestUrl)
               : rawDocumentUrl;
 
-    const documentCategory = category ?? "Uncategorized";
+    // The workspace's root bucket; a caller that names no folder lands there,
+    // not in a folder of its own that then needs tidying away.
+    const documentCategory = normalizeFolderPath(category);
 
     // ------------------------------------------------------------------
     // Credit pre-check. Only a deployment that actually bills gates on the

@@ -11,6 +11,7 @@
  */
 
 import React, { useMemo, useState } from "react";
+import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
 import { ContextMenu } from "./ContextMenu";
@@ -280,11 +281,13 @@ export function KnowledgePane({
                     <FilterMenu
                         label="Collection"
                         value={folder}
-                        options={[...counts.byFolder.entries()].map(([name, count]) => ({
-                            value: name,
-                            label: name,
-                            count,
-                        }))}
+                        options={[...counts.byFolder.entries()]
+                            .sort(([a], [b]) => compareFolderPaths(a, b))
+                            .map(([name, count]) => ({
+                                value: name,
+                                label: displayFolderPath(name),
+                                count,
+                            }))}
                         onChange={setFolder}
                     />
                     <FilterMenu

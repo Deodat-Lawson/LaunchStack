@@ -26,10 +26,10 @@ The **layer boundaries are enforced by ESLint** (see [`eslint.config.js`](eslint
 with the strict direction `protocol ← evidence ← application ← adapters ← core ← apps`:
 
 - `protocol`/`evidence` import nothing but zod (and protocol, respectively); no Node built-ins, no env.
-- `application` may not touch databases or frameworks; `adapters` may not import features/web/Next/Clerk/React.
+- `application` may not touch databases or frameworks; `adapters` may not import features/web/Next/React or auth modules.
 - None of the engine packages may read `process.env` — configuration flows through `CoreConfig`/ports.
 - `@launchstack/core` must stay re-exports only (`node scripts/ci/check-core-facade.mjs`).
-- `@launchstack/features` must not import from the host app (`~/*`) or pull in Next/Clerk/React. Features can read `process.env`.
+- `@launchstack/features` must not import from the host app (`~/*`) or pull in Next/React or auth modules. Features can read `process.env`.
 - Violations fail lint (blocking in CI — ADR-006).
 
 ## Local dev
@@ -46,7 +46,7 @@ with the strict direction `protocol ← evidence ← application ← adapters �
 git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
-cp .env.example .env                  # fill in DATABASE_URL + CLERK + OPENAI keys
+cp .env.example .env                  # fill in DATABASE_URL + BETTER_AUTH_SECRET + OPENAI keys
 pnpm --filter @launchstack/web db:migrate      # apply BOTH migration sets (engine, then product)
 pnpm --filter @launchstack/core db:seed        # optional sample data
 pnpm --filter @launchstack/web dev             # Next.js app on :3000 (plain `next dev` — no background work)

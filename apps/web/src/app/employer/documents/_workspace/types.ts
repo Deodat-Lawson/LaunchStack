@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
 // set kept for this file's existing entries (see apps/web/README.md).
-import { Network as IconMindmap } from "lucide-react";
+import {
+    AppWindow as IconArtifact,
+    MessagesSquare as IconSessions,
+    Network as IconMindmap,
+} from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -115,6 +119,24 @@ export interface WorkspaceFolder {
 export interface ThreadReference {
     sourceId: string;
     snippet: string;
+    /** Page number (1-based) in the cited document, when the chunk carried one. */
+    page?: number;
+    /** The retrieval match phrase — a more precise highlight target than the snippet. */
+    matchText?: string;
+}
+
+/**
+ * A "jump to the cited passage" request for the document viewer. `nonce`
+ * distinguishes repeat clicks on the same citation so the viewer re-scrolls.
+ */
+export interface CitationHighlight {
+    /** The cited snippet — the primary text to locate and highlight. */
+    text: string;
+    /** Narrower match phrase to fall back to when the snippet can't be located. */
+    matchText?: string;
+    /** Page hint for paginated documents (1-based). */
+    page?: number | null;
+    nonce: number;
 }
 
 /**
@@ -223,6 +245,20 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconMindmap,
         desc: "Diagrams, mindmaps and flowcharts you can cite",
         href: "/employer/mindmap",
+    },
+    {
+        id: "artifacts",
+        label: "Claude Artifacts",
+        Icon: IconArtifact,
+        desc: "Pages and diagrams imported from Claude",
+        href: "/employer/artifacts",
+    },
+    {
+        id: "agent-sessions",
+        label: "Coding sessions",
+        Icon: IconSessions,
+        desc: "Import Claude Code and Codex conversations",
+        href: "/employer/agent-sessions",
     },
     {
         id: "audit",
@@ -353,6 +389,22 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 external: true,
             },
             {
+                id: "artifacts",
+                label: "Claude Artifacts",
+                Icon: IconArtifact,
+                desc: "Import pages and diagrams built in Claude, and manage them here",
+                href: "/employer/artifacts",
+                external: true,
+            },
+            {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
+                href: "/employer/agent-sessions",
+                external: true,
+            },
+            {
                 id: "workflows",
                 label: "Workflow Generation",
                 Icon: IconWorkflow,
@@ -464,6 +516,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
             { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
             { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Claude Code & Codex transcripts",
+            },
             { id: "dropbox", label: "Dropbox", Icon: IconDropbox, desc: "Folders stay in sync" },
         ],
     },

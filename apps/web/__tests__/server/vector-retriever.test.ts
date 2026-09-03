@@ -32,7 +32,7 @@ import {
     documentRetrievalChunks,
     documentVersions,
 } from "@launchstack/store/schema";
-import { createDocumentVectorRetriever } from "~/lib/tools/rag/retrievers/vector-retriever";
+import { createDocumentVectorRetriever } from "@launchstack/retrieval/algorithms/vector";
 import { db } from "~/server/db/index";
 
 const integrationDescribe = process.env.DATABASE_URL ? describe : describe.skip;

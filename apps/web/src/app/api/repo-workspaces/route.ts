@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 
         const { created, workspace } = await createRepoWorkspace({
             companyId: BigInt(ctx.data.companyId),
-            createdByUserId: ctx.data.clerkUserId,
+            createdByUserId: ctx.data.authUserId,
             ref: { provider: "github", owner: parsed.owner, repo: parsed.repo },
         });
 

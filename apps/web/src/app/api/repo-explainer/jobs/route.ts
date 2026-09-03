@@ -60,7 +60,7 @@ export async function POST(request: Request) {
         const job = await createExplainerJob({
             companyId,
             workspaceId,
-            userId: ctx.data.clerkUserId,
+            userId: ctx.data.authUserId,
             diagramType,
             instructions,
         });

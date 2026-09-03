@@ -1,0 +1,23 @@
+# Production Caddyfile (mounted by docker-compose.prod.yml).
+# Caddy provisions and renews Let's Encrypt certificates for both hosts.
+# Optional: add a global `email you@example.com` block to receive certificate
+# expiry notices from Let's Encrypt.
+
+{$DOMAIN} {
+	# Inngest Cloud syncs against the worker's serve endpoint (ADR-003:
+	# the app no longer serves /api/inngest).
+	@inngest path /api/inngest*
+	handle @inngest {
+		reverse_proxy worker:8020
+	}
+
+	handle {
+		reverse_proxy app:3000
+	}
+}
+
+# Object storage: SeaweedFS S3, anonymous read only (writes require the
+# signed credentials only the app holds). Object keys contain UUIDs.
+files.{$DOMAIN} {
+	reverse_proxy seaweedfs:8333
+}

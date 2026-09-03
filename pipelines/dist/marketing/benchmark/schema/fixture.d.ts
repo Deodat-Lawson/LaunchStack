@@ -77,13 +77,13 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         metric?: string | null | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     description: string;
+    name: string;
+    version: string;
     industry: string;
     ref: string;
     categories: string[];
-    version: string;
-    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
+    knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
     docs: {
         path: string;
         title: string;
@@ -95,12 +95,12 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         metric: string | null;
     }[];
 }, {
-    name: string;
     description: string;
+    name: string;
+    version: string;
     industry: string;
     ref: string;
-    version: string;
-    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
+    knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
     categories?: string[] | undefined;
     docs?: {
         path: string;
@@ -130,18 +130,18 @@ export declare const FixtureInputsSchema: z.ZodObject<{
     simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
     simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     prompt: string;
+    contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
     targetAudience: string | null;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
     contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
     campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
     simulateNoResearch: boolean;
     simulateNoPerformanceHistory: boolean;
 }, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     prompt: string;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
     campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
     contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -164,11 +164,11 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
         min: z.ZodNumber;
         max: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        max: number;
         min: number;
+        max: number;
     }, {
-        max: number;
         min: number;
+        max: number;
     }>>>;
     requireCitations: z.ZodDefault<z.ZodBoolean>;
     minCitations: z.ZodDefault<z.ZodNumber>;
@@ -182,8 +182,8 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
     allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     hashtags: {
-        max: number;
         min: number;
+        max: number;
     } | null;
     maxChars: number | null;
     minChars: number | null;
@@ -197,8 +197,8 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
     allowUnsupportedClaims: boolean;
 }, {
     hashtags?: {
-        max: number;
         min: number;
+        max: number;
     } | null | undefined;
     maxChars?: number | null | undefined;
     minChars?: number | null | undefined;
@@ -226,8 +226,8 @@ export declare const CriterionSpecSchema: z.ZodObject<{
     id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
     weight: number;
     required: boolean;
-    enabled: boolean;
     method: "judge" | "deterministic";
+    enabled: boolean;
     minScore: number | null;
 }, {
     id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -255,18 +255,18 @@ export declare const FixtureSchema: z.ZodObject<{
         simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
         simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         targetAudience: string | null;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         simulateNoResearch: boolean;
         simulateNoPerformanceHistory: boolean;
     }, {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -284,11 +284,11 @@ export declare const FixtureSchema: z.ZodObject<{
             min: z.ZodNumber;
             max: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            max: number;
             min: number;
+            max: number;
         }, {
-            max: number;
             min: number;
+            max: number;
         }>>>;
         requireCitations: z.ZodDefault<z.ZodBoolean>;
         minCitations: z.ZodDefault<z.ZodNumber>;
@@ -302,8 +302,8 @@ export declare const FixtureSchema: z.ZodObject<{
         allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         hashtags: {
-            max: number;
             min: number;
+            max: number;
         } | null;
         maxChars: number | null;
         minChars: number | null;
@@ -317,8 +317,8 @@ export declare const FixtureSchema: z.ZodObject<{
         allowUnsupportedClaims: boolean;
     }, {
         hashtags?: {
-            max: number;
             min: number;
+            max: number;
         } | null | undefined;
         maxChars?: number | null | undefined;
         minChars?: number | null | undefined;
@@ -344,8 +344,8 @@ export declare const FixtureSchema: z.ZodObject<{
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
         required: boolean;
-        enabled: boolean;
         method: "judge" | "deterministic";
+        enabled: boolean;
         minScore: number | null;
     }, {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -360,16 +360,15 @@ export declare const FixtureSchema: z.ZodObject<{
     relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    notes: string | null;
-    id: string;
     description: string;
+    id: string;
     fixtureVersion: string;
     companyRef: string;
     inputs: {
-        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         targetAudience: string | null;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -378,8 +377,8 @@ export declare const FixtureSchema: z.ZodObject<{
     };
     expectedConstraints: {
         hashtags: {
-            max: number;
             min: number;
+            max: number;
         } | null;
         maxChars: number | null;
         minChars: number | null;
@@ -396,20 +395,21 @@ export declare const FixtureSchema: z.ZodObject<{
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
         required: boolean;
-        enabled: boolean;
         method: "judge" | "deterministic";
+        enabled: boolean;
         minScore: number | null;
     }[];
     expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
     relevantFactIds: string[];
+    notes: string | null;
 }, {
-    id: string;
     description: string;
+    id: string;
     fixtureVersion: string;
     companyRef: string;
     inputs: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -420,8 +420,8 @@ export declare const FixtureSchema: z.ZodObject<{
     };
     expectedConstraints: {
         hashtags?: {
-            max: number;
             min: number;
+            max: number;
         } | null | undefined;
         maxChars?: number | null | undefined;
         minChars?: number | null | undefined;
@@ -442,9 +442,9 @@ export declare const FixtureSchema: z.ZodObject<{
         enabled?: boolean | undefined;
         minScore?: number | null | undefined;
     }[];
-    notes?: string | null | undefined;
     expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
     relevantFactIds?: string[] | undefined;
+    notes?: string | null | undefined;
 }>;
 export type Fixture = z.infer<typeof FixtureSchema>;
 /** Top-level dataset manifest — pins the whole fixture set for reproducibility. */
@@ -467,18 +467,18 @@ export declare const FixtureSetSchema: z.ZodObject<{
             simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
             simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             simulateNoResearch: boolean;
             simulateNoPerformanceHistory: boolean;
         }, {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -496,11 +496,11 @@ export declare const FixtureSetSchema: z.ZodObject<{
                 min: z.ZodNumber;
                 max: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                max: number;
                 min: number;
+                max: number;
             }, {
-                max: number;
                 min: number;
+                max: number;
             }>>>;
             requireCitations: z.ZodDefault<z.ZodBoolean>;
             minCitations: z.ZodDefault<z.ZodNumber>;
@@ -514,8 +514,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
             hashtags: {
-                max: number;
                 min: number;
+                max: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -529,8 +529,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims: boolean;
         }, {
             hashtags?: {
-                max: number;
                 min: number;
+                max: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -556,8 +556,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
             required: boolean;
-            enabled: boolean;
             method: "judge" | "deterministic";
+            enabled: boolean;
             minScore: number | null;
         }, {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -572,16 +572,15 @@ export declare const FixtureSetSchema: z.ZodObject<{
         relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        notes: string | null;
-        id: string;
         description: string;
+        id: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -590,8 +589,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags: {
-                max: number;
                 min: number;
+                max: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -608,20 +607,21 @@ export declare const FixtureSetSchema: z.ZodObject<{
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
             required: boolean;
-            enabled: boolean;
             method: "judge" | "deterministic";
+            enabled: boolean;
             minScore: number | null;
         }[];
         expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
         relevantFactIds: string[];
+        notes: string | null;
     }, {
-        id: string;
         description: string;
+        id: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -632,8 +632,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags?: {
-                max: number;
                 min: number;
+                max: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -654,23 +654,22 @@ export declare const FixtureSetSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             minScore?: number | null | undefined;
         }[];
-        notes?: string | null | undefined;
         expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
         relevantFactIds?: string[] | undefined;
+        notes?: string | null | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     version: string;
     fixtures: {
-        notes: string | null;
-        id: string;
         description: string;
+        id: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -679,8 +678,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags: {
-                max: number;
                 min: number;
+                max: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -697,23 +696,24 @@ export declare const FixtureSetSchema: z.ZodObject<{
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
             required: boolean;
-            enabled: boolean;
             method: "judge" | "deterministic";
+            enabled: boolean;
             minScore: number | null;
         }[];
         expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
         relevantFactIds: string[];
+        notes: string | null;
     }[];
 }, {
     version: string;
     fixtures: {
-        id: string;
         description: string;
+        id: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -724,8 +724,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags?: {
-                max: number;
                 min: number;
+                max: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -746,9 +746,9 @@ export declare const FixtureSetSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             minScore?: number | null | undefined;
         }[];
-        notes?: string | null | undefined;
         expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
         relevantFactIds?: string[] | undefined;
+        notes?: string | null | undefined;
     }[];
 }>;
 export type FixtureSet = z.infer<typeof FixtureSetSchema>;

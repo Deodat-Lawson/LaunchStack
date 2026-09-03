@@ -117,7 +117,7 @@ export async function loadDocument(
     return {
         ok: true,
         companyId,
-        userId: ctx.data.clerkUserId,
+        userId: ctx.data.authUserId,
         data: {
             id: row.id,
             title: row.title,

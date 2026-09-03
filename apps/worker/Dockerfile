@@ -24,7 +24,7 @@ COPY packages/store/package.json ./packages/store/
 COPY packages/llm/package.json ./packages/llm/
 COPY packages/conversion/package.json ./packages/conversion/
 COPY packages/indexing/package.json ./packages/indexing/
-COPY packages/search/package.json ./packages/search/
+COPY packages/retrieval/package.json ./packages/retrieval/
 COPY packages/orchestration/package.json ./packages/orchestration/
 COPY packages/editing/package.json ./packages/editing/
 COPY packages/collab/package.json ./packages/collab/
@@ -32,6 +32,8 @@ COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/
 COPY packages/tools/package.json ./packages/tools/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
+COPY packages/document-conversion-engine/package.json ./packages/document-conversion-engine/
+COPY packages/google-drive/package.json ./packages/google-drive/
 COPY pipelines/package.json ./pipelines/
 
 RUN pnpm install --frozen-lockfile

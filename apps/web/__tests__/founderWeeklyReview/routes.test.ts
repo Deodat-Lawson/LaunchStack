@@ -1,4 +1,4 @@
-jest.mock("@clerk/nextjs/server", () => ({ auth: jest.fn() }));
+jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("~/server/founder-weekly-review/actor-resolver", () => ({
     productionFounderWeeklyReviewActorResolver: { resolve: jest.fn() },
 }));
@@ -11,8 +11,8 @@ import {
     FounderWeeklyReviewForbiddenError,
     type FounderWeeklyReviewRunRecord,
 } from "@launchstack/pipelines/founder-weekly-review";
-import { auth } from "@clerk/nextjs/server";
-const mockAuth = auth as unknown as jest.Mock;
+import { getServerSession } from "~/server/auth";
+const mockAuth = getServerSession as unknown as jest.Mock;
 
 const run = (id = "fwr_1"): FounderWeeklyReviewRunRecord => ({
     id,
@@ -87,9 +87,9 @@ function setup(
     };
 }
 describe("Founder Weekly Review create route", () => {
-    beforeEach(() => mockAuth.mockResolvedValue({ userId: "u" }));
+    beforeEach(() => mockAuth.mockResolvedValue({ user: { id: "u" } }));
     it("returns 401 without auth and never resolves or collects", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockAuth.mockResolvedValue(null);
         const { handler, collector, deps } = setup();
         expect(
             (

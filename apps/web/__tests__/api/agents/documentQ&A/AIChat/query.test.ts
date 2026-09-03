@@ -9,7 +9,7 @@
 import { POST } from "~/app/api/agents/documentQ&A/AIChat/query/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
-import { companyEnsembleSearch, documentEnsembleSearch } from "~/lib/tools/rag";
+import { companyEnsembleSearch, documentEnsembleSearch } from "~/server/rag/ensemble";
 
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");
@@ -78,20 +78,19 @@ jest.mock("~/server/metrics/registry", () => ({
     qaRequestDuration: { startTimer: () => jest.fn() },
 }));
 
-jest.mock("~/app/api/agents/predictive-document-analysis/services/annOptimizer", () => ({
-    __esModule: true,
-    default: class {
-        searchSimilarChunks = jest.fn().mockResolvedValue([]);
-    },
-}));
-
 const RETRIEVED = [{ pageContent: "chunk text", metadata: { page: 1 } }];
 
-jest.mock("~/lib/tools/rag", () => ({
+jest.mock("~/server/rag/ensemble", () => ({
     companyEnsembleSearch: jest.fn(),
     documentEnsembleSearch: jest.fn(),
     multiDocEnsembleSearch: jest.fn(),
+}));
+
+jest.mock("@launchstack/retrieval/algorithms/vector", () => ({
     createDocumentVectorRetriever: jest.fn(),
+    ANNOptimizer: class {
+        searchSimilarChunks = jest.fn().mockResolvedValue([]);
+    },
 }));
 
 jest.mock("@launchstack/llm/embeddings", () => ({
@@ -172,7 +171,7 @@ jest.mock("@langchain/core/messages", () => ({
 }));
 
 const CTX: WorkspaceContext = {
-    clerkUserId: "user-a",
+    authUserId: "user-a",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",

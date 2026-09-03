@@ -159,7 +159,7 @@ export async function POST(request: Request) {
                     name: "website/crawl.requested",
                     data: {
                         url,
-                        userId: ctx.data.clerkUserId,
+                        userId: ctx.data.authUserId,
                         companyId: ctx.data.companyId.toString(),
                         category,
                         maxDepth: maxDepth ?? DEFAULT_MAX_DEPTH,
@@ -185,7 +185,7 @@ export async function POST(request: Request) {
             // Single-page mode
             // ------------------------------------------------------------------
             console.log(
-                `[WebsiteUpload] Fetching: ${url}, user=${ctx.data.clerkUserId}, jsRender=${jsRender ?? false}`
+                `[WebsiteUpload] Fetching: ${url}, user=${ctx.data.authUserId}, jsRender=${jsRender ?? false}`
             );
 
             let page: { html: string; finalUrl: string } | null = null;
@@ -221,7 +221,7 @@ export async function POST(request: Request) {
                 filename,
                 data: htmlBuffer,
                 contentType: "text/html",
-                userId: ctx.data.clerkUserId,
+                userId: ctx.data.authUserId,
                 companyId: ctx.data.companyId,
             });
 
@@ -231,7 +231,7 @@ export async function POST(request: Request) {
 
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId: ctx.data.clerkUserId,
+                    userId: ctx.data.authUserId,
                     companyId: ctx.data.companyId,
                 },
                 documentName: resolvedTitle,

@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
-    documentEnsembleSearch,
+    ANNOptimizer,
     createDocumentVectorRetriever,
-    type RetrievalMethod,
-    type DocumentSearchOptions,
-    type SearchResult,
-} from "~/lib/tools/rag";
+} from "@launchstack/retrieval/algorithms/vector";
+import { documentEnsembleSearch } from "~/server/rag/ensemble";
+import type {
+    RetrievalMethod,
+    DocumentSearchOptions,
+    SearchResult,
+} from "@launchstack/retrieval/search-types";
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";

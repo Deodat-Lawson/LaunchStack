@@ -202,7 +202,7 @@ export async function PATCH(request: Request) {
                 companyId,
                 changeType: "manual_override",
                 diff,
-                changedBy: ctx.data.clerkUserId,
+                changedBy: ctx.data.authUserId,
             });
 
             return { kind: "ok" as const, fact: edit.updatedFact };

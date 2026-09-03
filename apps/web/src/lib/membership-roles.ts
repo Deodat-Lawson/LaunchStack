@@ -6,7 +6,7 @@
  * (`employer` / `employee`) — `requireWorkspaceContext` never returns those.
  *
  * Kept in a dependency-free module so client UI and API routes can share the
- * same gate without pulling in Clerk/DB.
+ * same gate without pulling in auth/DB modules.
  */
 
 export type ManagementRole = "owner" | "admin";

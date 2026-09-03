@@ -5,7 +5,7 @@
 "@launchstack/llm": minor
 "@launchstack/conversion": minor
 "@launchstack/indexing": minor
-"@launchstack/search": minor
+"@launchstack/retrieval": minor
 "@launchstack/orchestration": minor
 "@launchstack/editing": minor
 "@launchstack/collab": minor

@@ -11,10 +11,6 @@ on:
 env:
   NODE_VERSION: "20"
   PNPM_VERSION: "10.15.1"
-  # Clerk validates the publishable-key structure while Next.js prerenders.
-  # This decodes to ci.clerk.accounts.dev$ and is safe for untrusted PRs that
-  # cannot read repository secrets.
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_Y2kuY2xlcmsuYWNjb3VudHMuZGV2JA==' }}
 
 jobs:
   check:
@@ -44,7 +40,7 @@ jobs:
       CHAT_BASE_URL: https://ci.invalid/v1
       CHAT_API_KEY: chat-ci-placeholder
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ci-placeholder' }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'ci-clerk-secret-placeholder' }}
+      BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
       INNGEST_EVENT_KEY: ci-placeholder
 
     steps:
@@ -61,6 +57,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      # Cheap, dependency-free, and fails fast: a workspace package missing
+      # from a Dockerfile deps layer otherwise surfaces ~2 minutes into the
+      # image build as an unresolvable dependency the package does declare.
+      - name: Dockerfile deps layers cover every workspace manifest
+        run: node scripts/ci/check-dockerfile-manifests.mjs
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -92,7 +94,8 @@ jobs:
         run: >-
           pnpm --filter @launchstack/evidence
           --filter @launchstack/conversion
-          --filter @launchstack/search
+          --filter @launchstack/retrieval
+          --filter @launchstack/document-conversion-engine
           --filter @launchstack/worker test
 
       # Includes the outbox + lifecycle integration tests against the real
@@ -188,7 +191,7 @@ jobs:
 
       - name: Boot the stack
         env:
-          CLERK_SECRET_KEY: sk_test_ci_placeholder
+          BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
         run: >-
           docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
           db migrate worker document-converter transcription adeu-docs-editing
@@ -515,7 +518,7 @@ jobs:
 
       # `ignoreBuildErrors`/`ignoreDuringBuilds` are gone from next.config
       # (ADR-006): this build fails on type or lint errors.
-      # The public site (launchstack.app). It needs no database, no Clerk key,
+      # The public site (launchstack.app). It needs no database, no auth secret,
       # and no engine packages — if this build ever starts requiring one of
       # them, something has leaked back across the split. Runs before the web
       # build because it is the faster of the two to fail.

@@ -22,7 +22,7 @@ function mockAuthenticated(companyId = BigInt(10)) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "user-1",
+            authUserId: "user-1",
             userPk: BigInt(1),
             companyId,
             role: "owner",

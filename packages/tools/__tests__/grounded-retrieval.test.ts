@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { configureRag, type RagPort, type RagSearchResult } from "@launchstack/search";
+import { configureRag, type RagPort, type RagSearchResult } from "@launchstack/retrieval";
 import {
     cleanSnippet,
     formatSnippetBlock,

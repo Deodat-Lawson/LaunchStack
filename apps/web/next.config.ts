@@ -34,10 +34,11 @@ const config: NextConfig = {
         "@launchstack/llm",
         "@launchstack/conversion",
         "@launchstack/indexing",
-        "@launchstack/search",
+        "@launchstack/retrieval",
         "@launchstack/orchestration",
         "@launchstack/collab",
         "@launchstack/editing",
+        "@launchstack/google-drive",
         "@launchstack/evidence",
         "@launchstack/pipelines",
         "@launchstack/tools",
@@ -123,7 +124,6 @@ const config: NextConfig = {
             },
         ];
     },
-
 
     outputFileTracingExcludes: {
         "/*": [

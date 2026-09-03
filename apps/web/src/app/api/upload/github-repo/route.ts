@@ -21,6 +21,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
@@ -64,11 +65,21 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.authUserId}`
             );
 
+            // A token pasted into the form wins; otherwise the workspace's
+            // GitHub connection covers private repos without pasting anything.
+            const effectiveToken =
+                accessToken ?? (await getCompanyAccessToken(ctx.data.companyId, "github"));
+
             // Download the repository as a ZIP
-            const zipBuffer = await downloadGitHubRepoZip(owner, repo, branch, accessToken);
+            const zipBuffer = await downloadGitHubRepoZip(
+                owner,
+                repo,
+                branch,
+                effectiveToken ?? undefined
+            );
 
             const filename = `${owner}-${repo}.zip`;
 
@@ -87,7 +98,7 @@ export async function POST(request: Request) {
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId: ctx.data.clerkUserId,
+                    userId: ctx.data.authUserId,
                     companyId: ctx.data.companyId,
                 },
                 documentName: `${owner}/${repo}`,

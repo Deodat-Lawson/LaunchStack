@@ -22,7 +22,7 @@
         "@launchstack/pipelines": "workspace:^",
         "@launchstack/runtime": "workspace:^",
         "@launchstack/schema-generator": "workspace:^",
-        "@launchstack/search": "workspace:^",
+        "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "drizzle-orm": "^0.45.1",
         "inngest": "^3.54.2",

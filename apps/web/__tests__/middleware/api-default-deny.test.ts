@@ -1,44 +1,33 @@
 /**
  * Middleware default-deny for /api/*: anything not on the public allowlist
- * needs a Clerk session, and the rejection is a JSON 401 rather than the
- * 404/redirect that auth.protect() would produce.
+ * needs a session, and the rejection is a JSON 401 rather than a page-shaped
+ * redirect to /signin.
  */
 
-import { NextRequest, type NextResponse } from "next/server";
-import type * as ClerkServer from "@clerk/nextjs/server";
+import { NextRequest } from "next/server";
 
-type MiddlewareHandler = (
-    auth: (() => Promise<{ userId: string | null }>) & { protect: jest.Mock },
-    req: NextRequest
-) => Promise<NextResponse | undefined>;
+const mockGetSession = jest.fn<Promise<{ user: { id: string } } | null>, []>();
 
-type HandlerHolder = { __middlewareHandler?: MiddlewareHandler };
+jest.mock("~/server/auth", () => ({
+    getSessionFromHeaders: () => mockGetSession(),
+}));
 
-jest.mock("@clerk/nextjs/server", () => {
-    const actual = jest.requireActual<typeof ClerkServer>("@clerk/nextjs/server");
-    return {
-        ...actual,
-        clerkMiddleware: (handler: MiddlewareHandler) => {
-            (globalThis as HandlerHolder).__middlewareHandler = handler;
-            return handler;
-        },
-    };
-});
-
-import "~/middleware";
-
-const handler = (globalThis as HandlerHolder).__middlewareHandler!;
+import middleware from "~/middleware";
 
 function run(pathname: string, userId: string | null) {
-    const auth = Object.assign(async () => ({ userId }), {
-        protect: jest.fn(),
+    mockGetSession.mockResolvedValue(userId ? { user: { id: userId } } : null);
+    // The middleware only consults the session when a session cookie exists
+    // (the anonymous fast-path), so an authenticated request must carry one.
+    const req = new NextRequest(new URL(`http://localhost${pathname}`), {
+        headers: userId ? { cookie: "better-auth.session_token=tok" } : {},
     });
-    return handler(auth, new NextRequest(new URL(`http://localhost${pathname}`)));
+    return middleware(req);
 }
 
 const PUBLIC_API_PATHS = [
+    "/api/auth/sign-in/email",
     "/api/health",
-    "/api/webhooks/clerk",
+    "/api/webhooks/uploadthing",
     "/api/inngest",
     "/api/invite-codes/validate",
     "/api/ocr/benchmark",
@@ -79,20 +68,27 @@ describe("middleware /api default-deny", () => {
     });
 
     it.each(PROTECTED_API_PATHS)("lets authenticated requests through to %s", async path => {
-        await expect(run(path, "clerk_abc")).resolves.toBeUndefined();
+        await expect(run(path, "user_abc")).resolves.toBeUndefined();
     });
 
     it("does not redirect API callers to /signin", async () => {
-        const auth = Object.assign(async () => ({ userId: null }), {
-            protect: jest.fn(),
-        });
+        const response = await run("/api/uploadDocument", null);
 
-        const response = await handler(
-            auth,
-            new NextRequest(new URL("http://localhost/api/uploadDocument"))
-        );
-
-        expect(auth.protect).not.toHaveBeenCalled();
+        expect(response?.status).toBe(401);
         expect(response?.headers.get("location")).toBeNull();
+    });
+
+    it("treats a session cookie that fails verification as anonymous", async () => {
+        // Cookie present, but the session read rejects (bad signature, DB gone).
+        mockGetSession.mockRejectedValue(new Error("verification failed"));
+        const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+
+        const req = new NextRequest(new URL("http://localhost/api/uploadDocument"), {
+            headers: { cookie: "better-auth.session_token=garbage" },
+        });
+        const response = await middleware(req);
+
+        expect(response?.status).toBe(401);
+        consoleSpy.mockRestore();
     });
 });

@@ -35,6 +35,14 @@ jest.mock("~/server/storage/vercel-blob", () => ({
     putFile: jest.fn(),
 }));
 
+// The route falls back to the workspace's GitHub connection when no token is
+// pasted; mocked to "nothing connected" so the fallback chain ends at the
+// request-supplied token, as before connections existed.
+const mockGetCompanyAccessToken = jest.fn().mockResolvedValue(null);
+jest.mock("~/server/services/connectors/connection-store", () => ({
+    getCompanyAccessToken: (...args: unknown[]) => mockGetCompanyAccessToken(...args),
+}));
+
 import { POST } from "~/app/api/upload/github-repo/route";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { downloadGitHubRepoZip } from "~/server/services/github-repo";
@@ -48,7 +56,7 @@ function mockAuthenticated() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: {
-            clerkUserId: "user_session",
+            authUserId: "user_session",
             userPk: BigInt(31),
             companyId: BigInt(6),
             role: "owner",

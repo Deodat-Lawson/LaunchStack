@@ -98,6 +98,11 @@ function blobFilenameFor(item: KnowledgeItem): string {
  * from a chunk of a hand-written note.
  */
 function withProvenanceHeader(item: KnowledgeItem, syncedAt: string): string {
+    if (typeof item.content !== "string") {
+        throw new Error(
+            `agent-knowledge items are always text; got binary content for ${item.sourceId}`
+        );
+    }
     const toolLabel = metaString(item, "toolLabel", metaString(item, "tool", "agent"));
     const scopeKey = metaString(item, "scopeKey", "global");
     return [

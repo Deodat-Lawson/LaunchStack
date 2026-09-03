@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Home } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
+import { UserMenu } from "~/components/UserMenu";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 import { Button } from "~/components/ui/button";
@@ -14,7 +14,7 @@ import { Button } from "~/components/ui/button";
  * areas must not import from each other.
  */
 export function EmployeeNavbar({ showHome = false }: { showHome?: boolean }) {
-    // Clerk's UserButton reads auth state that only exists client-side;
+    // The user menu reads auth state that only exists client-side;
     // render a placeholder until mounted to avoid a hydration mismatch.
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
@@ -37,7 +37,7 @@ export function EmployeeNavbar({ showHome = false }: { showHome?: boolean }) {
                     </Button>
                 )}
                 <div className="relative inline-block">
-                    {isMounted ? <UserButton /> : <div aria-hidden="true" className="h-7 w-7" />}
+                    {isMounted ? <UserMenu /> : <div aria-hidden="true" className="h-7 w-7" />}
                 </div>
             </div>
         </nav>

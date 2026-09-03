@@ -3,12 +3,12 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
-import { requireClerkIdentity } from "~/lib/require-workspace-context";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
 export async function GET(request: Request) {
-    const identity = await requireClerkIdentity();
+    const identity = await requireAuthIdentity();
     if (!identity.success) return identity.response;
 
     const url = new URL(request.url);

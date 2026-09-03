@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Building, Clock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Card, PageShell } from "~/components/layout/page-shell";

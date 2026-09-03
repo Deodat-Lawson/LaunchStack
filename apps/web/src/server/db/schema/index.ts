@@ -8,13 +8,16 @@
  * barrel deliberately does not re-export them, so which side of the boundary a
  * table lives on stays obvious at the import site.
  */
+export * from "./auth";
 export * from "./identity";
+export * from "./connectors";
 export * from "./document-features";
 export * from "./agent-ai";
 export * from "./collab";
 export * from "./credits";
 export * from "./document-notes";
 export * from "./mindmap";
+export * from "./artifacts";
 
 // Feature-vertical tables live in packages/features (a package cannot import
 // from an app). Same side of the boundary, same product migration set.

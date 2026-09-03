@@ -7,6 +7,15 @@
     oklch(0.55 0.2 295) = #7e4ed7
     oklch(0.4  0.2 290) = #4e1ca8
     oklch(0.24 0.13 285) = #1f0658
+
+  Regenerating favicon.ico from this file (it is a raster, so nothing checks
+  it at build time — apps/web/__tests__/brand/favicon-raster.test.ts does):
+    npx @resvg/resvg-js  # render at 16/32/48/64/128/256 with
+                         # fitTo {mode:"width"} and a transparent background,
+                         # then pack the PNGs into a multi-size .ico
+  fitTo matters: rendering without it put the mark at a fifth of the canvas in
+  the top-left corner on opaque white, which is what shipped until it was
+  caught in a browser tab.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Launchstack">
   <defs>

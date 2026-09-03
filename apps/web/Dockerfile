@@ -20,7 +20,7 @@ COPY packages/store/package.json ./packages/store/
 COPY packages/llm/package.json ./packages/llm/
 COPY packages/conversion/package.json ./packages/conversion/
 COPY packages/indexing/package.json ./packages/indexing/
-COPY packages/search/package.json ./packages/search/
+COPY packages/retrieval/package.json ./packages/retrieval/
 COPY packages/orchestration/package.json ./packages/orchestration/
 COPY packages/editing/package.json ./packages/editing/
 COPY packages/collab/package.json ./packages/collab/
@@ -28,6 +28,8 @@ COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/
 COPY packages/tools/package.json ./packages/tools/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
+COPY packages/document-conversion-engine/package.json ./packages/document-conversion-engine/
+COPY packages/google-drive/package.json ./packages/google-drive/
 COPY pipelines/package.json ./pipelines/
 COPY apps/web/package.json ./apps/web/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
@@ -53,8 +55,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Windows, but being explicit keeps the Docker path deterministic).
 ENV STANDALONE_BUILD=1
 
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
 
 RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
     pnpm --filter @launchstack/web build

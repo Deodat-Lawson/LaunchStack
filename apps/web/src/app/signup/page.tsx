@@ -3,7 +3,8 @@
 import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SignUp, useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-client";
+import { SignUpForm } from "~/app/_components/CredentialsForm";
 import {
     AlertCircle,
     ArrowRight,
@@ -19,7 +20,7 @@ import { AuthChrome } from "~/app/_components/AuthChrome";
 /**
  * Sign-up page.
  *
- * Solo-first flow. After the user authenticates via Clerk, they see three
+ * Solo-first flow. After the user authenticates, they see three
  * clearly-ranked paths:
  *
  *   1. Start solo (default, one click) — auto-provisions a workspace using
@@ -57,6 +58,10 @@ const SignupPage: React.FC = () => {
     // ── Solo flow ──
     const [isCreatingSolo, setIsCreatingSolo] = useState(false);
     const [soloError, setSoloError] = useState<string | null>(null);
+    // Pre-filled from the server with a name that is free at the time of
+    // asking, then owned by the person: they can rename it before creating.
+    const [soloWorkspaceName, setSoloWorkspaceName] = useState("");
+    const [isSuggestingName, setIsSuggestingName] = useState(true);
 
     // ── Invite flow ──
     const [inviteCode, setInviteCode] = useState("");
@@ -126,8 +131,8 @@ const SignupPage: React.FC = () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        name: user.fullName ?? user.username,
-                        email: user.emailAddresses[0]?.emailAddress,
+                        name: user.name,
+                        email: user.email,
                         inviteCode: code,
                     }),
                 });
@@ -160,6 +165,32 @@ const SignupPage: React.FC = () => {
         [userId, user, router]
     );
 
+    // ── Suggest a workspace name that is actually available ──
+    useEffect(() => {
+        if (!isAuthLoaded || !userId) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/signup/workspace-name-suggestion");
+                if (!res.ok) throw new Error(String(res.status));
+                const data = (await res.json()) as { name?: string };
+                if (!cancelled && data.name) setSoloWorkspaceName(data.name);
+            } catch {
+                // A suggestion is a convenience, not a gate. Fall back to the
+                // local guess and let the server reject it if it is taken.
+                if (!cancelled) {
+                    const first = (user?.name ?? "").trim().split(/\s+/)[0];
+                    setSoloWorkspaceName(first ? `${first}'s workspace` : "My workspace");
+                }
+            } finally {
+                if (!cancelled) setIsSuggestingName(false);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [isAuthLoaded, userId, user]);
+
     // ── Auto-join when arriving via ?code=XYZ ──
     useEffect(() => {
         if (!isAuthLoaded || autoJoinTriggered.current) return;
@@ -176,18 +207,20 @@ const SignupPage: React.FC = () => {
     // ── Solo: one-click workspace creation ──
     const startSolo = async () => {
         if (!userId || !user) return;
+        const workspaceName = soloWorkspaceName.trim();
+        if (!workspaceName) {
+            setSoloError("Give your workspace a name.");
+            return;
+        }
         setSoloError(null);
         setIsCreatingSolo(true);
-        const firstName =
-            user.firstName ?? user.fullName?.split(" ")[0] ?? user.username ?? "Personal";
-        const workspaceName = `${firstName}'s workspace`;
         try {
             const response = await fetch("/api/signup/employerCompany", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: user.fullName ?? user.username,
-                    email: user.emailAddresses[0]?.emailAddress,
+                    name: user.name,
+                    email: user.email,
                     companyName: workspaceName,
                     numberOfEmployees: "1",
                     embeddingIndexKey: defaultIndexKey,
@@ -226,8 +259,8 @@ const SignupPage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: user.fullName ?? user.username,
-                    email: user.emailAddresses[0]?.emailAddress,
+                    name: user.name,
+                    email: user.email,
                     companyName: teamName.trim(),
                     numberOfEmployees: teamSize || "2",
                     embeddingIndexKey: defaultIndexKey,
@@ -280,9 +313,10 @@ const SignupPage: React.FC = () => {
         </div>
     );
 
-    const soloName = user?.firstName ?? user?.fullName?.split(" ")[0] ?? user?.username ?? null;
+    const soloFirstWord = (user?.name ?? "").trim().split(/\s+/)[0];
+    const soloName = soloFirstWord?.length ? soloFirstWord : null;
 
-    // ── Not yet authenticated: show Clerk SignUp ──
+    // ── Not yet authenticated: show the sign-up form ──
     if (isAuthLoaded && !userId) {
         return (
             <Shell>
@@ -294,7 +328,7 @@ const SignupPage: React.FC = () => {
                             One account covers your solo workspace — and any team you might create
                             down the road.
                         </SubHeadline>
-                        <SignUp routing="hash" forceRedirectUrl="/" signInUrl="/signin" />
+                        <SignUpForm />
                         <div style={bottomLinkStyle}>
                             Already have an account?{" "}
                             <Link href="/signin" style={linkStyle}>
@@ -336,7 +370,9 @@ const SignupPage: React.FC = () => {
 
                     {mode === "solo" && (
                         <SoloCard
-                            workspaceName={soloName ? `${soloName}'s workspace` : "Your workspace"}
+                            workspaceName={soloWorkspaceName}
+                            onWorkspaceNameChange={setSoloWorkspaceName}
+                            isSuggesting={isSuggestingName}
                             onStart={() => void startSolo()}
                             isCreating={isCreatingSolo}
                             error={soloError}
@@ -627,11 +663,15 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
 
 function SoloCard({
     workspaceName,
+    onWorkspaceNameChange,
+    isSuggesting,
     onStart,
     isCreating,
     error,
 }: {
     workspaceName: string;
+    onWorkspaceNameChange: (v: string) => void;
+    isSuggesting: boolean;
     onStart: () => void;
     isCreating: boolean;
     error: string | null;
@@ -670,20 +710,38 @@ function SoloCard({
                     marginBottom: 14,
                 }}
             >
-                We&apos;ll spin up{" "}
-                <span
-                    style={{
-                        color: "var(--ink-2)",
-                        fontWeight: 600,
-                    }}
-                >
-                    {workspaceName}
-                </span>{" "}
-                for you. No billing, no team setup — just you, your sources, and an AI that knows
-                them.
+                No billing, no team setup — just you, your sources, and an AI that knows them. Name
+                it whatever you like; you can change it later.
             </div>
+            <label
+                htmlFor="solo-workspace-name"
+                style={{
+                    display: "block",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "var(--ink-2)",
+                    marginBottom: 6,
+                }}
+            >
+                Workspace name
+            </label>
+            <input
+                id="solo-workspace-name"
+                value={workspaceName}
+                onChange={e => onWorkspaceNameChange(e.target.value)}
+                disabled={isSuggesting || isCreating}
+                placeholder={isSuggesting ? "Finding an available name…" : "My workspace"}
+                maxLength={256}
+                style={{ ...inputStyle, marginBottom: 14 }}
+            />
             {error && <ErrorBanner>{error}</ErrorBanner>}
-            <button onClick={onStart} disabled={isCreating} style={primaryButtonStyle(isCreating)}>
+            <button
+                onClick={onStart}
+                disabled={isCreating || isSuggesting || workspaceName.trim().length === 0}
+                style={primaryButtonStyle(
+                    isCreating || isSuggesting || workspaceName.trim().length === 0
+                )}
+            >
                 {isCreating ? (
                     <>
                         <Spinner /> Setting things up…

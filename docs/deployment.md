@@ -44,7 +44,10 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 ## Option 1: Docker Compose (full stack)
 
-Recommended for local and self-hosted deployments.
+Recommended for local and self-hosted deployments. For the production
+single-VM variant (GHCR images, Caddy TLS, no Whisper/Docling/Inngest-dev
+containers), layer `docker-compose.prod.yml` on top — see
+[`docs/runbooks/azure-lean-deploy.md`](./runbooks/azure-lean-deploy.md).
 
 ```bash
 docker compose --env-file .env up
@@ -58,6 +61,7 @@ docker compose --env-file .env up
 - `transcription` — Whisper transcription + yt-dlp download (port 8000, [ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
 - `adeu-docs-editing` — Adeu DOCX redlining service (host port 8003)
 - `document-converter` — OCR routing, vision classification, PDF rendering, docling-backed parsing (port 8002)
+- `gotenberg` — PDF rendering: DOCX/Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium (host port 8004, [ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md))
 - `worker` — the sole durable workflow coordinator (port 8020): consumes the transactional outbox and hosts the Inngest serve endpoint at `/api/inngest` ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md)); health at `/healthz` and `/readyz`
 - `app` — Next.js runtime (port 3000) — command acceptance and reads only
 - `inngest-dev` — Inngest dev server (dashboard at `http://localhost:8288`), polling `http://worker:8020/api/inngest`
@@ -164,8 +168,8 @@ modes, and migration from the pre-PR variables.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk publishable key |
-| `CLERK_SECRET_KEY` | Yes | Clerk secret key |
+| `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
+| `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
 | `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
 | `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
@@ -176,6 +180,7 @@ modes, and migration from the pre-PR variables.
 | `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
 | `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
 | `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
+| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 `OCR_WORKER_URL`) are being phased out per
@@ -200,7 +205,7 @@ being picked up.
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
 - [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate`, or the Compose `migrate` service / a one-shot job on the image)
-- [ ] Clerk and the selected chat provider/model validated
+- [ ] Sign-in (better-auth) and the selected chat provider/model validated
 - [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used (endpoint served by the worker)

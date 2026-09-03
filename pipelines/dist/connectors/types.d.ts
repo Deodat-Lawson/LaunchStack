@@ -35,17 +35,33 @@ export interface DiscoveredKnowledgeItem {
 }
 /** A discovered item whose contents have been read. */
 export interface KnowledgeItem extends DiscoveredKnowledgeItem {
-    readonly content: string;
-    /** sha256 of `content`. Drives change detection. */
+    /**
+     * Text connectors produce a string; remote connectors that carry binary
+     * formats (PDF, DOCX, images) produce raw bytes. Sinks that only handle
+     * text must narrow and reject bytes rather than coerce them.
+     */
+    readonly content: string | Uint8Array;
+    /**
+     * Stable fingerprint of `content`. Text connectors use sha256 of the text;
+     * remote connectors may use the provider's revision identity (md5Checksum,
+     * headRevisionId) so change detection needs no download. Opaque to the
+     * host — only equality matters.
+     */
     readonly contentHash: string;
 }
+/** Byte length of an item's content, whichever form it takes. */
+export declare function contentByteLength(content: string | Uint8Array): number;
+/** Content as a Buffer, ready for blob upload. */
+export declare function contentToBuffer(content: string | Uint8Array): Buffer;
 /** An item the scan deliberately passed over, and why. */
 export interface SkippedKnowledgeItem {
     readonly sourceId: string;
     readonly reason: SkipReason;
     readonly detail?: string;
 }
-export type SkipReason = "unchanged" | "too-large" | "empty" | "excluded" | "unreadable" | "limit-reached";
+export type SkipReason = "unchanged" | "too-large" | "empty" | "excluded" | "unreadable" | "limit-reached"
+/** The file is still being written to (modified within the quiescence window). */
+ | "active";
 /**
  * Host-supplied destination for scanned knowledge.
  *

@@ -2,17 +2,21 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray } from "drizzle-orm";
-import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
+import {
+    ANNOptimizer,
+    createDocumentVectorRetriever,
+} from "@launchstack/retrieval/algorithms/vector";
 import {
     companyEnsembleSearch,
-    createDocumentVectorRetriever,
     documentEnsembleSearch,
     multiDocEnsembleSearch,
-    type CompanySearchOptions,
-    type DocumentSearchOptions,
-    type MultiDocSearchOptions,
-    type SearchResult,
-} from "~/lib/tools/rag";
+} from "~/server/rag/ensemble";
+import type {
+    CompanySearchOptions,
+    DocumentSearchOptions,
+    MultiDocSearchOptions,
+    SearchResult,
+} from "@launchstack/retrieval/search-types";
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
@@ -732,7 +736,7 @@ export async function POST(request: Request) {
             try {
                 if (searchScope === "document" && authorizedDocument) {
                     await db.insert(ChatHistory).values({
-                        UserId: ctx.data.clerkUserId,
+                        UserId: ctx.data.authUserId,
                         documentId: BigInt(authorizedDocument.id),
                         documentTitle: authorizedDocument.title,
                         question: question,

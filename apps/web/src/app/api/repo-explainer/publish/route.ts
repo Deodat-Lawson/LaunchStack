@@ -72,12 +72,12 @@ export async function POST(request: Request) {
             filename,
             data: Buffer.from(markdown, "utf8"),
             contentType: "text/markdown",
-            userId: ctx.data.clerkUserId,
+            userId: ctx.data.authUserId,
             companyId: ctx.data.companyId,
         });
 
         const upload = await processDocumentUpload({
-            user: { userId: ctx.data.clerkUserId, companyId: ctx.data.companyId },
+            user: { userId: ctx.data.authUserId, companyId: ctx.data.companyId },
             documentName: `${workspace.owner}/${workspace.repo} — ${job.diagramType} explanation`,
             rawDocumentUrl: stored.url,
             // Same repo, same commit, same diagram type ⇒ the same source.

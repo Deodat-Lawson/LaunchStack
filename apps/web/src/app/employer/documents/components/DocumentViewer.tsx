@@ -14,8 +14,11 @@ import {
     Archive,
     Music,
     History,
+    BookOpen,
+    MessagesSquare,
 } from "lucide-react";
 import type { DocumentType } from "../types";
+import type { ViewerHighlight } from "~/lib/find-text-range";
 import { getDocumentDisplayType, type DocumentDisplayType } from "../types/document";
 import { DocxViewer } from "./DocxViewer";
 
@@ -24,6 +27,18 @@ import { DocxViewer } from "./DocxViewer";
 const DocxEditor = dynamic(() => import("./docx").then(m => m.DocxEditor), {
     ssr: false,
 });
+
+// The markdown viewer pulls in katex, highlight.js, and (lazily) mermaid;
+// only markdown documents should pay for that bundle.
+const MarkdownViewer = dynamic(() => import("./MarkdownViewer").then(m => m.MarkdownViewer), {
+    ssr: false,
+});
+
+// Imported agent sessions render as conversations, not documents.
+const ConversationViewer = dynamic(
+    () => import("./ConversationViewer").then(m => m.ConversationViewer),
+    { ssr: false }
+);
 import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
@@ -37,6 +52,8 @@ interface DocumentViewerProps {
     hideActions?: boolean;
     minimal?: boolean;
     isCollapsed?: boolean;
+    /** Cited passage to locate + highlight, for viewers that support it. */
+    highlight?: ViewerHighlight | null;
     /**
      * Optional callback to open the version history modal for the currently
      * displayed document. When provided, a "Versions" button is rendered in
@@ -54,6 +71,8 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     xlsx: "Spreadsheet",
     pptx: "Presentation",
     text: "Text / HTML",
+    markdown: "Markdown",
+    conversation: "Agent Session",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
@@ -67,6 +86,8 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     xlsx: FileSpreadsheet,
     pptx: Presentation,
     text: FileCode,
+    markdown: BookOpen,
+    conversation: MessagesSquare,
     code: FileCode,
     zip: Archive,
     audio: Music,
@@ -145,6 +166,7 @@ export function DocumentViewer({
     hideActions: _hideActions = false,
     minimal = false,
     isCollapsed = false,
+    highlight = null,
     onOpenVersionHistory,
 }: DocumentViewerProps) {
     // Track document view
@@ -222,12 +244,23 @@ export function DocumentViewer({
                 return <XlsxViewer url={document.url} title={document.title} />;
             case "pptx":
                 return <PptxViewer url={document.url} title={document.title} />;
+            case "markdown":
+                return (
+                    <MarkdownViewer
+                        url={document.url}
+                        title={document.title}
+                        highlight={highlight}
+                    />
+                );
+            case "conversation":
+                return <ConversationViewer document={document} />;
             case "code":
                 return (
                     <CodeViewer
                         url={document.url}
                         title={document.title}
                         mimeType={document.mimeType}
+                        highlight={highlight}
                     />
                 );
             case "audio":

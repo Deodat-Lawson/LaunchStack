@@ -29,7 +29,7 @@ import {
     getWebSearchInstruction,
     describeChatError,
 } from "../services";
-import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
+import { performRLMSearch, type RLMSearchOptions } from "@launchstack/retrieval/tools/rlm-search";
 import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";

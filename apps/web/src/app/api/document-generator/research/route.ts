@@ -9,11 +9,8 @@
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import {
-    companyEnsembleSearch,
-    type CompanySearchOptions,
-    type SearchResult,
-} from "~/lib/tools/rag";
+import { companyEnsembleSearch } from "~/server/rag/ensemble";
+import type { CompanySearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

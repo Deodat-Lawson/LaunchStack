@@ -45,7 +45,7 @@ import { POST as postStream } from "~/app/api/agents/predictive-document-analysi
 const VERIFIED_CTX: WorkspaceContextResult = {
     success: true,
     data: {
-        clerkUserId: "clerk_abc",
+        authUserId: "clerk_abc",
         userPk: BigInt(7),
         companyId: BigInt(5),
         role: "employer",

@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
+import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
-import { SOURCE_META, type WorkspaceSource } from "./types";
+import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
@@ -51,6 +52,8 @@ interface VersionsResponse {
 
 export interface DocumentViewerProps {
     source: WorkspaceSource;
+    /** When opened from a citation: the cited passage to locate + highlight. */
+    highlight?: CitationHighlight | null;
     onClose: () => void;
     onRename: (id: number, title: string) => Promise<boolean>;
     onDelete: (id: number) => void;
@@ -142,6 +145,7 @@ function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
 
 export function DocumentViewer({
     source,
+    highlight,
     onClose,
     onRename,
     onDelete,
@@ -611,6 +615,9 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
+                    {typeof source.documentId === "number" && source.documentId > 0 && (
+                        <GoogleDriveBanner documentId={source.documentId} />
+                    )}
                     {viewingOld && (
                         <div
                             style={{
@@ -658,6 +665,7 @@ export function DocumentViewer({
                                 <PdfViewerWithNotes
                                     url={fullDoc.url}
                                     notes={toPdfNoteLites(pdfNotes)}
+                                    citationHighlight={highlight ?? null}
                                     scrollToNoteId={pdfScrollToNoteId}
                                     onCreateAnchoredNote={anchor => {
                                         setPdfAnchorDraft({
@@ -708,7 +716,11 @@ export function DocumentViewer({
                                         overflow: "hidden",
                                     }}
                                 >
-                                    <FullDocumentViewer document={fullDoc} minimal />
+                                    <FullDocumentViewer
+                                        document={fullDoc}
+                                        minimal
+                                        highlight={highlight ?? null}
+                                    />
                                 </div>
                             )}
                         </div>

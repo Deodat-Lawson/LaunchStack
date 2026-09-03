@@ -41,6 +41,10 @@ import {
     type ThreadReference,
     type WorkspaceSource,
 } from "./types";
+import { Plus } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import type { AskStarter } from "~/lib/ask-starters/contract";
+import { AskStarters } from "./AskStarters";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -1001,96 +1005,52 @@ function AttachmentChip({ attachment, onRemove }: AttachmentChipProps) {
 
 interface EmptyStateProps {
     onOpenAdd: () => void;
-    sourceCount: number;
+    sources: WorkspaceSource[];
+    /** Names the evidence behind the starter questions; a change refetches them. */
+    startersRevisionKey: string;
+    /** True while a message is in flight. */
+    disabled: boolean;
+    onAsk: (starter: AskStarter, refs: string[]) => void;
+    onOpenProfile: () => void;
 }
 
-function EmptyState({ onOpenAdd, sourceCount }: EmptyStateProps) {
-    const starters = [
-        { q: "Summarize my customer interviews", hint: "across all recordings" },
-        { q: "What did I promise investors?", hint: "from Gmail + pitch deck" },
-        { q: "Find every mention of pricing", hint: "in my notes and docs" },
-        { q: "Where's the auth code in my repo?", hint: "from GitHub" },
-    ];
+function EmptyState({
+    onOpenAdd,
+    sources,
+    startersRevisionKey,
+    disabled,
+    onAsk,
+    onOpenProfile,
+}: EmptyStateProps) {
+    const sourceCount = sources.length;
     return (
-        <div style={{ paddingTop: 40, animation: "lsw-fadeIn 300ms" }}>
-            <div style={{ textAlign: "center", marginBottom: 40 }}>
-                <div
-                    className="serif"
-                    style={{
-                        fontSize: 42,
-                        lineHeight: 1.15,
-                        letterSpacing: "-0.02em",
-                        marginBottom: 10,
-                    }}
-                >
-                    What do you want to <em style={{ color: "var(--accent)" }}>ask</em> yourself?
+        <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
+            <div className="mb-10 text-center">
+                <div className="serif text-ink mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
+                    What do you want to <em className="text-brand">ask</em> yourself?
                 </div>
-                <div style={{ fontSize: 14, color: "var(--ink-3)" }}>
+                <div className="text-ink-3 text-sm">
                     {sourceCount} source{sourceCount !== 1 ? "s" : ""} indexed · ready to query
                 </div>
             </div>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 10,
-                    marginBottom: 24,
-                }}
-            >
-                {starters.map((s, i) => (
-                    <button
-                        key={i}
-                        style={{
-                            textAlign: "left",
-                            padding: "12px 14px",
-                            borderRadius: 10,
-                            background: "var(--panel)",
-                            border: "1px solid var(--line)",
-                            transition: "border-color 120ms",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.borderColor = "var(--accent)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.borderColor = "var(--line)";
-                        }}
-                    >
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                            {s.q}
-                        </div>
-                        <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 3 }}>
-                            {s.hint}
-                        </div>
-                    </button>
-                ))}
-            </div>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 10,
-                    padding: "14px 18px",
-                    borderRadius: 12,
-                    background: "var(--line-2)",
-                    border: "1px dashed var(--line)",
-                    fontSize: 13,
-                    color: "var(--ink-3)",
-                }}
-            >
+            <AskStarters
+                sources={sources}
+                revisionKey={startersRevisionKey}
+                disabled={disabled}
+                onAsk={onAsk}
+                onOpenProfile={onOpenProfile}
+            />
+            <div className="bg-line-2 border-line text-ink-3 flex items-center justify-center gap-2.5 rounded-xl border border-dashed px-[18px] py-3.5 text-[13px]">
                 <span>Need something new?</span>
-                <button
+                <Button
+                    type="button"
+                    variant="link"
+                    size="sm"
+                    className="text-brand h-auto gap-1.5 p-0 text-[13px] font-semibold"
                     onClick={onOpenAdd}
-                    style={{
-                        color: "var(--accent)",
-                        fontWeight: 600,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 5,
-                    }}
                 >
-                    <IconPlus size={12} /> Add a source
-                </button>
+                    <Plus className="size-3" aria-hidden /> Add a source
+                </Button>
             </div>
         </div>
     );
@@ -1433,6 +1393,26 @@ export function AskPanel({
 
     const handleSend = useCallback((send: ComposerSend) => sendMessage(send), [sendMessage]);
 
+    // A starter question is a send with the question as its text. When the
+    // starter is about specific documents they become the pinned sources —
+    // visible in the composer, and the scope of any follow-up — otherwise
+    // whatever the user already pinned stays in force.
+    const switcher = useEmployerWorkspaceSwitcher();
+    const startersRevisionKey = `${switcher?.name ?? "workspace"}:${sources.length}`;
+    const handleAskStarter = useCallback(
+        (starter: AskStarter, refs: string[]) => {
+            if (refs.length > 0) setSelected(refs);
+            sendMessage({
+                text: starter.question,
+                refs: refs.length > 0 ? refs : selected,
+                attachments: [],
+                webSearch,
+                thinking,
+            });
+        },
+        [selected, setSelected, sendMessage, webSearch, thinking]
+    );
+
     return (
         <main
             style={{
@@ -1561,7 +1541,16 @@ export function AskPanel({
                     >
                         <div style={{ maxWidth: CHAT_COLUMN_MAX_PX, margin: "0 auto" }}>
                             {isEmpty ? (
-                                <EmptyState onOpenAdd={onOpenAdd} sourceCount={sources.length} />
+                                <EmptyState
+                                    onOpenAdd={onOpenAdd}
+                                    sources={sources}
+                                    startersRevisionKey={startersRevisionKey}
+                                    disabled={isSending}
+                                    onAsk={handleAskStarter}
+                                    onOpenProfile={() =>
+                                        onStudioNavigate("/employer/settings#company")
+                                    }
+                                />
                             ) : (
                                 <>
                                     {thread.map((m, i) => (

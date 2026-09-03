@@ -14,19 +14,19 @@ export declare const EvidenceCitationSchema: z.ZodObject<{
     snippet: z.ZodString;
     sourceType: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    sourceType: string | null;
     title: string | null;
     documentId: string | number | null;
     page: number | null;
     sectionPath: string | null;
     snippet: string;
-    sourceType: string | null;
 }, {
+    sourceType: string | null;
     title: string | null;
     documentId: string | number | null;
     page: number | null;
     sectionPath: string | null;
     snippet: string;
-    sourceType: string | null;
 }>;
 export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;
 export declare const NormalizedClaimSchema: z.ZodObject<{
@@ -41,43 +41,43 @@ export declare const NormalizedClaimSchema: z.ZodObject<{
         snippet: z.ZodString;
         sourceType: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
+        sourceType: string | null;
         title: string | null;
         documentId: string | number | null;
         page: number | null;
         sectionPath: string | null;
         snippet: string;
-        sourceType: string | null;
     }, {
+        sourceType: string | null;
         title: string | null;
         documentId: string | number | null;
         page: number | null;
         sectionPath: string | null;
         snippet: string;
-        sourceType: string | null;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
+    confidence: "high" | "medium" | "low";
     category: string;
-    confidence: "high" | "low" | "medium";
     claim: string;
     citations: {
+        sourceType: string | null;
         title: string | null;
         documentId: string | number | null;
         page: number | null;
         sectionPath: string | null;
         snippet: string;
-        sourceType: string | null;
     }[];
 }, {
+    confidence: "high" | "medium" | "low";
     category: string;
-    confidence: "high" | "low" | "medium";
     claim: string;
     citations?: {
+        sourceType: string | null;
         title: string | null;
         documentId: string | number | null;
         page: number | null;
         sectionPath: string | null;
         snippet: string;
-        sourceType: string | null;
     }[] | undefined;
 }>;
 export type NormalizedClaim = z.infer<typeof NormalizedClaimSchema>;
@@ -107,63 +107,63 @@ export declare const NormalizedCompanyKnowledgeSchema: z.ZodObject<{
             snippet: z.ZodString;
             sourceType: z.ZodNullable<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }, {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
+        confidence: "high" | "medium" | "low";
         category: string;
-        confidence: "high" | "low" | "medium";
         claim: string;
         citations: {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }[];
     }, {
+        confidence: "high" | "medium" | "low";
         category: string;
-        confidence: "high" | "low" | "medium";
         claim: string;
         citations?: {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }[] | undefined;
     }>, "many">>;
     summary: z.ZodString;
     missingInformation: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
+    categories: string[];
     summary: string;
     keyDifferentiators: string[];
     technicalEdge: string;
-    categories: string[];
     claims: {
+        confidence: "high" | "medium" | "low";
         category: string;
-        confidence: "high" | "low" | "medium";
         claim: string;
         citations: {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }[];
     }[];
     companyName: string;
@@ -183,19 +183,19 @@ export declare const NormalizedCompanyKnowledgeSchema: z.ZodObject<{
     companyName: string;
     whatItDoes: string;
     founderStory: string;
-    keyDifferentiators?: string[] | undefined;
     categories?: string[] | undefined;
+    keyDifferentiators?: string[] | undefined;
     claims?: {
+        confidence: "high" | "medium" | "low";
         category: string;
-        confidence: "high" | "low" | "medium";
         claim: string;
         citations?: {
+            sourceType: string | null;
             title: string | null;
             documentId: string | number | null;
             page: number | null;
             sectionPath: string | null;
             snippet: string;
-            sourceType: string | null;
         }[] | undefined;
     }[] | undefined;
     targetAudience?: string[] | undefined;
@@ -398,12 +398,12 @@ export declare const MarketingPipelineOutputSchema: z.ZodObject<{
     message: z.ZodString;
     "image/video": z.ZodEnum<["image", "video"]>;
 }, "strip", z.ZodTypeAny, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     message: string;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     "image/video": "image" | "video";
 }, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     message: string;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     "image/video": "image" | "video";
 }>;
 export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSchema>;

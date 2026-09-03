@@ -9,9 +9,5 @@ export declare const SYSTEM_PROMPT: string;
 export declare function extractSummary(text: string | null | undefined): string | null;
 /** Extract mermaid code from response (handles ```mermaid ... ``` or raw mermaid). */
 export declare function extractMermaidCode(text: string | null | undefined): string | null;
-export declare function buildUserPrompt(
-    repo: RepoInfo,
-    repoContext: string,
-    userInstructions?: string | null
-): string;
+export declare function buildUserPrompt(repo: RepoInfo, repoContext: string, userInstructions?: string | null): string;
 //# sourceMappingURL=prompts.d.ts.map

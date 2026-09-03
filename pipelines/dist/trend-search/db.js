@@ -16,14 +16,14 @@ function mapRowToJobRecord(row) {
         },
         output: results
             ? {
-                  results,
-                  metadata: {
-                      query: row.query,
-                      companyContext: row.companyContext,
-                      categories: row.categories ?? [],
-                      createdAt: (row.completedAt ?? row.createdAt).toISOString(),
-                  },
-              }
+                results,
+                metadata: {
+                    query: row.query,
+                    companyContext: row.companyContext,
+                    categories: row.categories ?? [],
+                    createdAt: (row.completedAt ?? row.createdAt).toISOString(),
+                },
+            }
             : null,
         errorMessage: row.errorMessage ?? null,
         createdAt: row.createdAt,
@@ -45,9 +45,9 @@ export function createDrizzleTrendSearchJobStore() {
             const [row] = await db
                 .update(trendSearchJobs)
                 .set({
-                    ...patch,
-                    updatedAt: new Date(),
-                })
+                ...patch,
+                updatedAt: new Date(),
+            })
                 .where(and(eq(trendSearchJobs.id, jobId), eq(trendSearchJobs.companyId, companyId)))
                 .returning();
             return row ?? null;
@@ -99,7 +99,8 @@ export function createTrendSearchJobHelpers(store) {
             }
             if (errorMessage !== undefined) {
                 patch.errorMessage = errorMessage;
-            } else if (status === "completed") {
+            }
+            else if (status === "completed") {
                 patch.errorMessage = null;
             }
             const row = await store.update(jobId, companyId, patch);

@@ -51,16 +51,16 @@ export declare const TrendSearchEventDataSchema: z.ZodObject<{
     categories: z.ZodOptional<z.ZodArray<z.ZodEnum<["fashion", "finance", "business", "tech"]>, "many">>;
 }, "strip", z.ZodTypeAny, {
     companyId: string;
-    query: string;
     userId: string;
     jobId: string;
+    query: string;
     companyContext: string;
     categories?: ("fashion" | "finance" | "business" | "tech")[] | undefined;
 }, {
     companyId: string;
-    query: string;
     userId: string;
     jobId: string;
+    query: string;
     companyContext: string;
     categories?: ("fashion" | "finance" | "business" | "tech")[] | undefined;
 }>;

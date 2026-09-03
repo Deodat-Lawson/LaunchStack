@@ -20,6 +20,11 @@ import {
     founderWeeklyReviewDispatchReconciler,
     founderWeeklyReviewGenerationJob,
 } from "~/server/inngest/functions/founderWeeklyReview";
+import {
+    repoWorkspacePollReconciler,
+    repoWorkspaceSyncJob,
+} from "~/server/inngest/functions/repoWorkspaceSync";
+import { repoExplainerJob } from "~/server/inngest/functions/repoExplainerJob";
 
 export function createInngestHandler() {
     return serve({
@@ -34,6 +39,9 @@ export function createInngestHandler() {
             founderWeeklyReviewDispatcher,
             founderWeeklyReviewDispatchReconciler,
             founderWeeklyReviewGenerationJob,
+            repoWorkspaceSyncJob,
+            repoWorkspacePollReconciler,
+            repoExplainerJob,
         ],
     });
 }

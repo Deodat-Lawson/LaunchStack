@@ -38,16 +38,16 @@ function mapRowToJobRecord(row) {
         },
         output: results
             ? {
-                  results,
-                  metadata: {
-                      query: row.query,
-                      companyContext: row.companyContext,
-                      location: { lat: row.locationLat, lng: row.locationLng },
-                      radius: row.radius,
-                      categories: row.categories ?? [],
-                      createdAt: (row.completedAt ?? row.createdAt).toISOString(),
-                  },
-              }
+                results,
+                metadata: {
+                    query: row.query,
+                    companyContext: row.companyContext,
+                    location: { lat: row.locationLat, lng: row.locationLng },
+                    radius: row.radius,
+                    categories: row.categories ?? [],
+                    createdAt: (row.completedAt ?? row.createdAt).toISOString(),
+                },
+            }
             : null,
         errorMessage: row.errorMessage ?? null,
         createdAt: row.createdAt,
@@ -71,12 +71,7 @@ export function createDrizzleClientProspectorJobStore() {
             const [row] = await db
                 .update(clientProspectorJobs)
                 .set(patch)
-                .where(
-                    and(
-                        eq(clientProspectorJobs.id, jobId),
-                        eq(clientProspectorJobs.companyId, companyId)
-                    )
-                )
+                .where(and(eq(clientProspectorJobs.id, jobId), eq(clientProspectorJobs.companyId, companyId)))
                 .returning();
             return row ?? null;
         },
@@ -85,12 +80,7 @@ export function createDrizzleClientProspectorJobStore() {
             const [row] = await db
                 .select()
                 .from(clientProspectorJobs)
-                .where(
-                    and(
-                        eq(clientProspectorJobs.id, jobId),
-                        eq(clientProspectorJobs.companyId, companyId)
-                    )
-                )
+                .where(and(eq(clientProspectorJobs.id, jobId), eq(clientProspectorJobs.companyId, companyId)))
                 .limit(1);
             return row ?? null;
         },
@@ -143,7 +133,8 @@ export function createClientProspectorJobHelpers(store) {
             }
             if (errorMessage !== undefined) {
                 patch.errorMessage = errorMessage;
-            } else if (status === "completed") {
+            }
+            else if (status === "completed") {
                 patch.errorMessage = null;
             }
             const row = await store.update(jobId, companyId, patch);

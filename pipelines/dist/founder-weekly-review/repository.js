@@ -1,23 +1,14 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
-import { founderWeeklyReviewOperations, founderWeeklyReviewRuns } from "./schema.js";
-import {
-    FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
-    FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
-    parseFounderWeeklyReviewEvidenceSnapshot,
-    parseFounderWeeklyReviewCollectionInput,
-    parseFounderWeeklyReviewModelMetadata,
-    parseFounderWeeklyReviewPayload,
-} from "./contracts.js";
+import { founderWeeklyReviewOperations, founderWeeklyReviewRuns, } from "./schema.js";
+import { FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION, FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION, parseFounderWeeklyReviewEvidenceSnapshot, parseFounderWeeklyReviewCollectionInput, parseFounderWeeklyReviewModelMetadata, parseFounderWeeklyReviewPayload, } from "./contracts.js";
 import { FounderWeeklyReviewInvalidPayloadError } from "./errors.js";
 function mapRunRow(row) {
     const reviewPayload = row.reviewPayload
         ? parseFounderWeeklyReviewPayload(row.reviewPayload)
         : null;
     if (reviewPayload && reviewPayload.schemaVersion !== row.reviewSchemaVersion) {
-        throw new FounderWeeklyReviewInvalidPayloadError(
-            `Founder weekly review run "${row.id}" has mismatched review payload and review schema versions.`
-        );
+        throw new FounderWeeklyReviewInvalidPayloadError(`Founder weekly review run "${row.id}" has mismatched review payload and review schema versions.`);
     }
     return {
         id: row.id,
@@ -88,28 +79,28 @@ export class FounderWeeklyReviewRepository {
         const [inserted] = await this.db
             .insert(founderWeeklyReviewRuns)
             .values({
-                id: input.id,
-                companyId: input.companyId,
-                requestKey: input.requestKey,
-                reportingPeriodStart: input.reportingPeriod.start,
-                reportingPeriodEnd: input.reportingPeriod.end,
-                status: "queued",
-                reviewPayload: null,
-                reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
-                evidenceSnapshot: input.evidenceSnapshot ?? null,
-                evidenceSchemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
-                collectionInput: input.collectionInput ?? {
-                    workspaceTimezone: input.evidenceSnapshot?.workspaceTimezone ?? "UTC",
-                    actorExternalUserId: input.createdByActorId.replace(/^user:/, ""),
-                },
-                modelMetadata: null,
-                createdByActorId: input.createdByActorId,
-                queuedAt: new Date(),
-                updatedAt: new Date(),
-            })
+            id: input.id,
+            companyId: input.companyId,
+            requestKey: input.requestKey,
+            reportingPeriodStart: input.reportingPeriod.start,
+            reportingPeriodEnd: input.reportingPeriod.end,
+            status: "queued",
+            reviewPayload: null,
+            reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
+            evidenceSnapshot: input.evidenceSnapshot ?? null,
+            evidenceSchemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+            collectionInput: input.collectionInput ?? {
+                workspaceTimezone: input.evidenceSnapshot?.workspaceTimezone ?? "UTC",
+                actorExternalUserId: input.createdByActorId.replace(/^user:/, ""),
+            },
+            modelMetadata: null,
+            createdByActorId: input.createdByActorId,
+            queuedAt: new Date(),
+            updatedAt: new Date(),
+        })
             .onConflictDoNothing({
-                target: [founderWeeklyReviewRuns.companyId, founderWeeklyReviewRuns.requestKey],
-            })
+            target: [founderWeeklyReviewRuns.companyId, founderWeeklyReviewRuns.requestKey],
+        })
             .returning();
         if (inserted) {
             return { run: mapRunRow(inserted), created: true };
@@ -124,12 +115,7 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .select()
             .from(founderWeeklyReviewRuns)
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.id, runId)
-                )
-            )
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.id, runId)))
             .limit(1);
         return row ? mapRunRow(row) : null;
     }
@@ -137,12 +123,7 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .select()
             .from(founderWeeklyReviewRuns)
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.requestKey, requestKey)
-                )
-            )
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.requestKey, requestKey)))
             .limit(1);
         return row ? mapRunRow(row) : null;
     }
@@ -158,17 +139,11 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                reviewPayload,
-                reviewSchemaVersion: reviewPayload.schemaVersion,
-                updatedAt: new Date(),
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.id, runId),
-                    eq(founderWeeklyReviewRuns.status, "draft")
-                )
-            )
+            reviewPayload,
+            reviewSchemaVersion: reviewPayload.schemaVersion,
+            updatedAt: new Date(),
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.id, runId), eq(founderWeeklyReviewRuns.status, "draft")))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -183,17 +158,11 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "published",
-                publishedAt: now,
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.id, runId),
-                    eq(founderWeeklyReviewRuns.status, "draft")
-                )
-            )
+            status: "published",
+            publishedAt: now,
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.id, runId), eq(founderWeeklyReviewRuns.status, "draft")))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -208,24 +177,17 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "generating",
-                generationAttempt: sql`${founderWeeklyReviewRuns.generationAttempt} + 1`,
-                generationClaimId: input.generationClaimId,
-                generationJobId: input.generationJobId ?? null,
-                claimedAt: now,
-                generationStartedAt: now,
-                errorCode: null,
-                errorMessage: null,
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "queued"),
-                    sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NOT NULL`
-                )
-            )
+            status: "generating",
+            generationAttempt: sql `${founderWeeklyReviewRuns.generationAttempt} + 1`,
+            generationClaimId: input.generationClaimId,
+            generationJobId: input.generationJobId ?? null,
+            claimedAt: now,
+            generationStartedAt: now,
+            errorCode: null,
+            errorMessage: null,
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "queued"), sql `${founderWeeklyReviewRuns.evidenceSnapshot} IS NOT NULL`))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -240,108 +202,79 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "collecting",
-                collectionClaimId: input.collectionClaimId,
-                collectionStartedAt: now,
-                errorCode: null,
-                errorMessage: null,
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "queued"),
-                    sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`
-                )
-            )
+            status: "collecting",
+            collectionClaimId: input.collectionClaimId,
+            collectionStartedAt: now,
+            errorCode: null,
+            errorMessage: null,
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "queued"), sql `${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`))
             .returning();
         return row
             ? { updated: true, run: mapRunRow(row) }
             : {
-                  updated: false,
-                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-              };
+                updated: false,
+                run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+            };
     }
     async attachEvidenceSnapshotIfAbsent(input, evidenceSnapshot) {
         const now = new Date();
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "queued",
-                evidenceSnapshot,
-                evidenceSchemaVersion: evidenceSnapshot.schemaVersion,
-                evidenceCollectedAt: now,
-                collectionClaimId: null,
-                queuedAt: now,
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "collecting"),
-                    eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId),
-                    sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`
-                )
-            )
+            status: "queued",
+            evidenceSnapshot,
+            evidenceSchemaVersion: evidenceSnapshot.schemaVersion,
+            evidenceCollectedAt: now,
+            collectionClaimId: null,
+            queuedAt: now,
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "collecting"), eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId), sql `${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`))
             .returning();
         return row
             ? { updated: true, run: mapRunRow(row) }
             : {
-                  updated: false,
-                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-              };
+                updated: false,
+                run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+            };
     }
     async markCollectionFailed(input, failure) {
         const now = new Date();
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "failed",
-                failureSequence: sql`${founderWeeklyReviewRuns.failureSequence} + 1`,
-                errorCode: failure.errorCode,
-                errorMessage: truncateErrorMessage(failure.errorMessage),
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "collecting"),
-                    eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId)
-                )
-            )
+            status: "failed",
+            failureSequence: sql `${founderWeeklyReviewRuns.failureSequence} + 1`,
+            errorCode: failure.errorCode,
+            errorMessage: truncateErrorMessage(failure.errorMessage),
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "collecting"), eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId)))
             .returning();
         return row
             ? { updated: true, run: mapRunRow(row) }
             : {
-                  updated: false,
-                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-              };
+                updated: false,
+                run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+            };
     }
     async saveGeneratedDraftWithClaim(input, reviewPayload, modelMetadata) {
         const now = new Date();
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "draft",
-                reviewPayload,
-                reviewSchemaVersion: reviewPayload.schemaVersion,
-                modelMetadata,
-                generatedAt: now,
-                errorCode: null,
-                errorMessage: null,
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "generating"),
-                    eq(founderWeeklyReviewRuns.generationClaimId, input.generationClaimId)
-                )
-            )
+            status: "draft",
+            reviewPayload,
+            reviewSchemaVersion: reviewPayload.schemaVersion,
+            modelMetadata,
+            generatedAt: now,
+            errorCode: null,
+            errorMessage: null,
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "generating"), eq(founderWeeklyReviewRuns.generationClaimId, input.generationClaimId)))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -356,20 +289,13 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "failed",
-                failureSequence: sql`${founderWeeklyReviewRuns.failureSequence} + 1`,
-                errorCode: failure.errorCode,
-                errorMessage: truncateErrorMessage(failure.errorMessage),
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                    eq(founderWeeklyReviewRuns.id, input.runId),
-                    eq(founderWeeklyReviewRuns.status, "generating"),
-                    eq(founderWeeklyReviewRuns.generationClaimId, input.generationClaimId)
-                )
-            )
+            status: "failed",
+            failureSequence: sql `${founderWeeklyReviewRuns.failureSequence} + 1`,
+            errorCode: failure.errorCode,
+            errorMessage: truncateErrorMessage(failure.errorMessage),
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "generating"), eq(founderWeeklyReviewRuns.generationClaimId, input.generationClaimId)))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -384,19 +310,13 @@ export class FounderWeeklyReviewRepository {
         const [row] = await this.db
             .update(founderWeeklyReviewRuns)
             .set({
-                status: "failed",
-                failureSequence: sql`${founderWeeklyReviewRuns.failureSequence} + 1`,
-                errorCode: failure.errorCode,
-                errorMessage: truncateErrorMessage(failure.errorMessage),
-                updatedAt: now,
-            })
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.id, runId),
-                    eq(founderWeeklyReviewRuns.status, "queued")
-                )
-            )
+            status: "failed",
+            failureSequence: sql `${founderWeeklyReviewRuns.failureSequence} + 1`,
+            errorCode: failure.errorCode,
+            errorMessage: truncateErrorMessage(failure.errorMessage),
+            updatedAt: now,
+        })
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.id, runId), eq(founderWeeklyReviewRuns.status, "queued")))
             .returning();
         if (row) {
             return { updated: true, run: mapRunRow(row) };
@@ -407,16 +327,11 @@ export class FounderWeeklyReviewRepository {
         };
     }
     async retryFailedRun(input) {
-        return this.db.transaction(async tx => {
+        return this.db.transaction(async (tx) => {
             const [currentRow] = await tx
                 .select()
                 .from(founderWeeklyReviewRuns)
-                .where(
-                    and(
-                        eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                        eq(founderWeeklyReviewRuns.id, input.runId)
-                    )
-                )
+                .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId)))
                 .limit(1);
             if (!currentRow) {
                 return {
@@ -428,14 +343,7 @@ export class FounderWeeklyReviewRepository {
             const [existingOperationRow] = await tx
                 .select()
                 .from(founderWeeklyReviewOperations)
-                .where(
-                    and(
-                        eq(founderWeeklyReviewOperations.companyId, input.companyId),
-                        eq(founderWeeklyReviewOperations.runId, input.runId),
-                        eq(founderWeeklyReviewOperations.operationType, "retry"),
-                        eq(founderWeeklyReviewOperations.requestKey, input.requestKey)
-                    )
-                )
+                .where(and(eq(founderWeeklyReviewOperations.companyId, input.companyId), eq(founderWeeklyReviewOperations.runId, input.runId), eq(founderWeeklyReviewOperations.operationType, "retry"), eq(founderWeeklyReviewOperations.requestKey, input.requestKey)))
                 .limit(1);
             const currentRun = mapRunRow(currentRow);
             if (existingOperationRow) {
@@ -463,41 +371,33 @@ export class FounderWeeklyReviewRepository {
             const [insertedOperationRow] = await tx
                 .insert(founderWeeklyReviewOperations)
                 .values({
-                    id: input.operationId,
-                    runId: input.runId,
-                    companyId: input.companyId,
-                    operationType: "retry",
-                    requestKey: input.requestKey,
-                    sourceFailureSequence: currentRun.failureSequence,
-                    actorId: input.actorId,
-                })
+                id: input.operationId,
+                runId: input.runId,
+                companyId: input.companyId,
+                operationType: "retry",
+                requestKey: input.requestKey,
+                sourceFailureSequence: currentRun.failureSequence,
+                actorId: input.actorId,
+            })
                 .onConflictDoNothing({
-                    target: [
-                        founderWeeklyReviewOperations.runId,
-                        founderWeeklyReviewOperations.operationType,
-                        founderWeeklyReviewOperations.requestKey,
-                    ],
-                })
+                target: [
+                    founderWeeklyReviewOperations.runId,
+                    founderWeeklyReviewOperations.operationType,
+                    founderWeeklyReviewOperations.requestKey,
+                ],
+            })
                 .returning();
             if (!insertedOperationRow) {
                 const [conflictingOperationRow] = await tx
                     .select()
                     .from(founderWeeklyReviewOperations)
-                    .where(
-                        and(
-                            eq(founderWeeklyReviewOperations.companyId, input.companyId),
-                            eq(founderWeeklyReviewOperations.runId, input.runId),
-                            eq(founderWeeklyReviewOperations.operationType, "retry"),
-                            eq(founderWeeklyReviewOperations.requestKey, input.requestKey)
-                        )
-                    )
+                    .where(and(eq(founderWeeklyReviewOperations.companyId, input.companyId), eq(founderWeeklyReviewOperations.runId, input.runId), eq(founderWeeklyReviewOperations.operationType, "retry"), eq(founderWeeklyReviewOperations.requestKey, input.requestKey)))
                     .limit(1);
                 return {
-                    outcome:
-                        conflictingOperationRow &&
+                    outcome: conflictingOperationRow &&
                         conflictingOperationRow.sourceFailureSequence === currentRun.failureSequence
-                            ? "idempotent"
-                            : "conflict",
+                        ? "idempotent"
+                        : "conflict",
                     run: await this.getRunInsideTransaction(tx, input.companyId, input.runId),
                     operation: conflictingOperationRow
                         ? mapOperationRow(conflictingOperationRow)
@@ -508,26 +408,19 @@ export class FounderWeeklyReviewRepository {
             const [updatedRow] = await tx
                 .update(founderWeeklyReviewRuns)
                 .set({
-                    status: "queued",
-                    retryCount: sql`${founderWeeklyReviewRuns.retryCount} + 1`,
-                    generationClaimId: null,
-                    generationJobId: null,
-                    claimedAt: null,
-                    generationStartedAt: null,
-                    generatedAt: null,
-                    queuedAt: now,
-                    errorCode: null,
-                    errorMessage: null,
-                    updatedAt: now,
-                })
-                .where(
-                    and(
-                        eq(founderWeeklyReviewRuns.companyId, input.companyId),
-                        eq(founderWeeklyReviewRuns.id, input.runId),
-                        eq(founderWeeklyReviewRuns.status, "failed"),
-                        eq(founderWeeklyReviewRuns.failureSequence, currentRun.failureSequence)
-                    )
-                )
+                status: "queued",
+                retryCount: sql `${founderWeeklyReviewRuns.retryCount} + 1`,
+                generationClaimId: null,
+                generationJobId: null,
+                claimedAt: null,
+                generationStartedAt: null,
+                generatedAt: null,
+                queuedAt: now,
+                errorCode: null,
+                errorMessage: null,
+                updatedAt: now,
+            })
+                .where(and(eq(founderWeeklyReviewRuns.companyId, input.companyId), eq(founderWeeklyReviewRuns.id, input.runId), eq(founderWeeklyReviewRuns.status, "failed"), eq(founderWeeklyReviewRuns.failureSequence, currentRun.failureSequence)))
                 .returning();
             if (!updatedRow) {
                 return {
@@ -547,12 +440,7 @@ export class FounderWeeklyReviewRepository {
         const [row] = await tx
             .select()
             .from(founderWeeklyReviewRuns)
-            .where(
-                and(
-                    eq(founderWeeklyReviewRuns.companyId, companyId),
-                    eq(founderWeeklyReviewRuns.id, runId)
-                )
-            )
+            .where(and(eq(founderWeeklyReviewRuns.companyId, companyId), eq(founderWeeklyReviewRuns.id, runId)))
             .limit(1);
         return row ? mapRunRow(row) : null;
     }

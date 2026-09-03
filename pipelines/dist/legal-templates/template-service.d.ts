@@ -11,14 +11,8 @@ export interface GenerateResult {
     filename: string;
     fieldErrors?: Record<string, string>;
 }
-export declare function validateData(
-    templateId: string,
-    data: Record<string, string>
-): ValidationResult;
+export declare function validateData(templateId: string, data: Record<string, string>): ValidationResult;
 export declare function fillTemplate(templatePath: string, data: Record<string, string>): Buffer;
-export declare function generateDocument(
-    templateId: string,
-    data: Record<string, string>
-): GenerateResult;
+export declare function generateDocument(templateId: string, data: Record<string, string>): GenerateResult;
 export { TEMPLATE_REGISTRY };
 //# sourceMappingURL=template-service.d.ts.map

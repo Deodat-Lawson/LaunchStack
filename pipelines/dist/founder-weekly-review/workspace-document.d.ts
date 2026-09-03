@@ -23,28 +23,19 @@ export type WorkspaceDocumentHit = {
     lineStart?: number | null;
     lineEnd?: number | null;
 };
-export type WorkspaceDocumentRetrievalResult =
-    | {
-          state: "success";
-          hits: WorkspaceDocumentHit[];
-      }
-    | {
-          state: "empty";
-          hits: [];
-      }
-    | {
-          state: "unavailable";
-          hits: [];
-          warnings: string[];
-      };
-export declare function normalizeFounderContextRetrievalQuery(
-    founderContext: string | null | undefined
-): string | null;
+export type WorkspaceDocumentRetrievalResult = {
+    state: "success";
+    hits: WorkspaceDocumentHit[];
+} | {
+    state: "empty";
+    hits: [];
+} | {
+    state: "unavailable";
+    hits: [];
+    warnings: string[];
+};
+export declare function normalizeFounderContextRetrievalQuery(founderContext: string | null | undefined): string | null;
 /** Deterministically deduplicate, diversify, and cap provider/database hits. */
-export declare function selectWorkspaceDocumentHits(
-    hits: readonly WorkspaceDocumentHit[]
-): WorkspaceDocumentHit[];
-export declare function buildWorkspaceDocumentEvidence(
-    hits: readonly WorkspaceDocumentHit[]
-): FounderWeeklyReviewEvidenceItem[];
+export declare function selectWorkspaceDocumentHits(hits: readonly WorkspaceDocumentHit[]): WorkspaceDocumentHit[];
+export declare function buildWorkspaceDocumentEvidence(hits: readonly WorkspaceDocumentHit[]): FounderWeeklyReviewEvidenceItem[];
 //# sourceMappingURL=workspace-document.d.ts.map

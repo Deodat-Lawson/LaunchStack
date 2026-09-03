@@ -23,13 +23,13 @@ export declare const SourceFactSchema: z.ZodObject<{
     /** A concrete metric/number a deterministic groundedness check can string-match. */
     metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    id: string;
-    text: string;
     kind: "supported" | "contradictory" | "distractor";
+    text: string;
+    id: string;
     metric: string | null;
 }, {
-    id: string;
     text: string;
+    id: string;
     kind?: "supported" | "contradictory" | "distractor" | undefined;
     metric?: string | null | undefined;
 }>;
@@ -52,11 +52,11 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         path: z.ZodString;
         title: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        title: string;
         path: string;
+        title: string;
     }, {
-        title: string;
         path: string;
+        title: string;
     }>, "many">>;
     /** Ground-truth facts for groundedness/citation scoring. */
     sourceFacts: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -66,49 +66,49 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         /** A concrete metric/number a deterministic groundedness check can string-match. */
         metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        id: string;
-        text: string;
         kind: "supported" | "contradictory" | "distractor";
+        text: string;
+        id: string;
         metric: string | null;
     }, {
-        id: string;
         text: string;
+        id: string;
         kind?: "supported" | "contradictory" | "distractor" | undefined;
         metric?: string | null | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
     name: string;
-    industry: string;
     description: string;
+    industry: string;
     ref: string;
     categories: string[];
     version: string;
-    knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
+    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
     docs: {
-        title: string;
         path: string;
+        title: string;
     }[];
     sourceFacts: {
-        id: string;
-        text: string;
         kind: "supported" | "contradictory" | "distractor";
+        text: string;
+        id: string;
         metric: string | null;
     }[];
 }, {
     name: string;
-    industry: string;
     description: string;
+    industry: string;
     ref: string;
     version: string;
-    knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
+    knowledgeState: "missing" | "strong" | "sparse" | "contradictory";
     categories?: string[] | undefined;
     docs?: {
-        title: string;
         path: string;
+        title: string;
     }[] | undefined;
     sourceFacts?: {
-        id: string;
         text: string;
+        id: string;
         kind?: "supported" | "contradictory" | "distractor" | undefined;
         metric?: string | null | undefined;
     }[] | undefined;
@@ -130,8 +130,8 @@ export declare const FixtureInputsSchema: z.ZodObject<{
     simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
     simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     prompt: string;
     targetAudience: string | null;
     toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -164,11 +164,11 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
         min: z.ZodNumber;
         max: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        min: number;
         max: number;
+        min: number;
     }, {
-        min: number;
         max: number;
+        min: number;
     }>>>;
     requireCitations: z.ZodDefault<z.ZodBoolean>;
     minCitations: z.ZodDefault<z.ZodNumber>;
@@ -182,8 +182,8 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
     allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     hashtags: {
-        min: number;
         max: number;
+        min: number;
     } | null;
     maxChars: number | null;
     minChars: number | null;
@@ -197,8 +197,8 @@ export declare const ExpectedConstraintsSchema: z.ZodObject<{
     allowUnsupportedClaims: boolean;
 }, {
     hashtags?: {
-        min: number;
         max: number;
+        min: number;
     } | null | undefined;
     maxChars?: number | null | undefined;
     minChars?: number | null | undefined;
@@ -225,9 +225,9 @@ export declare const CriterionSpecSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
     weight: number;
-    method: "judge" | "deterministic";
     required: boolean;
     enabled: boolean;
+    method: "judge" | "deterministic";
     minScore: number | null;
 }, {
     id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -255,8 +255,8 @@ export declare const FixtureSchema: z.ZodObject<{
         simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
         simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
         targetAudience: string | null;
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -284,11 +284,11 @@ export declare const FixtureSchema: z.ZodObject<{
             min: z.ZodNumber;
             max: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            min: number;
             max: number;
+            min: number;
         }, {
-            min: number;
             max: number;
+            min: number;
         }>>>;
         requireCitations: z.ZodDefault<z.ZodBoolean>;
         minCitations: z.ZodDefault<z.ZodNumber>;
@@ -302,8 +302,8 @@ export declare const FixtureSchema: z.ZodObject<{
         allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         hashtags: {
-            min: number;
             max: number;
+            min: number;
         } | null;
         maxChars: number | null;
         minChars: number | null;
@@ -317,8 +317,8 @@ export declare const FixtureSchema: z.ZodObject<{
         allowUnsupportedClaims: boolean;
     }, {
         hashtags?: {
-            min: number;
             max: number;
+            min: number;
         } | null | undefined;
         maxChars?: number | null | undefined;
         minChars?: number | null | undefined;
@@ -343,9 +343,9 @@ export declare const FixtureSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
-        method: "judge" | "deterministic";
         required: boolean;
         enabled: boolean;
+        method: "judge" | "deterministic";
         minScore: number | null;
     }, {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -360,13 +360,14 @@ export declare const FixtureSchema: z.ZodObject<{
     relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    description: string;
+    notes: string | null;
     id: string;
+    description: string;
     fixtureVersion: string;
     companyRef: string;
     inputs: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
         targetAudience: string | null;
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -377,8 +378,8 @@ export declare const FixtureSchema: z.ZodObject<{
     };
     expectedConstraints: {
         hashtags: {
-            min: number;
             max: number;
+            min: number;
         } | null;
         maxChars: number | null;
         minChars: number | null;
@@ -394,17 +395,16 @@ export declare const FixtureSchema: z.ZodObject<{
     criteria: {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
-        method: "judge" | "deterministic";
         required: boolean;
         enabled: boolean;
+        method: "judge" | "deterministic";
         minScore: number | null;
     }[];
     expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
     relevantFactIds: string[];
-    notes: string | null;
 }, {
-    description: string;
     id: string;
+    description: string;
     fixtureVersion: string;
     companyRef: string;
     inputs: {
@@ -420,8 +420,8 @@ export declare const FixtureSchema: z.ZodObject<{
     };
     expectedConstraints: {
         hashtags?: {
-            min: number;
             max: number;
+            min: number;
         } | null | undefined;
         maxChars?: number | null | undefined;
         minChars?: number | null | undefined;
@@ -442,9 +442,9 @@ export declare const FixtureSchema: z.ZodObject<{
         enabled?: boolean | undefined;
         minScore?: number | null | undefined;
     }[];
+    notes?: string | null | undefined;
     expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
     relevantFactIds?: string[] | undefined;
-    notes?: string | null | undefined;
 }>;
 export type Fixture = z.infer<typeof FixtureSchema>;
 /** Top-level dataset manifest — pins the whole fixture set for reproducibility. */
@@ -467,8 +467,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
             simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
             targetAudience: string | null;
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -496,11 +496,11 @@ export declare const FixtureSetSchema: z.ZodObject<{
                 min: z.ZodNumber;
                 max: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                min: number;
                 max: number;
+                min: number;
             }, {
-                min: number;
                 max: number;
+                min: number;
             }>>>;
             requireCitations: z.ZodDefault<z.ZodBoolean>;
             minCitations: z.ZodDefault<z.ZodNumber>;
@@ -514,8 +514,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
             hashtags: {
-                min: number;
                 max: number;
+                min: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -529,8 +529,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
             allowUnsupportedClaims: boolean;
         }, {
             hashtags?: {
-                min: number;
                 max: number;
+                min: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -555,9 +555,9 @@ export declare const FixtureSetSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
             enabled: boolean;
+            method: "judge" | "deterministic";
             minScore: number | null;
         }, {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
@@ -572,13 +572,14 @@ export declare const FixtureSetSchema: z.ZodObject<{
         relevantFactIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         notes: z.ZodDefault<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        description: string;
+        notes: string | null;
         id: string;
+        description: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
             targetAudience: string | null;
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -589,8 +590,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags: {
-                min: number;
                 max: number;
+                min: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -606,17 +607,16 @@ export declare const FixtureSetSchema: z.ZodObject<{
         criteria: {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
             enabled: boolean;
+            method: "judge" | "deterministic";
             minScore: number | null;
         }[];
         expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
         relevantFactIds: string[];
-        notes: string | null;
     }, {
-        description: string;
         id: string;
+        description: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
@@ -632,8 +632,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags?: {
-                min: number;
                 max: number;
+                min: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -654,20 +654,21 @@ export declare const FixtureSetSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             minScore?: number | null | undefined;
         }[];
+        notes?: string | null | undefined;
         expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
         relevantFactIds?: string[] | undefined;
-        notes?: string | null | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     version: string;
     fixtures: {
-        description: string;
+        notes: string | null;
         id: string;
+        description: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
             targetAudience: string | null;
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
@@ -678,8 +679,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags: {
-                min: number;
                 max: number;
+                min: number;
             } | null;
             maxChars: number | null;
             minChars: number | null;
@@ -695,20 +696,19 @@ export declare const FixtureSetSchema: z.ZodObject<{
         criteria: {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
             enabled: boolean;
+            method: "judge" | "deterministic";
             minScore: number | null;
         }[];
         expectedFailureMode: "none" | "graceful_degrade" | "hard_fail";
         relevantFactIds: string[];
-        notes: string | null;
     }[];
 }, {
     version: string;
     fixtures: {
-        description: string;
         id: string;
+        description: string;
         fixtureVersion: string;
         companyRef: string;
         inputs: {
@@ -724,8 +724,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         };
         expectedConstraints: {
             hashtags?: {
-                min: number;
                 max: number;
+                min: number;
             } | null | undefined;
             maxChars?: number | null | undefined;
             minChars?: number | null | undefined;
@@ -746,9 +746,9 @@ export declare const FixtureSetSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             minScore?: number | null | undefined;
         }[];
+        notes?: string | null | undefined;
         expectedFailureMode?: "none" | "graceful_degrade" | "hard_fail" | undefined;
         relevantFactIds?: string[] | undefined;
-        notes?: string | null | undefined;
     }[];
 }>;
 export type FixtureSet = z.infer<typeof FixtureSetSchema>;

@@ -20,19 +20,10 @@ export type Priority = "manual_override" | "high" | "normal" | "low";
 /** Lifecycle status of a fact. */
 export type FactStatus = "active" | "deprecated" | "superseded";
 export declare const VISIBILITY_VALUES: readonly ["public", "partner", "private", "internal"];
-export declare const USAGE_VALUES: readonly [
-    "outreach_ok",
-    "outreach_ok_with_approval",
-    "no_outreach",
-];
+export declare const USAGE_VALUES: readonly ["outreach_ok", "outreach_ok_with_approval", "no_outreach"];
 export declare const PRIORITY_VALUES: readonly ["manual_override", "high", "normal", "low"];
 export declare const FACT_STATUS_VALUES: readonly ["active", "deprecated", "superseded"];
-export declare const CHANGE_TYPE_VALUES: readonly [
-    "extraction",
-    "merge",
-    "manual_override",
-    "deprecation",
-];
+export declare const CHANGE_TYPE_VALUES: readonly ["extraction", "merge", "manual_override", "deprecation"];
 export type ChangeType = (typeof CHANGE_TYPE_VALUES)[number];
 /**
  * Where a fact was extracted from.
@@ -154,12 +145,7 @@ export interface ExtractedCompanyFacts {
     document_id: number;
     document_name: string;
     extracted_at: string;
-    facts: Partial<
-        Omit<
-            CompanyMetadataJSON,
-            "schema_version" | "company_id" | "updated_at" | "provenance" | "derived_views"
-        >
-    >;
+    facts: Partial<Omit<CompanyMetadataJSON, "schema_version" | "company_id" | "updated_at" | "provenance" | "derived_views">>;
 }
 /**
  * Output of the merger: the updated canonical metadata plus a

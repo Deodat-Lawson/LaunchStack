@@ -1,8 +1,4 @@
-import {
-    FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
-    assertGenerationEvidenceEnvelopeWithinBudget,
-    buildGenerationEvidenceEnvelope,
-} from "./generation-evidence-envelope.js";
+import { FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET, assertGenerationEvidenceEnvelopeWithinBudget, buildGenerationEvidenceEnvelope, } from "./generation-evidence-envelope.js";
 export const FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION = "founder-weekly-review-generation/v1";
 export const FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT = `You generate a structured Founder Weekly Review from supplied evidence only.
 
@@ -25,25 +21,23 @@ nextPriorities contains recommendations only. Every recommendation must have lab
 export function buildFounderWeeklyReviewPrompt(evidenceSnapshot, suppliedEnvelope) {
     const envelope = suppliedEnvelope ?? buildGenerationEvidenceEnvelope(evidenceSnapshot);
     assertGenerationEvidenceEnvelopeWithinBudget(envelope);
-    return JSON.stringify(
-        sortObjectKeysRecursively({
-            promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
-            evidenceEnvelopeVersion: envelope.version,
-            evidenceEnvelopeBudget: FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
-            evidenceEnvelopeDiagnostics: envelope.diagnostics,
-            reportingPeriod: evidenceSnapshot.reportingPeriod,
-            workspaceTimezone: evidenceSnapshot.workspaceTimezone,
-            evidence: envelope.items,
-            sourceWarnings: evidenceSnapshot.sourceWarnings,
-            requiredSections: [
-                "whatChanged",
-                "whatShipped",
-                "whatCustomersSaid",
-                "currentBlockers",
-                "nextPriorities",
-            ],
-        })
-    );
+    return JSON.stringify(sortObjectKeysRecursively({
+        promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
+        evidenceEnvelopeVersion: envelope.version,
+        evidenceEnvelopeBudget: FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
+        evidenceEnvelopeDiagnostics: envelope.diagnostics,
+        reportingPeriod: evidenceSnapshot.reportingPeriod,
+        workspaceTimezone: evidenceSnapshot.workspaceTimezone,
+        evidence: envelope.items,
+        sourceWarnings: evidenceSnapshot.sourceWarnings,
+        requiredSections: [
+            "whatChanged",
+            "whatShipped",
+            "whatCustomersSaid",
+            "currentBlockers",
+            "nextPriorities",
+        ],
+    }));
 }
 /** Sort object keys recursively while retaining the exact supplied order of arrays. */
 function sortObjectKeysRecursively(value) {
@@ -51,11 +45,12 @@ function sortObjectKeysRecursively(value) {
         return value.map(sortObjectKeysRecursively);
     }
     if (value && typeof value === "object") {
-        return Object.fromEntries(
-            Object.keys(value)
-                .sort()
-                .map(key => [key, sortObjectKeysRecursively(value[key])])
-        );
+        return Object.fromEntries(Object.keys(value)
+            .sort()
+            .map(key => [
+            key,
+            sortObjectKeysRecursively(value[key]),
+        ]));
     }
     return value;
 }

@@ -27,7 +27,8 @@ import { runClientProspector } from "@launchstack/pipelines/client-prospector";
 | `./client-prospector` | ICP description → scored prospect list |
 | `./trend-search` | question → synthesized answer + sources |
 | `./connectors` | external knowledge source → KnowledgeItems → sink |
-| `./repo-explainer` | GitHub URL → summary + Mermaid diagram |
+| `./repo-explainer` | GitHub URL → summary + Mermaid diagram (legacy request-scoped path), plus the workspace-backed gated agent explanation |
+| `./repo-workspace` | connected repository → synced git mirror + deterministic per-commit context bundle (tree, ranked repo map, memory files, stats, hygiene manifest) |
 | `./schema` | the product schema the verticals own (applied by apps/web's migration set) |
 
 ## Configuration

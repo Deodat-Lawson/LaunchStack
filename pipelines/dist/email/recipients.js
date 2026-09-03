@@ -42,15 +42,16 @@ export function parsePastedRecipients(text) {
     for (const line of lines) {
         row++;
         const trimmed = line.trim();
-        if (!trimmed) continue;
+        if (!trimmed)
+            continue;
         // Only split on comma/semicolon when the line isn't a single "Name <addr>",
         // so a display name containing a comma survives.
         const parts = ANGLE_RE.test(trimmed)
             ? [trimmed]
             : trimmed
-                  .split(/[,;]+/)
-                  .map(p => p.trim())
-                  .filter(Boolean);
+                .split(/[,;]+/)
+                .map(p => p.trim())
+                .filter(Boolean);
         for (const part of parts) {
             const angle = ANGLE_RE.exec(part);
             const name = angle ? clean(angle[1]) : null;
@@ -83,18 +84,23 @@ function splitCsvLine(line) {
                 if (line[i + 1] === '"') {
                     field += '"';
                     i++;
-                } else {
+                }
+                else {
                     inQuotes = false;
                 }
-            } else {
+            }
+            else {
                 field += ch;
             }
-        } else if (ch === '"') {
+        }
+        else if (ch === '"') {
             inQuotes = true;
-        } else if (ch === ",") {
+        }
+        else if (ch === ",") {
             out.push(field);
             field = "";
-        } else {
+        }
+        else {
             field += ch;
         }
     }
@@ -130,7 +136,8 @@ export function parseRecipientCsv(text) {
     const recipients = [];
     const skipped = [];
     const lines = (text ?? "").split(/\r?\n/).filter(l => l.trim().length > 0);
-    if (lines.length === 0) return { recipients, skipped };
+    if (lines.length === 0)
+        return { recipients, skipped };
     const header = splitCsvLine(lines[0]);
     const mapped = header.map(h => HEADER_ALIASES[canonicalHeader(h)] ?? null);
     if (!mapped.includes("email")) {
@@ -147,8 +154,10 @@ export function parseRecipientCsv(text) {
         header.forEach((h, idx) => {
             const value = cells[idx] ?? "";
             const target = mapped[idx];
-            if (target) rec[target] = value;
-            else if (value.trim() && h.trim()) vars[canonicalHeader(h)] = value.trim();
+            if (target)
+                rec[target] = value;
+            else if (value.trim() && h.trim())
+                vars[canonicalHeader(h)] = value.trim();
         });
         const email = rec.email ?? "";
         if (!looksLikeEmail(email)) {
@@ -159,15 +168,13 @@ export function parseRecipientCsv(text) {
             });
             continue;
         }
-        recipients.push(
-            toRecipient({
-                email,
-                name: rec.name,
-                company: rec.company,
-                contextNotes: rec.notes,
-                vars,
-            })
-        );
+        recipients.push(toRecipient({
+            email,
+            name: rec.name,
+            company: rec.company,
+            contextNotes: rec.notes,
+            vars,
+        }));
     }
     return { recipients, skipped };
 }
@@ -178,7 +185,7 @@ export function prospectContextNotes(p) {
         p.address ?? null,
         p.website ?? null,
         p.rationale ?? null,
-    ].filter(b => Boolean(b?.trim()));
+    ].filter((b) => Boolean(b?.trim()));
     return bits.join(" · ");
 }
 /**
@@ -206,14 +213,12 @@ export function recipientsFromProspects(prospects, emailByName = {}) {
             });
             return;
         }
-        recipients.push(
-            toRecipient({
-                email: supplied,
-                company: p.name,
-                contextNotes,
-                vars: p.website ? { website: p.website } : {},
-            })
-        );
+        recipients.push(toRecipient({
+            email: supplied,
+            company: p.name,
+            contextNotes,
+            vars: p.website ? { website: p.website } : {},
+        }));
     });
     return { recipients, skipped, needsEmail };
 }

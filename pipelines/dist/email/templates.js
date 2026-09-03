@@ -2,8 +2,7 @@ export const SEED_TEMPLATES = [
     {
         id: "intro",
         name: "Cold intro",
-        description:
-            "First touch. Leads with why you are writing to this specific recipient, then one concrete proof point.",
+        description: "First touch. Leads with why you are writing to this specific recipient, then one concrete proof point.",
         template: {
             subject: "{{ownerCompany}} — a quick thought for {{recipientCompany}}",
             body: [
@@ -38,8 +37,7 @@ export const SEED_TEMPLATES = [
     {
         id: "follow-up",
         name: "Single follow-up",
-        description:
-            "One polite follow-up. Restates the offer in a sentence and makes it easy to decline.",
+        description: "One polite follow-up. Restates the offer in a sentence and makes it easy to decline.",
         template: {
             subject: "Following up — {{ownerCompany}}",
             body: [

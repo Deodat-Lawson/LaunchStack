@@ -22,6 +22,11 @@ import {
     founderWeeklyReviewGenerationJob,
 } from "~/server/inngest/functions/founderWeeklyReview";
 import {
+    repoWorkspacePollReconciler,
+    repoWorkspaceSyncJob,
+} from "~/server/inngest/functions/repoWorkspaceSync";
+import { repoExplainerJob } from "~/server/inngest/functions/repoExplainerJob";
+import {
     googleDriveSyncCron,
     googleDriveSyncJob,
 } from "~/server/inngest/functions/googleDriveSync";
@@ -40,6 +45,9 @@ export function createInngestHandler() {
             founderWeeklyReviewDispatcher,
             founderWeeklyReviewDispatchReconciler,
             founderWeeklyReviewGenerationJob,
+            repoWorkspaceSyncJob,
+            repoWorkspacePollReconciler,
+            repoExplainerJob,
             googleDriveSyncJob,
             googleDriveSyncCron,
         ],

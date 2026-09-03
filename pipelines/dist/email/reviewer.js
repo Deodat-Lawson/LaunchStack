@@ -18,18 +18,11 @@ const SYSTEM_PROMPT = [
     'verdict = "pass" ONLY if grounding and compliance are strong and nothing is invented; otherwise "revise".',
 ].join("\n");
 export async function reviewTemplate(args) {
-    const { result } = await invokeEmailStructured(
-        "templateReview",
-        TemplateReviewSchema,
-        [
-            new SystemMessage(SYSTEM_PROMPT),
-            new HumanMessage(
-                `Company context (the facts the email may use):\n${args.companyContext}\n\n` +
-                    `Template to review:\nSubject: ${args.template.subject}\n\n${args.template.body}`
-            ),
-        ],
-        "template_review"
-    );
+    const { result } = await invokeEmailStructured("templateReview", TemplateReviewSchema, [
+        new SystemMessage(SYSTEM_PROMPT),
+        new HumanMessage(`Company context (the facts the email may use):\n${args.companyContext}\n\n` +
+            `Template to review:\nSubject: ${args.template.subject}\n\n${args.template.body}`),
+    ], "template_review");
     return result;
 }
 //# sourceMappingURL=reviewer.js.map

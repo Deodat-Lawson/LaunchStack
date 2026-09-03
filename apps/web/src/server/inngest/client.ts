@@ -71,6 +71,16 @@ export type WebsiteCrawlEvent = {
     };
 };
 
+export type RepoWorkspaceSyncEvent = {
+    name: "repo-workspace/sync.requested";
+    data: import("@launchstack/pipelines/repo-workspace").RepoWorkspaceSyncEventData;
+};
+
+export type RepoExplainerJobEvent = {
+    name: "repo-explainer/job.requested";
+    data: import("@launchstack/pipelines/repo-workspace").RepoExplainerJobEventData;
+};
+
 /** Drains the founder-weekly-review outbox. Carries no run-specific payload. */
 export type FounderWeeklyReviewDispatchEvent = {
     name: "founder-weekly-review/dispatch.requested";
@@ -107,6 +117,8 @@ export type Events =
     | WebsiteCrawlEvent
     | FounderWeeklyReviewDispatchEvent
     | FounderWeeklyReviewGenerationEvent
+    | RepoWorkspaceSyncEvent
+    | RepoExplainerJobEvent
     | GoogleDriveSyncEvent;
 
 /**

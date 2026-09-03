@@ -16,6 +16,7 @@ import {
     History,
     BookOpen,
     MessagesSquare,
+    Network,
 } from "lucide-react";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -37,6 +38,12 @@ const MarkdownViewer = dynamic(() => import("./MarkdownViewer").then(m => m.Mark
 // Imported agent sessions render as conversations, not documents.
 const ConversationViewer = dynamic(
     () => import("./ConversationViewer").then(m => m.ConversationViewer),
+    { ssr: false }
+);
+
+// A published mindmap renders as the map; the canvas bundle loads on demand.
+const MindmapDocumentViewer = dynamic(
+    () => import("./MindmapDocumentViewer").then(m => m.MindmapDocumentViewer),
     { ssr: false }
 );
 import { XlsxViewer } from "./XlsxViewer";
@@ -73,6 +80,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     text: "Text / HTML",
     markdown: "Markdown",
     conversation: "Agent Session",
+    mindmap: "Mindmap",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
@@ -88,6 +96,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     text: FileCode,
     markdown: BookOpen,
     conversation: MessagesSquare,
+    mindmap: Network,
     code: FileCode,
     zip: Archive,
     audio: Music,
@@ -254,6 +263,8 @@ export function DocumentViewer({
                 );
             case "conversation":
                 return <ConversationViewer document={document} />;
+            case "mindmap":
+                return <MindmapDocumentViewer document={document} highlight={highlight} />;
             case "code":
                 return (
                     <CodeViewer

@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 
 import { DriftShell } from "~/app/employer/_chrome/DriftShell";
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
-import { buildTemplate } from "~/app/employer/mindmap/_mindmap/model/templates";
-import { MindmapEditor } from "~/app/employer/mindmap/_mindmap/ui/MindmapEditor";
-import { MindmapGallery } from "~/app/employer/mindmap/_mindmap/ui/MindmapGallery";
+import { buildTemplate } from "~/app/employer/documents/_mindmap/model/templates";
+import { MindmapEditor } from "~/app/employer/documents/_mindmap/ui/MindmapEditor";
+import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_mindmap/ui/MindmapPreview";
 
 /**
  * Local harness for the mindmap editor. It reproduces the real chrome chain —
@@ -15,9 +15,9 @@ import { MindmapGallery } from "~/app/employer/mindmap/_mindmap/ui/MindmapGaller
  * without a session. Gated to non-production by the server page.
  *
  * `?template=flowchart` picks a starter document; the default is the mindmap.
- * The full list is in `_mindmap/model/template-meta.ts`. `?view=gallery` shows
- * the index page instead of the editor — it shares the same shell, so it shares
- * the same layout bugs.
+ * The full list is in `_mindmap/model/template-meta.ts`. `?view=preview` mounts
+ * the read-only preview the workspace viewer uses instead of the editor — same
+ * canvas, no chrome, so a layout bug in one shows up in the other.
  */
 
 /**
@@ -68,8 +68,8 @@ export function MindmapPreview() {
         setQuery(new URLSearchParams(window.location.search));
     }, []);
 
-    const gallery = query?.get("view") === "gallery";
-    const template = query && !gallery ? (query.get("template") ?? "mindmap") : null;
+    const preview = query?.get("view") === "preview";
+    const template = query ? (query.get("template") ?? "mindmap") : null;
 
     const doc = useMemo(
         () => (template ? buildTemplate(template, "Preview mindmap") : null),
@@ -80,8 +80,8 @@ export function MindmapPreview() {
         <div style={{ minHeight: "100vh", width: "100%" }}>
             <DriftShell>
                 <ToolsStudioShell>
-                    {gallery && <MindmapGallery />}
-                    {doc && (
+                    {doc && preview && <ReadOnlyMindmap key={template} doc={doc} />}
+                    {doc && !preview && (
                         <MindmapEditor
                             key={template}
                             mindmapId={1}

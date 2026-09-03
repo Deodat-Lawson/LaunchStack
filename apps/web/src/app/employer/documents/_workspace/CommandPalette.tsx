@@ -20,6 +20,8 @@ interface PaletteItem {
     id: string;
     label: string;
     sub?: string;
+    /** Matched by the search but never shown — a mindmap's node labels. */
+    keywords?: string;
     Icon: ComponentType<IconProps>;
     onRun: () => void;
 }
@@ -82,6 +84,7 @@ export function CommandPalette({
                 id: s.id,
                 label: s.title,
                 sub: `${meta.label} · ${s.size || s.added}`,
+                keywords: s.searchText,
                 Icon: meta.Icon,
                 onRun: () => onPickSource(s.id),
             });
@@ -89,7 +92,10 @@ export function CommandPalette({
         const qq = q.toLowerCase().trim();
         if (!qq) return base;
         return base.filter(
-            i => i.label.toLowerCase().includes(qq) || (i.sub ?? "").toLowerCase().includes(qq)
+            i =>
+                i.label.toLowerCase().includes(qq) ||
+                (i.sub ?? "").toLowerCase().includes(qq) ||
+                (i.keywords ?? "").toLowerCase().includes(qq)
         );
     }, [q, sources, onOpenAdd, onPickSource, onPickFeature, navigate]);
 

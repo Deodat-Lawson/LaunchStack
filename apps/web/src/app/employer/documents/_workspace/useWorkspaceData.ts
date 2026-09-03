@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
-import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -68,6 +69,42 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
     };
 }
 
+/**
+ * A mindmap is citable only through its published copy, and only faithfully
+ * when that copy was made from the revision on screen.
+ */
+export function mindmapCitability(
+    map: Pick<MindmapSummary, "publishedDocumentId" | "publishedRevision" | "revision">
+): SourceCitability {
+    if (map.publishedDocumentId === null) return "none";
+    if (map.publishedRevision !== null && map.publishedRevision < map.revision) return "stale";
+    return "citable";
+}
+
+/**
+ * A mindmap row as a source. `documentId` is the published document, when
+ * there is one, so the retrieval layer's citations — which name document ids —
+ * resolve to the map rather than to a Markdown copy of it.
+ */
+export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+    const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
+    return {
+        id: `m${map.id}`,
+        mindmapId: map.id,
+        documentId: map.publishedDocumentId ?? undefined,
+        title: map.title,
+        type: "mindmap",
+        size: shapes,
+        added: humanDate(map.updatedAt) || "",
+        folder: map.folder || "Unfiled",
+        tags: [],
+        domain: "General",
+        searchText: map.searchText ?? undefined,
+        thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
+        citability: mindmapCitability(map),
+    };
+}
+
 export interface UseWorkspaceDataResult {
     sources: WorkspaceSource[];
     folders: WorkspaceFolder[];
@@ -89,6 +126,7 @@ interface CategoryRow {
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
+    const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [categories, setCategories] = useState<CategoryRow[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
@@ -100,13 +138,16 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         if (!userId) return;
         setError(null);
         try {
-            const [docsRes, catsRes] = await Promise.all([
+            const [docsRes, catsRes, mapsRes] = await Promise.all([
                 fetch("/api/fetchDocument", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: "{}",
                 }),
                 fetch("/api/Categories/GetCategories"),
+                // Mindmaps are sources too. A failure here must not take the
+                // documents down with it — the list degrades to uploads only.
+                fetch("/api/mindmaps?scope=active").catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
             const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
@@ -115,6 +156,13 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
             if (catsRes.ok) {
                 const cats = (await catsRes.json()) as CategoryRow[];
                 setCategories(cats);
+            }
+
+            if (mapsRes?.ok) {
+                const body = (await mapsRes.json()) as { mindmaps: MindmapSummary[] };
+                setMindmaps(body.mindmaps ?? []);
+            } else if (mapsRes) {
+                console.warn(`[workspace] mindmaps list failed (${mapsRes.status})`);
             }
 
             // Prune optimistic rows that now exist in the server response (by title).
@@ -153,10 +201,19 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         void resolveCompany();
     }, [userId, refresh, resolveCompany]);
 
-    const sources = useMemo<WorkspaceSource[]>(
-        () => [...optimistic, ...documents.map(mapDocument)],
-        [documents, optimistic]
-    );
+    const sources = useMemo<WorkspaceSource[]>(() => {
+        // A published map's Markdown copy is the map, not a second source: it
+        // is hidden here and reached through the map's `documentId`.
+        const claimed = new Set<number>();
+        for (const map of mindmaps) {
+            if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
+        }
+        return [
+            ...optimistic,
+            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...mindmaps.map(mapMindmap),
+        ];
+    }, [documents, mindmaps, optimistic]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         const seen = new Map<string, WorkspaceFolder>();

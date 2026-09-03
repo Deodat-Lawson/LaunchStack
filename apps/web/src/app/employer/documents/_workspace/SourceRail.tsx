@@ -584,7 +584,7 @@ export function SourceRail({
             if (activeTag && !(s.tags ?? []).includes(activeTag)) return false;
             if (q) {
                 const hay =
-                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")}`.toLowerCase();
+                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")} ${s.searchText ?? ""}`.toLowerCase();
                 if (!hay.includes(q)) return false;
             }
             return true;

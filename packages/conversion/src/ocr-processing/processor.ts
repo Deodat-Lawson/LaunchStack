@@ -689,7 +689,24 @@ export async function finalizeStorage(
                 },
             });
 
+        // Merge, never replace: the row's metadata carries provenance written
+        // at creation — a connector's marker, a published mindmap's id — and
+        // the viewer picks a renderer by it. Overwriting it here turned every
+        // imported session back into a plain Markdown file the moment it
+        // finished indexing.
+        const [existing] = await getDb()
+            .select({ ocrMetadata: documentTable.ocrMetadata })
+            .from(documentTable)
+            .where(eq(documentTable.id, documentId))
+            .limit(1);
+        const preserved =
+            existing?.ocrMetadata &&
+            typeof existing.ocrMetadata === "object" &&
+            !Array.isArray(existing.ocrMetadata)
+                ? (existing.ocrMetadata as Record<string, unknown>)
+                : {};
         const ocrMetadataPayload = {
+            ...preserved,
             totalPages: meta.totalPages,
             totalChunks,
             processingTimeMs: meta.processingTimeMs,

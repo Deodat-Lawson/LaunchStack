@@ -15,13 +15,19 @@ export interface MindmapSummary {
     description: string | null;
     folder: string;
     templateId: string | null;
+    /** Only populated when listed with `thumbnails=1`; see `/api/mindmaps/[id]/thumbnail`. */
     thumbnail: string | null;
+    hasThumbnail: boolean;
     nodeCount: number;
     edgeCount: number;
     revision: number;
     starred: boolean;
     publishedDocumentId: number | null;
     publishedAt: string | null;
+    /** Revision the published copy was made from; null when never published. */
+    publishedRevision: number | null;
+    /** Flattened, capped node text for client-side search. */
+    searchText: string | null;
     createdByUserId: string;
     updatedByUserId: string | null;
     deletedAt: string | null;

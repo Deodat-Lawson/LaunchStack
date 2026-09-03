@@ -1,5 +1,7 @@
 // Document-related types
 
+import { isMindmapDocument } from "~/lib/mindmap-document";
+
 /** Display category for document preview (PDF, image, docx, xlsx, pptx, text, code, etc.) */
 export type DocumentDisplayType =
     | "pdf"
@@ -10,6 +12,7 @@ export type DocumentDisplayType =
     | "text" // Plain text, HTML
     | "markdown" // Markdown documents (.md, .markdown) — rendered, not shown as source
     | "conversation" // Imported agent-session transcripts — rendered as a chat, not a document
+    | "mindmap" // The citable copy of a mindmap — rendered as the map, not as its outline
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
     | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
@@ -71,6 +74,9 @@ export function getDocumentDisplayType(doc: {
     // Imported agent sessions are stored as text/markdown, but they read as
     // conversations — the sink's connector marker outranks the mime sniff.
     if (doc.ocrMetadata?.connector === "agent-sessions") return "conversation";
+    // Likewise a published mindmap: a Markdown outline on disk, a diagram to
+    // the reader.
+    if (isMindmapDocument(doc.ocrMetadata)) return "mindmap";
 
     // Check title first — transcription documents are stored as text/plain but should render as audio
     if (doc.title.toLowerCase().includes("(transcription)")) return "audio";

@@ -21,10 +21,12 @@ import { useCommittedDoc } from "./EditorContext";
 /**
  * Publish a mindmap into the Sources library.
  *
- * The map is rendered to a Markdown outline here — the client owns the document
- * model — and the server runs it through the ordinary ingestion path, so the
- * result is chunked, embedded and citable like any other source. Re-publishing
- * the same revision is idempotent server-side.
+ * The server renders the outline from the *stored* document and runs it
+ * through the ordinary ingestion path, so the result is chunked, embedded and
+ * citable like any other source — and what enters the corpus is what was
+ * saved, not whatever a client chose to send. The preview below is the same
+ * rendering, done locally so the dialog can show it before the round trip.
+ * Publishing again updates the same source rather than adding a second one.
  */
 
 export function PublishDialog({
@@ -55,7 +57,7 @@ export function PublishDialog({
             const res = await fetch(`/api/mindmaps/${mindmapId}/publish`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ markdown: outline, category: folder.trim() || undefined }),
+                body: JSON.stringify({ category: folder.trim() || undefined }),
             });
             if (!res.ok) {
                 const body = (await res.json().catch(() => ({}))) as { error?: string };
@@ -108,7 +110,7 @@ export function PublishDialog({
                 {publishedDocumentId !== null && (
                     <p className="text-ink-3 flex items-center gap-1.5 text-[12px]">
                         <ExternalLink className="size-3.5" />
-                        Already published once — publishing again adds an updated copy.
+                        Already in your sources — publishing again updates that copy in place.
                     </p>
                 )}
 

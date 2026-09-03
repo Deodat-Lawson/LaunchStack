@@ -70,7 +70,7 @@ themselves — read the local README before changing them:
 
 | Area                          | README                               |
 | ----------------------------- | ------------------------------------ |
-| Mindmap (the diagramming app) | `src/app/employer/mindmap/README.md` |
+| Mindmap (the diagramming editor, a source type of the Documents workspace) | `src/app/employer/documents/_mindmap/README.md` |
 
 Mindmap is the one place in `apps/web` where **colours are deliberately not
 design tokens**: shape fills live inside the saved document, so they are literal

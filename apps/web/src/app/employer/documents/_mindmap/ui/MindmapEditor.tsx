@@ -70,6 +70,12 @@ export interface MindmapEditorProps {
     needsInitialSave?: boolean;
     /** Display name used as the author on new comments. */
     author: string;
+    /**
+     * Where the top bar's back arrow goes. The workspace mounts the editor
+     * in place and hands it "return to the preview"; the standalone route
+     * leaves it unset and gets a link to the library.
+     */
+    onBack?: () => void;
 }
 
 type LeftTab = "shapes" | "outline" | "comments" | "history";
@@ -114,6 +120,16 @@ export function MindmapEditor(props: MindmapEditorProps) {
         seeded.current = true;
         void autosave.saveNow({ snapshot: true, label: "Created from template" });
     }, [autosave, props.needsInitialSave]);
+
+    // Leaving is a save first: the preview the workspace returns to reads the
+    // row, and it should show what was just drawn.
+    const { onBack } = props;
+    const leave = useMemo(() => {
+        if (!onBack) return undefined;
+        return () => {
+            void autosave.saveNow().finally(onBack);
+        };
+    }, [autosave, onBack]);
 
     const togglePresent = useCallback(() => {
         setPresenting(current => {
@@ -264,6 +280,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                     {!presenting && (
                         <TopBar
                             peers={presence.peers}
+                            onBack={leave}
                             onSave={() => void autosave.saveNow({ snapshot: true })}
                             onExport={() => setExportOpen(true)}
                             onImport={() => setImportOpen(true)}

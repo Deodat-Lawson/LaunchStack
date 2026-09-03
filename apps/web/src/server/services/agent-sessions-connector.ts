@@ -147,9 +147,7 @@ export async function createAgentSessionsSink(
             // The connector renders every session to Markdown text; binary
             // content here means a wiring mistake, not a session.
             if (typeof item.content !== "string") {
-                throw new Error(
-                    `agent-sessions sink received binary content for ${item.sourceId}`
-                );
+                throw new Error(`agent-sessions sink received binary content for ${item.sourceId}`);
             }
             const content = item.content;
             const syncedAt = new Date().toISOString();

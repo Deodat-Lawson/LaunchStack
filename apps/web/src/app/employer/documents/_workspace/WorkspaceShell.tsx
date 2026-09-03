@@ -16,6 +16,7 @@ import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
 import { IconChevronRight } from "./icons";
+import { MindmapEditorHost } from "./MindmapEditorHost";
 import { NewFolderDialog } from "./NewFolderDialog";
 import { RenameFolderDialog } from "./RenameFolderDialog";
 import { RenameSourceDialog } from "./RenameSourceDialog";
@@ -23,6 +24,7 @@ import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
+import * as sourceApi from "./sourceApi";
 import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
@@ -39,8 +41,12 @@ import type {
  * Studio features now open inline in the workspace drawer via `?feature=X`;
  * upload opens inline in the AddSourceModal via `?add=1`. Admin views redirect
  * to their standalone `/employer/<name>` routes. Values folded into the default
- * workspace map to the workspace root — any `docId` in the URL is preserved so
- * the DocumentViewer modal can pick it up.
+ * workspace map to the workspace root; other params are carried across.
+ *
+ * Two params are *not* one-shot: `?source=<id>` opens that source in the
+ * viewer and `&edit=1` opens a mindmap's editor in its place. They stay in
+ * the URL so the back button walks editor → preview → library and a link to
+ * a source can be shared.
  */
 const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "document-only": "/employer/documents/viewer",
@@ -85,6 +91,7 @@ const FEATURE_IDS = new Set([
     "metadata",
     "settings",
     "analytics",
+    "mindmap",
 ]);
 
 function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
@@ -131,7 +138,14 @@ export function WorkspaceShell() {
         if (isLoaded && !isSignedIn) router.push("/");
     }, [isLoaded, isSignedIn, router]);
 
-    const { sources, folders, companyId, role, refresh } = useWorkspaceData(userId ?? null);
+    const {
+        sources,
+        folders,
+        companyId,
+        role,
+        refresh,
+        loading: sourcesLoading,
+    } = useWorkspaceData(userId ?? null);
 
     const [selected, setSelected] = useState<string[]>([]);
     const [thread, setThread] = useState<ThreadMessage[]>([]);
@@ -151,9 +165,57 @@ export function WorkspaceShell() {
     const [palOpen, setPalOpen] = useState(false);
     const [newFolderOpen, setNewFolderOpen] = useState(false);
     const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
+    /**
+     * The open source lives in the URL (`?source=<id>`, plus `&edit=1` for a
+     * mindmap's editor) and is resolved against the loaded list here. Pushing
+     * rather than replacing is what gives the back button its meaning.
+     */
+    const sourceParam = searchParams.get("source");
+    const editParam = searchParams.get("edit") === "1";
     const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
+    const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
+    /** Read by the shortcut listener so the editor's own keys win while it is open. */
+    const editingRef = useRef(false);
+    useEffect(() => {
+        editingRef.current = editing;
+    }, [editing]);
     /** Cited passage to locate + highlight when the viewer was opened from a citation. */
     const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
+
+    const sourceUrl = useCallback(
+        (id: string | null, edit = false) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("source");
+            params.delete("edit");
+            if (id) params.set("source", id);
+            if (id && edit) params.set("edit", "1");
+            const query = params.toString();
+            return query ? `/employer/documents?${query}` : "/employer/documents";
+        },
+        [searchParams]
+    );
+    const openSource = useCallback(
+        (id: string, edit = false) => router.push(sourceUrl(id, edit)),
+        [router, sourceUrl]
+    );
+    const closeSource = useCallback(() => router.push(sourceUrl(null)), [router, sourceUrl]);
+
+    useEffect(() => {
+        if (!sourceParam) {
+            setViewerSource(null);
+            return;
+        }
+        const found = sources.find(s => s.id === sourceParam) ?? null;
+        if (found) {
+            setViewerSource(found);
+            return;
+        }
+        if (sourcesLoading) return;
+        // The list is loaded and the id is not in it — trashed, or a bad link.
+        // Drop the param rather than holding an empty viewer open.
+        setViewerSource(null);
+        router.replace(sourceUrl(null));
+    }, [sourceParam, sources, sourcesLoading, router, sourceUrl]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
@@ -370,10 +432,13 @@ export function WorkspaceShell() {
         [sources, sendQuery, companyId, continuation, thread]
     );
 
-    const handleOpenSource = useCallback((source: WorkspaceSource) => {
-        setViewerHighlight(null);
-        setViewerSource(source);
-    }, []);
+    const handleOpenSource = useCallback(
+        (source: WorkspaceSource) => {
+            setViewerHighlight(null);
+            openSource(source.id);
+        },
+        [openSource]
+    );
 
     /** A citation click opens the cited document with the passage highlighted. */
     const handleOpenCitation = useCallback(
@@ -387,25 +452,18 @@ export function WorkspaceShell() {
                 page: cite.page ?? null,
                 nonce: citationNonce.current,
             });
-            setViewerSource(src);
+            openSource(src.id);
         },
-        [sources]
+        [sources, openSource]
     );
 
-    const handleRenameDoc = useCallback(
-        async (docId: number, nextTitle: string): Promise<boolean> => {
+    const handleRenameSource = useCallback(
+        async (source: WorkspaceSource, nextTitle: string): Promise<boolean> => {
             try {
-                const res = await fetch(`/api/documents/${docId}`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ title: nextTitle }),
-                });
-                if (!res.ok) return false;
+                await sourceApi.renameSource(source, nextTitle);
+                // The viewer follows the list: the refreshed row carries the
+                // new title and the URL sync effect hands it over.
                 await refresh();
-                // Keep the viewer in sync with the new title.
-                setViewerSource(v =>
-                    v && v.documentId === docId ? { ...v, title: nextTitle } : v
-                );
                 return true;
             } catch {
                 return false;
@@ -414,53 +472,68 @@ export function WorkspaceShell() {
         [refresh]
     );
 
-    const deleteDocumentById = useCallback(
-        async (docId: number) => {
-            const res = await fetch("/api/deleteDocument", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ docId: String(docId) }),
-            });
-            if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
-                throw new Error(body.error ?? "Failed to delete document");
-            }
-            setViewerSource(null);
-            setSelected(prev => prev.filter(id => !id.endsWith(String(docId))));
+    /**
+     * Remove a source. A document is gone for good; a mindmap goes to the
+     * trash and the toast offers to bring it back — the one place the two
+     * kinds of delete meet the user differently.
+     */
+    const removeSource = useCallback(
+        async (source: WorkspaceSource) => {
+            const outcome = await sourceApi.deleteSource(source);
+            if (sourceParam === source.id) closeSource();
+            setSelected(prev => prev.filter(id => id !== source.id));
             await refresh();
+            if (outcome.restore) {
+                const restore = outcome.restore;
+                toast("Moved to trash", {
+                    description: source.title,
+                    duration: 8000,
+                    action: {
+                        label: "Undo",
+                        onClick: () => {
+                            restore()
+                                .then(refresh)
+                                .catch(() => toast.error("Couldn't restore that mindmap"));
+                        },
+                    },
+                });
+            }
         },
-        [refresh]
+        [closeSource, refresh, sourceParam]
     );
 
-    const handleDeleteDoc = useCallback(
-        async (docId: number) => {
+    const handleDeleteSource = useCallback(
+        async (source: WorkspaceSource) => {
             try {
-                await deleteDocumentById(docId);
+                await removeSource(source);
             } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to delete document");
+                alert(err instanceof Error ? err.message : "Failed to delete source");
             }
         },
-        [deleteDocumentById]
+        [removeSource]
     );
 
     const confirmDeleteSource = useCallback(async () => {
-        if (!deleteSource?.documentId) return;
+        if (!deleteSource) return;
         setDeleteBusy(true);
         setDeleteError(null);
         try {
-            await deleteDocumentById(deleteSource.documentId);
+            await removeSource(deleteSource);
             setDeleteSource(null);
         } catch (err) {
-            setDeleteError(err instanceof Error ? err.message : "Failed to delete document");
+            setDeleteError(err instanceof Error ? err.message : "Failed to delete source");
         } finally {
             setDeleteBusy(false);
         }
-    }, [deleteSource, deleteDocumentById]);
+    }, [deleteSource, removeSource]);
 
-    const handleAskAbout = useCallback((source: WorkspaceSource) => {
-        setSelected(prev => (prev.includes(source.id) ? prev : [source.id, ...prev]));
-        setViewerSource(null);
-    }, []);
+    const handleAskAbout = useCallback(
+        (source: WorkspaceSource) => {
+            setSelected(prev => (prev.includes(source.id) ? prev : [source.id, ...prev]));
+            closeSource();
+        },
+        [closeSource]
+    );
 
     const openAdd = useCallback((tabId?: string) => {
         setAddTab(tabId);
@@ -470,22 +543,13 @@ export function WorkspaceShell() {
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
             const src = sources.find(s => s.id === sourceId);
-            if (!src?.documentId) return;
+            if (!src) return;
             if ((src.folder ?? "Unfiled") === folderName) return;
             try {
-                const res = await fetch(`/api/documents/${src.documentId}`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ category: folderName }),
-                });
-                if (!res.ok) {
-                    const body = (await res.json().catch(() => ({}))) as { error?: string };
-                    alert(body.error ?? "Failed to move document");
-                    return;
-                }
+                await sourceApi.moveSource(src, folderName);
                 await refresh();
             } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to move document");
+                alert(err instanceof Error ? err.message : "Failed to move source");
             }
         },
         [sources, refresh]
@@ -504,7 +568,13 @@ export function WorkspaceShell() {
     const expandFeature = useCallback(
         (featureId: string) => {
             const feature = STUDIO_FEATURES_BY_ID[featureId];
-            // Separate apps (Mindmap) own their own route: navigate rather than
+            // A mindmap is a source, not a pane: "Mindmap" means "start one".
+            if (featureId === "mindmap") {
+                setStudioOpen(false);
+                openAdd("mindmap");
+                return;
+            }
+            // Separate apps own their own route: navigate rather than
             // expanding a pane whose only content is a link to that route.
             if (feature?.external && feature.href) {
                 setStudioOpen(false);
@@ -514,7 +584,7 @@ export function WorkspaceShell() {
             setActiveFeatureId(featureId);
             setStudioOpen(false);
         },
-        [router]
+        [openAdd, router]
     );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
@@ -523,6 +593,8 @@ export function WorkspaceShell() {
     // return leg — reopen the modal on that provider's tab and toast the outcome.
     const featureParam = searchParams.get("feature");
     const addParam = searchParams.get("add");
+    /** With `?add=1`: which Add-source tab to open on (`tab=mindmap` for the template picker). */
+    const tabParam = searchParams.get("tab");
     const connectorParam = searchParams.get("connector");
     const connectorResultParam = searchParams.get("result");
     // `?continue=<docId>` — continue an imported agent session in this chat.
@@ -534,6 +606,7 @@ export function WorkspaceShell() {
             expandFeature(featureParam);
         }
         if (addParam) {
+            if (tabParam) setAddTab(tabParam);
             setAddOpen(true);
         }
         if (continueParam) {
@@ -568,6 +641,7 @@ export function WorkspaceShell() {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("feature");
         params.delete("add");
+        params.delete("tab");
         params.delete("connector");
         params.delete("result");
         params.delete("continue");
@@ -576,6 +650,7 @@ export function WorkspaceShell() {
     }, [
         featureParam,
         addParam,
+        tabParam,
         connectorParam,
         connectorResultParam,
         continueParam,
@@ -589,6 +664,9 @@ export function WorkspaceShell() {
     // Keyboard shortcuts
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
+            // The mindmap editor binds its own ⌘K, `/` and tool keys on the
+            // same window; while it is open, its map wins.
+            if (editingRef.current) return;
             const tag = (e.target as HTMLElement | null)?.tagName;
             const inInput = tag === "INPUT" || tag === "TEXTAREA";
             const mod = e.metaKey || e.ctrlKey;
@@ -702,7 +780,31 @@ export function WorkspaceShell() {
                 </button>
             )}
 
-            {activeFeatureId === "chat" ? (
+            {editing && viewerSource?.mindmapId ? (
+                // The editor takes the main area and the rail stays, so
+                // another source is one click away without "leaving". It
+                // needs a definite height: this column is the flex row's
+                // full height, and `minHeight: 0` lets the canvas shrink to it.
+                <main
+                    style={{
+                        flex: 1,
+                        minWidth: 0,
+                        minHeight: 0,
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden",
+                        background: "var(--bg)",
+                    }}
+                >
+                    <MindmapEditorHost
+                        key={viewerSource.mindmapId}
+                        mindmapId={viewerSource.mindmapId}
+                        onBack={() => openSource(viewerSource.id)}
+                        onChanged={() => void refresh()}
+                    />
+                </main>
+            ) : activeFeatureId === "chat" ? (
                 <AskPanel
                     leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
                     sources={sources}
@@ -769,6 +871,7 @@ export function WorkspaceShell() {
                             },
                             onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                         },
+                        mindmap: { onCreate: () => openAdd("mindmap") },
                     }}
                 />
             )}
@@ -800,6 +903,13 @@ export function WorkspaceShell() {
                 folders={folders.map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
+                }}
+                onMindmapCreated={id => {
+                    setAddOpen(false);
+                    setAddTab(undefined);
+                    // The list must know the map before the URL names it, or
+                    // the sync effect reads the id as stale and drops it.
+                    void refresh().then(() => openSource(`m${id}`, true));
                 }}
             />
 
@@ -848,15 +958,21 @@ export function WorkspaceShell() {
                 open={!!renameSource}
                 source={renameSource}
                 onClose={() => setRenameSource(null)}
-                onRename={handleRenameDoc}
+                onRename={handleRenameSource}
             />
 
             <ConfirmActionDialog
                 open={!!deleteSource}
-                title="Delete this source?"
+                title={
+                    deleteSource && sourceApi.isMindmapSource(deleteSource)
+                        ? "Move this mindmap to the trash?"
+                        : "Delete this source?"
+                }
                 body={
                     deleteSource
-                        ? `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
+                        ? sourceApi.isMindmapSource(deleteSource)
+                            ? `“${deleteSource.title}” will leave the library. You can undo this right after.`
+                            : `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
                         : ""
                 }
                 confirmLabel="Delete"
@@ -870,18 +986,20 @@ export function WorkspaceShell() {
                 }}
             />
 
-            {viewerSource && (
+            {viewerSource && !editing && (
                 <DocumentViewer
                     source={viewerSource}
                     highlight={viewerHighlight}
                     onClose={() => {
-                        setViewerSource(null);
+                        closeSource();
                         setViewerHighlight(null);
                     }}
-                    onRename={handleRenameDoc}
-                    onDelete={id => void handleDeleteDoc(id)}
+                    onRename={handleRenameSource}
+                    onDelete={source => void handleDeleteSource(source)}
                     onAskAbout={handleAskAbout}
                     onVersionChanged={() => void refresh()}
+                    onEdit={source => openSource(source.id, true)}
+                    onPublished={() => void refresh()}
                 />
             )}
         </div>

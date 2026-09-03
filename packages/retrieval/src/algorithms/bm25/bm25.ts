@@ -108,6 +108,11 @@ export function chunksToDocuments(chunks: ChunkRow[], searchScope: SearchScope):
                 pageContent: chunk.content,
                 metadata: {
                     chunkId: chunk.id,
+                    // BM25 ranks context (parent) chunks directly, so the
+                    // chunk id *is* the parent id. Naming it lets the
+                    // ensemble collapse a vector hit and a lexical hit on
+                    // the same section into one result.
+                    parentChunkId: chunk.id,
                     page: chunk.page,
                     documentId: chunk.documentId,
                     versionId: chunk.versionId,

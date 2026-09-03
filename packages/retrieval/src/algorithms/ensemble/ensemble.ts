@@ -257,7 +257,7 @@ export async function documentEnsembleSearch(
 
         logLegBreakdown("document", results);
         const reranked = await rerankResults(query, mapped);
-        return reranked.slice(0, topK);
+        return mergeSiblingChunks(reranked).slice(0, topK);
     } catch (error) {
         console.error("[EnsembleSearch] Document search error:", error);
         return fallbackBM25Search(query, "document", { documentId }, topK);
@@ -303,7 +303,7 @@ export async function companyEnsembleSearch(
 
         logLegBreakdown("company", results);
         const reranked = await rerankResults(query, mapped);
-        return reranked.slice(0, topK);
+        return mergeSiblingChunks(reranked).slice(0, topK);
     } catch (error) {
         console.error("[EnsembleSearch] Company search error:", error);
         return fallbackBM25Search(query, "company", { companyId }, topK);
@@ -348,7 +348,7 @@ export async function multiDocEnsembleSearch(
 
         logLegBreakdown("multi-document", results);
         const reranked = await rerankResults(query, mapped);
-        return reranked.slice(0, topK);
+        return mergeSiblingChunks(reranked).slice(0, topK);
     } catch (error) {
         console.error("[EnsembleSearch] Multi-doc search error:", error);
         return fallbackBM25Search(query, "multi-document", { documentIds }, topK);
@@ -369,6 +369,54 @@ export async function multiDocEnsembleSearch(
  * Unconfigured or failing reranking is not fatal: the candidates pass through
  * in their existing RRF order.
  */
+/**
+ * Collapse results that came from the same section.
+ *
+ * A document's section is stored once as a context chunk and several times as
+ * the retrieval chunks cut from it. Both legs can therefore return the same
+ * section more than once — the vector leg as several children, the lexical
+ * leg as the parent — and under rank fusion those near-identical entries
+ * compete for the top slots, pushing genuinely different sections out of the
+ * results. Small-to-big retrieval's answer is to return the parent once, so
+ * that is what this does: the best-ranked entry per parent survives, keeping
+ * its position, and the rest are dropped.
+ *
+ * Entries with no parent id are left alone; nothing is merged on a guess.
+ */
+export function mergeSiblingChunks(results: SearchResult[]): SearchResult[] {
+    const merged: SearchResult[] = [];
+    const seen = new Map<number, number>();
+
+    for (const result of results) {
+        const raw = (result.metadata as { parentChunkId?: unknown }).parentChunkId;
+        const parentId = typeof raw === "number" && Number.isFinite(raw) ? raw : null;
+        if (parentId === null) {
+            merged.push(result);
+            continue;
+        }
+        const at = seen.get(parentId);
+        if (at === undefined) {
+            seen.set(parentId, merged.length);
+            merged.push({
+                ...result,
+                metadata: { ...result.metadata, mergedSiblings: 1 },
+            });
+            continue;
+        }
+        // Already have this section; record that more of it matched.
+        const kept = merged[at]!;
+        const count = ((kept.metadata as { mergedSiblings?: number }).mergedSiblings ?? 1) + 1;
+        merged[at] = { ...kept, metadata: { ...kept.metadata, mergedSiblings: count } };
+    }
+
+    if (merged.length !== results.length) {
+        console.log(
+            `[EnsembleSearch] Merged ${results.length - merged.length} sibling chunk(s) into their section`
+        );
+    }
+    return merged;
+}
+
 async function rerankResults(query: string, results: SearchResult[]): Promise<SearchResult[]> {
     if (results.length === 0) {
         return results;

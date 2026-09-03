@@ -1,12 +1,34 @@
 import type { PageContent, DocumentChunk, ExtractedTable, VectorizedChunk } from "./types";
-import { hasMarkdownHeadings, splitByHeadings } from "../heading-chunker";
+import type { ChunkMetadata } from "./types";
+import { buildDocumentTree, joinPages, renderSubtree, type DocumentNode } from "../document-tree";
+import { estimateCounter, type TokenCounter } from "./tokenizer";
 import { getOpenAIClient } from "@launchstack/llm";
 import { GEMINI_FAST_MODEL } from "@launchstack/llm/types";
 
 /**
- * The OpenAI client is shared across subsystems — configured once by the
- * host via configureChatModels and reached here through getOpenAIClient().
+ * Chunking.
+ *
+ * A chunk is a node in the document's tree, not a slice of a string. The
+ * pipeline builds one tree for the whole document (`../document-tree`), and
+ * this module walks it: a subtree that fits the budget becomes one chunk; a
+ * subtree that does not is entered, and its children become chunks that name
+ * it as an ancestor. Small neighbours sharing a parent are merged. That is
+ * the shape Docling's hierarchical/hybrid chunkers arrived at, and it is what
+ * lets a chunk cut out of a large document still say where it came from.
+ *
+ * Two properties are worth stating because the previous implementation had
+ * neither:
+ *
+ * - **Context is stored, not just embedded.** The ancestor breadcrumb is
+ *   written into the chunk's own text, so the lexical index, the reranker,
+ *   the answering model and the citation all read what the embedder read.
+ *   Previously the breadcrumb existed only inside `prepareForEmbedding` and
+ *   was discarded before storage, which meant BM25 could not match on it.
+ * - **Budgets are tokens.** A `TokenCounter` decides what fits; the
+ *   chars-per-token estimate is a labelled fallback rather than the
+ *   mechanism.
  */
+
 function getOpenAI() {
     return getOpenAIClient();
 }
@@ -17,9 +39,13 @@ export interface ChunkingConfig {
     overlapTokens?: number;
     charsPerToken?: number;
     includePageContext?: boolean;
+    /** Written into every chunk's breadcrumb, so a chunk names its document. */
+    documentTitle?: string;
+    /** Budget arithmetic. Defaults to the chars-per-token estimate. */
+    tokens?: TokenCounter;
 }
 
-const DEFAULT_CONFIG: Required<ChunkingConfig> = {
+const DEFAULT_CONFIG: Required<Omit<ChunkingConfig, "documentTitle" | "tokens">> = {
     parentMaxTokens: 1000,
     childMaxTokens: 256,
     overlapTokens: 50,
@@ -27,197 +53,351 @@ const DEFAULT_CONFIG: Required<ChunkingConfig> = {
     includePageContext: true,
 };
 
+interface ResolvedConfig extends Required<Omit<ChunkingConfig, "documentTitle" | "tokens">> {
+    documentTitle?: string;
+    tokens: TokenCounter;
+}
+
+function resolveConfig(config?: ChunkingConfig): ResolvedConfig {
+    const merged = { ...DEFAULT_CONFIG, ...config };
+    return {
+        ...merged,
+        documentTitle: config?.documentTitle,
+        tokens: config?.tokens ?? estimateCounter(merged.charsPerToken),
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Contextualisation
+// ---------------------------------------------------------------------------
+
+/** The separator between breadcrumb steps. Not `>`; that is Markdown quoting. */
+const CRUMB = " › ";
+
+/**
+ * The breadcrumb for a chunk: document title, then each enclosing heading or
+ * list item. A step already on the path is dropped rather than repeated — an
+ * outline whose root topic restates the document's title under every branch
+ * would otherwise read "Plan › Billing › Plan".
+ */
+export function contextHeader(metadata: ChunkMetadata): string | null {
+    const parts: string[] = [];
+    const seen = new Set<string>();
+    const push = (value?: string) => {
+        const trimmed = value?.replace(/\s+/g, " ").trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        parts.push(trimmed);
+    };
+    push(metadata.documentTitle);
+    for (const ancestor of metadata.ancestors ?? []) push(ancestor);
+    if (parts.length === 0) return null;
+    return parts.join(CRUMB);
+}
+
+/**
+ * The text that is stored, embedded, ranked and quoted — one representation,
+ * so those four can never disagree.
+ */
+export function contextualize(content: string, metadata: ChunkMetadata): string {
+    const header = contextHeader(metadata);
+    if (!header) return content;
+    return `${header}\n\n${content}`;
+}
+
+/** Drop the breadcrumb a chunk was stored with, leaving the body. */
+export function stripContextHeader(content: string, metadata?: ChunkMetadata): string {
+    const header = metadata?.contextHeader;
+    if (header && content.startsWith(`${header}\n\n`)) {
+        return content.slice(header.length + 2);
+    }
+    return stripStoredContextHeader(content);
+}
+
+/**
+ * The same, for a chunk read back from the database, where the metadata that
+ * described the header did not travel with it.
+ *
+ * Anything that needs to match a chunk against the *source document* — a
+ * citation quote, a highlight deep-link — has to drop the breadcrumb first,
+ * because the breadcrumb is something the index added and the document never
+ * contained. The shape is narrow on purpose: one line containing the
+ * separator, then a blank line. A body that happens to open with a line of
+ * prose is left alone.
+ */
+export function stripStoredContextHeader(content: string): string {
+    const breakAt = content.indexOf("\n\n");
+    if (breakAt <= 0) return content;
+    const firstLine = content.slice(0, breakAt);
+    if (!firstLine.includes(CRUMB)) return content;
+    // A breadcrumb is a short path, never a paragraph.
+    if (firstLine.length > 300 || firstLine.includes("\n")) return content;
+    return content.slice(breakAt + 2);
+}
+
+// ---------------------------------------------------------------------------
+// Tree → units
+// ---------------------------------------------------------------------------
+
+/** A leaf of the walk: text that will go into a chunk, with where it came from. */
+interface Unit {
+    text: string;
+    ancestors: string[];
+    page: number;
+}
+
+/**
+ * Walk the tree into units.
+ *
+ * A subtree that fits inside one chunk is emitted whole, so a branch and its
+ * leaves stay together — the property an outline needs and the one a
+ * size-based splitter cannot promise. A subtree that does not fit is entered,
+ * and its children are emitted with it named as an ancestor, so nothing loses
+ * its context by being too large.
+ */
+function collectUnits(
+    parent: DocumentNode,
+    ancestors: string[],
+    budgetTokens: number,
+    tokens: TokenCounter,
+    out: Unit[]
+): void {
+    for (const child of parent.children) {
+        // A heading is a label, not content: it becomes part of the path and
+        // its own line is dropped, since the breadcrumb already carries it.
+        if (child.kind === "heading") {
+            collectUnits(child, [...ancestors, child.text], budgetTokens, tokens, out);
+            continue;
+        }
+
+        if (child.children.length === 0) {
+            const text = child.raw.trim();
+            if (text.length > 0) out.push({ text, ancestors, page: child.page });
+            continue;
+        }
+
+        const whole = renderSubtree(child);
+        if (tokens.count(whole) <= budgetTokens) {
+            out.push({ text: whole, ancestors, page: child.page });
+            continue;
+        }
+
+        // Too large to keep whole: enter it. The node's own label survives as
+        // an ancestor of everything inside, so no words are lost.
+        collectUnits(child, [...ancestors, child.text], budgetTokens, tokens, out);
+    }
+}
+
+/** Consecutive units sharing an ancestor path — the merge-peers grouping. */
+interface Section {
+    ancestors: string[];
+    page: number;
+    units: Unit[];
+}
+
+function groupIntoSections(units: Unit[]): Section[] {
+    const sections: Section[] = [];
+    for (const unit of units) {
+        const key = unit.ancestors.join(CRUMB);
+        const open = sections[sections.length - 1];
+        if (open && open.ancestors.join(CRUMB) === key) {
+            open.units.push(unit);
+            continue;
+        }
+        sections.push({ ancestors: unit.ancestors, page: unit.page, units: [unit] });
+    }
+    return sections;
+}
+
+/**
+ * Pack units into pieces up to `budgetTokens`, merging neighbours and
+ * splitting only a unit that exceeds the budget on its own.
+ */
+function packUnits(
+    units: Unit[],
+    budgetTokens: number,
+    overlapTokens: number,
+    config: ResolvedConfig
+): string[] {
+    const { tokens } = config;
+    const pieces: string[] = [];
+    let open: string[] = [];
+    let openTokens = 0;
+
+    const flush = () => {
+        if (open.length === 0) return;
+        pieces.push(open.join("\n"));
+        open = [];
+        openTokens = 0;
+    };
+
+    for (const unit of units) {
+        const unitTokens = tokens.count(unit.text);
+
+        if (unitTokens > budgetTokens) {
+            flush();
+            // One unit larger than a whole chunk: fall back to size-based
+            // splitting, which is line-aware so an outline row is never cut.
+            const overlapChars = overlapTokens * config.charsPerToken;
+            const maxChars = budgetTokens * config.charsPerToken;
+            for (const piece of splitWithOverlap(
+                unit.text,
+                maxChars,
+                overlapChars,
+                tokens,
+                budgetTokens
+            ))
+                pieces.push(piece);
+            continue;
+        }
+
+        if (openTokens + unitTokens > budgetTokens) flush();
+        open.push(unit.text);
+        openTokens += unitTokens;
+    }
+    flush();
+    return pieces;
+}
+
+/** Group already-sized pieces into parents up to the parent budget. */
+function packPieces(pieces: string[], budgetTokens: number, tokens: TokenCounter): string[][] {
+    const groups: string[][] = [];
+    let open: string[] = [];
+    let openTokens = 0;
+
+    for (const piece of pieces) {
+        const pieceTokens = tokens.count(piece);
+        if (open.length > 0 && openTokens + pieceTokens > budgetTokens) {
+            groups.push(open);
+            open = [];
+            openTokens = 0;
+        }
+        open.push(piece);
+        openTokens += pieceTokens;
+    }
+    if (open.length > 0) groups.push(open);
+    return groups;
+}
+
+// ---------------------------------------------------------------------------
+// Entry point
+// ---------------------------------------------------------------------------
+
 export async function chunkDocument(
     pages: PageContent[],
     config?: ChunkingConfig
 ): Promise<DocumentChunk[]> {
-    const cfg = { ...DEFAULT_CONFIG, ...config };
+    const cfg = resolveConfig(config);
     const chunks: DocumentChunk[] = [];
-    let globalChunkIndex = 0;
 
+    // One tree for the whole document. Pages bound the page *numbers*, never
+    // the parse — which is what stops a heading stack resetting mid-document.
+    const { text, pageStarts } = joinPages(pages);
+    const tree = buildDocumentTree(text, pageStarts);
+
+    const units: Unit[] = [];
+    collectUnits(tree.root, [], cfg.childMaxTokens, cfg.tokens, units);
+
+    for (const section of groupIntoSections(units)) {
+        const childPieces = packUnits(section.units, cfg.childMaxTokens, cfg.overlapTokens, cfg);
+        for (const group of packPieces(childPieces, cfg.parentMaxTokens, cfg.tokens)) {
+            const children: DocumentChunk[] = group.map((childContent, index) => {
+                const metadata: ChunkMetadata = {
+                    pageNumber: section.page,
+                    chunkIndex: index,
+                    totalChunksInPage: group.length,
+                    isTable: false,
+                    documentTitle: cfg.documentTitle,
+                    ancestors: section.ancestors,
+                    structurePath: section.ancestors.join(CRUMB) || undefined,
+                };
+                return finishChunk(childContent, "text", metadata, cfg);
+            });
+
+            const parentMetadata: ChunkMetadata = {
+                pageNumber: section.page,
+                chunkIndex: 0,
+                totalChunksInPage: 0,
+                isTable: false,
+                documentTitle: cfg.documentTitle,
+                ancestors: section.ancestors,
+                structurePath: section.ancestors.join(CRUMB) || undefined,
+            };
+            const parent = finishChunk(group.join("\n"), "text", parentMetadata, cfg);
+            parent.children = children;
+            chunks.push(parent);
+        }
+    }
+
+    // Tables arrive alongside the text rather than inside it, so they are
+    // chunked per page as before — one parent, one child, description first.
     for (const page of pages) {
-        const pageChunks: DocumentChunk[] = [];
-
-        // Chunk text blocks into Parent-Child hierarchy
-        const textChunks = chunkTextBlocks(page.textBlocks, page.pageNumber, cfg);
-        pageChunks.push(...textChunks);
-
-        // Tables are treated as Parent chunks (context) with a single Child (itself) for retrieval
-        const tableChunks = await chunkTables(page.tables, page.pageNumber, cfg);
-        pageChunks.push(...tableChunks);
-
-        for (const chunk of pageChunks) {
-            chunk.metadata.chunkIndex = globalChunkIndex++;
-            chunk.metadata.totalChunksInPage = pageChunks.length;
-            chunk.id = `page-${page.pageNumber}-chunk-${chunk.metadata.chunkIndex}`;
+        for (const chunk of await chunkTables(page.tables, page.pageNumber, cfg)) {
             chunks.push(chunk);
         }
     }
 
+    let index = 0;
+    for (const chunk of chunks) {
+        chunk.metadata.chunkIndex = index++;
+        chunk.id = `page-${chunk.metadata.pageNumber}-chunk-${chunk.metadata.chunkIndex}`;
+    }
     return chunks;
 }
 
-function chunkTextBlocks(
-    textBlocks: string[],
-    pageNumber: number,
-    config: Required<ChunkingConfig>
-): DocumentChunk[] {
-    if (textBlocks.length === 0) return [];
-
-    const mergedText = textBlocks.join("\n\n");
-
-    // If the content has Markdown headings, split by headings first
-    if (hasMarkdownHeadings(mergedText)) {
-        return chunkByHeadings(mergedText, pageNumber, config);
-    }
-
-    return chunkPlainText(mergedText, pageNumber, config);
+/** Contextualise, count, and stamp — the last step every chunk passes through. */
+function finishChunk(
+    body: string,
+    type: "text" | "table",
+    metadata: ChunkMetadata,
+    cfg: ResolvedConfig
+): DocumentChunk {
+    const header = contextHeader(metadata);
+    const content = header ? `${header}\n\n${body}` : body;
+    return {
+        id: "",
+        content,
+        type,
+        metadata: {
+            ...metadata,
+            contextHeader: header ?? undefined,
+            tokenCount: cfg.tokens.count(content),
+            tokenCounterId: cfg.tokens.id,
+        },
+    };
 }
 
-/**
- * Heading-aware chunking: splits on heading boundaries, then applies
- * size-based splitting within each section. Sets structurePath metadata.
- */
-function chunkByHeadings(
-    text: string,
-    pageNumber: number,
-    config: Required<ChunkingConfig>
-): DocumentChunk[] {
-    const sections = splitByHeadings(text);
-    if (sections.length === 0) {
-        return chunkPlainText(text, pageNumber, config);
-    }
-
-    const parentMaxChars = config.parentMaxTokens * config.charsPerToken;
-    const childMaxChars = config.childMaxTokens * config.charsPerToken;
-    const overlapChars = config.overlapTokens * config.charsPerToken;
-    const chunks: DocumentChunk[] = [];
-
-    for (const section of sections) {
-        const parentTexts = splitWithOverlap(section.content, parentMaxChars, overlapChars);
-
-        for (const parentContent of parentTexts) {
-            const childTexts = splitWithOverlap(parentContent, childMaxChars, overlapChars);
-
-            const children: DocumentChunk[] = childTexts.map((childContent, cIndex) => ({
-                id: "",
-                content: childContent,
-                type: "text" as const,
-                metadata: {
-                    pageNumber,
-                    chunkIndex: cIndex,
-                    totalChunksInPage: childTexts.length,
-                    isTable: false,
-                    structurePath: section.path,
-                },
-            }));
-
-            chunks.push({
-                id: "",
-                content: parentContent,
-                type: "text" as const,
-                metadata: {
-                    pageNumber,
-                    chunkIndex: 0,
-                    totalChunksInPage: 0,
-                    isTable: false,
-                    structurePath: section.path,
-                },
-                children,
-            });
-        }
-    }
-
-    return chunks;
-}
-
-/**
- * Original plain-text chunking (no heading awareness).
- */
-function chunkPlainText(
-    mergedText: string,
-    pageNumber: number,
-    config: Required<ChunkingConfig>
-): DocumentChunk[] {
-    const parentMaxChars = config.parentMaxTokens * config.charsPerToken;
-    const childMaxChars = config.childMaxTokens * config.charsPerToken;
-    const overlapChars = config.overlapTokens * config.charsPerToken;
-
-    const parentTexts = splitWithOverlap(mergedText, parentMaxChars, overlapChars);
-
-    return parentTexts.map((parentContent, pIndex) => {
-        const childTexts = splitWithOverlap(parentContent, childMaxChars, overlapChars);
-
-        const children: DocumentChunk[] = childTexts.map((childContent, cIndex) => ({
-            id: "",
-            content: childContent,
-            type: "text" as const,
-            metadata: {
-                pageNumber,
-                chunkIndex: cIndex,
-                totalChunksInPage: childTexts.length,
-                isTable: false,
-            },
-        }));
-
-        return {
-            id: "",
-            content: parentContent,
-            type: "text" as const,
-            metadata: {
-                pageNumber,
-                chunkIndex: pIndex,
-                totalChunksInPage: 0,
-                isTable: false,
-            },
-            children,
-        };
-    });
-}
+// ---------------------------------------------------------------------------
+// Tables
+// ---------------------------------------------------------------------------
 
 async function chunkTables(
     tables: ExtractedTable[],
     pageNumber: number,
-    _config: Required<ChunkingConfig>
+    cfg: ResolvedConfig
 ): Promise<DocumentChunk[]> {
-    const tableChunks = await Promise.all(
+    return Promise.all(
         tables.map(async (table, tableIndex) => {
             const tableDescription = await generateTableDescription(table, pageNumber, tableIndex);
-            const content = `${tableDescription}\n\n${table.markdown}`;
-
-            // Table is both Parent and Child (1:1 mapping for now)
-            const child: DocumentChunk = {
-                id: "",
-                content,
-                type: "table" as const,
-                metadata: {
-                    pageNumber,
-                    chunkIndex: 0,
-                    totalChunksInPage: 1,
-                    isTable: true,
-                    tableIndex,
-                    tableDescription,
-                },
+            const body = `${tableDescription}\n\n${table.markdown}`;
+            const metadata: ChunkMetadata = {
+                pageNumber,
+                chunkIndex: 0,
+                totalChunksInPage: 0,
+                isTable: true,
+                tableIndex,
+                tableDescription,
+                documentTitle: cfg.documentTitle,
             };
-
-            return {
-                id: "",
-                content,
-                type: "table" as const,
-                metadata: {
-                    pageNumber,
-                    chunkIndex: 0,
-                    totalChunksInPage: 0,
-                    isTable: true,
-                    tableIndex,
-                    tableDescription,
-                },
-                children: [child],
-            };
+            const parent = finishChunk(body, "table", metadata, cfg);
+            parent.children = [
+                finishChunk(body, "table", { ...metadata, totalChunksInPage: 1 }, cfg),
+            ];
+            return parent;
         })
     );
-
-    return tableChunks;
 }
 
 async function generateTableDescription(
@@ -297,7 +477,17 @@ async function generateTableDescription(
     return fallbackDesc;
 }
 
-function splitWithOverlap(text: string, maxChars: number, overlapChars: number): string[] {
+// ---------------------------------------------------------------------------
+// Size-based splitting — the fallback for a single oversized unit
+// ---------------------------------------------------------------------------
+
+function splitWithOverlap(
+    text: string,
+    maxChars: number,
+    overlapChars: number,
+    tokens?: TokenCounter,
+    budgetTokens?: number
+): string[] {
     if (text.length <= maxChars) {
         return [text];
     }
@@ -338,9 +528,26 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
             }
         }
 
-        const chunk = text.slice(start, end).trim();
-        if (chunk.length > 0) {
-            chunks.push(chunk);
+        let piece = text.slice(start, end).trim();
+
+        // The character budget is an approximation of the token budget. When a
+        // real counter says the piece still overflows, walk the end back by
+        // lines until it fits, so no chunk is ever handed to the embedding
+        // model above its limit.
+        if (tokens && budgetTokens && piece.length > 0) {
+            let guard = 0;
+            while (tokens.count(piece) > budgetTokens && guard++ < 40) {
+                const cut = piece.lastIndexOf("\n");
+                const next =
+                    cut > 0 ? piece.slice(0, cut) : piece.slice(0, Math.floor(piece.length * 0.8));
+                if (next.length === 0 || next.length === piece.length) break;
+                end = start + next.length;
+                piece = next.trim();
+            }
+        }
+
+        if (piece.length > 0) {
+            chunks.push(piece);
         }
 
         // The last chunk reached the end of the text: stop. Stepping back by
@@ -371,63 +578,53 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
     return chunks;
 }
 
+// ---------------------------------------------------------------------------
+// Reporting and embedding hand-off
+// ---------------------------------------------------------------------------
+
 export function estimateTokens(text: string, charsPerToken = 4): number {
     return Math.ceil(text.length / charsPerToken);
 }
 
 export function getTotalChunkSize(chunks: DocumentChunk[]): {
-    totalChunks: number; // Counting PARENTS or CHILDREN? Usually we care about Parents for context, Children for vector usage.
+    totalChunks: number;
     textChunks: number;
     tableChunks: number;
     totalCharacters: number;
     estimatedTokens: number;
 } {
-    // This is for logging mostly. Let's count Parents.
     const textChunks = chunks.filter(c => c.type === "text");
     const tableChunks = chunks.filter(c => c.type === "table");
     const totalCharacters = chunks.reduce((sum, c) => sum + c.content.length, 0);
+    // Prefer the counted tokens the chunker recorded; fall back to the
+    // estimate only for chunks that predate it.
+    const totalTokens = chunks.reduce(
+        (sum, c) => sum + (c.metadata.tokenCount ?? estimateTokens(c.content)),
+        0
+    );
 
     return {
         totalChunks: chunks.length,
         textChunks: textChunks.length,
         tableChunks: tableChunks.length,
         totalCharacters,
-        estimatedTokens: estimateTokens(totalCharacters.toString()),
+        estimatedTokens: totalTokens,
     };
 }
 
 /**
- * Prepares strings for embedding by flattening the hierarchy (extracting all children).
- * Handles Contextual Prepending (Structure Path + Title).
+ * The strings handed to the embedding model: every child chunk's stored text.
+ *
+ * There is no prepending step any more. The breadcrumb is already part of
+ * `content`, which is the point — what gets embedded is exactly what gets
+ * stored, ranked lexically, read by the model and shown in a citation.
  */
 export function prepareForEmbedding(chunks: DocumentChunk[]): string[] {
     const strings: string[] = [];
-
     for (const parent of chunks) {
         if (parent.children && parent.children.length > 0) {
-            for (const child of parent.children) {
-                let textToEmbed = child.content;
-
-                // Contextual Prepending
-                const parts: string[] = [];
-                if (child.metadata.documentTitle) {
-                    parts.push(`Document: ${child.metadata.documentTitle}`);
-                }
-                if (child.metadata.structurePath) {
-                    parts.push(`Section: ${child.metadata.structurePath}`);
-                }
-                if (child.metadata.tableDescription) {
-                    parts.push(`Context: ${child.metadata.tableDescription}`);
-                }
-
-                if (parts.length > 0) {
-                    textToEmbed = `${parts.join(" > ")}\nContent: ${textToEmbed}`;
-                }
-
-                strings.push(textToEmbed);
-            }
+            for (const child of parent.children) strings.push(child.content);
         } else {
-            // Should not happen with new logic, but fallback to parent content
             strings.push(parent.content);
         }
     }
@@ -445,39 +642,34 @@ export function mergeWithEmbeddings(
         supportsMatryoshka?: boolean;
     }
 ): VectorizedChunk[] {
-    // We need to consume embeddings sequentially
     let embeddingIndex = 0;
 
     return chunks.map(parent => {
         const parentChildren = parent.children ?? [];
         const vectorizedChildren: VectorizedChunk[] = [];
 
-        if (parentChildren.length > 0) {
-            for (const child of parentChildren) {
-                const vector = embeddings[embeddingIndex++];
-                if (!vector) {
-                    throw new Error("Embedding mismatch: fewer embeddings than children");
-                }
-                const vectorShort =
-                    options?.supportsMatryoshka && options.shortDimension
-                        ? vector.slice(0, options.shortDimension)
-                        : undefined;
-
-                vectorizedChildren.push({
-                    content: child.content,
-                    metadata: child.metadata,
-                    vector: vector,
-                    vectorShort: vectorShort,
-                    // Children don't have children
-                });
-            }
-        } else {
-            // Fallback - should not happen if prepareForEmbedding works correctly
+        for (const child of parentChildren) {
             const vector = embeddings[embeddingIndex++];
-            if (vector) {
-                // If parent was treated as a child (no children), it would be in embeddings.
-                // But chunker structure guarantees children.
+            if (!vector) {
+                throw new Error("Embedding mismatch: fewer embeddings than children");
             }
+            const vectorShort =
+                options?.supportsMatryoshka && options.shortDimension
+                    ? vector.slice(0, options.shortDimension)
+                    : undefined;
+
+            vectorizedChildren.push({
+                content: child.content,
+                metadata: child.metadata,
+                vector,
+                vectorShort,
+            });
+        }
+
+        if (parentChildren.length === 0) {
+            // A parent with no children was itself embedded; keep the indexes
+            // aligned so later parents do not consume the wrong vector.
+            embeddingIndex++;
         }
 
         return {

@@ -292,12 +292,48 @@ try {
   }
   ok(`document row still says kind=mindmap (mindmapId ${mindmapIdOf(meta)}) beside the processor's keys`);
 
+  // ── The document's hierarchy is a real tree, not one root ──
+  const structure = await sql`
+    SELECT id, parent_id, level, title, path FROM pdr_ai_v2_document_structure
+    WHERE document_id = ${published.documentId} AND version_id = ${published.versionId}
+    ORDER BY level, id
+  `;
+  if (structure.length < 2) {
+    fail(`document_structure has ${structure.length} row(s); expected a root plus its sections`);
+  }
+  const roots = structure.filter((r) => r.parent_id === null);
+  if (roots.length !== 1) fail(`expected exactly one root node, found ${roots.length}`);
+  const sections = structure.filter((r) => r.parent_id !== null);
+  if (!sections.every((r) => structure.some((n) => Number(n.id) === Number(r.parent_id)))) {
+    fail("a structure node points at a parent that does not exist");
+  }
+  const titles = sections.map((r) => r.title);
+  for (const branch of ["Infrastructure", "Billing", "Risks"]) {
+    if (!titles.includes(branch)) fail(`the structure tree has no node for "${branch}"`);
+  }
+  ok(`structure tree: 1 root + ${sections.length} section(s) — ${titles.slice(0, 6).join(", ")}`);
+
+  // ── Chunks say which section they belong to ──
+  const linked = await sql`
+    SELECT cc.id, ds.title FROM pdr_ai_v2_document_context_chunks cc
+    JOIN pdr_ai_v2_document_structure ds ON cc.structure_id = ds.id
+    WHERE cc.document_id = ${published.documentId} AND cc.version_id = ${published.versionId}
+  `;
+  if (linked.length === 0) fail("no chunk resolved to a structure node");
+  if (linked.every((r) => r.title === "Document Root")) {
+    fail("every chunk still points at the document root");
+  }
+  ok(`${linked.length} chunk(s) point at their own section`);
+
   // ── Chunks carry the branch, not just the map ──
   const chunkRows = await sql`
     SELECT content FROM pdr_ai_v2_document_context_chunks
     WHERE document_id = ${published.documentId} AND version_id = ${published.versionId}
   `;
   const joined = chunkRows.map((r) => r.content).join("\n");
+  if (!joined.includes("›")) {
+    fail("indexed chunks carry no breadcrumb; the context was not stored");
+  }
   for (const label of ["Postgres 16 with read replicas", "Stripe subscriptions", "SOC 2 audit slips"]) {
     if (!joined.includes(label)) fail(`indexed chunks do not contain "${label}"`);
   }
@@ -332,8 +368,11 @@ try {
     const exact = hits[0] === answering;
     if (first) firsts += 1;
     if (exact) exactFirsts += 1;
+    // Sibling chunks of one section are merged before the cut, so the map
+    // should occupy one slot rather than several.
+    const slots = mapHits.length;
     console.log(
-      `  ${first ? "1st" : "not 1st"}  "${q}" → doc ${topDoc}; answering chunk at rank ${hits.indexOf(answering) + 1}`,
+      `  ${first ? "1st" : "not 1st"}  "${q}" → doc ${topDoc}; answering chunk at rank ${hits.indexOf(answering) + 1}; map occupies ${slots} slot(s)`,
     );
   }
   if (firsts < queries.length - 1) fail(`the map came first for only ${firsts}/${queries.length} queries`);

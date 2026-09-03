@@ -1,6 +1,7 @@
 import { buildCitations, type RetrievedEvidence } from "@launchstack/retrieval";
 import type { SearchResult } from "@launchstack/retrieval/search-types";
 import type { SourceReference } from "./types";
+import { stripStoredContextHeader } from "@launchstack/conversion/ocr/chunker";
 
 const STOPWORDS = new Set([
     "a",
@@ -210,7 +211,12 @@ export function buildReferences(
 
         const metadata = (doc.metadata ?? {}) as unknown as Record<string, unknown>;
         const childContent = typeof metadata.childContent === "string" ? metadata.childContent : "";
-        const content = childContent || doc.pageContent;
+        // The chunker writes an ancestor breadcrumb into a chunk's stored text
+        // so both retrieval legs can match on it. A citation, though, has to
+        // quote the *document*: the breadcrumb is never in the source file, so
+        // leaving it in the snippet would break the highlight deep-link that
+        // searches the document for the quoted passage.
+        const content = stripStoredContextHeader(childContent || doc.pageContent);
         const snippetResult = extractSnippet(content, question);
         if (!snippetResult.snippet) {
             continue;

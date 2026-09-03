@@ -227,11 +227,11 @@ function cosine(a: number[], b: number[]): number {
     return dot / (Math.sqrt(na) * Math.sqrt(nb) || 1);
 }
 
-async function chunkStrings(markdown: string): Promise<string[]> {
-    const chunks = await chunkDocument(
-        [{ pageNumber: 1, textBlocks: [markdown], tables: [] }],
-        PIPELINE_CHUNKING
-    );
+async function chunkStrings(markdown: string, documentTitle: string): Promise<string[]> {
+    const chunks = await chunkDocument([{ pageNumber: 1, textBlocks: [markdown], tables: [] }], {
+        ...PIPELINE_CHUNKING,
+        documentTitle,
+    });
     return prepareForEmbedding(chunks);
 }
 
@@ -333,7 +333,7 @@ describeWithKey("published mindmaps are findable by embedding", () => {
 
         decoyCorpus = [];
         for (const decoy of DECOYS) {
-            const strings = await chunkStrings(`# ${decoy.title}\n\n${decoy.text}`);
+            const strings = await chunkStrings(`# ${decoy.title}\n\n${decoy.text}`, decoy.title);
             const vectors = await embed(strings);
             strings.forEach((text, i) =>
                 decoyCorpus.push({ source: decoy.title, text, vector: vectors[i]! })
@@ -344,7 +344,7 @@ describeWithKey("published mindmaps are findable by embedding", () => {
     async function corpusFor(sections: boolean): Promise<Embedded[]> {
         const items: Embedded[] = [...decoyCorpus];
         for (const doc of MAPS) {
-            const strings = await chunkStrings(toMarkdownOutline(doc, { sections }));
+            const strings = await chunkStrings(toMarkdownOutline(doc, { sections }), doc.title);
             const vectors = await embed(strings);
             strings.forEach((text, i) =>
                 items.push({ source: doc.title, text, vector: vectors[i]! })
@@ -399,7 +399,7 @@ describeWithKey("published mindmaps are findable by embedding", () => {
         }
         big.Permissions!["Row-level security on the audit table"] = null;
         const doc = treeDoc("Platform backlog", { "Platform backlog": big });
-        const strings = await chunkStrings(toMarkdownOutline(doc, { sections: true }));
+        const strings = await chunkStrings(toMarkdownOutline(doc, { sections: true }), doc.title);
         expect(strings.length).toBeGreaterThan(6);
         const vectors = await embed(strings);
         const corpus = strings.map((text, i) => ({
@@ -418,7 +418,7 @@ describeWithKey("published mindmaps are findable by embedding", () => {
         );
         // The chunk that wins carries the branch it came from, so the answer
         // can say "Permissions" and not just "Platform backlog".
-        expect(top).toMatch(/^Section: Platform backlog > Permissions/);
+        expect(top).toMatch(/^Platform backlog › Permissions/);
         expect(top).toContain("Row-level security");
     });
 });

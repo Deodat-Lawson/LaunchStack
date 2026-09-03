@@ -1,6 +1,13 @@
 "use client";
 
 import React, { type ComponentType, useEffect, useRef, useState } from "react";
+import {
+    displayFolderPath,
+    folderDepth,
+    folderLeafName,
+    normalizeFolderPath,
+    validateFolderPath,
+} from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
 import { MessagesSquare } from "lucide-react";
 import { toast } from "sonner";
@@ -453,8 +460,14 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
     }, [open]);
 
     const filtered = folders.filter(f => f.toLowerCase().includes(q.toLowerCase()));
+    // Typing "Contracts/2026" creates a nested folder; the path is validated
+    // the same way the folder dialog validates it.
+    const candidate = normalizeFolderPath(q);
+    const candidateProblem = q.trim().length > 0 ? validateFolderPath(candidate) : null;
     const canCreate =
-        q.trim().length > 0 && !folders.some(f => f.toLowerCase() === q.trim().toLowerCase());
+        q.trim().length > 0 &&
+        !candidateProblem &&
+        !folders.some(f => f.toLowerCase() === candidate.toLowerCase());
 
     return (
         <div ref={ref} style={{ position: "relative" }}>
@@ -473,7 +486,7 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                 }}
             >
                 <IconFolder size={11} />
-                {value}
+                {displayFolderPath(value)}
                 <IconChevronDown size={10} />
             </button>
             {open && (
@@ -532,7 +545,8 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <IconFolder size={12} /> {f}
+                                <span style={{ width: folderDepth(f) * 10 }} aria-hidden />
+                                <IconFolder size={12} /> {folderLeafName(f)}
                                 {value === f && (
                                     <span style={{ marginLeft: "auto", color: "var(--accent)" }}>
                                         <IconCheck size={12} />
@@ -543,8 +557,8 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                         {canCreate && (
                             <button
                                 onClick={() => {
-                                    onCreate?.(q.trim());
-                                    onChange(q.trim());
+                                    onCreate?.(candidate);
+                                    onChange(candidate);
                                     setOpen(false);
                                     setQ("");
                                 }}
@@ -562,8 +576,20 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                                         filtered.length > 0 ? "1px solid var(--line)" : "none",
                                 }}
                             >
-                                <IconPlus size={12} /> Create folder &quot;{q.trim()}&quot;
+                                <IconPlus size={12} /> Create folder &quot;
+                                {displayFolderPath(candidate)}&quot;
                             </button>
+                        )}
+                        {candidateProblem && (
+                            <div
+                                style={{
+                                    padding: "6px 12px",
+                                    fontSize: 11,
+                                    color: "var(--danger)",
+                                }}
+                            >
+                                {candidateProblem}
+                            </div>
                         )}
                     </div>
                 </div>

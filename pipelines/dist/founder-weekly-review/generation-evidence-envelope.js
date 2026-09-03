@@ -1,5 +1,4 @@
-export const FOUNDER_WEEKLY_REVIEW_EVIDENCE_ENVELOPE_VERSION =
-    "founder-weekly-review-evidence-envelope/v1";
+export const FOUNDER_WEEKLY_REVIEW_EVIDENCE_ENVELOPE_VERSION = "founder-weekly-review-evidence-envelope/v1";
 export const FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET = Object.freeze({
     totalSerializedCharacters: 72_000,
     founderContextReservedCharacters: 4_000,
@@ -21,9 +20,7 @@ const SOURCE_TYPES = [
 ];
 export class FounderWeeklyReviewGenerationEvidenceBudgetError extends Error {
     code = "generation_evidence_budget_exceeded";
-    constructor(
-        message = "Founder Weekly Review generation evidence exceeded its deterministic context budget."
-    ) {
+    constructor(message = "Founder Weekly Review generation evidence exceeded its deterministic context budget.") {
         super(message);
         this.name = "FounderWeeklyReviewGenerationEvidenceBudgetError";
     }
@@ -58,12 +55,15 @@ function similarityScore(item) {
 /** Stable source-specific ordering that does not depend on snapshot input order. */
 function compareEvidenceItems(a, b) {
     const timestamp = compareOrdinal(a.sourceTimestamp ?? "", b.sourceTimestamp ?? "");
-    if (timestamp !== 0) return timestamp;
+    if (timestamp !== 0)
+        return timestamp;
     const sourceType = compareOrdinal(a.sourceType, b.sourceType);
-    if (sourceType !== 0) return sourceType;
+    if (sourceType !== 0)
+        return sourceType;
     if (a.sourceType === "workspace_document" && b.sourceType === "workspace_document") {
         const similarity = similarityScore(b) - similarityScore(a);
-        if (Number.isFinite(similarity) && similarity !== 0) return similarity;
+        if (Number.isFinite(similarity) && similarity !== 0)
+            return similarity;
     }
     if (a.sourceType === "document_change" && b.sourceType === "document_change") {
         for (const key of [
@@ -73,7 +73,8 @@ function compareEvidenceItems(a, b) {
             "structurePath",
         ]) {
             const compared = compareOrdinal(metadataText(a, key), metadataText(b, key));
-            if (compared !== 0) return compared;
+            if (compared !== 0)
+                return compared;
         }
     }
     return compareOrdinal(a.sourceId, b.sourceId);
@@ -82,7 +83,8 @@ function allowlistedMetadata(item) {
     const metadata = {};
     for (const key of PROMPT_METADATA_ALLOWLIST[item.sourceType]) {
         const value = item.metadata[key];
-        if (value !== undefined) metadata[key] = value;
+        if (value !== undefined)
+            metadata[key] = value;
     }
     return metadata;
 }
@@ -104,26 +106,20 @@ function canAppendWithin(selected, candidate, limit) {
 }
 function sourceCounts(items) {
     const counts = Object.fromEntries(SOURCE_TYPES.map(sourceType => [sourceType, 0]));
-    for (const item of items) counts[item.sourceType]++;
+    for (const item of items)
+        counts[item.sourceType]++;
     return counts;
 }
 function subtractCounts(total, selected) {
-    return Object.fromEntries(
-        SOURCE_TYPES.map(sourceType => [sourceType, total[sourceType] - selected[sourceType]])
-    );
+    return Object.fromEntries(SOURCE_TYPES.map(sourceType => [sourceType, total[sourceType] - selected[sourceType]]));
 }
 function dedupeAndOrder(items) {
-    const ordered = [...items].sort(
-        (a, b) =>
-            compareEvidenceItems(a, b) ||
-            compareOrdinal(
-                JSON.stringify(buildFounderWeeklyReviewPromptEvidenceItem(a)),
-                JSON.stringify(buildFounderWeeklyReviewPromptEvidenceItem(b))
-            )
-    );
+    const ordered = [...items].sort((a, b) => compareEvidenceItems(a, b) ||
+        compareOrdinal(JSON.stringify(buildFounderWeeklyReviewPromptEvidenceItem(a)), JSON.stringify(buildFounderWeeklyReviewPromptEvidenceItem(b))));
     const bySourceId = new Map();
     for (const item of ordered)
-        if (!bySourceId.has(item.sourceId)) bySourceId.set(item.sourceId, item);
+        if (!bySourceId.has(item.sourceId))
+            bySourceId.set(item.sourceId, item);
     return [...bySourceId.values()];
 }
 function selectReserved(candidates, limit) {
@@ -135,7 +131,9 @@ function selectReserved(candidates, limit) {
         if (canAppendWithin(projected, promptItem, limit)) {
             selected.push(item);
             projected.push(promptItem);
-        } else excluded.push(item);
+        }
+        else
+            excluded.push(item);
     }
     return { selected, excluded };
 }
@@ -143,9 +141,11 @@ function documentKey(item) {
     // An empty metadata value is as good as absent, so each fallback tests for
     // emptiness rather than only for null/undefined.
     const fromMetadata = metadataText(item, "documentId");
-    if (fromMetadata) return fromMetadata;
+    if (fromMetadata)
+        return fromMetadata;
     const fromSourceId = /^document_change:doc:([^:]+)/.exec(item.sourceId)?.[1];
-    if (fromSourceId) return fromSourceId;
+    if (fromSourceId)
+        return fromSourceId;
     return item.sourceId;
 }
 function selectDocumentChanges(candidates) {
@@ -159,27 +159,16 @@ function selectDocumentChanges(candidates) {
     const documents = [...byDocument.entries()].sort(([a], [b]) => compareOrdinal(a, b));
     const selected = [];
     const projected = [];
-    for (
-        let round = 0;
-        round < FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItemsPerDocument;
-        round++
-    ) {
+    for (let round = 0; round < FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItemsPerDocument; round++) {
         for (const [, items] of documents) {
-            if (
-                selected.length >=
-                FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItems
-            )
+            if (selected.length >=
+                FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItems)
                 return selected;
             const item = items[round];
-            if (!item) continue;
+            if (!item)
+                continue;
             const promptItem = buildFounderWeeklyReviewPromptEvidenceItem(item);
-            if (
-                !canAppendWithin(
-                    projected,
-                    promptItem,
-                    FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeSerializedCharacters
-                )
-            )
+            if (!canAppendWithin(projected, promptItem, FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeSerializedCharacters))
                 continue;
             selected.push(item);
             projected.push(promptItem);
@@ -195,34 +184,19 @@ export function buildGenerationEvidenceEnvelope(snapshot) {
     const feedback = ordered.filter(item => item.sourceType === "customer_feedback");
     const documentChanges = ordered.filter(item => item.sourceType === "document_change");
     const selectedOriginal = founder.slice(0, 1);
-    const reservedWorkspace = selectReserved(
-        workspace,
-        FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.workspaceDocumentReservedCharacters
-    );
-    const reservedFeedback = selectReserved(
-        feedback,
-        FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.customerFeedbackReservedCharacters
-    );
-    selectedOriginal.push(
-        ...reservedWorkspace.selected,
-        ...reservedFeedback.selected,
-        ...selectDocumentChanges(documentChanges)
-    );
+    const reservedWorkspace = selectReserved(workspace, FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.workspaceDocumentReservedCharacters);
+    const reservedFeedback = selectReserved(feedback, FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.customerFeedbackReservedCharacters);
+    selectedOriginal.push(...reservedWorkspace.selected, ...reservedFeedback.selected, ...selectDocumentChanges(documentChanges));
     const selectedIds = new Set(selectedOriginal.map(item => item.sourceId));
-    const sharedCandidates = ordered.filter(
-        item =>
-            item.sourceType !== "document_change" &&
-            item.sourceType !== "founder_context" &&
-            !selectedIds.has(item.sourceId)
-    );
+    const sharedCandidates = ordered.filter(item => item.sourceType !== "document_change" &&
+        item.sourceType !== "founder_context" &&
+        !selectedIds.has(item.sourceId));
     for (const item of sharedCandidates) {
         const candidateItems = [...selectedOriginal, item]
             .sort(compareEvidenceItems)
             .map(buildFounderWeeklyReviewPromptEvidenceItem);
-        if (
-            serializedItemsLength(candidateItems) >
-            FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.totalSerializedCharacters
-        )
+        if (serializedItemsLength(candidateItems) >
+            FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.totalSerializedCharacters)
             continue;
         selectedOriginal.push(item);
         selectedIds.add(item.sourceId);
@@ -239,10 +213,8 @@ export function buildGenerationEvidenceEnvelope(snapshot) {
         selectedBySourceType,
         excludedBySourceType: subtractCounts(sourceCounts(snapshot.items), selectedBySourceType),
         serializedCharacterCount,
-        estimatedTokenCount: Math.ceil(
-            serializedCharacterCount /
-                FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.estimatedCharactersPerToken
-        ),
+        estimatedTokenCount: Math.ceil(serializedCharacterCount /
+            FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.estimatedCharactersPerToken),
         truncated: items.length !== snapshot.items.length,
     };
     const envelope = {
@@ -260,33 +232,26 @@ export function assertGenerationEvidenceEnvelopeWithinBudget(envelope) {
     const founderContexts = envelope.items.filter(item => item.sourceType === "founder_context");
     const perDocument = new Map();
     for (const item of documentChanges) {
-        const key =
-            typeof item.metadata.documentId === "string" ||
+        const key = typeof item.metadata.documentId === "string" ||
             typeof item.metadata.documentId === "number"
-                ? String(item.metadata.documentId)
-                : (/^document_change:doc:([^:]+)/.exec(item.sourceId)?.[1] ?? item.sourceId);
+            ? String(item.metadata.documentId)
+            : (/^document_change:doc:([^:]+)/.exec(item.sourceId)?.[1] ?? item.sourceId);
         perDocument.set(key, (perDocument.get(key) ?? 0) + 1);
     }
-    const invalid =
-        envelope.version !== FOUNDER_WEEKLY_REVIEW_EVIDENCE_ENVELOPE_VERSION ||
+    const invalid = envelope.version !== FOUNDER_WEEKLY_REVIEW_EVIDENCE_ENVELOPE_VERSION ||
         actualCharacters !== envelope.diagnostics.serializedCharacterCount ||
         actualCharacters >
             FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.totalSerializedCharacters ||
         founderContexts.length > 1 ||
-        founderContexts.some(
-            item =>
-                item.excerpt.length >
-                FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.founderContextReservedCharacters
-        ) ||
+        founderContexts.some(item => item.excerpt.length >
+            FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.founderContextReservedCharacters) ||
         documentChanges.length >
             FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItems ||
         serializedItemsLength(documentChanges) >
             FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeSerializedCharacters ||
-        [...perDocument.values()].some(
-            count =>
-                count >
-                FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItemsPerDocument
-        );
-    if (invalid) throw new FounderWeeklyReviewGenerationEvidenceBudgetError();
+        [...perDocument.values()].some(count => count >
+            FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET.documentChangeItemsPerDocument);
+    if (invalid)
+        throw new FounderWeeklyReviewGenerationEvidenceBudgetError();
 }
 //# sourceMappingURL=generation-evidence-envelope.js.map

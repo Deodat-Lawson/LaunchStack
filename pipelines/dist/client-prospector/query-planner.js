@@ -66,26 +66,21 @@ Common Foursquare category IDs:
 - 17057: Real Estate Office
 - 12009: Bookstore`;
 function buildHumanPrompt(query, companyContext, categories) {
-    const validCategoryIds = (categories ?? []).filter(
-        category => FoursquareCategoryIdSchema.safeParse(category).success
-    );
-    const categoryLabels = (categories ?? []).filter(
-        category => !FoursquareCategoryIdSchema.safeParse(category).success
-    );
-    const categoryBlock =
-        categories && categories.length > 0
-            ? [
-                  validCategoryIds.length > 0
-                      ? `If helpful, constrain searches to these already-known Foursquare category IDs: ${validCategoryIds.join(", ")}.`
-                      : null,
-                  categoryLabels.length > 0
-                      ? `Translate these user-provided category labels into the correct Foursquare category IDs before planning searches: ${categoryLabels.join(", ")}.`
-                      : null,
-                  "Every planned search must return only real Foursquare category IDs in categoryIds.",
-              ]
-                  .filter(Boolean)
-                  .join(" ")
-            : "Infer appropriate Foursquare category IDs from the query and company context.";
+    const validCategoryIds = (categories ?? []).filter(category => FoursquareCategoryIdSchema.safeParse(category).success);
+    const categoryLabels = (categories ?? []).filter(category => !FoursquareCategoryIdSchema.safeParse(category).success);
+    const categoryBlock = categories && categories.length > 0
+        ? [
+            validCategoryIds.length > 0
+                ? `If helpful, constrain searches to these already-known Foursquare category IDs: ${validCategoryIds.join(", ")}.`
+                : null,
+            categoryLabels.length > 0
+                ? `Translate these user-provided category labels into the correct Foursquare category IDs before planning searches: ${categoryLabels.join(", ")}.`
+                : null,
+            "Every planned search must return only real Foursquare category IDs in categoryIds.",
+        ]
+            .filter(Boolean)
+            .join(" ")
+        : "Infer appropriate Foursquare category IDs from the query and company context.";
     return `PROSPECTING QUERY:
 ${query}
 
@@ -107,12 +102,7 @@ export async function planSearches(query, companyContext, categories) {
         temperature: 0.2,
     });
     const humanPrompt = buildHumanPrompt(query, companyContext, categories);
-    const response = await invokeStructured(
-        resolved,
-        QueryPlannerOutputSchema,
-        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "search_plan" }
-    );
+    const response = await invokeStructured(resolved, QueryPlannerOutputSchema, [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)], { name: "search_plan" });
     return response.plannedSearches;
 }
 //# sourceMappingURL=query-planner.js.map

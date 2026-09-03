@@ -131,28 +131,28 @@ export declare const ProspectorEventDataSchema: z.ZodObject<{
     excludeChains: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     companyId: string;
-    query: string;
     userId: string;
     jobId: string;
+    query: string;
     companyContext: string;
+    radius: number;
     location: string | {
         lat: number;
         lng: number;
     };
-    radius: number;
     categories?: string[] | undefined;
     excludeChains?: boolean | undefined;
 }, {
     companyId: string;
-    query: string;
     userId: string;
     jobId: string;
+    query: string;
     companyContext: string;
+    radius: number;
     location: string | {
         lat: number;
         lng: number;
     };
-    radius: number;
     categories?: string[] | undefined;
     excludeChains?: boolean | undefined;
 }>;

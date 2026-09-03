@@ -21,13 +21,13 @@ export declare const RunManifestSchema: z.ZodObject<{
         temperature: z.ZodNumber;
         samples: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        model: string;
         version: string;
+        model: string;
         temperature: number;
         samples: number;
     }, {
-        model: string;
         version: string;
+        model: string;
         temperature: number;
         samples: number;
     }>;
@@ -35,11 +35,11 @@ export declare const RunManifestSchema: z.ZodObject<{
     fixtureSetVersion: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     mode: "A" | "B";
-    createdAt: string;
     promptVersion: string;
+    createdAt: string;
     judge: {
-        model: string;
         version: string;
+        model: string;
         temperature: number;
         samples: number;
     };
@@ -50,11 +50,11 @@ export declare const RunManifestSchema: z.ZodObject<{
     fixtureSetVersion: string;
 }, {
     mode: "A" | "B";
-    createdAt: string;
     promptVersion: string;
+    createdAt: string;
     judge: {
-        model: string;
         version: string;
+        model: string;
         temperature: number;
         samples: number;
     };
@@ -110,8 +110,8 @@ export declare const CriterionScoreSchema: z.ZodObject<{
     method: "judge" | "deterministic";
     criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
     passed: boolean;
-    raw?: unknown;
     detail?: string | null | undefined;
+    raw?: unknown;
     stdDev?: number | null | undefined;
 }>;
 export type CriterionScore = z.infer<typeof CriterionScoreSchema>;
@@ -187,8 +187,8 @@ export declare const CaseResultSchema: z.ZodObject<{
         method: "judge" | "deterministic";
         criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         passed: boolean;
-        raw?: unknown;
         detail?: string | null | undefined;
+        raw?: unknown;
         stdDev?: number | null | undefined;
     }>, "many">>;
     aggregate: z.ZodObject<{
@@ -232,7 +232,6 @@ export declare const CaseResultSchema: z.ZodObject<{
     /** Echoed from the fixture so failure-mode expectations can be diffed. */
     expectedFailureMode: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     scores: {
         detail: string | null;
         weight: number;
@@ -243,6 +242,7 @@ export declare const CaseResultSchema: z.ZodObject<{
         stdDev: number | null;
         raw?: unknown;
     }[];
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     variants: {
         message: string;
         variantId: string;
@@ -293,8 +293,8 @@ export declare const CaseResultSchema: z.ZodObject<{
         method: "judge" | "deterministic";
         criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         passed: boolean;
-        raw?: unknown;
         detail?: string | null | undefined;
+        raw?: unknown;
         stdDev?: number | null | undefined;
     }[] | undefined;
     variants?: {
@@ -320,13 +320,13 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             temperature: z.ZodNumber;
             samples: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         }, {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         }>;
@@ -334,11 +334,11 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
         fixtureSetVersion: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         mode: "A" | "B";
-        createdAt: string;
         promptVersion: string;
+        createdAt: string;
         judge: {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         };
@@ -349,11 +349,11 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
         fixtureSetVersion: string;
     }, {
         mode: "A" | "B";
-        createdAt: string;
         promptVersion: string;
+        createdAt: string;
         judge: {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         };
@@ -407,8 +407,8 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             method: "judge" | "deterministic";
             criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             passed: boolean;
-            raw?: unknown;
             detail?: string | null | undefined;
+            raw?: unknown;
             stdDev?: number | null | undefined;
         }>, "many">>;
         aggregate: z.ZodObject<{
@@ -452,7 +452,6 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
         /** Echoed from the fixture so failure-mode expectations can be diffed. */
         expectedFailureMode: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         scores: {
             detail: string | null;
             weight: number;
@@ -463,6 +462,7 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             stdDev: number | null;
             raw?: unknown;
         }[];
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         variants: {
             message: string;
             variantId: string;
@@ -513,8 +513,8 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             method: "judge" | "deterministic";
             criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             passed: boolean;
-            raw?: unknown;
             detail?: string | null | undefined;
+            raw?: unknown;
             stdDev?: number | null | undefined;
         }[] | undefined;
         variants?: {
@@ -561,7 +561,6 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
         byCriterion: Record<string, number>;
     };
     results: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         scores: {
             detail: string | null;
             weight: number;
@@ -572,6 +571,7 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             stdDev: number | null;
             raw?: unknown;
         }[];
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         variants: {
             message: string;
             variantId: string;
@@ -599,11 +599,11 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
     }[];
     manifest: {
         mode: "A" | "B";
-        createdAt: string;
         promptVersion: string;
+        createdAt: string;
         judge: {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         };
@@ -649,8 +649,8 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
             method: "judge" | "deterministic";
             criterionId: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             passed: boolean;
-            raw?: unknown;
             detail?: string | null | undefined;
+            raw?: unknown;
             stdDev?: number | null | undefined;
         }[] | undefined;
         variants?: {
@@ -662,11 +662,11 @@ export declare const BenchmarkRunSchema: z.ZodObject<{
     }[];
     manifest: {
         mode: "A" | "B";
-        createdAt: string;
         promptVersion: string;
+        createdAt: string;
         judge: {
-            model: string;
             version: string;
+            model: string;
             temperature: number;
             samples: number;
         };

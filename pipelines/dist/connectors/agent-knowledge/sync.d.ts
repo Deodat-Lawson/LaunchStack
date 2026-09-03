@@ -26,7 +26,5 @@ export interface AgentKnowledgeSyncResult extends KnowledgeSyncReport {
  * Fetch every piece of pre-existing Claude Code / Codex knowledge on this
  * machine and push it into the host's knowledge base.
  */
-export declare function syncAgentKnowledge(
-    options: AgentKnowledgeSyncOptions
-): Promise<AgentKnowledgeSyncResult>;
+export declare function syncAgentKnowledge(options: AgentKnowledgeSyncOptions): Promise<AgentKnowledgeSyncResult>;
 //# sourceMappingURL=sync.d.ts.map

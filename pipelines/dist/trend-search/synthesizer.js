@@ -35,15 +35,11 @@ Given a list of raw search results (URL, title, content, score), the user's quer
 You must only use sourceUrl values that appear in the raw results list. Do not add or invent URLs.`;
 function buildHumanPrompt(rawResults, query, companyContext, categories) {
     const resultsBlock = rawResults
-        .map(
-            (r, i) =>
-                `[${i + 1}] URL: ${r.url}\n    Title: ${r.title}\n    Content: ${r.content.slice(0, 500)}${r.content.length > 500 ? "..." : ""}\n    Score: ${r.score}`
-        )
+        .map((r, i) => `[${i + 1}] URL: ${r.url}\n    Title: ${r.title}\n    Content: ${r.content.slice(0, 500)}${r.content.length > 500 ? "..." : ""}\n    Score: ${r.score}`)
         .join("\n\n");
-    const categoryBlock =
-        categories.length > 0
-            ? `Categories of interest: ${categories.join(", ")}.`
-            : "No category filter.";
+    const categoryBlock = categories.length > 0
+        ? `Categories of interest: ${categories.join(", ")}.`
+        : "No category filter.";
     return `QUERY: ${query}
 
 COMPANY CONTEXT: ${companyContext}
@@ -67,12 +63,7 @@ export async function synthesizeResults(rawResults, query, companyContext, categ
     }
     const resolved = resolveChatModel({ route: "fast" });
     const humanPrompt = buildHumanPrompt(rawResults, query, companyContext, categories);
-    const response = await invokeStructured(
-        resolved,
-        SynthesizerOutputSchema,
-        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "synthesized_results" }
-    );
+    const response = await invokeStructured(resolved, SynthesizerOutputSchema, [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)], { name: "synthesized_results" });
     const parsed = SynthesizerOutputSchema.safeParse(response);
     if (!parsed.success) {
         throw new Error(`Synthesizer output validation failed: ${parsed.error.message}`);

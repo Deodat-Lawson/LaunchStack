@@ -1,17 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { ZodError } from "zod";
-import {
-    buildFounderWeeklyReviewActorId,
-    parseFounderWeeklyReviewEvidenceSnapshot,
-    parseFounderWeeklyReviewPayload,
-} from "./contracts.js";
-import {
-    FounderWeeklyReviewConflictError,
-    FounderWeeklyReviewForbiddenError,
-    FounderWeeklyReviewInvalidPayloadError,
-    FounderWeeklyReviewInvalidTransitionError,
-    FounderWeeklyReviewNotFoundError,
-} from "./errors.js";
+import { buildFounderWeeklyReviewActorId, parseFounderWeeklyReviewEvidenceSnapshot, parseFounderWeeklyReviewPayload, } from "./contracts.js";
+import { FounderWeeklyReviewConflictError, FounderWeeklyReviewForbiddenError, FounderWeeklyReviewInvalidPayloadError, FounderWeeklyReviewInvalidTransitionError, FounderWeeklyReviewNotFoundError, } from "./errors.js";
 import { FounderWeeklyReviewRepository } from "./repository.js";
 const ALLOWED_WORKSPACE_ROLES = new Set(["owner", "admin", "editor"]);
 function assertWorkspaceMutationRole(role) {
@@ -20,13 +10,9 @@ function assertWorkspaceMutationRole(role) {
     }
 }
 function assertReportingPeriodMatchesSnapshot(reportingPeriod, evidenceSnapshot) {
-    if (
-        reportingPeriod.start !== evidenceSnapshot.reportingPeriod.start ||
-        reportingPeriod.end !== evidenceSnapshot.reportingPeriod.end
-    ) {
-        throw new FounderWeeklyReviewInvalidPayloadError(
-            "Evidence snapshot reporting period must match the run reporting period."
-        );
+    if (reportingPeriod.start !== evidenceSnapshot.reportingPeriod.start ||
+        reportingPeriod.end !== evidenceSnapshot.reportingPeriod.end) {
+        throw new FounderWeeklyReviewInvalidPayloadError("Evidence snapshot reporting period must match the run reporting period.");
     }
 }
 export class FounderWeeklyReviewUserService {
@@ -41,27 +27,26 @@ export class FounderWeeklyReviewUserService {
             evidenceSnapshot = input.evidenceSnapshot
                 ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot)
                 : undefined;
-        } catch (error) {
+        }
+        catch (error) {
             if (error instanceof ZodError)
                 throw new FounderWeeklyReviewInvalidPayloadError(error.message);
             throw error;
         }
         if (evidenceSnapshot)
             assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
-        return (
-            await this.repository.createOrGetByRequestKeyWithResult({
-                id: `fwr_${randomUUID()}`,
-                companyId: actor.companyId,
-                requestKey: input.requestKey,
-                reportingPeriod: input.reportingPeriod,
-                evidenceSnapshot,
-                collectionInput: input.collectionInput ?? {
-                    workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC",
-                    actorExternalUserId: actor.externalUserId,
-                },
-                createdByActorId: buildFounderWeeklyReviewActorId(actor),
-            })
-        ).run;
+        return (await this.repository.createOrGetByRequestKeyWithResult({
+            id: `fwr_${randomUUID()}`,
+            companyId: actor.companyId,
+            requestKey: input.requestKey,
+            reportingPeriod: input.reportingPeriod,
+            evidenceSnapshot,
+            collectionInput: input.collectionInput ?? {
+                workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC",
+                actorExternalUserId: actor.externalUserId,
+            },
+            createdByActorId: buildFounderWeeklyReviewActorId(actor),
+        })).run;
     }
     async createOrGetRunWithMetadata(actor, input) {
         assertWorkspaceMutationRole(actor.role);
@@ -70,7 +55,8 @@ export class FounderWeeklyReviewUserService {
             evidenceSnapshot = input.evidenceSnapshot
                 ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot)
                 : undefined;
-        } catch (error) {
+        }
+        catch (error) {
             if (error instanceof ZodError)
                 throw new FounderWeeklyReviewInvalidPayloadError(error.message);
             throw error;
@@ -120,9 +106,7 @@ export class FounderWeeklyReviewUserService {
         if (result.run.status !== "failed") {
             throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "retry");
         }
-        throw new FounderWeeklyReviewConflictError(
-            `Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`
-        );
+        throw new FounderWeeklyReviewConflictError(`Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`);
     }
     async retryFailedRunWithMetadata(actor, runId, requestKey) {
         assertWorkspaceMutationRole(actor.role);
@@ -135,34 +119,28 @@ export class FounderWeeklyReviewUserService {
         });
         if (result.outcome === "not_found" || !result.run)
             throw new FounderWeeklyReviewNotFoundError(runId);
-        if (result.outcome === "updated") return { run: result.run, transitionApplied: true };
-        if (
-            result.outcome === "idempotent" &&
-            (result.run.status === "failed" || result.run.status === "queued")
-        )
+        if (result.outcome === "updated")
+            return { run: result.run, transitionApplied: true };
+        if (result.outcome === "idempotent" &&
+            (result.run.status === "failed" || result.run.status === "queued"))
             return { run: result.run, transitionApplied: false };
         if (result.run.status !== "failed")
             throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "retry");
-        throw new FounderWeeklyReviewConflictError(
-            `Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`
-        );
+        throw new FounderWeeklyReviewConflictError(`Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`);
     }
     async updateDraft(actor, runId, reviewPayload) {
         assertWorkspaceMutationRole(actor.role);
         let payload;
         try {
             payload = parseFounderWeeklyReviewPayload(reviewPayload);
-        } catch (error) {
+        }
+        catch (error) {
             if (error instanceof ZodError) {
                 throw new FounderWeeklyReviewInvalidPayloadError(error.message);
             }
             throw error;
         }
-        const result = await this.repository.updateDraftConditionally(
-            actor.companyId,
-            runId,
-            payload
-        );
+        const result = await this.repository.updateDraftConditionally(actor.companyId, runId, payload);
         if (!result.run) {
             throw new FounderWeeklyReviewNotFoundError(runId);
         }

@@ -685,7 +685,7 @@ export function WorkspaceShell() {
             } else if (e.key === "/" && !inInput) {
                 e.preventDefault();
                 const el = document.querySelector<HTMLInputElement>(
-                    'input[placeholder="Search your sources"]'
+                    'input[placeholder="Search your knowledge"]'
                 );
                 el?.focus();
             }

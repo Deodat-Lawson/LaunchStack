@@ -73,7 +73,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const map = await getMindmap(id, ctx.data.companyId);
         if (!map) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
 
-        const markdown = toMarkdownOutline(parseDoc(map.doc, map.title));
+        // One heading per branch: the chunker stamps each chunk with its
+        // heading path, so a chunk cut out of a large map still says which
+        // branch it came from, not only which map.
+        const markdown = toMarkdownOutline(parseDoc(map.doc, map.title), { sections: true });
         const filename = safeFilename(map.title);
         const stored = await uploadFile({
             filename,

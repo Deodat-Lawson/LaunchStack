@@ -76,3 +76,7 @@ test-output/
 # Personal working notes — never committed
 notes/
 *.tgz
+
+# Playwright output (apps/web/e2e)
+test-results/
+playwright-report/

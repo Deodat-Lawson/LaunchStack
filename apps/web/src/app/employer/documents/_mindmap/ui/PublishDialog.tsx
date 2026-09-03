@@ -48,7 +48,8 @@ export function PublishDialog({
     const [folder, setFolder] = useState(defaultFolder);
     const [busy, setBusy] = useState(false);
 
-    const outline = toMarkdownOutline(doc);
+    // The same rendering the server indexes, so the preview is the truth.
+    const outline = toMarkdownOutline(doc, { sections: true });
     const topicCount = doc.pages.reduce((sum, p) => sum + p.nodes.length, 0);
 
     const publish = async () => {

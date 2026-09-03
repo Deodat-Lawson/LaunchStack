@@ -174,6 +174,22 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
             "attachment-only for the same reason.",
     },
     {
+        id: "repo-workspaces",
+        tier: "tool",
+        summary: "Connect a git repository; the worker mirrors it and explains it on request.",
+        scope: "mixed",
+        routes: ["repo-workspaces", "webhooks/github"],
+        unscopedRoutes: {
+            "webhooks/github":
+                "A push arrives signed by GitHub, not by a session; the route verifies the " +
+                "signature, records the sync request, and never says whether a repo is connected.",
+        },
+        notes:
+            "Connecting does no git work in the request — it opens a sync request the " +
+            "worker fulfils. The webhook is a latency optimisation; the poll reconciler " +
+            "is the guarantee.",
+    },
+    {
         id: "notes",
         tier: "tool",
         summary: "Freeform notes that link to sources and to each other.",

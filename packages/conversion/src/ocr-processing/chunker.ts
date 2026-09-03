@@ -304,6 +304,7 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
 
     const chunks: string[] = [];
     let start = 0;
+    let cutAtLine = false;
 
     while (start < text.length) {
         let end = Math.min(start + maxChars, text.length);
@@ -313,6 +314,12 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
             const searchRegion = text.slice(searchStart, end);
 
             const sentenceMatch = searchRegion.match(/[.!?]\s+(?=[A-Z])/g);
+            // Line-structured text — outlines, lists, code, transcripts —
+            // has no sentence ends to cut at. A line break inside the search
+            // window keeps every line whole, where the old fallback to the
+            // last space could split "- Read replicas" into two chunks that
+            // each say nothing.
+            const lastNewline = searchRegion.lastIndexOf("\n");
             if (sentenceMatch) {
                 const lastMatch = searchRegion.lastIndexOf(
                     sentenceMatch[sentenceMatch.length - 1]!
@@ -320,6 +327,9 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
                 if (lastMatch !== -1) {
                     end = searchStart + lastMatch + 2;
                 }
+            } else if (lastNewline > 0) {
+                end = searchStart + lastNewline + 1;
+                cutAtLine = true;
             } else {
                 const lastSpace = text.lastIndexOf(" ", end);
                 if (lastSpace > start + maxChars * 0.5) {
@@ -333,7 +343,20 @@ function splitWithOverlap(text: string, maxChars: number, overlapChars: number):
             chunks.push(chunk);
         }
 
-        const newStart = end - overlapChars;
+        // The last chunk reached the end of the text: stop. Stepping back by
+        // the overlap here used to emit one more chunk holding nothing but
+        // the tail of the previous one — a junk fragment per long document,
+        // embedded and retrievable like any other.
+        if (end >= text.length) break;
+
+        let newStart = end - overlapChars;
+        if (cutAtLine && newStart > start) {
+            // The overlap re-enters on a line boundary too, so the next chunk
+            // opens with a whole line rather than the tail of one.
+            const lineStart = text.lastIndexOf("\n", newStart) + 1;
+            if (lineStart > start) newStart = lineStart;
+            cutAtLine = false;
+        }
         if (newStart > start && newStart < text.length) {
             start = newStart;
         } else {

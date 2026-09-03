@@ -20,10 +20,20 @@ export interface HeadingSection {
 const HEADING_REGEX = /^(#{1,3})\s+(.+)$/;
 
 /**
+ * Same shape, matched line by line. `HEADING_REGEX` is anchored to the whole
+ * string (it is applied to single lines below), so testing a document with
+ * it only ever matched a one-line document: `.+$` cannot cross the newline
+ * after the first heading. Every real Markdown file failed the check and
+ * fell through to plain-text chunking, which is why no chunk ever carried a
+ * heading path. This one is multiline.
+ */
+const ANY_HEADING_LINE = /^#{1,3}[ \t]+\S/m;
+
+/**
  * Returns true if the text contains Markdown headings (lines starting with 1-3 #).
  */
 export function hasMarkdownHeadings(text: string): boolean {
-    return HEADING_REGEX.test(text);
+    return ANY_HEADING_LINE.test(text);
 }
 
 /**

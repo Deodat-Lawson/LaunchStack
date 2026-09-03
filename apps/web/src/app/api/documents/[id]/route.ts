@@ -8,6 +8,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { normalizeFolderPath } from "~/lib/folders/path";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -81,7 +82,9 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
             const patch: Record<string, string> = {};
             if (title !== undefined) patch.title = title;
-            if (category !== undefined) patch.category = category;
+            // A folder is a path; store its canonical form so every reader
+            // groups the document with its folder.
+            if (category !== undefined) patch.category = normalizeFolderPath(category);
 
             if (Object.keys(patch).length === 0) {
                 return NextResponse.json({ error: "No mutable fields provided" }, { status: 400 });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth, useUser } from "~/lib/auth-client";
@@ -8,6 +8,15 @@ import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
 import { LANDING_URL } from "~/config/landing";
+import {
+    UNFILED_FOLDER,
+    folderLeafName,
+    isFolderDescendant,
+    isFolderOrDescendant,
+    joinFolderPath,
+    replaceFolderPrefix,
+} from "~/lib/folders/path";
+import { isManagementRole } from "~/lib/membership-roles";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
@@ -16,9 +25,9 @@ import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
 import { IconChevronRight } from "./icons";
+import { DeleteFolderDialog } from "./DeleteFolderDialog";
+import { FolderDialog, type FolderDialogRequest } from "./FolderDialog";
 import { MindmapEditorHost } from "./MindmapEditorHost";
-import { NewFolderDialog } from "./NewFolderDialog";
-import { RenameFolderDialog } from "./RenameFolderDialog";
 import { RenameSourceDialog } from "./RenameSourceDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
@@ -32,7 +41,6 @@ import type {
     ComposerSend,
     ThreadMessage,
     ThreadReference,
-    WorkspaceFolder,
     WorkspaceSource,
 } from "./types";
 
@@ -163,8 +171,8 @@ export function WorkspaceShell() {
     /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
     const [palOpen, setPalOpen] = useState(false);
-    const [newFolderOpen, setNewFolderOpen] = useState(false);
-    const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
+    const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
+    const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
     /**
      * The open source lives in the URL (`?source=<id>`, plus `&edit=1` for a
      * mindmap's editor) and is resolved against the loaded list here. Pushing
@@ -555,6 +563,83 @@ export function WorkspaceShell() {
         [sources, refresh]
     );
 
+    // Folder structure is management-only, like every other write to the
+    // library. Members see the tree; owners and admins shape it.
+    const canManageFolders = role !== null && isManagementRole(role);
+    const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
+
+    /** One call for every folder mutation; resolves to an error message or null. */
+    const folderRequest = useCallback(
+        async (method: "POST" | "PATCH" | "DELETE", body: Record<string, string>) => {
+            try {
+                const res = await fetch("/api/folders", {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                });
+                const json = (await res.json().catch(() => ({}))) as {
+                    success?: boolean;
+                    message?: string;
+                };
+                if (!res.ok || !json.success) {
+                    return json.message ?? `Request failed (${res.status})`;
+                }
+                await refresh();
+                return null;
+            } catch (err) {
+                return err instanceof Error ? err.message : "Request failed";
+            }
+        },
+        [refresh]
+    );
+
+    const handleCreateFolder = useCallback(
+        (path: string) => folderRequest("POST", { path }),
+        [folderRequest]
+    );
+
+    const handleRenameFolder = useCallback(
+        async (path: string, newPath: string) => {
+            const failure = await folderRequest("PATCH", { path, newPath });
+            if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
+                setActiveFolder(replaceFolderPrefix(activeFolder, path, newPath));
+            }
+            return failure;
+        },
+        [folderRequest, activeFolder]
+    );
+
+    /** Drag-and-drop and the folder menu: the move is a rename to a new parent. */
+    const handleMoveFolder = useCallback(
+        async (path: string, targetParent: string | null) => {
+            const failure = await handleRenameFolder(
+                path,
+                joinFolderPath(targetParent, folderLeafName(path))
+            );
+            if (failure) toast.error(failure);
+        },
+        [handleRenameFolder]
+    );
+
+    const handleDeleteFolder = useCallback(
+        async (path: string) => {
+            const failure = await folderRequest("DELETE", { path });
+            if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
+                setActiveFolder(null);
+            }
+            return failure;
+        },
+        [folderRequest, activeFolder]
+    );
+
+    const deleteFolderCounts = useMemo(() => {
+        if (!deleteFolderPath) return { documents: 0, subfolders: 0 };
+        return {
+            documents: sources.filter(s => isFolderOrDescendant(s.folder, deleteFolderPath)).length,
+            subfolders: folderPaths.filter(p => isFolderDescendant(p, deleteFolderPath)).length,
+        };
+    }, [deleteFolderPath, sources, folderPaths]);
+
     /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
     const openFeature = useCallback(
         (featureId?: string) => {
@@ -729,14 +814,38 @@ export function WorkspaceShell() {
                     onOpenAdd={() => openAdd()}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenSource={handleOpenSource}
-                    onNewFolder={() => setNewFolderOpen(true)}
-                    onRenameFolder={folder => setRenameFolder(folder)}
+                    onNewFolder={
+                        canManageFolders
+                            ? parentPath =>
+                                  setFolderDialog({
+                                      mode: "create",
+                                      parentPath: parentPath ?? null,
+                                  })
+                            : undefined
+                    }
+                    onRenameFolder={
+                        canManageFolders
+                            ? folder => setFolderDialog({ mode: "rename", path: folder.name })
+                            : undefined
+                    }
+                    onMoveFolder={
+                        canManageFolders
+                            ? (path, target) => void handleMoveFolder(path, target)
+                            : undefined
+                    }
+                    onDeleteFolder={
+                        canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
+                    }
                     onRenameSource={source => setRenameSource(source)}
                     onDeleteSource={source => {
                         setDeleteError(null);
                         setDeleteSource(source);
                     }}
-                    onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
+                    onMoveToFolder={
+                        canManageFolders
+                            ? (id, name) => void handleMoveToFolder(id, name)
+                            : undefined
+                    }
                     activeFolder={activeFolder}
                     setActiveFolder={setActiveFolder}
                     activeTag={activeTag}
@@ -899,8 +1008,17 @@ export function WorkspaceShell() {
                     setAddTab(undefined);
                 }}
                 userId={userId ?? null}
-                defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
-                folders={folders.map(f => f.name)}
+                defaultCategory={activeFolder ?? UNFILED_FOLDER}
+                folders={folderPaths}
+                onCreateFolder={
+                    canManageFolders
+                        ? path => {
+                              void handleCreateFolder(path).then(failure => {
+                                  if (failure) toast.error(failure);
+                              });
+                          }
+                        : undefined
+                }
                 onUploaded={() => {
                     void refresh();
                 }}
@@ -930,28 +1048,23 @@ export function WorkspaceShell() {
                 }}
             />
 
-            <NewFolderDialog
-                open={newFolderOpen}
-                onClose={() => setNewFolderOpen(false)}
-                existingFolders={folders.map(f => f.name)}
-                onCreated={() => {
-                    void refresh();
-                }}
+            <FolderDialog
+                request={folderDialog}
+                existingPaths={folderPaths}
+                onSubmit={path =>
+                    folderDialog?.mode === "rename"
+                        ? handleRenameFolder(folderDialog.path, path)
+                        : handleCreateFolder(path)
+                }
+                onClose={() => setFolderDialog(null)}
             />
 
-            <RenameFolderDialog
-                open={!!renameFolder}
-                folder={renameFolder}
-                onClose={() => setRenameFolder(null)}
-                existingFolders={folders.map(f => f.name)}
-                onRenamed={newName => {
-                    if (activeFolder === renameFolder?.name) setActiveFolder(newName);
-                    void refresh();
-                }}
-                onDeleted={() => {
-                    if (activeFolder === renameFolder?.name) setActiveFolder(null);
-                    void refresh();
-                }}
+            <DeleteFolderDialog
+                path={deleteFolderPath}
+                documentCount={deleteFolderCounts.documents}
+                subfolderCount={deleteFolderCounts.subfolders}
+                onConfirm={handleDeleteFolder}
+                onClose={() => setDeleteFolderPath(null)}
             />
 
             <RenameSourceDialog

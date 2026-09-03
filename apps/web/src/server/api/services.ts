@@ -209,6 +209,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "graph",
             "embedding-indexes",
             "Categories",
+            "folders",
             "employer/upload",
             "updateUploadPreference",
         ],
@@ -221,8 +222,10 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "Answer a question over the workspace's sources, with references.",
         scope: "workspace",
-        routes: ["agents/documentQ&A", "Questions"],
+        routes: ["agents/documentQ&A", "Questions", "ask"],
         notes:
+            "`ask/starters` writes the workspace's starter questions from the company profile " +
+            "and the source inventory — the questions, not the answers. " +
             "Route path contains a literal ampersand. Also hosts a persisted chat/task/tool " +
             "surface that has no client. `Questions/{add,fetch}` are the chat-history reads " +
             "and writes — live and tested, but named as procedures in PascalCase, so they are " +

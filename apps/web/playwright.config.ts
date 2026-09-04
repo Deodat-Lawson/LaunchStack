@@ -13,8 +13,11 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
     testDir: "./e2e",
-    timeout: 90_000,
-    expect: { timeout: 15_000 },
+    timeout: 120_000,
+    // A dev server compiles routes on demand, so the first test to reach a
+    // route pays for its build. That is slow, not broken — a short expect
+    // timeout turns it into a flake on the first run after a restart.
+    expect: { timeout: 30_000 },
     fullyParallel: false,
     workers: 1,
     retries: 0,

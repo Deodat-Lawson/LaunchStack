@@ -1,3 +1,5 @@
+import { randomBytes, randomUUID } from "node:crypto";
+
 import { expect, test, type Page } from "@playwright/test";
 
 /**
@@ -7,17 +9,25 @@ import { expect, test, type Page } from "@playwright/test";
  * on the database's prior state and nothing leaks between runs.
  */
 
-const PASSWORD = "mindmap-e2e-Passw0rd!";
+/**
+ * A throwaway credential per run, generated rather than written down. The
+ * account exists only for the length of one test against a local server, so
+ * the value carries no meaning — and a literal here would be a hardcoded
+ * password for every secret scanner that reads the repository.
+ */
+function throwawayPassword(): string {
+    return `E2e-${randomBytes(18).toString("base64url")}!`;
+}
 
 async function signUpWithWorkspace(page: Page): Promise<{ email: string; workspace: string }> {
-    const stamp = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    const stamp = randomUUID().replace(/-/g, "").slice(0, 12);
     const email = `mindmap-e2e-${stamp}@example.test`;
     const workspace = `Mindmap E2E ${stamp}`;
 
     // Better Auth's email sign-up sets the session cookie on this page's
     // context; the workspace route then hangs a company off that identity.
     const signup = await page.request.post("/api/auth/sign-up/email", {
-        data: { name: "Mindmap E2E", email, password: PASSWORD },
+        data: { name: "Mindmap E2E", email, password: throwawayPassword() },
     });
     expect(signup.ok(), `sign-up failed: ${signup.status()} ${await signup.text()}`).toBe(true);
 

@@ -189,7 +189,9 @@ export function ProgramDialog({ open, mode, program, onClose, onSubmit }: Props)
                         />
                     </div>
                     <div className="grid gap-1.5">
-                        <Label htmlFor="pg-known">Existing partners' domains (one per line)</Label>
+                        <Label htmlFor="pg-known">
+                            Existing partners&rsquo; domains (one per line)
+                        </Label>
                         <Textarea
                             id="pg-known"
                             rows={2}

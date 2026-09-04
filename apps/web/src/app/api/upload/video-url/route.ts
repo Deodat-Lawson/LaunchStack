@@ -5,7 +5,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { validateRequestBody } from "~/lib/validation";
 import { processVideoUrlUpload } from "~/server/services/document-upload";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { assertPublicHttpUrl, UrlGuardError } from "~/server/security/url-guard";
 
 const VideoUrlSchema = z.object({
@@ -16,7 +17,7 @@ const VideoUrlSchema = z.object({
 });
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.standard, async () => {
@@ -26,6 +27,10 @@ export async function POST(request: Request) {
         }
 
         const { videoUrl, category, title, preferredProvider } = validation.data;
+
+        if (!(await canEditFolder(ctx.data, category))) {
+            return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+        }
 
         // SSRF guard: best-effort pre-check only. This route never fetches the
         // URL itself — it hands the string to the transcription sidecar, which

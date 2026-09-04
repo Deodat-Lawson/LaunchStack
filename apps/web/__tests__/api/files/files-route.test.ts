@@ -1,14 +1,25 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { GET } from "~/app/api/files/[id]/route";
 import { signFileAccessToken } from "@launchstack/store/crypto";
-import type { WorkspaceContext, WorkspaceContextResult } from "~/lib/require-workspace-context";
+import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
+
+import {
+    makeWorkspaceContext,
+    type WorkspaceContextOverrides,
+} from "../../helpers/workspace-context";
 
 const SECRET = "route-file-access-secret";
 
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 jest.mock("~/env", () => ({
     env: {
@@ -49,21 +60,8 @@ const DB_FILE_LEGACY = {
     companyId: null,
 };
 
-const VERIFIED_DATA: WorkspaceContext = {
-    authUserId: "clerk_abc",
-    userPk: BigInt(7),
-    companyId: BigInt(5),
-    role: "owner",
-    status: "verified",
-};
-
-const VERIFIED_CTX = {
-    success: true as const,
-    data: VERIFIED_DATA,
-};
-
-function mockAuthenticated(overrides?: Partial<WorkspaceContext>) {
-    const data = { ...VERIFIED_DATA, ...overrides };
+function mockAuthenticated(overrides?: WorkspaceContextOverrides) {
+    const data = makeWorkspaceContext({ authUserId: "clerk_abc", ...overrides });
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data });
 }
 
@@ -82,6 +80,21 @@ function setupFileQuery(rows: Record<string, unknown>[]) {
     const from = jest.fn().mockReturnValue({ where });
     mockDbSelect.mockReturnValueOnce({ from });
 }
+
+/** The documents (and versions) whose bytes this file is — the scope check's read. */
+function setupBackingDocumentsQuery(rows: { id: number; category: string }[]) {
+    const where = jest.fn().mockResolvedValue(rows);
+    const leftJoin = jest.fn().mockReturnValue({ where });
+    const from = jest.fn().mockReturnValue({ leftJoin });
+    mockDbSelect.mockReturnValueOnce({ from });
+}
+
+const HIDES_BOARD = {
+    kind: "except" as const,
+    deniedCategories: ["Board"],
+    deniedDocumentIds: [],
+    allowedDocumentIds: [],
+};
 
 function request(path: string) {
     return new Request(`http://localhost${path}`);
@@ -129,6 +142,47 @@ describe("GET /api/files/[id]", () => {
 
         expect(response.status).toBe(404);
         expect(mockDbSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it("skips the document lookup entirely when the caller sees everything", async () => {
+        mockAuthenticated();
+        setupFileQuery([DB_FILE]);
+
+        const response = await GET(request("/api/files/123"), params("123"));
+
+        expect(response.status).toBe(200);
+        expect(mockDbSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it("returns 404 when the file backs a document outside the caller's scope", async () => {
+        mockAuthenticated({ role: "member", scope: HIDES_BOARD });
+        setupFileQuery([DB_FILE]);
+        setupBackingDocumentsQuery([{ id: 9, category: "Board" }]);
+
+        const response = await GET(request("/api/files/123"), params("123"));
+
+        expect(response.status).toBe(404);
+        expect(await response.json()).toEqual({ error: "File not found" });
+    });
+
+    it("serves a file whose document is inside the caller's scope", async () => {
+        mockAuthenticated({ role: "member", scope: HIDES_BOARD });
+        setupFileQuery([DB_FILE]);
+        setupBackingDocumentsQuery([{ id: 9, category: "General" }]);
+
+        const response = await GET(request("/api/files/123"), params("123"));
+
+        expect(response.status).toBe(200);
+    });
+
+    it("serves a file no document references yet (mid-upload) on company scope alone", async () => {
+        mockAuthenticated({ role: "member", scope: HIDES_BOARD });
+        setupFileQuery([DB_FILE]);
+        setupBackingDocumentsQuery([]);
+
+        const response = await GET(request("/api/files/123"), params("123"));
+
+        expect(response.status).toBe(200);
     });
 
     it("serves the file to a caller holding a valid token (skips ownership)", async () => {

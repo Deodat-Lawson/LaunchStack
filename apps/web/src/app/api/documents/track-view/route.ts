@@ -5,6 +5,7 @@ import { users, documentViews } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function POST(request: Request) {
     try {
@@ -16,11 +17,16 @@ export async function POST(request: Request) {
         const { documentId } = validation.data;
 
         // Scoped in the WHERE clause on purpose: a separate 403 for documents
-        // that exist in another tenant would confirm their ids.
+        // that exist in another tenant or a hidden folder would confirm their ids.
         const [doc] = await db
             .select({ id: document.id })
             .from(document)
-            .where(and(eq(document.id, documentId), eq(document.companyId, ctx.data.companyId)));
+            .where(
+                and(
+                    eq(document.id, documentId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
         if (!doc) {
             return NextResponse.json(

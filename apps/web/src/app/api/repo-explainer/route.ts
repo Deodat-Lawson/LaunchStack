@@ -10,14 +10,9 @@ import {
     type RepoExplanationRequest,
 } from "@launchstack/pipelines/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
-import {
-    createSuccessResponse,
-    createForbiddenError,
-    createValidationError,
-    handleApiError,
-} from "~/lib/api-utils";
+import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -73,14 +68,10 @@ async function validateRepoAccess(
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        // Reads the workspace's GitHub connection and spends LLM budget on the
+        // company's behalf — a settings-tier action.
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return createForbiddenError(
-                "Insufficient permissions. Only workspace owners and admins can use the repo explainer."
-            );
-        }
 
         const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
         if (!validation.success) {

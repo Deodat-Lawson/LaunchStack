@@ -7,13 +7,12 @@
  * the documents workspace with a query flag the UI turns into a toast.
  */
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
 
 import { decodeIdTokenClaims, exchangeAuthorizationCode } from "@launchstack/google-drive";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 import {
     GOOGLE_DRIVE_SCOPES,
     GOOGLE_OAUTH_STATE_COOKIE,
@@ -44,7 +43,9 @@ export async function GET(request: Request) {
 
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
-    if (!isManagementRole(ctx.data.role)) {
+    // A browser redirect, not an API call: a missing permission lands on the
+    // workspace with a toast rather than a JSON 403.
+    if (!ctx.data.can("connectors.manage")) {
         return redirectToWorkspace(request, "forbidden");
     }
 
@@ -85,19 +86,22 @@ export async function GET(request: Request) {
             return redirectToWorkspace(request, "error");
         }
 
-        const [userRow] = await db
-            .select({ id: users.id })
-            .from(users)
-            .where(eq(users.userId, ctx.data.authUserId))
-            .limit(1);
-
-        await upsertGoogleConnection({
+        const connection = await upsertGoogleConnection({
             companyId: BigInt(ctx.data.companyId),
-            grantedByUserId: userRow ? BigInt(userRow.id) : null,
+            grantedByUserId: ctx.data.userPk,
             providerAccountId: accountId,
             providerAccountEmail: claims.email ?? null,
             refreshToken: token.refresh_token,
             scopes: token.scope ?? GOOGLE_DRIVE_SCOPES.join(" "),
+        });
+
+        await recordAuditEvent(db, {
+            companyId: ctx.data.companyId,
+            actorUserId: ctx.data.authUserId,
+            action: "connector.connected",
+            targetType: "connector",
+            targetId: "google-drive",
+            detail: { connectionId: connection.id, accountEmail: claims.email ?? null },
         });
 
         return redirectToWorkspace(request, "connected");

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconBolt } from "./icons";
-import { isManagementRole } from "~/lib/membership-roles";
+import { usePermissions } from "~/lib/use-permissions";
 import { STUDIO_GROUPS } from "./types";
 
 export interface StudioMenuProps {
@@ -11,8 +11,6 @@ export interface StudioMenuProps {
     onPickFeature?: (featureId: string) => void;
     /** Fires when the main Studio button is clicked; if omitted, opens the menu. */
     onOpenStudio?: () => void;
-    /** Role of the current user — filters company-only Management entries. */
-    role?: string | null;
 }
 
 /**
@@ -20,9 +18,13 @@ export interface StudioMenuProps {
  * tool topbar. **`onOpenStudio`** should open the drawer/sidebar only; individual
  * tiles call **`onPickFeature`** to jump straight to full-width workspace (parent
  * wires `expandFeature` vs `openFeature` accordingly).
+ *
+ * Gated entries (`feature.requires`) are absent until permissions have loaded
+ * and say yes — a viewer never sees a Settings tile flash and vanish.
  */
-export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProps) {
+export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
     const router = useRouter();
+    const { can } = usePermissions();
     const [menuOpen, setMenuOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -34,10 +36,9 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
         closeTimer.current = setTimeout(() => setMenuOpen(false), 120);
     };
 
-    const canSeeCompany = role ? isManagementRole(role) : true;
     const groups = STUDIO_GROUPS.map(g => ({
         ...g,
-        features: g.features.filter(f => canSeeCompany || !f.companyOnly),
+        features: g.features.filter(f => can(f.requires)),
     })).filter(g => g.features.length > 0);
 
     const pickFeature = (featureId: string, href?: string) => {

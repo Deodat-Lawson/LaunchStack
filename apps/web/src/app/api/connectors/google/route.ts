@@ -6,7 +6,12 @@
  */
 import { NextResponse } from "next/server";
 
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { db } from "~/server/db";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 import { isDriveLinkingEnabled } from "~/server/services/google-drive/config";
 import {
     disconnectGoogleConnections,
@@ -31,15 +36,19 @@ export async function GET() {
 }
 
 export async function DELETE() {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return ctx.response;
-    if (!isManagementRole(ctx.data.role)) {
-        return NextResponse.json(
-            { error: "Forbidden: owner or admin role required" },
-            { status: 403 }
-        );
-    }
 
     const revoked = await disconnectGoogleConnections(BigInt(ctx.data.companyId));
+    if (revoked > 0) {
+        await recordAuditEvent(db, {
+            companyId: ctx.data.companyId,
+            actorUserId: ctx.data.authUserId,
+            action: "connector.disconnected",
+            targetType: "connector",
+            targetId: "google-drive",
+            detail: { revoked },
+        });
+    }
     return NextResponse.json({ success: true, revoked });
 }

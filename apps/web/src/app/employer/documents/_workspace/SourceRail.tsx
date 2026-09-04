@@ -20,6 +20,7 @@ import {
     IconShield,
     IconX,
 } from "./icons";
+import { Lock } from "lucide-react";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { ContextMenu } from "./ContextMenu";
 import {
@@ -225,6 +226,18 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
                             lineHeight: 1.35,
                         }}
                     >
+                        {source.restricted && (
+                            <Lock
+                                size={10}
+                                aria-label="Restricted"
+                                style={{
+                                    display: "inline-block",
+                                    verticalAlign: "-1px",
+                                    marginRight: 4,
+                                    color: "var(--ink-3)",
+                                }}
+                            />
+                        )}
                         {source.title}
                     </div>
                     {(visibleTags.length > 0 ||
@@ -325,7 +338,7 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
 }
 
 interface FolderHeaderProps {
-    folder: { name: string; id?: string; color?: string };
+    folder: { name: string; id?: string; color?: string; restricted?: boolean };
     items: WorkspaceSource[];
     count: number;
     collapsed: boolean;
@@ -418,6 +431,13 @@ function FolderHeader({
                 >
                     {folder.name}
                 </span>
+                {folder.restricted && (
+                    <Lock
+                        size={10}
+                        aria-label="Restricted folder"
+                        style={{ color: "var(--ink-3)", flexShrink: 0 }}
+                    />
+                )}
                 {onRename && hover && (
                     <button
                         onClick={e => {
@@ -463,8 +483,12 @@ export interface SourceRailProps {
     onOpenSource?: (source: WorkspaceSource) => void;
     onNewFolder?: () => void;
     onRenameFolder?: (folder: WorkspaceFolder) => void;
+    /** "Share folder…" — who in the workspace can see this folder. */
+    onShareFolder?: (folder: WorkspaceFolder) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
+    /** "Restrict access…" — who can see this one document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
     activeFolder: string | null;
     setActiveFolder: Dispatch<SetStateAction<string | null>>;
@@ -497,8 +521,10 @@ export function SourceRail({
     onOpenSource,
     onNewFolder,
     onRenameFolder,
+    onShareFolder,
     onMoveToFolder,
     onRenameSource,
+    onRestrictAccess,
     onDeleteSource,
     activeFolder,
     setActiveFolder,
@@ -534,6 +560,7 @@ export function SourceRail({
                 onCopyTitle: source => {
                     void copyText(source.title);
                 },
+                onRestrictAccess,
                 onDelete: onDeleteSource,
             });
         }
@@ -544,6 +571,7 @@ export function SourceRail({
             const match = folders.find(f => f.name === menu.folderName);
             return buildFolderMenuItems(menu.folderName, {
                 onRename: onRenameFolder && match ? () => onRenameFolder(match) : undefined,
+                onShare: onShareFolder && match ? () => onShareFolder(match) : undefined,
                 onSelectAll: add => {
                     setSelected(prev => {
                         if (add) {
@@ -567,9 +595,11 @@ export function SourceRail({
         selected,
         onOpenSource,
         onRenameSource,
+        onRestrictAccess,
         onMoveToFolder,
         onDeleteSource,
         onRenameFolder,
+        onShareFolder,
         onOpenAdd,
         onNewFolder,
         setSelected,

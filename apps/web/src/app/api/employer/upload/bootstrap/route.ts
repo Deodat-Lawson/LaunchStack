@@ -3,12 +3,15 @@ import { and, eq } from "drizzle-orm";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { category, company } from "@launchstack/store/schema";
+import { folderSettings } from "~/server/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 
 type BootstrapCategory = {
     id: string;
     name: string;
+    /** True when the folder is restricted to the people granted access. */
+    restricted: boolean;
 };
 
 type BootstrapCompany = {
@@ -33,12 +36,10 @@ type UploadBootstrapResponse = {
 
 export async function GET() {
     try {
-        const ctx = await requireWorkspaceContext();
+        // Exposes storage configuration and every folder name, so it sits at
+        // the settings tier rather than behind `documents.upload`.
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ error: "Owner or admin access required." }, { status: 403 });
-        }
 
         const companyId = ctx.data.companyId;
 
@@ -47,8 +48,10 @@ export async function GET() {
                 .select({
                     id: category.id,
                     name: category.name,
+                    restricted: folderSettings.categoryId,
                 })
                 .from(category)
+                .leftJoin(folderSettings, eq(folderSettings.categoryId, category.id))
                 .where(eq(category.companyId, companyId)),
             db
                 .select({
@@ -65,6 +68,7 @@ export async function GET() {
             categories: categoriesRaw.map(item => ({
                 id: String(item.id),
                 name: item.name,
+                restricted: item.restricted != null,
             })),
             company: companyRaw[0]
                 ? {

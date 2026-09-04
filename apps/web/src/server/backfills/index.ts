@@ -10,6 +10,7 @@ import {
     countUsersMissingMembership,
     provisionMissingMemberships,
 } from "./user-company-memberships";
+import { applyWorkspaceAccessBackfill, countWorkspaceAccessRows } from "./workspace-access";
 
 /**
  * The backfill registry.
@@ -166,9 +167,33 @@ const userCompanyMembershipsBackfill: Backfill = {
     },
 };
 
+/**
+ * Move what the legacy `users.status` / `users.role` columns and the old
+ * `editor` / `employer` / `employee` slugs still expressed onto membership
+ * rows and join links, now that only those are read. See ./workspace-access.ts
+ * and its SQL twin src/server/backfills/sql/workspace-access.sql.
+ */
+const workspaceAccessBackfill: Backfill = {
+    id: "2026-09-workspace-access",
+    description:
+        "Per-workspace pending status, editor→member, and legacy join-link roles (employer/employee/owner)",
+    requiresEngine: false,
+    requiresMigration: "20260903024746_workspace_access",
+
+    estimate: ({ db }) => countWorkspaceAccessRows(db),
+
+    async step({ db }) {
+        const remaining = await countWorkspaceAccessRows(db);
+        await applyWorkspaceAccessBackfill(db);
+        // Three set-based statements cover every row; there is never a resume point.
+        return { cursor: null, processed: remaining };
+    },
+};
+
 export const BACKFILLS: Backfill[] = [
     noteEmbeddings,
     documentVersionsBackfill,
     fileUploadsCompanyId,
     userCompanyMembershipsBackfill,
+    workspaceAccessBackfill,
 ];

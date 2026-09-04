@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { Permission } from "~/lib/authz/permissions";
+import { usePermissions } from "~/lib/use-permissions";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
@@ -65,6 +67,7 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         folder: doc.category ?? "Unfiled",
         tags: [],
         domain: "General",
+        restricted: doc.restricted === true,
     };
 }
 
@@ -74,8 +77,14 @@ export interface UseWorkspaceDataResult {
     loading: boolean;
     error: string | null;
     companyId: number | null;
-    /** DB role of the current user (`employer`, `owner`, `employee`, or null while loading). */
-    role: string | null;
+    /**
+     * What the signed-in person may do here. `can` answers false until the
+     * permissions have loaded, so anything gated on it fails closed.
+     */
+    permissions: ReadonlySet<Permission>;
+    can: (permission: Permission | undefined) => boolean;
+    /** True once the permission answer has arrived (even if it was "nothing"). */
+    permissionsLoaded: boolean;
     refresh: () => Promise<void>;
     /** Optimistically insert a row before the backend confirms it. */
     addOptimistic: (source: WorkspaceSource) => void;
@@ -85,6 +94,8 @@ interface CategoryRow {
     id: number;
     name: string;
     companyId: number;
+    /** Only people, groups, or roles with a grant can see this folder. */
+    restricted?: boolean;
 }
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
@@ -93,8 +104,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [companyId, setCompanyId] = useState<number | null>(null);
-    const [role, setRole] = useState<string | null>(null);
+    // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
+    // AskPanel scopes to and the permission set come from the same answer.
+    const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
 
     const refresh = useCallback(async () => {
         if (!userId) return;
@@ -126,32 +138,10 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         }
     }, [userId]);
 
-    // Fetch company context so AskPanel can scope queries correctly.
-    const resolveCompany = useCallback(async () => {
-        if (!userId) return;
-        try {
-            const response = await fetch("/api/fetchUserInfo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: "{}",
-            });
-            if (!response.ok) return;
-            const data = (await response.json()) as {
-                companyId?: number | string;
-                role?: string;
-            };
-            if (data?.companyId != null) setCompanyId(Number(data.companyId));
-            if (typeof data?.role === "string") setRole(data.role);
-        } catch {
-            // non-fatal — AskPanel falls back to document-scoped queries
-        }
-    }, [userId]);
-
     useEffect(() => {
         if (!userId) return;
         void refresh();
-        void resolveCompany();
-    }, [userId, refresh, resolveCompany]);
+    }, [userId, refresh]);
 
     const sources = useMemo<WorkspaceSource[]>(
         () => [...optimistic, ...documents.map(mapDocument)],
@@ -162,7 +152,12 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         const seen = new Map<string, WorkspaceFolder>();
         // Seed with every category so empty folders render in the rail.
         for (const c of categories) {
-            seen.set(c.name, { id: `cat-${c.id}`, name: c.name, color: folderColor(c.name) });
+            seen.set(c.name, {
+                id: `cat-${c.id}`,
+                name: c.name,
+                color: folderColor(c.name),
+                restricted: c.restricted === true,
+            });
         }
         for (const src of sources) {
             const name = src.folder || "Unfiled";
@@ -183,7 +178,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         loading,
         error,
         companyId,
-        role,
+        permissions,
+        can,
+        permissionsLoaded,
         refresh,
         addOptimistic,
     };

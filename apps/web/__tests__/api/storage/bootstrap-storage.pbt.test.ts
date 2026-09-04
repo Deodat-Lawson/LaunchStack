@@ -3,25 +3,32 @@
  * Feature: storage unification (s3 + database fallback)
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+import type * as WorkspaceContextHelper from "../../helpers/workspace-context";
+
 import * as fc from "fast-check";
 
 // ─── Mock dependencies ──────────────────────────────────────────────────────
 
-// The route takes identity, tenant, and role from requireWorkspaceContext.
-// A management role is required, so the stub reports "owner".
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: jest.fn().mockResolvedValue({
-        success: true,
-        data: {
-            authUserId: "test-user-123",
-            userPk: BigInt(1),
-            companyId: BigInt(1),
-            role: "owner",
-            status: "verified",
-        },
-    }),
-    isManagementRole: (role: string) => role === "owner" || role === "admin",
-}));
+// The route takes identity, tenant, and permissions from the workspace
+// context. `settings.manage` is required, so the stub reports an owner.
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => ({
+            success: true,
+            data: jest
+                .requireActual<typeof WorkspaceContextHelper>("../../helpers/workspace-context")
+                .makeWorkspaceContext({
+                    authUserId: "test-user-123",
+                    userPk: BigInt(1),
+                    companyId: BigInt(1),
+                    role: "owner",
+                }),
+        }))
+);
 
 // The route reads validated env (~/env) for availableProviders.docling; the
 // real module runs zod validation + import.meta at load time, so mock it.
@@ -50,6 +57,7 @@ jest.mock("@launchstack/store/schema", () => ({
 // modules run drizzle table builders at load time — stub it out.
 jest.mock("~/server/db/schema", () => ({
     users: { userId: "userId", role: "role", companyId: "companyId" },
+    folderSettings: { categoryId: "folder_settings.category_id" },
 }));
 
 jest.mock("~/lib/storage", () => ({
@@ -94,8 +102,14 @@ function mockCreateDb() {
                 };
 
                 return {
-                    from: jest.fn().mockReturnValue({
-                        where: jest.fn().mockReturnValue(whereResult),
+                    // The category query LEFT JOINs folder_settings to report
+                    // `restricted`; the join returns the same builder.
+                    from: jest.fn().mockImplementation(() => {
+                        const builder: Record<string, unknown> = {
+                            where: jest.fn().mockReturnValue(whereResult),
+                        };
+                        builder.leftJoin = jest.fn().mockReturnValue(builder);
+                        return builder;
                     }),
                 };
             }),

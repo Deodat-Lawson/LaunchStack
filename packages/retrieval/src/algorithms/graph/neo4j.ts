@@ -22,6 +22,8 @@ import { document, documentSections } from "@launchstack/store/schema";
 import { inArray, and, eq, sql, type SQLWrapper } from "drizzle-orm";
 import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/indexing/knowledge-graph";
 import neo4j, { type Session } from "neo4j-driver";
+import type { DocumentScope } from "../../search-types";
+import { documentScopeSql } from "../scope";
 
 const currentVersionPredicate = (
     versionColumn: SQLWrapper,
@@ -33,6 +35,8 @@ interface Neo4jGraphRetrieverConfig extends BaseRetrieverInput {
     maxHops?: number;
     topK?: number;
     documentIds?: number[];
+    /** The caller's document scope; applied where section text is read from Postgres. */
+    scope?: DocumentScope;
 }
 
 export class Neo4jGraphRetriever extends BaseRetriever {
@@ -42,6 +46,7 @@ export class Neo4jGraphRetriever extends BaseRetriever {
     private maxHops: number;
     private topK: number;
     private documentIds?: number[];
+    private scope?: DocumentScope;
 
     constructor(config: Neo4jGraphRetrieverConfig) {
         super(config);
@@ -49,6 +54,7 @@ export class Neo4jGraphRetriever extends BaseRetriever {
         this.maxHops = config.maxHops ?? 1;
         this.topK = config.topK ?? 10;
         this.documentIds = config.documentIds;
+        this.scope = config.scope;
     }
 
     async _getRelevantDocuments(
@@ -171,12 +177,15 @@ export class Neo4jGraphRetriever extends BaseRetriever {
             whereClause = and(whereClause, inArray(documentSections.documentId, docBigInts))!;
         }
 
+        // Neo4j only holds ids; the scope is applied here, where the section
+        // text is read, so a restricted document's mentions surface nothing.
         const rows = await getDb()
             .select({
                 id: documentSections.id,
                 content: documentSections.content,
                 pageNumber: documentSections.pageNumber,
                 documentId: documentSections.documentId,
+                category: document.category,
             })
             .from(documentSections)
             .innerJoin(document, eq(documentSections.documentId, document.id))
@@ -184,7 +193,8 @@ export class Neo4jGraphRetriever extends BaseRetriever {
                 and(
                     whereClause,
                     eq(document.companyId, BigInt(this.companyId)),
-                    currentVersionPredicate(documentSections.versionId)
+                    currentVersionPredicate(documentSections.versionId),
+                    documentScopeSql(this.scope)
                 )
             )
             .limit(this.topK);
@@ -197,6 +207,7 @@ export class Neo4jGraphRetriever extends BaseRetriever {
                         chunkId: row.id,
                         page: row.pageNumber,
                         documentId: Number(row.documentId),
+                        category: row.category,
                         source: "neo4j_graph_retriever",
                         searchScope: "multi-document",
                         retrievalMethod: "graph_traversal",
@@ -212,6 +223,7 @@ export function createNeo4jGraphRetriever(
         documentIds?: number[];
         maxHops?: number;
         topK?: number;
+        scope?: DocumentScope;
     }
 ): Neo4jGraphRetriever {
     return new Neo4jGraphRetriever({
@@ -219,6 +231,7 @@ export function createNeo4jGraphRetriever(
         documentIds: options?.documentIds,
         maxHops: options?.maxHops,
         topK: options?.topK,
+        scope: options?.scope,
     });
 }
 

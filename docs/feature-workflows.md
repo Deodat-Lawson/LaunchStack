@@ -6,7 +6,7 @@ This document explains how major Launchstack features connect end to end.
 
 Launchstack follows this loop:
 
-1. Authenticate user with role context (Employer/Employee)
+1. Authenticate user and resolve their workspace membership (role, permissions, document scope)
 2. Upload document — the web app writes the source version **and** a
    `source.version.created` row into the transactional outbox
    (`pdr_ai_v2_event_outbox`) in one transaction ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md))

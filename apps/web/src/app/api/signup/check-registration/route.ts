@@ -8,9 +8,9 @@ import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 /**
  * GET /api/signup/check-registration
- * Auth required – checks whether the signed-in user already
- * has a record in the `users` table (i.e. is already registered
- * with a company).
+ * Auth required – whether the signed-in user already has a `users` row, and
+ * the name of their default workspace when they do. The membership row, not
+ * the legacy `users.role`, says what they may do there.
  */
 export async function GET() {
     try {
@@ -21,7 +21,6 @@ export async function GET() {
         const [existingUser] = await db
             .select({
                 id: users.id,
-                role: users.role,
                 companyId: users.companyId,
             })
             .from(users)
@@ -39,7 +38,6 @@ export async function GET() {
 
         return createSuccessResponse({
             registered: true,
-            role: existingUser.role,
             companyName: companyRecord?.name ?? "Unknown",
         });
     } catch (error: unknown) {

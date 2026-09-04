@@ -11,17 +11,33 @@
  * (e.g. pure ingestion) without special-casing.
  */
 
+import type { DocumentScope } from "./search-types";
+
+export type { DocumentScope };
+
 export interface RagPort {
     /**
      * Run company-scoped ensemble search — BM25 + vector + optional rerank +
      * optional graph retriever, all fused via RRF. Returns top-K chunks
-     * across the company's full corpus.
+     * across the company's corpus, narrowed by `options.scope` when given.
+     *
+     * @deprecated There is no company-wide search: a search is always over a
+     * set of document ids, and "everything" is the set of ids in the caller's
+     * document scope. Resolve the readable ids and use the multi-document
+     * search. Kept as a defence for callers that act for a workspace rather
+     * than a person (pipelines).
      */
     companyEnsembleSearch(query: string, options: CompanySearchOptions): Promise<RagSearchResult[]>;
 }
 
 export interface CompanySearchOptions {
     companyId: number;
+    /**
+     * The caller's document scope (folder names and document ids). The host
+     * resolves it per request and every company-scoped leg filters by it.
+     * Omitted means the whole company corpus — for workspace-level callers only.
+     */
+    scope?: DocumentScope;
     topK?: number;
     /** Rank-fusion weights (length must match the number of retrievers). */
     weights?: number[];
@@ -56,6 +72,8 @@ export interface RagSearchMetadata {
     page?: number;
     documentId?: number;
     documentTitle?: string;
+    /** `document.category` — the folder — so a consumer can gate on scope without a lookup. */
+    category?: string;
     distance?: number;
     confidence?: number;
     source?: string;

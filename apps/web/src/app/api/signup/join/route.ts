@@ -1,94 +1,31 @@
-import { db } from "~/server/db";
-import { company } from "@launchstack/store/schema";
-import { users, inviteCodes, userCompanyMemberships } from "~/server/db/schema";
-import { and, eq } from "drizzle-orm";
-import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
-import { validateRequestBody, JoinWithInviteSchema } from "~/lib/validation";
-import { requireAuthIdentity } from "~/lib/require-workspace-context";
+import { NextResponse } from "next/server";
 
+import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
+import { JoinWithInviteSchema } from "~/lib/validation";
+import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
+import { acceptJoinLink } from "~/server/workspace/join-links";
+import { requireSessionUser } from "~/server/workspace/session";
+
+/**
+ * Alias of POST /api/workspace/join-links/accept for the signup form, which
+ * posts `{ name, email, inviteCode }`. Already-registered accounts join too:
+ * a person may belong to several workspaces. The session's email is the one
+ * that counts; the body's is accepted for compatibility and not used.
+ */
 export async function POST(request: Request) {
+    const user = await requireSessionUser();
+    if (!user.success) return user.response;
+    const body = await parseJsonBody(request, JoinWithInviteSchema);
+    if (!body.success) return body.response;
     try {
-        const identity = await requireAuthIdentity();
-        if (!identity.success) return identity.response;
-
-        const validation = await validateRequestBody(request, JoinWithInviteSchema);
-        if (!validation.success) return validation.response;
-        const { name, email, inviteCode } = validation.data;
-        const userId = identity.data.authUserId;
-
-        // Find the active invite code
-        const [codeRecord] = await db
-            .select({
-                id: inviteCodes.id,
-                companyId: inviteCodes.companyId,
-                role: inviteCodes.role,
-                isActive: inviteCodes.isActive,
-            })
-            .from(inviteCodes)
-            .where(
-                and(eq(inviteCodes.code, inviteCode.toUpperCase()), eq(inviteCodes.isActive, true))
-            );
-
-        if (!codeRecord) {
-            return createValidationError(
-                "Invalid or expired invite code. Please check the code and try again."
-            );
-        }
-
-        // Verify the company exists
-        const [companyRecord] = await db
-            .select({ id: company.id, name: company.name })
-            .from(company)
-            .where(eq(company.id, Number(codeRecord.companyId)));
-
-        if (!companyRecord) {
-            return createValidationError("The company associated with this code no longer exists.");
-        }
-
-        // Check if user already exists in the system
-        const [existingUser] = await db
-            .select({ id: users.id })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (existingUser) {
-            return createValidationError("You are already registered. Please sign in instead.");
-        }
-
-        // Insert new user with the role from the invite code
-        const [insertedUser] = await db
-            .insert(users)
-            .values({
-                userId,
-                name,
-                email,
-                companyId: codeRecord.companyId,
-                status: "pending",
-                role: codeRecord.role,
-            })
-            .returning({ id: users.id });
-
-        if (insertedUser) {
-            const membershipRole =
-                codeRecord.role === "employer" || codeRecord.role === "owner" ? "owner" : "editor";
-            await db.insert(userCompanyMemberships).values({
-                userId: BigInt(insertedUser.id),
-                companyId: codeRecord.companyId,
-                role: membershipRole,
-            });
-        }
-
-        const redirectPath =
-            codeRecord.role === "employee"
-                ? "/employee/pending-approval"
-                : "/employer/pending-approval";
-
-        return createSuccessResponse(
-            { userId, role: codeRecord.role, companyName: companyRecord.name, redirectPath },
-            `Successfully joined as ${codeRecord.role}. Awaiting approval.`
-        );
-    } catch (error: unknown) {
-        console.error("Error during invite code signup:", error);
-        return handleApiError(error);
+        const result = await acceptJoinLink(user.data, {
+            code: body.data.inviteCode,
+            name: body.data.name,
+        });
+        const response = NextResponse.json(result);
+        setActiveWorkspaceCookie(response, BigInt(result.companyId));
+        return response;
+    } catch (error) {
+        return workspaceErrorResponse(error, "[signup/join POST]");
     }
 }

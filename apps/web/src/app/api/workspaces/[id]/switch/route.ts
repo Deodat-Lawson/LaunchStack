@@ -32,7 +32,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
         }
 
         const [membership] = await db
-            .select({ id: userCompanyMemberships.id })
+            .select({ id: userCompanyMemberships.id, status: userCompanyMemberships.status })
             .from(userCompanyMemberships)
             .where(
                 and(
@@ -47,15 +47,26 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
                 { status: 403 }
             );
         }
+        if (membership.status === "suspended") {
+            return NextResponse.json(
+                { error: "Your membership in this workspace is suspended" },
+                { status: 403 }
+            );
+        }
 
         await db
             .update(userCompanyMemberships)
             .set({ lastOpenedAt: sql`CURRENT_TIMESTAMP` })
             .where(eq(userCompanyMemberships.id, membership.id));
 
+        // A pending member may switch; the middleware keeps them on the
+        // pending page until someone approves them.
         const response = NextResponse.json({
             success: true,
-            redirectTo: "/employer/documents",
+            redirectTo:
+                membership.status === "pending"
+                    ? "/employer/pending-approval"
+                    : "/employer/documents",
         });
         setActiveWorkspaceCookie(response, companyId);
         return response;

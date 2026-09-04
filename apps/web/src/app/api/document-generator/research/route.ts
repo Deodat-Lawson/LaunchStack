@@ -9,8 +9,12 @@
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { companyEnsembleSearch } from "~/server/rag/ensemble";
-import type { CompanySearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
+import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
+import type { MultiDocSearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
+import { document } from "@launchstack/store/schema";
+import { db } from "~/server/db";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { gateChunksByScope } from "~/server/rag/gate";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -218,6 +222,9 @@ export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        if (!ctx.data.can("documents.read")) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
 
         const body = (await request.json()) as unknown;
         const validation = ResearchSchema.safeParse(body);
@@ -241,24 +248,38 @@ export async function POST(request: Request) {
             const documentSearchPromise = (async () => {
                 try {
                     const embeddings = getEmbeddings();
-                    const companyId = Number(ctx.data.companyId);
 
-                    if (Number.isNaN(companyId)) {
-                        console.warn("Invalid company ID for document search");
+                    // There is no company-wide search: research runs over
+                    // the set of documents the caller may read, through the
+                    // same multi-document path every other question uses.
+                    const scope = await ctx.data.documentScope();
+                    const readable = await db
+                        .select({ id: document.id })
+                        .from(document)
+                        .where(scopedDocumentWhere(ctx.data.companyId, scope));
+                    const documentIds = readable.map(row => Number(row.id));
+                    if (documentIds.length === 0) {
+                        console.log("📚 [Research] No readable documents for this member");
                         return;
                     }
 
-                    const searchOptions: CompanySearchOptions = {
+                    const searchOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: Math.min(maxResults, 10),
-                        companyId,
+                        documentIds,
+                        companyId: Number(ctx.data.companyId),
                     };
 
-                    const searchResults: SearchResult[] = await companyEnsembleSearch(
+                    const retrieved: SearchResult[] = await multiDocEnsembleSearch(
                         query,
                         searchOptions,
                         embeddings
                     );
+                    const searchResults = await gateChunksByScope(retrieved, {
+                        companyId: ctx.data.companyId,
+                        scope,
+                        searchScope: "research",
+                    });
 
                     for (let i = 0; i < searchResults.length; i++) {
                         const result = searchResults[i];

@@ -138,3 +138,63 @@ describe("buildBlankRailMenuItems", () => {
         expect(items.map(item => item.id)).toEqual(["add", "new-folder"]);
     });
 });
+
+describe("access items", () => {
+    it("offers Restrict access only when a handler is wired, after copy and before delete", () => {
+        const onRestrictAccess = jest.fn();
+        const file = source();
+        const items = buildSourceMenuItems(file, folders, [], {
+            onCopyTitle: jest.fn(),
+            onRestrictAccess,
+            onDelete: jest.fn(),
+        });
+        expect(items.map(item => item.id)).toEqual([
+            "title",
+            "sep-modify",
+            "copy",
+            "access",
+            "sep-danger",
+            "delete",
+        ]);
+        const access = items.find(item => item.id === "access");
+        expect(access?.type === "item" && access.label).toBe("Restrict access…");
+        expect(access?.type === "item" && access.icon).toBe("lock");
+        if (access?.type === "item") access.onSelect();
+        expect(onRestrictAccess).toHaveBeenCalledWith(file);
+    });
+
+    it("reads Change access once the document is already restricted", () => {
+        const items = buildSourceMenuItems(source({ restricted: true }), folders, [], {
+            onRestrictAccess: jest.fn(),
+        });
+        const access = items.find(item => item.id === "access");
+        expect(access?.type === "item" && access.label).toBe("Change access…");
+    });
+
+    it("waits for indexing before offering access changes", () => {
+        const items = buildSourceMenuItems(source({ documentId: undefined }), folders, [], {
+            onRestrictAccess: jest.fn(),
+        });
+        const access = items.find(item => item.id === "access");
+        expect(access?.type === "item" && access.disabled).toBe(true);
+    });
+
+    it("offers Share folder… on a folder when a handler is wired", () => {
+        const onShare = jest.fn();
+        const items = buildFolderMenuItems("Contracts", {
+            onRename: jest.fn(),
+            onShare,
+            onSelectAll: jest.fn(),
+            selectState: "none",
+        });
+        expect(items.map(item => item.id)).toEqual([
+            "title",
+            "rename-folder",
+            "share-folder",
+            "select-folder",
+        ]);
+        const share = items.find(item => item.id === "share-folder");
+        if (share?.type === "item") share.onSelect();
+        expect(onShare).toHaveBeenCalled();
+    });
+});

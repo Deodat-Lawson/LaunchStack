@@ -7,6 +7,9 @@
  * retiring an agent archives it instead of orphaning past transcripts.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+import type * as WorkspaceContextHelper from "../../helpers/workspace-context";
+
 import type { WorkerNode } from "~/app/employer/documents/_workspace/collab/types";
 
 interface StoredPersona {
@@ -36,26 +39,34 @@ const mockCtx: {
     slack: { canPost: true, canReceive: true, missing: [] },
 };
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () =>
-        mockCtx.userId
-            ? Promise.resolve({
-                  success: true,
-                  data: {
-                      authUserId: mockCtx.userId,
-                      userPk: 1n,
-                      companyId: 7n,
-                      role: "owner",
-                      status: "verified",
-                  },
-              })
-            : Promise.resolve({
-                  success: false,
-                  response: new Response(JSON.stringify({ error: "Unauthorized" }), {
-                      status: 401,
-                  }),
-              }),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() =>
+            mockCtx.userId
+                ? {
+                      success: true,
+                      data: jest
+                          .requireActual<
+                              typeof WorkspaceContextHelper
+                          >("../../helpers/workspace-context")
+                          .makeWorkspaceContext({
+                              authUserId: mockCtx.userId,
+                              userPk: 1n,
+                              companyId: 7n,
+                              role: "owner",
+                          }),
+                  }
+                : {
+                      success: false,
+                      response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                          status: 401,
+                      }),
+                  }
+        )
+);
 
 jest.mock("~/server/collab/slack", () => ({
     getSlackStatus: () => mockCtx.slack,

@@ -3,6 +3,7 @@ import { and, eq, asc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 interface RouteParams {
     params: Promise<{ id: string }>;
@@ -26,7 +27,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
                 currentVersionId: document.currentVersionId,
             })
             .from(document)
-            .where(and(eq(document.id, docId), eq(document.companyId, ctx.data.companyId)));
+            .where(
+                and(
+                    eq(document.id, docId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
         if (!doc) {
             return NextResponse.json({ error: "Document not found" }, { status: 404 });

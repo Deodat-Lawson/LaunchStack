@@ -9,11 +9,12 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, UpdateUploadPreferenceSchema);
@@ -22,10 +23,6 @@ export async function POST(request: Request) {
         }
 
         const { useUploadThing } = validation.data;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
-        }
 
         const updateResult = await db
             .update(company)
@@ -39,6 +36,15 @@ export async function POST(request: Request) {
                 { status: 404 }
             );
         }
+
+        await recordAuditEvent(db, {
+            companyId: ctx.data.companyId,
+            actorUserId: ctx.data.authUserId,
+            action: "settings.changed",
+            targetType: "workspace",
+            targetId: ctx.data.companyId,
+            detail: { keys: ["useUploadThing"] },
+        });
 
         return NextResponse.json({
             success: true,

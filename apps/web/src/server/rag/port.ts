@@ -31,6 +31,7 @@ export function createAppRagPort(): RagPort {
             const embeddings = createOpenAIEmbeddings();
             const appOptions: AppCompanySearchOptions = {
                 companyId: options.companyId,
+                scope: options.scope,
                 topK: options.topK,
                 weights: options.weights,
                 minSimilarity: options.minSimilarity,
@@ -56,6 +57,7 @@ function mapResult(r: AppSearchResult): RagSearchResult {
             page: r.metadata.page,
             documentId: r.metadata.documentId,
             documentTitle: r.metadata.documentTitle,
+            category: r.metadata.category,
             distance: r.metadata.distance,
             confidence: r.metadata.confidence,
             source: r.metadata.source,

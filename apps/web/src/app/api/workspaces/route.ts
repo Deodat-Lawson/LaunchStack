@@ -57,6 +57,7 @@ export async function GET() {
                 description: company.description,
                 swatch: company.swatch,
                 role: userCompanyMemberships.role,
+                status: userCompanyMemberships.status,
                 lastOpenedAt: userCompanyMemberships.lastOpenedAt,
                 memberCount: memberCountSubquery.memberCount,
             })
@@ -82,6 +83,7 @@ export async function GET() {
                 description: r.description,
                 swatch: r.swatch ?? 1,
                 role: r.role,
+                status: r.status,
                 memberCount: Number(r.memberCount ?? 1),
                 lastOpenedAt: r.lastOpenedAt,
                 isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
@@ -118,15 +120,25 @@ export async function POST(request: Request) {
         }
 
         const [user] = await db
-            .select({ id: users.id, name: users.name, email: users.email, status: users.status })
+            .select({ id: users.id })
             .from(users)
             .where(eq(users.userId, authUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
-        if (user.status !== "verified") {
+
+        // A brand-new account may open its first workspace; an account whose
+        // every membership is pending or suspended may not open a side door
+        // around approval. The legacy global `users.status` is not consulted.
+        const memberships = await db
+            .select({ status: userCompanyMemberships.status })
+            .from(userCompanyMemberships)
+            .where(eq(userCompanyMemberships.userId, BigInt(user.id)));
+        if (memberships.length > 0 && !memberships.some(m => m.status === "active")) {
             return NextResponse.json(
-                { error: "Account not verified. Please wait for administrator approval." },
+                {
+                    error: "Your workspace memberships are awaiting approval or suspended. Ask an owner to approve you before creating a workspace.",
+                },
                 { status: 403 }
             );
         }
@@ -154,6 +166,7 @@ export async function POST(request: Request) {
             userId: BigInt(user.id),
             companyId: newCompanyId,
             role: "owner",
+            status: "active",
         });
 
         try {

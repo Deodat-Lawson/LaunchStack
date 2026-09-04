@@ -24,6 +24,18 @@ import {
 } from "~/server/db/schema";
 import { document } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
+
+/**
+ * Documents a `[[Title]]` may resolve to: the workspace's, narrowed to the
+ * caller's scope when the caller is a person. Without a scope (a worker
+ * re-syncing links) the whole workspace is searchable.
+ */
+function linkableDocumentsWhere(companyId: string, scope: DocumentScope | undefined) {
+  const id = BigInt(companyId);
+  return scope ? scopedDocumentWhere(id, scope) : eq(document.companyId, id);
+}
 
 /**
  * Match the GitHub/Notion-flavored `[[Wiki Link]]` syntax. Permits any
@@ -64,6 +76,8 @@ interface ResolveCtx {
   companyId: string | null;
   /** Excluded from match — prevents a note from linking to itself. */
   selfNoteId?: number;
+  /** The caller's document scope; a link may not resolve to a document they cannot see. */
+  scope?: DocumentScope;
 }
 
 interface ResolvedRef {
@@ -93,7 +107,7 @@ async function resolveRefs(
         .from(document)
         .where(
           and(
-            eq(document.companyId, BigInt(ctx.companyId)),
+            linkableDocumentsWhere(ctx.companyId, ctx.scope),
             // varchar lower(title) match
             inArray(sql<string>`lower(${document.title})`, titleLower),
           ),
@@ -155,6 +169,8 @@ interface SyncArgs {
   noteId: number;
   rich: JSONContent | null | undefined;
   companyId: string | null;
+  /** The author's document scope. Routes pass it; a worker without a person may omit it. */
+  scope?: DocumentScope;
 }
 
 /**
@@ -167,6 +183,7 @@ export async function syncNoteLinks(args: SyncArgs): Promise<void> {
   const resolved = await resolveRefs(refs, {
     companyId: args.companyId,
     selfNoteId: args.noteId,
+    scope: args.scope,
   });
 
   await db
@@ -215,7 +232,13 @@ export async function getCompanyIdForUser(
  */
 export async function searchWikiLinkCandidates(
   title: string,
-  ctx: { companyId: string | null; userId: string; limit?: number },
+  ctx: {
+    companyId: string | null;
+    userId: string;
+    limit?: number;
+    /** The caller's document scope; the picker must not offer documents they cannot see. */
+    scope?: DocumentScope;
+  },
 ): Promise<
   Array<
     | {
@@ -237,7 +260,7 @@ export async function searchWikiLinkCandidates(
         .from(document)
         .where(
           and(
-            eq(document.companyId, BigInt(ctx.companyId)),
+            linkableDocumentsWhere(ctx.companyId, ctx.scope),
             sql<boolean>`${document.title} ILIKE ${pattern}`,
           ),
         )

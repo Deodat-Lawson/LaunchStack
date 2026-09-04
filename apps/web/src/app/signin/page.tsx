@@ -2,7 +2,9 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useAuth } from "~/lib/auth-client";
+import { safeNextPath, withNext } from "~/components/auth/next-path";
 import { SignInForm } from "~/app/_components/CredentialsForm";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
@@ -18,6 +20,10 @@ import { LANDING_URL } from "~/config/landing";
  */
 const SigninPage: React.FC = () => {
     const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
+    // `?next=/invite/<token>` and friends. Only a same-origin path is honoured.
+    const searchParams = useSearchParams();
+    const nextParam = searchParams.get("next");
+    const next = safeNextPath(nextParam, "/");
 
     return (
         <div
@@ -89,9 +95,9 @@ const SigninPage: React.FC = () => {
                         {!isAuthLoaded ? (
                             <LoadingState />
                         ) : isSignedIn ? (
-                            <AlreadySignedIn />
+                            <AlreadySignedIn continueHref={next === "/" ? "/workspaces" : next} />
                         ) : (
-                            <SignInForm />
+                            <SignInForm redirectTo={next} />
                         )}
 
                         <div
@@ -104,7 +110,7 @@ const SigninPage: React.FC = () => {
                         >
                             New to Launchstack?{" "}
                             <Link
-                                href="/signup"
+                                href={withNext("/signup", nextParam)}
                                 style={{
                                     color: "var(--accent)",
                                     fontWeight: 600,
@@ -149,7 +155,7 @@ const SigninPage: React.FC = () => {
  * Both are degraded states, so this offers manual versions of the two things
  * the app would otherwise have done automatically.
  */
-function AlreadySignedIn() {
+function AlreadySignedIn({ continueHref }: { continueHref: string }) {
     const { signOut } = useAuth();
     return (
         <div
@@ -172,10 +178,10 @@ function AlreadySignedIn() {
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <Link
-                    href="/workspaces"
+                    href={continueHref}
                     style={{
                         background: "var(--accent)",
-                        color: "#fff",
+                        color: "var(--accent-fg)",
                         fontWeight: 600,
                         fontSize: 13,
                         padding: "9px 16px",

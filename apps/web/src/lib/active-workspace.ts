@@ -2,9 +2,11 @@
  * Active workspace selection.
  *
  * A user can belong to multiple companies via `userCompanyMemberships`. Per
- * request we resolve the active workspace from a signed cookie. Pending
- * accounts may fall back to `users.companyId` before membership provisioning;
- * verified accounts may use that pointer only when a live membership exists.
+ * request we resolve the active workspace from a signed cookie, falling back
+ * to the user's default company (`users.companyId`) when the cookie is absent
+ * or stale. A workspace resolves only when a membership row exists for it —
+ * of any status; whether that membership may act is `requireWorkspaceContext`'s
+ * question, not this module's.
  *
  * Server code that previously did:
  *
@@ -17,7 +19,7 @@
  */
 
 import { cookies } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import type { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
@@ -53,13 +55,12 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
 };
 
 /**
- * Resolve the active companyId for a signed-in user. Pending accounts may use the
- * legacy default without membership; verified accounts receive null unless
- * the cookie or default points to a current membership.
+ * Resolve the active companyId for a signed-in user, or null when neither the
+ * cookie nor the default points at a workspace the user is a member of.
  */
 export async function getActiveCompanyId(authUserId: string): Promise<bigint | null> {
     const [user] = await db
-        .select({ id: users.id, companyId: users.companyId, status: users.status })
+        .select({ id: users.id, companyId: users.companyId })
         .from(users)
         .where(eq(users.userId, authUserId));
 
@@ -67,7 +68,7 @@ export async function getActiveCompanyId(authUserId: string): Promise<bigint | n
         throw new Error("User not found in database");
     }
 
-    return resolveActiveCompanyForUser(BigInt(user.id), user.companyId, user.status);
+    return resolveActiveCompanyForUser(BigInt(user.id), user.companyId);
 }
 
 /**
@@ -79,8 +80,7 @@ export async function getActiveCompanyId(authUserId: string): Promise<bigint | n
  */
 export async function resolveActiveCompanyForUser(
     userPk: number | bigint,
-    defaultCompanyId: number | bigint,
-    status: string
+    defaultCompanyId: number | bigint
 ): Promise<bigint | null> {
     const userPkBig = typeof userPk === "bigint" ? userPk : BigInt(userPk);
     const defaultBig =
@@ -106,10 +106,6 @@ export async function resolveActiveCompanyForUser(
         // cookie points at a workspace the user no longer belongs to; fall through
     }
 
-    if (status === "pending") {
-        return defaultBig;
-    }
-
     const [defaultMembership] = await db
         .select({ companyId: userCompanyMemberships.companyId })
         .from(userCompanyMemberships)
@@ -120,12 +116,24 @@ export async function resolveActiveCompanyForUser(
             )
         );
 
-    return defaultMembership?.companyId ?? null;
+    if (defaultMembership) return defaultMembership.companyId;
+
+    // Neither the cookie nor the default is a live membership. Fall back to
+    // the membership opened most recently so a person whose default workspace
+    // removed them still lands somewhere they belong.
+    const [anyMembership] = await db
+        .select({ companyId: userCompanyMemberships.companyId })
+        .from(userCompanyMemberships)
+        .where(eq(userCompanyMemberships.userId, userPkBig))
+        .orderBy(desc(userCompanyMemberships.lastOpenedAt))
+        .limit(1);
+
+    return anyMembership?.companyId ?? null;
 }
 
 /**
- * Same as getActiveCompanyId but also returns the role for the active
- * workspace. Used by routes that gate writes on workspace role.
+ * Same as getActiveCompanyId but also returns the role and status for the
+ * active workspace. Used by routes that gate writes on workspace role.
  *
  * Throws when the user holds no membership in the resolved company — the
  * legacy `users.role` is a global column and says nothing about what the
@@ -133,7 +141,7 @@ export async function resolveActiveCompanyForUser(
  */
 export async function getActiveCompanyContext(
     authUserId: string
-): Promise<{ companyId: bigint; role: string; userId: bigint }> {
+): Promise<{ companyId: bigint; role: string; status: string; userId: bigint }> {
     const companyId = await getActiveCompanyId(authUserId);
     if (companyId === null) {
         throw new Error(`User ${authUserId} has no active workspace`);
@@ -147,7 +155,7 @@ export async function getActiveCompanyContext(
 
     const userPkBig = BigInt(user.id);
     const [membership] = await db
-        .select({ role: userCompanyMemberships.role })
+        .select({ role: userCompanyMemberships.role, status: userCompanyMemberships.status })
         .from(userCompanyMemberships)
         .where(
             and(
@@ -163,6 +171,7 @@ export async function getActiveCompanyContext(
     return {
         companyId,
         role: membership.role,
+        status: membership.status,
         userId: userPkBig,
     };
 }

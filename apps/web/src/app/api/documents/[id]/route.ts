@@ -2,13 +2,14 @@
  * Document mutation API — per-document lightweight operations.
  *
  * PATCH /api/documents/[id]
- *   Update mutable document fields. Currently supports renaming (`title`).
- *   Employer/owner role required and the document must belong to the user's
- *   company. Returns the updated document row.
+ *   Update mutable document fields: rename (`title`) and move (`category`).
+ *   Needs `documents.edit`, the document must be one the caller can see in
+ *   their workspace, and moving into a restricted folder needs edit access
+ *   to that folder. Returns the updated document row.
  */
 
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
@@ -16,7 +17,9 @@ import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 
 // `title` and `category` columns are both varchar(256) — match schema.
 const PatchDocumentSchema = z.object({
@@ -54,23 +57,22 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             const parsed = parseDocumentId(rawId);
             if (!parsed.ok) return parsed.response;
 
-            const ctx = await requireWorkspaceContext();
+            const ctx = await requireWorkspacePermission("documents.edit");
             if (!ctx.success) return ctx.response;
 
-            if (!isManagementRole(ctx.data.role)) {
-                return NextResponse.json(
-                    { error: "Forbidden: owner or admin role required" },
-                    { status: 403 }
-                );
-            }
-
+            // Scoped in SQL: a cross-company or out-of-scope id reads exactly
+            // like a missing document.
             const [doc] = await db
                 .select()
                 .from(document)
-                .where(eq(document.id, parsed.documentId));
+                .where(
+                    and(
+                        eq(document.id, parsed.documentId),
+                        scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                    )
+                );
 
-            if (!doc || doc.companyId !== ctx.data.companyId) {
-                // Don't leak existence to cross-company requests.
+            if (!doc) {
                 return NextResponse.json({ error: "Document not found" }, { status: 404 });
             }
 
@@ -85,6 +87,12 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
             if (Object.keys(patch).length === 0) {
                 return NextResponse.json({ error: "No mutable fields provided" }, { status: 400 });
+            }
+
+            if (category !== undefined && category !== doc.category) {
+                if (!(await canEditFolder(ctx.data, category))) {
+                    return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                }
             }
 
             const [updated] = await db

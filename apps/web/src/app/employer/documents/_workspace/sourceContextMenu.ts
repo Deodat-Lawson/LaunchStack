@@ -25,7 +25,17 @@ export type SourceContextMenuItem =
           disabledReason?: string;
           checked?: boolean;
           shortcut?: string;
-          icon?: "open" | "ask" | "rename" | "copy" | "delete" | "folder" | "plus" | "check";
+          icon?:
+              | "open"
+              | "ask"
+              | "rename"
+              | "copy"
+              | "delete"
+              | "folder"
+              | "plus"
+              | "check"
+              | "lock"
+              | "share";
           onSelect: () => void;
       }
     | {
@@ -44,6 +54,8 @@ export interface SourceMenuHandlers {
     onRename?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onCopyTitle?: (source: WorkspaceSource) => void;
+    /** Opens the access dialog: who, beyond the folder's audience, may see this document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onDelete?: (source: WorkspaceSource) => void;
 }
 
@@ -130,6 +142,18 @@ export function buildSourceMenuItems(
         });
     }
 
+    if (handlers.onRestrictAccess) {
+        items.push({
+            type: "item",
+            id: "access",
+            label: source.restricted ? "Change access…" : "Restrict access…",
+            icon: "lock",
+            disabled: !persisted,
+            disabledReason: persisted ? undefined : indexingReason,
+            onSelect: () => handlers.onRestrictAccess?.(source),
+        });
+    }
+
     if (handlers.onDelete) {
         items.push({ type: "separator", id: "sep-danger" });
         items.push({
@@ -149,6 +173,8 @@ export function buildSourceMenuItems(
 
 export interface FolderMenuHandlers {
     onRename?: () => void;
+    /** Opens the folder access dialog: everyone in the workspace, or only people added. */
+    onShare?: () => void;
     onSelectAll?: (add: boolean) => void;
     selectState?: "none" | "some" | "all";
 }
@@ -165,6 +191,15 @@ export function buildFolderMenuItems(
             label: "Rename or delete…",
             icon: "rename",
             onSelect: () => handlers.onRename?.(),
+        });
+    }
+    if (handlers.onShare) {
+        items.push({
+            type: "item",
+            id: "share-folder",
+            label: "Share folder…",
+            icon: "share",
+            onSelect: () => handlers.onShare?.(),
         });
     }
     if (handlers.onSelectAll) {

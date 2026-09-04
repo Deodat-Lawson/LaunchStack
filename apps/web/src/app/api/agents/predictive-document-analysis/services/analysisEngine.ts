@@ -24,7 +24,9 @@ import { validatePredictiveAnalysis } from "~/lib/agents/supervisor";
 import pLimit from "p-limit";
 import { db } from "~/server/db/index";
 import { document } from "@launchstack/store/schema";
-import { and, eq, ne } from "drizzle-orm";
+import { and, ne } from "drizzle-orm";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCOPE_EVERYTHING } from "~/lib/authz/scope-types";
 import stringSimilarity from "string-similarity-js";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";
 import { resolveConfiguredChatModel } from "~/lib/models";
@@ -561,6 +563,9 @@ async function enhanceWithCompanyDocuments(
     const references = await extractReferences(allChunks, timeoutMs);
     deduplicateReferences(references);
 
+    // Suggestions are drawn from the requester's scope, so the analysis never
+    // names a document they cannot open.
+    const scope = specification.scope ?? SCOPE_EVERYTHING;
     const otherDocsQuery = await withRetry(() =>
         db
             .select({
@@ -570,7 +575,7 @@ async function enhanceWithCompanyDocuments(
             .from(document)
             .where(
                 and(
-                    eq(document.companyId, BigInt(specification.companyId)),
+                    scopedDocumentWhere(BigInt(specification.companyId), scope),
                     ne(document.id, specification.documentId)
                 )
             )
@@ -584,7 +589,8 @@ async function enhanceWithCompanyDocuments(
                 missing,
                 specification.companyId,
                 specification.documentId,
-                docTitleMap
+                docTitleMap,
+                scope
             );
 
             if (suggestions.length > 0) {

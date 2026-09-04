@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchNotes, type NoteSearchScope } from "~/server/notes/search";
+import { filterNotesByDocumentScope } from "~/server/notes/document-scope";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface Body {
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
     const scope: NoteSearchScope = body.scope ?? "user";
     const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
-    const hits = await searchNotes({
+    const found = await searchNotes({
       userId: ctx.data.authUserId,
       query,
       scope,
@@ -32,6 +33,14 @@ export async function POST(request: Request) {
       companyId: String(ctx.data.companyId),
       topK,
     });
+
+    // A hit on a note anchored to a document outside the caller's scope
+    // would surface that document's quote; drop it.
+    const hits = await filterNotesByDocumentScope(
+      found,
+      ctx.data.companyId,
+      await ctx.data.documentScope(),
+    );
 
     return NextResponse.json({ hits }, { status: 200 });
   } catch (err) {

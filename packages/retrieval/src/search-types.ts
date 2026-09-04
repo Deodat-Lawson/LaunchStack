@@ -32,6 +32,8 @@ export interface BaseSearchMetadata {
      */
     versionId?: number;
     documentTitle?: string;
+    /** `document.category` — the folder — so a consumer can gate on scope without a lookup. */
+    category?: string;
     distance?: number;
     confidence?: number;
     source?: string;
@@ -76,6 +78,34 @@ export interface SearchFilters {
     topicTags?: string[];
 }
 
+/**
+ * Which documents the caller may read, expressed as folder names (the
+ * `document.category` column) and document ids — never as a user, group, or
+ * grant. The host resolves it once per request; every company-scoped leg
+ * turns it into a predicate on the `document` table so out-of-scope chunks
+ * never become candidates. Mirrors the host's `DocumentScope` exactly.
+ *
+ * - `everything`: no filter.
+ * - `except`: allowed unless the category is denied or the id is denied,
+ *   except ids in `allowedDocumentIds`, which are always allowed.
+ * - `only`: allowed iff (category allowed AND id not denied) OR id in
+ *   `allowedDocumentIds`.
+ */
+export type DocumentScope =
+    | { readonly kind: "everything" }
+    | {
+          readonly kind: "except";
+          readonly deniedCategories: readonly string[];
+          readonly deniedDocumentIds: readonly number[];
+          readonly allowedDocumentIds: readonly number[];
+      }
+    | {
+          readonly kind: "only";
+          readonly allowedCategories: readonly string[];
+          readonly deniedDocumentIds: readonly number[];
+          readonly allowedDocumentIds: readonly number[];
+      };
+
 export interface EnsembleSearchOptions {
     weights?: number[];
     topK?: number;
@@ -91,6 +121,12 @@ export interface DocumentSearchOptions extends EnsembleSearchOptions {
 
 export interface CompanySearchOptions extends EnsembleSearchOptions {
     companyId: number;
+    /**
+     * The caller's document scope. Applied to every company-scoped leg
+     * (BM25, vector, graph, notes). Omitted means the whole company corpus —
+     * only correct for callers that act for the workspace, not for a person.
+     */
+    scope?: DocumentScope;
 }
 
 export interface MultiDocSearchOptions extends EnsembleSearchOptions {
@@ -105,6 +141,8 @@ export interface ChunkRow {
     /** Document version the chunk belongs to (for citation anchoring). */
     versionId?: number;
     documentTitle?: string;
+    /** `document.category` — the folder, so consumers can re-check scope without a lookup. */
+    category?: string;
     embedding?: number[];
 }
 

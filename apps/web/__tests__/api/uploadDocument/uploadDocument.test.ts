@@ -1,15 +1,33 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
     processDocumentUpload,
     type DocumentUploadResult,
 } from "~/server/services/document-upload";
+import { canEditFolder } from "~/server/services/folder-access";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: jest.fn(),
+import {
+    makeWorkspaceContext,
+    type WorkspaceContextOverrides,
+} from "../../helpers/workspace-context";
+
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/server/services/folder-access", () => ({
+    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
+    canEditFolder: jest.fn().mockResolvedValue(true),
 }));
 
 jest.mock("~/lib/validation", () => {
@@ -49,22 +67,16 @@ const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
     typeof processDocumentUpload
 >;
 
-const VERIFIED_DATA: WorkspaceContext = {
-    authUserId: "user-1",
-    userPk: BigInt(7),
-    companyId: BigInt(5),
-    role: "owner",
-    status: "verified",
-};
+const canEditFolderMock = canEditFolder as jest.MockedFunction<typeof canEditFolder>;
 
-function mockAuthenticatedContext(overrides?: Partial<WorkspaceContext>) {
-    const data = { ...VERIFIED_DATA, ...overrides };
-    (requireWorkspaceContext as jest.Mock).mockResolvedValue({ success: true, data });
+function mockAuthenticatedContext(overrides?: WorkspaceContextOverrides): WorkspaceContext {
+    const data = makeWorkspaceContext({ authUserId: "user-1", ...overrides });
+    mockRequireWorkspaceContext.mockResolvedValue({ success: true, data });
     return data;
 }
 
 function mockUnauthenticated() {
-    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+    mockRequireWorkspaceContext.mockResolvedValue({
         success: false,
         response: new Response(JSON.stringify({ error: "Unauthorized" }), {
             status: 401,
@@ -107,6 +119,59 @@ function mockUploadResult(overrides: Partial<UploadResult> = {}): UploadResult {
 describe("POST /api/uploadDocument", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        canEditFolderMock.mockResolvedValue(true);
+    });
+
+    it("returns 403 for a viewer (no documents.upload)", async () => {
+        mockAuthenticatedContext({ role: "viewer" });
+
+        const response = await POST(
+            requestFor({
+                documentName: "Example Document",
+                documentUrl: "https://example.com/doc.pdf",
+            })
+        );
+        const json = await response.json();
+
+        expect(response.status).toBe(403);
+        expect(json.permission).toBe("documents.upload");
+        expect(processDocumentUploadMock).not.toHaveBeenCalled();
+    });
+
+    it("refuses a restricted folder the member has no edit grant for", async () => {
+        const ctx = mockAuthenticatedContext({ role: "member" });
+        const body = {
+            documentName: "Board pack",
+            documentUrl: "https://example.com/board.pdf",
+            category: "Board",
+        };
+        mockValidRequest(body);
+        canEditFolderMock.mockResolvedValue(false);
+
+        const response = await POST(requestFor(body));
+        const json = await response.json();
+
+        expect(response.status).toBe(403);
+        expect(json.error).toBe("You do not have edit access to this folder.");
+        expect(canEditFolderMock).toHaveBeenCalledWith(ctx, "Board");
+        expect(processDocumentUploadMock).not.toHaveBeenCalled();
+    });
+
+    it("lets a member with an edit grant upload into a restricted folder", async () => {
+        mockAuthenticatedContext({ role: "member" });
+        const body = {
+            documentName: "Board pack",
+            documentUrl: "https://example.com/board.pdf",
+            category: "Board",
+        };
+        mockValidRequest(body);
+        canEditFolderMock.mockResolvedValue(true);
+        processDocumentUploadMock.mockResolvedValue(mockUploadResult());
+
+        const response = await POST(requestFor(body));
+
+        expect(response.status).toBe(202);
+        expect(processDocumentUploadMock).toHaveBeenCalled();
     });
 
     it("uploads and processes a document successfully", async () => {

@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { Permission } from "~/lib/authz/permissions";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
 // set kept for this file's existing entries (see apps/web/README.md).
 import {
@@ -108,12 +109,16 @@ export interface WorkspaceSource {
     syncing?: boolean;
     /** When true, row is optimistically-rendered and backend hasn't confirmed yet. */
     pending?: boolean;
+    /** Limited to people with an explicit grant, not the whole workspace. */
+    restricted?: boolean;
 }
 
 export interface WorkspaceFolder {
     id: string;
     name: string;
     color: string;
+    /** Visible only to people, groups, or roles granted access. */
+    restricted?: boolean;
 }
 
 export interface ThreadReference {
@@ -278,8 +283,8 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "team",
         label: "Workspace",
         Icon: IconUsers,
-        desc: "Invite codes, roles, approvals",
-        href: "/employer/employees",
+        desc: "People, roles, invitations, audit",
+        href: "/employer/settings#people",
     },
     {
         id: "profile",
@@ -323,8 +328,12 @@ export interface StudioFeature {
      * rather than expanding a pane inside the workspace.
      */
     external?: boolean;
-    /** When true, only visible to owner/admin membership roles — company-level management. */
-    companyOnly?: boolean;
+    /**
+     * Permission a person must hold to see this feature. Checked through
+     * `usePermissions().can(...)`, which answers false until loaded — so a
+     * gated tile never flashes for someone who may not open it.
+     */
+    requires?: Permission;
 }
 
 export interface StudioGroup {
@@ -452,8 +461,8 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "Processing, agents and nodes, integrations, company profile, analytics",
-                companyOnly: true,
+                desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
+                requires: "settings.manage",
             },
         ],
     },

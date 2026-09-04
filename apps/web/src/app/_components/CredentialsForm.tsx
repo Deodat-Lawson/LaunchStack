@@ -25,7 +25,16 @@ function ErrorText({ children }: { children: React.ReactNode }) {
     );
 }
 
-export function SignInForm() {
+export function SignInForm({
+    /**
+     * Where to land after a successful sign-in. Defaults to "/", which the
+     * middleware fans out by membership; an invitation page passes itself so
+     * the person comes straight back to "Join".
+     */
+    redirectTo = "/",
+}: {
+    redirectTo?: string;
+} = {}) {
     const [view, setView] = useState<"signin" | "forgot" | "sent">("signin");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -48,7 +57,7 @@ export function SignInForm() {
         }
         // Full navigation on purpose: middleware routes a fresh session to
         // the right dashboard by DB role.
-        window.location.href = "/";
+        window.location.href = redirectTo;
     };
 
     const submitForgot = async (e: React.FormEvent) => {

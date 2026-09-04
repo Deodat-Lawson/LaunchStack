@@ -17,6 +17,8 @@
  * Validates: Requirements 1.1, 1.4, 1.5, 1.7, 5.2, 5.4
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { NextRequest } from "next/server";
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
@@ -26,9 +28,13 @@ import { NextRequest } from "next/server";
 // Mock the centralized auth+tenant resolver — we control the workspace
 // context (or the failure response) per test.
 const mockRequireWorkspaceContext = jest.fn();
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 // Mock the schema export so drizzle-orm's eq() doesn't fail.
 jest.mock("@launchstack/store/schema", () => ({
@@ -72,6 +78,8 @@ jest.mock("uuid", () => ({
 import { POST, GET } from "~/app/api/client-prospector/route";
 import { GET as GET_JOB } from "~/app/api/client-prospector/[jobId]/route";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 // Build a fake NextRequest with a JSON body.
@@ -95,13 +103,12 @@ async function parseResponse(response: Response) {
 function mockAuthenticatedUser(userId = "user-123", companyId = 1001n) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: userId,
             userPk: BigInt(1),
             companyId,
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
 }
 

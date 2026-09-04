@@ -1,12 +1,19 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { POST } from "~/app/api/artifacts/route";
 import { db } from "~/server/db";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    ...jest.requireActual("~/lib/require-workspace-context"),
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 // Rate limiting is exercised by its own tests; here it just passes through.
 jest.mock("~/lib/rate-limit-middleware", () => ({
@@ -32,13 +39,12 @@ jest.mock("~/server/db", () => ({
 function mockCtx() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user-123",
             userPk: BigInt(7),
             companyId: BigInt(42),
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
 }
 

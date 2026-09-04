@@ -981,6 +981,12 @@ function IconMegaphone() {
 const KP_CSS = `
 .kp-stage {
   position: relative;
+  /* The SVG scales through its viewBox, so its labels shrink with the stage.
+     The HTML cards are positioned in percentages but were sized in fixed px,
+     so their text did not shrink with them — at narrow widths it overran the
+     card and collided with the SVG column labels. Making the stage a query
+     container lets the card type scale on the same basis as the drawing. */
+  container-type: inline-size;
   width: 100%;
   max-width: 1180px;
   margin: 40px auto 0;
@@ -1099,7 +1105,7 @@ const KP_CSS = `
 .kp-card__icon svg { width: 16px; height: 16px; display: block; }
 .kp-card__text { min-width: 0; }
 .kp-card__label {
-  font-size: 12px;
+  font-size: clamp(8px, 1.02cqw, 12px);
   font-weight: 500;
   letter-spacing: -0.005em;
   color: var(--ink);
@@ -1108,7 +1114,7 @@ const KP_CSS = `
   text-overflow: ellipsis;
 }
 .kp-card__meta {
-  font-size: 10px;
+  font-size: clamp(7px, 0.85cqw, 10px);
   color: var(--ink-3);
   font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
   margin-top: 2px;
@@ -1225,8 +1231,7 @@ const KP_CSS = `
   .kp-card { gap: 6px; padding: 5px 7px; border-radius: 8px; }
   .kp-card__icon { width: 20px; height: 20px; border-radius: 5px; }
   .kp-card__icon svg { width: 12px; height: 12px; }
-  .kp-card__label { font-size: 9px; }
-  .kp-card__meta { font-size: 7px; margin-top: 1px; }
+  .kp-card__meta { margin-top: 1px; }
   .kp-embed { padding: 6px 8px; border-radius: 8px; }
   .kp-embed__title { font-size: 9px; }
   .kp-embed__meta { font-size: 7px; }

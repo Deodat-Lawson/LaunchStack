@@ -1,23 +1,24 @@
 import { z } from "zod";
 
-// ─── Location ────────────────────────────────────────────────────────────────
+// ─── Location, planned search, raw result ────────────────────────────────────
+// Canonical shapes live in @launchstack/tools/place-search (distribution
+// design P0). Re-exported under the prospector's historical names so callers
+// keep their import paths.
 
-export const LatLngSchema = z.object({
-    lat: z.number().min(-90).max(90),
-    lng: z.number().min(-180).max(180),
-});
-export type LatLng = z.infer<typeof LatLngSchema>;
-
-export const SearchLocationSchema = z.union([
+export {
     LatLngSchema,
-    z.string().min(1).max(500), // city/region name to geocode
-]);
-export type SearchLocation = z.infer<typeof SearchLocationSchema>;
+    SearchLocationSchema,
+    DEFAULT_SEARCH_RADIUS,
+    MAX_SEARCH_RADIUS,
+    FoursquareCategoryIdSchema,
+} from "@launchstack/tools/place-search";
+export type { LatLng, SearchLocation, RawPlaceResult } from "@launchstack/tools/place-search";
+export type { PlannedPlaceSearch as PlannedSearch } from "@launchstack/tools/place-search";
+
+import { SearchLocationSchema } from "@launchstack/tools/place-search";
+import type { LatLng } from "@launchstack/tools/place-search";
 
 // ─── Input ───────────────────────────────────────────────────────────────────
-
-export const DEFAULT_SEARCH_RADIUS = 5000; // 5km
-export const MAX_SEARCH_RADIUS = 50000; // 50km
 
 export const ProspectorInputSchema = z.object({
     query: z.string().min(1).max(1000),
@@ -28,36 +29,6 @@ export const ProspectorInputSchema = z.object({
     excludeChains: z.boolean().optional(), // exclude chain businesses (default: true)
 });
 export type ProspectorInput = z.infer<typeof ProspectorInputSchema>;
-
-export const FoursquareCategoryIdSchema = z
-    .string()
-    .regex(/^[0-9a-fA-F]+$/, "Expected a valid Foursquare category ID");
-
-// ─── Query Planner ───────────────────────────────────────────────────────────
-
-export interface PlannedSearch {
-    searchQuery: string; // query string for Foursquare
-    categoryIds: string[]; // Foursquare category IDs
-    rationale: string; // why this search is useful
-}
-
-// ─── Raw Place Result (from Foursquare) ──────────────────────────────────────
-
-export interface RawPlaceResult {
-    fsqId: string;
-    name: string;
-    address: string;
-    formattedAddress: string;
-    location: LatLng;
-    categories: Array<{ id: string; name: string }>;
-    phone?: string;
-    website?: string;
-    rating?: number;
-    totalRatings?: number;
-    description?: string;
-    verified?: boolean;
-    distance?: number;
-}
 
 // ─── Scored Result ───────────────────────────────────────────────────────────
 // Canonical shape lives in @launchstack/core/db/schema (source of truth for

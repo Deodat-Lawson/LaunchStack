@@ -12,7 +12,10 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const pkgRoot = join(here, "..");
 
-const ASSET_DIRS = [["src/repo-explainer/skills", "dist/repo-explainer/skills"]];
+const ASSET_DIRS = [
+    ["src/repo-explainer/skills", "dist/repo-explainer/skills"],
+    ["src/distribution/playbook", "dist/distribution/playbook"],
+];
 
 for (const [from, to] of ASSET_DIRS) {
     const source = join(pkgRoot, from);

@@ -153,6 +153,32 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         routes: ["repo-explainer"],
     },
     {
+        id: "repo-workspaces",
+        tier: "tool",
+        summary: "Connect a repository as a synced mirror the repo explainer reads from.",
+        scope: "mixed",
+        feature: "@launchstack/pipelines/repo-workspace",
+        routes: ["repo-workspaces", "webhooks/github"],
+        unscopedRoutes: {
+            "webhooks/github":
+                "GitHub calls it; the request is authenticated by the webhook HMAC signature, not a session, and the workspace is resolved from the payload.",
+        },
+        notes:
+            "Connecting does no git work in the request — it opens a sync request the " +
+            "worker fulfils. The webhook is a latency optimisation; the poll reconciler " +
+            "is the guarantee.",
+    },
+    {
+        id: "distribution",
+        tier: "tool",
+        summary:
+            "Find, qualify and run B2B distribution partners: programs, discovery runs, evidence-backed dossiers, relationship stages, agreements, and an outreach hand-off to email campaigns.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/distribution",
+        routes: ["distribution"],
+        notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -172,22 +198,6 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
             "Bodies are stored inline and rendered in an iframe sandboxed without " +
             "allow-same-origin — the app's one untrusted-HTML surface. The raw route serves " +
             "attachment-only for the same reason.",
-    },
-    {
-        id: "repo-workspaces",
-        tier: "tool",
-        summary: "Connect a git repository; the worker mirrors it and explains it on request.",
-        scope: "mixed",
-        routes: ["repo-workspaces", "webhooks/github"],
-        unscopedRoutes: {
-            "webhooks/github":
-                "A push arrives signed by GitHub, not by a session; the route verifies the " +
-                "signature, records the sync request, and never says whether a repo is connected.",
-        },
-        notes:
-            "Connecting does no git work in the request — it opens a sync request the " +
-            "worker fulfils. The webhook is a latency optimisation; the poll reconciler " +
-            "is the guarantee.",
     },
     {
         id: "notes",

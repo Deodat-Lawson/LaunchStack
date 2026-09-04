@@ -46,11 +46,11 @@ export function MarketingShell({
     return (
         <div className={styles.root}>
             <div className={styles.ambient} aria-hidden="true">
+                {/* Three, not five, and no longer drifting: the wash gives the
+                    page depth, the motion only gave it a tell. */}
                 <div className={`${styles.orb} ${styles.orb1}`} />
                 <div className={`${styles.orb} ${styles.orb2}`} />
                 <div className={`${styles.orb} ${styles.orb3}`} />
-                <div className={`${styles.orb} ${styles.orb4}`} />
-                <div className={`${styles.orb} ${styles.orb5}`} />
                 <div className={styles.ambientDots} />
                 <div className={styles.ambientGrain} />
             </div>

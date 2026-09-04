@@ -71,6 +71,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     metadata: "/employer/documents?feature=metadata",
     "marketing-pipeline": "/employer/tools/marketing-pipeline",
     "repo-explainer": "/employer/tools/repo-explainer",
+    distribution: "/employer/tools/distribution",
     notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",

@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/pipelines",
     "version": "0.1.0",
-    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Ten verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, and the repo explainer.",
+    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Eleven verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, and the distribution pipeline.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,
@@ -44,7 +44,11 @@
         "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
         "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
         "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
+        "./distribution": "./src/distribution/index.ts",
+        "./distribution/db": "./src/distribution/db.ts",
+        "./distribution/schema": "./src/distribution/schema.ts",
+        "./distribution/types": "./src/distribution/types.ts"
     },
     "files": [
         "dist",
@@ -196,7 +200,23 @@
                 "types": "./dist/connectors/agent-sessions/index.d.ts",
                 "default": "./dist/connectors/agent-sessions/index.js"
             },
-            "./package.json": "./package.json"
+            "./package.json": "./package.json",
+            "./distribution": {
+                "types": "./dist/distribution/index.d.ts",
+                "default": "./dist/distribution/index.js"
+            },
+            "./distribution/db": {
+                "types": "./dist/distribution/db.d.ts",
+                "default": "./dist/distribution/db.js"
+            },
+            "./distribution/schema": {
+                "types": "./dist/distribution/schema.d.ts",
+                "default": "./dist/distribution/schema.js"
+            },
+            "./distribution/types": {
+                "types": "./dist/distribution/types.d.ts",
+                "default": "./dist/distribution/types.js"
+            }
         }
     },
     "scripts": {

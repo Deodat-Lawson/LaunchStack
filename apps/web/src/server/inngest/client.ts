@@ -98,6 +98,11 @@ export type FounderWeeklyReviewGenerationEvent = {
     };
 };
 
+export type DistributionRunEvent = {
+    name: "distribution/run.requested";
+    data: import("@launchstack/pipelines/distribution").DistributionRunEventData;
+};
+
 export type GoogleDriveSyncEvent = {
     name: "google-drive/sync.requested";
     data: {
@@ -119,7 +124,8 @@ export type Events =
     | FounderWeeklyReviewGenerationEvent
     | RepoWorkspaceSyncEvent
     | RepoExplainerJobEvent
-    | GoogleDriveSyncEvent;
+    | GoogleDriveSyncEvent
+    | DistributionRunEvent;
 
 /**
  * Create the Inngest client.

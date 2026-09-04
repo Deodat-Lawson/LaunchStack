@@ -138,7 +138,7 @@ describe("Property 4: Specified categories are preserved", () => {
                     const result = await planQueries(query, companyContext, [...categories]);
 
                     expect(result).toHaveLength(plannedQueries.length);
-                    const categorySet = new Set(categories);
+                    const categorySet = new Set<string>(categories);
                     for (const pq of result) {
                         expect(categorySet.has(pq.category)).toBe(true);
                     }

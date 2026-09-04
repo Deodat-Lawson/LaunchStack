@@ -26,6 +26,7 @@ import {
     repoWorkspaceSyncJob,
 } from "~/server/inngest/functions/repoWorkspaceSync";
 import { repoExplainerJob } from "~/server/inngest/functions/repoExplainerJob";
+import { distributionRunJob } from "~/server/inngest/functions/distributionRun";
 import {
     googleDriveSyncCron,
     googleDriveSyncJob,
@@ -50,6 +51,7 @@ export function createInngestHandler() {
             repoExplainerJob,
             googleDriveSyncJob,
             googleDriveSyncCron,
+            distributionRunJob,
         ],
     });
 }

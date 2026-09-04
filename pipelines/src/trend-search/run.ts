@@ -1,6 +1,7 @@
 import { executeSearch } from "@launchstack/tools/web-research";
 import type { PipelineProgressEvent } from "@launchstack/tools/contract";
-import type { PlannedQuery, TrendSearchInput, TrendSearchOutput } from "./types";
+import type { PlannedQuery, SearchCategory, TrendSearchInput, TrendSearchOutput } from "./types";
+import { SearchCategoryEnum } from "./types";
 import { planQueries } from "./query-planner";
 import { synthesizeResults } from "./synthesizer";
 
@@ -60,7 +61,11 @@ export async function runTrendSearch(
         label: STAGE_LABELS.synthesizing,
     });
     const synthStart = Date.now();
-    const resolvedCategories = categories ?? [...new Set(plannedQueries.map(q => q.category))];
+    const resolvedCategories =
+        categories ??
+        [...new Set(plannedQueries.map(q => q.category))].filter(
+            (c): c is SearchCategory => SearchCategoryEnum.safeParse(c).success
+        );
     const results = await synthesizeResults(
         rawResults,
         input.query,

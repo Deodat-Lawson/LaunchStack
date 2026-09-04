@@ -2,7 +2,7 @@
     "name": "@launchstack/tools",
     "version": "0.1.0",
     "type": "module",
-    "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed \u2014 a brick above search, below the pipelines tier.",
+    "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed — a brick above search, below the pipelines tier.",
     "license": "Apache-2.0",
     "engines": {
         "node": ">=20"
@@ -60,7 +60,23 @@
             "types": "./src/stage-runner/index.ts",
             "default": "./src/stage-runner/index.ts"
         },
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
+        "./place-search": {
+            "types": "./src/place-search/index.ts",
+            "default": "./src/place-search/index.ts"
+        },
+        "./org-resolver": {
+            "types": "./src/org-resolver/index.ts",
+            "default": "./src/org-resolver/index.ts"
+        },
+        "./trade-data": {
+            "types": "./src/trade-data/index.ts",
+            "default": "./src/trade-data/index.ts"
+        },
+        "./compliance-screen": {
+            "types": "./src/compliance-screen/index.ts",
+            "default": "./src/compliance-screen/index.ts"
+        }
     },
     "scripts": {
         "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
@@ -142,7 +158,23 @@
                 "types": "./dist/stage-runner/index.d.ts",
                 "default": "./dist/stage-runner/index.js"
             },
-            "./package.json": "./package.json"
+            "./package.json": "./package.json",
+            "./place-search": {
+                "types": "./dist/place-search/index.d.ts",
+                "default": "./dist/place-search/index.js"
+            },
+            "./org-resolver": {
+                "types": "./dist/org-resolver/index.d.ts",
+                "default": "./dist/org-resolver/index.js"
+            },
+            "./trade-data": {
+                "types": "./dist/trade-data/index.d.ts",
+                "default": "./dist/trade-data/index.js"
+            },
+            "./compliance-screen": {
+                "types": "./dist/compliance-screen/index.d.ts",
+                "default": "./dist/compliance-screen/index.js"
+            }
         }
     }
 }

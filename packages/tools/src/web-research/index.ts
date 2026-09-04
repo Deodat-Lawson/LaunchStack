@@ -25,6 +25,7 @@ export { createTtlCache, type TtlCache } from "./cache";
 export { providerRegistry } from "./providers/registry";
 export { callExa } from "./providers/exa";
 export { callSerper } from "./providers/serper";
+export * from "./fetch";
 
 const MAX_RETRIES = 2;
 

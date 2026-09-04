@@ -67,11 +67,6 @@ export const mindmaps = pgTable(
         /** Set when the map has been pushed into the Sources library. */
         publishedDocumentId: bigint("published_document_id", { mode: "bigint" }),
         publishedAt: timestamp("published_at", { withTimezone: true }),
-        /**
-         * The `revision` that was published. When it trails `revision`, the
-         * citable copy is older than the map on screen and the UI says so.
-         */
-        publishedRevision: integer("published_revision"),
 
         /** Soft delete — the list hides these, "Trash" restores them. */
         deletedAt: timestamp("deleted_at", { withTimezone: true }),
@@ -82,6 +77,15 @@ export const mindmaps = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        /**
+         * The `revision` that was published. When it trails `revision`, the
+         * citable copy is older than the map on screen and the UI says so.
+         */
+        publishedRevision: integer("published_revision"),
     },
     table => ({
         companyIdx: index("mindmaps_company_idx").on(table.companyId),

@@ -4,10 +4,18 @@ import { z } from "zod";
 export const SearchCategoryEnum = z.enum(["fashion", "finance", "business", "tech"]);
 export type SearchCategory = z.infer<typeof SearchCategoryEnum>;
 
-/** One planned sub-query, produced by a caller's query planner. */
+/**
+ * One planned sub-query, produced by a caller's query planner.
+ *
+ * `category` is a free label (widened from the four-value enum in the
+ * distribution design P0): trend-search keeps planning within
+ * SearchCategoryEnum; other callers tag queries with their own vocabulary
+ * ("distributor-directory", "brand-locator"). Nothing in this tool branches
+ * on it — it is provenance for the caller.
+ */
 export interface PlannedQuery {
     searchQuery: string;
-    category: SearchCategory;
+    category: SearchCategory | (string & {});
     rationale: string;
 }
 

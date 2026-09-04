@@ -176,17 +176,27 @@ function presetFor(
             return {
                 style: {
                     // A frame is a slightly raised patch of paper, so it tracks
-                    // the paper rather than sitting at a fixed lightness.
-                    fill: mode === "dark" ? "oklch(0.235 0.018 285)" : "oklch(0.985 0.004 280)",
-                    stroke: mode === "dark" ? "oklch(0.36 0.02 285)" : "oklch(0.80 0.01 280)",
-                    strokeWidth: 1,
+                    // the paper rather than sitting at a fixed lightness — but
+                    // it must be *visibly* raised, or placing one reads as the
+                    // tool doing nothing.
+                    fill: mode === "dark" ? "oklch(0.245 0.018 285)" : "oklch(0.972 0.005 280)",
+                    stroke: mode === "dark" ? "oklch(0.42 0.02 285)" : "oklch(0.74 0.012 280)",
+                    strokeWidth: 1.5,
                     radius: 8,
                 },
                 text: { align: "left", valign: "middle", size: 12, color: n.inkSoft },
             };
         case "group":
             return {
-                style: { fill: "none", stroke: "none", strokeWidth: 0 },
+                // A brand-new group has to say it exists: a dashed hairline,
+                // the notation every tool uses for "these belong together".
+                // Zero-weight nothing made the feature look broken.
+                style: {
+                    fill: "none",
+                    stroke: n.hairline,
+                    strokeWidth: 1.5,
+                    strokeStyle: "dashed",
+                },
                 text: {},
             };
         case "swimlane-h":

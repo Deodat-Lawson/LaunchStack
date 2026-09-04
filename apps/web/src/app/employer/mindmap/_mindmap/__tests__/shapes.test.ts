@@ -146,18 +146,50 @@ describe("lookups", () => {
 });
 
 describe("search", () => {
-    it("returns everything for an empty query", () => {
-        expect(searchShapes("  ")).toHaveLength(SHAPES.length);
+    it("returns every offered shape for an empty query", () => {
+        expect(searchShapes("  ")).toHaveLength(SHAPES.filter(s => !s.paletteHidden).length);
     });
 
     it("matches on keywords, not just names", () => {
-        const hits = searchShapes("database").map(s => s.id);
+        const hits = searchShapes("cylinder").map(s => s.id);
+        // The cylinder tile is gone; its name is a keyword on Database.
         expect(hits).toContain("database");
-        // "cylinder" carries `database` as a keyword.
-        expect(hits).toContain("cylinder");
     });
 
     it("matches case-insensitively", () => {
-        expect(searchShapes("DECISION").map(s => s.id)).toContain("decision");
+        expect(searchShapes("DECISION").map(s => s.id)).toContain("diamond");
+    });
+});
+
+describe("the offered palette", () => {
+    const offered = SHAPES.filter(s => !s.paletteHidden);
+    const hidden = SHAPES.filter(s => s.paletteHidden);
+
+    it("never offers two tiles with the same silhouette in the Standard group", () => {
+        // The regression this guards: "Basic" and "Flowchart" used to offer
+        // identical outlines under different names (diamond ≡ decision,
+        // cylinder ≡ database), which made the library read as padded.
+        const seen = new Map<string, string>();
+        for (const shape of offered.filter(s => s.category === "Standard")) {
+            const g = shapeGeometry(shape.id, shape.defaultSize.w, shape.defaultSize.h, 0);
+            if (!g.path && !g.decorations?.length) continue; // pure text marks
+            const signature = [g.path, ...(g.decorations ?? []), ...(g.backing ?? [])].join("|");
+            const prior = seen.get(signature);
+            expect(prior ? `${prior} ≡ ${shape.id}` : shape.id).toBe(shape.id);
+            seen.set(signature, shape.id);
+        }
+    });
+
+    it("keeps every hidden duplicate reachable by its old name", () => {
+        for (const dupe of hidden) {
+            // Searching "decision" must offer the diamond, not nothing.
+            expect(searchShapes(dupe.name).length).toBeGreaterThan(0);
+        }
+    });
+
+    it("still resolves hidden ids, so existing documents render unchanged", () => {
+        for (const dupe of hidden) {
+            expect(shapeDef(dupe.id).id).toBe(dupe.id);
+        }
     });
 });

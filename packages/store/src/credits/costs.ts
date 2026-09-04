@@ -30,6 +30,8 @@ export const TOKEN_COSTS = {
     ocr_native: 0,
     /** Per actual LLM token (prompt + completion, 1:1) */
     llm_chat: 1,
+    /** Per completed distribution-pipeline candidate dossier (flat, debited after the work) */
+    distribution_research: 2_000,
 } as const satisfies Record<TokenService, number>;
 
 /** Calculate embedding token cost from actual token count */

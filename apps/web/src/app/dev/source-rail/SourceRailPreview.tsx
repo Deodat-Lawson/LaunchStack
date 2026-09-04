@@ -2,54 +2,82 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ConfirmActionDialog } from "~/app/employer/documents/_workspace/ConfirmActionDialog";
+import { DeleteFolderDialog } from "~/app/employer/documents/_workspace/DeleteFolderDialog";
+import {
+    FolderDialog,
+    type FolderDialogRequest,
+} from "~/app/employer/documents/_workspace/FolderDialog";
 import { RenameSourceDialog } from "~/app/employer/documents/_workspace/RenameSourceDialog";
 import { SourceRail } from "~/app/employer/documents/_workspace/SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "~/app/employer/documents/_workspace/types";
+import {
+    UNFILED_FOLDER,
+    expandFolderPaths,
+    folderLeafName,
+    folderParentPath,
+    isFolderDescendant,
+    isFolderOrDescendant,
+    joinFolderPath,
+    replaceFolderPrefix,
+} from "~/lib/folders/path";
+
+function src(id: string, title: string, folder: string, added: string): WorkspaceSource {
+    return {
+        id,
+        documentId: Number(id.slice(1)),
+        title,
+        type: "doc",
+        size: "",
+        added,
+        folder,
+        tags: [],
+        domain: "General",
+    };
+}
 
 const FIXTURE_SOURCES: WorkspaceSource[] = [
-    {
-        id: "d1",
-        documentId: 1,
-        title: "Claude Code (global) — projects/-Users-aurea-Pensieve-new-frontend/memory/reference_design_bundles.md",
-        type: "doc",
-        size: "",
-        added: "2h ago",
-        folder: "Launchstack Future Plans 2",
-        tags: ["memory"],
-        domain: "Technical",
-    },
-    {
-        id: "d2",
-        documentId: 2,
-        title: "Claude Code (global) — projects/-Users-aurea-AI-coworker/memory/feedback_parallel_worktree_scopes.md",
-        type: "doc",
-        size: "",
-        added: "Yesterday",
-        folder: "Launchstack Future Plans 2",
-        tags: ["memory"],
-        domain: "Technical",
-    },
+    src("d1", "Globex MSA 2026.pdf", "Contracts/2026", "2h ago"),
+    src("d2", "Initech SOW.docx", "Contracts/2026", "yesterday"),
+    src("d3", "NDA template.docx", "Contracts", "last week"),
+    src("d4", "PickBot v3 field spec.docx", "Engineering/Specs", "3 days ago"),
+    src("d5", "Employee handbook.pdf", "HR", "2 weeks ago"),
+    src(
+        "d6",
+        "Claude Code (global) — projects/-Users-aurea-Pensieve-new-frontend/memory/reference_design_bundles.md",
+        "Unfiled",
+        "just now"
+    ),
 ];
 
-const FIXTURE_FOLDERS: WorkspaceFolder[] = [
-    { id: "cat-1", name: "Launchstack Future Plans 2", color: "oklch(0.6 0.17 285)" },
-    { id: "cat-2", name: "Unfiled", color: "oklch(0.5 0.02 280)" },
-];
+const FIXTURE_FOLDER_PATHS = ["Contracts/Archive", "Engineering/Specs", "HR"];
 
 /**
- * Local harness for the source-rail context menu. Production auth is skipped so
- * the menu can be exercised without a session. Gated by the server page.
+ * Local harness for the source rail: nested folders, folder drag-and-drop,
+ * the folder menu, and the folder dialogs, all against in-memory state so the
+ * whole flow can be exercised without a session. Gated by the server page.
  */
 export function SourceRailPreview() {
     const [sources, setSources] = useState(FIXTURE_SOURCES);
+    const [folderPaths, setFolderPaths] = useState<string[]>(FIXTURE_FOLDER_PATHS);
     const [selected, setSelected] = useState<string[]>([]);
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
+    const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
+    const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
     const [opened, setOpened] = useState<string | null>(null);
 
-    const folders = useMemo(() => FIXTURE_FOLDERS, []);
+    const folders = useMemo<WorkspaceFolder[]>(
+        () =>
+            expandFolderPaths([...folderPaths, ...sources.map(s => s.folder)]).map(name => ({
+                id: `f-${name}`,
+                name,
+                color: "oklch(0.6 0.17 285)",
+            })),
+        [folderPaths, sources]
+    );
+    const allPaths = useMemo(() => folders.map(f => f.name), [folders]);
 
     useEffect(() => {
         if (typeof window === "undefined") return;
@@ -68,6 +96,30 @@ export function SourceRailPreview() {
         return () => window.clearTimeout(timer);
     }, []);
 
+    const renameFolder = (path: string, newPath: string) => {
+        if (allPaths.includes(newPath))
+            return `A folder named "${folderLeafName(newPath)}" already exists there.`;
+        setFolderPaths(prev =>
+            expandFolderPaths([...prev.map(p => replaceFolderPrefix(p, path, newPath)), newPath])
+        );
+        setSources(prev =>
+            prev.map(s => ({ ...s, folder: replaceFolderPrefix(s.folder, path, newPath) }))
+        );
+        if (activeFolder && isFolderOrDescendant(activeFolder, path)) {
+            setActiveFolder(replaceFolderPrefix(activeFolder, path, newPath));
+        }
+        setOpened(`rename-folder:${path}→${newPath}`);
+        return null;
+    };
+
+    const deleteCounts = deleteFolderPath
+        ? {
+              documents: sources.filter(s => isFolderOrDescendant(s.folder, deleteFolderPath))
+                  .length,
+              subfolders: allPaths.filter(p => isFolderDescendant(p, deleteFolderPath)).length,
+          }
+        : { documents: 0, subfolders: 0 };
+
     return (
         <div
             style={{
@@ -83,14 +135,25 @@ export function SourceRailPreview() {
                 setSelected={setSelected}
                 onOpenAdd={() => setOpened("add")}
                 onOpenSource={source => setOpened(`open:${source.title}`)}
-                onNewFolder={() => setOpened("new-folder")}
-                onRenameFolder={folder => setOpened(`rename-folder:${folder.name}`)}
+                onNewFolder={parent =>
+                    setFolderDialog({ mode: "create", parentPath: parent ?? null })
+                }
+                onRenameFolder={folder => setFolderDialog({ mode: "rename", path: folder.name })}
+                onMoveFolder={(path, target) => {
+                    const failure = renameFolder(
+                        path,
+                        joinFolderPath(target, folderLeafName(path))
+                    );
+                    if (failure) setOpened(`error:${failure}`);
+                }}
+                onDeleteFolder={folder => setDeleteFolderPath(folder.name)}
                 onMoveToFolder={(id, name) => {
                     setSources(prev =>
                         prev.map(source =>
                             source.id === id ? { ...source, folder: name } : source
                         )
                     );
+                    setOpened(`move:${id}→${name}`);
                 }}
                 onRenameSource={setRenameSource}
                 onDeleteSource={setDeleteSource}
@@ -102,21 +165,42 @@ export function SourceRailPreview() {
             {opened && (
                 <div
                     data-testid="preview-last-action"
-                    style={{
-                        position: "fixed",
-                        right: 16,
-                        bottom: 16,
-                        padding: "8px 12px",
-                        borderRadius: 8,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        fontSize: 12,
-                        maxWidth: 360,
-                    }}
+                    className="bg-panel border-line fixed bottom-4 right-4 max-w-[360px] rounded-lg border px-3 py-2 text-xs"
                 >
                     {opened}
                 </div>
             )}
+            <FolderDialog
+                request={folderDialog}
+                existingPaths={allPaths}
+                onSubmit={async path => {
+                    if (folderDialog?.mode === "rename")
+                        return renameFolder(folderDialog.path, path);
+                    setFolderPaths(prev => expandFolderPaths([...prev, path]));
+                    setOpened(`create-folder:${path}`);
+                    return null;
+                }}
+                onClose={() => setFolderDialog(null)}
+            />
+            <DeleteFolderDialog
+                path={deleteFolderPath}
+                documentCount={deleteCounts.documents}
+                subfolderCount={deleteCounts.subfolders}
+                onConfirm={async path => {
+                    const destination = folderParentPath(path) ?? UNFILED_FOLDER;
+                    setSources(prev =>
+                        prev.map(s =>
+                            isFolderOrDescendant(s.folder, path) ? { ...s, folder: destination } : s
+                        )
+                    );
+                    setFolderPaths(prev => prev.filter(p => !isFolderOrDescendant(p, path)));
+                    if (activeFolder && isFolderOrDescendant(activeFolder, path))
+                        setActiveFolder(null);
+                    setOpened(`delete-folder:${path}→${destination}`);
+                    return null;
+                }}
+                onClose={() => setDeleteFolderPath(null)}
+            />
             <RenameSourceDialog
                 open={!!renameSource}
                 source={renameSource}

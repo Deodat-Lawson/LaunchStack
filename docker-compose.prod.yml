@@ -80,6 +80,22 @@ services:
   inngest-dev:
     profiles: ["inngest-dev"]
 
+  # The marketing site — the "home page" a signed-out visitor lands on.
+  # apps/web's `/` is the product's front door and redirects to /signin by
+  # design; this serves the public site on its own hostname so a self-hosted
+  # deployment does not have to send people to launchstack.app.
+  landing:
+    build:
+      context: .
+      dockerfile: apps/landing/Dockerfile
+      target: runner
+    container_name: pdr_ai_v2-landing
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_SITE_URL: https://home.${DOMAIN}
+      NEXT_PUBLIC_APP_URL: https://${DOMAIN}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ""
+
   caddy:
     image: caddy:2
     container_name: pdr_ai_v2-caddy

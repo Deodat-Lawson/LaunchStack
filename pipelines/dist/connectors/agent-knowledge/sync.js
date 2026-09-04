@@ -7,7 +7,7 @@
  * a report describing exactly what landed.
  */
 import { collectAgentKnowledge } from "./collect.js";
-import { AGENT_KNOWLEDGE_CONNECTOR_ID, describeError, scanAgentKnowledge } from "./discover.js";
+import { AGENT_KNOWLEDGE_CONNECTOR_ID, describeError, scanAgentKnowledge, } from "./discover.js";
 export const DEFAULT_SYNC_CONCURRENCY = 4;
 async function runWithConcurrency(tasks, limit) {
     const results = new Array(tasks.length);
@@ -16,7 +16,8 @@ async function runWithConcurrency(tasks, limit) {
         while (true) {
             const index = cursor++;
             const task = tasks[index];
-            if (!task) return;
+            if (!task)
+                return;
             results[index] = await task();
         }
     });
@@ -32,7 +33,8 @@ async function storeItem(item, sink, force) {
             }
         }
         return { kind: "stored", value: await sink.store(item) };
-    } catch (error) {
+    }
+    catch (error) {
         return {
             kind: "failed",
             value: { sourceId: item.sourceId, error: describeError(error) },
@@ -49,17 +51,17 @@ export async function syncAgentKnowledge(options) {
     const startedAt = clock();
     const scan = await scanAgentKnowledge(scanOptions);
     const collected = await collectAgentKnowledge(scan.items);
-    const outcomes = await runWithConcurrency(
-        collected.items.map(item => () => storeItem(item, sink, force ?? false)),
-        concurrency ?? DEFAULT_SYNC_CONCURRENCY
-    );
+    const outcomes = await runWithConcurrency(collected.items.map(item => () => storeItem(item, sink, force ?? false)), concurrency ?? DEFAULT_SYNC_CONCURRENCY);
     const stored = [];
     const skipped = [...scan.skipped, ...collected.skipped];
     const failed = [];
     for (const outcome of outcomes) {
-        if (outcome.kind === "stored") stored.push(outcome.value);
-        else if (outcome.kind === "skipped") skipped.push(outcome.value);
-        else failed.push(outcome.value);
+        if (outcome.kind === "stored")
+            stored.push(outcome.value);
+        else if (outcome.kind === "skipped")
+            skipped.push(outcome.value);
+        else
+            failed.push(outcome.value);
     }
     const finishedAt = clock();
     return {

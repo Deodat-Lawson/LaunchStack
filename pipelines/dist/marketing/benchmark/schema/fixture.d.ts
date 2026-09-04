@@ -23,13 +23,13 @@ export declare const SourceFactSchema: z.ZodObject<{
     /** A concrete metric/number a deterministic groundedness check can string-match. */
     metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    id: string;
-    text: string;
     kind: "supported" | "contradictory" | "distractor";
+    text: string;
+    id: string;
     metric: string | null;
 }, {
-    id: string;
     text: string;
+    id: string;
     kind?: "supported" | "contradictory" | "distractor" | undefined;
     metric?: string | null | undefined;
 }>;
@@ -52,11 +52,11 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         path: z.ZodString;
         title: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        title: string;
         path: string;
+        title: string;
     }, {
-        title: string;
         path: string;
+        title: string;
     }>, "many">>;
     /** Ground-truth facts for groundedness/citation scoring. */
     sourceFacts: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -66,49 +66,49 @@ export declare const CompanyFixtureSchema: z.ZodObject<{
         /** A concrete metric/number a deterministic groundedness check can string-match. */
         metric: z.ZodDefault<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        id: string;
-        text: string;
         kind: "supported" | "contradictory" | "distractor";
+        text: string;
+        id: string;
         metric: string | null;
     }, {
-        id: string;
         text: string;
+        id: string;
         kind?: "supported" | "contradictory" | "distractor" | undefined;
         metric?: string | null | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
-    industry: string;
     description: string;
+    name: string;
+    version: string;
+    industry: string;
     ref: string;
     categories: string[];
-    version: string;
     knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
     docs: {
-        title: string;
         path: string;
+        title: string;
     }[];
     sourceFacts: {
-        id: string;
-        text: string;
         kind: "supported" | "contradictory" | "distractor";
+        text: string;
+        id: string;
         metric: string | null;
     }[];
 }, {
-    name: string;
-    industry: string;
     description: string;
-    ref: string;
+    name: string;
     version: string;
+    industry: string;
+    ref: string;
     knowledgeState: "missing" | "contradictory" | "strong" | "sparse";
     categories?: string[] | undefined;
     docs?: {
-        title: string;
         path: string;
+        title: string;
     }[] | undefined;
     sourceFacts?: {
-        id: string;
         text: string;
+        id: string;
         kind?: "supported" | "contradictory" | "distractor" | undefined;
         metric?: string | null | undefined;
     }[] | undefined;
@@ -130,18 +130,18 @@ export declare const FixtureInputsSchema: z.ZodObject<{
     simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
     simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
-    contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
     prompt: string;
+    contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
     targetAudience: string | null;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
     contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
     campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
     simulateNoResearch: boolean;
     simulateNoPerformanceHistory: boolean;
 }, {
-    platform: "x" | "linkedin" | "reddit" | "bluesky";
     prompt: string;
+    platform: "x" | "linkedin" | "reddit" | "bluesky";
     contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
     campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
     contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -225,8 +225,8 @@ export declare const CriterionSpecSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
     weight: number;
-    method: "judge" | "deterministic";
     required: boolean;
+    method: "judge" | "deterministic";
     enabled: boolean;
     minScore: number | null;
 }, {
@@ -255,18 +255,18 @@ export declare const FixtureSchema: z.ZodObject<{
         simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
         simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
-        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         prompt: string;
+        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         targetAudience: string | null;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         simulateNoResearch: boolean;
         simulateNoPerformanceHistory: boolean;
     }, {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -343,8 +343,8 @@ export declare const FixtureSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
-        method: "judge" | "deterministic";
         required: boolean;
+        method: "judge" | "deterministic";
         enabled: boolean;
         minScore: number | null;
     }, {
@@ -365,10 +365,10 @@ export declare const FixtureSchema: z.ZodObject<{
     fixtureVersion: string;
     companyRef: string;
     inputs: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
-        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         prompt: string;
+        contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
         targetAudience: string | null;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -394,8 +394,8 @@ export declare const FixtureSchema: z.ZodObject<{
     criteria: {
         id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
         weight: number;
-        method: "judge" | "deterministic";
         required: boolean;
+        method: "judge" | "deterministic";
         enabled: boolean;
         minScore: number | null;
     }[];
@@ -408,8 +408,8 @@ export declare const FixtureSchema: z.ZodObject<{
     fixtureVersion: string;
     companyRef: string;
     inputs: {
-        platform: "x" | "linkedin" | "reddit" | "bluesky";
         prompt: string;
+        platform: "x" | "linkedin" | "reddit" | "bluesky";
         contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
         campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
         contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -467,18 +467,18 @@ export declare const FixtureSetSchema: z.ZodObject<{
             simulateNoResearch: z.ZodDefault<z.ZodBoolean>;
             simulateNoPerformanceHistory: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             simulateNoResearch: boolean;
             simulateNoPerformanceHistory: boolean;
         }, {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -555,8 +555,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
+            method: "judge" | "deterministic";
             enabled: boolean;
             minScore: number | null;
         }, {
@@ -577,10 +577,10 @@ export declare const FixtureSetSchema: z.ZodObject<{
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -606,8 +606,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         criteria: {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
+            method: "judge" | "deterministic";
             enabled: boolean;
             minScore: number | null;
         }[];
@@ -620,8 +620,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
@@ -666,10 +666,10 @@ export declare const FixtureSetSchema: z.ZodObject<{
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
-            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             prompt: string;
+            contentType: "email" | "post" | "thread" | "ad_copy" | "multi_platform";
             targetAudience: string | null;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             toneOverride: "bold" | "technical" | "formal" | "conversational" | null;
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
@@ -695,8 +695,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         criteria: {
             id: "brand_voice" | "groundedness" | "specificity" | "audience_relevance" | "goal_alignment" | "platform_structure" | "hook_strength" | "cta_quality" | "cliche_generic" | "citation_coverage" | "unsupported_claims" | "variant_quality" | "variant_diversity";
             weight: number;
-            method: "judge" | "deterministic";
             required: boolean;
+            method: "judge" | "deterministic";
             enabled: boolean;
             minScore: number | null;
         }[];
@@ -712,8 +712,8 @@ export declare const FixtureSetSchema: z.ZodObject<{
         fixtureVersion: string;
         companyRef: string;
         inputs: {
-            platform: "x" | "linkedin" | "reddit" | "bluesky";
             prompt: string;
+            platform: "x" | "linkedin" | "reddit" | "bluesky";
             contentCategory: "product_launch" | "thought_leadership" | "educational" | "customer_proof" | "community_discussion";
             campaignGoal: "awareness" | "engagement" | "conversion" | "signups" | "community";
             contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;

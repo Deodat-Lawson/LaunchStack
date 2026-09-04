@@ -20,6 +20,8 @@ import type { ResolvedChatModel } from "./chat-model-factory";
 import { applyMessageBehavior, systemMessageFor } from "./messages";
 import { normalizeModelContent } from "./normalize-content";
 import type { NativeStructuredOutputMode } from "./types";
+import type { ChatTokenUsage } from "./usage";
+import { addTokenUsage, normalizeTokenUsage } from "./usage";
 
 export interface StructuredOutputOptions {
     /** Schema/tool name; some endpoints surface it in logs. */
@@ -106,7 +108,7 @@ async function invokeJsonFallback<T>(
     schema: z.ZodType<T>,
     messages: readonly BaseMessageLike[],
     options: StructuredOutputOptions
-): Promise<T> {
+): Promise<StructuredResultWithUsage<T>> {
     const instructed = resolved.prepareMessages([
         ...systemMessageFor(resolved.behavior, jsonInstruction(schema, options.name)),
         ...messages,
@@ -114,9 +116,10 @@ async function invokeJsonFallback<T>(
 
     const first = await resolved.chat.invoke(instructed);
     const firstText = normalizeModelContent(first.content);
+    let usage = normalizeTokenUsage(first);
 
     try {
-        return schema.parse(extractJson(firstText));
+        return { result: schema.parse(extractJson(firstText)), usage, modelId: resolved.modelId };
     } catch (firstError) {
         const issue = firstError instanceof Error ? firstError.message : String(firstError);
         const repair = applyMessageBehavior(resolved.behavior, [
@@ -129,7 +132,12 @@ async function invokeJsonFallback<T>(
 
         try {
             const second = await resolved.chat.invoke(repair);
-            return schema.parse(extractJson(normalizeModelContent(second.content)));
+            usage = addTokenUsage(usage, normalizeTokenUsage(second));
+            return {
+                result: schema.parse(extractJson(normalizeModelContent(second.content))),
+                usage,
+                modelId: resolved.modelId,
+            };
         } catch (repairError) {
             throw new StructuredOutputError(
                 resolved.modelId,
@@ -137,6 +145,13 @@ async function invokeJsonFallback<T>(
             );
         }
     }
+}
+
+/** A structured result plus what it cost — the meterable envelope. */
+export interface StructuredResultWithUsage<T> {
+    result: T;
+    usage: ChatTokenUsage;
+    modelId: string;
 }
 
 /**
@@ -150,6 +165,21 @@ export async function invokeStructured<T>(
     messages: readonly BaseMessageLike[],
     options: StructuredOutputOptions
 ): Promise<T> {
+    return (await invokeStructuredWithUsage(resolved, schema, messages, options)).result;
+}
+
+/**
+ * `invokeStructured`, keeping the response envelope: token usage (summed
+ * across the repair attempt when one happens) and the serving model id.
+ * Additive fix from the rebuild design (§3.8 P1 prerequisite) — before this,
+ * the envelope was discarded and no tool's LLM call could be metered.
+ */
+export async function invokeStructuredWithUsage<T>(
+    resolved: ResolvedChatModel,
+    schema: z.ZodType<T>,
+    messages: readonly BaseMessageLike[],
+    options: StructuredOutputOptions
+): Promise<StructuredResultWithUsage<T>> {
     const native = pickNativeStructuredMode(resolved.behavior.nativeStructuredOutput);
     if (!native) {
         return invokeJsonFallback(resolved, schema, messages, options);
@@ -165,9 +195,27 @@ export async function invokeStructured<T>(
               ]
             : messages;
 
+    // `includeRaw` keeps the AIMessage that carries `usage_metadata`; without
+    // it LangChain hands back only the parsed object.
     const structured = resolved.chat.withStructuredOutput(schema, {
         name: options.name,
         method: LANGCHAIN_METHOD[native],
+        includeRaw: true,
     });
-    return schema.parse(await structured.invoke(applyMessageBehavior(resolved.behavior, prompt)));
+    const response = await structured.invoke(applyMessageBehavior(resolved.behavior, prompt));
+    const usage = normalizeTokenUsage(response.raw);
+    if (response.parsed === undefined || response.parsed === null) {
+        const detail =
+            response.raw === undefined
+                ? "no raw response"
+                : normalizeModelContent(
+                      (response.raw as { content?: unknown }).content ?? ""
+                  ).slice(0, 300);
+        throw new StructuredOutputError(resolved.modelId, `no parsed value (raw: ${detail})`);
+    }
+    return {
+        result: schema.parse(response.parsed),
+        usage,
+        modelId: resolved.modelId,
+    };
 }

@@ -14,6 +14,8 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import type { FolderVisibility } from "~/lib/authz/permissions";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
+import { normalizeFolderPath } from "~/lib/folders/path";
+import { createFolder } from "~/server/folders";
 
 import { forbidden, notFound } from "./errors";
 import {
@@ -125,6 +127,62 @@ export async function getFolderAccess(
     const folder = await requireVisibleFolder(ctx, categoryId);
     const groupIds = await callerGroupIds(ctx.userPk);
     return buildView(ctx, folder, groupIds);
+}
+
+async function findFolderByPath(companyId: bigint, path: string): Promise<FolderRef | null> {
+    const [row] = await db
+        .select({ id: category.id, name: category.name })
+        .from(category)
+        .where(and(eq(category.companyId, companyId), eq(category.name, path)))
+        .limit(1);
+    return row ? { id: Number(row.id), name: row.name } : null;
+}
+
+/**
+ * Folders are paths, and a folder that exists only through the documents in
+ * it (or as an implied ancestor) has no `category` row yet. Reading its
+ * access answers "visible to the workspace, no grants" without writing
+ * anything; saving stores the row first (`folders.manage` required for that,
+ * since it is the same act as creating the folder).
+ */
+export async function getFolderAccessByPath(
+    ctx: WorkspaceContext,
+    rawPath: string
+): Promise<FolderAccessView> {
+    const path = normalizeFolderPath(rawPath);
+    const existing = await findFolderByPath(ctx.companyId, path);
+    if (existing) return getFolderAccess(ctx, existing.id);
+
+    if (!ctx.can("folders.manage")) {
+        const scope = await ctx.documentScope();
+        if (!scopeAllowsCategory(scope, path)) throw notFound("Folder not found.");
+    }
+    const members = await activeMemberPrincipals(ctx.companyId);
+    return {
+        folder: { id: 0, name: path },
+        visibility: "workspace",
+        grants: [],
+        audienceCount: members.filter(m => canSeeFolder(m, false, [])).length,
+        canManage: ctx.can("folders.manage"),
+    };
+}
+
+export async function setFolderAccessByPath(
+    ctx: WorkspaceContext,
+    rawPath: string,
+    input: { visibility: FolderVisibility; grants: GrantInput[] }
+): Promise<FolderAccessView> {
+    const path = normalizeFolderPath(rawPath);
+    let folder = await findFolderByPath(ctx.companyId, path);
+    if (!folder) {
+        if (!ctx.can("folders.manage")) {
+            throw forbidden("Only someone who can manage folders can store this folder.");
+        }
+        await createFolder(ctx.companyId, path);
+        folder = await findFolderByPath(ctx.companyId, path);
+        if (!folder) throw notFound("Folder not found.");
+    }
+    return setFolderAccess(ctx, folder.id, input);
 }
 
 // ---------------------------------------------------------------------------

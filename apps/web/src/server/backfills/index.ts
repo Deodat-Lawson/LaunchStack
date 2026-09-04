@@ -178,7 +178,7 @@ const workspaceAccessBackfill: Backfill = {
     description:
         "Per-workspace pending status, editor→member, and legacy join-link roles (employer/employee/owner)",
     requiresEngine: false,
-    requiresMigration: "20260903024746_workspace_access",
+    requiresMigration: "20260904031425_workspace_access",
 
     estimate: ({ db }) => countWorkspaceAccessRows(db),
 

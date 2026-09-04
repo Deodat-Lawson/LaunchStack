@@ -16,4 +16,5 @@ export * from "./company-metadata/schema.js";
 export * from "./marketing/schema.js";
 export * from "./founder-weekly-review/schema.js";
 export * from "./email/schema.js";
+export * from "./repo-workspace/schema.js";
 //# sourceMappingURL=schema.js.map

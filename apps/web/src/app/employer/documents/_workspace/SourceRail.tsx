@@ -20,8 +20,17 @@ import {
     IconShield,
     IconX,
 } from "./icons";
-import { Lock } from "lucide-react";
+import { Folder, FolderOpen, Lock } from "lucide-react";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
+import {
+    UNFILED_FOLDER,
+    buildFolderTree,
+    displayFolderPath,
+    folderLeafName,
+    isFolderOrDescendant,
+    joinFolderPath,
+    type FolderTreeNode,
+} from "~/lib/folders/path";
 import { ContextMenu } from "./ContextMenu";
 import {
     buildBlankRailMenuItems,
@@ -33,8 +42,11 @@ import { SOURCE_META, type WorkspaceFolder, type WorkspaceSource } from "./types
 
 type RailMenu =
     | { kind: "source"; x: number; y: number; source: WorkspaceSource }
-    | { kind: "folder"; x: number; y: number; folderName: string; itemIds: string[] }
+    | { kind: "folder"; x: number; y: number; folderPath: string; itemIds: string[] }
     | { kind: "blank"; x: number; y: number };
+
+/** What is being dragged over the rail: a source into a folder, or a folder into a folder. */
+type RailDrag = { kind: "source"; id: string } | { kind: "folder"; path: string };
 
 async function copyText(value: string): Promise<void> {
     try {
@@ -337,38 +349,65 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
     );
 }
 
+type SourceNode = FolderTreeNode<WorkspaceSource>;
+
+/** Every source id in a folder and the folders beneath it. */
+function collectItemIds(node: SourceNode): string[] {
+    return [...node.items.map(item => item.id), ...node.children.flatMap(collectItemIds)];
+}
+
 interface FolderHeaderProps {
-    folder: { name: string; id?: string; color?: string; restricted?: boolean };
-    items: WorkspaceSource[];
-    count: number;
+    node: SourceNode;
+    /** The folder, or an ancestor, is restricted to the people granted access. */
+    restricted?: boolean;
     collapsed: boolean;
     onToggle: () => void;
     onSelectAll: (ids: string[], add: boolean) => void;
-    onRename?: () => void;
     onOpenMenu?: (point: { clientX: number; clientY: number }) => void;
     selected: string[];
     dragOver: boolean;
+    /** Folders can be picked up and dropped into other folders. */
+    draggable: boolean;
+    onDragStart?: () => void;
+    onDragEnd?: () => void;
 }
 
 function FolderHeader({
-    folder,
-    items,
-    count,
+    node,
+    restricted,
     collapsed,
     onToggle,
     onSelectAll,
-    onRename,
     onOpenMenu,
     selected,
     dragOver,
+    draggable,
+    onDragStart,
+    onDragEnd,
 }: FolderHeaderProps) {
     const [hover, setHover] = useState(false);
-    const itemIds = items.map(i => i.id);
+    const [menuFocus, setMenuFocus] = useState(false);
+    const itemIds = collectItemIds(node);
     const selCount = itemIds.filter(id => selected.includes(id)).length;
     const state: CheckState =
-        selCount === 0 ? "none" : selCount === itemIds.length ? "all" : "some";
+        selCount === 0
+            ? "none"
+            : selCount === itemIds.length && itemIds.length > 0
+              ? "all"
+              : "some";
+    const FolderIcon = collapsed ? Folder : FolderOpen;
     return (
         <div
+            data-testid={`folder-row-${node.path}`}
+            draggable={draggable}
+            onDragStart={e => {
+                if (!draggable) return;
+                e.stopPropagation();
+                // jsdom fires drag events without a dataTransfer.
+                if (e.dataTransfer) e.dataTransfer.effectAllowed = "move";
+                onDragStart?.();
+            }}
+            onDragEnd={onDragEnd}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onContextMenu={e => {
@@ -390,6 +429,7 @@ function FolderHeader({
                       ? "var(--line-2)"
                       : "transparent",
                 border: dragOver ? "1px dashed var(--accent)" : "1px solid transparent",
+                cursor: draggable ? "grab" : undefined,
             }}
         >
             <Checkbox
@@ -415,8 +455,10 @@ function FolderHeader({
                         opacity: 0.7,
                         transform: collapsed ? "rotate(0deg)" : "rotate(90deg)",
                         transition: "transform 100ms",
+                        flexShrink: 0,
                     }}
                 />
+                <FolderIcon className="text-ink-3 size-3 shrink-0" aria-hidden />
                 <span
                     style={{
                         fontSize: 11,
@@ -428,23 +470,32 @@ function FolderHeader({
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                     }}
+                    title={displayFolderPath(node.path)}
                 >
-                    {folder.name}
+                    {node.name}
                 </span>
-                {folder.restricted && (
+                {restricted && (
                     <Lock
                         size={10}
                         aria-label="Restricted folder"
                         style={{ color: "var(--ink-3)", flexShrink: 0 }}
                     />
                 )}
-                {onRename && hover && (
+                {onOpenMenu && (
                     <button
+                        type="button"
+                        data-testid={`folder-menu-${node.path}`}
+                        aria-label={`Actions for folder ${displayFolderPath(node.path)}`}
+                        aria-haspopup="menu"
+                        title="Folder actions"
                         onClick={e => {
+                            e.preventDefault();
                             e.stopPropagation();
-                            onRename();
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            onOpenMenu({ clientX: rect.right, clientY: rect.bottom });
                         }}
-                        title="Rename or delete folder"
+                        onFocus={() => setMenuFocus(true)}
+                        onBlur={() => setMenuFocus(false)}
                         style={{
                             width: 18,
                             height: 18,
@@ -453,6 +504,8 @@ function FolderHeader({
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            flexShrink: 0,
+                            opacity: hover || menuFocus ? 1 : 0,
                         }}
                         onMouseEnter={e => {
                             e.currentTarget.style.color = "var(--ink)";
@@ -467,7 +520,7 @@ function FolderHeader({
                     </button>
                 )}
                 <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                    {count}
+                    {node.totalItems}
                 </span>
             </div>
         </div>
@@ -481,10 +534,14 @@ export interface SourceRailProps {
     setSelected: Dispatch<SetStateAction<string[]>>;
     onOpenAdd: () => void;
     onOpenSource?: (source: WorkspaceSource) => void;
-    onNewFolder?: () => void;
+    /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
+    onNewFolder?: (parentPath?: string | null) => void;
     onRenameFolder?: (folder: WorkspaceFolder) => void;
     /** "Share folder…" — who in the workspace can see this folder. */
     onShareFolder?: (folder: WorkspaceFolder) => void;
+    /** Move a folder (and everything in it) under `targetParent`; null means the top level. */
+    onMoveFolder?: (path: string, targetParent: string | null) => void;
+    onDeleteFolder?: (folder: WorkspaceFolder) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
     /** "Restrict access…" — who can see this one document. */
@@ -505,11 +562,117 @@ export interface SourceRailProps {
     onOpenKnowledge?: () => void;
 }
 
-interface GroupEntry {
-    key: string;
-    name: string | null;
-    folder: { name: string; id?: string; color?: string } | null;
-    items: WorkspaceSource[];
+/** Everything a branch of the tree needs from the rail, passed once per level. */
+interface BranchContext {
+    selected: string[];
+    collapsed: Record<string, boolean>;
+    toggleCollapsed: (path: string) => void;
+    toggleSelected: (id: string) => void;
+    selectMany: (ids: string[], add: boolean) => void;
+    drag: RailDrag | null;
+    setDrag: (drag: RailDrag | null) => void;
+    dragOverFolder: string | null;
+    setDragOverFolder: (path: string | null) => void;
+    canDragFolders: boolean;
+    dropOnFolder: (target: string) => void;
+    onOpenSource?: (source: WorkspaceSource) => void;
+    openSourceMenu: (point: { clientX: number; clientY: number }, source: WorkspaceSource) => void;
+    openFolderMenu: (point: { clientX: number; clientY: number }, node: SourceNode) => void;
+    /** True when the folder, or an ancestor, is restricted to the people granted access. */
+    isRestricted: (path: string) => boolean;
+}
+
+function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchContext }) {
+    return (
+        <>
+            {items.map(s => (
+                <div
+                    key={s.id}
+                    draggable
+                    onDragStart={e => {
+                        e.stopPropagation();
+                        ctx.setDrag({ kind: "source", id: s.id });
+                    }}
+                    onDragEnd={() => {
+                        ctx.setDrag(null);
+                        ctx.setDragOverFolder(null);
+                    }}
+                >
+                    <SourceRow
+                        source={s}
+                        selected={ctx.selected.includes(s.id)}
+                        toggleSelected={ctx.toggleSelected}
+                        onOpen={ctx.onOpenSource}
+                        onOpenMenu={ctx.openSourceMenu}
+                    />
+                </div>
+            ))}
+        </>
+    );
+}
+
+function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
+    const isCollapsed = !!ctx.collapsed[node.path];
+    const isDragOver = ctx.dragOverFolder === node.path;
+    // A folder cannot be dropped on itself, inside itself, or under Unfiled.
+    const acceptsDrag =
+        ctx.drag?.kind === "source" ||
+        (ctx.drag?.kind === "folder" &&
+            node.path !== UNFILED_FOLDER &&
+            !isFolderOrDescendant(node.path, ctx.drag.path));
+    const isUnfiled = node.path === UNFILED_FOLDER;
+    return (
+        <div
+            style={{ position: "relative" }}
+            onDragEnter={e => {
+                if (!acceptsDrag) return;
+                e.preventDefault();
+                e.stopPropagation();
+                ctx.setDragOverFolder(node.path);
+            }}
+            onDragOver={e => {
+                if (!acceptsDrag) return;
+                e.preventDefault();
+                e.stopPropagation();
+            }}
+            onDragLeave={() => {
+                if (ctx.dragOverFolder === node.path) ctx.setDragOverFolder(null);
+            }}
+            onDrop={e => {
+                // A refused drop ends here; letting it bubble would read as a
+                // drop on empty rail space, which means "move to the top level".
+                e.stopPropagation();
+                if (!acceptsDrag) return;
+                e.preventDefault();
+                ctx.dropOnFolder(node.path);
+            }}
+        >
+            <FolderHeader
+                node={node}
+                restricted={ctx.isRestricted(node.path)}
+                selected={ctx.selected}
+                collapsed={isCollapsed}
+                onToggle={() => ctx.toggleCollapsed(node.path)}
+                onSelectAll={ctx.selectMany}
+                onOpenMenu={point => ctx.openFolderMenu(point, node)}
+                dragOver={isDragOver}
+                draggable={ctx.canDragFolders && !isUnfiled}
+                onDragStart={() => ctx.setDrag({ kind: "folder", path: node.path })}
+                onDragEnd={() => {
+                    ctx.setDrag(null);
+                    ctx.setDragOverFolder(null);
+                }}
+            />
+            {!isCollapsed && (
+                <div style={{ paddingLeft: 14 }}>
+                    {node.children.map(child => (
+                        <FolderBranch key={child.path} node={child} ctx={ctx} />
+                    ))}
+                    <SourceRows items={node.items} ctx={ctx} />
+                </div>
+            )}
+        </div>
+    );
 }
 
 export function SourceRail({
@@ -522,6 +685,8 @@ export function SourceRail({
     onNewFolder,
     onRenameFolder,
     onShareFolder,
+    onMoveFolder,
+    onDeleteFolder,
     onMoveToFolder,
     onRenameSource,
     onRestrictAccess,
@@ -538,10 +703,17 @@ export function SourceRail({
     const [searchFocus, setSearchFocus] = useState(false);
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
     const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
-    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const [drag, setDrag] = useState<RailDrag | null>(null);
     const [menu, setMenu] = useState<RailMenu | null>(null);
 
     const closeMenu = () => setMenu(null);
+
+    const folderFor = (path: string): WorkspaceFolder =>
+        folders.find(f => f.name === path) ?? {
+            id: `f-${path}`,
+            name: path,
+            color: "var(--ink-3)",
+        };
 
     const menuItems = useMemo<SourceContextMenuItem[]>(() => {
         if (!menu) return [];
@@ -565,13 +737,36 @@ export function SourceRail({
             });
         }
         if (menu.kind === "folder") {
+            const path = menu.folderPath;
+            const isUnfiled = path === UNFILED_FOLDER;
             const selCount = menu.itemIds.filter(id => selected.includes(id)).length;
             const selectState: "none" | "some" | "all" =
-                selCount === 0 ? "none" : selCount === menu.itemIds.length ? "all" : "some";
-            const match = folders.find(f => f.name === menu.folderName);
-            return buildFolderMenuItems(menu.folderName, {
-                onRename: onRenameFolder && match ? () => onRenameFolder(match) : undefined,
-                onShare: onShareFolder && match ? () => onShareFolder(match) : undefined,
+                selCount === 0
+                    ? "none"
+                    : selCount === menu.itemIds.length && menu.itemIds.length > 0
+                      ? "all"
+                      : "some";
+            return buildFolderMenuItems(path, {
+                onOpen:
+                    activeFolder === path
+                        ? undefined
+                        : () => {
+                              setActiveFolder(path);
+                              setActiveTag(null);
+                          },
+                onNewSubfolder: onNewFolder && !isUnfiled ? () => onNewFolder(path) : undefined,
+                onRename:
+                    onRenameFolder && !isUnfiled
+                        ? () => onRenameFolder(folderFor(path))
+                        : undefined,
+                onMove:
+                    onMoveFolder && !isUnfiled ? target => onMoveFolder(path, target) : undefined,
+                onDelete:
+                    onDeleteFolder && !isUnfiled
+                        ? () => onDeleteFolder(folderFor(path))
+                        : undefined,
+                onShare:
+                    onShareFolder && !isUnfiled ? () => onShareFolder(folderFor(path)) : undefined,
                 onSelectAll: add => {
                     setSelected(prev => {
                         if (add) {
@@ -583,16 +778,20 @@ export function SourceRail({
                     });
                 },
                 selectState,
+                folders: folders.map(f => f.name),
             });
         }
         return buildBlankRailMenuItems({
             onAddKnowledge: onOpenAdd,
-            onNewFolder,
+            onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
         });
+        // folderFor is derived from `folders`, which is a dependency.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         menu,
         folders,
         selected,
+        activeFolder,
         onOpenSource,
         onRenameSource,
         onRestrictAccess,
@@ -600,17 +799,23 @@ export function SourceRail({
         onDeleteSource,
         onRenameFolder,
         onShareFolder,
+        onMoveFolder,
+        onDeleteFolder,
         onOpenAdd,
         onNewFolder,
         setSelected,
+        setActiveFolder,
+        setActiveTag,
     ]);
 
-    const toggleCollapsed = (name: string) => setCollapsed(p => ({ ...p, [name]: !p[name] }));
+    const toggleCollapsed = (path: string) => setCollapsed(p => ({ ...p, [path]: !p[path] }));
 
     const filtered = useMemo(() => {
         const q = search.toLowerCase();
         return sources.filter(s => {
-            if (activeFolder && s.folder !== activeFolder) return false;
+            if (activeFolder && !isFolderOrDescendant(s.folder || UNFILED_FOLDER, activeFolder)) {
+                return false;
+            }
             if (activeTag && !(s.tags ?? []).includes(activeTag)) return false;
             if (q) {
                 const hay =
@@ -621,31 +826,73 @@ export function SourceRail({
         });
     }, [sources, search, activeFolder, activeTag]);
 
-    const groups = useMemo<GroupEntry[]>(() => {
-        if (activeFolder || activeTag) {
-            return [{ key: "flat", name: null, folder: null, items: filtered }];
-        }
-        const byFolder = new Map<string, GroupEntry>();
-        folders.forEach(f =>
-            byFolder.set(f.name, { key: `f-${f.id}`, name: f.name, folder: f, items: [] })
-        );
-        filtered.forEach(s => {
-            const fname = s.folder || "Unfiled";
-            if (!byFolder.has(fname)) {
-                byFolder.set(fname, {
-                    key: `f-${fname}`,
-                    name: fname,
-                    folder: { name: fname, color: "var(--ink-3)" },
-                    items: [],
-                });
-            }
-            byFolder.get(fname)!.items.push(s);
-        });
-        return [...byFolder.values()];
-    }, [filtered, folders, activeFolder, activeTag]);
+    // Searching or filtering by tag shows only folders with a match; browsing
+    // shows every folder, empty ones included, so a new folder is visible.
+    const tree = useMemo(
+        () =>
+            buildFolderTree(
+                folders.map(f => f.name),
+                filtered,
+                s => s.folder,
+                { root: activeFolder, pruneEmpty: Boolean(search) || Boolean(activeTag) }
+            ),
+        [folders, filtered, activeFolder, search, activeTag]
+    );
 
     const toggle = (id: string) => {
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
+    };
+
+    const selectMany = (ids: string[], add: boolean) => {
+        setSelected(prev => {
+            if (add) {
+                const set = new Set(prev);
+                ids.forEach(id => set.add(id));
+                return [...set];
+            }
+            return prev.filter(id => !ids.includes(id));
+        });
+    };
+
+    const dropOnFolder = (target: string) => {
+        if (drag?.kind === "source") {
+            onMoveToFolder?.(drag.id, target);
+        } else if (
+            drag?.kind === "folder" &&
+            onMoveFolder &&
+            target !== UNFILED_FOLDER &&
+            !isFolderOrDescendant(target, drag.path)
+        ) {
+            onMoveFolder(drag.path, target);
+        }
+        setDrag(null);
+        setDragOverFolder(null);
+    };
+
+    const branchCtx: BranchContext = {
+        selected,
+        collapsed,
+        toggleCollapsed,
+        isRestricted: path => folderFor(path).restricted === true,
+        toggleSelected: toggle,
+        selectMany,
+        drag,
+        setDrag,
+        dragOverFolder,
+        setDragOverFolder,
+        canDragFolders: Boolean(onMoveFolder),
+        dropOnFolder,
+        onOpenSource,
+        openSourceMenu: (point, source) =>
+            setMenu({ kind: "source", x: point.clientX, y: point.clientY, source }),
+        openFolderMenu: (point, node) =>
+            setMenu({
+                kind: "folder",
+                x: point.clientX,
+                y: point.clientY,
+                folderPath: node.path,
+                itemIds: collectItemIds(node),
+            }),
     };
 
     const asideStyle: CSSProperties = {
@@ -787,10 +1034,12 @@ export function SourceRail({
             {(Boolean(activeFolder) || Boolean(activeTag)) && (
                 <div style={{ padding: "0 14px 8px" }}>
                     <button
+                        data-testid="source-rail-scope"
                         onClick={() => {
                             setActiveFolder(null);
                             setActiveTag(null);
                         }}
+                        title="Back to all folders"
                         style={{
                             width: "100%",
                             display: "flex",
@@ -814,7 +1063,7 @@ export function SourceRail({
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {activeFolder ?? `#${activeTag}`}
+                            {activeFolder ? displayFolderPath(activeFolder) : `#${activeTag}`}
                         </span>
                         <IconX size={11} style={{ opacity: 0.5 }} />
                     </button>
@@ -827,109 +1076,28 @@ export function SourceRail({
                     e.preventDefault();
                     setMenu({ kind: "blank", x: e.clientX, y: e.clientY });
                 }}
+                onDragOver={e => {
+                    // Empty rail space is the top level: a nested folder dropped
+                    // here moves out of its parent.
+                    if (drag?.kind === "folder" && onMoveFolder) e.preventDefault();
+                }}
+                onDrop={e => {
+                    if (drag?.kind === "folder" && onMoveFolder) {
+                        e.preventDefault();
+                        const target = activeFolder;
+                        if (joinFolderPath(target, folderLeafName(drag.path)) !== drag.path) {
+                            onMoveFolder(drag.path, target);
+                        }
+                    }
+                    setDrag(null);
+                    setDragOverFolder(null);
+                }}
                 style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}
             >
-                {groups.map(group => {
-                    const isCollapsed = group.name ? !!collapsed[group.name] : false;
-                    const hasHeader = !!group.name;
-                    const isDragOver = dragOverFolder === group.name;
-                    return (
-                        <div
-                            key={group.key}
-                            style={{ position: "relative" }}
-                            onDragEnter={e => {
-                                if (draggingId && hasHeader && group.name) {
-                                    e.preventDefault();
-                                    setDragOverFolder(group.name);
-                                }
-                            }}
-                            onDragOver={e => {
-                                if (draggingId && hasHeader) e.preventDefault();
-                            }}
-                            onDragLeave={() => {
-                                if (dragOverFolder === group.name) setDragOverFolder(null);
-                            }}
-                            onDrop={() => {
-                                if (draggingId && hasHeader && group.name) {
-                                    onMoveToFolder?.(draggingId, group.name);
-                                    setDragOverFolder(null);
-                                    setDraggingId(null);
-                                }
-                            }}
-                        >
-                            {hasHeader && group.folder && group.name && (
-                                <FolderHeader
-                                    folder={group.folder}
-                                    items={group.items}
-                                    selected={selected}
-                                    count={group.items.length}
-                                    collapsed={isCollapsed}
-                                    onToggle={() => toggleCollapsed(group.name!)}
-                                    onRename={
-                                        onRenameFolder && group.folder
-                                            ? () => {
-                                                  const match = folders.find(
-                                                      f => f.name === group.name
-                                                  );
-                                                  if (match) onRenameFolder(match);
-                                              }
-                                            : undefined
-                                    }
-                                    onSelectAll={(ids, add) => {
-                                        setSelected(prev => {
-                                            if (add) {
-                                                const set = new Set(prev);
-                                                ids.forEach(id => set.add(id));
-                                                return [...set];
-                                            }
-                                            return prev.filter(id => !ids.includes(id));
-                                        });
-                                    }}
-                                    onOpenMenu={point => {
-                                        setMenu({
-                                            kind: "folder",
-                                            x: point.clientX,
-                                            y: point.clientY,
-                                            folderName: group.name!,
-                                            itemIds: group.items.map(item => item.id),
-                                        });
-                                    }}
-                                    dragOver={isDragOver}
-                                />
-                            )}
-                            {!isCollapsed && (
-                                <div style={{ paddingLeft: hasHeader ? 14 : 0 }}>
-                                    {group.items.map(s => (
-                                        <div
-                                            key={s.id}
-                                            draggable
-                                            onDragStart={() => setDraggingId(s.id)}
-                                            onDragEnd={() => {
-                                                setDraggingId(null);
-                                                setDragOverFolder(null);
-                                            }}
-                                        >
-                                            <SourceRow
-                                                source={s}
-                                                selected={selected.includes(s.id)}
-                                                toggleSelected={toggle}
-                                                onOpen={onOpenSource}
-                                                onOpenMenu={(point, source) => {
-                                                    setMenu({
-                                                        kind: "source",
-                                                        x: point.clientX,
-                                                        y: point.clientY,
-                                                        source,
-                                                    });
-                                                }}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
+                <SourceRows items={tree.items} ctx={branchCtx} />
+                {tree.children.map(node => (
+                    <FolderBranch key={node.path} node={node} ctx={branchCtx} />
+                ))}
                 {filtered.length === 0 && (
                     <div
                         style={{
@@ -954,9 +1122,10 @@ export function SourceRail({
                     </div>
                 )}
 
-                {!activeFolder && !activeTag && !search && onNewFolder && (
+                {!activeTag && !search && onNewFolder && (
                     <button
-                        onClick={onNewFolder}
+                        data-testid="source-rail-new-folder"
+                        onClick={() => onNewFolder(activeFolder)}
                         style={{
                             width: "100%",
                             display: "flex",
@@ -978,7 +1147,7 @@ export function SourceRail({
                         }}
                     >
                         <IconPlus size={11} />
-                        New folder
+                        {activeFolder ? "New subfolder" : "New folder"}
                     </button>
                 )}
             </div>
@@ -1028,7 +1197,7 @@ export function SourceRail({
                         menu.kind === "source"
                             ? `Actions for ${menu.source.title}`
                             : menu.kind === "folder"
-                              ? `Actions for folder ${menu.folderName}`
+                              ? `Actions for folder ${displayFolderPath(menu.folderPath)}`
                               : "Sidebar actions"
                     }
                     onClose={closeMenu}

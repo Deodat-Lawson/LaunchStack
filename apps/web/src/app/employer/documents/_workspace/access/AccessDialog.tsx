@@ -38,15 +38,8 @@ import { LEVEL_LABELS, audienceSummary, type AudienceGrant } from "./audience";
 import { PrincipalPicker, principalKey, type PickedPrincipal } from "./PrincipalPicker";
 
 export type AccessTarget =
-    | { kind: "folder"; id: number; name: string }
-    | { kind: "document"; id: number; name: string };
-
-/** Category ids look like `cat-<n>` when the folder is stored; anything else has no row yet. */
-export function folderCategoryId(folder: { id: string }): number | null {
-    if (!folder.id.startsWith("cat-")) return null;
-    const n = Number(folder.id.slice("cat-".length));
-    return Number.isInteger(n) && n > 0 ? n : null;
-}
+    /** Folders are paths; one that exists only through its contents is stored on save. */
+    { kind: "folder"; path: string; name: string } | { kind: "document"; id: number; name: string };
 
 interface LocalGrant extends AudienceGrant {
     principalName: string;
@@ -107,7 +100,7 @@ export function AccessDialog({
             try {
                 const res =
                     target.kind === "folder"
-                        ? await peopleApi.access.folder(target.id)
+                        ? await peopleApi.access.folderByPath(target.path)
                         : await peopleApi.access.document(target.id);
                 if (cancelled) return;
                 const isRestricted =
@@ -168,7 +161,7 @@ export function AccessDialog({
         }));
         try {
             if (target.kind === "folder") {
-                await peopleApi.access.saveFolder(target.id, {
+                await peopleApi.access.saveFolderByPath(target.path, {
                     visibility: restricted ? "restricted" : "workspace",
                     grants: body,
                 });

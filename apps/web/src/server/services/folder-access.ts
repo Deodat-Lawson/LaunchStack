@@ -12,12 +12,13 @@
  * only about who may add or move documents into a folder.
  */
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { category } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { folderGrants, folderSettings, workspaceGroupMembers } from "~/server/db/schema";
 import { grantLevelAtLeast, isGrantLevel, normalizeRoleSlug } from "~/lib/authz/permissions";
+import { folderAncestors, normalizeFolderPath } from "~/lib/folders/path";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 
 /** The slice of a workspace context the folder check needs. */
@@ -35,18 +36,25 @@ export const FOLDER_EDIT_DENIED = "You do not have edit access to this folder.";
 export async function canEditFolder(ctx: FolderActor, categoryName: string): Promise<boolean> {
     if (ctx.can("folders.manage")) return true;
 
-    const [restricted] = await db
-        .select({ categoryId: folderSettings.categoryId })
+    // Folders are paths and a restriction covers everything beneath it, so
+    // the folder that governs this path is the deepest restricted one among
+    // the path and its ancestors.
+    const path = normalizeFolderPath(categoryName);
+    const lineage = [...folderAncestors(path), path];
+    const restrictedRows = await db
+        .select({ categoryId: folderSettings.categoryId, name: category.name })
         .from(folderSettings)
         .innerJoin(category, eq(category.id, folderSettings.categoryId))
         .where(
             and(
                 eq(category.companyId, ctx.companyId),
-                eq(category.name, categoryName),
+                inArray(category.name, lineage),
                 eq(folderSettings.visibility, "restricted")
             )
-        )
-        .limit(1);
+        );
+    const restricted = restrictedRows
+        .map(row => ({ ...row, depth: normalizeFolderPath(row.name).split("/").length }))
+        .sort((a, b) => b.depth - a.depth)[0];
     if (!restricted) return true;
 
     const grants = await db

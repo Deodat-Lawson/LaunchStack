@@ -127,61 +127,6 @@ export declare const marketingContentHistory: import("drizzle-orm/pg-core").PgTa
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        postId: import("drizzle-orm/pg-core").PgColumn<{
-            name: "post_id";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {
-            length: 200;
-        }>;
-        postUrl: import("drizzle-orm/pg-core").PgColumn<{
-            name: "post_url";
-            tableName: "marketing_content_history";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {
-            length: 500;
-        }>;
-        publishedAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "published_at";
-            tableName: "marketing_content_history";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
         impressions: import("drizzle-orm/pg-core").PgColumn<{
             name: "impressions";
             tableName: "marketing_content_history";
@@ -259,6 +204,61 @@ export declare const marketingContentHistory: import("drizzle-orm/pg-core").PgTa
             driverParam: string;
             notNull: true;
             hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        postId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "post_id";
+            tableName: "marketing_content_history";
+            dataType: "string";
+            columnType: "PgVarchar";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 200;
+        }>;
+        postUrl: import("drizzle-orm/pg-core").PgColumn<{
+            name: "post_url";
+            tableName: "marketing_content_history";
+            dataType: "string";
+            columnType: "PgVarchar";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 500;
+        }>;
+        publishedAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "published_at";
+            tableName: "marketing_content_history";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;

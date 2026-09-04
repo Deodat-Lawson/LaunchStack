@@ -116,6 +116,14 @@ describeDb("resolveDocumentScope (integration)", () => {
         const docGeneral = await mkDoc("Handbook", "General");
         const docFinance = await mkDoc("Ledger", "Finance");
         const docBoardDeck = await mkDoc("Board deck", "General");
+        // Folders are paths: Reports is only implied by its document, Secret is
+        // a stored subfolder that is restricted on its own with no grants.
+        await mkDoc("Budget", "Finance/Reports");
+        const [secret] = await test.db
+            .insert(category)
+            .values({ name: "Finance/Secret", companyId })
+            .returning();
+        await mkDoc("Plan", "Finance/Secret");
 
         const [grp] = await test.db
             .insert(workspaceGroups)
@@ -131,12 +139,20 @@ describeDb("resolveDocumentScope (integration)", () => {
             .insert(workspaceGroupMembers)
             .values({ groupId: financeGroup, userId: groupMember, addedBy: "auth_owner" });
 
-        await test.db.insert(folderSettings).values({
-            categoryId: BigInt(finance!.id),
-            companyId,
-            visibility: "restricted",
-            updatedBy: "auth_owner",
-        });
+        await test.db.insert(folderSettings).values([
+            {
+                categoryId: BigInt(finance!.id),
+                companyId,
+                visibility: "restricted",
+                updatedBy: "auth_owner",
+            },
+            {
+                categoryId: BigInt(secret!.id),
+                companyId,
+                visibility: "restricted",
+                updatedBy: "auth_owner",
+            },
+        ]);
         await test.db.insert(folderGrants).values([
             {
                 companyId,
@@ -229,35 +245,47 @@ describeDb("resolveDocumentScope (integration)", () => {
         expect(scope.kind).toBe("everything");
         expect(await visibleTitles(ids.owner, "owner")).toEqual([
             "Board deck",
+            "Budget",
             "Handbook",
             "Ledger",
+            "Plan",
         ]);
     });
 
-    it("hides the restricted folder and the restricted document from a plain member", async () => {
+    it("hides the restricted folder, its subfolders, and the restricted document from a plain member", async () => {
         const scope = await scopeFor(ids.member, "member");
         expect(scope).toEqual({
             kind: "except",
-            deniedCategories: ["Finance"],
+            deniedCategories: ["Finance", "Finance/Secret"],
+            allowedCategories: [],
             deniedDocumentIds: [ids.docBoardDeck],
             allowedDocumentIds: [],
         });
         expect(await visibleTitles(ids.member, "member")).toEqual(["Handbook"]);
     });
 
-    it("opens the folder through a user grant", async () => {
-        expect(await visibleTitles(ids.financeMember, "member")).toEqual(["Handbook", "Ledger"]);
+    it("opens the folder and its implied subfolders through a user grant, but not a restricted subfolder", async () => {
+        expect(await visibleTitles(ids.financeMember, "member")).toEqual([
+            "Budget",
+            "Handbook",
+            "Ledger",
+        ]);
     });
 
     it("opens the folder through a group grant", async () => {
-        expect(await visibleTitles(ids.groupMember, "member")).toEqual(["Handbook", "Ledger"]);
+        expect(await visibleTitles(ids.groupMember, "member")).toEqual([
+            "Budget",
+            "Handbook",
+            "Ledger",
+        ]);
     });
 
     it("re-allows a restricted document through an explicit document grant", async () => {
         const scope = await scopeFor(ids.viewer, "viewer");
         expect(scope).toEqual({
             kind: "except",
-            deniedCategories: ["Finance"],
+            deniedCategories: ["Finance", "Finance/Secret"],
+            allowedCategories: [],
             deniedDocumentIds: [],
             allowedDocumentIds: [ids.docBoardDeck],
         });
@@ -269,10 +297,11 @@ describeDb("resolveDocumentScope (integration)", () => {
         expect(scope).toEqual({
             kind: "only",
             allowedCategories: ["Finance"],
+            deniedCategories: ["Finance/Secret"],
             deniedDocumentIds: [ids.docBoardDeck],
             allowedDocumentIds: [],
         });
-        expect(await visibleTitles(ids.guest, "guest")).toEqual(["Ledger"]);
+        expect(await visibleTitles(ids.guest, "guest")).toEqual(["Budget", "Ledger"]);
     });
 
     it("gives a person without documents.read nothing at all", async () => {
@@ -295,16 +324,16 @@ describeDb("resolveDocumentScope (integration)", () => {
     it("collapses to everything once the workspace has nothing restricted", async () => {
         const { folderSettings, documentSettings } = await import("~/server/db/schema");
         await test.db.delete(folderSettings).where(eq(folderSettings.companyId, ids.companyId));
-        await test.db
-            .delete(documentSettings)
-            .where(eq(documentSettings.companyId, ids.companyId));
+        await test.db.delete(documentSettings).where(eq(documentSettings.companyId, ids.companyId));
 
         const scope = await scopeFor(ids.member, "member");
         expect(scope.kind).toBe("everything");
         expect(await visibleTitles(ids.member, "member")).toEqual([
             "Board deck",
+            "Budget",
             "Handbook",
             "Ledger",
+            "Plan",
         ]);
     });
 });

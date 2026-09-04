@@ -57,18 +57,12 @@ export interface AgentKnowledgeScan {
  * Deliberately free of absolute paths: this string is the identity the host
  * keys its documents on, and it has to survive the home directory moving.
  */
-export declare function buildSourceId(
-    toolId: AgentToolId,
-    scopeKey: string,
-    relativePath: string
-): string;
+export declare function buildSourceId(toolId: AgentToolId, scopeKey: string, relativePath: string): string;
 /**
  * Discover — but do not read — every knowledge file the configured tools
  * expose. Cheap enough to run on a page load; `collectAgentKnowledge` is the
  * step that actually opens files.
  */
-export declare function scanAgentKnowledge(
-    options?: AgentKnowledgeScanOptions
-): Promise<AgentKnowledgeScan>;
+export declare function scanAgentKnowledge(options?: AgentKnowledgeScanOptions): Promise<AgentKnowledgeScan>;
 export declare function describeError(error: unknown): string;
 //# sourceMappingURL=discover.d.ts.map

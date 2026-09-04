@@ -21,3 +21,9 @@
 files.{$DOMAIN} {
 	reverse_proxy seaweedfs:8333
 }
+
+# The marketing site. Kept on its own hostname so the app keeps the origin its
+# auth callbacks and stored object URLs were issued against.
+home.{$DOMAIN} {
+	reverse_proxy landing:3001
+}

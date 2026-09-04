@@ -86,22 +86,30 @@ export interface SearchFilters {
  * never become candidates. Mirrors the host's `DocumentScope` exactly.
  *
  * - `everything`: no filter.
- * - `except`: allowed unless the category is denied or the id is denied,
- *   except ids in `allowedDocumentIds`, which are always allowed.
- * - `only`: allowed iff (category allowed AND id not denied) OR id in
- *   `allowedDocumentIds`.
+ * - `except`: allowed unless the folder (or an ancestor) is denied or the id
+ *   is denied; a granted subfolder inside a denied folder is allowed again
+ *   (nearest restricted ancestor wins), and ids in `allowedDocumentIds` are
+ *   always allowed.
+ * - `only`: allowed iff the folder (or an ancestor) is allowed, minus denied
+ *   subfolders and ids, OR the id is in `allowedDocumentIds`.
  */
 export type DocumentScope =
     | { readonly kind: "everything" }
     | {
           readonly kind: "except";
+          /** Folder paths (and their subfolders) the caller may not read. */
           readonly deniedCategories: readonly string[];
+          /** Restricted subfolders beneath a denied folder the caller may read (nearest ancestor wins). */
+          readonly allowedCategories?: readonly string[];
           readonly deniedDocumentIds: readonly number[];
           readonly allowedDocumentIds: readonly number[];
       }
     | {
           readonly kind: "only";
+          /** Folder paths (and their subfolders) the caller may read. */
           readonly allowedCategories: readonly string[];
+          /** Restricted subfolders beneath an allowed folder the caller may not read. */
+          readonly deniedCategories?: readonly string[];
           readonly deniedDocumentIds: readonly number[];
           readonly allowedDocumentIds: readonly number[];
       };

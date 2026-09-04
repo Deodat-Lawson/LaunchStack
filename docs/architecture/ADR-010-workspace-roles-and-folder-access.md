@@ -36,7 +36,11 @@ lint-banned.
 **The unit of access is the folder, and the folder is the engine `category`
 row.** `folder_settings` marks a folder restricted (no row means
 workspace-visible); `folder_grants` gives a principal — a person, a group,
-or a role — a level (`view | edit | manage`). Restricted folders are hidden,
+or a role — a level (`view | edit | manage`). Folders are paths, so a
+restriction covers the folder and everything beneath it; when nested
+restricted folders disagree, the nearest restricted ancestor decides (a
+granted subfolder inside a denied folder stays visible, a restricted
+subfolder inside a granted folder stays hidden). Restricted folders are hidden,
 not shown locked. Per-document restriction (`document_settings`,
 `document_grants`) is the exception mechanism for one file in a shared
 folder. Zero engine migrations: every new table is product-side and points

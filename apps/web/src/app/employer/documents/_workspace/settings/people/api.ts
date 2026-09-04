@@ -356,6 +356,18 @@ export const peopleApi = {
             }),
     },
     access: {
+        folderByPath: (path: string) =>
+            request<FolderAccess>(
+                `/api/workspace/folders/by-path?path=${encodeURIComponent(path)}`
+            ),
+        saveFolderByPath: (
+            path: string,
+            body: { visibility: "workspace" | "restricted"; grants: GrantInput[] }
+        ) =>
+            request<FolderAccess>(`/api/workspace/folders/by-path`, {
+                method: "PUT",
+                body: JSON.stringify({ path, ...body }),
+            }),
         folder: (categoryId: number) =>
             request<FolderAccess>(`/api/workspace/folders/${categoryId}/access`),
         saveFolder: (

@@ -153,6 +153,28 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         routes: ["repo-explainer"],
     },
     {
+        id: "repo-workspaces",
+        tier: "tool",
+        summary: "Connect a repository as a synced mirror the repo explainer reads from.",
+        scope: "mixed",
+        feature: "@launchstack/pipelines/repo-workspace",
+        routes: ["repo-workspaces", "webhooks/github"],
+        unscopedRoutes: {
+            "webhooks/github":
+                "GitHub calls it; the request is authenticated by the webhook HMAC signature, not a session, and the workspace is resolved from the payload.",
+        },
+    },
+    {
+        id: "distribution",
+        tier: "tool",
+        summary:
+            "Find, qualify and run B2B distribution partners: programs, discovery runs, evidence-backed dossiers, relationship stages, agreements, and an outreach hand-off to email campaigns.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/distribution",
+        routes: ["distribution"],
+        notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -209,6 +231,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "graph",
             "embedding-indexes",
             "Categories",
+            "folders",
             "employer/upload",
             "updateUploadPreference",
         ],
@@ -221,8 +244,10 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "Answer a question over the workspace's sources, with references.",
         scope: "workspace",
-        routes: ["agents/documentQ&A", "Questions"],
+        routes: ["agents/documentQ&A", "Questions", "ask"],
         notes:
+            "`ask/starters` writes the workspace's starter questions from the company profile " +
+            "and the source inventory — the questions, not the answers. " +
             "Route path contains a literal ampersand. Also hosts a persisted chat/task/tool " +
             "surface that has no client. `Questions/{add,fetch}` are the chat-history reads " +
             "and writes — live and tested, but named as procedures in PascalCase, so they are " +

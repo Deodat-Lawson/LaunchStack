@@ -3,6 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
+import {
+    compareFolderPaths,
+    expandFolderPaths,
+    folderLeafName,
+    normalizeFolderPath,
+} from "~/lib/folders/path";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
@@ -64,7 +70,7 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         type: mapDocType(doc),
         size: doc.aiSummary ? "" : "",
         added: humanDate(doc.createdAt) || "",
-        folder: doc.category ?? "Unfiled",
+        folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
@@ -90,17 +96,19 @@ export interface UseWorkspaceDataResult {
     addOptimistic: (source: WorkspaceSource) => void;
 }
 
-interface CategoryRow {
-    id: number;
-    name: string;
-    companyId: number;
-    /** Only people, groups, or roles with a grant can see this folder. */
+interface FolderRow {
+    path: string;
+    documentCount: number;
+    persisted: boolean;
+    /** Only people, groups, or roles with a grant can see this folder (or an ancestor is restricted). */
     restricted?: boolean;
+    /** The `category` row behind a persisted folder; null while the folder is only implied. */
+    categoryId?: number | null;
 }
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
-    const [categories, setCategories] = useState<CategoryRow[]>([]);
+    const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -112,21 +120,23 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         if (!userId) return;
         setError(null);
         try {
-            const [docsRes, catsRes] = await Promise.all([
+            const [docsRes, foldersRes] = await Promise.all([
                 fetch("/api/fetchDocument", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: "{}",
                 }),
-                fetch("/api/Categories/GetCategories"),
+                fetch("/api/folders"),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
             const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
             setDocuments(docs);
 
-            if (catsRes.ok) {
-                const cats = (await catsRes.json()) as CategoryRow[];
-                setCategories(cats);
+            // Folders that exist while empty only come from here; the rest are
+            // implied by the documents themselves, so a failure degrades to that.
+            if (foldersRes.ok) {
+                const body = (await foldersRes.json()) as { data?: { folders?: FolderRow[] } };
+                setFolderRows(body.data?.folders ?? []);
             }
 
             // Prune optimistic rows that now exist in the server response (by title).
@@ -149,24 +159,24 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     );
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
-        const seen = new Map<string, WorkspaceFolder>();
-        // Seed with every category so empty folders render in the rail.
-        for (const c of categories) {
-            seen.set(c.name, {
-                id: `cat-${c.id}`,
-                name: c.name,
-                color: folderColor(c.name),
-                restricted: c.restricted === true,
-            });
-        }
-        for (const src of sources) {
-            const name = src.folder || "Unfiled";
-            if (!seen.has(name)) {
-                seen.set(name, { id: `f-${name}`, name, color: folderColor(name) });
-            }
-        }
-        return [...seen.values()];
-    }, [sources, categories]);
+        // Every folder a source sits in, every folder that exists while empty,
+        // and every ancestor either implies — a path is a folder tree.
+        const byPath = new Map(folderRows.map(row => [row.path, row] as const));
+        const paths = expandFolderPaths([
+            ...folderRows.map(row => row.path),
+            ...sources.map(src => src.folder),
+        ]);
+        return paths.sort(compareFolderPaths).map(path => {
+            const row = byPath.get(path);
+            return {
+                id: `f-${path}`,
+                name: path,
+                color: folderColor(folderLeafName(path)),
+                restricted: row?.restricted === true,
+                categoryId: row?.categoryId ?? null,
+            };
+        });
+    }, [sources, folderRows]);
 
     const addOptimistic = useCallback((source: WorkspaceSource) => {
         setOptimistic(prev => [source, ...prev]);

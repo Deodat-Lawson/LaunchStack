@@ -7,7 +7,13 @@ import { PgDialect } from "drizzle-orm/pg-core";
 import type { SQL } from "drizzle-orm";
 
 import type { DocumentScope } from "../search-types";
-import { documentScopeSql, documentScopeSqlForAlias, scopeAllowsDocument } from "./scope";
+import {
+    documentScopeSql,
+    documentScopeSqlForAlias,
+    scopeAllowsCategory,
+    scopeAllowsDocument,
+    scopeFolderRules,
+} from "./scope";
 
 const dialect = new PgDialect();
 const render = (chunk: SQL | undefined) => {
@@ -34,7 +40,7 @@ describe("documentScopeSql", () => {
         expect(render(documentScopeSql(NOTHING)).sql).toBe("false");
     });
 
-    it("denies folders and documents, then re-allows explicit grants", () => {
+    it("denies folders and their subfolders, denies documents, then re-allows explicit grants", () => {
         const { sql, params } = render(
             documentScopeSql({
                 kind: "except",
@@ -43,10 +49,13 @@ describe("documentScopeSql", () => {
                 allowedDocumentIds: [7],
             })
         );
-        expect(sql).toMatch(/"category" not in \(\$1, \$2\)/);
-        expect(sql).toMatch(/"id" not in \(\$3\)/);
-        expect(sql).toMatch(/ or .*"id" in \(\$4\)/);
-        expect(params).toEqual(["Finance", "Legal", 42, 7]);
+        expect(sql).toMatch(
+            /case when \("[^"]+"\."category" = \$1 or "[^"]+"\."category" like \$2\) then true|false/i
+        );
+        expect(sql).toMatch(/then false .*then false else true end/i);
+        expect(sql).toMatch(/"id" not in \(\$5\)/);
+        expect(sql).toMatch(/ or .*"id" in \(\$6\)/);
+        expect(params).toEqual(["Finance", "Finance/%", "Legal", "Legal/%", 42, 7]);
     });
 
     it("omits empty lists and is absent when nothing is denied", () => {
@@ -67,9 +76,36 @@ describe("documentScopeSql", () => {
                 allowedDocumentIds: [],
             })
         );
-        expect(sql).toMatch(/"category" not in \(\$1\)/);
+        expect(sql).toMatch(/case when .* then false else true end/i);
         expect(sql).not.toMatch(/"id"/);
-        expect(params).toEqual(["Finance"]);
+        expect(params).toEqual(["Finance", "Finance/%"]);
+    });
+
+    it("lets a granted subfolder beneath a denied folder through — nearest ancestor wins", () => {
+        const { sql, params } = render(
+            documentScopeSql({
+                kind: "except",
+                deniedCategories: ["Finance"],
+                allowedCategories: ["Finance/Shared"],
+                deniedDocumentIds: [],
+                allowedDocumentIds: [],
+            })
+        );
+        // The deeper rule renders first, so it is the one CASE picks.
+        expect(params).toEqual(["Finance/Shared", "Finance/Shared/%", "Finance", "Finance/%"]);
+        expect(sql).toMatch(/then true when .* then false else true end/i);
+    });
+
+    it("escapes LIKE metacharacters in folder paths", () => {
+        const { params } = render(
+            documentScopeSql({
+                kind: "except",
+                deniedCategories: ["100%_done"],
+                deniedDocumentIds: [],
+                allowedDocumentIds: [],
+            })
+        );
+        expect(params).toEqual(["100%_done", "100\\%\\_done/%"]);
     });
 
     it("allow-lists folders minus restricted documents, plus explicit grants", () => {
@@ -81,9 +117,10 @@ describe("documentScopeSql", () => {
                 allowedDocumentIds: [11],
             })
         );
-        expect(sql).toMatch(/"category" in \(\$1\) and .*"id" not in \(\$2\)/);
-        expect(sql).toMatch(/ or .*"id" in \(\$3\)/);
-        expect(params).toEqual(["Shared", 9, 11]);
+        expect(sql).toMatch(/case when .* then true else false end/i);
+        expect(sql).toMatch(/"id" not in \(\$3\)/);
+        expect(sql).toMatch(/ or .*"id" in \(\$4\)/);
+        expect(params).toEqual(["Shared", "Shared/%", 9, 11]);
     });
 
     it("allow-lists only explicit documents when there are no folders", () => {
@@ -91,37 +128,51 @@ describe("documentScopeSql", () => {
             documentScopeSql({
                 kind: "only",
                 allowedCategories: [],
-                deniedDocumentIds: [3],
+                deniedDocumentIds: [],
                 allowedDocumentIds: [11],
             })
         );
-        expect(sql).toMatch(/"id" in \(\$1\)/);
-        expect(sql).not.toMatch(/category/);
-        // A denied id without an allowed folder has nothing to subtract from.
+        expect(sql).toMatch(/false or .*"id" in \(\$1\)/);
         expect(params).toEqual([11]);
     });
-});
 
-describe("documentScopeSqlForAlias", () => {
     it("reads the aliased document columns and binds values as parameters", () => {
         const { sql, params } = render(
             documentScopeSqlForAlias(
                 {
                     kind: "except",
                     deniedCategories: ["Finance"],
-                    deniedDocumentIds: [42],
+                    deniedDocumentIds: [3],
                     allowedDocumentIds: [],
                 },
                 "d"
             )
         );
-        expect(sql).toBe('("d".category not in ($1) and "d".id not in ($2))');
-        expect(params).toEqual(["Finance", 42]);
+        expect(sql).toMatch(/"d"\.category = \$1 or "d"\.category like \$2/i);
+        expect(sql).toMatch(/"d"\.id not in \(\$3\)/);
+        expect(params).toEqual(["Finance", "Finance/%", 3]);
+        expect(sql).not.toContain("Finance");
     });
 
     it("is absent for everything", () => {
         expect(documentScopeSqlForAlias(EVERYTHING, "d")).toBeUndefined();
-        expect(documentScopeSqlForAlias(undefined, "d")).toBeUndefined();
+    });
+});
+
+describe("scopeFolderRules", () => {
+    it("orders rules deepest first", () => {
+        const rules = scopeFolderRules({
+            kind: "except",
+            deniedCategories: ["Finance", "Finance/Shared/Secret"],
+            allowedCategories: ["Finance/Shared"],
+            deniedDocumentIds: [],
+            allowedDocumentIds: [],
+        });
+        expect(rules.map(r => r.path)).toEqual([
+            "Finance/Shared/Secret",
+            "Finance/Shared",
+            "Finance",
+        ]);
     });
 });
 
@@ -129,39 +180,51 @@ describe("scopeAllowsDocument", () => {
     const except: DocumentScope = {
         kind: "except",
         deniedCategories: ["Finance"],
+        allowedCategories: ["Finance/Shared"],
         deniedDocumentIds: [42],
         allowedDocumentIds: [7],
     };
     const only: DocumentScope = {
         kind: "only",
         allowedCategories: ["Shared"],
+        deniedCategories: ["Shared/Private"],
         deniedDocumentIds: [9],
         allowedDocumentIds: [11],
     };
 
     it("allows everything under no scope", () => {
         expect(scopeAllowsDocument(undefined, { id: 1, category: "Finance" })).toBe(true);
-        expect(scopeAllowsDocument(EVERYTHING, { id: 1, category: null })).toBe(true);
+        expect(scopeAllowsDocument(EVERYTHING, { id: 1, category: "Finance" })).toBe(true);
     });
 
-    it("applies the except rules", () => {
-        expect(scopeAllowsDocument(except, { id: 1, category: "Ops" })).toBe(true);
+    it("applies the except rules to folders and their subfolders", () => {
+        expect(scopeAllowsDocument(except, { id: 1, category: "General" })).toBe(true);
         expect(scopeAllowsDocument(except, { id: 1, category: "Finance" })).toBe(false);
-        expect(scopeAllowsDocument(except, { id: 42, category: "Ops" })).toBe(false);
-        // An explicit grant wins over both denials.
+        expect(scopeAllowsDocument(except, { id: 1, category: "Finance/Q3" })).toBe(false);
+        expect(scopeAllowsDocument(except, { id: 1, category: "Finance/Shared" })).toBe(true);
+        expect(scopeAllowsDocument(except, { id: 1, category: "Finance/Shared/Deck" })).toBe(true);
+        expect(scopeAllowsDocument(except, { id: 1, category: "Financeiro" })).toBe(true);
+        expect(scopeAllowsDocument(except, { id: 42, category: "General" })).toBe(false);
         expect(scopeAllowsDocument(except, { id: 7, category: "Finance" })).toBe(true);
     });
 
-    it("applies the only rules", () => {
+    it("applies the only rules to folders and their subfolders", () => {
         expect(scopeAllowsDocument(only, { id: 1, category: "Shared" })).toBe(true);
-        expect(scopeAllowsDocument(only, { id: 1, category: "Ops" })).toBe(false);
+        expect(scopeAllowsDocument(only, { id: 1, category: "Shared/Q3" })).toBe(true);
+        expect(scopeAllowsDocument(only, { id: 1, category: "Shared/Private" })).toBe(false);
         expect(scopeAllowsDocument(only, { id: 9, category: "Shared" })).toBe(false);
-        expect(scopeAllowsDocument(only, { id: 11, category: "Ops" })).toBe(true);
-        expect(scopeAllowsDocument(NOTHING, { id: 1, category: "Shared" })).toBe(false);
+        expect(scopeAllowsDocument(only, { id: 1, category: "General" })).toBe(false);
+        expect(scopeAllowsDocument(only, { id: 11, category: "General" })).toBe(true);
     });
 
     it("treats a missing category as the empty folder", () => {
+        expect(scopeAllowsDocument(except, { id: 1, category: null })).toBe(true);
         expect(scopeAllowsDocument(only, { id: 1, category: undefined })).toBe(false);
-        expect(scopeAllowsDocument(except, { id: 1, category: undefined })).toBe(true);
+    });
+
+    it("answers for a folder alone", () => {
+        expect(scopeAllowsCategory(except, "Finance/Q3")).toBe(false);
+        expect(scopeAllowsCategory(except, "Finance/Shared/Deck")).toBe(true);
+        expect(scopeAllowsCategory(only, "Shared/Private/Deep")).toBe(false);
     });
 });

@@ -123,6 +123,12 @@ function inspectPredicate(
     }
     if (Array.isArray(candidate.queryChunks)) {
         for (const chunk of candidate.queryChunks) {
+            // A `sql` template keeps interpolated primitives raw until the
+            // query is built; they are parameters all the same.
+            if (chunk !== null && typeof chunk !== "object") {
+                details.params.push(chunk);
+                continue;
+            }
             inspectPredicate(chunk, details);
         }
     }

@@ -356,7 +356,7 @@ describe("POST /api/uploadDocument", () => {
                     id: 5,
                     url: body.documentUrl,
                     title: body.documentName,
-                    category: "Uncategorized",
+                    category: "Unfiled",
                 },
                 resolvedDocumentUrl: "http://localhost/api/files/123",
             })

@@ -25,7 +25,7 @@ describe("2026-09-workspace-access backfill", () => {
     it("is registered against the workspace_access migration and needs no engine", () => {
         const entry = BACKFILLS.find(b => b.id === "2026-09-workspace-access");
         expect(entry).toBeDefined();
-        expect(entry?.requiresMigration).toBe("20260903024746_workspace_access");
+        expect(entry?.requiresMigration).toBe("20260904031425_workspace_access");
         expect(entry?.requiresEngine).toBe(false);
         expect(entry?.estimate).toBeDefined();
     });

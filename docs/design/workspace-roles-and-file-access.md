@@ -104,7 +104,9 @@ transaction with its audit row. `invite_codes` gain `expires_at`, `max_uses`,
 The folder is the engine `category` row. `folder_settings` marks a folder
 restricted (no row = workspace-visible); `folder_grants` gives a principal a
 level (`view | edit | manage`) that composes with — never exceeds — the role.
-Restricted folders are hidden, not locked. Documents whose category has no
+Folders are paths (`Finance/Q3`): a restriction covers the folder and every
+subfolder, and when nested restricted folders disagree the nearest restricted
+ancestor decides. Restricted folders are hidden, not locked. Documents whose category has no
 folder row are workspace-visible; connectors create their folder row on first
 sync. `document_settings` / `document_grants` are the exception mechanism for
 one file in a shared folder.
@@ -164,7 +166,7 @@ middleware routes on membership status; `/employee/**` redirects to its
 ### 3.9 Data model
 
 All new tables are product-side (`apps/web/src/server/db/schema/access.ts`)
-and point at engine tables. Migration `20260903024746_workspace_access`
+and point at engine tables. Migration `20260904031425_workspace_access`
 (product ledger) adds them and appends `status`/`updated_at` to memberships and
 `expires_at`/`max_uses`/`use_count` to join links.
 

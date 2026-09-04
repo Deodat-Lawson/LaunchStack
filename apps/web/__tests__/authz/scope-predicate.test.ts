@@ -27,7 +27,7 @@ describe("documentScopePredicate", () => {
         expect(sql).toBe("false");
     });
 
-    it("denies folders and documents, then re-allows explicit grants", () => {
+    it("denies folders with their subfolders and documents, then re-allows explicit grants", () => {
         const scope: DocumentScope = {
             kind: "except",
             deniedCategories: ["Finance", "Legal"],
@@ -35,10 +35,13 @@ describe("documentScopePredicate", () => {
             allowedDocumentIds: [7],
         };
         const { sql, params } = render(documentScopePredicate(scope));
-        expect(sql).toMatch(/"category" not in \(\$1, \$2\)/);
-        expect(sql).toMatch(/"id" not in \(\$3\)/);
-        expect(sql).toMatch(/ or .*"id" in \(\$4\)/);
-        expect(params).toEqual(["Finance", "Legal", 42, 7]);
+        expect(sql).toMatch(
+            /case when \(.*"category" = \$1 or .*"category" like \$2\) then false/i
+        );
+        expect(sql).toMatch(/then false .* then false else true end/i);
+        expect(sql).toMatch(/"id" not in \(\$5\)/);
+        expect(sql).toMatch(/ or .*"id" in \(\$6\)/);
+        expect(params).toEqual(["Finance", "Finance/%", "Legal", "Legal/%", 42, 7]);
     });
 
     it("omits empty lists and returns undefined when nothing is denied", () => {
@@ -57,9 +60,34 @@ describe("documentScopePredicate", () => {
             allowedDocumentIds: [],
         };
         const { sql, params } = render(documentScopePredicate(foldersOnly));
-        expect(sql).toMatch(/"category" not in \(\$1\)/);
+        expect(sql).toMatch(/case when .* then false else true end/i);
         expect(sql).not.toMatch(/"id"/);
-        expect(params).toEqual(["Finance"]);
+        expect(params).toEqual(["Finance", "Finance/%"]);
+    });
+
+    it("lets a granted subfolder inside a denied folder through: the nearest ancestor decides", () => {
+        const scope: DocumentScope = {
+            kind: "except",
+            deniedCategories: ["Finance"],
+            allowedCategories: ["Finance/Shared"],
+            deniedDocumentIds: [],
+            allowedDocumentIds: [],
+        };
+        const { sql, params } = render(documentScopePredicate(scope));
+        expect(params).toEqual(["Finance/Shared", "Finance/Shared/%", "Finance", "Finance/%"]);
+        expect(sql).toMatch(/then true when .* then false else true end/i);
+    });
+
+    it("escapes LIKE metacharacters in folder paths", () => {
+        const { params } = render(
+            documentScopePredicate({
+                kind: "except",
+                deniedCategories: ["100%_done"],
+                deniedDocumentIds: [],
+                allowedDocumentIds: [],
+            })
+        );
+        expect(params).toEqual(["100%_done", "100\\%\\_done/%"]);
     });
 
     it("allow-lists folders for guests, minus restricted documents, plus explicit grants", () => {
@@ -70,9 +98,10 @@ describe("documentScopePredicate", () => {
             allowedDocumentIds: [11],
         };
         const { sql, params } = render(documentScopePredicate(scope));
-        expect(sql).toMatch(/"category" in \(\$1\) and .*"id" not in \(\$2\)/);
-        expect(sql).toMatch(/ or .*"id" in \(\$3\)/);
-        expect(params).toEqual(["Shared", 9, 11]);
+        expect(sql).toMatch(/case when .* then true else false end/i);
+        expect(sql).toMatch(/"id" not in \(\$3\)/);
+        expect(sql).toMatch(/ or .*"id" in \(\$4\)/);
+        expect(params).toEqual(["Shared", "Shared/%", 9, 11]);
     });
 
     it("allow-lists only explicit documents when a guest has no folders", () => {
@@ -83,8 +112,7 @@ describe("documentScopePredicate", () => {
             allowedDocumentIds: [11],
         };
         const { sql, params } = render(documentScopePredicate(scope));
-        expect(sql).toMatch(/"id" in \(\$1\)/);
-        expect(sql).not.toMatch(/category/);
+        expect(sql).toMatch(/false or .*"id" in \(\$1\)/);
         expect(params).toEqual([11]);
     });
 });
@@ -103,7 +131,7 @@ describe("scopedDocumentWhere", () => {
                 allowedDocumentIds: [],
             })
         );
-        expect(scoped.sql).toMatch(/"company_id" = \$1 and .*"category" not in \(\$2\)/);
-        expect(scoped.params).toEqual([BigInt(5), "Finance"]);
+        expect(scoped.sql).toMatch(/"company_id" = \$1 and \(case when/i);
+        expect(scoped.params).toEqual([BigInt(5), "Finance", "Finance/%"]);
     });
 });

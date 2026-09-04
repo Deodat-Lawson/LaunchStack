@@ -119,6 +119,8 @@ export interface WorkspaceFolder {
     color: string;
     /** Visible only to people, groups, or roles granted access. */
     restricted?: boolean;
+    /** The `category` row behind a persisted folder; null while only implied by its contents. */
+    categoryId?: number | null;
 }
 
 export interface ThreadReference {

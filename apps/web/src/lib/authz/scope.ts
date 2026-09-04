@@ -31,6 +31,8 @@ import {
     SCOPE_EVERYTHING,
     SCOPE_NOTHING,
     scopeAllowsDocument,
+    scopeDefaultAllow,
+    scopeFolderRules,
     type DocumentScope,
 } from "./scope-types";
 
@@ -176,6 +178,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
         return {
             kind: "only",
             allowedCategories: grantedCategories,
+            deniedCategories,
             deniedDocumentIds,
             allowedDocumentIds,
         };
@@ -189,12 +192,46 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
         return SCOPE_EVERYTHING;
     }
 
-    return { kind: "except", deniedCategories, deniedDocumentIds, allowedDocumentIds };
+    // Granted folders ride along as carve-outs: a granted subfolder beneath a
+    // denied folder stays visible, because the nearest restricted ancestor wins.
+    return {
+        kind: "except",
+        deniedCategories,
+        allowedCategories: grantedCategories,
+        deniedDocumentIds,
+        allowedDocumentIds,
+    };
 }
 
 // ---------------------------------------------------------------------------
 // SQL
 // ---------------------------------------------------------------------------
+
+/** Escape a literal for a LIKE pattern (Postgres escapes with a backslash by default). */
+function escapeLikeLiteral(value: string): string {
+    return value.replace(/[\\%_]/g, match => `\\${match}`);
+}
+
+/** The LIKE pattern matching everything strictly beneath a folder path. */
+function descendantPattern(path: string): string {
+    return `${escapeLikeLiteral(path)}/%`;
+}
+
+/**
+ * The folder half of the scope as one CASE over `document.category`, rules
+ * deepest first, so the nearest restricted ancestor decides. `undefined`
+ * means the folders impose no filter.
+ */
+function folderPredicate(scope: DocumentScope): SQL | undefined {
+    const rules = scopeFolderRules(scope);
+    const otherwise = scopeDefaultAllow(scope);
+    if (rules.length === 0) return otherwise ? undefined : sql`false`;
+    const whens = rules.map(
+        rule =>
+            sql`WHEN (${document.category} = ${rule.path} OR ${document.category} LIKE ${descendantPattern(rule.path)}) THEN ${rule.allow ? sql`true` : sql`false`}`
+    );
+    return sql`(CASE ${sql.join(whens, sql` `)} ELSE ${otherwise ? sql`true` : sql`false`} END)`;
+}
 
 /**
  * The scope as a predicate over the engine `document` table. `undefined` for
@@ -207,31 +244,15 @@ export function documentScopePredicate(scope: DocumentScope): SQL | undefined {
     const allowedIds = [...scope.allowedDocumentIds];
     const deniedIds = [...scope.deniedDocumentIds];
 
-    if (scope.kind === "except") {
-        const clauses: SQL[] = [];
-        if (scope.deniedCategories.length > 0) {
-            clauses.push(notInArray(document.category, [...scope.deniedCategories]));
-        }
-        if (deniedIds.length > 0) clauses.push(notInArray(document.id, deniedIds));
-        const base = clauses.length === 0 ? undefined : and(...clauses);
-        if (allowedIds.length === 0) return base;
-        if (!base) return undefined;
-        return or(base, inArray(document.id, allowedIds));
+    let base = folderPredicate(scope);
+    if (deniedIds.length > 0) {
+        const notDenied = notInArray(document.id, deniedIds);
+        base = base ? and(base, notDenied) : notDenied;
     }
-
-    // only
-    const parts: SQL[] = [];
-    if (scope.allowedCategories.length > 0) {
-        const inCategories = inArray(document.category, [...scope.allowedCategories]);
-        parts.push(
-            deniedIds.length > 0
-                ? and(inCategories, notInArray(document.id, deniedIds))!
-                : inCategories
-        );
+    if (allowedIds.length > 0 && base) {
+        base = or(base, inArray(document.id, allowedIds));
     }
-    if (allowedIds.length > 0) parts.push(inArray(document.id, allowedIds));
-    if (parts.length === 0) return sql`false`;
-    return parts.length === 1 ? parts[0] : or(...parts);
+    return base;
 }
 
 /** `company_id = ? AND <scope>` — the predicate every document read goes through. */

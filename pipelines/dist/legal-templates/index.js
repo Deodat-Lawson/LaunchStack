@@ -6,10 +6,5 @@
 export { TEMPLATE_REGISTRY } from "./template-registry.js";
 export { buildEditorSections } from "./section-builders.js";
 export { parseLegalDocumentHtmlToSections } from "./html-to-sections.js";
-export {
-    validateFieldValue,
-    extractFieldValuesFromSections,
-    validateDocument,
-    buildTemplateFieldDataForDocx,
-} from "./legal-document-validation.js";
+export { validateFieldValue, extractFieldValuesFromSections, validateDocument, buildTemplateFieldDataForDocx, } from "./legal-document-validation.js";
 //# sourceMappingURL=index.js.map

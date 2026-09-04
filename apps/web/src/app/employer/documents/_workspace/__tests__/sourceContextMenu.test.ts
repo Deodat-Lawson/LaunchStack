@@ -130,6 +130,74 @@ describe("buildFolderMenuItems", () => {
     });
 });
 
+describe("buildFolderMenuItems for a nested folder", () => {
+    const paths = ["Contracts", "Contracts/2026", "Contracts/2026/Globex", "HR", "Unfiled"];
+
+    it("offers subfolder, rename, move, and delete", () => {
+        const onMove = jest.fn();
+        const onDelete = jest.fn();
+        const items = buildFolderMenuItems("Contracts/2026", {
+            onNewSubfolder: jest.fn(),
+            onRename: jest.fn(),
+            onMove,
+            onDelete,
+            folders: paths,
+        });
+        expect(items.map(item => item.id)).toEqual([
+            "title",
+            "new-subfolder",
+            "rename-folder",
+            "move-folder",
+            "sep-folder-danger",
+            "delete-folder",
+        ]);
+        expect(items[0]).toMatchObject({ type: "label", label: "Contracts / 2026" });
+        const del = items.find(item => item.id === "delete-folder");
+        expect(del).toMatchObject({ danger: true });
+        if (del?.type === "item") del.onSelect();
+        expect(onDelete).toHaveBeenCalled();
+    });
+
+    it("moves only to folders that are not itself, its subtree, its parent, or Unfiled", () => {
+        const onMove = jest.fn();
+        const items = buildFolderMenuItems("Contracts/2026", { onMove, folders: paths });
+        const move = items.find(item => item.id === "move-folder");
+        expect(move?.type).toBe("submenu");
+        if (move?.type !== "submenu") return;
+        expect(move.items.map(item => item.id)).toEqual(["move-folder-root", "move-folder-HR"]);
+        const root = move.items[0];
+        if (root?.type === "item") root.onSelect();
+        expect(onMove).toHaveBeenCalledWith(null);
+        const hr = move.items[1];
+        if (hr?.type === "item") hr.onSelect();
+        expect(onMove).toHaveBeenLastCalledWith("HR");
+    });
+
+    it("cannot move a top-level folder to the top level again", () => {
+        const items = buildFolderMenuItems("HR", { onMove: jest.fn(), folders: paths });
+        const move = items.find(item => item.id === "move-folder");
+        if (move?.type !== "submenu") throw new Error("expected submenu");
+        expect(move.items[0]).toMatchObject({ id: "move-folder-root", disabled: true });
+    });
+});
+
+describe("source move submenu", () => {
+    it("labels nested folders as readable paths", () => {
+        const nested: WorkspaceFolder[] = [
+            { id: "f-Contracts", name: "Contracts", color: "x" },
+            { id: "f-Contracts/2026", name: "Contracts/2026", color: "x" },
+        ];
+        const items = buildSourceMenuItems(source(), nested, [], { onMoveToFolder: jest.fn() });
+        const move = items.find(item => item.id === "move");
+        if (move?.type !== "submenu") throw new Error("expected submenu");
+        expect(move.items.map(item => (item.type === "item" ? item.label : ""))).toEqual([
+            "Contracts",
+            "Contracts / 2026",
+            "Unfiled",
+        ]);
+    });
+});
+
 describe("buildBlankRailMenuItems", () => {
     it("offers add knowledge and new folder", () => {
         const onAddKnowledge = jest.fn();

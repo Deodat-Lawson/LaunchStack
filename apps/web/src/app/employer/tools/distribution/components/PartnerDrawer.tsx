@@ -56,29 +56,49 @@ function Cited({ label, ids }: { label: string; ids: number[] }) {
     );
 }
 
+/** Event payloads are untyped JSON; render scalars as text and anything else as JSON. */
+function text(value: unknown, fallback = ""): string {
+    if (value === null || value === undefined || value === "") return fallback;
+    if (typeof value === "string") return value;
+    if (typeof value === "number" || typeof value === "boolean") return String(value);
+    try {
+        return JSON.stringify(value);
+    } catch {
+        return fallback;
+    }
+}
+
 function eventText(e: EventDto): string {
-    const p = e.payload as Record<string, unknown>;
+    const p = e.payload;
     switch (e.type) {
         case "stage_changed":
-            return `Moved ${String(p.from)} → ${String(p.to)}`;
+            return `Moved ${text(p.from, "?")} → ${text(p.to, "?")}`;
         case "researched":
-            return `Researched (${String(p.status)}; fit ${String(p.fitScore)}; ${String(p.evidence)} evidence)`;
+            return `Researched (${text(p.status, "?")}; fit ${text(p.fitScore, "?")}; ${text(p.evidence, "0")} evidence)`;
         case "note":
-            return String(p.text ?? "Note");
+            return text(p.text, "Note");
         case "imported":
-            return `Imported at stage ${String(p.stage)}`;
-        case "agreement_signed":
-            return `Agreement recorded (${String(p.exclusivity)}${p.endsOn ? `, ends ${String(p.endsOn)}` : ""})`;
+            return `Imported at stage ${text(p.stage, "?")}`;
+        case "agreement_signed": {
+            const ends = text(p.endsOn);
+            return `Agreement recorded (${text(p.exclusivity, "none")}${ends ? `, ends ${ends}` : ""})`;
+        }
         case "owner_changed":
-            return `Owner set to ${String(p.ownerUserId)}`;
+            return `Owner set to ${text(p.ownerUserId, "?")}`;
         case "next_action_set":
-            return `Next action: ${String(p.nextAction ?? "—")}`;
-        case "reply_logged":
-            return `Reply logged${p.summary ? `: ${String(p.summary)}` : ""}`;
-        case "meeting":
-            return `Meeting${p.summary ? `: ${String(p.summary)}` : ""}`;
-        case "document_shared":
-            return `Document shared${p.title ? `: ${String(p.title)}` : ""}`;
+            return `Next action: ${text(p.nextAction, "—")}`;
+        case "reply_logged": {
+            const summary = text(p.summary);
+            return `Reply logged${summary ? `: ${summary}` : ""}`;
+        }
+        case "meeting": {
+            const summary = text(p.summary);
+            return `Meeting${summary ? `: ${summary}` : ""}`;
+        }
+        case "document_shared": {
+            const title = text(p.title);
+            return `Document shared${title ? `: ${title}` : ""}`;
+        }
         default:
             return e.type;
     }

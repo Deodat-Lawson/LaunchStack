@@ -149,8 +149,8 @@ export function Overview({ state }: { state: DistributionState }) {
                         })}
                     </div>
                     <p className="text-ink-3 mt-3 text-[11px]">
-                        Cumulative: a partner at "qualified" also counts in every earlier stage.
-                        Median days per stage come from the timeline.
+                        Cumulative: a partner at &ldquo;qualified&rdquo; also counts in every
+                        earlier stage. Median days per stage come from the timeline.
                     </p>
                 </Card>
 
@@ -184,14 +184,13 @@ export function Overview({ state }: { state: DistributionState }) {
                                             <td className="text-ink-2 p-1 font-mono">{country}</td>
                                             {kinds.map(kind => {
                                                 const c = cell(country, kind);
-                                                const tone =
-                                                    !c || !c.targeted
-                                                        ? "bg-panel-2 text-ink-3"
-                                                        : c.covered > 0
-                                                          ? "bg-success-soft text-success"
-                                                          : c.inPipeline > 0
-                                                            ? "bg-brand-soft text-brand-ink"
-                                                            : "bg-warn-soft text-warn";
+                                                const tone = !c?.targeted
+                                                    ? "bg-panel-2 text-ink-3"
+                                                    : c.covered > 0
+                                                      ? "bg-success-soft text-success"
+                                                      : c.inPipeline > 0
+                                                        ? "bg-brand-soft text-brand-ink"
+                                                        : "bg-warn-soft text-warn";
                                                 const label = !c
                                                     ? "–"
                                                     : c.covered > 0

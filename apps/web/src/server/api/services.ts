@@ -153,6 +153,28 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         routes: ["repo-explainer"],
     },
     {
+        id: "repo-workspaces",
+        tier: "tool",
+        summary: "Connect a repository as a synced mirror the repo explainer reads from.",
+        scope: "mixed",
+        feature: "@launchstack/pipelines/repo-workspace",
+        routes: ["repo-workspaces", "webhooks/github"],
+        unscopedRoutes: {
+            "webhooks/github":
+                "GitHub calls it; the request is authenticated by the webhook HMAC signature, not a session, and the workspace is resolved from the payload.",
+        },
+    },
+    {
+        id: "distribution",
+        tier: "tool",
+        summary:
+            "Find, qualify and run B2B distribution partners: programs, discovery runs, evidence-backed dossiers, relationship stages, agreements, and an outreach hand-off to email campaigns.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/distribution",
+        routes: ["distribution"],
+        notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",

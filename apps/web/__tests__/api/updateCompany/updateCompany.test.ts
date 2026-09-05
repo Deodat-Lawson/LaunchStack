@@ -1,12 +1,24 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { POST } from "~/app/api/updateCompany/route";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db/index";
+import { recordAuditEvent } from "~/lib/authz/audit";
+
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    ...jest.requireActual("~/lib/require-workspace-context"),
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/lib/authz/audit", () => ({
+    recordAuditEvent: jest.fn().mockResolvedValue(undefined),
 }));
 
 jest.mock("~/lib/validation", () => {
@@ -42,13 +54,7 @@ jest.mock("~/server/inngest/client", () => ({
 function mockCtx(role: string, companyId = BigInt(7)) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
-            authUserId: "user-123",
-            userPk: BigInt(1),
-            companyId,
-            role,
-            status: "verified",
-        },
+        data: makeWorkspaceContext({ role, companyId, authUserId: "user-123", userPk: BigInt(1) }),
     });
 }
 
@@ -95,6 +101,23 @@ describe("POST /api/updateCompany", () => {
             employeepasskey: "EMP456",
             numberOfEmployees: "25",
         });
+        // The audit row names the keys that changed, never the passkeys.
+        expect(recordAuditEvent).toHaveBeenCalledWith(
+            db,
+            expect.objectContaining({
+                action: "settings.changed",
+                targetType: "workspace",
+                actorUserId: "user-123",
+                detail: {
+                    keys: ["name", "numberOfEmployees", "employerpasskey", "employeepasskey"],
+                },
+            })
+        );
+        const auditCalls = JSON.stringify(
+            (recordAuditEvent as jest.Mock).mock.calls,
+            (_k, v: unknown) => (typeof v === "bigint" ? v.toString() : v)
+        );
+        expect(auditCalls).not.toContain("EMP123");
     });
 
     it("updates company settings for an admin", async () => {
@@ -128,8 +151,8 @@ describe("POST /api/updateCompany", () => {
         expect(validateRequestBody).not.toHaveBeenCalled();
     });
 
-    it("returns 403 when the membership role is editor", async () => {
-        mockCtx("editor");
+    it("returns 403 when the membership lacks settings.manage", async () => {
+        mockCtx("member");
         (validateRequestBody as jest.Mock).mockResolvedValue({
             success: true,
             data: { name: "Acme Corp" },
@@ -139,10 +162,8 @@ describe("POST /api/updateCompany", () => {
         const json = await response.json();
 
         expect(response.status).toBe(403);
-        expect(json).toEqual({
-            success: false,
-            message: "Forbidden",
-        });
+        expect(json.permission).toBe("settings.manage");
+        expect(validateRequestBody).not.toHaveBeenCalled();
         expect(db.update).not.toHaveBeenCalled();
     });
 

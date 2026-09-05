@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
+import { safeNextPath, withNext } from "~/components/auth/next-path";
 
 /**
  * Sign-up page.
@@ -50,6 +51,10 @@ const SignupPage: React.FC = () => {
     const searchParams = useSearchParams();
     const { userId, isLoaded: isAuthLoaded } = useAuth();
     const { user } = useUser();
+    // An invitation page sends people here with `?next=/invite/<token>`. Once
+    // the account exists they go straight back — the invitation already
+    // decided which workspace and role, so there is no path to pick.
+    const next = safeNextPath(searchParams.get("next"), "");
 
     const [mode, setMode] = useState<Mode>("solo");
     const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
@@ -115,18 +120,8 @@ const SignupPage: React.FC = () => {
             setInviteSuccess(null);
 
             try {
-                const regRes = await fetch("/api/signup/check-registration");
-                const regData = (await regRes.json()) as {
-                    data?: { registered: boolean; companyName?: string };
-                };
-                if (regData.data?.registered) {
-                    setInviteError(
-                        `You're already part of "${regData.data.companyName ?? "a workspace"}". You can't join a second one.`
-                    );
-                    setIsJoining(false);
-                    return;
-                }
-
+                // One account can belong to several workspaces, so someone who
+                // is already registered joins exactly the way a new person does.
                 const response = await fetch("/api/signup/join", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -154,7 +149,7 @@ const SignupPage: React.FC = () => {
                 };
                 setInviteSuccess(data.message ?? "You're in!");
                 setTimeout(() => {
-                    router.push(data.data?.redirectPath ?? "/");
+                    router.push(data.data?.redirectPath ?? "/employer/documents");
                 }, 1200);
             } catch (err) {
                 console.error("Join failed:", err);
@@ -203,6 +198,12 @@ const SignupPage: React.FC = () => {
             void performJoin(codeFromUrl);
         }
     }, [isAuthLoaded, userId, user, searchParams, performJoin]);
+
+    // ── Hand an invited person back to the invitation once signed in ──
+    useEffect(() => {
+        if (!isAuthLoaded || !userId || !next) return;
+        router.replace(next);
+    }, [isAuthLoaded, userId, next, router]);
 
     // ── Solo: one-click workspace creation ──
     const startSolo = async () => {
@@ -331,7 +332,7 @@ const SignupPage: React.FC = () => {
                         <SignUpForm />
                         <div style={bottomLinkStyle}>
                             Already have an account?{" "}
-                            <Link href="/signin" style={linkStyle}>
+                            <Link href={withNext("/signin", next)} style={linkStyle}>
                                 Sign in →
                             </Link>
                         </div>
@@ -342,8 +343,8 @@ const SignupPage: React.FC = () => {
         );
     }
 
-    // ── Loading state ──
-    if (!isAuthLoaded) {
+    // ── Loading state (also while handing an invited person back to `next`) ──
+    if (!isAuthLoaded || Boolean(userId && next)) {
         return (
             <Shell>
                 <div style={formPanelStyle}>

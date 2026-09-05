@@ -112,7 +112,12 @@ export function SessionsBrowserPreview() {
                 typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
             if (url.includes("/api/connectors/agent-sessions")) {
                 if (init?.method === "POST") {
-                    const body = JSON.parse(String(init.body ?? "{}")) as { sourceIds?: string[] };
+                    // `BodyInit` covers Blob, FormData and streams, and String()
+                    // on those yields "[object Object]" — which would parse as
+                    // nothing useful. This shim is only ever handed a JSON
+                    // string, so anything else is treated as an empty body.
+                    const raw = typeof init.body === "string" ? init.body : "{}";
+                    const body = JSON.parse(raw) as { sourceIds?: string[] };
                     const ids =
                         body.sourceIds ?? ITEMS.filter(i => !i.imported).map(i => i.sourceId);
                     await new Promise(r => setTimeout(r, 600));

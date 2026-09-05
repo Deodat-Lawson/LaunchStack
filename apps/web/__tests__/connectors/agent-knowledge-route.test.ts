@@ -3,13 +3,15 @@
  * call this, and with which directories" is the part that must not regress.
  */
 
+import type * as MockRequireWorkspaceContext from "../helpers/mock-require-workspace-context";
+
 const mockEnv = {
     server: {
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: undefined as string | undefined,
         AGENT_KNOWLEDGE_PROJECT_ROOTS: undefined as string | undefined,
     },
 };
-const mockUserRows: { rows: { id: bigint; role: string; companyId: bigint }[] } = { rows: [] };
+const mockRequireWorkspaceContext = jest.fn();
 
 // A getter, not `env: mockEnv` — jest hoists mock factories above the const,
 // so the binding is only safe to read once a handler actually runs.
@@ -18,13 +20,13 @@ jest.mock("~/env", () => ({
         return mockEnv;
     },
 }));
-jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
-jest.mock("~/server/db", () => ({
-    db: {
-        select: () => ({ from: () => ({ where: () => Promise.resolve(mockUserRows.rows) }) }),
-    },
-}));
-jest.mock("~/lib/active-workspace", () => ({ resolveActiveCompanyForUser: jest.fn() }));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 jest.mock("~/server/services/agent-knowledge-connector", () => ({
     previewAgentKnowledge: jest.fn(),
     runAgentKnowledgeSync: jest.fn(),
@@ -32,19 +34,30 @@ jest.mock("~/server/services/agent-knowledge-connector", () => ({
 
 import path from "node:path";
 
-import { getServerSession } from "~/server/auth";
-
 import { GET, POST } from "~/app/api/connectors/agent-knowledge/route";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import {
     previewAgentKnowledge,
     runAgentKnowledgeSync,
 } from "~/server/services/agent-knowledge-connector";
 
-const mockAuth = getServerSession as unknown as jest.Mock;
-const mockResolveCompany = resolveActiveCompanyForUser as jest.Mock;
+import { makeWorkspaceContext } from "../helpers/workspace-context";
+
 const mockPreview = previewAgentKnowledge as jest.Mock;
 const mockSync = runAgentKnowledgeSync as jest.Mock;
+
+function signedInAs(role: string) {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: makeWorkspaceContext({ authUserId: "user_abc", companyId: 7n, role }),
+    });
+}
+
+function signedOut() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 }),
+    });
+}
 
 const ROOT = path.resolve("/srv/checkouts/app");
 
@@ -76,9 +89,7 @@ beforeEach(() => {
     jest.clearAllMocks();
     mockEnv.server.AGENT_KNOWLEDGE_CONNECTOR_ENABLED = "true";
     mockEnv.server.AGENT_KNOWLEDGE_PROJECT_ROOTS = ROOT;
-    mockUserRows.rows = [{ id: 1n, role: "owner", companyId: 7n }];
-    mockAuth.mockResolvedValue({ user: { id: "user_abc" } });
-    mockResolveCompany.mockResolvedValue(7n);
+    signedInAs("owner");
     mockPreview.mockResolvedValue({ roots: [], items: [], skipped: [], truncated: false });
     mockSync.mockResolvedValue({
         connectorId: "agent-knowledge",
@@ -99,7 +110,7 @@ beforeEach(() => {
 
 describe("POST /api/connectors/agent-knowledge", () => {
     it("rejects an unauthenticated call before touching the filesystem", async () => {
-        mockAuth.mockResolvedValue(null);
+        signedOut();
 
         const response = await POST(postRequest({}));
 
@@ -107,8 +118,8 @@ describe("POST /api/connectors/agent-knowledge", () => {
         expect(mockSync).not.toHaveBeenCalled();
     });
 
-    it("rejects an employee — imported knowledge is workspace-wide", async () => {
-        mockUserRows.rows = [{ id: 1n, role: "employee", companyId: 7n }];
+    it("rejects a member — imported knowledge needs connectors.manage", async () => {
+        signedInAs("member");
 
         const response = await POST(postRequest({}));
 
@@ -228,7 +239,7 @@ describe("GET /api/connectors/agent-knowledge", () => {
     });
 
     it("requires the same authorization as a sync", async () => {
-        mockUserRows.rows = [{ id: 1n, role: "employee", companyId: 7n }];
+        signedInAs("member");
 
         expect((await GET(getRequest())).status).toBe(403);
         expect(mockPreview).not.toHaveBeenCalled();

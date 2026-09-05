@@ -246,7 +246,7 @@ function logEntityExtractionOffOnce(): void {
     console.log(
         "[DocIngestionTool] Step F skipped: entity extraction is off. The host has not " +
             "called configureEntityExtraction({ enabled: true }) — apps/web reads " +
-            "ENABLE_ENTITY_EXTRACTION for it (ADR-010)."
+            "ENABLE_ENTITY_EXTRACTION for it (ADR-011)."
     );
 }
 
@@ -258,7 +258,7 @@ async function maybeExtractEntities(
 ): Promise<void> {
     if (storedSections.length === 0) return;
 
-    // Opt-in since ADR-010: nothing user-facing reads the kg_* tables, and
+    // Opt-in since ADR-011: nothing user-facing reads the kg_* tables, and
     // extraction bills an NER call per five chunks of every upload. The host
     // decides (configureEntityExtraction); unconfigured means off.
     if (!isEntityExtractionEnabled()) {

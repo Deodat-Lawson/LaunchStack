@@ -33,8 +33,8 @@ import { companyFactsLegs } from "./company-facts-retriever";
 const notesLegs: NotesLegProvider = {
     createDocumentLeg: (documentId, embeddings, topK) =>
         createDocumentNotesRetriever(documentId, embeddings, topK),
-    createCompanyLeg: (companyId, embeddings, topK) =>
-        createCompanyNotesRetriever(companyId, embeddings, topK),
+    createCompanyLeg: (companyId, embeddings, topK, scope) =>
+        createCompanyNotesRetriever(companyId, embeddings, topK, scope),
     createMultiDocLeg: (documentIds, embeddings, topK) =>
         createMultiDocNotesRetriever(documentIds, embeddings, topK),
 };
@@ -43,7 +43,7 @@ configureEnsemble({
     graphRetrieval: env.server.ENABLE_GRAPH_RETRIEVER === true,
     notesLegs: env.server.ENABLE_NOTES_RETRIEVER === true ? notesLegs : null,
     // On unless the operator says "false": the projection is one row per
-    // company, so an empty one costs a single indexed read (ADR-010).
+    // company, so an empty one costs a single indexed read (ADR-011).
     factsLegs: env.server.ENABLE_COMPANY_FACTS_RETRIEVER === false ? null : companyFactsLegs,
 });
 

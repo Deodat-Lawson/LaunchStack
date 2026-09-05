@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth, useUser } from "~/lib/auth-client";
@@ -8,16 +8,26 @@ import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
 import { LANDING_URL } from "~/config/landing";
+import {
+    UNFILED_FOLDER,
+    folderLeafName,
+    isFolderDescendant,
+    isFolderOrDescendant,
+    joinFolderPath,
+    replaceFolderPrefix,
+    displayFolderPath,
+} from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { useAIChat } from "../hooks/useAIChat";
+import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
 import { IconChevronRight } from "./icons";
-import { NewFolderDialog } from "./NewFolderDialog";
-import { RenameFolderDialog } from "./RenameFolderDialog";
+import { DeleteFolderDialog } from "./DeleteFolderDialog";
+import { FolderDialog, type FolderDialogRequest } from "./FolderDialog";
 import { RenameSourceDialog } from "./RenameSourceDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
@@ -30,8 +40,8 @@ import type {
     ComposerSend,
     ThreadMessage,
     ThreadReference,
-    WorkspaceFolder,
     WorkspaceSource,
+    WorkspaceFolder,
 } from "./types";
 
 /**
@@ -52,11 +62,12 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=analytics",
-    employees: "/employer/employees",
+    employees: "/employer/settings#people",
     settings: "/employer/settings",
     metadata: "/employer/documents?feature=metadata",
     "marketing-pipeline": "/employer/tools/marketing-pipeline",
     "repo-explainer": "/employer/tools/repo-explainer",
+    distribution: "/employer/tools/distribution",
     notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
@@ -131,7 +142,7 @@ export function WorkspaceShell() {
         if (isLoaded && !isSignedIn) router.push("/");
     }, [isLoaded, isSignedIn, router]);
 
-    const { sources, folders, companyId, role, refresh } = useWorkspaceData(userId ?? null);
+    const { sources, folders, companyId, can, refresh } = useWorkspaceData(userId ?? null);
 
     const [selected, setSelected] = useState<string[]>([]);
     const [thread, setThread] = useState<ThreadMessage[]>([]);
@@ -149,8 +160,8 @@ export function WorkspaceShell() {
     /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
     const [palOpen, setPalOpen] = useState(false);
-    const [newFolderOpen, setNewFolderOpen] = useState(false);
-    const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
+    const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
+    const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
     const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
     /** Cited passage to locate + highlight when the viewer was opened from a citation. */
     const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
@@ -159,6 +170,8 @@ export function WorkspaceShell() {
     const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
+    /** The folder or document whose access dialog is open. */
+    const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
     const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
     /**
@@ -491,6 +504,99 @@ export function WorkspaceShell() {
         [sources, refresh]
     );
 
+    const openFolderAccess = useCallback((folder: WorkspaceFolder) => {
+        setAccessTarget({
+            kind: "folder",
+            path: folder.name,
+            name: displayFolderPath(folder.name),
+        });
+    }, []);
+
+    const openDocumentAccess = useCallback((source: WorkspaceSource) => {
+        if (!source.documentId) {
+            toast.info("This source is still being indexed.");
+            return;
+        }
+        setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
+    }, []);
+
+    // Folder structure needs `folders.manage`, like every other write to the
+    // library. Members see the tree; owners and admins shape it.
+    const canManageFolders = can("folders.manage");
+    const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
+
+    /** One call for every folder mutation; resolves to an error message or null. */
+    const folderRequest = useCallback(
+        async (method: "POST" | "PATCH" | "DELETE", body: Record<string, string>) => {
+            try {
+                const res = await fetch("/api/folders", {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                });
+                const json = (await res.json().catch(() => ({}))) as {
+                    success?: boolean;
+                    message?: string;
+                };
+                if (!res.ok || !json.success) {
+                    return json.message ?? `Request failed (${res.status})`;
+                }
+                await refresh();
+                return null;
+            } catch (err) {
+                return err instanceof Error ? err.message : "Request failed";
+            }
+        },
+        [refresh]
+    );
+
+    const handleCreateFolder = useCallback(
+        (path: string) => folderRequest("POST", { path }),
+        [folderRequest]
+    );
+
+    const handleRenameFolder = useCallback(
+        async (path: string, newPath: string) => {
+            const failure = await folderRequest("PATCH", { path, newPath });
+            if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
+                setActiveFolder(replaceFolderPrefix(activeFolder, path, newPath));
+            }
+            return failure;
+        },
+        [folderRequest, activeFolder]
+    );
+
+    /** Drag-and-drop and the folder menu: the move is a rename to a new parent. */
+    const handleMoveFolder = useCallback(
+        async (path: string, targetParent: string | null) => {
+            const failure = await handleRenameFolder(
+                path,
+                joinFolderPath(targetParent, folderLeafName(path))
+            );
+            if (failure) toast.error(failure);
+        },
+        [handleRenameFolder]
+    );
+
+    const handleDeleteFolder = useCallback(
+        async (path: string) => {
+            const failure = await folderRequest("DELETE", { path });
+            if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
+                setActiveFolder(null);
+            }
+            return failure;
+        },
+        [folderRequest, activeFolder]
+    );
+
+    const deleteFolderCounts = useMemo(() => {
+        if (!deleteFolderPath) return { documents: 0, subfolders: 0 };
+        return {
+            documents: sources.filter(s => isFolderOrDescendant(s.folder, deleteFolderPath)).length,
+            subfolders: folderPaths.filter(p => isFolderDescendant(p, deleteFolderPath)).length,
+        };
+    }, [deleteFolderPath, sources, folderPaths]);
+
     /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
     const openFeature = useCallback(
         (featureId?: string) => {
@@ -651,14 +757,40 @@ export function WorkspaceShell() {
                     onOpenAdd={() => openAdd()}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenSource={handleOpenSource}
-                    onNewFolder={() => setNewFolderOpen(true)}
-                    onRenameFolder={folder => setRenameFolder(folder)}
+                    onNewFolder={
+                        canManageFolders
+                            ? parentPath =>
+                                  setFolderDialog({
+                                      mode: "create",
+                                      parentPath: parentPath ?? null,
+                                  })
+                            : undefined
+                    }
+                    onRenameFolder={
+                        canManageFolders
+                            ? folder => setFolderDialog({ mode: "rename", path: folder.name })
+                            : undefined
+                    }
+                    onMoveFolder={
+                        canManageFolders
+                            ? (path, target) => void handleMoveFolder(path, target)
+                            : undefined
+                    }
+                    onDeleteFolder={
+                        canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
+                    }
+                    onShareFolder={openFolderAccess}
+                    onRestrictAccess={openDocumentAccess}
                     onRenameSource={source => setRenameSource(source)}
                     onDeleteSource={source => {
                         setDeleteError(null);
                         setDeleteSource(source);
                     }}
-                    onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
+                    onMoveToFolder={
+                        canManageFolders
+                            ? (id, name) => void handleMoveToFolder(id, name)
+                            : undefined
+                    }
                     activeFolder={activeFolder}
                     setActiveFolder={setActiveFolder}
                     activeTag={activeTag}
@@ -729,7 +861,6 @@ export function WorkspaceShell() {
                     onToggleThinking={() => setComposerThinking(v => !v)}
                     studioSlot={
                         <StudioMenu
-                            role={role}
                             onOpenStudio={() => openFeature()}
                             onPickFeature={id => expandFeature(id)}
                         />
@@ -738,7 +869,6 @@ export function WorkspaceShell() {
             ) : (
                 <ExpandedFeatureView
                     featureId={activeFeatureId}
-                    role={role}
                     leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
                     onPaneExit={() => setActiveFeatureId("chat")}
                     onOpenStudio={() => openFeature()}
@@ -767,6 +897,7 @@ export function WorkspaceShell() {
                                 setDeleteError(null);
                                 setDeleteSource(source);
                             },
+                            onRestrictAccess: openDocumentAccess,
                             onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                         },
                     }}
@@ -776,7 +907,6 @@ export function WorkspaceShell() {
             {studioOpen && (
                 <StudioDrawer
                     open
-                    role={role}
                     initialFeatureId={studioFeatureId}
                     activeFeatureId={activeFeatureId}
                     onClose={() => setStudioOpen(false)}
@@ -796,8 +926,18 @@ export function WorkspaceShell() {
                     setAddTab(undefined);
                 }}
                 userId={userId ?? null}
-                defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
-                folders={folders.map(f => f.name)}
+                defaultCategory={activeFolder ?? UNFILED_FOLDER}
+                folders={folderPaths}
+                onCreateFolder={
+                    canManageFolders
+                        ? path => {
+                              void handleCreateFolder(path).then(failure => {
+                                  if (failure) toast.error(failure);
+                              });
+                          }
+                        : undefined
+                }
+                restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
                 }}
@@ -820,28 +960,23 @@ export function WorkspaceShell() {
                 }}
             />
 
-            <NewFolderDialog
-                open={newFolderOpen}
-                onClose={() => setNewFolderOpen(false)}
-                existingFolders={folders.map(f => f.name)}
-                onCreated={() => {
-                    void refresh();
-                }}
+            <FolderDialog
+                request={folderDialog}
+                existingPaths={folderPaths}
+                onSubmit={path =>
+                    folderDialog?.mode === "rename"
+                        ? handleRenameFolder(folderDialog.path, path)
+                        : handleCreateFolder(path)
+                }
+                onClose={() => setFolderDialog(null)}
             />
 
-            <RenameFolderDialog
-                open={!!renameFolder}
-                folder={renameFolder}
-                onClose={() => setRenameFolder(null)}
-                existingFolders={folders.map(f => f.name)}
-                onRenamed={newName => {
-                    if (activeFolder === renameFolder?.name) setActiveFolder(newName);
-                    void refresh();
-                }}
-                onDeleted={() => {
-                    if (activeFolder === renameFolder?.name) setActiveFolder(null);
-                    void refresh();
-                }}
+            <DeleteFolderDialog
+                path={deleteFolderPath}
+                documentCount={deleteFolderCounts.documents}
+                subfolderCount={deleteFolderCounts.subfolders}
+                onConfirm={handleDeleteFolder}
+                onClose={() => setDeleteFolderPath(null)}
             />
 
             <RenameSourceDialog
@@ -870,6 +1005,12 @@ export function WorkspaceShell() {
                 }}
             />
 
+            <AccessDialog
+                target={accessTarget}
+                onClose={() => setAccessTarget(null)}
+                onSaved={() => void refresh()}
+            />
+
             {viewerSource && (
                 <DocumentViewer
                     source={viewerSource}
@@ -880,6 +1021,7 @@ export function WorkspaceShell() {
                     }}
                     onRename={handleRenameDoc}
                     onDelete={id => void handleDeleteDoc(id)}
+                    onRestrictAccess={openDocumentAccess}
                     onAskAbout={handleAskAbout}
                     onVersionChanged={() => void refresh()}
                 />
@@ -890,7 +1032,6 @@ export function WorkspaceShell() {
 
 interface ExpandedFeatureViewProps {
     featureId: string;
-    role: string | null;
     /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
     leadingChromeInsetPx?: number;
     /** Return to workspace chat when panes invoke their exit / close callbacks. */
@@ -912,7 +1053,6 @@ interface ExpandedFeatureViewProps {
  */
 function ExpandedFeatureView({
     featureId,
-    role,
     leadingChromeInsetPx = 0,
     onPaneExit,
     onOpenStudio,
@@ -946,7 +1086,7 @@ function ExpandedFeatureView({
                     <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{feature?.desc ?? ""}</div>
                 </div>
                 <JumpToPaletteButton onClick={openPalette} />
-                <StudioMenu role={role} onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
+                <StudioMenu onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
                 <AvatarMenu
                     userInitials={userInitials}
                     userName={userName}

@@ -3,15 +3,23 @@
  * Tests authentication, validation, Adeu integration, and error handling
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { POST } from "~/app/api/legal/apply-edits/route";
 import { processDocumentBatch, readDocx } from "@launchstack/editing";
 import type { BatchSummary } from "@launchstack/editing";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 // Mock Adeu client
 jest.mock("@launchstack/editing", () => ({
@@ -42,13 +50,12 @@ const mockReadDocx = readDocx as jest.MockedFunction<typeof readDocx>;
 
 const VERIFIED_CTX = {
     success: true as const,
-    data: {
+    data: makeWorkspaceContext({
         authUserId: "user123",
         userPk: BigInt(1),
         companyId: BigInt(1),
-        role: "employer",
-        status: "verified",
-    },
+        role: "admin",
+    }),
 };
 
 function mockAuthenticated() {

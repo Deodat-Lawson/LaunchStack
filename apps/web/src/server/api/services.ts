@@ -153,6 +153,28 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         routes: ["repo-explainer"],
     },
     {
+        id: "repo-workspaces",
+        tier: "tool",
+        summary: "Connect a repository as a synced mirror the repo explainer reads from.",
+        scope: "mixed",
+        feature: "@launchstack/pipelines/repo-workspace",
+        routes: ["repo-workspaces", "webhooks/github"],
+        unscopedRoutes: {
+            "webhooks/github":
+                "GitHub calls it; the request is authenticated by the webhook HMAC signature, not a session, and the workspace is resolved from the payload.",
+        },
+    },
+    {
+        id: "distribution",
+        tier: "tool",
+        summary:
+            "Find, qualify and run B2B distribution partners: programs, discovery runs, evidence-backed dossiers, relationship stages, agreements, and an outreach hand-off to email campaigns.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/distribution",
+        routes: ["distribution"],
+        notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -209,6 +231,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "graph",
             "embedding-indexes",
             "Categories",
+            "folders",
             "employer/upload",
             "updateUploadPreference",
         ],
@@ -221,8 +244,10 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         tier: "platform",
         summary: "Answer a question over the workspace's sources, with references.",
         scope: "workspace",
-        routes: ["agents/documentQ&A", "Questions"],
+        routes: ["agents/documentQ&A", "Questions", "ask"],
         notes:
+            "`ask/starters` writes the workspace's starter questions from the company profile " +
+            "and the source inventory — the questions, not the answers. " +
             "Route path contains a literal ampersand. Also hosts a persisted chat/task/tool " +
             "surface that has no client. `Questions/{add,fetch}` are the chat-history reads " +
             "and writes — live and tested, but named as procedures in PascalCase, so they are " +
@@ -276,29 +301,23 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
     {
         id: "workspace",
         tier: "system",
-        summary: "Accounts, workspaces, membership, invitations.",
+        summary:
+            "Accounts, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
         scope: "mixed",
-        routes: [
-            "auth",
-            "workspaces",
-            "signup",
-            "employerAuth",
-            "employeeAuth",
-            "invite-codes",
-            "approveEmployees",
-            "removeEmployees",
-            "getAllEmployees",
-            "fetchUserInfo",
-        ],
+        routes: ["auth", "workspaces", "signup", "workspace", "fetchUserInfo"],
         unscopedRoutes: {
             "auth/*": "better-auth's own surface — sign-in/out/up, sessions, password reset.",
             "signup/*": "Runs before a user row or membership exists.",
             workspaces: "Selecting a workspace cannot require one to already be active.",
             "workspaces/[id]/switch": "Changes which workspace is active.",
             "workspaces/slug-available": "Checked while creating a workspace.",
-            "invite-codes/validate": "Checked before the caller is a member.",
-            employerAuth: "Establishes the session that workspace context reads.",
-            employeeAuth: "Establishes the session that workspace context reads.",
+            "workspace/invitations/preview": "Public: previewed before the caller has an account.",
+            "workspace/invitations/accept":
+                "Session only: creates the membership it would otherwise require.",
+            "workspace/join-links/preview": "Public: previewed before the caller has an account.",
+            "workspace/join-links/accept":
+                "Session only: creates the membership it would otherwise require.",
+            "workspace/members/leave": "Removes the caller's own membership.",
             fetchUserInfo: "User-level identity, not workspace-scoped.",
         },
     },

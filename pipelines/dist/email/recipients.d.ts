@@ -74,10 +74,7 @@ export declare function prospectContextNotes(p: ProspectLike): string;
  * `emailByName` supplies addresses a human has already researched, keyed by the
  * prospect's name. Anything absent from it lands in `needsEmail`.
  */
-export declare function recipientsFromProspects(
-    prospects: ProspectLike[],
-    emailByName?: Record<string, string>
-): ProspectIngestResult;
+export declare function recipientsFromProspects(prospects: ProspectLike[], emailByName?: Record<string, string>): ProspectIngestResult;
 /**
  * Merge several ingest results, de-duplicating by address. The first occurrence
  * wins, and later duplicates are reported rather than silently dropped — a

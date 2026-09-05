@@ -24,6 +24,7 @@ import type {
     SearchResult,
     DocumentSearchOptions,
     CompanySearchOptions,
+    DocumentScope,
     MultiDocSearchOptions,
     EmbeddingsProvider,
     SearchScope,
@@ -137,17 +138,20 @@ export async function createCompanyEnsembleRetriever(
     options: CompanySearchOptions,
     embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-    const { companyId, topK = 10, filters } = options;
+    // The scope reaches every leg: a chunk the caller may not read is never
+    // a candidate, whichever retriever would have surfaced it.
+    const { companyId, topK = 10, filters, scope } = options;
     const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
     const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
-    const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
+    const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK, scope);
     const vectorRetriever = createCompanyVectorRetriever(
         companyId,
         emb,
         resolveEmbeddingIndex(options.embeddingIndexKey),
         candidateK,
-        filters
+        filters,
+        scope
     );
 
     const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
@@ -156,6 +160,7 @@ export async function createCompanyEnsembleRetriever(
     if (isGraphRetrievalEnabled()) {
         const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
             topK: candidateK,
+            scope,
         });
         if (graphRetriever) {
             retrievers.push(graphRetriever);
@@ -168,7 +173,8 @@ export async function createCompanyEnsembleRetriever(
         const notesRetriever = notesLegs.createCompanyLeg(
             companyId,
             emb,
-            Math.min(candidateK, NOTES_MAX_CANDIDATES)
+            Math.min(candidateK, NOTES_MAX_CANDIDATES),
+            scope
         );
         retrievers.push(notesRetriever);
         weights = [...weights, NOTES_DEFAULT_WEIGHT];
@@ -177,7 +183,7 @@ export async function createCompanyEnsembleRetriever(
     const factsLegs = getEnsembleConfig().factsLegs;
     if (factsLegs) {
         retrievers.push(
-            factsLegs.createCompanyLeg(companyId, Math.min(candidateK, FACTS_MAX_CANDIDATES))
+            factsLegs.createCompanyLeg(companyId, Math.min(candidateK, FACTS_MAX_CANDIDATES), scope)
         );
         weights = [...weights, FACTS_DEFAULT_WEIGHT];
     }
@@ -248,7 +254,7 @@ export async function createMultiDocEnsembleRetriever(
  */
 function createGraphRetrieverForEnsemble(
     companyId: number,
-    options?: { documentIds?: number[]; topK?: number }
+    options?: { documentIds?: number[]; topK?: number; scope?: DocumentScope }
 ): BaseRetriever | null {
     if (shouldUseNeo4jRetriever()) {
         console.log(
@@ -303,14 +309,21 @@ export async function documentEnsembleSearch(
     }
 }
 
+/**
+ * @deprecated There is no company-wide search: a search is always over a set
+ * of document ids, and "everything" is the set of ids in the caller's
+ * document scope. Resolve the readable ids and use `multiDocEnsembleSearch`.
+ * Kept, with `options.scope` applied to every leg, as a defence for callers
+ * that act for a workspace rather than a person (pipelines).
+ */
 export async function companyEnsembleSearch(
     query: string,
     options: CompanySearchOptions,
     embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
-    const { companyId, topK = 10 } = options;
+    const { companyId, topK = 10, scope } = options;
 
-    const chunks = await getCompanyChunks(companyId);
+    const chunks = await getCompanyChunks(companyId, scope);
     if (chunks.length === 0) {
         console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
         return [];
@@ -345,7 +358,7 @@ export async function companyEnsembleSearch(
         return reranked.slice(0, topK);
     } catch (error) {
         console.error("[EnsembleSearch] Company search error:", error);
-        return fallbackBM25Search(query, "company", { companyId }, topK);
+        return fallbackBM25Search(query, "company", { companyId, scope }, topK);
     }
 }
 
@@ -471,7 +484,13 @@ async function rerankResults(query: string, results: SearchResult[]): Promise<Se
 async function fallbackBM25Search(
     query: string,
     scope: SearchScope,
-    ids: { documentId?: number; companyId?: number; documentIds?: number[] },
+    ids: {
+        documentId?: number;
+        companyId?: number;
+        documentIds?: number[];
+        /** The caller's document scope — the fallback must not widen the corpus. */
+        scope?: DocumentScope;
+    },
     topK: number
 ): Promise<SearchResult[]> {
     console.warn(`[EnsembleSearch] Falling back to BM25-only search for ${scope}`);
@@ -481,7 +500,7 @@ async function fallbackBM25Search(
         if (scope === "document" && ids.documentId !== undefined) {
             chunks = await getDocumentChunks(ids.documentId);
         } else if (scope === "company" && ids.companyId !== undefined) {
-            chunks = await getCompanyChunks(ids.companyId);
+            chunks = await getCompanyChunks(ids.companyId, ids.scope);
         } else if (scope === "multi-document" && ids.documentIds?.length) {
             chunks = await getMultiDocChunks(ids.documentIds);
         } else {

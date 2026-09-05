@@ -18,6 +18,7 @@ export async function GET(request: Request) {
       companyId,
       userId: ctx.data.authUserId,
       limit: 10,
+      scope: await ctx.data.documentScope(),
     });
 
     return NextResponse.json({ candidates }, { status: 200 });

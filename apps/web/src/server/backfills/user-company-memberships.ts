@@ -63,7 +63,7 @@ export async function countUsersMissingMembership(db: DbClient): Promise<number>
  * role someone changed deliberately survives a re-run.
  *
  * Role vocabularies differ — `users.role` is employer/employee while the
- * membership role is owner/admin/editor (see ~/lib/membership-roles) — so the
+ * membership role is owner/admin/editor (see ~/lib/authz/permissions) — so the
  * mapping mirrors what the signup routes already write.
  */
 export async function provisionMissingMemberships(db: DbClient): Promise<void> {

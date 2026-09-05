@@ -1,46 +1,58 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { DELETE } from "~/app/api/Categories/DeleteCategories/route";
 import { validateRequestBody } from "~/lib/validation";
-import { db } from "~/server/db/index";
+import { recordAuditEvent } from "~/lib/authz/audit";
+
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    ...jest.requireActual("~/lib/require-workspace-context"),
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 jest.mock("~/lib/validation", () => ({
     validateRequestBody: jest.fn(),
 }));
 
+jest.mock("~/lib/authz/audit", () => ({
+    recordAuditEvent: jest.fn().mockResolvedValue(undefined),
+}));
+
+const mockDelete = jest.fn();
+const mockTx = { delete: (...args: unknown[]) => mockDelete(...args) };
+
 jest.mock("~/server/db/index", () => ({
     db: {
-        delete: jest.fn(),
+        transaction: (fn: (tx: unknown) => Promise<unknown>) => fn(mockTx),
     },
 }));
 
 function mockCtx(role: string, companyId = BigInt(1)) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
-            authUserId: "user-123",
-            userPk: BigInt(7),
-            companyId,
-            role,
-            status: "verified",
-        },
+        data: makeWorkspaceContext({ role, companyId, authUserId: "user-123" }),
     });
 }
 
-function mockDeleteReturning(rows: { id: number }[]) {
+function mockDeleteReturning(rows: { id: number; name: string }[]) {
     const returning = jest.fn().mockResolvedValue(rows);
     const where = jest.fn().mockReturnValue({ returning });
-    // `db.delete` is a jest mock here, not a query builder — this line installs
-    // the stub whose `.where()` the route under test then calls. The rule reads
-    // it as an unbounded delete, which it structurally cannot be.
-    // eslint-disable-next-line drizzle/enforce-delete-with-where
-    (db.delete as jest.Mock).mockReturnValue({ where });
+    mockDelete.mockReturnValue({ where });
     return { where, returning };
+}
+
+function request(body: unknown) {
+    return new Request("http://localhost/api/Categories/DeleteCategory", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
 }
 
 describe("DELETE /api/Categories/DeleteCategory", () => {
@@ -54,20 +66,23 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
             data: { id: 123 },
         });
         mockCtx("owner");
-        const { where } = mockDeleteReturning([{ id: 123 }]);
+        const { where } = mockDeleteReturning([{ id: 123, name: "Legal" }]);
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: 123 }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: 123 }));
         const json = await response.json();
 
         expect(response.status).toBe(200);
         expect(json.success).toBe(true);
         expect(where).toHaveBeenCalled();
+        expect(recordAuditEvent).toHaveBeenCalledWith(
+            mockTx,
+            expect.objectContaining({
+                action: "folder.deleted",
+                targetType: "folder",
+                targetId: 123,
+                detail: { name: "Legal" },
+            })
+        );
     });
 
     it("should allow an authenticated admin to delete a category", async () => {
@@ -76,15 +91,9 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
             data: { id: 456 },
         });
         mockCtx("admin", BigInt(2));
-        mockDeleteReturning([{ id: 456 }]);
+        mockDeleteReturning([{ id: 456, name: "HR" }]);
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: 456 }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: 456 }));
         const json = await response.json();
 
         expect(response.status).toBe(200);
@@ -104,37 +113,26 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
             }),
         });
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: 123 }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: 123 }));
         const json = await response.json();
 
         expect(response.status).toBe(401);
         expect(json.error).toBe("Unauthorized");
     });
 
-    it("should return 403 if user has an editor role", async () => {
+    it("should return 403 for a member (no folders.manage)", async () => {
         (validateRequestBody as jest.Mock).mockResolvedValue({
             success: true,
             data: { id: 123 },
         });
-        mockCtx("editor");
+        mockCtx("member");
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: 123 }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: 123 }));
         const json = await response.json();
 
         expect(response.status).toBe(403);
-        expect(json.error).toBe("Invalid user role.");
+        expect(json.permission).toBe("folders.manage");
+        expect(mockDelete).not.toHaveBeenCalled();
     });
 
     it("returns 404 when category is missing or outside company", async () => {
@@ -145,17 +143,12 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
         mockCtx("owner");
         mockDeleteReturning([]);
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: 999 }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: 999 }));
         const json = await response.json();
 
         expect(response.status).toBe(404);
         expect(json.error).toBe("Category not found.");
+        expect(recordAuditEvent).not.toHaveBeenCalled();
     });
 
     it("should return validation error if id is missing", async () => {
@@ -166,13 +159,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
             }),
         });
 
-        const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: "" }),
-        });
-
-        const response = await DELETE(request);
+        const response = await DELETE(request({ id: "" }));
         const json = await response.json();
 
         expect(response.status).toBe(400);
@@ -191,17 +178,9 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
 
             const returning = jest.fn().mockRejectedValue(new Error("Delete failed"));
             const where = jest.fn().mockReturnValue({ returning });
-            // Mock installation, not a query — see `mockDeleteReturning`.
-            // eslint-disable-next-line drizzle/enforce-delete-with-where
-            (db.delete as jest.Mock).mockReturnValue({ where });
+            mockDelete.mockReturnValue({ where });
 
-            const request = new Request("http://localhost/api/Categories/DeleteCategory", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: 123 }),
-            });
-
-            const response = await DELETE(request);
+            const response = await DELETE(request({ id: 123 }));
             expect(response.status).toBe(500);
         } finally {
             consoleErrorSpy.mockRestore();

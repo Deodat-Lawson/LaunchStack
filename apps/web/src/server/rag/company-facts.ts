@@ -1,5 +1,5 @@
 /**
- * Company facts — the pure half of the company-facts retrieval leg (ADR-010).
+ * Company facts — the pure half of the company-facts retrieval leg (ADR-011).
  *
  * The company-metadata projection (people, services, projects, legal,
  * policies — each a MetadataFact with confidence, status and cited sources)
@@ -331,6 +331,23 @@ export function rowsCitingDocuments(
 ): CompanyFactRow[] {
     const wanted = new Set(documentIds);
     return rows.filter(row => row.sourceDocumentIds.some(id => wanted.has(id)));
+}
+
+/**
+ * Rows a reader may see given the documents they may read. A fact quotes the
+ * document it was read from, so a fact whose every source is out of scope
+ * goes with those documents. A fact with no document source at all — a
+ * manual entry — carries no document text and stays visible.
+ */
+export function rowsVisibleUnder(
+    rows: CompanyFactRow[],
+    visibleDocumentIds: ReadonlySet<number>
+): CompanyFactRow[] {
+    return rows.filter(
+        row =>
+            row.sourceDocumentIds.length === 0 ||
+            row.sourceDocumentIds.some(id => visibleDocumentIds.has(id))
+    );
 }
 
 // ============================================================================

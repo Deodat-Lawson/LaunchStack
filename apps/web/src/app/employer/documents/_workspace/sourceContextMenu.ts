@@ -1,3 +1,11 @@
+import {
+    UNFILED_FOLDER,
+    displayFolderPath,
+    folderDepth,
+    folderParentPath,
+    isFolderOrDescendant,
+    normalizeFolderPath,
+} from "~/lib/folders/path";
 import type { WorkspaceFolder, WorkspaceSource } from "./types";
 
 /**
@@ -25,7 +33,17 @@ export type SourceContextMenuItem =
           disabledReason?: string;
           checked?: boolean;
           shortcut?: string;
-          icon?: "open" | "ask" | "rename" | "copy" | "delete" | "folder" | "plus" | "check";
+          icon?:
+              | "open"
+              | "ask"
+              | "rename"
+              | "copy"
+              | "delete"
+              | "folder"
+              | "plus"
+              | "check"
+              | "lock"
+              | "share";
           onSelect: () => void;
       }
     | {
@@ -44,6 +62,8 @@ export interface SourceMenuHandlers {
     onRename?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onCopyTitle?: (source: WorkspaceSource) => void;
+    /** Opens the access dialog: who, beyond the folder's audience, may see this document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onDelete?: (source: WorkspaceSource) => void;
 }
 
@@ -111,7 +131,7 @@ export function buildSourceMenuItems(
             items: folderNames.map(name => ({
                 type: "item" as const,
                 id: `move-${name}`,
-                label: name,
+                label: displayFolderPath(name),
                 icon: name === currentFolder ? "check" : undefined,
                 checked: name === currentFolder,
                 disabled: name === currentFolder,
@@ -127,6 +147,18 @@ export function buildSourceMenuItems(
             label: "Copy title",
             icon: "copy",
             onSelect: () => handlers.onCopyTitle?.(source),
+        });
+    }
+
+    if (handlers.onRestrictAccess) {
+        items.push({
+            type: "item",
+            id: "access",
+            label: source.restricted ? "Change access…" : "Restrict access…",
+            icon: "lock",
+            disabled: !persisted,
+            disabledReason: persisted ? undefined : indexingReason,
+            onSelect: () => handlers.onRestrictAccess?.(source),
         });
     }
 
@@ -148,23 +180,98 @@ export function buildSourceMenuItems(
 }
 
 export interface FolderMenuHandlers {
+    /** Focus the rail on this folder's subtree. */
+    onOpen?: () => void;
+    onNewSubfolder?: () => void;
     onRename?: () => void;
+    /** Opens the folder access dialog: everyone in the workspace, or only people added. */
+    onShare?: () => void;
+    /** Move the folder under `targetParent`; null means the top level. */
+    onMove?: (targetParent: string | null) => void;
+    onDelete?: () => void;
     onSelectAll?: (add: boolean) => void;
     selectState?: "none" | "some" | "all";
+    /** Every folder path in the workspace, for the move submenu. */
+    folders?: string[];
 }
 
 export function buildFolderMenuItems(
-    folderName: string,
+    folderPath: string,
     handlers: FolderMenuHandlers
 ): SourceContextMenuItem[] {
-    const items: SourceContextMenuItem[] = [{ type: "label", id: "title", label: folderName }];
+    const path = normalizeFolderPath(folderPath);
+    const items: SourceContextMenuItem[] = [
+        { type: "label", id: "title", label: displayFolderPath(path) },
+    ];
+    if (handlers.onOpen) {
+        items.push({
+            type: "item",
+            id: "open-folder",
+            label: "Open folder",
+            icon: "open",
+            onSelect: () => handlers.onOpen?.(),
+        });
+    }
+    if (handlers.onNewSubfolder) {
+        items.push({
+            type: "item",
+            id: "new-subfolder",
+            label: "New subfolder…",
+            icon: "plus",
+            onSelect: () => handlers.onNewSubfolder?.(),
+        });
+    }
     if (handlers.onRename) {
         items.push({
             type: "item",
             id: "rename-folder",
-            label: "Rename or delete…",
+            label: "Rename…",
             icon: "rename",
             onSelect: () => handlers.onRename?.(),
+        });
+    }
+    if (handlers.onMove) {
+        const parent = folderParentPath(path);
+        const targets = (handlers.folders ?? [])
+            .map(normalizeFolderPath)
+            .filter(
+                candidate =>
+                    candidate !== UNFILED_FOLDER &&
+                    candidate !== parent &&
+                    !isFolderOrDescendant(candidate, path)
+            )
+            .sort((a, b) => a.localeCompare(b));
+        items.push({
+            type: "submenu",
+            id: "move-folder",
+            label: "Move to…",
+            icon: "folder",
+            items: [
+                {
+                    type: "item" as const,
+                    id: "move-folder-root",
+                    label: "Top level",
+                    icon: folderDepth(path) === 0 ? "check" : undefined,
+                    checked: folderDepth(path) === 0,
+                    disabled: folderDepth(path) === 0,
+                    onSelect: () => handlers.onMove?.(null),
+                },
+                ...targets.map(target => ({
+                    type: "item" as const,
+                    id: `move-folder-${target}`,
+                    label: displayFolderPath(target),
+                    onSelect: () => handlers.onMove?.(target),
+                })),
+            ],
+        });
+    }
+    if (handlers.onShare) {
+        items.push({
+            type: "item",
+            id: "share-folder",
+            label: "Share folder…",
+            icon: "share",
+            onSelect: () => handlers.onShare?.(),
         });
     }
     if (handlers.onSelectAll) {
@@ -175,6 +282,17 @@ export function buildFolderMenuItems(
             label: all ? "Deselect all in folder" : "Select all in folder",
             icon: "check",
             onSelect: () => handlers.onSelectAll?.(!all),
+        });
+    }
+    if (handlers.onDelete) {
+        items.push({ type: "separator", id: "sep-folder-danger" });
+        items.push({
+            type: "item",
+            id: "delete-folder",
+            label: "Delete…",
+            icon: "delete",
+            danger: true,
+            onSelect: () => handlers.onDelete?.(),
         });
     }
     return items;

@@ -12,7 +12,12 @@ export const VISIBILITY_VALUES = ["public", "partner", "private", "internal"];
 export const USAGE_VALUES = ["outreach_ok", "outreach_ok_with_approval", "no_outreach"];
 export const PRIORITY_VALUES = ["manual_override", "high", "normal", "low"];
 export const FACT_STATUS_VALUES = ["active", "deprecated", "superseded"];
-export const CHANGE_TYPE_VALUES = ["extraction", "merge", "manual_override", "deprecation"];
+export const CHANGE_TYPE_VALUES = [
+    "extraction",
+    "merge",
+    "manual_override",
+    "deprecation",
+];
 // ============================================================================
 // Helpers
 // ============================================================================

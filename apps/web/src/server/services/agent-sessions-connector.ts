@@ -40,6 +40,9 @@ import { env } from "~/env";
 import { uploadFile } from "~/lib/storage";
 import { getEngine } from "~/server/engine";
 import { toAbsoluteUrl } from "./detect-storage-type";
+import { ensureCategoryRow } from "./folder-access";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
 import {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,
@@ -147,9 +150,7 @@ export async function createAgentSessionsSink(
             // The connector renders every session to Markdown text; binary
             // content here means a wiring mistake, not a session.
             if (typeof item.content !== "string") {
-                throw new Error(
-                    `agent-sessions sink received binary content for ${item.sourceId}`
-                );
+                throw new Error(`agent-sessions sink received binary content for ${item.sourceId}`);
             }
             const content = item.content;
             const syncedAt = new Date().toISOString();
@@ -273,6 +274,10 @@ export async function runAgentSessionsSync(
         ...scanOptions
     } = request;
 
+    // The folder the sink writes into must exist as a category row so it
+    // can be restricted like any other folder.
+    await ensureCategoryRow(companyId, category ?? AGENT_SESSIONS_CATEGORY);
+
     const sink = await createAgentSessionsSink({
         companyId,
         userId,
@@ -330,18 +335,22 @@ interface ImportedSessionRow {
 }
 
 /**
- * Every session this workspace has already imported, keyed by sourceId. The
- * lookup goes through the sink's own `ocrMetadata` marker rather than by
- * creation key on purpose: the key-hashing scheme is private to the lifecycle
- * module, and one marker query replaces N per-item key lookups.
+ * Every session this workspace has already imported that `scope` lets the
+ * caller see, keyed by sourceId. The lookup goes through the sink's own
+ * `ocrMetadata` marker rather than by creation key on purpose: the
+ * key-hashing scheme is private to the lifecycle module, and one marker
+ * query replaces N per-item key lookups.
  */
-async function loadImportedSessions(companyId: bigint): Promise<Map<string, ImportedSessionRow>> {
+async function loadImportedSessions(
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<Map<string, ImportedSessionRow>> {
     const rows = await db
         .select({ id: document.id, ocrMetadata: document.ocrMetadata })
         .from(document)
         .where(
             and(
-                eq(document.companyId, companyId),
+                scopedDocumentWhere(companyId, scope),
                 sql`${document.ocrMetadata} ->> 'connector' = ${AGENT_SESSIONS_CONNECTOR_ID}`
             )
         );
@@ -373,7 +382,8 @@ function metaOf(metadata: Readonly<Record<string, unknown>>, key: string): strin
  */
 export async function previewAgentSessionsDetailed(
     companyId: bigint,
-    options: AgentSessionsScanOptions = {}
+    options: AgentSessionsScanOptions = {},
+    scope: DocumentScope = SCOPE_EVERYTHING
 ): Promise<AgentSessionsDetailedPreview> {
     const scan = await scanAgentSessions({ ...options, quiescenceMs: 0 });
 
@@ -383,7 +393,7 @@ export async function previewAgentSessionsDetailed(
         wantsCodex
             ? loadCodexSessionIndex(options.homeDir ?? homedir())
             : Promise.resolve(new Map<string, string>()),
-        loadImportedSessions(companyId),
+        loadImportedSessions(companyId, scope),
     ]);
 
     const activeSince = Date.now() - DEFAULT_QUIESCENCE_MS;

@@ -2,6 +2,7 @@ import { EventSchemas, Inngest } from "inngest";
 import { chatConfigMiddleware } from "./chat-config-middleware";
 import type { TrendSearchEventData } from "@launchstack/pipelines/trend-search";
 import type { ProspectorEventData } from "@launchstack/pipelines/client-prospector";
+import type { DistributionRunEventData } from "@launchstack/pipelines/distribution/types";
 import type { DocumentEdit, ReviewAction } from "@launchstack/editing";
 
 // Retired event types (ADR-003): document/process.requested,
@@ -71,6 +72,16 @@ export type WebsiteCrawlEvent = {
     };
 };
 
+export type RepoWorkspaceSyncEvent = {
+    name: "repo-workspace/sync.requested";
+    data: import("@launchstack/pipelines/repo-workspace").RepoWorkspaceSyncEventData;
+};
+
+export type RepoExplainerJobEvent = {
+    name: "repo-explainer/job.requested";
+    data: import("@launchstack/pipelines/repo-workspace").RepoExplainerJobEventData;
+};
+
 /** Drains the founder-weekly-review outbox. Carries no run-specific payload. */
 export type FounderWeeklyReviewDispatchEvent = {
     name: "founder-weekly-review/dispatch.requested";
@@ -86,6 +97,11 @@ export type FounderWeeklyReviewGenerationEvent = {
         generationJobId: string;
         generationClaimId: string;
     };
+};
+
+export type DistributionRunEvent = {
+    name: "distribution/run.requested";
+    data: DistributionRunEventData;
 };
 
 export type GoogleDriveSyncEvent = {
@@ -107,7 +123,10 @@ export type Events =
     | WebsiteCrawlEvent
     | FounderWeeklyReviewDispatchEvent
     | FounderWeeklyReviewGenerationEvent
-    | GoogleDriveSyncEvent;
+    | RepoWorkspaceSyncEvent
+    | RepoExplainerJobEvent
+    | GoogleDriveSyncEvent
+    | DistributionRunEvent;
 
 /**
  * Create the Inngest client.

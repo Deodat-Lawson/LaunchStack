@@ -5,6 +5,7 @@ import { document } from "@launchstack/store/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isS3Storage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
     ".pdf": "application/pdf",
@@ -48,8 +49,15 @@ export async function GET(_request: Request, { params }: RouteParams) {
         const [doc] = await db
             .select({ url: document.url, title: document.title })
             .from(document)
-            .where(and(eq(document.id, docId), eq(document.companyId, ctx.data.companyId)));
+            .where(
+                and(
+                    eq(document.id, docId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
+        // Out of scope reads exactly like missing — the distinction would leak
+        // which ids exist in folders the caller cannot see.
         if (!doc) {
             return NextResponse.json({ error: "Document not found" }, { status: 404 });
         }

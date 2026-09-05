@@ -6,7 +6,7 @@ This document explains how major Launchstack features connect end to end.
 
 Launchstack follows this loop:
 
-1. Authenticate user with role context (Employer/Employee)
+1. Authenticate user and resolve their workspace membership (role, permissions, document scope)
 2. Upload document — the web app writes the source version **and** a
    `source.version.created` row into the transactional outbox
    (`pdr_ai_v2_event_outbox`) in one transaction ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md))
@@ -64,7 +64,7 @@ The ingestion layer (`src/lib/ingestion/`) provides a single API to convert docu
 
 ## Knowledge graph (Graph RAG)
 
-Opt-in since [ADR-010](./architecture/ADR-010-knowledge-graph-scope.md). The
+Opt-in since [ADR-011](./architecture/ADR-011-knowledge-graph-scope.md). The
 chat panel no longer carries a Graph tab, stage F entity extraction runs only
 when `ENABLE_ENTITY_EXTRACTION=true`, and the graph retrieval leg stays behind
 `ENABLE_GRAPH_RETRIEVER`. What chat gets instead is the **company-facts leg**:

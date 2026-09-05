@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { GET } from "~/app/api/agents/documentQ&A/AIChat/tools/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertToolCallParentsOwnedByUser } from "~/lib/ai-chat-ownership";
-import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { makeWorkspaceContext } from "../../../../helpers/workspace-context";
 
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: jest.fn(),
@@ -47,13 +47,12 @@ jest.mock("drizzle-orm", () => ({
     and: (...args: unknown[]) => mockAnd(...args),
 }));
 
-const CTX: WorkspaceContext = {
+const CTX = makeWorkspaceContext({
     authUserId: "user-a",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",
-    status: "verified",
-};
+});
 
 function getRequest(query: string): NextRequest {
     return new Request(

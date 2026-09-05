@@ -9,14 +9,7 @@
 import { lstat, readdir, realpath } from "node:fs/promises";
 import { homedir } from "node:os";
 import path from "node:path";
-import {
-    CONFIG_EXTENSIONS,
-    KNOWLEDGE_EXTENSIONS,
-    TOOL_LAYOUTS,
-    isDeniedDirectory,
-    isDeniedFilename,
-    layoutFor,
-} from "./layout.js";
+import { CONFIG_EXTENSIONS, KNOWLEDGE_EXTENSIONS, TOOL_LAYOUTS, isDeniedDirectory, isDeniedFilename, layoutFor, } from "./layout.js";
 export const AGENT_KNOWLEDGE_CONNECTOR_ID = "agent-knowledge";
 /** 512 KiB — a knowledge file above this is a transcript, not instructions. */
 export const DEFAULT_MAX_FILE_BYTES = 512 * 1024;
@@ -39,7 +32,8 @@ function normalizeProject(target) {
 }
 function projectKeyFor(target) {
     const explicit = target.key?.trim();
-    if (explicit) return explicit;
+    if (explicit)
+        return explicit;
     const base = path.basename(path.resolve(target.dir));
     return base.length > 0 ? base : "project";
 }
@@ -59,7 +53,8 @@ function titleFor(layout, scopeKey, relativePath) {
 }
 function isReadableExtension(name, includeConfig) {
     const ext = path.extname(name).toLowerCase();
-    if (KNOWLEDGE_EXTENSIONS.has(ext)) return true;
+    if (KNOWLEDGE_EXTENSIONS.has(ext))
+        return true;
     return includeConfig && CONFIG_EXTENSIONS.has(ext);
 }
 /** Guards against a `..` segment or a symlinked directory escaping the root. */
@@ -86,11 +81,13 @@ async function considerFile(ctx, absolutePath, kind) {
     let stats;
     try {
         stats = await lstat(absolutePath);
-    } catch (error) {
+    }
+    catch (error) {
         // Most layout entries are optional — a user with no `MEMORY.md` has
         // nothing wrong with their setup. Only a real read failure (EACCES and
         // friends) is worth reporting.
-        if (isMissing(error)) return;
+        if (isMissing(error))
+            return;
         ctx.skipped.push({ sourceId, reason: "unreadable", detail: describeError(error) });
         return;
     }
@@ -98,7 +95,8 @@ async function considerFile(ctx, absolutePath, kind) {
         ctx.skipped.push({ sourceId, reason: "excluded", detail: "symlink" });
         return;
     }
-    if (!stats.isFile()) return;
+    if (!stats.isFile())
+        return;
     if (stats.size === 0) {
         ctx.skipped.push({ sourceId, reason: "empty" });
         return;
@@ -138,8 +136,10 @@ async function walkDirectory(ctx, dir, kind, recursive) {
     let entries;
     try {
         entries = await readdir(dir, { withFileTypes: true });
-    } catch (error) {
-        if (isMissing(error)) return;
+    }
+    catch (error) {
+        if (isMissing(error))
+            return;
         ctx.skipped.push({
             sourceId: buildSourceId(ctx.layout.toolId, ctx.scopeKey, path.relative(ctx.root, dir)),
             reason: "unreadable",
@@ -152,21 +152,19 @@ async function walkDirectory(ctx, dir, kind, recursive) {
     // cutoff (and every test asserting on it) nondeterministic.
     for (const entry of [...entries].sort((a, b) => a.name.localeCompare(b.name))) {
         const child = path.join(dir, entry.name);
-        if (!isInsideRoot(ctx.root, child)) continue;
+        if (!isInsideRoot(ctx.root, child))
+            continue;
         if (entry.isSymbolicLink()) {
             ctx.skipped.push({
-                sourceId: buildSourceId(
-                    ctx.layout.toolId,
-                    ctx.scopeKey,
-                    path.relative(ctx.root, child)
-                ),
+                sourceId: buildSourceId(ctx.layout.toolId, ctx.scopeKey, path.relative(ctx.root, child)),
                 reason: "excluded",
                 detail: "symlink",
             });
             continue;
         }
         if (entry.isDirectory()) {
-            if (!recursive || isDeniedDirectory(entry.name)) continue;
+            if (!recursive || isDeniedDirectory(entry.name))
+                continue;
             await walkDirectory(ctx, child, kind, recursive);
             continue;
         }
@@ -176,9 +174,11 @@ async function walkDirectory(ctx, dir, kind, recursive) {
     }
 }
 async function scanEntry(ctx, entry) {
-    if (entry.config && !ctx.includeConfig) return;
+    if (entry.config && !ctx.includeConfig)
+        return;
     const absolutePath = path.resolve(ctx.root, entry.path);
-    if (!isInsideRoot(ctx.root, absolutePath)) return;
+    if (!isInsideRoot(ctx.root, absolutePath))
+        return;
     if (entry.target === "file") {
         await considerFile(ctx, absolutePath, entry.kind);
         return;
@@ -198,38 +198,46 @@ async function scanEntry(ctx, entry) {
  */
 async function walkNested(ctx, dir, entry) {
     const nested = entry.nested;
-    if (!nested) return;
+    if (!nested)
+        return;
     let children;
     try {
         children = await readdir(dir, { withFileTypes: true });
-    } catch {
+    }
+    catch {
         return;
     }
     for (const child of [...children].sort((a, b) => a.name.localeCompare(b.name))) {
-        if (!child.isDirectory() || child.isSymbolicLink()) continue;
+        if (!child.isDirectory() || child.isSymbolicLink())
+            continue;
         const target = path.join(dir, child.name, nested);
-        if (!isInsideRoot(ctx.root, target)) continue;
+        if (!isInsideRoot(ctx.root, target))
+            continue;
         await walkDirectory(ctx, target, entry.kind, true);
     }
 }
 async function directoryExists(dir) {
     try {
         const stats = await lstat(dir);
-        if (stats.isDirectory()) return true;
-        if (!stats.isSymbolicLink()) return false;
+        if (stats.isDirectory())
+            return true;
+        if (!stats.isSymbolicLink())
+            return false;
         // A symlinked *root* is normal (`~/.claude` pointing at a dotfiles
         // repo). Resolving it once here is safe; the walk below still refuses
         // to follow any symlink found underneath.
         const resolved = await realpath(dir);
         return (await lstat(resolved)).isDirectory();
-    } catch {
+    }
+    catch {
         return false;
     }
 }
 async function resolveRoot(dir) {
     try {
         return await realpath(dir);
-    } catch {
+    }
+    catch {
         return path.resolve(dir);
     }
 }
@@ -305,7 +313,9 @@ export async function scanAgentKnowledge(options = {}) {
     return { roots, items, skipped, truncated };
 }
 function isMissing(error) {
-    return typeof error === "object" && error !== null && error.code === "ENOENT";
+    return (typeof error === "object" &&
+        error !== null &&
+        error.code === "ENOENT");
 }
 export function describeError(error) {
     return error instanceof Error ? error.message : String(error);

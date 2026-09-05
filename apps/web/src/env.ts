@@ -85,6 +85,10 @@ const serverSchema = z.object({
     FOURSQUARE_SERVICE_KEY: optionalString(),
     SERPER_API_KEY: optionalString(),
     SEARCH_PROVIDER: z.enum(["exa", "serper", "fallback", "parallel"]).optional(),
+    // Distribution pipeline — optional ports (design §4.6). Unset = stage skipped.
+    OPENSANCTIONS_API_URL: optionalString(),
+    OPENSANCTIONS_API_KEY: optionalString(),
+    TRADE_DATA_PROVIDER: optionalString(),
     // Platform API Keys for Marketing Pipeline
     REDDIT_CLIENT_ID: optionalString(),
     REDDIT_CLIENT_SECRET: optionalString(),
@@ -247,7 +251,7 @@ const serverSchema = z.object({
     // the Inngest SDK itself, not by this app; declared so it is documented.
     INNGEST_SIGNING_KEY: optionalString(),
     // Stage F of ingestion: LLM entity extraction into the kg_* tables. Off
-    // unless set (ADR-010): nothing user-facing reads the graph, and it bills
+    // unless set (ADR-011): nothing user-facing reads the graph, and it bills
     // an NER call per five chunks of every upload.
     ENABLE_ENTITY_EXTRACTION: z.preprocess(
         val => val === "true" || val === "1",
@@ -260,7 +264,7 @@ const serverSchema = z.object({
         z.boolean().optional()
     ),
     // The company-facts leg: cited facts from the company-metadata projection
-    // join the chat ensemble (ADR-010). On unless explicitly "false" / "0".
+    // join the chat ensemble (ADR-011). On unless explicitly "false" / "0".
     ENABLE_COMPANY_FACTS_RETRIEVER: z.preprocess(
         val => !(val === "false" || val === "0"),
         z.boolean().optional()
@@ -450,6 +454,9 @@ function parseServerEnv() {
         EXA_API_KEY: process.env.EXA_API_KEY,
         FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
         SERPER_API_KEY: process.env.SERPER_API_KEY,
+        OPENSANCTIONS_API_URL: process.env.OPENSANCTIONS_API_URL,
+        OPENSANCTIONS_API_KEY: process.env.OPENSANCTIONS_API_KEY,
+        TRADE_DATA_PROVIDER: process.env.TRADE_DATA_PROVIDER,
         SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
             | "exa"
             | "serper"

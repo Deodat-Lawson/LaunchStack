@@ -8,11 +8,20 @@
 export type {
     RagPort,
     CompanySearchOptions,
+    DocumentScope,
     RagSearchFilters,
     RagSearchResult,
     RagSearchMetadata,
 } from "./types";
 export { configureRag, getRag, getRagOrNull, ragCompanySearchSafe } from "./slot";
+export {
+    documentScopeSql,
+    documentScopeSqlFor,
+    documentScopeSqlForAlias,
+    scopeAllowsDocument,
+    type ScopeColumns,
+    type ScopedDocumentRef,
+} from "./algorithms/scope";
 export {
     buildCitations,
     type RetrievedEvidence,

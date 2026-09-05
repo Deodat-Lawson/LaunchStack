@@ -15,6 +15,7 @@ import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -66,11 +67,17 @@ export async function loadDocument(
             fileType: document.fileType,
         })
         .from(document)
-        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)));
+        .where(
+            and(
+                eq(document.id, documentId),
+                scopedDocumentWhere(companyId, await ctx.data.documentScope())
+            )
+        );
 
     if (!row) {
-        // Same response whether it does not exist or belongs to another
-        // company — the distinction would leak which ids are real.
+        // Same response whether it does not exist, belongs to another company,
+        // or sits in a folder the caller cannot see — the distinction would
+        // leak which ids are real.
         return { ok: false, response: fail(404, "not_found", "Document not found") };
     }
 

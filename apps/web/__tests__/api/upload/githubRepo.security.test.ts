@@ -4,10 +4,21 @@
  * ZIP download is pinned to api.github.com (asserted in the service tests).
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/server/services/folder-access", () => ({
+    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
+    canEditFolder: jest.fn().mockResolvedValue(true),
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
@@ -48,6 +59,8 @@ import { processDocumentUpload } from "~/server/services/document-upload";
 import { downloadGitHubRepoZip } from "~/server/services/github-repo";
 import { putFile } from "~/server/storage/vercel-blob";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
     typeof processDocumentUpload
 >;
@@ -55,13 +68,12 @@ const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
 function mockAuthenticated() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user_session",
             userPk: BigInt(31),
             companyId: BigInt(6),
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
 }
 

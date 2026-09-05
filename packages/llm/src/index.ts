@@ -1,5 +1,6 @@
 export * from "./types";
 export * from "./presets";
+export * from "./agent";
 export * from "./chat-config";
 export * from "./chat-model-factory";
 export * from "./structured-output";

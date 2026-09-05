@@ -7,7 +7,8 @@ import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { validateRequestBody } from "~/lib/validation";
 import {
     findBatchOwnedByUser,
@@ -27,7 +28,7 @@ const CommitSchema = z.object({
 const MAX_CONCURRENCY = 3;
 
 export async function POST(request: Request, { params }: { params: Promise<{ batchId: string }> }) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -78,6 +79,19 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                 { error: "No uploaded or failed files are ready to commit" },
                 { status: 400 }
             );
+        }
+
+        // Every folder this commit writes into must be one the caller may
+        // edit; checked once per distinct folder, before anything is claimed.
+        const targetFolders = new Set<string>();
+        for (const file of filesToProcess) {
+            const folder = resolveCategory(file.metadata, batch.metadata, category);
+            if (folder !== undefined) targetFolders.add(folder);
+        }
+        for (const folder of targetFolders) {
+            if (!(await canEditFolder(ctx.data, folder))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
         }
 
         const startedAt = new Date();

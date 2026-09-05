@@ -7,16 +7,18 @@ import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { resolveRole } from "~/lib/authz/resolve";
+import { isMembershipStatus, roleLabel } from "~/lib/authz/permissions";
 
 /**
- * Profile lookup for the signed-in user — including unverified /
- * pending-approval accounts. Uses requireAuthIdentity (not workspace
- * context) so pending pages can load name/company/submission date.
+ * Profile lookup for the signed-in user — including pending-approval
+ * memberships. Uses requireAuthIdentity (not workspace context) so pending
+ * pages can load name/company/submission date.
  *
  * The company reported here is the *active* workspace, matching what the
- * product APIs scope to. Pending users with no membership keep the legacy
- * default company and global role so the approval pages still render;
- * verified users require a current membership.
+ * product APIs scope to. Alongside the role it returns the resolved
+ * permission set and the membership status, which is what the client's
+ * `usePermissions()` hook consumes.
  */
 export async function POST() {
     try {
@@ -24,7 +26,15 @@ export async function POST() {
         if (!identity.success) return identity.response;
 
         const [userInfo] = await db
-            .select()
+            .select({
+                id: users.id,
+                name: users.name,
+                email: users.email,
+                userId: users.userId,
+                companyId: users.companyId,
+                lastActiveAt: users.lastActiveAt,
+                createdAt: users.createdAt,
+            })
             .from(users)
             .where(eq(users.userId, identity.data.authUserId));
 
@@ -32,18 +42,14 @@ export async function POST() {
             return NextResponse.json({ error: "Invalid user." }, { status: 401 });
         }
 
-        const companyId = await resolveActiveCompanyForUser(
-            userInfo.id,
-            userInfo.companyId,
-            userInfo.status
-        );
+        const companyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
 
         if (companyId === null) {
             return NextResponse.json({ error: "No active workspace" }, { status: 403 });
         }
 
         const [membership] = await db
-            .select({ role: userCompanyMemberships.role })
+            .select({ role: userCompanyMemberships.role, status: userCompanyMemberships.status })
             .from(userCompanyMemberships)
             .where(
                 and(
@@ -52,7 +58,7 @@ export async function POST() {
                 )
             );
 
-        if (!membership && userInfo.status === "verified") {
+        if (!membership) {
             return NextResponse.json({ error: "No active workspace membership" }, { status: 403 });
         }
 
@@ -65,20 +71,25 @@ export async function POST() {
             return NextResponse.json({ error: "Company not found" }, { status: 404 });
         }
 
+        const resolved = await resolveRole(companyId, membership.role);
+        const membershipStatus = isMembershipStatus(membership.status)
+            ? membership.status
+            : "active";
+
         const submissionDate = new Date(userInfo.createdAt).toLocaleString("en-US", {
             dateStyle: "medium",
             timeStyle: "short",
         });
 
-        const serializedUserInfo = {
-            ...userInfo,
-            companyId: Number(companyId),
-            role: membership?.role ?? (userInfo.status === "pending" ? userInfo.role : ""),
-        };
-
         return NextResponse.json(
             {
-                ...serializedUserInfo,
+                ...userInfo,
+                companyId: Number(companyId),
+                role: resolved.slug,
+                roleName: roleLabel(resolved.slug, resolved.name),
+                membershipStatus,
+                // Suspended and pending members hold no permissions until reinstated.
+                permissions: membershipStatus === "active" ? [...resolved.permissions] : [],
                 company: companyRecord.name,
                 submissionDate: submissionDate,
             },

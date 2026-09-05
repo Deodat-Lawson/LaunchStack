@@ -26,7 +26,9 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -108,9 +110,11 @@ async function storeAnalysisResult(
     return result;
 }
 
+/** The document, if the caller may read it; out of scope reads as missing. */
 async function getDocumentDetails(
     documentId: number,
-    companyId: bigint
+    companyId: bigint,
+    scope: DocumentScope
 ): Promise<DocumentDetails | null> {
     const results = await db
         .select({
@@ -120,7 +124,7 @@ async function getDocumentDetails(
             currentVersionId: document.currentVersionId,
         })
         .from(document)
-        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)))
+        .where(and(eq(document.id, documentId), scopedDocumentWhere(companyId, scope)))
         .limit(1);
 
     return results[0]
@@ -134,6 +138,7 @@ async function getDocumentDetails(
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
 
     // Apply rate limiting: 20 requests per 15 minutes for predictive analysis
     // This is a compute-intensive AI operation
@@ -198,8 +203,10 @@ export async function POST(request: Request) {
                 );
             }
 
-            // Ownership before cache: never return another tenant's analysis.
-            const docDetails = await getDocumentDetails(documentId, ctx.data.companyId);
+            // Scope before cache: never return an analysis of a document the
+            // caller cannot open.
+            const scope = await ctx.data.documentScope();
+            const docDetails = await getDocumentDetails(documentId, ctx.data.companyId, scope);
             if (!docDetails) {
                 recordResult("error");
                 return NextResponse.json(
@@ -294,7 +301,10 @@ export async function POST(request: Request) {
                     .selectDistinct({ title: document.title, url: document.url })
                     .from(document)
                     .where(
-                        and(eq(document.companyId, ctx.data.companyId), ne(document.id, documentId))
+                        and(
+                            scopedDocumentWhere(ctx.data.companyId, scope),
+                            ne(document.id, documentId)
+                        )
                     );
 
                 existingDocuments = existingDocs.map(row => `${row.title || row.url}`);
@@ -314,6 +324,7 @@ export async function POST(request: Request) {
                     ...specification,
                     companyId: Number(docDetails.companyId),
                     documentId,
+                    scope,
                 },
                 timeoutMs,
                 ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY

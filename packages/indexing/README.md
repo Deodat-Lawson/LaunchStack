@@ -35,7 +35,7 @@ package's own `configure*` hooks when used standalone.
 
 Entity extraction (stage F) is opt-in: the host calls
 `configureEntityExtraction({ enabled: true })` before ingestion runs, or the
-step logs once and skips (ADR-010). apps/web reads `ENABLE_ENTITY_EXTRACTION`
+step logs once and skips (ADR-011). apps/web reads `ENABLE_ENTITY_EXTRACTION`
 for it.
 
 ## Stability

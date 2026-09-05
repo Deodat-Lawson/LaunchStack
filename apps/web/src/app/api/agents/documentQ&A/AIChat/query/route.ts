@@ -6,13 +6,8 @@ import {
     ANNOptimizer,
     createDocumentVectorRetriever,
 } from "@launchstack/retrieval/algorithms/vector";
-import {
-    companyEnsembleSearch,
-    documentEnsembleSearch,
-    multiDocEnsembleSearch,
-} from "~/server/rag/ensemble";
+import { documentEnsembleSearch, multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import type {
-    CompanySearchOptions,
     DocumentSearchOptions,
     MultiDocSearchOptions,
     SearchResult,
@@ -25,7 +20,10 @@ import { document } from "@launchstack/store/schema";
 import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
+import { gateChunksByScope } from "~/server/rag/gate";
 import {
     normalizeModelContent,
     performWebSearch,
@@ -51,6 +49,8 @@ import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+const ROUTE = "agents/documentQ&A/AIChat/query";
 
 const qaAnnOptimizer = new ANNOptimizer({
     strategy: "hnsw",
@@ -186,11 +186,17 @@ async function buildAttachmentTextBlock(textAttachments: AttachmentPayload[]): P
  * AIChat Query - Comprehensive search solution
  *
  * This endpoint provides comprehensive document Q&A capabilities:
- * - Supports both document-level and company-wide searches
+ * - Answers over one document, or over a set of documents
  * - Advanced retrieval with multiple fallback strategies
  * - Web search integration
  * - Conversation context support
  * - Rich response metadata
+ *
+ * A search is always over a set of document ids. There is no company-wide
+ * search: "everything" is the set of ids in the caller's document scope, so
+ * `searchScope: "company"` and `"archive"` are deprecated aliases that
+ * resolve to ids and then take the same multi-document path `"selected"`
+ * does — one retrieval path, one place the scope is applied.
  */
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -208,6 +214,13 @@ export async function POST(request: Request) {
             if (!ctx.success) {
                 recordResult("error");
                 return ctx.response;
+            }
+            // Asking is reading. Which documents the answer may draw on is the
+            // caller's document scope, resolved once and pushed into every leg.
+            if (!ctx.data.can("documents.read")) {
+                recordAuthzDenied("documents.read", ROUTE);
+                recordResult("error");
+                return forbiddenForPermission("documents.read");
             }
 
             const validation = await validateRequestBody(request, QuestionSchema);
@@ -235,6 +248,8 @@ export async function POST(request: Request) {
 
             const userCompanyId = ctx.data.companyId;
             const numericCompanyId = Number(userCompanyId);
+            const scope = await ctx.data.documentScope();
+            observeScopeSize(scope);
 
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for
@@ -327,37 +342,26 @@ export async function POST(request: Request) {
                 );
             }
 
-            // Validate company/archive search permissions — company scope
-            // always uses the caller's active workspace (ignore body companyId).
-            // Membership roles: owner/admin may search company-wide; editors may not.
-            if (searchScope === "company" || searchScope === "archive") {
-                if (!isManagementRole(ctx.data.role)) {
-                    recordResult("error");
-                    return NextResponse.json(
-                        {
-                            success: false,
-                            message:
-                                "Only workspace owners and admins can run company-wide searches.",
-                        },
-                        { status: 403 }
-                    );
-                }
-            }
+            // Every member with `documents.read` may run every search scope;
+            // "company" always means the caller's active workspace (the body's
+            // companyId is ignored) narrowed to their document scope, not a role.
 
             // Validate document access. The verified row is kept so history
             // logging below can reuse it instead of re-reading whatever
             // `documentId` the caller sent — on company/archive/selected
-            // searches that id is extraneous and was never authorized.
+            // searches that id is extraneous and was never authorized. A
+            // document outside the scope reads as missing: 404, never 403.
             let authorizedDocument: { id: number; title: string } | null = null;
             if (searchScope === "document" && documentId) {
                 const [targetDocument] = await db
                     .select({
                         id: document.id,
                         title: document.title,
-                        companyId: document.companyId,
                     })
                     .from(document)
-                    .where(eq(document.id, documentId))
+                    .where(
+                        and(eq(document.id, documentId), scopedDocumentWhere(userCompanyId, scope))
+                    )
                     .limit(1);
 
                 if (!targetDocument) {
@@ -371,17 +375,6 @@ export async function POST(request: Request) {
                     );
                 }
 
-                if (targetDocument.companyId !== userCompanyId) {
-                    recordResult("error");
-                    return NextResponse.json(
-                        {
-                            success: false,
-                            message: "You do not have access to this document.",
-                        },
-                        { status: 403 }
-                    );
-                }
-
                 authorizedDocument = {
                     id: targetDocument.id,
                     title: targetDocument.title,
@@ -390,21 +383,38 @@ export async function POST(request: Request) {
 
             const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
-            // Resolve archive document IDs if archive scope
-            let archiveDocumentIds: number[] | undefined;
-            if (searchScope === "archive" && archiveName) {
-                const archiveDocs = await db
+            // Every non-document search is a search over ids the caller may
+            // read, resolved through the scope. "company" is every readable
+            // document; "archive" is the readable documents of one archive;
+            // "selected" keeps the supplied ids the caller may read. A stale,
+            // cross-company, or out-of-scope id is dropped rather than named —
+            // the caller learns nothing about a document they cannot see.
+            let searchDocumentIds: number[] | undefined;
+            if (searchScope === "company") {
+                const rows = await db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(scopedDocumentWhere(userCompanyId, scope));
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
+                    recordResult("empty");
+                    return NextResponse.json({
+                        success: false,
+                        message: "No relevant content found for the given question.",
+                    });
+                }
+            } else if (searchScope === "archive" && archiveName) {
+                const rows = await db
                     .select({ id: document.id })
                     .from(document)
                     .where(
                         and(
                             eq(document.sourceArchiveName, archiveName),
-                            eq(document.companyId, userCompanyId)
+                            scopedDocumentWhere(userCompanyId, scope)
                         )
                     );
-
-                archiveDocumentIds = archiveDocs.map(d => d.id);
-                if (archiveDocumentIds.length === 0) {
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
                     recordResult("empty");
                     return NextResponse.json(
                         {
@@ -414,34 +424,28 @@ export async function POST(request: Request) {
                         { status: 404 }
                     );
                 }
-            }
-
-            // For the "selected" scope, verify every supplied document ID belongs
-            // to the caller's company before retrieval. A mismatch means the
-            // client passed a stale or cross-company ID — reject rather than
-            // silently drop, so the user sees an explicit error.
-            let verifiedSelectedIds: number[] | undefined;
-            if (searchScope === "selected" && selectedDocumentIds?.length) {
+            } else if (searchScope === "selected" && selectedDocumentIds?.length) {
                 const uniqueIds = Array.from(new Set(selectedDocumentIds));
                 const rows = await db
-                    .select({ id: document.id, companyId: document.companyId })
+                    .select({ id: document.id })
                     .from(document)
-                    .where(inArray(document.id, uniqueIds));
-
-                const allowed = rows.filter(r => r.companyId === userCompanyId).map(r => r.id);
-
-                if (allowed.length !== uniqueIds.length) {
+                    .where(
+                        and(
+                            inArray(document.id, uniqueIds),
+                            scopedDocumentWhere(userCompanyId, scope)
+                        )
+                    );
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
                     recordResult("error");
                     return NextResponse.json(
                         {
                             success: false,
-                            message: "One or more selected documents are not accessible.",
+                            message: "None of the selected documents were found.",
                         },
-                        { status: 403 }
+                        { status: 404 }
                     );
                 }
-
-                verifiedSelectedIds = allowed;
             }
 
             // Perform comprehensive search
@@ -464,38 +468,19 @@ export async function POST(request: Request) {
                         : "document_ensemble_rrf";
 
             try {
-                if (searchScope === "company") {
-                    const companyOptions: CompanySearchOptions = {
+                if (searchDocumentIds?.length) {
+                    // One path for every set of ids: from the retriever's
+                    // perspective the caller's whole scope, an archive, and a
+                    // hand-picked set are identical (`document_id = ANY(...)`).
+                    const multiDocOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
+                        documentIds: searchDocumentIds,
                         companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
-                    documents = await companyEnsembleSearch(question, companyOptions, embeddings);
-                } else if (searchScope === "archive" && archiveDocumentIds?.length) {
-                    const archiveOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10,
-                        documentIds: archiveDocumentIds,
-                        companyId: numericCompanyId,
-                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
-                    };
-
-                    documents = await multiDocEnsembleSearch(question, archiveOptions, embeddings);
-                } else if (searchScope === "selected" && verifiedSelectedIds?.length) {
-                    // Reuse the archive scope's multi-doc path; from the retriever's
-                    // perspective a user-picked set and an archive-resolved set are
-                    // identical (both narrow to `document_id = ANY(...)`).
-                    const selectedOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10,
-                        documentIds: verifiedSelectedIds,
-                        companyId: numericCompanyId,
-                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
-                    };
-
-                    documents = await multiDocEnsembleSearch(question, selectedOptions, embeddings);
+                    documents = await multiDocEnsembleSearch(question, multiDocOptions, embeddings);
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
                         topK: 5,
@@ -515,10 +500,11 @@ export async function POST(request: Request) {
             } catch (ensembleError) {
                 console.warn(`⚠️ [AIChat] Ensemble search failed, falling back:`, ensembleError);
 
-                if (searchScope === "company") {
-                    retrievalMethod = "company_fallback_failed";
+                if (searchScope !== "document") {
+                    // The multi-document path has no narrower fallback.
+                    retrievalMethod = `${searchScope}_fallback_failed`;
                     documents = [];
-                } else if (searchScope === "document" && documentId) {
+                } else if (documentId) {
                     if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
                         retrievalMethod = "ann_hybrid";
 
@@ -596,6 +582,15 @@ export async function POST(request: Request) {
                 }
             }
 
+            // The last check before anything reaches the prompt: every leg
+            // already filtered by the scope in SQL, so this drops nothing —
+            // and counts loudly when it does.
+            documents = await gateChunksByScope(documents, {
+                companyId: userCompanyId,
+                scope,
+                searchScope: searchScope ?? "document",
+            });
+
             if (documents.length === 0) {
                 recordResult("empty");
                 return NextResponse.json({
@@ -617,7 +612,7 @@ export async function POST(request: Request) {
                     );
 
                     // A company fact is a curated, cited statement, not a passage;
-                    // label it so the model treats it as such (ADR-010).
+                    // label it so the model treats it as such (ADR-011).
                     const heading =
                         source === "company_fact"
                             ? `=== Company fact #${idx + 1}${

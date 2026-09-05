@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Badge } from "~/components/ui/badge";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import {
     Table,
     TableBody,
@@ -348,12 +349,15 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                                     <div
                                                                         className={cn(
                                                                             "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
-                                                                            viewer.role === "owner"
+                                                                            normalizeRoleSlug(
+                                                                                viewer.role
+                                                                            ) === "owner"
                                                                                 ? "bg-brand"
-                                                                                : viewer.role ===
-                                                                                    "employer"
-                                                                                  ? "bg-blue-500"
-                                                                                  : "bg-gray-400"
+                                                                                : normalizeRoleSlug(
+                                                                                        viewer.role
+                                                                                    ) === "admin"
+                                                                                  ? "bg-info"
+                                                                                  : "bg-ink-4"
                                                                         )}
                                                                     >
                                                                         {viewer.name

@@ -2,7 +2,7 @@
  * Entity-extraction gate.
  *
  * Stage F of ingestion — LLM NER over every stored section, then the `kg_*`
- * writes — is optional enrichment and, since ADR-010, off unless the host
+ * writes — is optional enrichment and, since ADR-011, off unless the host
  * turns it on. Nothing user-facing reads the `kg_*` tables except the
  * parked knowledge-graph view and the graph retrieval leg (itself off by
  * default), while extraction bills an NER call per five chunks of every

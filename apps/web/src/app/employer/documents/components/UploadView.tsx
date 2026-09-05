@@ -12,6 +12,8 @@ const CategoryManagement = dynamic(() => import("~/app/employer/upload/CategoryM
 interface Category {
     id: string;
     name: string;
+    /** Only people with a grant can see documents filed here. */
+    restricted?: boolean;
 }
 
 type CategoryResponse = {

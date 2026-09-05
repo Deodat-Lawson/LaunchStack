@@ -11,6 +11,8 @@
  */
 
 import React, { useMemo, useState } from "react";
+import { Lock } from "lucide-react";
+import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
 import { ContextMenu } from "./ContextMenu";
@@ -34,6 +36,8 @@ export interface KnowledgePaneProps {
     onAskAbout: (sourceIds: string[]) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
+    /** "Restrict access…" — opens the document's access dialog. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
 }
 
@@ -50,6 +54,7 @@ export function KnowledgePane({
     onAskAbout,
     onRenameSource,
     onDeleteSource,
+    onRestrictAccess,
     onMoveToFolder,
 }: KnowledgePaneProps) {
     const [query, setQuery] = useState("");
@@ -86,6 +91,7 @@ export function KnowledgePane({
                       onCopyTitle: source => {
                           void navigator.clipboard?.writeText(source.title).catch(() => undefined);
                       },
+                      onRestrictAccess,
                       onDelete: onDeleteSource,
                   })
                 : [],
@@ -96,6 +102,7 @@ export function KnowledgePane({
             onOpenSource,
             onAskAbout,
             onRenameSource,
+            onRestrictAccess,
             onMoveToFolder,
             onDeleteSource,
             setSelected,
@@ -280,11 +287,13 @@ export function KnowledgePane({
                     <FilterMenu
                         label="Collection"
                         value={folder}
-                        options={[...counts.byFolder.entries()].map(([name, count]) => ({
-                            value: name,
-                            label: name,
-                            count,
-                        }))}
+                        options={[...counts.byFolder.entries()]
+                            .sort(([a], [b]) => compareFolderPaths(a, b))
+                            .map(([name, count]) => ({
+                                value: name,
+                                label: displayFolderPath(name),
+                                count,
+                            }))}
                         onChange={setFolder}
                     />
                     <FilterMenu
@@ -743,6 +752,24 @@ function SourceCard({
                 >
                     {collectionOf(source)}
                 </span>
+                {source.restricted && (
+                    <span
+                        title="Only people with access can see this document"
+                        style={{
+                            fontSize: 10,
+                            padding: "1px 7px",
+                            borderRadius: 5,
+                            background: "var(--line-2)",
+                            color: "var(--ink-2)",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 3,
+                        }}
+                    >
+                        <Lock size={9} />
+                        Restricted
+                    </span>
+                )}
                 {(source.pending ?? source.syncing ?? false) && (
                     <span style={{ fontSize: 10, color: "oklch(0.5 0.13 55)" }}>indexing…</span>
                 )}
@@ -877,6 +904,16 @@ function SourceTable({
                                             >
                                                 {source.title}
                                             </span>
+                                            {source.restricted && (
+                                                <Lock
+                                                    size={11}
+                                                    aria-label="Restricted"
+                                                    style={{
+                                                        color: "var(--ink-3)",
+                                                        flexShrink: 0,
+                                                    }}
+                                                />
+                                            )}
                                         </span>
                                     </Td>
                                     <Td muted>{meta.label}</Td>

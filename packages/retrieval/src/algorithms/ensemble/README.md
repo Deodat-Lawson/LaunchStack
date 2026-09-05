@@ -22,7 +22,7 @@ Neo4j when configured, Postgres fallback otherwise); `notesLegs` and
 live in product schema this package cannot see. The facts leg is where
 entity questions ("who owns X", "which contract names Y") are meant to land:
 the company-metadata projection is already a typed, cited graph of the
-company, so the leg reads it instead of a co-occurrence graph (ADR-010).
+company, so the leg reads it instead of a co-occurrence graph (ADR-011).
 
 **Failure.** A failing ensemble degrades to BM25-only over the same scope —
 retrieval never throws to the caller; it narrows.

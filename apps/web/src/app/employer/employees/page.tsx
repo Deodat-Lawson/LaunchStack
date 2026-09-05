@@ -1,7 +1,10 @@
-// app/employer/manage-employees/page.tsx
+import { redirect } from "next/navigation";
 
-import ManageEmployeesPage from "./ManageEmployeePage";
-
-export default function Page() {
-    return <ManageEmployeesPage />;
+/**
+ * The people list is a section of Settings now. This route survives only so
+ * old bookmarks, emails, and the retired `?view=employees` links still land
+ * somewhere useful.
+ */
+export default function EmployeesRedirect() {
+    redirect("/employer/settings#people");
 }

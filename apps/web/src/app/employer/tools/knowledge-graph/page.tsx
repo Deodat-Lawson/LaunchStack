@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * /employer/tools/knowledge-graph — the parked entity-graph view (ADR-010).
+ * /employer/tools/knowledge-graph — the parked entity-graph view (ADR-011).
  *
  * Deliberately linked from no navigation: it shows what stage-F entity
  * extraction produced, which is an index-health question, not a product

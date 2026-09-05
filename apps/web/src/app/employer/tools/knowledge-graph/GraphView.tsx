@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The entity-graph view, parked here from the chat panel (ADR-010). It draws
+ * The entity-graph view, parked here from the chat panel (ADR-011). It draws
  * whatever stage-F entity extraction produced — NER labels joined by
  * same-chunk co-occurrence — and is an index-health surface, not a product
  * one: nodes select but lead nowhere. It renders nothing on a deployment

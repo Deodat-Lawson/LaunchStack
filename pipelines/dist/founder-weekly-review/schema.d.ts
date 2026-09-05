@@ -109,7 +109,7 @@ export declare const founderWeeklyReviewRuns: import("drizzle-orm/pg-core").PgTa
             tableName: "founder_weekly_review_runs";
             dataType: "string";
             columnType: "PgVarchar";
-            data: "queued" | "failed" | "collecting" | "generating" | "draft" | "published";
+            data: "queued" | "collecting" | "generating" | "draft" | "published" | "failed";
             driverParam: string;
             notNull: true;
             hasDefault: true;

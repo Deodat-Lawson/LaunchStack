@@ -286,7 +286,7 @@ export function getEngine(): Engine {
     // document-converter adapters all read from the same source.
     configureOcr(config.ocr);
 
-    // Stage F (entity extraction into kg_*) is opt-in (ADR-010). apps/worker
+    // Stage F (entity extraction into kg_*) is opt-in (ADR-011). apps/worker
     // boots through this same root, so ingestion and the app agree.
     configureEntityExtraction({ enabled: env.server.ENABLE_ENTITY_EXTRACTION === true });
 

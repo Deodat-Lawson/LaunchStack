@@ -5,7 +5,8 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { category, document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 
 const PatchCategorySchema = z.object({
     name: z
@@ -32,15 +33,8 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         const parsed = parseId(rawId);
         if (!parsed.ok) return parsed.response;
 
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("folders.manage");
         if (!ctx.success) return ctx.response;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json(
-                { error: "Forbidden: owner or admin role required" },
-                { status: 403 }
-            );
-        }
 
         const validation = await validateRequestBody(request, PatchCategorySchema);
         if (!validation.success) {
@@ -65,7 +59,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
         // Rename + cascade the new name onto any documents that referenced the old
         // name via the `category` text column. Kept in a transaction so the two
-        // writes can't drift.
+        // writes can't drift, and the audit row lands with them.
         await db.transaction(async tx => {
             await tx.update(category).set({ name }).where(eq(category.id, parsed.id));
             await tx
@@ -77,6 +71,14 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
                         eq(document.category, existing.name)
                     )
                 );
+            await recordAuditEvent(tx, {
+                companyId: ctx.data.companyId,
+                actorUserId: ctx.data.authUserId,
+                action: "folder.renamed",
+                targetType: "folder",
+                targetId: parsed.id,
+                detail: { from: existing.name, to: name },
+            });
         });
 
         return NextResponse.json({ success: true, id: parsed.id, name }, { status: 200 });

@@ -25,6 +25,7 @@ import {
     IconSparkle,
     IconTrash,
 } from "./icons";
+import { Lock, Users } from "lucide-react";
 import { placeMenu, placeSubmenu } from "./placeMenu";
 import type { SourceContextMenuItem } from "./sourceContextMenu";
 import styles from "./ContextMenu.module.css";
@@ -66,6 +67,10 @@ function iconFor(name: MenuIconName | undefined): ReactNode {
             return <IconPlus size={13} />;
         case "check":
             return <IconCheck size={13} />;
+        case "lock":
+            return <Lock size={13} />;
+        case "share":
+            return <Users size={13} />;
         default:
             return null;
     }

@@ -25,7 +25,13 @@ import {
     listPickedItems,
     releaseSyncLease,
 } from "./store";
-import { createGoogleDriveSink, listKnownSourceIds, markMissingDocuments } from "./sink";
+import { ensureCategoryRow } from "../../folder-access";
+import {
+    GOOGLE_DRIVE_CATEGORY,
+    createGoogleDriveSink,
+    listKnownSourceIds,
+    markMissingDocuments,
+} from "./sink";
 
 export type GoogleDriveSyncRunResult =
     | { readonly outcome: "synced"; readonly report: GoogleDriveSyncResult }
@@ -85,6 +91,10 @@ export async function runGoogleDriveSync(
         if (!granter) {
             throw new Error("The user who connected Google Drive no longer exists");
         }
+
+        // The folder the sink writes into must exist as a category row so it
+        // can be restricted like any other folder.
+        await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
         const [syncState, pickedRows, knownSourceIds, sink] = await Promise.all([
             getSyncState(connectionId),

@@ -4,22 +4,25 @@
  *
  * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
  * session. Token-based requests skip the ownership check; session-based
- * requests require `file_uploads.company_id` to match the caller's company.
- * Rows with no company stamp belong to no known tenant and are denied — see
- * Legacy rows get `company_id` from the
+ * requests require `file_uploads.company_id` to match the caller's company,
+ * and when the file backs a document, that document must be in the caller's
+ * read scope. Rows with no company stamp belong to no known tenant and are
+ * denied. Legacy rows get `company_id` from the
  * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
  * attribute authoritatively.
  */
 
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq, like, or } from "drizzle-orm";
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/store/schema";
+import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopeAllows } from "~/lib/authz/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
     pdf: "application/pdf",
@@ -76,10 +79,12 @@ export async function GET(request: Request, { params }: RouteParams) {
 
         // Session path: full workspace context + company ownership check.
         let sessionCompanyId: bigint | null = null;
+        let sessionScope: DocumentScope | null = null;
         if (!hasValidToken) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
             sessionCompanyId = ctx.data.companyId;
+            sessionScope = await ctx.data.documentScope();
         }
 
         // Fetch file from database
@@ -93,6 +98,25 @@ export async function GET(request: Request, { params }: RouteParams) {
         if (sessionCompanyId !== null) {
             if (file.companyId == null || file.companyId !== sessionCompanyId) {
                 return NextResponse.json({ error: "File not found" }, { status: 404 });
+            }
+            // The file is the bytes behind a document (current or a past
+            // version); serving it would bypass the document's folder. A file
+            // no document references yet (mid-upload) is only company-scoped.
+            if (sessionScope && sessionScope.kind !== "everything") {
+                const pattern = `%/api/files/${fileId}`;
+                const backed = await db
+                    .select({ id: document.id, category: document.category })
+                    .from(document)
+                    .leftJoin(documentVersions, eq(documentVersions.documentId, document.id))
+                    .where(
+                        and(
+                            eq(document.companyId, sessionCompanyId),
+                            or(like(document.url, pattern), like(documentVersions.url, pattern))
+                        )
+                    );
+                if (backed.length > 0 && !backed.some(doc => scopeAllows(sessionScope, doc))) {
+                    return NextResponse.json({ error: "File not found" }, { status: 404 });
+                }
             }
         }
 

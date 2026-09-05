@@ -14,6 +14,7 @@ import {
     formatCompanyFact,
     rankCompanyFacts,
     rowsCitingDocuments,
+    rowsVisibleUnder,
     tokenize,
 } from "~/server/rag/company-facts";
 
@@ -158,6 +159,35 @@ describe("rowsCitingDocuments", () => {
         const fromLease = rowsCitingDocuments(rows, [58]);
         expect(fromLease.map(r => r.subject)).toEqual(["Office lease"]);
         expect(rowsCitingDocuments(rows, [999])).toEqual([]);
+    });
+});
+
+describe("rowsVisibleUnder", () => {
+    it("drops facts whose every source is out of scope, keeps document-free facts", () => {
+        const rows = flattenCompanyFacts(projection());
+        // Only the lease document is readable: the legal entry stays, the
+        // org-chart-backed people go, and nothing declared by hand is lost.
+        const visible = rowsVisibleUnder(rows, new Set([58]));
+        expect(visible.map(r => r.subject)).toEqual(["Office lease"]);
+
+        expect(rowsVisibleUnder(rows, new Set())).toEqual([]);
+
+        const withManual = rowsVisibleUnder(
+            [
+                ...rows,
+                {
+                    path: "custom.motto",
+                    section: "policies",
+                    subject: "motto",
+                    details: [{ field: "motto", value: "Ship it" }],
+                    confidence: 1,
+                    lastUpdated: "2026-08-20T00:00:00Z",
+                    sourceDocumentIds: [],
+                },
+            ],
+            new Set()
+        );
+        expect(withManual.map(r => r.subject)).toEqual(["motto"]);
     });
 });
 

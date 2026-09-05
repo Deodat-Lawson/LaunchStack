@@ -1,6 +1,14 @@
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: jest.fn(),
-}));
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 jest.mock("~/server/db", () => ({
     db: {
@@ -10,9 +18,10 @@ jest.mock("~/server/db", () => ({
 
 import { NextResponse } from "next/server";
 import { GET } from "~/app/api/documents/[id]/text/route";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 type DocumentRow = {
     id: number;
@@ -61,18 +70,28 @@ type DocumentTextPayload = {
     documentId?: number;
 };
 
-const requireWorkspaceContextMock = requireWorkspaceContext as jest.MockedFunction<
-    typeof requireWorkspaceContext
->;
 const selectMock = jest.spyOn(db, "select") as unknown as SelectMock;
 
-const CTX: WorkspaceContext = {
+const CTX: WorkspaceContext = makeWorkspaceContext({
     authUserId: "user-1",
     userPk: 7n,
     companyId: 10n,
-    role: "employer",
-    status: "verified",
-};
+    role: "admin",
+});
+
+/** A Member who cannot see the "Board" folder. */
+const SCOPED_CTX: WorkspaceContext = makeWorkspaceContext({
+    authUserId: "user-2",
+    userPk: 8n,
+    companyId: 10n,
+    role: "member",
+    scope: {
+        kind: "except",
+        deniedCategories: ["Board"],
+        deniedDocumentIds: [],
+        allowedDocumentIds: [],
+    },
+});
 
 function inspectPredicate(
     value: unknown,
@@ -82,6 +101,11 @@ function inspectPredicate(
     }
 ): PredicateDetails {
     if (!value || typeof value !== "object") return details;
+    // Drizzle embeds `IN (...)` lists as a raw array of params inside the chunk list.
+    if (Array.isArray(value)) {
+        for (const item of value) inspectPredicate(item, details);
+        return details;
+    }
 
     const candidate = value as {
         config?: { name?: unknown };
@@ -99,6 +123,12 @@ function inspectPredicate(
     }
     if (Array.isArray(candidate.queryChunks)) {
         for (const chunk of candidate.queryChunks) {
+            // A `sql` template keeps interpolated primitives raw until the
+            // query is built; they are parameters all the same.
+            if (chunk !== null && typeof chunk !== "object") {
+                details.params.push(chunk);
+                continue;
+            }
             inspectPredicate(chunk, details);
         }
     }
@@ -164,14 +194,14 @@ function documentRow(overrides: Partial<DocumentRow> = {}): DocumentRow {
 describe("GET /api/documents/[id]/text", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        requireWorkspaceContextMock.mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: CTX,
         });
     });
 
     it("preserves the unauthorized response", async () => {
-        requireWorkspaceContextMock.mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: false,
             response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
         });
@@ -260,5 +290,32 @@ describe("GET /api/documents/[id]/text", () => {
             error: "Document not found",
         });
         expect(selectMock).toHaveBeenCalledTimes(1);
+    });
+
+    it("puts the caller's read scope into the document predicate", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: SCOPED_CTX });
+        const predicates: unknown[] = [];
+        selectMock.mockImplementation(() => {
+            const where = jest.fn<Promise<readonly SelectRow[]> | OrderedQuery, [unknown]>(
+                (condition: unknown) => {
+                    predicates.push(condition);
+                    // The scoped WHERE finds nothing — the document lives in
+                    // "Board" — so the route must answer exactly like a miss.
+                    return Promise.resolve([]);
+                }
+            );
+            return { from: jest.fn<SelectWhereQuery, [table: unknown]>(() => ({ where })) };
+        });
+
+        const response = await requestFor();
+
+        expect(response.status).toBe(404);
+        await expect(responsePayload(response)).resolves.toEqual({
+            error: "Document not found",
+        });
+        // The predicate carries the denied folder name as a bound parameter.
+        const details = inspectPredicate(predicates[0]);
+        expect(details.params).toContain("Board");
+        expect(details.columnNames).toContain("category");
     });
 });

@@ -10,15 +10,7 @@
  */
 export type AgentToolId = "claude-code" | "codex";
 export type KnowledgeScope = "global" | "project";
-export type KnowledgeKind =
-    | "instructions"
-    | "agent"
-    | "command"
-    | "skill"
-    | "memory"
-    | "prompt"
-    | "output-style"
-    | "config";
+export type KnowledgeKind = "instructions" | "agent" | "command" | "skill" | "memory" | "prompt" | "output-style" | "config";
 /** One allowlisted location inside a root. */
 export interface LayoutEntry {
     /** Path relative to the root. `""` is not allowed — name a file or dir. */

@@ -52,7 +52,7 @@ x-shared-env: &shared-env
   NER_MODEL: ${NER_MODEL:-}
   NER_API_BASE_URL: ${NER_API_BASE_URL:-}
   NER_API_KEY: ${NER_API_KEY:-}
-  # Stage F entity extraction is opt-in (ADR-010); the facts leg is on unless "false".
+  # Stage F entity extraction is opt-in (ADR-011); the facts leg is on unless "false".
   ENABLE_ENTITY_EXTRACTION: ${ENABLE_ENTITY_EXTRACTION:-}
   ENABLE_COMPANY_FACTS_RETRIEVER: ${ENABLE_COMPANY_FACTS_RETRIEVER:-}
   TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}

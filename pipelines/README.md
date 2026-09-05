@@ -1,6 +1,6 @@
 # @launchstack/pipelines
 
-The compositions — level two. Nine verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, and the repo explainer. It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
+The compositions — level two. Eleven verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, the repo explainer, repo workspaces, and the distribution pipeline. It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
 
 ## Install
 
@@ -27,7 +27,9 @@ import { runClientProspector } from "@launchstack/pipelines/client-prospector";
 | `./client-prospector` | ICP description → scored prospect list |
 | `./trend-search` | question → synthesized answer + sources |
 | `./connectors` | external knowledge source → KnowledgeItems → sink |
-| `./repo-explainer` | GitHub URL → summary + Mermaid diagram |
+| `./repo-explainer` | GitHub URL → summary + Mermaid diagram (legacy request-scoped path), plus the workspace-backed gated agent explanation |
+| `./repo-workspace` | connected repository → synced git mirror + deterministic per-commit context bundle (tree, ranked repo map, memory files, stats, hygiene manifest) |
+| `./distribution` | program (offering, territories, partner kinds) → evidence-backed partner dossiers, fit scores, relationship pipeline with stage rules, coverage dashboard; outreach hands off to `./email` |
 | `./schema` | the product schema the verticals own (applied by apps/web's migration set) |
 
 ## Configuration

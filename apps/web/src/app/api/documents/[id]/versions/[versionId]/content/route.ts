@@ -19,6 +19,7 @@ import { document, documentVersions } from "@launchstack/store/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
     ".pdf": "application/pdf",
@@ -62,14 +63,19 @@ export async function GET(
             return NextResponse.json({ error: "Invalid version id" }, { status: 400 });
         }
 
-        // Company-scoped auth: verify the caller shares a company with the target
-        // document. Mirrors the check used in every other document-scoped route.
+        // Scoped in SQL: the document must be in the caller's workspace and
+        // read scope. Mirrors the check used in every other document route.
         const [doc] = await db
             .select({ companyId: document.companyId, title: document.title })
             .from(document)
-            .where(eq(document.id, documentId));
+            .where(
+                and(
+                    eq(document.id, documentId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
-        if (!doc || doc.companyId !== ctx.data.companyId) {
+        if (!doc) {
             return NextResponse.json({ error: "Document not found" }, { status: 404 });
         }
 

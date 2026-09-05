@@ -3,7 +3,7 @@
  * internal file that cannot be processed in the current configuration.
  * Callers map this onto an HTTP response instead of a generic 500.
  *
- * Kept in its own dependency-free module — like ~/lib/membership-roles — so a
+ * Kept in its own dependency-free module — like ~/lib/authz/permissions — so a
  * route can catch it without importing `internal-file-ref`, which pulls in the
  * db client and the whole engine composition root just to name an error type.
  */

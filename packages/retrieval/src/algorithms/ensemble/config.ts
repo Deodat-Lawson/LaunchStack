@@ -19,7 +19,7 @@
  */
 
 import type { BaseRetriever } from "@langchain/core/retrievers";
-import type { EmbeddingsProvider } from "../../search-types";
+import type { DocumentScope, EmbeddingsProvider } from "../../search-types";
 
 export interface NotesLegProvider {
     createDocumentLeg(
@@ -27,10 +27,16 @@ export interface NotesLegProvider {
         embeddings: EmbeddingsProvider,
         topK: number
     ): BaseRetriever;
+    /**
+     * `scope` is the caller's document scope. Notes are per-user, but a note
+     * anchored to a restricted document carries that document's quote, so a
+     * provider should honour it where it can.
+     */
     createCompanyLeg(
         companyId: number | string,
         embeddings: EmbeddingsProvider,
-        topK: number
+        topK: number,
+        scope?: DocumentScope
     ): BaseRetriever;
     createMultiDocLeg(
         documentIds: number[],
@@ -47,7 +53,16 @@ export interface NotesLegProvider {
  */
 export interface FactsLegProvider {
     createDocumentLeg(documentId: number, companyId: number, topK: number): BaseRetriever;
-    createCompanyLeg(companyId: number | string, topK: number): BaseRetriever;
+    /**
+     * `scope` is the caller's document scope. A fact quotes the document it
+     * was read from, so a fact whose only sources fall outside the scope must
+     * not surface — the provider filters by cited source.
+     */
+    createCompanyLeg(
+        companyId: number | string,
+        topK: number,
+        scope?: DocumentScope
+    ): BaseRetriever;
     createMultiDocLeg(documentIds: number[], companyId: number, topK: number): BaseRetriever;
 }
 

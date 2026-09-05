@@ -29,7 +29,8 @@ const PUBLIC_API_PATHS = [
     "/api/health",
     "/api/webhooks/uploadthing",
     "/api/inngest",
-    "/api/invite-codes/validate",
+    "/api/workspace/invitations/preview",
+    "/api/workspace/join-links/preview",
     "/api/ocr/benchmark",
     "/api/metrics",
     "/api/uploadthing",
@@ -45,12 +46,12 @@ const PUBLIC_API_PATHS = [
 
 const PROTECTED_API_PATHS = [
     "/api/uploadDocument",
-    "/api/signup/employee",
+    "/api/signup/join",
     "/api/config/ocr",
     "/api/experimental/embedding-search",
     "/api/upload-local",
     "/api/documents/1",
-    "/api/invite-codes/generate",
+    "/api/workspace/join-links",
     "/api/collab/agents",
     "/api/collab/meetings",
 ];

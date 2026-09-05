@@ -101,11 +101,26 @@ async function assertLedgerTable(db: DbClient) {
     }
 }
 
+/**
+ * Two ledgers, one question. The engine set records in
+ * `_launchstack_migrations`; the product set (apps/web) in
+ * `_launchstack_web_migrations`, which an engine-only consumer never creates —
+ * hence the `to_regclass` guard rather than a bare reference.
+ */
 async function assertMigrationApplied(db: DbClient, tag: string) {
     const rows = await db.execute<{ ok: boolean }>(sql`
-    SELECT EXISTS (
-      SELECT 1 FROM _launchstack_migrations
-       WHERE tag = ${tag} AND state = 'applied'
+    SELECT (
+      EXISTS (
+        SELECT 1 FROM _launchstack_migrations
+         WHERE tag = ${tag} AND state = 'applied'
+      )
+      OR (
+        to_regclass('_launchstack_web_migrations') IS NOT NULL
+        AND EXISTS (
+          SELECT 1 FROM _launchstack_web_migrations
+           WHERE tag = ${tag} AND state = 'applied'
+        )
+      )
     ) AS ok
   `);
     const list = Array.isArray(rows) ? rows : ((rows as { rows?: unknown[] }).rows ?? []);
@@ -113,7 +128,7 @@ async function assertMigrationApplied(db: DbClient, tag: string) {
     if (!ok) {
         throw new Error(
             `backfill requires migration ${tag}, which is not applied to this database. ` +
-                `Run the engine migrations first: \`node packages/core/scripts/migrate.mjs\`.`
+                `Run the migrations first: \`pnpm --filter @launchstack/web db:migrate\`.`
         );
     }
 }

@@ -9,6 +9,10 @@ import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
 import { validateNoteTarget } from "~/server/notes/validate-note-target";
+import {
+  filterNotesByDocumentScope,
+  isNoteDocumentVisible,
+} from "~/server/notes/document-scope";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
@@ -24,6 +28,13 @@ export async function GET(request: Request) {
     const surface = searchParams.get("surface");
 
     const companyIdStr = String(ctx.data.companyId);
+    const scope = await ctx.data.documentScope();
+
+    // A document outside the caller's scope has no notes to list — it reads
+    // as missing, the same as a document that does not exist.
+    if (documentId && !(await isNoteDocumentVisible(documentId, ctx.data.companyId, scope))) {
+      return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    }
     // Scope to the active workspace. Legacy rows with null companyId still
     // surface for the owning user so old notes are not silently dropped.
     const conditions = [
@@ -84,11 +95,15 @@ export async function GET(request: Request) {
 
     // When semantic search seeded the result set, restore the relevance
     // ordering rather than the raw createdAt sort.
-    const notes = semanticIds
+    const ordered = semanticIds
       ? semanticIds
           .map((id) => rows.find((r) => r.id === id))
           .filter((r): r is (typeof rows)[number] => r !== undefined)
       : rows;
+
+    // Notes are the author's, but an anchored note quotes its document:
+    // when the document is outside the scope, so is the note.
+    const notes = await filterNotesByDocumentScope(ordered, ctx.data.companyId, scope);
 
     return NextResponse.json({ notes: notes.map(serializeNote) }, { status: 200 });
   } catch (error) {
@@ -109,10 +124,12 @@ export async function POST(request: Request) {
     if (!validation.success) return validation.response;
     const body = validation.data;
 
+    const scope = await ctx.data.documentScope();
     const target = await validateNoteTarget({
       documentId: body.documentId,
       versionId: body.versionId,
       companyId: ctx.data.companyId,
+      scope,
     });
     if (!target.ok) return target.response;
 
@@ -161,6 +178,7 @@ export async function POST(request: Request) {
         noteId: note.id,
         rich: (note.contentRich as JSONContent | null) ?? null,
         companyId: note.companyId,
+        scope,
       }).catch((err) => console.error("[syncNoteLinks] failed:", err));
     }
 

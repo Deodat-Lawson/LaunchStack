@@ -1,5 +1,7 @@
 import type * as CoreLlm from "@launchstack/llm";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const mockStructuredInvoke = jest
     .fn<Promise<{ missingDocuments: never[]; recommendations: never[] }>, []>()
     .mockResolvedValue({
@@ -316,13 +318,12 @@ function makePredictiveSelectQuery(): PredictiveQueryChain {
 function resetPredictiveFixtures() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user-1",
             userPk: BigInt(1),
             companyId: BigInt(7),
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
     currentVersionId = 2n;
     contextChunkRows = [

@@ -1,8 +1,9 @@
 /**
  * GET /api/documents/[id]/google-docs/status — the viewer's state line.
  *
- * Readable by any workspace member (the banner shows on the document for
- * everyone); mutating anything stays management-only in the other routes.
+ * Readable by anyone who can read the document (the banner shows on the
+ * document for everyone); mutating anything takes `connectors.manage` in the
+ * other routes.
  */
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
@@ -19,7 +20,7 @@ import { authorizeDriveRoute } from "../_shared";
 
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
     const { id: rawId } = await context.params;
-    const auth = await authorizeDriveRoute(rawId, { requireManagement: false });
+    const auth = await authorizeDriveRoute(rawId, { requirePermission: false });
     if (!auth.ok) return auth.response;
 
     const [connection, link] = await Promise.all([

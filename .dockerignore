@@ -12,10 +12,18 @@
 # Generated assets (created by postinstall from node_modules)
 apps/web/public/vad
 
-# The public site (launchstack.app) is not containerized — docker-compose and
-# the GHCR images build apps/web only. This also keeps its 26MB deployment
-# demo video out of every build context.
-apps/landing
+# The public site is containerized only by apps/landing/Dockerfile, so a
+# self-hosted deployment can serve its own front door. The web and worker
+# images do not need it, but a .dockerignore is per-context, not per-image, so
+# excluding it outright is what stopped the landing image from building at all.
+#
+# The 26MB deployment demo video this used to exclude is no longer committed —
+# the whole app is ~0.5MB across 61 files — so the cost of carrying it is now
+# negligible. Heavy media stays excluded by extension below in case one comes
+# back.
+apps/landing/**/*.mp4
+apps/landing/**/*.webm
+apps/landing/**/*.mov
 
 # Git
 .git
@@ -67,6 +75,7 @@ sidecar
 docker-compose*.yml
 apps/web/Dockerfile
 apps/web/Dockerfile.*
+apps/landing/Dockerfile
 .dockerignore
 scripts/ops/start-database.sh
 

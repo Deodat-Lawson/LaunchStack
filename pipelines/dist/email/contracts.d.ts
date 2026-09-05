@@ -3,7 +3,10 @@ import type { EmailTemplate, Recipient, RenderedEmail, TemplateReview } from "./
  * Pipeline interfaces (the frozen seam member.md builds against).
  */
 /** Generate a company-grounded template for a company. */
-export type GenerateTemplateFn = (args: { companyId: number; goal?: string }) => Promise<{
+export type GenerateTemplateFn = (args: {
+    companyId: number;
+    goal?: string;
+}) => Promise<{
     template: EmailTemplate;
     companyContext: string;
 }>;

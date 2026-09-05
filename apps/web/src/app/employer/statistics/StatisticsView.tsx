@@ -234,8 +234,8 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                             accent="oklch(0.6 0.16 225)"
                         />
                         <StatTile
-                            label="Active users"
-                            value={data.employees.filter(e => e.status === "verified").length}
+                            label="Active members"
+                            value={data.employees.filter(e => e.status === "active").length}
                             Icon={Clock}
                             accent="oklch(0.58 0.15 160)"
                         />

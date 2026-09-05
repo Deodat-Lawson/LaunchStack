@@ -77,13 +77,6 @@ export const connectorConnections = pgTable(
          * rotation) — there `accessTokenCiphertext` IS the credential.
          */
         refreshTokenCiphertext: text("refresh_token_ciphertext"),
-        /**
-         * For Google this stays null (access tokens are cached in-process);
-         * for Slack/GitHub it persists the long-lived token.
-         */
-        accessTokenCiphertext: text("access_token_ciphertext"),
-        /** Null when the stored access token does not expire. */
-        accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
         encryptionKeyVersion: integer("encryption_key_version").notNull().default(1),
         scopes: varchar("scopes", { length: 512 }).notNull(),
         /** 'active' | 'revoked' — revoked means reconnect is the only fix. */
@@ -93,6 +86,18 @@ export const connectorConnections = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared last because that is where they physically live: the
+        // migration adds them with ALTER TABLE ADD COLUMN, which appends. The
+        // migrations-apply job compares pg_dump output, and pg_dump prints
+        // columns in physical order — so declaring them mid-table read as
+        // schema drift even though both sides had identical columns.
+        /**
+         * For Google this stays null (access tokens are cached in-process);
+         * for Slack/GitHub it persists the long-lived token.
+         */
+        accessTokenCiphertext: text("access_token_ciphertext"),
+        /** Null when the stored access token does not expire. */
+        accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
     },
     table => ({
         companyProviderAccountUnique: uniqueIndex(

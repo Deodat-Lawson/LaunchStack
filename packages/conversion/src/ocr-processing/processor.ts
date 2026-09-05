@@ -339,9 +339,17 @@ export async function normalizeDocument(
  * If a filename is provided and it's a known code extension, uses code-aware
  * chunking that respects function/class boundaries.
  */
+export interface ChunkPagesOptions {
+    /** Written into every chunk's breadcrumb so a chunk names its document. */
+    documentTitle?: string;
+    /** Embedding model whose tokenizer decides what fits; falls back to an estimate. */
+    embeddingModel?: string;
+}
+
 export async function chunkPages(
     pages: PageContent[],
-    filename?: string
+    filename?: string,
+    options?: ChunkPagesOptions
 ): Promise<DocumentChunk[]> {
     const { isCodeFile, chunkCodeFile } = await import("./code-chunker");
 
@@ -363,13 +371,23 @@ export async function chunkPages(
     });
     console.log(`[Chunking] Page content sizes:\n${pageSizes.join("\n")}`);
 
+    // A real tokenizer when one loads, the chars-per-token estimate when it
+    // does not. Resolved here rather than inside the chunker so one document
+    // pays the load cost once.
+    const { tokenCounterFor } = await import("./tokenizer");
+    const tokens = await tokenCounterFor(options?.embeddingModel ?? "text-embedding-3-large");
+
     const documentChunks = await chunkDocument(pages, {
         parentMaxTokens: 1000,
         childMaxTokens: 256,
         overlapTokens: 50,
         includePageContext: true,
+        documentTitle: options?.documentTitle,
+        tokens,
     });
-    console.log(`[Chunking] Created ${documentChunks.length} Parent chunks`);
+    console.log(
+        `[Chunking] Created ${documentChunks.length} Parent chunks (budget by ${tokens.id})`
+    );
 
     documentChunks.forEach((chunk, idx) => {
         console.log(
@@ -498,13 +516,164 @@ export async function createRootStructure(
 }
 
 /**
+ * The document's structure, as ids a chunk can point at.
+ *
+ * `byPath` is keyed by a chunk's ancestor path joined with the same separator
+ * the breadcrumb uses, so a chunk resolves its own node without string
+ * surgery. The root is the fallback for chunks that have no ancestors — a
+ * table, or a document with no headings at all.
+ */
+export interface DocumentStructureMap {
+    rootId: number;
+    /**
+     * A plain object, not a Map: this value is returned from an Inngest step,
+     * and step output is JSON — a Map would arrive on the other side empty.
+     */
+    byPath: Record<string, number>;
+}
+
+/** The separator between breadcrumb steps; must match the chunker's. */
+const CRUMB = " › ";
+
+/**
+ * Write the document's real hierarchy.
+ *
+ * The table has always modelled a tree — `parentId`, `path`, `level`,
+ * `ordering` — and the pipeline has always written exactly one row into it,
+ * so every chunk pointed at the same "Document Root" and no query could ask
+ * for a section. Chunks now carry their ancestors, so the tree they imply
+ * can be materialised: one node per distinct ancestor path, parents before
+ * children, each chunk pointing at its own node.
+ */
+export async function createStructureTree(
+    documentId: number,
+    totalPages: number,
+    versionId: number,
+    chunks: DocumentChunk[]
+): Promise<DocumentStructureMap> {
+    const rootId = await createRootStructure(
+        documentId,
+        totalPages,
+        chunks.reduce((sum, c) => sum + (c.metadata.tokenCount ?? 0), 0),
+        versionId
+    );
+    const byPath: Record<string, number> = {};
+
+    // Every ancestor path, plus every prefix of one, so a parent always
+    // exists before the child that references it.
+    const paths = new Set<string>();
+    for (const chunk of chunks) {
+        const ancestors = chunk.metadata.ancestors ?? [];
+        for (let i = 1; i <= ancestors.length; i++) {
+            paths.add(ancestors.slice(0, i).join(CRUMB));
+        }
+    }
+    if (paths.size === 0) return { rootId, byPath };
+
+    // Shallowest first: a node's parent is inserted before it.
+    const ordered = [...paths].sort(
+        (a, b) => a.split(CRUMB).length - b.split(CRUMB).length || a.localeCompare(b)
+    );
+
+    // Page span and token weight per node, summed from the chunks under it.
+    const stats = new Map<string, { start: number; end: number; tokens: number }>();
+    for (const chunk of chunks) {
+        const ancestors = chunk.metadata.ancestors ?? [];
+        const page = chunk.metadata.pageNumber;
+        for (let i = 1; i <= ancestors.length; i++) {
+            const key = ancestors.slice(0, i).join(CRUMB);
+            const seen = stats.get(key);
+            if (seen) {
+                seen.start = Math.min(seen.start, page);
+                seen.end = Math.max(seen.end, page);
+                seen.tokens += chunk.metadata.tokenCount ?? 0;
+            } else {
+                stats.set(key, {
+                    start: page,
+                    end: page,
+                    tokens: chunk.metadata.tokenCount ?? 0,
+                });
+            }
+        }
+    }
+
+    const orderingByParent = new Map<string, number>();
+    await withDbRetry(async () => {
+        for (const path of ordered) {
+            const steps = path.split(CRUMB);
+            const parentPath = steps.slice(0, -1).join(CRUMB);
+            const parentId = parentPath.length > 0 ? byPath[parentPath] : rootId;
+            const ordering = orderingByParent.get(parentPath) ?? 0;
+            orderingByParent.set(parentPath, ordering + 1);
+            const stat = stats.get(path);
+
+            const [row] = await getDb()
+                .insert(documentStructure)
+                .values({
+                    documentId: BigInt(documentId),
+                    versionId: BigInt(versionId),
+                    parentId: parentId != null ? BigInt(parentId) : BigInt(rootId),
+                    contentType: "section",
+                    // `path` is varchar(256); a deep path is truncated from
+                    // the left so the most specific steps survive.
+                    path: `/${path.split(CRUMB).join("/")}`.slice(-256),
+                    title: steps[steps.length - 1] ?? null,
+                    level: steps.length,
+                    ordering,
+                    startPage: stat?.start ?? 1,
+                    endPage: stat?.end ?? totalPages,
+                    tokenCount: stat?.tokens ?? 0,
+                    childCount: 0,
+                })
+                .returning({ id: documentStructure.id });
+            if (row) byPath[path] = row.id;
+        }
+    });
+
+    // Child counts, now that every node exists.
+    const childCounts = new Map<string, number>();
+    for (const path of ordered) {
+        const parentPath = path.split(CRUMB).slice(0, -1).join(CRUMB);
+        childCounts.set(parentPath, (childCounts.get(parentPath) ?? 0) + 1);
+    }
+    for (const [parentPath, count] of childCounts) {
+        const id = parentPath.length > 0 ? byPath[parentPath] : rootId;
+        if (id == null) continue;
+        await getDb()
+            .update(documentStructure)
+            .set({ childCount: count })
+            .where(eq(documentStructure.id, id))
+            .catch((error: unknown) => {
+                // Advisory only — a missing count never blocks ingestion.
+                console.warn(`[Structure] child count update failed for ${id}:`, error);
+            });
+    }
+
+    console.log(
+        `[Structure] Wrote ${Object.keys(byPath).length} node(s) under the root for doc ${documentId}`
+    );
+    return { rootId, byPath };
+}
+
+/** The structure node a chunk belongs to, falling back to the document root. */
+export function structureIdFor(
+    structure: DocumentStructureMap | number,
+    metadata: { ancestors?: string[] }
+): number {
+    if (typeof structure === "number") return structure;
+    const key = (metadata.ancestors ?? []).join(CRUMB);
+    return structure.byPath[key] ?? structure.rootId;
+}
+
+/**
  * Write a batch of vectorized chunks to the database (context + retrieval chunks).
  * Designed to be called per-batch inside an Inngest step so vectors never
  * need to pass through step output serialization.
  */
 export async function storeBatch(
     documentId: number,
-    rootStructureId: number,
+    /** The document's structure. A bare id keeps the pre-tree callers working. */
+    structure: DocumentStructureMap | number,
     vectorizedChunks: VectorizedChunk[],
     embeddingIndex: EmbeddingIndexConfig,
     versionId: number
@@ -521,9 +690,14 @@ export async function storeBatch(
                 return {
                     documentId: BigInt(documentId),
                     versionId: versionBigInt,
-                    structureId: BigInt(rootStructureId),
+                    // Each chunk points at its own section now, not at one
+                    // "Document Root" every chunk in the corpus shared.
+                    structureId: BigInt(structureIdFor(structure, chunk.metadata)),
                     content: chunk.content,
-                    tokenCount: Math.ceil(chunk.content.length / 4),
+                    // The chunker counted these with the embedding model's
+                    // own tokenizer; the chars-per-token estimate is only a
+                    // fallback for chunks made before it did.
+                    tokenCount: chunk.metadata.tokenCount ?? Math.ceil(chunk.content.length / 4),
                     charCount: chunk.content.length,
                     embedding:
                         isLegacyEmbeddingIndex(embeddingIndex) &&
@@ -572,7 +746,8 @@ export async function storeBatch(
                         documentId: BigInt(documentId),
                         versionId: versionBigInt,
                         content: child.content,
-                        tokenCount: Math.ceil(child.content.length / 4),
+                        tokenCount:
+                            child.metadata.tokenCount ?? Math.ceil(child.content.length / 4),
                         embedding: isLegacyEmbeddingIndex(embeddingIndex)
                             ? sql`${JSON.stringify(child.vector)}::vector(1536)`
                             : null,
@@ -689,7 +864,24 @@ export async function finalizeStorage(
                 },
             });
 
+        // Merge, never replace: the row's metadata carries provenance written
+        // at creation — a connector's marker, a published mindmap's id — and
+        // the viewer picks a renderer by it. Overwriting it here turned every
+        // imported session back into a plain Markdown file the moment it
+        // finished indexing.
+        const [existing] = await getDb()
+            .select({ ocrMetadata: documentTable.ocrMetadata })
+            .from(documentTable)
+            .where(eq(documentTable.id, documentId))
+            .limit(1);
+        const preserved =
+            existing?.ocrMetadata &&
+            typeof existing.ocrMetadata === "object" &&
+            !Array.isArray(existing.ocrMetadata)
+                ? (existing.ocrMetadata as Record<string, unknown>)
+                : {};
         const ocrMetadataPayload = {
+            ...preserved,
             totalPages: meta.totalPages,
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
@@ -833,7 +1025,7 @@ export async function storeDocument(
                 versionId: versionBigInt,
                 structureId: BigInt(rootId),
                 content: chunk.content,
-                tokenCount: Math.ceil(chunk.content.length / 4),
+                tokenCount: chunk.metadata.tokenCount ?? Math.ceil(chunk.content.length / 4),
                 charCount: chunk.content.length,
                 // Parent chunks might not have embeddings in this architecture
                 // But if 'vector' is present and not empty, use it. In new chunker, parent vector is empty.
@@ -860,7 +1052,8 @@ export async function storeDocument(
                             documentId: BigInt(documentId),
                             versionId: versionBigInt,
                             content: child.content,
-                            tokenCount: Math.ceil(child.content.length / 4),
+                            tokenCount:
+                                child.metadata.tokenCount ?? Math.ceil(child.content.length / 4),
                             embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
                             embeddingShort: child.vectorShort
                                 ? sql`${JSON.stringify(child.vectorShort)}::vector(512)`

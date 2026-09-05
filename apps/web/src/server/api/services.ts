@@ -163,6 +163,10 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
             "webhooks/github":
                 "GitHub calls it; the request is authenticated by the webhook HMAC signature, not a session, and the workspace is resolved from the payload.",
         },
+        notes:
+            "Connecting does no git work in the request — it opens a sync request the " +
+            "worker fulfils. The webhook is a latency optimisation; the poll reconciler " +
+            "is the guarantee.",
     },
     {
         id: "distribution",

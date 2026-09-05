@@ -26,6 +26,8 @@ const { createDb, configureDatabase } = await import(
 const { createDocumentLifecycle } = await import(
   "../../packages/orchestration/src/source-lifecycle/lifecycle.ts"
 );
+// The retrieval package keeps one folder per algorithm and per tool
+// (packages/retrieval/README.md); these are the two the smoke needs.
 const { createCompanyBM25Retriever } = await import(
   "../../packages/retrieval/src/algorithms/bm25/bm25.ts"
 );

@@ -23,6 +23,16 @@ export type RetrievalMethod =
 
 export interface BaseSearchMetadata {
     chunkId?: number;
+    /**
+     * The context (parent) chunk this result came from — the document section
+     * rather than the slice of it that matched. Several children of one
+     * section, and a lexical hit on that same section, all carry the same id,
+     * which is what lets the ensemble return the section once instead of
+     * letting it fill every result slot.
+     */
+    parentChunkId?: number;
+    /** How many chunks of this section matched, after they were merged into it. */
+    mergedSiblings?: number;
     page?: number;
     documentId?: number;
     /**

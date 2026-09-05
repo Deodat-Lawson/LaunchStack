@@ -129,7 +129,8 @@ export function KnowledgePane({
             return (
                 source.title.toLowerCase().includes(needle) ||
                 source.tags.some(tag => tag.toLowerCase().includes(needle)) ||
-                (source.folder ?? "").toLowerCase().includes(needle)
+                (source.folder ?? "").toLowerCase().includes(needle) ||
+                (source.searchText ?? "").toLowerCase().includes(needle)
             );
         });
     }, [sources, query, folder, type]);
@@ -666,6 +667,26 @@ function SourceCard({
                 e.currentTarget.style.transform = "none";
             }}
         >
+            {source.thumbnailUrl && (
+                <div
+                    style={{
+                        margin: "-13px -14px 0",
+                        height: 112,
+                        background: "var(--panel-2)",
+                        borderBottom: "1px solid var(--line)",
+                        overflow: "hidden",
+                    }}
+                >
+                    {/* Rendered by the editor on save; served by the thumbnail route. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={source.thumbnailUrl}
+                        alt=""
+                        loading="lazy"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                </div>
+            )}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                 <span
                     style={{
@@ -772,6 +793,14 @@ function SourceCard({
                 )}
                 {(source.pending ?? source.syncing ?? false) && (
                     <span style={{ fontSize: 10, color: "oklch(0.5 0.13 55)" }}>indexing…</span>
+                )}
+                {source.citability === "stale" && (
+                    <span style={{ fontSize: 10, color: "var(--warn)" }}>
+                        changes not yet citable
+                    </span>
+                )}
+                {source.citability === "none" && (
+                    <span style={{ fontSize: 10, color: "var(--ink-3)" }}>not citable yet</span>
                 )}
             </div>
 

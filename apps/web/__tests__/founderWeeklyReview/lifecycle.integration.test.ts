@@ -189,6 +189,8 @@ async function insertCompany(
 }
 
 describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
+    jest.setTimeout(120_000);
+
     it("covers create idempotency, isolation, lifecycle transitions, claims, retries, and immutability", async () => {
         const testDb = await createFounderWeeklyReviewTestDatabase();
         const extraSession = await testDb.createSession();

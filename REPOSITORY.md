@@ -108,26 +108,31 @@ events visible and replayable (`docs/runbooks/outbox.md`). The old
 dispatch-after-commit Inngest path is gone; `founder_weekly_review_dispatches`
 remains as the vertical-local outbox it always was.
 
-## Mindmap — a second app inside `apps/web`
+## Mindmap — a source type inside the Documents workspace
 
-`apps/web/src/app/employer/mindmap` is a diagramming app (mindmaps, flowcharts,
-org charts, ERDs) with its own document model, canvas and storage. It is a route
-area rather than a package because it is product UI, but it is structured like a
-library: `_mindmap/model` is pure TypeScript with no React or DOM, and carries
-the bulk of the tests.
+`apps/web/src/app/employer/documents/_mindmap` is a diagramming editor
+(mindmaps, flowcharts, org charts, ERDs) with its own document model, canvas
+and storage. It lives under the documents route because a mindmap *is a
+source*: it is listed, searched, filed, renamed and deleted through the same
+workspace controls as an upload, previewed in the same viewer, and edited in
+place (`?source=m<id>&edit=1`). It has no pages of its own. It is structured
+like a library: `_mindmap/model` is pure TypeScript with no React or DOM, and
+carries the bulk of the tests.
 
-It joins the rest of the system at exactly one seam. A diagram is **published
-into the Sources library** — rendered to a Markdown outline, stored through
-`uploadFile`, then handed to `processDocumentUpload`, which is the same
-ingestion path an uploaded PDF takes. There is no diagram-shaped special case in
-ingestion, and a published mindmap is chunked, embedded and citable like any
-other source. Entry points: _Add a source → Create → Mindmap_, and the Studio
-feature menu.
+It joins ingestion at exactly one seam. A diagram is **made citable** — the
+server renders its outline from the stored document, stores it through
+`uploadFile`, then hands it to `processDocumentUpload` the first time and to
+`createDocumentVersionLifecycle` every time after, so one document is
+re-indexed in place rather than a new copy added. There is no diagram-shaped
+special case in ingestion; the document row carries a `kind: "mindmap"`
+marker in `ocrMetadata` so viewers render it as the map. Entry points: _Add a
+source → Create → Mindmap_, and the Studio feature menu.
 
 Its tables (`pdr_ai_v2_mindmaps`, `…_mindmap_revisions`, `…_mindmap_presence`)
 belong to the product migration set. Documents are stored whole as `jsonb` with
-an optimistic-concurrency `revision`; see `apps/web/src/app/employer/mindmap/README.md`
-for why, and for the one place the app deliberately does not use design tokens.
+an optimistic-concurrency `revision`; see
+`apps/web/src/app/employer/documents/_mindmap/README.md` for why, and for the
+one place the editor deliberately does not use design tokens.
 
 ## Two migration sets, one database
 

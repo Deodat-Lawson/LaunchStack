@@ -7,7 +7,7 @@ export * from "./evidence-document";
 export * from "./ports";
 export * from "./types";
 export * from "./extraction-router";
-export * from "./heading-chunker";
+export * from "./document-tree";
 export {
     expandArchive,
     isTextFastPathFile,

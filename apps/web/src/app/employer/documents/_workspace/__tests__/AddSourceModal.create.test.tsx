@@ -106,7 +106,7 @@ describe("creating a mindmap", () => {
         expect(screen.getByText("Diagram it, then cite it")).toBeInTheDocument();
     });
 
-    it("creates the document and navigates to the editor", async () => {
+    it("creates the document and opens it in the workspace editor", async () => {
         const user = userEvent.setup();
         mount();
 
@@ -122,7 +122,22 @@ describe("creating a mindmap", () => {
         expect(body.templateId).toBe("mindmap");
         expect(body.folder).toBe("Strategy");
 
-        await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/employer/mindmap/42"));
+        // No gallery, no route of its own: the map opens where the library is.
+        await waitFor(() =>
+            expect(mockPush).toHaveBeenCalledWith("/employer/documents?source=m42&edit=1")
+        );
+    });
+
+    it("hands the new map to the workspace when it asks for it", async () => {
+        const user = userEvent.setup();
+        const onMindmapCreated = jest.fn();
+        mount({ onMindmapCreated });
+
+        await user.click(screen.getByRole("button", { name: "Mindmap" }));
+        await user.click(screen.getByText("Blank canvas"));
+
+        await waitFor(() => expect(onMindmapCreated).toHaveBeenCalledWith(42));
+        expect(mockPush).not.toHaveBeenCalled();
     });
 
     it("creates an untitled document from the blank template", async () => {

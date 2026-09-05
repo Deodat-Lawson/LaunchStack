@@ -205,10 +205,10 @@ export function SourceRailPreview() {
                 open={!!renameSource}
                 source={renameSource}
                 onClose={() => setRenameSource(null)}
-                onRename={async (documentId, title) => {
+                onRename={async (renamed, title) => {
                     setSources(prev =>
                         prev.map(source =>
-                            source.documentId === documentId ? { ...source, title } : source
+                            source.id === renamed.id ? { ...source, title } : source
                         )
                     );
                     return true;

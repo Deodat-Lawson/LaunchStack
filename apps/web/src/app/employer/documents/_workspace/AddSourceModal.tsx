@@ -24,7 +24,7 @@ import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
-import { TEMPLATE_META } from "~/app/employer/mindmap/_mindmap/model/template-meta";
+import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-meta";
 
 /**
  * AddSourceModal — tabbed create/upload/connect modal matching the Launstack
@@ -38,8 +38,9 @@ import { TEMPLATE_META } from "~/app/employer/mindmap/_mindmap/model/template-me
  *   - Paste: wraps the text in a `.md` File and runs the file path
  *   - URL: `/api/upload/website`
  *   - YouTube: `/api/upload/video-url`
- *   - Mindmap: `/api/mindmaps` → navigates to the editor; the diagram becomes
- *     a source when it is published from there.
+ *   - Mindmap: `/api/mindmaps` → the workspace opens the new map's editor in
+ *     place; it is a source from the moment it exists and citable once
+ *     published.
  *   - Connectors: Drive/Slack/GitHub start the workspace OAuth flow at
  *     `/api/connectors/<provider>/oauth/start`; Gmail/Notion/Dropbox remain
  *     coming-soon CTAs.
@@ -65,6 +66,11 @@ export interface AddSourceModalProps {
      * rather than dropping them on Files first.
      */
     initialTab?: string;
+    /**
+     * A mindmap was created. The workspace opens it in place; without a
+     * handler the panel navigates to the workspace itself.
+     */
+    onMindmapCreated?: (mindmapId: number) => void;
 }
 
 interface UploadResult {
@@ -186,6 +192,7 @@ export function AddSourceModal({
     onUploaded,
     onCreateFolder,
     initialTab,
+    onMindmapCreated,
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
@@ -217,7 +224,7 @@ export function AddSourceModal({
 
     let panel: React.ReactNode = null;
     if (tab === "mindmap") {
-        panel = <MindmapPanel folder={folder} />;
+        panel = <MindmapPanel folder={folder} onCreated={onMindmapCreated} />;
     } else if (tab === "files") {
         panel = (
             <FilesPanel
@@ -627,12 +634,18 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
 // ---------------------------------------------------------------------------
 
 /**
- * Creating a mindmap does not ingest anything: it makes a document in the
- * Mindmap app and hands the user straight to the editor. Only the template id
- * is posted — the editor owns the template registry and builds the document on
- * open, so a new template never needs a server change.
+ * Creating a mindmap does not ingest anything: it makes the row and opens the
+ * editor in place. Only the template id is posted — the editor owns the
+ * template registry and builds the document on open, so a new template never
+ * needs a server change.
  */
-function MindmapPanel({ folder }: { folder: string }) {
+function MindmapPanel({
+    folder,
+    onCreated,
+}: {
+    folder: string;
+    onCreated?: (mindmapId: number) => void;
+}) {
     const router = useRouter();
     const [busy, setBusy] = useState<string | null>(null);
 
@@ -649,7 +662,8 @@ function MindmapPanel({ folder }: { folder: string }) {
                 throw new Error(body.error ?? `HTTP ${res.status}`);
             }
             const body = (await res.json()) as { mindmap: { id: number } };
-            router.push(`/employer/mindmap/${body.mindmap.id}`);
+            if (onCreated) onCreated(body.mindmap.id);
+            else router.push(`/employer/documents?source=m${body.mindmap.id}&edit=1`);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Couldn't create that mindmap");
             setBusy(null);
@@ -659,8 +673,7 @@ function MindmapPanel({ folder }: { folder: string }) {
     return (
         <div>
             <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
-                Draw it in the Mindmap editor, then publish it back here as a source your workspace
-                can cite. It will be filed under{" "}
+                Draw it here, then make it citable when it is ready. It will be filed under{" "}
                 <strong style={{ color: "var(--ink-2)" }}>{folder}</strong>.
             </p>
 

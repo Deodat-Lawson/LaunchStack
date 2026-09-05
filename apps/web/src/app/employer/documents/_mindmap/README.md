@@ -1,19 +1,33 @@
 # Mindmap
 
 A diagramming app — mindmaps, flowcharts, org charts, ERDs, whiteboards — that
-lives inside Launchstack rather than beside it. A finished diagram can be
-**published back into the Sources library**, where it is chunked, embedded and
-citable like any uploaded document. That round trip is the reason this is part
-of the workspace instead of a link to a third-party tool.
+lives inside the Documents workspace rather than beside it. A diagram can be
+**made citable**: the server renders its outline and runs it through ordinary
+ingestion, so it is chunked, embedded and cited like any uploaded document,
+and re-publishing updates that one document as a new version rather than
+adding another. That round trip is the reason this is part of the workspace
+instead of a link to a third-party tool.
 
 ## Where it is
 
-| Surface     | Route                                           | What it is                                                                                     |
-| ----------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Gallery     | `/employer/mindmap`                             | Template picker + the workspace's documents, folders, trash                                    |
-| Editor      | `/employer/mindmap/[id]`                        | The canvas                                                                                     |
-| Entry point | Documents → **Add a source → Create → Mindmap** | Picks a template, creates the row, opens the editor                                            |
-| Entry point | Documents → Studio → **Mindmap**                | Same app, from the feature menu (`external: true`, so it navigates rather than opening a pane) |
+A mindmap is a **source**. It has no pages of its own: it is listed in the
+Documents workspace beside every upload, found by the same three search boxes
+(the rail, Knowledge, ⌘K — node labels included), filed in the same folders,
+and opened, renamed, moved and deleted through the same controls.
+
+| Surface | Where                                           | What it is                                                                                        |
+| ------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Preview | `/employer/documents?source=m<id>`              | The workspace viewer showing the live canvas read-only (`ui/MindmapPreview`), with **Edit**       |
+| Editor  | `/employer/documents?source=m<id>&edit=1`       | `MindmapEditor` mounted in the workspace's main area; the rail stays. Back returns to the preview |
+| Create  | Documents → **Add a source → Create → Mindmap** | Picks a template, creates the row, opens the editor in place                                      |
+| Create  | Documents → Studio → **Mindmap**                | Opens that same tab                                                                               |
+
+Both params persist in the URL and transitions push history, so the browser's
+back button walks editor → preview → library. `/employer/mindmap/[id]` survives
+only as a redirect for links shared before the move. The glue on the workspace
+side is `_workspace/useWorkspaceData` (lists maps as `WorkspaceSource`s of type
+`mindmap`), `_workspace/sourceApi` (the one place that picks an API by id
+prefix) and `_workspace/MindmapEditorHost`.
 
 ## Layout
 
@@ -178,9 +192,9 @@ vanish from every exported PNG.
 → `DriftShell` → `ToolsStudioShell` → editor — with a template document and
 `/api/mindmaps/*` answered locally, so the canvas can be driven without a real
 session or a row in the database. `?template=flowchart` picks a starter (ids in
-`model/template-meta.ts`); `?view=gallery` shows the index page, which shares
-the same shell and therefore the same layout bugs. The route 404s in
-production.
+`model/template-meta.ts`); `?view=preview` mounts the read-only preview the
+workspace viewer uses instead, which shares the canvas and therefore its
+layout bugs. The route 404s in production.
 
 Because it reproduces the chain rather than approximating it, layout that works
 there works in the app: the shell is what has to hand the editor a *definite*
@@ -189,7 +203,7 @@ height, and getting that wrong is not visible from the editor alone.
 ## Tests
 
 ```bash
-pnpm --filter @launchstack/web exec jest src/app/employer/mindmap
+pnpm --filter @launchstack/web exec jest src/app/employer/documents/_mindmap
 ```
 
 Model tests are pure. UI tests mount the real components against the real store;

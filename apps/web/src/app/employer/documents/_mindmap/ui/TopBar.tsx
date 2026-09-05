@@ -74,6 +74,12 @@ function saveStateEqual(
 export interface TopBarProps {
     /** Other people currently in the document. */
     peers: PresencePeer[];
+    /**
+     * Leave the editor. The workspace that mounted the editor decides where
+     * "back" goes — to the map's preview, in practice — so this is a callback
+     * rather than a link. Without one the arrow falls back to the library.
+     */
+    onBack?: () => void;
     onSave: () => void;
     onExport: () => void;
     onImport: () => void;
@@ -101,15 +107,28 @@ export function TopBar(props: TopBarProps) {
         <header className="border-line bg-panel flex h-12 shrink-0 items-center gap-2 border-b px-2">
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Link
-                        href="/employer/mindmap"
-                        className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
-                        aria-label="All mindmaps"
-                    >
-                        <ArrowLeft className="size-4" />
-                    </Link>
+                    {props.onBack ? (
+                        <button
+                            type="button"
+                            onClick={props.onBack}
+                            className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
+                            aria-label="Back"
+                        >
+                            <ArrowLeft className="size-4" />
+                        </button>
+                    ) : (
+                        <Link
+                            href="/employer/documents"
+                            className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
+                            aria-label="Back to library"
+                        >
+                            <ArrowLeft className="size-4" />
+                        </Link>
+                    )}
                 </TooltipTrigger>
-                <TooltipContent side="bottom">All mindmaps</TooltipContent>
+                <TooltipContent side="bottom">
+                    {props.onBack ? "Back" : "Back to library"}
+                </TooltipContent>
             </Tooltip>
 
             <input

@@ -79,3 +79,9 @@ test-output/
 # imports of a module that was never added.
 /notes/
 *.tgz
+
+# Playwright output. Written beside apps/web/playwright.config.ts, and
+# spelled out in full rather than as a bare `test-results/` — see the
+# note above for what a pattern that matches at any depth can swallow.
+apps/web/test-results/
+apps/web/playwright-report/

@@ -49,7 +49,8 @@ export type SourceTypeId =
     | "dropbox"
     | "web"
     | "youtube"
-    | "paste";
+    | "paste"
+    | "mindmap";
 
 export interface SourceMeta {
     label: string;
@@ -70,7 +71,16 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     web: { label: "Website", Icon: IconGlobe, color: "oklch(0.55 0.08 200)" },
     youtube: { label: "YouTube", Icon: IconYoutube, color: "oklch(0.55 0.18 25)" },
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
+    mindmap: { label: "Mindmap", Icon: IconMindmap, color: "oklch(0.55 0.2 290)" },
 };
+
+/**
+ * Whether a source can be cited by the workspace. Uploads are citable once
+ * indexed. A mindmap is citable only after it has been published, and a map
+ * edited since its last publish is `stale`: the answer would quote an older
+ * revision than the one on screen.
+ */
+export type SourceCitability = "citable" | "stale" | "none";
 
 export type DocDomain =
     | "Contract"
@@ -94,10 +104,29 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
 };
 
 export interface WorkspaceSource {
-    /** Unique within the UI — DB-backed rows prefix with "d", staged locals with "s". */
+    /**
+     * Unique within the UI — DB-backed rows prefix with "d", staged locals
+     * with "s", mindmaps with "m". `sourceApi` is the one place that switches
+     * on the prefix.
+     */
     id: string;
-    /** DB primary key if this source came from the document table. */
+    /**
+     * DB primary key if this source came from the document table. For a
+     * mindmap this is the *published* document, when there is one — the row
+     * the retrieval layer cites — so citations resolve back to the map.
+     */
     documentId?: number;
+    /** Mindmap primary key, for sources of type `mindmap`. */
+    mindmapId?: number;
+    /**
+     * Extra text the search boxes should match on beyond the title: a
+     * mindmap's node labels, so "the map with the Postgres box" is findable.
+     */
+    searchText?: string;
+    /** Image URL for a card preview, when the source has one. */
+    thumbnailUrl?: string;
+    /** Defaults to `citable` when absent — uploads become citable as they index. */
+    citability?: SourceCitability;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -248,10 +277,10 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     },
     {
         id: "mindmap",
-        label: "Mindmap",
+        label: "New mindmap",
         Icon: IconMindmap,
         desc: "Diagrams, mindmaps and flowcharts you can cite",
-        href: "/employer/mindmap",
+        href: "/employer/documents?add=1&tab=mindmap",
     },
     {
         id: "artifacts",
@@ -392,12 +421,13 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Freeform notes that span every source",
             },
             {
+                // Not `external`: maps live in the library beside every other
+                // source. Picking this opens the template picker.
                 id: "mindmap",
                 label: "Mindmap",
                 Icon: IconMindmap,
-                desc: "Diagrams, mindmaps and flowcharts — publishable as sources",
-                href: "/employer/mindmap",
-                external: true,
+                desc: "Diagrams, mindmaps and flowcharts — sources you draw",
+                href: "/employer/documents?add=1&tab=mindmap",
             },
             {
                 id: "artifacts",

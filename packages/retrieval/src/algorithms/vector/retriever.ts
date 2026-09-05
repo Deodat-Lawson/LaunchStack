@@ -47,6 +47,12 @@ type VectorRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig;
 
 type VectorRow = {
     child_id: number;
+    /**
+     * The parent context chunk. Several children of one parent are several
+     * rows carrying identical `parent_content`; the ensemble collapses them
+     * by this id so one section cannot fill every result slot.
+     */
+    parent_chunk_id: number | null;
     parent_content: string;
     child_content: string;
     page: number;
@@ -163,6 +169,7 @@ async function searchLegacyIndex(args: {
       )
       SELECT
         c.id as child_id,
+        cc.id as parent_chunk_id,
         cc.content as parent_content,
         c.child_content,
         cc.page_number as page,
@@ -189,6 +196,7 @@ async function searchLegacyIndex(args: {
     const fullQuery = sql`
     SELECT
       rc.id as child_id,
+      cc.id as parent_chunk_id,
       cc.content as parent_content,
       rc.content as child_content,
       cc.page_number as page,
@@ -219,6 +227,7 @@ async function searchLegacyIndex(args: {
     const fallbackQuery = sql`
     SELECT
       s.id as child_id,
+      s.id as parent_chunk_id,
       s.content as parent_content,
       s.content as child_content,
       s.page_number as page,
@@ -255,6 +264,7 @@ async function searchDimensionTableIndex(args: {
     const sqlQuery = sql`
     SELECT
       de.retrieval_chunk_id as child_id,
+      cc.id as parent_chunk_id,
       cc.content as parent_content,
       rc.content as child_content,
       cc.page_number as page,
@@ -365,6 +375,10 @@ export class VectorRetriever extends BaseRetriever {
                         pageContent: row.parent_content,
                         metadata: {
                             chunkId: row.child_id,
+                            parentChunkId:
+                                row.parent_chunk_id != null
+                                    ? Number(row.parent_chunk_id)
+                                    : undefined,
                             childContent: row.child_content,
                             page: row.page,
                             documentId: row.document_id,

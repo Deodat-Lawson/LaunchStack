@@ -772,8 +772,12 @@ export const UpdateMindmapSchema = z
 export const PublishMindmapSchema = z.object({
     /** Folder in the Sources library to file the exported document under. */
     category: z.string().min(1).max(256).optional(),
-    /** Markdown rendering of the map, produced by the editor. */
-    markdown: z.string().min(1).max(5_000_000),
+    /**
+     * Accepted and ignored. Older editors sent their own rendering of the
+     * map; the server now renders the outline from the stored document, so
+     * what enters the retrieval corpus is what is actually saved.
+     */
+    markdown: z.string().max(5_000_000).optional(),
 });
 
 // ============================================================================

@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/editing",
-    "version": "0.1.0",
-    "description": "Tracked-changes Word editing (ADR-007): the wire contract for the adeu document-editing service and its typed client \u2014 apply tracked edits, enumerate and act on review items, diff, preview as CriticMarkup.",
+    "version": "0.2.0",
+    "description": "Tracked-changes Word editing (ADR-007): the wire contract for the adeu document-editing service and its typed client — apply tracked edits, enumerate and act on review items, diff, preview as CriticMarkup.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,

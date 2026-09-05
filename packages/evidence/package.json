@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/evidence",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Pure company-state logic for Launchstack: immutable evidence records, citation anchors, version diffing, supersession, conflict detection, reconciliation, and freshness. No database, no HTTP, no environment access, no dependencies at all (ADR-002, ADR-005).",
     "license": "Apache-2.0",
     "type": "module",

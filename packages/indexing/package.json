@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/indexing",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Takes conversion's output and makes it searchable: heading-aligned and code-aware chunking, embedding generation under named indexes with reindex state, entity extraction, knowledge-graph sync into Neo4j, the OCR pipeline body, and the two-stage doc-ingestion pipeline the worker drives.",
     "license": "Apache-2.0",
     "type": "module",

@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/tools",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "type": "module",
     "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed — a brick above search, below the pipelines tier.",
     "license": "Apache-2.0",

@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/pipelines",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Eleven verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, and the distribution pipeline.",
     "license": "Apache-2.0",
     "type": "module",

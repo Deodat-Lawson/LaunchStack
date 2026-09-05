@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/llm",
-    "version": "0.1.0",
-    "description": "Everything that calls a model: structured output against a zod schema, message normalization across providers, token-usage accounting, the three answer guardrails, LLM-backed NER, and the vendor wiring (chat-model factory, presets, OpenAI-compatible transport, provider registry). Reads no environment \u2014 configuration is injected.",
+    "version": "0.2.0",
+    "description": "Everything that calls a model: structured output against a zod schema, message normalization across providers, token-usage accounting, the three answer guardrails, LLM-backed NER, and the vendor wiring (chat-model factory, presets, OpenAI-compatible transport, provider registry). Reads no environment — configuration is injected.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,

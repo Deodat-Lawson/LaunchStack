@@ -97,6 +97,27 @@ function SingleNodeChrome({
             </g>
             {!interacting && !node.locked && (
                 <>
+                    {/* The outline's own sides resize too, Lucid-style — a
+                        thin invisible band straddling each edge, so grabbing
+                        anywhere along a side works, not just the mid grip. */}
+                    <g transform={transform} style={{ pointerEvents: "all" }}>
+                        {(["n", "e", "s", "w"] as const).map(side => {
+                            const band = px(6);
+                            const horizontal = side === "n" || side === "s";
+                            return (
+                                <rect
+                                    key={side}
+                                    data-handle={side}
+                                    x={horizontal ? 0 : side === "w" ? -band : node.w - band}
+                                    y={horizontal ? (side === "n" ? -band : node.h - band) : 0}
+                                    width={horizontal ? node.w : band * 2}
+                                    height={horizontal ? band * 2 : node.h}
+                                    fill="transparent"
+                                    style={{ cursor: rotatedCursor(side, node.rotation) }}
+                                />
+                            );
+                        })}
+                    </g>
                     {HANDLE_ORDER.map(handle => {
                         const p = handlePosition(node, handle);
                         return (

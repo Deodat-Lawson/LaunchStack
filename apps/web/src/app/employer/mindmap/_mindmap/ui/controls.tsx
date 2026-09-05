@@ -4,6 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, Minus } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 
 import { DARK_SWATCHES, SWATCHES, THEMES } from "../model/palette";
@@ -141,6 +147,53 @@ export function NumberField({
                     {suffix}
                 </span>
             )}
+        </div>
+    );
+}
+
+export interface NumberPreset {
+    /** The word people think in — "Thin", "Heading" — not the number. */
+    label: string;
+    value: number;
+}
+
+/**
+ * A NumberField with named presets beside it: pick "Bold" from the menu or
+ * keep typing/scrubbing an exact value. Most choices here are made in words,
+ * and the number stays for the case the words don't cover.
+ */
+export function PresetNumberField({
+    presets,
+    ...props
+}: NumberFieldProps & { presets: readonly NumberPreset[] }) {
+    return (
+        <div className="flex flex-1 items-center gap-1">
+            <NumberField {...props} />
+            <DropdownMenu>
+                <DropdownMenuTrigger
+                    aria-label={`${props["aria-label"] ?? "Value"} presets`}
+                    className="border-line text-ink-3 hover:bg-panel-2 hover:text-ink-2 flex h-7 w-5 shrink-0 items-center justify-center rounded-md border"
+                >
+                    <ChevronDown className="size-3" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[9.5rem]">
+                    {presets.map(preset => (
+                        <DropdownMenuItem
+                            key={preset.label}
+                            onSelect={() => props.onChange(preset.value)}
+                            className="flex items-center justify-between gap-3 text-[12px]"
+                        >
+                            <span>{preset.label}</span>
+                            <span className="text-ink-3 flex items-center gap-1 font-mono text-[11px]">
+                                {preset.value}
+                                {!props.mixed && props.value === preset.value && (
+                                    <Check className="size-3" />
+                                )}
+                            </span>
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     );
 }

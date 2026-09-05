@@ -46,18 +46,64 @@ export function CommentsPanel({
     const [showResolved, setShowResolved] = useState(false);
 
     const page = useMemo(() => activePage(doc), [doc]);
-    const threads = useMemo(
-        () =>
-            doc.comments
-                .filter(c => c.pageId === page.id)
-                .filter(c => showResolved || !c.resolved)
-                .slice()
-                .reverse(),
-        [doc.comments, page.id, showResolved]
-    );
-
     const anchorNodeId = selection.find(s => s.kind === "node")?.id ?? null;
     const anchorNode = anchorNodeId ? nodeById(page, anchorNodeId) : null;
+
+    // Selecting a shape scopes the list: its threads first under their own
+    // header, everything else demoted below — so "what was said about this
+    // box?" is one click on the box, not a scan of the whole page.
+    const { onShape, elsewhere } = useMemo(() => {
+        const visible = doc.comments
+            .filter(c => c.pageId === page.id)
+            .filter(c => showResolved || !c.resolved)
+            .slice()
+            .reverse();
+        if (!anchorNodeId) return { onShape: null, elsewhere: visible };
+        return {
+            onShape: visible.filter(c => c.nodeId === anchorNodeId),
+            elsewhere: visible.filter(c => c.nodeId !== anchorNodeId),
+        };
+    }, [doc.comments, page.id, showResolved, anchorNodeId]);
+    const total = (onShape?.length ?? 0) + elsewhere.length;
+
+    const threadGroups = useMemo(() => {
+        if (onShape === null) {
+            return [
+                {
+                    key: "all",
+                    header: null as string | null,
+                    empty: elsewhere.length === 0 ? "No comments yet." : null,
+                    highlight: false,
+                    threads: elsewhere,
+                },
+            ];
+        }
+        const name = anchorNode
+            ? trimmedOr(anchorNode.text.split("\n")[0], "this shape")
+            : "this shape";
+        const groups = [
+            {
+                key: "shape",
+                header: `On “${name}”`,
+                empty:
+                    onShape.length === 0
+                        ? "Nothing here yet — the box above posts to this shape."
+                        : null,
+                highlight: true,
+                threads: onShape,
+            },
+        ];
+        if (elsewhere.length > 0) {
+            groups.push({
+                key: "page",
+                header: "Elsewhere on this page",
+                empty: null,
+                highlight: false,
+                threads: elsewhere,
+            });
+        }
+        return groups;
+    }, [onShape, elsewhere, anchorNode]);
 
     const submit = () => {
         const body = draft.trim();
@@ -97,7 +143,7 @@ export function CommentsPanel({
 
             <div className="border-line flex items-center justify-between border-b px-3 py-1.5">
                 <span className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                    {threads.length} thread{threads.length === 1 ? "" : "s"}
+                    {total} thread{total === 1 ? "" : "s"}
                 </span>
                 <button
                     type="button"
@@ -110,14 +156,24 @@ export function CommentsPanel({
 
             <ScrollArea className="min-h-0 flex-1">
                 <div className="space-y-2 p-3">
-                    {threads.length === 0 && (
-                        <p className="text-ink-3 py-6 text-center text-[13px]">No comments yet.</p>
-                    )}
-                    {threads.map(thread => (
+                    {threadGroups.map(group => (
+                        <React.Fragment key={group.key}>
+                            {group.header && (
+                                <h4 className="text-ink-3 pt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
+                                    {group.header}
+                                </h4>
+                            )}
+                            {group.empty && (
+                                <p className="text-ink-3 py-4 text-center text-[12.5px]">
+                                    {group.empty}
+                                </p>
+                            )}
+                            {group.threads.map(thread => (
                         <article
                             key={thread.id}
                             className={cn(
                                 "border-line bg-panel rounded-lg border p-2.5",
+                                group.highlight && "border-brand",
                                 thread.resolved && "opacity-60"
                             )}
                         >
@@ -223,6 +279,8 @@ export function CommentsPanel({
                                 )
                             )}
                         </article>
+                            ))}
+                        </React.Fragment>
                     ))}
                 </div>
             </ScrollArea>

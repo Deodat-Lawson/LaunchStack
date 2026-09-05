@@ -223,7 +223,12 @@ describe("selection", () => {
         });
 
         expect(store.selectedNodeIds()).toEqual([root.id]);
-        expect(view.container.querySelectorAll("[data-handle]").length).toBe(9);
+        // 8 grips + the rotation grip + 4 invisible edge bands (each side of
+        // the outline resizes too, Lucid-style).
+        expect(view.container.querySelectorAll("[data-handle]").length).toBe(13);
+        expect(
+            view.container.querySelectorAll("rect[data-handle='e'][fill='transparent']").length
+        ).toBe(1);
     });
 
     it("adds to the selection with shift-click", () => {
@@ -368,6 +373,179 @@ describe("dragging", () => {
         // Dragging into empty space creates the target topic and the connector.
         expect(page.nodes).toHaveLength(3);
         expect(page.edges).toHaveLength(2);
+    });
+
+    it("leaves the connector dangling from a non-topic shape instead of inventing a box", () => {
+        // The mindmap drag-out gesture is wrong for a flowchart: missing the
+        // drop target there must not create a node — the arrow stays, with a
+        // free endpoint that can be re-dragged onto the intended shape.
+        const box = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
+        const doc = createDoc("Flow", [{ ...createPage(), nodes: [box], edges: [] }]);
+        const { store, view } = mount(doc);
+        const svg = svgOf(view.container);
+        store.selectNodes([box.id]);
+        view.rerender(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText: jest.fn() }} />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+
+        const port = svgOf(view.container).querySelector(
+            `[data-node-id="${box.id}"][data-port="e"] circle`
+        );
+        expect(port).not.toBeNull();
+
+        act(() => {
+            port!.dispatchEvent(
+                pointer("pointerdown", box.x + box.w, box.y + box.h / 2, {
+                    button: 0,
+                    buttons: 1,
+                })
+            );
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointermove", 700, 400, { buttons: 1 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", 700, 400, { buttons: 0 }));
+        });
+
+        const page = store.getState().doc.pages[0]!;
+        expect(page.nodes).toHaveLength(1);
+        expect(page.edges).toHaveLength(1);
+        expect(page.edges[0]!.to).toEqual({ point: { x: 700, y: 400 } });
+    });
+
+    it("binds the connector to the shape it is dropped on", () => {
+        // The regression: the svg holds pointer capture during the drag, so
+        // `e.target` was the svg on every move, the hover hit-test never saw
+        // the shape underneath, and a drop "onto" a shape landed as a free
+        // point sitting on top of it — the arrow then stayed behind when the
+        // shape moved.
+        const a = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
+        const b = createNode({ shape: "rectangle", x: 500, y: 300, w: 160, h: 90, text: "B" });
+        const doc = createDoc("Flow", [{ ...createPage(), nodes: [a, b], edges: [] }]);
+        const { store, view } = mount(doc);
+        const svg = svgOf(view.container);
+        store.selectNodes([a.id]);
+        view.rerender(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText: jest.fn() }} />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+
+        const port = svgOf(view.container).querySelector(
+            `[data-node-id="${a.id}"][data-port="e"] circle`
+        );
+        expect(port).not.toBeNull();
+
+        act(() => {
+            port!.dispatchEvent(
+                pointer("pointerdown", a.x + a.w, a.y + a.h / 2, { button: 0, buttons: 1 })
+            );
+        });
+        act(() => {
+            // jsdom has no elementFromPoint, so the handler falls back to the
+            // event's own target — dispatching the move on B is the honest
+            // stand-in for the pointer being over B.
+            nodeElement(view.container, b.id).dispatchEvent(
+                pointer("pointermove", b.x + b.w / 2, b.y + b.h / 2, { buttons: 1 })
+            );
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", b.x + b.w / 2, b.y + b.h / 2, { buttons: 0 }));
+        });
+
+        const page = store.getState().doc.pages[0]!;
+        expect(page.nodes).toHaveLength(2);
+        expect(page.edges).toHaveLength(1);
+        expect(page.edges[0]!.from).toEqual({ nodeId: a.id, port: "e" });
+        expect(page.edges[0]!.to).toEqual({ nodeId: b.id, port: "auto" });
+    });
+
+    it("spawns a connected twin when a port is clicked without dragging", () => {
+        // Lucid's click-a-port: the next shape in that direction, already
+        // wired up. Same shape and size as the source, not a mindmap topic.
+        const box = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
+        const doc = createDoc("Flow", [{ ...createPage(), nodes: [box], edges: [] }]);
+        const { store, view } = mount(doc);
+        const svg = svgOf(view.container);
+        store.selectNodes([box.id]);
+        view.rerender(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText: jest.fn() }} />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+
+        const port = svgOf(view.container).querySelector(
+            `[data-node-id="${box.id}"][data-port="e"] circle`
+        );
+        expect(port).not.toBeNull();
+
+        act(() => {
+            port!.dispatchEvent(
+                pointer("pointerdown", box.x + box.w, box.y + box.h / 2, {
+                    button: 0,
+                    buttons: 1,
+                })
+            );
+        });
+        act(() => {
+            svg.dispatchEvent(
+                pointer("pointerup", box.x + box.w, box.y + box.h / 2, { buttons: 0 })
+            );
+        });
+
+        const page = store.getState().doc.pages[0]!;
+        expect(page.nodes).toHaveLength(2);
+        const spawned = page.nodes[1]!;
+        expect(spawned.shape).toBe("rectangle");
+        expect(spawned.w).toBe(box.w);
+        expect(spawned.x).toBeGreaterThan(box.x + box.w);
+        expect(page.edges).toHaveLength(1);
+        expect(page.edges[0]!.from).toEqual({ nodeId: box.id, port: "e" });
+        expect(page.edges[0]!.to).toEqual({ nodeId: spawned.id, port: "auto" });
+        expect(store.selectedNodeIds()).toEqual([spawned.id]);
+    });
+});
+
+describe("right button", () => {
+    it("pans the canvas with a right-drag, no menu", () => {
+        const { store, view, callbacks } = mount();
+        const svg = svgOf(view.container);
+        act(() => {
+            svg.dispatchEvent(pointer("pointerdown", 500, 300, { button: 2, buttons: 2 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointermove", 560, 340, { buttons: 2 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", 560, 340, { button: 2, buttons: 0 }));
+        });
+        const viewport = store.getState().viewport;
+        expect({ x: viewport.x, y: viewport.y }).not.toEqual({ x: 0, y: 0 });
+        expect(callbacks.onContextMenuAt).not.toHaveBeenCalled();
+    });
+
+    it("opens the context menu on a right-click that never travelled", () => {
+        const { callbacks, view } = mount();
+        const svg = svgOf(view.container);
+        act(() => {
+            svg.dispatchEvent(pointer("pointerdown", 500, 300, { button: 2, buttons: 2 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", 500, 300, { button: 2, buttons: 0 }));
+        });
+        expect(callbacks.onContextMenuAt).toHaveBeenCalledWith(
+            { x: 500, y: 300 },
+            { kind: "canvas" }
+        );
     });
 });
 
@@ -554,16 +732,19 @@ describe("shape palette and toolbar", () => {
     it("arms a shape when a palette tile is chosen", async () => {
         const user = userEvent.setup();
         const { store } = mountChrome();
-        await user.click(screen.getAllByLabelText("Decision")[0]!);
+        await user.click(screen.getAllByLabelText("Diamond")[0]!);
         expect(store.getState().tool).toBe("shape");
-        expect(store.getState().pendingShape).toBe("decision");
+        expect(store.getState().pendingShape).toBe("diamond");
     });
 
     it("filters the palette by search", async () => {
         const user = userEvent.setup();
         mountChrome();
+        // "cylinder" survives as a keyword on the Database tile.
         await user.type(screen.getByPlaceholderText("Search shapes…"), "cylinder");
-        expect(screen.getAllByLabelText("Cylinder").length).toBeGreaterThan(0);
-        expect(screen.queryByLabelText("Decision")).toBeNull();
+        expect(screen.getAllByLabelText("Database").length).toBeGreaterThan(0);
+        // "Diamond" would still match the toolbar's quick-shape button, so the
+        // absence assertion uses a palette-only tile.
+        expect(screen.queryByLabelText("Trapezoid")).toBeNull();
     });
 });

@@ -343,8 +343,7 @@ export type ShapeId =
 export type ShapeCategory =
     | "Nodes"
     | "Annotate"
-    | "Basic"
-    | "Flowchart"
+    | "Standard"
     | "UML & ERD"
     | "Containers"
     | "Arrows";

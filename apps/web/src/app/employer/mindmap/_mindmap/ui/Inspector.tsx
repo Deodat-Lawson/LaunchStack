@@ -80,6 +80,7 @@ import {
     IconToggle,
     Label,
     NumberField,
+    PresetNumberField,
     Row,
     Section,
     Segmented,
@@ -99,6 +100,26 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  */
 
 const selectSelection = (s: EditorState) => s.selection;
+
+/** Stroke weights people ask for by name; the field still takes any number. */
+const WEIGHT_PRESETS = [
+    { label: "Hairline", value: 0.75 },
+    { label: "Thin", value: 1 },
+    { label: "Regular", value: 1.5 },
+    { label: "Medium", value: 2.5 },
+    { label: "Bold", value: 4 },
+    { label: "Heavy", value: 6 },
+] as const;
+
+/** Type sizes by role rather than by pixel. */
+const FONT_SIZE_PRESETS = [
+    { label: "Small", value: 11 },
+    { label: "Body", value: 14 },
+    { label: "Emphasis", value: 16 },
+    { label: "Subheading", value: 20 },
+    { label: "Heading", value: 24 },
+    { label: "Display", value: 32 },
+] as const;
 
 /** Common value across a set, or `null` when they disagree. */
 function common<T, K>(items: readonly T[], read: (item: T) => K): K | null {
@@ -288,7 +309,9 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         <SelectValue placeholder="Mixed shapes" />
                     </SelectTrigger>
                     <SelectContent className="max-h-72">
-                        {SHAPES.map(def => (
+                        {/* Hidden duplicates stay listable only while one is the
+                            current value, so a legacy node's select isn't blank. */}
+                        {SHAPES.filter(def => !def.paletteHidden || def.id === shape).map(def => (
                             <SelectItem key={def.id} value={def.id} className="text-[12px]">
                                 {def.name}
                             </SelectItem>
@@ -320,8 +343,9 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                 </Row>
                 <Row>
                     <Label>Weight</Label>
-                    <NumberField
+                    <PresetNumberField
                         aria-label="Stroke width"
+                        presets={WEIGHT_PRESETS}
                         value={strokeWidth ?? 1.5}
                         mixed={strokeWidth === null}
                         min={0}
@@ -394,8 +418,9 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                 </Row>
                 <Row>
                     <Label>Size</Label>
-                    <NumberField
+                    <PresetNumberField
                         aria-label="Font size"
+                        presets={FONT_SIZE_PRESETS}
                         value={fontSize ?? 14}
                         mixed={fontSize === null}
                         min={6}
@@ -587,8 +612,9 @@ function EdgeSections({ edges }: { edges: DiagramEdge[] }) {
             </Row>
             <Row>
                 <Label>Weight</Label>
-                <NumberField
+                <PresetNumberField
                     aria-label="Connector width"
+                    presets={WEIGHT_PRESETS}
                     value={strokeWidth ?? 1.8}
                     mixed={strokeWidth === null}
                     min={0.5}

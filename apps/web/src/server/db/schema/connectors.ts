@@ -77,13 +77,6 @@ export const connectorConnections = pgTable(
          * rotation) — there `accessTokenCiphertext` IS the credential.
          */
         refreshTokenCiphertext: text("refresh_token_ciphertext"),
-        /**
-         * For Google this stays null (access tokens are cached in-process);
-         * for Slack/GitHub it persists the long-lived token.
-         */
-        accessTokenCiphertext: text("access_token_ciphertext"),
-        /** Null when the stored access token does not expire. */
-        accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
         encryptionKeyVersion: integer("encryption_key_version").notNull().default(1),
         scopes: varchar("scopes", { length: 512 }).notNull(),
         /** 'active' | 'revoked' — revoked means reconnect is the only fix. */
@@ -93,6 +86,16 @@ export const connectorConnections = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        /**
+         * For Google this stays null (access tokens are cached in-process);
+         * for Slack/GitHub it persists the long-lived token.
+         */
+        accessTokenCiphertext: text("access_token_ciphertext"),
+        /** Null when the stored access token does not expire. */
+        accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
     },
     table => ({
         companyProviderAccountUnique: uniqueIndex(

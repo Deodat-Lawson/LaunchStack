@@ -50,6 +50,12 @@ export interface EmailPipelineTestDatabase {
  * A database rather than a `search_path` schema: generated migrations qualify
  * every foreign key as `"public"."…"`, so a per-schema sandbox would resolve
  * those references to the wrong (empty) schema.
+ *
+ * Suites that call this must raise their own Jest timeout — the convention is
+ * `jest.setTimeout(120_000)` at the top of the describe. Creating a database
+ * and replaying every migration file does not fit the 5s default once workers
+ * run in parallel, and the failure surfaces as a bare per-test timeout that
+ * says nothing about the database.
  */
 export async function createEmailPipelineTestDatabase(): Promise<EmailPipelineTestDatabase> {
     const connectionString = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL;

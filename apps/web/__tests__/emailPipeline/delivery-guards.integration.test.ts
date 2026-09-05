@@ -60,6 +60,8 @@ function countingAdapter(delayMs = 0) {
 }
 
 describeIfDatabase("email delivery guards", () => {
+    jest.setTimeout(120_000);
+
     let harness: EmailPipelineTestDatabase;
 
     beforeAll(async () => {

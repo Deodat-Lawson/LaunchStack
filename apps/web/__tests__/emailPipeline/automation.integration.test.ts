@@ -71,6 +71,8 @@ function countingAdapter() {
 }
 
 describeIfDatabase("automated email campaign runs", () => {
+    jest.setTimeout(120_000);
+
     let harness: EmailPipelineTestDatabase;
 
     beforeAll(async () => {

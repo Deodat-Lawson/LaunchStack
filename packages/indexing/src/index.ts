@@ -5,6 +5,12 @@
  */
 export { extractAndStoreEntities } from "./entity-extraction";
 export {
+    configureEntityExtraction,
+    isEntityExtractionEnabled,
+    resetEntityExtractionConfig,
+    type EntityExtractionConfig,
+} from "./entity-extraction-config";
+export {
     runDocIngestionTool,
     runExtractionStage,
     runIndexingStage,

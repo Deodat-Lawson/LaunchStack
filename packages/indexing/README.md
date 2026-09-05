@@ -33,6 +33,11 @@ package's own `configure*` hooks when used standalone.
 
 `neo4j-driver` is an optional peer — the engine runs without a graph.
 
+Entity extraction (stage F) is opt-in: the host calls
+`configureEntityExtraction({ enabled: true })` before ingestion runs, or the
+step logs once and skips (ADR-011). apps/web reads `ENABLE_ENTITY_EXTRACTION`
+for it.
+
 ## Stability
 
 0.x. Both pipeline stages are idempotent on (sourceVersionId, ocrJobId); that property is what makes outbox replay safe and is covered by the integration suite.

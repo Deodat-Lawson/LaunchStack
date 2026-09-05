@@ -123,7 +123,7 @@ Each `runStep` becomes an Inngest `step.run` (memoized on retry).
 | **C** Chunk           | Parent/child text units                                    | chunks → `ocr_jobs.ocrResult`                                                           |
 | **D** Embed / store   | OpenAI 1536-dim **or** sidecar `/embed`                    | `document_structure`, `document_context_chunks`, `document_retrieval_chunks`            |
 | **E** Finalize        | Mark success                                               | `document_metadata`; `ocrProcessed=true`; `ocr_jobs.status=completed`                   |
-| **F** GraphRAG        | Entities + relationships (one step)                        | Postgres `kg_*`                                                                         |
+| **F** GraphRAG        | Entities + relationships; needs `ENABLE_ENTITY_EXTRACTION` | Postgres `kg_*`                                                                         |
 | **G** Neo4j sync      | Mirror from `kg_*`                                         | `:Entity` / `:Section` + edges                                                          |
 | Downstream            | Separate Inngest fns                                       | `company_metadata`; version-scoped note-anchor rehydrate                                |
 

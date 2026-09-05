@@ -14,4 +14,5 @@ export {
     getEnsembleConfig,
     type EnsembleRuntimeConfig,
     type NotesLegProvider,
+    type FactsLegProvider,
 } from "./config";

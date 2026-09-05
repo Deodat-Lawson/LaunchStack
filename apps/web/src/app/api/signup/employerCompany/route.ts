@@ -104,8 +104,6 @@ export async function POST(request: Request) {
                 companyId,
                 name,
                 email,
-                status: "verified",
-                role: "owner",
             })
             .returning({ id: users.id });
 
@@ -114,6 +112,7 @@ export async function POST(request: Request) {
                 userId: BigInt(insertedUser.id),
                 companyId,
                 role: "owner",
+                status: "active",
             });
         }
 

@@ -10,7 +10,13 @@ import {
     supportsShortVectorSearch,
     type EmbeddingIndexConfig,
 } from "@launchstack/llm/embeddings";
-import type { EmbeddingsProvider, SearchScope, SearchFilters } from "../../search-types";
+import type {
+    DocumentScope,
+    EmbeddingsProvider,
+    SearchScope,
+    SearchFilters,
+} from "../../search-types";
+import { documentScopeSqlForAlias } from "../scope";
 
 interface VectorRetrieverConfig extends BaseRetrieverInput {
     embeddings: EmbeddingsProvider;
@@ -28,6 +34,8 @@ interface SingleDocConfig extends VectorRetrieverConfig {
 interface CompanyConfig extends VectorRetrieverConfig {
     companyId: number;
     searchScope: "company";
+    /** The caller's document scope; joins the `d` predicate of every company query. */
+    scope?: DocumentScope;
 }
 
 interface MultiDocConfig extends VectorRetrieverConfig {
@@ -52,19 +60,30 @@ type VectorRow = {
     /** documents.current_version_id — carried for citation anchoring. */
     version_id: number;
     document_title: string;
+    /** documents.category — the folder, for scope re-checks downstream. */
+    category: string;
     distance: number;
 };
 
 function buildScopeWhere(
     scope: SearchScope,
-    ids: { documentId?: number; companyId?: number; documentIds?: number[] },
+    ids: {
+        documentId?: number;
+        companyId?: number;
+        documentIds?: number[];
+        documentScope?: DocumentScope;
+    },
     retrievalAlias: string
 ): ReturnType<typeof sql> | null {
     if (scope === "document" && ids.documentId !== undefined) {
         return sql.raw(`${retrievalAlias}.document_id = ${ids.documentId}`);
     }
     if (scope === "company" && ids.companyId !== undefined) {
-        return sql.raw(`d.company_id = ${ids.companyId}`);
+        // Every company query joins the document table as `d`, so the caller's
+        // scope narrows candidates before the ANN scan, not after.
+        const company = sql.raw(`d.company_id = ${ids.companyId}`);
+        const scoped = documentScopeSqlForAlias(ids.documentScope, "d");
+        return scoped ? sql`${company} AND (${scoped})` : company;
     }
     if (scope === "multi-document" && ids.documentIds?.length) {
         return sql.raw(
@@ -156,7 +175,7 @@ async function searchLegacyIndex(args: {
         cc.page_number as page,
         cc.document_id,
         d.current_version_id as version_id,
-        d.title as document_title,
+        d.title as document_title, d.category as category,
         (c.embedding <-> ${fullVectorLiteral}) as distance
       FROM candidates c
       JOIN ${T.document} d ON c.document_id = d.id
@@ -183,7 +202,7 @@ async function searchLegacyIndex(args: {
       cc.page_number as page,
       cc.document_id,
       d.current_version_id as version_id,
-      d.title as document_title,
+      d.title as document_title, d.category as category,
       (rc.embedding <-> ${fullVectorLiteral}) as distance
     FROM ${T.retrievalChunks} rc
     JOIN ${T.document} d ON rc.document_id = d.id
@@ -214,7 +233,7 @@ async function searchLegacyIndex(args: {
       s.page_number as page,
       s.document_id,
       d.current_version_id as version_id,
-      d.title as document_title,
+      d.title as document_title, d.category as category,
       s.embedding <-> ${fullVectorLiteral} AS distance
     FROM ${T.contextChunks} s
     JOIN ${T.document} d ON s.document_id = d.id
@@ -251,7 +270,7 @@ async function searchDimensionTableIndex(args: {
       cc.page_number as page,
       rc.document_id,
       d.current_version_id as version_id,
-      d.title as document_title,
+      d.title as document_title, d.category as category,
       (de.embedding <-> ${fullVectorLiteral}) as distance
     FROM ${sql.raw(tableName)} de
     JOIN ${T.retrievalChunks} rc ON de.retrieval_chunk_id = rc.id
@@ -283,6 +302,7 @@ export class VectorRetriever extends BaseRetriever {
     private companyId?: number;
     private documentIds?: number[];
     private filters?: SearchFilters;
+    private scope?: DocumentScope;
 
     constructor(fields: VectorRetrieverFields) {
         super(fields);
@@ -296,6 +316,7 @@ export class VectorRetriever extends BaseRetriever {
             this.documentId = fields.documentId;
         } else if (fields.searchScope === "company") {
             this.companyId = fields.companyId;
+            this.scope = fields.scope;
         } else if (fields.searchScope === "multi-document") {
             this.documentIds = fields.documentIds;
         }
@@ -313,6 +334,7 @@ export class VectorRetriever extends BaseRetriever {
                     documentId: this.documentId,
                     companyId: this.companyId,
                     documentIds: this.documentIds,
+                    documentScope: this.scope,
                 },
                 "rc"
             );
@@ -322,6 +344,7 @@ export class VectorRetriever extends BaseRetriever {
                     documentId: this.documentId,
                     companyId: this.companyId,
                     documentIds: this.documentIds,
+                    documentScope: this.scope,
                 },
                 "s"
             );
@@ -363,6 +386,7 @@ export class VectorRetriever extends BaseRetriever {
                             // so citation anchoring sees a number.
                             versionId: row.version_id != null ? Number(row.version_id) : undefined,
                             documentTitle: row.document_title,
+                            category: row.category,
                             distance: row.distance,
                             source: "vector_ann",
                             searchScope: this.searchScope,
@@ -406,7 +430,8 @@ export function createCompanyVectorRetriever(
     embeddings: EmbeddingsProvider,
     embeddingIndex: EmbeddingIndexConfig,
     topK = 10,
-    filters?: SearchFilters
+    filters?: SearchFilters,
+    scope?: DocumentScope
 ): VectorRetriever {
     return new VectorRetriever({
         companyId,
@@ -415,6 +440,7 @@ export function createCompanyVectorRetriever(
         topK,
         searchScope: "company",
         filters,
+        scope,
     });
 }
 

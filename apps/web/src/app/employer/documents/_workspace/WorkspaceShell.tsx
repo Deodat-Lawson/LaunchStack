@@ -15,10 +15,11 @@ import {
     isFolderOrDescendant,
     joinFolderPath,
     replaceFolderPrefix,
+    displayFolderPath,
 } from "~/lib/folders/path";
-import { isManagementRole } from "~/lib/membership-roles";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { useAIChat } from "../hooks/useAIChat";
+import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
@@ -42,6 +43,7 @@ import type {
     ThreadMessage,
     ThreadReference,
     WorkspaceSource,
+    WorkspaceFolder,
 } from "./types";
 
 /**
@@ -66,7 +68,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=analytics",
-    employees: "/employer/employees",
+    employees: "/employer/settings#people",
     settings: "/employer/settings",
     metadata: "/employer/documents?feature=metadata",
     "marketing-pipeline": "/employer/tools/marketing-pipeline",
@@ -151,8 +153,10 @@ export function WorkspaceShell() {
         sources,
         folders,
         companyId,
-        role,
+        can,
         refresh,
+        // The URL names a source; until the list has loaded, an id that is not
+        // in it yet is "not loaded", not "gone".
         loading: sourcesLoading,
     } = useWorkspaceData(userId ?? null);
 
@@ -230,6 +234,8 @@ export function WorkspaceShell() {
     const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
+    /** The folder or document whose access dialog is open. */
+    const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
     const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
     /**
@@ -564,9 +570,25 @@ export function WorkspaceShell() {
         [sources, refresh]
     );
 
-    // Folder structure is management-only, like every other write to the
+    const openFolderAccess = useCallback((folder: WorkspaceFolder) => {
+        setAccessTarget({
+            kind: "folder",
+            path: folder.name,
+            name: displayFolderPath(folder.name),
+        });
+    }, []);
+
+    const openDocumentAccess = useCallback((source: WorkspaceSource) => {
+        if (!source.documentId) {
+            toast.info("This source is still being indexed.");
+            return;
+        }
+        setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
+    }, []);
+
+    // Folder structure needs `folders.manage`, like every other write to the
     // library. Members see the tree; owners and admins shape it.
-    const canManageFolders = role !== null && isManagementRole(role);
+    const canManageFolders = can("folders.manage");
     const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
 
     /** One call for every folder mutation; resolves to an error message or null. */
@@ -837,6 +859,8 @@ export function WorkspaceShell() {
                     onDeleteFolder={
                         canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
                     }
+                    onShareFolder={openFolderAccess}
+                    onRestrictAccess={openDocumentAccess}
                     onRenameSource={source => setRenameSource(source)}
                     onDeleteSource={source => {
                         setDeleteError(null);
@@ -941,7 +965,6 @@ export function WorkspaceShell() {
                     onToggleThinking={() => setComposerThinking(v => !v)}
                     studioSlot={
                         <StudioMenu
-                            role={role}
                             onOpenStudio={() => openFeature()}
                             onPickFeature={id => expandFeature(id)}
                         />
@@ -950,7 +973,6 @@ export function WorkspaceShell() {
             ) : (
                 <ExpandedFeatureView
                     featureId={activeFeatureId}
-                    role={role}
                     leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
                     onPaneExit={() => setActiveFeatureId("chat")}
                     onOpenStudio={() => openFeature()}
@@ -979,6 +1001,7 @@ export function WorkspaceShell() {
                                 setDeleteError(null);
                                 setDeleteSource(source);
                             },
+                            onRestrictAccess: openDocumentAccess,
                             onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                         },
                         mindmap: { onCreate: () => openAdd("mindmap") },
@@ -989,7 +1012,6 @@ export function WorkspaceShell() {
             {studioOpen && (
                 <StudioDrawer
                     open
-                    role={role}
                     initialFeatureId={studioFeatureId}
                     activeFeatureId={activeFeatureId}
                     onClose={() => setStudioOpen(false)}
@@ -1020,6 +1042,7 @@ export function WorkspaceShell() {
                           }
                         : undefined
                 }
+                restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
                 }}
@@ -1100,6 +1123,12 @@ export function WorkspaceShell() {
                 }}
             />
 
+            <AccessDialog
+                target={accessTarget}
+                onClose={() => setAccessTarget(null)}
+                onSaved={() => void refresh()}
+            />
+
             {viewerSource && !editing && (
                 <DocumentViewer
                     source={viewerSource}
@@ -1110,6 +1139,7 @@ export function WorkspaceShell() {
                     }}
                     onRename={handleRenameSource}
                     onDelete={source => void handleDeleteSource(source)}
+                    onRestrictAccess={openDocumentAccess}
                     onAskAbout={handleAskAbout}
                     onVersionChanged={() => void refresh()}
                     onEdit={source => openSource(source.id, true)}
@@ -1122,7 +1152,6 @@ export function WorkspaceShell() {
 
 interface ExpandedFeatureViewProps {
     featureId: string;
-    role: string | null;
     /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
     leadingChromeInsetPx?: number;
     /** Return to workspace chat when panes invoke their exit / close callbacks. */
@@ -1144,7 +1173,6 @@ interface ExpandedFeatureViewProps {
  */
 function ExpandedFeatureView({
     featureId,
-    role,
     leadingChromeInsetPx = 0,
     onPaneExit,
     onOpenStudio,
@@ -1178,7 +1206,7 @@ function ExpandedFeatureView({
                     <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{feature?.desc ?? ""}</div>
                 </div>
                 <JumpToPaletteButton onClick={openPalette} />
-                <StudioMenu role={role} onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
+                <StudioMenu onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
                 <AvatarMenu
                     userInitials={userInitials}
                     userName={userName}

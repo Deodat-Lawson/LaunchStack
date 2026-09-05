@@ -4,10 +4,21 @@
  * query value cannot reach the batch lookup even by accident.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/server/services/folder-access", () => ({
+    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
+    canEditFolder: jest.fn().mockResolvedValue(true),
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
@@ -29,6 +40,8 @@ import { POST as createBatch } from "~/app/api/upload/batches/route";
 import { GET as getBatch } from "~/app/api/upload/batches/[batchId]/route";
 import { createUploadBatch, findBatchOwnedByUser } from "~/server/services/upload-batches";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const createUploadBatchMock = createUploadBatch as jest.MockedFunction<typeof createUploadBatch>;
 const findBatchOwnedByUserMock = findBatchOwnedByUser as jest.MockedFunction<
     typeof findBatchOwnedByUser
@@ -37,13 +50,12 @@ const findBatchOwnedByUserMock = findBatchOwnedByUser as jest.MockedFunction<
 function mockAuthenticated() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user_session",
             userPk: BigInt(41),
             companyId: BigInt(7),
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
 }
 

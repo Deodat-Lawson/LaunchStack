@@ -6,7 +6,7 @@
 
 import { deleteRepoWorkspace } from "@launchstack/pipelines/repo-workspace/db";
 
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     createForbiddenError,
     createNotFoundError,
@@ -21,7 +21,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
-        if (!isManagementRole(ctx.data.role)) {
+        if (!ctx.data.can("connectors.manage")) {
             return createForbiddenError("Only management roles can disconnect repositories");
         }
 

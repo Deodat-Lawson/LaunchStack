@@ -9,6 +9,8 @@
  * most expensive thing on the screen.
  */
 
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
 import { count, desc, eq, max } from "drizzle-orm";
 import { formatMetadataContext } from "@launchstack/tools/company-context";
 import { company, document } from "@launchstack/store/schema";
@@ -22,7 +24,10 @@ import { relativeAge, type BriefDocument, type BriefFolder, type WorkspaceBrief 
 const RECENT_DOCUMENT_LIMIT = 16;
 const FOLDER_LIMIT = 8;
 
-export async function buildWorkspaceBrief(companyId: bigint): Promise<WorkspaceBrief> {
+export async function buildWorkspaceBrief(
+    companyId: bigint,
+    scope: DocumentScope = SCOPE_EVERYTHING
+): Promise<WorkspaceBrief> {
     const now = new Date();
 
     const [companyRows, metadataRows, folderRows, recentRows, totalRows, connections] =
@@ -48,7 +53,7 @@ export async function buildWorkspaceBrief(companyId: bigint): Promise<WorkspaceB
             db
                 .select({ name: document.category, count: count() })
                 .from(document)
-                .where(eq(document.companyId, companyId))
+                .where(scopedDocumentWhere(companyId, scope))
                 .groupBy(document.category),
             db
                 .select({
@@ -58,13 +63,13 @@ export async function buildWorkspaceBrief(companyId: bigint): Promise<WorkspaceB
                     createdAt: document.createdAt,
                 })
                 .from(document)
-                .where(eq(document.companyId, companyId))
+                .where(scopedDocumentWhere(companyId, scope))
                 .orderBy(desc(document.createdAt), desc(document.id))
                 .limit(RECENT_DOCUMENT_LIMIT),
             db
                 .select({ total: count(), maxId: max(document.id) })
                 .from(document)
-                .where(eq(document.companyId, companyId)),
+                .where(scopedDocumentWhere(companyId, scope)),
             listConnectionsForCompany(companyId),
         ]);
 

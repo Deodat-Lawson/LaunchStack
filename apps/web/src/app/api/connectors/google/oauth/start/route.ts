@@ -1,18 +1,18 @@
 /**
  * GET /api/connectors/google/oauth/start — Leg 0, first half.
  *
- * Redirects a signed-in management user to Google's consent screen. CSRF: a
- * random nonce goes into both the OAuth `state` and a short-lived Lax cookie;
- * the callback requires them to match. The Clerk session survives the round
- * trip (top-level navigation, Lax cookies are sent), so the callback runs
- * with full workspace context.
+ * Redirects a signed-in `connectors.manage` holder to Google's consent
+ * screen. CSRF: a random nonce goes into both the OAuth `state` and a
+ * short-lived Lax cookie; the callback requires them to match. The session
+ * survives the round trip (top-level navigation, Lax cookies are sent), so
+ * the callback runs with full workspace context.
  */
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 
 import { buildAuthorizationUrl } from "@launchstack/google-drive";
 
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     GOOGLE_DRIVE_SCOPES,
     GOOGLE_OAUTH_STATE_COOKIE,
@@ -26,14 +26,8 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "feature_disabled" }, { status: 404 });
     }
 
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return ctx.response;
-    if (!isManagementRole(ctx.data.role)) {
-        return NextResponse.json(
-            { error: "Forbidden: owner or admin role required" },
-            { status: 403 }
-        );
-    }
 
     const nonce = randomUUID();
     const url = buildAuthorizationUrl({

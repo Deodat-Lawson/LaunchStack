@@ -9,6 +9,7 @@
  * shown, and overwrites the entry — that is the Shuffle button.
  */
 
+import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
 import { createTtlCache } from "@launchstack/tools/web-research";
 import { GeneratedStartersSchema, type AskStartersPayload } from "~/lib/ask-starters/contract";
 import { generateStructured } from "~/lib/llm";
@@ -28,17 +29,25 @@ export type { WorkspaceBrief } from "./starters";
 
 const STARTERS_TTL_MS = 12 * 60 * 60 * 1000;
 
+/** Two people with different scopes must never share a cached set. */
+function scopeFingerprint(scope: DocumentScope): string {
+    return scope.kind === "everything" ? "all" : JSON.stringify(scope);
+}
+
 const cache = createTtlCache<AskStartersPayload>({ ttlMs: STARTERS_TTL_MS, maxEntries: 2000 });
 
 export interface GetAskStartersArgs {
     companyId: bigint;
+    /** The caller's readable documents; starters never mention what they cannot open. */
+    scope?: DocumentScope;
     /** Bypass the cached set and ask for a different one. */
     refresh?: boolean;
 }
 
 export async function getAskStarters(args: GetAskStartersArgs): Promise<AskStartersPayload> {
-    const brief = await buildWorkspaceBrief(args.companyId);
-    const key = `${args.companyId}:${brief.fingerprint}`;
+    const scope = args.scope ?? SCOPE_EVERYTHING;
+    const brief = await buildWorkspaceBrief(args.companyId, scope);
+    const key = `${args.companyId}:${scopeFingerprint(scope)}:${brief.fingerprint}`;
 
     const cached = cache.get(key);
     if (cached && !args.refresh) return cached;

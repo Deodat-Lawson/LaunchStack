@@ -105,7 +105,7 @@ function uploadToS3WithProgress(
 }
 
 interface UploadFormProps {
-    categories: { id: string; name: string }[];
+    categories: { id: string; name: string; restricted?: boolean }[];
     useUploadThing: boolean;
     isUploadThingConfigured: boolean;
     onToggleUploadMethod: (useUploadThing: boolean) => Promise<void>;

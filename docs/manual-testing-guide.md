@@ -42,8 +42,9 @@ Before the first pass:
    Open **http://localhost:3000**.
 
 5. **Test accounts**
-   - Have at least one **Employer** (or Owner) account.
-   - Optionally have one **pending** employer and one **pending** employee for approval flows.
+   - Have at least one **Owner** account (the first signup on a fresh instance).
+   - Optionally have one **pending** member (joined through a join link under the default
+     "approval required" policy) and one **Member** for the folder-access checks.
 
 Complete sections 1–5 (and 6 if desired), then proceed to Run 2.
 
@@ -65,7 +66,7 @@ Before the second pass:
    Wait until the stack is ready (migrate completes, app listens, worker healthy at **http://localhost:8020/healthz**). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
 
 3. **Test accounts**
-   - Reuse the same Employer/Employee accounts (auth and app rows live in the same DB) or create fresh ones.
+   - Reuse the same Owner/Member accounts (auth and app rows live in the same DB) or create fresh ones.
 
 Run the **same checklist** (sections 1–5, and optionally 6) again. Note any differences from Run 1 (e.g. upload paths, API base URL, env-only features).
 
@@ -86,29 +87,31 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 ## 2. Authentication flows (Only needed if working on authentication)
 
-### 2.1 Sign up
+### 2.1 Sign up and join
 
 | # | Check | Steps | Expected |
 |---|--------|--------|----------|
-| 2.1.1 | New employer signup | Go to `/signup`, create an account (name/email/password), choose Employer, submit. | User created in DB as employer (or owner), then redirected to `/employer/home` or `/employer/pending-approval` depending on approval flow. |
-| 2.1.2 | New employee signup | Go to `/signup`, create an account (name/email/password), choose Employee, submit. | User created as employee, redirected to `/employee/documents` or `/employee/pending-approval`. |
-| 2.1.3 | Already in DB | Sign up with email that already exists in DB (with role). | Appropriate error or redirect (no duplicate role flip). |
+| 2.1.1 | New workspace | Go to `/signup`, create an account, choose "Create a workspace", submit. | Company created; the account is its **Owner**, active immediately; redirected to `/employer/documents`. |
+| 2.1.2 | Join link | As an Owner, Settings → People and access → Join links → create one (role Member). Open its URL in a fresh browser and sign up. | Membership created with status **pending** (default policy); redirected to `/employer/pending-approval`. With join policy "open", status is active and the person lands in the workspace. |
+| 2.1.3 | Email invitation | Settings → People and access → Invitations → invite an address as Viewer. Copy the accept link (also in the server log on a self-hosted instance). Open it signed out, then sign in / sign up with **that** email. | `/invite/<token>` shows the workspace and role; accepting creates an **active** Viewer membership and lands in the workspace. Accepting with a different email is refused with a clear message. |
+| 2.1.4 | Second workspace | Accept an invitation while signed in with an account that already belongs to another workspace. | A second membership is created; `/workspaces` lists both. |
+| 2.1.5 | Expired / revoked link | Revoke a join link or invitation, then open it. | The preview says it is no longer valid; nothing is created. |
 
 ### 2.2 Sign in & redirects
 
 | # | Check | Steps | Expected |
 |---|--------|--------|----------|
-| 2.2.1 | Employer sign in | Sign in as verified employer. Visit `/` or `/signin`. | Redirect to `/employer/home`. |
-| 2.2.2 | Employee sign in | Sign in as verified employee. Visit `/` or `/signin`. | Redirect to `/employee/documents`. |
-| 2.2.3 | Protected route unauthenticated | Log out, visit `/employer/home` or `/employee/documents`. | Redirect to `/signin`. |
-| 2.2.4 | Wrong role | Sign in as employee, manually go to `/employer/home`. | Rejected or redirected (employer-only). |
+| 2.2.1 | Member sign in | Sign in as an active member. Visit `/` or `/signin`. | Redirect to `/employer/documents` (or `/workspaces` with 2+ memberships). |
+| 2.2.2 | Old employee URLs | Visit `/employee/documents` signed in. | Redirect to `/employer/documents` — there is one app. |
+| 2.2.3 | Protected route unauthenticated | Log out, visit `/employer/documents`. | Redirect to `/signin`. |
+| 2.2.4 | Suspended everywhere | Suspend a member's only membership, sign in as them. | Sent to `/workspaces`; every product API answers 403. |
 
 ### 2.3 Pending approval
 
 | # | Check | Steps | Expected |
 |---|--------|--------|----------|
-| 2.3.1 | Pending employer | Sign in as employer with `status !== 'verified'`. | Redirect to `/employer/pending-approval`; message about waiting for approval. |
-| 2.3.2 | Pending employee | Sign in as employee with `status !== 'verified'`. | Redirect to `/employee/pending-approval`; same idea. |
+| 2.3.1 | Pending member | Sign in as a member whose membership is `pending`. | Redirect to `/employer/pending-approval`; the page names the workspace and role. |
+| 2.3.2 | Approve | As Owner/Admin, People and access → Members → Approve. | The person's next request succeeds; an audit event `member.approved` exists. |
 
 ---
 
@@ -143,13 +146,25 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 | 3.4.1 | Page loads | Charts and tables load (employee activity, document stats). |
 | 3.4.2 | Data | Numbers and trends match backend; document details sheet or drill-down works if present. |
 
-### 3.4 Manage employees (`/employer/employees`) (Only if working on authentication)
+### 3.4 People and access (`/employer/settings#people`) (Only if working on access)
 
 | # | Check | Expected |
 |---|--------|----------|
-| 3.5.1 | List | Employee list loads. |
-| 3.5.2 | Approve/deny (if applicable) | Pending employees can be approved/denied; list updates. |
-| 3.5.3 | Invite / add (if applicable) | Invite or add employee flow works; no 500. |
+| 3.5.1 | Members | List loads with role, status, groups; counts (active / pending / suspended) match. |
+| 3.5.2 | Change role | An Admin can make a Member a Viewer but not an Admin; an Owner can. Your own row has no actions. The last Owner cannot be demoted or removed. |
+| 3.5.3 | Suspend / reinstate | Suspending a member makes their next request 403; reinstating restores it. Audit shows both. |
+| 3.5.4 | Groups | Create a group, add two members, grant it a restricted folder; both see the folder. Deleting the group warns how many people lose access and removes the grant. |
+| 3.5.5 | Custom roles | Create a role with `documents.read` + `documents.delete`; owner-only permissions are not offered; a Member cannot create roles. Assign it and check the member can delete but not invite. |
+| 3.5.6 | Audit | Every action above appears newest-first with a plain sentence; filters and CSV export work. |
+
+### 3.5 Folder access (`/employer/documents`) (Only if working on access)
+
+| # | Check | Expected |
+|---|--------|----------|
+| 3.5.7 | Restrict a folder | Folder rail → Share folder… → "Only people added below" → Save. The folder shows a lock for people who manage it and disappears entirely for a Member without a grant: not in the rail, not in `GetCategories`, its documents absent from the list, their content routes 404. |
+| 3.5.8 | Grant view | Add the Member with "Can view"; the folder and its documents reappear for them; upload into it is refused for them (needs "Can edit"). |
+| 3.5.9 | Assistant stays in scope | Put a document with a unique sentence in the restricted folder. As the Member without a grant, ask about the sentence with every document selected (the "everything I can see" search): the answer does not contain it and cites nothing from that folder. `authz_retrieval_dropped_total` on `/api/metrics` stays at 0. |
+| 3.5.10 | Restrict one document | Document menu → Restrict access… → add one person. Everyone else stops seeing that document while still seeing its folder. |
 
 ### 3.6 Settings (`/employer/settings`) (Only if working on settings)
 
@@ -168,30 +183,23 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 | # | Check | Expected |
 |---|--------|----------|
-| 3.9.1 | Message | Clear “pending approval” message; no employer actions that require verification. |
+| 3.9.1 | Message | Clear "pending approval" message naming the workspace; product APIs answer 403 until approved. |
 ---
 
-## 4. Employee flows (Employers and employees share the same document screen. So only need to test this if employee sepcific features are touched)
+## 4. Members and viewers (Everyone shares one document screen; what differs is what their role permits)
 
-### 4.1 Employee home (`/employee/home`)
-
-| # | Check | Expected |
-|---|--------|----------|
-| 4.1.1 | Page loads | Dashboard with “View Documents” and any other employee menu items. |
-| 4.1.2 | Nav | Nav and profile present; theme toggle works. |
-
-### 4.2 Employee documents (`/employee/documents`)
+### 4.1 Member
 
 | # | Check | Expected |
 |---|--------|----------|
-| 4.2.1 | List | Only documents assigned/visible to employee are shown. |
-| 4.2.2 | Viewer | Opening a document shows viewer (PDF/DOCX/etc.). |
-| 4.2.3 | AI Q&A | Chat/Q&A over documents works; answers are scoped to allowed content. |
+| 4.1.1 | Documents | Only folders and documents in the member's scope are listed (see 3.5.7). |
+| 4.1.2 | Upload / rename | Allowed into workspace-visible folders and folders they can edit; refused elsewhere. Delete is not offered. |
+| 4.1.3 | AI Q&A | Every search scope works; answers are limited to what they can read. |
+| 4.1.4 | Studio | Settings is not offered; Workspace/People is not offered without `members.view` actions. |
 
-### 4.4 Profile & sign out
+### 4.2 Viewer and Guest
 
 | # | Check | Expected |
 |---|--------|----------|
-| 4.4.1 | Sign out | Same as employer; clean redirect after sign out. |
-
----
+| 4.2.1 | Viewer | Can open, search and download; upload, rename and delete are not offered and the APIs answer 403. |
+| 4.2.2 | Guest | Sees only folders explicitly granted to them (or to the Guest role); workspace-visible folders are absent. |

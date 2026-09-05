@@ -30,7 +30,11 @@ export async function GET(request: Request) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            const payload = await getAskStarters({ companyId: ctx.data.companyId, refresh });
+            const payload = await getAskStarters({
+                companyId: ctx.data.companyId,
+                scope: await ctx.data.documentScope(),
+                refresh,
+            });
             return ok(payload);
         } catch (error) {
             return handleRouteError("ask-starters", error);

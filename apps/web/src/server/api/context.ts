@@ -8,7 +8,7 @@
  *
  * It layers on top of `requireWorkspaceContext`; it does not replace it.
  * Tenancy resolution stays in one place, and this adds the user row and the
- * role gate that routes were otherwise re-querying for themselves.
+ * permission gate that routes were otherwise re-querying for themselves.
  *
  * Response shape, id parsing and error mapping live in `./responses`, which is
  * free of the database — a route that only needs to answer should not have to
@@ -19,7 +19,8 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import type { Permission } from "~/lib/authz/permissions";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail } from "./responses";
 import type { NextResponse } from "next/server";
 
@@ -43,8 +44,11 @@ export interface ApiActor {
      * wants the bigint back widens it in its own adapter.
      */
     companyId: number;
-    /** Workspace role in the active company (see membership-roles). */
+    /** Membership role slug in the active company, normalised (see ~/lib/authz/permissions). */
     role: string;
+    /** The permission set the role resolves to. */
+    permissions: ReadonlySet<Permission>;
+    can(permission: Permission): boolean;
 }
 
 /**
@@ -70,6 +74,7 @@ export async function resolveApiActor(): Promise<ActorResult> {
         return { ok: false, response: fail("User not found", 404) };
     }
 
+    const permissions = ctx.data.permissions;
     return {
         ok: true,
         actor: {
@@ -79,28 +84,35 @@ export async function resolveApiActor(): Promise<ActorResult> {
             name: requestingUser.name ?? null,
             companyId: Number(ctx.data.companyId),
             role: ctx.data.role,
+            permissions,
+            can: permission => permissions.has(permission),
         },
     };
 }
 
 /**
- * Narrows an already-resolved actor to a management role.
+ * Narrows an already-resolved actor to one holding `permission`.
  *
  * Kept separate from resolution so a service that extends {@link ApiActor}
- * with its own fields can gate without re-querying, and so the role rule is
+ * with its own fields can gate without re-querying, and so the rule is
  * written once rather than per route.
  */
-export function requireManagement<A extends ApiActor>(resolved: ActorResult<A>): ActorResult<A> {
+export function requirePermission<A extends ApiActor>(
+    resolved: ActorResult<A>,
+    permission: Permission
+): ActorResult<A> {
     if (!resolved.ok) return resolved;
-    if (!isManagementRole(resolved.actor.role)) {
+    if (!resolved.actor.can(permission)) {
         return {
             ok: false,
-            response: fail("Your workspace role does not allow this action.", 403),
+            response: fail("Your workspace role does not allow this action.", 403, {
+                permission,
+            }),
         };
     }
     return resolved;
 }
 
-export async function resolveManagementApiActor(): Promise<ActorResult> {
-    return requireManagement(await resolveApiActor());
+export async function resolveApiActorWithPermission(permission: Permission): Promise<ActorResult> {
+    return requirePermission(await resolveApiActor(), permission);
 }

@@ -215,7 +215,7 @@ await engine.close();   // graceful shutdown
 
 [`apps/web`](apps/web) is a Next.js app built on the engine. It demonstrates:
 
-- First-party employer/employee auth (better-auth, in the app's own Postgres) with role-aware middleware
+- First-party auth (better-auth, in the app's own Postgres) with per-workspace roles, folder-level access, invitations and an audit log (ADR-010)
 - Document upload + optional OCR (`NATIVE_PDF`, Docling, Azure, Landing.AI, Datalab)
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)

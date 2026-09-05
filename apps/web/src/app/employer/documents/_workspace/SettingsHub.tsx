@@ -19,10 +19,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 
+import { Users } from "lucide-react";
+
 import { Button } from "~/components/ui/button";
 import { IconBuilding, IconChart, IconRobot, IconSettings, IconSlack } from "./icons";
 import { StatusNote } from "./settings/ui";
 import type { SettingsSectionActions } from "./settings/contract";
+
+const PeopleAccessSection = dynamic(
+    () => import("./settings/PeopleAccessSection").then(m => m.PeopleAccessSection),
+    { loading: () => <SectionLoading /> }
+);
 
 const ProcessingSettings = dynamic(
     () => import("./settings/ProcessingSettings").then(m => m.ProcessingSettings),
@@ -48,7 +55,13 @@ const StatisticsView = dynamic(
     { loading: () => <SectionLoading /> }
 );
 
-export type SettingsSectionId = "processing" | "agents" | "integrations" | "company" | "analytics";
+export type SettingsSectionId =
+    | "people"
+    | "processing"
+    | "agents"
+    | "integrations"
+    | "company"
+    | "analytics";
 
 interface SectionDef {
     id: SettingsSectionId;
@@ -70,6 +83,27 @@ interface SectionDef {
 }
 
 const SECTIONS: SectionDef[] = [
+    {
+        id: "people",
+        label: "People and access",
+        blurb: "Members, roles, folders",
+        eyebrow: "People",
+        title: "Who is in the workspace, and what they can see",
+        description:
+            "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else.",
+        Icon: Users,
+        wide: true,
+        aliases: [
+            "people",
+            "members",
+            "team",
+            "employees",
+            "invitations",
+            "roles",
+            "groups",
+            "audit",
+        ],
+    },
     {
         id: "processing",
         label: "Processing",
@@ -390,6 +424,8 @@ function SectionBody({
     onActions: (actions: SettingsSectionActions | null) => void;
 }) {
     switch (id) {
+        case "people":
+            return <PeopleAccessSection onActions={onActions} />;
         case "processing":
             return <ProcessingSettings onActions={onActions} />;
         case "agents":

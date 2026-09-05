@@ -57,8 +57,11 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
     "/api/inngest",
-    // Pre-auth signup UX: the code is validated before the user has an account.
-    "/api/invite-codes/validate",
+    // Pre-auth join UX: an invitation or join link is previewed (workspace
+    // name, role) before the person has an account. Neither route consumes
+    // anything; accepting requires a session.
+    "/api/workspace/invitations/preview",
+    "/api/workspace/join-links/preview",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     "/api/ocr/benchmark",
     // Prometheus scrapes without a session; the route requires
@@ -85,8 +88,16 @@ const isPublicApiRoute = createRouteMatcher([
 // Routes where authenticated users should be redirected to their dashboard
 const isAuthRedirectRoute = createRouteMatcher(["/", "/signup", "/signin"]);
 
-const isEmployerPath = (pathname: string) => pathname.startsWith("/employer");
 const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
+
+// The employee area is gone: one app, and what a person can do is decided by
+// their membership's permissions, not by which URL prefix they were sent to.
+// Old bookmarks and emails still land on the right page.
+const employerTwin = (pathname: string): string => {
+    const rest = pathname.slice("/employee".length);
+    if (rest === "" || rest === "/" || rest === "/home") return "/employer/documents";
+    return `/employer${rest}`;
+};
 
 // Lazy singleton for middleware (postgres.js works with standard PostgreSQL)
 let _middlewareDb: ReturnType<
@@ -101,10 +112,10 @@ const getDb = () => {
 };
 
 type CachedUserValue = {
-    role: string;
-    status: string;
-    membershipCount: number;
     userPk: number;
+    membershipCount: number;
+    activeCount: number;
+    pendingCount: number;
 };
 
 const middlewareUserCache = new Map<
@@ -205,28 +216,38 @@ export default async function middleware(req: NextRequest) {
                     const db = getDb();
                     const dbStart = Date.now();
                     const [queriedUser] = await db
-                        .select({
-                            id: users.id,
-                            role: users.role,
-                            status: users.status,
-                        })
+                        .select({ id: users.id })
                         .from(users)
                         .where(eq(users.userId, userId));
                     if (queriedUser) {
-                        const [{ c: membershipCount } = { c: 0 }] = await db
-                            .select({ c: count(userCompanyMemberships.id) })
+                        const rows = await db
+                            .select({
+                                status: userCompanyMemberships.status,
+                                c: count(userCompanyMemberships.id),
+                            })
                             .from(userCompanyMemberships)
-                            .where(eq(userCompanyMemberships.userId, BigInt(queriedUser.id)));
+                            .where(eq(userCompanyMemberships.userId, BigInt(queriedUser.id)))
+                            .groupBy(userCompanyMemberships.status);
+                        let membershipCount = 0;
+                        let activeCount = 0;
+                        let pendingCount = 0;
+                        for (const row of rows) {
+                            const n = Number(row.c ?? 0);
+                            membershipCount += n;
+                            if (row.status === "active") activeCount += n;
+                            else if (row.status === "pending") pendingCount += n;
+                        }
                         existingUser = {
-                            role: queriedUser.role,
-                            status: queriedUser.status,
-                            membershipCount: Number(membershipCount ?? 0),
                             userPk: Number(queriedUser.id),
+                            membershipCount,
+                            activeCount,
+                            pendingCount,
                         };
                     }
                     dbQueryMs = Date.now() - dbStart;
-                    // Only cache verified users to avoid stale pending/signup states.
-                    if (existingUser && existingUser.status === "verified") {
+                    // Only cache people who can act somewhere; a pending or
+                    // suspended state should be re-read on the next request.
+                    if (existingUser && existingUser.activeCount > 0) {
                         setCachedMiddlewareUser(userId, existingUser);
                     }
                 }
@@ -239,43 +260,33 @@ export default async function middleware(req: NextRequest) {
                 } else if (hasCodeParam) {
                     // Let the signup page handle the "already registered" error
                     return;
-                } else if (existingUser.status !== "verified") {
-                    // User is pending approval – redirect to the correct pending page
-                    const pendingPath =
-                        existingUser.role === "employee"
-                            ? "/employee/pending-approval"
-                            : "/employer/pending-approval";
-                    if (pathname !== pendingPath) {
-                        return NextResponse.redirect(new URL(pendingPath, req.url));
+                } else if (existingUser.activeCount === 0) {
+                    // No workspace this person may act in. Awaiting approval
+                    // somewhere → the pending page; otherwise the workspace
+                    // picker, where they can create one.
+                    const holdingPath =
+                        existingUser.pendingCount > 0
+                            ? "/employer/pending-approval"
+                            : "/workspaces";
+                    if (pathname !== holdingPath && !pathname.startsWith("/workspaces")) {
+                        return NextResponse.redirect(new URL(holdingPath, req.url));
                     }
                 } else if (isProtectedRoute(req)) {
-                    const isEmployerRole =
-                        existingUser.role === "employer" || existingUser.role === "owner";
-                    const isEmployeeRole = existingUser.role === "employee";
-
-                    // Enforce role-specific protected route spaces.
-                    if (isEmployerPath(pathname) && !isEmployerRole) {
-                        return NextResponse.redirect(new URL("/employee/documents", req.url));
+                    if (isEmployeePath(pathname)) {
+                        return NextResponse.redirect(new URL(employerTwin(pathname), req.url));
                     }
-                    if (isEmployeePath(pathname) && !isEmployeeRole) {
+                    if (pathname === "/employer/pending-approval") {
                         return NextResponse.redirect(new URL("/employer/documents", req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
-                    // Verified user on / or /signup – send to their dashboard.
+                    // Signed-in member on / or /signup – send to their dashboard.
                     // Users with 2+ memberships pick a workspace first.
-                    if (existingUser.role === "employer" || existingUser.role === "owner") {
-                        if (existingUser.membershipCount >= 2) {
-                            return NextResponse.redirect(new URL("/workspaces", req.url));
-                        }
-                        return NextResponse.redirect(new URL("/employer/documents", req.url));
-                    } else if (existingUser.role === "employee") {
-                        if (existingUser.membershipCount >= 2) {
-                            return NextResponse.redirect(new URL("/workspaces", req.url));
-                        }
-                        return NextResponse.redirect(new URL("/employee/documents", req.url));
+                    if (existingUser.membershipCount >= 2) {
+                        return NextResponse.redirect(new URL("/workspaces", req.url));
                     }
+                    return NextResponse.redirect(new URL("/employer/documents", req.url));
                 }
-                // Verified user on a protected route – let through
+                // Active member on a protected route – let through
             } catch (error) {
                 // If DB query fails, let the request continue without redirect
                 console.error("Middleware DB query failed:", error);

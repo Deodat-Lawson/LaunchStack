@@ -10,7 +10,7 @@ import {
     parseCampaignId,
     readJson,
     resolveActor,
-    resolveManagementActor,
+    resolveSendingActor,
     unsubscribeBaseUrl,
 } from "../../_lib/context";
 
@@ -53,10 +53,10 @@ export async function POST(
             return fail("Invalid input", 400, { errors: parsed.error.flatten() });
         }
 
-        // Real delivery is a workspace-management action; a dry-run preview
-        // stays open to any member so editors can iterate on drafts.
+        // Real delivery needs `campaigns.send`; a dry-run preview stays open
+        // to any member so editors can iterate on drafts.
         const actor =
-            parsed.data.mode === "send" ? await resolveManagementActor() : await resolveActor();
+            parsed.data.mode === "send" ? await resolveSendingActor() : await resolveActor();
         if (!actor.ok) return actor.response;
 
         const idempotencyKey = idempotencyKeyFrom(request, parsed.data.idempotencyKey);

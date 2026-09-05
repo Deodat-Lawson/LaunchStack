@@ -1,6 +1,6 @@
 # @launchstack/web — frontend conventions
 
-The application (employer/employee workspaces, auth, API/BFF). The marketing
+The application (the workspace app, auth, API/BFF). The marketing
 site lives in `apps/landing`. Both apps share one visual language through
 `@launchstack/design-tokens`; this page is the contract that keeps new
 frontend work consistent. ESLint enforces the hard rules (see the
@@ -16,9 +16,10 @@ When you need UI, take the first thing that exists:
    growing layout/callout/code-block layer).
 3. **Your route area's own `_components/`** — feature-specific pieces.
 
-Never import from another route area (`app/employer/**` ↔ `app/employee/**`)
-— lint blocks it. If two areas need the same thing, promote it to
-`~/components` or `~/lib`.
+There is one route area, `app/employer/**` (the name is historical — every
+member lands there, and what they can do is decided by their membership's
+permissions, see `~/lib/authz`). Shared pieces go in `~/components` or
+`~/lib`, never in a route area another one imports from.
 
 ## Adding primitives
 

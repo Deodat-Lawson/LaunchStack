@@ -25,6 +25,8 @@ import {
     kgRelationships,
     documentSections,
 } from "@launchstack/store/schema";
+import type { DocumentScope } from "../../search-types";
+import { documentScopeSql } from "../scope";
 
 const currentVersionPredicate = (
     versionColumn: SQLWrapper,
@@ -40,6 +42,8 @@ interface GraphRetrieverConfig extends BaseRetrieverInput {
     maxHops?: number;
     topK?: number;
     documentIds?: number[];
+    /** The caller's document scope; sections outside it are never returned. */
+    scope?: DocumentScope;
 }
 
 // ============================================================================
@@ -53,6 +57,7 @@ export class GraphRetriever extends BaseRetriever {
     private maxHops: number;
     private topK: number;
     private documentIds?: number[];
+    private scope?: DocumentScope;
 
     constructor(config: GraphRetrieverConfig) {
         super(config);
@@ -60,6 +65,7 @@ export class GraphRetriever extends BaseRetriever {
         this.maxHops = config.maxHops ?? 1;
         this.topK = config.topK ?? 10;
         this.documentIds = config.documentIds;
+        this.scope = config.scope;
     }
 
     async _getRelevantDocuments(
@@ -230,12 +236,16 @@ export class GraphRetriever extends BaseRetriever {
             whereClause = and(whereClause, inArray(documentSections.documentId, docBigInts))!;
         }
 
+        // The entity graph is company-wide; the scope is applied where the
+        // section text is read, so a mention in a restricted document surfaces
+        // nothing.
         const rows = await getDb()
             .select({
                 id: documentSections.id,
                 content: documentSections.content,
                 pageNumber: documentSections.pageNumber,
                 documentId: documentSections.documentId,
+                category: document.category,
             })
             .from(documentSections)
             .innerJoin(document, eq(documentSections.documentId, document.id))
@@ -243,7 +253,8 @@ export class GraphRetriever extends BaseRetriever {
                 and(
                     whereClause,
                     eq(document.companyId, BigInt(this.companyId)),
-                    currentVersionPredicate(documentSections.versionId)
+                    currentVersionPredicate(documentSections.versionId),
+                    documentScopeSql(this.scope)
                 )
             )
             .limit(this.topK);
@@ -256,6 +267,7 @@ export class GraphRetriever extends BaseRetriever {
                         chunkId: row.id,
                         page: row.pageNumber,
                         documentId: Number(row.documentId),
+                        category: row.category,
                         source: "graph_retriever",
                         searchScope: "multi-document",
                         retrievalMethod: "graph_traversal",
@@ -275,6 +287,7 @@ export function createGraphRetriever(
         documentIds?: number[];
         maxHops?: number;
         topK?: number;
+        scope?: DocumentScope;
     }
 ): GraphRetriever {
     return new GraphRetriever({
@@ -282,5 +295,6 @@ export function createGraphRetriever(
         documentIds: options?.documentIds,
         maxHops: options?.maxHops,
         topK: options?.topK,
+        scope: options?.scope,
     });
 }

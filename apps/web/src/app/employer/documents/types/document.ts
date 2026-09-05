@@ -42,6 +42,8 @@ export interface DocumentType {
     } | null;
     /** When set, this document was extracted from a ZIP archive with this name */
     sourceArchiveName?: string | null;
+    /** Limited to people with an explicit grant rather than the folder's audience. */
+    restricted?: boolean;
 }
 
 const CODE_MIME_PREFIXES = [

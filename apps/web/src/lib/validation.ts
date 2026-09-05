@@ -2,6 +2,13 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+import {
+    FOLDER_VISIBILITIES,
+    GRANT_LEVELS,
+    JOIN_POLICIES,
+    PERMISSIONS,
+    PRINCIPAL_TYPES,
+} from "~/lib/authz/permissions";
 
 export const createErrorResponse = (message: string, status = 400) => {
     return NextResponse.json(
@@ -315,54 +322,137 @@ export const EmployerCompanySignupSchema = z.object({
     embeddingOllamaModel: z.string().nullish(),
 });
 
-export const EmployerSignupSchema = z.object({
-    name: z.string().min(1, "Name is required").max(256).trim(),
-    email: z.string().email("Valid email is required"),
-    employerPasskey: z.string().min(1, "Employer passkey is required"),
-    companyName: z.string().min(1, "Company name is required").max(256).trim(),
-});
-
-export const EmployeeSignupSchema = z.object({
-    name: z.string().min(1, "Name is required").max(256).trim(),
-    email: z.string().email("Valid email is required"),
-    employeePasskey: z.string().min(1, "Employee passkey is required"),
-    companyName: z.string().min(1, "Company name is required").max(256).trim(),
-});
-
 export const JoinWithInviteSchema = z.object({
-    name: z.string().min(1, "Name is required").max(256).trim(),
-    email: z.string().email("Valid email is required"),
-    inviteCode: z.string().min(1, "Invite code is required").trim(),
+    name: z.string().trim().min(1, "Name is required").max(256),
+    email: z.string().trim().toLowerCase().email("Valid email is required"),
+    inviteCode: z.string().trim().min(1, "Invite code is required").max(12),
 });
 
 // ============================================================================
-// Employee Management Schemas
+// Workspace membership, roles, groups, and access
 // ============================================================================
 
-export const ApproveEmployeeByIdSchema = z.object({
-    employeeId: z.string().min(1, "Employee ID is required"),
+const RoleSlugSchema = z.string().trim().min(1, "Role is required").max(64);
+const EmailSchema = z.string().trim().toLowerCase().email("Valid email is required");
+const NameSchema = z.string().trim().min(1, "Name is required").max(120);
+const DescriptionSchema = z.string().trim().max(2000).nullable().optional();
+const PositiveIdSchema = z.number().int().positive();
+
+export const UpdateMemberSchema = z
+    .object({
+        role: RoleSlugSchema.optional(),
+        status: z.enum(["active", "suspended"]).optional(),
+    })
+    .refine(v => v.role !== undefined || v.status !== undefined, {
+        message: "Provide a role or a status",
+    });
+
+export const TransferOwnershipSchema = z.object({
+    userId: PositiveIdSchema,
 });
 
-export const RemoveEmployeeSchema = z.object({
-    employeeId: z.string().min(1, "Employee ID is required"),
+export const CreateInvitationSchema = z.object({
+    email: EmailSchema,
+    role: RoleSlugSchema,
+    groupIds: z.array(PositiveIdSchema).max(50).optional(),
 });
 
-// ============================================================================
-// Invite Code Schemas
-// ============================================================================
+export const AcceptInvitationSchema = z
+    .object({
+        token: z.string().trim().min(1).max(256).optional(),
+        invitationId: PositiveIdSchema.optional(),
+        name: z.string().trim().min(1).max(256).optional(),
+    })
+    .refine(v => v.token !== undefined || v.invitationId !== undefined, {
+        message: "Provide a token or an invitationId",
+    });
 
-export const GenerateInviteCodeSchema = z.object({
-    role: z.enum(["employer", "employee"], {
-        errorMap: () => ({ message: "Role must be 'employer' or 'employee'" }),
-    }),
+export const CreateJoinLinkSchema = z.object({
+    role: RoleSlugSchema,
+    expiresInDays: z.number().int().min(1).max(365).nullable().optional(),
+    maxUses: z.number().int().min(1).max(10_000).nullable().optional(),
 });
 
-export const ValidateInviteCodeSchema = z.object({
-    code: z.string().min(1, "Invite code is required").trim(),
+export const AcceptJoinLinkSchema = z.object({
+    code: z.string().trim().min(1, "Join code is required").max(12),
+    name: z.string().trim().min(1).max(256).optional(),
+    email: EmailSchema.optional(),
 });
 
-export const DeactivateInviteCodeSchema = z.object({
-    codeId: z.number().int().positive("Code ID must be a positive integer"),
+export const CreateGroupSchema = z.object({
+    name: NameSchema,
+    description: DescriptionSchema,
+});
+
+export const UpdateGroupSchema = z
+    .object({
+        name: NameSchema.optional(),
+        description: DescriptionSchema,
+    })
+    .refine(v => v.name !== undefined || v.description !== undefined, {
+        message: "Provide a name or a description",
+    });
+
+export const GroupMembersSchema = z.object({
+    userIds: z.array(PositiveIdSchema).min(1).max(500),
+});
+
+const PermissionListSchema = z.array(z.enum(PERMISSIONS)).max(PERMISSIONS.length);
+
+export const CreateRoleSchema = z.object({
+    name: NameSchema,
+    description: DescriptionSchema,
+    permissions: PermissionListSchema,
+});
+
+export const UpdateRoleSchema = z
+    .object({
+        name: NameSchema.optional(),
+        description: DescriptionSchema,
+        permissions: PermissionListSchema.optional(),
+    })
+    .refine(
+        v => v.name !== undefined || v.description !== undefined || v.permissions !== undefined,
+        { message: "Nothing to change" }
+    );
+
+export const DeleteRoleSchema = z.object({
+    reassignTo: RoleSlugSchema.optional(),
+});
+
+const GrantInputSchema = z.object({
+    principalType: z.enum(PRINCIPAL_TYPES),
+    principalId: z.string().trim().min(1).max(64),
+    level: z.enum(GRANT_LEVELS),
+});
+
+export const FolderAccessSchema = z.object({
+    visibility: z.enum(FOLDER_VISIBILITIES),
+    grants: z.array(GrantInputSchema).max(200),
+});
+
+export const DocumentAccessSchema = z.object({
+    restricted: z.boolean(),
+    grants: z.array(GrantInputSchema).max(200),
+});
+
+export const WorkspaceSettingsPatchSchema = z
+    .object({
+        joinPolicy: z.enum(JOIN_POLICIES).optional(),
+        auditRetentionDays: z.number().int().min(1).max(3650).nullable().optional(),
+    })
+    .refine(v => v.joinPolicy !== undefined || v.auditRetentionDays !== undefined, {
+        message: "Nothing to change",
+    });
+
+export const AuditQuerySchema = z.object({
+    cursor: z.coerce.number().int().positive().optional(),
+    limit: z.coerce.number().int().min(1).max(200).optional(),
+    action: z.string().trim().min(1).max(64).optional(),
+    actor: z.string().trim().min(1).max(256).optional(),
+    from: z.coerce.date().optional(),
+    to: z.coerce.date().optional(),
+    format: z.enum(["json", "csv"]).optional(),
 });
 
 // ============================================================================

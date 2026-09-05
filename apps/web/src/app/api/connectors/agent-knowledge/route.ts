@@ -5,27 +5,24 @@
  * POST — read it and push it through the normal ingestion pipeline.
  *
  * The connector reads this server's filesystem, so both verbs are gated on
- * `AGENT_KNOWLEDGE_CONNECTOR_ENABLED` and on the caller owning the workspace.
+ * `AGENT_KNOWLEDGE_CONNECTOR_ENABLED` and on the caller holding
+ * `connectors.manage` in the workspace.
  */
 
-import { getServerSession } from "~/server/auth";
-import { eq } from "drizzle-orm";
 import type { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { env } from "~/env";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
     createForbiddenError,
-    createUnauthorizedError,
     createValidationError,
     createSuccessResponse,
     handleApiError,
 } from "~/lib/api-utils";
+import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
     previewAgentKnowledge,
     runAgentKnowledgeSync,
@@ -57,54 +54,28 @@ const SyncRequestSchema = z.object({
 interface Caller {
     readonly userId: string;
     readonly companyId: bigint;
+    readonly documentScope: WorkspaceContext["documentScope"];
 }
 
 type CallerResult = { ok: true; caller: Caller } | { ok: false; response: NextResponse };
 
+/**
+ * Imported content lands in the shared company knowledge base, so this is a
+ * workspace-administration action: `connectors.manage` in an active
+ * membership of the resolved workspace. The guard refuses rather than falls
+ * back when there is no membership — importing into a company the caller has
+ * left would leak their local agent folders into someone else's knowledge
+ * base.
+ */
 async function resolveCaller(): Promise<CallerResult> {
-    const session = await getServerSession();
-    const userId = session?.user.id;
-    if (!userId) {
-        return { ok: false, response: createUnauthorizedError("Authentication required.") };
-    }
-
-    const [userInfo] = await db
-        .select({
-            id: users.id,
-            role: users.role,
-            companyId: users.companyId,
-            status: users.status,
-        })
-        .from(users)
-        .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-        return { ok: false, response: createValidationError("Invalid user.") };
-    }
-    // Imported knowledge lands in the shared company knowledge base, so this
-    // is a workspace-administration action, not a per-employee one.
-    if (userInfo.role !== "employer" && userInfo.role !== "owner") {
-        return { ok: false, response: createForbiddenError("Employer access required.") };
-    }
-
-    const companyId = await resolveActiveCompanyForUser(
-        userInfo.id,
-        userInfo.companyId,
-        userInfo.status
-    );
-    // Null means the user holds no membership in the resolved workspace. There
-    // is no tenant to import into, so this is a refusal rather than a fallback —
-    // importing into a company the caller has left would leak the contents of
-    // their local agent folders into someone else's knowledge base.
-    if (companyId === null) {
-        return { ok: false, response: createForbiddenError("No active workspace membership.") };
-    }
-
+    const admin = await requireConnectorAdmin();
+    if (!admin.ok) return admin;
     return {
         ok: true,
         caller: {
-            userId,
-            companyId,
+            userId: admin.ctx.authUserId,
+            companyId: admin.ctx.companyId,
+            documentScope: () => admin.ctx.documentScope(),
         },
     };
 }

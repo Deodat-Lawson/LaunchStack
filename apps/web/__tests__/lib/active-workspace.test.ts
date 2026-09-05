@@ -22,23 +22,34 @@ jest.mock("~/server/db/schema", () => ({
     userCompanyMemberships: {
         userId: "membership.userId",
         companyId: "membership.companyId",
+        lastOpenedAt: "membership.lastOpenedAt",
     },
 }));
 
 jest.mock("drizzle-orm", () => ({
     and: (...conditions: unknown[]) => ({ op: "and", conditions }),
     eq: (...args: unknown[]) => ({ op: "eq", args }),
+    desc: (value: unknown) => ({ op: "desc", value }),
 }));
 
+/**
+ * Each queued row set answers one SELECT. The builder resolves when awaited
+ * directly after `.where()` and also when the query goes on through
+ * `.orderBy().limit()` (the most-recently-opened fallback).
+ */
 function setupRows(...rows: unknown[][]) {
     queuedRows = [...rows];
     mockSelect.mockImplementation(() => {
         const result = queuedRows.shift() ?? [];
-        const builder = {
-            from: jest.fn().mockReturnThis(),
-            where: jest.fn().mockResolvedValue(result),
+        const terminal = {
+            then: (resolve: (value: unknown) => unknown, reject?: (reason: unknown) => unknown) =>
+                Promise.resolve(result).then(resolve, reject),
+            orderBy: () => ({ limit: () => Promise.resolve(result) }),
         };
-        return builder;
+        return {
+            from: jest.fn().mockReturnThis(),
+            where: jest.fn().mockReturnValue(terminal),
+        };
     });
 }
 
@@ -49,29 +60,44 @@ describe("resolveActiveCompanyForUser", () => {
         mockCookieGet.mockReturnValue(undefined);
     });
 
-    it("does not trust a verified user's stale default without membership", async () => {
-        setupRows([]);
+    it("returns null when the user holds no membership anywhere", async () => {
+        setupRows([], []);
 
-        await expect(resolveActiveCompanyForUser(7, 10, "verified")).resolves.toBeNull();
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBeNull();
     });
 
-    it("accepts a verified user's default only when membership is current", async () => {
+    it("accepts the default company when a membership for it exists", async () => {
         setupRows([{ companyId: BigInt(10) }]);
 
-        await expect(resolveActiveCompanyForUser(7, 10, "verified")).resolves.toBe(BigInt(10));
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
     });
 
-    it("preserves the pending-account fallback without membership", async () => {
-        setupRows([]);
-
-        await expect(resolveActiveCompanyForUser(7, 10, "pending")).resolves.toBe(BigInt(10));
-        expect(mockSelect).not.toHaveBeenCalled();
-    });
-
-    it("uses a valid alternate workspace cookie for verified users", async () => {
+    it("uses a valid alternate workspace cookie", async () => {
         mockCookieGet.mockReturnValue({ value: "20" });
         setupRows([{ companyId: BigInt(20) }]);
 
-        await expect(resolveActiveCompanyForUser(7, 10, "verified")).resolves.toBe(BigInt(20));
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(20));
+    });
+
+    it("ignores a cookie pointing at a workspace the user left", async () => {
+        mockCookieGet.mockReturnValue({ value: "20" });
+        setupRows([], [{ companyId: BigInt(10) }]);
+
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
+    });
+
+    it("falls back to the most recently opened membership when the default is stale", async () => {
+        setupRows([], [{ companyId: BigInt(30) }]);
+
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(30));
+    });
+
+    it("never consults a global account status", async () => {
+        setupRows([{ companyId: BigInt(10) }]);
+
+        await resolveActiveCompanyForUser(7, 10);
+
+        // One SELECT — the membership check — and nothing against `users`.
+        expect(mockSelect).toHaveBeenCalledTimes(1);
     });
 });

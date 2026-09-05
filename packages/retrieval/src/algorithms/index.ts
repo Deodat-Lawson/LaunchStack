@@ -4,6 +4,7 @@
  * it. Algorithms never import from ../tools.
  */
 
+export * from "./scope";
 export * from "./bm25";
 export * from "./vector";
 export * from "./fusion";

@@ -8,7 +8,7 @@ import {
     ok,
     parseCampaignId,
     readJson,
-    resolveManagementActor,
+    resolveSendingActor,
 } from "../../_lib/context";
 
 export const runtime = "nodejs";
@@ -34,9 +34,9 @@ export async function POST(
     { params }: { params: Promise<{ campaignId: string }> }
 ) {
     try {
-        // Approval is the accountability record delivery relies on — a
-        // workspace-management action, like every other company-wide mutation.
-        const actor = await resolveManagementActor();
+        // Approval is the accountability record delivery relies on, so it
+        // takes the same `campaigns.send` permission as delivery itself.
+        const actor = await resolveSendingActor();
         if (!actor.ok) return actor.response;
 
         const campaignId = parseCampaignId((await params).campaignId);

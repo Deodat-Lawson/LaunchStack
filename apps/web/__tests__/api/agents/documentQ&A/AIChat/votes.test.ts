@@ -9,13 +9,14 @@
 import type { NextRequest } from "next/server";
 
 import { GET, POST } from "~/app/api/agents/documentQ&A/AIChat/votes/route";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { makeWorkspaceContext } from "../../../../helpers/workspace-context";
 
-jest.mock("~/lib/require-workspace-context", () => {
-    const actual = jest.requireActual("~/lib/require-workspace-context");
-    return { ...actual, requireWorkspaceContext: jest.fn() };
-});
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual("../../../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 let mockQueuedRows: Record<string, unknown>[][] = [];
 const mockSelectCount = { value: 0 };
@@ -65,16 +66,15 @@ jest.mock("drizzle-orm", () => ({
     and: (...args: unknown[]) => ({ op: "and", args }),
 }));
 
-const CTX: WorkspaceContext = {
+const CTX = makeWorkspaceContext({
     authUserId: "user-a",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",
-    status: "verified",
-};
+});
 
 function authenticate() {
-    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+    mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: CTX,
     });

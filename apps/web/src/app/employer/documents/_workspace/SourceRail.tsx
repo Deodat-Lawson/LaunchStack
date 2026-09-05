@@ -20,7 +20,7 @@ import {
     IconShield,
     IconX,
 } from "./icons";
-import { Folder, FolderOpen } from "lucide-react";
+import { Folder, FolderOpen, Lock } from "lucide-react";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {
     UNFILED_FOLDER,
@@ -238,6 +238,18 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
                             lineHeight: 1.35,
                         }}
                     >
+                        {source.restricted && (
+                            <Lock
+                                size={10}
+                                aria-label="Restricted"
+                                style={{
+                                    display: "inline-block",
+                                    verticalAlign: "-1px",
+                                    marginRight: 4,
+                                    color: "var(--ink-3)",
+                                }}
+                            />
+                        )}
                         {source.title}
                     </div>
                     {(visibleTags.length > 0 ||
@@ -346,6 +358,8 @@ function collectItemIds(node: SourceNode): string[] {
 
 interface FolderHeaderProps {
     node: SourceNode;
+    /** The folder, or an ancestor, is restricted to the people granted access. */
+    restricted?: boolean;
     collapsed: boolean;
     onToggle: () => void;
     onSelectAll: (ids: string[], add: boolean) => void;
@@ -360,6 +374,7 @@ interface FolderHeaderProps {
 
 function FolderHeader({
     node,
+    restricted,
     collapsed,
     onToggle,
     onSelectAll,
@@ -459,6 +474,13 @@ function FolderHeader({
                 >
                     {node.name}
                 </span>
+                {restricted && (
+                    <Lock
+                        size={10}
+                        aria-label="Restricted folder"
+                        style={{ color: "var(--ink-3)", flexShrink: 0 }}
+                    />
+                )}
                 {onOpenMenu && (
                     <button
                         type="button"
@@ -515,11 +537,15 @@ export interface SourceRailProps {
     /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
     onNewFolder?: (parentPath?: string | null) => void;
     onRenameFolder?: (folder: WorkspaceFolder) => void;
+    /** "Share folder…" — who in the workspace can see this folder. */
+    onShareFolder?: (folder: WorkspaceFolder) => void;
     /** Move a folder (and everything in it) under `targetParent`; null means the top level. */
     onMoveFolder?: (path: string, targetParent: string | null) => void;
     onDeleteFolder?: (folder: WorkspaceFolder) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
+    /** "Restrict access…" — who can see this one document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
     activeFolder: string | null;
     setActiveFolder: Dispatch<SetStateAction<string | null>>;
@@ -552,6 +578,8 @@ interface BranchContext {
     onOpenSource?: (source: WorkspaceSource) => void;
     openSourceMenu: (point: { clientX: number; clientY: number }, source: WorkspaceSource) => void;
     openFolderMenu: (point: { clientX: number; clientY: number }, node: SourceNode) => void;
+    /** True when the folder, or an ancestor, is restricted to the people granted access. */
+    isRestricted: (path: string) => boolean;
 }
 
 function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchContext }) {
@@ -621,6 +649,7 @@ function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
         >
             <FolderHeader
                 node={node}
+                restricted={ctx.isRestricted(node.path)}
                 selected={ctx.selected}
                 collapsed={isCollapsed}
                 onToggle={() => ctx.toggleCollapsed(node.path)}
@@ -655,10 +684,12 @@ export function SourceRail({
     onOpenSource,
     onNewFolder,
     onRenameFolder,
+    onShareFolder,
     onMoveFolder,
     onDeleteFolder,
     onMoveToFolder,
     onRenameSource,
+    onRestrictAccess,
     onDeleteSource,
     activeFolder,
     setActiveFolder,
@@ -701,6 +732,7 @@ export function SourceRail({
                 onCopyTitle: source => {
                     void copyText(source.title);
                 },
+                onRestrictAccess,
                 onDelete: onDeleteSource,
             });
         }
@@ -733,6 +765,8 @@ export function SourceRail({
                     onDeleteFolder && !isUnfiled
                         ? () => onDeleteFolder(folderFor(path))
                         : undefined,
+                onShare:
+                    onShareFolder && !isUnfiled ? () => onShareFolder(folderFor(path)) : undefined,
                 onSelectAll: add => {
                     setSelected(prev => {
                         if (add) {
@@ -760,9 +794,11 @@ export function SourceRail({
         activeFolder,
         onOpenSource,
         onRenameSource,
+        onRestrictAccess,
         onMoveToFolder,
         onDeleteSource,
         onRenameFolder,
+        onShareFolder,
         onMoveFolder,
         onDeleteFolder,
         onOpenAdd,
@@ -837,6 +873,7 @@ export function SourceRail({
         selected,
         collapsed,
         toggleCollapsed,
+        isRestricted: path => folderFor(path).restricted === true,
         toggleSelected: toggle,
         selectMany,
         drag,

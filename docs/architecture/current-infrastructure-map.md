@@ -156,14 +156,14 @@ The 25 pages group into these user-facing applications:
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `/`, `/pricing`, `/contact`, `/deployment` | Public marketing and deployment guidance                                                              |
 | `/signin`, `/signup`, `/workspaces`        | Identity, registration, and workspace selection                                                       |
-| `/employer/*`                              | Employer document workspace, employees, onboarding, metadata, settings, statistics, upload, and tools |
-| `/employee/*`                              | Employee home, documents, and approval state                                                          |
+| `/employer/*`                              | The workspace: documents, settings (incl. People and access), statistics, upload, and tools — one app for every role |
+| `/employee/*`                              | Redirects to the `/employer` twin (the separate employee area was removed, ADR-010)                    |
 | `/employer/tools/marketing-pipeline`       | Marketing workflow UI                                                                                 |
 | `/employer/tools/repo-explainer`           | Repository analysis UI                                                                                |
 
 The 119 route handlers group into:
 
-- identity, users, companies, memberships, invite codes, and workspaces
+- identity, users, companies, memberships (role + status), invitations, join links, groups, custom roles, folder/document grants, the audit log, and workspaces
 - document upload, storage, versions, notes, graph entities, and retrieval
 - document Q&A, predictive analysis, and research agents
 - legal document generation and Adeu edits
@@ -244,8 +244,9 @@ Inngest Cloud is expected to call the Vercel deployment.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.
-- better-auth (in-process, same PostgreSQL) owns authentication. Middleware reads PostgreSQL directly to enforce
-  employer/employee routing and workspace selection.
+- better-auth (in-process, same PostgreSQL) owns authentication. Middleware reads PostgreSQL directly to route on
+  membership status (active / pending / none) and workspace selection; permissions and document
+  scope are resolved per request by `requireWorkspaceContext` (ADR-010).
 - Object storage is selected at runtime: Vercel Blob, S3-compatible storage, or
   a database fallback. Docker uses SeaweedFS as the S3-compatible implementation.
 - Neo4j is optional for graph retrieval; PostgreSQL also stores knowledge-graph

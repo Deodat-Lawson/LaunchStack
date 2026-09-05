@@ -3,10 +3,12 @@ import { NextResponse } from "next/server";
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
 import { document, fileUploads } from "@launchstack/store/schema";
-import { eq, inArray } from "drizzle-orm";
+import { documentSettings } from "~/server/db/schema";
+import { eq, getTableColumns, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -85,12 +87,20 @@ function inferMimeFromName(name: string): string | undefined {
 
 export async function POST(_request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
 
         const companyId = ctx.data.companyId;
 
-        const docs = await db.select().from(document).where(eq(document.companyId, companyId));
+        // The read scope is part of the WHERE clause, so a restricted folder
+        // the caller has no grant to never leaves the database. The settings
+        // join says which of the visible documents are individually restricted
+        // (the caller sees those only because a grant reaches them).
+        const docs = await db
+            .select({ ...getTableColumns(document), restricted: documentSettings.restricted })
+            .from(document)
+            .leftJoin(documentSettings, eq(documentSettings.documentId, document.id))
+            .where(scopedDocumentWhere(companyId, await ctx.data.documentScope()));
 
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}
         // (so preview works for PDFs and other types when stored in DB and url has no extension)
@@ -134,6 +144,7 @@ export async function POST(_request: Request) {
                 // choke on the raw BigInt.
                 currentVersionId:
                     doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
+                restricted: doc.restricted === true,
                 ...(mimeType && { mimeType }),
             };
         });

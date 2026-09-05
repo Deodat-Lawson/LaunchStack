@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { deleteDocumentCore } from "~/server/services/document-delete";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { recordAuditEvent } from "~/lib/authz/audit";
 
 export async function DELETE(request: Request) {
     try {
@@ -14,12 +16,8 @@ export async function DELETE(request: Request) {
             return validation.response;
         }
 
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("documents.delete");
         if (!ctx.success) return ctx.response;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
-        }
 
         const { docId } = validation.data;
         const documentId = Number(docId);
@@ -31,12 +29,19 @@ export async function DELETE(request: Request) {
             );
         }
 
+        // A document the caller cannot see is one they cannot delete, and it
+        // reads exactly like one that does not exist.
         const [doc] = await db
-            .select({ id: document.id, companyId: document.companyId })
+            .select({ id: document.id, title: document.title, category: document.category })
             .from(document)
-            .where(eq(document.id, documentId));
+            .where(
+                and(
+                    eq(document.id, documentId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
-        if (!doc || doc.companyId !== ctx.data.companyId) {
+        if (!doc) {
             return NextResponse.json(
                 { success: false, error: "Document not found" },
                 { status: 404 }
@@ -45,6 +50,14 @@ export async function DELETE(request: Request) {
 
         await db.transaction(async tx => {
             await deleteDocumentCore(tx, documentId);
+            await recordAuditEvent(tx, {
+                companyId: ctx.data.companyId,
+                actorUserId: ctx.data.authUserId,
+                action: "document.deleted",
+                targetType: "document",
+                targetId: documentId,
+                detail: { title: doc.title, category: doc.category },
+            });
         });
 
         return NextResponse.json(

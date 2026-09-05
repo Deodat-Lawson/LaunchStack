@@ -15,7 +15,7 @@ import {
 } from "@launchstack/pipelines/repo-workspace/db";
 import { inngest } from "~/server/inngest/client";
 import { serializeExplainerJob } from "~/server/services/repo-explainer-jobs";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import {
     createForbiddenError,
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
-        if (!isManagementRole(ctx.data.role)) {
+        if (!ctx.data.can("settings.manage")) {
             return createForbiddenError("Only management roles can run the repo explainer");
         }
 

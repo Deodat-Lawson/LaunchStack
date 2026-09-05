@@ -42,6 +42,8 @@ export interface BaseSearchMetadata {
      */
     versionId?: number;
     documentTitle?: string;
+    /** `document.category` — the folder — so a consumer can gate on scope without a lookup. */
+    category?: string;
     distance?: number;
     confidence?: number;
     source?: string;
@@ -86,6 +88,42 @@ export interface SearchFilters {
     topicTags?: string[];
 }
 
+/**
+ * Which documents the caller may read, expressed as folder names (the
+ * `document.category` column) and document ids — never as a user, group, or
+ * grant. The host resolves it once per request; every company-scoped leg
+ * turns it into a predicate on the `document` table so out-of-scope chunks
+ * never become candidates. Mirrors the host's `DocumentScope` exactly.
+ *
+ * - `everything`: no filter.
+ * - `except`: allowed unless the folder (or an ancestor) is denied or the id
+ *   is denied; a granted subfolder inside a denied folder is allowed again
+ *   (nearest restricted ancestor wins), and ids in `allowedDocumentIds` are
+ *   always allowed.
+ * - `only`: allowed iff the folder (or an ancestor) is allowed, minus denied
+ *   subfolders and ids, OR the id is in `allowedDocumentIds`.
+ */
+export type DocumentScope =
+    | { readonly kind: "everything" }
+    | {
+          readonly kind: "except";
+          /** Folder paths (and their subfolders) the caller may not read. */
+          readonly deniedCategories: readonly string[];
+          /** Restricted subfolders beneath a denied folder the caller may read (nearest ancestor wins). */
+          readonly allowedCategories?: readonly string[];
+          readonly deniedDocumentIds: readonly number[];
+          readonly allowedDocumentIds: readonly number[];
+      }
+    | {
+          readonly kind: "only";
+          /** Folder paths (and their subfolders) the caller may read. */
+          readonly allowedCategories: readonly string[];
+          /** Restricted subfolders beneath an allowed folder the caller may not read. */
+          readonly deniedCategories?: readonly string[];
+          readonly deniedDocumentIds: readonly number[];
+          readonly allowedDocumentIds: readonly number[];
+      };
+
 export interface EnsembleSearchOptions {
     weights?: number[];
     topK?: number;
@@ -101,6 +139,12 @@ export interface DocumentSearchOptions extends EnsembleSearchOptions {
 
 export interface CompanySearchOptions extends EnsembleSearchOptions {
     companyId: number;
+    /**
+     * The caller's document scope. Applied to every company-scoped leg
+     * (BM25, vector, graph, notes). Omitted means the whole company corpus —
+     * only correct for callers that act for the workspace, not for a person.
+     */
+    scope?: DocumentScope;
 }
 
 export interface MultiDocSearchOptions extends EnsembleSearchOptions {
@@ -115,6 +159,8 @@ export interface ChunkRow {
     /** Document version the chunk belongs to (for citation anchoring). */
     versionId?: number;
     documentTitle?: string;
+    /** `document.category` — the folder, so consumers can re-check scope without a lookup. */
+    category?: string;
     embedding?: number[];
 }
 

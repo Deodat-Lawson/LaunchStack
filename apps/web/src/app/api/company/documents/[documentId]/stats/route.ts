@@ -2,9 +2,11 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { document } from "@launchstack/store/schema";
-import { users, documentViews } from "~/server/db/schema";
+import { users, documentViews, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 interface Viewer {
     name: string;
@@ -38,14 +40,10 @@ export async function GET(
     { params }: { params: Promise<{ documentId: string }> }
 ) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("analytics.view");
         if (!ctx.success) return ctx.response;
 
         const documentId = (await params).documentId;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 });
-        }
 
         const docId = parseInt(documentId);
         if (isNaN(docId)) {
@@ -55,11 +53,17 @@ export async function GET(
             );
         }
 
-        // Verify document belongs to company
+        // The document must be in the caller's workspace and read scope; a
+        // miss on either reads as not found.
         const [doc] = await db
             .select()
             .from(document)
-            .where(and(eq(document.id, docId), eq(document.companyId, ctx.data.companyId)));
+            .where(
+                and(
+                    eq(document.id, docId),
+                    scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                )
+            );
 
         if (!doc) {
             return NextResponse.json(
@@ -90,16 +94,24 @@ export async function GET(
                 )
             );
 
-        // Get recent viewers
+        // Get recent viewers. The role shown is the one held in this
+        // workspace; a viewer who has since left has no membership row.
         const recentViewersData = await db
             .select({
                 name: users.name,
                 email: users.email,
                 viewedAt: documentViews.viewedAt,
-                role: users.role,
+                role: userCompanyMemberships.role,
             })
             .from(documentViews)
             .leftJoin(users, eq(documentViews.userId, users.userId))
+            .leftJoin(
+                userCompanyMemberships,
+                and(
+                    eq(userCompanyMemberships.userId, users.id),
+                    eq(userCompanyMemberships.companyId, ctx.data.companyId)
+                )
+            )
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
@@ -159,7 +171,7 @@ export async function GET(
                     name: v.name ?? "Unknown User",
                     email: v.email ?? "No Email",
                     viewedAt: v.viewedAt.toISOString(),
-                    role: v.role ?? "unknown",
+                    role: v.role ? normalizeRoleSlug(v.role) : "unknown",
                 })),
                 viewsTrend: fillTrendDates(
                     trendData.map(d => ({

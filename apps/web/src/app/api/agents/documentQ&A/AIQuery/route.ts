@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import {
     ANNOptimizer,
     createDocumentVectorRetriever,
@@ -33,10 +33,15 @@ import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
+import { gateChunksByScope } from "~/server/rag/gate";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+const ROUTE = "agents/documentQ&A/AIQuery";
 
 const qaAnnOptimizer = new ANNOptimizer({
     strategy: "hnsw",
@@ -68,6 +73,11 @@ export async function POST(request: Request) {
             if (!ctx.success) {
                 recordResult("error");
                 return ctx.response;
+            }
+            if (!ctx.data.can("documents.read")) {
+                recordAuthzDenied("documents.read", ROUTE);
+                recordResult("error");
+                return forbiddenForPermission("documents.read");
             }
 
             const validation = await validateRequestBody(request, QuestionSchema);
@@ -129,13 +139,15 @@ export async function POST(request: Request) {
                 );
             }
 
+            // A document outside the caller's scope reads as missing: 404, never 403.
+            const scope = await ctx.data.documentScope();
+            observeScopeSize(scope);
             const [targetDocument] = await db
-                .select({
-                    id: document.id,
-                    companyId: document.companyId,
-                })
+                .select({ id: document.id })
                 .from(document)
-                .where(eq(document.id, documentId))
+                .where(
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
+                )
                 .limit(1);
 
             if (!targetDocument) {
@@ -146,17 +158,6 @@ export async function POST(request: Request) {
                         message: "Document not found.",
                     },
                     { status: 404 }
-                );
-            }
-
-            if (targetDocument.companyId !== ctx.data.companyId) {
-                recordResult("error");
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: "You do not have access to this document.",
-                    },
-                    { status: 403 }
                 );
             }
 
@@ -244,6 +245,13 @@ export async function POST(request: Request) {
                     }));
                 }
             }
+
+            // Last check before the prompt; the legs already applied the scope.
+            documents = await gateChunksByScope(documents, {
+                companyId: ctx.data.companyId,
+                scope,
+                searchScope: "document",
+            });
 
             if (documents.length === 0) {
                 recordResult("empty");

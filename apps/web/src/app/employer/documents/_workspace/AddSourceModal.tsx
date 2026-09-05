@@ -9,7 +9,7 @@ import {
     validateFolderPath,
 } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
-import { MessagesSquare } from "lucide-react";
+import { Lock, MessagesSquare } from "lucide-react";
 import { toast } from "sonner";
 import {
     IconBolt,
@@ -54,6 +54,8 @@ export interface AddSourceModalProps {
     defaultCategory: string;
     /** Existing folder names for the Save-to picker. */
     folders: string[];
+    /** Folders whose audience is limited to people with access — the picker says so. */
+    restrictedFolders?: string[];
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
     /** Optional: persist a new folder name the user typed in the picker. */
@@ -186,6 +188,7 @@ export function AddSourceModal({
     userId,
     defaultCategory,
     folders,
+    restrictedFolders = [],
     onUploaded,
     onCreateFolder,
     initialTab,
@@ -433,6 +436,27 @@ export function AddSourceModal({
                             folders={folders}
                             onCreate={onCreateFolder}
                         />
+                        <span
+                            role="note"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 5,
+                                fontSize: 11.5,
+                                color: restrictedFolders.includes(folder)
+                                    ? "var(--ink-2)"
+                                    : "var(--ink-3)",
+                            }}
+                        >
+                            {restrictedFolders.includes(folder) ? (
+                                <>
+                                    <Lock size={11} />
+                                    Restricted folder — visible only to people with access
+                                </>
+                            ) : (
+                                "Visible to everyone in the workspace"
+                            )}
+                        </span>
                     </div>
                 </div>
             </div>

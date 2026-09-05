@@ -3,7 +3,8 @@ import { db } from "~/server/db/index";
 import { category } from "@launchstack/store/schema";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 
 const AddCategorySchema = z.object({
     CategoryName: z
@@ -19,24 +20,31 @@ export async function POST(request: Request) {
             return validation.response;
         }
 
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("folders.manage");
         if (!ctx.success) return ctx.response;
 
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ error: "Invalid user role." }, { status: 403 });
-        }
-
-        const newCategoryId = await db
-            .insert(category)
-            .values({
-                name: validation.data.CategoryName,
+        const created = await db.transaction(async tx => {
+            const [row] = await tx
+                .insert(category)
+                .values({
+                    name: validation.data.CategoryName,
+                    companyId: ctx.data.companyId,
+                })
+                .returning({ id: category.id });
+            await recordAuditEvent(tx, {
                 companyId: ctx.data.companyId,
-            })
-            .returning({ id: category.id });
+                actorUserId: ctx.data.authUserId,
+                action: "folder.created",
+                targetType: "folder",
+                targetId: row?.id,
+                detail: { name: validation.data.CategoryName },
+            });
+            return row;
+        });
 
         return NextResponse.json({
             success: true,
-            id: newCategoryId[0],
+            id: created,
             name: validation.data.CategoryName,
         });
     } catch (error: unknown) {

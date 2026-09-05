@@ -3,7 +3,9 @@ import { db } from "~/server/db/index";
 import { document } from "@launchstack/store/schema";
 import { users, documentViews, ChatHistory, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -69,18 +71,23 @@ export async function GET() {
             .set({ lastActiveAt: new Date() })
             .where(eq(users.userId, ctx.data.authUserId));
 
-        if (!isManagementRole(ctx.data.role)) {
+        if (!ctx.data.can("analytics.view")) {
             outcome = "forbidden";
             return NextResponse.json(
                 {
                     success: false,
-                    error: "Unauthorized. Only workspace owners and admins can access this data.",
+                    error: "Forbidden. The analytics.view permission is required.",
+                    permission: "analytics.view",
                 },
                 { status: 403 }
             );
         }
 
         const companyId = ctx.data.companyId;
+        // Document totals and per-document stats only count what the caller
+        // may read; a restricted folder they have no grant to is invisible
+        // here too.
+        const documentWhere = scopedDocumentWhere(companyId, await ctx.data.documentScope());
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -94,15 +101,15 @@ export async function GET() {
             documentViewsTrendData,
         ] = await Promise.all([
             // Roster is the membership list for this workspace, with the role
-            // granted here — `users.companyId` is only a default workspace and
-            // `users.role` is global.
+            // and status granted here — `users.companyId` is only a default
+            // workspace, and the legacy global columns are never read.
             db
                 .select({
                     id: users.id,
                     name: users.name,
                     email: users.email,
                     role: userCompanyMemberships.role,
-                    status: users.status,
+                    status: userCompanyMemberships.status,
                     lastActiveAt: users.lastActiveAt,
                     createdAt: userCompanyMemberships.createdAt,
                     userId: users.userId,
@@ -111,7 +118,7 @@ export async function GET() {
                 .innerJoin(users, eq(users.id, userCompanyMemberships.userId))
                 .where(eq(userCompanyMemberships.companyId, companyId))
                 .orderBy(desc(users.lastActiveAt)),
-            db.select({ count: count() }).from(document).where(eq(document.companyId, companyId)),
+            db.select({ count: count() }).from(document).where(documentWhere),
             db
                 .select({
                     id: document.id,
@@ -129,7 +136,7 @@ export async function GET() {
                         eq(documentViews.companyId, companyId)
                     )
                 )
-                .where(eq(document.companyId, companyId))
+                .where(documentWhere)
                 .groupBy(document.id, document.title, document.category, document.createdAt)
                 .orderBy(desc(count(documentViews.id))),
             db
@@ -243,7 +250,7 @@ export async function GET() {
             id: Number(emp.id),
             name: emp.name,
             email: emp.email,
-            role: emp.role,
+            role: normalizeRoleSlug(emp.role),
             status: emp.status,
             lastActiveAt: emp.lastActiveAt?.toISOString() ?? null,
             createdAt: emp.createdAt.toISOString(),

@@ -7,6 +7,7 @@
 import { GET } from "~/app/api/ask/starters/route";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { makeWorkspaceContext } from "../helpers/workspace-context";
 import { RateLimitPresets, type RateLimitConfig } from "~/lib/rate-limiter";
 import { getAskStarters } from "~/server/ask-starters";
 import { NextResponse } from "next/server";
@@ -29,13 +30,12 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
     },
 }));
 
-const CTX: WorkspaceContext = {
+const CTX: WorkspaceContext = makeWorkspaceContext({
     authUserId: "user_1",
     userPk: BigInt(1),
     companyId: BigInt(42),
     role: "employee",
-    status: "verified",
-};
+});
 
 const PAYLOAD = {
     starters: [
@@ -78,7 +78,11 @@ describe("GET /api/ask/starters", () => {
 
         expect(response.status).toBe(200);
         await expect(response.json()).resolves.toEqual({ success: true, data: PAYLOAD });
-        expect(getAskStarters).toHaveBeenCalledWith({ companyId: BigInt(42), refresh: false });
+        expect(getAskStarters).toHaveBeenCalledWith({
+            companyId: BigInt(42),
+            scope: { kind: "everything" },
+            refresh: false,
+        });
         expect(limiterCalls).toEqual([RateLimitPresets.standard]);
     });
 
@@ -88,7 +92,11 @@ describe("GET /api/ask/starters", () => {
 
         await GET(new Request("http://localhost/api/ask/starters?refresh=1"));
 
-        expect(getAskStarters).toHaveBeenCalledWith({ companyId: BigInt(42), refresh: true });
+        expect(getAskStarters).toHaveBeenCalledWith({
+            companyId: BigInt(42),
+            scope: { kind: "everything" },
+            refresh: true,
+        });
         expect(limiterCalls).toEqual([RateLimitPresets.burst]);
     });
 

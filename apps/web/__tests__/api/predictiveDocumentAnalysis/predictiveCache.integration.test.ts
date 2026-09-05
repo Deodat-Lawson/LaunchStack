@@ -9,6 +9,8 @@ import type {
 import type { AnalyzeDocumentChunksResponse } from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import type { PredictiveAnalysisEvent } from "~/server/inngest/client";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 type AnalyzeDocumentChunks = (
     allChunks: PdfChunk[],
     specification: AnalysisSpecification,
@@ -247,13 +249,12 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
 
         mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
-            data: {
+            data: makeWorkspaceContext({
                 authUserId: "clerk_predictive_cache_test",
                 userPk: BigInt(1),
                 companyId: BigInt(companyId),
                 role: "owner",
-                status: "verified",
-            },
+            }),
         });
 
         const [documentRow] = await integrationDb.db

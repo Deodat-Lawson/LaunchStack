@@ -630,6 +630,43 @@ const eslintConfig = [
             ],
         },
     },
+    // ADR-010: authorization is `ctx.data.can(permission)` over the membership
+    // role. The retired management-role shim and the legacy global
+    // `users.role` / `users.status` columns must not come back through a
+    // stale branch. Error-level: the count is zero and stays zero.
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}", "apps/web/__tests__/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: [
+                        {
+                            name: "~/lib/membership-roles",
+                            message:
+                                "Deleted (ADR-010). Gate on ctx.data.can(permission) from ~/lib/authz/permissions.",
+                        },
+                    ],
+                    patterns: [
+                        {
+                            group: ["**/lib/membership-roles"],
+                            message:
+                                "Deleted (ADR-010). Gate on ctx.data.can(permission) from ~/lib/authz/permissions.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector:
+                        "MemberExpression[object.name='users'][property.name=/^(role|status)$/]",
+                    message:
+                        "users.role / users.status are legacy and unread (ADR-010). Use the membership row: user_company_memberships.role + status.",
+                },
+            ],
+        },
+    },
     // Colors come from tokens (var(--…) / semantic Tailwind classes), not
     // hex literals in any CSS form (#rgb, #rgba, #rrggbb, #rrggbbaa).
     // Warn-level ratchet; baseline ~74 occurrences.

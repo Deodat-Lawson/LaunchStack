@@ -72,10 +72,12 @@ export async function POST(request: Request) {
       const sourceCtx = body.sourceContext ?? {};
 
       // Validate before spending an LLM call on a source the caller cannot see.
+      const scope = await ctx.data.documentScope();
       const target = await validateNoteTarget({
         documentId: sourceCtx.documentId,
         versionId: sourceCtx.versionId,
         companyId: ctx.data.companyId,
+        scope,
       });
       if (!target.ok) return target.response;
 
@@ -140,6 +142,7 @@ export async function POST(request: Request) {
           noteId: note.id,
           rich: (note.contentRich as JSONContent | null) ?? null,
           companyId: note.companyId,
+          scope,
         }).catch((err) => console.error("[syncNoteLinks] failed:", err));
       }
 

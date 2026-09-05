@@ -103,8 +103,15 @@
     {
       "idx": 14,
       "version": "7",
-      "when": 1788492156906,
-      "tag": "20260904032236_mindmap_published_revision",
+      "when": 1788491665025,
+      "tag": "20260904031425_workspace_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1788584047514,
+      "tag": "20260905045407_mindmap_published_revision",
       "breakpoints": true
     }
   ]

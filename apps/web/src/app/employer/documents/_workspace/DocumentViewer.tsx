@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Pencil, Upload } from "lucide-react";
+import { Lock, Pencil, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
@@ -68,8 +68,12 @@ export interface DocumentViewerProps {
     /** When opened from a citation: the cited passage to locate + highlight. */
     highlight?: CitationHighlight | null;
     onClose: () => void;
+    // Source-shaped rather than id-shaped: a mindmap has no document id
+    // until it is published, so the id could not identify one.
     onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
     onDelete: (source: WorkspaceSource) => void;
+    /** "Restrict access" — who can see this document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     onVersionChanged?: () => void;
     /** Mindmaps only: leave the preview for the editor. */
@@ -166,6 +170,7 @@ export function DocumentViewer({
     onClose,
     onRename,
     onDelete,
+    onRestrictAccess,
     onAskAbout,
     onVersionChanged,
     onEdit,
@@ -736,6 +741,27 @@ export function DocumentViewer({
                         }}
                     >
                         <IconSparkle size={12} /> Ask about this
+                    </button>
+                )}
+                {onRestrictAccess && (
+                    <button
+                        onClick={() => onRestrictAccess(source)}
+                        title={source.restricted ? "Change who can see this" : "Restrict access"}
+                        aria-label={
+                            source.restricted ? "Change who can see this" : "Restrict access"
+                        }
+                        style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: 7,
+                            color: source.restricted ? "var(--accent)" : "var(--ink-2)",
+                            border: "1px solid var(--line)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Lock size={13} />
                     </button>
                 )}
                 <button

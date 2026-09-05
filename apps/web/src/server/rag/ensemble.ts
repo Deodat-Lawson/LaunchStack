@@ -31,8 +31,8 @@ import {
 const notesLegs: NotesLegProvider = {
     createDocumentLeg: (documentId, embeddings, topK) =>
         createDocumentNotesRetriever(documentId, embeddings, topK),
-    createCompanyLeg: (companyId, embeddings, topK) =>
-        createCompanyNotesRetriever(companyId, embeddings, topK),
+    createCompanyLeg: (companyId, embeddings, topK, scope) =>
+        createCompanyNotesRetriever(companyId, embeddings, topK, scope),
     createMultiDocLeg: (documentIds, embeddings, topK) =>
         createMultiDocNotesRetriever(documentIds, embeddings, topK),
 };

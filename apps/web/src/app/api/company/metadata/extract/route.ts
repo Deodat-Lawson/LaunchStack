@@ -14,7 +14,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, gt, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document as documentTable, documentContextChunks } from "@launchstack/store/schema";
@@ -24,22 +24,19 @@ import { mergeCompanyMetadata } from "@launchstack/pipelines/company-metadata";
 import { createEmptyMetadata } from "@launchstack/pipelines/company-metadata";
 import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/pipelines/company-metadata";
 import { generateStructured } from "~/lib/llm";
-import {
-    forbiddenForRole,
-    isManagementRole,
-    requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
-        if (!ctx.success) return ctx.response;
-
         // Extraction rewrites canonical metadata and appends history.
-        if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
+        const ctx = await requireWorkspacePermission("settings.manage");
+        if (!ctx.success) return ctx.response;
 
         const companyIdBigint = ctx.data.companyId;
         const companyId = String(companyIdBigint);
+        // Facts are only extracted from documents the caller may read.
+        const documentWhere = scopedDocumentWhere(companyIdBigint, await ctx.data.documentScope());
 
         // Parse optional body flags
         let debug = false;
@@ -70,13 +67,11 @@ export async function POST(request: Request) {
             ? await db
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
-                  .where(
-                      sql`${documentTable.companyId} = ${companyIdBigint} AND ${documentTable.id} > ${lastDocId}`
-                  )
+                  .where(and(documentWhere, gt(documentTable.id, Number(lastDocId))))
             : await db
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
-                  .where(eq(documentTable.companyId, companyIdBigint));
+                  .where(documentWhere);
 
         if (docs.length === 0) {
             return NextResponse.json({

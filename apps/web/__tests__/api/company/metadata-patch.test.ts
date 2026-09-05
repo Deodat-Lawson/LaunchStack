@@ -11,18 +11,23 @@
  * row lock.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { PATCH } from "~/app/api/company/metadata/route";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
 
-jest.mock("~/lib/require-workspace-context", () => {
-    const actual = jest.requireActual("~/lib/require-workspace-context");
-    return {
-        ...actual,
-        requireWorkspaceContext: jest.fn(),
-    };
-});
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 /** Rows written by the transaction, in order, for assertions. */
 let mockStoredMetadata: CompanyMetadataJSON;
@@ -81,13 +86,12 @@ jest.mock("drizzle-orm", () => ({
     eq: (...args: unknown[]) => ({ op: "eq", args }),
 }));
 
-const OWNER_CTX: WorkspaceContext = {
+const OWNER_CTX: WorkspaceContext = makeWorkspaceContext({
     authUserId: "clerk_owner",
     userPk: BigInt(7),
     companyId: BigInt(5),
     role: "owner",
-    status: "verified",
-};
+});
 
 function extractedFact(value: string) {
     return {
@@ -148,7 +152,7 @@ beforeEach(() => {
     mockWrittenMetadata = undefined;
     mockHistoryRows = [];
     mockLockedForUpdate = false;
-    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+    mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: OWNER_CTX,
     });
@@ -229,15 +233,20 @@ describe("PATCH /api/company/metadata", () => {
         expect(mockWrittenMetadata).toBeUndefined();
     });
 
-    it("denies a non-management member", async () => {
-        (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+    it("denies a member without settings.manage", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
-            data: { ...OWNER_CTX, role: "editor" },
+            data: makeWorkspaceContext({
+                authUserId: "clerk_member",
+                companyId: BigInt(5),
+                role: "member",
+            }),
         });
 
         const response = await patch({ path: "company.name", value: "Acme Corp" });
 
         expect(response.status).toBe(403);
+        expect((await response.json()).permission).toBe("settings.manage");
         expect(mockWrittenMetadata).toBeUndefined();
     });
 });

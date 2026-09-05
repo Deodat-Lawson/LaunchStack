@@ -20,6 +20,8 @@ import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/m
 
 import { db, toRows } from "~/server/db/index";
 import type { EmbeddingsProvider, SearchScope } from "@launchstack/retrieval/search-types";
+import { documentScopeSqlForAlias } from "@launchstack/retrieval/algorithms/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
 
 /**
  * Notes retrievers extend the global `SearchScope` with a "user" branch so
@@ -42,6 +44,11 @@ interface SingleDocConfig extends NotesRetrieverConfig {
 interface CompanyConfig extends NotesRetrieverConfig {
     companyId: number | string;
     searchScope: "company";
+    /**
+     * The caller's document scope. A note anchored to a document is only as
+     * visible as the document — its anchor quote is the document's text.
+     */
+    scope?: DocumentScope;
 }
 interface MultiDocConfig extends NotesRetrieverConfig {
     documentIds: number[];
@@ -79,6 +86,7 @@ export class NotesRetriever extends BaseRetriever {
     private companyId?: number | string;
     private documentIds?: number[];
     private userId?: string;
+    private scope?: DocumentScope;
 
     constructor(fields: NotesRetrieverFields) {
         super(fields);
@@ -86,8 +94,10 @@ export class NotesRetriever extends BaseRetriever {
         this.topK = fields.topK ?? 5;
         this.searchScope = fields.searchScope;
         if (fields.searchScope === "document") this.documentId = fields.documentId;
-        else if (fields.searchScope === "company") this.companyId = fields.companyId;
-        else if (fields.searchScope === "multi-document") this.documentIds = fields.documentIds;
+        else if (fields.searchScope === "company") {
+            this.companyId = fields.companyId;
+            this.scope = fields.scope;
+        } else if (fields.searchScope === "multi-document") this.documentIds = fields.documentIds;
         else if (fields.searchScope === "user") {
             this.userId = fields.userId;
             this.companyId = fields.companyId;
@@ -166,7 +176,13 @@ export class NotesRetriever extends BaseRetriever {
         }
         if (this.searchScope === "company" && this.companyId !== undefined) {
             const asText = String(this.companyId);
-            return sql`ne.company_id = ${asText}`;
+            const base = sql`ne.company_id = ${asText}`;
+            const scoped = documentScopeSqlForAlias(this.scope, "d");
+            if (!scoped) return base;
+            // Freeform notes have no document to gate on; anchored notes are
+            // only as visible as their document. `document_id` is a varchar,
+            // so compare as text rather than cast a possibly-empty value.
+            return sql`${base} AND (ne.document_id IS NULL OR EXISTS (SELECT 1 FROM ${T.document} d WHERE d.id::text = ne.document_id AND ${scoped}))`;
         }
         if (this.searchScope === "multi-document" && this.documentIds?.length) {
             const list = this.documentIds.map(n => String(n));
@@ -198,13 +214,15 @@ export function createDocumentNotesRetriever(
 export function createCompanyNotesRetriever(
     companyId: number | string,
     embeddings: EmbeddingsProvider,
-    topK = 5
+    topK = 5,
+    scope?: DocumentScope
 ): NotesRetriever {
     return new NotesRetriever({
         companyId,
         embeddings,
         topK,
         searchScope: "company",
+        scope,
     });
 }
 

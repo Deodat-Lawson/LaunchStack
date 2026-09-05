@@ -26,6 +26,8 @@ import {
     nodeRect,
     nodesBounds,
     normalizeRect,
+    portNormal,
+    portPoint,
     rectContains,
     rectsIntersect,
     screenToWorld,
@@ -133,6 +135,12 @@ const IDLE: Gesture = {
 /** Pointer travel (screen px) before a click becomes a drag. */
 const DRAG_THRESHOLD = 3;
 
+/**
+ * Contextmenu events this hook raised itself after a right-click released
+ * without travelling. The handler lets these through the right-drag guard.
+ */
+const reopenedMenuEvents = new WeakSet<Event>();
+
 export interface CanvasInteractions {
     onPointerDown: (e: ReactPointerEvent<SVGSVGElement>) => void;
     onPointerMove: (e: ReactPointerEvent<SVGSVGElement>) => void;
@@ -154,6 +162,8 @@ export interface CanvasCallbacks {
     ) => void;
     /** Begin editing a node's or edge label's text. */
     onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) => void;
+    /** Bring the comments panel forward (a pin on the canvas was clicked). */
+    onOpenComments?: () => void;
 }
 
 export function useCanvasInteractions(
@@ -163,6 +173,14 @@ export function useCanvasInteractions(
 ): CanvasInteractions {
     const gesture = useRef<Gesture>({ ...IDLE });
     const spaceHeld = useRef(false);
+    /** A right-button drag pans; while it lasts the context menu is deferred. */
+    const rightPan = useRef(false);
+    /**
+     * The browser's own `contextmenu` timing differs per platform (macOS fires
+     * it at press, Windows at release), so after a right release the handler
+     * ignores the native event for a beat — pointerup already decided.
+     */
+    const ignoreMenuUntil = useRef(0);
     /**
      * What the last pointerdown actually landed on.
      *
@@ -276,14 +294,57 @@ export function useCanvasInteractions(
     // Pointer down
     // -----------------------------------------------------------------------
 
+    const openMenuFor = useCallback(
+        (clientX: number, clientY: number, target: Element | null) => {
+            const nodeId = target?.closest("[data-node-id]")?.getAttribute("data-node-id");
+            const edgeId = target?.closest("[data-edge-id]")?.getAttribute("data-edge-id");
+            if (nodeId) {
+                if (!store.isSelected("node", nodeId)) store.selectNodes([nodeId]);
+                cb.current.onContextMenuAt(
+                    { x: clientX, y: clientY },
+                    { kind: "node", id: nodeId }
+                );
+                return;
+            }
+            if (edgeId) {
+                if (!store.isSelected("edge", edgeId)) {
+                    store.setSelection([{ kind: "edge", id: edgeId }]);
+                }
+                cb.current.onContextMenuAt(
+                    { x: clientX, y: clientY },
+                    { kind: "edge", id: edgeId }
+                );
+                return;
+            }
+            cb.current.onContextMenuAt({ x: clientX, y: clientY }, { kind: "canvas" });
+        },
+        [store]
+    );
+
     const onPointerDown = useCallback(
         (e: ReactPointerEvent<SVGSVGElement>) => {
-            if (e.button === 2) return; // handled by onContextMenu
             const state = store.getState();
             if (state.presenting) return;
 
             const world = toWorld(e.clientX, e.clientY);
             const screen = toScreen(e.clientX, e.clientY);
+
+            // The right button drags the canvas around, Lucid-style. The
+            // context menu still exists — it opens from pointerup, and only
+            // when the button never travelled (see `onContextMenu`).
+            if (e.button === 2) {
+                svgRef.current?.setPointerCapture(e.pointerId);
+                store.setEditing(null);
+                rightPan.current = true;
+                gesture.current = {
+                    ...IDLE,
+                    kind: "pan",
+                    origin: world,
+                    originScreen: screen,
+                };
+                store.setDrag({ kind: "pan" });
+                return;
+            }
             const target = e.target as Element | null;
             const additive = e.shiftKey || e.metaKey || e.ctrlKey;
 
@@ -741,11 +802,20 @@ export function useCanvasInteractions(
                 }
 
                 case "connect": {
-                    const target = e.target;
+                    // The svg holds pointer capture for the drag, so every
+                    // move's `target` IS the svg — it can never say what the
+                    // pointer is over, and reading it here meant a drop on a
+                    // shape never bound to it. Hit-test the point instead;
+                    // the draft line and selection chrome are
+                    // pointer-transparent, so the top element is the truth.
+                    const under =
+                        typeof document.elementFromPoint === "function"
+                            ? document.elementFromPoint(e.clientX, e.clientY)
+                            : e.target;
                     const overNode =
-                        target?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null;
+                        under?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null;
                     const overPort =
-                        target?.closest("[data-port]")?.getAttribute("data-port") ?? null;
+                        under?.closest("[data-port]")?.getAttribute("data-port") ?? null;
                     const drag = state.drag;
                     if (drag.kind === "connect") {
                         store.setDrag({
@@ -950,7 +1020,10 @@ export function useCanvasInteractions(
                 }
 
                 case "connect": {
-                    finishConnect(store, g, world);
+                    const spawned = finishConnect(store, g, world);
+                    if (spawned && shapeHoldsText(spawned.shape)) {
+                        cb.current.onEditText({ kind: "node", id: spawned.id });
+                    }
                     break;
                 }
 
@@ -994,6 +1067,35 @@ export function useCanvasInteractions(
                 }
 
                 case "pan":
+                    if (rightPan.current) {
+                        rightPan.current = false;
+                        // Whatever the platform's contextmenu timing, the
+                        // release has decided: swallow any trailing native
+                        // event…
+                        ignoreMenuUntil.current = performance.now() + 350;
+                        if (!g.moved) {
+                            // …and for a right *click*, raise a marked one of
+                            // our own so the menu opens on release. Dispatch
+                            // it on whatever is under the pointer (capture
+                            // made `e.target` the svg), so a right-click on a
+                            // shape selects and targets that shape.
+                            const under =
+                                (typeof document.elementFromPoint === "function"
+                                    ? document.elementFromPoint(e.clientX, e.clientY)
+                                    : null) ?? svgRef.current;
+                            if (under) {
+                                const reopened = new MouseEvent("contextmenu", {
+                                    bubbles: true,
+                                    cancelable: true,
+                                    clientX: e.clientX,
+                                    clientY: e.clientY,
+                                });
+                                reopenedMenuEvents.add(reopened);
+                                under.dispatchEvent(reopened);
+                            }
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -1069,31 +1171,22 @@ export function useCanvasInteractions(
 
     const onContextMenu = useCallback(
         (e: ReactMouseEvent<SVGSVGElement>) => {
-            e.preventDefault();
-            const target = e.target as Element | null;
-            const nodeId = target?.closest("[data-node-id]")?.getAttribute("data-node-id");
-            const edgeId = target?.closest("[data-edge-id]")?.getAttribute("data-edge-id");
-            if (nodeId) {
-                if (!store.isSelected("node", nodeId)) store.selectNodes([nodeId]);
-                cb.current.onContextMenuAt(
-                    { x: e.clientX, y: e.clientY },
-                    { kind: "node", id: nodeId }
-                );
+            // A right press is a pan until proven otherwise: swallow the
+            // native event (preventDefault also stops the Radix trigger
+            // above us, which skips a default-prevented event) and let
+            // pointerup re-dispatch a marked one if the pointer never moved.
+            if (
+                !reopenedMenuEvents.has(e.nativeEvent) &&
+                (rightPan.current || performance.now() < ignoreMenuUntil.current)
+            ) {
+                e.preventDefault();
                 return;
             }
-            if (edgeId) {
-                if (!store.isSelected("edge", edgeId)) {
-                    store.setSelection([{ kind: "edge", id: edgeId }]);
-                }
-                cb.current.onContextMenuAt(
-                    { x: e.clientX, y: e.clientY },
-                    { kind: "edge", id: edgeId }
-                );
-                return;
-            }
-            cb.current.onContextMenuAt({ x: e.clientX, y: e.clientY }, { kind: "canvas" });
+            // Fix the selection, then let the event bubble on unprevented —
+            // the Radix trigger wrapping the canvas opens the menu from it.
+            openMenuFor(e.clientX, e.clientY, e.target as Element | null);
         },
-        [store]
+        [openMenuFor]
     );
 
     const isPanning = useCallback(() => spaceHeld.current, []);
@@ -1182,7 +1275,11 @@ function reparentIntoContainers(store: EditorStore, movedIds: readonly string[])
     );
 }
 
-function finishConnect(store: EditorStore, g: Gesture, world: Point): void {
+/**
+ * Ends a connector gesture. Returns the node a port *click* spawned (so the
+ * caller can drop the user into its label), null for every other outcome.
+ */
+function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNode | null {
     const state = store.getState();
     const drag = state.drag;
     const hoverNodeId = drag.kind === "connect" ? drag.hoverNodeId : null;
@@ -1202,41 +1299,47 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): void {
             { transient: true }
         );
         store.endInteraction();
-        return;
+        return null;
     }
 
     const page = activePage(state.doc);
     const fromNodeId = g.fromNodeId;
 
-    // Dragging out of a port into empty space creates the target topic — the
-    // single most-used gesture in a mindmap, so it must not require a second
-    // click on the shape palette.
+    // Dragging out of a *topic's* port into empty space creates the next
+    // topic — the single most-used gesture in a mindmap, so it must not
+    // require a second click on the shape palette. Every other shape gets
+    // what the gesture looks like and no more: a connector, left dangling at
+    // the drop point (re-drag the arrowhead to attach it). A missed drop on
+    // a flowchart must not invent a box.
     let targetNodeId = hoverNodeId;
     let created: DiagramNode | null = null;
     if (!targetNodeId) {
         if (!g.moved) {
-            store.cancelInteraction();
-            return;
+            return spawnFromPortClick(store, g);
         }
         const source = fromNodeId ? nodeById(page, fromNodeId) : undefined;
-        // The new topic inherits its parent's look unless the parent is the
-        // root, whose filled-pill styling would swamp a child.
-        created = createNodeAt("mind-branch", world, {
-            mode: docMode(store),
-            w: source && source.shape !== "mind-root" ? source.w : 160,
-            h: source && source.shape !== "mind-root" ? source.h : 54,
-        });
-        targetNodeId = created.id;
+        if (source?.shape.startsWith("mind-")) {
+            // The new topic inherits its parent's look unless the parent is
+            // the root, whose filled-pill styling would swamp a child.
+            created = createNodeAt("mind-branch", world, {
+                mode: docMode(store),
+                w: source.shape !== "mind-root" ? source.w : 160,
+                h: source.shape !== "mind-root" ? source.h : 54,
+            });
+            targetNodeId = created.id;
+        }
     }
 
     if (fromNodeId && targetNodeId === fromNodeId && !created) {
         store.cancelInteraction();
-        return;
+        return null;
     }
 
     const edge = createEdge({
         from: fromNodeId ? { nodeId: fromNodeId, port: g.fromPort ?? "auto" } : { point: g.origin },
-        to: { nodeId: targetNodeId, port: (hoverPort ?? "auto") as PortId },
+        to: targetNodeId
+            ? { nodeId: targetNodeId, port: (hoverPort ?? "auto") as PortId }
+            : { point: world },
         kind: state.doc.settings.defaultEdgeKind,
     });
 
@@ -1250,4 +1353,53 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): void {
     );
     store.endInteraction();
     if (created) store.selectNodes([created.id]);
+    return null;
+}
+
+/**
+ * Lucid's click-a-port: a plain click on a port (no drag) mints the next
+ * shape one step out in the port's direction, already connected. A topic
+ * spawns a topic; anything else spawns its own kind, in its own colours.
+ */
+function spawnFromPortClick(store: EditorStore, g: Gesture): DiagramNode | null {
+    const state = store.getState();
+    const page = activePage(state.doc);
+    const source = g.fromNodeId ? nodeById(page, g.fromNodeId) : undefined;
+    const port = g.fromPort;
+    if (!source || !port || port === "auto") {
+        store.cancelInteraction();
+        return null;
+    }
+
+    const isMind = source.shape.startsWith("mind-");
+    const shape: ShapeId = isMind ? "mind-branch" : source.shape;
+    const w = source.shape === "mind-root" ? 160 : source.w;
+    const h = source.shape === "mind-root" ? 54 : source.h;
+
+    const at = portPoint(source, port);
+    const dir = portNormal(source, port);
+    const GAP = 56;
+    let spawned = createNodeAt(
+        shape,
+        {
+            x: at.x + dir.x * (GAP + w / 2),
+            y: at.y + dir.y * (GAP + h / 2),
+        },
+        { mode: docMode(store), w, h }
+    );
+    if (!isMind) {
+        spawned = { ...spawned, style: { ...source.style }, textStyle: { ...source.textStyle } };
+    }
+
+    const edge = createEdge({
+        from: { nodeId: source.id, port },
+        to: { nodeId: spawned.id, port: "auto" },
+        kind: state.doc.settings.defaultEdgeKind,
+    });
+    store.updatePage(p => ({ ...p, nodes: [...p.nodes, spawned], edges: [...p.edges, edge] }), {
+        transient: true,
+    });
+    store.endInteraction();
+    store.selectNodes([spawned.id]);
+    return spawned;
 }

@@ -86,9 +86,11 @@ export const connectorConnections = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
-        // Added after the table shipped, so declared last: ALTER TABLE ADD
-        // COLUMN appends physically, and the migrations-apply job compares a
-        // migrated database against a freshly-pushed one column by column.
+        // Declared last because that is where they physically live: the
+        // migration adds them with ALTER TABLE ADD COLUMN, which appends. The
+        // migrations-apply job compares pg_dump output, and pg_dump prints
+        // columns in physical order — so declaring them mid-table read as
+        // schema drift even though both sides had identical columns.
         /**
          * For Google this stays null (access tokens are cached in-process);
          * for Slack/GitHub it persists the long-lived token.

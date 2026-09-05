@@ -22,8 +22,6 @@ const CreateRunSchema = z.object({
     options: RunOptionsSchema.partial().optional(),
 });
 
-// Module-local: a route file may only export handlers and Next's own route
-// config fields, so exporting this makes `next build` reject the route.
 /** Credits the run needs before it starts: planning plus the first candidate. */
 const RUN_MINIMUM_CREDITS = 3_000;
 

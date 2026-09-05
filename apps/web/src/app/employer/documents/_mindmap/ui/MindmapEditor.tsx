@@ -203,6 +203,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
             onContextMenuAt: () => undefined,
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
+            onOpenComments: () => setLeftTab("comments"),
         }),
         [store]
     );

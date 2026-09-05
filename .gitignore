@@ -73,13 +73,9 @@ backups/
 # test output
 test-output/
 
-# Personal working notes — never committed. Anchored to the repo root:
-# unanchored, `notes/` also matches src/server/notes, src/components/notes,
-# src/app/api/notes and __tests__/**/notes, and silently drops new source
-# files added to any of them.
+# Personal working notes — never committed. Anchored to the repository root:
+# a bare `notes/` matches any directory of that name at any depth, which
+# silently swallowed apps/web/src/server/notes/ and let a commit ship three
+# imports of a module that was never added.
 /notes/
 *.tgz
-
-# Playwright output (apps/web/e2e)
-test-results/
-playwright-report/

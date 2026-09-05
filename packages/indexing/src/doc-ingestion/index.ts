@@ -29,6 +29,7 @@ import {
 import type { DocumentChunk, PageContent, PipelineResult } from "@launchstack/conversion/ocr/types";
 import { getDb } from "@launchstack/store/client";
 import { ocrJobs, documentContextChunks } from "@launchstack/store/schema";
+import { isEntityExtractionEnabled } from "../entity-extraction-config";
 import {
     creditsDebitSafe,
     embeddingTokens,
@@ -239,6 +240,17 @@ async function vectorizeWithIndex(
     };
 }
 
+let entityExtractionOffLogged = false;
+function logEntityExtractionOffOnce(): void {
+    if (entityExtractionOffLogged) return;
+    entityExtractionOffLogged = true;
+    console.log(
+        "[DocIngestionTool] Step F skipped: entity extraction is off. The host has not " +
+            "called configureEntityExtraction({ enabled: true }) — apps/web reads " +
+            "ENABLE_ENTITY_EXTRACTION for it (ADR-011)."
+    );
+}
+
 async function maybeExtractEntities(
     storedSections: StoredSection[],
     documentId: number,
@@ -246,6 +258,14 @@ async function maybeExtractEntities(
     runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>
 ): Promise<void> {
     if (storedSections.length === 0) return;
+
+    // Opt-in since ADR-011: nothing user-facing reads the kg_* tables, and
+    // extraction bills an NER call per five chunks of every upload. The host
+    // decides (configureEntityExtraction); unconfigured means off.
+    if (!isEntityExtractionEnabled()) {
+        logEntityExtractionOffOnce();
+        return;
+    }
 
     // Entity extraction runs on the cloud/LLM NER provider — the only mode
     // since ADR-004 §5 removed the sidecar path (and its /health probe here).

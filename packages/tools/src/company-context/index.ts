@@ -28,7 +28,8 @@ import {
     SNIPPET_POLICIES,
 } from "../grounded-retrieval";
 import { companyMetadata } from "./schema";
-import type { CompanyMetadataJSON, MetadataFact } from "./schema";
+import type { CompanyMetadataJSON } from "./schema";
+import { readFact } from "./facts";
 import { invokeCompanyContextStructured } from "./models";
 import { COMPANY_CONTEXT_PROMPT_VERSION, DNA_SYSTEM_PROMPT } from "./prompts";
 import { CompanyDNASchema } from "./types";
@@ -201,20 +202,10 @@ export async function extractCompanyDNA(args: {
 // Metadata-based context (preferred path)
 // ============================================================================
 
-/**
- * Only facts at or above this confidence, with status "active", are used.
- * Shared with email-pipeline's merge fields — previously a documented
- * duplicate that asked to be kept in sync by hand.
- */
-export const MIN_CONFIDENCE = 0.5;
-
-/** Read an active fact's value if its confidence meets the threshold. */
-export function readFact<T>(fact: MetadataFact<T> | undefined): T | undefined {
-    if (!fact) return undefined;
-    if (fact.status !== "active") return undefined;
-    if (fact.confidence < MIN_CONFIDENCE) return undefined;
-    return fact.value;
-}
+// The confidence gate lives in ./facts (dependency-free) so consumers that
+// must not pull the DB client — the company-facts retrieval leg, tests — can
+// share it. Re-exported here so existing imports keep working.
+export { MIN_CONFIDENCE, readFact } from "./facts";
 
 /**
  * Build a structured text block from the company_metadata JSONB for LLM

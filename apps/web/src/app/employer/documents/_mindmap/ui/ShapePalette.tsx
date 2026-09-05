@@ -9,7 +9,7 @@ import { cn } from "~/lib/utils";
 
 import { createNode } from "../model/factory";
 import { themeMode, type ThemeMode } from "../model/palette";
-import { SHAPES, SHAPE_CATEGORIES, shapeGeometry, type ShapeDef } from "../model/shapes";
+import { SHAPE_CATEGORIES, searchShapes, shapeGeometry, type ShapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { NodeStyle, ShapeCategory, ShapeId } from "../model/types";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
@@ -49,15 +49,7 @@ export function ShapePalette() {
     const mode = themeMode(doc.settings.paletteId);
 
     const grouped = useMemo(() => {
-        const q = query.trim().toLowerCase();
-        const matches = q
-            ? SHAPES.filter(
-                  s =>
-                      s.name.toLowerCase().includes(q) ||
-                      s.id.includes(q) ||
-                      s.keywords.some(k => k.includes(q))
-              )
-            : SHAPES;
+        const matches = searchShapes(query);
         const byCategory = new Map<ShapeCategory, ShapeDef[]>();
         for (const shape of matches) {
             const list = byCategory.get(shape.category);

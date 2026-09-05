@@ -76,7 +76,7 @@ export function CanvasContextMenu({ children }: { children: React.ReactNode }) {
         for (const category of SHAPE_CATEGORIES) {
             map.set(
                 category,
-                SHAPES.filter(s => s.category === category)
+                SHAPES.filter(s => s.category === category && !s.paletteHidden)
             );
         }
         return map;

@@ -352,6 +352,10 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                                         at={at}
                                         zoom={viewport.zoom}
                                         replies={c.replies.length}
+                                        onOpen={() => {
+                                            if (c.nodeId) store.selectNodes([c.nodeId]);
+                                            callbacks.onOpenComments?.();
+                                        }}
                                     />
                                 );
                             })}
@@ -622,10 +626,29 @@ function Guides({ guides, zoom }: { guides: EditorState["guides"]; zoom: number 
     );
 }
 
-function CommentPin({ at, zoom, replies }: { at: Point; zoom: number; replies: number }) {
+function CommentPin({
+    at,
+    zoom,
+    replies,
+    onOpen,
+}: {
+    at: Point;
+    zoom: number;
+    replies: number;
+    onOpen: () => void;
+}) {
     const px = (v: number) => v / zoom;
     return (
-        <g transform={`translate(${at.x} ${at.y})`} style={{ pointerEvents: "none" }}>
+        <g
+            transform={`translate(${at.x} ${at.y})`}
+            style={{ pointerEvents: "all", cursor: "pointer" }}
+            onPointerDown={e => {
+                // A pin is a doorway to its thread, not part of the canvas —
+                // don't let the click start a marquee or clear the selection.
+                e.stopPropagation();
+                onOpen();
+            }}
+        >
             <circle r={px(11)} fill="var(--warn)" stroke="var(--panel)" strokeWidth={px(2)} />
             <path
                 d={`M ${-px(5)} ${-px(4)} h ${px(10)} v ${px(6)} h ${-px(6)} l ${-px(3)} ${px(3)} v ${-px(3)} h ${-px(1)} Z`}

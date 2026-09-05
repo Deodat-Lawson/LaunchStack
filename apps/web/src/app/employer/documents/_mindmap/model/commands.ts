@@ -705,11 +705,23 @@ export function applyTheme(store: EditorStore, themeId: string): void {
 // Text
 // ---------------------------------------------------------------------------
 
-export function setNodeText(store: EditorStore, nodeId: string, text: string): void {
-    store.updatePage(page => mapNodes(page, [nodeId], nd => ({ ...nd, text })), {
-        label: "Edit text",
-        coalesceKey: `text:${nodeId}`,
-    });
+export function setNodeText(
+    store: EditorStore,
+    nodeId: string,
+    text: string,
+    opts?: { fit?: boolean }
+): void {
+    store.updatePage(
+        page =>
+            mapNodes(page, [nodeId], nd => {
+                const next = { ...nd, text };
+                return opts?.fit ? fitToLabel(next) : next;
+            }),
+        {
+            label: "Edit text",
+            coalesceKey: `text:${nodeId}`,
+        }
+    );
 }
 
 export function setEdgeLabel(
@@ -742,26 +754,25 @@ export function setVAlign(store: EditorStore, valign: VAlign): void {
     styleTextSelection(store, { valign }, "Align text");
 }
 
+/** Width grows (never shrinks), height hugs the wrapped label. */
+function fitToLabel(nd: DiagramNode): DiagramNode {
+    if (!nd.text.trim()) return nd;
+    const box = shapeTextBox(nd.shape, nd.w, nd.h);
+    const padX = nd.w - box.w;
+    const padY = nd.h - box.h;
+    const laid = layoutText(nd.text, nd.textStyle, Math.max(box.w, 40));
+    const min = shapeDef(nd.shape).minSize;
+    return {
+        ...nd,
+        w: Math.max(nd.w, Math.ceil(laid.width + padX + 8), min.w),
+        h: Math.max(Math.ceil(laid.height + padY + 8), min.h),
+    };
+}
+
 /** Grow (never shrink below the shape minimum) so the label fits. */
 export function fitNodeToText(store: EditorStore, nodeIds: readonly string[]): void {
     if (nodeIds.length === 0) return;
-    store.updatePage(
-        page =>
-            mapNodes(page, nodeIds, nd => {
-                if (!nd.text.trim()) return nd;
-                const box = shapeTextBox(nd.shape, nd.w, nd.h);
-                const padX = nd.w - box.w;
-                const padY = nd.h - box.h;
-                const laid = layoutText(nd.text, nd.textStyle, Math.max(box.w, 40));
-                const min = shapeDef(nd.shape).minSize;
-                return {
-                    ...nd,
-                    w: Math.max(nd.w, Math.ceil(laid.width + padX + 8), min.w),
-                    h: Math.max(Math.ceil(laid.height + padY + 8), min.h),
-                };
-            }),
-        { label: "Fit to text" }
-    );
+    store.updatePage(page => mapNodes(page, nodeIds, fitToLabel), { label: "Fit to text" });
 }
 
 // ---------------------------------------------------------------------------

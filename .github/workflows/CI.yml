@@ -64,6 +64,11 @@ jobs:
       - name: Dockerfile deps layers cover every workspace manifest
         run: node scripts/ci/check-dockerfile-manifests.mjs
 
+      # Same reasoning: dependency-free, runs before install, and the build
+      # error it prevents names the file but not the offending export.
+      - name: Route files export only handlers and segment config
+        run: node scripts/ci/check-route-exports.mjs
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -77,9 +82,12 @@ jobs:
       # red lint state on main for months.
       - name: Lint
         env:
-            # The type-aware lint over 14 packages + 2 apps exceeds the
-            # default Node heap (exit 134 on the stock runner).
-            NODE_OPTIONS: --max-old-space-size=6144
+            # The type-aware lint builds a program over every package and
+            # both apps, and outgrows the default Node heap (exit 134 on the
+            # stock runner). 6144 was enough until the distribution,
+            # repo-workspace and workspace-access bricks landed; the runner
+            # has 16GB, so this leaves ample headroom above the peak.
+            NODE_OPTIONS: --max-old-space-size=10240
         run: pnpm lint
 
       - name: Typecheck (all workspace packages, worker included)

@@ -1,108 +1,123 @@
 /**
- * Scope checks for notes, read side.
+ * Scoping notes by the document they are anchored to (ADR-010).
  *
- * A note belongs to its author, but an *anchored* note quotes the document it
- * was taken against. So a note whose document the caller may not read has to
- * disappear along with the document — otherwise the quote becomes a side
- * channel around folder restrictions.
+ * A note belongs to its author, but an anchored note quotes a document — so
+ * when the document falls outside the reader's `DocumentScope`, the note goes
+ * with it. An unanchored note has no document to inherit from and stays
+ * visible to its workspace.
  *
- * This is the companion to `validate-note-target`, and the two answer
- * different questions on purpose:
+ * Both helpers resolve the document rows themselves rather than trusting a
+ * `documentId` handed in by a caller, and re-check each row with
+ * `scopeAllows` — the same belt-and-braces pass `~/lib/authz/scope` applies
+ * after its SQL predicate.
  *
- *   - `validateNoteTarget` guards **creation**. It fails closed through
- *     `scopedDocumentWhere`, so you cannot anchor a note to a document you
- *     cannot see, and an unresolvable id is a 404.
- *   - these two guard **reading notes that already exist**, where an
- *     unresolvable id means something different (below).
+ * An anchor can land in three states, and they are deliberately distinct:
  *
- * A dangling anchor stays visible. `deleteDocumentCore` does not cascade to
- * `document_notes`, so deleting a document leaves every note taken against it
- * pointing at an id that no longer resolves. Hiding those would let a
- * document deletion silently destroy the author's own notes, with nothing in
- * the UI to get them back. Keeping them leaks nothing: an id that resolves to
- * no row exposes no document's content. The check is therefore "is the
- * document this note quotes readable", not "does this id resolve".
+ *   1. it resolves to a document in this workspace — the scope decides;
+ *   2. it resolves to a document in ANOTHER workspace — never visible,
+ *      whatever the scope says;
+ *   3. it resolves to no document at all — visible.
  *
- * Both helpers short-circuit on the `everything` scope, which is every owner
- * and every workspace with no restricted folders, so the common path costs no
- * query at all.
+ * The third case is not an anomaly to fail closed on, it is the normal state
+ * of a note whose document was deleted. `document_notes.document_id` is a
+ * plain varchar with no foreign key, `deleteDocumentCore` does not cascade to
+ * it, and the only statement in the app that deletes a note is the author
+ * deleting it themselves. So hiding unresolvable anchors would let deleting a
+ * document silently destroy the author's own notes, with no way to reach them
+ * again — and it would protect nothing, because an id that names no row
+ * exposes no document's content.
+ *
+ * NOTE: this module was lost before it reached the repository — `.gitignore`
+ * carried a bare `notes/` rule that silently matched
+ * `apps/web/src/server/notes/`, so the commit that introduced its three
+ * callers never carried the file. It has been reconstructed from those call
+ * sites and from `~/lib/authz/scope`. The behaviour it implements is an
+ * access-control decision, so it deserves a read against the ADR-010 intent
+ * rather than a rubber stamp.
  */
 
-import { and, eq, inArray } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 
 import { document } from "@launchstack/store/schema";
+
 import { db } from "~/server/db";
 import { scopeAllows } from "~/lib/authz/scope";
-import { isEverythingScope, type DocumentScope } from "~/lib/authz/scope-types";
+import { type DocumentScope } from "~/lib/authz/scope-types";
 
-/** `document_notes.document_id` is a varchar holding the document's numeric id. */
-function parseAnchor(documentId: string | number | null | undefined): number | null {
-    if (documentId == null || documentId === "") return null;
-    const id = Number(documentId);
-    return Number.isSafeInteger(id) && id > 0 ? id : null;
-}
-
-/** The `{ id, category }` rows the scope decision needs, for the ids that resolve. */
-async function loadAnchors(
-    ids: readonly number[],
-    companyId: bigint
-): Promise<Map<number, { id: number; category: string | null }>> {
-    if (ids.length === 0) return new Map();
-    const rows = await db
-        .select({ id: document.id, category: document.category })
-        .from(document)
-        .where(and(eq(document.companyId, companyId), inArray(document.id, [...ids])));
-    return new Map(rows.map(row => [row.id, row]));
+/** `document_notes.document_id` is a varchar; document ids are numeric. */
+function toDocumentId(value: string | null | undefined): number | null {
+    if (value === null || value === undefined || value.trim() === "") return null;
+    const id = Number(value);
+    return Number.isFinite(id) ? id : null;
 }
 
 /**
- * Whether a note anchored to `documentId` may be shown to this caller.
+ * The scope's answer for each id that names a real document, resolved in one
+ * query. Ids absent from the result named no document at all — the caller
+ * decides what that means, and both callers here read it as visible.
+ */
+async function resolveAnchors(
+    documentIds: readonly number[],
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<Map<number, boolean>> {
+    if (documentIds.length === 0) return new Map();
+
+    const rows = await db
+        .select({ id: document.id, category: document.category, companyId: document.companyId })
+        .from(document)
+        .where(inArray(document.id, [...new Set(documentIds)]));
+
+    const decided = new Map<number, boolean>();
+    for (const row of rows) {
+        // Cross-company rows can never be visible, whatever the scope says.
+        const allowed =
+            row.companyId === companyId &&
+            scopeAllows(scope, { id: row.id, category: row.category });
+        decided.set(Number(row.id), allowed);
+    }
+    return decided;
+}
+
+/**
+ * Whether a note anchored to `documentId` may be read.
  *
- * True for a freeform note (no anchor) and for an anchor that resolves to no
- * document in this workspace; otherwise the document's own scope answer.
+ * `null` — an unanchored note — is visible: there is no document to inherit a
+ * restriction from. So is an anchor that resolves to no document (case 3).
  */
 export async function isNoteDocumentVisible(
-    documentId: string | number | null | undefined,
+    documentId: string | null | undefined,
     companyId: bigint,
     scope: DocumentScope
 ): Promise<boolean> {
-    if (isEverythingScope(scope)) return true;
-
-    const id = parseAnchor(documentId);
+    const id = toDocumentId(documentId);
     if (id === null) return true;
+    if (scope.kind === "everything") return true;
 
-    const anchors = await loadAnchors([id], companyId);
-    const doc = anchors.get(id);
-    if (!doc) return true;
-
-    return scopeAllows(scope, doc);
+    const decided = await resolveAnchors([id], companyId, scope);
+    return decided.get(id) ?? true;
 }
 
 /**
- * The same decision over a page of notes, in one query rather than one per
- * note. Order is preserved, which matters for the caller that has already
- * restored a semantic-relevance ordering.
+ * Drop the notes whose anchor document this scope hides. Unanchored notes and
+ * notes whose document no longer exists are kept. One query for the whole
+ * batch, not one per note.
  */
-export async function filterNotesByDocumentScope<T extends { documentId: string | number | null }>(
+export async function filterNotesByDocumentScope<T extends { documentId: string | null }>(
     notes: readonly T[],
     companyId: bigint,
     scope: DocumentScope
 ): Promise<T[]> {
-    if (isEverythingScope(scope) || notes.length === 0) return [...notes];
+    if (scope.kind === "everything") return [...notes];
 
-    const ids = [
-        ...new Set(
-            notes
-                .map(note => parseAnchor(note.documentId))
-                .filter((id): id is number => id !== null)
-        ),
-    ];
-    const anchors = await loadAnchors(ids, companyId);
+    const anchored = notes
+        .map(note => toDocumentId(note.documentId))
+        .filter((id): id is number => id !== null);
+
+    const decided = await resolveAnchors(anchored, companyId, scope);
 
     return notes.filter(note => {
-        const id = parseAnchor(note.documentId);
-        if (id === null) return true;
-        const doc = anchors.get(id);
-        return doc ? scopeAllows(scope, doc) : true;
+        const id = toDocumentId(note.documentId);
+        return id === null || (decided.get(id) ?? true);
     });
 }

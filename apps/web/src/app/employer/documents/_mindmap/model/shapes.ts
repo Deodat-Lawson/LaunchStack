@@ -141,6 +141,12 @@ export interface ShapeDef {
     /** Rendered with no fill/stroke chrome — text or bitmap only. */
     chromeless?: boolean;
     /**
+     * Kept in the registry so existing documents render, but not offered in
+     * the palette: another tile with the same silhouette carries this shape's
+     * keywords (the diamond is the decision, the cylinder is the database).
+     */
+    paletteHidden?: boolean;
+    /**
      * Whether the shape carries a text label. Defaults to true: nearly every
      * shape here is a container you put words in, which is the whole point of
      * dropping one. The exceptions are the shapes with nothing to say — a
@@ -175,8 +181,8 @@ const BASIC: ShapeDef[] = [
     def({
         id: "rectangle",
         name: "Rectangle",
-        category: "Basic",
-        keywords: ["box", "square", "block"],
+        category: "Standard",
+        keywords: ["box", "square", "block", "process", "step"],
         defaultSize: { w: 160, h: 90 },
         minSize: { w: 12, h: 12 },
         ports: ALL8,
@@ -192,7 +198,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "rounded-rectangle",
         name: "Rounded rectangle",
-        category: "Basic",
+        category: "Standard",
         keywords: ["box", "card", "pill"],
         defaultSize: { w: 160, h: 90 },
         minSize: { w: 12, h: 12 },
@@ -203,7 +209,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "ellipse",
         name: "Ellipse",
-        category: "Basic",
+        category: "Standard",
         keywords: ["oval", "circle", "round"],
         defaultSize: { w: 160, h: 100 },
         minSize: { w: 12, h: 12 },
@@ -214,8 +220,8 @@ const BASIC: ShapeDef[] = [
     def({
         id: "circle",
         name: "Circle",
-        category: "Basic",
-        keywords: ["round", "dot"],
+        category: "Standard",
+        keywords: ["round", "dot", "connector", "junction"],
         defaultSize: { w: 120, h: 120 },
         minSize: { w: 12, h: 12 },
         keepAspect: true,
@@ -225,7 +231,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "diamond",
         name: "Diamond",
-        category: "Basic",
+        category: "Standard",
         keywords: ["rhombus", "decision", "choice"],
         defaultSize: { w: 160, h: 110 },
         minSize: { w: 24, h: 24 },
@@ -242,8 +248,8 @@ const BASIC: ShapeDef[] = [
     def({
         id: "triangle",
         name: "Triangle",
-        category: "Basic",
-        keywords: ["delta", "up"],
+        category: "Standard",
+        keywords: ["delta", "up", "extract", "split"],
         defaultSize: { w: 140, h: 120 },
         minSize: { w: 16, h: 16 },
         textBox: (w, h) => ({ x: w * 0.2, y: h * 0.42, w: w * 0.6, h: h * 0.5 }),
@@ -258,7 +264,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "right-triangle",
         name: "Right triangle",
-        category: "Basic",
+        category: "Standard",
         keywords: ["corner", "wedge"],
         defaultSize: { w: 130, h: 120 },
         minSize: { w: 16, h: 16 },
@@ -274,7 +280,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "pentagon",
         name: "Pentagon",
-        category: "Basic",
+        category: "Standard",
         keywords: ["five"],
         defaultSize: { w: 130, h: 120 },
         minSize: { w: 20, h: 20 },
@@ -283,7 +289,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "hexagon",
         name: "Hexagon",
-        category: "Basic",
+        category: "Standard",
         keywords: ["six", "preparation"],
         defaultSize: { w: 160, h: 100 },
         minSize: { w: 20, h: 20 },
@@ -302,7 +308,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "octagon",
         name: "Octagon",
-        category: "Basic",
+        category: "Standard",
         keywords: ["eight", "stop"],
         defaultSize: { w: 130, h: 120 },
         minSize: { w: 24, h: 24 },
@@ -326,7 +332,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "trapezoid",
         name: "Trapezoid",
-        category: "Basic",
+        category: "Standard",
         keywords: ["manual", "operation"],
         defaultSize: { w: 160, h: 90 },
         minSize: { w: 24, h: 16 },
@@ -342,8 +348,8 @@ const BASIC: ShapeDef[] = [
     def({
         id: "parallelogram",
         name: "Parallelogram",
-        category: "Basic",
-        keywords: ["data", "input", "output", "skew"],
+        category: "Standard",
+        keywords: ["data", "input", "output", "skew", "io"],
         defaultSize: { w: 170, h: 90 },
         minSize: { w: 24, h: 16 },
         geometry: (w, h) => ({
@@ -358,7 +364,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "star",
         name: "Star",
-        category: "Basic",
+        category: "Standard",
         keywords: ["favourite", "rating"],
         defaultSize: { w: 130, h: 125 },
         minSize: { w: 24, h: 24 },
@@ -368,7 +374,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "cross",
         name: "Cross",
-        category: "Basic",
+        category: "Standard",
         keywords: ["plus", "add"],
         defaultSize: { w: 120, h: 120 },
         minSize: { w: 24, h: 24 },
@@ -396,8 +402,9 @@ const BASIC: ShapeDef[] = [
     def({
         id: "cylinder",
         name: "Cylinder",
-        category: "Basic",
+        category: "Standard",
         keywords: ["database", "storage", "disk"],
+        paletteHidden: true,
         defaultSize: { w: 130, h: 140 },
         minSize: { w: 30, h: 40 },
         textBox: (w, h) => ({ x: TEXT_PAD, y: h * 0.24, w: Math.max(w - 16, 0), h: h * 0.6 }),
@@ -418,7 +425,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "cloud",
         name: "Cloud",
-        category: "Basic",
+        category: "Standard",
         keywords: ["internet", "service", "saas"],
         defaultSize: { w: 180, h: 110 },
         minSize: { w: 40, h: 30 },
@@ -437,7 +444,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "callout",
         name: "Callout",
-        category: "Basic",
+        category: "Standard",
         keywords: ["speech", "bubble", "comment"],
         defaultSize: { w: 170, h: 100 },
         minSize: { w: 40, h: 40 },
@@ -468,7 +475,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "chevron",
         name: "Chevron",
-        category: "Basic",
+        category: "Standard",
         keywords: ["step", "process", "phase"],
         defaultSize: { w: 170, h: 80 },
         minSize: { w: 40, h: 20 },
@@ -490,7 +497,7 @@ const BASIC: ShapeDef[] = [
     def({
         id: "bracket-pair",
         name: "Brackets",
-        category: "Basic",
+        category: "Standard",
         keywords: ["annotation", "span"],
         defaultSize: { w: 160, h: 90 },
         minSize: { w: 24, h: 24 },
@@ -646,8 +653,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "process",
         name: "Process",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["step", "action", "rectangle"],
+        paletteHidden: true,
         defaultSize: { w: 170, h: 84 },
         minSize: { w: 24, h: 20 },
         rounded: true,
@@ -657,8 +665,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "decision",
         name: "Decision",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["if", "branch", "diamond", "condition"],
+        paletteHidden: true,
         defaultSize: { w: 170, h: 110 },
         minSize: { w: 40, h: 30 },
         textBox: (w, h) => ({ x: w * 0.2, y: h * 0.25, w: w * 0.6, h: h * 0.5 }),
@@ -674,7 +683,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "terminator",
         name: "Terminator",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["start", "end", "stadium", "pill"],
         defaultSize: { w: 160, h: 66 },
         minSize: { w: 40, h: 24 },
@@ -683,8 +692,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "data",
         name: "Data",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["input", "output", "parallelogram", "io"],
+        paletteHidden: true,
         defaultSize: { w: 175, h: 84 },
         minSize: { w: 40, h: 24 },
         geometry: (w, h) => ({
@@ -699,7 +709,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "document",
         name: "Document",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["report", "page", "paper"],
         defaultSize: { w: 165, h: 100 },
         minSize: { w: 40, h: 34 },
@@ -709,7 +719,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "multi-document",
         name: "Multi-document",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["reports", "stack", "copies"],
         defaultSize: { w: 170, h: 110 },
         minSize: { w: 40, h: 40 },
@@ -732,7 +742,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "predefined-process",
         name: "Predefined process",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["subroutine", "function", "call"],
         defaultSize: { w: 175, h: 84 },
         minSize: { w: 44, h: 24 },
@@ -762,7 +772,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "internal-storage",
         name: "Internal storage",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["memory", "register"],
         defaultSize: { w: 165, h: 100 },
         minSize: { w: 40, h: 34 },
@@ -793,7 +803,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "manual-input",
         name: "Manual input",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["keyboard", "entry"],
         defaultSize: { w: 165, h: 90 },
         minSize: { w: 40, h: 30 },
@@ -810,7 +820,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "manual-operation",
         name: "Manual operation",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["hand", "manual", "trapezoid"],
         defaultSize: { w: 170, h: 88 },
         minSize: { w: 40, h: 26 },
@@ -826,8 +836,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "preparation",
         name: "Preparation",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["setup", "init", "hexagon"],
+        paletteHidden: true,
         defaultSize: { w: 175, h: 90 },
         minSize: { w: 44, h: 26 },
         textBox: (w, h) => ({ x: w * 0.18, y: TEXT_PAD, w: w * 0.64, h: Math.max(h - 16, 0) }),
@@ -845,7 +856,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "off-page-connector",
         name: "Off-page connector",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["link", "continue", "pentagon"],
         defaultSize: { w: 110, h: 100 },
         minSize: { w: 30, h: 30 },
@@ -863,8 +874,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "connector-dot",
         name: "Connector",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["junction", "on-page", "circle"],
+        paletteHidden: true,
         defaultSize: { w: 64, h: 64 },
         minSize: { w: 16, h: 16 },
         keepAspect: true,
@@ -874,7 +886,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "database",
         name: "Database",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["store", "sql", "cylinder", "disk"],
         defaultSize: { w: 130, h: 140 },
         minSize: { w: 32, h: 44 },
@@ -896,7 +908,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "direct-data",
         name: "Direct data",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["drum", "disk"],
         defaultSize: { w: 165, h: 100 },
         minSize: { w: 44, h: 30 },
@@ -919,7 +931,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "stored-data",
         name: "Stored data",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["archive", "tape"],
         defaultSize: { w: 165, h: 95 },
         minSize: { w: 44, h: 30 },
@@ -941,7 +953,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "display",
         name: "Display",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["screen", "monitor", "output"],
         defaultSize: { w: 175, h: 90 },
         minSize: { w: 44, h: 30 },
@@ -963,7 +975,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "delay",
         name: "Delay",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["wait", "pause"],
         defaultSize: { w: 165, h: 88 },
         minSize: { w: 44, h: 28 },
@@ -981,7 +993,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "merge",
         name: "Merge",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["combine", "down triangle"],
         defaultSize: { w: 140, h: 90 },
         minSize: { w: 30, h: 24 },
@@ -997,8 +1009,9 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "extract",
         name: "Extract",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["split", "up triangle"],
+        paletteHidden: true,
         defaultSize: { w: 140, h: 90 },
         minSize: { w: 30, h: 24 },
         textBox: (w, h) => ({ x: w * 0.2, y: h * 0.45, w: w * 0.6, h: h * 0.45 }),
@@ -1013,7 +1026,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "or-junction",
         name: "Or",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["logical", "circle", "cross"],
         defaultSize: { w: 70, h: 70 },
         minSize: { w: 20, h: 20 },
@@ -1035,7 +1048,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "summing-junction",
         name: "Summing junction",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["and", "circle", "x"],
         defaultSize: { w: 70, h: 70 },
         minSize: { w: 20, h: 20 },
@@ -1060,7 +1073,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "sort",
         name: "Sort",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["order", "diamond"],
         defaultSize: { w: 150, h: 110 },
         minSize: { w: 30, h: 30 },
@@ -1083,7 +1096,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "collate",
         name: "Collate",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["hourglass", "gather"],
         defaultSize: { w: 130, h: 110 },
         minSize: { w: 30, h: 30 },
@@ -1100,7 +1113,7 @@ const FLOWCHART: ShapeDef[] = [
     def({
         id: "loop-limit",
         name: "Loop limit",
-        category: "Flowchart",
+        category: "Standard",
         keywords: ["for", "while", "repeat"],
         defaultSize: { w: 165, h: 88 },
         minSize: { w: 44, h: 28 },
@@ -1553,8 +1566,7 @@ export const SHAPE_BY_ID: Record<string, ShapeDef> = Object.fromEntries(SHAPES.m
 export const SHAPE_CATEGORIES: readonly ShapeCategory[] = [
     "Nodes",
     "Annotate",
-    "Basic",
-    "Flowchart",
+    "Standard",
     "Arrows",
     "UML & ERD",
     "Containers",
@@ -1592,11 +1604,13 @@ export function isContainer(id: string): boolean {
     return shapeDef(id).container === true;
 }
 
-/** Free-text search over name + keywords, used by the palette filter. */
+/** Free-text search over name + keywords, used by the palette filter.
+ *  Hidden duplicates never match: their keywords live on the offered tile. */
 export function searchShapes(query: string): ShapeDef[] {
+    const offered = SHAPES.filter(s => !s.paletteHidden);
     const q = query.trim().toLowerCase();
-    if (!q) return [...SHAPES];
-    return SHAPES.filter(
+    if (!q) return offered;
+    return offered.filter(
         s =>
             s.name.toLowerCase().includes(q) ||
             s.id.includes(q) ||

@@ -64,6 +64,11 @@ jobs:
       - name: Dockerfile deps layers cover every workspace manifest
         run: node scripts/ci/check-dockerfile-manifests.mjs
 
+      # Same reasoning: dependency-free, runs before install, and the build
+      # error it prevents names the file but not the offending export.
+      - name: Route files export only handlers and segment config
+        run: node scripts/ci/check-route-exports.mjs
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

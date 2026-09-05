@@ -11,7 +11,8 @@ import {
 import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
 import { beginReindex, getCompanyReindexState } from "@launchstack/llm/embeddings";
 import { inngest } from "~/server/inngest/client";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { recordAuditEvent } from "~/lib/authz/audit";
 
 async function readCurrentIndexKey(companyId: number): Promise<string | null> {
     const [row] = await db
@@ -24,7 +25,7 @@ async function readCurrentIndexKey(companyId: number): Promise<string | null> {
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, UpdateCompanySchema);
@@ -45,16 +46,6 @@ export async function POST(request: Request) {
             numberOfEmployees,
             useUploadThing,
         } = validation.data;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Forbidden",
-                },
-                { status: 403 }
-            );
-        }
 
         const companyIdNum = Number(ctx.data.companyId);
 
@@ -297,6 +288,23 @@ export async function POST(request: Request) {
                 { status: 404 }
             );
         }
+
+        // Which settings changed — never their values: passkeys and credential
+        // material do not belong in the audit log.
+        await recordAuditEvent(db, {
+            companyId: ctx.data.companyId,
+            actorUserId: ctx.data.authUserId,
+            action: "settings.changed",
+            targetType: "workspace",
+            targetId: ctx.data.companyId,
+            detail: {
+                keys: [
+                    ...Object.keys(updateData),
+                    ...Object.keys(credentialsInput),
+                    ...(reindexResponse?.scheduled ? ["embeddingIndexKey"] : []),
+                ],
+            },
+        });
 
         if (reindexResponse?.scheduled) {
             return NextResponse.json(

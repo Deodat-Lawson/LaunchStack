@@ -11,7 +11,10 @@ import { POST as createNote } from "~/app/api/notes/route";
 import { POST as aiCapture } from "~/app/api/notes/ai-capture/route";
 import { captureFromSelection } from "~/server/notes/ai-capture";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
+
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 jest.mock("~/lib/require-workspace-context", () => {
   const actual = jest.requireActual("~/lib/require-workspace-context");
@@ -75,6 +78,16 @@ jest.mock("drizzle-orm", () => {
   };
 });
 
+// The real predicate builder pulls in the grants schema; the routes only
+// need it to hand the scope to SQL, which is what these tests assert on.
+jest.mock("~/lib/authz/scope", () => ({
+  scopedDocumentWhere: jest.fn((companyId: bigint, scope: unknown) => ({
+    op: "scoped",
+    companyId,
+    scope,
+  })),
+}));
+
 jest.mock("~/server/notes/embed-note", () => ({
   embedNoteAsync: jest.fn(),
 }));
@@ -109,13 +122,14 @@ jest.mock("~/lib/rate-limiter", () => ({
   RateLimitPresets: { strict: {} },
 }));
 
-const CTX: WorkspaceContext = {
-  authUserId: "user-a",
-  userPk: BigInt(7),
-  companyId: BigInt(5),
-  role: "editor",
-  status: "verified",
+const FINANCE_HIDDEN: DocumentScope = {
+  kind: "except",
+  deniedCategories: ["Finance"],
+  deniedDocumentIds: [],
+  allowedDocumentIds: [],
 };
+
+const CTX = makeWorkspaceContext({ role: "member" });
 
 function postRequest(url: string, body: unknown) {
   return new Request(url, {
@@ -188,6 +202,26 @@ describe("note target relationships", () => {
 
       expect(response.status).toBe(400);
       expect(mockSelectCount.value).toBe(0);
+      expect(mockInsert).not.toHaveBeenCalled();
+    });
+
+    it("reads a document outside the caller's scope as missing", async () => {
+      (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+        success: true,
+        data: makeWorkspaceContext({ role: "member", scope: FINANCE_HIDDEN }),
+      });
+      // The scoped query matches nothing for a document the caller cannot see.
+      mockQueuedRows = [[]];
+
+      const response = await createNote(
+        postRequest("http://localhost/api/notes", {
+          documentId: "42",
+          title: "note",
+        }),
+      );
+
+      expect(response.status).toBe(404);
+      expect(scopedDocumentWhere).toHaveBeenCalledWith(BigInt(5), FINANCE_HIDDEN);
       expect(mockInsert).not.toHaveBeenCalled();
     });
 

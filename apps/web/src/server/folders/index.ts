@@ -8,6 +8,8 @@
  * they are re-homed first.
  */
 
+import { folderSettings } from "~/server/db/schema";
+import { scopeAllowsCategory, type DocumentScope } from "~/lib/authz/scope-types";
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
 
@@ -43,6 +45,10 @@ export interface FolderRecord {
     documentCount: number;
     /** Backed by a `category` row, so it survives being emptied. */
     persisted: boolean;
+    /** The `category` row behind a persisted folder; null while only implied. */
+    categoryId: number | null;
+    /** The folder, or an ancestor, is restricted to the people granted access. */
+    restricted: boolean;
 }
 
 /** Escape a literal for a LIKE pattern (Postgres escapes with a backslash by default). */
@@ -79,27 +85,61 @@ function rewritePrefix(
 }
 
 export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
-    const [rows, counts] = await Promise.all([
-        db.select({ name: category.name }).from(category).where(eq(category.companyId, companyId)),
+    const [rows, counts, restrictedRows] = await Promise.all([
+        db
+            .select({ id: category.id, name: category.name })
+            .from(category)
+            .where(eq(category.companyId, companyId)),
         db
             .select({ path: document.category, count: sql<number>`count(*)::int` })
             .from(document)
             .where(eq(document.companyId, companyId))
             .groupBy(document.category),
+        db
+            .select({ categoryId: folderSettings.categoryId })
+            .from(folderSettings)
+            .where(
+                and(
+                    eq(folderSettings.companyId, companyId),
+                    eq(folderSettings.visibility, "restricted")
+                )
+            ),
     ]);
 
-    const persisted = new Set(rows.map(row => normalizeFolderPath(row.name)));
+    const persisted = new Map<string, number>();
+    for (const row of rows) persisted.set(normalizeFolderPath(row.name), Number(row.id));
     const documentCounts = new Map<string, number>();
     for (const row of counts) {
         const path = normalizeFolderPath(row.path);
         documentCounts.set(path, (documentCounts.get(path) ?? 0) + Number(row.count));
     }
+    const restrictedIds = new Set(restrictedRows.map(row => Number(row.categoryId)));
+    const restrictedPaths = [...persisted.entries()]
+        .filter(([, id]) => restrictedIds.has(id))
+        .map(([path]) => path);
 
-    return expandFolderPaths([...persisted, ...documentCounts.keys()]).map(path => ({
+    return expandFolderPaths([...persisted.keys(), ...documentCounts.keys()]).map(path => ({
         path,
         documentCount: documentCounts.get(path) ?? 0,
         persisted: persisted.has(path),
+        categoryId: persisted.get(path) ?? null,
+        // A restriction covers the folder and everything beneath it.
+        restricted: restrictedPaths.some(restricted => isFolderOrDescendant(path, restricted)),
     }));
+}
+
+/**
+ * `listFolders`, minus every folder the caller may not see. Document counts
+ * count what the caller can read, so a folder that is empty *for them* reads
+ * as empty.
+ */
+export async function listVisibleFolders(
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<FolderRecord[]> {
+    const all = await listFolders(companyId);
+    if (scope.kind === "everything") return all;
+    return all.filter(folder => scopeAllowsCategory(scope, folder.path));
 }
 
 async function existingPaths(companyId: bigint): Promise<Set<string>> {

@@ -15,7 +15,7 @@
  */
 
 import type { BaseRetriever } from "@langchain/core/retrievers";
-import type { EmbeddingsProvider } from "../../search-types";
+import type { DocumentScope, EmbeddingsProvider } from "../../search-types";
 
 export interface NotesLegProvider {
     createDocumentLeg(
@@ -23,10 +23,16 @@ export interface NotesLegProvider {
         embeddings: EmbeddingsProvider,
         topK: number
     ): BaseRetriever;
+    /**
+     * `scope` is the caller's document scope. Notes are per-user, but a note
+     * anchored to a restricted document carries that document's quote, so a
+     * provider should honour it where it can.
+     */
     createCompanyLeg(
         companyId: number | string,
         embeddings: EmbeddingsProvider,
-        topK: number
+        topK: number,
+        scope?: DocumentScope
     ): BaseRetriever;
     createMultiDocLeg(
         documentIds: number[],

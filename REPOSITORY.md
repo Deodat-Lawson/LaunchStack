@@ -178,7 +178,9 @@ no `ignoreBuildErrors`.
    also what makes `DEPLOYMENT_MODE` reach the worker for free — the app and
    the worker cannot disagree about metering.
 5. **`employerPasskey`/`employeePasskey`** remain plaintext columns on
-   `company` — pre-existing; needs a hashing migration + backfill.
+   `company` — unused since ADR-010 (invitations and join links replaced the
+   passkey signup); dropped, with `users.role` / `users.status`, once a release
+   has shipped with zero reads.
 6. **~~Clerk is a hard dependency.~~ Resolved (2026-08): auth is first-party.**
    Clerk was replaced by better-auth running inside `apps/web` against the
    same Postgres (`pdr_ai_v2_auth_*` tables) — no external auth service, no

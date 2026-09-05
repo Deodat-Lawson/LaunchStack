@@ -1,5 +1,7 @@
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 const mockInngestSend = jest.fn();
 const mockDbSelect = jest.fn();
@@ -44,13 +46,12 @@ import { POST as postStream } from "~/app/api/agents/predictive-document-analysi
 
 const VERIFIED_CTX: WorkspaceContextResult = {
     success: true,
-    data: {
+    data: makeWorkspaceContext({
         authUserId: "clerk_abc",
         userPk: BigInt(7),
         companyId: BigInt(5),
         role: "employer",
-        status: "verified",
-    },
+    }),
 };
 
 function chainResolved(rows: unknown[]) {

@@ -1,3 +1,5 @@
+import type { DocumentScope } from "~/lib/authz/scope-types";
+
 export type PdfChunk = {
     id: number;
     content: string;
@@ -13,6 +15,13 @@ export type AnalysisSpecification = {
     category: string;
     companyId: number;
     documentId: number;
+    /**
+     * The requesting person's document scope. Related-document suggestions
+     * are drawn from it, so a restricted document is never suggested to
+     * someone who cannot open it. Absent when no person made the request
+     * (the background job), in which case the whole company is searched.
+     */
+    scope?: DocumentScope;
 };
 
 export type SearchResult = {

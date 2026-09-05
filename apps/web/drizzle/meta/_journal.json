@@ -99,6 +99,13 @@
       "when": 1788489462403,
       "tag": "20260904023742_distribution_pipeline",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1788491665025,
+      "tag": "20260904031425_workspace_access",
+      "breakpoints": true
     }
   ]
 }

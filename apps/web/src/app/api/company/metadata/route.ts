@@ -17,9 +17,8 @@ import type {
     Usage,
 } from "@launchstack/pipelines/company-metadata";
 import {
-    forbiddenForRole,
-    isManagementRole,
     requireWorkspaceContext,
+    requireWorkspacePermission,
 } from "~/lib/require-workspace-context";
 
 export async function GET() {
@@ -155,11 +154,9 @@ function applyManualEdit(metadata: CompanyMetadataJSON, path: string, value: str
 
 export async function PATCH(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
-        if (!ctx.success) return ctx.response;
-
         // Canonical metadata and its history are workspace-wide state.
-        if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
+        const ctx = await requireWorkspacePermission("settings.manage");
+        if (!ctx.success) return ctx.response;
 
         const body = (await request.json()) as unknown;
         const parsed = PatchSchema.safeParse(body);

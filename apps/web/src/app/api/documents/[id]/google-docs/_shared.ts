@@ -1,7 +1,8 @@
 /**
  * Shared auth + error mapping for the Drive-link routes. Same conventions as
- * the adeu routes: documentId in, company scope enforced server-side, 404 for
- * both "missing" and "someone else's" so real ids don't leak.
+ * the adeu routes: documentId in, company and read scope enforced
+ * server-side, 404 for "missing", "someone else's" and "not in your folders"
+ * alike so real ids don't leak.
  */
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
@@ -10,8 +11,11 @@ import { GoogleAuthError, GoogleDriveError } from "@launchstack/google-drive";
 import { document } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 import {
     GoogleDriveConfigError,
     isDriveLinkingEnabled,
@@ -31,9 +35,15 @@ export interface DriveRouteContext {
     doc: { id: number; title: string; fileType: string | null; mimeType: string | null };
 }
 
+/**
+ * Linking, syncing and unlinking move the document's bytes between the
+ * workspace and its Google account, so they take `connectors.manage`. The
+ * status line is readable by anyone who can read the document — pass
+ * `{ requirePermission: false }`.
+ */
 export async function authorizeDriveRoute(
     rawId: string,
-    options?: { requireManagement?: boolean }
+    options?: { requirePermission?: boolean }
 ): Promise<{ ok: true; data: DriveRouteContext } | { ok: false; response: NextResponse }> {
     if (!isDriveLinkingEnabled()) {
         return {
@@ -51,15 +61,11 @@ export async function authorizeDriveRoute(
         return { ok: false, response: fail(400, "invalid_id", "Invalid document id") };
     }
 
-    const ctx = await requireWorkspaceContext();
+    const ctx =
+        options?.requirePermission === false
+            ? await requireWorkspaceContext()
+            : await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return { ok: false, response: ctx.response };
-
-    if (options?.requireManagement !== false && !isManagementRole(ctx.data.role)) {
-        return {
-            ok: false,
-            response: fail(403, "forbidden", "Owner or admin role required"),
-        };
-    }
 
     const companyId = BigInt(ctx.data.companyId);
     const [doc] = await db
@@ -70,17 +76,16 @@ export async function authorizeDriveRoute(
             mimeType: document.mimeType,
         })
         .from(document)
-        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)));
+        .where(
+            and(
+                eq(document.id, documentId),
+                scopedDocumentWhere(companyId, await ctx.data.documentScope())
+            )
+        );
 
     if (!doc) {
         return { ok: false, response: fail(404, "not_found", "Document not found") };
     }
-
-    const [userRow] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.userId, ctx.data.authUserId))
-        .limit(1);
 
     return {
         ok: true,
@@ -88,7 +93,7 @@ export async function authorizeDriveRoute(
             documentId,
             companyId,
             authUserId: ctx.data.authUserId,
-            userPk: userRow ? BigInt(userRow.id) : null,
+            userPk: ctx.data.userPk,
             doc,
         },
     };

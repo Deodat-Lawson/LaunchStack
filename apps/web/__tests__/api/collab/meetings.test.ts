@@ -7,6 +7,9 @@
  * scoping, control dispatch, and the shapes the UI consumes.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+import type * as WorkspaceContextHelper from "../../helpers/workspace-context";
+
 import {
     createMeeting,
     InMemoryChannelStore,
@@ -77,26 +80,34 @@ jest.mock("~/server/auth", () => ({
         ),
 }));
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () =>
-        mockCtx.userId
-            ? Promise.resolve({
-                  success: true,
-                  data: {
-                      authUserId: mockCtx.userId,
-                      userPk: 1n,
-                      companyId: mockCtx.companyId,
-                      role: "owner",
-                      status: "verified",
-                  },
-              })
-            : Promise.resolve({
-                  success: false,
-                  response: new Response(JSON.stringify({ error: "Unauthorized" }), {
-                      status: 401,
-                  }),
-              }),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() =>
+            mockCtx.userId
+                ? {
+                      success: true,
+                      data: jest
+                          .requireActual<
+                              typeof WorkspaceContextHelper
+                          >("../../helpers/workspace-context")
+                          .makeWorkspaceContext({
+                              authUserId: mockCtx.userId,
+                              userPk: 1n,
+                              companyId: mockCtx.companyId,
+                              role: "owner",
+                          }),
+                  }
+                : {
+                      success: false,
+                      response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                          status: 401,
+                      }),
+                  }
+        )
+);
 
 jest.mock("~/server/collab/store", () => ({
     getChannelStore: () => mockCtx.harness.store,

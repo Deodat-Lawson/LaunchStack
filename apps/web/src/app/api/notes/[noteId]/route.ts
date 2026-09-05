@@ -19,6 +19,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { isNoteDocumentVisible } from "~/server/notes/document-scope";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(
@@ -42,7 +43,15 @@ export async function GET(
         noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId),
       );
 
-    if (!note) {
+    // An anchored note is only as visible as its document.
+    if (
+      !note ||
+      !(await isNoteDocumentVisible(
+        note.documentId,
+        ctx.data.companyId,
+        await ctx.data.documentScope(),
+      ))
+    ) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
     }
 
@@ -73,6 +82,22 @@ export async function PUT(
     const validation = await validateRequestBody(request, UpdateNoteSchema);
     if (!validation.success) return validation.response;
     const body = validation.data;
+
+    // Prove the note is readable before changing it: an anchored note whose
+    // document left the caller's scope reads as missing.
+    const scope = await ctx.data.documentScope();
+    const [existing] = await db
+      .select({ documentId: documentNotes.documentId })
+      .from(documentNotes)
+      .where(
+        noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId),
+      );
+    if (
+      !existing ||
+      !(await isNoteDocumentVisible(existing.documentId, ctx.data.companyId, scope))
+    ) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    }
 
     const [updated] = await db
       .update(documentNotes)
@@ -134,6 +159,7 @@ export async function PUT(
         noteId: updated.id,
         rich: (body.contentRich as JSONContent | null) ?? null,
         companyId: updated.companyId,
+        scope,
       }).catch((err) => console.error("[syncNoteLinks] failed:", err));
     }
 

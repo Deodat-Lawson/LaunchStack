@@ -15,6 +15,8 @@ import {
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import { ANNOptimizer } from "@launchstack/retrieval/algorithms/vector";
 import { hybridSearchWithRRF } from "@launchstack/retrieval/algorithms/fusion";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
 
 type MatchCandidate = {
     documentId: number;
@@ -36,7 +38,9 @@ export async function findSuggestedCompanyDocuments(
     missingDoc: MissingDocumentPrediction,
     companyId: number,
     currentDocumentId: number,
-    docTitleMap: Map<number, string>
+    docTitleMap: Map<number, string>,
+    /** The requester's document scope; suggestions never name a document they cannot open. */
+    scope: DocumentScope = SCOPE_EVERYTHING
 ): Promise<
     {
         documentId: number;
@@ -54,7 +58,10 @@ export async function findSuggestedCompanyDocuments(
             })
             .from(document)
             .where(
-                and(eq(document.companyId, BigInt(companyId)), ne(document.id, currentDocumentId))
+                and(
+                    scopedDocumentWhere(BigInt(companyId), scope),
+                    ne(document.id, currentDocumentId)
+                )
             );
 
         const otherDocIds = otherDocsQuery.map(doc => doc.id);

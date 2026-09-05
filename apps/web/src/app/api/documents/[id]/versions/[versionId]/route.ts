@@ -30,7 +30,8 @@ import { document, documentVersions } from "@launchstack/store/schema";
 import { deleteFileByUrl } from "~/lib/storage";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function DELETE(
     request: Request,
@@ -49,19 +50,22 @@ export async function DELETE(
                 return NextResponse.json({ error: "Invalid version id" }, { status: 400 });
             }
 
-            const ctx = await requireWorkspaceContext();
+            const ctx = await requireWorkspacePermission("documents.delete");
             if (!ctx.success) return ctx.response;
 
-            if (!isManagementRole(ctx.data.role)) {
-                return NextResponse.json(
-                    { error: "Forbidden: owner or admin role required" },
-                    { status: 403 }
+            // Scoped in SQL: a cross-company or out-of-scope id reads exactly
+            // like a missing document.
+            const [doc] = await db
+                .select()
+                .from(document)
+                .where(
+                    and(
+                        eq(document.id, documentId),
+                        scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                    )
                 );
-            }
 
-            const [doc] = await db.select().from(document).where(eq(document.id, documentId));
-
-            if (!doc || doc.companyId !== ctx.data.companyId) {
+            if (!doc) {
                 return NextResponse.json({ error: "Document not found" }, { status: 404 });
             }
 

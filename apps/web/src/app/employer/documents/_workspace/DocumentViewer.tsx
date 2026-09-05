@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
@@ -57,6 +58,8 @@ export interface DocumentViewerProps {
     onClose: () => void;
     onRename: (id: number, title: string) => Promise<boolean>;
     onDelete: (id: number) => void;
+    /** "Restrict access" — who can see this document. */
+    onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     onVersionChanged?: () => void;
 }
@@ -149,6 +152,7 @@ export function DocumentViewer({
     onClose,
     onRename,
     onDelete,
+    onRestrictAccess,
     onAskAbout,
     onVersionChanged,
 }: DocumentViewerProps) {
@@ -588,6 +592,27 @@ export function DocumentViewer({
                 >
                     <IconSparkle size={12} /> Ask about this
                 </button>
+                {onRestrictAccess && (
+                    <button
+                        onClick={() => onRestrictAccess(source)}
+                        title={source.restricted ? "Change who can see this" : "Restrict access"}
+                        aria-label={
+                            source.restricted ? "Change who can see this" : "Restrict access"
+                        }
+                        style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: 7,
+                            color: source.restricted ? "var(--accent)" : "var(--ink-2)",
+                            border: "1px solid var(--line)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Lock size={13} />
+                    </button>
+                )}
                 <button
                     onClick={deleteDocument}
                     style={{

@@ -21,7 +21,8 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 
 const WebsiteUploadSchema = z.object({
     url: z.string().url("A valid URL is required"),
@@ -117,7 +118,7 @@ async function fetchPageWithJsRender(
 }
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -128,6 +129,10 @@ export async function POST(request: Request) {
             }
 
             const { url, title, category, crawl, maxDepth, maxPages, jsRender } = validation.data;
+
+            if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
 
             // SSRF guard: http(s) only, and the host must resolve to a public
             // address. Guards both single-page fetch and the crawl seed (the

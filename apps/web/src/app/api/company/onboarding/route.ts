@@ -4,16 +4,15 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
-
-        if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-        }
 
         const validation = await validateRequestBody(request, CompanyOnboardingSchema);
         if (!validation.success) return validation.response;

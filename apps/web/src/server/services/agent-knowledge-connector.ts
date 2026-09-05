@@ -30,6 +30,7 @@ import { env } from "~/env";
 import { uploadFile } from "~/lib/storage";
 import { getEngine } from "~/server/engine";
 import { toAbsoluteUrl } from "./detect-storage-type";
+import { ensureCategoryRow } from "./folder-access";
 import {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,
@@ -286,6 +287,10 @@ export async function runAgentKnowledgeSync(
         requestUrl,
         ...scanOptions
     } = request;
+
+    // The folder the sink writes into must exist as a category row so it
+    // can be restricted like any other folder.
+    await ensureCategoryRow(companyId, category ?? AGENT_KNOWLEDGE_CATEGORY);
 
     const sink = await createAgentKnowledgeSink({
         companyId,

@@ -4,8 +4,15 @@ import { and, eq } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { getActiveCompanyId } from "~/lib/active-workspace";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
+import { resolvePermissionsForRole } from "~/lib/authz/resolve";
 
-const GENERATION_ROLES = new Set(["owner", "admin", "editor"]);
+/**
+ * Generating a review writes into the workspace, so it takes the same
+ * permission as editing a document. Viewers and guests read; they do not
+ * generate.
+ */
+const GENERATION_PERMISSION = "documents.edit" as const;
 
 export class FounderWeeklyReviewAuthorizationError extends Error {
     readonly code = "forbidden";
@@ -16,7 +23,8 @@ export interface FounderWeeklyReviewActor {
     externalUserId: string;
     internalUserId: bigint;
     companyId: bigint;
-    role: "owner" | "admin" | "editor";
+    /** Membership role slug, normalised (`owner` | `admin` | `member` | custom). */
+    role: string;
 }
 
 /**
@@ -34,7 +42,7 @@ export class FounderWeeklyReviewActorResolver {
             .limit(1);
         if (!user) throw new FounderWeeklyReviewAuthorizationError();
         const [membership] = await db
-            .select({ role: userCompanyMemberships.role })
+            .select({ role: userCompanyMemberships.role, status: userCompanyMemberships.status })
             .from(userCompanyMemberships)
             .where(
                 and(
@@ -43,14 +51,18 @@ export class FounderWeeklyReviewActorResolver {
                 )
             )
             .limit(1);
-        if (!membership || !GENERATION_ROLES.has(membership.role)) {
+        if (!membership || (membership.status ?? "active") !== "active") {
+            throw new FounderWeeklyReviewAuthorizationError();
+        }
+        const permissions = await resolvePermissionsForRole(companyId, membership.role);
+        if (!permissions.has(GENERATION_PERMISSION)) {
             throw new FounderWeeklyReviewAuthorizationError();
         }
         return {
             externalUserId,
             internalUserId: BigInt(user.id),
             companyId,
-            role: membership.role as FounderWeeklyReviewActor["role"],
+            role: normalizeRoleSlug(membership.role),
         };
     }
 }

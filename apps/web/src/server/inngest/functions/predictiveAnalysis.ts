@@ -13,6 +13,15 @@ import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/typ
  *
  * Progress is tracked via the predictiveDocumentAnalysisResults table
  * and polled by the SSE endpoint.
+ *
+ * Scope: the event carries no requesting user (see `PredictiveAnalysisEvent`
+ * in ~/server/inngest/client), so this job cannot resolve a person's document
+ * scope and the related-document pass stays company-scoped. The SSE route
+ * that dispatches it has already proven the caller may read the analysed
+ * document; the cross-document suggestions this job produces are not
+ * narrowed. To narrow them, add the requester's user id to the event and
+ * resolve their membership + `resolveDocumentScope` here — do not guess a
+ * user from the document.
  */
 export const predictiveAnalysisJob = inngest.createFunction(
     {

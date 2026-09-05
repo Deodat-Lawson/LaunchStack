@@ -1,151 +1,156 @@
 {
-    "name": "@launchstack/retrieval",
-    "version": "0.1.0",
-    "description": "Question in, cited answer out: hybrid retrieval (BM25 + vector ensemble behind a replaceable port), second-pass reranking, and the citation builder that turns permission-scoped retrieval rows into stable anchored citations.",
-    "license": "Apache-2.0",
-    "type": "module",
-    "sideEffects": false,
-    "main": "./src/index.ts",
-    "types": "./src/index.ts",
+  "name": "@launchstack/retrieval",
+  "version": "0.1.0",
+  "description": "Question in, cited answer out: hybrid retrieval (BM25 + vector ensemble behind a replaceable port), second-pass reranking, and the citation builder that turns permission-scoped retrieval rows into stable anchored citations.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./algorithms": "./src/algorithms/index.ts",
+    "./algorithms/scope": "./src/algorithms/scope.ts",
+    "./algorithms/bm25": "./src/algorithms/bm25/index.ts",
+    "./algorithms/vector": "./src/algorithms/vector/index.ts",
+    "./algorithms/fusion": "./src/algorithms/fusion/index.ts",
+    "./algorithms/ensemble": "./src/algorithms/ensemble/index.ts",
+    "./algorithms/rlm": "./src/algorithms/rlm/index.ts",
+    "./algorithms/graph": "./src/algorithms/graph/index.ts",
+    "./algorithms/reranking": "./src/algorithms/reranking/index.ts",
+    "./tools": "./src/tools/index.ts",
+    "./tools/citation-builder": "./src/tools/citation-builder/index.ts",
+    "./tools/rag-search-tool": "./src/tools/rag-search-tool/index.ts",
+    "./tools/grounded-retrieval": "./src/tools/grounded-retrieval/index.ts",
+    "./tools/rlm-search": "./src/tools/rlm-search/index.ts",
+    "./search-types": "./src/search-types.ts",
+    "./types": "./src/types.ts",
+    "./retrievers": "./src/algorithms/index.ts",
+    "./reranking": "./src/algorithms/reranking/index.ts",
+    "./citation-builder": "./src/tools/citation-builder/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
-        ".": "./src/index.ts",
-        "./algorithms": "./src/algorithms/index.ts",
-        "./algorithms/bm25": "./src/algorithms/bm25/index.ts",
-        "./algorithms/vector": "./src/algorithms/vector/index.ts",
-        "./algorithms/fusion": "./src/algorithms/fusion/index.ts",
-        "./algorithms/ensemble": "./src/algorithms/ensemble/index.ts",
-        "./algorithms/rlm": "./src/algorithms/rlm/index.ts",
-        "./algorithms/graph": "./src/algorithms/graph/index.ts",
-        "./algorithms/reranking": "./src/algorithms/reranking/index.ts",
-        "./tools": "./src/tools/index.ts",
-        "./tools/citation-builder": "./src/tools/citation-builder/index.ts",
-        "./tools/rag-search-tool": "./src/tools/rag-search-tool/index.ts",
-        "./tools/grounded-retrieval": "./src/tools/grounded-retrieval/index.ts",
-        "./tools/rlm-search": "./src/tools/rlm-search/index.ts",
-        "./search-types": "./src/search-types.ts",
-        "./types": "./src/types.ts",
-        "./retrievers": "./src/algorithms/index.ts",
-        "./reranking": "./src/algorithms/reranking/index.ts",
-        "./citation-builder": "./src/tools/citation-builder/index.ts",
-        "./package.json": "./package.json"
-    },
-    "files": [
-        "dist",
-        "README.md",
-        "LICENSE"
-    ],
-    "publishConfig": {
-        "access": "public",
-        "main": "./dist/index.js",
+      ".": {
         "types": "./dist/index.d.ts",
-        "exports": {
-            ".": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/index.js"
-            },
-            "./algorithms": {
-                "types": "./dist/algorithms/index.d.ts",
-                "default": "./dist/algorithms/index.js"
-            },
-            "./algorithms/bm25": {
-                "types": "./dist/algorithms/bm25/index.d.ts",
-                "default": "./dist/algorithms/bm25/index.js"
-            },
-            "./algorithms/vector": {
-                "types": "./dist/algorithms/vector/index.d.ts",
-                "default": "./dist/algorithms/vector/index.js"
-            },
-            "./algorithms/fusion": {
-                "types": "./dist/algorithms/fusion/index.d.ts",
-                "default": "./dist/algorithms/fusion/index.js"
-            },
-            "./algorithms/ensemble": {
-                "types": "./dist/algorithms/ensemble/index.d.ts",
-                "default": "./dist/algorithms/ensemble/index.js"
-            },
-            "./algorithms/rlm": {
-                "types": "./dist/algorithms/rlm/index.d.ts",
-                "default": "./dist/algorithms/rlm/index.js"
-            },
-            "./algorithms/graph": {
-                "types": "./dist/algorithms/graph/index.d.ts",
-                "default": "./dist/algorithms/graph/index.js"
-            },
-            "./algorithms/reranking": {
-                "types": "./dist/algorithms/reranking/index.d.ts",
-                "default": "./dist/algorithms/reranking/index.js"
-            },
-            "./tools": {
-                "types": "./dist/tools/index.d.ts",
-                "default": "./dist/tools/index.js"
-            },
-            "./tools/citation-builder": {
-                "types": "./dist/tools/citation-builder/index.d.ts",
-                "default": "./dist/tools/citation-builder/index.js"
-            },
-            "./tools/rag-search-tool": {
-                "types": "./dist/tools/rag-search-tool/index.d.ts",
-                "default": "./dist/tools/rag-search-tool/index.js"
-            },
-            "./tools/grounded-retrieval": {
-                "types": "./dist/tools/grounded-retrieval/index.d.ts",
-                "default": "./dist/tools/grounded-retrieval/index.js"
-            },
-            "./tools/rlm-search": {
-                "types": "./dist/tools/rlm-search/index.d.ts",
-                "default": "./dist/tools/rlm-search/index.js"
-            },
-            "./search-types": {
-                "types": "./dist/search-types.d.ts",
-                "default": "./dist/search-types.js"
-            },
-            "./types": {
-                "types": "./dist/types.d.ts",
-                "default": "./dist/types.js"
-            },
-            "./retrievers": {
-                "types": "./dist/algorithms/index.d.ts",
-                "default": "./dist/algorithms/index.js"
-            },
-            "./reranking": {
-                "types": "./dist/algorithms/reranking/index.d.ts",
-                "default": "./dist/algorithms/reranking/index.js"
-            },
-            "./citation-builder": {
-                "types": "./dist/tools/citation-builder/index.d.ts",
-                "default": "./dist/tools/citation-builder/index.js"
-            },
-            "./package.json": "./package.json"
-        }
-    },
-    "scripts": {
-        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
-        "clean": "rm -rf dist .tsbuildinfo",
-        "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "vitest run"
-    },
-    "dependencies": {
-        "@launchstack/runtime": "workspace:^",
-        "@launchstack/store": "workspace:^",
-        "@launchstack/llm": "workspace:^",
-        "@launchstack/indexing": "workspace:^",
-        "@langchain/community": "^0.3.56",
-        "@langchain/core": "^0.3.74",
-        "langchain": "^0.3.33",
-        "drizzle-orm": "^0.45.1",
-        "zod": "^3.23.8",
-        "@launchstack/evidence": "workspace:^"
-    },
-    "devDependencies": {
-        "typescript": "^5.9.2",
-        "vitest": "^3.0.5"
-    },
-    "peerDependencies": {
-        "neo4j-driver": "^6.0.0"
-    },
-    "peerDependenciesMeta": {
-        "neo4j-driver": {
-            "optional": true
-        }
+        "default": "./dist/index.js"
+      },
+      "./algorithms": {
+        "types": "./dist/algorithms/index.d.ts",
+        "default": "./dist/algorithms/index.js"
+      },
+      "./algorithms/scope": {
+        "types": "./dist/algorithms/scope.d.ts",
+        "default": "./dist/algorithms/scope.js"
+      },
+      "./algorithms/bm25": {
+        "types": "./dist/algorithms/bm25/index.d.ts",
+        "default": "./dist/algorithms/bm25/index.js"
+      },
+      "./algorithms/vector": {
+        "types": "./dist/algorithms/vector/index.d.ts",
+        "default": "./dist/algorithms/vector/index.js"
+      },
+      "./algorithms/fusion": {
+        "types": "./dist/algorithms/fusion/index.d.ts",
+        "default": "./dist/algorithms/fusion/index.js"
+      },
+      "./algorithms/ensemble": {
+        "types": "./dist/algorithms/ensemble/index.d.ts",
+        "default": "./dist/algorithms/ensemble/index.js"
+      },
+      "./algorithms/rlm": {
+        "types": "./dist/algorithms/rlm/index.d.ts",
+        "default": "./dist/algorithms/rlm/index.js"
+      },
+      "./algorithms/graph": {
+        "types": "./dist/algorithms/graph/index.d.ts",
+        "default": "./dist/algorithms/graph/index.js"
+      },
+      "./algorithms/reranking": {
+        "types": "./dist/algorithms/reranking/index.d.ts",
+        "default": "./dist/algorithms/reranking/index.js"
+      },
+      "./tools": {
+        "types": "./dist/tools/index.d.ts",
+        "default": "./dist/tools/index.js"
+      },
+      "./tools/citation-builder": {
+        "types": "./dist/tools/citation-builder/index.d.ts",
+        "default": "./dist/tools/citation-builder/index.js"
+      },
+      "./tools/rag-search-tool": {
+        "types": "./dist/tools/rag-search-tool/index.d.ts",
+        "default": "./dist/tools/rag-search-tool/index.js"
+      },
+      "./tools/grounded-retrieval": {
+        "types": "./dist/tools/grounded-retrieval/index.d.ts",
+        "default": "./dist/tools/grounded-retrieval/index.js"
+      },
+      "./tools/rlm-search": {
+        "types": "./dist/tools/rlm-search/index.d.ts",
+        "default": "./dist/tools/rlm-search/index.js"
+      },
+      "./search-types": {
+        "types": "./dist/search-types.d.ts",
+        "default": "./dist/search-types.js"
+      },
+      "./types": {
+        "types": "./dist/types.d.ts",
+        "default": "./dist/types.js"
+      },
+      "./retrievers": {
+        "types": "./dist/algorithms/index.d.ts",
+        "default": "./dist/algorithms/index.js"
+      },
+      "./reranking": {
+        "types": "./dist/algorithms/reranking/index.d.ts",
+        "default": "./dist/algorithms/reranking/index.js"
+      },
+      "./citation-builder": {
+        "types": "./dist/tools/citation-builder/index.d.ts",
+        "default": "./dist/tools/citation-builder/index.js"
+      },
+      "./package.json": "./package.json"
     }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@launchstack/runtime": "workspace:^",
+    "@launchstack/store": "workspace:^",
+    "@launchstack/llm": "workspace:^",
+    "@launchstack/indexing": "workspace:^",
+    "@langchain/community": "^0.3.56",
+    "@langchain/core": "^0.3.74",
+    "langchain": "^0.3.33",
+    "drizzle-orm": "^0.45.1",
+    "zod": "^3.23.8",
+    "@launchstack/evidence": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.0.5"
+  },
+  "peerDependencies": {
+    "neo4j-driver": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "neo4j-driver": {
+      "optional": true
+    }
+  }
 }

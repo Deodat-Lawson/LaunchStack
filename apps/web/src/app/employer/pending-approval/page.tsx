@@ -1,158 +1,152 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Building, Clock, Mail } from "lucide-react";
+/**
+ * The holding page for someone whose membership is not yet active: awaiting
+ * approval, or suspended. Reads `/api/fetchUserInfo`, which reports the
+ * membership status alongside the workspace and role names, and moves on the
+ * moment the membership turns active.
+ */
+
+import React, { useEffect, useState } from "react";
+import { Building, Clock, Mail, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "~/lib/auth-client";
+import type { MembershipStatus } from "~/lib/authz/permissions";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Card, PageShell } from "~/components/layout/page-shell";
+import { Button } from "~/components/ui/button";
+import { LANDING_CONTACT_URL } from "~/config/landing";
 
-interface EmployerData {
+interface UserInfo {
     name?: string;
     email?: string;
     company?: string;
+    roleName?: string;
+    membershipStatus?: MembershipStatus;
     submissionDate?: string;
 }
 
 export default function PendingApproval() {
     const router = useRouter();
-    const { userId } = useAuth();
+    const { userId, signOut } = useAuth();
 
-    const [currentEmployeeData, setCurrentEmployeeData] = useState<EmployerData>();
-
-    const checkEmployerRole = useCallback(async () => {
-        try {
-            const response = await fetch("/api/fetchUserInfo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: "{}",
-            });
-            const data = (await response.json()) as EmployerData;
-            setCurrentEmployeeData({
-                name: data?.name,
-                email: data?.email,
-                company: data?.company,
-                submissionDate: data?.submissionDate,
-            });
-        } catch (error) {
-            console.error(error);
-            router.push("/");
-        }
-    }, [router]);
+    const [info, setInfo] = useState<UserInfo | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (userId) void checkEmployerRole();
-    }, [userId, checkEmployerRole]);
+        if (!userId) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const response = await fetch("/api/fetchUserInfo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: "{}",
+                });
+                if (!response.ok) {
+                    // No membership anywhere: the picker is where they can create one.
+                    if (response.status === 403) {
+                        router.replace("/workspaces");
+                        return;
+                    }
+                    throw new Error(`Could not load your membership (${response.status}).`);
+                }
+                const data = (await response.json()) as UserInfo;
+                if (cancelled) return;
+                if (data.membershipStatus === "active") {
+                    router.replace("/employer/documents");
+                    return;
+                }
+                setInfo(data);
+            } catch (err) {
+                if (!cancelled) {
+                    setError(
+                        err instanceof Error ? err.message : "Could not load your membership."
+                    );
+                }
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [userId, router]);
+
+    const suspended = info?.membershipStatus === "suspended";
+    const workspace = info?.company ?? "this workspace";
 
     return (
         <>
-            <EmployerChrome pageLabel="Launchstack" pageTitle="Pending approval" />
+            <EmployerChrome
+                pageLabel="Launchstack"
+                pageTitle={suspended ? "Access suspended" : "Pending approval"}
+            />
             <PageShell>
-                <div style={{ maxWidth: 540, margin: "0 auto", paddingTop: 40 }}>
-                    <Card style={{ padding: 28, textAlign: "center" }}>
-                        <div
-                            style={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: 18,
-                                background: "var(--accent-soft)",
-                                color: "var(--accent)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                margin: "0 auto 18px",
-                            }}
-                        >
-                            <Clock style={{ width: 28, height: 28 }} />
+                <div className="mx-auto max-w-[540px] pt-10">
+                    <Card className="p-7 text-center">
+                        <div className="bg-brand-soft text-brand mx-auto mb-4 flex h-[60px] w-[60px] items-center justify-center rounded-[18px]">
+                            <Clock className="h-7 w-7" />
                         </div>
-                        <h1
-                            className="serif"
-                            style={{
-                                fontSize: 28,
-                                lineHeight: 1.15,
-                                letterSpacing: "-0.02em",
-                                color: "var(--ink)",
-                                margin: 0,
-                            }}
-                        >
-                            Pending approval
+                        <h1 className="serif text-ink m-0 text-[28px] leading-[1.15] tracking-tight">
+                            {suspended ? "Your access is suspended" : "Waiting for approval"}
                         </h1>
-                        <div
-                            style={{
-                                fontSize: 14,
-                                color: "var(--ink-3)",
-                                marginTop: 8,
-                                lineHeight: 1.55,
-                            }}
-                        >
-                            Your account is waiting for your employer to confirm access. You&apos;ll
-                            get an email as soon as it&apos;s approved.
-                        </div>
+                        <p className="text-ink-3 mx-auto mt-2 max-w-[420px] text-sm leading-relaxed">
+                            {suspended
+                                ? `An admin of ${workspace} has paused your access. You stay a member, but nothing opens until they reinstate you.`
+                                : `An admin of ${workspace} has to confirm you before anything opens. You'll get an email as soon as they do.`}
+                        </p>
 
-                        <div
-                            style={{
-                                marginTop: 24,
-                                padding: "18px 20px",
-                                borderRadius: 12,
-                                border: "1px solid var(--line)",
-                                background: "var(--panel-2)",
-                                textAlign: "left",
-                            }}
-                        >
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    letterSpacing: "0.1em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                    marginBottom: 10,
-                                }}
-                            >
-                                Application details
+                        {error && (
+                            <p role="alert" className="text-danger mt-4 text-[13px]">
+                                {error}
+                            </p>
+                        )}
+
+                        <div className="border-line bg-panel-2 mt-6 rounded-xl border p-5 text-left">
+                            <div className="mono text-ink-3 mb-2.5 text-[10px] font-bold uppercase tracking-[0.1em]">
+                                Your request
                             </div>
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr",
-                                    gap: 10,
-                                }}
-                            >
+                            <div className="grid gap-2.5">
                                 <DetailRow
                                     Icon={Building}
-                                    label="Company"
-                                    value={currentEmployeeData?.company ?? "—"}
+                                    label="Workspace"
+                                    value={info?.company}
                                 />
-                                <DetailRow
-                                    Icon={Mail}
-                                    label="Email"
-                                    value={currentEmployeeData?.email ?? "—"}
-                                />
+                                <DetailRow Icon={ShieldCheck} label="Role" value={info?.roleName} />
+                                <DetailRow Icon={Mail} label="Email" value={info?.email} />
                                 <DetailRow
                                     Icon={Clock}
                                     label="Submitted"
-                                    value={currentEmployeeData?.submissionDate ?? "—"}
+                                    value={info?.submissionDate}
                                 />
                             </div>
                         </div>
 
-                        <div
-                            style={{
-                                marginTop: 20,
-                                fontSize: 12,
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            Need help? Email{" "}
-                            <a
-                                href="mailto:pdraionline@gmail.com"
-                                style={{ color: "var(--accent)", fontWeight: 600 }}
+                        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                            <Button asChild variant="outline" size="sm">
+                                <Link href="/workspaces">Open a different workspace</Link>
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => void signOut({ redirectUrl: "/signin" })}
                             >
-                                pdraionline@gmail.com
-                            </a>
+                                Sign out
+                            </Button>
                         </div>
+
+                        <p className="text-ink-3 mt-5 text-xs">
+                            Stuck? Ask the person who invited you, or{" "}
+                            <a
+                                href={LANDING_CONTACT_URL}
+                                rel="noopener"
+                                className="text-brand font-semibold"
+                            >
+                                contact support
+                            </a>
+                            .
+                        </p>
                     </Card>
                 </div>
             </PageShell>
@@ -165,37 +159,18 @@ function DetailRow({
     label,
     value,
 }: {
-    Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+    Icon: React.ComponentType<{ className?: string }>;
     label: string;
-    value: string;
+    value: string | undefined;
 }) {
     return (
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Icon style={{ width: 15, height: 15, color: "var(--ink-3)", flexShrink: 0 }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                    className="mono"
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 600,
-                        letterSpacing: "0.08em",
-                        color: "var(--ink-3)",
-                        textTransform: "uppercase",
-                    }}
-                >
+        <div className="flex items-center gap-2.5">
+            <Icon className="text-ink-3 h-[15px] w-[15px] shrink-0" />
+            <div className="min-w-0 flex-1">
+                <div className="mono text-ink-3 text-[10px] font-semibold uppercase tracking-[0.08em]">
                     {label}
                 </div>
-                <div
-                    style={{
-                        fontSize: 13,
-                        color: "var(--ink)",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                    }}
-                >
-                    {value}
-                </div>
+                <div className="text-ink truncate text-[13px]">{value ?? "—"}</div>
             </div>
         </div>
     );

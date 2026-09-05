@@ -14,7 +14,7 @@
  */
 
 import { getRag } from "../../slot";
-import type { CompanySearchOptions, RagSearchResult } from "../../types";
+import type { CompanySearchOptions, DocumentScope, RagSearchResult } from "../../types";
 
 export interface SnippetPolicy {
     topK: number;
@@ -44,6 +44,8 @@ export interface RetrieveCompanySnippetsArgs {
     policy: SnippetPolicy;
     /** What a retrieval error means here. Required thinking, defaulted to "throw". */
     onError?: RetrievalErrorPolicy;
+    /** The caller's document scope; omit only when acting for the workspace, not a person. */
+    scope?: DocumentScope;
 }
 
 export interface RetrievedSnippets {
@@ -60,11 +62,12 @@ export function cleanSnippet(text: string, maxChars: number): string {
 export async function retrieveCompanySnippets(
     args: RetrieveCompanySnippetsArgs
 ): Promise<RetrievedSnippets> {
-    const { companyId, query, policy, onError = "throw" } = args;
+    const { companyId, query, policy, onError = "throw", scope } = args;
     const options: CompanySearchOptions = {
         companyId,
         topK: policy.topK,
         weights: policy.weights,
+        scope,
     };
 
     let results: RagSearchResult[];

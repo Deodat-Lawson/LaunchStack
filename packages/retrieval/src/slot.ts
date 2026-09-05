@@ -31,6 +31,15 @@ export function getRagOrNull(): RagPort | null {
     return portSlot.get() ?? null;
 }
 
+/**
+ * Company search through the port, empty when no port is registered.
+ * `options.scope` is the caller's document scope; hosts must apply it to
+ * every leg. Omitting it searches the whole company corpus, which is only
+ * right for workspace-level callers (pipelines), never for a person.
+ *
+ * @deprecated There is no company-wide search: resolve the readable document
+ * ids and use the multi-document search. Kept for workspace-level callers.
+ */
 export async function ragCompanySearchSafe(
     query: string,
     options: CompanySearchOptions

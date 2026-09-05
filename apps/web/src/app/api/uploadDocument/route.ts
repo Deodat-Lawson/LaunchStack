@@ -15,8 +15,12 @@ import { processDocumentUpload } from "~/server/services/document-upload";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 
 const UploadDocumentSchema = z.object({
     documentUrl: z.string().min(1, "Document URL or path is required"),
@@ -33,7 +37,7 @@ const UploadDocumentSchema = z.object({
 
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
 
         try {
@@ -52,6 +56,12 @@ export async function POST(request: Request) {
                 originalFilename,
                 embeddingIndexKey,
             } = validation.data;
+
+            // A restricted folder takes edit access to it, not just the
+            // permission to upload somewhere.
+            if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
 
             const uploadResult = await processDocumentUpload({
                 user: {

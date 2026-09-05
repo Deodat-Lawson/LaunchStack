@@ -8,7 +8,7 @@ import {
     idempotencyKeyFrom,
     ok,
     readJson,
-    resolveManagementActor,
+    resolveSendingActor,
     unsubscribeBaseUrl,
 } from "../email-campaigns/_lib/context";
 
@@ -35,10 +35,10 @@ export const maxDuration = 300;
  */
 export async function POST(request: Request) {
     try {
-        // This endpoint approves on a human's behalf and can deliver — it is
-        // management-gated even for dry runs, since the approval row it creates
-        // is a workspace-wide accountability record.
-        const actor = await resolveManagementActor();
+        // This endpoint approves on a human's behalf and can deliver — it
+        // needs `campaigns.send` even for dry runs, since the approval row it
+        // creates is a workspace-wide accountability record.
+        const actor = await resolveSendingActor();
         if (!actor.ok) return actor.response;
 
         const parsed = AutomatedRunSchema.safeParse(await readJson(request));

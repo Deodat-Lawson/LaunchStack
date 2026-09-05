@@ -8,11 +8,17 @@
  * errors map to relayed 4xx / opaque 502 like the adeu routes.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
-}));
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 const mockFetchFile = jest.fn();
 
@@ -48,6 +54,8 @@ jest.mock("~/server/db", () => ({
 import { RenderingServiceError } from "@launchstack/document-conversion-engine";
 import { GET } from "~/app/api/documents/pdf/route";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 function request(query = "documentId=7"): Request {
     return new Request(`http://localhost/api/documents/pdf?${query}`);
 }
@@ -55,7 +63,7 @@ function request(query = "documentId=7"): Request {
 function grantContext() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: { companyId: "42", authUserId: "user_1" },
+        data: makeWorkspaceContext({ companyId: BigInt(42), authUserId: "user_1" }),
     });
 }
 

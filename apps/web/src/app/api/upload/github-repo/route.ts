@@ -20,7 +20,8 @@ import { putFile } from "~/server/storage/vercel-blob";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
@@ -32,7 +33,7 @@ const GitHubRepoSchema = z.object({
 });
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -43,6 +44,10 @@ export async function POST(request: Request) {
             }
 
             const { repoUrl, branch, accessToken, category } = validation.data;
+
+            if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
 
             // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
             // rejects any hostname other than (www.)github.com, and the

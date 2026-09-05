@@ -11,7 +11,7 @@
 -- (`users.role`) are the only evidence available for those accounts, so they
 -- become the membership. Role vocabularies differ: `users.role` is
 -- employer/employee, membership role is owner/admin/editor (see
--- src/lib/membership-roles.ts), and the signup routes map employer→owner and
+-- src/lib/authz/permissions.ts), and the signup routes map employer→owner and
 -- employee→editor — this mirrors that mapping.
 --
 -- Only verified users are provisioned: a pending user still resolves through

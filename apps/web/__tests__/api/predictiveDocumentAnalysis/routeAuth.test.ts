@@ -11,6 +11,7 @@
 const mockRequireWorkspaceContext = jest.fn();
 
 jest.mock("~/lib/require-workspace-context", () => ({
+    ...jest.requireActual("~/lib/require-workspace-context"),
     requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
@@ -77,17 +78,18 @@ jest.mock("~/server/db/index", () => ({
 
 import { POST } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as streamPOST } from "~/app/api/agents/predictive-document-analysis/stream/route";
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
-function mockAuthenticated() {
+function mockAuthenticated(overrides: Parameters<typeof makeWorkspaceContext>[0] = {}) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user_session",
             userPk: BigInt(1),
             companyId: BigInt(5),
             role: "owner",
-            status: "verified",
-        },
+            ...overrides,
+        }),
     });
 }
 
@@ -134,6 +136,35 @@ describe("POST /api/agents/predictive-document-analysis", () => {
 
         expect(response.status).toBe(404);
         expect(json.message).toBe("Document not found.");
+    });
+
+    it("returns 404 for a document outside the caller's scope", async () => {
+        mockAuthenticated({
+            role: "member",
+            scope: {
+                kind: "except",
+                deniedCategories: ["Finance"],
+                deniedDocumentIds: [],
+                allowedDocumentIds: [],
+            },
+        });
+        // The scoped query matches nothing for a document the caller cannot see.
+        mockSelectQueue.push([]); // document details
+
+        const response = await POST(requestFor({ documentId: 1 }));
+        const json = await response.json();
+
+        expect(response.status).toBe(404);
+        expect(json.message).toBe("Document not found.");
+    });
+
+    it("returns 403 for a role without documents.read", async () => {
+        mockAuthenticated({ role: "reporting", permissions: ["analytics.view"] });
+
+        const response = await POST(requestFor({ documentId: 1 }));
+
+        expect(response.status).toBe(403);
+        expect(await response.json()).toEqual({ error: "Forbidden", permission: "documents.read" });
     });
 
     it("serves the cached analysis for a same-company document", async () => {

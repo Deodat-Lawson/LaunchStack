@@ -7,6 +7,7 @@ import { useAuth } from "~/lib/auth-client";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
+import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 
 import styles from "./workspace-select.module.css";
 
@@ -17,6 +18,8 @@ type Workspace = {
     description: string | null;
     swatch: number;
     role: string;
+    /** Membership status: active, pending approval, or suspended. */
+    status: string;
     memberCount: number;
     lastOpenedAt: string;
     isActive: boolean;
@@ -92,7 +95,7 @@ function gradientClass(swatch: number): string {
 }
 
 function roleBadgeClass(role: string): string {
-    const r = role.toLowerCase();
+    const r = normalizeRoleSlug(role);
     if (r === "owner") return `${styles.roleBadge} ${styles.roleOwner}`;
     if (r === "admin") return `${styles.roleBadge} ${styles.roleAdmin}`;
     return `${styles.roleBadge} ${styles.roleEditor}`;
@@ -169,6 +172,7 @@ export function WorkspaceSelectClient({
     const [switchingId, setSwitchingId] = useState<string | null>(null);
     const [slugAvailable, setSlugAvailable] = useState<null | boolean>(null);
     const [dismissedPendingIds, setDismissedPendingIds] = useState(() => new Set<string>());
+    const [acceptingId, setAcceptingId] = useState<string | null>(null);
 
     const searchRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
@@ -327,6 +331,39 @@ export function WorkspaceSelectClient({
             console.error(err);
             setError("Could not create workspace");
             setSubmitting(false);
+        }
+    }
+
+    async function acceptInvite(id: string) {
+        if (acceptingId) return;
+        setAcceptingId(id);
+        setError(null);
+        try {
+            const res = await fetch("/api/workspace/invitations/accept", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ invitationId: Number(id) }),
+            });
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+                redirectTo?: string;
+            };
+            if (!res.ok) {
+                setError(
+                    data.error ??
+                        (res.status === 410
+                            ? "That invitation has expired. Ask for a new one."
+                            : "Could not accept the invitation.")
+                );
+                setAcceptingId(null);
+                return;
+            }
+            router.push(data.redirectTo ?? "/employer/documents");
+            router.refresh();
+        } catch (err) {
+            console.error(err);
+            setError("Could not accept the invitation.");
+            setAcceptingId(null);
         }
     }
 
@@ -549,6 +586,21 @@ export function WorkspaceSelectClient({
                                             {ws.isActive ? (
                                                 <span className={styles.activeChip}>Active</span>
                                             ) : null}
+                                            {ws.status === "suspended" ? (
+                                                <span
+                                                    className={`${styles.statusChip} ${styles.statusChipSuspended}`}
+                                                    title="An admin has paused your access"
+                                                >
+                                                    Suspended
+                                                </span>
+                                            ) : ws.status === "pending" ? (
+                                                <span
+                                                    className={styles.statusChip}
+                                                    title="Waiting for an admin to approve you"
+                                                >
+                                                    Pending approval
+                                                </span>
+                                            ) : null}
                                         </div>
                                         <div className={styles.wsMeta}>
                                             {ws.slug ? (
@@ -586,7 +638,7 @@ export function WorkspaceSelectClient({
                                         </div>
                                     ) : null}
                                     <span className={roleBadgeClass(ws.role)}>
-                                        {ws.role.charAt(0).toUpperCase() + ws.role.slice(1)}
+                                        {roleLabel(ws.role)}
                                     </span>
                                 </button>
                             );
@@ -644,11 +696,7 @@ export function WorkspaceSelectClient({
                                                         · {relativeTime(inv.invitedAt)}
                                                     </span>
                                                     <span className={styles.sep}>·</span>
-                                                    <span>
-                                                        Role:{" "}
-                                                        {inv.role.charAt(0).toUpperCase() +
-                                                            inv.role.slice(1)}
-                                                    </span>
+                                                    <span>Role: {roleLabel(inv.role)}</span>
                                                 </div>
                                             </div>
                                             <div className={styles.inviteActions}>
@@ -668,13 +716,12 @@ export function WorkspaceSelectClient({
                                                 <button
                                                     type="button"
                                                     className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
-                                                    onClick={() =>
-                                                        setError(
-                                                            "Accepting invites from this screen is not available yet."
-                                                        )
-                                                    }
+                                                    onClick={() => void acceptInvite(inv.id)}
+                                                    disabled={acceptingId !== null}
                                                 >
-                                                    Accept &amp; open
+                                                    {acceptingId === inv.id
+                                                        ? "Joining…"
+                                                        : "Accept & open"}
                                                 </button>
                                             </div>
                                         </div>

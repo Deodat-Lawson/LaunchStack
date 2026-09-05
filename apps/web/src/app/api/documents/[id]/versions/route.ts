@@ -7,7 +7,8 @@
  *   initial upload flow) and then handing this endpoint the resulting URL.
  *
  *   Enforces:
- *     - Auth (owner/admin membership for the document's company)
+ *     - Auth (`documents.upload`, the document in the caller's read scope,
+ *       and edit access to its folder when that folder is restricted)
  *     - Exact MIME match against the document's `file_type` (locked in on v1)
  *     - Sequential version numbering (max + 1, atomically)
  *
@@ -24,7 +25,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
@@ -37,7 +38,10 @@ import { createDocumentVersionLifecycle } from "~/server/services/document-creat
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import type { Permission } from "~/lib/authz/permissions";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import {
     authorizeInternalFileRef,
@@ -77,45 +81,40 @@ function parseDocumentId(
 }
 
 /**
- * Load the authenticated user and verify they have owner/admin membership
- * to the target document's company. Returns the user + document on success,
- * or a NextResponse error on any failure.
+ * Resolve the caller with `permission` and load the target document from
+ * their read scope. Returns the user + document on success, or a NextResponse
+ * error on any failure. A cross-company or out-of-scope id reads exactly
+ * like a missing document.
  */
-async function authorizeDocumentAccess(documentId: number): Promise<
+async function authorizeDocumentAccess(
+    documentId: number,
+    permission: Permission
+): Promise<
     | {
           ok: true;
           userId: string;
           companyId: bigint;
+          canEditFolder: (categoryName: string) => Promise<boolean>;
           doc: typeof document.$inferSelect;
       }
     | { ok: false; response: NextResponse }
 > {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission(permission);
     if (!ctx.success) {
         return { ok: false, response: ctx.response };
     }
 
-    if (!isManagementRole(ctx.data.role)) {
-        return {
-            ok: false,
-            response: NextResponse.json(
-                { error: "Forbidden: owner or admin role required" },
-                { status: 403 }
-            ),
-        };
-    }
-
-    const [doc] = await db.select().from(document).where(eq(document.id, documentId));
+    const [doc] = await db
+        .select()
+        .from(document)
+        .where(
+            and(
+                eq(document.id, documentId),
+                scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+            )
+        );
 
     if (!doc) {
-        return {
-            ok: false,
-            response: NextResponse.json({ error: "Document not found" }, { status: 404 }),
-        };
-    }
-
-    if (doc.companyId !== ctx.data.companyId) {
-        // Don't leak existence to cross-company requests.
         return {
             ok: false,
             response: NextResponse.json({ error: "Document not found" }, { status: 404 }),
@@ -126,6 +125,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
         ok: true,
         userId: ctx.data.authUserId,
         companyId: ctx.data.companyId,
+        canEditFolder: categoryName => canEditFolder(ctx.data, categoryName),
         doc,
     };
 }
@@ -137,10 +137,16 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             const parsed = parseDocumentId(rawId);
             if (!parsed.ok) return parsed.response;
 
-            const authResult = await authorizeDocumentAccess(parsed.documentId);
+            const authResult = await authorizeDocumentAccess(parsed.documentId, "documents.upload");
             if (!authResult.ok) return authResult.response;
 
             const { userId, doc } = authResult;
+
+            // A new version is an upload into the document's folder; a
+            // restricted folder needs edit access to it.
+            if (!(await authResult.canEditFolder(doc.category))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
 
             // Phase 1 of Drive-linked files: a linked document's editing
             // surface is its Drive copy — direct version uploads would fork
@@ -304,7 +310,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         const parsed = parseDocumentId(rawId);
         if (!parsed.ok) return parsed.response;
 
-        const authResult = await authorizeDocumentAccess(parsed.documentId);
+        const authResult = await authorizeDocumentAccess(parsed.documentId, "documents.read");
         if (!authResult.ok) return authResult.response;
 
         const { doc } = authResult;

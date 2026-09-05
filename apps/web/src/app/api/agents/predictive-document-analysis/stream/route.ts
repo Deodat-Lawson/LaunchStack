@@ -6,7 +6,8 @@ import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -24,6 +25,7 @@ export const maxDuration = 300;
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
 
     const validation = await validateRequestBody(request, PredictiveAnalysisSchema);
     if (!validation.success) {
@@ -36,11 +38,13 @@ export async function POST(request: Request) {
     const typedAnalysisType: AnalysisType = analysisType ?? "general";
     const typedIncludeRelatedDocs = includeRelatedDocs ?? false;
 
-    // Ownership before cache: never stream another tenant's analysis.
+    // Scope before cache: never stream an analysis of a document the caller
+    // cannot open. Out of scope reads as missing.
+    const scope = await ctx.data.documentScope();
     const docCheck = await db
         .select({ id: document.id, currentVersionId: document.currentVersionId })
         .from(document)
-        .where(and(eq(document.id, documentId), eq(document.companyId, ctx.data.companyId)))
+        .where(and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope)))
         .limit(1);
 
     if (docCheck.length === 0) {

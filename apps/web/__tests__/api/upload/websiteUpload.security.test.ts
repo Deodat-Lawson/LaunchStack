@@ -2,10 +2,21 @@
  * POST /api/upload/website — session-derived identity and SSRF guard.
  */
 
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/server/services/folder-access", () => ({
+    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
+    canEditFolder: jest.fn().mockResolvedValue(true),
 }));
 
 // Pass rate limiting through. Mocking ~/lib/rate-limiter also keeps its
@@ -42,6 +53,8 @@ import { POST } from "~/app/api/upload/website/route";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
 
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
 const lookupMock = lookup as jest.MockedFunction<typeof lookup>;
 const uploadFileMock = uploadFile as jest.MockedFunction<typeof uploadFile>;
 const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
@@ -50,13 +63,12 @@ const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
 function mockAuthenticated() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: {
+        data: makeWorkspaceContext({
             authUserId: "user_session",
             userPk: BigInt(11),
             companyId: BigInt(3),
             role: "owner",
-            status: "verified",
-        },
+        }),
     });
 }
 

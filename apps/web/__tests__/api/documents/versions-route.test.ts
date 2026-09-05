@@ -1,5 +1,6 @@
+import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+
 import { POST } from "~/app/api/documents/[id]/versions/route";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
 import { getOcrConfig } from "@launchstack/conversion/ocr/config";
@@ -10,9 +11,29 @@ import {
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: jest.fn(),
-    isManagementRole: (role: string) => role === "owner" || role === "admin",
+import { canEditFolder } from "~/server/services/folder-access";
+
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual<
+            typeof MockRequireWorkspaceContext
+        >("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
+
+jest.mock("~/server/services/folder-access", () => ({
+    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
+    canEditFolder: jest.fn().mockResolvedValue(true),
+}));
+
+// The scope predicate is exercised by its own tests; here it only has to be
+// something the fake `where` accepts.
+jest.mock("~/lib/authz/scope", () => ({
+    scopedDocumentWhere: (companyId: bigint) => ({ op: "scoped", companyId }),
 }));
 
 jest.mock("~/lib/validation", () => ({
@@ -85,17 +106,17 @@ jest.mock("@launchstack/conversion/ocr/trigger", () => ({
 }));
 
 jest.mock("drizzle-orm", () => ({
+    and: (...conditions: unknown[]) => ({ op: "and", conditions }),
     desc: (column: unknown) => ({ op: "desc", column }),
     eq: (column: unknown, value: unknown) => ({ op: "eq", column, value }),
 }));
 
-const workspaceContext = {
+const workspaceContext = makeWorkspaceContext({
     authUserId: "user-1",
     userPk: BigInt(7),
     companyId: BigInt(10),
-    role: "owner" as const,
-    status: "verified" as const,
-};
+    role: "owner",
+});
 
 const documentRow = {
     id: 55,
@@ -114,10 +135,10 @@ function setupDatabase() {
     mockSelect.mockReturnValue({ from: selectFrom });
 }
 
-function setupAuthenticatedRequest() {
-    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+function setupAuthenticatedRequest(context = workspaceContext) {
+    mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: workspaceContext,
+        data: context,
     });
     (getOcrConfig as jest.Mock).mockReturnValue({
         defaultProvider: "DOCLING",
@@ -174,6 +195,42 @@ describe("POST /api/documents/[id]/versions", () => {
                 preferredProvider: "DOCLING",
             })
         );
+    });
+
+    it("returns 403 for a viewer (no documents.upload)", async () => {
+        setupAuthenticatedRequest(makeWorkspaceContext({ role: "viewer", companyId: BigInt(10) }));
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(403);
+        expect(mockSelect).not.toHaveBeenCalled();
+        expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
+    });
+
+    it("returns 404 when the document is outside the caller's scope", async () => {
+        const selectWhere = jest.fn().mockResolvedValue([]);
+        mockSelect.mockReturnValue({ from: jest.fn().mockReturnValue({ where: selectWhere }) });
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(404);
+        expect(selectWhere).toHaveBeenCalledWith(
+            expect.objectContaining({
+                op: "and",
+                conditions: expect.arrayContaining([{ op: "scoped", companyId: BigInt(10) }]),
+            })
+        );
+        expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
+    });
+
+    it("refuses a new version into a restricted folder without an edit grant", async () => {
+        (canEditFolder as jest.Mock).mockResolvedValueOnce(false);
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(403);
+        expect(canEditFolder).toHaveBeenCalledWith(workspaceContext, "contracts");
+        expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
     });
 
     it("returns 503 before inserting a version when OSS authorization cannot sign", async () => {

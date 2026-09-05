@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { ChevronDown, ChevronUp, Plus, Settings } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock, Plus, Settings } from "lucide-react";
 
 interface BatchSettings {
     category: string;
@@ -11,7 +11,7 @@ interface BatchSettings {
 }
 
 interface UploadSettingsProps {
-    categories: { id: string; name: string }[];
+    categories: { id: string; name: string; restricted?: boolean }[];
     batchSettings: BatchSettings;
     onBatchSettingsChange: React.Dispatch<React.SetStateAction<BatchSettings>>;
     onApplyBatchSettings: () => void;
@@ -84,9 +84,15 @@ export function UploadSettings({
         }
     }, [newCategoryName, onAddCategory, categories, onBatchSettingsChange]);
 
+    const selectedCategory = batchSettings.category
+        ? categories.find(c => c.name === batchSettings.category)
+        : undefined;
     const categoryLabel = batchSettings.category
-        ? (categories.find(c => c.name === batchSettings.category)?.name ?? batchSettings.category)
+        ? (selectedCategory?.name ?? batchSettings.category)
         : null;
+    // The audience note under the picker: a restricted folder narrows who will
+    // see everything in this batch, and that is worth saying before Upload.
+    const selectedRestricted = selectedCategory?.restricted === true;
 
     return (
         <div
@@ -247,6 +253,24 @@ export function UploadSettings({
                                 >
                                     Cancel
                                 </button>
+                            </div>
+                        )}
+                        {categoryLabel && (
+                            <div
+                                role="note"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                    fontSize: 11.5,
+                                    color: selectedRestricted ? "var(--ink-2)" : "var(--ink-3)",
+                                    marginTop: 6,
+                                }}
+                            >
+                                {selectedRestricted && <Lock size={11} />}
+                                {selectedRestricted
+                                    ? "Restricted folder — visible only to people with access"
+                                    : "Visible to everyone in the workspace"}
                             </div>
                         )}
                     </div>

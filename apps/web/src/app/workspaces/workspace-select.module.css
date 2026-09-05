@@ -1070,3 +1070,22 @@
     font-size: 12.5px;
     border: 1px solid oklch(from var(--danger) l c h / 0.25);
 }
+
+/* MEMBERSHIP STATE CHIP — a membership that is not usable right now */
+.statusChip {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--warn-soft);
+    color: var(--ink-2);
+    border: 1px solid oklch(from var(--warn) l c h / 0.35);
+    white-space: nowrap;
+}
+.statusChipSuspended {
+    background: var(--danger-soft);
+    color: var(--danger);
+    border-color: oklch(from var(--danger) l c h / 0.3);
+}

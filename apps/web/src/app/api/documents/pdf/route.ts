@@ -24,6 +24,7 @@ import { db } from "~/server/db";
 import { getGotenbergClient } from "~/server/rendering";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export const runtime = "nodejs";
 // LibreOffice cold starts plus a large document can pass the default budget.
@@ -53,6 +54,7 @@ export async function GET(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const companyId = BigInt(ctx.data.companyId);
+    const scope = await ctx.data.documentScope();
 
     const [row] = await db
         .select({
@@ -62,11 +64,12 @@ export async function GET(request: Request) {
             fileType: document.fileType,
         })
         .from(document)
-        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)));
+        .where(and(eq(document.id, documentId), scopedDocumentWhere(companyId, scope)));
 
     if (!row) {
-        // Same response whether it does not exist or belongs to another
-        // company — the distinction would leak which ids are real.
+        // Same response whether it does not exist, belongs to another company,
+        // or sits in a folder the caller cannot see — the distinction would
+        // leak which ids are real.
         return fail(404, "not_found", "Document not found");
     }
 

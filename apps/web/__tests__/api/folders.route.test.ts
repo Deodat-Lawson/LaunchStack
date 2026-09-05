@@ -6,26 +6,29 @@
 import type { NextResponse } from "next/server";
 
 import { DELETE, GET, PATCH, POST } from "~/app/api/folders/route";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
-import { createFolder, deleteFolder, listFolders, renameFolder } from "~/server/folders";
+import { createFolder, deleteFolder, listVisibleFolders, renameFolder } from "~/server/folders";
+import { makeWorkspaceContext } from "../helpers/workspace-context";
 
-jest.mock("~/lib/require-workspace-context", () => ({
-    requireWorkspaceContext: jest.fn(),
-    isManagementRole: (role: string) => role === "owner" || role === "admin",
-    forbiddenForRole: () =>
-        new Response(JSON.stringify({ error: "Forbidden" }), {
-            status: 403,
-            headers: { "Content-Type": "application/json" },
-        }),
-}));
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual("../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 jest.mock("~/server/folders", () => ({
-    listFolders: jest.fn(),
+    listVisibleFolders: jest.fn(),
     createFolder: jest.fn(),
     renameFolder: jest.fn(),
     deleteFolder: jest.fn(),
 }));
+
+// Writes land in the audit log through the shared client; neither is under test here.
+jest.mock("~/lib/authz/audit", () => ({
+    recordAuditEvent: jest.fn().mockResolvedValue(undefined),
+}));
+jest.mock("~/server/db", () => ({ db: {} }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<NextResponse>) =>
@@ -33,13 +36,12 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
 }));
 
 function ctx(role: string): WorkspaceContext {
-    return {
+    return makeWorkspaceContext({
         authUserId: "user_1",
         userPk: BigInt(1),
         companyId: BigInt(42),
         role,
-        status: "verified",
-    };
+    });
 }
 
 function request(method: string, body?: unknown): Request {
@@ -55,8 +57,8 @@ function expectedOutcome(code: string, status: number, message: string) {
 }
 
 beforeEach(() => {
-    jest.mocked(requireWorkspaceContext).mockReset();
-    jest.mocked(listFolders).mockReset();
+    mockRequireWorkspaceContext.mockReset();
+    jest.mocked(listVisibleFolders).mockReset();
     jest.mocked(createFolder).mockReset();
     jest.mocked(renameFolder).mockReset();
     jest.mocked(deleteFolder).mockReset();
@@ -64,12 +66,18 @@ beforeEach(() => {
 
 describe("/api/folders", () => {
     it("lists folders for any verified member", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("employee"),
         });
-        jest.mocked(listFolders).mockResolvedValue([
-            { path: "Contracts", documentCount: 2, persisted: true },
+        jest.mocked(listVisibleFolders).mockResolvedValue([
+            {
+                path: "Contracts",
+                documentCount: 2,
+                persisted: true,
+                categoryId: 7,
+                restricted: false,
+            },
         ]);
 
         const response = await GET(request("GET"));
@@ -77,13 +85,23 @@ describe("/api/folders", () => {
         expect(response.status).toBe(200);
         await expect(response.json()).resolves.toEqual({
             success: true,
-            data: { folders: [{ path: "Contracts", documentCount: 2, persisted: true }] },
+            data: {
+                folders: [
+                    {
+                        path: "Contracts",
+                        documentCount: 2,
+                        persisted: true,
+                        categoryId: 7,
+                        restricted: false,
+                    },
+                ],
+            },
         });
-        expect(listFolders).toHaveBeenCalledWith(BigInt(42));
+        expect(listVisibleFolders).toHaveBeenCalledWith(BigInt(42), { kind: "everything" });
     });
 
     it("refuses writes from members without a management role", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("employee"),
         });
@@ -95,7 +113,7 @@ describe("/api/folders", () => {
     });
 
     it("creates a folder and reports what was added", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("owner"),
         });
@@ -111,7 +129,7 @@ describe("/api/folders", () => {
     });
 
     it("rejects a rename without both paths", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("admin"),
         });
@@ -123,7 +141,7 @@ describe("/api/folders", () => {
     });
 
     it("reports an expected outcome with its own status", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("admin"),
         });
@@ -142,7 +160,7 @@ describe("/api/folders", () => {
     });
 
     it("deletes a folder and says where its sources went", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("owner"),
         });
@@ -163,7 +181,7 @@ describe("/api/folders", () => {
     });
 
     it("never leaks an unexpected failure", async () => {
-        jest.mocked(requireWorkspaceContext).mockResolvedValue({
+        mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("owner"),
         });

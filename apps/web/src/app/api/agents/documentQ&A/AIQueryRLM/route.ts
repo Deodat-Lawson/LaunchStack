@@ -18,7 +18,7 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { document } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -34,10 +34,14 @@ import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/store/schema";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+const ROUTE = "agents/documentQ&A/AIQueryRLM";
 
 /**
  * Request body schema for RLM queries
@@ -150,6 +154,10 @@ export async function POST(request: Request) {
             // is going to 401 should 401, not 400.
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
+            if (!ctx.data.can("documents.read")) {
+                recordAuthzDenied("documents.read", ROUTE);
+                return forbiddenForPermission("documents.read");
+            }
 
             // Parse and validate request
             const body = (await request.json()) as RLMQueryRequest;
@@ -205,27 +213,22 @@ export async function POST(request: Request) {
             }
             const { modelId: selectedAiModel, chat } = resolved;
 
+            // A document outside the caller's scope reads as missing: 404, never 403.
+            // RLM navigates within this one document, so proving it is enough.
+            const scope = await ctx.data.documentScope();
+            observeScopeSize(scope);
             const [targetDocument] = await db
-                .select({
-                    id: document.id,
-                    companyId: document.companyId,
-                    title: document.title,
-                })
+                .select({ id: document.id, title: document.title })
                 .from(document)
-                .where(eq(document.id, documentId))
+                .where(
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
+                )
                 .limit(1);
 
             if (!targetDocument) {
                 return NextResponse.json(
                     { success: false, message: "Document not found." },
                     { status: 404 }
-                );
-            }
-
-            if (targetDocument.companyId !== ctx.data.companyId) {
-                return NextResponse.json(
-                    { success: false, message: "You do not have access to this document." },
-                    { status: 403 }
                 );
             }
 

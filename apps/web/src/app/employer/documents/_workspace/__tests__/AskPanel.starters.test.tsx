@@ -31,7 +31,6 @@ jest.mock("../../../_chrome/EmployerWorkspaceSwitcherContext", () => ({
 jest.mock("../../hooks/useChatRoutes", () => ({
     useChatRoutes: () => ({ routes: [], loading: false }),
 }));
-jest.mock("../GraphView", () => ({ GraphView: () => null }));
 
 const SOURCES: WorkspaceSource[] = [
     {

@@ -23,7 +23,7 @@ const CreateRunSchema = z.object({
 });
 
 /** Credits the run needs before it starts: planning plus the first candidate. */
-export const RUN_MINIMUM_CREDITS = 3_000;
+const RUN_MINIMUM_CREDITS = 3_000;
 
 export async function GET(request: NextRequest) {
     try {

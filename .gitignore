@@ -73,6 +73,9 @@ backups/
 # test output
 test-output/
 
-# Personal working notes — never committed
-notes/
+# Personal working notes — never committed. Anchored to the repository root:
+# a bare `notes/` matches any directory of that name at any depth, which
+# silently swallowed apps/web/src/server/notes/ and let a commit ship three
+# imports of a module that was never added.
+/notes/
 *.tgz

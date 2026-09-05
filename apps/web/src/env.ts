@@ -246,9 +246,23 @@ const serverSchema = z.object({
     // Signing key Inngest uses to verify requests to the serve endpoint. Read by
     // the Inngest SDK itself, not by this app; declared so it is documented.
     INNGEST_SIGNING_KEY: optionalString(),
-    // Enable Graph RAG retrieval
+    // Stage F of ingestion: LLM entity extraction into the kg_* tables. Off
+    // unless set (ADR-010): nothing user-facing reads the graph, and it bills
+    // an NER call per five chunks of every upload.
+    ENABLE_ENTITY_EXTRACTION: z.preprocess(
+        val => val === "true" || val === "1",
+        z.boolean().optional()
+    ),
+    // Enable Graph RAG retrieval (needs ENABLE_ENTITY_EXTRACTION to have
+    // populated kg_*; not covered by the golden retrieval tests).
     ENABLE_GRAPH_RETRIEVER: z.preprocess(
         val => val === "true" || val === "1",
+        z.boolean().optional()
+    ),
+    // The company-facts leg: cited facts from the company-metadata projection
+    // join the chat ensemble (ADR-010). On unless explicitly "false" / "0".
+    ENABLE_COMPANY_FACTS_RETRIEVER: z.preprocess(
+        val => !(val === "false" || val === "0"),
         z.boolean().optional()
     ),
     // Enable retrieval over user-authored notes in the ensemble search.
@@ -493,7 +507,9 @@ function parseServerEnv() {
         EMAIL_UNSUBSCRIBE_SECRET: process.env.EMAIL_UNSUBSCRIBE_SECRET,
         EMAIL_SENDING_ENABLED: process.env.EMAIL_SENDING_ENABLED,
         INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
+        ENABLE_ENTITY_EXTRACTION: process.env.ENABLE_ENTITY_EXTRACTION,
         ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+        ENABLE_COMPANY_FACTS_RETRIEVER: process.env.ENABLE_COMPANY_FACTS_RETRIEVER,
         ENABLE_NOTES_RETRIEVER: process.env.ENABLE_NOTES_RETRIEVER,
         NEO4J_URI: process.env.NEO4J_URI,
         NEO4J_USERNAME: process.env.NEO4J_USERNAME,

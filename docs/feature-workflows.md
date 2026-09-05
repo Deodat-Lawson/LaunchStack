@@ -64,18 +64,30 @@ The ingestion layer (`src/lib/ingestion/`) provides a single API to convert docu
 
 ## Knowledge graph (Graph RAG)
 
+Opt-in since [ADR-010](./architecture/ADR-010-knowledge-graph-scope.md). The
+chat panel no longer carries a Graph tab, stage F entity extraction runs only
+when `ENABLE_ENTITY_EXTRACTION=true`, and the graph retrieval leg stays behind
+`ENABLE_GRAPH_RETRIEVER`. What chat gets instead is the **company-facts leg**:
+cited facts from the company-metadata projection (people, services, projects,
+legal, policies) join the ensemble (`ENABLE_COMPANY_FACTS_RETRIEVER`, on by
+default).
+
+When entity extraction is enabled:
+
 1. **Entity extraction** — the configured LLM-based extractor runs NER on
-   chunks (or extraction is explicitly disabled with an actionable log —
-   [ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
+   chunks ([ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
 2. **Graph storage** — Entities and relationships stored in `kg_entities`, `kg_entity_mentions`, `kg_relationships`
 3. **Graph retrieval** — `GraphRetriever` finds entities matching the query, traverses 1–2 hops, returns related sections
 4. **Ensemble use** — Graph retriever can be combined with vector and BM25 in ensemble search
 
 Relevant code:
 
-- `src/lib/ingestion/entity-extraction.ts` — runs extraction and writes to graph tables
-- `src/server/rag/retrievers/graph-retriever.ts` — LangChain retriever for graph traversal
-- `src/server/db/schema/knowledge-graph.ts` — graph schema
+- `packages/indexing/src/entity-extraction.ts` — runs extraction and writes to graph tables
+- `packages/indexing/src/entity-extraction-config.ts` — the opt-in gate
+- `packages/retrieval/src/algorithms/graph/` — graph traversal legs (Postgres + Neo4j)
+- `packages/store/src/db/schema/knowledge-graph.ts` — graph schema
+- `apps/web/src/server/rag/company-facts-retriever.ts` — the company-facts leg
+- `apps/web/src/app/employer/tools/knowledge-graph/` — parked entity-graph view (index health, unlinked)
 
 ## Compute services
 

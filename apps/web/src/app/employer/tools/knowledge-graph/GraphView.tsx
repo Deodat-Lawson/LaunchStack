@@ -1,7 +1,15 @@
 "use client";
 
+/**
+ * The entity-graph view, parked here from the chat panel (ADR-010). It draws
+ * whatever stage-F entity extraction produced — NER labels joined by
+ * same-chunk co-occurrence — and is an index-health surface, not a product
+ * one: nodes select but lead nowhere. It renders nothing on a deployment
+ * that has not set ENABLE_ENTITY_EXTRACTION, and says so.
+ */
+
 import { type PointerEvent, useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
-import { IconPlus, IconSearch } from "./icons";
+import { Plus, Search } from "lucide-react";
 
 export interface GraphNode {
     id: number;
@@ -238,7 +246,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                     minWidth: 280,
                 }}
             >
-                <IconSearch size={12} style={{ color: "var(--ink-3)" }} />
+                <Search size={12} style={{ color: "var(--ink-3)" }} />
                 <input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
@@ -280,8 +288,8 @@ export function GraphView({ documentId }: GraphViewProps) {
             {error && !loading && <CenterNote tone="danger">{error}</CenterNote>}
             {!loading && !error && data && data.nodes.length === 0 && (
                 <CenterNote>
-                    No entities extracted yet. Upload documents and let entity extraction run — then
-                    come back to this view.
+                    No entities extracted. Entity extraction is off by default; set
+                    ENABLE_ENTITY_EXTRACTION=true, upload a document, then come back to this view.
                 </CenterNote>
             )}
 
@@ -600,7 +608,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                             borderBottom: "1px solid var(--line)",
                         }}
                     >
-                        <IconPlus size={12} />
+                        <Plus size={12} />
                     </button>
                     <button
                         onClick={() => {

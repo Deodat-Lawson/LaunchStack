@@ -19,7 +19,6 @@ import {
     IconChevronRight,
     IconFile,
     IconGlobe,
-    IconGraph,
     IconImage,
     IconLogout,
     IconMoon,
@@ -32,7 +31,6 @@ import {
     IconUser,
     IconX,
 } from "./icons";
-import { GraphView } from "./GraphView";
 import {
     SOURCE_META,
     type ComposerSend,
@@ -1380,8 +1378,6 @@ export interface AskPanelProps {
     leadingChromeInsetPx?: number;
 }
 
-type WorkspaceView = "chat" | "graph";
-
 export function AskPanel({
     sources,
     selected,
@@ -1406,30 +1402,21 @@ export function AskPanel({
     leadingChromeInsetPx = 0,
 }: AskPanelProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [view, setView] = useState<WorkspaceView>("chat");
 
     useEffect(() => {
-        if (view === "chat" && scrollRef.current) {
+        if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [thread, isSending, view]);
+    }, [thread, isSending]);
 
     const isEmpty = thread.length === 0;
     const latestRole = thread.at(-1)?.role;
     const showTyping = isSending && latestRole === "user";
 
-    const titleText =
-        view === "graph"
-            ? "Knowledge graph"
-            : isEmpty
-              ? "New conversation"
-              : "Ask over your sources";
-    const subText =
-        view === "graph"
-            ? `${sources.length} sources · ${selected.length} pinned`
-            : isEmpty
-              ? "Pick sources on the left, then ask."
-              : `${thread.length} message${thread.length !== 1 ? "s" : ""} · updated just now`;
+    const titleText = isEmpty ? "New conversation" : "Ask over your sources";
+    const subText = isEmpty
+        ? "Pick sources on the left, then ask."
+        : `${thread.length} message${thread.length !== 1 ? "s" : ""} · updated just now`;
 
     const handleSend = useCallback((send: ComposerSend) => sendMessage(send), [sendMessage]);
 
@@ -1450,58 +1437,10 @@ export function AskPanel({
                     <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{subText}</div>
                 </div>
 
-                <div
-                    style={{
-                        display: "flex",
-                        background: "var(--line-2)",
-                        borderRadius: 7,
-                        padding: 2,
-                    }}
-                >
-                    <button
-                        onClick={() => setView("chat")}
-                        title="Chat"
-                        style={{
-                            padding: "4px 10px",
-                            borderRadius: 5,
-                            fontSize: 12,
-                            fontWeight: 600,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            background: view === "chat" ? "var(--panel)" : "transparent",
-                            color: view === "chat" ? "var(--ink)" : "var(--ink-3)",
-                            boxShadow: view === "chat" ? "0 1px 2px var(--scrim-shadow)" : "none",
-                        }}
-                    >
-                        <IconBolt size={11} />
-                        Chat
-                    </button>
-                    <button
-                        onClick={() => setView("graph")}
-                        title="Knowledge graph"
-                        style={{
-                            padding: "4px 10px",
-                            borderRadius: 5,
-                            fontSize: 12,
-                            fontWeight: 600,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            background: view === "graph" ? "var(--panel)" : "transparent",
-                            color: view === "graph" ? "var(--ink)" : "var(--ink-3)",
-                            boxShadow: view === "graph" ? "0 1px 2px var(--scrim-shadow)" : "none",
-                        }}
-                    >
-                        <IconGraph size={11} />
-                        Graph
-                    </button>
-                </div>
-
                 <button
                     onClick={onNewChat}
                     title="New chat"
-                    disabled={isEmpty || view !== "chat"}
+                    disabled={isEmpty}
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -1542,76 +1481,68 @@ export function AskPanel({
                 />
             </div>
 
-            {view === "graph" ? (
-                <div style={{ flex: 1, overflow: "hidden", background: "var(--bg)" }}>
-                    <GraphView />
+            <div
+                ref={scrollRef}
+                style={{
+                    flex: 1,
+                    overflowY: "auto",
+                    paddingTop: 28,
+                    paddingBottom: 20,
+                    paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
+                    paddingRight: CHAT_GUTTER_X_PX,
+                }}
+            >
+                <div style={{ maxWidth: CHAT_COLUMN_MAX_PX, margin: "0 auto" }}>
+                    {isEmpty ? (
+                        <EmptyState onOpenAdd={onOpenAdd} sourceCount={sources.length} />
+                    ) : (
+                        <>
+                            {thread.map((m, i) => (
+                                <Message
+                                    key={i}
+                                    msg={m}
+                                    sources={sources}
+                                    onOpenCitation={onOpenCitation}
+                                />
+                            ))}
+                            {showTyping && <TypingIndicator />}
+                        </>
+                    )}
                 </div>
-            ) : (
-                <>
-                    <div
-                        ref={scrollRef}
-                        style={{
-                            flex: 1,
-                            overflowY: "auto",
-                            paddingTop: 28,
-                            paddingBottom: 20,
-                            paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
-                            paddingRight: CHAT_GUTTER_X_PX,
-                        }}
-                    >
-                        <div style={{ maxWidth: CHAT_COLUMN_MAX_PX, margin: "0 auto" }}>
-                            {isEmpty ? (
-                                <EmptyState onOpenAdd={onOpenAdd} sourceCount={sources.length} />
-                            ) : (
-                                <>
-                                    {thread.map((m, i) => (
-                                        <Message
-                                            key={i}
-                                            msg={m}
-                                            sources={sources}
-                                            onOpenCitation={onOpenCitation}
-                                        />
-                                    ))}
-                                    {showTyping && <TypingIndicator />}
-                                </>
-                            )}
-                        </div>
-                    </div>
+            </div>
 
-                    <div
-                        style={{
-                            paddingTop: 12,
-                            paddingBottom: 20,
-                            paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
-                            paddingRight: CHAT_GUTTER_X_PX,
-                            flexShrink: 0,
-                        }}
-                    >
-                        <Composer
-                            sources={sources}
-                            selected={selected}
-                            setSelected={setSelected}
-                            onSend={handleSend}
-                            disabled={isSending}
-                            webSearch={webSearch}
-                            onToggleWebSearch={onToggleWebSearch}
-                            thinking={thinking}
-                            onToggleThinking={onToggleThinking}
-                        />
-                        <div
-                            style={{
-                                maxWidth: CHAT_COLUMN_MAX_PX,
-                                margin: "8px auto 0",
-                                textAlign: "center",
-                                fontSize: 11,
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            Grounded answers only — cites every source it uses.
-                        </div>
-                    </div>
-                </>
-            )}
+            <div
+                style={{
+                    paddingTop: 12,
+                    paddingBottom: 20,
+                    paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
+                    paddingRight: CHAT_GUTTER_X_PX,
+                    flexShrink: 0,
+                }}
+            >
+                <Composer
+                    sources={sources}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onSend={handleSend}
+                    disabled={isSending}
+                    webSearch={webSearch}
+                    onToggleWebSearch={onToggleWebSearch}
+                    thinking={thinking}
+                    onToggleThinking={onToggleThinking}
+                />
+                <div
+                    style={{
+                        maxWidth: CHAT_COLUMN_MAX_PX,
+                        margin: "8px auto 0",
+                        textAlign: "center",
+                        fontSize: 11,
+                        color: "var(--ink-3)",
+                    }}
+                >
+                    Grounded answers only — cites every source it uses.
+                </div>
+            </div>
         </main>
     );
 }

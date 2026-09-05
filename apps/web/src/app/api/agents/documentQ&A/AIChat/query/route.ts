@@ -478,6 +478,7 @@ export async function POST(request: Request) {
                         weights: [0.4, 0.6],
                         topK: 10,
                         documentIds: archiveDocumentIds,
+                        companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
@@ -490,6 +491,7 @@ export async function POST(request: Request) {
                         weights: [0.4, 0.6],
                         topK: 10,
                         documentIds: verifiedSelectedIds,
+                        companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
@@ -614,7 +616,17 @@ export async function POST(request: Request) {
                         `📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`
                     );
 
-                    return `=== Chunk #${idx + 1}, Page ${page} ===\n${doc.pageContent}`;
+                    // A company fact is a curated, cited statement, not a passage;
+                    // label it so the model treats it as such (ADR-010).
+                    const heading =
+                        source === "company_fact"
+                            ? `=== Company fact #${idx + 1}${
+                                  doc.metadata?.documentTitle
+                                      ? ` (from ${doc.metadata.documentTitle})`
+                                      : ""
+                              } ===`
+                            : `=== Chunk #${idx + 1}, Page ${page} ===`;
+                    return `${heading}\n${doc.pageContent}`;
                 })
                 .join("\n\n");
 

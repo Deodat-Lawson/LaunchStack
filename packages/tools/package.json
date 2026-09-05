@@ -24,6 +24,10 @@
             "types": "./src/company-context/schema.ts",
             "default": "./src/company-context/schema.ts"
         },
+        "./company-context/facts": {
+            "types": "./src/company-context/facts.ts",
+            "default": "./src/company-context/facts.ts"
+        },
         "./grounded-retrieval": {
             "types": "./src/grounded-retrieval/index.ts",
             "default": "./src/grounded-retrieval/index.ts"
@@ -105,6 +109,10 @@
             "./company-context/schema": {
                 "types": "./dist/company-context/schema.d.ts",
                 "default": "./dist/company-context/schema.js"
+            },
+            "./company-context/facts": {
+                "types": "./dist/company-context/facts.d.ts",
+                "default": "./dist/company-context/facts.js"
             },
             "./grounded-retrieval": {
                 "types": "./dist/grounded-retrieval/index.d.ts",

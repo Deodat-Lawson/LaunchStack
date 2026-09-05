@@ -14,6 +14,7 @@ import { env } from "~/env";
 import { configureProviders } from "@launchstack/llm/providers/registry";
 import { configureSecretBox } from "@launchstack/store/crypto";
 import { configureOcr } from "@launchstack/conversion/ocr/config";
+import { configureEntityExtraction } from "@launchstack/indexing";
 import { configureEmbeddingIndexRegistry } from "@launchstack/llm/embeddings";
 import { configureCompanyEmbeddingDefaults } from "@launchstack/llm/embeddings";
 import { createAppStoragePort } from "./storage/port";
@@ -284,6 +285,10 @@ export function getEngine(): Engine {
     // Register the full OcrConfig so the complexity router and the
     // document-converter adapters all read from the same source.
     configureOcr(config.ocr);
+
+    // Stage F (entity extraction into kg_*) is opt-in (ADR-010). apps/worker
+    // boots through this same root, so ingestion and the app agree.
+    configureEntityExtraction({ enabled: env.server.ENABLE_ENTITY_EXTRACTION === true });
 
     const engine = createEngine(config);
     globalHolder.__launchstackEngine = { engine };

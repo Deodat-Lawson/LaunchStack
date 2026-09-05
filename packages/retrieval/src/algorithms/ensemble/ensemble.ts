@@ -40,6 +40,13 @@ const NOTES_DEFAULT_WEIGHT = 0.15;
 // Cap note candidates so we don't flood the ensemble when a doc has dozens
 // of notes. The reranker downstream trims to the final topK anyway.
 const NOTES_MAX_CANDIDATES = 8;
+// Company facts are few, short and curated: a fact that matches should land
+// beside the chunks that say the same thing, not above the whole corpus.
+// Same share the graph leg gets, for the same reason.
+const FACTS_DEFAULT_WEIGHT = 0.2;
+// The projection is one JSON row; a question rarely touches more than a few
+// of its facts, and anything past that is the lexical scorer guessing.
+const FACTS_MAX_CANDIDATES = 6;
 
 function isGraphRetrievalEnabled(): boolean {
     return getEnsembleConfig().graphRetrieval;
@@ -111,6 +118,18 @@ export async function createDocumentEnsembleRetriever(
         weights = [...weights, NOTES_DEFAULT_WEIGHT];
     }
 
+    const factsLegs = getEnsembleConfig().factsLegs;
+    if (factsLegs && companyId != null) {
+        retrievers.push(
+            factsLegs.createDocumentLeg(
+                documentId,
+                companyId,
+                Math.min(candidateK, FACTS_MAX_CANDIDATES)
+            )
+        );
+        weights = [...weights, FACTS_DEFAULT_WEIGHT];
+    }
+
     return new EnsembleRetriever({ retrievers, weights });
 }
 
@@ -153,6 +172,14 @@ export async function createCompanyEnsembleRetriever(
         );
         retrievers.push(notesRetriever);
         weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
+
+    const factsLegs = getEnsembleConfig().factsLegs;
+    if (factsLegs) {
+        retrievers.push(
+            factsLegs.createCompanyLeg(companyId, Math.min(candidateK, FACTS_MAX_CANDIDATES))
+        );
+        weights = [...weights, FACTS_DEFAULT_WEIGHT];
     }
 
     return new EnsembleRetriever({ retrievers, weights });
@@ -198,6 +225,18 @@ export async function createMultiDocEnsembleRetriever(
         );
         retrievers.push(notesRetriever);
         weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
+
+    const factsLegs = getEnsembleConfig().factsLegs;
+    if (factsLegs && companyId != null) {
+        retrievers.push(
+            factsLegs.createMultiDocLeg(
+                documentIds,
+                companyId,
+                Math.min(candidateK, FACTS_MAX_CANDIDATES)
+            )
+        );
+        weights = [...weights, FACTS_DEFAULT_WEIGHT];
     }
 
     return new EnsembleRetriever({ retrievers, weights });

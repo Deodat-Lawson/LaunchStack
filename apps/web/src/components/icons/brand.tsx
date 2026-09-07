@@ -60,6 +60,15 @@ export const IconDrive = (p: BrandIconProps) => (
     </Ic>
 );
 
+/** Google Docs: the Drive page glyph with ruled lines. */
+export const IconGoogleDocs = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <path d="M5 2.5h6l4 4v11H5Z" />
+        <path d="M11 2.5v4h4" />
+        <path d="M7.5 10.5h5M7.5 13h5" />
+    </Ic>
+);
+
 export const IconSlack = (p: BrandIconProps) => (
     <Ic {...p}>
         <rect x="8" y="3" width="3" height="7" rx="1.5" />

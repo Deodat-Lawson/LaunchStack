@@ -226,18 +226,28 @@ function buildMultipartBody(
     return Buffer.concat([Buffer.from(head, "utf8"), data, Buffer.from(tail, "utf8")]);
 }
 
-/** Create a file with content in one request (multipart upload). */
+/**
+ * Create a file with content in one request (multipart upload).
+ *
+ * Pass `targetMimeType` to have Drive *convert* the body on the way in — the
+ * uploaded part keeps `mimeType` while the metadata asks for the destination
+ * type, which is how an HTML body becomes a native Google Doc. Omit it and the
+ * file is stored verbatim.
+ */
 export async function createFileMultipart(params: {
     accessToken: string;
     name: string;
+    /** Content-Type of the uploaded body. */
     mimeType: string;
+    /** Type Drive should convert the body into (e.g. GOOGLE_DOC_MIME). */
+    targetMimeType?: string;
     data: Buffer;
     parents?: string[];
 }): Promise<DriveFileMetadata> {
     const boundary = `launchstack-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
     const metadata: Record<string, unknown> = {
         name: params.name,
-        mimeType: params.mimeType,
+        mimeType: params.targetMimeType ?? params.mimeType,
         ...(params.parents?.length ? { parents: params.parents } : {}),
     };
     const url = `${DRIVE_UPLOAD_BASE}/files?uploadType=multipart&fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;

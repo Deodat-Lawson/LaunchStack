@@ -6,7 +6,9 @@ import React, {
     type Dispatch,
     type MouseEvent,
     type SetStateAction,
+    useEffect,
     useMemo,
+    useRef,
     useState,
 } from "react";
 import {
@@ -32,6 +34,7 @@ import {
     type FolderTreeNode,
 } from "~/lib/folders/path";
 import { ContextMenu } from "./ContextMenu";
+import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import {
     buildBlankRailMenuItems,
     buildFolderMenuItems,
@@ -560,7 +563,17 @@ export interface SourceRailProps {
      * question; browsing and auditing the corpus happens there.
      */
     onOpenKnowledge?: () => void;
+    /**
+     * Everything the History tab needs. Omit it and the rail is sources-only,
+     * with no tab strip — which is what the minimal embeddings want.
+     */
+    history?: Omit<HistoryRailProps, "query">;
 }
+
+/** Which half of the rail is showing. Persisted, so a habit survives a reload. */
+type RailTab = "sources" | "history";
+
+const RAIL_TAB_KEY = "workspace.railTab.v1";
 
 /** Everything a branch of the tree needs from the rail, passed once per level. */
 interface BranchContext {
@@ -698,13 +711,37 @@ export function SourceRail({
     logoLabel = "Launchstack",
     onClose,
     onOpenKnowledge,
+    history,
 }: SourceRailProps) {
+    const [tab, setTab] = useState<RailTab>("sources");
+    const tabReady = useRef(false);
     const [search, setSearch] = useState("");
     const [searchFocus, setSearchFocus] = useState(false);
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
     const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
     const [drag, setDrag] = useState<RailDrag | null>(null);
     const [menu, setMenu] = useState<RailMenu | null>(null);
+
+    useEffect(() => {
+        try {
+            if (localStorage.getItem(RAIL_TAB_KEY) === "history") setTab("history");
+        } catch {
+            // Private mode / corrupt storage — Sources is the safe default.
+        }
+        tabReady.current = true;
+    }, []);
+
+    useEffect(() => {
+        if (!tabReady.current) return;
+        try {
+            localStorage.setItem(RAIL_TAB_KEY, tab);
+        } catch {
+            // Quota / private mode — the tab just won't be remembered.
+        }
+    }, [tab]);
+
+    // A rail without history props can never sit on a tab that isn't there.
+    const activeTab: RailTab = history ? tab : "sources";
 
     const closeMenu = () => setMenu(null);
 
@@ -999,6 +1036,52 @@ export function SourceRail({
                 )}
             </div>
 
+            {history && (
+                <div
+                    role="tablist"
+                    aria-label="Sidebar section"
+                    style={{
+                        margin: "0 14px 10px",
+                        display: "flex",
+                        gap: 2,
+                        padding: 2,
+                        borderRadius: 7,
+                        background: "var(--line-2)",
+                    }}
+                >
+                    {(
+                        [
+                            { id: "sources", label: "Sources" },
+                            { id: "history", label: "History" },
+                        ] as const
+                    ).map(item => {
+                        const selected = activeTab === item.id;
+                        return (
+                            <button
+                                key={item.id}
+                                role="tab"
+                                aria-selected={selected}
+                                data-testid={`rail-tab-${item.id}`}
+                                onClick={() => setTab(item.id)}
+                                style={{
+                                    flex: 1,
+                                    padding: "4px 8px",
+                                    borderRadius: 5,
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    background: selected ? "var(--panel)" : "transparent",
+                                    color: selected ? "var(--ink)" : "var(--ink-3)",
+                                    boxShadow: selected ? "0 1px 2px rgba(0,0,0,0.05)" : "none",
+                                    transition: "background 120ms, color 120ms",
+                                }}
+                            >
+                                {item.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
             <div style={{ padding: "0 14px 10px" }}>
                 <div
                     style={{
@@ -1018,7 +1101,9 @@ export function SourceRail({
                         onChange={e => setSearch(e.target.value)}
                         onFocus={() => setSearchFocus(true)}
                         onBlur={() => setSearchFocus(false)}
-                        placeholder="Search your knowledge"
+                        placeholder={
+                            activeTab === "history" ? "Search history" : "Search your knowledge"
+                        }
                         style={{
                             flex: 1,
                             background: "transparent",
@@ -1031,7 +1116,7 @@ export function SourceRail({
                 </div>
             </div>
 
-            {(Boolean(activeFolder) || Boolean(activeTag)) && (
+            {activeTab === "sources" && (Boolean(activeFolder) || Boolean(activeTag)) && (
                 <div style={{ padding: "0 14px 8px" }}>
                     <button
                         data-testid="source-rail-scope"
@@ -1070,87 +1155,91 @@ export function SourceRail({
                 </div>
             )}
 
-            <div
-                data-testid="source-rail-list"
-                onContextMenu={e => {
-                    e.preventDefault();
-                    setMenu({ kind: "blank", x: e.clientX, y: e.clientY });
-                }}
-                onDragOver={e => {
-                    // Empty rail space is the top level: a nested folder dropped
-                    // here moves out of its parent.
-                    if (drag?.kind === "folder" && onMoveFolder) e.preventDefault();
-                }}
-                onDrop={e => {
-                    if (drag?.kind === "folder" && onMoveFolder) {
+            {activeTab === "history" && history ? (
+                <HistoryRail {...history} query={search} />
+            ) : (
+                <div
+                    data-testid="source-rail-list"
+                    onContextMenu={e => {
                         e.preventDefault();
-                        const target = activeFolder;
-                        if (joinFolderPath(target, folderLeafName(drag.path)) !== drag.path) {
-                            onMoveFolder(drag.path, target);
+                        setMenu({ kind: "blank", x: e.clientX, y: e.clientY });
+                    }}
+                    onDragOver={e => {
+                        // Empty rail space is the top level: a nested folder dropped
+                        // here moves out of its parent.
+                        if (drag?.kind === "folder" && onMoveFolder) e.preventDefault();
+                    }}
+                    onDrop={e => {
+                        if (drag?.kind === "folder" && onMoveFolder) {
+                            e.preventDefault();
+                            const target = activeFolder;
+                            if (joinFolderPath(target, folderLeafName(drag.path)) !== drag.path) {
+                                onMoveFolder(drag.path, target);
+                            }
                         }
-                    }
-                    setDrag(null);
-                    setDragOverFolder(null);
-                }}
-                style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}
-            >
-                <SourceRows items={tree.items} ctx={branchCtx} />
-                {tree.children.map(node => (
-                    <FolderBranch key={node.path} node={node} ctx={branchCtx} />
-                ))}
-                {filtered.length === 0 && (
-                    <div
-                        style={{
-                            padding: "32px 14px",
-                            textAlign: "center",
-                            color: "var(--ink-3)",
-                            fontSize: 13,
-                        }}
-                    >
-                        Nothing here.{" "}
-                        <button
-                            onClick={onOpenAdd}
+                        setDrag(null);
+                        setDragOverFolder(null);
+                    }}
+                    style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}
+                >
+                    <SourceRows items={tree.items} ctx={branchCtx} />
+                    {tree.children.map(node => (
+                        <FolderBranch key={node.path} node={node} ctx={branchCtx} />
+                    ))}
+                    {filtered.length === 0 && (
+                        <div
                             style={{
-                                color: "var(--accent)",
-                                fontWeight: 600,
-                                textDecoration: "underline",
+                                padding: "32px 14px",
+                                textAlign: "center",
+                                color: "var(--ink-3)",
+                                fontSize: 13,
                             }}
                         >
-                            Add a source
-                        </button>
-                        .
-                    </div>
-                )}
+                            Nothing here.{" "}
+                            <button
+                                onClick={onOpenAdd}
+                                style={{
+                                    color: "var(--accent)",
+                                    fontWeight: 600,
+                                    textDecoration: "underline",
+                                }}
+                            >
+                                Add a source
+                            </button>
+                            .
+                        </div>
+                    )}
 
-                {!activeTag && !search && onNewFolder && (
-                    <button
-                        data-testid="source-rail-new-folder"
-                        onClick={() => onNewFolder(activeFolder)}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 7,
-                            padding: "6px 10px",
-                            marginTop: 8,
-                            borderRadius: 5,
-                            color: "var(--ink-3)",
-                            fontSize: 12,
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.color = "var(--accent)";
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.color = "var(--ink-3)";
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        <IconPlus size={11} />
-                        {activeFolder ? "New subfolder" : "New folder"}
-                    </button>
-                )}
-            </div>
+                    {!activeTag && !search && onNewFolder && (
+                        <button
+                            data-testid="source-rail-new-folder"
+                            onClick={() => onNewFolder(activeFolder)}
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 7,
+                                padding: "6px 10px",
+                                marginTop: 8,
+                                borderRadius: 5,
+                                color: "var(--ink-3)",
+                                fontSize: 12,
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.color = "var(--accent)";
+                                e.currentTarget.style.background = "var(--line-2)";
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.color = "var(--ink-3)";
+                                e.currentTarget.style.background = "transparent";
+                            }}
+                        >
+                            <IconPlus size={11} />
+                            {activeFolder ? "New subfolder" : "New folder"}
+                        </button>
+                    )}
+                </div>
+            )}
 
             {selected.length > 0 && (
                 <div

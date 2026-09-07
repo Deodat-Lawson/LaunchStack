@@ -215,7 +215,7 @@ describe("LaunchStackKnowledgeNoteSink", () => {
         expect(store.embeddingRequests).toEqual([{ noteId: NOTE_ID, companyId: COMPANY_ID }]);
     });
 
-    it("does not send Transcript, Bookmark, or proposal content into the embedding request", async () => {
+    it("does not send Transcript or proposal content into the embedding request", async () => {
         const store = new FakeKnowledgeNoteStore();
 
         await createKnowledgeNoteSink(store).upsert(knowledgeNote());

@@ -93,6 +93,18 @@
       "types": "./src/call-notes/index.ts",
       "default": "./src/call-notes/index.ts"
     },
+    "./call-notes/contracts": {
+      "types": "./src/call-notes/contracts.ts",
+      "default": "./src/call-notes/contracts.ts"
+    },
+    "./call-notes/files": {
+      "types": "./src/call-notes/files.ts",
+      "default": "./src/call-notes/files.ts"
+    },
+    "./call-notes/enrichment": {
+      "types": "./src/call-notes/enrichment.ts",
+      "default": "./src/call-notes/enrichment.ts"
+    },
     "./founder-weekly-review": {
       "types": "./src/founder-weekly-review/index.ts",
       "default": "./src/founder-weekly-review/index.ts"

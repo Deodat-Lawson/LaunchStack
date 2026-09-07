@@ -11,6 +11,9 @@ import type {
     EnrichmentInput,
     EnrichmentResult,
     KnowledgeNote,
+    LocalCaptureWorkerStatus,
+    LocalCapturePollInput,
+    LocalCapturePollResult,
     StartCaptureInput,
     TranscriptSearchQuery,
     TranscriptSegment,
@@ -23,7 +26,7 @@ export interface CaptureEventSink {
 export interface CaptureAttemptHandle {
     pause(input: CaptureControlInput): Promise<void>;
     resume(input: CaptureControlInput): Promise<void>;
-    /** Releases local resources. It is not a provider Stop command. */
+    /** Releases local resources without emitting a source control event. */
     dispose(): Promise<void>;
 }
 
@@ -35,7 +38,13 @@ export interface CaptureSource {
 /** Public application boundary consumed by API handlers and contract tests. */
 export interface CallNotesApplication {
     execute(command: CallNotesCommand): Promise<CallSnapshot | null>;
+    pollLocalCapture(input: LocalCapturePollInput): Promise<LocalCapturePollResult>;
+    getLocalCaptureWorkerStatus(input: {
+        companyId: string;
+        userId: string;
+    }): Promise<LocalCaptureWorkerStatus>;
     ingestCaptureEvent(companyId: string, event: CaptureEvent): Promise<void>;
+    ingestLocalCaptureEvent(companyId: string, event: CaptureEvent): Promise<void>;
     completeEnrichment(input: CompleteEnrichmentInput): Promise<void>;
     getCall(query: CallQuery): Promise<CallSnapshot>;
     listCalls(query: CallListQuery): Promise<readonly CallSnapshot[]>;

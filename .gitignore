@@ -52,6 +52,7 @@ yarn-error.log*
 
 # package build outputs
 packages/*/dist/
+**/.build/
 
 # idea files
 .idea

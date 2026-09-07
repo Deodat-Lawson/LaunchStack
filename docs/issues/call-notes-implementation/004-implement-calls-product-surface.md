@@ -17,7 +17,7 @@ blocked_by:
 
 ## Outcome
 
-The accepted single-workspace interaction becomes the production Calls experience: a persistent Calls rail, note-first Call workspace, live attributed Transcript, visible capture state/gaps, Bookmarks, privacy, post-call enrichment review, and deliberate knowledge inclusion.
+The accepted single-workspace interaction becomes the production Calls experience: a persistent Calls rail, note-first Call workspace, live channel-provenance Transcript, visible capture state/gaps, Bookmarks, privacy, post-call enrichment review, and deliberate knowledge inclusion.
 
 ## Contracts consumed and provided
 
@@ -25,15 +25,15 @@ Consumes `CallSnapshot`, Call Notes command/query schemas, stable product APIs, 
 
 ## Owned surface
 
-Production Calls pages, layouts, components, client state, navigation entry, styling, and their UI tests. Product API handlers, domain persistence, shared contracts/schema, Zoom runtime, enrichment internals, and root integration files remain outside this lane.
+Production Calls pages, layouts, components, client state, navigation entry, styling, and their UI tests. Product API handlers, domain persistence, shared contracts/schema, local audio runtime, enrichment internals, and root integration files remain outside this lane.
 
 ## Acceptance
 
 - The prototype's accepted interaction contract is preserved: one compact Live/Recent Calls rail and one restrained, note-first Call detail pane with a contained collapsed Transcript card.
-- Start, detected-call suggestion, manual Zoom URL/meeting ID fallback, Pause, Resume, connecting/live/paused/partial/failed/finalizing states, and retryable outcomes are understandable without hidden provider assumptions.
-- Transcript search filters the current immutable segment list; Bookmarks are visible on hover and keyboard/touch access; speaker/timestamp evidence remains legible.
+- Start local audio capture, explain required Microphone and Computer Audio permissions, and show connecting/live/paused/partial/failed/finalizing states and retryable outcomes without hidden provider assumptions. No meeting bot joins.
+- Transcript search filters the current immutable segment list; Bookmarks are visible on hover and keyboard/touch access; timestamps and `Me`/`Meeting` channel fallback labels remain legible without implying speaker attribution.
 - Note edits expose real saving/saved/failed state, never only optimistic local text.
-- Transcript evidence stays company-visible; owner-only edits and private-note redaction are reflected exactly as returned by the API.
+- Transcript evidence stays company-visible; owner-only edits and private-note redaction are reflected exactly as returned by the API. The UI identifies microphone versus computer-audio provenance while leaving `participantId` unset.
 - AI-enhanced is a separate editable proposal with provenance/conflict/citation cues, explicit Accept/Reject, and no silent overwrite of My notes.
 - Knowledge inclusion defaults off and clearly controls the canonical accepted Call Note, not Transcript indexing.
 - Desktop and narrow-browser flows are visually exercised against contract fixtures, with keyboard access and reduced-motion behavior intact.
@@ -44,4 +44,4 @@ MN-WF-003 through MN-WF-005, MN-WF-008, MN-WF-011, MN-WF-012, and MN-WF-014. The
 
 ## Non-goals
 
-Reusing prototype code as a production state store, writing product APIs, editing shared schemas, Zoom SDK work, AI orchestration, transcript correction, live copilot features, native/browser recording, or pixel-for-pixel preservation of discarded prototype variants.
+Reusing prototype code as a production state store, writing product APIs, editing shared schemas, conferencing-provider integration, AI orchestration, transcript correction, live copilot features, raw-audio recording, per-app audio controls, or pixel-for-pixel preservation of discarded prototype variants.

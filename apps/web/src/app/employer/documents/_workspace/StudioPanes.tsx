@@ -17,6 +17,8 @@ import type { StudioFeature } from "./types";
  */
 export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
+    /** Refresh workspace file metadata after a successful Calls mutation. */
+    onCallChanged?: () => void;
 }
 
 const DocumentGenerator = dynamic(
@@ -770,7 +772,7 @@ export function renderStudioPane(
         case "meetings":
             return <MeetingsStudioPane onClose={onClose} />;
         case "calls":
-            return <CallsFeature />;
+            return <CallsFeature onCallChanged={context?.onCallChanged} />;
         case "draft":
             return <DraftPane onClose={onClose} />;
         case "rewrite":

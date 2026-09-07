@@ -18,7 +18,8 @@ import { pgTable } from "@launchstack/core/db/schema/helpers";
 import type { EnrichedNoteProposal, ModelMetadata } from "./contracts";
 
 export const callNotesCallStatusEnum = ["active", "finalizing", "completed", "failed"] as const;
-export const callNotesCaptureDesiredModeEnum = ["running", "paused"] as const;
+export const callNotesCaptureDesiredModeEnum = ["running", "paused", "stopped"] as const;
+export const callNotesAudioChannelEnum = ["microphone", "system"] as const;
 export const callNotesCaptureLifecycleEnum = [
     "connecting",
     "live",
@@ -40,7 +41,7 @@ export const callNotesGapKindEnum = [
     "capture_user_absent",
     "transport_interruption",
     "worker_unavailable",
-    "provider_unknown",
+    "capture_unknown",
 ] as const;
 export const callNotesNoteVisibilityEnum = ["company", "private"] as const;
 export const callNotesEnrichmentStatusEnum = [
@@ -55,47 +56,36 @@ export const callNotesWorkItemKindEnum = [
     "start",
     "pause",
     "resume",
-    "provider_event",
+    "capture_event",
     "finalize",
     "enrich",
     "reindex",
 ] as const;
 export const callNotesWorkItemStatusEnum = ["pending", "claimed", "completed", "failed"] as const;
 
-export const callNotesZoomConnections = pgTable(
-    "call_notes_zoom_connections",
+export const callNotesLocalCaptureWorkers = pgTable(
+    "call_notes_local_capture_workers",
     {
         id: varchar("id", { length: 64 }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
         userId: varchar("user_id", { length: 256 }).notNull(),
-        zoomAccountId: varchar("zoom_account_id", { length: 256 }).notNull(),
-        zoomUserId: varchar("zoom_user_id", { length: 256 }).notNull(),
-        encryptedAccessToken: text("encrypted_access_token"),
-        encryptedRefreshToken: text("encrypted_refresh_token"),
-        tokenExpiresAt: timestamp("token_expires_at", { withTimezone: true }),
-        scopes: text("scopes").array().notNull().default([]),
-        status: varchar("status", {
-            length: 24,
-            enum: ["active", "revoked", "disconnected"],
-        })
-            .notNull()
-            .default("active"),
-        disconnectedAt: timestamp("disconnected_at", { withTimezone: true }),
+        workerId: varchar("worker_id", { length: 64 }).notNull(),
+        lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
     table => ({
-        companyUserUnique: uniqueIndex("call_notes_zoom_connections_company_user_unique").on(
+        scopeWorkerUnique: uniqueIndex(
+            "call_notes_local_capture_workers_company_user_worker_unique"
+        ).on(table.companyId, table.userId, table.workerId),
+        scopeLastSeenIdx: index("call_notes_local_capture_workers_company_user_last_seen_idx").on(
             table.companyId,
-            table.userId
+            table.userId,
+            table.lastSeenAt
         ),
-        companyZoomUserUnique: uniqueIndex(
-            "call_notes_zoom_connections_company_zoom_user_unique"
-        ).on(table.companyId, table.zoomUserId),
     })
 );
 
@@ -106,8 +96,8 @@ export const callNotesCalls = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        provider: varchar("provider", { length: 32, enum: ["zoom"] }).notNull(),
-        providerOccurrenceKey: varchar("provider_occurrence_key", { length: 256 }).notNull(),
+        source: varchar("source", { length: 32, enum: ["local_audio"] }).notNull(),
+        sourceOccurrenceKey: varchar("source_occurrence_key", { length: 256 }).notNull(),
         title: varchar("title", { length: 512 }).notNull(),
         status: varchar("status", { length: 32, enum: callNotesCallStatusEnum })
             .notNull()
@@ -132,10 +122,10 @@ export const callNotesCalls = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
     table => ({
-        occurrenceUnique: uniqueIndex("call_notes_calls_company_occurrence_unique").on(
+        occurrenceUnique: uniqueIndex("call_notes_calls_company_source_occurrence_unique").on(
             table.companyId,
-            table.provider,
-            table.providerOccurrenceKey
+            table.source,
+            table.sourceOccurrenceKey
         ),
         companyCreatedIdx: index("call_notes_calls_company_created_at_idx").on(
             table.companyId,
@@ -161,10 +151,7 @@ export const callNotesCaptures = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        captureUserConnectionId: varchar("capture_user_connection_id", { length: 64 })
-            .notNull()
-            .references(() => callNotesZoomConnections.id, { onDelete: "restrict" }),
-        captureUserProviderKey: varchar("capture_user_provider_key", { length: 256 }).notNull(),
+        captureUserId: varchar("capture_user_id", { length: 256 }).notNull(),
         desiredMode: varchar("desired_mode", {
             length: 16,
             enum: callNotesCaptureDesiredModeEnum,
@@ -207,8 +194,8 @@ export const callNotesCaptureAttempts = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        providerAttemptKey: varchar("provider_attempt_key", { length: 256 }).notNull(),
-        providerStreamKey: varchar("provider_stream_key", { length: 256 }),
+        sourceAttemptKey: varchar("source_attempt_key", { length: 256 }).notNull(),
+        sourceStreamKey: varchar("source_stream_key", { length: 256 }),
         lifecycle: varchar("lifecycle", {
             length: 24,
             enum: callNotesAttemptLifecycleEnum,
@@ -226,9 +213,9 @@ export const callNotesCaptureAttempts = pgTable(
         failureMessage: varchar("failure_message", { length: 1024 }),
     },
     table => ({
-        providerAttemptUnique: uniqueIndex(
-            "call_notes_capture_attempts_capture_provider_key_unique"
-        ).on(table.captureId, table.providerAttemptKey),
+        sourceAttemptUnique: uniqueIndex(
+            "call_notes_capture_attempts_capture_source_key_unique"
+        ).on(table.captureId, table.sourceAttemptKey),
         oneActiveAttemptUnique: uniqueIndex("call_notes_capture_attempts_one_active_unique")
             .on(table.captureId)
             .where(sql`${table.lifecycle} in ('connecting', 'live', 'reconnecting')`),
@@ -256,8 +243,8 @@ export const callNotesParticipants = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        providerParticipantKey: varchar("provider_participant_key", { length: 256 }).notNull(),
-        providerSessionKey: varchar("provider_session_key", { length: 256 }),
+        sourceParticipantKey: varchar("source_participant_key", { length: 256 }).notNull(),
+        sourceSessionKey: varchar("source_session_key", { length: 256 }),
         displayName: varchar("display_name", { length: 512 }).notNull(),
         observedAt: timestamp("observed_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
@@ -267,7 +254,7 @@ export const callNotesParticipants = pgTable(
     table => ({
         attemptParticipantIdx: index("call_notes_participants_attempt_key_idx").on(
             table.attemptId,
-            table.providerParticipantKey
+            table.sourceParticipantKey
         ),
         callObservedIdx: index("call_notes_participants_call_observed_idx").on(
             table.callId,
@@ -293,15 +280,18 @@ export const callNotesTranscriptSegments = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        providerEventKey: varchar("provider_event_key", { length: 256 }),
         sourcePacketHash: varchar("source_packet_hash", { length: 64 }).notNull(),
         sourceKind: varchar("source_kind", {
             length: 32,
-            enum: ["provider_transcript", "derived_asr"],
+            enum: ["derived_asr"],
+        }).notNull(),
+        audioChannel: varchar("audio_channel", {
+            length: 16,
+            enum: callNotesAudioChannelEnum,
         }).notNull(),
         speakerName: varchar("speaker_name", { length: 512 }),
-        providerStartMs: bigint("provider_start_ms", { mode: "number" }),
-        providerEndMs: bigint("provider_end_ms", { mode: "number" }),
+        sourceStartMs: bigint("source_start_ms", { mode: "number" }),
+        sourceEndMs: bigint("source_end_ms", { mode: "number" }),
         receivedAt: timestamp("received_at", { withTimezone: true }).notNull(),
         receiveOrder: integer("receive_order").notNull(),
         text: text("text").notNull(),
@@ -317,7 +307,7 @@ export const callNotesTranscriptSegments = pgTable(
         ),
         callOrderIdx: index("call_notes_segments_call_order_idx").on(
             table.callId,
-            table.providerStartMs,
+            table.sourceStartMs,
             table.receiveOrder
         ),
         companyReceivedIdx: index("call_notes_segments_company_received_idx").on(
@@ -354,33 +344,6 @@ export const callNotesGaps = pgTable(
     })
 );
 
-export const callNotesBookmarks = pgTable(
-    "call_notes_bookmarks",
-    {
-        id: varchar("id", { length: 64 }).primaryKey(),
-        callId: varchar("call_id", { length: 64 })
-            .notNull()
-            .references(() => callNotesCalls.id, { onDelete: "cascade" }),
-        segmentId: varchar("segment_id", { length: 64 })
-            .notNull()
-            .references(() => callNotesTranscriptSegments.id, { onDelete: "cascade" }),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        createdByUserId: varchar("created_by_user_id", { length: 256 }).notNull(),
-        comment: text("comment"),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    table => ({
-        callCreatedIdx: index("call_notes_bookmarks_call_created_idx").on(
-            table.callId,
-            table.createdAt
-        ),
-    })
-);
-
 export const callNotesEnrichmentRuns = pgTable(
     "call_notes_enrichment_runs",
     {
@@ -402,6 +365,8 @@ export const callNotesEnrichmentRuns = pgTable(
             .default("queued"),
         originalOutput: jsonb("original_output").$type<EnrichedNoteProposal | null>(),
         editableProposal: jsonb("editable_proposal").$type<EnrichedNoteProposal | null>(),
+        /** Latest bounded chronological preview emitted while the model generates. */
+        previewMarkdown: text("preview_markdown"),
         modelMetadata: jsonb("model_metadata").$type<ModelMetadata | null>(),
         errorCode: varchar("error_code", { length: 128 }),
         errorMessage: varchar("error_message", { length: 1024 }),
@@ -521,10 +486,9 @@ export type CallNotesCallRow = InferSelectModel<typeof callNotesCalls>;
 export type CallNotesCaptureRow = InferSelectModel<typeof callNotesCaptures>;
 export type CallNotesCaptureAttemptRow = InferSelectModel<typeof callNotesCaptureAttempts>;
 export type CallNotesParticipantRow = InferSelectModel<typeof callNotesParticipants>;
+export type CallNotesLocalCaptureWorkerRow = InferSelectModel<typeof callNotesLocalCaptureWorkers>;
 export type CallNotesTranscriptSegmentRow = InferSelectModel<typeof callNotesTranscriptSegments>;
 export type CallNotesGapRow = InferSelectModel<typeof callNotesGaps>;
-export type CallNotesBookmarkRow = InferSelectModel<typeof callNotesBookmarks>;
 export type CallNotesEnrichmentRunRow = InferSelectModel<typeof callNotesEnrichmentRuns>;
 export type CallNotesNoteRevisionRow = InferSelectModel<typeof callNotesNoteRevisions>;
 export type CallNotesWorkItemRow = InferSelectModel<typeof callNotesWorkItems>;
-export type CallNotesZoomConnectionRow = InferSelectModel<typeof callNotesZoomConnections>;

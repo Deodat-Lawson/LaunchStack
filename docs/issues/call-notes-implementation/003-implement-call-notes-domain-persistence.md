@@ -25,15 +25,15 @@ Consumes `CallNotesCommand`, `CaptureEvent`, the canonical Drizzle tables, deter
 
 ## Owned surface
 
-Call/Capture domain services, repositories, authorization rules, state transitions, finalization, durable work claiming, application-service implementation, and Call Notes product API handlers. Canonical contracts/schema/migration, Zoom runtime, production UI, enrichment internals, and root wiring are exclusive to other lanes.
+Call/Capture domain services, repositories, authorization rules, state transitions, durable work claiming, application-service implementation, and Call Notes product API handlers. Canonical contracts/schema/migration, local audio runtime, production UI, enrichment internals, and root wiring are exclusive to other lanes.
 
 Peace also owns transcript finalization, shared fixture alignment, and the deterministic integration harness. Root environment/Compose wiring and the final cross-lane merge remain Kien's responsibility.
 
 ## Acceptance
 
-- One provider occurrence maps idempotently to one Call and one logical Capture; every connected or continued stream is a separate Capture Attempt.
-- Segment insertion is immutable and replay-safe by provider identity or packet hash, with timestamp-first and receive-order fallback ordering.
-- Pause, Resume, transport interruption, capture-user absence/return, worker unavailability, occurrence end, and failure maintain explicit gaps and honest complete/partial/failed outcomes.
+- One `local_audio` occurrence maps idempotently to one Call and one logical Capture; the microphone and system-output streams are concurrent channels within an Attempt, while each continuous capture interval is a separate Capture Attempt.
+- Segment insertion is immutable and replay-safe by source identity or packet hash, preserves required `audioChannel` provenance, and uses timestamp-first and receive-order fallback ordering.
+- Per-channel silence, required-stream failure, worker unavailability, occurrence end, and user/source shutdown maintain explicit gaps and honest complete/partial/failed outcomes; silence in one channel cannot end an Attempt while the other required channel remains active.
 - Request/work idempotency and PostgreSQL leases survive retries, worker restart, reconnect replay, and concurrent claims without adding another queue.
 - Eligible detected occurrences and per-user Dismiss suppression remain separate from Calls until Start; dismissing one occurrence does not suppress future occurrences.
 - Company membership scopes every access. Company users can read the Transcript; only the owner edits/enriches the canonical Call Note; private notes are redacted from other users; company-admin Call deletion and owner deletion of empty failed Calls follow MN-WF-008.
@@ -47,7 +47,7 @@ MN-WF-002 through MN-WF-012 and MN-WF-014.
 
 ## Non-goals
 
-Zoom SDK/OAuth behavior, page/component implementation, model prompts, embeddings/retrieval implementation, root exports/Compose, a second note store, transcript editing, or cross-user Capture handoff.
+Conferencing-provider behavior or authorization, page/component implementation, model prompts, embeddings/retrieval implementation, root exports/Compose, a second note store, transcript editing, or cross-user Capture handoff.
 
 ## Resolution
 
@@ -56,5 +56,5 @@ fencing, app-owned membership and `document_notes` adapters, authenticated produ
 handlers, and focused PostgreSQL conformance coverage. The shared vertical tracer and
 Call Notes suites pass against the production state machine and migrated schema.
 
-Root runtime composition, Zoom transport, production UI, and enrichment/knowledge sink
+Root runtime composition, local audio transport, production UI, and enrichment/knowledge sink
 implementations remain with their owning lanes.

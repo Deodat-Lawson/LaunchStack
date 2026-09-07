@@ -7,7 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Authenticated workspace hydration** — Enable request-backed Clerk state in the root provider so server rendering and client hydration share the authentication snapshot instead of switching from the loading screen to the workspace. The root provider now opts routes into dynamic rendering.
+- **Call title renaming** — Removed the purple outline during inline title editing; text selection remains visible, and keyboard focus is still indicated before editing.
+- **AI proposal review notice** — Kept the subtle highlighted container with a uniform border; removed the thick left accent. Accepted notes do not show a review banner.
+
+### Removed
+
+- **Transcript bookmarking** — Removed marker controls and guidance, bookmark commands/capabilities, storage queries, and AI bookmark inputs/citations. A forward migration drops the bookmark table, purges retained bookmark-command payloads, and strips retired citation metadata from saved proposals without rewriting notes or transcript evidence.
+
 ### Added
+
+- **Current file highlight** — The workspace sidebar marks the open file with a solid accent background, including Call Notes opened from the sidebar or a deep link. Current-file state remains separate from chat-context selection and clears when returning to Calls home.
+- **Integrated Call Notes** — The current frontend now connects capture controls, durable transcripts, title/rich-note autosave, visibility, deletion, and owner-reviewed AI enrichment to the backend. Canonical notes appear as permission-scoped files in the workspace's Calls folder without becoming assistant context. Browser verification covered real authentication, Azure transcription, enrichment, persistence, and file reopening with isolated synthetic audio.
+- **Explicit local capture controls** — Calls now starts capture only after authenticated Start and drains outstanding transcription on Stop. A private worker polls and claims one configured user's session; silence no longer creates or finishes Calls. Added HTTP/PostgreSQL lifecycle E2E coverage and recorded deferred macOS installation, supervision, permission, and enrollment work.
+- **Reliable local Capture readiness and Stop** — Start now requires a fresh scoped worker heartbeat, Live waits for required audio input, and expired claims recover with preserved evidence rather than remaining stuck. Stop closes native inputs before draining transcription; enrichment runs separately. Added 200ms speech-onset buffering and shorter 3-second utterances, worker-unavailable UI feedback, and real macOS/Azure browser verification. Shared application/worker startup and shutdown orchestration remains deferred in the specification.
+- **Focused Calls workspace** — Separate date-grouped notes home and centered note view inside LaunchStack's existing main workspace pane, preserving the application sidebar and navigation. Transcript and AI chat share one bottom dock that morphs upward into the same panel, reverses smoothly on collapse, and preserves drafts, conversation history, and transcript search across mode switches. Includes searchable and copyable channel-aligned bubbles, history-safe navigation, and theme-aware purple accents.
+- **Call-scoped AI chat** — Bottom composer and follow-up email drafts use the configured model with the authenticated viewer's visible note and transcript. No document retrieval or cross-call search; oversized context is rejected rather than silently truncated.
+- **Tiptap Call Notes** — Owner-only rich-text note editing with double-click inline title renaming, a sticky formatting toolbar, JSON/Markdown autosave through the existing revisioned note command, stable polling, explicit conflict recovery, and idempotent retries. Read-only and private-note boundaries remain intact.
+- **Chronological AI enhancement** — Call summaries now use short, discussion-driven topic headings and concise Markdown bullets instead of paragraphs or fixed appendices. The prompt prioritizes key points and removes filler and repetition while preserving user-note ideas, paraphrased inline with Markdown bold as an intuitive citation cue. The editor preserves bold through review, editing, acceptance, and reload; structured evidence metadata and the existing acceptance flow remain intact.
+- **Live AI note previews** — Enhanced note Markdown now arrives during model generation through an authenticated, reconnectable SSE observer backed by bounded durable preview storage. Manual and automatic enrichment retain final schema/provenance validation and explicit acceptance; provisional text never changes the saved note.
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing
@@ -24,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing environment variables in `.env.example` file with proper documentation
 
 ### Enhanced
+
+- **Streaming call-chat answers** — The call assistant renders Markdown as model text arrives instead of waiting for the full response. Model resolution explicitly enables streaming to prevent the SDK from silently returning a buffered completion. Interrupted answers are marked incomplete, retries exclude partial output, and leaving the call cancels generation.
+
+- **Current call-chat context** — Every question uses the latest server-side transcript and saved note, with capture-state awareness and current evidence taking precedence over old answers. Completed calls also supply ready AI-enhanced notes as review drafts; accepted notes use the current canonical revision. Rejected, stale, and private proposals stay excluded.
+
 - **Document Upload API** (`src/app/api/uploadDocument/route.ts`):
   - Dual-path processing architecture: OCR path for scanned documents, standard path for digital PDFs
   - Unified chunking and embedding pipeline for both processing methods
@@ -45,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Better semantic HTML structure
 
 ### Improved
+
 - Code organization with centralized constants and utilities
 - Type safety across API endpoints and components
 - Error handling consistency throughout the application
@@ -52,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation and code maintainability
 
 ### Fixed
+
 - **TypeScript/ESLint Compliance**:
   - Replaced all `any` types with proper TypeScript types in `ocrService.ts`
   - Fixed unsafe type assignments and member access violations
@@ -61,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All linter errors resolved (38 errors fixed)
 
 ### Technical Improvements
+
 - Centralized configuration management
 - Standardized API response patterns
 - Enhanced error categorization and handling
@@ -68,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved code reusability and maintainability
 
 ### Environment & Configuration
+
 - Added comprehensive environment variable validation
 - Updated `.env.example` with all required variables and documentation
 - Better configuration management with centralized constants
@@ -75,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `DATALAB_API_KEY` for optional OCR functionality
 
 ### Documentation
+
 - **README.md** - Comprehensive OCR feature documentation:
   - Added OCR processing section with detailed usage guide
   - When to use OCR (scanned documents, image-based PDFs, handwritten content)
@@ -91,4 +121,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CHANGELOG.md** - Documented all OCR feature additions and linter fixes
 
 ## [Previous Versions]
+
 This changelog starts from the current state of the codebase. Previous version history can be found in the git commit history.

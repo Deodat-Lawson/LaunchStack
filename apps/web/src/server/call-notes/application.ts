@@ -16,7 +16,7 @@ import {
 
 import { getEngine } from "~/server/engine";
 import { documentNotes, userCompanyMemberships, users } from "~/server/db/schema";
-import { ZoomDetectedCallSource } from "./detected-calls";
+import { LocalDetectedCallSource } from "./detected-calls";
 import { createKnowledgeNoteSink } from "./knowledge-note-sink";
 
 export type { CallNotesApplication } from "@launchstack/features/call-notes";
@@ -192,13 +192,12 @@ export function createWebCallNotesApplication(
     });
 }
 
-type WebCallNotesApplicationHolder = {
-    __launchstackWebCallNotesApplication?: CallNotesApplication;
-};
+// Keep the service in its module: separate Next route bundles can have distinct
+// error constructors. Sharing an instance through globalThis crosses that boundary
+// and turns domain 403/404 errors into unrecognized 503 responses.
+let configuredApplication: CallNotesApplication | undefined;
 
-const holder = globalThis as unknown as WebCallNotesApplicationHolder;
-
-/** Configure the process-wide production application, or a test application. */
+/** Configure this module's production application, or a test application. */
 export function configureWebCallNotesApplication(application: CallNotesApplication): void;
 export function configureWebCallNotesApplication(
     options: WebCallNotesApplicationOptions
@@ -210,19 +209,18 @@ export function configureWebCallNotesApplication(
         ? value
         : createWebCallNotesApplication(value);
 
-    holder.__launchstackWebCallNotesApplication = application;
+    configuredApplication = application;
     return application;
 }
 
 export function getWebCallNotesApplication(): CallNotesApplication {
-    const configured = holder.__launchstackWebCallNotesApplication;
-    if (configured) return configured;
+    if (configuredApplication) return configuredApplication;
 
     const application = createWebCallNotesApplication({
         knowledgeSink: createKnowledgeNoteSink(),
-        detectedCalls: new ZoomDetectedCallSource(),
+        detectedCalls: new LocalDetectedCallSource(),
     });
-    holder.__launchstackWebCallNotesApplication = application;
+    configuredApplication = application;
     return application;
 }
 

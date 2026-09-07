@@ -1,9 +1,8 @@
-import { CallSnapshotSchema, type CallSnapshot } from "@launchstack/features/call-notes";
+import { CallSnapshotSchema, type CallSnapshot } from "@launchstack/features/call-notes/contracts";
 
 const ownerCapabilities = {
     canEditNote: true,
     canControlCapture: true,
-    canBookmark: true,
     canRequestEnrichment: true,
     canResolveEnrichment: true,
     canChangeVisibility: true,
@@ -14,7 +13,6 @@ const ownerCapabilities = {
 const readOnlyCapabilities = {
     canEditNote: false,
     canControlCapture: false,
-    canBookmark: false,
     canRequestEnrichment: false,
     canResolveEnrichment: false,
     canChangeVisibility: false,
@@ -24,11 +22,11 @@ const readOnlyCapabilities = {
 
 // base input that the variants below extend.
 const baseCallInput = {
-    schemaVersion: "call-notes/v1",
+    schemaVersion: "call-notes/v2",
     id: "call-northstar-pricing",
     companyId: "42",
-    provider: "zoom",
-    occurrenceKey: "zoom-northstar-2026-08-21",
+    source: "local_audio",
+    sourceOccurrenceKey: "local-northstar-2026-08-21",
     title: "Northstar pricing review",
     status: "completed",
     capture: {
@@ -44,10 +42,11 @@ const baseCallInput = {
         {
             id: "segment-1",
             attemptId: "attempt-1",
-            participantId: "participant-deodat",
-            speakerName: "Deodat",
-            providerStartMs: 0,
-            providerEndMs: 4200,
+            participantId: null,
+            speakerName: null,
+            audioChannel: "microphone",
+            sourceStartMs: 0,
+            sourceEndMs: 4200,
             receivedAt: "2026-08-21T14:00:04.000Z",
             receiveOrder: 0,
             text: "Let's aim to finalize the pricing tiers before Friday.",
@@ -56,10 +55,11 @@ const baseCallInput = {
         {
             id: "segment-2",
             attemptId: "attempt-1",
-            participantId: "participant-hank",
-            speakerName: "Hank",
-            providerStartMs: 4200,
-            providerEndMs: 9000,
+            participantId: null,
+            speakerName: null,
+            audioChannel: "system",
+            sourceStartMs: 4200,
+            sourceEndMs: 9000,
             receivedAt: "2026-08-21T14:00:09.000Z",
             receiveOrder: 1,
             text: "Agreed. I'll draft the enterprise tier and share it tomorrow.",
@@ -67,14 +67,6 @@ const baseCallInput = {
         },
     ],
     gaps: [],
-    bookmarks: [
-        {
-            id: "bookmark-1",
-            segmentId: "segment-1",
-            comment: "Pricing deadline",
-            createdAt: "2026-08-21T14:05:00.000Z",
-        },
-    ],
     note: {
         documentNoteId: 101,
         ownerUserId: "user-hank",
@@ -82,7 +74,7 @@ const baseCallInput = {
         knowledgeIncluded: false,
         revision: 1,
         title: "Northstar pricing review",
-        contentMarkdown: "- Finalize pricing tiers by Friday\n- Hank drafting the enterprise tier",
+        contentMarkdown: "- Finalize pricing tiers by Friday\n- Enterprise tier draft in progress",
         contentRich: {},
         saveState: "saved",
     },
@@ -98,7 +90,7 @@ export const northstarPricingReviewCall: CallSnapshot = CallSnapshotSchema.parse
 export const pausedCall: CallSnapshot = CallSnapshotSchema.parse({
     ...baseCallInput,
     id: "call-paused",
-    occurrenceKey: "zoom-paused-1",
+    sourceOccurrenceKey: "local-paused-1",
     title: "Live roadmap sync",
     status: "active",
     capture: {
@@ -117,7 +109,7 @@ export const pausedCall: CallSnapshot = CallSnapshotSchema.parse({
 export const failedCall: CallSnapshot = CallSnapshotSchema.parse({
     ...baseCallInput,
     id: "call-failed",
-    occurrenceKey: "zoom-failed-1",
+    sourceOccurrenceKey: "local-failed-1",
     title: "Dropped investor call",
     status: "failed",
     capture: {
@@ -131,7 +123,6 @@ export const failedCall: CallSnapshot = CallSnapshotSchema.parse({
     viewerCapabilities: { ...ownerCapabilities, canDelete: true },
     transcript: [],
     gaps: [],
-    bookmarks: [],
     note: { ...baseCallInput.note, title: "Dropped investor call", contentMarkdown: "" },
     enrichment: null,
 });
@@ -140,7 +131,7 @@ export const failedCall: CallSnapshot = CallSnapshotSchema.parse({
 export const partialCall: CallSnapshot = CallSnapshotSchema.parse({
     ...baseCallInput,
     id: "call-partial",
-    occurrenceKey: "zoom-partial-1",
+    sourceOccurrenceKey: "local-partial-1",
     title: "Partial support review",
     capture: {
         id: "capture-partial-1",
@@ -154,10 +145,11 @@ export const partialCall: CallSnapshot = CallSnapshotSchema.parse({
         {
             id: "segment-1",
             attemptId: "attempt-1",
-            participantId: "participant-deodat",
-            speakerName: "Deodat",
-            providerStartMs: 0,
-            providerEndMs: 4200,
+            participantId: null,
+            speakerName: null,
+            audioChannel: "microphone",
+            sourceStartMs: 0,
+            sourceEndMs: 4200,
             receivedAt: "2026-08-21T14:00:04.000Z",
             receiveOrder: 0,
             text: "Let's aim to finalize the pricing tiers before Friday.",
@@ -166,10 +158,11 @@ export const partialCall: CallSnapshot = CallSnapshotSchema.parse({
         {
             id: "segment-2",
             attemptId: "attempt-1",
-            participantId: "participant-hank",
-            speakerName: "Hank",
-            providerStartMs: 51000,
-            providerEndMs: 55000,
+            participantId: null,
+            speakerName: null,
+            audioChannel: "system",
+            sourceStartMs: 51000,
+            sourceEndMs: 55000,
             receivedAt: "2026-08-21T14:00:52.000Z",
             receiveOrder: 1,
             text: "Sorry, I'm back — I'll draft the enterprise tier and share it tomorrow.",
@@ -191,7 +184,7 @@ export const partialCall: CallSnapshot = CallSnapshotSchema.parse({
 export const redactedCall: CallSnapshot = CallSnapshotSchema.parse({
     ...baseCallInput,
     id: "call-redacted",
-    occurrenceKey: "zoom-redacted-1",
+    sourceOccurrenceKey: "local-redacted-1",
     title: "Private 1:1",
     note: null,
     viewerCapabilities: readOnlyCapabilities,
@@ -201,7 +194,7 @@ export const redactedCall: CallSnapshot = CallSnapshotSchema.parse({
 export const enrichmentReadyCall: CallSnapshot = CallSnapshotSchema.parse({
     ...baseCallInput,
     id: "call-enriched",
-    occurrenceKey: "zoom-enriched-1",
+    sourceOccurrenceKey: "local-enriched-1",
     title: "Enriched strategy call",
     enrichment: {
         id: "enrichment-1",
@@ -211,23 +204,18 @@ export const enrichmentReadyCall: CallSnapshot = CallSnapshotSchema.parse({
         proposal: {
             schemaVersion: "call-notes-enrichment/v1",
             chronologicalSections: [
-                { heading: "Pricing", markdown: "Discussed the tier structure.", ownerContextLabels: [] },
-            ],
-            summary: "The team agreed to finalize the pricing tiers by Friday; Hank will draft the enterprise tier.",
-            decisions: [],
-            actionItems: [{ text: "Draft the enterprise tier", ownerName: "Hank", dueDate: "2026-08-28" }],
-            bookmarkPassages: [
                 {
-                    markdown: "Pricing deadline is Friday.",
-                    citations: [
-                        {
-                            bookmarkId: "bookmark-1",
-                            segmentId: "segment-1",
-                            speakerName: "Deodat",
-                            providerStartMs: 0,
-                        },
-                    ],
+                    heading: "Pricing",
+                    markdown:
+                        "- **Finalize the pricing tiers by Friday**, then draft the enterprise tier by August 28.",
+                    ownerContextLabels: [],
                 },
+            ],
+            summary:
+                "The team agreed to finalize the pricing tiers by Friday; the enterprise tier draft follows.",
+            decisions: [],
+            actionItems: [
+                { text: "Draft the enterprise tier", ownerName: null, dueDate: "2026-08-28" },
             ],
             conflicts: [],
         },

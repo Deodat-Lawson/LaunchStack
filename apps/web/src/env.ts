@@ -24,6 +24,31 @@ const normalize = (value: unknown) =>
 const requiredString = () => z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () => z.preprocess(normalize, z.string().min(1).optional());
+const localCaptureBoolean = (defaultValue: boolean) =>
+    z.preprocess(value => {
+        const normalized = normalize(value);
+        if (normalized === undefined) return undefined;
+        if (normalized === true || normalized === false) return normalized;
+        if (normalized === "true" || normalized === "1") return true;
+        if (normalized === "false" || normalized === "0") return false;
+        return normalized;
+    }, z.boolean().default(defaultValue));
+
+const localCaptureInteger = (minimum = 1) =>
+    z.preprocess(value => {
+        const normalized = normalize(value);
+        if (normalized === undefined || typeof normalized === "number") return normalized;
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? parsed : normalized;
+    }, z.number().int().min(minimum).optional());
+
+const localCaptureNumber = (minimum = 0) =>
+    z.preprocess(value => {
+        const normalized = normalize(value);
+        if (normalized === undefined || typeof normalized === "number") return normalized;
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? parsed : normalized;
+    }, z.number().min(minimum).optional());
 
 const serverSchema = z.object({
     // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
@@ -177,12 +202,27 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
-    ZOOM_WEBHOOK_SECRET: optionalString(),
-    CALL_NOTES_DEMO_COMPANY_ID: optionalString(),
-    ZOOM_CLIENT_ID: optionalString(),
-    ZOOM_CLIENT_SECRET: optionalString(),
-    ZOOM_TOKEN_ENCRYPTION_KEY: optionalString(),
-    ZOOM_OAUTH_REDIRECT_URI: optionalString(),
+    // Local audio capture is fail-closed unless explicitly enabled. The worker
+    // posts normalized microphone and system-audio events back to this app.
+    CALL_NOTES_CAPTURE_ENABLED: localCaptureBoolean(false),
+    CALL_NOTES_WEB_ORIGIN: z.preprocess(normalize, z.string().url().optional()),
+    CALL_NOTES_INTERNAL_TOKEN: optionalString(),
+    CALL_NOTES_LOCAL_COMPANY_ID: optionalString(),
+    CALL_NOTES_LOCAL_USER_ID: optionalString(),
+    CALL_NOTES_FFMPEG_PATH: optionalString(),
+    CALL_NOTES_AUDIO_INPUT_FORMAT: optionalString(),
+    CALL_NOTES_AUDIO_INPUT_DEVICE: optionalString(),
+    CALL_NOTES_AUDIO_SAMPLE_RATE: localCaptureInteger(),
+    CALL_NOTES_AUDIO_FRAME_MS: localCaptureInteger(),
+    CALL_NOTES_VAD_THRESHOLD: localCaptureNumber(),
+    CALL_NOTES_VAD_ACTIVATION_FRAMES: localCaptureInteger(),
+    CALL_NOTES_VAD_RELEASE_FRAMES: localCaptureInteger(),
+    CALL_NOTES_UTTERANCE_MAX_MS: localCaptureInteger(),
+    CALL_NOTES_TRANSCRIPTION_BASE_URL: z.preprocess(normalize, z.string().url().optional()),
+    CALL_NOTES_TRANSCRIPTION_MODEL: optionalString(),
+    CALL_NOTES_TRANSCRIPTION_API_KEY: optionalString(),
+    CALL_NOTES_TRANSCRIPTION_LANGUAGE: optionalString(),
+    CALL_NOTES_AUTO_ENRICH: localCaptureBoolean(false),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -354,12 +394,25 @@ function parseServerEnv() {
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
         SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
-        ZOOM_WEBHOOK_SECRET: process.env.ZOOM_WEBHOOK_SECRET,
-        CALL_NOTES_DEMO_COMPANY_ID: process.env.CALL_NOTES_DEMO_COMPANY_ID,
-        ZOOM_CLIENT_ID: process.env.ZOOM_CLIENT_ID,
-        ZOOM_CLIENT_SECRET: process.env.ZOOM_CLIENT_SECRET,
-        ZOOM_TOKEN_ENCRYPTION_KEY: process.env.ZOOM_TOKEN_ENCRYPTION_KEY,
-        ZOOM_OAUTH_REDIRECT_URI: process.env.ZOOM_OAUTH_REDIRECT_URI,
+        CALL_NOTES_CAPTURE_ENABLED: process.env.CALL_NOTES_CAPTURE_ENABLED,
+        CALL_NOTES_WEB_ORIGIN: process.env.CALL_NOTES_WEB_ORIGIN,
+        CALL_NOTES_INTERNAL_TOKEN: process.env.CALL_NOTES_INTERNAL_TOKEN,
+        CALL_NOTES_LOCAL_COMPANY_ID: process.env.CALL_NOTES_LOCAL_COMPANY_ID,
+        CALL_NOTES_LOCAL_USER_ID: process.env.CALL_NOTES_LOCAL_USER_ID,
+        CALL_NOTES_FFMPEG_PATH: process.env.CALL_NOTES_FFMPEG_PATH,
+        CALL_NOTES_AUDIO_INPUT_FORMAT: process.env.CALL_NOTES_AUDIO_INPUT_FORMAT,
+        CALL_NOTES_AUDIO_INPUT_DEVICE: process.env.CALL_NOTES_AUDIO_INPUT_DEVICE,
+        CALL_NOTES_AUDIO_SAMPLE_RATE: process.env.CALL_NOTES_AUDIO_SAMPLE_RATE,
+        CALL_NOTES_AUDIO_FRAME_MS: process.env.CALL_NOTES_AUDIO_FRAME_MS,
+        CALL_NOTES_VAD_THRESHOLD: process.env.CALL_NOTES_VAD_THRESHOLD,
+        CALL_NOTES_VAD_ACTIVATION_FRAMES: process.env.CALL_NOTES_VAD_ACTIVATION_FRAMES,
+        CALL_NOTES_VAD_RELEASE_FRAMES: process.env.CALL_NOTES_VAD_RELEASE_FRAMES,
+        CALL_NOTES_UTTERANCE_MAX_MS: process.env.CALL_NOTES_UTTERANCE_MAX_MS,
+        CALL_NOTES_TRANSCRIPTION_BASE_URL: process.env.CALL_NOTES_TRANSCRIPTION_BASE_URL,
+        CALL_NOTES_TRANSCRIPTION_MODEL: process.env.CALL_NOTES_TRANSCRIPTION_MODEL,
+        CALL_NOTES_TRANSCRIPTION_API_KEY: process.env.CALL_NOTES_TRANSCRIPTION_API_KEY,
+        CALL_NOTES_TRANSCRIPTION_LANGUAGE: process.env.CALL_NOTES_TRANSCRIPTION_LANGUAGE,
+        CALL_NOTES_AUTO_ENRICH: process.env.CALL_NOTES_AUTO_ENRICH,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"
             | "database"

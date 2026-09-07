@@ -1,9 +1,11 @@
+import type * as CallNotesApplicationModule from "~/server/call-notes/application";
 import {
     CALL_NOTES_SCHEMA_VERSION,
     CallNotesApplicationError,
 } from "@launchstack/features/call-notes";
 
 const mockAuth = jest.fn();
+const mockGetEngine = jest.fn();
 const mockGetActiveCompanyId = jest.fn();
 const mockGetApplication = jest.fn();
 const mockListCalls = jest.fn();
@@ -12,28 +14,43 @@ const mockGetCall = jest.fn();
 const mockSearchTranscript = jest.fn();
 const mockListDetectedCalls = jest.fn();
 const mockProcessQueuedEnrichment = jest.fn();
+const mockWorkerStatus = jest.fn();
+const mockServerEnv: Record<string, unknown> = {
+    CALL_NOTES_CAPTURE_ENABLED: true,
+    CALL_NOTES_LOCAL_COMPANY_ID: "42",
+    CALL_NOTES_LOCAL_USER_ID: "user_actual",
+};
+
+jest.mock("~/env", () => ({
+    get env() {
+        return { server: mockServerEnv };
+    },
+}));
 
 jest.mock("@clerk/nextjs/server", () => ({
-    auth: (...args: unknown[]) => mockAuth(...args),
+    auth: (...args: unknown[]): unknown => mockAuth(...args),
 }));
 
 jest.mock("~/lib/active-workspace", () => ({
-    getActiveCompanyId: (...args: unknown[]) => mockGetActiveCompanyId(...args),
+    getActiveCompanyId: (...args: unknown[]): unknown => mockGetActiveCompanyId(...args),
 }));
 
 jest.mock("~/server/engine", () => ({
-    getEngine: jest.fn(),
+    getEngine: (...args: unknown[]): unknown => mockGetEngine(...args),
 }));
 
 jest.mock("~/server/call-notes/enrichment-runner", () => ({
-    processQueuedCallNotesEnrichment: (...args: unknown[]) => mockProcessQueuedEnrichment(...args),
+    processQueuedCallNotesEnrichment: (...args: unknown[]): unknown =>
+        mockProcessQueuedEnrichment(...args),
 }));
 
 jest.mock("~/server/call-notes/application", () => {
-    const actual = jest.requireActual("~/server/call-notes/application");
+    const actual = jest.requireActual<typeof CallNotesApplicationModule>(
+        "~/server/call-notes/application"
+    );
     return {
         ...actual,
-        getWebCallNotesApplication: () => mockGetApplication(),
+        getWebCallNotesApplication: (): unknown => mockGetApplication(),
     };
 });
 
@@ -41,6 +58,7 @@ import { GET as getCall } from "~/app/api/call-notes/[callId]/route";
 import { GET as getTranscript } from "~/app/api/call-notes/[callId]/transcript/route";
 import { GET as getDetected } from "~/app/api/call-notes/detected/route";
 import { GET as listCalls, POST as executeCommand } from "~/app/api/call-notes/route";
+import { GET as getWorkerStatus } from "~/app/api/call-notes/worker/route";
 
 const APPLICATION = {
     listCalls: mockListCalls,
@@ -48,6 +66,7 @@ const APPLICATION = {
     getCall: mockGetCall,
     searchTranscript: mockSearchTranscript,
     listDetectedCalls: mockListDetectedCalls,
+    getLocalCaptureWorkerStatus: mockWorkerStatus,
 };
 
 function request(url: string, init?: RequestInit): Request {
@@ -61,9 +80,11 @@ async function responseBody(response: Response): Promise<unknown> {
 function callParams(callId: string) {
     return { params: Promise.resolve({ callId }) };
 }
-
 beforeEach(() => {
     jest.clearAllMocks();
+    mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = true;
+    mockServerEnv.CALL_NOTES_LOCAL_COMPANY_ID = "42";
+    mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "user_actual";
     mockAuth.mockResolvedValue({ userId: "user_actual" });
     mockGetActiveCompanyId.mockResolvedValue(42n);
     mockGetApplication.mockReturnValue(APPLICATION);
@@ -72,9 +93,22 @@ beforeEach(() => {
     mockGetCall.mockResolvedValue({ id: "call-1" });
     mockSearchTranscript.mockResolvedValue([]);
     mockListDetectedCalls.mockResolvedValue([]);
+    mockWorkerStatus.mockResolvedValue({ available: true, lastSeenAt: "2026-09-06T00:00:00.000Z" });
 });
 
 describe("Call Notes authenticated routes", () => {
+    it("does not expose worker availability without authentication", async () => {
+        mockAuth.mockResolvedValue({ userId: null });
+        expect((await getWorkerStatus()).status).toBe(401);
+        expect(mockWorkerStatus).not.toHaveBeenCalled();
+    });
+
+    it("does not expose another configured user's worker as available", async () => {
+        mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "different-user";
+        const response = await getWorkerStatus();
+        expect(await responseBody(response)).toEqual({ available: false, lastSeenAt: null });
+        expect(mockWorkerStatus).not.toHaveBeenCalled();
+    });
     it("derives actor and company from Clerk and active workspace instead of GET query spoofing", async () => {
         const response = await listCalls(
             request("/api/call-notes?limit=7&companyId=999&actorUserId=attacker&limitOverride=1")
@@ -102,8 +136,8 @@ describe("Call Notes authenticated routes", () => {
                     kind: "dismiss_detected_occurrence",
                     companyId: "999",
                     actorUserId: "attacker",
-                    provider: "zoom",
-                    occurrenceKey: "zoom-occurrence-1",
+                    source: "local_audio",
+                    sourceOccurrenceKey: "local-occurrence-1",
                 }),
             })
         );
@@ -116,8 +150,95 @@ describe("Call Notes authenticated routes", () => {
             kind: "dismiss_detected_occurrence",
             companyId: "42",
             actorUserId: "user_actual",
-            provider: "zoom",
-            occurrenceKey: "zoom-occurrence-1",
+            source: "local_audio",
+            sourceOccurrenceKey: "local-occurrence-1",
+        });
+    });
+    it("starts local audio capture without an external authorization reference", async () => {
+        mockExecute.mockResolvedValue({ id: "call-1", status: "active" });
+        const response = await executeCommand(
+            request("/api/call-notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    requestId: "start-request",
+                    kind: "start_capture",
+                    companyId: "999",
+                    actorUserId: "attacker",
+                    source: "remote_conference",
+                    sourceOccurrenceKey: "local-occurrence-start",
+                    title: "Local audio call",
+                }),
+            })
+        );
+
+        expect(response.status).toBe(200);
+        expect(await responseBody(response)).toEqual({ id: "call-1", status: "active" });
+        expect(mockExecute).toHaveBeenCalledWith({
+            schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+            requestId: "start-request",
+            kind: "start_capture",
+            companyId: "42",
+            actorUserId: "user_actual",
+            source: "local_audio",
+            sourceOccurrenceKey: "local-occurrence-start",
+            title: "Local audio call",
+        });
+        expect(mockGetEngine).not.toHaveBeenCalled();
+    });
+
+    it("rejects explicit local start when no configured worker serves the actor", async () => {
+        mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "different-user";
+        const response = await executeCommand(
+            request("/api/call-notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    requestId: "unserved-start",
+                    kind: "start_capture",
+                    source: "local_audio",
+                    sourceOccurrenceKey: "local-occurrence-unserved",
+                    title: "Local audio call",
+                }),
+            })
+        );
+
+        expect(response.status).toBe(503);
+        expect(await responseBody(response)).toEqual({
+            error: "No configured local capture worker serves this workspace user",
+            code: "unavailable",
+        });
+        expect(mockExecute).not.toHaveBeenCalled();
+    });
+
+    it("passes an explicit stop command through the authenticated product route", async () => {
+        mockExecute.mockResolvedValue({ id: "call-1", status: "finalizing" });
+        const response = await executeCommand(
+            request("/api/call-notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    requestId: "stop-request",
+                    kind: "stop_capture",
+                    companyId: "spoofed",
+                    actorUserId: "spoofed",
+                    callId: "call-1",
+                }),
+            })
+        );
+
+        expect(response.status).toBe(200);
+        expect(await responseBody(response)).toEqual({ id: "call-1", status: "finalizing" });
+        expect(mockExecute).toHaveBeenCalledWith({
+            schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+            requestId: "stop-request",
+            kind: "stop_capture",
+            companyId: "42",
+            actorUserId: "user_actual",
+            callId: "call-1",
         });
     });
 
@@ -179,8 +300,8 @@ describe("Call Notes authenticated routes", () => {
                     kind: "dismiss_detected_occurrence",
                     companyId: "spoofed",
                     actorUserId: "spoofed",
-                    provider: "zoom",
-                    occurrenceKey: "zoom-occurrence-1",
+                    source: "local_audio",
+                    sourceOccurrenceKey: "local-occurrence-1",
                 }),
             })
         );

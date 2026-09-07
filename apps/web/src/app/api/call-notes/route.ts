@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { and, eq } from "drizzle-orm";
 
 import {
     CallListQuerySchema,
+    CallNotesApplicationError,
     CallNotesCommandSchema,
-    callNotesZoomConnections,
 } from "@launchstack/features/call-notes";
+import { env } from "~/env";
 
 import { getActiveCompanyId } from "~/lib/active-workspace";
 import {
@@ -14,12 +14,39 @@ import {
     getWebCallNotesApplication,
 } from "~/server/call-notes/application";
 import { processQueuedCallNotesEnrichment } from "~/server/call-notes/enrichment-runner";
-import { getEngine } from "~/server/engine";
 
 export const dynamic = "force-dynamic";
 
 function invalidRequest(): NextResponse {
     return NextResponse.json({ error: "Invalid Call Notes request" }, { status: 400 });
+}
+
+function localCaptureUnavailable(context: {
+    companyId: string;
+    userId: string;
+}): NextResponse | null {
+    if (!env.server.CALL_NOTES_CAPTURE_ENABLED) {
+        return callNotesErrorResponse(
+            new CallNotesApplicationError("unavailable", "Local capture is disabled")
+        ) as NextResponse;
+    }
+    const configuredCompanyId = env.server.CALL_NOTES_LOCAL_COMPANY_ID;
+    const configuredUserId = env.server.CALL_NOTES_LOCAL_USER_ID;
+    if (
+        !configuredCompanyId ||
+        !/^\d+$/.test(configuredCompanyId) ||
+        !configuredUserId ||
+        configuredCompanyId !== context.companyId ||
+        configuredUserId !== context.userId
+    ) {
+        return callNotesErrorResponse(
+            new CallNotesApplicationError(
+                "unavailable",
+                "No configured local capture worker serves this workspace user"
+            )
+        ) as NextResponse;
+    }
+    return null;
 }
 
 async function authenticatedContext(): Promise<{ userId: string; companyId: string } | null> {
@@ -67,29 +94,19 @@ export async function POST(request: Request): Promise<Response> {
             return invalidRequest();
         }
 
-        // Actor, company, and Zoom authorization are always resolved server-side.
+        // Actor, company, and capture source are always resolved server-side.
         const requestBody =
             body !== null && typeof body === "object" && !Array.isArray(body) ? body : {};
-        const [connection] =
-            "kind" in requestBody && requestBody.kind === "start_capture"
-                ? await getEngine()
-                      .db.select({ id: callNotesZoomConnections.id })
-                      .from(callNotesZoomConnections)
-                      .where(
-                          and(
-                              eq(callNotesZoomConnections.companyId, BigInt(context.companyId)),
-                              eq(callNotesZoomConnections.userId, context.userId),
-                              eq(callNotesZoomConnections.status, "active")
-                          )
-                      )
-                      .limit(1)
-                : [];
+        if ("kind" in requestBody && requestBody.kind === "start_capture") {
+            const unavailableResponse = localCaptureUnavailable(context);
+            if (unavailableResponse) return unavailableResponse;
+        }
         const parsed = CallNotesCommandSchema.safeParse({
             ...requestBody,
             companyId: context.companyId,
             actorUserId: context.userId,
             ...("kind" in requestBody && requestBody.kind === "start_capture"
-                ? { authorizationRef: connection?.id }
+                ? { source: "local_audio" }
                 : {}),
         });
         if (!parsed.success) return invalidRequest();

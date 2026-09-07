@@ -21,6 +21,17 @@ RUN pnpm --filter @launchstack/call-worker build
 RUN pnpm --filter @launchstack/call-worker deploy --prod /prod/call-worker --legacy
 
 FROM node:24-trixie-slim AS runner
+# Runtime audio capture targets Linux ALSA devices. Docker Desktop cannot pass
+# a macOS host microphone through to this Linux container; run the worker on
+# the macOS host for local capture instead.
+# This image is an explicit microphone-only development fallback. It does not
+# contain the macOS ScreenCaptureKit helper, and Docker Desktop cannot expose
+# the host's combined system audio to a Linux container.
+ENV CALL_NOTES_SYSTEM_AUDIO_ENABLED="false"
+RUN apt-get update \
+    && apt-get install --no-install-recommends --yes ffmpeg alsa-utils \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /prod/call-worker ./

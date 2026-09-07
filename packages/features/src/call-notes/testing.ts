@@ -35,14 +35,14 @@ async function invariantRejects(promise: Promise<unknown>, message: string): Pro
 }
 
 const fixtureParticipant = {
-    providerParticipantKey: "zoom-user-owner",
-    providerSessionKey: "zoom-session-owner",
+    sourceParticipantKey: "user_owner",
+    sourceSessionKey: "local-session-owner",
     displayName: "Alex Founder",
 };
 
 const fixtureGuest = {
-    providerParticipantKey: "zoom-user-guest",
-    providerSessionKey: "zoom-session-guest",
+    sourceParticipantKey: "local-participant-guest",
+    sourceSessionKey: "local-session-guest",
     displayName: "Maya Customer",
 };
 
@@ -50,15 +50,14 @@ export const CALL_NOTES_FIXTURE_IDS = {
     companyId: "1",
     ownerUserId: "user_owner",
     otherUserId: "user_teammate",
-    occurrenceKey: "zoom-occurrence-2026-08-15",
-    firstAttemptKey: "zoom-attempt-1",
-    secondAttemptKey: "zoom-attempt-2",
-    authorizationRef: "zoom-connection-owner",
+    sourceOccurrenceKey: "local-occurrence-2026-08-15",
+    firstSourceAttemptKey: "local-attempt-1",
+    secondSourceAttemptKey: "local-attempt-2",
 } as const;
 export const CALL_NOTES_DETECTED_CANDIDATE = DetectedCallCandidateSchema.parse({
     schemaVersion: CALL_NOTES_SCHEMA_VERSION,
-    provider: "zoom",
-    occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
+    source: "local_audio",
+    sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
     title: "Customer onboarding review",
     detectedAt: "2026-08-15T13:59:00.000Z",
     endsAt: null,
@@ -69,19 +68,19 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-connected-1",
         kind: "attempt_connected",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
-        streamKey: "zoom-stream-1",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
+        sourceStreamKey: "local-stream-1",
         occurredAt: "2026-08-15T14:00:00.000Z",
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-owner-joined",
         kind: "participant_joined",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         participant: fixtureParticipant,
         occurredAt: "2026-08-15T14:00:01.000Z",
     },
@@ -89,9 +88,9 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-guest-joined",
         kind: "participant_joined",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         participant: fixtureGuest,
         occurredAt: "2026-08-15T14:00:02.000Z",
     },
@@ -99,15 +98,15 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-segment-1",
         kind: "transcript_segment",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
-        providerEventKey: "zoom-transcript-1",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         sourcePacketHash: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        sourceKind: "provider_transcript",
-        participant: fixtureGuest,
-        providerStartMs: 1_000,
-        providerEndMs: 4_000,
+        sourceKind: "derived_asr",
+        audioChannel: "microphone",
+        participant: null,
+        sourceStartMs: 1_000,
+        sourceEndMs: 4_000,
         receivedAt: "2026-08-15T14:00:04.100Z",
         receiveOrder: 1,
         text: "We need to reduce onboarding time before the September launch.",
@@ -118,33 +117,33 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-paused-1",
         kind: "attempt_paused",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         occurredAt: "2026-08-15T14:05:00.000Z",
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-resumed-1",
         kind: "attempt_resumed",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         occurredAt: "2026-08-15T14:07:00.000Z",
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-segment-2",
         kind: "transcript_segment",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
-        providerEventKey: "zoom-transcript-2",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         sourcePacketHash: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        sourceKind: "provider_transcript",
-        participant: fixtureParticipant,
-        providerStartMs: 421_000,
-        providerEndMs: 425_000,
+        sourceKind: "derived_asr",
+        audioChannel: "system",
+        participant: null,
+        sourceStartMs: 421_000,
+        sourceEndMs: 425_000,
         receivedAt: "2026-08-15T14:07:05.050Z",
         receiveOrder: 2,
         text: "I will send the revised onboarding checklist by Friday.",
@@ -153,31 +152,41 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+        eventId: "event-transport-interrupted-1",
+        kind: "transport_interrupted",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
+        reason: "audio device unavailable",
+        occurredAt: "2026-08-15T14:09:00.000Z",
+    },
+    {
+        schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-attempt-1-ended",
         kind: "attempt_ended",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
-        reason: "capture_user_left",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
+        reason: "silence_timeout",
         occurredAt: "2026-08-15T14:10:00.000Z",
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-connected-2",
         kind: "attempt_connected",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.secondAttemptKey,
-        streamKey: "zoom-stream-2",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.secondSourceAttemptKey,
+        sourceStreamKey: "local-stream-2",
         occurredAt: "2026-08-15T14:11:00.000Z",
     },
     {
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-owner-returned",
         kind: "participant_returned",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.secondAttemptKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.secondSourceAttemptKey,
         participant: fixtureParticipant,
         occurredAt: "2026-08-15T14:11:00.100Z",
     },
@@ -185,15 +194,15 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-segment-3",
         kind: "transcript_segment",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.secondAttemptKey,
-        providerEventKey: "zoom-transcript-3",
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.secondSourceAttemptKey,
         sourcePacketHash: "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-        sourceKind: "provider_transcript",
-        participant: fixtureGuest,
-        providerStartMs: 665_000,
-        providerEndMs: 669_000,
+        sourceKind: "derived_asr",
+        audioChannel: "microphone",
+        participant: null,
+        sourceStartMs: 665_000,
+        sourceEndMs: 669_000,
         receivedAt: "2026-08-15T14:11:09.040Z",
         receiveOrder: 3,
         text: "That checklist and a short walkthrough should unblock our team.",
@@ -204,10 +213,10 @@ export const CALL_NOTES_CAPTURE_EVENTS = CaptureEventSchema.array().parse([
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
         eventId: "event-occurrence-ended",
         kind: "occurrence_ended",
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
         occurredAt: "2026-08-15T14:30:00.000Z",
-        reason: "meeting ended",
+        reason: "silence_timeout",
     },
 ]);
 
@@ -216,7 +225,7 @@ export const CALL_NOTES_ENRICHMENT_PROPOSAL = EnrichedNoteProposalSchema.parse({
     chronologicalSections: [
         {
             heading: "Onboarding launch risk",
-            markdown: "Maya needs onboarding time reduced before the September launch.",
+            markdown: "**Onboarding needs to be faster** before the September launch.",
             ownerContextLabels: ["Pricing concerns and launch sequencing"],
         },
         {
@@ -234,7 +243,6 @@ export const CALL_NOTES_ENRICHMENT_PROPOSAL = EnrichedNoteProposalSchema.parse({
             dueDate: "2026-08-21",
         },
     ],
-    bookmarkPassages: [],
     conflicts: [],
 });
 
@@ -245,9 +253,8 @@ export const CALL_NOTES_START_COMMAND: Extract<CallNotesCommand, { kind: "start_
         kind: "start_capture",
         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
         actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        authorizationRef: CALL_NOTES_FIXTURE_IDS.authorizationRef,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
         title: "Customer onboarding review",
     }) as Extract<CallNotesCommand, { kind: "start_capture" }>;
 export const CALL_NOTES_DISMISS_COMMAND: Extract<
@@ -259,8 +266,8 @@ export const CALL_NOTES_DISMISS_COMMAND: Extract<
     kind: "dismiss_detected_occurrence",
     companyId: CALL_NOTES_FIXTURE_IDS.companyId,
     actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
-    provider: "zoom",
-    occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
+    source: "local_audio",
+    sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
 }) as Extract<CallNotesCommand, { kind: "dismiss_detected_occurrence" }>;
 
 export interface KnowledgeNoteProbe {
@@ -276,10 +283,9 @@ export async function assertCaptureSourceContract(source: CaptureSource): Promis
     };
     const startInput = StartCaptureInputSchema.parse({
         schemaVersion: CALL_NOTES_SCHEMA_VERSION,
-        provider: "zoom",
-        occurrenceKey: CALL_NOTES_FIXTURE_IDS.occurrenceKey,
-        attemptKey: CALL_NOTES_FIXTURE_IDS.firstAttemptKey,
-        authorizationRef: CALL_NOTES_FIXTURE_IDS.authorizationRef,
+        source: "local_audio",
+        sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
+        sourceAttemptKey: CALL_NOTES_FIXTURE_IDS.firstSourceAttemptKey,
         captureUser: fixtureParticipant,
     });
     const controlInput = CaptureControlInputSchema.parse(startInput);
@@ -288,7 +294,7 @@ export async function assertCaptureSourceContract(source: CaptureSource): Promis
     await handle.resume(controlInput);
     await handle.dispose();
 
-    invariant(source.capabilities.attributedTranscript, "source must attribute transcript");
+    invariant(!source.capabilities.attributedTranscript, "local source must not claim attribution");
     invariant(
         events.some(event => event.kind === "attempt_connected"),
         "missing connected event"
@@ -304,8 +310,8 @@ export async function assertCaptureSourceContract(source: CaptureSource): Promis
     invariant(
         events.every(
             event =>
-                event.occurrenceKey === startInput.occurrenceKey &&
-                event.attemptKey === startInput.attemptKey
+                event.sourceOccurrenceKey === startInput.sourceOccurrenceKey &&
+                event.sourceAttemptKey === startInput.sourceAttemptKey
         ),
         "source changed occurrence or attempt identity"
     );
@@ -314,10 +320,10 @@ export async function assertCaptureSourceContract(source: CaptureSource): Promis
 export function createScriptedCaptureSource(): CaptureSource {
     return {
         capabilities: {
-            attributedTranscript: true,
+            attributedTranscript: false,
             nativePauseResume: true,
-            transportReconnect: true,
-            observesCaptureUserReturn: true,
+            transportReconnect: false,
+            observesCaptureUserReturn: false,
         },
         async startAttempt(input, sink): Promise<CaptureAttemptHandle> {
             await sink.append(CALL_NOTES_CAPTURE_EVENTS[0]!);
@@ -363,12 +369,17 @@ function ownerCommand(
 /**
  * Shared end-to-end contract. The subject must use its real state machine,
  * persistence, authorization, API-facing application boundary, and knowledge sink.
- * Only Zoom transport and model output may be deterministic fakes.
+ * Only local audio capture and model output may be deterministic fakes.
  */
 export async function runCallNotesVerticalTracer(
     application: CallNotesApplication,
     knowledgeProbe?: KnowledgeNoteProbe
 ): Promise<CallSnapshot> {
+    const worker = await application.getLocalCaptureWorkerStatus({
+        companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+        userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+    });
+    invariant(worker.available, "a Local Capture Worker heartbeat is required before the tracer");
     const started = await application.execute(CALL_NOTES_START_COMMAND);
     invariant(started, "start_capture returned no Call");
     CallSnapshotSchema.parse(started);
@@ -391,7 +402,7 @@ export async function runCallNotesVerticalTracer(
         CALL_NOTES_CAPTURE_EVENTS[5]!
     );
 
-    for (const index of [7, 8, 9, 10, 6, 6, 11]) {
+    for (const index of [7, 8, 9, 10, 11, 6, 6, 12]) {
         await application.ingestCaptureEvent(
             CALL_NOTES_FIXTURE_IDS.companyId,
             CALL_NOTES_CAPTURE_EVENTS[index]!
@@ -408,26 +419,26 @@ export async function runCallNotesVerticalTracer(
     invariant(current.capture.attemptCount === 2, "same-user return must create a second attempt");
     invariant(current.transcript.length === 3, "transcript replay lost or duplicated segments");
     invariant(
+        current.transcript.every(segment => segment.participantId === null),
+        "channel provenance must not create named participants"
+    );
+    invariant(
+        current.transcript
+            .map(segment => `${segment.audioChannel}:${segment.speakerName}`)
+            .join("|") === "microphone:Me|system:Meeting|microphone:Me",
+        "transcript presentation did not apply deterministic channel labels"
+    );
+    invariant(
         current.transcript.map(segment => segment.text).join("|") ===
             [
                 "We need to reduce onboarding time before the September launch.",
                 "I will send the revised onboarding checklist by Friday.",
                 "That checklist and a short walkthrough should unblock our team.",
             ].join("|"),
-        "late Transcript packets were not restored to deterministic provider-time order"
+        "late Transcript packets were not restored to deterministic source-time order"
     );
-    invariant(current.gaps.length >= 2, "pause and capture-user absence must remain visible gaps");
+    invariant(current.gaps.length >= 2, "pause and transport gaps must remain visible");
     invariant(current.note, "owner cannot see the Call Note");
-    await invariantRejects(
-        application.execute(
-            userCommand(CALL_NOTES_FIXTURE_IDS.otherUserId, started.id, {
-                kind: "add_bookmark",
-                segmentId: current.transcript[0]!.id,
-                comment: null,
-            })
-        ),
-        "non-owner created a Bookmark"
-    );
     await invariantRejects(
         application.getCall({
             companyId: "2",
@@ -444,13 +455,6 @@ export async function runCallNotesVerticalTracer(
             title: current.note.title,
             contentMarkdown: "Pricing concerns and launch sequencing.",
             contentRich: { type: "doc", content: [] },
-        })
-    );
-    await application.execute(
-        ownerCommand(started.id, {
-            kind: "add_bookmark",
-            segmentId: current.transcript[0]!.id,
-            comment: "Use this evidence in the follow-up.",
         })
     );
     await application.execute(
@@ -553,7 +557,6 @@ export async function runCallNotesVerticalTracer(
         finalSnapshot.enrichment?.status === "accepted",
         "accepted proposal was not immutable history"
     );
-    invariant(finalSnapshot.bookmarks.length === 1, "bookmark was not persisted");
 
     if (knowledgeProbe) {
         const indexed = await knowledgeProbe.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id);

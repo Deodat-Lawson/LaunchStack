@@ -7,14 +7,13 @@ import {
     CALL_NOTES_START_COMMAND,
     CALL_NOTES_SCHEMA_VERSION,
     CallNotesCommandSchema,
+    CallNotesSourceSchema,
     CallStatusSchema,
     CaptureEventSchema,
     CallSnapshotSchema,
     DetectedCallCandidateSchema,
-    EnrichedNoteProposalSchema,
     assertCaptureSourceContract,
     createScriptedCaptureSource,
-    renderEnrichedNoteProposal,
 } from "@launchstack/features/call-notes";
 
 import type { CaptureAttemptHandle, CaptureSource } from "@launchstack/features/call-notes";
@@ -23,13 +22,21 @@ describe("Call Notes contract baseline", () => {
     it("keeps one occurrence across pause and same-user return attempts", () => {
         const events = CALL_NOTES_CAPTURE_EVENTS.map(event => CaptureEventSchema.parse(event));
 
-        expect(new Set(events.map(event => event.occurrenceKey))).toEqual(
-            new Set([CALL_NOTES_FIXTURE_IDS.occurrenceKey])
+        expect(new Set(events.map(event => event.sourceOccurrenceKey))).toEqual(
+            new Set([CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey])
         );
         expect(
-            new Set(events.flatMap(event => (event.attemptKey ? [event.attemptKey] : []))).size
+            new Set(
+                events.flatMap(event => (event.sourceAttemptKey ? [event.sourceAttemptKey] : []))
+            ).size
         ).toBe(2);
         expect(events.filter(event => event.kind === "transcript_segment")).toHaveLength(3);
+        expect(
+            events
+                .filter(event => event.kind === "transcript_segment")
+                .map(event => event.sourceKind)
+        ).toEqual(["derived_asr", "derived_asr", "derived_asr"]);
+        expect(events.filter(event => event.source === "local_audio")).toHaveLength(events.length);
         expect(events.some(event => event.kind === "attempt_paused")).toBe(true);
         expect(events.some(event => event.kind === "participant_returned")).toBe(true);
     });
@@ -45,39 +52,41 @@ describe("Call Notes contract baseline", () => {
         expect(() => CaptureEventSchema.parse(withoutHash)).toThrow();
     });
 
-    it("rejects unsupported capture providers at the command boundary", () => {
+    it("accepts only local audio capture at the command boundary", () => {
+        expect(CallNotesSourceSchema.parse("local_audio")).toBe("local_audio");
+        expect(() => CallNotesSourceSchema.parse("remote_conference")).toThrow();
         expect(() =>
-            CallNotesCommandSchema.parse({ ...CALL_NOTES_START_COMMAND, provider: "google_meet" })
+            CallNotesCommandSchema.parse({
+                ...CALL_NOTES_START_COMMAND,
+                source: "remote_conference",
+            })
         ).toThrow();
     });
+
+    it("rejects retired bookmark command kinds", () => {
+        for (const kind of ["add_bookmark", "update_bookmark", "remove_bookmark"]) {
+            expect(() =>
+                CallNotesCommandSchema.parse({
+                    ...CALL_NOTES_START_COMMAND,
+                    kind,
+                })
+            ).toThrow();
+        }
+    });
+
     it("keeps detected suggestions separate from Calls until Start", () => {
         const candidate = DetectedCallCandidateSchema.parse(CALL_NOTES_DETECTED_CANDIDATE);
 
-        expect(candidate.occurrenceKey).toBe(CALL_NOTES_DISMISS_COMMAND.occurrenceKey);
+        expect(candidate.sourceOccurrenceKey).toBe(CALL_NOTES_DISMISS_COMMAND.sourceOccurrenceKey);
         expect(CALL_NOTES_DISMISS_COMMAND.kind).toBe("dismiss_detected_occurrence");
         expect(CALL_NOTES_DISMISS_COMMAND).not.toHaveProperty("callId");
         expect(CallStatusSchema.options).not.toContain("detected");
-    });
-
-    it("keeps enrichment as a structured reviewable proposal", () => {
-        const proposal = EnrichedNoteProposalSchema.parse(CALL_NOTES_ENRICHMENT_PROPOSAL);
-
-        expect(proposal.chronologicalSections.map(section => section.heading)).toEqual([
-            "Onboarding launch risk",
-            "Next step",
-        ]);
-        expect(proposal.actionItems).toEqual([
-            expect.objectContaining({ ownerName: "Alex Founder" }),
-        ]);
-        expect(proposal).not.toHaveProperty("contentMarkdown");
-        expect(renderEnrichedNoteProposal(proposal).contentMarkdown).toContain("## Summary");
     });
 
     it("fails closed when a private-note projection carries enrichment", () => {
         const viewerCapabilities = {
             canEditNote: false,
             canControlCapture: false,
-            canBookmark: false,
             canRequestEnrichment: false,
             canResolveEnrichment: false,
             canChangeVisibility: false,
@@ -88,8 +97,8 @@ describe("Call Notes contract baseline", () => {
             schemaVersion: CALL_NOTES_SCHEMA_VERSION,
             id: "call-private",
             companyId: "1",
-            provider: "zoom",
-            occurrenceKey: "zoom-occurrence-private",
+            source: "local_audio",
+            sourceOccurrenceKey: "local-occurrence-private",
             title: "Private call",
             status: "completed",
             capture: {
@@ -103,7 +112,6 @@ describe("Call Notes contract baseline", () => {
             viewerCapabilities,
             transcript: [],
             gaps: [],
-            bookmarks: [],
             note: null,
             enrichment: {
                 id: "enrichment-private",
@@ -136,10 +144,10 @@ describe("Call Notes contract baseline", () => {
 
         const missingResume: CaptureSource = {
             capabilities: {
-                attributedTranscript: true,
+                attributedTranscript: false,
                 nativePauseResume: true,
-                transportReconnect: true,
-                observesCaptureUserReturn: true,
+                transportReconnect: false,
+                observesCaptureUserReturn: false,
             },
             async startAttempt(input, sink): Promise<CaptureAttemptHandle> {
                 await sink.append(CALL_NOTES_CAPTURE_EVENTS[0]!);

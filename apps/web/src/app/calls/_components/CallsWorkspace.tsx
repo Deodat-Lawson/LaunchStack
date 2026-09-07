@@ -1,674 +1,1438 @@
 "use client";
 
 import {
-    Bookmark,
-    ChevronDown,
+    AudioLines,
+    CalendarDays,
+    Check,
+    ChevronLeft,
     ChevronRight,
-    Clock3,
+    ChevronDown,
+    Copy,
     FileText,
-    Link2,
+    Home,
+    Info,
+    Link as LinkIcon,
     LockKeyhole,
+    Mic,
+    Minus,
     Pause,
-    Play,
-    Plus,
-    Radio,
-    RefreshCcw,
+    RefreshCw,
     Search,
-    ShieldCheck,
     Sparkles,
+    Square,
+    Trash2,
     Users,
     X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import type { CallSnapshot, Gap, TranscriptSegment } from "@launchstack/features/call-notes";
-
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type {
+    CallNote,
+    CallSnapshot,
+    Gap,
+    NoteVisibility,
+    TranscriptSegment,
+} from "@launchstack/features/call-notes";
+import { renderEnrichedNoteProposal } from "@launchstack/features/call-notes/enrichment";
+import type { EnrichmentPreviewState } from "~/lib/call-notes-enrichment-stream";
+import { CallsChat } from "./CallsChat";
+import { CallNoteEditor } from "./CallNoteEditor";
+import { EnrichmentPreview, ProposalReviewNotice } from "./EnrichmentPreview";
+import type { CallNoteDraft } from "./useCallNoteDrafts";
 import styles from "../calls.module.css";
-
-function companyLabel(snapshot: CallSnapshot): string {
-    return `Company ${snapshot.companyId}`;
-}
-
-function formatDateTime(iso: string): string {
-    return new Intl.DateTimeFormat("en-US", {
-        dateStyle: "medium",
-        timeStyle: "short",
-        timeZone: "UTC",
-    }).format(new Date(iso));
-}
 
 function formatClock(ms: number | null): string {
     if (ms === null) return "";
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    const seconds = Math.floor(ms / 1000);
+    return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
 }
 
-type CaptureControl = "start" | "pause" | "resume" | "retry" | "connecting" | "none";
-type CaptureStatusKey = "live" | "connecting" | "paused" | "failed" | "completed";
-type CaptureView = {
-    badge: string;
-    control: CaptureControl;
-    statusKey: CaptureStatusKey;
-    partial: boolean;
-};
-function deriveCapture(snapshot: CallSnapshot): CaptureView {
-    const { lifecycle, desiredMode, outcome } = snapshot.capture;
-    const partial = outcome === "partial";
-
-    if (lifecycle === "completed")
-        return { badge: "Completed", control: "none", statusKey: "completed", partial };
-    if (lifecycle === "failed")
-        return { badge: "Failed", control: "retry", statusKey: "failed", partial };
-    if (lifecycle === "finalizing")
-        return { badge: "Finalizing", control: "none", statusKey: "connecting", partial };
-
-    if (desiredMode === "paused")
-        return { badge: "Paused", control: "resume", statusKey: "paused", partial };
-
-    switch (lifecycle) {
-        case "connecting":
-            return { badge: "Connecting", control: "connecting", statusKey: "connecting", partial };
-        case "interrupted":
-            return {
-                badge: "Reconnecting",
-                control: "connecting",
-                statusKey: "connecting",
-                partial,
-            };
-        case "live":
-            return { badge: "Live", control: "pause", statusKey: "live", partial };
-        default:
-            return { badge: "Ready", control: "start", statusKey: "connecting", partial };
-    }
+function dateLabel(iso: string): string {
+    const date = new Date(iso);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    if (date.toDateString() === today.toDateString()) return "Today";
+    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+    return date.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        ...(date.getFullYear() !== today.getFullYear() ? { year: "numeric" as const } : {}),
+    });
 }
 
+function captureLabel(snapshot: CallSnapshot): string {
+    const { lifecycle, desiredMode } = snapshot.capture;
+    if (lifecycle === "completed") return "Completed";
+    if (lifecycle === "failed") return "Failed";
+    if (lifecycle === "finalizing") return "Finalizing";
+    if (desiredMode === "stopped") return "Stopping";
+    if (desiredMode === "paused") return "Paused";
+    if (lifecycle === "interrupted") return "Reconnecting";
+    if (lifecycle === "live") return "Live";
+    return "Connecting";
+}
+
+function noteTitle(snapshot: CallSnapshot): string {
+    return snapshot.note?.title ?? snapshot.title;
+}
 const GAP_LABELS: Record<Gap["kind"], string> = {
     user_paused: "Capture paused",
     capture_user_absent: "Capture user away",
     transport_interruption: "Connection interrupted",
     worker_unavailable: "Processing unavailable",
-    provider_unknown: "Zoom interruption",
+    capture_unknown: "Capture interrupted",
 };
+
 function gapDuration(gap: Gap): string {
     if (!gap.endedAt) return "ongoing";
-    const ms = new Date(gap.endedAt).getTime() - new Date(gap.startedAt).getTime();
-    const seconds = Math.max(0, Math.round(ms / 1000));
+    const seconds = Math.max(
+        0,
+        Math.round((new Date(gap.endedAt).getTime() - new Date(gap.startedAt).getTime()) / 1000)
+    );
     if (seconds < 60) return `${seconds}s`;
-    const minutes = Math.floor(seconds / 60);
     const remainder = seconds % 60;
-    return remainder ? `${minutes}m ${remainder}s` : `${minutes}m`;
+    return `${Math.floor(seconds / 60)}m${remainder ? ` ${remainder}s` : ""}`;
 }
+
+// Local audio channels are provenance, not speaker identification.
+function speakerLabel(segment: TranscriptSegment): string {
+    return segment.speakerName ?? (segment.audioChannel === "microphone" ? "Me" : "Meeting");
+}
+
+export type CaptureCommand = "start" | "stop";
+export type CallMutationStatus = {
+    pending: boolean;
+    error?: string;
+};
+
+type EditableContent = Pick<CallNote, "contentRich" | "contentMarkdown">;
 
 export interface CallsWorkspaceProps {
     calls: CallSnapshot[];
     initialSelectedId?: string | null;
-    onSelectCall?: (callId: string) => void;
+    onSelectCall?: (callId: string | null) => void;
+    onStartCapture?: () => void;
+    onStopCapture?: (callId: string) => void;
+    pendingCommand?: CaptureCommand | null;
+    captureUnavailableReason?: string | null;
+    commandError?: string | null;
+    onRetryCommand?: () => void;
+    refreshError?: string | null;
+    onRetryRefresh?: () => void;
+    mutationStatus?: Readonly<Record<string, CallMutationStatus>>;
+    onRetryMutation?: (callId: string) => void;
+    noteDrafts?: Readonly<Record<string, CallNoteDraft>>;
+    enrichmentPreview?: EnrichmentPreviewState;
+    onNoteChange?: (callId: string, content: EditableContent) => void;
+    onNoteTitleChange?: (callId: string, title: string) => void;
+    onSaveNote?: (callId: string) => void;
+    onDiscardNote?: (callId: string) => void;
+    onSetVisibility?: (callId: string, visibility: NoteVisibility) => void;
+    onRequestEnrichment?: (callId: string) => void;
+    onRejectEnrichment?: (callId: string, enrichmentRunId: string) => void;
+    onAcceptEnrichment?: (
+        callId: string,
+        enrichmentRunId: string,
+        content: EditableContent
+    ) => void;
+    onDeleteCall?: (callId: string) => void;
 }
-
 export function CallsWorkspace({
     calls,
     initialSelectedId = null,
     onSelectCall,
+    onStartCapture,
+    onStopCapture,
+    pendingCommand = null,
+    captureUnavailableReason = null,
+    commandError = null,
+    onRetryCommand,
+    refreshError = null,
+    onRetryRefresh,
+    mutationStatus,
+    onRetryMutation,
+    noteDrafts,
+    enrichmentPreview,
+    onNoteChange,
+    onNoteTitleChange,
+    onSaveNote,
+    onDiscardNote,
+    onSetVisibility,
+    onRequestEnrichment,
+    onRejectEnrichment,
+    onAcceptEnrichment,
+    onDeleteCall,
 }: CallsWorkspaceProps) {
-    const [railOpen, setRailOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState<string | null>(
-        initialSelectedId ?? calls[0]?.id ?? null
-    );
-
+    const [selectedId, setSelectedId] = useState(initialSelectedId);
     useEffect(() => {
-        if (selectedId && calls.some(call => call.id === selectedId)) return;
-        setSelectedId(
-            (initialSelectedId && calls.some(call => call.id === initialSelectedId)
-                ? initialSelectedId
-                : calls[0]?.id) ?? null
-        );
-    }, [calls, initialSelectedId, selectedId]);
-
-    const selected = calls.find(call => call.id === selectedId) ?? calls[0] ?? null;
+        setSelectedId(previous => (previous === initialSelectedId ? previous : initialSelectedId));
+    }, [initialSelectedId]);
+    const selected = calls.find(call => call.id === selectedId) ?? null;
+    const captureActive = calls.some(isCaptureActive);
+    const [infoOpen, setInfoOpen] = useState(false);
+    const select = (id: string | null) => {
+        if (id === selectedId) return;
+        setSelectedId(id);
+        setInfoOpen(false);
+        onSelectCall?.(id);
+    };
+    const selectedMutation = selected ? mutationStatus?.[selected.id] : undefined;
 
     return (
-        <div data-theme="light" className={`lsw-root ${styles.root}`}>
-            <CallsRail
-                calls={calls}
-                selectedId={selected?.id ?? null}
-                open={railOpen}
-                onSelect={id => {
-                    setSelectedId(id);
-                    onSelectCall?.(id);
-                    setRailOpen(false);
-                }}
-                onClose={() => setRailOpen(false)}
-            />
-            {railOpen ? (
-                <button
-                    type="button"
-                    className={styles.railScrim}
-                    aria-label="Close Calls rail"
-                    onClick={() => setRailOpen(false)}
-                />
-            ) : null}
+        <div className={`lsw-root ${styles.root}`}>
             {selected ? (
-                <CallPanel key={selected.id} snapshot={selected} onMenu={() => setRailOpen(true)} />
+                <CallPanel
+                    key={selected.id}
+                    snapshot={selected}
+                    onHome={() => select(null)}
+                    onInfo={() => setInfoOpen(value => !value)}
+                    onStartCapture={onStartCapture}
+                    onStopCapture={onStopCapture}
+                    captureActive={captureActive}
+                    pendingCommand={pendingCommand}
+                    captureUnavailableReason={captureUnavailableReason}
+                    noteDraft={noteDrafts?.[selected.id]}
+                    enrichmentPreview={
+                        enrichmentPreview?.callId === selected.id ? enrichmentPreview : undefined
+                    }
+                    mutationStatus={mutationStatus?.[selected.id]}
+                    onNoteChange={onNoteChange}
+                    onNoteTitleChange={onNoteTitleChange}
+                    onSaveNote={onSaveNote}
+                    onDiscardNote={onDiscardNote}
+                    onSetVisibility={onSetVisibility}
+                    onRequestEnrichment={onRequestEnrichment}
+                    onRejectEnrichment={onRejectEnrichment}
+                    onAcceptEnrichment={onAcceptEnrichment}
+                    onDeleteCall={onDeleteCall}
+                />
             ) : (
-                <main className={styles.panel} aria-label="No call selected" />
+                <CallsHome
+                    calls={calls}
+                    onSelect={select}
+                    onInfo={() => setInfoOpen(value => !value)}
+                    onStartCapture={onStartCapture}
+                    captureActive={captureActive}
+                    pendingCommand={pendingCommand}
+                    captureUnavailableReason={captureUnavailableReason}
+                />
             )}
+            {infoOpen && (
+                <aside className={styles.infoPopover} aria-label="Local capture">
+                    <div className={styles.popoverHeading}>
+                        <strong>Local capture</strong>
+                        <button
+                            className={styles.iconButton}
+                            aria-label="Close capture information"
+                            onClick={() => setInfoOpen(false)}
+                        >
+                            <X size={16} />
+                        </button>
+                    </div>
+                    <p>
+                        Start a capture when you are ready. A worker on your configured Mac records
+                        microphone and computer audio locally; no bot joins the call.
+                    </p>
+                    <p>
+                        The capture worker owns device permissions and sends only the resulting
+                        transcript evidence to Call Notes. This page never requests browser
+                        microphone access.
+                    </p>
+                </aside>
+            )}
+            {refreshError && <CommandFeedback message={refreshError} onRetry={onRetryRefresh} />}
+            {selected && selectedMutation?.error && (
+                <CommandFeedback
+                    message={selectedMutation.error}
+                    onRetry={() => onRetryMutation?.(selected.id)}
+                />
+            )}
+            {commandError && <CommandFeedback message={commandError} onRetry={onRetryCommand} />}
+            {!selected && <CallsChat snapshot={null} />}
         </div>
     );
 }
 
-function CallsRail({
+function CommandFeedback({ message, onRetry }: { message: string; onRetry?: () => void }) {
+    return (
+        <div className={styles.commandError} role="alert">
+            <span>{message}</span>
+            {onRetry && (
+                <button type="button" onClick={onRetry}>
+                    Retry
+                </button>
+            )}
+        </div>
+    );
+}
+function isCaptureActive(call: CallSnapshot): boolean {
+    return (
+        (call.status === "active" || call.status === "finalizing") &&
+        call.capture.lifecycle !== "completed" &&
+        call.capture.lifecycle !== "failed"
+    );
+}
+
+function CallsHome({
     calls,
-    selectedId,
-    open,
     onSelect,
-    onClose,
+    onInfo,
+    onStartCapture,
+    captureActive,
+    pendingCommand,
+    captureUnavailableReason,
 }: {
     calls: CallSnapshot[];
-    selectedId: string | null;
-    open: boolean;
     onSelect: (id: string) => void;
-    onClose: () => void;
+    onInfo: () => void;
+    onStartCapture?: () => void;
+    captureActive: boolean;
+    pendingCommand: CaptureCommand | null;
+    captureUnavailableReason?: string | null;
 }) {
+    const [searchOpen, setSearchOpen] = useState(false);
     const [query, setQuery] = useState("");
-
+    const [dayOffset, setDayOffset] = useState(0);
+    const day = new Date();
+    day.setDate(day.getDate() + dayOffset);
+    const activeCalls = calls.filter(
+        call =>
+            isCaptureActive(call) && new Date(call.createdAt).toDateString() === day.toDateString()
+    );
     const normalized = query.trim().toLowerCase();
-    const matches = normalized
-        ? calls.filter(call => call.title.toLowerCase().includes(normalized))
-        : calls;
-    const live = matches.filter(call => call.status === "active");
-    const recent = matches.filter(call => call.status !== "active");
+    const groups = new Map<string, CallSnapshot[]>();
+    for (const call of [...calls].sort((a, b) => b.createdAt.localeCompare(a.createdAt))) {
+        if (normalized && !noteTitle(call).toLowerCase().includes(normalized)) continue;
+        const label = dateLabel(call.createdAt);
+        const group = groups.get(label);
+        if (group) group.push(call);
+        else groups.set(label, [call]);
+    }
+    const startDisabled =
+        captureActive || pendingCommand !== null || Boolean(captureUnavailableReason);
 
     return (
-        <aside
-            className={`${styles.rail} ${open ? styles.railOpen : ""}`}
-            aria-label="Calls library"
-        >
-            <div className={styles.railBrand}>
-                <span className={styles.brandMark}>L</span>
-                <strong>LaunchStack</strong>
-                <button
-                    type="button"
-                    className={styles.iconButton}
-                    aria-label="Close Calls rail"
-                    onClick={onClose}
-                >
-                    <X size={17} />
-                </button>
-            </div>
-            <div className={styles.railTitle}>
-                <h1>Calls</h1>
-                <button
-                    type="button"
-                    className={styles.iconButton}
-                    aria-label="Start a new capture"
-                    disabled
-                    title="Capture starts from the detected-meeting prompt in this demo"
-                >
-                    <Plus size={17} />
-                </button>
-            </div>
-            <label className={styles.search}>
-                <Search size={14} />
-                <input
-                    aria-label="Search calls"
-                    placeholder="Search calls"
-                    value={query}
-                    onChange={event => setQuery(event.target.value)}
-                />
-            </label>
-
-            <div className={styles.railList}>
-                {matches.length === 0 ? (
-                    <span className={styles.railLabel}>No calls match “{query.trim()}”.</span>
-                ) : null}
-                {live.length ? (
-                    <section>
-                        <span className={styles.railLabel}>Live</span>
-                        {live.map(call => (
-                            <RailItem
-                                key={call.id}
-                                call={call}
-                                selected={call.id === selectedId}
-                                onSelect={onSelect}
-                            />
-                        ))}
-                    </section>
-                ) : null}
-                {recent.length ? (
-                    <section>
-                        <span className={styles.railLabel}>Recent</span>
-                        {recent.map(call => (
-                            <RailItem
-                                key={call.id}
-                                call={call}
-                                selected={call.id === selectedId}
-                                onSelect={onSelect}
-                            />
-                        ))}
-                    </section>
-                ) : null}
-            </div>
-        </aside>
-    );
-}
-
-function RailItem({
-    call,
-    selected,
-    onSelect,
-}: {
-    call: CallSnapshot;
-    selected: boolean;
-    onSelect: (id: string) => void;
-}) {
-    const capture = deriveCapture(call);
-    const isLive = call.status === "active";
-    return (
-        <button
-            type="button"
-            className={`${styles.callItem} ${selected ? styles.callItemActive : ""}`}
-            aria-current={selected}
-            onClick={() => onSelect(call.id)}
-        >
-            {isLive ? (
-                <span className={styles.liveMeta}>
-                    <span className={styles.liveDot} />
-                    {capture.badge}
-                </span>
-            ) : (
-                <span>{capture.badge}</span>
-            )}
-            <strong>{call.title}</strong>
-            <span>{companyLabel(call)}</span>
-        </button>
-    );
-}
-
-function CallPanel({ snapshot, onMenu }: { snapshot: CallSnapshot; onMenu: () => void }) {
-    const capture = deriveCapture(snapshot);
-    const [noteView, setNoteView] = useState<"notes" | "enhanced">("notes");
-    const enrichmentReady = snapshot.enrichment?.status === "ready";
-
-    return (
-        <main className={styles.panel}>
-            <header className={styles.panelHeader}>
-                <button
-                    type="button"
-                    className={styles.iconButton}
-                    aria-label="Open Calls rail"
-                    onClick={onMenu}
-                >
-                    <Users size={18} />
-                </button>
-
-                <span
-                    className={`${styles.status} ${styles[`status_${capture.statusKey}`] ?? ""}`}
-                    role="status"
-                    aria-label="Capture status"
-                >
-                    <span className={styles.statusDot} aria-hidden="true" />
-                    {capture.badge}
-                    {capture.partial ? <span className={styles.partialLabel}>Partial</span> : null}
-                </span>
-
-                <div className={styles.headerSpacer} />
-
-                <CaptureControls control={capture.control} />
-
-                <div className={styles.titleBlock}>
-                    <div className={styles.titleLine}>
-                        <button
-                            type="button"
-                            className={styles.titleButton}
-                            aria-label="Rename call"
-                            disabled
-                            title="Call rename is not available in the auto-start demo"
-                        >
-                            <h1>{snapshot.title}</h1>
-                        </button>
-                    </div>
-                    <div className={styles.callMeta}>
-                        <span>
-                            <Clock3 size={13} />
-                            {formatDateTime(snapshot.createdAt)}
-                        </span>
-                        <span>
-                            <Users size={13} />
-                            {snapshot.transcript.length} segments
-                        </span>
-                        <span>
-                            <Link2 size={13} />
-                            Zoom
-                        </span>
-                    </div>
+        <main className={styles.panel} aria-label="Calls library">
+            <header className={styles.chrome}>
+                <div className={styles.chromeGroup}>
+                    <button
+                        className={styles.iconButton}
+                        aria-label="Search notes"
+                        aria-expanded={searchOpen}
+                        onClick={() => {
+                            setSearchOpen(value => !value);
+                            setQuery("");
+                        }}
+                    >
+                        <Search size={17} />
+                    </button>
+                </div>
+                <div className={styles.chromeGroup}>
+                    <button
+                        className={`${styles.pill} ${styles.captureButton}`}
+                        type="button"
+                        aria-label="Start capture"
+                        onClick={onStartCapture}
+                        disabled={startDisabled}
+                        title={captureUnavailableReason ?? undefined}
+                    >
+                        <Mic size={14} />{" "}
+                        {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                    </button>
+                    <button className={styles.pill} type="button" onClick={onInfo}>
+                        <Info size={14} /> Capture info
+                    </button>
                 </div>
             </header>
-
-            <div className={styles.panelScroll}>
-                <div className={styles.panelContent}>
-                    <section className={styles.note} aria-label="Call note">
-                        <div className={styles.noteHeading}>
-                            <div
-                                className={styles.noteSwitcher}
-                                role="tablist"
-                                aria-label="Note views"
+            <div className={styles.scroll}>
+                <div
+                    className={`${styles.homeContent} ${query && !groups.size ? styles.noSearchResults : ""}`}
+                >
+                    {captureUnavailableReason && (
+                        <p className={styles.workerNotice} role="status">
+                            {captureUnavailableReason}
+                        </p>
+                    )}
+                    <div className={styles.sectionHeading}>
+                        <h1>Coming up</h1>
+                        <div className={styles.chromeGroup}>
+                            <button
+                                className={styles.iconButton}
+                                aria-label="Previous day"
+                                onClick={() => setDayOffset(value => value - 1)}
                             >
-                                <button
-                                    type="button"
-                                    role="tab"
-                                    aria-selected={noteView === "notes"}
-                                    className={`${styles.noteTab} ${noteView === "notes" ? styles.noteTabActive : ""}`}
-                                    onClick={() => setNoteView("notes")}
-                                >
-                                    <FileText size={13} />
-                                    My notes
-                                </button>
-                                <button
-                                    type="button"
-                                    role="tab"
-                                    aria-selected={noteView === "enhanced"}
-                                    className={`${styles.noteTab} ${noteView === "enhanced" ? styles.noteTabActive : ""}`}
-                                    onClick={() => setNoteView("enhanced")}
-                                >
-                                    <Sparkles size={13} />
-                                    AI enhanced
-                                    {enrichmentReady ? <span className={styles.readyDot} /> : null}
-                                </button>
-                            </div>
-                            <small>
-                                {snapshot.note ? saveLabel(snapshot.note.saveState) : "Private"}
-                            </small>
+                                <ChevronLeft size={17} />
+                            </button>
+                            <button
+                                className={styles.iconButton}
+                                aria-label="Next day"
+                                onClick={() => setDayOffset(value => value + 1)}
+                            >
+                                <ChevronRight size={17} />
+                            </button>
                         </div>
-
-                        {noteView === "notes" ? (
-                            <NoteBody snapshot={snapshot} />
-                        ) : (
-                            <EnhancedBody snapshot={snapshot} />
-                        )}
-
-                        <div className={styles.noteFooter}>
-                            {snapshot.note?.visibility === "company" ? (
-                                <span>
-                                    <Users size={13} />
-                                    Shared with company
-                                </span>
+                    </div>
+                    <section className={styles.agenda} aria-label="Call activity">
+                        <div className={styles.agendaDate}>
+                            <span className={styles.dayNumber}>{day.getDate()}</span>
+                            <div>
+                                {day.toLocaleDateString("en-US", { month: "long" })}
+                                {dayOffset === 0 && <i />}
+                                <small>
+                                    {day.toLocaleDateString("en-US", { weekday: "short" })}
+                                </small>
+                            </div>
+                        </div>
+                        <div className={styles.agendaEvents}>
+                            {activeCalls.length ? (
+                                activeCalls.map(call => (
+                                    <button
+                                        key={call.id}
+                                        className={styles.agendaEvent}
+                                        onClick={() => onSelect(call.id)}
+                                    >
+                                        <strong>{noteTitle(call)}</strong>
+                                        <span>{captureLabel(call)} · Open note</span>
+                                    </button>
+                                ))
                             ) : (
-                                <span>
-                                    <LockKeyhole size={13} />
-                                    Private note
-                                </span>
+                                <div className={styles.agendaEmpty}>
+                                    <span>
+                                        {dayOffset === 0
+                                            ? "Ready for your next call"
+                                            : "No call activity"}
+                                    </span>
+                                    <small>Start capture when you are ready</small>
+                                </div>
                             )}
                         </div>
                     </section>
-
-                    <TranscriptSection snapshot={snapshot} />
+                    {searchOpen && (
+                        <label className={styles.search}>
+                            <Search size={15} />
+                            <input
+                                autoFocus
+                                aria-label="Search calls"
+                                placeholder="Search your notes"
+                                value={query}
+                                onChange={event => setQuery(event.target.value)}
+                            />
+                            <button
+                                className={styles.iconButton}
+                                aria-label="Close search"
+                                onClick={() => {
+                                    setQuery("");
+                                    setSearchOpen(false);
+                                }}
+                            >
+                                <X size={15} />
+                            </button>
+                        </label>
+                    )}
+                    <div className={styles.notesList}>
+                        {[...groups].map(([label, group]) => (
+                            <section key={label} className={styles.dateGroup} aria-label={label}>
+                                <h2>{label}</h2>
+                                {group.map(call => (
+                                    <button
+                                        key={call.id}
+                                        className={styles.noteRow}
+                                        onClick={() => onSelect(call.id)}
+                                    >
+                                        <span
+                                            className={`${styles.noteIcon} ${isCaptureActive(call) ? styles.activeIcon : ""}`}
+                                        >
+                                            {isCaptureActive(call) ? (
+                                                <AudioLines size={18} />
+                                            ) : (
+                                                <FileText size={17} />
+                                            )}
+                                        </span>
+                                        <span className={styles.noteRowText}>
+                                            <strong>{noteTitle(call)}</strong>
+                                            <small>
+                                                {isCaptureActive(call)
+                                                    ? captureLabel(call)
+                                                    : call.note?.visibility === "company"
+                                                      ? "Shared with company"
+                                                      : "Private note"}
+                                            </small>
+                                        </span>
+                                        {call.note?.visibility === "private" && (
+                                            <LockKeyhole size={12} className={styles.rowLock} />
+                                        )}
+                                        <time dateTime={call.createdAt}>
+                                            {new Date(call.createdAt).toLocaleTimeString("en-US", {
+                                                hour: "numeric",
+                                                minute: "2-digit",
+                                            })}
+                                        </time>
+                                    </button>
+                                ))}
+                            </section>
+                        ))}
+                        {!groups.size && (
+                            <div className={query ? styles.searchEmptyState : styles.emptyState}>
+                                {!query && <FileText size={24} />}
+                                <h2>
+                                    {query
+                                        ? "No matching notes"
+                                        : "Your next conversation starts here"}
+                                </h2>
+                                <p>
+                                    {query
+                                        ? `No calls match “${query.trim()}”.`
+                                        : "Start a capture when you are ready. Your note and transcript will appear here."}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </main>
     );
 }
 
-function saveLabel(state: "saved" | "saving" | "failed"): string {
-    if (state === "saving") return "Saving…";
-    if (state === "failed") return "Save failed";
-    return "Saved";
-}
-
-function CaptureControls({ control }: { control: CaptureControl }) {
-    if (control === "pause")
-        return (
-            <button
-                type="button"
-                className={styles.controlButton}
-                disabled
-                title="Pause from Zoom during the auto-start demo"
-            >
-                <Pause size={14} />
-                Pause
-            </button>
+function CallPanel({
+    snapshot,
+    onHome,
+    onInfo,
+    onStartCapture,
+    onStopCapture,
+    captureActive,
+    pendingCommand,
+    captureUnavailableReason,
+    noteDraft,
+    enrichmentPreview,
+    mutationStatus,
+    onNoteChange,
+    onNoteTitleChange,
+    onSaveNote,
+    onDiscardNote,
+    onSetVisibility,
+    onRequestEnrichment,
+    onRejectEnrichment,
+    onAcceptEnrichment,
+    onDeleteCall,
+}: {
+    snapshot: CallSnapshot;
+    onHome: () => void;
+    onInfo: () => void;
+    onStartCapture?: () => void;
+    onStopCapture?: (callId: string) => void;
+    captureActive: boolean;
+    pendingCommand: CaptureCommand | null;
+    captureUnavailableReason?: string | null;
+    noteDraft?: CallNoteDraft;
+    enrichmentPreview?: EnrichmentPreviewState;
+    mutationStatus?: CallMutationStatus;
+    onNoteChange?: CallsWorkspaceProps["onNoteChange"];
+    onNoteTitleChange?: CallsWorkspaceProps["onNoteTitleChange"];
+    onSaveNote?: CallsWorkspaceProps["onSaveNote"];
+    onDiscardNote?: CallsWorkspaceProps["onDiscardNote"];
+    onSetVisibility?: CallsWorkspaceProps["onSetVisibility"];
+    onRequestEnrichment?: CallsWorkspaceProps["onRequestEnrichment"];
+    onRejectEnrichment?: CallsWorkspaceProps["onRejectEnrichment"];
+    onAcceptEnrichment?: CallsWorkspaceProps["onAcceptEnrichment"];
+    onDeleteCall?: CallsWorkspaceProps["onDeleteCall"];
+}) {
+    const [noteView, setNoteView] = useState<"notes" | "enhanced">("notes");
+    const [dockMode, setDockMode] = useState<"collapsed" | "transcript" | "chat">("collapsed");
+    const dockRef = useRef<HTMLDivElement>(null);
+    const previousDockMode = useRef(dockMode);
+    const restoreDockFocus = useRef(true);
+    const closeDock = () => {
+        restoreDockFocus.current = true;
+        setDockMode("collapsed");
+    };
+    useLayoutEffect(() => {
+        const previous = previousDockMode.current;
+        previousDockMode.current = dockMode;
+        const selector =
+            dockMode === "chat"
+                ? '[aria-label="Ask about this call"]'
+                : dockMode === "transcript"
+                  ? '[aria-label="Close transcript"]'
+                  : previous === "transcript"
+                    ? '[aria-label="Show transcript"]'
+                    : "[data-chat-trigger]";
+        if (dockMode !== "collapsed" || (previous !== "collapsed" && restoreDockFocus.current)) {
+            dockRef.current?.querySelector<HTMLElement>(selector)?.focus({ preventScroll: true });
+        }
+    }, [dockMode]);
+    useEffect(() => {
+        if (dockMode === "collapsed") return;
+        const escape = (event: KeyboardEvent) => {
+            if (event.key !== "Escape" || event.defaultPrevented) return;
+            event.preventDefault();
+            restoreDockFocus.current = true;
+            setDockMode("collapsed");
+        };
+        const outside = (event: PointerEvent) => {
+            if (event.target instanceof Node && !dockRef.current?.contains(event.target)) {
+                restoreDockFocus.current = false;
+                setDockMode("collapsed");
+            }
+        };
+        window.addEventListener("keydown", escape);
+        document.addEventListener("pointerdown", outside);
+        return () => {
+            window.removeEventListener("keydown", escape);
+            document.removeEventListener("pointerdown", outside);
+        };
+    }, [dockMode]);
+    const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+    const [proposalDraft, setProposalDraft] = useState<{
+        runId: string;
+        content: EditableContent;
+    } | null>(null);
+    const enrichment = snapshot.enrichment;
+    useEffect(() => {
+        if (!enrichment || enrichment.status !== "ready" || !enrichment.proposal) {
+            if (enrichment?.status !== "ready") setProposalDraft(null);
+            return;
+        }
+        const proposal = enrichment.proposal;
+        setProposalDraft(current =>
+            current?.runId === enrichment.id
+                ? current
+                : {
+                      runId: enrichment.id,
+                      content: renderEnrichedNoteProposal(proposal),
+                  }
         );
-    if (control === "resume")
-        return (
-            <button
-                type="button"
-                className={styles.primaryButton}
-                disabled
-                title="Resume from Zoom during the auto-start demo"
-            >
-                <Play size={14} />
-                Resume
-            </button>
-        );
-    if (control === "connecting")
-        return (
-            <span className={styles.connecting}>
-                <Radio size={13} />
-                Connecting…
-            </span>
-        );
-    if (control === "retry")
-        return (
-            <button
-                type="button"
-                className={styles.controlButton}
-                disabled
-                title="Retry is not available in the auto-start demo"
-            >
-                <RefreshCcw size={14} />
-                Retry capture
-            </button>
-        );
-    if (control === "none") return null;
+    }, [enrichment]);
+    const copyLink = async () => {
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set("call", snapshot.id);
+            await navigator.clipboard.writeText(url.toString());
+            setCopyState("copied");
+        } catch {
+            setCopyState("failed");
+        }
+    };
+    const stopping =
+        pendingCommand === "stop" ||
+        snapshot.status === "finalizing" ||
+        snapshot.capture.lifecycle === "finalizing" ||
+        snapshot.capture.desiredMode === "stopped";
+    const showStop = snapshot.viewerCapabilities.canControlCapture && isCaptureActive(snapshot);
+    const startDisabled =
+        captureActive || pendingCommand !== null || Boolean(captureUnavailableReason);
+    const mutationPending = mutationStatus?.pending ?? false;
+    const noteTitle = noteDraft?.title ?? snapshot.note?.title ?? snapshot.title;
+    const proposalContent =
+        proposalDraft && enrichment?.id === proposalDraft.runId ? proposalDraft.content : null;
+    const proposalStale =
+        enrichment !== null &&
+        snapshot.note !== null &&
+        enrichment.baseNoteRevision !== snapshot.note.revision;
     return (
-        <button
-            type="button"
-            className={styles.controlButton}
-            disabled
-            title="Start from the detected-meeting prompt"
-        >
-            <Play size={14} />
-            Start
-        </button>
+        <main className={styles.panel}>
+            <header className={styles.chrome}>
+                <button
+                    className={styles.homeButton}
+                    aria-label="Back to all notes"
+                    onClick={onHome}
+                >
+                    <ChevronLeft size={13} />
+                    <Home size={16} />
+                </button>
+                <div className={styles.chromeGroup}>
+                    {showStop && (
+                        <button
+                            className={`${styles.pill} ${styles.stopButton}`}
+                            type="button"
+                            onClick={() => onStopCapture?.(snapshot.id)}
+                            disabled={stopping || pendingCommand !== null}
+                        >
+                            <Square size={13} /> {stopping ? "Stopping…" : "Stop capture"}
+                        </button>
+                    )}
+                    <button
+                        className={`${styles.pill} ${styles.captureButton}`}
+                        type="button"
+                        onClick={onStartCapture}
+                        disabled={startDisabled}
+                        title={captureUnavailableReason ?? undefined}
+                    >
+                        <Mic size={14} />{" "}
+                        {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                    </button>
+                    <button
+                        className={styles.iconButton}
+                        aria-label="Capture information"
+                        onClick={onInfo}
+                    >
+                        <Info size={16} />
+                    </button>
+                    {snapshot.note &&
+                    snapshot.viewerCapabilities.canChangeVisibility &&
+                    onSetVisibility ? (
+                        <label className={styles.visibilityControl}>
+                            <span className={styles.visuallyHidden}>Note visibility</span>
+                            <select
+                                aria-label="Note visibility"
+                                value={snapshot.note.visibility}
+                                disabled={mutationPending}
+                                onChange={event =>
+                                    onSetVisibility(
+                                        snapshot.id,
+                                        event.currentTarget.value as NoteVisibility
+                                    )
+                                }
+                            >
+                                <option value="company">Shared</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </label>
+                    ) : (
+                        <span className={styles.pill} title="Note visibility">
+                            {snapshot.note?.visibility === "company" ? (
+                                <Users size={13} />
+                            ) : (
+                                <LockKeyhole size={13} />
+                            )}
+                            {snapshot.note?.visibility === "company" ? "Shared" : "Private"}
+                        </span>
+                    )}
+                    {snapshot.viewerCapabilities.canDelete && onDeleteCall && (
+                        <button
+                            className={styles.iconButton}
+                            type="button"
+                            aria-label="Delete call"
+                            disabled={mutationPending}
+                            onClick={() => {
+                                if (window.confirm("Delete this call and its note?")) {
+                                    onDeleteCall(snapshot.id);
+                                }
+                            }}
+                        >
+                            <Trash2 size={15} />
+                        </button>
+                    )}
+                    <button
+                        className={styles.pill}
+                        aria-label="Copy note link"
+                        onClick={() => void copyLink()}
+                    >
+                        {copyState === "copied" ? <Check size={15} /> : <LinkIcon size={15} />}
+                    </button>
+                    {copyState !== "idle" && (
+                        <span role="status" className={styles.copyStatus}>
+                            {copyState === "copied" ? "Link copied" : "Could not copy link"}
+                        </span>
+                    )}
+                </div>
+            </header>
+            <div className={styles.scroll}>
+                <article className={styles.noteContent}>
+                    {captureUnavailableReason && !captureActive && (
+                        <p className={styles.workerNotice} role="status">
+                            {captureUnavailableReason}
+                        </p>
+                    )}
+                    {snapshot.capture.lifecycle === "finalizing" && (
+                        <p className={styles.workerNotice} role="status">
+                            Stopping audio and saving pending Transcript segments…
+                        </p>
+                    )}
+                    {snapshot.capture.lifecycle === "failed" && (
+                        <p className={styles.workerNotice} role="alert">
+                            Capture did not finish successfully. Saved evidence is retained. Check
+                            the worker, audio permissions, and transcription service before starting
+                            again.
+                        </p>
+                    )}
+                    {snapshot.capture.outcome === "partial" && (
+                        <p className={styles.workerNotice} role="status">
+                            This Capture is incomplete. Saved Transcript segments and your Call Note
+                            are preserved.
+                        </p>
+                    )}
+                    <CallNoteTitle
+                        title={noteTitle}
+                        editable={Boolean(
+                            snapshot.note &&
+                                snapshot.viewerCapabilities.canEditNote &&
+                                onNoteTitleChange
+                        )}
+                        onRename={title => onNoteTitleChange?.(snapshot.id, title)}
+                    />
+                    <div className={styles.noteMeta}>
+                        <div className={styles.noteSwitcher} role="tablist" aria-label="Note views">
+                            <button
+                                role="tab"
+                                aria-selected={noteView === "notes"}
+                                className={noteView === "notes" ? styles.selectedTab : ""}
+                                onClick={() => setNoteView("notes")}
+                            >
+                                <FileText size={13} /> My notes
+                            </button>
+                            <button
+                                role="tab"
+                                aria-selected={noteView === "enhanced"}
+                                className={noteView === "enhanced" ? styles.selectedTab : ""}
+                                onClick={() => setNoteView("enhanced")}
+                            >
+                                <Sparkles size={14} /> AI enhanced
+                                {(snapshot.enrichment?.status === "ready" ||
+                                    snapshot.enrichment?.status === "accepted") && <i />}
+                            </button>
+                        </div>
+                        <span className={styles.pill}>
+                            <CalendarDays size={13} />
+                            {dateLabel(snapshot.createdAt)}
+                        </span>
+                        <span
+                            className={styles.captureStatus}
+                            role="status"
+                            aria-label="Capture status"
+                            data-live={snapshot.capture.lifecycle === "live"}
+                        >
+                            <i />
+                            {captureLabel(snapshot)}
+                            {snapshot.capture.outcome === "partial" ? " · Partial" : ""}
+                        </span>
+                    </div>
+                    <section className={styles.noteBody} aria-label="Call note">
+                        {noteView === "notes" ? (
+                            snapshot.note ? (
+                                <CallNoteEditor
+                                    content={
+                                        snapshot.viewerCapabilities.canEditNote
+                                            ? (noteDraft ?? snapshot.note)
+                                            : snapshot.note
+                                    }
+                                    editable={
+                                        snapshot.viewerCapabilities.canEditNote &&
+                                        Boolean(onNoteChange)
+                                    }
+                                    onChange={content => onNoteChange?.(snapshot.id, content)}
+                                    onSave={() => onSaveNote?.(snapshot.id)}
+                                />
+                            ) : (
+                                <PrivateNote />
+                            )
+                        ) : (
+                            <EnhancedBody
+                                snapshot={snapshot}
+                                noteDraft={noteDraft}
+                                enrichmentPreview={enrichmentPreview}
+                                mutationPending={mutationPending}
+                                proposalContent={proposalContent}
+                                proposalStale={proposalStale}
+                                onProposalChange={content =>
+                                    setProposalDraft(current =>
+                                        enrichment
+                                            ? {
+                                                  runId: enrichment.id,
+                                                  content,
+                                              }
+                                            : current
+                                    )
+                                }
+                                onRequestEnrichment={onRequestEnrichment}
+                                onRejectEnrichment={onRejectEnrichment}
+                                onAcceptEnrichment={onAcceptEnrichment}
+                                onSaveNote={onSaveNote}
+                                onDiscardNote={onDiscardNote}
+                            />
+                        )}
+                    </section>
+                    {snapshot.note && noteView === "notes" && (
+                        <NoteSaveStatus
+                            snapshot={snapshot}
+                            draft={noteDraft}
+                            onSave={onSaveNote}
+                            onDiscard={onDiscardNote}
+                        />
+                    )}
+                </article>
+            </div>
+            <div
+                ref={dockRef}
+                className={styles.callDock}
+                data-mode={dockMode}
+                aria-label="Call assistant dock"
+            >
+                <div
+                    className={styles.dockView}
+                    data-active={dockMode !== "transcript"}
+                    ref={element => {
+                        if (element) element.inert = dockMode === "transcript";
+                    }}
+                    aria-hidden={dockMode === "transcript"}
+                >
+                    <CallsChat
+                        snapshot={snapshot}
+                        open={dockMode === "chat"}
+                        onOpen={() => setDockMode("chat")}
+                        onClose={closeDock}
+                        onShowTranscript={() => setDockMode("transcript")}
+                    />
+                </div>
+                <div
+                    className={styles.dockView}
+                    data-active={dockMode === "transcript"}
+                    ref={element => {
+                        if (element) element.inert = dockMode !== "transcript";
+                    }}
+                    aria-hidden={dockMode !== "transcript"}
+                >
+                    <TranscriptSection
+                        snapshot={snapshot}
+                        active={dockMode === "transcript"}
+                        onClose={closeDock}
+                        onShowChat={() => setDockMode("chat")}
+                    />
+                </div>
+                <button
+                    className={styles.dockWaveform}
+                    aria-label={
+                        dockMode === "transcript" ? "Collapse transcript" : "Show transcript"
+                    }
+                    aria-expanded={dockMode === "transcript"}
+                    aria-controls={`transcript-${snapshot.id}`}
+                    tabIndex={dockMode === "chat" ? -1 : 0}
+                    aria-hidden={dockMode === "chat"}
+                    onClick={() =>
+                        dockMode === "transcript" ? closeDock() : setDockMode("transcript")
+                    }
+                >
+                    <AudioLines size={25} />
+                    <ChevronDown size={12} className={styles.transcriptChevron} />
+                </button>
+            </div>
+        </main>
     );
 }
 
-function NoteBody({ snapshot }: { snapshot: CallSnapshot }) {
-    // note === null is a non-owner viewing a private note.
-    if (!snapshot.note) {
-        return (
-            <div className={styles.privateNote}>
-                <LockKeyhole size={17} />
-                <strong>Private to the owner</strong>
-                <span>The company transcript remains available.</span>
-            </div>
-        );
-    }
+function CallNoteTitle({
+    title,
+    editable,
+    onRename,
+}: {
+    title: string;
+    editable: boolean;
+    onRename: (title: string) => void;
+}) {
+    const headingRef = useRef<HTMLHeadingElement>(null);
+    const [editing, setEditing] = useState(false);
+    const isEditing = editable && editing;
+
+    // Leave the browser-owned text and selection alone while the owner types,
+    // including when a polled snapshot updates the surrounding workspace.
+    useLayoutEffect(() => {
+        if (!isEditing && headingRef.current) headingRef.current.textContent = title;
+    }, [title, isEditing]);
+    useLayoutEffect(() => {
+        if (!isEditing || !headingRef.current) return;
+        headingRef.current.focus();
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(headingRef.current);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+    }, [isEditing]);
+
     return (
-        <div
-            className={styles.noteEditor}
-            role="textbox"
-            aria-label="Call note"
-            aria-readonly="true"
-        >
-            {snapshot.note.contentMarkdown || "Write notes here…"}
+        <h1
+            ref={headingRef}
+            className={editable ? styles.editableTitle : undefined}
+            contentEditable={isEditing ? "plaintext-only" : false}
+            suppressContentEditableWarning
+            role={isEditing ? "textbox" : undefined}
+            aria-label={isEditing ? "Call note title" : undefined}
+            aria-multiline={isEditing ? false : undefined}
+            title={editable && !isEditing ? "Double-click to rename" : undefined}
+            tabIndex={editable ? 0 : undefined}
+            onDoubleClick={() => {
+                if (editable && !isEditing) setEditing(true);
+            }}
+            onKeyDown={event => {
+                if (event.nativeEvent.isComposing) return;
+                if (!isEditing) {
+                    if (editable && (event.key === "Enter" || event.key === "F2")) {
+                        event.preventDefault();
+                        setEditing(true);
+                    }
+                    return;
+                }
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    setEditing(false);
+                } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    event.currentTarget.blur();
+                }
+            }}
+            onBlur={event => {
+                if (isEditing) {
+                    const nextTitle = (event.currentTarget.textContent ?? "")
+                        .replace(/[\r\n]+/g, " ")
+                        .trim()
+                        .slice(0, 512);
+                    event.currentTarget.textContent = nextTitle || title;
+                    if (nextTitle && nextTitle !== title) onRename(nextTitle);
+                }
+                setEditing(false);
+            }}
+        />
+    );
+}
+
+function NoteSaveStatus({
+    snapshot,
+    draft,
+    onSave,
+    onDiscard,
+}: {
+    snapshot: CallSnapshot;
+    draft?: CallNoteDraft;
+    onSave?: CallsWorkspaceProps["onSaveNote"];
+    onDiscard?: CallsWorkspaceProps["onDiscardNote"];
+}) {
+    const [copyFailed, setCopyFailed] = useState(false);
+    if (!snapshot.viewerCapabilities.canEditNote || !onSave) {
+        return <footer className={styles.noteFooter}>Read-only note</footer>;
+    }
+    const failed = draft?.status === "failed" || draft?.status === "conflict";
+    return (
+        <footer className={styles.noteFooter} aria-label="Note save status">
+            <span role={failed ? "alert" : "status"} aria-live="polite">
+                {draft?.error ??
+                    (draft?.status === "saving" ? "Saving…" : draft ? "Unsaved changes" : "Saved")}
+            </span>
+            {draft && draft.status !== "saving" && draft.status !== "conflict" && (
+                <button type="button" onClick={() => onSave(snapshot.id)}>
+                    {failed ? "Retry save" : "Save now"}
+                </button>
+            )}
+            {failed && (
+                <button
+                    type="button"
+                    onClick={async () => {
+                        try {
+                            await navigator.clipboard.writeText(draft.contentMarkdown);
+                            setCopyFailed(false);
+                        } catch {
+                            setCopyFailed(true);
+                        }
+                    }}
+                >
+                    Copy my draft
+                </button>
+            )}
+            {failed && onDiscard && (
+                <button
+                    type="button"
+                    disabled={
+                        draft.status === "conflict" &&
+                        (snapshot.note?.revision ?? 0) <= draft.baseRevision
+                    }
+                    onClick={() => {
+                        if (
+                            window.confirm("Discard your unsaved changes and use the saved note?")
+                        ) {
+                            onDiscard(snapshot.id);
+                        }
+                    }}
+                >
+                    Use saved version
+                </button>
+            )}
+            {copyFailed && (
+                <span role="alert">Could not copy. Select and copy your text in the editor.</span>
+            )}
+        </footer>
+    );
+}
+
+function PrivateNote() {
+    return (
+        <div className={styles.emptyState}>
+            <LockKeyhole size={20} />
+            <strong>Private to the owner</strong>
+            <p>The company transcript remains available.</p>
         </div>
     );
 }
 
-function EnhancedBody({ snapshot }: { snapshot: CallSnapshot }) {
-    const proposal = snapshot.enrichment?.proposal;
-    if (!proposal) {
+function EnhancedBody({
+    snapshot,
+    noteDraft,
+    enrichmentPreview,
+    mutationPending,
+    proposalContent,
+    proposalStale,
+    onProposalChange,
+    onRequestEnrichment,
+    onRejectEnrichment,
+    onAcceptEnrichment,
+    onSaveNote,
+    onDiscardNote,
+}: {
+    snapshot: CallSnapshot;
+    noteDraft?: CallNoteDraft;
+    enrichmentPreview?: EnrichmentPreviewState;
+    mutationPending: boolean;
+    proposalContent: EditableContent | null;
+    proposalStale: boolean;
+    onProposalChange: (content: EditableContent) => void;
+    onRequestEnrichment?: CallsWorkspaceProps["onRequestEnrichment"];
+    onRejectEnrichment?: CallsWorkspaceProps["onRejectEnrichment"];
+    onAcceptEnrichment?: CallsWorkspaceProps["onAcceptEnrichment"];
+    onSaveNote?: CallsWorkspaceProps["onSaveNote"];
+    onDiscardNote?: CallsWorkspaceProps["onDiscardNote"];
+}) {
+    if (!snapshot.note) return <PrivateNote />;
+
+    const run = snapshot.enrichment;
+    const canRequest = snapshot.viewerCapabilities.canRequestEnrichment && onRequestEnrichment;
+    const canResolve = snapshot.viewerCapabilities.canResolveEnrichment;
+    const noteDirty = noteDraft !== undefined;
+    const status = run?.status;
+    const proposal = run?.proposal;
+    const requestLabel =
+        status === "failed" || status === "rejected" || status === "accepted"
+            ? "Regenerate enhancement"
+            : "Enhance with AI";
+
+    if (enrichmentPreview || status === "queued" || status === "generating") {
         return (
-            <div className={styles.enhancedEmpty}>
-                <Sparkles size={18} />
-                <strong>AI enhancement starts after capture</strong>
-                <span>
-                    The transcript and your notes stay separate until the suggestion is ready.
-                </span>
+            <div role="tabpanel" aria-label="AI enhanced note">
+                <EnrichmentPreview
+                    markdown={enrichmentPreview?.markdown ?? ""}
+                    status={
+                        enrichmentPreview?.status ??
+                        (status === "generating" ? "generating" : "queued")
+                    }
+                    error={enrichmentPreview?.error}
+                />
             </div>
         );
     }
+
+    if (!run) {
+        return (
+            <div className={styles.emptyState} role="tabpanel" aria-label="AI enhanced note">
+                <Sparkles size={20} />
+                <strong>No enhanced note yet</strong>
+                <p>Summarize the call by topic, with ideas from your notes woven in and bolded.</p>
+                {canRequest && (
+                    <button
+                        type="button"
+                        className={styles.actionButton}
+                        disabled={mutationPending || noteDirty}
+                        onClick={() => onRequestEnrichment?.(snapshot.id)}
+                    >
+                        <Sparkles size={14} />{" "}
+                        {noteDirty ? "Save note before enhancing" : requestLabel}
+                    </button>
+                )}
+            </div>
+        );
+    }
+
+    if (!proposal || status === "failed") {
+        return (
+            <div className={styles.emptyState} role="tabpanel" aria-label="AI enhanced note">
+                <Sparkles size={20} />
+                <strong>
+                    {status === "failed" ? "Enhancement failed" : "No enhanced note yet"}
+                </strong>
+                <p>
+                    The original note and transcript are unchanged. Retry to generate a new
+                    proposal.
+                </p>
+                {canRequest && (
+                    <button
+                        type="button"
+                        className={styles.actionButton}
+                        disabled={mutationPending || noteDirty}
+                        onClick={() => onRequestEnrichment?.(snapshot.id)}
+                    >
+                        <RefreshCw size={14} />{" "}
+                        {noteDirty ? "Save note before retrying" : requestLabel}
+                    </button>
+                )}
+            </div>
+        );
+    }
+
+    const content = proposalContent ?? renderEnrichedNoteProposal(proposal);
+    const reviewable = status === "ready" && canResolve;
     return (
-        <div className={styles.enhancedNote} role="tabpanel" aria-label="AI enhanced note">
-            <div className={styles.enhancedHeader}>
-                <span>
-                    <Sparkles size={15} />
-                    <strong>AI-enhanced draft</strong>
-                </span>
+        <div className={styles.enrichmentPanel} role="tabpanel" aria-label="AI enhanced note">
+            {status !== "accepted" && <ProposalReviewNotice rejected={status === "rejected"} />}
+            {proposalStale && status === "ready" && (
+                <p className={styles.enrichmentWarning} role="alert">
+                    This proposal was generated from Note revision {run.baseNoteRevision}, but the
+                    saved note is now revision {snapshot.note.revision}. Save or regenerate before
+                    accepting it.
+                </p>
+            )}
+            {noteDirty && status === "ready" && (
+                <div className={styles.enrichmentWarning} role="alert">
+                    <span>
+                        Save or explicitly resolve your canonical note draft before accepting this
+                        proposal.
+                    </span>
+                    <div className={styles.enrichmentActions}>
+                        {onSaveNote && noteDraft.status !== "conflict" && (
+                            <button type="button" onClick={() => onSaveNote(snapshot.id)}>
+                                Save note
+                            </button>
+                        )}
+                        {onDiscardNote && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (window.confirm("Discard your unsaved note changes?")) {
+                                        onDiscardNote(snapshot.id);
+                                    }
+                                }}
+                            >
+                                Use saved note
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
+            <CallNoteEditor
+                content={content}
+                editable={reviewable && !mutationPending}
+                onChange={onProposalChange}
+            />
+            {status === "ready" && canResolve && (
+                <div className={styles.enrichmentActions}>
+                    <button
+                        type="button"
+                        className={styles.actionButton}
+                        disabled={mutationPending || noteDirty || proposalStale}
+                        onClick={() =>
+                            onAcceptEnrichment?.(snapshot.id, run.id, {
+                                contentRich: content.contentRich,
+                                contentMarkdown: content.contentMarkdown,
+                            })
+                        }
+                    >
+                        <Check size={14} /> Accept enhancement
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.secondaryAction}
+                        disabled={mutationPending}
+                        onClick={() => onRejectEnrichment?.(snapshot.id, run.id)}
+                    >
+                        Reject
+                    </button>
+                </div>
+            )}
+            {(status === "rejected" || status === "accepted") && canRequest && (
                 <button
                     type="button"
-                    className={styles.controlButton}
-                    disabled
-                    title="Enrichment review wiring is pending final integration"
+                    className={styles.actionButton}
+                    disabled={mutationPending || noteDirty}
+                    onClick={() => onRequestEnrichment?.(snapshot.id)}
                 >
-                    Review suggestion
+                    <RefreshCw size={14} />{" "}
+                    {noteDirty ? "Save note before regenerating" : requestLabel}
                 </button>
-            </div>
-            <p>{proposal.summary}</p>
+            )}
         </div>
     );
 }
 
 type TimelineEntry = { type: "segment"; segment: TranscriptSegment } | { type: "gap"; gap: Gap };
 
-function TranscriptSection({ snapshot }: { snapshot: CallSnapshot }) {
-    const [open, setOpen] = useState(false);
+function TranscriptSection({
+    snapshot,
+    onClose,
+    active,
+    onShowChat,
+}: {
+    snapshot: CallSnapshot;
+    onClose: () => void;
+    active: boolean;
+    onShowChat: () => void;
+}) {
     const [query, setQuery] = useState("");
-
+    const [copyStatus, setCopyStatus] = useState("");
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const followTail = useRef(true);
+    const previousQuery = useRef("");
     const normalized = query.trim().toLowerCase();
-    const isSearching = normalized.length > 0;
-    const partial = snapshot.capture.outcome === "partial";
-
-    const matchedSegments = isSearching
-        ? snapshot.transcript.filter(
-              segment =>
-                  (segment.speakerName ?? "").toLowerCase().includes(normalized) ||
-                  segment.text.toLowerCase().includes(normalized)
-          )
-        : snapshot.transcript;
-
-    const timeline: TimelineEntry[] = [];
-    if (isSearching) {
-        for (const segment of matchedSegments) {
-            timeline.push({ type: "segment", segment });
+    useLayoutEffect(() => {
+        const body = bodyRef.current;
+        if (!body || !active) return;
+        if (previousQuery.current !== normalized) {
+            body.scrollTop = normalized ? 0 : body.scrollHeight;
+            followTail.current = !normalized;
+        } else if (!normalized && followTail.current) {
+            body.scrollTop = body.scrollHeight;
         }
-    } else {
-        const sortedGaps = [...snapshot.gaps].sort((a, b) =>
-            a.startedAt.localeCompare(b.startedAt)
-        );
-        let gapIndex = 0;
-        for (const segment of snapshot.transcript) {
-            while (gapIndex < sortedGaps.length) {
-                const gap = sortedGaps[gapIndex];
-                if (!gap || gap.startedAt > segment.receivedAt) break;
-                timeline.push({ type: "gap", gap });
-                gapIndex += 1;
-            }
-            timeline.push({ type: "segment", segment });
+        previousQuery.current = normalized;
+    }, [snapshot.transcript.length, snapshot.gaps.length, normalized, active]);
+    const timeline: TimelineEntry[] = [
+        ...snapshot.transcript
+            .filter(
+                segment =>
+                    !normalized ||
+                    `${speakerLabel(segment)} ${segment.text}`.toLowerCase().includes(normalized)
+            )
+            .map(segment => ({ type: "segment" as const, segment })),
+        ...(!normalized ? snapshot.gaps.map(gap => ({ type: "gap" as const, gap })) : []),
+    ];
+    timeline.sort((a, b) =>
+        (a.type === "segment" ? a.segment.receivedAt : a.gap.startedAt).localeCompare(
+            b.type === "segment" ? b.segment.receivedAt : b.gap.startedAt
+        )
+    );
+    const copyTranscript = async () => {
+        const text = timeline
+            .map(entry =>
+                entry.type === "gap"
+                    ? `[${GAP_LABELS[entry.gap.kind]} · ${gapDuration(entry.gap)} not transcribed]`
+                    : `${speakerLabel(entry.segment)} (${entry.segment.audioChannel}, ${formatClock(entry.segment.sourceStartMs)}): ${entry.segment.text}`
+            )
+            .join("\n\n");
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopyStatus("Copied");
+        } catch {
+            setCopyStatus("Could not copy transcript");
         }
-        for (; gapIndex < sortedGaps.length; gapIndex += 1) {
-            const gap = sortedGaps[gapIndex];
-            if (gap) timeline.push({ type: "gap", gap });
-        }
-    }
-
+    };
     return (
-        <section className={styles.transcript} aria-label="Company transcript">
-            <div className={styles.transcriptHeader}>
+        <aside
+            id={`transcript-${snapshot.id}`}
+            className={styles.transcript}
+            aria-label="Company transcript"
+        >
+            <header className={styles.transcriptHeader}>
+                <label className={styles.transcriptSearch}>
+                    <Search size={16} />
+                    <input
+                        aria-label="Search transcript"
+                        placeholder="Search transcript"
+                        value={query}
+                        onChange={event => {
+                            setQuery(event.target.value);
+                            setCopyStatus("");
+                        }}
+                    />
+                </label>
+                <span className={styles.transcriptCount}>
+                    {normalized
+                        ? `${timeline.length} matches`
+                        : `${snapshot.transcript.length} segments`}
+                </span>
                 <button
-                    type="button"
-                    className={styles.transcriptToggle}
-                    aria-expanded={open}
-                    onClick={() => setOpen(value => !value)}
+                    className={styles.iconButton}
+                    aria-label="Open AI chat"
+                    onClick={onShowChat}
                 >
-                    <span className={styles.toggleIcon}>
-                        {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                    </span>
-                    <span>
-                        <strong>Transcript</strong>
-                        <small>
-                            <ShieldCheck size={12} />
-                            {snapshot.transcript.length} segments · shared with{" "}
-                            {companyLabel(snapshot)}
-                        </small>
-                    </span>
+                    <Sparkles size={16} />
                 </button>
-                {open ? (
-                    <label className={styles.transcriptSearch}>
-                        <Search size={14} />
-                        <input
-                            aria-label="Search transcript"
-                            placeholder="Search transcript"
-                            value={query}
-                            onChange={event => setQuery(event.target.value)}
+                <button
+                    className={styles.iconButton}
+                    aria-label={normalized ? "Copy search results" : "Copy transcript"}
+                    disabled={!timeline.length}
+                    onClick={() => void copyTranscript()}
+                >
+                    {copyStatus === "Copied" ? <Check size={16} /> : <Copy size={16} />}
+                </button>
+                <button
+                    className={styles.iconButton}
+                    aria-label="Close transcript"
+                    onClick={onClose}
+                >
+                    <Minus size={18} />
+                </button>
+            </header>
+            <div
+                ref={bodyRef}
+                className={styles.transcriptBody}
+                aria-label="Transcript segments"
+                tabIndex={0}
+                onScroll={event => {
+                    const body = event.currentTarget;
+                    followTail.current =
+                        body.scrollHeight - body.scrollTop - body.clientHeight < 48;
+                }}
+            >
+                {timeline.map((entry, index) => {
+                    if (entry.type === "gap")
+                        return (
+                            <div className={styles.gap} key={`gap-${entry.gap.id}`}>
+                                <Pause size={13} />
+                                <strong>{GAP_LABELS[entry.gap.kind]}</strong>
+                                <span>{gapDuration(entry.gap)} not transcribed</span>
+                            </div>
+                        );
+                    const previous = timeline[index - 1];
+                    const showMeta =
+                        previous?.type !== "segment" ||
+                        previous.segment.audioChannel !== entry.segment.audioChannel ||
+                        speakerLabel(previous.segment) !== speakerLabel(entry.segment);
+                    return (
+                        <SegmentRow
+                            key={entry.segment.id}
+                            segment={entry.segment}
+                            showMeta={showMeta}
                         />
-                    </label>
-                ) : partial ? (
-                    <span className={styles.gapSummary}>Capture had gaps · Partial</span>
-                ) : null}
+                    );
+                })}
+                {!timeline.length && (
+                    <p className={styles.transcriptEmpty}>
+                        {normalized
+                            ? `No transcript matches “${query.trim()}”.`
+                            : "Transcript appears as the local worker streams microphone and computer audio after you start capture."}
+                    </p>
+                )}
             </div>
-
-            {open ? (
-                <div className={styles.transcriptBody} aria-label="Transcript segments">
-                    {timeline.length ? (
-                        timeline.map(entry =>
-                            entry.type === "segment" ? (
-                                <SegmentRow
-                                    key={`segment-${entry.segment.id}`}
-                                    segment={entry.segment}
-                                    bookmark={snapshot.bookmarks.find(
-                                        item => item.segmentId === entry.segment.id
-                                    )}
-                                />
-                            ) : (
-                                <div className={styles.gap} key={`gap-${entry.gap.id}`}>
-                                    <Pause size={13} />
-                                    <strong>{GAP_LABELS[entry.gap.kind]}</strong>
-                                    <span>{gapDuration(entry.gap)} not transcribed</span>
-                                </div>
-                            )
-                        )
-                    ) : (
-                        <div className={styles.transcriptEmpty}>
-                            {isSearching
-                                ? `No transcript matches “${query.trim()}”.`
-                                : "Transcript appears when Zoom connects."}
-                        </div>
-                    )}
-                </div>
-            ) : null}
-        </section>
+            <footer className={styles.transcriptFooter}>
+                <span className={styles.transcriptCapture}>
+                    <i />
+                    {captureLabel(snapshot)}
+                    {snapshot.capture.outcome === "partial" ? " · Partial" : ""}
+                </span>
+                <span className={styles.transcriptFeedback} role="status">
+                    {copyStatus}
+                </span>
+                <span
+                    className={styles.transcriptProvenance}
+                    title="Channel labels show the audio source, not speaker identity. Local capture may be incomplete."
+                >
+                    <Users size={13} /> Company transcript
+                </span>
+            </footer>
+        </aside>
     );
 }
 
-function SegmentRow({
-    segment,
-    bookmark,
-}: {
-    segment: TranscriptSegment;
-    bookmark: CallSnapshot["bookmarks"][number] | undefined;
-}) {
+function SegmentRow({ segment, showMeta }: { segment: TranscriptSegment; showMeta: boolean }) {
     return (
-        <article className={styles.segment}>
-            <div className={styles.segmentMeta}>
-                <strong>{segment.speakerName ?? "Unknown speaker"}</strong>
-                <span>{formatClock(segment.providerStartMs)}</span>
-            </div>
+        <article
+            className={styles.segment}
+            data-channel={segment.audioChannel}
+            data-group-start={showMeta}
+            aria-label={`${speakerLabel(segment)} · ${formatClock(segment.sourceStartMs)}`}
+        >
+            {showMeta && (
+                <div className={styles.segmentMeta}>
+                    <strong>{speakerLabel(segment)}</strong>
+                    <span>
+                        {segment.audioChannel === "microphone" ? "Microphone" : "Computer audio"}
+                    </span>
+                    <time>{formatClock(segment.sourceStartMs)}</time>
+                </div>
+            )}
             <p>{segment.text}</p>
-            <button
-                type="button"
-                className={`${styles.bookmarkButton} ${bookmark ? styles.bookmarkSaved : ""}`}
-                aria-label="Bookmark segment"
-                disabled
-                title="Bookmark editing is pending final integration"
-            >
-                <Bookmark size={14} fill={bookmark ? "currentColor" : "none"} />
-            </button>
-            {bookmark?.comment ? (
-                <span className={styles.bookmarkComment}>{bookmark.comment}</span>
-            ) : null}
         </article>
     );
 }

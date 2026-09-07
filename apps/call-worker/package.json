@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --target=node24 --outfile=dist/main.js --external:@zoom/rtms",
+    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --target=node24 --outfile=dist/main.js",
+    "build:system-audio": "swift build --package-path native/system-audio-capture -c release",
+    "system-audio:request-permission": "./native/system-audio-capture/.build/release/launchstack-system-audio --request-permission",
+    "system-audio:status": "./native/system-audio-capture/.build/release/launchstack-system-audio --status",
     "dev": "tsx src/main.ts",
     "start": "node dist/main.js",
     "test": "tsx --test 'src/**/*.test.ts'",
@@ -13,7 +16,6 @@
   "dependencies": {
     "@launchstack/core": "workspace:*",
     "@launchstack/features": "workspace:*",
-    "@zoom/rtms": "1.1.0",
     "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {

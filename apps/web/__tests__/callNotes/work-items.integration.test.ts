@@ -65,8 +65,8 @@ describeIfDatabase("Call Notes durable work items", () => {
 
             const enqueueInput = {
                 companyId: "1",
-                kind: "provider_event" as const,
-                idempotencyKey: "provider-event-1",
+                kind: "capture_event" as const,
+                idempotencyKey: "capture-event-1",
                 payload: { eventId: "event-1" },
             };
             const firstEnqueue = await workA.enqueue(enqueueInput);
@@ -80,25 +80,25 @@ describeIfDatabase("Call Notes durable work items", () => {
 
             const secondEnqueue = await workA.enqueue({
                 ...enqueueInput,
-                idempotencyKey: "provider-event-2",
+                idempotencyKey: "capture-event-2",
                 payload: { eventId: "event-2" },
             });
             expect(secondEnqueue.id).not.toBe(firstEnqueue.id);
             const duplicateReceipt = await workA.enqueue({
                 ...enqueueInput,
-                idempotencyKey: "provider-event-duplicate",
+                idempotencyKey: "capture-event-duplicate",
                 payload: { eventId: "event-duplicate" },
             });
             const [duplicateClaimA, duplicateClaimB] = await Promise.all([
                 workA.claimById(duplicateReceipt.id, "duplicate-worker-a", {
                     companyId: "1",
-                    kind: "provider_event",
+                    kind: "capture_event",
                     leaseMs: 1_000,
                     now: NOW,
                 }),
                 workB.claimById(duplicateReceipt.id, "duplicate-worker-b", {
                     companyId: "1",
-                    kind: "provider_event",
+                    kind: "capture_event",
                     leaseMs: 1_000,
                     now: NOW,
                 }),
@@ -116,13 +116,13 @@ describeIfDatabase("Call Notes durable work items", () => {
             const [claimAResult, claimBResult] = await Promise.all([
                 workA.claim("worker-a", {
                     companyId: "1",
-                    kind: "provider_event",
+                    kind: "capture_event",
                     leaseMs: 1_000,
                     now: NOW,
                 }),
                 workB.claim("worker-b", {
                     companyId: "1",
-                    kind: "provider_event",
+                    kind: "capture_event",
                     leaseMs: 1_000,
                     now: NOW,
                 }),
@@ -144,7 +144,7 @@ describeIfDatabase("Call Notes durable work items", () => {
             const reclaimed = expectClaim(
                 await workA.claim("worker-c", {
                     companyId: "1",
-                    kind: "provider_event",
+                    kind: "capture_event",
                     leaseMs: 2_000,
                     now: expiredAt,
                 })

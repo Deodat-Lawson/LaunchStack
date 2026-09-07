@@ -20,11 +20,39 @@ import { validateEnrichmentProvenance } from "./enrichment-validation";
 
 export const CALL_NOTES_ENRICHMENT_ROUTE = "reasoning" as const;
 
+function renderPartialChronologicalSections(value: unknown): string {
+    if (value === null || typeof value !== "object" || !("chronologicalSections" in value)) {
+        return "";
+    }
+    const sections = value.chronologicalSections;
+    if (!Array.isArray(sections)) return "";
+
+    return sections
+        .map((section: unknown) => {
+            if (section === null || typeof section !== "object") return "";
+            const headingValue = "heading" in section ? section.heading : undefined;
+            const markdownValue = "markdown" in section ? section.markdown : undefined;
+            const heading = typeof headingValue === "string" ? headingValue.trim() : "";
+            const markdown = typeof markdownValue === "string" ? markdownValue.trim() : "";
+            if (heading && markdown) return `## ${heading}\n\n${markdown}`;
+            if (heading) return `## ${heading}`;
+            return markdown;
+        })
+        .filter(Boolean)
+        .join("\n\n");
+}
+
 /** Configured LaunchStack model adapter for the isolated enrichment core. */
 export class ConfiguredCallNotesEnrichmentModel implements EnrichmentModel {
-    async generate(rawInput: EnrichmentInput): Promise<EnrichmentResult> {
+    async generate(
+        rawInput: EnrichmentInput,
+        onPreview?: (markdown: string) => void | Promise<void>
+    ): Promise<EnrichmentResult> {
         const input = EnrichmentInputSchema.parse(rawInput);
-        const resolved = resolveConfiguredChatModel({ route: CALL_NOTES_ENRICHMENT_ROUTE });
+        const resolved = resolveConfiguredChatModel({
+            route: CALL_NOTES_ENRICHMENT_ROUTE,
+            ...(onPreview ? { streaming: true } : {}),
+        });
         const proposal = await invokeStructured<EnrichedNoteProposal>(
             resolved,
             EnrichedNoteProposalSchema,
@@ -32,7 +60,14 @@ export class ConfiguredCallNotesEnrichmentModel implements EnrichmentModel {
                 new SystemMessage(CALL_NOTES_ENRICHMENT_SYSTEM_PROMPT),
                 new HumanMessage(buildCallNotesEnrichmentPrompt(input)),
             ],
-            { name: "call_notes_enrichment_v1" }
+            {
+                name: "call_notes_enrichment_v1",
+                onPartial: onPreview
+                    ? async partial => {
+                          await onPreview(renderPartialChronologicalSections(partial));
+                      }
+                    : undefined,
+            }
         );
 
         const validatedProposal = validateEnrichmentProvenance(input, proposal);

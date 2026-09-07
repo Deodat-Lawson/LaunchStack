@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -14,108 +14,260 @@ import {
     redactedCall,
 } from "~/app/calls/_fixtures/callSnapshots";
 
+jest.mock("~/app/calls/_components/CallsChat", () => ({
+    CallsChat: () => null,
+}));
+
+// Markdown rendering is exercised in the browser; keep these interaction tests
+// independent of Jest's unsupported pnpm ESM module loading.
+jest.mock("react-markdown", () => ({
+    __esModule: true,
+    default: ({ children }: { children: string }) => children,
+}));
+jest.mock("remark-gfm", () => ({ __esModule: true, default: () => undefined }));
+
 describe("CallsWorkspace", () => {
-    it("renders a completed call's title, note, and transcript segments", async () => {
+    it("renders a selected completed call's title, note, and transcript segments", async () => {
         const user = userEvent.setup();
-        render(<CallsWorkspace calls={[northstarPricingReviewCall]} />);
+        render(
+            <CallsWorkspace
+                calls={[northstarPricingReviewCall]}
+                initialSelectedId={northstarPricingReviewCall.id}
+            />
+        );
 
-        const panel = screen.getByRole("main");
         expect(
-            within(panel).getByRole("heading", { name: /northstar pricing review/i })
+            screen.getByRole("heading", { name: /northstar pricing review/i })
         ).toBeInTheDocument();
-        expect(within(panel).getByText(/hank drafting the enterprise tier/i)).toBeInTheDocument();
+        expect(screen.getByText(/enterprise tier draft in progress/i)).toBeInTheDocument();
+        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
+            /completed/i
+        );
 
-        // completed call has no capture control in the panel
-        expect(within(panel).queryByRole("button", { name: /^(start|pause|resume)$/i })).toBeNull();
-        expect(within(panel).queryByRole("button", { name: /retry capture/i })).toBeNull();
-
-        await user.click(within(panel).getByRole("button", { name: /transcript/i }));
-        const transcript = screen.getByLabelText("Transcript segments");
+        await user.click(screen.getByRole("button", { name: /show transcript/i }));
+        const transcript = screen.getByLabelText("Company transcript");
         expect(
             within(transcript).getByText(/finalize the pricing tiers before friday/i)
         ).toBeInTheDocument();
+        expect(within(transcript).getByText("Me")).toBeInTheDocument();
+        expect(within(transcript).getByText("Meeting")).toBeInTheDocument();
+
+        await user.type(
+            within(transcript).getByRole("textbox", { name: /search transcript/i }),
+            "enterprise"
+        );
+        expect(
+            within(transcript).getByText(northstarPricingReviewCall.transcript[1]!.text)
+        ).toBeInTheDocument();
+        expect(
+            within(transcript).queryByText(northstarPricingReviewCall.transcript[0]!.text)
+        ).toBeNull();
+
+        await user.click(within(transcript).getByRole("button", { name: /close transcript/i }));
+        expect(screen.queryByRole("complementary", { name: "Company transcript" })).toBeNull();
+        expect(screen.getByRole("button", { name: "Show transcript" })).toHaveFocus();
+        await user.click(screen.getByRole("button", { name: "Show transcript" }));
+        expect(screen.getByRole("textbox", { name: "Search transcript" })).toHaveValue(
+            "enterprise"
+        );
     });
 
-    it("shows Paused status with a Resume control for a paused capture", () => {
-        render(<CallsWorkspace calls={[pausedCall]} />);
-        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(/paused/i);
-        expect(screen.getByRole("button", { name: /resume/i })).toBeInTheDocument();
+    it("shows Paused status for a selected paused capture", () => {
+        render(<CallsWorkspace calls={[pausedCall]} initialSelectedId={pausedCall.id} />);
+        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
+            /paused/i
+        );
     });
 
-    it("shows Failed status with a Retry control for a failed capture", () => {
-        render(<CallsWorkspace calls={[failedCall]} />);
-        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(/failed/i);
-        expect(screen.getByRole("button", { name: /retry capture/i })).toBeInTheDocument();
+    it("shows Failed status for a selected failed capture", () => {
+        render(<CallsWorkspace calls={[failedCall]} initialSelectedId={failedCall.id} />);
+        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
+            /failed/i
+        );
     });
 
     it("marks a partial call and renders the gap in the transcript timeline", async () => {
         const user = userEvent.setup();
-        render(<CallsWorkspace calls={[partialCall]} />);
-        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(/partial/i);
+        render(<CallsWorkspace calls={[partialCall]} initialSelectedId={partialCall.id} />);
+        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
+            /partial/i
+        );
 
-        await user.click(screen.getByRole("button", { name: /transcript/i }));
-        const transcript = screen.getByLabelText("Transcript segments");
+        await user.click(screen.getByRole("button", { name: /show transcript/i }));
+        const transcript = screen.getByLabelText("Company transcript");
         expect(within(transcript).getByText(/capture paused/i)).toBeInTheDocument();
         expect(within(transcript).getByText(/45s not transcribed/i)).toBeInTheDocument();
     });
 
     it("redacts a private note for a non-owner", () => {
-        render(<CallsWorkspace calls={[redactedCall]} />);
+        render(<CallsWorkspace calls={[redactedCall]} initialSelectedId={redactedCall.id} />);
         expect(screen.getByText(/private to the owner/i)).toBeInTheDocument();
     });
 
     it("shows the AI-enhanced proposal when enrichment is ready", async () => {
         const user = userEvent.setup();
-        render(<CallsWorkspace calls={[enrichmentReadyCall]} />);
+        render(
+            <CallsWorkspace
+                calls={[enrichmentReadyCall]}
+                initialSelectedId={enrichmentReadyCall.id}
+            />
+        );
 
         await user.click(screen.getByRole("tab", { name: /ai enhanced/i }));
-        expect(screen.getByText(/finalize the pricing tiers by friday/i)).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /review suggestion/i })).toBeInTheDocument();
+        expect(
+            await screen.findByText(/finalize the pricing tiers by friday/i)
+        ).toBeInTheDocument();
     });
 
-    it("lists every call in the rail and switches the panel when one is selected", async () => {
+    it("navigates from the home note list to a note and back home", async () => {
+        const user = userEvent.setup();
+        const onSelectCall = jest.fn();
+        render(
+            <CallsWorkspace
+                calls={[northstarPricingReviewCall, failedCall]}
+                onSelectCall={onSelectCall}
+            />
+        );
+
+        expect(screen.getByRole("main", { name: /calls library/i })).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: /northstar pricing review/i }));
+        expect(onSelectCall).toHaveBeenLastCalledWith(northstarPricingReviewCall.id);
+        expect(
+            screen.getByRole("heading", { name: /northstar pricing review/i })
+        ).toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: /back to all notes/i }));
+        expect(onSelectCall).toHaveBeenLastCalledWith(null);
+        expect(screen.getByRole("main", { name: /calls library/i })).toBeInTheDocument();
+        expect(screen.queryByRole("heading", { name: /northstar pricing review/i })).toBeNull();
+    });
+
+    it("filters home notes after Search notes is opened", async () => {
         const user = userEvent.setup();
         render(<CallsWorkspace calls={[northstarPricingReviewCall, failedCall]} />);
 
-        const rail = screen.getByRole("complementary", { name: /calls library/i });
-        expect(within(rail).getByRole("button", { name: /northstar pricing review/i })).toBeInTheDocument();
-        expect(within(rail).getByRole("button", { name: /dropped investor call/i })).toBeInTheDocument();
+        expect(screen.queryByRole("textbox", { name: /search calls/i })).toBeNull();
+        await user.click(screen.getByRole("button", { name: /search notes/i }));
+        const search = screen.getByRole("textbox", { name: /search calls/i });
+        await user.type(search, "northstar");
 
-        const panel = screen.getByRole("main");
-        expect(within(panel).getByRole("heading", { name: /northstar pricing review/i })).toBeInTheDocument();
-
-        await user.click(within(rail).getByRole("button", { name: /dropped investor call/i }));
-        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(/failed/i);
-        expect(screen.getByRole("button", { name: /retry capture/i })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: /northstar pricing review/i })
+        ).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /dropped investor call/i })).toBeNull();
     });
 
-    it("resets panel view state when switching to another call", async () => {
-        const user = userEvent.setup();
-        render(<CallsWorkspace calls={[enrichmentReadyCall, redactedCall]} />);
+    it("follows browser selection changes through initialSelectedId", async () => {
+        const { rerender } = render(
+            <CallsWorkspace
+                calls={[northstarPricingReviewCall, failedCall]}
+                initialSelectedId={null}
+            />
+        );
+        expect(screen.getByRole("main", { name: /calls library/i })).toBeInTheDocument();
 
-        await user.click(screen.getByRole("tab", { name: /ai enhanced/i }));
-        expect(screen.getByText(/finalize the pricing tiers by friday/i)).toBeInTheDocument();
+        rerender(
+            <CallsWorkspace
+                calls={[northstarPricingReviewCall, failedCall]}
+                initialSelectedId={failedCall.id}
+            />
+        );
+        await waitFor(() =>
+            expect(
+                screen.getByRole("heading", { name: /dropped investor call/i })
+            ).toBeInTheDocument()
+        );
 
-        // switching calls should reset the panel back to My notes (not stay on AI)
-        const rail = screen.getByRole("complementary", { name: /calls library/i });
-        await user.click(within(rail).getByRole("button", { name: /private 1:1/i }));
-        expect(screen.getByText(/private to the owner/i)).toBeInTheDocument();
-        expect(screen.getByRole("tab", { name: /my notes/i })).toHaveAttribute(
-            "aria-selected",
-            "true"
+        rerender(
+            <CallsWorkspace
+                calls={[northstarPricingReviewCall, failedCall]}
+                initialSelectedId={null}
+            />
+        );
+        await waitFor(() =>
+            expect(screen.getByRole("main", { name: /calls library/i })).toBeInTheDocument()
         );
     });
 
-    it("filters the rail by call title", async () => {
+    it("renders the home state when there are no calls", () => {
+        render(<CallsWorkspace calls={[]} />);
+        expect(screen.getByRole("main", { name: /calls library/i })).toBeInTheDocument();
+        expect(screen.getByText(/your next conversation starts here/i)).toBeInTheDocument();
+    });
+
+    it("offers an explicit Start capture action from an empty workspace", async () => {
         const user = userEvent.setup();
-        render(<CallsWorkspace calls={[northstarPricingReviewCall, failedCall]} />);
+        const onStartCapture = jest.fn();
+        render(<CallsWorkspace calls={[]} onStartCapture={onStartCapture} />);
 
-        const rail = screen.getByRole("complementary", { name: /calls library/i });
-        await user.type(within(rail).getByRole("textbox", { name: /search calls/i }), "northstar");
+        await user.click(screen.getByRole("button", { name: /start capture/i }));
+        expect(onStartCapture).toHaveBeenCalledTimes(1);
+    });
 
-        expect(
-            within(rail).getByRole("button", { name: /northstar pricing review/i })
-        ).toBeInTheDocument();
-        expect(within(rail).queryByRole("button", { name: /dropped investor call/i })).toBeNull();
+    it("disables Start while capturing and allows an owner to stop", async () => {
+        const user = userEvent.setup();
+        const onStartCapture = jest.fn();
+        const onStopCapture = jest.fn();
+        render(
+            <CallsWorkspace
+                calls={[pausedCall]}
+                initialSelectedId={pausedCall.id}
+                onStartCapture={onStartCapture}
+                onStopCapture={onStopCapture}
+            />
+        );
+
+        expect(screen.getByRole("button", { name: /start capture/i })).toBeDisabled();
+        await user.click(screen.getByRole("button", { name: /stop capture/i }));
+        expect(onStopCapture).toHaveBeenCalledWith(pausedCall.id);
+    });
+
+    it("does not expose Stop to a viewer without capture control", () => {
+        const readOnlyActiveCall = {
+            ...pausedCall,
+            viewerCapabilities: { ...pausedCall.viewerCapabilities, canControlCapture: false },
+        };
+        render(
+            <CallsWorkspace
+                calls={[readOnlyActiveCall]}
+                initialSelectedId={readOnlyActiveCall.id}
+            />
+        );
+
+        expect(screen.queryByRole("button", { name: /stop capture/i })).toBeNull();
+    });
+
+    it("shows command errors with a retry action", async () => {
+        const user = userEvent.setup();
+        const onRetryCommand = jest.fn();
+        render(
+            <CallsWorkspace
+                calls={[]}
+                commandError="The capture worker is unavailable"
+                onRetryCommand={onRetryCommand}
+            />
+        );
+
+        expect(screen.getByRole("alert")).toHaveTextContent(/worker is unavailable/i);
+        await user.click(screen.getByRole("button", { name: /retry/i }));
+        expect(onRetryCommand).toHaveBeenCalledTimes(1);
+    });
+    it("exposes enrichment rejection", async () => {
+        const user = userEvent.setup();
+        const onRejectEnrichment = jest.fn();
+        render(
+            <CallsWorkspace
+                calls={[enrichmentReadyCall]}
+                initialSelectedId={enrichmentReadyCall.id}
+                onRejectEnrichment={onRejectEnrichment}
+            />
+        );
+
+        await user.click(screen.getByRole("tab", { name: /ai enhanced/i }));
+        await user.click(screen.getByRole("button", { name: "Reject" }));
+        expect(onRejectEnrichment).toHaveBeenCalledWith(
+            enrichmentReadyCall.id,
+            enrichmentReadyCall.enrichment!.id
+        );
     });
 });

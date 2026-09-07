@@ -1,3 +1,4 @@
+import type { NoteVisibility } from "@launchstack/features/call-notes";
 import type { ComponentType } from "react";
 import {
     IconAudio,
@@ -41,7 +42,8 @@ export type SourceTypeId =
     | "dropbox"
     | "web"
     | "youtube"
-    | "paste";
+    | "paste"
+    | "call-note";
 
 export interface SourceMeta {
     label: string;
@@ -62,6 +64,7 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     web: { label: "Website", Icon: IconGlobe, color: "oklch(0.55 0.08 200)" },
     youtube: { label: "YouTube", Icon: IconYoutube, color: "oklch(0.55 0.18 25)" },
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
+    "call-note": { label: "Call Note", Icon: IconNote, color: "oklch(0.52 0.16 185)" },
 };
 
 export type DocDomain =
@@ -86,10 +89,21 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
 };
 
 export interface WorkspaceSource {
-    /** Unique within the UI — DB-backed rows prefix with "d", staged locals with "s". */
+    /** Unique within the UI — DB documents prefix with "d", Call Notes with "call-note:". */
     id: string;
     /** DB primary key if this source came from the document table. */
     documentId?: number;
+    /**
+     * Call Note identity. Call files intentionally have no documentId: they
+     * open in Calls and are never eligible for document retrieval/mutation.
+     */
+    callId?: string;
+    noteId?: number;
+    visibility?: NoteVisibility;
+    revision?: number;
+    updatedAt?: string;
+    /** Bounded canonical note text used by workspace search and palette discovery. */
+    preview?: string;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -107,6 +121,8 @@ export interface WorkspaceFolder {
     id: string;
     name: string;
     color: string;
+    /** System collections (currently Calls) cannot be renamed or deleted. */
+    system?: boolean;
 }
 
 export interface ThreadReference {
@@ -309,7 +325,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "calls",
                 label: "Calls",
                 Icon: IconAudio,
-                desc: "Capture human conversations as notes and attributed Transcript evidence",
+                desc: "Capture human conversations as notes and channel-labelled transcript evidence",
             },
         ],
     },

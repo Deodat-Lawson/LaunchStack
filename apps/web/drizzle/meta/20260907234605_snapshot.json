@@ -1,5 +1,5 @@
 {
-  "id": "9892d2c5-ec63-4aeb-88b9-0ed265588ace",
+  "id": "1f76f60f-6a6d-4b87-a7bc-c3bd1016327e",
   "prevId": "5289b859-e448-431e-9557-c11dded3b83d",
   "version": "7",
   "dialect": "postgresql",
@@ -3703,13 +3703,6 @@
           "notNull": true,
           "default": "'linked'"
         },
-        "origin": {
-          "name": "origin",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'linked'"
-        },
         "fidelity_warning": {
           "name": "fidelity_warning",
           "type": "boolean",
@@ -3747,6 +3740,13 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "origin": {
+          "name": "origin",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'linked'"
         }
       },
       "indexes": {

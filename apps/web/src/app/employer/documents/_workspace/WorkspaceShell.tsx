@@ -97,6 +97,7 @@ const FEATURE_IDS = new Set([
     "image-gen",
     "audio-gen",
     "marketing",
+    "distribution",
     "knowledge",
     "meetings",
     "metadata",

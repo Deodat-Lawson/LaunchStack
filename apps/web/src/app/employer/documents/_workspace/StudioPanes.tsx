@@ -850,6 +850,23 @@ export function renderStudioPane(
             return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
+        case "distribution":
+            return (
+                <DefaultLinkPane
+                    onClose={onClose}
+                    eyebrow="Distribution"
+                    title="Distribution"
+                    body="Describe what you sell and where you want it sold. Discovery finds importers, distributors, wholesalers and retail accounts, researches each one with sourced evidence, and scores the fit. Then run every relationship through stages to a signed agreement."
+                    bullets={[
+                        "Programs: your offering, territories and the kinds of partner you want",
+                        "Discovery runs: evidence-backed dossiers published into Sources, with a fit score per candidate",
+                        "Pipeline: stages with rules, next actions, agreements, and a coverage map by territory",
+                        "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
+                    ]}
+                    href={feature.href ?? "/employer/tools/distribution"}
+                    ctaLabel="Open Distribution"
+                />
+            );
         default:
             if (feature.comingSoon) {
                 return (

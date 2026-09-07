@@ -27,8 +27,12 @@ export async function GET(request: Request) {
 
         const { searchParams } = new URL(request.url);
         const scope = searchParams.get("scope") === "trash" ? "trash" : "active";
+        // Thumbnails are data URIs that can run to megabytes each; a list is
+        // not the place for them. `hasThumbnail` says whether the image route
+        // will answer.
+        const includeThumbnails = searchParams.get("thumbnails") === "1";
 
-        const [items, folders] = await Promise.all([
+        const [rows, folders] = await Promise.all([
             listMindmaps({
                 companyId: ctx.data.companyId,
                 scope,
@@ -40,6 +44,7 @@ export async function GET(request: Request) {
             }),
             listFolders(ctx.data.companyId),
         ]);
+        const items = includeThumbnails ? rows : rows.map(row => ({ ...row, thumbnail: null }));
 
         return NextResponse.json({ mindmaps: items, folders }, { status: 200 });
     } catch (error) {

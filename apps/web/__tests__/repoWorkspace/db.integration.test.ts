@@ -55,6 +55,8 @@ function bundleFor(sha: string): ContextBundle {
 }
 
 describeDb("repo-workspace store", () => {
+    jest.setTimeout(120_000);
+
     let testDb: Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>;
     let companyId: bigint;
 

@@ -290,39 +290,82 @@ export function serializeDoc(doc: MindmapDoc): string {
 // Markdown outline
 // ---------------------------------------------------------------------------
 
+export interface OutlineOptions {
+    /**
+     * Put every top-level branch under its own Markdown heading.
+     *
+     * The heading-aware chunker splits on headings and stamps each chunk
+     * with the heading path, and that path is prepended to the text that is
+     * embedded. With sections on, a chunk cut out of a large map still says
+     * which branch it came from ("Launch plan > Infrastructure") instead of
+     * only which map. Off by default so the export people download keeps
+     * reading as one outline.
+     */
+    sections?: boolean;
+}
+
 /**
  * Depth-first outline of every page. This is the text that gets indexed when a
  * mindmap is published as a knowledge source, so it has to read as prose-ish
  * structure rather than a dump of coordinates.
  */
-export function toMarkdownOutline(doc: MindmapDoc): string {
+export function toMarkdownOutline(doc: MindmapDoc, options: OutlineOptions = {}): string {
+    const sections = options.sections === true;
     const out: string[] = [`# ${doc.title || "Untitled mindmap"}`, ""];
+    // With sections on, a page heading takes the H2 slot and branches become
+    // H3s; without pages the branches are H2s. The chunker reads three levels.
+    const pageHeading = doc.pages.length > 1 ? "## " : "";
+    const branchHeading = doc.pages.length > 1 ? "### " : "## ";
 
     for (const page of doc.pages) {
-        if (doc.pages.length > 1) out.push(`## ${page.name}`, "");
+        if (doc.pages.length > 1) out.push(`${pageHeading}${page.name}`, "");
         const idx = graphIndex(page);
         const byId = new Map(page.nodes.map(nd => [nd.id, nd]));
         const roots = page.nodes.filter(nd => (idx.in.get(nd.id) ?? []).length === 0);
         const seen = new Set<string>();
+        const labelOf = (nd: { text: string }) =>
+            (nd.text.trim() || "(untitled)").replace(/\n+/g, " ");
 
         const walk = (id: string, depth: number) => {
             if (seen.has(id) || depth > 32) return;
             seen.add(id);
             const nd = byId.get(id);
             if (!nd) return;
-            const label = nd.text.trim() || "(untitled)";
-            out.push(`${"  ".repeat(depth)}- ${label.replace(/\n+/g, " ")}`);
+            out.push(`${"  ".repeat(depth)}- ${labelOf(nd)}`);
             for (const childId of idx.out.get(id) ?? []) walk(childId, depth + 1);
         };
 
-        for (const root of roots) walk(root.id, 0);
+        if (sections) {
+            // One section per top-level branch: the root's label leads the
+            // section so the root topic is never separated from its
+            // children, and a root with no branches is a section of its own.
+            for (const root of roots) {
+                if (seen.has(root.id)) continue;
+                const branches = (idx.out.get(root.id) ?? []).filter(id => !seen.has(id));
+                if (branches.length === 0) {
+                    walk(root.id, 0);
+                    out.push("");
+                    continue;
+                }
+                seen.add(root.id);
+                for (const branchId of branches) {
+                    const branch = byId.get(branchId);
+                    if (!branch || seen.has(branchId)) continue;
+                    out.push(`${branchHeading}${labelOf(branch)}`, "", `- ${labelOf(root)}`);
+                    walk(branchId, 1);
+                    out.push("");
+                }
+            }
+        } else {
+            for (const root of roots) walk(root.id, 0);
+        }
         // Nodes in a cycle never appear as roots — list whatever is left so no
         // content is silently dropped from the export.
         for (const nd of page.nodes) if (!seen.has(nd.id)) walk(nd.id, 0);
 
         const labelled = page.edges.filter(e => e.labels.some(l => l.text.trim()));
         if (labelled.length) {
-            out.push("", "**Connections**", "");
+            out.push("", sections ? `${branchHeading}Connections` : "**Connections**", "");
             for (const e of labelled) {
                 const a = e.from.nodeId ? byId.get(e.from.nodeId)?.text : undefined;
                 const b = e.to.nodeId ? byId.get(e.to.nodeId)?.text : undefined;

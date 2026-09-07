@@ -7,6 +7,7 @@ export {
     documentEnsembleSearch,
     companyEnsembleSearch,
     multiDocEnsembleSearch,
+    mergeSiblingChunks,
 } from "./ensemble";
 
 export {

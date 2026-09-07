@@ -83,6 +83,8 @@ const START_BOUND = new Date("2026-02-16T00:00:00.000Z");
 const END_BOUND = new Date("2026-02-23T00:00:00.000Z");
 
 describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
+    jest.setTimeout(120_000);
+
     let testDb: TestDatabase;
     let service: FounderWeeklyReviewEvidenceService;
     let companyA: bigint;

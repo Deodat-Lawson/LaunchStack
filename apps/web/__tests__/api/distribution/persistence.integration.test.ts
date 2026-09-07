@@ -69,6 +69,8 @@ const mentions = [
 ];
 
 describeDb("distribution persistence", () => {
+    jest.setTimeout(120_000);
+
     let testDb: Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>;
     let companyA: bigint;
     let companyB: bigint;

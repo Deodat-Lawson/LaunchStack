@@ -25,6 +25,7 @@
         "preview": "next build && next start",
         "start": "next start",
         "test": "jest --passWithNoTests",
+        "test:e2e": "playwright test",
         "test:evals": "jest __tests__/lib/evals",
         "typecheck": "tsc --noEmit",
         "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest"

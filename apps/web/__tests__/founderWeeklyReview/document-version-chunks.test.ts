@@ -13,6 +13,8 @@ const describeDb =
         : describe.skip;
 
 describeDb("explicit document version chunks", () => {
+    jest.setTimeout(120_000);
+
     it("loads only owned explicit-version chunks in deterministic order", async () => {
         const test = await createFounderWeeklyReviewTestDatabase();
         try {

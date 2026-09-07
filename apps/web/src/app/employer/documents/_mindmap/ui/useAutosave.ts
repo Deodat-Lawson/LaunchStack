@@ -165,6 +165,26 @@ export function useAutosave(
         return () => window.removeEventListener("beforeunload", onBeforeUnload);
     }, [mindmapId, store]);
 
+    // The editor lives inside the workspace now, so leaving it is a client
+    // navigation, not an unload: no `beforeunload`, and the debounce above is
+    // cleared with the component. Flush whatever is still dirty on the way
+    // out. `keepalive` lets the request outlive the unmount the way a beacon
+    // outlives a page.
+    useEffect(() => {
+        return () => {
+            const state = store.getState();
+            if (!state.dirty) return;
+            void fetch(`/api/mindmaps/${mindmapId}`, {
+                method: "PATCH",
+                keepalive: true,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ doc: state.doc, baseRevision: revision.current }),
+            }).catch(() => {
+                /* nothing left to tell — the editor is gone */
+            });
+        };
+    }, [mindmapId, store]);
+
     const saveNow = useCallback(
         (options: { snapshot?: boolean; label?: string } = {}) =>
             save({ snapshot: options.snapshot ?? SNAPSHOT_ON_MANUAL, label: options.label }),

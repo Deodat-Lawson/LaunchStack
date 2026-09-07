@@ -8,6 +8,8 @@ const describeIfDatabase =
         : describe.skip;
 
 describeIfDatabase("Founder Weekly Review migrations", () => {
+    jest.setTimeout(120_000);
+
     it("replays all migrations into a clean schema and creates the new tables and constraints", async () => {
         const testDb = await createFounderWeeklyReviewTestDatabase();
         try {

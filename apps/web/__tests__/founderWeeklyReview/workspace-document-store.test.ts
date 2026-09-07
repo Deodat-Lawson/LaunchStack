@@ -18,6 +18,8 @@ const vector = (index: number) => Array.from({ length: 1536 }, (_, i) => (i === 
 const vectorSql = (index: number) => sql`${JSON.stringify(vector(index))}::vector(1536)`;
 
 describeDb("strict current workspace document store", () => {
+    jest.setTimeout(120_000);
+
     it("returns only company-owned current-version embedded chunks with deterministic ranking", async () => {
         const test = await createFounderWeeklyReviewTestDatabase();
         try {

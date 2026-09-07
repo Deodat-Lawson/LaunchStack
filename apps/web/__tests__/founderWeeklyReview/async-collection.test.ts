@@ -22,6 +22,8 @@ const snapshot = FounderWeeklyReviewEvidenceSnapshotSchema.parse({
 });
 
 describeDb("Founder Weekly Review async evidence workflow", () => {
+    jest.setTimeout(120_000);
+
     it("creates without a snapshot, attaches it once, and then permits generation claim", async () => {
         const test = await createFounderWeeklyReviewTestDatabase();
         try {

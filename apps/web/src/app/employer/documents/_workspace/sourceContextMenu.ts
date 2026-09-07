@@ -68,6 +68,11 @@ export interface SourceMenuHandlers {
 }
 
 export function isPersistedSource(source: WorkspaceSource): boolean {
+    // A mindmap is persisted by its own row, published or not; everything
+    // else is persisted by a document row.
+    if (source.type === "mindmap") {
+        return typeof source.mindmapId === "number" && source.mindmapId > 0;
+    }
     return typeof source.documentId === "number" && source.documentId > 0;
 }
 

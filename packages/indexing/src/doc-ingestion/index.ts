@@ -2,7 +2,8 @@ import { and, eq } from "drizzle-orm";
 
 import {
     chunkPages,
-    createRootStructure,
+    createStructureTree,
+    type DocumentStructureMap,
     finalizeStorage,
     markJobFailed,
     normalizeDocument,
@@ -169,7 +170,7 @@ async function vectorizeWithIndex(
     embeddingConfig: CompanyEmbeddingConfig | undefined,
     batchSize: number,
     documentId: number,
-    rootStructureId: number,
+    structure: DocumentStructureMap,
     versionId: number,
     runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
@@ -210,7 +211,7 @@ async function vectorizeWithIndex(
                 });
                 const sections = await storeBatch(
                     documentId,
-                    rootStructureId,
+                    structure,
                     vectorized,
                     embeddingIndex,
                     versionId
@@ -547,7 +548,10 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
     if (isInngest) {
         const chunkSummary = await runStep("step-c-chunking", async (): Promise<ChunkSummary> => {
             const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
-            const chunked = await chunkPages(pages, routingFilename);
+            const chunked = await chunkPages(pages, routingFilename, {
+                documentTitle: documentName,
+                embeddingModel: embeddingIndex.model,
+            });
             await savePipelineState(jobId, "chunks", chunked);
             const stats = getTotalChunkSize(chunked);
             return {
@@ -566,7 +570,11 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
         const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
         chunks = await runStep(
             "step-c-chunking",
-            async (): Promise<DocumentChunk[]> => chunkPages(pages, routingFilename)
+            async (): Promise<DocumentChunk[]> =>
+                chunkPages(pages, routingFilename, {
+                    documentTitle: documentName,
+                    embeddingModel: embeddingIndex.model,
+                })
         );
     }
 
@@ -577,17 +585,11 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
     let totalStored = 0;
 
     if (chunks.length > 0) {
-        const rootStructureId = await runStep("step-d-setup", async (): Promise<number> => {
-            const estimatedTokens = Math.ceil(
-                chunks.reduce((sum, c) => sum + c.content.length / 4, 0)
-            );
-            return createRootStructure(
-                documentId,
-                normSummary.pageCount,
-                estimatedTokens,
-                versionId
-            );
-        });
+        // The document's real hierarchy, one node per distinct section, so a
+        // chunk can name the part of the document it came from.
+        const structure = await runStep("step-d-setup", async () =>
+            createStructureTree(documentId, normSummary.pageCount, versionId, chunks)
+        );
 
         const result = await vectorizeWithIndex(
             chunks,
@@ -595,7 +597,7 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
             companyEmbeddingConfig ?? undefined,
             embeddingBatchSize,
             documentId,
-            rootStructureId,
+            structure,
             versionId,
             runStep
         );

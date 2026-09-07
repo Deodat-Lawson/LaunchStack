@@ -16,6 +16,8 @@ import type { StudioFeature } from "./types";
  */
 export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
+    /** Maps are created from the Add-source modal; the workspace owns it. */
+    mindmap?: { onCreate: () => void };
 }
 
 const DocumentGenerator = dynamic(
@@ -751,6 +753,60 @@ export function DefaultLinkPane({
 }
 
 /**
+ * Mindmaps have no pane of their own: a map is a source, opened from the rail
+ * like anything else. This pane exists so the Studio entry still does
+ * something useful — start a new one.
+ */
+function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioPaneContext }) {
+    if (!context?.mindmap) {
+        return (
+            <DefaultLinkPane
+                onClose={onClose}
+                eyebrow="Studio"
+                title="Mindmap"
+                body="Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create."
+                bullets={[]}
+                href="/employer/documents?add=1&tab=mindmap"
+                ctaLabel="New mindmap"
+            />
+        );
+    }
+    const { onCreate } = context.mindmap;
+    return (
+        <InlineFeatureShell eyebrow="Mindmap" title="Sources you draw">
+            <div
+                style={{
+                    padding: "20px 24px",
+                    fontSize: 13,
+                    lineHeight: 1.6,
+                    color: "var(--ink-2)",
+                }}
+            >
+                <p style={{ margin: 0 }}>
+                    Diagrams, mindmaps and flowcharts live in your library beside every other
+                    source. Open one from the rail to preview it, edit it in place, and make it
+                    citable when it is ready.
+                </p>
+                <button
+                    onClick={onCreate}
+                    style={{
+                        marginTop: 14,
+                        padding: "8px 14px",
+                        borderRadius: 8,
+                        background: "var(--accent)",
+                        color: "white",
+                        fontSize: 12.5,
+                        fontWeight: 600,
+                    }}
+                >
+                    New mindmap
+                </button>
+            </div>
+        </InlineFeatureShell>
+    );
+}
+
+/**
  * Single-entry pane renderer used by the Studio drawer *and* the main
  * workspace area when a non-chat feature is expanded. `onClose` is the pane's
  * exit path — the drawer passes its own close handler; the main area passes
@@ -766,6 +822,8 @@ export function renderStudioPane(
             return <ChatPane onClose={onClose} />;
         case "knowledge":
             return <KnowledgeStudioPane onClose={onClose} context={context} />;
+        case "mindmap":
+            return <MindmapStudioPane onClose={onClose} context={context} />;
         case "meetings":
             return <MeetingsStudioPane onClose={onClose} />;
         case "draft":

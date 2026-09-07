@@ -1,5 +1,5 @@
 {
-  "id": "1cfd0352-420c-4513-8039-a8345cd79af1",
+  "id": "5289b859-e448-431e-9557-c11dded3b83d",
   "prevId": "17fc4a0d-07f7-475f-bb3e-5cd5f585e791",
   "version": "7",
   "dialect": "postgresql",
@@ -3496,6 +3496,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "access_token_ciphertext": {
+          "name": "access_token_ciphertext",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "encryption_key_version": {
           "name": "encryption_key_version",
           "type": "integer",
@@ -3531,18 +3543,6 @@
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "access_token_ciphertext": {
-          "name": "access_token_ciphertext",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "access_token_expires_at": {
-          "name": "access_token_expires_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -3698,13 +3698,6 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'linked'"
-        },
-        "origin": {
-          "name": "origin",
           "type": "varchar(16)",
           "primaryKey": false,
           "notNull": true,
@@ -6403,6 +6396,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "published_revision": {
+          "name": "published_revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {

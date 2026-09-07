@@ -3,11 +3,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Lock } from "lucide-react";
+import { Lock, Pencil, Upload } from "lucide-react";
+import { toast } from "sonner";
 import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
+import { getMindmap } from "../_mindmap/lib/api";
+import { openMindmapDocument } from "../_mindmap/lib/open";
+import type { MindmapDoc } from "../_mindmap/model/types";
+import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
+import { isMindmapSource } from "./sourceApi";
 import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
@@ -27,6 +33,12 @@ type UploadState =
 
 const FullDocumentViewer = dynamic(
     () => import("~/app/employer/documents/components/DocumentViewer").then(m => m.DocumentViewer),
+    { ssr: false }
+);
+
+// The canvas bundle is only worth paying for when a map is actually opened.
+const MindmapPreview = dynamic(
+    () => import("../_mindmap/ui/MindmapPreview").then(m => m.MindmapPreview),
     { ssr: false }
 );
 
@@ -56,12 +68,18 @@ export interface DocumentViewerProps {
     /** When opened from a citation: the cited passage to locate + highlight. */
     highlight?: CitationHighlight | null;
     onClose: () => void;
-    onRename: (id: number, title: string) => Promise<boolean>;
-    onDelete: (id: number) => void;
+    // Source-shaped rather than id-shaped: a mindmap has no document id
+    // until it is published, so the id could not identify one.
+    onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
+    onDelete: (source: WorkspaceSource) => void;
     /** "Restrict access" — who can see this document. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     onVersionChanged?: () => void;
+    /** Mindmaps only: leave the preview for the editor. */
+    onEdit?: (source: WorkspaceSource) => void;
+    /** Mindmaps only: the citable copy was created or updated. */
+    onPublished?: () => void;
 }
 
 function humanDate(raw: string): string {
@@ -155,11 +173,23 @@ export function DocumentViewer({
     onRestrictAccess,
     onAskAbout,
     onVersionChanged,
+    onEdit,
+    onPublished,
 }: DocumentViewerProps) {
     const router = useRouter();
     const { userId } = useAuth();
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
+    // A mindmap is its own row: no document to fetch, no file versions, and
+    // notes only once it has a published copy to hang them on.
+    const isMindmap = isMindmapSource(source);
+    const persisted = isMindmap
+        ? typeof source.mindmapId === "number" && source.mindmapId > 0
+        : typeof source.documentId === "number" && source.documentId > 0;
+    const [mindmapDoc, setMindmapDoc] = useState<{ doc: MindmapDoc; key: string } | null>(null);
+    const [mindmapError, setMindmapError] = useState<string | null>(null);
+    const [revisions, setRevisions] = useState<RevisionRow[]>([]);
+    const [publishing, setPublishing] = useState(false);
     const [title, setTitle] = useState(source.title);
     const [dirty, setDirty] = useState(false);
     const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -184,7 +214,7 @@ export function DocumentViewer({
     // audio, DOCX, etc. via the full viewer — same endpoint the standalone
     // viewer page uses.
     useEffect(() => {
-        if (!source.documentId || !userId || source.pending) {
+        if (isMindmap || !source.documentId || !userId || source.pending) {
             setFullDoc(null);
             return;
         }
@@ -210,7 +240,70 @@ export function DocumentViewer({
         return () => {
             cancelled = true;
         };
-    }, [source.documentId, source.pending, userId]);
+    }, [isMindmap, source.documentId, source.pending, userId]);
+
+    // The map itself, plus its snapshot history for the sidebar.
+    useEffect(() => {
+        if (!isMindmap || !source.mindmapId) return;
+        const mindmapId = source.mindmapId;
+        let cancelled = false;
+        setMindmapDoc(null);
+        setMindmapError(null);
+        setRevisions([]);
+        void (async () => {
+            try {
+                const detail = await getMindmap(mindmapId);
+                if (cancelled) return;
+                const { doc } = openMindmapDocument(detail);
+                setMindmapDoc({ doc, key: `${detail.id}:${detail.revision}` });
+            } catch (err) {
+                if (!cancelled) {
+                    setMindmapError(
+                        err instanceof Error ? err.message : "Couldn't open this mindmap"
+                    );
+                }
+            }
+        })();
+        void (async () => {
+            try {
+                const res = await fetch(`/api/mindmaps/${mindmapId}/revisions`);
+                if (!res.ok) return;
+                const body = (await res.json()) as { revisions: RevisionRow[] };
+                if (!cancelled) setRevisions(body.revisions ?? []);
+            } catch {
+                /* history is advisory; the preview stands without it */
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [isMindmap, source.mindmapId]);
+
+    const publishMindmap = useCallback(async () => {
+        if (!source.mindmapId) return;
+        setPublishing(true);
+        try {
+            const res = await fetch(`/api/mindmaps/${source.mindmapId}/publish`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ category: source.folder || undefined }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => ({}))) as { error?: string };
+                throw new Error(body.error ?? `HTTP ${res.status}`);
+            }
+            toast.success(
+                source.citability === "none"
+                    ? "Added to your sources — it will finish indexing shortly"
+                    : "Citable copy updated — it will finish indexing shortly"
+            );
+            onPublished?.();
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Couldn't publish this mindmap");
+        } finally {
+            setPublishing(false);
+        }
+    }, [onPublished, source.citability, source.folder, source.mindmapId]);
 
     useEffect(() => {
         setTitle(source.title);
@@ -250,7 +343,7 @@ export function DocumentViewer({
 
     // Fetch version history on mount
     useEffect(() => {
-        if (!source.documentId) return;
+        if (isMindmap || !source.documentId) return;
         let cancelled = false;
         setVersionsError(null);
         void (async () => {
@@ -276,11 +369,11 @@ export function DocumentViewer({
         return () => {
             cancelled = true;
         };
-    }, [source.documentId]);
+    }, [isMindmap, source.documentId]);
 
     // Auto-save title rename on blur/debounce.
     const saveTitle = useCallback(async () => {
-        if (!source.documentId) return;
+        if (!persisted) return;
         const trimmed = title.trim();
         if (!trimmed || trimmed === source.title) {
             setDirty(false);
@@ -288,10 +381,10 @@ export function DocumentViewer({
             return;
         }
         setSaveStatus("saving");
-        const ok = await onRename(source.documentId, trimmed);
+        const ok = await onRename(source, trimmed);
         setSaveStatus(ok ? "saved" : "error");
         setDirty(false);
-    }, [title, source.documentId, source.title, onRename]);
+    }, [title, persisted, source, onRename]);
 
     useEffect(() => {
         if (!dirty) return;
@@ -446,12 +539,19 @@ export function DocumentViewer({
     };
 
     const deleteDocument = () => {
-        if (!source.documentId) return;
-        if (!confirm(`Delete "${source.title}"? This cannot be undone.`)) return;
-        onDelete(source.documentId);
+        if (!persisted) return;
+        const prompt = isMindmap
+            ? `Move "${source.title}" to the trash? You can undo it right after.`
+            : `Delete "${source.title}"? This cannot be undone.`;
+        if (!confirm(prompt)) return;
+        onDelete(source);
     };
 
     const openOriginal = () => {
+        if (isMindmap) {
+            onEdit?.(source);
+            return;
+        }
         if (!source.documentId) return;
         router.push(`/employer/documents/viewer?docId=${source.documentId}`);
     };
@@ -577,21 +677,72 @@ export function DocumentViewer({
                         </div>
                     </div>
                 </div>
-                <button
-                    onClick={() => onAskAbout(source)}
-                    style={{
-                        fontSize: 12,
-                        padding: "6px 10px",
-                        borderRadius: 7,
-                        color: "var(--ink-2)",
-                        border: "1px solid var(--line)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 5,
-                    }}
-                >
-                    <IconSparkle size={12} /> Ask about this
-                </button>
+                {isMindmap && onEdit && (
+                    <button
+                        onClick={() => onEdit(source)}
+                        data-testid="viewer-edit-mindmap"
+                        style={{
+                            fontSize: 12,
+                            fontWeight: 600,
+                            padding: "6px 12px",
+                            borderRadius: 7,
+                            background: "var(--accent)",
+                            color: "white",
+                            border: "1px solid transparent",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                        }}
+                    >
+                        <Pencil style={{ width: 12, height: 12 }} /> Edit
+                    </button>
+                )}
+                {isMindmap && source.citability !== "citable" && (
+                    <button
+                        onClick={() => void publishMindmap()}
+                        disabled={publishing || !persisted}
+                        title={
+                            source.citability === "stale"
+                                ? "The citable copy is older than this map"
+                                : "Index this map so answers can cite it"
+                        }
+                        style={{
+                            fontSize: 12,
+                            padding: "6px 10px",
+                            borderRadius: 7,
+                            color: "var(--ink-2)",
+                            border: "1px solid var(--line)",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                            opacity: publishing ? 0.6 : 1,
+                        }}
+                    >
+                        <Upload style={{ width: 12, height: 12 }} />
+                        {publishing
+                            ? "Publishing…"
+                            : source.citability === "stale"
+                              ? "Update citable copy"
+                              : "Make citable"}
+                    </button>
+                )}
+                {(!isMindmap || source.citability !== "none") && (
+                    <button
+                        onClick={() => onAskAbout(source)}
+                        style={{
+                            fontSize: 12,
+                            padding: "6px 10px",
+                            borderRadius: 7,
+                            color: "var(--ink-2)",
+                            border: "1px solid var(--line)",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                        }}
+                    >
+                        <IconSparkle size={12} /> Ask about this
+                    </button>
+                )}
                 {onRestrictAccess && (
                     <button
                         onClick={() => onRestrictAccess(source)}
@@ -640,9 +791,11 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
-                    {typeof source.documentId === "number" && source.documentId > 0 && (
-                        <GoogleDriveBanner documentId={source.documentId} />
-                    )}
+                    {!isMindmap &&
+                        typeof source.documentId === "number" &&
+                        source.documentId > 0 && (
+                            <GoogleDriveBanner documentId={source.documentId} />
+                        )}
                     {viewingOld && (
                         <div
                             style={{
@@ -660,7 +813,49 @@ export function DocumentViewer({
                             current version.
                         </div>
                     )}
-                    {source.pending ? (
+                    {isMindmap ? (
+                        mindmapDoc ? (
+                            <div
+                                style={{
+                                    flex: 1,
+                                    display: "flex",
+                                    minWidth: 0,
+                                    minHeight: 0,
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <MindmapPreview key={mindmapDoc.key} doc={mindmapDoc.doc} />
+                            </div>
+                        ) : mindmapError ? (
+                            <div
+                                style={{
+                                    flex: 1,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: "60px 40px",
+                                    textAlign: "center",
+                                    color: "var(--ink-3)",
+                                    fontSize: 14,
+                                }}
+                            >
+                                Couldn&apos;t open this mindmap: {mindmapError}
+                            </div>
+                        ) : (
+                            <div
+                                style={{
+                                    flex: 1,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "var(--ink-3)",
+                                    fontSize: 13,
+                                }}
+                            >
+                                Opening…
+                            </div>
+                        )
+                    ) : source.pending ? (
                         <div
                             style={{
                                 flex: 1,
@@ -815,18 +1010,21 @@ export function DocumentViewer({
                     >
                         <TabButton
                             label="Versions"
-                            count={versions.length}
+                            count={isMindmap ? revisions.length : versions.length}
                             active={sidebarTab === "versions"}
                             onClick={() => setSidebarTab("versions")}
                         />
-                        <TabButton
-                            label="Notes"
-                            active={sidebarTab === "notes"}
-                            onClick={() => setSidebarTab("notes")}
-                        />
+                        {/* Notes hang off a document id; an unpublished map has none yet. */}
+                        {(!isMindmap || Boolean(source.documentId)) && (
+                            <TabButton
+                                label="Notes"
+                                active={sidebarTab === "notes"}
+                                onClick={() => setSidebarTab("notes")}
+                            />
+                        )}
                     </div>
 
-                    {sidebarTab === "notes" ? (
+                    {sidebarTab === "notes" && (!isMindmap || Boolean(source.documentId)) ? (
                         <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
                             <DocumentNotesPanel
                                 documentId={source.documentId ? String(source.documentId) : null}
@@ -841,6 +1039,8 @@ export function DocumentViewer({
                                 }}
                             />
                         </div>
+                    ) : isMindmap ? (
+                        <MindmapHistory source={source} rows={revisions} />
                     ) : (
                         <div style={{ flex: 1, overflowY: "auto" }}>
                             <div style={{ padding: "16px 16px 10px" }}>
@@ -1138,6 +1338,119 @@ export function DocumentViewer({
                         </div>
                     )}
                 </aside>
+            </div>
+        </div>
+    );
+}
+
+/**
+ * The sidebar for a mindmap: snapshot history from the editor's explicit
+ * saves, and the same Details block every source gets — with "Indexed"
+ * replaced by whether answers can cite this map right now.
+ */
+function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: RevisionRow[] }) {
+    const citability = source.citability ?? "citable";
+    return (
+        <div style={{ flex: 1, overflowY: "auto" }}>
+            <div style={{ padding: "16px 16px 10px" }}>
+                <div
+                    className="mono"
+                    style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        letterSpacing: "0.08em",
+                        color: "var(--ink-3)",
+                        textTransform: "uppercase",
+                    }}
+                >
+                    Version history
+                </div>
+                <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
+                    Snapshots saved from the editor. Restore one from its History panel.
+                </div>
+            </div>
+            <div style={{ padding: "0 10px 16px" }}>
+                {rows.length === 0 && (
+                    <div style={{ padding: "10px 12px", fontSize: 11, color: "var(--ink-3)" }}>
+                        No snapshots yet — ⌘S in the editor writes one.
+                    </div>
+                )}
+                {rows.map((row, index) => (
+                    <div
+                        key={row.id}
+                        style={{
+                            padding: "10px 12px",
+                            borderRadius: 8,
+                            marginBottom: 2,
+                            background: index === 0 ? "var(--accent-soft)" : "transparent",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginBottom: 2,
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    color: index === 0 ? "var(--accent-ink)" : "var(--ink)",
+                                }}
+                            >
+                                r{row.revision}
+                                {index === 0 ? " (latest)" : ""}
+                            </span>
+                            <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+                                {humanDate(row.createdAt)}
+                            </span>
+                        </div>
+                        <div style={{ fontSize: 11, color: "var(--ink-3)", lineHeight: 1.4 }}>
+                            {row.label ?? `${row.nodeCount} shape${row.nodeCount === 1 ? "" : "s"}`}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div style={{ borderTop: "1px solid var(--line)", padding: "14px 16px" }}>
+                <div
+                    className="mono"
+                    style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        letterSpacing: "0.08em",
+                        color: "var(--ink-3)",
+                        textTransform: "uppercase",
+                        marginBottom: 8,
+                    }}
+                >
+                    Details
+                </div>
+                {source.added && <MetaRow label="Edited" value={source.added} />}
+                {source.size && <MetaRow label="Size" value={source.size} />}
+                <MetaRow
+                    label="Folder"
+                    value={
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                            <IconFolder size={10} />
+                            {source.folder || "Unfiled"}
+                        </span>
+                    }
+                />
+                <MetaRow
+                    label="Citable"
+                    value={
+                        citability === "citable" ? (
+                            <span style={{ color: "var(--ok)" }}>✓ answers can cite it</span>
+                        ) : citability === "stale" ? (
+                            <span style={{ color: "var(--warn)" }}>changes not yet citable</span>
+                        ) : (
+                            <span style={{ color: "var(--ink-3)" }}>not yet</span>
+                        )
+                    }
+                />
             </div>
         </div>
     );

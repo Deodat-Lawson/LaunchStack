@@ -77,6 +77,15 @@ export const mindmaps = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        /**
+         * The `revision` that was published. When it trails `revision`, the
+         * citable copy is older than the map on screen and the UI says so.
+         */
+        publishedRevision: integer("published_revision"),
     },
     table => ({
         companyIdx: index("mindmaps_company_idx").on(table.companyId),

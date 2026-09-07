@@ -133,6 +133,23 @@ export interface ChunkMetadata {
     documentTitle?: string;
     /** Structure path for contextual retrieval */
     structurePath?: string;
+    /**
+     * The chunk's ancestors in the document tree, outermost first — the
+     * document title, then each enclosing heading or list item. Kept as an
+     * array rather than a pre-joined string so consumers can filter on a
+     * subtree, render a breadcrumb, or re-serialise it differently.
+     */
+    ancestors?: string[];
+    /**
+     * The breadcrumb written into the chunk's stored text. Recorded here too
+     * so a consumer can strip it (a citation quoting only the body) without
+     * re-deriving where it ends.
+     */
+    contextHeader?: string;
+    /** Tokens in the stored content, counted with `tokenCounterId`. */
+    tokenCount?: number;
+    /** Which counter produced `tokenCount` — `tiktoken:…` or `estimate:…`. */
+    tokenCounterId?: string;
     /** Source line range for code chunks */
     lineStart?: number;
     lineEnd?: number;

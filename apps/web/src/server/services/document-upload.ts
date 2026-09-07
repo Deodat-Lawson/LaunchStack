@@ -61,6 +61,12 @@ export interface DocumentUploadParams {
     /** Stable idempotency key for this logical upload. */
     creationKey?: string;
     embeddingIndexKey?: string;
+    /**
+     * Provenance stored on the document row — a published mindmap's marker,
+     * for instance. OCR completion merges its own keys into this rather than
+     * replacing it.
+     */
+    ocrMetadata?: Record<string, unknown>;
 }
 
 export interface DocumentUploadResult {
@@ -92,6 +98,7 @@ export async function processDocumentUpload({
     isWebsite,
     creationKey,
     embeddingIndexKey,
+    ocrMetadata,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
     // Populate OCR (and provider) config before reading getOcrConfig() or
     // authorizing internal file refs. On a cold process, an empty slot makes
@@ -254,6 +261,7 @@ export async function processDocumentUpload({
         mimeType: mimeType ?? null,
         ocrEnabled: true,
         ocrProcessed: false,
+        ocrMetadata: ocrMetadata ?? null,
         processing: {
             preferredProvider,
             originalFilename,

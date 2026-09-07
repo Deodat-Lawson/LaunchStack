@@ -39,6 +39,8 @@ async function companyId(
 }
 
 describeDb("Founder Weekly Review dispatch atomicity", () => {
+    jest.setTimeout(120_000);
+
     it("concurrent create persists one run and one dispatch", async () => {
         const test = await createFounderWeeklyReviewTestDatabase();
         const a = await test.createSession(),

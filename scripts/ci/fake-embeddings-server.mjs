@@ -34,6 +34,11 @@ function embed(text) {
   return vector.map((v) => v / norm);
 }
 
+// Documents registered by POST /docs, for bodies too long to ride in a URL
+// (the document table's url column is varchar(256)). Keyed by content hash
+// so re-registering the same text yields the same URL.
+const registered = new Map();
+
 const server = createServer((req, res) => {
   // GET /doc/<base64url> — serves a text document for the e2e ingestion
   // smoke (the pipeline fetches documentUrl over HTTP like any storage ref).
@@ -46,6 +51,40 @@ const server = createServer((req, res) => {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: { message: String(error) } }));
     }
+    return;
+  }
+  // GET /docs/<sha256> — a document registered below.
+  if (req.method === "GET" && req.url?.startsWith("/docs/")) {
+    const entry = registered.get(req.url.slice(6));
+    if (!entry) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: { message: "no such document" } }));
+      return;
+    }
+    res.writeHead(200, { "Content-Type": entry.contentType });
+    res.end(entry.text);
+    return;
+  }
+  // POST /docs {text, contentType?} → {id, path} — register a long document.
+  if (req.method === "POST" && req.url === "/docs") {
+    let body = "";
+    req.on("data", (c) => (body += c));
+    req.on("end", () => {
+      try {
+        const parsed = JSON.parse(body);
+        const text = String(parsed.text ?? "");
+        const id = createHash("sha256").update(text).digest("hex");
+        registered.set(id, {
+          text,
+          contentType: parsed.contentType ?? "text/plain; charset=utf-8",
+        });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ id, path: `/docs/${id}` }));
+      } catch (error) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: { message: String(error) } }));
+      }
+    });
     return;
   }
   if (req.method !== "POST" || !req.url?.includes("/embeddings")) {

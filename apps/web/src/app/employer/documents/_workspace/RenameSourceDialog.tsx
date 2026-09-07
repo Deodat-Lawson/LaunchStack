@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { IconFile } from "./icons";
+import { isPersistedSource } from "./sourceContextMenu";
 import type { WorkspaceSource } from "./types";
 
 export interface RenameSourceDialogProps {
     open: boolean;
     source: WorkspaceSource | null;
     onClose: () => void;
-    onRename: (documentId: number, title: string) => Promise<boolean>;
+    onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
 }
 
 export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSourceDialogProps) {
@@ -37,14 +38,14 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
 
     const trimmed = name.trim();
     const unchanged = trimmed === source.title;
-    const ok = trimmed.length > 0 && !unchanged && Boolean(source.documentId);
+    const ok = trimmed.length > 0 && !unchanged && isPersistedSource(source);
 
     const submit = async () => {
-        if (!ok || submitting || !source.documentId) return;
+        if (!ok || submitting) return;
         setSubmitting(true);
         setError(null);
         try {
-            const success = await onRename(source.documentId, trimmed);
+            const success = await onRename(source, trimmed);
             if (!success) {
                 setError("Couldn't rename this source. Try again.");
                 return;

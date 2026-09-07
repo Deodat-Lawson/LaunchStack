@@ -15,19 +15,35 @@ import { mindmapRevisions, mindmaps, type Mindmap } from "~/server/db/schema";
 /** How many history snapshots to keep per document. */
 export const REVISION_LIMIT = 60;
 
+/** How much flattened label text a list row carries for client-side search. */
+const SUMMARY_SEARCH_TEXT_LIMIT = 2000;
+
 export interface MindmapSummary {
     id: number;
     title: string;
     description: string | null;
     folder: string;
     templateId: string | null;
+    /**
+     * The PNG data URI, when the caller asked for it. List responses leave it
+     * null and set `hasThumbnail` instead — see `/api/mindmaps/[id]/thumbnail`.
+     */
     thumbnail: string | null;
+    hasThumbnail: boolean;
     nodeCount: number;
     edgeCount: number;
     revision: number;
     starred: boolean;
     publishedDocumentId: number | null;
     publishedAt: string | null;
+    /** Revision the published copy was made from; null when never published. */
+    publishedRevision: number | null;
+    /**
+     * Node and edge labels, flattened and capped, so the workspace's search
+     * boxes can match a map by what is drawn on it. The full text stays on
+     * the row for the server-side search.
+     */
+    searchText: string | null;
     createdByUserId: string;
     updatedByUserId: string | null;
     deletedAt: string | null;
@@ -54,6 +70,7 @@ export function toSummary(row: Mindmap): MindmapSummary {
         folder: row.folder,
         templateId: row.templateId,
         thumbnail: row.thumbnail,
+        hasThumbnail: typeof row.thumbnail === "string" && row.thumbnail.length > 0,
         nodeCount: row.nodeCount,
         edgeCount: row.edgeCount,
         revision: row.revision,
@@ -61,6 +78,8 @@ export function toSummary(row: Mindmap): MindmapSummary {
         publishedDocumentId:
             row.publishedDocumentId === null ? null : Number(row.publishedDocumentId),
         publishedAt: iso(row.publishedAt),
+        publishedRevision: row.publishedRevision,
+        searchText: row.searchText ? row.searchText.slice(0, SUMMARY_SEARCH_TEXT_LIMIT) : null,
         createdByUserId: row.createdByUserId,
         updatedByUserId: row.updatedByUserId,
         deletedAt: iso(row.deletedAt),

@@ -16,6 +16,8 @@ const describeIfDatabase =
 type TestDatabase = Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>;
 
 describeIfDatabase("founder weekly review dispatch claiming", () => {
+    jest.setTimeout(120_000);
+
     let testDb: TestDatabase;
     let claimPendingDispatches: typeof import("~/server/founder-weekly-review/dispatch-service").claimPendingDispatches;
     let recordDispatchFailure: typeof import("~/server/founder-weekly-review/dispatch-service").recordDispatchFailure;

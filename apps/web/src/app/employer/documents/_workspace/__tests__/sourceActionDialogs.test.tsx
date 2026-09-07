@@ -31,7 +31,7 @@ describe("RenameSourceDialog", () => {
         await user.clear(input);
         await user.type(input, "New name");
         await user.click(screen.getByTestId("rename-source-save"));
-        expect(onRename).toHaveBeenCalledWith(12, "New name");
+        expect(onRename).toHaveBeenCalledWith(source, "New name");
         expect(onClose).toHaveBeenCalled();
     });
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CallSnapshotSchema } from "@launchstack/features/call-notes";
+import { CallSnapshotSchema } from "@launchstack/pipelines/call-notes/contracts";
 
 /** Preview text is provisional; only a completed, validated proposal can be accepted. */
 export const EnrichmentStreamEventSchema = z.discriminatedUnion("type", [

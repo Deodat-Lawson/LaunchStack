@@ -7,13 +7,9 @@ import {
     documentMetadata,
     documentRetrievalChunks,
     documentStructure,
-} from "@launchstack/core/db/schema";
-import {
-    callNotesCalls,
-    documentNoteEmbeddings,
-    documentNotes,
-    trendSearchCache,
-} from "~/server/db/schema";
+} from "@launchstack/store/schema";
+import { callNotesCalls } from "@launchstack/pipelines/schema";
+import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
 
 /**
  * Physical table identifiers for hand-written SQL.
@@ -22,7 +18,7 @@ import {
  * reindex UPDATE — cannot be expressed in the query builder and must name
  * tables literally. Deriving those names from the schema instead of hardcoding
  * `"pdr_ai_v2_..."` strings means the table prefix lives in exactly one place
- * (packages/core/src/db/schema/helpers.ts) and the compiler catches a rename.
+ * (packages/store/src/db/schema/helpers.ts) and the compiler catches a rename.
  *
  * Note this makes the CODE side of a prefix change a one-line edit, but not the
  * database side: `drizzle-kit generate` cannot tell a mass rename from a
@@ -32,8 +28,7 @@ import {
  * Use `T.*` inside sql`` templates; use `NAME.*` where a bare string is needed.
  */
 
-const ident = <T extends { _: unknown }>(table: T) =>
-  sql.identifier(getTableName(table as never));
+const ident = <T extends { _: unknown }>(table: T) => sql.identifier(getTableName(table as never));
 
 export const NAME = {
     document: getTableName(document),
@@ -44,6 +39,7 @@ export const NAME = {
     notes: getTableName(documentNotes),
     noteEmbeddings: getTableName(documentNoteEmbeddings),
     callNotesCalls: getTableName(callNotesCalls),
+
     embeddings768: getTableName(documentEmbeddings768),
     embeddings1024: getTableName(documentEmbeddings1024),
     trendSearchCache: getTableName(trendSearchCache),

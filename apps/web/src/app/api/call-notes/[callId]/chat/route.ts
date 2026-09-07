@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { auth } from "@clerk/nextjs/server";
 
-import { CallQuerySchema, type CallSnapshot } from "@launchstack/features/call-notes";
-import { renderEnrichedNoteProposal } from "@launchstack/features/call-notes/enrichment";
+import { CallQuerySchema, type CallSnapshot } from "@launchstack/pipelines/call-notes";
+import { renderEnrichedNoteProposal } from "@launchstack/pipelines/call-notes/enrichment";
 import type { CallChatStreamEvent } from "~/lib/call-chat-stream";
 
 import { describeChatError, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -103,13 +102,9 @@ export async function POST(
 ): Promise<Response> {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: 401 }
-                );
-            }
+            const workspace = await requireWorkspacePermission("documents.read");
+            if (!workspace.success) return workspace.response;
+            const userId = workspace.data.authUserId;
 
             const body: unknown = await request.json().catch(() => undefined);
             const parsedRequest = CallChatRequestSchema.safeParse(body);
@@ -136,9 +131,9 @@ export async function POST(
             }
 
             const { callId } = await params;
-            const companyId = await getActiveCompanyId(userId);
+            const companyId = workspace.data.companyId.toString();
             const parsedCall = CallQuerySchema.safeParse({
-                companyId: companyId.toString(),
+                companyId,
                 actorUserId: userId,
                 callId,
             });

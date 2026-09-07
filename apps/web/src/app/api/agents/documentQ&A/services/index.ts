@@ -22,7 +22,7 @@ export {
     selectChatRoute,
     getEmbeddings,
 } from "./models";
-export { describeChatError } from "@launchstack/core/llm";
+export { describeChatError } from "@launchstack/llm";
 export { ChatRoutes, isChatRoute } from "./types";
 
 // RLM Search (hierarchical, cost-aware retrieval for large documents)
@@ -34,7 +34,7 @@ export {
     getSectionsByPath,
     type RLMSearchOptions,
     type RLMSearchResult,
-} from "./rlmSearch";
+} from "@launchstack/retrieval/tools/rlm-search";
 
 // Types - Centralized export from types.ts
 export type {
@@ -61,11 +61,7 @@ export type {
 } from "./types";
 
 // Type guards
-export {
-    isResponseStyle,
-    isAIPersona,
-    isSearchScope,
-} from "./types";
+export { isResponseStyle, isAIPersona, isSearchScope } from "./types";
 
 // Additional types from specific modules
 export type { PerformWebSearchResult } from "./webSearch";

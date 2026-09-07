@@ -3,7 +3,7 @@ import {
     createChatModelsConfig,
     resolveChatModel,
     type ResolveChatModelOptions,
-} from "@launchstack/core/llm";
+} from "@launchstack/llm";
 import {
     enrichmentReadyCall,
     northstarPricingReviewCall,
@@ -11,12 +11,14 @@ import {
     redactedCall,
 } from "~/app/calls/_fixtures/callSnapshots";
 
-const mockAuth = jest.fn<Promise<{ userId: string | null }>, []>();
+const mockRequireWorkspacePermission = jest.fn();
 const mockGetCall = jest.fn();
 const mockStream = jest.fn();
 const mockResolveModel = jest.fn<unknown, [ResolveChatModelOptions]>();
 
-jest.mock("@clerk/nextjs/server", () => ({ auth: () => mockAuth() }));
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspacePermission: (permission: string) => mockRequireWorkspacePermission(permission),
+}));
 jest.mock("~/lib/active-workspace", () => ({ getActiveCompanyId: async () => 42n }));
 jest.mock("~/lib/rate-limiter", () => ({ RateLimitPresets: { strict: {} } }));
 jest.mock("~/lib/rate-limit-middleware", () => ({
@@ -46,7 +48,10 @@ beforeEach(() => {
         prepareMessages: (messages: unknown[]) => messages,
         modelId: "test-model",
     }));
-    mockAuth.mockResolvedValue({ userId: "viewer" });
+    mockRequireWorkspacePermission.mockResolvedValue({
+        success: true,
+        data: { authUserId: "viewer", companyId: 42n },
+    });
     mockGetCall.mockResolvedValue(northstarPricingReviewCall);
     mockStream.mockImplementation(async function* () {
         yield { content: "The pricing deadline is Friday." };
@@ -55,7 +60,10 @@ beforeEach(() => {
 
 describe("Call chat access boundaries", () => {
     it("does not load call evidence or invoke AI without authentication", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockRequireWorkspacePermission.mockResolvedValue({
+            success: false,
+            response: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 }),
+        });
         const response = await POST(
             new Request("http://localhost/api/call-notes/call-1/chat", {
                 method: "POST",

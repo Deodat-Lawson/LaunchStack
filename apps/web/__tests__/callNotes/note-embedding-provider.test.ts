@@ -1,14 +1,13 @@
-const mockEmbeddingClientOptions: Array<Record<string, unknown>> = [];
+const mockEmbeddingConfigs: Array<Record<string, unknown>> = [];
 const mockVector = Array.from({ length: 1536 }, (_, index) => index / 1536);
 
-jest.mock("@langchain/openai", () => ({
-    OpenAIEmbeddings: jest.fn().mockImplementation((options: Record<string, unknown>) => {
-        mockEmbeddingClientOptions.push(options);
-        return {
-            embedDocuments: jest.fn().mockResolvedValue([mockVector]),
-            embedQuery: jest.fn().mockResolvedValue(mockVector),
-        };
-    }),
+jest.mock("@launchstack/llm/embeddings", () => ({
+    generateEmbeddings: jest
+        .fn()
+        .mockImplementation(async (_texts: string[], config: Record<string, unknown>) => {
+            mockEmbeddingConfigs.push(config);
+            return { embeddings: [mockVector] };
+        }),
 }));
 
 jest.mock("~/server/db", () => ({ db: {} }));
@@ -46,7 +45,7 @@ describe("legacy note embedding provider consistency", () => {
     });
 
     beforeEach(() => {
-        mockEmbeddingClientOptions.length = 0;
+        mockEmbeddingConfigs.length = 0;
         mockExecute.mockClear();
     });
 
@@ -89,15 +88,19 @@ describe("legacy note embedding provider consistency", () => {
             scope: "company",
         });
 
-        expect(mockEmbeddingClientOptions).toHaveLength(2);
-        expect(mockEmbeddingClientOptions).toEqual([
+        expect(mockEmbeddingConfigs).toHaveLength(2);
+        expect(mockEmbeddingConfigs).toEqual([
             expect.objectContaining({
-                modelName: NOTE_EMBEDDING_INDEX.model,
+                model: NOTE_EMBEDDING_INDEX.model,
                 dimensions: NOTE_EMBEDDING_INDEX.dimension,
+                baseUrl: "https://embedding.example/v1",
+                apiKey: "test-key",
             }),
             expect.objectContaining({
-                modelName: NOTE_EMBEDDING_INDEX.model,
+                model: NOTE_EMBEDDING_INDEX.model,
                 dimensions: NOTE_EMBEDDING_INDEX.dimension,
+                baseUrl: "https://embedding.example/v1",
+                apiKey: "test-key",
             }),
         ]);
         expect(written).toMatchObject({

@@ -10,10 +10,10 @@ import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { SettingsHub } from "~/app/employer/documents/_workspace/SettingsHub";
 
 export default function SettingsPage() {
-  return (
-    <>
-      <EmployerChrome pageLabel="Launchstack" pageTitle="Settings" />
-      <SettingsHub />
-    </>
-  );
+    return (
+        <>
+            <EmployerChrome pageLabel="Launchstack" pageTitle="Settings" />
+            <SettingsHub />
+        </>
+    );
 }

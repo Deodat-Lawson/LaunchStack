@@ -2,146 +2,125 @@
  * Document mutation API — per-document lightweight operations.
  *
  * PATCH /api/documents/[id]
- *   Update mutable document fields. Currently supports renaming (`title`).
- *   Employer/owner role required and the document must belong to the user's
- *   company. Returns the updated document row.
+ *   Update mutable document fields: rename (`title`) and move (`category`).
+ *   Needs `documents.edit`, the document must be one the caller can see in
+ *   their workspace, and moving into a restricted folder needs edit access
+ *   to that folder. Returns the updated document row.
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { normalizeFolderPath } from "~/lib/folders/path";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { document } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
+import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
-
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 
 // `title` and `category` columns are both varchar(256) — match schema.
 const PatchDocumentSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .min(1, "Title cannot be empty")
-    .max(256, "Title is too long (max 256 characters)")
-    .optional(),
-  category: z
-    .string()
-    .trim()
-    .min(1, "Category cannot be empty")
-    .max(256, "Category is too long (max 256 characters)")
-    .optional(),
+    title: z
+        .string()
+        .trim()
+        .min(1, "Title cannot be empty")
+        .max(256, "Title is too long (max 256 characters)")
+        .optional(),
+    category: z
+        .string()
+        .trim()
+        .min(1, "Category cannot be empty")
+        .max(256, "Category is too long (max 256 characters)")
+        .optional(),
 });
 
-function parseDocumentId(rawId: string):
-  | { ok: true; documentId: number }
-  | { ok: false; response: NextResponse } {
-  const documentId = Number(rawId);
-  if (!Number.isInteger(documentId) || documentId <= 0) {
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Invalid document id" },
-        { status: 400 }
-      ),
-    };
-  }
-  return { ok: true, documentId };
+function parseDocumentId(
+    rawId: string
+): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
+    const documentId = Number(rawId);
+    if (!Number.isInteger(documentId) || documentId <= 0) {
+        return {
+            ok: false,
+            response: NextResponse.json({ error: "Invalid document id" }, { status: 400 }),
+        };
+    }
+    return { ok: true, documentId };
 }
 
-export async function PATCH(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  return withRateLimit(request, RateLimitPresets.strict, async () => {
-    try {
-      const { id: rawId } = await context.params;
-      const parsed = parseDocumentId(rawId);
-      if (!parsed.ok) return parsed.response;
+export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+    return withRateLimit(request, RateLimitPresets.strict, async () => {
+        try {
+            const { id: rawId } = await context.params;
+            const parsed = parseDocumentId(rawId);
+            if (!parsed.ok) return parsed.response;
 
-      const { userId } = await auth();
-      if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+            const ctx = await requireWorkspacePermission("documents.edit");
+            if (!ctx.success) return ctx.response;
 
-      const [userInfo] = await db
-        .select()
-        .from(users)
-        .where(eq(users.userId, userId));
+            // Scoped in SQL: a cross-company or out-of-scope id reads exactly
+            // like a missing document.
+            const [doc] = await db
+                .select()
+                .from(document)
+                .where(
+                    and(
+                        eq(document.id, parsed.documentId),
+                        scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
+                    )
+                );
 
-      if (!userInfo) {
-        return NextResponse.json({ error: "Unknown user" }, { status: 401 });
-      }
+            if (!doc) {
+                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            }
 
-      if (!AUTHORIZED_ROLES.has(userInfo.role)) {
-        return NextResponse.json(
-          { error: "Forbidden: employer or owner role required" },
-          { status: 403 }
-        );
-      }
+            const validation = await validateRequestBody(request, PatchDocumentSchema);
+            if (!validation.success) return validation.response;
 
-      const [doc] = await db
-        .select()
-        .from(document)
-        .where(eq(document.id, parsed.documentId));
+            const { title, category } = validation.data;
 
-      if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
-        // Don't leak existence to cross-company requests.
-        return NextResponse.json(
-          { error: "Document not found" },
-          { status: 404 }
-        );
-      }
+            const patch: Record<string, string> = {};
+            if (title !== undefined) patch.title = title;
+            // A folder is a path; store its canonical form so every reader
+            // groups the document with its folder.
+            if (category !== undefined) patch.category = normalizeFolderPath(category);
 
-      const validation = await validateRequestBody(request, PatchDocumentSchema);
-      if (!validation.success) return validation.response;
+            if (Object.keys(patch).length === 0) {
+                return NextResponse.json({ error: "No mutable fields provided" }, { status: 400 });
+            }
 
-      const { title, category } = validation.data;
+            if (category !== undefined && category !== doc.category) {
+                if (!(await canEditFolder(ctx.data, category))) {
+                    return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                }
+            }
 
-      const patch: Record<string, string> = {};
-      if (title !== undefined) patch.title = title;
-      if (category !== undefined) patch.category = category;
+            const [updated] = await db
+                .update(document)
+                .set(patch)
+                .where(eq(document.id, parsed.documentId))
+                .returning();
 
-      if (Object.keys(patch).length === 0) {
-        return NextResponse.json(
-          { error: "No mutable fields provided" },
-          { status: 400 }
-        );
-      }
+            // `companyId` and `currentVersionId` are bigint columns; JSON.stringify
+            // can't serialize bigints, so coerce them to JSON-safe shapes before
+            // sending. Matches the convention used by /api/documents/[id]/versions.
+            const serialized = updated && {
+                ...updated,
+                companyId: updated.companyId.toString(),
+                currentVersionId:
+                    updated.currentVersionId !== null ? Number(updated.currentVersionId) : null,
+            };
 
-      const [updated] = await db
-        .update(document)
-        .set(patch)
-        .where(eq(document.id, parsed.documentId))
-        .returning();
-
-      // `companyId` and `currentVersionId` are bigint columns; JSON.stringify
-      // can't serialize bigints, so coerce them to JSON-safe shapes before
-      // sending. Matches the convention used by /api/documents/[id]/versions.
-      const serialized = updated && {
-        ...updated,
-        companyId: updated.companyId.toString(),
-        currentVersionId:
-          updated.currentVersionId !== null
-            ? Number(updated.currentVersionId)
-            : null,
-      };
-
-      return NextResponse.json({
-        success: true,
-        document: serialized,
-      });
-    } catch (error) {
-      console.error("[PATCH /api/documents/[id]] error:", error);
-      return NextResponse.json(
-        { error: "Failed to update document" },
-        { status: 500 }
-      );
-    }
-  });
+            return NextResponse.json({
+                success: true,
+                document: serialized,
+            });
+        } catch (error) {
+            console.error("[PATCH /api/documents/[id]] error:", error);
+            return NextResponse.json({ error: "Failed to update document" }, { status: 500 });
+        }
+    });
 }

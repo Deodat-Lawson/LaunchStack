@@ -1,4 +1,4 @@
-import type { KnowledgeNote } from "@launchstack/features/call-notes";
+import type { KnowledgeNote } from "@launchstack/pipelines/call-notes";
 
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/notes/embed-note", () => ({ requestNoteEmbedding: jest.fn() }));

@@ -1,5 +1,5 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { invokeStructured } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/llm";
 import {
     EnrichedNoteProposalSchema,
     EnrichmentInputSchema,
@@ -8,7 +8,7 @@ import {
     type EnrichmentInput,
     type EnrichmentModel,
     type EnrichmentResult,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import { resolveConfiguredChatModel } from "~/lib/models";
 import {

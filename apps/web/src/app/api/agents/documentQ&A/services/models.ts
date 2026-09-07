@@ -3,8 +3,8 @@
  * controls how routes resolve.
  */
 export {
-  resolveConfiguredChatModel,
-  resolveConfiguredChatRoute,
-  selectChatRoute,
-  getEmbeddings,
+    resolveConfiguredChatModel,
+    resolveConfiguredChatRoute,
+    selectChatRoute,
+    getEmbeddings,
 } from "~/lib/models";

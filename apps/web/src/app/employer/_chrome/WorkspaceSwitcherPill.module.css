@@ -81,7 +81,9 @@
     font-size: 13px;
     font-weight: 500;
     box-sizing: border-box;
-    transition: background 0.12s, color 0.12s;
+    transition:
+        background 0.12s,
+        color 0.12s;
 }
 .dropdownRow:hover {
     background: var(--line-2);

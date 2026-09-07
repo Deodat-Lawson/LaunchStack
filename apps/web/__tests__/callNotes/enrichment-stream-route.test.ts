@@ -2,11 +2,12 @@ import type * as ApplicationModule from "~/server/call-notes/application";
 import { enrichmentReadyCall } from "~/app/calls/_fixtures/callSnapshots";
 import { EnrichmentStreamEventSchema } from "~/lib/call-notes-enrichment-stream";
 
-const mockAuth = jest.fn();
+const mockWorkspacePermission = jest.fn();
 const mockGetCall = jest.fn();
 const mockReadRun = jest.fn();
-jest.mock("@clerk/nextjs/server", () => ({ auth: (): unknown => mockAuth() }));
-jest.mock("~/lib/active-workspace", () => ({ getActiveCompanyId: async () => 42n }));
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspacePermission: (...args: unknown[]): unknown => mockWorkspacePermission(...args),
+}));
 jest.mock("~/server/engine", () => ({
     getEngine: () => ({
         db: { select: () => ({ from: () => ({ where: () => ({ limit: mockReadRun }) }) }) },
@@ -46,7 +47,10 @@ async function nextEvent(reader: ReadableStreamDefaultReader<Uint8Array>) {
 beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
-    mockAuth.mockResolvedValue({ userId: "owner" });
+    mockWorkspacePermission.mockResolvedValue({
+        success: true,
+        data: { authUserId: "owner", companyId: 42n },
+    });
     mockGetCall.mockResolvedValue(generating);
     mockReadRun.mockResolvedValue([{ status: "generating", previewMarkdown: "## Live section" }]);
 });
@@ -100,9 +104,18 @@ it("stops without exposing new preview text when note visibility is revoked", as
 });
 
 it("does not expose previews to an unauthenticated caller or a redacted note viewer", async () => {
-    mockAuth.mockResolvedValue({ userId: null });
+    mockWorkspacePermission.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
     expect((await GET(request(), params)).status).toBe(401);
-    mockAuth.mockResolvedValue({ userId: "another-viewer" });
+    mockWorkspacePermission.mockResolvedValue({
+        success: true,
+        data: { authUserId: "another-viewer", companyId: 42n },
+    });
     mockGetCall.mockResolvedValue({ ...generating, note: null, enrichment: null });
     const response = await GET(request(), params);
     expect(response.status).toBe(404);

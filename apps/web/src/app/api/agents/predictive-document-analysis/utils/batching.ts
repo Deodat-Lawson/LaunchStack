@@ -91,7 +91,7 @@ export function createChunkBatches(
 function sequentialBatch(
     chunks: PdfChunk[],
     maxChunksPerCall: number,
-    maxCharactersPerCall: number,
+    maxCharactersPerCall: number
 ): PdfChunk[][] {
     const batches: PdfChunk[][] = [];
     let currentBatch: PdfChunk[] = [];

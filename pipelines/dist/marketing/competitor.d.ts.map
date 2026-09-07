@@ -1,0 +1,1 @@
+{"version":3,"file":"competitor.d.ts","sourceRoot":"","sources":["../../src/marketing/competitor.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,kBAAkB,EAAE,MAAM,SAAS,CAAC;AAoDlD,wBAAsB,kBAAkB,CAAC,IAAI,EAAE;IAC3C,WAAW,EAAE,MAAM,CAAC;IACpB,UAAU,EAAE,MAAM,EAAE,CAAC;IACrB,cAAc,CAAC,EAAE,MAAM,CAAC;CAC3B,GAAG,OAAO,CAAC,kBAAkB,CAAC,CAwD9B"}

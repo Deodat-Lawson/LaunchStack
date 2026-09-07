@@ -1,3 +1,8 @@
+# Mounted read-only, so every value here is a static default. SeaweedFS
+# overrides any key from WEED_<SECTION>_<KEY>; docker-compose.yml sets
+# WEED_POSTGRES_PASSWORD from POSTGRES_PASSWORD, which is what a deployment
+# with a real password actually authenticates with. The literal below only
+# applies to a stack running the local default.
 [postgres]
 enabled = true
 hostname = "db"

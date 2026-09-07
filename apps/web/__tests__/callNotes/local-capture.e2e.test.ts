@@ -6,7 +6,7 @@ import { EventEmitter, once } from "node:events";
 import { setImmediate as yieldEventLoop } from "node:timers/promises";
 import { setTimeout as delay } from "node:timers/promises";
 import type { CallNotesTestDatabase } from "./testDb";
-import type { StructuredOutputOptions } from "@launchstack/core/llm";
+import type { StructuredOutputOptions } from "@launchstack/llm";
 import { sql } from "drizzle-orm";
 
 import {
@@ -16,9 +16,9 @@ import {
     createPostgresCallNotesApplication,
     renderEnrichedNoteProposal,
     type CallSnapshot,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
-const mockAuth = jest.fn<Promise<{ userId: string }>, []>();
+const mockWorkspacePermission = jest.fn();
 const mockInvokeStructured = jest.fn<Promise<unknown>, unknown[]>();
 const mockAfterTasks: Promise<void>[] = [];
 jest.mock("next/server", () => ({
@@ -41,12 +41,13 @@ jest.mock("~/env", () => ({
     },
 }));
 jest.mock("~/server/engine", () => ({ getEngine: () => ({ db: mockTestDb!.db }) }));
-jest.mock("@clerk/nextjs/server", () => ({ auth: () => mockAuth() }));
-jest.mock("~/lib/active-workspace", () => ({ getActiveCompanyId: async () => 1n }));
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspacePermission: (...args: unknown[]): unknown => mockWorkspacePermission(...args),
+}));
 jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: () => ({ name: "fixture", modelId: "deterministic-enrichment" }),
 }));
-jest.mock("@launchstack/core/llm", () => ({
+jest.mock("@launchstack/llm", () => ({
     invokeStructured: (...args: unknown[]) => mockInvokeStructured(...args),
 }));
 
@@ -276,7 +277,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         mockAfterTasks.length = 0;
         mockTestDb = await createCallNotesTestDatabase();
         await seedOwner();
-        mockAuth.mockResolvedValue({ userId: OWNER });
+        mockWorkspacePermission.mockResolvedValue({
+            success: true,
+            data: { authUserId: OWNER, companyId: 1n },
+        });
         mockInvokeStructured.mockReset().mockResolvedValue(proposal);
         configureWebCallNotesApplication(
             createPostgresCallNotesApplication({

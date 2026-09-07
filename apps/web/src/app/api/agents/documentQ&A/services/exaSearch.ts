@@ -7,25 +7,22 @@ import type { WebSearchResult } from "./types";
  * @param maxResults - Maximum number of results to return (default: 5)
  * @returns Array of web search results
  */
-export async function performExaSearch(
-    query: string,
-    maxResults = 5
-): Promise<WebSearchResult[]> {
+export async function performExaSearch(query: string, maxResults = 5): Promise<WebSearchResult[]> {
     if (!env.server.EXA_API_KEY) {
-        console.warn('Exa API key not configured. Web search disabled.');
+        console.warn("Exa API key not configured. Web search disabled.");
         return [];
     }
 
     try {
-        const response = await fetch('https://api.exa.ai/search', {
-            method: 'POST',
+        const response = await fetch("https://api.exa.ai/search", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': env.server.EXA_API_KEY,
+                "Content-Type": "application/json",
+                "x-api-key": env.server.EXA_API_KEY,
             },
             body: JSON.stringify({
                 query,
-                type: 'auto',
+                type: "auto",
                 numResults: maxResults,
                 contents: {
                     text: true,
@@ -50,14 +47,14 @@ export async function performExaSearch(
         }
 
         return data.results
-            .map((item) => ({
-                title: item.title ?? 'Untitled',
-                url: item.url ?? '',
-                snippet: item.text ?? '',
+            .map(item => ({
+                title: item.title ?? "Untitled",
+                url: item.url ?? "",
+                snippet: item.text ?? "",
             }))
-            .filter((item) => item.url && item.title);
+            .filter(item => item.url && item.title);
     } catch (error) {
-        console.error('Exa search error:', error);
+        console.error("Exa search error:", error);
         return [];
     }
 }

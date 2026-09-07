@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePermissions } from "~/lib/use-permissions";
 import { IconBolt, IconX } from "./icons";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
 import { STUDIO_GROUPS, type StudioFeature } from "./types";
@@ -16,11 +17,7 @@ export interface StudioDrawerProps {
      */
     inline?: boolean;
     /**
-     * Role of the current user. When not `employer`/`owner`, Management entries
-     * marked `companyOnly` are hidden.
-     */
-    role?: string | null;
-    /**
+
      * Feature id that's currently rendered in the main workspace area. Hides the
      * Expand button when viewing the already-expanded feature.
      */
@@ -58,26 +55,26 @@ const CUSTOM_PANE_IDS = new Set([
     "analytics",
 ]);
 
-const COMPANY_ROLES = new Set(["employer", "owner"]);
-
 export function StudioDrawer({
     open,
     initialFeatureId,
     onClose,
     inline = false,
-    role,
     activeFeatureId,
     context,
     onExpand,
     onOpenWorkspaceChat,
 }: StudioDrawerProps) {
-    const visibleGroups = useMemo(() => {
-        const canSeeCompany = role ? COMPANY_ROLES.has(role) : true;
-        return STUDIO_GROUPS.map(g => ({
-            ...g,
-            features: g.features.filter(f => canSeeCompany || !f.companyOnly),
-        })).filter(g => g.features.length > 0);
-    }, [role]);
+    // Fails closed: until permissions have loaded, gated entries are absent.
+    const { can } = usePermissions();
+    const visibleGroups = useMemo(
+        () =>
+            STUDIO_GROUPS.map(g => ({
+                ...g,
+                features: g.features.filter(f => can(f.requires)),
+            })).filter(g => g.features.length > 0),
+        [can]
+    );
 
     const firstFeatureId = visibleGroups[0]?.features[0]?.id ?? "draft";
     const [activeId, setActiveId] = useState<string>(initialFeatureId ?? firstFeatureId);

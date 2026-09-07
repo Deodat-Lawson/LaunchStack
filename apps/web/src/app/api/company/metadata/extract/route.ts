@@ -14,43 +14,29 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, gt, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
+import { document as documentTable, documentContextChunks } from "@launchstack/store/schema";
 import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
-import { extractCompanyFacts } from "@launchstack/features/company-metadata";
-import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
-import { createEmptyMetadata } from "@launchstack/features/company-metadata";
-import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/features/company-metadata";
+import { extractCompanyFacts } from "@launchstack/pipelines/company-metadata";
+import { mergeCompanyMetadata } from "@launchstack/pipelines/company-metadata";
+import { createEmptyMetadata } from "@launchstack/pipelines/company-metadata";
+import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/pipelines/company-metadata";
 import { generateStructured } from "~/lib/llm";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        // Extraction rewrites canonical metadata and appends history.
+        const ctx = await requireWorkspacePermission("settings.manage");
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const companyId = String((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
+        const companyIdBigint = ctx.data.companyId;
+        const companyId = String(companyIdBigint);
+        // Facts are only extracted from documents the caller may read.
+        const documentWhere = scopedDocumentWhere(companyIdBigint, await ctx.data.documentScope());
 
         // Parse optional body flags
         let debug = false;
@@ -71,7 +57,7 @@ export async function POST(request: Request) {
                 lastExtractionDocumentId: companyMetadata.lastExtractionDocumentId,
             })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+            .where(eq(companyMetadata.companyId, companyIdBigint));
 
         // Build document query — incremental by default, full if force=true or no prior extraction
         const lastDocId = existingRow?.lastExtractionDocumentId;
@@ -81,35 +67,38 @@ export async function POST(request: Request) {
             ? await db
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
-                  .where(
-                      sql`${documentTable.companyId} = ${(await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))} AND ${documentTable.id} > ${lastDocId}`,
-                  )
+                  .where(and(documentWhere, gt(documentTable.id, Number(lastDocId))))
             : await db
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
-                  .where(eq(documentTable.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+                  .where(documentWhere);
 
         if (docs.length === 0) {
             return NextResponse.json({
                 message: isIncremental
                     ? "No new documents since last extraction"
                     : "No documents found for this company",
-                metadata: isIncremental ? existingRow?.metadata ?? null : null,
+                metadata: isIncremental ? (existingRow?.metadata ?? null) : null,
                 documentsProcessed: 0,
                 incremental: isIncremental,
             });
         }
 
         // For incremental: merge into existing. For full: start fresh (force) or merge into existing.
-        const baseMetadata = force ? null : existingRow?.metadata ?? null;
+        const baseMetadata = force ? null : (existingRow?.metadata ?? null);
 
-        return processDocuments(docs, companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)), baseMetadata, debug, isIncremental, userId);
+        return processDocuments(
+            docs,
+            companyId,
+            companyIdBigint,
+            baseMetadata,
+            debug,
+            isIncremental,
+            ctx.data.authUserId
+        );
     } catch (error) {
         console.error("[company-metadata] POST /extract error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
 
@@ -120,7 +109,7 @@ async function processDocuments(
     existingMetadata: CompanyMetadataJSON | null,
     debug: boolean,
     incremental: boolean,
-    userId: string,
+    userId: string
 ) {
     // Debug mode: return per-document chunk counts without running extraction
     if (debug) {
@@ -141,7 +130,7 @@ async function processDocuments(
             incremental,
             totalDocuments: docs.length,
             documents: diagnostics,
-            documentsWithChunks: diagnostics.filter((d) => d.chunkCount > 0).length,
+            documentsWithChunks: diagnostics.filter(d => d.chunkCount > 0).length,
         });
     }
 
@@ -155,7 +144,7 @@ async function processDocuments(
         const extracted = await extractCompanyFacts({
             documentId: doc.id,
             companyId,
-            generate: (input) =>
+            generate: input =>
                 generateStructured({
                     ...input,
                     capability: "smallExtraction",
@@ -164,10 +153,7 @@ async function processDocuments(
 
         if (!extracted) continue;
 
-        const { updatedMetadata, diff } = mergeCompanyMetadata(
-            metadata,
-            extracted,
-        );
+        const { updatedMetadata, diff } = mergeCompanyMetadata(metadata, extracted);
 
         metadata = updatedMetadata;
         allDiffs.added.push(...diff.added);
@@ -208,7 +194,8 @@ async function processDocuments(
         });
 
     // Write audit history entry for this extraction
-    const hasChanges = allDiffs.added.length > 0 || allDiffs.updated.length > 0 || allDiffs.deprecated.length > 0;
+    const hasChanges =
+        allDiffs.added.length > 0 || allDiffs.updated.length > 0 || allDiffs.deprecated.length > 0;
     if (hasChanges) {
         await db.insert(companyMetadataHistory).values({
             companyId: companyIdBigint,

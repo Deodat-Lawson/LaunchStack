@@ -1,5 +1,4 @@
 import { and, eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 import {
@@ -8,12 +7,12 @@ import {
     callNotesEnrichmentRuns,
     type CallSnapshot,
     type EnrichmentStatus,
-} from "@launchstack/features/call-notes";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+} from "@launchstack/pipelines/call-notes";
 import {
     EnrichmentStreamEventSchema,
     type EnrichmentStreamEvent,
 } from "~/lib/call-notes-enrichment-stream";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
@@ -130,16 +129,15 @@ export async function GET(
     { params }: { params: Promise<{ callId: string }> }
 ): Promise<Response> {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const workspace = await requireWorkspacePermission("documents.read");
+        if (!workspace.success) return workspace.response;
+        const userId = workspace.data.authUserId;
 
         const { callId } = await params;
         const runId = new URL(request.url).searchParams.get("run");
         if (!runId) return invalidRequest();
 
-        const companyId = (await getActiveCompanyId(userId)).toString();
+        const companyId = workspace.data.companyId.toString();
         const parsed = CallQuerySchema.safeParse({
             companyId,
             actorUserId: userId,

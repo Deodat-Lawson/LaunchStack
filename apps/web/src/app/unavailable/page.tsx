@@ -1,13 +1,13 @@
-"use client"
-import React from 'react';
-import { AlertTriangle, ArrowLeft, Construction } from 'lucide-react';
-import styles from '../../styles/featureUnavailable.module.css';
+"use client";
+import React from "react";
+import { AlertTriangle, ArrowLeft, Construction } from "lucide-react";
+import styles from "../../styles/featureUnavailable.module.css";
 import Link from "next/link";
 
 const FeatureUnavailable = () => {
     const handleGoBack = () => {
         // Navigation logic will go here
-        console.log('Navigating back');
+        console.log("Navigating back");
     };
 
     return (
@@ -17,9 +17,7 @@ const FeatureUnavailable = () => {
                     <Construction className={styles.icon} />
                 </div>
 
-                <h1 className={styles.title}>
-                    Feature Currently Unavailable
-                </h1>
+                <h1 className={styles.title}>Feature Currently Unavailable</h1>
 
                 <p className={styles.description}>
                     We are working hard to bring this feature to you. Please check back soon!
@@ -27,9 +25,7 @@ const FeatureUnavailable = () => {
 
                 <div className={styles.messageBox}>
                     <AlertTriangle className={styles.alertIcon} />
-                    <p className={styles.message}>
-                        Expected availability: Q4 2025 ~ Q1 2026
-                    </p>
+                    <p className={styles.message}>Expected availability: Q4 2025 ~ Q1 2026</p>
                 </div>
 
                 <div className={styles.alternativesBox}>
@@ -42,15 +38,11 @@ const FeatureUnavailable = () => {
                 </div>
 
                 <Link href="/">
-                    <button
-                        onClick={handleGoBack}
-                        className={styles.backButton}
-                    >
+                    <button onClick={handleGoBack} className={styles.backButton}>
                         <ArrowLeft className={styles.backIcon} />
                         Back to Home
                     </button>
                 </Link>
-
             </div>
         </div>
     );

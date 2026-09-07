@@ -28,22 +28,22 @@ export type Capability = (typeof CAPABILITIES)[number];
  * model or an endpoint.
  */
 export interface GenerateStructuredInput<TOutput> {
-  /** Which capability class this call needs. */
-  capability: Capability;
-  /** System message; optional but recommended for extraction tasks. */
-  system?: string;
-  /** User prompt. */
-  prompt: string;
-  /**
-   * Zod schema describing the expected output shape. The return type of
-   * `generateStructured` is inferred from this schema, so no cast is needed
-   * at the call site.
-   */
-  schema: ZodType<TOutput>;
-  /**
-   * Name used as the JSON schema / tool name. Purely cosmetic, but it shows
-   * up in endpoint-side logs.
-   */
-  schemaName?: string;
+    /** Which capability class this call needs. */
+    capability: Capability;
+    /** System message; optional but recommended for extraction tasks. */
+    system?: string;
+    /** User prompt. */
+    prompt: string;
+    /**
+     * Zod schema describing the expected output shape. The return type of
+     * `generateStructured` is inferred from this schema, so no cast is needed
+     * at the call site.
+     */
+    schema: ZodType<TOutput>;
+    /**
+     * Name used as the JSON schema / tool name. Purely cosmetic, but it shows
+     * up in endpoint-side logs.
+     */
+    schemaName?: string;
 }
 import type { ZodType } from "zod";

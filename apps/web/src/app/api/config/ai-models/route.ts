@@ -12,23 +12,22 @@ export const dynamic = "force-dynamic";
  * reasoning request patches, and internal context/output limits never appear.
  */
 export async function GET() {
-  try {
-    return NextResponse.json(getConfiguredPublicChatConfig());
-  } catch (error) {
-    // A broken configuration must not take the whole UI down — report every
-    // route unavailable so controls disable themselves cleanly.
-    const message =
-      error instanceof Error ? error.message : "Chat models are not configured";
-    return NextResponse.json(
-      {
-        routes: {
-          default: { available: false, unavailableReason: message },
-          fast: { available: false, unavailableReason: message },
-          reasoning: { available: false, unavailableReason: message },
-          vision: { available: false, unavailableReason: message },
-        },
-      },
-      { status: 200 },
-    );
-  }
+    try {
+        return NextResponse.json(getConfiguredPublicChatConfig());
+    } catch (error) {
+        // A broken configuration must not take the whole UI down — report every
+        // route unavailable so controls disable themselves cleanly.
+        const message = error instanceof Error ? error.message : "Chat models are not configured";
+        return NextResponse.json(
+            {
+                routes: {
+                    default: { available: false, unavailableReason: message },
+                    fast: { available: false, unavailableReason: message },
+                    reasoning: { available: false, unavailableReason: message },
+                    vision: { available: false, unavailableReason: message },
+                },
+            },
+            { status: 200 }
+        );
+    }
 }

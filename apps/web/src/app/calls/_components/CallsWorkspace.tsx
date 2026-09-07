@@ -31,8 +31,8 @@ import type {
     Gap,
     NoteVisibility,
     TranscriptSegment,
-} from "@launchstack/features/call-notes";
-import { renderEnrichedNoteProposal } from "@launchstack/features/call-notes/enrichment";
+} from "@launchstack/pipelines/call-notes";
+import { renderEnrichedNoteProposal } from "@launchstack/pipelines/call-notes/enrichment";
 import type { EnrichmentPreviewState } from "~/lib/call-notes-enrichment-stream";
 import { CallsChat } from "./CallsChat";
 import { CallNoteEditor } from "./CallNoteEditor";

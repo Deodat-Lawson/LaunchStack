@@ -6,11 +6,8 @@
  */
 
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import {
     parseGitHubUrl,
@@ -23,10 +20,12 @@ import { putFile } from "~/server/storage/vercel-blob";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
-    userId: z.string().min(1, "User ID is required"),
     repoUrl: z.string().url("A valid URL is required"),
     branch: z.string().optional(),
     accessToken: z.string().optional(),
@@ -34,6 +33,9 @@ const GitHubRepoSchema = z.object({
 });
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspacePermission("documents.upload");
+    if (!ctx.success) return ctx.response;
+
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const validation = await validateRequestBody(request, GitHubRepoSchema);
@@ -41,10 +43,16 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId, repoUrl, branch, accessToken, category } =
-                validation.data;
+            const { repoUrl, branch, accessToken, category } = validation.data;
 
-            // Parse and validate the GitHub URL
+            if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
+
+            // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
+            // rejects any hostname other than (www.)github.com, and the
+            // download itself is pinned to https://api.github.com — the
+            // user-supplied URL only contributes owner/repo path segments.
             let parsed;
             try {
                 parsed = parseGitHubUrl(repoUrl);
@@ -52,10 +60,9 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         error: "Invalid GitHub URL",
-                        details:
-                            err instanceof Error ? err.message : "Unknown error",
+                        details: err instanceof Error ? err.message : "Unknown error",
                     },
-                    { status: 400 },
+                    { status: 400 }
                 );
             }
 
@@ -63,35 +70,27 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${userId}`,
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.authUserId}`
             );
 
-            // Look up user
-            const [userInfo] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId));
-
-            if (!userInfo) {
-                return NextResponse.json(
-                    { error: "Invalid user" },
-                    { status: 400 },
-                );
-            }
+            // A token pasted into the form wins; otherwise the workspace's
+            // GitHub connection covers private repos without pasting anything.
+            const effectiveToken =
+                accessToken ?? (await getCompanyAccessToken(ctx.data.companyId, "github"));
 
             // Download the repository as a ZIP
             const zipBuffer = await downloadGitHubRepoZip(
                 owner,
                 repo,
                 branch,
-                accessToken,
+                effectiveToken ?? undefined
             );
 
             const filename = `${owner}-${repo}.zip`;
 
             console.log(
                 `[GitHubRepoUpload] Downloaded ${(zipBuffer.length / 1024 / 1024).toFixed(1)}MB, ` +
-                    `storing as ${filename}`,
+                    `storing as ${filename}`
             );
 
             // Store the ZIP in blob storage
@@ -104,11 +103,15 @@ export async function POST(request: Request) {
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId,
-                    companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+                    userId: ctx.data.authUserId,
+                    companyId: ctx.data.companyId,
                 },
                 documentName: `${owner}/${repo}`,
                 rawDocumentUrl: blob.url,
+                creationKey:
+                    owner && repo
+                        ? `github:${owner}/${repo}@${branch ?? "default"}`
+                        : `upload:${blob.url}`,
                 requestUrl: request.url,
                 category,
                 explicitStorageType: "s3",
@@ -118,7 +121,7 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Pipeline triggered: jobId=${uploadResult.jobId}, ` +
-                    `docId=${uploadResult.document.id}`,
+                    `docId=${uploadResult.document.id}`
             );
 
             return NextResponse.json(
@@ -130,38 +133,35 @@ export async function POST(request: Request) {
                     document: uploadResult.document,
                     repo: { owner, repo, branch: branch ?? "default" },
                 },
-                { status: 202 },
+                { status: 202 }
             );
         } catch (error) {
             if (error instanceof GitHubRepoNotFoundError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 404 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 404 });
             }
 
             if (error instanceof GitHubAuthError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 403 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 403 });
             }
 
             if (error instanceof GitHubRateLimitError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 429 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 429 });
+            }
+
+            // processDocumentUpload authorizes the internal file reference and
+            // throws with its own status (404 foreign file / 503 unconfigured);
+            // a generic 500 would hide an operator-fixable condition.
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json({ error: error.message }, { status: error.status });
             }
 
             console.error("[GitHubRepoUpload] Error:", error);
             return NextResponse.json(
                 {
                     error: "Failed to index GitHub repository",
-                    details:
-                        error instanceof Error ? error.message : "Unknown error",
+                    details: error instanceof Error ? error.message : "Unknown error",
                 },
-                { status: 500 },
+                { status: 500 }
             );
         }
     });

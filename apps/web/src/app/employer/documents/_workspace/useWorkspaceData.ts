@@ -1,13 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { DocumentType } from "../types/document";
-import { getDocumentDisplayType } from "../types/document";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { Permission } from "~/lib/authz/permissions";
+import { usePermissions } from "~/lib/use-permissions";
+import {
+    compareFolderPaths,
+    expandFolderPaths,
+    folderLeafName,
+    normalizeFolderPath,
+} from "~/lib/folders/path";
 import {
     WorkspaceCallNoteFilesSchema,
     type WorkspaceCallNoteFile,
-} from "@launchstack/features/call-notes/files";
-import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+} from "@launchstack/pipelines/call-notes/files";
+import type { MindmapSummary } from "../_mindmap/lib/api";
+import type { DocumentType } from "../types/document";
+import { getDocumentDisplayType } from "../types/document";
+import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -37,9 +46,14 @@ function mapDocType(doc: DocumentType): SourceTypeId {
 }
 
 function humanDate(raw: unknown): string {
-    if (typeof raw !== "string" && typeof raw !== "number" && !(raw instanceof Date)) return "";
-    const d = new Date(raw);
-    if (Number.isNaN(d.getTime())) return "";
+    if (!raw) return "";
+    const d =
+        raw instanceof Date
+            ? raw
+            : typeof raw === "string" || typeof raw === "number"
+              ? new Date(raw)
+              : null;
+    if (!d || Number.isNaN(d.getTime())) return "";
     const diffMs = Date.now() - d.getTime();
     const diffHr = Math.floor(diffMs / 3_600_000);
     if (diffHr < 1) return "just now";
@@ -61,9 +75,10 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         type: mapDocType(doc),
         size: doc.aiSummary ? "" : "",
         added: humanDate(doc.createdAt) || "",
-        folder: doc.category ?? "Unfiled",
+        folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
+        restricted: doc.restricted === true,
     };
 }
 
@@ -86,170 +101,180 @@ function mapCallNoteFile(file: WorkspaceCallNoteFile): WorkspaceSource {
     };
 }
 
+/**
+ * A mindmap is citable only through its published copy, and only faithfully
+ * when that copy was made from the revision on screen.
+ */
+export function mindmapCitability(
+    map: Pick<MindmapSummary, "publishedDocumentId" | "publishedRevision" | "revision">
+): SourceCitability {
+    if (map.publishedDocumentId === null) return "none";
+    if (map.publishedRevision !== null && map.publishedRevision < map.revision) return "stale";
+    return "citable";
+}
+
+/**
+ * A mindmap row as a source. `documentId` is the published document, when
+ * there is one, so the retrieval layer's citations — which name document ids —
+ * resolve to the map rather than to a Markdown copy of it.
+ */
+export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+    const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
+    return {
+        id: `m${map.id}`,
+        mindmapId: map.id,
+        documentId: map.publishedDocumentId ?? undefined,
+        title: map.title,
+        type: "mindmap",
+        size: shapes,
+        added: humanDate(map.updatedAt) || "",
+        // Folders are paths now, and a map is filed like any other source.
+        folder: normalizeFolderPath(map.folder),
+        tags: [],
+        domain: "General",
+        searchText: map.searchText ?? undefined,
+        thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
+        citability: mindmapCitability(map),
+    };
+}
+
 export interface UseWorkspaceDataResult {
     sources: WorkspaceSource[];
     folders: WorkspaceFolder[];
     loading: boolean;
     error: string | null;
     companyId: number | null;
-    /** DB role of the current user (`employer`, `owner`, `employee`, or null while loading). */
-    role: string | null;
+    /**
+     * What the signed-in person may do here. `can` answers false until the
+     * permissions have loaded, so anything gated on it fails closed.
+     */
+    permissions: ReadonlySet<Permission>;
+    can: (permission: Permission | undefined) => boolean;
+    /** True once the permission answer has arrived (even if it was "nothing"). */
+    permissionsLoaded: boolean;
     refresh: () => Promise<void>;
     /** Optimistically insert a row before the backend confirms it. */
     addOptimistic: (source: WorkspaceSource) => void;
 }
 
-interface CategoryRow {
-    id: number;
-    name: string;
-    companyId: number;
+interface FolderRow {
+    path: string;
+    documentCount: number;
+    persisted: boolean;
+    /** Only people, groups, or roles with a grant can see this folder (or an ancestor is restricted). */
+    restricted?: boolean;
+    /** The `category` row behind a persisted folder; null while the folder is only implied. */
+    categoryId?: number | null;
 }
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
+    const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
+    const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
     const [callNoteFiles, setCallNoteFiles] = useState<WorkspaceCallNoteFile[]>([]);
-    const [categories, setCategories] = useState<CategoryRow[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [companyId, setCompanyId] = useState<number | null>(null);
-    const [role, setRole] = useState<string | null>(null);
-    const refreshGeneration = useRef(0);
-    const companyGeneration = useRef(0);
+    // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
+    // AskPanel scopes to and the permission set come from the same answer.
+    const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
 
     const refresh = useCallback(async () => {
-        const generation = ++refreshGeneration.current;
         if (!userId) {
             setDocuments([]);
+            setMindmaps([]);
+            setFolderRows([]);
             setCallNoteFiles([]);
-            setCategories([]);
             setOptimistic([]);
             setLoading(false);
-            setError(null);
             return;
         }
-        setLoading(true);
         setError(null);
         try {
-            const [docsRes, catsRes, callFilesRes] = await Promise.all([
+            const [docsRes, foldersRes, mapsRes, callFilesRes] = await Promise.all([
                 fetch("/api/fetchDocument", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId }),
+                    body: "{}",
                 }),
-                fetch("/api/Categories/GetCategories"),
-                fetch("/api/call-notes/files", { cache: "no-store" }),
+                fetch("/api/folders"),
+                // Mindmaps are sources too. A failure here must not take the
+                // documents down with it — the list degrades to uploads only.
+                fetch("/api/mindmaps?scope=active").catch(() => null),
+                // Call Notes are a navigable source projection. A deployment
+                // without the endpoint simply renders the regular workspace.
+                fetch("/api/call-notes/files", { cache: "no-store" }).catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
-            if (!callFilesRes.ok)
-                throw new Error(`Failed to fetch Call Notes (${callFilesRes.status})`);
-
             const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
-            const callFiles = WorkspaceCallNoteFilesSchema.parse(await callFilesRes.json());
-            const cats = catsRes.ok ? ((await catsRes.json()) as CategoryRow[]) : [];
-            if (generation !== refreshGeneration.current) return;
-
             setDocuments(docs);
-            setCallNoteFiles(callFiles);
-            setCategories(cats);
+
+            if (foldersRes.ok) {
+                const body = (await foldersRes.json()) as { data?: { folders?: FolderRow[] } };
+                setFolderRows(body.data?.folders ?? []);
+            }
+
+            if (mapsRes?.ok) {
+                const body = (await mapsRes.json()) as { mindmaps: MindmapSummary[] };
+                setMindmaps(body.mindmaps ?? []);
+            } else if (mapsRes) {
+                console.warn(`[workspace] mindmaps list failed (${mapsRes.status})`);
+                setMindmaps([]);
+            }
+
+            if (callFilesRes?.ok) {
+                setCallNoteFiles(WorkspaceCallNoteFilesSchema.parse(await callFilesRes.json()));
+            } else {
+                setCallNoteFiles([]);
+            }
+
             // Prune optimistic rows that now exist in the server response (by title).
             setOptimistic(prev => prev.filter(o => !docs.some(d => d.title === o.title)));
         } catch (err) {
-            if (generation !== refreshGeneration.current) return;
-            // A failed refresh must not leave data from a prior active workspace on
-            // screen while the auth/workspace context is uncertain.
-            setDocuments([]);
-            setCallNoteFiles([]);
-            setCategories([]);
-            setOptimistic([]);
-            setCompanyId(null);
-            setRole(null);
-            setError(err instanceof Error ? err.message : "Failed to fetch workspace files");
+            setError(err instanceof Error ? err.message : "Failed to fetch documents");
         } finally {
-            if (generation === refreshGeneration.current) setLoading(false);
-        }
-    }, [userId]);
-
-    // Fetch company context so AskPanel can scope queries correctly.
-    const resolveCompany = useCallback(async () => {
-        const generation = ++companyGeneration.current;
-        if (!userId) {
-            setCompanyId(null);
-            setRole(null);
-            return;
-        }
-        try {
-            const response = await fetch("/api/fetchUserInfo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId }),
-            });
-            if (generation !== companyGeneration.current) return;
-            if (!response.ok) {
-                setCompanyId(null);
-                setRole(null);
-                return;
-            }
-            const data = (await response.json()) as {
-                companyId?: number | string;
-                role?: string;
-            };
-            setCompanyId(data.companyId == null ? null : Number(data.companyId));
-            setRole(typeof data.role === "string" ? data.role : null);
-        } catch {
-            if (generation !== companyGeneration.current) return;
-            setCompanyId(null);
-            setRole(null);
-            // non-fatal — AskPanel falls back to document-scoped queries
+            setLoading(false);
         }
     }, [userId]);
 
     useEffect(() => {
-        // Invalidate in-flight responses before changing identity/workspace data.
-        refreshGeneration.current += 1;
-        companyGeneration.current += 1;
-        setDocuments([]);
-        setCallNoteFiles([]);
-        setCategories([]);
-        setOptimistic([]);
-        setCompanyId(null);
-        setRole(null);
-        setError(null);
-        setLoading(Boolean(userId));
-        if (!userId) return;
         void refresh();
-        void resolveCompany();
-    }, [userId, refresh, resolveCompany]);
+    }, [refresh]);
 
-    const sources = useMemo<WorkspaceSource[]>(
-        () => [...optimistic, ...documents.map(mapDocument), ...callNoteFiles.map(mapCallNoteFile)],
-        [documents, callNoteFiles, optimistic]
-    );
+    const sources = useMemo<WorkspaceSource[]>(() => {
+        // A published map's Markdown copy is the map, not a second source: it
+        // is hidden here and reached through the map's `documentId`.
+        const claimed = new Set<number>();
+        for (const map of mindmaps) {
+            if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
+        }
+        return [
+            ...optimistic,
+            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...mindmaps.map(mapMindmap),
+            ...callNoteFiles.map(mapCallNoteFile),
+        ];
+    }, [documents, mindmaps, callNoteFiles, optimistic]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
-        const seen = new Map<string, WorkspaceFolder>();
-        // Seed with every category so empty folders render in the rail.
-        for (const c of categories) {
-            seen.set(c.name, {
-                id: `cat-${c.id}`,
-                name: c.name,
-                color: folderColor(c.name),
-                ...(c.name === "Calls" ? { system: true } : {}),
-            });
-        }
-        for (const src of sources) {
-            const name = src.folder || "Unfiled";
-            if (!seen.has(name)) {
-                seen.set(name, {
-                    id: `f-${name}`,
-                    name,
-                    color: folderColor(name),
-                    ...(src.type === "call-note" && name === "Calls" ? { system: true } : {}),
-                });
-            }
-        }
-        return [...seen.values()];
-    }, [sources, categories]);
+        // Every folder a source sits in, every folder that exists while empty,
+        // and every ancestor either implies — a path is a folder tree.
+        const byPath = new Map(folderRows.map(row => [row.path, row] as const));
+        const paths = expandFolderPaths([
+            ...folderRows.map(row => row.path),
+            ...sources.map(src => src.folder),
+        ]);
+        return paths.sort(compareFolderPaths).map(path => {
+            const row = byPath.get(path);
+            return {
+                id: `f-${path}`,
+                name: path,
+                color: folderColor(folderLeafName(path)),
+                restricted: row?.restricted === true,
+                categoryId: row?.categoryId ?? null,
+            };
+        });
+    }, [sources, folderRows]);
 
     const addOptimistic = useCallback((source: WorkspaceSource) => {
         setOptimistic(prev => [source, ...prev]);
@@ -261,7 +286,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         loading,
         error,
         companyId,
-        role,
+        permissions,
+        can,
+        permissionsLoaded,
         refresh,
         addOptimistic,
     };

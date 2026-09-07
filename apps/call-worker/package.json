@@ -14,8 +14,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@launchstack/core": "workspace:*",
-    "@launchstack/features": "workspace:*",
+    "@launchstack/pipelines": "workspace:*",
     "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {

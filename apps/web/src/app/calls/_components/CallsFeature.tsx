@@ -8,7 +8,7 @@ import {
     LocalCaptureWorkerStatusSchema,
     type CallNote,
     type CallSnapshot,
-} from "@launchstack/features/call-notes/contracts";
+} from "@launchstack/pipelines/call-notes/contracts";
 
 import { CallsWorkspace, type CallMutationStatus, type CaptureCommand } from "./CallsWorkspace";
 import { useCallNoteDrafts } from "./useCallNoteDrafts";

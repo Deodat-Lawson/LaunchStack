@@ -8,19 +8,16 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { db } from "~/server/db/index";
-import { eq } from "drizzle-orm";
-import { users } from "~/server/db/schema";
-import { 
-    companyEnsembleSearch,
-    type CompanySearchOptions,
-    type SearchResult
-} from "~/lib/tools/rag";
+import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
+import type { MultiDocSearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
+import { document } from "@launchstack/store/schema";
+import { db } from "~/server/db";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { gateChunksByScope } from "~/server/rag/gate";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -65,14 +62,19 @@ type ResearchResult = DocumentResult | WebResult | ArxivResult;
 // Validation schema
 const ResearchSchema = z.object({
     query: z.string().min(1).max(1000),
-    sources: z.array(z.enum(["documents", "web", "arxiv"])).min(1).default(["documents", "web"]),
-    options: z.object({
-        maxResults: z.number().min(1).max(20).optional(),
-        searchType: z.enum(["general", "academic", "news"]).optional(),
-        documentIds: z.array(z.number()).optional(), // Filter to specific documents
-        arxivCategory: z.string().optional(), // e.g., "cs.AI", "cs.LG", "physics"
-        sortBy: z.enum(["relevance", "lastUpdatedDate", "submittedDate"]).optional(),
-    }).optional(),
+    sources: z
+        .array(z.enum(["documents", "web", "arxiv"]))
+        .min(1)
+        .default(["documents", "web"]),
+    options: z
+        .object({
+            maxResults: z.number().min(1).max(20).optional(),
+            searchType: z.enum(["general", "academic", "news"]).optional(),
+            documentIds: z.array(z.number()).optional(), // Filter to specific documents
+            arxivCategory: z.string().optional(), // e.g., "cs.AI", "cs.LG", "physics"
+            sortBy: z.enum(["relevance", "lastUpdatedDate", "submittedDate"]).optional(),
+        })
+        .optional(),
 });
 
 /**
@@ -80,7 +82,7 @@ const ResearchSchema = z.object({
  * API Documentation: https://info.arxiv.org/help/api/basics.html
  */
 async function searchArxiv(
-    query: string, 
+    query: string,
     maxResults = 5,
     options?: { category?: string; sortBy?: string }
 ): Promise<ArxivResult[]> {
@@ -88,7 +90,7 @@ async function searchArxiv(
         // Build the arXiv API query
         // Encode the query properly for URL
         let searchQuery = encodeURIComponent(query);
-        
+
         // If a category is specified, add it to the query
         if (options?.category) {
             searchQuery = `all:${searchQuery}+AND+cat:${options.category}`;
@@ -98,8 +100,12 @@ async function searchArxiv(
 
         // Determine sort order
         const sortBy = options?.sortBy ?? "relevance";
-        const sortOrder = sortBy === "relevance" ? "relevance" : 
-                          sortBy === "lastUpdatedDate" ? "lastUpdatedDate" : "submittedDate";
+        const sortOrder =
+            sortBy === "relevance"
+                ? "relevance"
+                : sortBy === "lastUpdatedDate"
+                  ? "lastUpdatedDate"
+                  : "submittedDate";
 
         const arxivUrl = `https://export.arxiv.org/api/query?search_query=${searchQuery}&start=0&max_results=${maxResults}&sortBy=${sortOrder}&sortOrder=descending`;
 
@@ -117,13 +123,12 @@ async function searchArxiv(
         }
 
         const xmlText = await response.text();
-        
+
         // Parse the Atom XML response
         const results = parseArxivXml(xmlText);
-        
+
         console.log(`✅ [arXiv] Found ${results.length} papers`);
         return results;
-
     } catch (error) {
         console.error("❌ [arXiv] Search error:", error);
         return [];
@@ -135,7 +140,7 @@ async function searchArxiv(
  */
 function parseArxivXml(xml: string): ArxivResult[] {
     const results: ArxivResult[] = [];
-    
+
     // Extract entries using regex (simpler than full XML parsing)
     const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
     let entryMatch;
@@ -215,15 +220,13 @@ function extractXmlValue(xml: string, tag: string): string | null {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
+        if (!ctx.data.can("documents.read")) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = ResearchSchema.safeParse(body);
 
         if (!validation.success) {
@@ -237,20 +240,6 @@ export async function POST(request: Request) {
         const startTime = Date.now();
         const maxResults = options?.maxResults ?? 10;
 
-        // Get user's company for document search
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 }
-            );
-        }
-
         const results: ResearchResult[] = [];
         const searchPromises: Promise<void>[] = [];
 
@@ -259,31 +248,47 @@ export async function POST(request: Request) {
             const documentSearchPromise = (async () => {
                 try {
                     const embeddings = getEmbeddings();
-                    const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
-                    
-                    if (Number.isNaN(companyId)) {
-                        console.warn("Invalid company ID for document search");
+
+                    // There is no company-wide search: research runs over
+                    // the set of documents the caller may read, through the
+                    // same multi-document path every other question uses.
+                    const scope = await ctx.data.documentScope();
+                    const readable = await db
+                        .select({ id: document.id })
+                        .from(document)
+                        .where(scopedDocumentWhere(ctx.data.companyId, scope));
+                    const documentIds = readable.map(row => Number(row.id));
+                    if (documentIds.length === 0) {
+                        console.log("📚 [Research] No readable documents for this member");
                         return;
                     }
 
-                    const searchOptions: CompanySearchOptions = {
+                    const searchOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: Math.min(maxResults, 10),
-                        companyId,
+                        documentIds,
+                        companyId: Number(ctx.data.companyId),
                     };
 
-                    const searchResults: SearchResult[] = await companyEnsembleSearch(
+                    const retrieved: SearchResult[] = await multiDocEnsembleSearch(
                         query,
                         searchOptions,
                         embeddings
                     );
+                    const searchResults = await gateChunksByScope(retrieved, {
+                        companyId: ctx.data.companyId,
+                        scope,
+                        searchScope: "research",
+                    });
 
                     for (let i = 0; i < searchResults.length; i++) {
                         const result = searchResults[i];
                         if (!result) continue;
-                        
+
                         const distance = Number(result.metadata?.distance ?? 0);
-                        const metadata = result.metadata as unknown as Record<string, unknown> | undefined;
+                        const metadata = result.metadata as unknown as
+                            | Record<string, unknown>
+                            | undefined;
                         results.push({
                             id: `doc-${i}-${Date.now()}`,
                             content: result.pageContent,
@@ -310,7 +315,7 @@ export async function POST(request: Request) {
                     // Adjust query based on search type
                     let adjustedQuery = query;
                     const searchType = options?.searchType ?? "general";
-                    
+
                     if (searchType === "academic") {
                         adjustedQuery = `academic research: ${query}`;
                     } else if (searchType === "news") {
@@ -325,7 +330,7 @@ export async function POST(request: Request) {
                     for (let i = 0; i < webResults.length; i++) {
                         const result = webResults[i];
                         if (!result) continue;
-                        
+
                         results.push({
                             id: `web-${i}-${Date.now()}`,
                             title: result.title,
@@ -348,14 +353,10 @@ export async function POST(request: Request) {
         if (sources.includes("arxiv")) {
             const arxivSearchPromise = (async () => {
                 try {
-                    const arxivResults = await searchArxiv(
-                        query,
-                        Math.min(maxResults, 10),
-                        {
-                            category: options?.arxivCategory,
-                            sortBy: options?.sortBy,
-                        }
-                    );
+                    const arxivResults = await searchArxiv(query, Math.min(maxResults, 10), {
+                        category: options?.arxivCategory,
+                        sortBy: options?.sortBy,
+                    });
 
                     results.push(...arxivResults);
                     console.log(`📄 [Research] Found ${arxivResults.length} arXiv papers`);
@@ -370,14 +371,16 @@ export async function POST(request: Request) {
         await Promise.all(searchPromises);
 
         // Sort results by relevance score
-        results.sort((a, b) => (b.relevanceScore) - (a.relevanceScore));
+        results.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
         // Limit total results
         const limitedResults = results.slice(0, maxResults);
 
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`);
+        console.log(
+            `✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`
+        );
 
         return NextResponse.json({
             success: true,
@@ -391,14 +394,13 @@ export async function POST(request: Request) {
             },
             processingTimeMs,
         });
-
     } catch (error) {
         console.error("❌ [Research] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to perform research",
-                error: "Failed to perform research"
+                error: "Failed to perform research",
             },
             { status: 500 }
         );

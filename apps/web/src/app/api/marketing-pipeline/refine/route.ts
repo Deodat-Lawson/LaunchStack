@@ -1,13 +1,9 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { refineContent } from "@launchstack/features/marketing-pipeline";
-import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
-import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { refineContent } from "@launchstack/pipelines/marketing";
+import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
+import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -21,51 +17,17 @@ const RefineInputSchema = z.object({
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        let body: unknown;
-        try {
-            body = (await request.json()) as unknown;
-        } catch {
-            return NextResponse.json(
-                { success: false, message: "Invalid JSON body" },
-                { status: 400 },
-            );
-        }
-
-        const validation = RefineInputSchema.safeParse(body);
+        const validation = RefineInputSchema.safeParse(await readJson(request));
         if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid input", errors: validation.error.flatten() },
-                { status: 400 },
-            );
+            return fail("Invalid input", 400, { errors: validation.error.flatten() });
         }
 
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 },
-            );
-        }
-
-        const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+        const companyId = Number(ctx.data.companyId);
         if (Number.isNaN(companyId)) {
-            return NextResponse.json(
-                { success: false, message: "Invalid company ID" },
-                { status: 400 },
-            );
+            return fail("Invalid company ID", 400);
         }
 
         const companyContext = await buildCompanyKnowledgeContext({
@@ -81,12 +43,8 @@ export async function POST(request: Request) {
             brandVoice: validation.data.brandVoice,
         });
 
-        return NextResponse.json({ success: true, data: result });
+        return ok(result);
     } catch (error) {
-        console.error("[marketing-pipeline/refine] error:", error);
-        return NextResponse.json(
-            { success: false, message: "Refinement failed" },
-            { status: 500 },
-        );
+        return handleRouteError("marketing-pipeline/refine", error);
     }
 }

@@ -1,8 +1,20 @@
 # Current Infrastructure Code Map
 
-**Status:** Current-state inventory  
+**Status:** Historical inventory (superseded in part — see note below)  
 **Snapshot:** `3dcb60e` (`codex/infrastructure-code-map`)  
 **Reviewed:** 2026-07-24
+
+> **⚠️ Snapshot note.** This map predates ADR-003 and ADR-004. Since it was
+> written: the transactional outbox (`pdr_ai_v2_event_outbox`) and
+> `apps/worker` now exist
+> ([ADR-003](./ADR-003-transactional-outbox-and-worker.md)); `sidecar/`,
+> `services/ocr-router`, and `services/ocr-worker` were consolidated into
+> `services/transcription`, `services/adeu-ai-docs-editing`, and
+> `services/document-converter`
+> ([ADR-004](./ADR-004-compute-service-consolidation.md)); and the sidecar
+> `/embed`//`/rerank`//`/extract-entities` contracts described below were
+> confirmed to have **never been implemented** and were removed. Treat the
+> rest of this document as the historical baseline those ADRs changed.
 
 This document maps what is in the repository today. It distinguishes observed
 runtime wiring from the intended architecture described elsewhere in the repo.
@@ -58,7 +70,7 @@ services have independent requirements files.
 
 | Path                  | Runtime               | Responsibility                                                                                            | Main entry point                                       | Current deployment path                                                  |
 | --------------------- | --------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `apps/web`            | Next.js 15 / Node 20  | Browser UI, Clerk auth, 119 HTTP API handlers, engine composition, storage adapters, nine background jobs | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | Vercel or root `Dockerfile`                                              |
+| `apps/web`            | Next.js 15 / Node 20  | Browser UI, first-party auth (better-auth), 119 HTTP API handlers, engine composition, storage adapters, nine background jobs | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | Vercel or root `Dockerfile`                                              |
 | `services/ocr-router` | Express / Node 20     | OCR provider routing and PDF page rendering                                                               | `src/server.ts` on `:8002`                             | Its Dockerfile; Compose default stack                                    |
 | `services/ocr-worker` | FastAPI / Python 3.12 | Thin `/parse/docling` and `/parse/marker` façade                                                          | `app/main.py` on `:8001`                               | Its Dockerfile; Compose `ocr` profile                                    |
 | `sidecar`             | FastAPI / Python 3.12 | DOCX redlining through Adeu and local audio/video transcription through Whisper                           | `app/main.py` on `:8000`                               | Its Dockerfile; Compose default stack                                    |
@@ -115,7 +127,7 @@ dependency model.
 
 `connectors`, `mcp`, `rules-extraction`, and `workflow-generation` are currently
 roadmap scaffolds. Features may read environment variables, but they may not
-import Next.js, Clerk, React, or `apps/web`.
+import Next.js, React, auth modules, or `apps/web`.
 
 ### `apps/web`
 
@@ -131,7 +143,7 @@ Its internal layers are:
 | `src/server/services`                   | Application services for documents/uploads                                  |
 | `src/server/notes`                      | Notes and wiki-link domain logic                                            |
 | `src/lib`                               | Shared browser/server utilities plus transitional legacy implementations    |
-| `src/middleware.ts`                     | Clerk authentication, role routing, workspace routing, and direct DB lookup |
+| `src/middleware.ts`                     | Session authentication, role routing, workspace routing, and direct DB lookup |
 
 The compatibility layer remains material: 113 web source files still import
 the legacy `~/server/db` façade, while 154 import `@launchstack/core` directly.
@@ -144,14 +156,14 @@ The 25 pages group into these user-facing applications:
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `/`, `/pricing`, `/contact`, `/deployment` | Public marketing and deployment guidance                                                              |
 | `/signin`, `/signup`, `/workspaces`        | Identity, registration, and workspace selection                                                       |
-| `/employer/*`                              | Employer document workspace, employees, onboarding, metadata, settings, statistics, upload, and tools |
-| `/employee/*`                              | Employee home, documents, and approval state                                                          |
+| `/employer/*`                              | The workspace: documents, settings (incl. People and access), statistics, upload, and tools — one app for every role |
+| `/employee/*`                              | Redirects to the `/employer` twin (the separate employee area was removed, ADR-010)                    |
 | `/employer/tools/marketing-pipeline`       | Marketing workflow UI                                                                                 |
 | `/employer/tools/repo-explainer`           | Repository analysis UI                                                                                |
 
 The 119 route handlers group into:
 
-- identity, users, companies, memberships, invite codes, and workspaces
+- identity, users, companies, memberships (role + status), invitations, join links, groups, custom roles, folder/document grants, the audit log, and workspaces
 - document upload, storage, versions, notes, graph entities, and retrieval
 - document Q&A, predictive analysis, and research agents
 - legal document generation and Adeu edits
@@ -168,7 +180,6 @@ do not need to change in order to reorganize the implementation behind them.
 ```mermaid
 flowchart LR
   Browser["Browser / API client"] --> Web["apps/web<br/>Next.js host"]
-  Clerk["Clerk"] --> Web
 
   Web --> Features["@launchstack/features"]
   Features --> Core["@launchstack/core"]
@@ -233,8 +244,9 @@ Inngest Cloud is expected to call the Vercel deployment.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.
-- Clerk owns authentication. Middleware reads PostgreSQL directly to enforce
-  employer/employee routing and workspace selection.
+- better-auth (in-process, same PostgreSQL) owns authentication. Middleware reads PostgreSQL directly to route on
+  membership status (active / pending / none) and workspace selection; permissions and document
+  scope are resolved per request by `requireWorkspaceContext` (ADR-010).
 - Object storage is selected at runtime: Vercel Blob, S3-compatible storage, or
   a database fallback. Docker uses SeaweedFS as the S3-compatible implementation.
 - Neo4j is optional for graph retrieval; PostgreSQL also stores knowledge-graph

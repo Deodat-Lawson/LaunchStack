@@ -36,33 +36,36 @@ export function InlineEditor({ path, initialValue, multiline, onSave }: InlineEd
         <div className="space-y-1.5">
             {multiline ? (
                 <textarea
-                    className="w-full px-2 py-1 text-sm border border-border rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                    className="border-line bg-surface text-ink focus:ring-brand-glow w-full resize-none rounded border px-2 py-1 text-sm focus:outline-none focus:ring-2"
                     rows={3}
                     value={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={e => setValue(e.target.value)}
                     disabled={saving}
                 />
             ) : (
                 <input
-                    className="w-full px-2 py-1 text-sm border border-border rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="border-line bg-surface text-ink focus:ring-brand-glow w-full rounded border px-2 py-1 text-sm focus:outline-none focus:ring-2"
                     value={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={e => setValue(e.target.value)}
                     disabled={saving}
                 />
             )}
-            {error && <p className="text-xs text-destructive">{error}</p>}
+            {error && <p className="text-danger text-xs">{error}</p>}
             <div className="flex gap-2">
                 <button
                     onClick={() => void handleSave()}
                     disabled={saving || value.trim() === initialValue}
-                    className="px-2 py-1 text-xs font-semibold bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    className="bg-brand hover:bg-brand-hi rounded px-2 py-1 text-xs font-semibold text-white transition-colors disabled:opacity-50"
                 >
                     {saving ? "Saving..." : "Save"}
                 </button>
                 <button
-                    onClick={() => { setValue(initialValue); setError(null); }}
+                    onClick={() => {
+                        setValue(initialValue);
+                        setError(null);
+                    }}
                     disabled={saving}
-                    className="px-2 py-1 text-xs font-semibold border border-border rounded hover:bg-muted transition-colors"
+                    className="border-line hover:bg-panel-2 rounded border px-2 py-1 text-xs font-semibold transition-colors"
                 >
                     Reset
                 </button>

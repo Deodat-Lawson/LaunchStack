@@ -25,9 +25,7 @@ function makeTree(): OutlineItem[] {
                     id: "1.2",
                     title: "Motivation",
                     level: 2,
-                    children: [
-                        { id: "1.2.1", title: "Problem Statement", level: 3 },
-                    ],
+                    children: [{ id: "1.2.1", title: "Problem Statement", level: 3 }],
                 },
             ],
         },
@@ -35,9 +33,7 @@ function makeTree(): OutlineItem[] {
             id: "2",
             title: "Methods",
             level: 1,
-            children: [
-                { id: "2.1", title: "Design", level: 2 },
-            ],
+            children: [{ id: "2.1", title: "Design", level: 2 }],
         },
         { id: "3", title: "Conclusion", level: 1 },
     ];

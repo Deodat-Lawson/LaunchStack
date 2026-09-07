@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 
 import { listWorkspaceCallNoteFiles } from "~/server/call-notes/files";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { callNotesErrorResponse } from "~/server/call-notes/application";
-
 export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
     try {
-        const { userId } = await auth();
-        if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        const companyId = await getActiveCompanyId(userId);
+        const workspace = await requireWorkspacePermission("documents.read");
+        if (!workspace.success) return workspace.response;
         const files = await listWorkspaceCallNoteFiles({
-            actorUserId: userId,
-            companyId: companyId.toString(),
+            actorUserId: workspace.data.authUserId,
+            companyId: workspace.data.companyId.toString(),
         });
         return NextResponse.json(files);
     } catch (error) {

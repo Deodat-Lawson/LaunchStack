@@ -6,7 +6,7 @@ import "@testing-library/jest-dom";
 
 import { CallsFeature } from "~/app/calls/_components/CallsFeature";
 import { pausedCall } from "~/app/calls/_fixtures/callSnapshots";
-import type { CallSnapshot } from "@launchstack/features/call-notes/contracts";
+import type { CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
 
 const mockRouterPush = jest.fn();
 let mockSearchParams = new URLSearchParams("feature=calls");

@@ -12,7 +12,7 @@ import {
     type KeyboardEvent,
 } from "react";
 
-import type { CallSnapshot } from "@launchstack/features/call-notes";
+import type { CallSnapshot } from "@launchstack/pipelines/call-notes";
 
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
 import type { CallChatStreamEvent } from "~/lib/call-chat-stream";

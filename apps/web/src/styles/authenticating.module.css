@@ -1,56 +1,61 @@
 /* Modern Loading Screen - Glassmorphism Theme */
 
 .container {
-    @apply min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 
-    dark:from-slate-950 dark:via-background dark:to-purple-950/20
-    flex items-center justify-center relative overflow-hidden;
+    @apply relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-surface-2 via-panel to-brand-soft;
 }
 
 /* Animated background gradient */
 .container::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 bg-gradient-to-br from-purple-400/20 via-blue-400/20 to-indigo-400/20;
     animation: gradientShift 8s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
 }
 
 .content {
-    @apply flex flex-col items-center p-12 relative z-10
-    bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50
-    hover:shadow-2xl hover:scale-105 transition-all duration-700;
+    @apply relative z-10 flex flex-col items-center rounded-3xl border border-gray-200/50 bg-white/80 p-12 shadow-2xl backdrop-blur-md transition-all duration-700 hover:scale-105 hover:shadow-2xl dark:border-gray-800/50 dark:bg-slate-900/80;
 }
 
 /* Logo Section */
 .logoWrapper {
-    @apply flex items-center space-x-4 mb-12;
+    @apply mb-12 flex items-center space-x-4;
 }
 
 .logoIcon {
-    @apply w-16 h-16 text-purple-600 dark:text-purple-400 drop-shadow-lg;
+    @apply h-16 w-16 text-purple-600 drop-shadow-lg dark:text-purple-400;
     animation: logoFloat 3s ease-in-out infinite;
 }
 
 @keyframes logoFloat {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(5deg); }
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
 }
 
 .logoText {
-    @apply text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400
-    bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-4xl font-extrabold text-transparent dark:from-purple-400 dark:to-indigo-400;
 }
 
 /* Loading Animation Container */
 .loadingContainer {
-    @apply flex flex-col items-center mb-8;
+    @apply mb-8 flex flex-col items-center;
 }
 
 .loadingText {
-    @apply text-3xl font-bold text-gray-800 dark:text-gray-100 mt-8;
+    @apply mt-8 text-3xl font-bold text-gray-800 dark:text-gray-100;
     background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -58,16 +63,16 @@
 }
 
 .message {
-    @apply text-lg text-gray-600 dark:text-gray-400 font-medium text-center max-w-md;
+    @apply max-w-md text-center text-lg font-medium text-gray-600 dark:text-gray-400;
 }
 
 /* Enhanced Loading Animation */
 .dots {
-    @apply flex space-x-3 relative;
+    @apply relative flex space-x-3;
 }
 
 .dot {
-    @apply w-5 h-5 rounded-full relative;
+    @apply relative h-5 w-5 rounded-full;
     background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #6366f1 100%);
     animation: modernPulse 1.8s infinite ease-in-out;
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
@@ -86,7 +91,9 @@
 }
 
 @keyframes modernPulse {
-    0%, 80%, 100% {
+    0%,
+    80%,
+    100% {
         transform: scale(0.8) translateY(0);
         opacity: 0.5;
         box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
@@ -100,7 +107,7 @@
 
 /* Spinning Ring Animation */
 .spinnerContainer {
-    @apply relative w-20 h-20 mb-6;
+    @apply relative mb-6 h-20 w-20;
 }
 
 .spinner {
@@ -108,43 +115,60 @@
     background: linear-gradient(135deg, #8b5cf6, #3b82f6, #6366f1, #8b5cf6);
     animation: spin 2s linear infinite;
     mask: radial-gradient(farthest-side, transparent calc(100% - 4px), white calc(100% - 4px));
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), white calc(100% - 4px));
+    -webkit-mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 4px),
+        white calc(100% - 4px)
+    );
 }
 
 .spinnerInner {
-    @apply absolute inset-2 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm
-    flex items-center justify-center;
+    @apply absolute inset-2 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm dark:bg-slate-900/90;
 }
 
 .spinnerIcon {
-    @apply w-8 h-8 text-purple-600 dark:text-purple-400;
+    @apply h-8 w-8 text-purple-600 dark:text-purple-400;
     animation: counterSpin 2s linear infinite;
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes counterSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(-360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
 }
 
 /* Progress Bar */
 .progressContainer {
-    @apply w-64 h-2 bg-gray-200/50 rounded-full overflow-hidden mb-6;
+    @apply mb-6 h-2 w-64 overflow-hidden rounded-full bg-gray-200/50;
 }
 
 .progressBar {
-    @apply h-full bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full;
+    @apply h-full rounded-full bg-gradient-to-r from-purple-600 to-indigo-600;
     animation: progressAnimation 3s ease-in-out infinite;
 }
 
 @keyframes progressAnimation {
-    0% { transform: translateX(-100%); }
-    50% { transform: translateX(0%); }
-    100% { transform: translateX(100%); }
+    0% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 /* Responsive Design */
@@ -152,19 +176,19 @@
     .content {
         @apply p-8;
     }
-    
+
     .logoIcon {
-        @apply w-12 h-12;
+        @apply h-12 w-12;
     }
-    
+
     .logoText {
         @apply text-3xl;
     }
-    
+
     .loadingText {
         @apply text-2xl;
     }
-    
+
     .message {
         @apply text-base;
     }

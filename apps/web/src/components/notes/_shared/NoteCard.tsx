@@ -124,7 +124,7 @@ export function NoteCard({
             {page !== null && (
               <span style={metaChipStyle}>Page {page}</span>
             )}
-            {(note.tags as string[] | null)?.map((t) => (
+            {(note.tags)?.map((t) => (
               <span key={t} style={metaChipStyle}>
                 #{t}
               </span>

@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { document } from "@launchstack/core/db/schema";
-import { users, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
+import { document } from "@launchstack/store/schema";
+import { users, documentViews, ChatHistory, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -53,45 +54,40 @@ export async function GET() {
     let queryCountMs: number | null = null;
     let outcome = "ok";
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            outcome = "unauthorized";
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) {
+            outcome =
+                ctx.response.status === 401
+                    ? "unauthorized"
+                    : ctx.response.status === 403
+                      ? "forbidden"
+                      : "error";
+            return ctx.response;
         }
 
-        // Update activity + fetch current user in parallel.
-        const [, userRows] = await Promise.all([
-            db
-                .update(users)
-                .set({ lastActiveAt: new Date() })
-                .where(eq(users.userId, userId)),
-            db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId)),
-        ]);
-        const [userInfo] = userRows;
+        // Update last-active timestamp for the authenticated user.
+        await db
+            .update(users)
+            .set({ lastActiveAt: new Date() })
+            .where(eq(users.userId, ctx.data.authUserId));
 
-        if (!userInfo) {
-            outcome = "not_found";
-            return NextResponse.json(
-                { success: false, error: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+        if (!ctx.data.can("analytics.view")) {
             outcome = "forbidden";
             return NextResponse.json(
-                { success: false, error: "Unauthorized. Only employers and owners can access this data." },
+                {
+                    success: false,
+                    error: "Forbidden. The analytics.view permission is required.",
+                    permission: "analytics.view",
+                },
                 { status: 403 }
             );
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
+        // Document totals and per-document stats only count what the caller
+        // may read; a restricted folder they have no grant to is invisible
+        // here too.
+        const documentWhere = scopedDocumentWhere(companyId, await ctx.data.documentScope());
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -104,24 +100,25 @@ export async function GET() {
             employeeTrendData,
             documentViewsTrendData,
         ] = await Promise.all([
+            // Roster is the membership list for this workspace, with the role
+            // and status granted here — `users.companyId` is only a default
+            // workspace, and the legacy global columns are never read.
             db
                 .select({
                     id: users.id,
                     name: users.name,
                     email: users.email,
-                    role: users.role,
-                    status: users.status,
+                    role: userCompanyMemberships.role,
+                    status: userCompanyMemberships.status,
                     lastActiveAt: users.lastActiveAt,
-                    createdAt: users.createdAt,
+                    createdAt: userCompanyMemberships.createdAt,
                     userId: users.userId,
                 })
-                .from(users)
-                .where(eq(users.companyId, companyId))
+                .from(userCompanyMemberships)
+                .innerJoin(users, eq(users.id, userCompanyMemberships.userId))
+                .where(eq(userCompanyMemberships.companyId, companyId))
                 .orderBy(desc(users.lastActiveAt)),
-            db
-                .select({ count: count() })
-                .from(document)
-                .where(eq(document.companyId, companyId)),
+            db.select({ count: count() }).from(document).where(documentWhere),
             db
                 .select({
                     id: document.id,
@@ -132,24 +129,30 @@ export async function GET() {
                     lastViewedAt: max(documentViews.viewedAt),
                 })
                 .from(document)
-                .leftJoin(documentViews, eq(document.id, documentViews.documentId))
-                .where(eq(document.companyId, companyId))
+                .leftJoin(
+                    documentViews,
+                    and(
+                        eq(document.id, documentViews.documentId),
+                        eq(documentViews.companyId, companyId)
+                    )
+                )
+                .where(documentWhere)
                 .groupBy(document.id, document.title, document.category, document.createdAt)
                 .orderBy(desc(count(documentViews.id))),
             db
                 .select({
-                    date: sql<string>`DATE(${users.createdAt})`.as("date"),
+                    date: sql<string>`DATE(${userCompanyMemberships.createdAt})`.as("date"),
                     count: count(),
                 })
-                .from(users)
+                .from(userCompanyMemberships)
                 .where(
                     and(
-                        eq(users.companyId, companyId),
-                        gte(users.createdAt, thirtyDaysAgo)
+                        eq(userCompanyMemberships.companyId, companyId),
+                        gte(userCompanyMemberships.createdAt, thirtyDaysAgo)
                     )
                 )
-                .groupBy(sql`DATE(${users.createdAt})`)
-                .orderBy(sql`DATE(${users.createdAt})`),
+                .groupBy(sql`DATE(${userCompanyMemberships.createdAt})`)
+                .orderBy(sql`DATE(${userCompanyMemberships.createdAt})`),
             db
                 .select({
                     date: sql<string>`DATE(${documentViews.viewedAt})`.as("date"),
@@ -168,70 +171,47 @@ export async function GET() {
         aggregateMs = Date.now() - aggregateStart;
         const [documentCount] = documentCountRows;
 
-        // Get employee query counts from BOTH simple queries (ChatHistory) AND AI chat (agentAiChatbotMessage)
+        // Query counts come from ChatHistory joined to this company's documents.
+        // Members can belong to several workspaces, so filtering by user id
+        // alone would count questions they asked somewhere else. The AI chat
+        // aggregate that used to be merged in here is gone: `agent_ai_chatbot_chat`
+        // carries no company or document, so there is nothing to scope it by.
         const employeeUserIds = employeesData.map(e => e.userId);
-        
+
         let queryCountsData: { userId: string; count: number }[] = [];
-        
+
         if (employeeUserIds.length > 0) {
             const queryCountStart = Date.now();
-            const [simpleQueryCounts, aiChatCounts] = await Promise.all([
-                db
+            queryCountsData = (
+                await db
                     .select({
                         userId: ChatHistory.UserId,
                         count: count(),
                     })
                     .from(ChatHistory)
-                    .where(inArray(ChatHistory.UserId, employeeUserIds))
-                    .groupBy(ChatHistory.UserId),
-                // Join with chat table to get userId since message table doesn't have it directly.
-                db
-                    .select({
-                        userId: agentAiChatbotChat.userId,
-                        count: count(),
-                    })
-                    .from(agentAiChatbotMessage)
-                    .innerJoin(agentAiChatbotChat, eq(agentAiChatbotMessage.chatId, agentAiChatbotChat.id))
+                    .innerJoin(document, eq(document.id, ChatHistory.documentId))
                     .where(
                         and(
-                            eq(agentAiChatbotMessage.role, "user"),
-                            inArray(agentAiChatbotChat.userId, employeeUserIds)
+                            inArray(ChatHistory.UserId, employeeUserIds),
+                            eq(document.companyId, companyId)
                         )
                     )
-                    .groupBy(agentAiChatbotChat.userId),
-            ]);
+                    .groupBy(ChatHistory.UserId)
+            ).map(row => ({ userId: row.userId, count: Number(row.count) }));
             queryCountMs = Date.now() - queryCountStart;
-
-            // 3. Merge counts
-            const countsMap = new Map<string, number>();
-            
-            simpleQueryCounts.forEach(c => {
-                countsMap.set(c.userId, (countsMap.get(c.userId) ?? 0) + Number(c.count));
-            });
-            
-            aiChatCounts.forEach(c => {
-                countsMap.set(c.userId, (countsMap.get(c.userId) ?? 0) + Number(c.count));
-            });
-
-            queryCountsData = Array.from(countsMap.entries()).map(([userId, count]) => ({
-                userId,
-                count
-            }));
         }
-            
-        const queryCountsMap = new Map(
-            queryCountsData.map(q => [q.userId, q.count])
-        );
+
+        const queryCountsMap = new Map(queryCountsData.map(q => [q.userId, q.count]));
 
         // Fill in missing dates for trends (to show continuous line chart)
         const fillTrendDates = (data: { date: string; count: number }[]): TrendDataPoint[] => {
             const result: TrendDataPoint[] = [];
             const dataMap = new Map(data.map(d => [d.date, Number(d.count)]));
-            
+
             for (let i = 29; i >= 0; i--) {
                 const date = new Date();
                 date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0]!;
+                const dateStr = date.toISOString().split("T")[0]!;
                 result.push({
                     date: dateStr,
                     count: dataMap.get(dateStr) ?? 0,
@@ -243,21 +223,19 @@ export async function GET() {
         // Calculate cumulative employee count trend
         const calculateCumulativeEmployeeTrend = (): TrendDataPoint[] => {
             const result: TrendDataPoint[] = [];
-            const dailyJoins = new Map(
-                employeeTrendData.map(d => [d.date, Number(d.count)])
-            );
-            
+            const dailyJoins = new Map(employeeTrendData.map(d => [d.date, Number(d.count)]));
+
             // Count employees before 30 days ago
             const employeesBeforePeriod = employeesData.filter(
                 e => new Date(e.createdAt) < thirtyDaysAgo
             ).length;
-            
+
             let cumulative = employeesBeforePeriod;
-            
+
             for (let i = 29; i >= 0; i--) {
                 const date = new Date();
                 date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0]!;
+                const dateStr = date.toISOString().split("T")[0]!;
                 cumulative += dailyJoins.get(dateStr) ?? 0;
                 result.push({
                     date: dateStr,
@@ -272,7 +250,7 @@ export async function GET() {
             id: Number(emp.id),
             name: emp.name,
             email: emp.email,
-            role: emp.role,
+            role: normalizeRoleSlug(emp.role),
             status: emp.status,
             lastActiveAt: emp.lastActiveAt?.toISOString() ?? null,
             createdAt: emp.createdAt.toISOString(),

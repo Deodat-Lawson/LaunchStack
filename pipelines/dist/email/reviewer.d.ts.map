@@ -1,0 +1,1 @@
+{"version":3,"file":"reviewer.d.ts","sourceRoot":"","sources":["../../src/email/reviewer.ts"],"names":[],"mappings":"AAGA,OAAO,EAAwB,KAAK,aAAa,EAAE,KAAK,cAAc,EAAE,MAAM,SAAS,CAAC;AAoBxF,wBAAsB,cAAc,CAAC,IAAI,EAAE;IACvC,QAAQ,EAAE,aAAa,CAAC;IACxB,cAAc,EAAE,MAAM,CAAC;CAC1B,GAAG,OAAO,CAAC,cAAc,CAAC,CAe1B"}

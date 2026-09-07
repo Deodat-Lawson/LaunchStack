@@ -3,7 +3,7 @@ import {
     EnrichmentInputSchema,
     type EnrichedNoteProposal,
     type EnrichmentInput,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 export type EnrichmentProvenanceIssueCode =
     | "duplicate_transcript_segment_id"

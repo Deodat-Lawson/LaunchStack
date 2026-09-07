@@ -71,7 +71,7 @@ function jsonResponse(response: ServerResponse, status: number, value: unknown):
     response.end(JSON.stringify(value));
 }
 
-test("OpenAiCompatibleTranscriptionModel sends WAV multipart data to the configured endpoint", async () => {
+await test("OpenAiCompatibleTranscriptionModel sends WAV multipart data to the configured endpoint", async () => {
     const requests: RequestRecord[] = [];
     const { server, origin } = await startServer((request, response, body) => {
         requests.push({
@@ -115,7 +115,7 @@ test("OpenAiCompatibleTranscriptionModel sends WAV multipart data to the configu
     }
 });
 
-test("AzureSpeechFastTranscriptionModel uses the Azure Fast Transcription contract", async () => {
+await test("AzureSpeechFastTranscriptionModel uses the Azure Fast Transcription contract", async () => {
     const requests: RequestRecord[] = [];
     const { server, origin } = await startServer((request, response, body) => {
         requests.push({
@@ -158,7 +158,7 @@ test("AzureSpeechFastTranscriptionModel uses the Azure Fast Transcription contra
     }
 });
 
-test("AzureSpeechFastTranscriptionModel treats no recognized speech as an empty transcript", async () => {
+await test("AzureSpeechFastTranscriptionModel treats no recognized speech as an empty transcript", async () => {
     const { server, origin } = await startServer((_request, response) => {
         jsonResponse(response, 200, { combinedPhrases: [] });
     });
@@ -174,7 +174,7 @@ test("AzureSpeechFastTranscriptionModel treats no recognized speech as an empty 
     }
 });
 
-test("OpenAiCompatibleTranscriptionModel converts a stalled request into a timeout", async () => {
+await test("OpenAiCompatibleTranscriptionModel converts a stalled request into a timeout", async () => {
     const { server, origin } = await startServer((_request, _response) => {
         // Keep the HTTP response open until the model's AbortSignal closes it.
     });
@@ -194,7 +194,7 @@ test("OpenAiCompatibleTranscriptionModel converts a stalled request into a timeo
     }
 });
 
-test("OpenAiCompatibleTranscriptionModel reports non-2xx responses with server detail", async () => {
+await test("OpenAiCompatibleTranscriptionModel reports non-2xx responses with server detail", async () => {
     const { server, origin } = await startServer((_request, response) => {
         response.statusCode = 422;
         response.end("model rejected audio");
@@ -211,7 +211,7 @@ test("OpenAiCompatibleTranscriptionModel reports non-2xx responses with server d
     }
 });
 
-test("OpenAiCompatibleTranscriptionModel rejects an empty response transcript", async () => {
+await test("OpenAiCompatibleTranscriptionModel rejects an empty response transcript", async () => {
     const { server, origin } = await startServer((_request, response) => {
         jsonResponse(response, 200, { text: " \n\t " });
     });

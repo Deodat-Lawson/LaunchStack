@@ -6,7 +6,7 @@ import {
     CallSnapshotSchema,
     type CallNote,
     type CallSnapshot,
-} from "@launchstack/features/call-notes/contracts";
+} from "@launchstack/pipelines/call-notes/contracts";
 
 const AUTOSAVE_DELAY_MS = 600;
 

@@ -1,0 +1,35 @@
+export {
+    AdeuConfigError,
+    AdeuServiceError,
+    acceptAllChanges,
+    applyEditsAsMarkdown,
+    diffDocxFiles,
+    getBaseUrl,
+    processDocumentBatch,
+    processDocumentBatchDetailed,
+    listReviewItems,
+    rejectAllChanges,
+    readDocx,
+    type ProcessBatchResponse,
+} from "./client";
+export type {
+    ApplyEditsMarkdownParams,
+    ApplyEditsMarkdownResponse,
+    BatchSummary,
+    DiffResponse,
+    DocumentEdit,
+    ProcessBatchParams,
+    ReadDocxResponse,
+    ReviewAction,
+    ReviewItem,
+    ReviewItemKind,
+    ReviewItemsResponse,
+    BatchResult,
+    EditReport,
+    FailedEdit,
+    MatchMode,
+    ObjectRef,
+    ProcessBatchJsonResponse,
+} from "./types";
+
+export * from "./wire";

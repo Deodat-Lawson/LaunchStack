@@ -1,0 +1,1 @@
+{"version":3,"file":"location-resolver.js","sourceRoot":"","sources":["../../src/client-prospector/location-resolver.ts"],"names":[],"mappings":"AAAA,wDAAwD;AACxD,EAAE;AACF,6EAA6E;AAC7E,sCAAsC;AAEtC,OAAO,EAAE,eAAe,EAAE,MAAM,iCAAiC,CAAC;AAIlE;;;;;;GAMG;AACH,MAAM,CAAC,KAAK,UAAU,eAAe,CAAC,QAAwB;IAC1D,OAAO,eAAe,CAAC,QAAQ,CAAC,CAAC;AACrC,CAAC"}

@@ -4,7 +4,7 @@ import {
     KnowledgeNoteSchema,
     type KnowledgeNote,
     type KnowledgeNoteSink,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import { db } from "~/server/db";
 import { callNotesCalls, documentNotes } from "~/server/db/schema";

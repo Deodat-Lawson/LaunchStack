@@ -4,7 +4,7 @@ import type {
     LocalCapturePollInput,
     LocalCapturePollResult,
     LocalCaptureSession,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import type { CallWorkerConfig } from "./config";
 import {

@@ -16,7 +16,7 @@ blocked_by:
 
 ## Question
 
-Which responsibilities belong in `apps/web`, a long-running workspace application such as `apps/call-worker`, `packages/features`, `packages/core`, PostgreSQL, object storage, Inngest, and the existing batch transcription sidecar—and what dependency and process boundaries keep Zoom lifecycle code, product policy, knowledge integration, and portable infrastructure from leaking into one another?
+Which responsibilities belong in `apps/web`, a long-running workspace application such as `apps/call-worker`, `pipelines`, the split `packages/*` bricks, PostgreSQL, object storage, Inngest, and the existing batch transcription sidecar—and what dependency and process boundaries keep Zoom lifecycle code, product policy, knowledge integration, and portable infrastructure from leaking into one another?
 
 ## Resolution
 
@@ -26,19 +26,19 @@ same self-hosted deployment; it is not a separately operated product or public A
 
 ### Responsibility boundaries
 
-- `apps/web` owns the Calls UI, Clerk-authenticated user commands, Zoom OAuth
+- `apps/web` owns the Calls UI, better-authenticated user commands, Zoom OAuth
   initiation/callbacks, and the public signed-webhook endpoint. Its handlers validate,
   persist, and acknowledge quickly; they never hold an RTMS media connection.
 - `apps/call-worker` owns command leasing, Zoom signaling/media WebSockets, ready and
   keepalive protocol, Pause/Resume execution, reconnect handling, Transcript packet
   normalization, and durable lifecycle/segment writes. Browser or web-process exit does
   not stop a Capture Attempt.
-- `packages/features` owns the Call Notes domain module: state transitions,
+- `pipelines` owns the Call Notes domain module: state transitions,
   authorization and ownership policy, command/event contracts, repositories,
   finalization, Call Note revision rules, and knowledge-inclusion orchestration. Both
   deployable applications reuse this module rather than reimplementing policy.
-- `packages/core` gains no Call Notes product policy. Call Notes reuses its existing
-  database, model-routing, structured-output, and knowledge primitives.
+- `packages/*` bricks gain no Call Notes product policy. Call Notes reuses their
+  existing database, model-routing, structured-output, and knowledge primitives.
 - PostgreSQL is the durable coordination boundary. Web transactions append idempotent
   commands and webhook events; workers claim them with leases, persist provider events,
   and enforce uniqueness/state constraints. Basic polling is sufficient initially;

@@ -8,23 +8,23 @@
  */
 
 export interface AiCredentialEnvironment {
-  CHAT_BASE_URL?: string;
-  /** @deprecated Pre-PR name for CHAT_BASE_URL. */
-  AI_BASE_URL?: string;
-  /**
-   * Declared because real environments carry them, and deliberately *not*
-   * treated as endpoint sources. A bare credential names no URL, and
-   * OLLAMA_BASE_URL names a provider whose OpenAI-compatible endpoint is
-   * reached through CHAT_BASE_URL like any other. See
-   * {@link getDeprecatedChatEndpointSources}.
-   */
-  OPENROUTER_API_KEY?: string;
-  OPENAI_API_KEY?: string;
-  OLLAMA_BASE_URL?: string;
+    CHAT_BASE_URL?: string;
+    /** @deprecated Pre-PR name for CHAT_BASE_URL. */
+    AI_BASE_URL?: string;
+    /**
+     * Declared because real environments carry them, and deliberately *not*
+     * treated as endpoint sources. A bare credential names no URL, and
+     * OLLAMA_BASE_URL names a provider whose OpenAI-compatible endpoint is
+     * reached through CHAT_BASE_URL like any other. See
+     * {@link getDeprecatedChatEndpointSources}.
+     */
+    OPENROUTER_API_KEY?: string;
+    OPENAI_API_KEY?: string;
+    OLLAMA_BASE_URL?: string;
 }
 
 function configured(value: string | undefined): boolean {
-  return typeof value === "string" && value.trim().length > 0;
+    return typeof value === "string" && value.trim().length > 0;
 }
 
 /**
@@ -36,12 +36,10 @@ function configured(value: string | undefined): boolean {
  * to the Gemini default either, so reporting it here would credit the operator
  * with configuration that has no effect on where chat goes.
  */
-export function getDeprecatedChatEndpointSources(
-  environment: AiCredentialEnvironment,
-): string[] {
-  return [
-    configured(environment.AI_BASE_URL) ? "AI_BASE_URL" : undefined,
-  ].filter((source): source is string => Boolean(source));
+export function getDeprecatedChatEndpointSources(environment: AiCredentialEnvironment): string[] {
+    return [configured(environment.AI_BASE_URL) ? "AI_BASE_URL" : undefined].filter(
+        (source): source is string => Boolean(source)
+    );
 }
 
 /**
@@ -51,11 +49,9 @@ export function getDeprecatedChatEndpointSources(
  * Gemini. This answers the narrower question a setup surface needs: is the
  * deployment running on a deliberate endpoint, or on the default?
  */
-export function hasConfiguredAiCredential(
-  environment: AiCredentialEnvironment,
-): boolean {
-  return (
-    configured(environment.CHAT_BASE_URL) ||
-    getDeprecatedChatEndpointSources(environment).length > 0
-  );
+export function hasConfiguredAiCredential(environment: AiCredentialEnvironment): boolean {
+    return (
+        configured(environment.CHAT_BASE_URL) ||
+        getDeprecatedChatEndpointSources(environment).length > 0
+    );
 }

@@ -7,7 +7,7 @@ jest.mock("~/server/db/index", () => ({
 import { PgDialect } from "drizzle-orm/pg-core";
 import type { SQL } from "drizzle-orm";
 
-import { createCompanyNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
+import { createCompanyNotesRetriever } from "~/server/notes/notes-retriever";
 
 const embeddings = {
     embedQuery: jest.fn().mockResolvedValue(Array.from({ length: 1536 }, () => 0.01)),

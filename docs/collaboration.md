@@ -17,7 +17,7 @@ and writers of the same log, with nothing to keep in sync.
 
 | Path | What it is |
 | --- | --- |
-| `packages/core/src/collab/` | The engine. No Next, no Clerk, no database, no `process.env`. |
+| `packages/core/src/collab/` | The engine. No Next, no auth, no database, no `process.env`. |
 | `packages/core/src/collab/net/` | The signed HTTP protocol, the hub, the worker, the `node:http` adapter. |
 | `packages/core/src/collab/slack/` | Slack Web API port, signature verification, the two-way bridge. |
 | `packages/core/src/collab/evals.ts` | Deterministic meeting scoring. |

@@ -5,7 +5,7 @@ import {
     CallNotesApplicationError,
     type CallSnapshot,
     type CaptureEvent,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 const mockGetApplication = jest.fn();
 const mockExecute = jest.fn();
@@ -36,6 +36,8 @@ jest.mock("~/env", () => ({
         return { server: mockServerEnv };
     },
 }));
+
+jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
 
 jest.mock("~/server/call-notes/application", () => {
     const actual = jest.requireActual<typeof CallNotesApplicationModule>(

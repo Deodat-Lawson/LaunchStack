@@ -21,17 +21,11 @@ import * as path from "path";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { ChatOpenAI } from "@langchain/openai";
-import {
-    HumanMessage,
-    AIMessage,
-    ToolMessage,
-    type BaseMessage,
-} from "@langchain/core/messages";
+import { HumanMessage, AIMessage, ToolMessage, type BaseMessage } from "@langchain/core/messages";
 import { readDocx, applyEditsAsMarkdown, processDocumentBatch } from "~/lib/adeu/client";
 import type { DocumentEdit } from "~/lib/adeu/types";
 
 const OUTPUT_DIR = path.join(process.cwd(), "test-output");
-
 
 // ---------------------------------------------------------------------------
 // Logging helpers
@@ -63,7 +57,10 @@ const readDocxTool = tool(
         if (!docxBuffer) return "Error: no document loaded";
         log("TOOL CALL → read_docx", { clean_view });
         const result = await readDocx(docxBuffer, { cleanView: clean_view });
-        log("TOOL RESULT ← read_docx", { textLength: result.text.length, filename: result.filename });
+        log("TOOL RESULT ← read_docx", {
+            textLength: result.text.length,
+            filename: result.filename,
+        });
         return result.text;
     },
     {
@@ -75,7 +72,9 @@ const readDocxTool = tool(
         schema: z.object({
             clean_view: z
                 .boolean()
-                .describe("If true, return clean text without markup. If false, include CriticMarkup."),
+                .describe(
+                    "If true, return clean text without markup. If false, include CriticMarkup."
+                ),
         }),
     }
 );
@@ -91,7 +90,7 @@ const editDocumentTool = tool(
         if (!docxBuffer) return "Error: no document loaded";
         log("TOOL CALL → edit_document", { editCount: edits.length, highlight_only, edits });
 
-        const adeuEdits: DocumentEdit[] = edits.map((e) => ({
+        const adeuEdits: DocumentEdit[] = edits.map(e => ({
             target_text: e.target_text,
             new_text: e.new_text,
             comment: e.comment,
@@ -141,7 +140,7 @@ const applyEditsTool = tool(
         if (!docxBuffer) return "Error: no document loaded";
         log("TOOL CALL → apply_edits", { author_name, editCount: edits.length, edits });
 
-        const adeuEdits: DocumentEdit[] = edits.map((e) => ({
+        const adeuEdits: DocumentEdit[] = edits.map(e => ({
             target_text: e.target_text,
             new_text: e.new_text,
             comment: e.comment,
@@ -182,13 +181,18 @@ const applyEditsTool = tool(
             "The edits appear as Track Changes in the output document. " +
             "Call this AFTER previewing edits with edit_document to commit them.",
         schema: z.object({
-            author_name: z.string().describe("Name of the author making the edits (appears in Track Changes)"),
+            author_name: z
+                .string()
+                .describe("Name of the author making the edits (appears in Track Changes)"),
             edits: z
                 .array(
                     z.object({
                         target_text: z.string().describe("Exact text to find in the document"),
                         new_text: z.string().describe("Replacement text"),
-                        comment: z.string().optional().describe("Comment bubble text for this edit"),
+                        comment: z
+                            .string()
+                            .optional()
+                            .describe("Comment bubble text for this edit"),
                     })
                 )
                 .describe("List of edits to apply as tracked changes"),
@@ -203,10 +207,7 @@ const tools = [readDocxTool, editDocumentTool, applyEditsTool];
 // ---------------------------------------------------------------------------
 async function main() {
     // 1. Load the SAFE template
-    const templatePath = path.join(
-        process.cwd(),
-        "public/templates/safe-template.docx"
-    );
+    const templatePath = path.join(process.cwd(), "public/templates/safe-template.docx");
     if (!fs.existsSync(templatePath)) {
         console.error(`❌ Template not found at ${templatePath}`);
         process.exit(1);
@@ -239,9 +240,7 @@ async function main() {
         "of just '{company_name}').\n\n" +
         "Use the tools provided. Do NOT fabricate document content — read it first.";
 
-    const messages: BaseMessage[] = [
-        new HumanMessage(systemPrompt),
-    ];
+    const messages: BaseMessage[] = [new HumanMessage(systemPrompt)];
 
     log("LLM PROMPT", systemPrompt);
 
@@ -254,10 +253,11 @@ async function main() {
         messages.push(response);
 
         log("LLM RESPONSE", {
-            content: typeof response.content === "string"
-                ? response.content.slice(0, 500)
-                : response.content,
-            tool_calls: response.tool_calls?.map((tc) => ({
+            content:
+                typeof response.content === "string"
+                    ? response.content.slice(0, 500)
+                    : response.content,
+            tool_calls: response.tool_calls?.map(tc => ({
                 name: tc.name,
                 args: tc.args,
             })),
@@ -273,7 +273,7 @@ async function main() {
         for (const toolCall of response.tool_calls) {
             log("EXECUTING TOOL", { id: toolCall.id, name: toolCall.name, args: toolCall.args });
 
-            const matchedTool = tools.find((t) => t.name === toolCall.name);
+            const matchedTool = tools.find(t => t.name === toolCall.name);
             if (!matchedTool) {
                 const errMsg = `Unknown tool: ${toolCall.name}`;
                 log("TOOL ERROR", errMsg);
@@ -282,11 +282,11 @@ async function main() {
             }
 
             try {
-                const result = await (matchedTool.invoke as (args: unknown) => Promise<unknown>)(toolCall.args);
-                const resultStr = typeof result === "string" ? result : JSON.stringify(result);
-                messages.push(
-                    new ToolMessage({ content: resultStr, tool_call_id: toolCall.id! })
+                const result = await (matchedTool.invoke as (args: unknown) => Promise<unknown>)(
+                    toolCall.args
                 );
+                const resultStr = typeof result === "string" ? result : JSON.stringify(result);
+                messages.push(new ToolMessage({ content: resultStr, tool_call_id: toolCall.id! }));
             } catch (err) {
                 const errMsg = err instanceof Error ? err.message : String(err);
                 log("TOOL ERROR", errMsg);
@@ -306,7 +306,7 @@ async function main() {
     flushLog();
 }
 
-main().catch((err) => {
+main().catch(err => {
     console.error("Fatal error:", err);
     flushLog();
     process.exit(1);

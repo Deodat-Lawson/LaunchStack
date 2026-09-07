@@ -4,47 +4,46 @@
  */
 
 // Types
-export * from "@launchstack/core/ocr/types";
+export * from "@launchstack/conversion/ocr/types";
 
 // Adapters
-export { createAzureAdapter } from "@launchstack/core/ocr/adapters/azureAdapter";
-export { createLandingAIAdapter } from "@launchstack/core/ocr/adapters/landingAdapter";
+export { createAzureAdapter } from "@launchstack/conversion/ocr/adapters/azureAdapter";
+export { createLandingAIAdapter } from "@launchstack/conversion/ocr/adapters/landingAdapter";
 
 // Complexity analysis & Vision-based routing
 export {
-  determineDocumentRouting,
-  type RoutingDecision,
-} from "@launchstack/core/ocr/complexity";
+    determineDocumentRouting,
+    type RoutingDecision,
+} from "@launchstack/conversion/ocr/complexity";
 
 // Chunking
 export {
-  chunkDocument,
-  estimateTokens,
-  getTotalChunkSize,
-  prepareForEmbedding,
-  mergeWithEmbeddings,
-  type ChunkingConfig,
-} from "@launchstack/core/ocr/chunker";
+    chunkDocument,
+    estimateTokens,
+    getTotalChunkSize,
+    prepareForEmbedding,
+    mergeWithEmbeddings,
+    type ChunkingConfig,
+} from "@launchstack/conversion/ocr/chunker";
 
 // Pipeline trigger
 export {
-  triggerDocumentProcessing,
-  parseProvider,
-  type TriggerOptions,
-} from "@launchstack/core/ocr/trigger";
+    triggerDocumentProcessing,
+    parseProvider,
+    type TriggerOptions,
+} from "@launchstack/conversion/ocr/trigger";
 
 // Processor (shared logic for sync/async processing)
 export {
-  routeDocument,
-  normalizeDocument,
-  chunkPages,
-  vectorizeChunks,
-  storeDocument,
-  markJobFailed,
-  processNativePDF,
-  processWithAzure,
-  processWithLandingAI,
-  type RouterDecisionResult,
-  type NormalizationResult,
-} from "@launchstack/core/ocr/processor";
-
+    routeDocument,
+    normalizeDocument,
+    chunkPages,
+    vectorizeChunks,
+    storeDocument,
+    markJobFailed,
+    processNativePDF,
+    processWithAzure,
+    processWithLandingAI,
+    type RouterDecisionResult,
+    type NormalizationResult,
+} from "@launchstack/conversion/ocr/processor";

@@ -4,12 +4,12 @@
  * Validates: Requirements 1.2, 1.3, 2.1
  */
 
-import type * as CoreLlm from "@launchstack/core/llm";
+import type * as CoreLlm from "@launchstack/llm";
 
 const mockInvoke = jest.fn<Promise<unknown>, []>();
 
-jest.mock("@launchstack/core/llm", () => {
-    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+jest.mock("@launchstack/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/llm");
     return {
         __esModule: true,
         ...actual,
@@ -38,23 +38,26 @@ jest.mock("@launchstack/core/llm", () => {
 });
 
 import * as fc from "fast-check";
-import { planQueries } from "@launchstack/features/trend-search/query-planner";
-import { SearchCategoryEnum } from "@launchstack/features/trend-search";
-import type { SearchCategory } from "@launchstack/features/trend-search";
+import { planQueries } from "@launchstack/pipelines/trend-search/query-planner";
+import { SearchCategoryEnum } from "@launchstack/pipelines/trend-search";
+import type { SearchCategory } from "@launchstack/pipelines/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
-const validCategories = ["fashion", "finance", "business", "tech"] as const satisfies readonly SearchCategory[];
+const validCategories = [
+    "fashion",
+    "finance",
+    "business",
+    "tech",
+] as const satisfies readonly SearchCategory[];
 
 const categoryArb = fc.constantFrom(...validCategories);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 /** Generates a single PlannedQuery-shaped object (for mock return value). */
 function plannedQueryArb(categoryArbitrary: fc.Arbitrary<SearchCategory>) {
@@ -120,7 +123,7 @@ describe("Property 4: Specified categories are preserved", () => {
 
     it("planned queries only reference the specified categories when categories are provided", async () => {
         const categoriesSubsetArb = fc.array(categoryArb, { minLength: 1, maxLength: 4 });
-        const categoriesAndPlannedQueriesArb = categoriesSubsetArb.chain((categories) =>
+        const categoriesAndPlannedQueriesArb = categoriesSubsetArb.chain(categories =>
             fc.tuple(fc.constant(categories), plannedQueriesForCategoriesArb(categories))
         );
 
@@ -135,7 +138,7 @@ describe("Property 4: Specified categories are preserved", () => {
                     const result = await planQueries(query, companyContext, [...categories]);
 
                     expect(result).toHaveLength(plannedQueries.length);
-                    const categorySet = new Set(categories);
+                    const categorySet = new Set<string>(categories);
                     for (const pq of result) {
                         expect(categorySet.has(pq.category)).toBe(true);
                     }
@@ -160,12 +163,18 @@ describe("Property 5: Query planner always produces sub-queries", () => {
             fc.asyncProperty(
                 validQueryArb,
                 validCompanyContextArb,
-                fc.option(fc.array(categoryArb, { minLength: 1, maxLength: 4 }), { nil: undefined }),
+                fc.option(fc.array(categoryArb, { minLength: 1, maxLength: 4 }), {
+                    nil: undefined,
+                }),
                 plannedQueriesArb,
                 async (query, companyContext, categories, plannedQueries) => {
                     mockInvoke.mockResolvedValue({ plannedQueries });
 
-                    const result = await planQueries(query, companyContext, categories ?? undefined);
+                    const result = await planQueries(
+                        query,
+                        companyContext,
+                        categories ?? undefined
+                    );
 
                     expect(result.length).toBeGreaterThanOrEqual(1);
                     expect(result.length).toBeGreaterThanOrEqual(3);

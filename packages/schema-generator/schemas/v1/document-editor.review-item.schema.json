@@ -1,0 +1,61 @@
+{
+  "$ref": "#/definitions/document-editor.review-item",
+  "definitions": {
+    "document-editor.review-item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "insert",
+            "delete",
+            "format",
+            "comment"
+          ]
+        },
+        "author": {
+          "type": "string"
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "anchor_text": {
+          "type": "string"
+        },
+        "paired_with": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "context": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "author",
+        "text",
+        "anchor_text",
+        "offset",
+        "context"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -98,7 +98,7 @@ async function main() {
 }
 
 main()
-    .catch((err) => {
+    .catch(err => {
         console.error("Failed to fetch company metadata:", err);
         process.exit(1);
     })

@@ -16,7 +16,7 @@ function frame(value: number, durationMs = 20): PcmFrame {
     return { pcm: pcm16(value), capturedAt: new Date(FRAME_AT), durationMs };
 }
 
-test("VoiceActivityDetector activates only after the configured threshold count", () => {
+await test("VoiceActivityDetector activates only after the configured threshold count", () => {
     const vad = new VoiceActivityDetector({
         threshold: 0.25,
         activationFrames: 2,
@@ -46,7 +46,7 @@ test("VoiceActivityDetector activates only after the configured threshold count"
     );
 });
 
-test("VoiceActivityDetector releases on the exact quiet-frame boundary", () => {
+await test("VoiceActivityDetector releases on the exact quiet-frame boundary", () => {
     const vad = new VoiceActivityDetector({
         threshold: 0.1,
         activationFrames: 1,
@@ -68,7 +68,7 @@ test("VoiceActivityDetector releases on the exact quiet-frame boundary", () => {
     assert.equal(quietAfterRelease.ended, false);
 });
 
-test("VoiceActivityDetector releases on accumulated duration at the time boundary", () => {
+await test("VoiceActivityDetector releases on accumulated duration at the time boundary", () => {
     const vad = new VoiceActivityDetector({
         threshold: 0.1,
         activationFrames: 1,

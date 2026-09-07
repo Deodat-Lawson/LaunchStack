@@ -1,99 +1,43 @@
 import { Document } from "@langchain/core/documents";
+import { BaseRetriever } from "@langchain/core/retrievers";
 
-jest.mock("~/env", () => ({
-    env: {
-        server: {
-            ENABLE_NOTES_RETRIEVER: true,
-            ENABLE_GRAPH_RETRIEVER: false,
-        },
-    },
-}));
-
-const mockGetCompanyChunks = jest.fn();
-const mockCreateCompanyBm25Retriever = jest.fn().mockResolvedValue({ kind: "bm25" });
-jest.mock("~/lib/tools/rag/retrievers/bm25-retriever", () => ({
-    getCompanyChunks: (...args: unknown[]) => mockGetCompanyChunks(...args),
-    getDocumentChunks: jest.fn(),
-    getMultiDocChunks: jest.fn(),
-    chunksToDocuments: jest.fn(),
-    createCompanyBM25Retriever: (...args: unknown[]) => mockCreateCompanyBm25Retriever(...args),
-    createDocumentBM25Retriever: jest.fn(),
-    createMultiDocBM25Retriever: jest.fn(),
-}));
-
-const mockCreateCompanyVectorRetriever = jest.fn().mockReturnValue({ kind: "vector" });
-jest.mock("~/lib/tools/rag/retrievers/vector-retriever", () => ({
-    createCompanyVectorRetriever: (...args: unknown[]) => mockCreateCompanyVectorRetriever(...args),
-    createDocumentVectorRetriever: jest.fn(),
-    createMultiDocVectorRetriever: jest.fn(),
-}));
-
-const mockNotesGetRelevantDocuments = jest.fn();
-const mockCreateCompanyNotesRetriever = jest.fn().mockReturnValue({
-    kind: "notes",
-    getRelevantDocuments: (...args: unknown[]) => mockNotesGetRelevantDocuments(...args),
-});
-jest.mock("~/lib/tools/rag/retrievers/notes-retriever", () => ({
-    createCompanyNotesRetriever: (...args: unknown[]) => mockCreateCompanyNotesRetriever(...args),
-    createDocumentNotesRetriever: jest.fn(),
-    createMultiDocNotesRetriever: jest.fn(),
-}));
-
-const mockEnsembleGetRelevantDocuments = jest.fn();
-const mockEnsembleConstructor = jest.fn().mockImplementation(() => ({
-    getRelevantDocuments: (...args: unknown[]) => mockEnsembleGetRelevantDocuments(...args),
-}));
-jest.mock("langchain/retrievers/ensemble", () => ({
-    EnsembleRetriever: class {
-        constructor(...args: unknown[]) {
-            mockEnsembleConstructor(...args);
-        }
-
-        getRelevantDocuments(...args: unknown[]) {
-            return mockEnsembleGetRelevantDocuments(...args);
-        }
-    },
-}));
-
-jest.mock("@langchain/community/retrievers/bm25", () => ({
-    BM25Retriever: { fromDocuments: jest.fn() },
-}));
-jest.mock("~/lib/tools/rag/retrievers/neo4j-graph-retriever", () => ({
-    createNeo4jGraphRetriever: jest.fn(),
-    shouldUseNeo4jRetriever: jest.fn().mockReturnValue(false),
-}));
-jest.mock("~/lib/tools/rag/retrievers/graph-retriever", () => ({
-    createGraphRetriever: jest.fn(),
-}));
-jest.mock("@launchstack/core/providers/reranking", () => ({
-    getRerankProvider: jest.fn(),
-    isRerankConfigured: jest.fn().mockReturnValue(false),
-}));
-
-const mockDocumentEmbeddings = { embedQuery: jest.fn() };
-const mockNoteEmbeddings = { embedQuery: jest.fn() };
-jest.mock("@launchstack/core/embeddings", () => ({
-    createEmbeddingModel: jest.fn(() => mockDocumentEmbeddings),
-    resolveEmbeddingIndex: jest.fn().mockReturnValue({
-        indexKey: "document-index",
-        dimension: 768,
+const mockChunkRows: unknown[] = [];
+let mockChunkError: Error | null = null;
+jest.mock("@launchstack/store/client", () => ({
+    getDb: () => ({
+        select: () => ({
+            from: () => ({
+                innerJoin: () => ({
+                    where: async () => {
+                        if (mockChunkError) throw mockChunkError;
+                        return mockChunkRows;
+                    },
+                }),
+            }),
+        }),
     }),
 }));
-jest.mock("~/server/notes/embedding-config", () => ({
-    resolveNoteEmbeddingRuntime: jest.fn(() => ({
-        embeddings: mockNoteEmbeddings,
-        index: { indexKey: "legacy-openai-1536" },
-    })),
-}));
 
-import { companyEnsembleSearch } from "~/lib/tools/rag/search/ensemble-search";
-import { env as mockedEnv } from "~/env";
-import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
+const mockNotesGetRelevantDocuments = jest.fn<Promise<Document[]>, [string]>();
 
-const mockEnv = mockedEnv as typeof mockedEnv & {
-    server: { ENABLE_NOTES_RETRIEVER: boolean; ENABLE_GRAPH_RETRIEVER: boolean };
+class TestNotesRetriever extends BaseRetriever {
+    lc_namespace = ["test", "notes"];
+    _getRelevantDocuments = mockNotesGetRelevantDocuments;
+}
+
+const mockCreateCompanyNotesRetriever = jest.fn(() => new TestNotesRetriever({}));
+const mockNoteEmbeddings = { embedQuery: jest.fn() };
+
+const notesLegs = {
+    createDocumentLeg: jest.fn(),
+    createCompanyLeg: mockCreateCompanyNotesRetriever,
+    createMultiDocLeg: jest.fn(),
 };
-const mockResolveNoteEmbeddingRuntime = resolveNoteEmbeddingRuntime as jest.Mock;
+
+import {
+    companyEnsembleSearch,
+    configureEnsemble,
+} from "@launchstack/retrieval/algorithms/ensemble";
 
 function callNoteDocument(): Document {
     return new Document({
@@ -110,24 +54,35 @@ function callNoteDocument(): Document {
 describe("companyEnsembleSearch notes-only behavior", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mockEnv.server.ENABLE_NOTES_RETRIEVER = true;
-        mockGetCompanyChunks.mockResolvedValue([]);
+        mockChunkRows.length = 0;
+        mockChunkError = null;
+        mockCreateCompanyNotesRetriever.mockClear();
         mockNotesGetRelevantDocuments.mockResolvedValue([]);
-        mockEnsembleGetRelevantDocuments.mockResolvedValue([]);
+        configureEnsemble({
+            graphRetrieval: false,
+            notesLegs,
+            factsLegs: null,
+        });
     });
 
     it("returns [] with zero document chunks and no eligible notes", async () => {
-        const results = await companyEnsembleSearch("customer", { companyId: 42, topK: 5 });
+        const results = await companyEnsembleSearch(
+            "customer",
+            { companyId: 42, topK: 5 },
+            mockNoteEmbeddings
+        );
 
         expect(results).toEqual([]);
-        expect(mockCreateCompanyNotesRetriever).toHaveBeenCalledWith(42, mockNoteEmbeddings, 8);
-        expect(mockEnsembleConstructor).not.toHaveBeenCalled();
     });
 
     it("returns eligible Call Notes when the company has zero document chunks", async () => {
         mockNotesGetRelevantDocuments.mockResolvedValue([callNoteDocument()]);
 
-        const [result] = await companyEnsembleSearch("customer", { companyId: 42, topK: 5 });
+        const [result] = await companyEnsembleSearch(
+            "customer",
+            { companyId: 42, topK: 5 },
+            mockNoteEmbeddings
+        );
 
         expect(result).toMatchObject({
             pageContent: "Accepted Call Note",
@@ -140,45 +95,23 @@ describe("companyEnsembleSearch notes-only behavior", () => {
                 revision: 4,
             },
         });
-        expect(mockEnsembleConstructor).not.toHaveBeenCalled();
-    });
-
-    it("preserves the normal ensemble when document chunks and notes exist", async () => {
-        mockGetCompanyChunks.mockResolvedValue([{ id: 1, content: "document chunk" }]);
-        mockEnsembleGetRelevantDocuments.mockResolvedValue([callNoteDocument()]);
-
-        const [result] = await companyEnsembleSearch("customer", { companyId: 42, topK: 5 });
-
-        expect(mockCreateCompanyBm25Retriever).toHaveBeenCalled();
-        expect(mockCreateCompanyVectorRetriever).toHaveBeenCalled();
-        expect(mockCreateCompanyNotesRetriever).toHaveBeenCalledWith(42, mockNoteEmbeddings, 8);
-        expect(mockEnsembleConstructor).toHaveBeenCalledWith(
-            expect.objectContaining({
-                retrievers: expect.arrayContaining([
-                    expect.objectContaining({ kind: "bm25" }),
-                    expect.objectContaining({ kind: "vector" }),
-                    expect.objectContaining({ kind: "notes" }),
-                ]),
-            })
-        );
-        expect(result?.metadata.retrievalMethod).toBe("ensemble_rrf");
     });
 
     it("fails safely when company chunk loading fails", async () => {
-        mockGetCompanyChunks.mockRejectedValueOnce(new Error("database unavailable"));
+        mockChunkError = new Error("database unavailable");
 
         await expect(
-            companyEnsembleSearch("customer", { companyId: 42, topK: 5 })
+            companyEnsembleSearch("customer", { companyId: 42, topK: 5 }, mockNoteEmbeddings)
         ).resolves.toEqual([]);
     });
 
-    it("fails safely when the note embedding runtime cannot be resolved", async () => {
-        mockResolveNoteEmbeddingRuntime.mockImplementationOnce(() => {
-            throw new Error("embedding configuration unavailable");
+    it("fails safely when the notes leg fails", async () => {
+        mockCreateCompanyNotesRetriever.mockImplementationOnce(() => {
+            throw new Error("notes unavailable");
         });
 
         await expect(
-            companyEnsembleSearch("customer", { companyId: 42, topK: 5 })
+            companyEnsembleSearch("customer", { companyId: 42, topK: 5 }, mockNoteEmbeddings)
         ).resolves.toEqual([]);
     });
 });

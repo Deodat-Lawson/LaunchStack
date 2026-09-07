@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, desc, count } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
-import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
-import {
-    setActiveWorkspaceCookie,
-    getActiveCompanyId,
-} from "~/lib/active-workspace";
+import { ensureTokenAccount } from "~/lib/credits";
+import { setActiveWorkspaceCookie, getActiveCompanyId } from "~/lib/active-workspace";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
@@ -30,15 +27,14 @@ const CreateWorkspaceSchema = z.object({
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const identity = await requireAuthIdentity();
+        if (!identity.success) return identity.response;
+        const authUserId = identity.data.authUserId;
 
         const [user] = await db
             .select({ id: users.id, defaultCompanyId: users.companyId })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, authUserId));
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -61,6 +57,7 @@ export async function GET() {
                 description: company.description,
                 swatch: company.swatch,
                 role: userCompanyMemberships.role,
+                status: userCompanyMemberships.status,
                 lastOpenedAt: userCompanyMemberships.lastOpenedAt,
                 memberCount: memberCountSubquery.memberCount,
             })
@@ -73,20 +70,23 @@ export async function GET() {
             .where(eq(userCompanyMemberships.userId, BigInt(user.id)))
             .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
-        const activeCompanyId = await getActiveCompanyId(userId);
+        // Null activeCompanyId is a recoverable stale-cookie state: still list
+        // memberships so the client can pick a workspace (same as the page).
+        const activeCompanyId = await getActiveCompanyId(authUserId);
 
         return NextResponse.json({
-            activeCompanyId: activeCompanyId.toString(),
-            workspaces: rows.map((r) => ({
+            activeCompanyId: activeCompanyId?.toString() ?? null,
+            workspaces: rows.map(r => ({
                 id: r.id,
                 name: r.name,
                 slug: r.slug,
                 description: r.description,
                 swatch: r.swatch ?? 1,
                 role: r.role,
+                status: r.status,
                 memberCount: Number(r.memberCount ?? 1),
                 lastOpenedAt: r.lastOpenedAt,
-                isActive: BigInt(r.id) === activeCompanyId,
+                isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
             })),
         });
     } catch (err) {
@@ -97,12 +97,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const identity = await requireAuthIdentity();
+        if (!identity.success) return identity.response;
+        const authUserId = identity.data.authUserId;
 
-        const json = await request.json().catch(() => ({}));
+        const json: unknown = await request.json().catch(() => ({}));
         const parsed = CreateWorkspaceSchema.safeParse(json);
         if (!parsed.success) {
             return NextResponse.json(
@@ -117,21 +116,34 @@ export async function POST(request: Request) {
             .from(company)
             .where(eq(company.slug, slug));
         if (existingSlug) {
-            return NextResponse.json(
-                { error: "Slug already taken" },
-                { status: 409 }
-            );
+            return NextResponse.json({ error: "Slug already taken" }, { status: 409 });
         }
 
         const [user] = await db
-            .select({ id: users.id, name: users.name, email: users.email })
+            .select({ id: users.id })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, authUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const teamSizeForCompany = teamSize?.trim() || "1";
+        // A brand-new account may open its first workspace; an account whose
+        // every membership is pending or suspended may not open a side door
+        // around approval. The legacy global `users.status` is not consulted.
+        const memberships = await db
+            .select({ status: userCompanyMemberships.status })
+            .from(userCompanyMemberships)
+            .where(eq(userCompanyMemberships.userId, BigInt(user.id)));
+        if (memberships.length > 0 && !memberships.some(m => m.status === "active")) {
+            return NextResponse.json(
+                {
+                    error: "Your workspace memberships are awaiting approval or suspended. Ask an owner to approve you before creating a workspace.",
+                },
+                { status: 403 }
+            );
+        }
+
+        const teamSizeForCompany = (teamSize?.trim() ?? "") || "1";
 
         const [newCompany] = await db
             .insert(company)
@@ -145,10 +157,7 @@ export async function POST(request: Request) {
             .returning({ id: company.id });
 
         if (!newCompany) {
-            return NextResponse.json(
-                { error: "Could not create workspace" },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: "Could not create workspace" }, { status: 500 });
         }
 
         const newCompanyId = BigInt(newCompany.id);
@@ -157,12 +166,15 @@ export async function POST(request: Request) {
             userId: BigInt(user.id),
             companyId: newCompanyId,
             role: "owner",
+            status: "active",
         });
 
         try {
-            await initTokenAccount(newCompanyId, TOKEN_SIGNUP_BONUS);
+            // Grant is cloud-only; see the signup route for why a self-hosted
+            // instance opens the account at zero instead.
+            await ensureTokenAccount(newCompanyId);
         } catch (creditErr) {
-            console.error("[workspaces] initTokenAccount failed:", creditErr);
+            console.error("[workspaces] ensureTokenAccount failed:", creditErr);
             // Non-fatal: workspace exists, credits can be initialized later.
         }
 

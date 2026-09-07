@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { searchNotes, type NoteSearchScope } from "~/server/notes/search";
+import { filterNotesByDocumentScope } from "~/server/notes/document-scope";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface Body {
   query?: string;
@@ -12,10 +13,8 @@ interface Body {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const body = (await request.json().catch(() => ({}))) as Body;
     const query = (body.query ?? "").trim();
@@ -26,14 +25,22 @@ export async function POST(request: Request) {
     const scope: NoteSearchScope = body.scope ?? "user";
     const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
-    const hits = await searchNotes({
-      userId,
+    const found = await searchNotes({
+      userId: ctx.data.authUserId,
       query,
       scope,
       documentId: body.documentId,
-      companyId: body.companyId,
+      companyId: String(ctx.data.companyId),
       topK,
     });
+
+    // A hit on a note anchored to a document outside the caller's scope
+    // would surface that document's quote; drop it.
+    const hits = await filterNotesByDocumentScope(
+      found,
+      ctx.data.companyId,
+      await ctx.data.documentScope(),
+    );
 
     return NextResponse.json({ hits }, { status: 200 });
   } catch (err) {

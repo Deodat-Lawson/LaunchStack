@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 
 import { db } from "~/server/db/index";
-import { document } from "@launchstack/core/db/schema";
-import { ChatHistory, users } from "~/server/db/schema";
+import { document } from "@launchstack/store/schema";
+import { ChatHistory } from "~/server/db/schema";
 import { validateRequestBody, ChatHistoryFetchSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function POST(request: Request) {
     try {
@@ -17,54 +17,41 @@ export async function POST(request: Request) {
 
         const { documentId } = validation.data;
 
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({
-                success: false,
-                message: "Unauthorized"
-            }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
+        if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
 
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json({
-                success: false,
-                message: "Invalid user."
-            }, { status: 401 });
-        }
-
+        // A document outside the caller's scope reads as missing — 404, never 403.
+        const scope = await ctx.data.documentScope();
+        const scoped = scopedDocumentWhere(ctx.data.companyId, scope);
         const [targetDocument] = await db
-            .select()
+            .select({ id: document.id })
             .from(document)
-            .where(eq(document.id, documentId))
+            .where(and(eq(document.id, documentId), scoped))
             .limit(1);
 
         if (!targetDocument) {
-            return NextResponse.json({
-                success: false,
-                message: "Document not found."
-            }, { status: 404 });
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Document not found.",
+                },
+                { status: 404 }
+            );
         }
 
-        if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
-            return NextResponse.json({
-                success: false,
-                message: "You do not have access to this document."
-            }, { status: 403 });
-        }
-
+        // The history rows join the document under the same predicate, so a
+        // row for a document the caller cannot read is never listed even if
+        // the check above is ever bypassed.
         const userChatHistory = await db
-            .select()
+            .select(getTableColumns(ChatHistory))
             .from(ChatHistory)
+            .innerJoin(document, eq(document.id, ChatHistory.documentId))
             .where(
                 and(
-                    eq(ChatHistory.UserId, userId),
-                    eq(ChatHistory.documentId, BigInt(targetDocument.id))
+                    eq(ChatHistory.UserId, ctx.data.authUserId),
+                    eq(ChatHistory.documentId, BigInt(targetDocument.id)),
+                    scoped
                 )
             );
 
@@ -74,9 +61,12 @@ export async function POST(request: Request) {
         });
     } catch (error: unknown) {
         console.error(error);
-        return NextResponse.json({
-            success: false,
-            error: "Failed to fetch questions"
-        }, { status: 500 });
+        return NextResponse.json(
+            {
+                success: false,
+                error: "Failed to fetch questions",
+            },
+            { status: 500 }
+        );
     }
 }

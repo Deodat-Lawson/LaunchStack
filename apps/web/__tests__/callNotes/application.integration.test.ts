@@ -22,7 +22,7 @@ import {
     type CaptureEvent,
     type DetectedCallCandidate,
     type KnowledgeNote,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 // Keep the integration test focused on the injected migrated database. The
 // production engine eagerly imports env.ts, which is not a Jest-loadable module
@@ -326,11 +326,11 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
 
     beforeEach(async () => {
         testDb = await createCallNotesTestDatabase();
-    });
+    }, 30_000);
 
     afterEach(async () => {
         if (testDb) await testDb.close();
-    });
+    }, 30_000);
 
     it("runs the real application through the shared vertical tracer and preserves durable boundaries", async () => {
         const fixtures = await insertFixtures(testDb);

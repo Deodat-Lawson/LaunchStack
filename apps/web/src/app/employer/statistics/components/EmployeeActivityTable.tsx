@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
+import { Clock, MessageSquare, Users } from "lucide-react";
+import { Badge } from "~/components/ui/badge";
+import { Card } from "~/components/ui/card";
 import {
     Table,
     TableBody,
@@ -10,9 +11,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "~/app/employer/documents/components/ui/table";
-import { Users, Clock, MessageSquare } from "lucide-react";
-import { cn } from "~/lib/utils";
+} from "~/components/ui/table";
+import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import type { EmployeeInfo } from "../types";
 
 interface EmployeeActivityTableProps {
@@ -36,93 +36,106 @@ function formatRelativeTime(dateString: string | null): string {
     return date.toLocaleDateString();
 }
 
+/** The dashboard reports the membership role slug; built-ins get a tint, custom roles stay neutral. */
+function roleVariant(role: string): "default" | "info" | "secondary" {
+    const slug = normalizeRoleSlug(role);
+    if (slug === "owner") return "default";
+    if (slug === "admin") return "info";
+    return "secondary";
+}
+
+function statusVariant(status: string): "success" | "warn" | "secondary" {
+    if (status === "active") return "success";
+    if (status === "pending") return "warn";
+    return "secondary";
+}
+
+function statusLabel(status: string): string {
+    if (status === "active") return "Active";
+    if (status === "pending") return "Pending approval";
+    if (status === "suspended") return "Suspended";
+    return status;
+}
+
 export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps) {
     return (
-        <Card className="p-6 border-none shadow-sm">
-            <div className="flex items-center justify-between mb-6">
+        <Card className="border-none p-6 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="p-1.5 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
-                        <Users className="w-4 h-4" />
+                    <div className="bg-success-soft text-success rounded-lg p-1.5">
+                        <Users className="h-4 w-4" />
                     </div>
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest">
-                        Employee Activity
+                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
+                        Member activity
                     </h2>
                 </div>
-                <Badge
-                    variant="outline"
-                    className="rounded-full px-3 py-1 border-green-200 dark:border-green-900/30 text-green-600 dark:text-green-400 font-bold"
-                >
-                    {employees.length} Total
+                <Badge variant="success" className="rounded-full px-3 py-1 font-bold">
+                    {employees.length} total
                 </Badge>
             </div>
 
-            <div className="rounded-lg border border-border overflow-hidden">
+            <div className="border-line overflow-hidden rounded-lg border">
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-muted/50">
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                        <TableRow className="bg-panel-2/50">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Name
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Role
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Status
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
-                                Queries Made
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
+                                Queries made
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest text-right">
-                                Last Online
+                            <TableHead className="text-right text-[10px] font-bold uppercase tracking-widest">
+                                Last online
                             </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {employees.map((employee) => (
-                            <TableRow key={employee.id} className="hover:bg-muted/30">
+                        {employees.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-ink-3 py-8 text-center">
+                                    No members yet.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                        {employees.map(employee => (
+                            <TableRow key={employee.id} className="hover:bg-panel-2/30">
                                 <TableCell className="font-medium">
                                     <div className="flex flex-col">
                                         <span>{employee.name}</span>
-                                        <span className="text-xs text-muted-foreground">{employee.email}</span>
+                                        <span className="text-ink-3 text-xs">{employee.email}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell>
                                     <Badge
-                                        variant="outline"
-                                        className={cn(
-                                            "text-[10px] font-bold uppercase",
-                                            employee.role === "owner"
-                                                ? "border-purple-200 text-purple-600 dark:border-purple-900/30 dark:text-purple-400"
-                                                : employee.role === "employer"
-                                                ? "border-blue-200 text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
-                                                : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400"
-                                        )}
+                                        variant={roleVariant(employee.role)}
+                                        className="text-[10px] font-bold uppercase"
                                     >
-                                        {employee.role}
+                                        {roleLabel(employee.role)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
                                     <Badge
-                                        variant="outline"
-                                        className={cn(
-                                            "text-[10px] font-bold uppercase",
-                                            employee.status === "verified"
-                                                ? "border-green-200 text-green-600 dark:border-green-900/30 dark:text-green-400"
-                                                : "border-amber-200 text-amber-600 dark:border-amber-900/30 dark:text-amber-400"
-                                        )}
+                                        variant={statusVariant(employee.status)}
+                                        className="text-[10px] font-bold uppercase"
                                     >
-                                        {employee.status}
+                                        {statusLabel(employee.status)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <MessageSquare className="w-3 h-3 text-muted-foreground" />
+                                        <MessageSquare className="text-ink-3 h-3 w-3" />
                                         <span className="font-mono">{employee.queryCount}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-muted-foreground text-sm text-right">
+                                <TableCell className="text-ink-3 text-right text-sm">
                                     <div className="flex items-center justify-end gap-2">
-                                        <Clock className="w-3 h-3" />
+                                        <Clock className="h-3 w-3" />
                                         {formatRelativeTime(employee.lastActiveAt)}
                                     </div>
                                 </TableCell>

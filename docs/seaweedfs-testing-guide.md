@@ -29,7 +29,7 @@ Remove any leftover containers from previous runs, then start fresh:
 
 ```bash
 docker container prune -f
-docker compose --env-file .env --profile local-storage up db seaweedfs -d
+docker compose --env-file .env up db seaweedfs -d
 ```
 
 Wait ~5 seconds for Postgres to become healthy (SeaweedFS depends on it). You can check with:
@@ -135,8 +135,8 @@ This validates containers, PostgreSQL databases, S3 operations (upload, download
 
 ## Architecture Notes
 
-- SeaweedFS runs under the `local-storage` Docker Compose profile — it only starts when explicitly requested
+- SeaweedFS is part of the default Docker Compose profile — `docker compose up` starts it with the rest of the Local stack, and `docker compose up db seaweedfs` starts just these two
 - The S3 bucket is auto-created on first use via `ensureBucketExists()` (idempotent, cached per process)
 - SeaweedFS filer metadata is stored in a dedicated `seaweedfs` PostgreSQL database (separate from the app's `pdr_ai_v2` database)
 - Volume data persists in the `seaweedfs_data` Docker volume across container restarts
-- Use `docker compose --profile local-storage down -v` to wipe all data and start fresh
+- Use `docker compose down -v` to wipe all data and start fresh

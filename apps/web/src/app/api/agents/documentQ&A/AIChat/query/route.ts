@@ -2,27 +2,28 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray } from "drizzle-orm";
-import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
-    companyEnsembleSearch,
+    ANNOptimizer,
     createDocumentVectorRetriever,
-    documentEnsembleSearch,
-    multiDocEnsembleSearch,
-    type CompanySearchOptions,
-    type DocumentSearchOptions,
-    type MultiDocSearchOptions,
-    type SearchResult
-} from "~/lib/tools/rag";
-import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
+} from "@launchstack/retrieval/algorithms/vector";
+import { documentEnsembleSearch, multiDocEnsembleSearch } from "~/server/rag/ensemble";
+import type {
+    DocumentSearchOptions,
+    MultiDocSearchOptions,
+    SearchResult,
+} from "@launchstack/retrieval/search-types";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/llm/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { document } from "@launchstack/core/db/schema";
-import { users, ChatHistory } from "~/server/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { document } from "@launchstack/store/schema";
+import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
+import { gateChunksByScope } from "~/server/rag/gate";
 import {
     normalizeModelContent,
     performWebSearch,
@@ -38,23 +39,23 @@ import {
     resolveConfiguredChatModel,
     selectChatRoute,
 } from "~/lib/models";
-import { normalizeTokenUsage } from "@launchstack/core/llm";
+import { normalizeTokenUsage } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
-import { isCloudMode } from "@launchstack/core/providers/registry";
+import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const qaAnnOptimizer = new ANNOptimizer({ 
-    strategy: 'hnsw',
-    efSearch: 200
-});
+const ROUTE = "agents/documentQ&A/AIChat/query";
 
-const COMPANY_SCOPE_ROLES = new Set(["employer", "owner"]);
+const qaAnnOptimizer = new ANNOptimizer({
+    strategy: "hnsw",
+    efSearch: 200,
+});
 
 /**
  * Cap on total plaintext pulled from text attachments across a single turn.
@@ -104,7 +105,7 @@ async function extractPdfText(buffer: ArrayBuffer): Promise<string> {
         const page = await doc.getPage(i);
         const content = await page.getTextContent();
         const text = content.items
-            .map((it) => (typeof it.str === "string" ? it.str : ""))
+            .map(it => (typeof it.str === "string" ? it.str : ""))
             .join(" ")
             .replace(/\s+/g, " ")
             .trim();
@@ -141,9 +142,7 @@ async function extractAttachmentText(att: AttachmentPayload): Promise<string> {
     return await res.text();
 }
 
-async function buildAttachmentTextBlock(
-    textAttachments: AttachmentPayload[],
-): Promise<string> {
+async function buildAttachmentTextBlock(textAttachments: AttachmentPayload[]): Promise<string> {
     if (textAttachments.length === 0) return "";
 
     let remainingBudget = ATTACHMENT_TEXT_CAP_BYTES;
@@ -152,7 +151,7 @@ async function buildAttachmentTextBlock(
     for (const att of textAttachments) {
         if (remainingBudget <= 0) {
             blocks.push(
-                `=== User Attachment: ${att.name} ===\n[omitted — prior attachments filled the context budget]`,
+                `=== User Attachment: ${att.name} ===\n[omitted — prior attachments filled the context budget]`
             );
             continue;
         }
@@ -161,25 +160,21 @@ async function buildAttachmentTextBlock(
             const raw = await extractAttachmentText(att);
             if (!raw.trim()) {
                 blocks.push(
-                    `=== User Attachment: ${att.name} ===\n[no extractable text — if this is a scanned PDF or image-only doc, add it as a Source to run OCR]`,
+                    `=== User Attachment: ${att.name} ===\n[no extractable text — if this is a scanned PDF or image-only doc, add it as a Source to run OCR]`
                 );
                 continue;
             }
             const perFile = raw.slice(0, ATTACHMENT_PER_FILE_CAP_BYTES);
             const trimmed = perFile.slice(0, remainingBudget);
-            const suffix =
-                trimmed.length < raw.length ? "\n[…attachment truncated]" : "";
+            const suffix = trimmed.length < raw.length ? "\n[…attachment truncated]" : "";
             remainingBudget -= trimmed.length;
             blocks.push(
-                `=== User Attachment: ${att.name} (${att.mimeType}) ===\n${trimmed}${suffix}`,
+                `=== User Attachment: ${att.name} (${att.mimeType}) ===\n${trimmed}${suffix}`
             );
         } catch (err) {
-            console.warn(
-                `[AIChat] Failed to read attachment "${att.name}":`,
-                err,
-            );
+            console.warn(`[AIChat] Failed to read attachment "${att.name}":`, err);
             blocks.push(
-                `=== User Attachment: ${att.name} ===\n[could not read attachment content]`,
+                `=== User Attachment: ${att.name} ===\n[could not read attachment content]`
             );
         }
     }
@@ -189,13 +184,19 @@ async function buildAttachmentTextBlock(
 
 /**
  * AIChat Query - Comprehensive search solution
- * 
+ *
  * This endpoint provides comprehensive document Q&A capabilities:
- * - Supports both document-level and company-wide searches
+ * - Answers over one document, or over a set of documents
  * - Advanced retrieval with multiple fallback strategies
  * - Web search integration
  * - Conversation context support
  * - Rich response metadata
+ *
+ * A search is always over a set of document ids. There is no company-wide
+ * search: "everything" is the set of ids in the caller's document scope, so
+ * `searchScope: "company"` and `"archive"` are deprecated aliases that
+ * resolve to ids and then take the same multi-document path `"selected"`
+ * does — one retrieval path, one place the scope is applied.
  */
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -209,24 +210,27 @@ export async function POST(request: Request) {
         };
 
         try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) {
+                recordResult("error");
+                return ctx.response;
+            }
+            // Asking is reading. Which documents the answer may draw on is the
+            // caller's document scope, resolved once and pushed into every leg.
+            if (!ctx.data.can("documents.read")) {
+                recordAuthzDenied("documents.read", ROUTE);
+                recordResult("error");
+                return forbiddenForPermission("documents.read");
+            }
+
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
                 return validation.response;
             }
 
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Unauthorized"
-                }, { status: 401 });
-            }
-
             const {
                 documentId,
-                companyId,
                 question,
                 style,
                 searchScope,
@@ -242,15 +246,16 @@ export async function POST(request: Request) {
                 attachments,
             } = validation.data;
 
+            const userCompanyId = ctx.data.companyId;
+            const numericCompanyId = Number(userCompanyId);
+            const scope = await ctx.data.documentScope();
+            observeScopeSize(scope);
+
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for
             // context we are about to discard helps nobody.
-            const imageAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "image",
-            );
-            const textAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "text",
-            );
+            const imageAttachments = (attachments ?? []).filter(a => a.kind === "image");
+            const textAttachments = (attachments ?? []).filter(a => a.kind === "text");
             const { route, requiredCapabilities } = selectChatRoute({
                 vision: imageAttachments.length > 0,
                 reasoning: Boolean(thinkingMode),
@@ -268,19 +273,19 @@ export async function POST(request: Request) {
                 const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(
                     { success: false, message: failure.message },
-                    { status: failure.status },
+                    { status: failure.status }
                 );
             }
 
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
-                resolved,
+                resolved
             );
             if (!compatibility.ok) {
                 recordResult("error");
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
-                    { status: compatibility.status },
+                    { status: compatibility.status }
                 );
             }
             const { modelId: selectedAiModel, chat } = resolved;
@@ -296,230 +301,186 @@ export async function POST(request: Request) {
                         success: false,
                         message: `The configured vision model accepts at most ${resolved.behavior.image.maxImages} image(s) per request.`,
                     },
-                    { status: 400 },
+                    { status: 400 }
                 );
             }
 
             // Validate search scope requirements
-            if (searchScope === "company" && !companyId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "companyId is required for company-wide search"
-                }, { status: 400 });
-            }
-
             if (searchScope === "document" && !documentId) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "documentId is required for document search"
-                }, { status: 400 });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "documentId is required for document search",
+                    },
+                    { status: 400 }
+                );
             }
 
             if (searchScope === "archive" && !archiveName) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "archiveName is required for archive search"
-                }, { status: 400 });
-            }
-
-            if (searchScope === "selected" && (!selectedDocumentIds || selectedDocumentIds.length === 0)) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "selectedDocumentIds is required for selected-documents search"
-                }, { status: 400 });
-            }
-
-            // Verify user and permissions
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Invalid user."
-                }, { status: 401 });
-            }
-
-            const userCompanyId = await resolveActiveCompanyForUser(
-                requestingUser.id,
-                requestingUser.companyId
-            );
-            const numericCompanyId = userCompanyId ? Number(userCompanyId) : null;
-
-            if (numericCompanyId === null || Number.isNaN(numericCompanyId)) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "User is not associated with a valid company."
-                }, { status: 403 });
-            }
-
-            // Validate company/archive search permissions
-            if (searchScope === "company" || searchScope === "archive") {
-                if (!COMPANY_SCOPE_ROLES.has(requestingUser.role)) {
-                    recordResult("error");
-                    return NextResponse.json({
+                return NextResponse.json(
+                    {
                         success: false,
-                        message: "Only employer accounts can run company-wide searches."
-                    }, { status: 403 });
-                }
-
-                if (companyId !== undefined && companyId !== numericCompanyId) {
-                    recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "Company mismatch detected for the current user."
-                    }, { status: 403 });
-                }
+                        message: "archiveName is required for archive search",
+                    },
+                    { status: 400 }
+                );
             }
 
-            // Validate document access
+            if (
+                searchScope === "selected" &&
+                (!selectedDocumentIds || selectedDocumentIds.length === 0)
+            ) {
+                recordResult("error");
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "selectedDocumentIds is required for selected-documents search",
+                    },
+                    { status: 400 }
+                );
+            }
+
+            // Every member with `documents.read` may run every search scope;
+            // "company" always means the caller's active workspace (the body's
+            // companyId is ignored) narrowed to their document scope, not a role.
+
+            // Validate document access. The verified row is kept so history
+            // logging below can reuse it instead of re-reading whatever
+            // `documentId` the caller sent — on company/archive/selected
+            // searches that id is extraneous and was never authorized. A
+            // document outside the scope reads as missing: 404, never 403.
+            let authorizedDocument: { id: number; title: string } | null = null;
             if (searchScope === "document" && documentId) {
                 const [targetDocument] = await db
                     .select({
                         id: document.id,
-                        companyId: document.companyId
+                        title: document.title,
                     })
                     .from(document)
-                    .where(eq(document.id, documentId))
+                    .where(
+                        and(eq(document.id, documentId), scopedDocumentWhere(userCompanyId, scope))
+                    )
                     .limit(1);
 
                 if (!targetDocument) {
                     recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "Document not found."
-                    }, { status: 404 });
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: "Document not found.",
+                        },
+                        { status: 404 }
+                    );
                 }
 
-                if (targetDocument.companyId !== userCompanyId) {
-                    recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "You do not have access to this document."
-                    }, { status: 403 });
-                }
+                authorizedDocument = {
+                    id: targetDocument.id,
+                    title: targetDocument.title,
+                };
             }
 
             const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
-            // Resolve archive document IDs if archive scope
-            let archiveDocumentIds: number[] | undefined;
-            if (searchScope === "archive" && archiveName) {
-                const archiveDocs = await db
+            // Every non-document search is a search over ids the caller may
+            // read, resolved through the scope. "company" is every readable
+            // document; "archive" is the readable documents of one archive;
+            // "selected" keeps the supplied ids the caller may read. A stale,
+            // cross-company, or out-of-scope id is dropped rather than named —
+            // the caller learns nothing about a document they cannot see.
+            let searchDocumentIds: number[] | undefined;
+            if (searchScope === "company") {
+                const rows = await db
                     .select({ id: document.id })
                     .from(document)
-                    .where(and(
-                        eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, BigInt(numericCompanyId))
-                    ));
-
-                archiveDocumentIds = archiveDocs.map(d => d.id);
-                if (archiveDocumentIds.length === 0) {
+                    .where(scopedDocumentWhere(userCompanyId, scope));
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
                     recordResult("empty");
                     return NextResponse.json({
                         success: false,
-                        message: `No documents found in archive "${archiveName}".`
-                    }, { status: 404 });
+                        message: "No relevant content found for the given question.",
+                    });
                 }
-            }
-
-            // For the "selected" scope, verify every supplied document ID belongs
-            // to the caller's company before retrieval. A mismatch means the
-            // client passed a stale or cross-company ID — reject rather than
-            // silently drop, so the user sees an explicit error.
-            let verifiedSelectedIds: number[] | undefined;
-            if (searchScope === "selected" && selectedDocumentIds?.length) {
+            } else if (searchScope === "archive" && archiveName) {
+                const rows = await db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(
+                        and(
+                            eq(document.sourceArchiveName, archiveName),
+                            scopedDocumentWhere(userCompanyId, scope)
+                        )
+                    );
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
+                    recordResult("empty");
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: `No documents found in archive "${archiveName}".`,
+                        },
+                        { status: 404 }
+                    );
+                }
+            } else if (searchScope === "selected" && selectedDocumentIds?.length) {
                 const uniqueIds = Array.from(new Set(selectedDocumentIds));
                 const rows = await db
-                    .select({ id: document.id, companyId: document.companyId })
+                    .select({ id: document.id })
                     .from(document)
-                    .where(inArray(document.id, uniqueIds));
-
-                const allowed = rows
-                    .filter((r) => r.companyId === userCompanyId)
-                    .map((r) => r.id);
-
-                if (allowed.length !== uniqueIds.length) {
+                    .where(
+                        and(
+                            inArray(document.id, uniqueIds),
+                            scopedDocumentWhere(userCompanyId, scope)
+                        )
+                    );
+                searchDocumentIds = rows.map(r => r.id);
+                if (searchDocumentIds.length === 0) {
                     recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "One or more selected documents are not accessible."
-                    }, { status: 403 });
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: "None of the selected documents were found.",
+                        },
+                        { status: 404 }
+                    );
                 }
-
-                verifiedSelectedIds = allowed;
             }
 
             // Perform comprehensive search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
                 embeddingIndexKey,
-                companyConfig ?? undefined,
+                companyConfig ?? undefined
             );
             const embeddings = getEmbeddings(
                 resolvedEmbeddingIndex.indexKey,
-                companyConfig ?? undefined,
+                companyConfig ?? undefined
             );
             let documents: SearchResult[] = [];
-            retrievalMethod = searchScope === "company"
-                ? 'company_ensemble_rrf'
-                : searchScope === "archive"
-                    ? 'archive_ensemble_rrf'
-                    : searchScope === "selected"
-                        ? 'selected_ensemble_rrf'
-                        : 'document_ensemble_rrf';
+            retrievalMethod =
+                searchScope === "company"
+                    ? "company_ensemble_rrf"
+                    : searchScope === "archive"
+                      ? "archive_ensemble_rrf"
+                      : searchScope === "selected"
+                        ? "selected_ensemble_rrf"
+                        : "document_ensemble_rrf";
 
             try {
-                if (searchScope === "company") {
-                    const companyOptions: CompanySearchOptions = {
+                if (searchDocumentIds?.length) {
+                    // One path for every set of ids: from the retriever's
+                    // perspective the caller's whole scope, an archive, and a
+                    // hand-picked set are identical (`document_id = ANY(...)`).
+                    const multiDocOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
+                        documentIds: searchDocumentIds,
                         companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
-                    documents = await companyEnsembleSearch(
-                        question,
-                        companyOptions,
-                        embeddings
-                    );
-                } else if (searchScope === "archive" && archiveDocumentIds?.length) {
-                    const archiveOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10,
-                        documentIds: archiveDocumentIds,
-                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
-                    };
-
-                    documents = await multiDocEnsembleSearch(
-                        question,
-                        archiveOptions,
-                        embeddings
-                    );
-                } else if (searchScope === "selected" && verifiedSelectedIds?.length) {
-                    // Reuse the archive scope's multi-doc path; from the retriever's
-                    // perspective a user-picked set and an archive-resolved set are
-                    // identical (both narrow to `document_id = ANY(...)`).
-                    const selectedOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10,
-                        documentIds: verifiedSelectedIds,
-                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
-                    };
-
-                    documents = await multiDocEnsembleSearch(
-                        question,
-                        selectedOptions,
-                        embeddings
-                    );
+                    documents = await multiDocEnsembleSearch(question, multiDocOptions, embeddings);
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
                         topK: 5,
@@ -527,30 +488,26 @@ export async function POST(request: Request) {
                         companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
-                    
-                    documents = await documentEnsembleSearch(
-                        question,
-                        documentOptions,
-                        embeddings
-                    );
+
+                    documents = await documentEnsembleSearch(question, documentOptions, embeddings);
                 } else {
                     throw new Error("Invalid search parameters");
                 }
-                
+
                 if (documents.length === 0) {
                     throw new Error("No ensemble results");
                 }
-
             } catch (ensembleError) {
                 console.warn(`⚠️ [AIChat] Ensemble search failed, falling back:`, ensembleError);
-                
-                if (searchScope === "company") {
-                    retrievalMethod = 'company_fallback_failed';
+
+                if (searchScope !== "document") {
+                    // The multi-document path has no narrower fallback.
+                    retrievalMethod = `${searchScope}_fallback_failed`;
                     documents = [];
-                } else if (searchScope === "document" && documentId) {
+                } else if (documentId) {
                     if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
-                        retrievalMethod = 'ann_hybrid';
-                        
+                        retrievalMethod = "ann_hybrid";
+
                         try {
                             const questionEmbedding = await embeddings.embedQuery(question);
                             const annResults = await qaAnnOptimizer.searchSimilarChunks(
@@ -567,19 +524,21 @@ export async function POST(request: Request) {
                                     page: result.page,
                                     documentId: result.documentId,
                                     distance: 1 - result.confidence,
-                                    source: 'ann_hybrid',
-                                    searchScope: 'document' as const,
-                                    retrievalMethod: 'ann_hybrid' as const,
-                                    timestamp: new Date().toISOString()
-                                }
+                                    source: "ann_hybrid",
+                                    searchScope: "document" as const,
+                                    retrievalMethod: "ann_hybrid" as const,
+                                    timestamp: new Date().toISOString(),
+                                },
                             }));
-
                         } catch (annError) {
-                            console.warn(`⚠️ [AIChat] ANN search failed, using vector search:`, annError);
-                            retrievalMethod = 'vector_fallback';
+                            console.warn(
+                                `⚠️ [AIChat] ANN search failed, using vector search:`,
+                                annError
+                            );
+                            retrievalMethod = "vector_fallback";
                         }
                     } else {
-                        retrievalMethod = 'vector_fallback';
+                        retrievalMethod = "vector_fallback";
                     }
 
                     if (documents.length === 0) {
@@ -587,29 +546,50 @@ export async function POST(request: Request) {
                             documentId,
                             embeddings,
                             resolvedEmbeddingIndex,
-                            3,
+                            3
                         );
                         const vectorDocs = await retriever.getRelevantDocuments(question);
-                        documents = vectorDocs.map((doc) => ({
-                            retrievalMethod: 'vector_fallback',
-                            source: typeof doc.metadata?.source === "string" ? doc.metadata.source : undefined,
-                            pageNumber: typeof doc.metadata?.page === "number" ? doc.metadata.page : undefined,
-                            title: typeof doc.metadata?.documentTitle === "string" ? doc.metadata.documentTitle : undefined,
-                            documentId: typeof doc.metadata?.documentId === "number" ? doc.metadata.documentId : undefined,
+                        documents = vectorDocs.map(doc => ({
+                            retrievalMethod: "vector_fallback",
+                            source:
+                                typeof doc.metadata?.source === "string"
+                                    ? doc.metadata.source
+                                    : undefined,
+                            pageNumber:
+                                typeof doc.metadata?.page === "number"
+                                    ? doc.metadata.page
+                                    : undefined,
+                            title:
+                                typeof doc.metadata?.documentTitle === "string"
+                                    ? doc.metadata.documentTitle
+                                    : undefined,
+                            documentId:
+                                typeof doc.metadata?.documentId === "number"
+                                    ? doc.metadata.documentId
+                                    : undefined,
                             pageContent: doc.pageContent,
                             metadata: {
                                 ...doc.metadata,
-                                searchScope: 'document' as const,
-                                retrievalMethod: 'vector_fallback' as const,
-                                timestamp: new Date().toISOString()
-                            }
+                                searchScope: "document" as const,
+                                retrievalMethod: "vector_fallback" as const,
+                                timestamp: new Date().toISOString(),
+                            },
                         })) as unknown as SearchResult[];
                     }
                 } else {
-                    retrievalMethod = 'invalid_parameters';
+                    retrievalMethod = "invalid_parameters";
                     documents = [];
                 }
             }
+
+            // The last check before anything reaches the prompt: every leg
+            // already filtered by the scope in SQL, so this drops nothing —
+            // and counts loudly when it does.
+            documents = await gateChunksByScope(documents, {
+                companyId: userCompanyId,
+                scope,
+                searchScope: searchScope ?? "document",
+            });
 
             if (documents.length === 0) {
                 recordResult("empty");
@@ -622,27 +602,42 @@ export async function POST(request: Request) {
             // Build comprehensive context from retrieved documents
             const combinedContent = documents
                 .map((doc, idx) => {
-                    const page = doc.metadata?.page ?? 'Unknown';
+                    const page = doc.metadata?.page ?? "Unknown";
                     const source = doc.metadata?.source ?? retrievalMethod;
                     const distance = doc.metadata?.distance ?? 0;
                     const relevanceScore = Math.round((1 - Number(distance)) * 100);
-                    
-                    console.log(`📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`);
-                    
-                    return `=== Chunk #${idx + 1}, Page ${page} ===\n${doc.pageContent}`;
+
+                    console.log(
+                        `📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`
+                    );
+
+                    // A company fact is a curated, cited statement, not a passage;
+                    // label it so the model treats it as such (ADR-011).
+                    const heading =
+                        source === "company_fact"
+                            ? `=== Company fact #${idx + 1}${
+                                  doc.metadata?.documentTitle
+                                      ? ` (from ${doc.metadata.documentTitle})`
+                                      : ""
+                              } ===`
+                            : `=== Chunk #${idx + 1}, Page ${page} ===`;
+                    return `${heading}\n${doc.pageContent}`;
                 })
                 .join("\n\n");
-            
-            console.log(`✅ [AIChat] Built context with pages: ${documents.map(doc => doc.metadata?.page).join(', ')}`);
+
+            console.log(
+                `✅ [AIChat] Built context with pages: ${documents.map(doc => doc.metadata?.page).join(", ")}`
+            );
 
             // Build references for document highlights and page navigation
             const references = buildReferences(question, documents, 5);
 
             // Perform comprehensive web search if enabled
-            const documentContext = documents.length > 0 
-                ? documents.map(doc => doc.pageContent).join('\n\n')
-                : undefined;
-            
+            const documentContext =
+                documents.length > 0
+                    ? documents.map(doc => doc.pageContent).join("\n\n")
+                    : undefined;
+
             const enableWebSearchFlag = Boolean(enableWebSearch ?? false);
             const webSearch = await performWebSearch(
                 question,
@@ -653,10 +648,10 @@ export async function POST(request: Request) {
 
             const attachmentTextBlock = await buildAttachmentTextBlock(textAttachments);
 
-            const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
-            
+            const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
+
             // Build conversation context
-            let conversationContext = '';
+            let conversationContext = "";
             if (conversationHistory) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
@@ -681,7 +676,7 @@ export async function POST(request: Request) {
                     ? new HumanMessage({
                           content: [
                               { type: "text", text: userPrompt },
-                              ...imageAttachments.map((img) => ({
+                              ...imageAttachments.map(img => ({
                                   type: "image_url" as const,
                                   image_url: { url: img.url },
                               })),
@@ -692,10 +687,7 @@ export async function POST(request: Request) {
             let response;
             try {
                 response = await chat.invoke(
-                    resolved.prepareMessages([
-                        new SystemMessage(systemPrompt),
-                        humanMessage,
-                    ]),
+                    resolved.prepareMessages([new SystemMessage(systemPrompt), humanMessage])
                 );
             } catch (modelError) {
                 const friendly = describeChatError(modelError, selectedAiModel);
@@ -706,7 +698,7 @@ export async function POST(request: Request) {
                             success: false,
                             message: friendly.message,
                         },
-                        { status: friendly.status },
+                        { status: friendly.status }
                     );
                 }
                 throw modelError;
@@ -723,7 +715,11 @@ export async function POST(request: Request) {
             console.log(
                 `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
             );
-            if (isCloudMode() && userCompanyId && promptTokens + completionTokens > 0) {
+            // isMeteringEnabled, not isMeteringEnforced: recording chat usage
+            // is useful on a self-hosted instance too. This calls debitTokens
+            // directly rather than going through creditsDebitSafe (which would
+            // change the recorded metadata shape), so it needs its own guard.
+            if (isMeteringEnabled() && userCompanyId && promptTokens + completionTokens > 0) {
                 const tokenCost = llmChatTokens(promptTokens, completionTokens);
                 debitTokens({
                     companyId: userCompanyId,
@@ -731,7 +727,7 @@ export async function POST(request: Request) {
                     service: "llm_chat",
                     description: `Chat query via ${selectedAiModel}`,
                     metadata: { promptTokens, completionTokens, model: selectedAiModel, route },
-                }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
+                }).catch(err => console.warn("[AIChat] Token debit failed:", err));
             }
 
             const sourceTexts = documents.map(d => d.pageContent);
@@ -740,25 +736,21 @@ export async function POST(request: Request) {
                 summarizedAnswer = supervision.adjustedOutput;
             }
 
-            // Log query to ChatHistory for analytics
+            // Log query to ChatHistory for analytics. Only document-scope
+            // searches produce a history row, and only against the document
+            // authorized above — a company/archive/selected search carrying a
+            // stray documentId must not attach the caller's history to it.
             try {
-                if (documentId) {
-                    const [doc] = await db
-                        .select({ title: document.title })
-                        .from(document)
-                        .where(eq(document.id, documentId));
-
-                    if (doc) {
-                        await db.insert(ChatHistory).values({
-                            UserId: userId,
-                            documentId: BigInt(documentId),
-                            documentTitle: doc.title,
-                            question: question,
-                            response: summarizedAnswer,
-                            pages: extractRecommendedPages(documents),
-                            queryType: "simple"
-                        });
-                    }
+                if (searchScope === "document" && authorizedDocument) {
+                    await db.insert(ChatHistory).values({
+                        UserId: ctx.data.authUserId,
+                        documentId: BigInt(authorizedDocument.id),
+                        documentTitle: authorizedDocument.title,
+                        question: question,
+                        response: summarizedAnswer,
+                        pages: extractRecommendedPages(documents),
+                        queryType: "simple",
+                    });
                 }
             } catch (logError) {
                 console.error("Failed to log chat history:", logError);
@@ -779,17 +771,20 @@ export async function POST(request: Request) {
                 searchScope,
                 aiModel: selectedAiModel,
                 webSources: enableWebSearchFlag ? webSearch.results : undefined,
-                webSearch: enableWebSearchFlag ? {
-                    refinedQuery: webSearch.refinedQuery || question,
-                    reasoning: webSearch.reasoning,
-                    resultsCount: webSearch.results.length
-                } : undefined,
+                webSearch: enableWebSearchFlag
+                    ? {
+                          refinedQuery: webSearch.refinedQuery || question,
+                          reasoning: webSearch.reasoning,
+                          resultsCount: webSearch.results.length,
+                      }
+                    : undefined,
                 disclaimer: supervision.disclaimer,
-                guardrails: !supervision.approved ? {
-                    warnings: supervision.issues,
-                } : undefined,
+                guardrails: !supervision.approved
+                    ? {
+                          warnings: supervision.issues,
+                      }
+                    : undefined,
             });
-
         } catch (error) {
             console.error("❌ [AIChat] Error in query processing:", error);
             recordResult("error");

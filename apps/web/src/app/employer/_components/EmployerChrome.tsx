@@ -4,12 +4,12 @@ import { useMemo } from "react";
 import { useSetBreadcrumbs } from "../_chrome/BreadcrumbContext";
 
 export interface EmployerChromeProps {
-  /** Section label (e.g. "Tools"). Becomes the second breadcrumb. */
-  pageLabel?: string;
-  /** Page title (e.g. "Marketing pipeline"). Becomes the last breadcrumb. */
-  pageTitle?: string;
-  /** Kept for backwards compatibility — actions now live in DriftShell topbar. */
-  rightActions?: React.ReactNode;
+    /** Section label (e.g. "Tools"). Becomes the second breadcrumb. */
+    pageLabel?: string;
+    /** Page title (e.g. "Marketing pipeline"). Becomes the last breadcrumb. */
+    pageTitle?: string;
+    /** Kept for backwards compatibility — actions now live in DriftShell topbar. */
+    rightActions?: React.ReactNode;
 }
 
 /**
@@ -19,12 +19,12 @@ export interface EmployerChromeProps {
  * existing callers don't need to change.
  */
 export function EmployerChrome({ pageLabel, pageTitle }: EmployerChromeProps) {
-  const crumbs = useMemo(() => {
-    const trail = ["Drift"];
-    if (pageLabel) trail.push(pageLabel);
-    if (pageTitle) trail.push(pageTitle);
-    return trail;
-  }, [pageLabel, pageTitle]);
-  useSetBreadcrumbs(crumbs);
-  return null;
+    const crumbs = useMemo(() => {
+        const trail = ["Drift"];
+        if (pageLabel) trail.push(pageLabel);
+        if (pageTitle) trail.push(pageTitle);
+        return trail;
+    }, [pageLabel, pageTitle]);
+    useSetBreadcrumbs(crumbs);
+    return null;
 }

@@ -12,8 +12,18 @@
 # Generated assets (created by postinstall from node_modules)
 apps/web/public/vad
 
-# Heavy static assets not needed in Docker image
-apps/web/public/deployment-demos
+# The public site is containerized only by apps/landing/Dockerfile, so a
+# self-hosted deployment can serve its own front door. The web and worker
+# images do not need it, but a .dockerignore is per-context, not per-image, so
+# excluding it outright is what stopped the landing image from building at all.
+#
+# The 26MB deployment demo video this used to exclude is no longer committed —
+# the whole app is ~0.5MB across 61 files — so the cost of carrying it is now
+# negligible. Heavy media stays excluded by extension below in case one comes
+# back.
+apps/landing/**/*.mp4
+apps/landing/**/*.webm
+apps/landing/**/*.mov
 
 # Git
 .git
@@ -65,12 +75,15 @@ sidecar
 docker-compose*.yml
 apps/web/Dockerfile
 apps/web/Dockerfile.*
+apps/landing/Dockerfile
 .dockerignore
 scripts/ops/start-database.sh
 
 # Workspace package build outputs (rebuilt inside container)
 packages/*/dist
 packages/*/.tsbuildinfo
+pipelines/dist
+pipelines/.tsbuildinfo
 
 # Services with their own build contexts
 services

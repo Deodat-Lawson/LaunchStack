@@ -4,7 +4,7 @@ import {
     type CaptureEvent,
     type LocalCapturePollInput,
     type LocalCapturePollResult,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 const LOCAL_ENDPOINT_PATH = "/api/internal/call-notes/local";
 

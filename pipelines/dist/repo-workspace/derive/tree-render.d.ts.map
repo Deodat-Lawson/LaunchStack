@@ -1,0 +1,1 @@
+{"version":3,"file":"tree-render.d.ts","sourceRoot":"","sources":["../../../src/repo-workspace/derive/tree-render.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AAWH,MAAM,WAAW,iBAAiB;IAC9B,QAAQ,CAAC,EAAE,MAAM,CAAC;IAClB,QAAQ,CAAC,EAAE,MAAM,CAAC;IAClB,SAAS,CAAC,EAAE,MAAM,CAAC;CACtB;AAED,wBAAgB,UAAU,CAAC,KAAK,EAAE,MAAM,EAAE,EAAE,OAAO,CAAC,EAAE,iBAAiB,GAAG,MAAM,CA6D/E"}

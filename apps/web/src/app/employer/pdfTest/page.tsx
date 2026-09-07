@@ -16,7 +16,7 @@ export default function HomePage() {
         setReferences([]);
 
         try {
-            console.log("sent")
+            console.log("sent");
             const response = await fetch("/api/question", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -24,7 +24,7 @@ export default function HomePage() {
             });
 
             if (!response.ok) {
-                const rawErrorData:unknown = await response.json();
+                const rawErrorData: unknown = await response.json();
                 if (typeof rawErrorData !== "object") {
                     throw new Error(`Request failed with status ${response.status}`);
                 }
@@ -32,7 +32,7 @@ export default function HomePage() {
                 throw new Error(errorData.error ?? "Request failed");
             }
 
-            const rawData:unknown = await response.json();
+            const rawData: unknown = await response.json();
             if (typeof rawData !== "object") {
                 throw new Error("Invalid response from server");
             }
@@ -55,7 +55,7 @@ export default function HomePage() {
             <h1>Ask About the PDF</h1>
             <textarea
                 value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                onChange={e => setQuestion(e.target.value)}
                 rows={4}
                 style={{ width: "100%" }}
                 placeholder="Ask a question about the PDF..."
@@ -70,7 +70,9 @@ export default function HomePage() {
                     <h2>Answer</h2>
                     <p>{answer}</p>
                     {references.length > 0 && (
-                        <p><b>References (pages):</b> {references.join(", ")}</p>
+                        <p>
+                            <b>References (pages):</b> {references.join(", ")}
+                        </p>
                     )}
                 </div>
             )}

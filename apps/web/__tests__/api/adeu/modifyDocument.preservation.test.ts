@@ -25,7 +25,7 @@ jest.mock("~/server/storage/vercel-blob", () => ({
     putFile: jest.fn(),
 }));
 
-jest.mock("@launchstack/features/adeu", () => ({
+jest.mock("@launchstack/editing", () => ({
     processDocumentBatch: jest.fn(),
     AdeuServiceError: class AdeuServiceError extends Error {
         statusCode: number;
@@ -42,11 +42,20 @@ jest.mock("@launchstack/features/adeu", () => ({
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
-import { processDocumentBatch } from "@launchstack/features/adeu";
+import { processDocumentBatch } from "@launchstack/editing";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+/** Shape of the Inngest handler extracted from the function object in tests. */
+type ModifyDocumentHandler = (ctx: { event: unknown; step: unknown }) => Promise<{
+    success: boolean;
+    documentId?: number;
+    url?: string;
+    summary?: unknown;
+    error?: string;
+}>;
 
 function createMockStep(): {
     run: jest.Mock;
@@ -80,8 +89,8 @@ function setupSuccessfulPipeline(docBuffer: Buffer) {
             Promise.resolve(
                 docBuffer.buffer.slice(
                     docBuffer.byteOffset,
-                    docBuffer.byteOffset + docBuffer.byteLength,
-                ),
+                    docBuffer.byteOffset + docBuffer.byteLength
+                )
             ),
     });
 
@@ -125,7 +134,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -154,7 +163,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         const { summary } = setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -182,7 +191,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -205,11 +214,9 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
-        const edits = [
-            { target_text: "old text", new_text: "new text", comment: "fix" },
-        ];
+        const edits = [{ target_text: "old text", new_text: "new text", comment: "fix" }];
 
         await handler({
             event: {
@@ -229,7 +236,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
             expect.objectContaining({
                 author_name: "Test Author",
                 edits,
-            }),
+            })
         );
     });
 
@@ -238,7 +245,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         const { mockSet } = setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -258,7 +265,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
                 filename: expect.stringContaining("modified-42"),
                 contentType:
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            }),
+            })
         );
 
         // Preservation: DB is updated with url and updatedAt
@@ -267,7 +274,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
             expect.objectContaining({
                 url: "https://blob.store/documents/modified-42.docx",
                 updatedAt: expect.any(Date),
-            }),
+            })
         );
     });
 });
@@ -285,7 +292,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -312,8 +319,8 @@ describe("Preservation: Single-user document edit completes correctly", () => {
                 Promise.resolve(
                     docBuffer.buffer.slice(
                         docBuffer.byteOffset,
-                        docBuffer.byteOffset + docBuffer.byteLength,
-                    ),
+                        docBuffer.byteOffset + docBuffer.byteLength
+                    )
                 ),
         });
 
@@ -338,7 +345,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         (db.update as jest.Mock).mockReturnValue({ set: mockSet });
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -362,8 +369,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
 
     it("returns validation error without throwing on 422", async () => {
         const docBuffer = makeSmallDocxBuffer();
-        const { AdeuServiceError: MockAdeuServiceError } =
-            jest.requireMock("@launchstack/features/adeu");
+        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock("@launchstack/editing");
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({
             ok: true,
@@ -371,13 +377,13 @@ describe("Preservation: Single-user document edit completes correctly", () => {
                 Promise.resolve(
                     docBuffer.buffer.slice(
                         docBuffer.byteOffset,
-                        docBuffer.byteOffset + docBuffer.byteLength,
-                    ),
+                        docBuffer.byteOffset + docBuffer.byteLength
+                    )
                 ),
         });
 
         (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
-            new MockAdeuServiceError(422, "Edit target not found"),
+            new MockAdeuServiceError(422, "Edit target not found")
         );
 
         const mockWhere = jest.fn().mockResolvedValue([]);
@@ -385,7 +391,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         (db.update as jest.Mock).mockReturnValue({ set: mockSet });
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -408,8 +414,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
 
     it("throws on 500 to allow Inngest retry", async () => {
         const docBuffer = makeSmallDocxBuffer();
-        const { AdeuServiceError: MockAdeuServiceError } =
-            jest.requireMock("@launchstack/features/adeu");
+        const { AdeuServiceError: MockAdeuServiceError } = jest.requireMock("@launchstack/editing");
 
         (fetchBlob as jest.Mock).mockResolvedValueOnce({
             ok: true,
@@ -417,17 +422,17 @@ describe("Preservation: Single-user document edit completes correctly", () => {
                 Promise.resolve(
                     docBuffer.buffer.slice(
                         docBuffer.byteOffset,
-                        docBuffer.byteOffset + docBuffer.byteLength,
-                    ),
+                        docBuffer.byteOffset + docBuffer.byteLength
+                    )
                 ),
         });
 
         (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
-            new MockAdeuServiceError(500, "Internal error"),
+            new MockAdeuServiceError(500, "Internal error")
         );
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await expect(
             handler({
@@ -440,7 +445,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
                     },
                 },
                 step,
-            }),
+            })
         ).rejects.toThrow("Internal error");
     });
 });

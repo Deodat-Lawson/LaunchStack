@@ -1,5 +1,12 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "~/server/auth";
+
+const requireSessionUserId = async () => {
+    const session = await getServerSession();
+    const userId = session?.user.id;
+    if (!userId) throw new Error("Unauthorized");
+    return { userId };
+};
 
 const f = createUploadthing();
 
@@ -10,12 +17,7 @@ export const ourFileRouter = {
             maxFileCount: 1,
         },
     })
-        .middleware(async () => {
-            const { userId } = await auth();
-            if (!userId) throw new Error("Unauthorized");
-
-            return { userId };
-        })
+        .middleware(requireSessionUserId)
         .onUploadComplete(async ({ metadata, file }) => {
             return {
                 uploadedBy: metadata.userId,
@@ -31,11 +33,7 @@ export const ourFileRouter = {
             maxFileCount: 1,
         },
     })
-        .middleware(async () => {
-            const { userId } = await auth();
-            if (!userId) throw new Error("Unauthorized");
-            return { userId };
-        })
+        .middleware(requireSessionUserId)
         .onUploadComplete(async ({ metadata, file }) => {
             return {
                 uploadedBy: metadata.userId,
@@ -51,11 +49,7 @@ export const ourFileRouter = {
             maxFileCount: 1,
         },
     })
-        .middleware(async () => {
-            const { userId } = await auth();
-            if (!userId) throw new Error("Unauthorized");
-            return { userId };
-        })
+        .middleware(requireSessionUserId)
         .onUploadComplete(async ({ metadata, file }) => {
             return {
                 uploadedBy: metadata.userId,
@@ -71,11 +65,7 @@ export const ourFileRouter = {
             maxFileCount: 1,
         },
     })
-        .middleware(async () => {
-            const { userId } = await auth();
-            if (!userId) throw new Error("Unauthorized");
-            return { userId };
-        })
+        .middleware(requireSessionUserId)
         .onUploadComplete(async ({ metadata, file }) => {
             return {
                 uploadedBy: metadata.userId,
@@ -94,12 +84,21 @@ export const ourFileRouter = {
         "image/webp": { maxFileSize: "128MB", maxFileCount: 1 },
         "image/gif": { maxFileSize: "128MB", maxFileCount: 1 },
         "image/bmp": { maxFileSize: "128MB", maxFileCount: 1 },
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": { maxFileSize: "128MB", maxFileCount: 1 },
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+            maxFileSize: "128MB",
+            maxFileCount: 1,
+        },
         "application/msword": { maxFileSize: "128MB", maxFileCount: 1 },
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": { maxFileSize: "128MB", maxFileCount: 1 },
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+            maxFileSize: "128MB",
+            maxFileCount: 1,
+        },
         "application/vnd.ms-excel": { maxFileSize: "128MB", maxFileCount: 1 },
         "text/csv": { maxFileSize: "128MB", maxFileCount: 1 },
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation": { maxFileSize: "128MB", maxFileCount: 1 },
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
+            maxFileSize: "128MB",
+            maxFileCount: 1,
+        },
         "application/vnd.ms-powerpoint": { maxFileSize: "128MB", maxFileCount: 1 },
         "text/plain": { maxFileSize: "128MB", maxFileCount: 1 },
         "text/markdown": { maxFileSize: "128MB", maxFileCount: 1 },
@@ -108,11 +107,7 @@ export const ourFileRouter = {
         "audio/mp4": { maxFileSize: "128MB", maxFileCount: 1 },
         "video/mp4": { maxFileSize: "128MB", maxFileCount: 1 },
     })
-        .middleware(async () => {
-            const { userId } = await auth();
-            if (!userId) throw new Error("Unauthorized");
-            return { userId };
-        })
+        .middleware(requireSessionUserId)
         .onUploadComplete(async ({ metadata, file }) => {
             return {
                 uploadedBy: metadata.userId,

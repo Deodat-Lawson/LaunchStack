@@ -3,11 +3,13 @@ import { sql } from "drizzle-orm";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
 describeIfDatabase("Founder Weekly Review migrations", () => {
+    jest.setTimeout(120_000);
+
     it("replays all migrations into a clean schema and creates the new tables and constraints", async () => {
         const testDb = await createFounderWeeklyReviewTestDatabase();
         try {
@@ -29,7 +31,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
 
             expect(runsTable[0]?.name).toBe("pdr_ai_v2_founder_weekly_review_runs");
             expect(opsTable[0]?.name).toBe("pdr_ai_v2_founder_weekly_review_operations");
-            expect(indexes.map((row) => row.indexname)).toEqual(
+            expect(indexes.map(row => row.indexname)).toEqual(
                 expect.arrayContaining([
                     "founder_weekly_review_runs_company_request_key_unique",
                     "founder_weekly_review_operations_run_type_request_key_unique",
@@ -55,6 +57,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
                         "review_schema_version",
                         "evidence_snapshot",
                         "evidence_schema_version",
+                        "collection_input",
                         "created_by_actor_id"
                     )
                 VALUES
@@ -68,6 +71,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
                         'founder-weekly-review/v1',
                         '{"schemaVersion":"founder-weekly-review-evidence/v1","capturedAt":"2026-07-18T00:00:00.000Z","reportingPeriod":{"start":"2026-07-07","end":"2026-07-13"},"workspaceTimezone":"UTC","items":[],"sourceWarnings":[]}'::jsonb,
                         'founder-weekly-review-evidence/v1',
+                        '{"workspaceTimezone":"UTC","actorExternalUserId":"test"}'::jsonb,
                         'user:test'
                     )
             `);

@@ -1,4 +1,7 @@
+import { randomUUID } from "node:crypto";
+
 import { sql } from "drizzle-orm";
+import { company } from "@launchstack/store/schema";
 import {
     FounderWeeklyReviewConflictError,
     FounderWeeklyReviewEvidenceSnapshotSchema,
@@ -10,12 +13,13 @@ import {
     FounderWeeklyReviewWorkerService,
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewPayload,
-} from "@launchstack/features/founder-weekly-review";
+    type FounderWeeklyReviewV2Payload,
+} from "@launchstack/pipelines/founder-weekly-review";
 
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
@@ -55,7 +59,8 @@ function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
                 sourceType: "founder_context",
                 sourceId: "founder-context-1",
                 title: "Founder weekly context",
-                excerpt: "Manual founder input: enterprise onboarding remains blocked on SSO setup.",
+                excerpt:
+                    "Manual founder input: enterprise onboarding remains blocked on SSO setup.",
             },
         ],
         sourceWarnings: [
@@ -94,6 +99,70 @@ function createPayload(seed: string): FounderWeeklyReviewPayload {
     };
 }
 
+function createV2Payload(): FounderWeeklyReviewV2Payload {
+    return {
+        schemaVersion: "founder-weekly-review/v2",
+        sections: {
+            whatChanged: {
+                state: "evidence",
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Billing exports changed.",
+                        sourceIds: ["doc-1"],
+                        confidence: 0.9,
+                    },
+                ],
+            },
+            whatShipped: {
+                state: "evidence",
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Billing exports shipped.",
+                        sourceIds: ["doc-1"],
+                        confidence: 0.9,
+                    },
+                ],
+            },
+            whatCustomersSaid: {
+                state: "evidence",
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Prospects requested audit logging.",
+                        sourceIds: ["feedback-1"],
+                        confidence: 0.8,
+                    },
+                ],
+            },
+            currentBlockers: {
+                state: "evidence",
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "SSO setup remains blocked.",
+                        sourceIds: ["founder-context-1"],
+                        confidence: 0.8,
+                    },
+                ],
+            },
+            nextPriorities: {
+                state: "evidence",
+                items: [
+                    {
+                        kind: "recommendation",
+                        label: "Recommendation",
+                        text: "Prioritize SSO setup.",
+                        sourceIds: ["founder-context-1"],
+                        confidence: 0.8,
+                    },
+                ],
+            },
+        },
+    };
+}
+
 async function insertCompany(
     db: Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>["db"],
     name: string
@@ -112,11 +181,7 @@ async function insertCompany(
 
     const id = result.id;
 
-    if (
-        typeof id !== "number" &&
-        typeof id !== "string" &&
-        typeof id !== "bigint"
-    ) {
+    if (typeof id !== "number" && typeof id !== "string" && typeof id !== "bigint") {
         throw new Error(`Invalid company ID returned for ${name}`);
     }
 
@@ -124,6 +189,8 @@ async function insertCompany(
 }
 
 describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
+    jest.setTimeout(120_000);
+
     it("covers create idempotency, isolation, lifecycle transitions, claims, retries, and immutability", async () => {
         const testDb = await createFounderWeeklyReviewTestDatabase();
         const extraSession = await testDb.createSession();
@@ -257,7 +324,14 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
                 createPayload("draft-2")
             );
             expect(editedDraft.status).toBe("draft");
-            expect(editedDraft.reviewPayload?.sections.whatChanged.items[0]).toMatchObject({
+            expect(editedDraft.reviewPayload?.schemaVersion).toBe("founder-weekly-review/v1");
+            if (
+                !editedDraft.reviewPayload ||
+                editedDraft.reviewPayload.schemaVersion !== "founder-weekly-review/v1"
+            ) {
+                throw new Error("Expected v1 draft payload");
+            }
+            expect(editedDraft.reviewPayload.sections.whatChanged.items[0]).toMatchObject({
                 text: "Observed fact draft-2",
             });
 
@@ -432,17 +506,64 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
             expect(listed.length).toBeGreaterThanOrEqual(5);
 
             await expect(
-                userServiceA.updateDraft(
-                    actorA,
-                    claimRaceRun.id,
-                    {
-                        schemaVersion: "founder-weekly-review/v1",
-                    } as FounderWeeklyReviewPayload
-                )
+                userServiceA.updateDraft(actorA, claimRaceRun.id, {
+                    schemaVersion: "founder-weekly-review/v1",
+                } as FounderWeeklyReviewPayload)
             ).rejects.toBeInstanceOf(FounderWeeklyReviewInvalidPayloadError);
         } finally {
             await thirdSession.close();
             await extraSession.close();
+            await testDb.close();
+        }
+    });
+
+    it("round-trips v2 drafts and rejects mismatched persisted schema versions", async () => {
+        const testDb = await createFounderWeeklyReviewTestDatabase();
+        try {
+            const companyId = await insertCompany(testDb.db, "V2 Review Co");
+            const repository = new FounderWeeklyReviewRepository(testDb.db);
+            const userService = new FounderWeeklyReviewUserService(repository);
+            const worker = new FounderWeeklyReviewWorkerService(repository);
+            const actor = {
+                externalUserId: "clerk_v2",
+                companyId,
+                role: "owner",
+            };
+            const evidenceSnapshot = createEvidenceSnapshot();
+            const run = await userService.createOrGetRun(actor, {
+                requestKey: "v2-round-trip",
+                reportingPeriod: evidenceSnapshot.reportingPeriod,
+                evidenceSnapshot,
+            });
+            const claim = { companyId, runId: run.id, generationClaimId: "v2-claim" };
+            await worker.claimQueuedRun(claim);
+
+            const payload = createV2Payload();
+            const saved = await worker.saveGeneratedDraft(claim, payload, {
+                provider: "openai",
+                model: "gpt-4o-mini",
+                capability: "founderWeeklyReview",
+                temperature: 0,
+                attributes: {},
+            });
+            expect(saved.reviewPayload).toEqual(payload);
+            expect(saved.reviewPayload?.schemaVersion).toBe("founder-weekly-review/v2");
+            expect(saved.reviewSchemaVersion).toBe("founder-weekly-review/v2");
+
+            const reread = await repository.getByCompanyAndRunId(companyId, run.id);
+            expect(reread?.reviewPayload).toEqual(payload);
+            expect(reread?.reviewPayload?.schemaVersion).toBe("founder-weekly-review/v2");
+            expect(reread?.reviewSchemaVersion).toBe("founder-weekly-review/v2");
+
+            await testDb.db.execute(sql`
+                UPDATE "pdr_ai_v2_founder_weekly_review_runs"
+                SET "review_schema_version" = 'founder-weekly-review/v1'
+                WHERE "id" = ${run.id}
+            `);
+            await expect(repository.getByCompanyAndRunId(companyId, run.id)).rejects.toBeInstanceOf(
+                FounderWeeklyReviewInvalidPayloadError
+            );
+        } finally {
             await testDb.close();
         }
     });

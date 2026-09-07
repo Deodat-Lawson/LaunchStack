@@ -20,12 +20,12 @@ One versioned, executable source of truth lets four lanes implement independentl
 
 ## Owned surface
 
-- `packages/features/src/call-notes/contracts.ts`
-- `packages/features/src/call-notes/ports.ts`
-- `packages/features/src/call-notes/schema.ts`
-- `packages/features/src/call-notes/testing.ts`
-- `packages/features/src/call-notes/index.ts`
-- `packages/features/src/schema.ts` and package exports
+- `pipelines/src/call-notes/contracts.ts`
+- `pipelines/src/call-notes/ports.ts`
+- `pipelines/src/call-notes/schema.ts`
+- `pipelines/src/call-notes/testing.ts`
+- `pipelines/src/call-notes/index.ts`
+- `pipelines/src/schema.ts` and package exports
 - Call Notes product migrations
 - Shared contract behavior tests
 

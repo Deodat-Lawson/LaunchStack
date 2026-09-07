@@ -1,4 +1,4 @@
-import { CallSnapshotSchema, type CallSnapshot } from "@launchstack/features/call-notes/contracts";
+import { CallSnapshotSchema, type CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
 
 const ownerCapabilities = {
     canEditNote: true,

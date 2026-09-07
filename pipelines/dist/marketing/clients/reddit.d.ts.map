@@ -1,0 +1,1 @@
+{"version":3,"file":"reddit.d.ts","sourceRoot":"","sources":["../../../src/marketing/clients/reddit.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,uBAAuB,EAAE,MAAM,UAAU,CAAC;AAoBxD,cAAM,YAAY;IACd,OAAO,CAAC,WAAW,CAAuB;IAC1C,OAAO,CAAC,WAAW,CAAK;YAEV,cAAc;IAsCtB,mBAAmB,CACrB,KAAK,EAAE,MAAM,EACb,UAAU,EAAE,MAAM,GACnB,OAAO,CAAC,uBAAuB,EAAE,CAAC;CAuDxC;AAED,eAAO,MAAM,YAAY,cAAqB,CAAC"}

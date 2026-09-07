@@ -52,6 +52,8 @@ yarn-error.log*
 
 # package build outputs
 packages/*/dist/
+pipelines/dist/
+apps/call-worker/dist/
 **/.build/
 
 # idea files
@@ -59,6 +61,8 @@ packages/*/dist/
 /.localFiles
 .windsurf/rules/markdowncreation.md
 /public/vad
+# Copied from node_modules at build time by apps/web/scripts/copy-pdf-worker.mjs
+apps/web/public/pdf.worker.min.mjs
 *.pyc
 
 # kiro
@@ -72,5 +76,15 @@ backups/
 # test output
 test-output/
 
-# Personal working notes — never committed
-notes/
+# Personal working notes — never committed. Anchored to the repository root:
+# a bare `notes/` matches any directory of that name at any depth, which
+# silently swallowed apps/web/src/server/notes/ and let a commit ship three
+# imports of a module that was never added.
+/notes/
+*.tgz
+
+# Playwright output. Written beside apps/web/playwright.config.ts, and
+# spelled out in full rather than as a bare `test-results/` — see the
+# note above for what a pattern that matches at any depth can swallow.
+apps/web/test-results/
+apps/web/playwright-report/

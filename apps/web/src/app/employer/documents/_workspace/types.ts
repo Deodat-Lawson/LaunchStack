@@ -1,5 +1,13 @@
-import type { NoteVisibility } from "@launchstack/features/call-notes";
+import type { NoteVisibility } from "@launchstack/pipelines/call-notes";
 import type { ComponentType } from "react";
+import type { Permission } from "~/lib/authz/permissions";
+// New icons come from lucide-react; `./icons` below is the deprecated legacy
+// set kept for this file's existing entries (see apps/web/README.md).
+import {
+    AppWindow as IconArtifact,
+    MessagesSquare as IconSessions,
+    Network as IconMindmap,
+} from "lucide-react";
 import {
     IconAudio,
     IconBolt,
@@ -43,7 +51,8 @@ export type SourceTypeId =
     | "web"
     | "youtube"
     | "paste"
-    | "call-note";
+    | "call-note"
+    | "mindmap";
 
 export interface SourceMeta {
     label: string;
@@ -65,7 +74,16 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     youtube: { label: "YouTube", Icon: IconYoutube, color: "oklch(0.55 0.18 25)" },
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
     "call-note": { label: "Call Note", Icon: IconNote, color: "oklch(0.52 0.16 185)" },
+    mindmap: { label: "Mindmap", Icon: IconMindmap, color: "oklch(0.55 0.2 290)" },
 };
+
+/**
+ * Whether a source can be cited by the workspace. Uploads are citable once
+ * indexed. A mindmap is citable only after it has been published, and a map
+ * edited since its last publish is `stale`: the answer would quote an older
+ * revision than the one on screen.
+ */
+export type SourceCitability = "citable" | "stale" | "none";
 
 export type DocDomain =
     | "Contract"
@@ -89,14 +107,11 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
 };
 
 export interface WorkspaceSource {
-    /** Unique within the UI — DB documents prefix with "d", Call Notes with "call-note:". */
+    /** Unique within the UI — DB-backed rows prefix with "d", staged locals with "s", call notes with "call-note:", mindmaps with "m". */
     id: string;
     /** DB primary key if this source came from the document table. */
     documentId?: number;
-    /**
-     * Call Note identity. Call files intentionally have no documentId: they
-     * open in Calls and are never eligible for document retrieval/mutation.
-     */
+    /** Call Note identity. Call files intentionally have no documentId and open in Calls. */
     callId?: string;
     noteId?: number;
     visibility?: NoteVisibility;
@@ -104,6 +119,14 @@ export interface WorkspaceSource {
     updatedAt?: string;
     /** Bounded canonical note text used by workspace search and palette discovery. */
     preview?: string;
+    /** Mindmap primary key, for sources of type `mindmap`. */
+    mindmapId?: number;
+    /** Extra text the search boxes should match on beyond the title. */
+    searchText?: string;
+    /** Image URL for a card preview, when the source has one. */
+    thumbnailUrl?: string;
+    /** Defaults to `citable` when absent — uploads become citable as they index. */
+    citability?: SourceCitability;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -115,6 +138,8 @@ export interface WorkspaceSource {
     syncing?: boolean;
     /** When true, row is optimistically-rendered and backend hasn't confirmed yet. */
     pending?: boolean;
+    /** Limited to people with an explicit grant, not the whole workspace. */
+    restricted?: boolean;
 }
 
 export interface WorkspaceFolder {
@@ -123,11 +148,33 @@ export interface WorkspaceFolder {
     color: string;
     /** System collections (currently Calls) cannot be renamed or deleted. */
     system?: boolean;
+    /** Visible only to people, groups, or roles granted access. */
+    restricted?: boolean;
+    /** The `category` row behind a persisted folder; null while only implied by its contents. */
+    categoryId?: number | null;
 }
 
 export interface ThreadReference {
     sourceId: string;
     snippet: string;
+    /** Page number (1-based) in the cited document, when the chunk carried one. */
+    page?: number;
+    /** The retrieval match phrase — a more precise highlight target than the snippet. */
+    matchText?: string;
+}
+
+/**
+ * A "jump to the cited passage" request for the document viewer. `nonce`
+ * distinguishes repeat clicks on the same citation so the viewer re-scrolls.
+ */
+export interface CitationHighlight {
+    /** The cited snippet — the primary text to locate and highlight. */
+    text: string;
+    /** Narrower match phrase to fall back to when the snippet can't be located. */
+    matchText?: string;
+    /** Page hint for paginated documents (1-based). */
+    page?: number | null;
+    nonce: number;
 }
 
 /**
@@ -231,6 +278,27 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=notes",
     },
     {
+        id: "mindmap",
+        label: "New mindmap",
+        Icon: IconMindmap,
+        desc: "Diagrams, mindmaps and flowcharts you can cite",
+        href: "/employer/documents?add=1&tab=mindmap",
+    },
+    {
+        id: "artifacts",
+        label: "Claude Artifacts",
+        Icon: IconArtifact,
+        desc: "Pages and diagrams imported from Claude",
+        href: "/employer/artifacts",
+    },
+    {
+        id: "agent-sessions",
+        label: "Coding sessions",
+        Icon: IconSessions,
+        desc: "Import Claude Code and Codex conversations",
+        href: "/employer/agent-sessions",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -248,8 +316,8 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "team",
         label: "Workspace",
         Icon: IconUsers,
-        desc: "Invite codes, roles, approvals",
-        href: "/employer/employees",
+        desc: "People, roles, invitations, audit",
+        href: "/employer/settings#people",
     },
     {
         id: "profile",
@@ -288,8 +356,12 @@ export interface StudioFeature {
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
-    /** When true, only visible to employer/owner roles — company-level management. */
+    /** When true, only visible to employer/owner roles — retained for legacy callers. */
     companyOnly?: boolean;
+    /** The feature is a separate app with its own route. */
+    external?: boolean;
+    /** Permission a person must hold to see this feature. */
+    requires?: Permission;
 }
 
 export interface StudioGroup {
@@ -352,6 +424,31 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Freeform notes that span every source",
             },
             {
+                // Not `external`: maps live in the library beside every other
+                // source. Picking this opens the template picker.
+                id: "mindmap",
+                label: "Mindmap",
+                Icon: IconMindmap,
+                desc: "Diagrams, mindmaps and flowcharts — sources you draw",
+                href: "/employer/documents?add=1&tab=mindmap",
+            },
+            {
+                id: "artifacts",
+                label: "Claude Artifacts",
+                Icon: IconArtifact,
+                desc: "Import pages and diagrams built in Claude, and manage them here",
+                href: "/employer/artifacts",
+                external: true,
+            },
+            {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
+                href: "/employer/agent-sessions",
+                external: true,
+            },
+            {
                 id: "workflows",
                 label: "Workflow Generation",
                 Icon: IconWorkflow,
@@ -399,8 +496,9 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "Processing, agents and nodes, integrations, company profile, analytics",
+                desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
                 companyOnly: true,
+                requires: "settings.manage",
             },
         ],
     },
@@ -426,6 +524,19 @@ export interface AddSourceTab {
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
+        // Authoring, not ingesting: these open the Mindmap app, and the diagram
+        // becomes a citable source once it is published back here.
+        group: "Create",
+        items: [
+            {
+                id: "mindmap",
+                label: "Mindmap",
+                Icon: IconMindmap,
+                desc: "Diagram it, then cite it",
+            },
+        ],
+    },
+    {
         group: "Upload",
         items: [
             { id: "files", label: "Files", Icon: IconFile, desc: "PDF, DOCX, XLSX, images" },
@@ -450,6 +561,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
             { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
             { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "agent-sessions",
+                label: "Coding sessions",
+                Icon: IconSessions,
+                desc: "Claude Code & Codex transcripts",
+            },
             { id: "dropbox", label: "Dropbox", Icon: IconDropbox, desc: "Folders stay in sync" },
         ],
     },

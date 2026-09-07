@@ -3,7 +3,7 @@
 -- runs when PostgreSQL creates a fresh data directory.
 --
 -- NOTE: Do NOT create tables or indexes for the app schema here. Those are
--- owned entirely by the ordered migrations in packages/core/drizzle, applied
+-- owned entirely by the ordered migrations in packages/store/drizzle, applied
 -- by the `migrate` service (pnpm db:migrate). The migration runner also
 -- creates this extension itself; it is repeated here so a fresh volume has
 -- pgvector available before anything else connects.

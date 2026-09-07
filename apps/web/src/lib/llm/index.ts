@@ -12,8 +12,4 @@
  */
 
 export { generateStructured } from "./generate";
-export {
-  CAPABILITIES,
-  type Capability,
-  type GenerateStructuredInput,
-} from "./types";
+export { CAPABILITIES, type Capability, type GenerateStructuredInput } from "./types";

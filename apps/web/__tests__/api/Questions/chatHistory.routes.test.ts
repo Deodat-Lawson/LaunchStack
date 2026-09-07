@@ -1,9 +1,20 @@
 import { POST as addChatHistory } from "~/app/api/Questions/add/route";
 import { POST as fetchChatHistory } from "~/app/api/Questions/fetch/route";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import type { DocumentScope } from "~/lib/authz/scope-types";
 
-const mockAuth = jest.fn();
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: (...args: unknown[]) => mockAuth(...args),
+import { makeWorkspaceContext } from "../../helpers/workspace-context";
+
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () => ({
+    ...jest.requireActual("~/lib/require-workspace-context"),
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+}));
+
+// `and` as data, so a test can see which predicates a query was built from.
+jest.mock("drizzle-orm", () => ({
+    ...jest.requireActual("drizzle-orm"),
+    and: (...args: unknown[]) => ({ op: "and", args }),
 }));
 
 const mockSelect = jest.fn();
@@ -15,6 +26,50 @@ jest.mock("~/server/db/index", () => ({
     },
 }));
 
+jest.mock("~/lib/authz/scope", () => ({
+    scopedDocumentWhere: jest.fn((companyId: bigint, scope: unknown) => ({
+        op: "scoped",
+        companyId,
+        scope,
+    })),
+}));
+
+const FINANCE_HIDDEN: DocumentScope = {
+    kind: "except",
+    deniedCategories: ["Finance"],
+    deniedDocumentIds: [],
+    allowedDocumentIds: [],
+};
+
+// Identity and tenant now come from requireWorkspaceContext, so the routes no
+// longer look the user up themselves — the first db.select() a handler makes
+// is the document lookup, through the caller's document scope.
+function mockAuthenticated(
+    companyId = BigInt(10),
+    overrides: Parameters<typeof makeWorkspaceContext>[0] = {}
+) {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: makeWorkspaceContext({
+            authUserId: "user-1",
+            userPk: BigInt(1),
+            companyId,
+            role: "owner",
+            ...overrides,
+        }),
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
+}
+
 const createLimitedSelect = (rows: unknown[]) => ({
     from: () => ({
         where: () => ({
@@ -23,9 +78,15 @@ const createLimitedSelect = (rows: unknown[]) => ({
     }),
 });
 
-const createWhereSelect = (rows: unknown[]) => ({
+// The history query joins the document under the scoped predicate.
+const createJoinedSelect = (rows: unknown[], onWhere?: (predicate: unknown) => void) => ({
     from: () => ({
-        where: () => Promise.resolve(rows),
+        innerJoin: () => ({
+            where: (predicate: unknown) => {
+                onWhere?.(predicate);
+                return Promise.resolve(rows);
+            },
+        }),
     }),
 });
 
@@ -43,7 +104,7 @@ describe("Chat history routes", () => {
             });
 
         it("rejects unauthenticated requests", async () => {
-            mockAuth.mockResolvedValue({ userId: null });
+            mockUnauthenticated();
 
             const response = await addChatHistory(
                 buildRequest({
@@ -52,21 +113,16 @@ describe("Chat history routes", () => {
                     documentTitle: "Doc",
                     response: "A",
                     pages: [1],
-                }),
+                })
             );
 
             expect(response.status).toBe(401);
         });
 
-        it("prevents writing to documents outside the user's company", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
-            mockSelect
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 5, companyId: "20", title: "Doc" }]),
-                );
+        it("reads a document outside the user's company or scope as missing", async () => {
+            mockAuthenticated(BigInt(10), { role: "member", scope: FINANCE_HIDDEN });
+            // The scoped query matches nothing for a document the caller cannot see.
+            mockSelect.mockImplementationOnce(() => createLimitedSelect([]));
 
             const response = await addChatHistory(
                 buildRequest({
@@ -74,21 +130,35 @@ describe("Chat history routes", () => {
                     question: "Q?",
                     documentTitle: "Doc",
                     response: "A",
-                }),
+                })
+            );
+
+            expect(response.status).toBe(404);
+            expect(scopedDocumentWhere).toHaveBeenCalledWith(BigInt(10), FINANCE_HIDDEN);
+            expect(mockInsert).not.toHaveBeenCalled();
+        });
+
+        it("refuses a role without documents.read", async () => {
+            mockAuthenticated(BigInt(10), { role: "reporting", permissions: ["analytics.view"] });
+
+            const response = await addChatHistory(
+                buildRequest({
+                    documentId: 5,
+                    question: "Q?",
+                    documentTitle: "Doc",
+                    response: "A",
+                })
             );
 
             expect(response.status).toBe(403);
+            expect(mockSelect).not.toHaveBeenCalled();
         });
 
         it("stores chat history when user and document are valid", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
-            mockSelect
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 7, companyId: "10", title: "Actual Title" }]),
-                );
+            mockAuthenticated();
+            mockSelect.mockImplementationOnce(() =>
+                createLimitedSelect([{ id: 7, companyId: 10n, title: "Actual Title" }])
+            );
 
             const insertValues = jest.fn().mockResolvedValue(undefined);
             mockInsert.mockReturnValueOnce({ values: insertValues });
@@ -100,7 +170,7 @@ describe("Chat history routes", () => {
                     documentTitle: "Ignored",
                     response: "Answer",
                     pages: [2, 3],
-                }),
+                })
             );
 
             expect(response.status).toBe(201);
@@ -124,39 +194,66 @@ describe("Chat history routes", () => {
             });
 
         it("rejects unauthenticated requests", async () => {
-            mockAuth.mockResolvedValue({ userId: null });
+            mockUnauthenticated();
 
             const response = await fetchChatHistory(
                 buildRequest({
                     documentId: 9,
-                }),
+                })
             );
 
             expect(response.status).toBe(401);
         });
 
         it("returns chat history for valid users and documents", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
+            mockAuthenticated();
             mockSelect
+                .mockImplementationOnce(() => createLimitedSelect([{ id: 9 }]))
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 9, companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createWhereSelect([{ id: 1, question: "Q?", response: "A" }]),
+                    createJoinedSelect([{ id: 1, question: "Q?", response: "A" }])
                 );
 
             const response = await fetchChatHistory(
                 buildRequest({
                     documentId: 9,
-                }),
+                })
             );
 
             expect(response.status).toBe(200);
             const payload = await response.json();
             expect(payload.chatHistory).toEqual([{ id: 1, question: "Q?", response: "A" }]);
+        });
+
+        it("lists history only through the caller's document scope", async () => {
+            mockAuthenticated(BigInt(10), { role: "member", scope: FINANCE_HIDDEN });
+            const historyWhere = jest.fn();
+            mockSelect
+                .mockImplementationOnce(() => createLimitedSelect([{ id: 9 }]))
+                .mockImplementationOnce(() => createJoinedSelect([], historyWhere));
+
+            const response = await fetchChatHistory(buildRequest({ documentId: 9 }));
+
+            expect(response.status).toBe(200);
+            expect(scopedDocumentWhere).toHaveBeenCalledWith(BigInt(10), FINANCE_HIDDEN);
+            expect(historyWhere).toHaveBeenCalledTimes(1);
+            // The join predicate carries the same scope the lookup used.
+            expect(historyWhere.mock.calls[0]?.[0]).toEqual(
+                expect.objectContaining({
+                    op: "and",
+                    args: expect.arrayContaining([
+                        { op: "scoped", companyId: BigInt(10), scope: FINANCE_HIDDEN },
+                    ]),
+                })
+            );
+        });
+
+        it("reads a document outside the scope as missing", async () => {
+            mockAuthenticated(BigInt(10), { role: "member", scope: FINANCE_HIDDEN });
+            mockSelect.mockImplementationOnce(() => createLimitedSelect([]));
+
+            const response = await fetchChatHistory(buildRequest({ documentId: 9 }));
+
+            expect(response.status).toBe(404);
         });
     });
 });

@@ -1,16 +1,12 @@
 "use client";
 
 import React from "react";
-import {
-    FileSearch,
-    MessagesSquare,
-    Sparkles,
-} from "lucide-react";
+import { FileSearch, MessagesSquare, Sparkles } from "lucide-react";
 
 /**
  * Launchstack auth-side brand panel.
  *
- * Used by /signin and /signup as the right-hand panel next to the Clerk form.
+ * Used by /signin and /signup as the right-hand panel next to the auth form.
  * Styled with the `.lsw-root` OKLCH tokens so both themes render correctly.
  * Tone is tuned for solo founders, indie developers, and students — not the
  * enterprise "5k documents / 50+ companies / bank-level security" pitch.
@@ -124,8 +120,8 @@ export function AuthBrandPanel({
                         lineHeight: 1.6,
                     }}
                 >
-                    &ldquo;It&apos;s the only workspace that keeps up with how
-                    fast my notes move.&rdquo;
+                    &ldquo;It&apos;s the only workspace that keeps up with how fast my notes
+                    move.&rdquo;
                     <div
                         className="mono"
                         style={{
@@ -172,9 +168,7 @@ function BrandFeature({
                 <Icon style={{ width: 16, height: 16 }} />
             </div>
             <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                    {title}
-                </div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{title}</div>
                 <div
                     style={{
                         fontSize: 12.5,

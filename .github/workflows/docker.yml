@@ -10,6 +10,7 @@ on:
       - .dockerignore
       - docker-compose*.yml
       - apps/web/**
+      - apps/worker/**
       - packages/**
       - patches/**
       - pnpm-lock.yaml
@@ -27,9 +28,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}-web
   NODE_VERSION: "20"
   PNPM_VERSION: "10.15.1"
-  # Syntactically valid non-secret Clerk key for forked PR smoke builds.
-  # Production pushes use the repository secret when it is available.
-  CI_CLERK_PUBLISHABLE_KEY: "pk_test_Y2kuY2xlcmsuYWNjb3VudHMuZGV2JA=="
 
 jobs:
   build:
@@ -73,8 +71,6 @@ jobs:
           target: migrate
           push: false
           cache-from: type=gha,scope=source
-          build-args: |
-            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
 
       - name: Build ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
         uses: docker/build-push-action@v6
@@ -87,8 +83,31 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=source
           cache-to: type=gha,scope=source,mode=max
-          build-args: |
-            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
+
+      # The worker is a required deployment component (ADR-003): a stack
+      # without it accepts uploads but never processes them.
+      - name: Derive worker tags
+        id: worker-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-worker
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build worker ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/worker/Dockerfile
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.worker-meta.outputs.tags }}
+          labels: ${{ steps.worker-meta.outputs.labels }}
+          cache-from: type=gha,scope=worker
+          cache-to: type=gha,scope=worker,mode=max
 
   prebuilt:
     name: Build prebuilt runner
@@ -119,7 +138,9 @@ jobs:
         env:
           SKIP_ENV_VALIDATION: "1"
           STANDALONE_BUILD: "1"
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
+          # better-auth throws on the default secret during `next build`, and
+          # SKIP_ENV_VALIDATION only bypasses the zod schema, not that check.
+          BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
         run: pnpm --filter @launchstack/web build
 
       - name: Set up Docker Buildx

@@ -1,36 +1,30 @@
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
-import {
-    createSuccessResponse,
-    createUnauthorizedError,
-    handleApiError,
-} from "~/lib/api-utils";
+import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 /**
  * GET /api/signup/check-registration
- * Auth required – checks whether the current Clerk user already
- * has a record in the `users` table (i.e. is already registered
- * with a company).
+ * Auth required – whether the signed-in user already has a `users` row, and
+ * the name of their default workspace when they do. The membership row, not
+ * the legacy `users.role`, says what they may do there.
  */
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return createUnauthorizedError("You must be signed in.");
-        }
+        const identity = await requireAuthIdentity();
+        if (!identity.success) return identity.response;
+        const authUserId = identity.data.authUserId;
 
         const [existingUser] = await db
             .select({
                 id: users.id,
-                role: users.role,
                 companyId: users.companyId,
             })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, authUserId));
 
         if (!existingUser) {
             return createSuccessResponse({ registered: false });
@@ -44,7 +38,6 @@ export async function GET() {
 
         return createSuccessResponse({
             registered: true,
-            role: existingUser.role,
             companyName: companyRecord?.name ?? "Unknown",
         });
     } catch (error: unknown) {

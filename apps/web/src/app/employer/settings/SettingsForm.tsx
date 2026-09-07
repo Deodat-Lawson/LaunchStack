@@ -39,25 +39,25 @@ interface SettingsFormProps {
 }
 
 const SettingsForm: FC<SettingsFormProps> = ({
-                                                 displayName,
-                                                 email,
-                                                 companyName,
-                                                 staffCount,
-                                                 embeddingIndexKey,
-                                                 embeddingOpenAIApiKey,
-                                                 embeddingHuggingFaceApiKey,
-                                                 embeddingOllamaBaseUrl,
-                                                 embeddingOllamaModel,
-                                                 isSaving,
-                                                 onCompanyNameChange,
-                                                 onStaffCountChange,
-                                                 onEmbeddingIndexKeyChange,
-                                                 onEmbeddingOpenAIApiKeyChange,
-                                                 onEmbeddingHuggingFaceApiKeyChange,
-                                                 onEmbeddingOllamaBaseUrlChange,
-                                                 onEmbeddingOllamaModelChange,
-                                                 onSave,
-                                             }) => {
+    displayName,
+    email,
+    companyName,
+    staffCount,
+    embeddingIndexKey,
+    embeddingOpenAIApiKey,
+    embeddingHuggingFaceApiKey,
+    embeddingOllamaBaseUrl,
+    embeddingOllamaModel,
+    isSaving,
+    onCompanyNameChange,
+    onStaffCountChange,
+    onEmbeddingIndexKeyChange,
+    onEmbeddingOpenAIApiKeyChange,
+    onEmbeddingHuggingFaceApiKeyChange,
+    onEmbeddingOllamaBaseUrlChange,
+    onEmbeddingOllamaModelChange,
+    onSave,
+}) => {
     const [indexOptions, setIndexOptions] = useState<EmbeddingIndexOption[]>([]);
 
     useEffect(() => {
@@ -100,13 +100,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                 <label htmlFor="email" className={styles.label}>
                     Email
                 </label>
-                <input
-                    id="email"
-                    type="email"
-                    className={styles.input}
-                    value={email}
-                    disabled
-                />
+                <input id="email" type="email" className={styles.input} value={email} disabled />
             </div>
 
             {/* Company Name */}
@@ -119,7 +113,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="text"
                     className={styles.input}
                     value={companyName}
-                    onChange={(e) => onCompanyNameChange(e.target.value)}
+                    onChange={e => onCompanyNameChange(e.target.value)}
                 />
             </div>
 
@@ -133,7 +127,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="number"
                     className={styles.input}
                     value={staffCount}
-                    onChange={(e) => onStaffCountChange(e.target.value)}
+                    onChange={e => onStaffCountChange(e.target.value)}
                 />
             </div>
 
@@ -145,13 +139,13 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     id="embeddingIndexKey"
                     className={styles.input}
                     value={embeddingIndexKey}
-                    onChange={(e) => onEmbeddingIndexKeyChange(e.target.value)}
+                    onChange={e => onEmbeddingIndexKeyChange(e.target.value)}
                     disabled={indexOptions.length === 0}
                 >
                     {indexOptions.length === 0 ? (
                         <option value="">Loading available indexes…</option>
                     ) : (
-                        indexOptions.map((opt) => (
+                        indexOptions.map(opt => (
                             <option key={opt.indexKey} value={opt.indexKey}>
                                 {opt.label}
                             </option>
@@ -169,7 +163,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="password"
                     className={styles.input}
                     value={embeddingOpenAIApiKey}
-                    onChange={(e) => onEmbeddingOpenAIApiKeyChange(e.target.value)}
+                    onChange={e => onEmbeddingOpenAIApiKeyChange(e.target.value)}
                 />
             </div>
 
@@ -182,7 +176,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="password"
                     className={styles.input}
                     value={embeddingHuggingFaceApiKey}
-                    onChange={(e) => onEmbeddingHuggingFaceApiKeyChange(e.target.value)}
+                    onChange={e => onEmbeddingHuggingFaceApiKeyChange(e.target.value)}
                 />
             </div>
 
@@ -195,7 +189,7 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="text"
                     className={styles.input}
                     value={embeddingOllamaBaseUrl}
-                    onChange={(e) => onEmbeddingOllamaBaseUrlChange(e.target.value)}
+                    onChange={e => onEmbeddingOllamaBaseUrlChange(e.target.value)}
                 />
             </div>
 
@@ -208,20 +202,17 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     type="text"
                     className={styles.input}
                     value={embeddingOllamaModel}
-                    onChange={(e) => onEmbeddingOllamaModelChange(e.target.value)}
+                    onChange={e => onEmbeddingOllamaModelChange(e.target.value)}
                 />
             </div>
 
             <p className={styles.label}>
-                Optional provider fields are demo-only and currently stored in plaintext. Leave them blank to keep using server env defaults.
+                Optional provider fields are demo-only and currently stored in plaintext. Leave them
+                blank to keep using server env defaults.
             </p>
 
             {/* Save Button */}
-            <button
-                onClick={onSave}
-                className={styles.saveButton}
-                disabled={isSaving}
-            >
+            <button onClick={onSave} className={styles.saveButton} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save"}
             </button>
         </div>

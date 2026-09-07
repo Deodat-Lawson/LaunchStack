@@ -1,11 +1,44 @@
-import type { SearchResult } from "~/lib/tools/rag";
+import { buildCitations, type RetrievedEvidence } from "@launchstack/retrieval";
+import type { SearchResult } from "@launchstack/retrieval/search-types";
 import type { SourceReference } from "./types";
+import { stripStoredContextHeader } from "@launchstack/conversion/ocr/chunker";
 
 const STOPWORDS = new Set([
-    "a", "an", "and", "are", "as", "at", "be", "but", "by", "for",
-    "from", "how", "i", "in", "is", "it", "of", "on", "or", "that",
-    "the", "their", "this", "to", "was", "we", "what", "when", "where",
-    "which", "who", "why", "with", "you", "your",
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "but",
+    "by",
+    "for",
+    "from",
+    "how",
+    "i",
+    "in",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "their",
+    "this",
+    "to",
+    "was",
+    "we",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "why",
+    "with",
+    "you",
+    "your",
 ]);
 
 function normalizeWhitespace(text: string): string {
@@ -16,27 +49,33 @@ function getQuestionKeywords(question: string): string[] {
     const words = question
         .toLowerCase()
         .split(/[^a-z0-9]+/)
-        .filter((word) => word.length > 2 && !STOPWORDS.has(word));
+        .filter(word => word.length > 2 && !STOPWORDS.has(word));
 
     return Array.from(new Set(words)).slice(0, 12);
 }
 
 function getPageValue(value: unknown): number | undefined {
-    return typeof value === "number" && Number.isInteger(value) && value > 0
-        ? value
-        : undefined;
+    return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : undefined;
 }
 
-function extractSnippet(text: string, question: string): {
+/**
+ * Locates a query-aware snippet in the chunk text. Purely presentational —
+ * it carries no score: the 0.25/0.8 "confidence" constants this function
+ * used to fabricate were removed by ADR-005 §3 (no model ever produced
+ * them). Relevance now comes only from real retrieval scores.
+ */
+function extractSnippet(
+    text: string,
+    question: string
+): {
     snippet: string;
     matchText?: string;
     matchStart?: number;
     matchEnd?: number;
-    confidence: number;
 } {
     const normalizedText = normalizeWhitespace(text);
     if (!normalizedText) {
-        return { snippet: "", confidence: 0 };
+        return { snippet: "" };
     }
 
     const maxSnippetLength = 240;
@@ -54,7 +93,7 @@ function extractSnippet(text: string, question: string): {
 
     if (bestIndex < 0) {
         const snippet = normalizedText.slice(0, maxSnippetLength).trimEnd();
-        return { snippet, confidence: 0.25 };
+        return { snippet };
     }
 
     const left = Math.max(0, bestIndex - 110);
@@ -63,22 +102,21 @@ function extractSnippet(text: string, question: string): {
 
     const prefix = left > 0 ? "... " : "";
     const suffix = right < normalizedText.length ? " ..." : "";
-    const bestKeyword = keywords.find((keyword) => haystack.indexOf(keyword) === bestIndex);
+    const bestKeyword = keywords.find(keyword => haystack.indexOf(keyword) === bestIndex);
     return {
         snippet: `${prefix}${rawSnippet}${suffix}`,
         matchText: bestKeyword,
         matchStart: bestIndex,
         matchEnd: bestKeyword ? bestIndex + bestKeyword.length : undefined,
-        confidence: 0.8,
     };
 }
 
 export function extractRecommendedPages(documents: SearchResult[]): number[] {
     const pages = documents
-        .map((doc) => getPageValue(doc.metadata?.page))
+        .map(doc => getPageValue(doc.metadata?.page))
         .filter((page): page is number => page !== undefined);
 
-    if (pages.length > 1 && pages.every((page) => page === 1)) {
+    if (pages.length > 1 && pages.every(page => page === 1)) {
         // Legacy fallback data often pins everything to page 1; hide misleading values.
         return [];
     }
@@ -102,10 +140,7 @@ export function extractRecommendedPages(documents: SearchResult[]): number[] {
  * - Every cited page falls outside the candidate set (e.g. the model
  *   hallucinated a page number — avoid returning an empty list).
  */
-export function filterPagesByAICitation(
-    aiResponse: string,
-    candidatePages: number[]
-): number[] {
+export function filterPagesByAICitation(aiResponse: string, candidatePages: number[]): number[] {
     if (candidatePages.length === 0) return [];
 
     const cited = new Set<number>();
@@ -127,15 +162,45 @@ export function filterPagesByAICitation(
         return candidatePages;
     }
 
-    const filtered = candidatePages.filter((p) => cited.has(p));
+    const filtered = candidatePages.filter(p => cited.has(p));
     return filtered.length > 0 ? filtered : candidatePages;
 }
 
+function asPositiveInt(value: unknown): number | undefined {
+    const n = typeof value === "number" ? value : typeof value === "string" ? Number(value) : NaN;
+    return Number.isInteger(n) && n > 0 ? n : undefined;
+}
+
+/**
+ * Real retrieval relevance for a row, or nothing. Only the rerank score
+ * qualifies: it is a model-produced [0,1] relevance judgement. Raw vector
+ * distance is not converted into a pseudo-score — a reference with no real
+ * score simply carries no value (ADR-005 §3).
+ */
+function getRelevance(metadata: Record<string, unknown>): number | undefined {
+    const score = metadata.rerankScore;
+    return typeof score === "number" && Number.isFinite(score) ? score : undefined;
+}
+
+/**
+ * Build the cited references for an answer.
+ *
+ * ADR-005 §3 change, documented for API consumers: references used to carry a
+ * `confidence` of 0.25 or 0.8 — constants fabricated by the snippet finder,
+ * never produced by any model. The field is retained for response-shape
+ * compatibility but is now populated from the REAL retrieval relevance
+ * (`relevance`, the reranker's score) and omitted entirely when no such score
+ * exists. Rows that carry full identity (documentId + versionId) are also
+ * anchored via @launchstack/retrieval's `buildCitations`, yielding a stable
+ * `anchorKey`. The frontend reads `snippet`/`documentId`/`page`, which are
+ * unchanged.
+ */
 export function buildReferences(
     question: string,
     documents: SearchResult[],
     maxReferences = 5
 ): SourceReference[] {
+    const now = new Date().toISOString();
     const dedup = new Set<string>();
     const references: SourceReference[] = [];
 
@@ -146,22 +211,60 @@ export function buildReferences(
 
         const metadata = (doc.metadata ?? {}) as unknown as Record<string, unknown>;
         const childContent = typeof metadata.childContent === "string" ? metadata.childContent : "";
-        const snippetResult = extractSnippet(childContent || doc.pageContent, question);
+        // The chunker writes an ancestor breadcrumb into a chunk's stored text
+        // so both retrieval legs can match on it. A citation, though, has to
+        // quote the *document*: the breadcrumb is never in the source file, so
+        // leaving it in the snippet would break the highlight deep-link that
+        // searches the document for the quoted passage.
+        const content = stripStoredContextHeader(childContent || doc.pageContent);
+        const snippetResult = extractSnippet(content, question);
         if (!snippetResult.snippet) {
             continue;
         }
 
         const page = getPageValue(metadata.page);
+        const relevance = getRelevance(metadata);
+        const documentId =
+            typeof metadata.documentId === "number" ? metadata.documentId : undefined;
+        const chunkId = typeof metadata.chunkId === "number" ? metadata.chunkId : undefined;
+
+        // Anchor through the shared citation builder when the row carries a
+        // real (sourceId, sourceVersionId) identity; per-row invocation keeps
+        // this module's ordering/dedup semantics while reusing the library's
+        // anchor and relevance mapping.
+        let anchorKey: string | undefined;
+        const sourceId = asPositiveInt(documentId);
+        const sourceVersionId = asPositiveInt(metadata.versionId);
+        if (sourceId !== undefined && sourceVersionId !== undefined) {
+            const hit: RetrievedEvidence = {
+                sourceId,
+                sourceVersionId,
+                chunkId,
+                page,
+                content,
+                documentTitle:
+                    typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
+                relevance,
+            };
+            const [citation] = buildCitations([hit], [], { now });
+            anchorKey = citation?.anchorKey;
+        }
+
         const reference: SourceReference = {
             page,
             snippet: snippetResult.snippet,
             matchText: snippetResult.matchText,
             matchStart: snippetResult.matchStart,
             matchEnd: snippetResult.matchEnd,
-            confidence: snippetResult.confidence,
-            documentId: typeof metadata.documentId === "number" ? metadata.documentId : undefined,
-            documentTitle: typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
-            chunkId: typeof metadata.chunkId === "number" ? metadata.chunkId : undefined,
+            relevance,
+            // Back-compat mirror of `relevance` — real score or absent, never
+            // a fabricated constant.
+            confidence: relevance,
+            anchorKey,
+            documentId,
+            documentTitle:
+                typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
+            chunkId,
             source: typeof metadata.source === "string" ? metadata.source : undefined,
         };
 

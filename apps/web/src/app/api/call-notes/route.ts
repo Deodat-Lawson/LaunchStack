@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 
 import {
     CallListQuerySchema,
     CallNotesApplicationError,
     CallNotesCommandSchema,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 import { env } from "~/env";
 
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
@@ -49,20 +48,14 @@ function localCaptureUnavailable(context: {
     return null;
 }
 
-async function authenticatedContext(): Promise<{ userId: string; companyId: string } | null> {
-    const { userId } = await auth();
-    if (!userId) return null;
-
-    const companyId = await getActiveCompanyId(userId);
-    return { userId, companyId: companyId.toString() };
-}
-
 export async function GET(request: Request): Promise<Response> {
     try {
-        const context = await authenticatedContext();
-        if (!context) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const workspace = await requireWorkspacePermission("documents.read");
+        if (!workspace.success) return workspace.response;
+        const context = {
+            userId: workspace.data.authUserId,
+            companyId: workspace.data.companyId.toString(),
+        };
 
         const { searchParams } = new URL(request.url);
         const rawLimit = searchParams.get("limit");
@@ -82,10 +75,12 @@ export async function GET(request: Request): Promise<Response> {
 
 export async function POST(request: Request): Promise<Response> {
     try {
-        const context = await authenticatedContext();
-        if (!context) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const workspace = await requireWorkspacePermission("documents.edit");
+        if (!workspace.success) return workspace.response;
+        const context = {
+            userId: workspace.data.authUserId,
+            companyId: workspace.data.companyId.toString(),
+        };
 
         let body: unknown;
         try {

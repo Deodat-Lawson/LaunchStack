@@ -14,9 +14,9 @@ import {
     DetectedCallCandidateSchema,
     assertCaptureSourceContract,
     createScriptedCaptureSource,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
-import type { CaptureAttemptHandle, CaptureSource } from "@launchstack/features/call-notes";
+import type { CaptureAttemptHandle, CaptureSource } from "@launchstack/pipelines/call-notes";
 
 describe("Call Notes contract baseline", () => {
     it("keeps one occurrence across pause and same-user return attempts", () => {

@@ -158,15 +158,14 @@ async function main() {
     console.log("\nRunning pipeline (plan → search → synthesize)…\n");
 
     const output = await runTrendSearch(input, {
-        onStageChange: (stage) => console.log(`  ⏳ stage: ${stage}`),
+        onStageChange: stage => console.log(`  ⏳ stage: ${stage}`),
     });
 
     console.log("─── Output ───");
     console.log(JSON.stringify(output, null, 2));
 }
 
-main().catch((err) => {
+main().catch(err => {
     console.error("Pipeline failed:", err);
     process.exit(1);
 });
-

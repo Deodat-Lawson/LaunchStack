@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 
-import { CallQuerySchema } from "@launchstack/features/call-notes";
+import { CallQuerySchema } from "@launchstack/pipelines/call-notes";
 
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
@@ -20,20 +19,18 @@ export async function GET(
     { params }: { params: Promise<{ callId: string }> }
 ): Promise<Response> {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const workspace = await requireWorkspacePermission("documents.read");
+        if (!workspace.success) return workspace.response;
 
         const { callId } = await params;
-        const companyId = await getActiveCompanyId(userId);
+        const companyId = workspace.data.companyId.toString();
+        const actorUserId = workspace.data.authUserId;
         const parsed = CallQuerySchema.safeParse({
-            companyId: companyId.toString(),
-            actorUserId: userId,
+            companyId,
+            actorUserId,
             callId,
         });
         if (!parsed.success) return invalidRequest();
-
         const snapshot = await getWebCallNotesApplication().getCall(parsed.data);
         return NextResponse.json(snapshot);
     } catch (error) {

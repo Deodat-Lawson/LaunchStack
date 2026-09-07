@@ -1,0 +1,31 @@
+{
+  "$ref": "#/definitions/document-editor.error-response",
+  "definitions": {
+    "document-editor.error-response": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "errors": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "detail"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

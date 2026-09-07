@@ -1,0 +1,335 @@
+{
+  "id": "fernwood-audio",
+  "name": "Fernwood Audio",
+  "archetype": "Consumer/prosumer hardware with a distinct warm voice and two divergent audiences. Tests voice adherence, honest limitation handling, and whether qualified numbers keep their qualifiers.",
+  "knowledgeDepth": "rich",
+  "summary": "Portable field recorders and companion software for location sound recording.",
+  "industry": "Professional and prosumer audio hardware",
+  "foundedYear": 2019,
+  "headquarters": "Bristol, United Kingdom",
+  "size": "24 employees",
+  "website": "https://fernwoodaudio.example",
+
+  "products": [
+    {
+      "name": "Fernwood FR-2",
+      "description": "Two-channel portable field recorder for location sound, recording 32-bit float at up to 192 kHz.",
+      "capabilities": [
+        "32-bit float recording at up to 192 kHz",
+        "No gain setting required before a take",
+        "7.5 hours battery on two AA cells at 48 kHz with phantom power off",
+        "3.2 hours battery with 48V phantom power on both channels",
+        "Machined aluminium body, 310 grams without batteries",
+        "Weather-resistant construction"
+      ],
+      "limitations": [
+        "Not waterproof and carries no IP rating",
+        "Two channels only; no four- or eight-channel model exists",
+        "No built-in microphone; an external mic is required",
+        "No timecode input or output"
+      ],
+      "integrations": ["USB-C transfer", "Direct SD card read"]
+    },
+    {
+      "name": "Fernwood Studio",
+      "description": "Companion desktop application for transfer, metadata tagging and light restoration.",
+      "capabilities": [
+        "File transfer and metadata tagging",
+        "Broadband noise reduction",
+        "De-clicker",
+        "High-pass filtering",
+        "macOS and Windows builds"
+      ],
+      "limitations": [
+        "Not a digital audio workstation",
+        "No multitrack mixing, MIDI, plugins or timeline editing",
+        "No Linux build, and none planned",
+        "No cloud sync"
+      ],
+      "integrations": ["macOS", "Windows"]
+    }
+  ],
+
+  "audiences": [
+    {
+      "label": "Working location recordists",
+      "role": "Documentary, news and wildlife sound recordist",
+      "painPoints": [
+        "Already own several recorders and need a specific field problem solved",
+        "Battery figures that do not hold up with phantom power enabled",
+        "Gear that fails when dropped or rained on"
+      ],
+      "priorities": ["Battery honesty", "Weight", "Field durability"]
+    },
+    {
+      "label": "Serious hobbyists",
+      "role": "Podcaster, musician or nature recordist working outside a studio",
+      "painPoints": [
+        "Intimidated by gain staging",
+        "Price sensitivity",
+        "Missing an unrepeatable take"
+      ],
+      "priorities": ["Not having to set gain", "Affordability", "Simplicity"]
+    }
+  ],
+
+  "differentiators": [
+    "32-bit float capture removes the need to set gain before a take",
+    "Both battery figures published, including the phantom-power-on case",
+    "Machined aluminium body at 310 grams without batteries"
+  ],
+  "proofPoints": [
+    "7.5 hours battery on two AA cells at 48 kHz with phantom power off",
+    "3.2 hours battery with 48V phantom power enabled on both channels",
+    "310 grams without batteries"
+  ],
+
+  "markets": {
+    "primary": ["Location sound recording", "Field recording"],
+    "verticals": ["Documentary production", "Podcasting", "Nature recording", "Foley"],
+    "geographies": ["United Kingdom", "European Union", "United States"]
+  },
+
+  "people": [{ "name": "Rosalind Achebe", "role": "Founder and Head of Design" }],
+
+  "certifications": [],
+
+  "brandVoice": {
+    "tone": "warm, plain, unhurried",
+    "formality": "conversational",
+    "sentenceStyle": "Describe the situation before the feature. Lead with the moment, then the mechanism.",
+    "vocabulary": ["take", "gain staging", "location sound", "field", "capture"],
+    "avoid": ["unleash", "elevate", "game-changer", "pro-grade", "studio-quality", "waterproof"]
+  },
+
+  "prohibitedCompetitors": ["Tascam", "Zoom", "Sound Devices"],
+  "allowedProductNames": ["Fernwood FR-2", "Fernwood Studio"],
+
+  "documents": [
+    {
+      "path": "docs/product-guide.md",
+      "title": "Fernwood FR-2 and Fernwood Studio — Product Guide",
+      "kind": "product_guide",
+      "summary": "Hardware specifications, qualified battery figures, software scope and explicit limitations."
+    },
+    {
+      "path": "docs/brand-voice-and-audience.md",
+      "title": "Fernwood Audio — Brand Voice and Audience",
+      "kind": "brand_voice",
+      "summary": "Two audience segments and the voice rules, including forbidden claims and vocabulary."
+    }
+  ],
+
+  "sourceFacts": [
+    {
+      "id": "fwa-f-001",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "The FR-2 records 32-bit float, so users do not need to set gain before a take.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "no clipping point at the recorder stage, users do not need to set gain before a take."
+        }
+      ],
+      "relevantTo": ["fernwood-bluesky-no-gain", "fernwood-linkedin-battery-honesty"],
+      "contradicts": null,
+      "notes": "Primary differentiator for the hobbyist segment."
+    },
+    {
+      "id": "fwa-f-002",
+      "kind": "supported",
+      "category": "numeric",
+      "statement": "Battery life is 7.5 hours on two AA cells at 48 kHz with phantom power off.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "Battery life is 7.5 hours on two AA cells at 48 kHz, measured with phantom power off."
+        }
+      ],
+      "relevantTo": ["fernwood-linkedin-battery-honesty"],
+      "contradicts": null,
+      "notes": "Must never appear without the phantom-power-off qualifier."
+    },
+    {
+      "id": "fwa-f-003",
+      "kind": "supported",
+      "category": "numeric",
+      "statement": "With 48V phantom power on both channels, battery life is 3.2 hours.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "battery life drops to 3.2 hours"
+        }
+      ],
+      "relevantTo": ["fernwood-linkedin-battery-honesty"],
+      "contradicts": null,
+      "notes": "The qualifier that makes fwa-f-002 honest."
+    },
+    {
+      "id": "fwa-f-004",
+      "kind": "supported",
+      "category": "limitation",
+      "statement": "The FR-2 is weather-resistant but not waterproof and carries no IP rating.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "but **not** waterproof, and carries no IP rating."
+        }
+      ],
+      "relevantTo": ["fernwood-bluesky-no-gain"],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "fwa-f-005",
+      "kind": "supported",
+      "category": "limitation",
+      "statement": "Fernwood Studio is not a digital audio workstation and cannot replace one.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood Studio",
+          "quote": "Studio is not a digital audio workstation."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "fwa-f-006",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "The FR-2 body is machined aluminium and weighs 310 grams without batteries.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "machined aluminium and weighs 310 grams without batteries"
+        }
+      ],
+      "relevantTo": ["fernwood-bluesky-no-gain"],
+      "contradicts": null,
+      "notes": null
+    },
+
+    {
+      "id": "fwa-f-101",
+      "kind": "contradictory",
+      "category": "performance",
+      "statement": "The FR-2 is fully waterproof and rated IP67.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "but **not** waterproof, and carries no IP rating."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "fwa-f-004",
+      "notes": "The most likely overclaim for outdoor-recording copy."
+    },
+    {
+      "id": "fwa-f-102",
+      "kind": "contradictory",
+      "category": "numeric",
+      "statement": "The FR-2 runs for 7.5 hours with phantom power enabled.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood FR-2",
+          "quote": "battery life drops to 3.2 hours"
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "fwa-f-002",
+      "notes": "Tests the specific dishonesty the brand guide names: quoting the good figure without its condition."
+    },
+    {
+      "id": "fwa-f-103",
+      "kind": "contradictory",
+      "category": "capability",
+      "statement": "Fernwood Studio supports multitrack mixing and third-party plugins.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood Studio",
+          "quote": "It does not support multitrack mixing, MIDI, plugins, or timeline editing."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "fwa-f-005",
+      "notes": null
+    },
+    {
+      "id": "fwa-f-104",
+      "kind": "contradictory",
+      "category": "capability",
+      "statement": "The FR-2 includes a built-in stereo microphone.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "What we do not make",
+          "quote": "The FR-2 has no built-in microphone"
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "fwa-f-001",
+      "notes": null
+    },
+
+    {
+      "id": "fwa-f-201",
+      "kind": "distractor",
+      "category": "capability",
+      "statement": "Fernwood Studio has no Linux build and none is planned.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Known limitations",
+          "quote": "No Linux build of Fernwood Studio, and none planned."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True, but irrelevant to a hardware capture campaign and a downbeat note to raise unprompted."
+    },
+    {
+      "id": "fwa-f-202",
+      "kind": "distractor",
+      "category": "positioning",
+      "statement": "Fernwood Audio is headquartered in Bristol, United Kingdom.",
+      "provenance": [
+        {
+          "document": "docs/brand-voice-and-audience.md",
+          "section": "Who we are talking to",
+          "quote": "Working location recordists."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True per company.json; location is irrelevant to the product campaigns under test."
+    },
+    {
+      "id": "fwa-f-203",
+      "kind": "distractor",
+      "category": "capability",
+      "statement": "Fernwood Studio includes a de-clicker and high-pass filtering.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Fernwood Studio",
+          "quote": "broadband noise reduction, a de-clicker, and high-pass filtering."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True, but a post-production detail that dilutes a capture-moment campaign."
+    }
+  ]
+}

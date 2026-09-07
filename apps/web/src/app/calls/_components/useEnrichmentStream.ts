@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CallSnapshot } from "@launchstack/features/call-notes/contracts";
+import type { CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
 import {
     EnrichmentStreamEventSchema,
     type EnrichmentPreviewState,

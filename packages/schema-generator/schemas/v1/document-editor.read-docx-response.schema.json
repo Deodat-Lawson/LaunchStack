@@ -1,0 +1,22 @@
+{
+  "$ref": "#/definitions/document-editor.read-docx-response",
+  "definitions": {
+    "document-editor.read-docx-response": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "filename"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

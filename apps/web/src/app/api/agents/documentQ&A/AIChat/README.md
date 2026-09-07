@@ -7,6 +7,7 @@ Comprehensive backend API for the Agent AI Chatbot system with task execution, t
 ### Chat Management
 
 #### Create Chat
+
 ```
 POST /api/agent-ai-chatbot/chats
 Body: {
@@ -18,16 +19,19 @@ Body: {
 ```
 
 #### Get All Chats for User
+
 ```
 GET /api/agent-ai-chatbot/chats?userId=xxx
 ```
 
 #### Get Specific Chat with Messages and Tasks
+
 ```
 GET /api/agent-ai-chatbot/chats/[chatId]
 ```
 
 #### Update Chat
+
 ```
 PATCH /api/agent-ai-chatbot/chats/[chatId]
 Body: {
@@ -39,6 +43,7 @@ Body: {
 ```
 
 #### Delete Chat
+
 ```
 DELETE /api/agent-ai-chatbot/chats/[chatId]
 ```
@@ -46,6 +51,7 @@ DELETE /api/agent-ai-chatbot/chats/[chatId]
 ### Message Management
 
 #### Send Message
+
 ```
 POST /api/agent-ai-chatbot/messages
 Body: {
@@ -58,6 +64,7 @@ Body: {
 ```
 
 #### Get Messages for Chat
+
 ```
 GET /api/agent-ai-chatbot/messages?chatId=xxx
 ```
@@ -65,6 +72,7 @@ GET /api/agent-ai-chatbot/messages?chatId=xxx
 ### Task Management
 
 #### Create Task
+
 ```
 POST /api/agent-ai-chatbot/tasks
 Body: {
@@ -77,16 +85,19 @@ Body: {
 ```
 
 #### Get Tasks for Chat
+
 ```
 GET /api/agent-ai-chatbot/tasks?chatId=xxx
 ```
 
 #### Get Task with Execution Steps
+
 ```
 GET /api/agent-ai-chatbot/tasks/[taskId]
 ```
 
 #### Update Task
+
 ```
 PATCH /api/agent-ai-chatbot/tasks/[taskId]
 Body: {
@@ -100,6 +111,7 @@ Body: {
 ### Tool Calls
 
 #### Create Tool Call
+
 ```
 POST /api/agent-ai-chatbot/tools
 Body: {
@@ -111,12 +123,14 @@ Body: {
 ```
 
 #### Get Tool Calls
+
 ```
 GET /api/agent-ai-chatbot/tools?messageId=xxx
 GET /api/agent-ai-chatbot/tools?taskId=xxx
 ```
 
 #### Update Tool Call Result
+
 ```
 PATCH /api/agent-ai-chatbot/tools/[toolCallId]
 Body: {
@@ -130,6 +144,7 @@ Body: {
 ### Execution Steps
 
 #### Create Execution Step
+
 ```
 POST /api/agent-ai-chatbot/execution-steps
 Body: {
@@ -144,11 +159,13 @@ Body: {
 ```
 
 #### Get Execution Steps for Task
+
 ```
 GET /api/agent-ai-chatbot/execution-steps?taskId=xxx
 ```
 
 #### Update Execution Step
+
 ```
 PATCH /api/agent-ai-chatbot/execution-steps/[stepId]
 Body: {
@@ -161,6 +178,7 @@ Body: {
 ### Voting
 
 #### Vote on Message
+
 ```
 POST /api/agent-ai-chatbot/votes
 Body: {
@@ -172,6 +190,7 @@ Body: {
 ```
 
 #### Get Vote for Message
+
 ```
 GET /api/agent-ai-chatbot/votes?chatId=xxx&messageId=xxx
 ```
@@ -179,6 +198,7 @@ GET /api/agent-ai-chatbot/votes?chatId=xxx&messageId=xxx
 ### Memory Management
 
 #### Store Memory
+
 ```
 POST /api/agent-ai-chatbot/memory
 Body: {
@@ -193,6 +213,7 @@ Body: {
 ```
 
 #### Get Memories for Chat
+
 ```
 GET /api/agent-ai-chatbot/memory?chatId=xxx&memoryType=xxx
 ```
@@ -202,6 +223,7 @@ GET /api/agent-ai-chatbot/memory?chatId=xxx&memoryType=xxx
 All endpoints return JSON with the following structure:
 
 ### Success Response
+
 ```json
 {
   "success": true,
@@ -210,6 +232,7 @@ All endpoints return JSON with the following structure:
 ```
 
 ### Error Response
+
 ```json
 {
   "error": "Error message",
@@ -268,38 +291,38 @@ await fetch('/api/agent-ai-chatbot/messages', {
 
 ```typescript
 // 1. Create task
-const taskResponse = await fetch('/api/agent-ai-chatbot/tasks', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+const taskResponse = await fetch("/api/agent-ai-chatbot/tasks", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    chatId: 'chat123',
-    description: 'Analyze sales data',
-    objective: 'Identify top-selling products',
-    priority: 1
-  })
+    chatId: "chat123",
+    description: "Analyze sales data",
+    objective: "Identify top-selling products",
+    priority: 1,
+  }),
 });
 const { task } = await taskResponse.json();
 
 // 2. Create execution steps
-await fetch('/api/agent-ai-chatbot/execution-steps', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+await fetch("/api/agent-ai-chatbot/execution-steps", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     taskId: task.id,
     stepNumber: 1,
-    stepType: 'planning',
-    description: 'Plan data analysis approach'
-  })
+    stepType: "planning",
+    description: "Plan data analysis approach",
+  }),
 });
 
 // 3. Update step status
 await fetch(`/api/agent-ai-chatbot/execution-steps/${stepId}`, {
-  method: 'PATCH',
-  headers: { 'Content-Type': 'application/json' },
+  method: "PATCH",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    status: 'completed',
-    output: { plan: '...' }
-  })
+    status: "completed",
+    output: { plan: "..." },
+  }),
 });
 ```
 
@@ -309,4 +332,3 @@ await fetch(`/api/agent-ai-chatbot/execution-steps/${stepId}`, {
 - Timestamps are managed automatically by the database
 - Foreign key relationships ensure data integrity with cascade deletes
 - The API supports rich JSON content for flexible message and data formats
-

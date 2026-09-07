@@ -1,26 +1,17 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
-import { TrendSearchInputSchema } from "@launchstack/features/trend-search";
-import { createJob, getJobsByCompanyId } from "@launchstack/features/trend-search/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { TrendSearchInputSchema } from "@launchstack/pipelines/trend-search";
+import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/trend-search/db";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         // Parse and validate request body
         const body: unknown = await request.json();
@@ -28,26 +19,14 @@ export async function POST(request: NextRequest) {
         if (!parsed.success) {
             return NextResponse.json(
                 { error: "Validation failed", details: parsed.error.flatten() },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
         const input = parsed.data;
 
-        // Look up user's company_id
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
+        const userId = ctx.data.authUserId;
         const jobId = uuidv4();
 
         // Create job record in DB
@@ -73,45 +52,22 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        return NextResponse.json(
-            { jobId, status: "queued" },
-            { status: 202 },
-        );
+        return NextResponse.json({ jobId, status: "queued" }, { status: 202 });
     } catch (error) {
         console.error("[trend-search] POST error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
 
 // ─── GET /api/trend-search ──────────────────────────────────────────────────
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
+        const jobs = await getJobsByCompanyId(ctx.data.companyId);
 
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const jobs = await getJobsByCompanyId((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
-
-        const results = jobs.map((job) => ({
+        const results = jobs.map(job => ({
             id: job.id,
             status: job.status,
             query: job.input.query,
@@ -122,9 +78,6 @@ export async function GET() {
         return NextResponse.json({ searches: results }, { status: 200 });
     } catch (error) {
         console.error("[trend-search] GET error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

@@ -4,7 +4,7 @@ import {
     CallNotesWorkItemError,
     createPostgresCallNotesWorkItems,
     type CallNotesWorkItemClaim,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import {
     createCallNotesTestDatabase,

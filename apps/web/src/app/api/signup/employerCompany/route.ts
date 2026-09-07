@@ -1,19 +1,22 @@
-import {db} from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { db } from "~/server/db";
+import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
-import {eq} from "drizzle-orm";
-import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
-import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { eq } from "drizzle-orm";
+import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
+import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
-import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
+import { upsertCompanyCredentials } from "@launchstack/llm/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
+import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
+        const identity = await requireAuthIdentity();
+        if (!identity.success) return identity.response;
+
         const validation = await validateRequestBody(request, EmployerCompanySignupSchema);
         if (!validation.success) return validation.response;
         const {
-            userId,
             name,
             email,
             companyName,
@@ -24,8 +27,12 @@ export async function POST(request: Request) {
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
         } = validation.data;
+        const userId = identity.data.authUserId;
 
-        // Check if company already exists
+        // Names are unique only by this check — the column carries no database
+        // constraint. The signup form pre-fills an available suggestion and
+        // lets the person edit it, so a conflict here is now something they
+        // can see and fix rather than a dead end.
         const [existingCompany] = await db
             .select()
             .from(company)
@@ -44,16 +51,16 @@ export async function POST(request: Request) {
             .values({
                 name: companyName,
                 slug,
-                numberOfEmployees: numberOfEmployees || "0",
-                embeddingIndexKey: embeddingIndexKey?.trim() || null,
+                // `?? ""` first so the `||` default (which must also catch
+                // empty strings) operates on a plain string.
+                numberOfEmployees: (numberOfEmployees ?? "") || "0",
+                embeddingIndexKey: (embeddingIndexKey?.trim() ?? "") || null,
             })
             .returning({ id: company.id });
 
-        if(!newCompany) {
+        if (!newCompany) {
             console.error("Company creation returned no data. Database insert failed.");
-            return createValidationError(
-                "Could not create company. Please try again later."
-            );
+            return createValidationError("Could not create company. Please try again later.");
         }
 
         const companyId = BigInt(newCompany.id);
@@ -97,8 +104,6 @@ export async function POST(request: Request) {
                 companyId,
                 name,
                 email,
-                status: "verified",
-                role: "owner",
             })
             .returning({ id: users.id });
 
@@ -107,18 +112,22 @@ export async function POST(request: Request) {
                 userId: BigInt(insertedUser.id),
                 companyId,
                 role: "owner",
+                status: "active",
             });
         }
 
-        // Initialize credit account with signup bonus
-        await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
+        // Always create the account so usage is recorded from the first
+        // document. ensureTokenAccount applies the signup grant only where a
+        // balance is enforced — on a self-hosted instance nothing enforces it
+        // and nothing can top it up, so a notional 10M would be a number
+        // nobody reads.
+        await ensureTokenAccount(companyId);
 
         return createSuccessResponse(
             { userId, role: "owner" },
             "Company and owner account created successfully."
         );
-    }
-    catch (error: unknown) {
+    } catch (error: unknown) {
         console.error("Error during employer company signup:", error);
         if (error instanceof Error) {
             console.error("Error message:", error.message);

@@ -36,7 +36,7 @@ block-beta
   PLABEL["Physical\nLayer"]:1
   DB["PostgreSQL + pgvector\n─────────────\nEmbeddings Index\nDocument Structure\nKnowledge Graph\nDomain Tables"]:2
   HOST["Hosting & Compute\n─────────────\nNext.js 15\nInngest Jobs\nAgent Hosting\nML Sidecar"]:2
-  EXT["External Services\n─────────────\nOCR Providers\nFile Storage (S3)\nClerk Auth + RBAC"]:2
+  EXT["External Services\n─────────────\nOCR Providers\nFile Storage (S3)"]:2
   KBS["Knowledge Bases\n─────────────\nCompany KB\nLegal Templates\nOnboarding Docs"]:2
 
   %% Service → Tool edges
@@ -80,4 +80,4 @@ block-beta
 
 ## Data Isolation
 
-All services operate within domain-partitioned boundaries enforced by Clerk RBAC. RAG queries are scoped by `domain + company_id` — legal documents never surface in marketing queries.
+All services operate within domain-partitioned boundaries enforced by the app's own membership roles (`user_company_memberships`, checked in `requireWorkspaceContext`); authentication is first-party better-auth. RAG queries are scoped by `domain + company_id` — legal documents never surface in marketing queries.

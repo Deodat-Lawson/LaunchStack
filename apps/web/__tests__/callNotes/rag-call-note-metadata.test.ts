@@ -1,7 +1,7 @@
 const mockCompanyEnsembleSearch = jest.fn();
 const mockEmbeddings = { embedQuery: jest.fn() };
 
-jest.mock("~/lib/tools/rag", () => ({
+jest.mock("~/server/rag/ensemble", () => ({
     companyEnsembleSearch: (...args: unknown[]) => mockCompanyEnsembleSearch(...args),
     createOpenAIEmbeddings: jest.fn(() => mockEmbeddings),
 }));

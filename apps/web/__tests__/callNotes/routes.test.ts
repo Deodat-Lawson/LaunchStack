@@ -2,11 +2,10 @@ import type * as CallNotesApplicationModule from "~/server/call-notes/applicatio
 import {
     CALL_NOTES_SCHEMA_VERSION,
     CallNotesApplicationError,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
-const mockAuth = jest.fn();
+const mockWorkspacePermission = jest.fn();
 const mockGetEngine = jest.fn();
-const mockGetActiveCompanyId = jest.fn();
 const mockGetApplication = jest.fn();
 const mockListCalls = jest.fn();
 const mockExecute = jest.fn();
@@ -27,12 +26,8 @@ jest.mock("~/env", () => ({
     },
 }));
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: (...args: unknown[]): unknown => mockAuth(...args),
-}));
-
-jest.mock("~/lib/active-workspace", () => ({
-    getActiveCompanyId: (...args: unknown[]): unknown => mockGetActiveCompanyId(...args),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspacePermission: (...args: unknown[]): unknown => mockWorkspacePermission(...args),
 }));
 
 jest.mock("~/server/engine", () => ({
@@ -85,8 +80,10 @@ beforeEach(() => {
     mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = true;
     mockServerEnv.CALL_NOTES_LOCAL_COMPANY_ID = "42";
     mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "user_actual";
-    mockAuth.mockResolvedValue({ userId: "user_actual" });
-    mockGetActiveCompanyId.mockResolvedValue(42n);
+    mockWorkspacePermission.mockResolvedValue({
+        success: true,
+        data: { authUserId: "user_actual", companyId: 42n },
+    });
     mockGetApplication.mockReturnValue(APPLICATION);
     mockListCalls.mockResolvedValue([]);
     mockExecute.mockResolvedValue(null);
@@ -98,7 +95,13 @@ beforeEach(() => {
 
 describe("Call Notes authenticated routes", () => {
     it("does not expose worker availability without authentication", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockWorkspacePermission.mockResolvedValue({
+            success: false,
+            response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                status: 401,
+                headers: { "Content-Type": "application/json" },
+            }),
+        });
         expect((await getWorkerStatus()).status).toBe(401);
         expect(mockWorkerStatus).not.toHaveBeenCalled();
     });
@@ -109,7 +112,7 @@ describe("Call Notes authenticated routes", () => {
         expect(await responseBody(response)).toEqual({ available: false, lastSeenAt: null });
         expect(mockWorkerStatus).not.toHaveBeenCalled();
     });
-    it("derives actor and company from Clerk and active workspace instead of GET query spoofing", async () => {
+    it("derives actor and company from the workspace context instead of GET query spoofing", async () => {
         const response = await listCalls(
             request("/api/call-notes?limit=7&companyId=999&actorUserId=attacker&limitOverride=1")
         );
@@ -121,7 +124,6 @@ describe("Call Notes authenticated routes", () => {
             actorUserId: "user_actual",
             limit: 7,
         });
-        expect(mockGetActiveCompanyId).toHaveBeenCalledWith("user_actual");
     });
 
     it("rebuilds POST command tenancy and actor fields when the client sends spoofed values", async () => {
@@ -242,14 +244,19 @@ describe("Call Notes authenticated routes", () => {
         });
     });
 
-    it("returns 401 before consulting the application when Clerk has no actor", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+    it("returns 401 before consulting the application when the workspace context has no actor", async () => {
+        mockWorkspacePermission.mockResolvedValue({
+            success: false,
+            response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                status: 401,
+                headers: { "Content-Type": "application/json" },
+            }),
+        });
 
         const response = await listCalls(request("/api/call-notes"));
 
         expect(response.status).toBe(401);
         expect(await responseBody(response)).toEqual({ error: "Unauthorized" });
-        expect(mockGetActiveCompanyId).not.toHaveBeenCalled();
         expect(mockListCalls).not.toHaveBeenCalled();
     });
 

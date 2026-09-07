@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import type { CaptureEvent, LocalCaptureSession } from "@launchstack/features/call-notes";
+import type { CaptureEvent, LocalCaptureSession } from "@launchstack/pipelines/call-notes";
 
 import type { AudioSource, PcmFrame } from "./audio";
 import { LocalCapturePipeline, type LocalCaptureBackend } from "./pipeline";

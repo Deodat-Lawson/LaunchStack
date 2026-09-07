@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { test } from "node:test";
 
-import type { CaptureEvent, LocalCapturePollResult } from "@launchstack/features/call-notes";
+import type { CaptureEvent, LocalCapturePollResult } from "@launchstack/pipelines/call-notes";
 
 import {
     LocalBackendClient,
@@ -24,14 +24,13 @@ async function readJson(request: IncomingMessage): Promise<unknown> {
 }
 
 async function startServer(handler: RequestHandler): Promise<{ server: Server; origin: string }> {
-    const server = createServer(async (request, response) => {
-        try {
-            const body = await readJson(request);
-            await handler(request, response, body);
-        } catch (error) {
-            response.statusCode = 500;
-            response.end(error instanceof Error ? error.message : String(error));
-        }
+    const server = createServer((request, response) => {
+        void readJson(request)
+            .then(body => handler(request, response, body))
+            .catch((error: unknown) => {
+                response.statusCode = 500;
+                response.end(error instanceof Error ? error.message : String(error));
+            });
     });
     await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
     const address = server.address();
@@ -82,7 +81,7 @@ function eventInput(callId: string = CALL_ID): LocalBackendEventInput {
     return { companyId: COMPANY_ID, userId: USER_ID, callId, event: EVENT };
 }
 
-test("LocalBackendClient sends authenticated poll, event, and finish tenant bodies", async () => {
+await test("LocalBackendClient sends authenticated poll, event, and finish tenant bodies", async () => {
     const requests: RequestRecord[] = [];
     const { server, origin } = await startServer(async (request, response, body) => {
         requests.push({ body, authorization: request.headers.authorization });
@@ -131,7 +130,7 @@ test("LocalBackendClient sends authenticated poll, event, and finish tenant bodi
     }
 });
 
-test("LocalBackendClient surfaces non-2xx responses and response detail", async () => {
+await test("LocalBackendClient surfaces non-2xx responses and response detail", async () => {
     const { server, origin } = await startServer(async (_request, response) => {
         response.statusCode = 409;
         response.end("capture conflict");
@@ -144,7 +143,7 @@ test("LocalBackendClient surfaces non-2xx responses and response detail", async 
     }
 });
 
-test("LocalBackendClient validates shared poll responses", async () => {
+await test("LocalBackendClient validates shared poll responses", async () => {
     let malformed = false;
     const { server, origin } = await startServer(async (_request, response) => {
         if (malformed) response.end("not json");

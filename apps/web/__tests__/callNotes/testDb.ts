@@ -5,9 +5,9 @@ import { join } from "node:path";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 
-import * as coreSchema from "@launchstack/core/db/schema";
-import * as featuresSchema from "@launchstack/features/schema";
-import type { DbClient } from "@launchstack/core/db";
+import * as engineSchema from "@launchstack/store/schema";
+import * as productSchema from "@launchstack/pipelines/schema";
+import type { DbClient } from "@launchstack/store/client";
 
 const webDir = join(__dirname, "..", "..");
 const repoRoot = join(webDir, "..", "..");
@@ -16,7 +16,7 @@ const repoRoot = join(webDir, "..", "..");
  * The real migration runner applies engine migrations before product
  * migrations because product tables reference engine tables.
  */
-const MIGRATION_SETS = [join(repoRoot, "packages", "core", "drizzle"), join(webDir, "drizzle")];
+const MIGRATION_SETS = [join(repoRoot, "packages", "store", "drizzle"), join(webDir, "drizzle")];
 
 interface JournalEntry {
     idx: number;
@@ -54,7 +54,7 @@ export interface CallNotesTestDatabase {
 async function createSession(connectionString: string): Promise<CallNotesTestSession> {
     const client = postgres(connectionString, { max: 1 });
     return {
-        db: drizzle(client, { schema: { ...coreSchema, ...featuresSchema } }),
+        db: drizzle(client, { schema: { ...engineSchema, ...productSchema } }),
         close: () => client.end({ timeout: 5 }),
     };
 }

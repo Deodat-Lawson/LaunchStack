@@ -9,7 +9,7 @@ import {
     LocalCapturePollInputSchema,
     LocalCapturePollResultSchema,
     type CallSnapshot,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import { env } from "~/env";
 import {

@@ -4,7 +4,7 @@ import {
     CALL_NOTES_ENRICHMENT_SCHEMA_VERSION,
     EnrichmentInputSchema,
     callNotesEnrichmentRuns,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import { getWebCallNotesApplication } from "./application";
 import { ConfiguredCallNotesEnrichmentModel } from "./enrichment-model";

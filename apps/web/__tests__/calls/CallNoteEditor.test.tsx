@@ -3,8 +3,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { CallNoteEditor } from "~/app/calls/_components/CallNoteEditor";
-import { renderEnrichedNoteProposal } from "@launchstack/features/call-notes/enrichment";
-import { CALL_NOTES_ENRICHMENT_PROPOSAL } from "@launchstack/features/call-notes";
+import { renderEnrichedNoteProposal } from "@launchstack/pipelines/call-notes/enrichment";
+import { CALL_NOTES_ENRICHMENT_PROPOSAL } from "@launchstack/pipelines/call-notes";
 
 describe("Call note hydration", () => {
     it("renders an enhancement's inline note citations without metadata appendices", async () => {

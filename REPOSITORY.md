@@ -1,226 +1,199 @@
 # What is in this repository
 
-Read this before `README.md`. The README describes the engine we are building.
-This file describes the repository as it actually is today.
+Read this before `README.md`. The README describes the product; this file
+describes the repository as it actually is today.
 
 ## The short version
 
-There is **one** Next.js application (`apps/web`), **one** publishable library
-(`packages/core`), and **three** long-running services (two Python, one Node).
-Everything else is configuration, docs, or scripts.
+Launchstack is a **cited company-memory system**: sources go in through one
+ingestion path, immutable evidence comes out, and answers cite that evidence
+with stable anchors. The repository holds two private applications (web and
+worker), fifteen publishable feature packages under `packages/` (the
+bricks), one publishable compositions package at `pipelines/` (level two:
+chains of bricks toward business outcomes), and three compute services
+(plus two off-the-shelf service images, docling-serve and gotenberg).
 
-The repository is mid-transition. We are separating an **open-source engine**
-from a **closed-source SaaS product**. That separation is not finished, and in
-two places the boundary currently runs the wrong way — see
-[The boundary today](#the-boundary-today).
+The 2026-08 refactors (ADR-002 … ADR-008) replaced the previous layouts in
+two steps: first layered engine packages with an enforced dependency
+direction, a dedicated worker over a transactional outbox, and single-owner
+compute services; then ADR-008 reorganized the packages **by feature** —
+each package owns its tools, its wire contracts, and its clients — and the
+kind-based packages (protocol/application/adapters/core) were deleted
+outright, since nothing was ever published under the old names.
 
-## Labels used below
+## Layout
 
-| Label | Meaning |
-| --- | --- |
-| `ENGINE` | Intended to be open source. Must not know about tenants, billing, or auth. |
-| `CLOUD` | Closed-source product. Tenancy, billing, auth, verticals, UI. |
-| `SERVICE` | Standalone process, called over HTTP. Deployed as a container. |
-| `INFRA` | Build, deploy, and local-development plumbing. |
-| `QUARANTINE` | Unowned or duplicated. Needs a decision before it is kept or deleted. |
+| Path                                  | Runtime                | What it is                                                                                                                                                                                                                                                                                             |
+| ------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `apps/web`                            | Next.js 15             | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint.                                                                                                                                                                       |
+| `apps/landing`                        | Next.js 15             | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment.                                                     |
+| `apps/worker`                         | Node (tsx)             | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
+| `packages/runtime`                    | TS library (published) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing.                                                                                                                                                  |
+| `packages/evidence`                   | TS library (published) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies.                                                                                                                                          |
+| `packages/store`                      | TS library (published) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history).                                                                             |
+| `packages/llm`                        | TS library (published) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport.                                                                                                                  |
+| `packages/orchestration`              | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports.                                                                                                                        |
+| `packages/conversion`                 | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router.                                                                                         |
+| `packages/indexing`                   | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer).                                                                                                                                                                              |
+| `packages/retrieval`                 | TS library (published) | Question → cited answer (renamed from `search`): every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`.                                   |
+| `packages/editing`                    | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client.                                                                                                                                                                                                                         |
+| `packages/document-conversion-engine` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env.                                                                                                                                   |
+| `packages/google-drive`               | TS library (published) | Thin typed client for the Google Drive v3 REST API and Google OAuth 2.0 token endpoints — the wire layer for Drive-linked documents. Framework-free; credentials injected, never read from the environment.                                                                                            |
+| `packages/collab`                     | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only.                                                                                                                                                                                                             |
+| `packages/engine`                     | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface.                                                                                                                                                                                                        |
+| `packages/schema-generator`           | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                                                    |
+| `packages/tools`                      | TS library             | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
+| `packages/design-tokens`              | CSS (published)        | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
+| `pipelines/`                          | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
+| `services/document-converter`         | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
+| `services/transcription`              | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
+| `services/adeu-ai-docs-editing`       | Python/FastAPI         | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor.                                                                                                                               |
+| `docker/`                             | config                 | SeaweedFS, Caddy, DB bootstrap.                                                                                                                                                                                                                                                                        |
+| `scripts/`                            | mixed                  | `scripts/ci` (gates, also runnable locally), `scripts/dev` (manual probes), `scripts/ops`.                                                                                                                                                                                                             |
+| `docs/`                               | Markdown               | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`).                                                                                                                                                                                     |
 
-## Directory map
+> **`services/*` stays outside the pnpm workspace** (deliberate — their deps
+> must not enter every app install). They are covered by their own CI
+> jobs (`python-services`, `document-converter` in CI.yml), not by
+> `pnpm -r typecheck`.
 
-| Path | Runtime | Label | What it is |
-| --- | --- | --- | --- |
-| `apps/web` | Next.js 15 | `CLOUD` | The only Next.js app. Marketing site, product UI, and every API route. **Also contains the real RAG engine** (`src/lib/tools/rag/`), which belongs in `packages/core`. |
-| `packages/core` | TypeScript library | `ENGINE` | Published as `@launchstack/core`. Engine ports, ingestion, embeddings, graph, OCR, and the 25 engine tables (`src/db/schema/`). |
-| `packages/features` | TypeScript library | `CLOUD` | 14 vertical products: client prospector, marketing pipeline, legal templates, trend search, voice, connectors, MCP, and others. |
-| `services/ocr-router` | Node / Express | `SERVICE` | Routes OCR jobs by document complexity. |
-| `services/ocr-worker` | Python | `SERVICE` | Docling-based OCR worker. |
-| `sidecar` | Python / FastAPI | `SERVICE` | Whisper transcription and the ADEU document routines. |
-| `api/adeu` | Python | `QUARANTINE` | A 503-line serverless function that duplicates `sidecar/app/routes/adeu.py` and imports `sidecar/` through `sys.path` manipulation. Nothing in the TypeScript codebase references it, and the owner has confirmed it is not deployed on Vercel. Retained pending a decision from its authors — see [Open questions](#open-questions). |
-| `docker/` | config | `INFRA` | SeaweedFS, Caddy, and database bootstrap configuration. |
-| `scripts/` | mixed | `INFRA` | See [Scripts](#scripts). |
-| `docs/` | Markdown | — | Deployment, architecture, and feature notes. See `docs/collaboration.md` for meetings, the Slack bridge, and distributed agents. |
-| `patches/` | patch files | `INFRA` | One pnpm patch for `drizzle-kit`. |
+## The dependency direction (enforced)
 
-> **`services/*` is not part of the pnpm workspace.** `pnpm-workspace.yaml`
-> globs only `apps/*` and `packages/*`. This is deliberate — `ocr-router`
-> depends on `@huggingface/transformers`, and adding it to the workspace would
-> pull that into every Vercel install. The cost is that `services/ocr-router`
-> is **not** covered by `pnpm -r typecheck` or `pnpm check`. It also duplicates
-> `packages/core/src/ocr/complexity.ts` in its own `src/complexity.ts`.
+```
+runtime  evidence          ← bottom: ports/slots/errors · pure domain math
+store  llm                 ← persistence · model calls (embeddings live here)
+orchestration              ← events, outbox, tick, source acceptance
+conversion                 ← any source → EvidenceDocument
+indexing                   ← EvidenceDocument → chunks, vectors, graph
+retrieval                  ← question → cited answer
+engine                     ← createEngine() aggregate
+pipelines/  apps/          ← compositions and products (never imported by bricks)
+```
 
-## The boundary today
+ESLint blocks every illegal edge with composed per-package blocks in
+`eslint.config.js`, plus a **flat ban on the deleted legacy names**
+(`@launchstack/{core,protocol,application,adapters,features}`) — the ban
+that replaced the facade ratchet. `check-schema-boundary.mjs` keeps engine
+SQL free of product references. Engine packages must not read
+`process.env` (two documented exceptions: the transcription and adeu
+clients, inherited from the old features tier) — configuration flows
+through `CoreConfig` from the composition roots
+(`apps/web/src/server/engine.ts`, reused by the worker).
 
-One inversion remains.
+`packages/tools` (`@launchstack/tools`) holds shared, contract-typed
+capabilities the feature verticals compose — a tool is _imported_, a service is
+_deployed_. Capabilities move down into tools; pipelines stay up in features
+(tools cannot import `@launchstack/features`, lint-enforced), and `process.env`
+is allowed only in a tool's `config.ts`. See `packages/tools/README.md` for the
+catalog.
 
-1. ~~**`packages/core` owns SaaS data.**~~ **Resolved.** The schema is split into
-   an engine set (`packages/core`, 25 tables) and a product set (`apps/web` +
-   `packages/features`, 36 tables) — see
-   [Two migration sets](#two-migration-sets-one-database). Users, memberships,
-   invite codes, credit ledgers, chatbot, collab, notes, company metadata and
-   the vertical tables all moved to the product side.
+## The one ingestion path (ADR-003)
 
-   `company` and `companyEmbeddingCredentials` stay in the engine **by design**:
-   the engine's search contract is keyed on `companyId`, so the tenant table is
-   part of the engine's own model. A consumer still adopts that tenancy model —
-   they just no longer inherit our auth, billing or product tables with it.
+```
+upload/import (web route) ──ONE tx──► document + document_versions + ocr_jobs
+                                      + event_outbox(source.version.created)
+worker ── source.version.created ───► extract (converter / text fast path /
+                                      archive expansion)
+       ── evidence.version.extracted► chunk + embed + store (+ graph)
+       ── evidence.version.indexed ─► note re-anchoring
+                                      + company.state.projection.requested
+       ── projection.requested ─────► company-metadata extraction
+                                      → company.state.projected
+query (web) ────────────────────────► ensemble retrieval → citations with
+                                      stable anchors + freshness
+```
 
-2. **`apps/web` owns the engine.** The retrieval pipeline — BM25, vector, graph,
-   and RLM retrievers plus ensemble fusion — lives in
-   `apps/web/src/lib/tools/rag/`. `packages/core/src/rag/` is only a port; its
-   own doc comment says the implementation lives in the app.
+Handlers are idempotent, retries bounded (8, exponential backoff), dead
+events visible and replayable (`docs/runbooks/outbox.md`). The old
+dispatch-after-commit Inngest path is gone; `founder_weekly_review_dispatches`
+remains as the vertical-local outbox it always was.
 
-Until that is inverted too, treat "is it in `packages/core`?" as a reliable
-signal for the **schema** but not yet for the **retrieval code**.
+## Mindmap — a source type inside the Documents workspace
 
-### Enforcement
+`apps/web/src/app/employer/documents/_mindmap` is a diagramming editor
+(mindmaps, flowcharts, org charts, ERDs) with its own document model, canvas
+and storage. It lives under the documents route because a mindmap *is a
+source*: it is listed, searched, filed, renamed and deleted through the same
+workspace controls as an upload, previewed in the same viewer, and edited in
+place (`?source=m<id>&edit=1`). It has no pages of its own. It is structured
+like a library: `_mindmap/model` is pure TypeScript with no React or DOM, and
+carries the bulk of the tests.
 
-`eslint.config.js` already forbids `packages/core` from importing Next, Clerk,
-React, `apps/web` (`~/*`), or `@launchstack/features`, and forbids reading
-`process.env`. These rules are correct but currently report errors rather than
-blocking merges.
+It joins ingestion at exactly one seam. A diagram is **made citable** — the
+server renders its outline from the stored document, stores it through
+`uploadFile`, then hands it to `processDocumentUpload` the first time and to
+`createDocumentVersionLifecycle` every time after, so one document is
+re-indexed in place rather than a new copy added. There is no diagram-shaped
+special case in ingestion; the document row carries a `kind: "mindmap"`
+marker in `ocrMetadata` so viewers render it as the map. Entry points: _Add a
+source → Create → Mindmap_, and the Studio feature menu.
 
-For the schema boundary specifically, that import rule is the real enforcement —
-a foreign key requires importing the target table, so core structurally cannot
-reference a product table. `scripts/ci/check-schema-boundary.mjs` re-checks the
-generated SQL as a backstop against a hand-edited migration, and **does** block
-merges.
+Its tables (`pdr_ai_v2_mindmaps`, `…_mindmap_revisions`, `…_mindmap_presence`)
+belong to the product migration set. Documents are stored whole as `jsonb` with
+an optimistic-concurrency `revision`; see
+`apps/web/src/app/employer/documents/_mindmap/README.md` for why, and for the
+one place the editor deliberately does not use design tokens.
+
+## Two migration sets, one database
+
+Unchanged from before (see `CONTRIBUTING.md`): engine set in
+`packages/core/drizzle` (ledger `_launchstack_migrations`; schema source now
+`packages/adapters/src/db/schema/`), product set in `apps/web/drizzle`
+(ledger `_launchstack_web_migrations`). Forward-only, checksummed, applied
+by `packages/store/scripts/migrate.mjs` everywhere. `drizzle-kit push` stays
+banned on deploy surfaces. The one engine table the refactor added:
+`pdr_ai_v2_event_outbox`.
 
 ## Deploy targets
 
-Four different things ship from this repository. This is the main reason the
-root directory looks crowded.
+| Target         | Built from                                      | Notes                                                                                                                                                                                                                                |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GHCR images    | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.**                                                                                     |
+| `apps/landing` | —                                               | The public marketing site has no deploy pipeline in this repo.                                                                                                                                                                       |
+| npm packages   | every `packages/*` + `pipelines/`               | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports).                                                                                         |
+| Local          | `docker-compose.yml` via `Makefile`             | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, gotenberg, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
-| Target | Built from | Triggered by |
-| --- | --- | --- |
-| Vercel — web app | `apps/web` | `vercel.json`. Runs `db:migrate` on production builds. |
-| GHCR container images | `apps/web/Dockerfile`, `apps/web/Dockerfile.prebuilt` | `.github/workflows/docker.yml` |
-| npm package | `packages/core` | `.github/workflows/release.yml` via Changesets |
+## Verification (all blocking — ADR-006)
 
-> **The npm release path cannot run.** `.changeset/` does not exist, although
-> the root `package.json` defines `changeset` / `version` / `release` scripts
-> and `.github/workflows/release.yml` expects it. Separately, the release job
-> is gated on `if: github.repository == 'launchstack/launchstack'`
-> (`release.yml:20`) while this repository is `Deodat-Lawson/LaunchStack`, so
-> it is skipped on every push.
->
-> The **package itself is publish-ready**, contrary to what an earlier revision
-> of this file claimed. `packages/core/package.json` carries a `publishConfig`
-> block that redirects `main`, `types` and the entire `exports` map to
-> `./dist/*`; npm and pnpm apply those overrides at publish time, and
-> `release.yml` runs `publint` and `@arethetypeswrong/cli` against the packed
-> tarball. The top-level `exports` pointing at `./src/*.ts` is what makes the
-> workspace build work in development, not what would ship.
-
-### Local development
-
-`docker-compose.yml` defines nine services: `db`, `migrate`, `seaweedfs`,
-`sidecar`, `docling-serve`, `ocr-router`, `ocr-worker`, `app`, and `inngest-dev`.
-Use the `Makefile` rather than raw compose commands:
-
-```bash
-make up
-```
-
-### The repository root is not an application
-
-The root `package.json` is a **workspace manifest, not an app manifest**. It has
-zero dependencies, holds no application code, and does not start a server.
-Running `pnpm dev` at the root does nothing — target a package explicitly:
-
-```bash
-pnpm --filter @launchstack/web dev
-```
-
-Only genuinely repo-wide commands live at the root: `lint`, `typecheck`,
-`format:*`, `check`, and the Changesets release scripts. Every Dockerfile now
-lives beside the thing it builds, so no single application owns the root.
-
-## Scripts
-
-Three separate script locations exist, and they are not interchangeable.
-
-| Location | Purpose |
-| --- | --- |
-| `packages/core/scripts/` | Migration runner, journal check, push guard, seed. |
-| `apps/web/scripts/` | Wired into `apps/web/package.json`. Backfill CLI, workers. |
-| `scripts/ops/` | Operational tasks: database backup, model download. |
-| `scripts/dev/` | Manual developer probes. Not tests, not run by CI. |
-| `scripts/ci/` | Checks CI runs that are useful to run locally too. |
-
-### Two migration sets, one database
-
-Schema ownership follows the open-source boundary:
-
-| Set | Schema | Migrations | Ledger |
-| --- | --- | --- | --- |
-| **engine** | `packages/core/src/db/schema/` | `packages/core/drizzle/` | `_launchstack_migrations` |
-| **product** | `apps/web/src/server/db/schema/` + `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | `_launchstack_web_migrations` |
-
-`@launchstack/core` is published, so its 25 tables must stand alone: applying
-`packages/core/drizzle` by itself yields a working engine database. The
-remaining 36 product tables may reference engine tables — never the reverse.
-ESLint blocks core from importing `~/*` or `@launchstack/features` (which a
-foreign key needs), and `scripts/ci/check-schema-boundary.mjs` re-checks the
-generated SQL.
-
-**Every environment applies both sets with the same ordered command** — local
-dev, CI, the Docker `migrate` service and the Vercel production build all run
-`db:migrate`, engine first. The order is load-bearing: product foreign keys
-point at engine tables.
-
-`drizzle-kit push` is banned anywhere it can reach a real database
-(`scripts/ci/check-no-push.mjs` enforces it). Previously push was the de-facto
-schema source for dev/CI/Docker while Vercel production ran SQL migrations —
-two strategies that produced provably different databases.
-
-See [Changing the database](CONTRIBUTING.md#changing-the-database) for the
-workflow.
-
-### Migrations are immutable
-
-`packages/core/scripts/migrate.mjs` records a SHA-256 checksum per migration and
-**refuses to apply anything** if a previously-applied file has changed —
-including its comments. Because `vercel.json` runs `db:migrate` during
-production builds, editing history fails the deploy. Always add a new forward
-migration; there are no down migrations by design.
-
-The runner also takes a session advisory lock before reading its ledger, so two
-concurrent production builds cannot both decide the same migration is pending,
-and `db:verify` exits `2` for pending, `3` for checksum drift and `4` when the
-database is *ahead* of the build being deployed.
-
-## Where to start reading
-
-| If you want to understand… | Read |
-| --- | --- |
-| The retrieval pipeline | `apps/web/src/lib/tools/rag/search/ensemble-search.ts` |
-| Meetings, Slack, and agents on other machines | `docs/collaboration.md`, then `packages/core/src/collab/` |
-| The engine's public surface | `packages/core/src/index.ts` |
-| What the engine promises hosts | `packages/core/src/config/types.ts` |
-| The data model | `packages/core/src/db/schema/` |
-| Product verticals | `packages/features/src/` |
+`pnpm lint` · `pnpm -r typecheck` · package tests
+(`pnpm --filter @launchstack/<pkg> test`) · full web Jest suite ·
+`next build` (type errors fail it) · schema-generator `schemas:check` ·
+Python service pytest suites · converter vitest suite ·
+migration gates (journal, drift, DML/destructive, parity, upgrade) ·
+Docker Compose smoke with an end-to-end cited-ingestion script
+(`scripts/ci/e2e-ingest.mjs`). No `continue-on-error`, no excluded suites,
+no `ignoreBuildErrors`.
 
 ## Open questions
 
-These need an owner decision, not a code change.
-
-1. **Compose files still sit at the root** — four of them. Consolidating them
-   under `docker/` means every relative build context changes, because Compose
-   resolves those against the first `-f` file's directory. *Deferred by owner
-   decision.* The Dockerfiles have already moved to `apps/web/`.
-2. **`sidecar/` sits outside `services/`** — it is a service and belongs at
-   `services/sidecar/`, next to `ocr-router` and `ocr-worker`. Moving it means
-   rewriting its build context in `docker-compose.yml`.
-3. **`apps/web` is two products** — a marketing site (`/`, `/contact`,
-   `/pricing`, `/deployment`) and the application (`/employer`, `/employee`,
-   `/workspaces`) share one route tree with no route groups separating them.
-   The `employer` / `employee` naming also predates `workspaces`.
-4. **`qodana.yaml` and root `CHANGELOG.md`** — nothing references the Qodana
-   config, and the root changelog was last updated 2026-01-31 and documents
-   files under a root `src/` directory that no longer exists. The real
-   changelog for the published package is `packages/core/CHANGELOG.md`.
-5. **`api/adeu` has no owner decision yet.** It is unreferenced and undeployed,
-   but it was authored and tested by contributors other than the repository
-   owner (created 2026-03-30, fixed and verified against preservation tests
-   2026-04-09). "Not deployed" is not the same as "not wanted" — retiring it
-   should be an explicit call by its authors, not an inference. Until then it
-   stays.
+1. ~~**`api/adeu` retirement**~~ **Closed** (ADR-007). Deleted: its
+   `sys.path` import of a sibling directory was never visible to a serverless
+   bundler, so it could not have run in the environment it existed for, and no
+   caller referenced it. History remains in git.
+2. **Compose files at the root** — deferred by owner decision (unchanged).
+3. ~~**`apps/web` is two products** (marketing site + application in one route
+   tree).~~ **Closed.** The public site is now `apps/landing`, deployed
+   separately and excluded from every image; `apps/web` serves the application
+   only, and `/` redirects to `/signin`.
+4. **Worker composition reuse** — the worker boots through
+   `apps/web/src/server/engine.ts` (one config authority). That keeps the
+   worker's env surface identical to the app's (including Clerk keys it
+   never uses); splitting a framework-free composition root out of web is
+   the natural next refactor (ADR-002 consequences). Note this shared root is
+   also what makes `DEPLOYMENT_MODE` reach the worker for free — the app and
+   the worker cannot disagree about metering.
+5. **`employerPasskey`/`employeePasskey`** remain plaintext columns on
+   `company` — unused since ADR-010 (invitations and join links replaced the
+   passkey signup); dropped, with `users.role` / `users.status`, once a release
+   has shipped with zero reads.
+6. **~~Clerk is a hard dependency.~~ Resolved (2026-08): auth is first-party.**
+   Clerk was replaced by better-auth running inside `apps/web` against the
+   same Postgres (`pdr_ai_v2_auth_*` tables) — no external auth service, no
+   account required, air-gapped deployments work. The predicted `AuthPort`
+   turned out to be unnecessary: because tenancy was already entirely our own
+   Postgres (`users`, `userCompanyMemberships`, `company`, plus the
+   `pdr_active_company` cookie), the swap was confined to the
+   `lib/require-workspace-context.ts` chokepoint, `middleware.ts`, and the
+   auth UI. `users.userId` now holds an opaque auth subject ID; rows imported
+   from Clerk keep their original `user_…` strings
+   (`apps/web/scripts/import-clerk-users.ts`).

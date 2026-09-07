@@ -19,7 +19,7 @@ import {
     Undo2,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { CallNote } from "@launchstack/features/call-notes";
+import type { CallNote } from "@launchstack/pipelines/call-notes";
 import styles from "./CallNoteEditor.module.css";
 
 type NoteContent = Pick<CallNote, "contentRich" | "contentMarkdown">;

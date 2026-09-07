@@ -2,7 +2,7 @@
 
 import { act, renderHook } from "@testing-library/react";
 import { useCallback, useState } from "react";
-import type { CallNote, CallSnapshot } from "@launchstack/features/call-notes";
+import type { CallNote, CallSnapshot } from "@launchstack/pipelines/call-notes";
 import { useCallNoteDrafts } from "~/app/calls/_components/useCallNoteDrafts";
 import { northstarPricingReviewCall } from "~/app/calls/_fixtures/callSnapshots";
 

@@ -43,7 +43,7 @@ Kien owns local capture/transcription, canonical contract approval, and final re
 
 ## Shared baseline
 
-The canonical contract pack is `@launchstack/features/call-notes`:
+The canonical contract pack is `@launchstack/pipelines/call-notes`:
 
 - `contracts.ts`: commands, source-normalized capture events, snapshots, enrichment payloads, and knowledge output.
 - `ports.ts`: local capture source, application, model, knowledge sink, clock, and ID boundaries.

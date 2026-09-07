@@ -19,61 +19,159 @@
     {
       "idx": 2,
       "version": "7",
+      "when": 1786228646563,
+      "tag": "20260808223726_document_creation_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786229348295,
+      "tag": "20260808224908_founder_weekly_review_async_collection",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786683913812,
+      "tag": "20260814050513_email_pipeline",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786941135920,
+      "tag": "20260817043215_mindmap_app",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786944851065,
+      "tag": "20260817053411_mindmap_presence",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
       "when": 1787188199398,
       "tag": "20260820010959_simple_khan",
       "breakpoints": true
     },
     {
-      "idx": 3,
+      "idx": 8,
       "version": "7",
       "when": 1787205296532,
       "tag": "20260820055456_deep_veda",
       "breakpoints": true
     },
     {
-      "idx": 4,
+      "idx": 9,
       "version": "7",
       "when": 1787205446269,
       "tag": "20260820055726_famous_titanium_man",
       "breakpoints": true
     },
     {
-      "idx": 5,
+      "idx": 10,
+      "version": "7",
+      "when": 1787442919298,
+      "tag": "20260822235519_marketing-history-publish-writeback",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
       "version": "7",
       "when": 1787492396419,
       "tag": "20260823133956_certain_iron_monger",
       "breakpoints": true
     },
     {
-      "idx": 6,
+      "idx": 12,
+      "version": "7",
+      "when": 1788032041550,
+      "tag": "20260829193401_lowly_silverclaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1788036212629,
+      "tag": "20260829204332_google_drive_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1788037408131,
+      "tag": "20260829210328_workspace_connections_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1788118573347,
+      "tag": "20260830193613_claude_artifacts",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
       "version": "7",
       "when": 1788354112851,
       "tag": "20260902130152_opposite_gargoyle",
       "breakpoints": true
     },
     {
-      "idx": 7,
+      "idx": 17,
       "version": "7",
       "when": 1788358503203,
       "tag": "20260902141503_big_jean_grey",
       "breakpoints": true
     },
     {
-      "idx": 8,
+      "idx": 18,
+      "version": "7",
+      "when": 1788396468893,
+      "tag": "20260903004748_repo_workspaces",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1788489462403,
+      "tag": "20260904023742_distribution_pipeline",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1788491665025,
+      "tag": "20260904031425_workspace_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1788584047514,
+      "tag": "20260905045407_mindmap_published_revision",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
       "version": "7",
       "when": 1788668126728,
       "tag": "20260906041526_youthful_strong_guy",
       "breakpoints": true
     },
     {
-      "idx": 9,
+      "idx": 23,
       "version": "7",
       "when": 1788674400000,
       "tag": "20260906060000_sunset_transcript_bookmarks",
       "breakpoints": true
     },
     {
-      "idx": 10,
+      "idx": 24,
       "version": "7",
       "when": 1788723945685,
       "tag": "20260906194545_legal_bromley",

@@ -7,8 +7,7 @@
 
 /* Sidebar Styles - Modern Glassmorphism */
 .sidebar {
-    @apply bg-white/80 backdrop-blur-md border-r border-gray-200/50 
-    flex flex-col sticky top-0 shadow-lg transition-all duration-300 overflow-hidden;
+    @apply sticky top-0 flex flex-col overflow-hidden border-r border-gray-200/50 bg-white/80 shadow-lg backdrop-blur-md transition-all duration-300;
     max-height: 100vh;
     /* Width is now controlled dynamically via inline styles */
 }
@@ -19,11 +18,11 @@
 }
 
 .sidebarRight {
-    @apply border-r-0 border-l border-gray-200/50;
+    @apply border-l border-r-0 border-gray-200/50;
 }
 
 [data-theme="dark"] .sidebarRight {
-    @apply border-r-0 border-l border-purple-500/30;
+    @apply border-l border-r-0 border-purple-500/30;
 }
 
 /* Sidebar left for document preview in chat mode */
@@ -38,7 +37,7 @@
 /* Icon buttons are now styled in headerActions section */
 
 .sidebarHeader {
-    @apply p-6 border-b border-gray-200/50;
+    @apply border-b border-gray-200/50 p-6;
 }
 
 /* Collapsed Header Styles */
@@ -48,12 +47,12 @@
 
 /* Logo Row - Horizontal layout with logo and buttons */
 .logoRow {
-    @apply flex items-center justify-between mb-6 transition-all duration-300;
+    @apply mb-6 flex items-center justify-between transition-all duration-300;
 }
 
 /* Collapsed: Stack vertically */
 .sidebar.collapsed .logoRow {
-    @apply flex-col gap-3 mb-4;
+    @apply mb-4 flex-col gap-3;
 }
 
 .logoContainer {
@@ -76,55 +75,48 @@
 }
 
 .iconButton {
-    @apply p-2 rounded-lg bg-transparent border-0 cursor-pointer;
+    @apply cursor-pointer rounded-lg border-0 bg-transparent p-2;
     @apply text-gray-600 hover:bg-purple-100 hover:text-purple-600;
     @apply transition-all duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-purple-500;
 }
 
 .iconButtonIcon {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
 }
 
 .logoIcon {
-    @apply w-8 h-8 text-purple-600 transition-colors duration-300;
+    @apply h-8 w-8 text-purple-600 transition-colors duration-300;
 }
 
 .logoContainer:hover .logoIcon {
-    @apply text-purple-700 scale-110;
+    @apply scale-110 text-purple-700;
 }
 
 .logoText {
-    @apply text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 
-    bg-clip-text text-transparent transition-all duration-300;
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-xl font-bold text-transparent transition-all duration-300;
 }
 
 /* Hide logo text when collapsed */
 .sidebar.collapsed .logoText {
-    @apply opacity-0 w-0 overflow-hidden;
+    @apply w-0 overflow-hidden opacity-0;
 }
 
 .searchContainer {
-    @apply relative transition-all duration-300 mb-4;
+    @apply relative mb-4 transition-all duration-300;
 }
 
 /* Hide search when collapsed */
 .sidebar.collapsed .searchContainer {
-    @apply opacity-0 h-0 overflow-hidden mb-0;
+    @apply mb-0 h-0 overflow-hidden opacity-0;
 }
 
 .searchIcon {
-    @apply w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 
-    text-gray-500 transition-all duration-300 z-10;
+    @apply absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transform text-gray-500 transition-all duration-300;
 }
 
 .searchInput {
-    @apply w-full pl-12 pr-4 py-3.5 
-    border border-gray-200 rounded-2xl
-    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-400
-    placeholder-gray-500 transition-all duration-200 
-    bg-white
-    text-gray-700 font-medium;
+    @apply w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-4 font-medium text-gray-700 placeholder-gray-500 transition-all duration-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500;
 }
 
 .searchInput:hover {
@@ -134,14 +126,14 @@
 /* Search icon styling is now handled in the component */
 
 .searchInput:focus {
-    @apply bg-white border-purple-400;
+    @apply border-purple-400 bg-white;
 }
 
 /* Document List Styles - Enhanced */
 .docList {
     @apply flex-1 overflow-y-auto p-4;
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.purple.300') theme('colors.gray.100');
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
 }
 
 /* Collapsed Document List */
@@ -154,11 +146,11 @@
 }
 
 .docList::-webkit-scrollbar-track {
-    @apply bg-gray-100 rounded-full;
+    @apply rounded-full bg-gray-100;
 }
 
 .docList::-webkit-scrollbar-thumb {
-    @apply bg-purple-300 rounded-full;
+    @apply rounded-full bg-purple-300;
 }
 
 .docList::-webkit-scrollbar-thumb:hover {
@@ -170,18 +162,16 @@
 }
 
 .categoryHeader {
-    @apply flex items-center px-4 py-3 text-sm font-semibold text-gray-700 
-    rounded-xl cursor-pointer transition-all duration-300
-    hover:bg-purple-50;
+    @apply flex cursor-pointer items-center rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-purple-50;
 }
 
 /* Collapsed Category Header */
 .sidebar.collapsed .categoryHeader {
-    @apply px-2 justify-center;
+    @apply justify-center px-2;
 }
 
 .chevronIcon {
-    @apply w-5 h-5 mr-3 text-gray-400 transition-transform duration-300;
+    @apply mr-3 h-5 w-5 text-gray-400 transition-transform duration-300;
 }
 
 /* Hide chevron text when collapsed */
@@ -189,48 +179,43 @@
     @apply mr-0;
 }
 
-
 .categoryName {
     @apply font-semibold transition-all duration-300;
 }
 
 /* Hide category name when collapsed */
 .sidebar.collapsed .categoryName {
-    @apply opacity-0 w-0 overflow-hidden;
+    @apply w-0 overflow-hidden opacity-0;
 }
 
 .categoryDocs {
-    @apply ml-8 space-y-2 mt-3 transition-all duration-300;
+    @apply ml-8 mt-3 space-y-2 transition-all duration-300;
 }
 
 /* Hide category docs when collapsed */
 .sidebar.collapsed .categoryDocs {
-    @apply opacity-0 h-0 overflow-hidden ml-0 mt-0;
+    @apply ml-0 mt-0 h-0 overflow-hidden opacity-0;
 }
 
 .docItem {
-    @apply flex items-center w-full px-4 py-3 text-sm text-gray-700 
-    rounded-xl transition-all duration-300 
-    hover:bg-purple-50
-    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+    @apply flex w-full items-center rounded-xl px-4 py-3 text-sm text-gray-700 transition-all duration-300 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
 }
 
 .docItem.selected {
-    @apply bg-purple-100 border-l-4 border-purple-600;
+    @apply border-l-4 border-purple-600 bg-purple-100;
 }
 
 /* Collapsed Doc Item */
 .sidebar.collapsed .docItem {
-    @apply px-2 justify-center;
+    @apply justify-center px-2;
 }
 
 .docItem.selected {
-    @apply bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 
-    shadow-md border border-purple-200;
+    @apply border border-purple-200 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 shadow-md;
 }
 
 .docIcon {
-    @apply w-5 h-5 mr-3 flex-shrink-0 transition-colors duration-300;
+    @apply mr-3 h-5 w-5 flex-shrink-0 transition-colors duration-300;
 }
 
 /* Collapsed Doc Icon */
@@ -238,22 +223,18 @@
     @apply mr-0;
 }
 
-
-
-
 .docName {
     @apply truncate text-left font-medium transition-all duration-300;
 }
 
 /* Hide doc name when collapsed */
 .sidebar.collapsed .docName {
-    @apply opacity-0 w-0 overflow-hidden;
+    @apply w-0 overflow-hidden opacity-0;
 }
 
 /* VIEW-MODE BUTTONS - Enhanced */
 .viewModeContainer {
-    @apply p-6 border-b border-gray-200/50 
-    bg-white/60 backdrop-blur-sm transition-all duration-300;
+    @apply border-b border-gray-200/50 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300;
 }
 
 /* Collapsed View Mode Container */
@@ -267,12 +248,11 @@
 
 /* Hide view mode header when collapsed */
 .sidebar.collapsed .viewModeHeader {
-    @apply opacity-0 h-0 overflow-hidden mb-2;
+    @apply mb-2 h-0 overflow-hidden opacity-0;
 }
 
 .viewModeTitle {
-    @apply text-sm font-bold text-gray-700 tracking-wide uppercase 
-    text-center pb-2 border-b border-gray-200;
+    @apply border-b border-gray-200 pb-2 text-center text-sm font-bold uppercase tracking-wide text-gray-700;
 }
 
 .viewModeButtons {
@@ -285,23 +265,16 @@
 }
 
 .viewModeButton {
-    @apply flex items-center justify-center w-14 h-14 
-    bg-white/80 backdrop-blur-sm
-    border-2 border-gray-200 
-    rounded-2xl shadow-lg
-    transition-all duration-300 ease-in-out
-    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
-    relative transform;
+    @apply relative flex h-14 w-14 transform items-center justify-center rounded-2xl border-2 border-gray-200 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
 }
 
 /* Collapsed View Mode Button */
 .sidebar.collapsed .viewModeButton {
-    @apply w-12 h-12;
+    @apply h-12 w-12;
 }
 
 .viewModeButton:hover {
-    @apply scale-110 border-purple-300 shadow-xl
-    bg-gradient-to-br from-purple-50 to-indigo-50;
+    @apply scale-110 border-purple-300 bg-gradient-to-br from-purple-50 to-indigo-50 shadow-xl;
 }
 
 .viewModeButton:hover .viewModeIcon {
@@ -309,19 +282,17 @@
 }
 
 .viewModeIcon {
-    @apply w-6 h-6 text-gray-600 
-    transition-all duration-300;
+    @apply h-6 w-6 text-gray-600 transition-all duration-300;
 }
 
 /* Collapsed View Mode Icon */
 .sidebar.collapsed .viewModeIcon {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
 }
 
 /* Active view mode styling */
 .activeViewMode {
-    @apply bg-gradient-to-br from-purple-600 to-indigo-600 
-    border-purple-600 shadow-xl scale-105;
+    @apply scale-105 border-purple-600 bg-gradient-to-br from-purple-600 to-indigo-600 shadow-xl;
 }
 
 .activeViewMode .viewModeIcon {
@@ -329,7 +300,7 @@
 }
 
 .activeViewMode:hover {
-    @apply from-purple-700 to-indigo-700 border-purple-700;
+    @apply border-purple-700 from-purple-700 to-indigo-700;
 }
 
 /* Tooltip Styles - Enhanced */
@@ -338,33 +309,25 @@
 }
 
 .tooltip {
-    @apply absolute left-1/2 transform -translate-x-1/2 
-    bottom-full mb-3 z-50
-    pointer-events-none;
+    @apply pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 -translate-x-1/2 transform;
 }
 
 /* Adjust tooltip position for collapsed state */
 .sidebar.collapsed .tooltip {
-    @apply left-full ml-3 bottom-1/2 transform translate-y-1/2 translate-x-0;
+    @apply bottom-1/2 left-full ml-3 translate-x-0 translate-y-1/2 transform;
 }
 
 .tooltipText {
-    @apply bg-gray-900/90 backdrop-blur-sm text-white text-xs font-semibold
-    px-3 py-2 rounded-lg shadow-xl
-    whitespace-nowrap;
+    @apply whitespace-nowrap rounded-lg bg-gray-900/90 px-3 py-2 text-xs font-semibold text-white shadow-xl backdrop-blur-sm;
 }
 
 .tooltipArrow {
-    @apply absolute top-full left-1/2 transform -translate-x-1/2
-    w-0 h-0 border-l-4 border-r-4 border-t-4
-    border-l-transparent border-r-transparent border-t-gray-900;
+    @apply absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 transform border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900;
 }
 
 /* Adjust tooltip arrow for collapsed state */
 .sidebar.collapsed .tooltipArrow {
-    @apply top-1/2 left-0 transform -translate-y-1/2 -translate-x-full
-    border-l-0 border-r-4 border-t-4 border-b-4
-    border-r-gray-900 border-t-transparent border-b-transparent;
+    @apply left-0 top-1/2 -translate-x-full -translate-y-1/2 transform border-b-4 border-l-0 border-r-4 border-t-4 border-b-transparent border-r-gray-900 border-t-transparent;
 }
 
 /* Main Content Styles - Enhanced */
@@ -377,7 +340,7 @@
 }
 
 .docTitle {
-    @apply text-4xl md:text-5xl font-extrabold;
+    @apply text-4xl font-extrabold md:text-5xl;
     background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -385,17 +348,15 @@
 }
 
 .summaryContainer {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-8 
-    border border-gray-100 hover:shadow-2xl transition-all duration-500;
+    @apply mb-8 rounded-2xl border border-gray-100 bg-white/80 p-8 shadow-xl backdrop-blur-sm transition-all duration-500 hover:shadow-2xl;
 }
 
 .summaryHeader {
-    @apply flex items-center mb-6;
+    @apply mb-6 flex items-center;
 }
 
 .summaryIcon {
-    @apply w-8 h-8 text-purple-600 mr-4 p-1 bg-gradient-to-br from-purple-100 to-indigo-100 
-    rounded-xl;
+    @apply mr-4 h-8 w-8 rounded-xl bg-gradient-to-br from-purple-100 to-indigo-100 p-1 text-purple-600;
 }
 
 .summaryTitle {
@@ -403,16 +364,15 @@
 }
 
 .summaryText {
-    @apply text-gray-700 leading-relaxed text-lg;
+    @apply text-lg leading-relaxed text-gray-700;
 }
 
 .pdfContainer {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 
-    h-[calc(100vh-20rem)] border border-gray-100;
+    @apply h-[calc(100vh-20rem)] rounded-2xl border border-gray-100 bg-white/80 p-6 shadow-xl backdrop-blur-sm;
 }
 
 .pdfViewer {
-    @apply w-full h-full border-0 rounded-xl;
+    @apply h-full w-full rounded-xl border-0;
 }
 
 /* Loading States - Enhanced */
@@ -421,7 +381,7 @@
 }
 
 .mainLoadingContent {
-    @apply flex-1 flex items-center justify-center p-8;
+    @apply flex flex-1 items-center justify-center p-8;
 }
 
 .loadingContent {
@@ -429,16 +389,16 @@
 }
 
 .loadingIcon {
-    @apply w-16 h-16 text-purple-600 mb-6 animate-spin;
+    @apply mb-6 h-16 w-16 animate-spin text-purple-600;
 }
 
 .loadingText {
-    @apply text-xl text-gray-700 font-semibold;
+    @apply text-xl font-semibold text-gray-700;
 }
 
 /* Sidebar Footer - Enhanced and Modular */
 .sidebarFooter {
-    @apply mt-auto p-6 border-t border-gray-200/50 transition-all duration-300;
+    @apply mt-auto border-t border-gray-200/50 p-6 transition-all duration-300;
     @apply flex flex-col gap-3;
 }
 
@@ -457,22 +417,16 @@
 }
 
 .homeButton {
-    @apply flex items-center space-x-3 w-full
-    text-gray-700 font-medium
-    bg-white/50 backdrop-blur-sm
-    border border-gray-200 rounded-xl p-4
-    hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50
-    hover:border-purple-300 hover:text-purple-600
-    transition-all duration-300;
+    @apply flex w-full items-center space-x-3 rounded-xl border border-gray-200 bg-white/50 p-4 font-medium text-gray-700 backdrop-blur-sm transition-all duration-300 hover:border-purple-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:text-purple-600;
 }
 
 /* Collapsed Home Button */
 .sidebar.collapsed .homeButton {
-    @apply space-x-0 justify-center p-3;
+    @apply justify-center space-x-0 p-3;
 }
 
 .homeIcon {
-    @apply w-6 h-6 transition-transform duration-300;
+    @apply h-6 w-6 transition-transform duration-300;
 }
 
 .homeButton:hover .homeIcon {
@@ -481,21 +435,20 @@
 
 /* Hide home button text when collapsed */
 .sidebar.collapsed .homeButton span {
-    @apply opacity-0 w-0 overflow-hidden;
+    @apply w-0 overflow-hidden opacity-0;
 }
 
 /* Profile Section - Enhanced */
 .profileSection {
-    @apply p-6 border-t border-gray-200/50 mt-auto;
+    @apply mt-auto border-t border-gray-200/50 p-6;
 }
 
 .userDetails {
-    @apply flex items-center space-x-4 mb-4 p-4 bg-white/50 rounded-xl;
+    @apply mb-4 flex items-center space-x-4 rounded-xl bg-white/50 p-4;
 }
 
 .userIcon {
-    @apply w-10 h-10 text-purple-600 p-1 bg-gradient-to-br from-purple-100 to-indigo-100 
-    rounded-xl;
+    @apply h-10 w-10 rounded-xl bg-gradient-to-br from-purple-100 to-indigo-100 p-1 text-purple-600;
 }
 
 .username {
@@ -508,81 +461,58 @@
 
 /* Logout Button - Enhanced */
 .logoutButton {
-    @apply flex items-center justify-center w-full 
-    bg-gradient-to-r from-red-500 to-red-600 text-white 
-    py-3 px-6 rounded-xl font-semibold
-    hover:from-red-600 hover:to-red-700 
-    shadow-lg hover:shadow-xl transition-all duration-300
-    transform hover:-translate-y-0.5
-    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
+    @apply flex w-full transform items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-red-600 hover:to-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
 }
 
 .logoutIcon {
-    @apply w-5 h-5 mr-3;
+    @apply mr-3 h-5 w-5;
 }
 
 /* Document Management Buttons - Enhanced */
 .deleteButton {
-    @apply inline-flex items-center justify-center
-    p-2 text-gray-400 rounded-lg flex-shrink-0 ml-2
-    hover:text-red-600 hover:bg-red-50
-    transition-all duration-200 transform hover:scale-110
-    focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
+    @apply ml-2 inline-flex flex-shrink-0 transform items-center justify-center rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
 }
 
 .trashIcon {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
 }
 
 .docButton {
-    @apply flex items-center gap-2 w-full text-left
-    px-2 py-1 text-sm text-gray-700 font-medium
-    rounded-xl transition-all duration-300
-    hover:bg-purple-50
-    focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2;
+    @apply flex w-full items-center gap-2 rounded-xl px-2 py-1 text-left text-sm font-medium text-gray-700 transition-all duration-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 hover:bg-purple-50;
 }
 
 .docButton.selected {
-    @apply bg-purple-100 border-l-4 border-purple-600;
+    @apply border-l-4 border-purple-600 bg-purple-100;
 }
 
 .docButton .docItem {
-    @apply flex-1 min-w-0 flex items-center px-2 py-2 rounded-lg
-    border-0 focus:outline-none focus:ring-0
-    bg-transparent shadow-none;
+    @apply flex min-w-0 flex-1 items-center rounded-lg border-0 bg-transparent px-2 py-2 shadow-none focus:outline-none focus:ring-0;
 }
 
 /* AI Search / Q&A - Enhanced */
 .aiSearchForm {
-    @apply flex flex-col space-y-4 p-4 bg-white/50 rounded-xl;
+    @apply flex flex-col space-y-4 rounded-xl bg-white/50 p-4;
 }
 
 .aiSearchInput {
-    @apply border-2 border-gray-200 rounded-xl p-3 w-full
-    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
-    transition-all duration-300 bg-white/50;
+    @apply w-full rounded-xl border-2 border-gray-200 bg-white/50 p-3 transition-all duration-300 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500;
 }
 
 .aiSearchButton {
-    @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white 
-    px-6 py-3 rounded-xl font-semibold
-    hover:from-purple-700 hover:to-indigo-700 
-    shadow-lg hover:shadow-xl transition-all duration-300
-    transform hover:-translate-y-0.5;
+    @apply transform rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-purple-700 hover:to-indigo-700 hover:shadow-xl;
 }
 
 .aiAnswerContainer {
-    @apply bg-gradient-to-r from-gray-50 to-purple-50 rounded-xl p-6 mt-4 
-    border border-gray-200;
+    @apply mt-4 rounded-xl border border-gray-200 bg-gradient-to-r from-gray-50 to-purple-50 p-6;
 }
 
 /* No document selected - Enhanced */
 .noDocSelected {
-    @apply flex flex-col items-center justify-center h-full text-center;
+    @apply flex h-full flex-col items-center justify-center text-center;
 }
 
 .noDocTitle {
-    @apply text-2xl font-semibold text-gray-500 mb-4;
+    @apply mb-4 text-2xl font-semibold text-gray-500;
 }
 
 .noDocDescription {
@@ -618,7 +548,7 @@
     }
 
     .sidebar {
-        @apply w-full h-auto relative;
+        @apply relative h-auto w-full;
     }
 
     .mainContent {
@@ -642,11 +572,11 @@
     }
 
     .viewModeButton {
-        @apply w-12 h-12;
+        @apply h-12 w-12;
     }
 
     .viewModeIcon {
-        @apply w-5 h-5;
+        @apply h-5 w-5;
     }
 }
 
@@ -655,11 +585,11 @@
 }
 
 [data-theme="dark"] .sidebar {
-    @apply bg-slate-950/80 border-r border-purple-500/20;
+    @apply border-r border-purple-500/20 bg-slate-950/80;
 }
 
 [data-theme="dark"] .toggleButton {
-    @apply bg-slate-800/90 border-purple-500/30 hover:bg-purple-900/50 hover:border-purple-400;
+    @apply border-purple-500/30 bg-slate-800/90 hover:border-purple-400 hover:bg-purple-900/50;
 }
 
 [data-theme="dark"] .toggleIcon {
@@ -683,8 +613,7 @@
 }
 
 [data-theme="dark"] .viewModeTitle {
-    @apply text-sm font-bold text-white tracking-wide uppercase 
-    text-center pb-2 border-b border-purple-500/20;
+    @apply border-b border-purple-500/20 pb-2 text-center text-sm font-bold uppercase tracking-wide text-white;
 }
 
 [data-theme="dark"] .iconButton {
@@ -692,7 +621,7 @@
 }
 
 [data-theme="dark"] .searchInput {
-    @apply bg-slate-800 border-slate-600 text-white placeholder-gray-400;
+    @apply border-slate-600 bg-slate-800 text-white placeholder-gray-400;
     @apply hover:border-purple-400 hover:bg-slate-700;
     @apply focus:border-purple-400 focus:bg-slate-800;
 }
@@ -702,7 +631,7 @@
 }
 
 [data-theme="dark"] .viewModeContainer {
-    @apply bg-slate-800/80 border-purple-500/20;
+    @apply border-purple-500/20 bg-slate-800/80;
 }
 
 [data-theme="dark"] .viewModeButton {
@@ -734,7 +663,7 @@
 }
 
 [data-theme="dark"] .docButton.selected {
-    @apply bg-slate-800 border-l-4 border-purple-500;
+    @apply border-l-4 border-purple-500 bg-slate-800;
 }
 
 [data-theme="dark"] .docItem {
@@ -742,7 +671,7 @@
 }
 
 [data-theme="dark"] .docItem.selected {
-    @apply bg-slate-800 border-l-4 border-purple-500;
+    @apply border-l-4 border-purple-500 bg-slate-800;
 }
 
 [data-theme="dark"] .docTitle {
@@ -793,8 +722,10 @@
 }
 
 [data-theme="dark"] .summaryContainer {
-    @apply bg-slate-900/90 border-purple-500/30;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(124, 58, 237, 0.15);
+    @apply border-purple-500/30 bg-slate-900/90;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(124, 58, 237, 0.15);
 }
 
 [data-theme="dark"] .summaryIcon {
@@ -810,7 +741,7 @@
 }
 
 [data-theme="dark"] .pdfContainer {
-    @apply bg-slate-900/95 border-purple-500/30;
+    @apply border-purple-500/30 bg-slate-900/95;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -824,28 +755,28 @@
 
 /* Split Layout Styles for Simple Query and AI Chat */
 .splitLayoutContainer {
-    @apply flex gap-6 h-[calc(100vh-8rem)];
+    @apply flex h-[calc(100vh-8rem)] gap-6;
 }
 
 .splitMainPanel {
-    @apply flex-1 flex flex-col;
+    @apply flex flex-1 flex-col;
 }
 
 .splitSidePanel {
-    @apply w-[400px] flex flex-col;
+    @apply flex w-[400px] flex-col;
 }
 
 /* Chat message scrolling */
 .chatHistoryContainer {
-    @apply flex-1 overflow-y-auto mb-4 space-y-4;
+    @apply mb-4 flex-1 space-y-4 overflow-y-auto;
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.purple.300') theme('colors.gray.100');
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
 }
 
 .sidebarBody {
     @apply flex-1 overflow-y-auto p-6;
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.purple.300') theme('colors.gray.100');
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
 }
 
 .sidebarBody::-webkit-scrollbar {
@@ -853,11 +784,11 @@
 }
 
 .sidebarBody::-webkit-scrollbar-track {
-    @apply bg-gray-100 rounded-full;
+    @apply rounded-full bg-gray-100;
 }
 
 .sidebarBody::-webkit-scrollbar-thumb {
-    @apply bg-purple-300 rounded-full;
+    @apply rounded-full bg-purple-300;
 }
 
 .sidebarBody::-webkit-scrollbar-thumb:hover {
@@ -869,11 +800,11 @@
 }
 
 .chatHistoryContainer::-webkit-scrollbar-track {
-    @apply bg-gray-100 rounded-full;
+    @apply rounded-full bg-gray-100;
 }
 
 .chatHistoryContainer::-webkit-scrollbar-thumb {
-    @apply bg-purple-300 rounded-full;
+    @apply rounded-full bg-purple-300;
 }
 
 .chatHistoryContainer::-webkit-scrollbar-thumb:hover {
@@ -881,15 +812,15 @@
 }
 
 [data-theme="dark"] .chatHistoryContainer {
-    scrollbar-color: theme('colors.purple.600') theme('colors.slate.700');
+    scrollbar-color: theme("colors.purple.600") theme("colors.slate.700");
 }
 
 [data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-track {
-    @apply bg-slate-700 rounded-full;
+    @apply rounded-full bg-slate-700;
 }
 
 [data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-thumb {
-    @apply bg-purple-600 rounded-full;
+    @apply rounded-full bg-purple-600;
 }
 
 [data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-thumb:hover {
@@ -897,15 +828,15 @@
 }
 
 [data-theme="dark"] .sidebarBody {
-    scrollbar-color: theme('colors.purple.600') theme('colors.slate.700');
+    scrollbar-color: theme("colors.purple.600") theme("colors.slate.700");
 }
 
 [data-theme="dark"] .sidebarBody::-webkit-scrollbar-track {
-    @apply bg-slate-700 rounded-full;
+    @apply rounded-full bg-slate-700;
 }
 
 [data-theme="dark"] .sidebarBody::-webkit-scrollbar-thumb {
-    @apply bg-purple-600 rounded-full;
+    @apply rounded-full bg-purple-600;
 }
 
 [data-theme="dark"] .sidebarBody::-webkit-scrollbar-thumb:hover {
@@ -913,18 +844,15 @@
 }
 
 .modeToggleWrapper {
-    @apply flex flex-col items-center mb-8;
+    @apply mb-8 flex flex-col items-center;
 }
 
 .modeToggle {
-    @apply flex items-center bg-white/90 dark:bg-slate-900/80 backdrop-blur-md 
-    border border-gray-200/60 dark:border-purple-500/30 rounded-full p-1
-    shadow-lg overflow-hidden;
+    @apply flex items-center overflow-hidden rounded-full border border-gray-200/60 bg-white/90 p-1 shadow-lg backdrop-blur-md dark:border-purple-500/30 dark:bg-slate-900/80;
 }
 
 .modeToggleButton {
-    @apply relative px-5 py-2 rounded-full text-sm font-medium
-    text-gray-600 dark:text-gray-300 transition-all duration-200;
+    @apply relative rounded-full px-5 py-2 text-sm font-medium text-gray-600 transition-all duration-200 dark:text-gray-300;
 }
 
 .modeToggleButton:hover {
@@ -940,17 +868,17 @@
 }
 
 .modeToggleDescription {
-    @apply text-xs text-gray-500 dark:text-gray-400 mt-2 text-center;
+    @apply mt-2 text-center text-xs text-gray-500 dark:text-gray-400;
 }
 
 /* Responsive adjustments for split layouts */
 @media (max-width: 1024px) {
     .splitLayoutContainer {
-        @apply flex-col h-auto;
+        @apply h-auto flex-col;
     }
 
     .splitSidePanel {
-        @apply w-full h-[400px];
+        @apply h-[400px] w-full;
     }
 
     .splitMainPanel {
@@ -967,7 +895,7 @@
 }
 
 .resizeHandle::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 50%;
     top: 0;
@@ -975,11 +903,13 @@
     width: 0;
     background: transparent;
     transform: translateX(-50%);
-    transition: width 0.2s ease-out, background-color 0.2s ease-out;
+    transition:
+        width 0.2s ease-out,
+        background-color 0.2s ease-out;
 }
 
 .resizeHandle:hover {
-    @apply bg-purple-400 w-1.5;
+    @apply w-1.5 bg-purple-400;
     box-shadow: 0 0 12px rgba(147, 51, 234, 0.4);
 }
 
@@ -989,9 +919,12 @@
 }
 
 .resizeHandle:active {
-    @apply bg-purple-500 w-2;
+    @apply w-2 bg-purple-500;
     box-shadow: 0 0 18px rgba(147, 51, 234, 0.6);
-    transition: width 0.1s ease-out, background-color 0.1s ease-out, box-shadow 0.1s ease-out;
+    transition:
+        width 0.1s ease-out,
+        background-color 0.1s ease-out,
+        box-shadow 0.1s ease-out;
 }
 
 [data-theme="dark"] .resizeHandle {
@@ -1014,9 +947,9 @@
 
 /* Reopen Sidebar Buttons */
 .reopenButton {
-    @apply fixed bg-purple-600 text-white p-3 rounded-lg shadow-xl;
-    @apply transition-all duration-300 z-50;
-    @apply hover:bg-purple-700 hover:scale-105;
+    @apply fixed rounded-lg bg-purple-600 p-3 text-white shadow-xl;
+    @apply z-50 transition-all duration-300;
+    @apply hover:scale-105 hover:bg-purple-700;
     @apply flex items-center gap-2;
 }
 

@@ -9,5 +9,5 @@
 import { redirect } from "next/navigation";
 
 export default function MetadataPage() {
-  redirect("/employer/settings#company");
+    redirect("/employer/settings#company");
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"query-planner.d.ts","sourceRoot":"","sources":["../../src/trend-search/query-planner.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,cAAc,EAAE,MAAM,SAAS,CAAC;AA8D5D;;;GAGG;AACH,wBAAsB,WAAW,CAC7B,KAAK,EAAE,MAAM,EACb,cAAc,EAAE,MAAM,EACtB,UAAU,CAAC,EAAE,cAAc,EAAE,GAC9B,OAAO,CAAC,YAAY,EAAE,CAAC,CAezB"}

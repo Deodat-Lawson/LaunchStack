@@ -8,39 +8,52 @@
  * the other.
  */
 
-import { HttpSlackClient, type SlackClient } from "@launchstack/core/collab";
+import { HttpSlackClient, type SlackClient } from "@launchstack/collab";
 import { env } from "~/env";
+import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 
 const globalForSlack = globalThis as unknown as { __collabSlackClient?: SlackClient | null };
 
 /** Returns null when no bot token is configured. */
 export function getSlackClient(): SlackClient | null {
-  if (globalForSlack.__collabSlackClient !== undefined) {
+    if (globalForSlack.__collabSlackClient !== undefined) {
+        return globalForSlack.__collabSlackClient;
+    }
+    const botToken = env.server.SLACK_BOT_TOKEN;
+    globalForSlack.__collabSlackClient = botToken ? new HttpSlackClient({ botToken }) : null;
     return globalForSlack.__collabSlackClient;
-  }
-  const botToken = env.server.SLACK_BOT_TOKEN;
-  globalForSlack.__collabSlackClient = botToken ? new HttpSlackClient({ botToken }) : null;
-  return globalForSlack.__collabSlackClient;
+}
+
+/**
+ * The workspace's own Slack connection wins over the deployment-global
+ * SLACK_BOT_TOKEN, which stays as the fallback so existing self-hosts keep
+ * working. Not cached: the token can rotate or be revoked between calls, and
+ * HttpSlackClient construction is trivial.
+ */
+export async function getSlackClientForCompany(companyId: bigint): Promise<SlackClient | null> {
+    const botToken = await getCompanyAccessToken(companyId, "slack");
+    if (botToken) return new HttpSlackClient({ botToken });
+    return getSlackClient();
 }
 
 export function getSlackSigningSecret(): string | null {
-  return env.server.SLACK_SIGNING_SECRET ?? null;
+    return env.server.SLACK_SIGNING_SECRET ?? null;
 }
 
 export interface SlackIntegrationStatus {
-  /** Outbound mirroring is possible. */
-  canPost: boolean;
-  /** Inbound events can be verified, so humans can steer from Slack. */
-  canReceive: boolean;
-  /** What an operator still has to configure. */
-  missing: string[];
+    /** Outbound mirroring is possible. */
+    canPost: boolean;
+    /** Inbound events can be verified, so humans can steer from Slack. */
+    canReceive: boolean;
+    /** What an operator still has to configure. */
+    missing: string[];
 }
 
 export function getSlackStatus(): SlackIntegrationStatus {
-  const canPost = Boolean(env.server.SLACK_BOT_TOKEN);
-  const canReceive = Boolean(env.server.SLACK_SIGNING_SECRET);
-  const missing: string[] = [];
-  if (!canPost) missing.push("SLACK_BOT_TOKEN");
-  if (!canReceive) missing.push("SLACK_SIGNING_SECRET");
-  return { canPost, canReceive, missing };
+    const canPost = Boolean(env.server.SLACK_BOT_TOKEN);
+    const canReceive = Boolean(env.server.SLACK_SIGNING_SECRET);
+    const missing: string[] = [];
+    if (!canPost) missing.push("SLACK_BOT_TOKEN");
+    if (!canReceive) missing.push("SLACK_SIGNING_SECRET");
+    return { canPost, canReceive, missing };
 }

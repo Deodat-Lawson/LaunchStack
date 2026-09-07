@@ -18,10 +18,8 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { document } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
+import { and, eq } from "drizzle-orm";
+import { document } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -31,18 +29,19 @@ import {
     getWebSearchInstruction,
     describeChatError,
 } from "../services";
-import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import {
-    describeChatResolutionFailure,
-    resolveConfiguredChatModel,
-} from "~/lib/models";
+import { performRLMSearch, type RLMSearchOptions } from "@launchstack/retrieval/tools/rlm-search";
+import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
-import type { SemanticType } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import type { SemanticType } from "@launchstack/store/schema";
+import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+const ROUTE = "agents/documentQ&A/AIQueryRLM";
 
 /**
  * Request body schema for RLM queries
@@ -69,7 +68,9 @@ interface RLMQueryRequest {
 /**
  * Validate request body
  */
-function validateRequest(body: unknown): { success: true; data: RLMQueryRequest } | { success: false; error: string } {
+function validateRequest(
+    body: unknown
+): { success: true; data: RLMQueryRequest } | { success: false; error: string } {
     if (!body || typeof body !== "object") {
         return { success: false, error: "Request body is required" };
     }
@@ -84,8 +85,10 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
         return { success: false, error: "question is required and must be a non-empty string" };
     }
 
-    const providerValue = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
-    const modelValue = typeof req.aiModel === "string" ? (req.aiModel.trim() || undefined) : undefined;
+    const providerValue =
+        typeof req.provider === "string" ? req.provider.trim() || undefined : undefined;
+    const modelValue =
+        typeof req.aiModel === "string" ? req.aiModel.trim() || undefined : undefined;
 
     // Validate maxTokens if provided
     if (req.maxTokens !== undefined) {
@@ -104,7 +107,12 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
     // Validate pageRange if provided
     if (req.pageRange !== undefined) {
         const pr = req.pageRange as Record<string, unknown>;
-        if (typeof pr.start !== "number" || typeof pr.end !== "number" || pr.start < 0 || pr.end < pr.start) {
+        if (
+            typeof pr.start !== "number" ||
+            typeof pr.end !== "number" ||
+            pr.start < 0 ||
+            pr.end < pr.start
+        ) {
             return { success: false, error: "pageRange must have valid start and end numbers" };
         }
     }
@@ -140,8 +148,19 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         try {
+            // Authenticate first. Chat resolution reports what this
+            // deployment can and cannot do, which is not something an
+            // anonymous caller should be able to probe — and a request that
+            // is going to 401 should 401, not 400.
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
+            if (!ctx.data.can("documents.read")) {
+                recordAuthzDenied("documents.read", ROUTE);
+                return forbiddenForPermission("documents.read");
+            }
+
             // Parse and validate request
-            const body = await request.json() as RLMQueryRequest;
+            const body = (await request.json()) as RLMQueryRequest;
             const validation = validateRequest(body);
 
             if (!validation.success) {
@@ -168,18 +187,6 @@ export async function POST(request: Request) {
                 pageRange,
             } = validation.data;
 
-            // Authenticate first. Chat resolution reports what this
-            // deployment can and cannot do, which is not something an
-            // anonymous caller should be able to probe — and a request that
-            // is going to 401 should 401, not 400.
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: 401 }
-                );
-            }
-
             // Then resolve, still before the hierarchical search runs: an
             // unavailable route is a 400, and RLM retrieval is the expensive
             // part.
@@ -190,57 +197,38 @@ export async function POST(request: Request) {
                 const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(
                     { success: false, message: failure.message },
-                    { status: failure.status },
+                    { status: failure.status }
                 );
             }
 
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
-                resolved,
+                resolved
             );
             if (!compatibility.ok) {
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
-                    { status: compatibility.status },
+                    { status: compatibility.status }
                 );
             }
             const { modelId: selectedAiModel, chat } = resolved;
 
-            // Verify user and document access
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                return NextResponse.json(
-                    { success: false, message: "Invalid user." },
-                    { status: 401 }
-                );
-            }
-
+            // A document outside the caller's scope reads as missing: 404, never 403.
+            // RLM navigates within this one document, so proving it is enough.
+            const scope = await ctx.data.documentScope();
+            observeScopeSize(scope);
             const [targetDocument] = await db
-                .select({
-                    id: document.id,
-                    companyId: document.companyId,
-                    title: document.title,
-                })
+                .select({ id: document.id, title: document.title })
                 .from(document)
-                .where(eq(document.id, documentId))
+                .where(
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
+                )
                 .limit(1);
 
             if (!targetDocument) {
                 return NextResponse.json(
                     { success: false, message: "Document not found." },
                     { status: 404 }
-                );
-            }
-
-            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
-                return NextResponse.json(
-                    { success: false, message: "You do not have access to this document." },
-                    { status: 403 }
                 );
             }
 
@@ -261,7 +249,8 @@ export async function POST(request: Request) {
             if (searchResult.sections.length === 0) {
                 return NextResponse.json({
                     success: false,
-                    message: "No relevant content found. The document may not have been processed with RLM indexing yet.",
+                    message:
+                        "No relevant content found. The document may not have been processed with RLM indexing yet.",
                 });
             }
 
@@ -312,7 +301,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
                     resolved.prepareMessages([
                         new SystemMessage(systemPrompt),
                         new HumanMessage(userPrompt),
-                    ]),
+                    ])
                 );
             } catch (modelError) {
                 const friendly = describeChatError(modelError, selectedAiModel);
@@ -322,7 +311,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
                             success: false,
                             message: friendly.message,
                         },
-                        { status: friendly.status },
+                        { status: friendly.status }
                     );
                 }
                 throw modelError;
@@ -335,7 +324,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
             const recommendedPages = [
                 ...new Set(
                     searchResult.sections
-                        .map((s) => s.pageNumber)
+                        .map(s => s.pageNumber)
                         .filter((p): p is number => p !== null)
                 ),
             ].sort((a, b) => a - b);

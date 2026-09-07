@@ -5,7 +5,7 @@ import type {
     CaptureEvent,
     LocalCapturePollResult,
     LocalCaptureSession,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import type { AudioSource, PcmFrame } from "./local/audio";
 import type {

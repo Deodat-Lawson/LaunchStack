@@ -1,8 +1,8 @@
 import { and, desc, eq, or, sql } from "drizzle-orm";
 
-import type { DbClient } from "@launchstack/core/db";
-import { CallNotesApplicationError } from "@launchstack/features/call-notes";
-import type { CallListQuery, WorkspaceCallNoteFile } from "@launchstack/features/call-notes";
+import type { DbClient } from "@launchstack/store/client";
+import { CallNotesApplicationError } from "@launchstack/pipelines/call-notes";
+import type { CallListQuery, WorkspaceCallNoteFile } from "@launchstack/pipelines/call-notes";
 import { callNotesCalls, documentNotes } from "~/server/db/schema";
 import { getEngine } from "~/server/engine";
 import { createWebCallNotesMembershipStore } from "./application";

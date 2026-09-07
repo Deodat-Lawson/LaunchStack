@@ -1,8 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
-import { LocalCaptureWorkerStatusSchema } from "@launchstack/features/call-notes";
+import { LocalCaptureWorkerStatusSchema } from "@launchstack/pipelines/call-notes";
 
 import { env } from "~/env";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
@@ -12,9 +11,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
     try {
-        const { userId } = await auth();
-        if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
-        const companyId = (await getActiveCompanyId(userId)).toString();
+        const workspace = await requireWorkspacePermission("documents.read");
+        if (!workspace.success) return workspace.response;
+        const userId = workspace.data.authUserId;
+        const companyId = workspace.data.companyId.toString();
         if (
             !env.server.CALL_NOTES_CAPTURE_ENABLED ||
             env.server.CALL_NOTES_LOCAL_COMPANY_ID !== companyId ||

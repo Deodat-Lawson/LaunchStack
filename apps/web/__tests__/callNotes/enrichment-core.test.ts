@@ -2,8 +2,8 @@ import {
     CALL_NOTES_ENRICHMENT_SCHEMA_VERSION,
     EnrichedNoteProposalSchema,
     EnrichmentInputSchema,
-} from "@launchstack/features/call-notes";
-import { invokeStructured } from "@launchstack/core/llm";
+} from "@launchstack/pipelines/call-notes";
+import { invokeStructured } from "@launchstack/llm";
 
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { ConfiguredCallNotesEnrichmentModel } from "~/server/call-notes/enrichment-model";
@@ -13,7 +13,7 @@ import {
     validateEnrichmentProvenance,
 } from "~/server/call-notes/enrichment-validation";
 
-jest.mock("@launchstack/core/llm", () => ({
+jest.mock("@launchstack/llm", () => ({
     invokeStructured: jest.fn(),
 }));
 

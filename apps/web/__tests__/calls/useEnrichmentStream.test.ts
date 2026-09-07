@@ -2,7 +2,7 @@
 
 import { act, renderHook } from "@testing-library/react";
 import { useState } from "react";
-import type { CallSnapshot } from "@launchstack/features/call-notes/contracts";
+import type { CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
 import { enrichmentReadyCall } from "~/app/calls/_fixtures/callSnapshots";
 import { useEnrichmentStream } from "~/app/calls/_components/useEnrichmentStream";
 

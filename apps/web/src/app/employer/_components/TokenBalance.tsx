@@ -13,12 +13,17 @@ export function TokenBalance() {
     const [balance, setBalance] = useState<number | null>(null);
 
     useEffect(() => {
-        fetch("/api/credits")
-            .then((r) => (r.ok ? r.json() : null))
-            .then((data) => {
-                if (data?.balanceTokens != null) setBalance(data.balanceTokens);
-            })
-            .catch(() => {});
+        void (async () => {
+            try {
+                const res = await fetch("/api/credits");
+                if (!res.ok) return;
+                // Known response shape of our /api/credits route.
+                const data = (await res.json()) as { balanceTokens?: number | null };
+                if (data.balanceTokens != null) setBalance(data.balanceTokens);
+            } catch {
+                // Network errors just leave the balance chip hidden.
+            }
+        })();
     }, []);
 
     if (balance === null) return null;
@@ -27,14 +32,14 @@ export function TokenBalance() {
 
     return (
         <div
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 isLow
-                    ? "bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400"
-                    : "bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800/50 text-purple-600 dark:text-purple-400"
+                    ? "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-400"
+                    : "border-brand bg-brand-soft text-brand-ink dark:border-brand-soft"
             }`}
             title={`${balance.toLocaleString()} tokens remaining`}
         >
-            <Coins className="w-3.5 h-3.5" />
+            <Coins className="h-3.5 w-3.5" />
             {formatTokens(balance)}
         </div>
     );

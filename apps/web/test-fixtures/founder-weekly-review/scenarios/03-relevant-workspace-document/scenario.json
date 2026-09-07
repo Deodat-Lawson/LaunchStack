@@ -1,0 +1,48 @@
+{
+  "name": "relevant-workspace-document",
+  "description": "An unchanged current document is retrieved for Founder Context without becoming a temporal document change.",
+  "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+  "workspaceTimezone": "America/New_York",
+  "founderContext": "Focus on onboarding reliability and who owns retry telemetry.",
+  "companies": [
+    {
+      "name": "Northstar Analytics",
+      "underReview": true,
+      "documents": [
+        {
+          "title": "Onboarding Reliability Plan",
+          "category": "Planning",
+          "versions": [
+            {
+              "versionNumber": 1,
+              "timestamp": "2026-06-15T10:00:00.000Z",
+              "changelog": "Last updated before the reporting period.",
+              "chunks": [
+                {
+                  "section": "Ownership",
+                  "content": "Platform owns retry telemetry and recovery monitoring for onboarding."
+                },
+                {
+                  "section": "Runbook",
+                  "content": "On failure, onboarding retries with backoff and pages the platform on-call."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "expect": {
+    "evidence": {
+      "sourceTypeCounts": {
+        "workspace_document": { "min": 1 },
+        "document_change": { "exact": 0 }
+      }
+    },
+    "sourceSemantics": {
+      "currentWorkspaceOnly": true,
+      "temporalEvidenceRequired": true
+    }
+  }
+}

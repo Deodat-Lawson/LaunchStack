@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Authenticated workspace hydration** — Enable request-backed Clerk state in the root provider so server rendering and client hydration share the authentication snapshot instead of switching from the loading screen to the workspace. The root provider now opts routes into dynamic rendering.
+- **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables.
 - **Call title renaming** — Removed the purple outline during inline title editing; text selection remains visible, and keyboard focus is still indicated before editing.
 - **AI proposal review notice** — Kept the subtle highlighted container with a uniform border; removed the thick left accent. Accepted notes do not show a review banner.
 
@@ -48,7 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Streaming call-chat answers** — The call assistant renders Markdown as model text arrives instead of waiting for the full response. Model resolution explicitly enables streaming to prevent the SDK from silently returning a buffered completion. Interrupted answers are marked incomplete, retries exclude partial output, and leaving the call cancels generation.
 
 - **Current call-chat context** — Every question uses the latest server-side transcript and saved note, with capture-state awareness and current evidence taking precedence over old answers. Completed calls also supply ready AI-enhanced notes as review drafts; accepted notes use the current canonical revision. Rejected, stale, and private proposals stay excluded.
-
 - **Document Upload API** (`src/app/api/uploadDocument/route.ts`):
   - Dual-path processing architecture: OCR path for scanned documents, standard path for digital PDFs
   - Unified chunking and embedding pipeline for both processing methods
@@ -79,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Document lifecycle correctness:** Uploads, new versions, ZIP children, and archive summaries now atomically persist their document/version/job state, converge retries through stable idempotency keys, dispatch only after job creation, and propagate strict version IDs. Users no longer get stranded or duplicate document trees when a request or dispatch is retried; dispatch remains non-outbox and ambiguous remote acceptance relies on stable event-ID dedupe/retry.
 - **TypeScript/ESLint Compliance**:
   - Replaced all `any` types with proper TypeScript types in `ocrService.ts`
   - Fixed unsafe type assignments and member access violations

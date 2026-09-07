@@ -2,7 +2,7 @@ import {
     CALL_NOTES_ENRICHMENT_SCHEMA_VERSION,
     EnrichmentInputSchema,
     type EnrichmentInput,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 export const CALL_NOTES_ENRICHMENT_PROMPT_VERSION = "call-notes-enrichment-generation/v4" as const;
 

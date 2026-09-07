@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
-import { dbCore } from "../../../server/db/core";
-import { document, fileUploads } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
-import { eq, inArray } from "drizzle-orm";
-import { validateRequestBody, UserIdSchema } from "~/lib/validation";
-import { auth } from '@clerk/nextjs/server';
+// The second postgres pool (~/server/db/core) was removed — hot routes use
+// the engine's shared Drizzle client like everything else.
+import { db } from "~/server/db";
+import { document, fileUploads } from "@launchstack/store/schema";
+import { documentSettings } from "~/server/db/schema";
+import { eq, getTableColumns, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -84,44 +85,27 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()];
 }
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
     try {
-        const validation = await validateRequestBody(request, UserIdSchema);
-        if (!validation.success) {
-            return validation.response;
-        }
+        const ctx = await requireWorkspacePermission("documents.read");
+        if (!ctx.success) return ctx.response;
 
-        const { userId } = await auth()
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
+        const companyId = ctx.data.companyId;
 
-        const [userInfo] = await dbCore
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
-
-        const docs = await dbCore
-            .select()
+        // The read scope is part of the WHERE clause, so a restricted folder
+        // the caller has no grant to never leaves the database. The settings
+        // join says which of the visible documents are individually restricted
+        // (the caller sees those only because a grant reaches them).
+        const docs = await db
+            .select({ ...getTableColumns(document), restricted: documentSettings.restricted })
             .from(document)
-            .where(eq(document.companyId, companyId));
+            .leftJoin(documentSettings, eq(documentSettings.documentId, document.id))
+            .where(scopedDocumentWhere(companyId, await ctx.data.documentScope()));
 
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}
         // (so preview works for PDFs and other types when stored in DB and url has no extension)
         const fileIds = docs
-            .map((d) => {
+            .map(d => {
                 const m = FILE_API_ID_REGEX.exec(d.url);
                 return m ? parseInt(m[1]!, 10) : null;
             })
@@ -130,26 +114,25 @@ export async function POST(request: Request) {
 
         let mimeByFileId: Record<number, string> = {};
         if (uniqueFileIds.length > 0) {
-            const rows = await dbCore
+            const rows = await db
                 .select({ id: fileUploads.id, mimeType: fileUploads.mimeType })
                 .from(fileUploads)
                 .where(inArray(fileUploads.id, uniqueFileIds));
-            mimeByFileId = Object.fromEntries(rows.map((r) => [r.id, r.mimeType]));
+            mimeByFileId = Object.fromEntries(rows.map(r => [r.id, r.mimeType]));
         }
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
-        const serializedDocs = docs.map((doc) => {
+        const serializedDocs = docs.map(doc => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
             const mimeFromFile = fileId ? mimeByFileId[parseInt(fileId, 10)] : undefined;
-            const mimeType = doc.mimeType
-                ?? mimeFromFile
-                ?? inferMimeFromName(doc.title)
-                ?? inferMimeFromName(doc.url);
-            const needsProxy = isPrivateBlobUrl(doc.url)
-                || (isS3Storage() && doc.url.startsWith("http"));
-            const url = needsProxy
-                ? `/api/documents/${Number(doc.id)}/content`
-                : doc.url;
+            const mimeType =
+                doc.mimeType ??
+                mimeFromFile ??
+                inferMimeFromName(doc.title) ??
+                inferMimeFromName(doc.url);
+            const needsProxy =
+                isPrivateBlobUrl(doc.url) || (isS3Storage() && doc.url.startsWith("http"));
+            const url = needsProxy ? `/api/documents/${Number(doc.id)}/content` : doc.url;
 
             return {
                 ...doc,
@@ -160,9 +143,8 @@ export async function POST(request: Request) {
                 // schema — convert to number|null so JSON.stringify doesn't
                 // choke on the raw BigInt.
                 currentVersionId:
-                    doc.currentVersionId !== null
-                        ? Number(doc.currentVersionId)
-                        : null,
+                    doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
+                restricted: doc.restricted === true,
                 ...(mimeType && { mimeType }),
             };
         });
@@ -170,9 +152,6 @@ export async function POST(request: Request) {
         return NextResponse.json(serializedDocs, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
     }
 }

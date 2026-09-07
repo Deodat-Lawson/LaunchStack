@@ -5,122 +5,122 @@ import { useRef, useState, useCallback } from "react";
 import { blobToWav } from "./encodeWav";
 
 interface UseVoiceRecorderOptions {
-  onTranscription?: (text: string) => void;
-  onError?: (error: string) => void;
+    onTranscription?: (text: string) => void;
+    onError?: (error: string) => void;
 }
 
 export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
-  const { onTranscription, onError } = options;
+    const { onTranscription, onError } = options;
 
-  const [isRecording, setIsRecording] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const streamRef = useRef<MediaStream | null>(null);
+    const [isRecording, setIsRecording] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const chunksRef = useRef<Blob[]>([]);
+    const streamRef = useRef<MediaStream | null>(null);
 
-  const start = useCallback(async () => {
-    if (isRecording || isProcessing) return;
+    const start = useCallback(async () => {
+        if (isRecording || isProcessing) return;
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-      });
-      streamRef.current = stream;
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    channelCount: 1,
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                },
+            });
+            streamRef.current = stream;
 
-      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : "audio/webm";
+            const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+                ? "audio/webm;codecs=opus"
+                : "audio/webm";
 
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
+            const mediaRecorder = new MediaRecorder(stream, { mimeType });
+            mediaRecorderRef.current = mediaRecorder;
+            chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
+            mediaRecorder.ondataavailable = e => {
+                if (e.data.size > 0) chunksRef.current.push(e.data);
+            };
 
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(chunksRef.current, { type: mimeType });
-        chunksRef.current = [];
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+                chunksRef.current = [];
 
-        stream.getTracks().forEach((t) => t.stop());
-        streamRef.current = null;
+                stream.getTracks().forEach(t => t.stop());
+                streamRef.current = null;
 
-        if (audioBlob.size < 100) {
-          onError?.("Recording too short");
-          return;
+                if (audioBlob.size < 100) {
+                    onError?.("Recording too short");
+                    return;
+                }
+
+                void transcribe(audioBlob);
+            };
+
+            mediaRecorder.start();
+            setIsRecording(true);
+        } catch (err) {
+            console.error("Mic access failed:", err);
+            onError?.("Microphone access denied");
         }
+    }, [isRecording, isProcessing, onError]); // eslint-disable-line react-hooks/exhaustive-deps
 
-        void transcribe(audioBlob);
-      };
+    const stop = useCallback(() => {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+        }
+    }, []);
 
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (err) {
-      console.error("Mic access failed:", err);
-      onError?.("Microphone access denied");
-    }
-  }, [isRecording, isProcessing, onError]); // eslint-disable-line react-hooks/exhaustive-deps
+    const transcribe = async (audioBlob: Blob) => {
+        setIsProcessing(true);
+        try {
+            // MediaRecorder gives us WebM/Opus (or MP4/AAC on Safari); the
+            // transcription endpoint accepts neither reliably. Convert here so the
+            // server never has to carry a transcoder.
+            const wavBlob = await blobToWav(audioBlob);
 
-  const stop = useCallback(() => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  }, []);
+            const formData = new FormData();
+            formData.append("audio", wavBlob, "recording.wav");
 
-  const transcribe = async (audioBlob: Blob) => {
-    setIsProcessing(true);
-    try {
-      // MediaRecorder gives us WebM/Opus (or MP4/AAC on Safari); the
-      // transcription endpoint accepts neither reliably. Convert here so the
-      // server never has to carry a transcoder.
-      const wavBlob = await blobToWav(audioBlob);
+            const response = await fetch("/api/voice/speech-to-text", {
+                method: "POST",
+                body: formData,
+            });
 
-      const formData = new FormData();
-      formData.append("audio", wavBlob, "recording.wav");
+            if (!response.ok) throw new Error("Transcription failed");
 
-      const response = await fetch("/api/voice/speech-to-text", {
-        method: "POST",
-        body: formData,
-      });
+            const data = (await response.json()) as { text?: string };
+            const text = data.text?.trim() ?? "";
 
-      if (!response.ok) throw new Error("Transcription failed");
+            if (text.length >= 2) {
+                onTranscription?.(text);
+            } else {
+                onError?.("Could not understand audio");
+            }
+        } catch (err) {
+            console.error("Transcription error:", err);
+            onError?.("Failed to process speech");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
-      const data = (await response.json()) as { text?: string };
-      const text = data.text?.trim() ?? "";
+    const cancel = useCallback(() => {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+            mediaRecorderRef.current.ondataavailable = null;
+            mediaRecorderRef.current.onstop = null;
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+        }
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(t => t.stop());
+            streamRef.current = null;
+        }
+        chunksRef.current = [];
+    }, []);
 
-      if (text.length >= 2) {
-        onTranscription?.(text);
-      } else {
-        onError?.("Could not understand audio");
-      }
-    } catch (err) {
-      console.error("Transcription error:", err);
-      onError?.("Failed to process speech");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const cancel = useCallback(() => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
-      mediaRecorderRef.current.ondataavailable = null;
-      mediaRecorderRef.current.onstop = null;
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((t) => t.stop());
-      streamRef.current = null;
-    }
-    chunksRef.current = [];
-  }, []);
-
-  return { isRecording, isProcessing, start, stop, cancel };
+    return { isRecording, isProcessing, start, stop, cancel };
 }

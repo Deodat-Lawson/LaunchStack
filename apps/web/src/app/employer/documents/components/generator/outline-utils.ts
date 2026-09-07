@@ -3,10 +3,7 @@ import type { OutlineItem } from "./OutlinePanel";
 /**
  * Recursively find an item by ID in the outline tree.
  */
-export function findItem(
-    items: OutlineItem[],
-    id: string,
-): OutlineItem | null {
+export function findItem(items: OutlineItem[], id: string): OutlineItem | null {
     for (const item of items) {
         if (item.id === id) return item;
         if (item.children) {
@@ -20,12 +17,9 @@ export function findItem(
 /**
  * Find the parent of an item by ID.
  */
-export function findParent(
-    items: OutlineItem[],
-    id: string,
-): OutlineItem | null {
+export function findParent(items: OutlineItem[], id: string): OutlineItem | null {
     for (const item of items) {
-        if (item.children?.some((c) => c.id === id)) return item;
+        if (item.children?.some(c => c.id === id)) return item;
         if (item.children) {
             const found = findParent(item.children, id);
             if (found) return found;
@@ -37,29 +31,20 @@ export function findParent(
 /**
  * Recursively delete an item by ID from the tree.
  */
-export function deleteItem(
-    items: OutlineItem[],
-    id: string,
-): OutlineItem[] {
+export function deleteItem(items: OutlineItem[], id: string): OutlineItem[] {
     return items
-        .filter((item) => item.id !== id)
-        .map((item) => ({
+        .filter(item => item.id !== id)
+        .map(item => ({
             ...item,
-            children: item.children
-                ? deleteItem(item.children, id)
-                : undefined,
+            children: item.children ? deleteItem(item.children, id) : undefined,
         }));
 }
 
 /**
  * Recursively update an item's title by ID.
  */
-export function saveEdit(
-    items: OutlineItem[],
-    id: string,
-    newTitle: string,
-): OutlineItem[] {
-    return items.map((item) => {
+export function saveEdit(items: OutlineItem[], id: string, newTitle: string): OutlineItem[] {
+    return items.map(item => {
         if (item.id === id) {
             return { ...item, title: newTitle };
         }
@@ -76,9 +61,9 @@ export function saveEdit(
 export function addChild(
     items: OutlineItem[],
     parentId: string,
-    child: OutlineItem,
+    child: OutlineItem
 ): OutlineItem[] {
-    return items.map((item) => {
+    return items.map(item => {
         if (item.id === parentId) {
             return {
                 ...item,
@@ -96,10 +81,7 @@ export function addChild(
  * Return a flat array of item IDs in visual (depth-first) order,
  * respecting which items are currently expanded.
  */
-export function getVisibleItems(
-    items: OutlineItem[],
-    expandedItems: Set<string>,
-): string[] {
+export function getVisibleItems(items: OutlineItem[], expandedItems: Set<string>): string[] {
     const result: string[] = [];
     for (const item of items) {
         result.push(item.id);

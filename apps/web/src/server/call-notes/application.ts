@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import type { DbClient } from "@launchstack/core/db";
+import type { DbClient } from "@launchstack/store/client";
 import {
     CallNoteSchema,
     CallNotesApplicationError,
@@ -12,15 +12,15 @@ import {
     type CallNotesDocumentNoteStore,
     type CallNotesMembershipRole,
     type CallNotesMembershipStore,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 import { getEngine } from "~/server/engine";
 import { documentNotes, userCompanyMemberships, users } from "~/server/db/schema";
 import { LocalDetectedCallSource } from "./detected-calls";
 import { createKnowledgeNoteSink } from "./knowledge-note-sink";
 
-export type { CallNotesApplication } from "@launchstack/features/call-notes";
-export { CallNotesApplicationError } from "@launchstack/features/call-notes";
+export type { CallNotesApplication } from "@launchstack/pipelines/call-notes";
+export { CallNotesApplicationError } from "@launchstack/pipelines/call-notes";
 
 /**
  * The web host owns identity/membership and document-note storage. The
@@ -42,8 +42,24 @@ const DOCUMENT_NOTE_CONTENT_SCHEMA = CallNoteSchema.pick({
     contentRich: true,
 });
 
-function isMembershipRole(value: string): value is CallNotesMembershipRole {
-    return value === "owner" || value === "admin" || value === "editor";
+function asCallNotesMembershipRole(value: string): CallNotesMembershipRole | null {
+    switch (value.trim().toLowerCase()) {
+        case "owner":
+            return "owner";
+        case "admin":
+            return "admin";
+        case "editor":
+        case "member":
+            return "editor";
+        case "viewer":
+            return "viewer";
+        case "guest":
+            return "guest";
+        default:
+            // Custom roles are resolved by requireWorkspaceContext at the route
+            // boundary; retain membership existence for this domain adapter.
+            return value.trim() ? "editor" : null;
+    }
 }
 
 function asDocumentNoteRecord(row: {
@@ -89,15 +105,17 @@ export function createWebCallNotesMembershipStore(
                 .where(
                     and(
                         eq(userCompanyMemberships.companyId, BigInt(companyId)),
-                        eq(users.userId, actorUserId)
+                        eq(users.userId, actorUserId),
+                        eq(userCompanyMemberships.status, "active")
                     )
                 )
                 .limit(1);
 
-            if (!row || !isMembershipRole(row.role)) {
+            const role = row ? asCallNotesMembershipRole(row.role) : null;
+            if (!role) {
                 return null;
             }
-            return row.role;
+            return role;
         },
     };
 }

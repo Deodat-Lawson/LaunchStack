@@ -6,5 +6,5 @@
 import { redirect } from "next/navigation";
 
 export default function StatisticsPage() {
-  redirect("/employer/settings#analytics");
+    redirect("/employer/settings#analytics");
 }

@@ -7,10 +7,9 @@ import { NextResponse } from "next/server";
 import { env } from "~/env";
 
 export async function GET() {
-  const isConfigured = Boolean(env.server.UPLOADTHING_TOKEN);
+    const isConfigured = Boolean(env.server.UPLOADTHING_TOKEN);
 
-  return NextResponse.json({
-    configured: isConfigured,
-  });
+    return NextResponse.json({
+        configured: isConfigured,
+    });
 }
-

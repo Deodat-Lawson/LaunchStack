@@ -6,47 +6,20 @@
 // can never see company B's jobs (returns 404 instead of leaking data).
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { getJobById } from "@launchstack/features/client-prospector/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { getJobById } from "@launchstack/pipelines/client-prospector/db";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
-export async function GET(
-    _request: Request,
-    { params }: { params: Promise<{ jobId: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ jobId: string }> }) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const { jobId } = await params;
-        const job = await getJobById(jobId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
+        const job = await getJobById(jobId, ctx.data.companyId);
 
         if (!job) {
-            return NextResponse.json(
-                { error: "Not found" },
-                { status: 404 },
-            );
+            return NextResponse.json({ error: "Not found" }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -64,9 +37,6 @@ export async function GET(
         });
     } catch (error) {
         console.error("[client-prospector] GET /[jobId] error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

@@ -2,7 +2,7 @@ import type {
     CallListQuery,
     DetectedCallCandidate,
     DetectedCallSource,
-} from "@launchstack/features/call-notes";
+} from "@launchstack/pipelines/call-notes";
 
 /**
  * Local audio capture creates Calls directly, so there are no external

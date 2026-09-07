@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_mindmaps" ADD COLUMN "published_revision" integer;

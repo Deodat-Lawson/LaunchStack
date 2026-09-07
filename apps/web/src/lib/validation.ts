@@ -2,6 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
 import {
     FOLDER_VISIBILITIES,
     GRANT_LEVELS,
@@ -816,5 +817,49 @@ export const UpdateArtifactSchema = z
         content: z.string().min(1).max(MAX_ARTIFACT_BYTES).optional(),
         /** Bring the artifact back out of the trash. */
         restore: z.boolean().optional(),
+    })
+    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+
+// ---------------------------------------------------------------------------
+// Workspace chat sessions (sidebar History)
+// ---------------------------------------------------------------------------
+
+/**
+ * One stored turn. `citations` and `attachments` travel as opaque JSON: they
+ * are the UI's own render payload (`ThreadReference`, `EphemeralAttachment`),
+ * replayed verbatim when the session is reopened, and pinning their shape here
+ * would mean a schema change every time a citation gains a field. They are
+ * bounded instead of parsed — an array cap plus the text cap is what keeps a
+ * session row from becoming a dumping ground.
+ */
+export const SessionMessageSchema = z.object({
+    role: z.enum(["user", "assistant"]),
+    text: z.string().max(MAX_SESSION_MESSAGE_CHARS),
+    refs: z.array(z.string().max(64)).max(200).optional(),
+    citations: z.array(z.unknown()).max(20).optional(),
+    attachments: z.array(z.unknown()).max(20).optional(),
+    model: z.string().max(120).nullable().optional(),
+    tokens: z.number().int().nonnegative().nullable().optional(),
+});
+
+export const CreateSessionSchema = z.object({
+    title: z.string().min(1).max(300).optional(),
+    messages: z.array(SessionMessageSchema).min(1).max(MAX_SESSION_APPEND),
+    contextSourceIds: z.array(z.string().max(64)).max(200).optional(),
+    continuation: z
+        .object({ title: z.string().max(300), context: z.string().max(20_000) })
+        .nullable()
+        .optional(),
+});
+
+export const AppendSessionMessagesSchema = z.object({
+    messages: z.array(SessionMessageSchema).min(1).max(MAX_SESSION_APPEND),
+    contextSourceIds: z.array(z.string().max(64)).max(200).optional(),
+});
+
+export const UpdateSessionSchema = z
+    .object({
+        title: z.string().min(1).max(300).optional(),
+        pinned: z.boolean().optional(),
     })
     .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });

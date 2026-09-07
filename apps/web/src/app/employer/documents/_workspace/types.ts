@@ -4,6 +4,7 @@ import type { Permission } from "~/lib/authz/permissions";
 // set kept for this file's existing entries (see apps/web/README.md).
 import {
     AppWindow as IconArtifact,
+    Compass as IconDistribution,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
 } from "lucide-react";
@@ -297,6 +298,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/agent-sessions",
     },
     {
+        id: "distribution",
+        label: "Distribution",
+        Icon: IconDistribution,
+        desc: "Find importers, distributors and retail accounts; run each relationship to a deal",
+        href: "/employer/tools/distribution",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -478,6 +486,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Marketing Pipeline",
                 Icon: IconMegaphone,
                 desc: "Multi-channel campaigns from your company knowledge",
+            },
+            {
+                // A separate app with its own route (programs, discovery runs,
+                // a pipeline board and a dashboard), like Claude Artifacts.
+                id: "distribution",
+                label: "Distribution",
+                Icon: IconDistribution,
+                desc: "Find importers, distributors and retail accounts for what you sell — evidence-backed dossiers, fit scores, and a pipeline to a signed agreement",
+                href: "/employer/tools/distribution",
+                external: true,
             },
         ],
     },

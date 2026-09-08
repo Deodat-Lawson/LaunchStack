@@ -13,6 +13,7 @@ import {
     refreshAccessToken,
     updateFileMedia,
 } from "./client";
+import { GOOGLE_DOC_MIME } from "./wire";
 
 const APP = { clientId: "cid", clientSecret: "secret" };
 
@@ -151,6 +152,32 @@ describe("drive files", () => {
         expect(body).toContain('"name":"contract.pdf"');
         expect(body).toContain('"parents":["folder1"]');
         expect(body).toContain("PDFBYTES");
+        // No targetMimeType: metadata and media agree, nothing is converted.
+        expect(body).toContain(`"mimeType":"application/pdf"`);
+    });
+
+    it("asks Drive to convert the body when targetMimeType differs", async () => {
+        const fetchMock = mockFetch(
+            jsonResponse({ id: "doc1", mimeType: GOOGLE_DOC_MIME, version: "1" })
+        );
+
+        const meta = await createFileMultipart({
+            accessToken: "at",
+            name: "Q3 Planning",
+            mimeType: "text/html",
+            targetMimeType: GOOGLE_DOC_MIME,
+            data: Buffer.from("<h1>Q3 Planning</h1>"),
+            parents: ["folder1"],
+        });
+
+        expect(meta.mimeType).toBe(GOOGLE_DOC_MIME);
+        const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+        const body = Buffer.from(init.body as Uint8Array).toString("utf8");
+        // The metadata part asks for a native Doc...
+        expect(body).toContain(`"mimeType":"${GOOGLE_DOC_MIME}"`);
+        // ...while the media part is still the HTML we uploaded.
+        expect(body).toContain("Content-Type: text/html");
+        expect(body).toContain("<h1>Q3 Planning</h1>");
     });
 
     it("pushes in-place updates via uploadType=media PATCH", async () => {

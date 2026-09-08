@@ -8,6 +8,8 @@ import {
     MessagesSquare as IconSessions,
     Network as IconMindmap,
 } from "lucide-react";
+// Brand marks live in the shared icon home, not the legacy set below.
+import { IconGoogleDocs } from "~/components/icons/brand";
 import {
     IconAudio,
     IconBolt,
@@ -538,8 +540,10 @@ export interface AddSourceTab {
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
-        // Authoring, not ingesting: these open the Mindmap app, and the diagram
-        // becomes a citable source once it is published back here.
+        // Authoring, not ingesting: these hand the user an editor rather than
+        // asking for a file. A mindmap becomes citable once it is published
+        // back here; a Google Doc is citable from the moment it is created and
+        // re-syncs as it is edited.
         group: "Create",
         items: [
             {
@@ -547,6 +551,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 label: "Mindmap",
                 Icon: IconMindmap,
                 desc: "Diagram it, then cite it",
+            },
+            {
+                id: "google-doc",
+                label: "Google Doc",
+                Icon: IconGoogleDocs,
+                desc: "Write it in Google Docs",
             },
         ],
     },

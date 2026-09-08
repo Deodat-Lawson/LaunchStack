@@ -77,6 +77,7 @@ import {
     downloadFileContent,
     exportFileContent,
     getFileMetadata,
+    trashFile,
 } from "@launchstack/google-drive";
 
 import { uploadFile } from "~/lib/storage";
@@ -87,7 +88,7 @@ import {
     linkedFilename,
     resolveCanonicalMime,
 } from "~/server/services/google-drive/links";
-import { pullDriveLink } from "~/server/services/google-drive/sync";
+import { pullDriveLink, unlinkDocument } from "~/server/services/google-drive/sync";
 import type { ConnectorConnection, DocumentDriveLink } from "~/server/db/schema";
 
 const mockGetMetadata = getFileMetadata as jest.Mock;
@@ -96,6 +97,7 @@ const mockExport = exportFileContent as jest.Mock;
 const mockToken = getAccessTokenForConnection as jest.Mock;
 const mockUpload = uploadFile as jest.Mock;
 const mockLifecycle = createDocumentVersionLifecycle as jest.Mock;
+const mockTrash = trashFile as jest.Mock;
 
 const HOUR = 60 * 60 * 1000;
 
@@ -112,6 +114,7 @@ function link(overrides: Partial<DocumentDriveLink> = {}): DocumentDriveLink {
         lastSyncedRevisionId: "rev1",
         lastSyncedMd5: "md5a",
         status: "linked",
+        origin: "linked",
         fidelityWarning: false,
         lastCheckedAt: new Date(Date.now() - HOUR),
         lastSyncedAt: new Date(Date.now() - HOUR),
@@ -304,6 +307,28 @@ describe("pull gates", () => {
         });
     });
 
+    it("a doc born in Google Docs syncs natively without a fidelity flag", async () => {
+        mockSelectResults.push([connection()], [DOC_ROW], [USER_ROW]);
+        mockGetMetadata.mockResolvedValue({
+            id: "f1",
+            mimeType: GOOGLE_DOC_MIME,
+            version: "42",
+            modifiedTime: new Date(Date.now() - HOUR).toISOString(),
+            trashed: false,
+        });
+        mockExport.mockResolvedValue(Buffer.from("exported"));
+        mockUpload.mockResolvedValue({ url: "/api/files/9" });
+        mockLifecycle.mockResolvedValue({ versionId: 80, version: { versionNumber: 2 } });
+
+        // Native is this file's normal state, not a lossy conversion: there was
+        // never a Word original whose formatting the export could damage.
+        const outcome = await pullDriveLink(link({ origin: "created" }));
+
+        expect(outcome).toMatchObject({ kind: "synced", fidelityWarning: false });
+        expect(mockExport).toHaveBeenCalled();
+        expect(mockUpdateCalls.at(-1)).toMatchObject({ fidelityWarning: false });
+    });
+
     it("a revoked grant surfaces as auth_revoked, not a retry loop", async () => {
         mockSelectResults.push([connection()]);
         mockToken.mockRejectedValue(new GoogleAuthError(400, "invalid_grant", true));
@@ -321,6 +346,66 @@ describe("pull gates", () => {
 
         expect(outcome).toMatchObject({ kind: "auth_revoked", detail: "gone" });
         expect(mockToken).not.toHaveBeenCalled();
+    });
+});
+
+/**
+ * Unlink has to know which side the file was born on: trashing a *copy* stops
+ * a zombie Doc from drifting out of sync, but trashing an *original* destroys
+ * the only editable version there is.
+ */
+describe("unlink and the origin rule", () => {
+    it("trashes the Drive copy of an uploaded document", async () => {
+        mockSelectResults.push([link()], [connection()], [connection()]);
+        // Marker unchanged, so the final pull is a cheap no-op.
+        mockGetMetadata.mockResolvedValue({
+            id: "f1",
+            mimeType: "application/pdf",
+            headRevisionId: "rev1",
+            trashed: false,
+        });
+
+        const result = await unlinkDocument({ documentId: 5 });
+
+        expect(result.trashed).toBe(true);
+        expect(mockTrash).toHaveBeenCalledWith(expect.objectContaining({ fileId: "f1" }));
+    });
+
+    it("keeps the Drive original of a document created in Google Docs", async () => {
+        mockSelectResults.push(
+            [link({ origin: "created", lastSyncedRevisionId: "v42" })],
+            [connection()]
+        );
+        mockGetMetadata.mockResolvedValue({
+            id: "f1",
+            mimeType: GOOGLE_DOC_MIME,
+            version: "42",
+            trashed: false,
+        });
+
+        const result = await unlinkDocument({ documentId: 5 });
+
+        expect(result.trashed).toBe(false);
+        expect(mockTrash).not.toHaveBeenCalled();
+    });
+
+    it("still honours an explicit keepDriveFile: false on a created doc", async () => {
+        mockSelectResults.push(
+            [link({ origin: "created", lastSyncedRevisionId: "v42" })],
+            [connection()],
+            [connection()]
+        );
+        mockGetMetadata.mockResolvedValue({
+            id: "f1",
+            mimeType: GOOGLE_DOC_MIME,
+            version: "42",
+            trashed: false,
+        });
+
+        const result = await unlinkDocument({ documentId: 5, keepDriveFile: false });
+
+        expect(result.trashed).toBe(true);
+        expect(mockTrash).toHaveBeenCalled();
     });
 });
 

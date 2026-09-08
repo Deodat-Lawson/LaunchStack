@@ -134,6 +134,35 @@ an optimistic-concurrency `revision`; see
 `apps/web/src/app/employer/documents/_mindmap/README.md` for why, and for the
 one place the editor deliberately does not use design tokens.
 
+## History — one sidebar feed over chats and pipeline runs
+
+The workspace rail has two tabs. **Sources** is the knowledge tree; **History**
+is everything that has already happened, newest first.
+
+Two different things share that list, and their scopes differ on purpose:
+
+- **Chat sessions** (`pdr_ai_v2_workspace_sessions` + `…_session_messages`) are
+  **personal** — one person inside one workspace. A half-finished question is a
+  draft, and a colleague finding your drafts in their sidebar is a surprise
+  nobody asked for. A session is created by the *first send*, never by opening
+  the composer, and its id lives in `?session=<id>` so a reload lands back in
+  the same conversation. Reopening replays the stored transcript, its pinned
+  sources, and its imported-transcript continuation.
+- **Pipeline runs** are **workspace-wide**, read out of the verticals' own
+  tables (`trend_search_jobs`, `client_prospector_jobs`, `repo_explainer_jobs`,
+  `distribution_runs`, `email_campaigns`, `founder_weekly_review_runs`). Nothing
+  is copied into a second table: history is a *read* over the rows the verticals
+  already own, so it can never drift from them.
+
+`apps/web/src/lib/workspace-history.ts` is the shared contract — the entry
+shape, four normalized statuses, date grouping, all pure and both-sides.
+`apps/web/src/server/history/loaders.ts` holds one loader per kind; the merge in
+`…/history/index.ts` settles them rather than awaiting as a group, so a vertical
+whose query throws costs you that vertical and is named in `degraded`, instead of
+blanking the sidebar. **Adding a vertical to the feed is a loader plus a kind —
+no UI change.** A vertical with no surface yet still lists its runs, without a
+link it cannot honour.
+
 ## Two migration sets, one database
 
 Unchanged from before (see `CONTRIBUTING.md`): engine set in

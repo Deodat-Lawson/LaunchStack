@@ -1,0 +1,54 @@
+name: Feature request
+description: Propose a new feature or enhancement
+title: "[feat]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For open-ended questions, use [Discussions](https://github.com/launchstack/launchstack/discussions) instead.
+        Substantial features should land as a design discussion before implementation.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do? What's the pain today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would the API or behavior look like? Code sketches welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you've thought about, and why you ruled them out.
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: Affected area
+      multiple: true
+      options:
+        - "@launchstack/core"
+        - "@launchstack/features"
+        - apps/web
+        - Docker / deployment
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: willing-to-contribute
+    attributes:
+      label: Willing to contribute?
+      options:
+        - label: I'd be willing to open a PR if this is accepted

@@ -1,0 +1,1010 @@
+/* Modern Employer Document Viewer - Matching Homepage Theme */
+
+.container {
+    @apply flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50;
+    overflow: hidden; /* Prevent horizontal scroll during drag */
+}
+
+/* Sidebar Styles - Modern Glassmorphism */
+.sidebar {
+    @apply sticky top-0 flex flex-col overflow-hidden border-r border-gray-200/50 bg-white/80 shadow-lg backdrop-blur-md transition-all duration-300;
+    max-height: 100vh;
+    /* Width is now controlled dynamically via inline styles */
+}
+
+/* Collapsed Sidebar Styles */
+.sidebar.collapsed {
+    @apply w-20;
+}
+
+.sidebarRight {
+    @apply border-l border-r-0 border-gray-200/50;
+}
+
+[data-theme="dark"] .sidebarRight {
+    @apply border-l border-r-0 border-purple-500/30;
+}
+
+/* Sidebar left for document preview in chat mode */
+.sidebarLeft {
+    @apply border-l-0 border-r border-gray-200/50;
+}
+
+[data-theme="dark"] .sidebarLeft {
+    @apply border-l-0 border-r border-purple-500/30;
+}
+
+/* Icon buttons are now styled in headerActions section */
+
+.sidebarHeader {
+    @apply border-b border-gray-200/50 p-6;
+}
+
+/* Collapsed Header Styles */
+.sidebar.collapsed .sidebarHeader {
+    @apply p-4;
+}
+
+/* Logo Row - Horizontal layout with logo and buttons */
+.logoRow {
+    @apply mb-6 flex items-center justify-between transition-all duration-300;
+}
+
+/* Collapsed: Stack vertically */
+.sidebar.collapsed .logoRow {
+    @apply mb-4 flex-col gap-3;
+}
+
+.logoContainer {
+    @apply flex items-center space-x-3 transition-all duration-300;
+}
+
+/* Collapsed Logo Styles */
+.sidebar.collapsed .logoContainer {
+    @apply justify-center space-x-0;
+}
+
+/* Header Actions - Buttons next to logo */
+.headerActions {
+    @apply flex items-center gap-2 transition-all duration-300;
+}
+
+/* Collapsed: Stack buttons vertically below logo */
+.sidebar.collapsed .headerActions {
+    @apply flex-col gap-2;
+}
+
+.iconButton {
+    @apply cursor-pointer rounded-lg border-0 bg-transparent p-2;
+    @apply text-gray-600 hover:bg-purple-100 hover:text-purple-600;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-purple-500;
+}
+
+.iconButtonIcon {
+    @apply h-5 w-5;
+}
+
+.logoIcon {
+    @apply h-8 w-8 text-purple-600 transition-colors duration-300;
+}
+
+.logoContainer:hover .logoIcon {
+    @apply scale-110 text-purple-700;
+}
+
+.logoText {
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-xl font-bold text-transparent transition-all duration-300;
+}
+
+/* Hide logo text when collapsed */
+.sidebar.collapsed .logoText {
+    @apply w-0 overflow-hidden opacity-0;
+}
+
+.searchContainer {
+    @apply relative mb-4 transition-all duration-300;
+}
+
+/* Hide search when collapsed */
+.sidebar.collapsed .searchContainer {
+    @apply mb-0 h-0 overflow-hidden opacity-0;
+}
+
+.searchIcon {
+    @apply absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 transform text-gray-500 transition-all duration-300;
+}
+
+.searchInput {
+    @apply w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-4 font-medium text-gray-700 placeholder-gray-500 transition-all duration-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500;
+}
+
+.searchInput:hover {
+    @apply border-purple-300 bg-purple-50/30;
+}
+
+/* Search icon styling is now handled in the component */
+
+.searchInput:focus {
+    @apply border-purple-400 bg-white;
+}
+
+/* Document List Styles - Enhanced */
+.docList {
+    @apply flex-1 overflow-y-auto p-4;
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
+}
+
+/* Collapsed Document List */
+.sidebar.collapsed .docList {
+    @apply p-2;
+}
+
+.docList::-webkit-scrollbar {
+    @apply w-2;
+}
+
+.docList::-webkit-scrollbar-track {
+    @apply rounded-full bg-gray-100;
+}
+
+.docList::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-300;
+}
+
+.docList::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-400;
+}
+
+.categoryGroup {
+    @apply mb-4;
+}
+
+.categoryHeader {
+    @apply flex cursor-pointer items-center rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-purple-50;
+}
+
+/* Collapsed Category Header */
+.sidebar.collapsed .categoryHeader {
+    @apply justify-center px-2;
+}
+
+.chevronIcon {
+    @apply mr-3 h-5 w-5 text-gray-400 transition-transform duration-300;
+}
+
+/* Hide chevron text when collapsed */
+.sidebar.collapsed .chevronIcon {
+    @apply mr-0;
+}
+
+.categoryName {
+    @apply font-semibold transition-all duration-300;
+}
+
+/* Hide category name when collapsed */
+.sidebar.collapsed .categoryName {
+    @apply w-0 overflow-hidden opacity-0;
+}
+
+.categoryDocs {
+    @apply ml-8 mt-3 space-y-2 transition-all duration-300;
+}
+
+/* Hide category docs when collapsed */
+.sidebar.collapsed .categoryDocs {
+    @apply ml-0 mt-0 h-0 overflow-hidden opacity-0;
+}
+
+.docItem {
+    @apply flex w-full items-center rounded-xl px-4 py-3 text-sm text-gray-700 transition-all duration-300 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+}
+
+.docItem.selected {
+    @apply border-l-4 border-purple-600 bg-purple-100;
+}
+
+/* Collapsed Doc Item */
+.sidebar.collapsed .docItem {
+    @apply justify-center px-2;
+}
+
+.docItem.selected {
+    @apply border border-purple-200 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 shadow-md;
+}
+
+.docIcon {
+    @apply mr-3 h-5 w-5 flex-shrink-0 transition-colors duration-300;
+}
+
+/* Collapsed Doc Icon */
+.sidebar.collapsed .docIcon {
+    @apply mr-0;
+}
+
+.docName {
+    @apply truncate text-left font-medium transition-all duration-300;
+}
+
+/* Hide doc name when collapsed */
+.sidebar.collapsed .docName {
+    @apply w-0 overflow-hidden opacity-0;
+}
+
+/* VIEW-MODE BUTTONS - Enhanced */
+.viewModeContainer {
+    @apply border-b border-gray-200/50 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300;
+}
+
+/* Collapsed View Mode Container */
+.sidebar.collapsed .viewModeContainer {
+    @apply p-2;
+}
+
+.viewModeHeader {
+    @apply mb-4 transition-all duration-300;
+}
+
+/* Hide view mode header when collapsed */
+.sidebar.collapsed .viewModeHeader {
+    @apply mb-2 h-0 overflow-hidden opacity-0;
+}
+
+.viewModeTitle {
+    @apply border-b border-gray-200 pb-2 text-center text-sm font-bold uppercase tracking-wide text-gray-700;
+}
+
+.viewModeButtons {
+    @apply flex flex-row justify-between space-x-3 transition-all duration-300;
+}
+
+/* Collapsed View Mode Buttons */
+.sidebar.collapsed .viewModeButtons {
+    @apply flex-col space-x-0 space-y-2;
+}
+
+.viewModeButton {
+    @apply relative flex h-14 w-14 transform items-center justify-center rounded-2xl border-2 border-gray-200 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+}
+
+/* Collapsed View Mode Button */
+.sidebar.collapsed .viewModeButton {
+    @apply h-12 w-12;
+}
+
+.viewModeButton:hover {
+    @apply scale-110 border-purple-300 bg-gradient-to-br from-purple-50 to-indigo-50 shadow-xl;
+}
+
+.viewModeButton:hover .viewModeIcon {
+    @apply text-purple-600;
+}
+
+.viewModeIcon {
+    @apply h-6 w-6 text-gray-600 transition-all duration-300;
+}
+
+/* Collapsed View Mode Icon */
+.sidebar.collapsed .viewModeIcon {
+    @apply h-5 w-5;
+}
+
+/* Active view mode styling */
+.activeViewMode {
+    @apply scale-105 border-purple-600 bg-gradient-to-br from-purple-600 to-indigo-600 shadow-xl;
+}
+
+.activeViewMode .viewModeIcon {
+    @apply text-white;
+}
+
+.activeViewMode:hover {
+    @apply border-purple-700 from-purple-700 to-indigo-700;
+}
+
+/* Tooltip Styles - Enhanced */
+.tooltipContainer {
+    @apply relative;
+}
+
+.tooltip {
+    @apply pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 -translate-x-1/2 transform;
+}
+
+/* Adjust tooltip position for collapsed state */
+.sidebar.collapsed .tooltip {
+    @apply bottom-1/2 left-full ml-3 translate-x-0 translate-y-1/2 transform;
+}
+
+.tooltipText {
+    @apply whitespace-nowrap rounded-lg bg-gray-900/90 px-3 py-2 text-xs font-semibold text-white shadow-xl backdrop-blur-sm;
+}
+
+.tooltipArrow {
+    @apply absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 transform border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900;
+}
+
+/* Adjust tooltip arrow for collapsed state */
+.sidebar.collapsed .tooltipArrow {
+    @apply left-0 top-1/2 -translate-x-full -translate-y-1/2 transform border-b-4 border-l-0 border-r-4 border-t-4 border-b-transparent border-r-gray-900 border-t-transparent;
+}
+
+/* Main Content Styles - Enhanced */
+.mainContent {
+    @apply flex-1 p-8;
+}
+
+.docHeader {
+    @apply mb-8;
+}
+
+.docTitle {
+    @apply text-4xl font-extrabold md:text-5xl;
+    background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.summaryContainer {
+    @apply mb-8 rounded-2xl border border-gray-100 bg-white/80 p-8 shadow-xl backdrop-blur-sm transition-all duration-500 hover:shadow-2xl;
+}
+
+.summaryHeader {
+    @apply mb-6 flex items-center;
+}
+
+.summaryIcon {
+    @apply mr-4 h-8 w-8 rounded-xl bg-gradient-to-br from-purple-100 to-indigo-100 p-1 text-purple-600;
+}
+
+.summaryTitle {
+    @apply text-2xl font-bold text-gray-900;
+}
+
+.summaryText {
+    @apply text-lg leading-relaxed text-gray-700;
+}
+
+.pdfContainer {
+    @apply h-[calc(100vh-20rem)] rounded-2xl border border-gray-100 bg-white/80 p-6 shadow-xl backdrop-blur-sm;
+}
+
+.pdfViewer {
+    @apply h-full w-full rounded-xl border-0;
+}
+
+/* Loading States - Enhanced */
+.loadingContainer {
+    @apply flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50;
+}
+
+.mainLoadingContent {
+    @apply flex flex-1 items-center justify-center p-8;
+}
+
+.loadingContent {
+    @apply flex flex-col items-center justify-center;
+}
+
+.loadingIcon {
+    @apply mb-6 h-16 w-16 animate-spin text-purple-600;
+}
+
+.loadingText {
+    @apply text-xl font-semibold text-gray-700;
+}
+
+/* Sidebar Footer - Enhanced and Modular */
+.sidebarFooter {
+    @apply mt-auto border-t border-gray-200/50 p-6 transition-all duration-300;
+    @apply flex flex-col gap-3;
+}
+
+/* Collapsed Sidebar Footer */
+.sidebar.collapsed .sidebarFooter {
+    @apply p-4;
+}
+
+/* Footer Action Container - Makes it easy to add new actions */
+.footerAction {
+    @apply w-full transition-all duration-300;
+}
+
+.sidebar.collapsed .footerAction {
+    @apply flex justify-center;
+}
+
+.homeButton {
+    @apply flex w-full items-center space-x-3 rounded-xl border border-gray-200 bg-white/50 p-4 font-medium text-gray-700 backdrop-blur-sm transition-all duration-300 hover:border-purple-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:text-purple-600;
+}
+
+/* Collapsed Home Button */
+.sidebar.collapsed .homeButton {
+    @apply justify-center space-x-0 p-3;
+}
+
+.homeIcon {
+    @apply h-6 w-6 transition-transform duration-300;
+}
+
+.homeButton:hover .homeIcon {
+    @apply scale-110;
+}
+
+/* Hide home button text when collapsed */
+.sidebar.collapsed .homeButton span {
+    @apply w-0 overflow-hidden opacity-0;
+}
+
+/* Profile Section - Enhanced */
+.profileSection {
+    @apply mt-auto border-t border-gray-200/50 p-6;
+}
+
+.userDetails {
+    @apply mb-4 flex items-center space-x-4 rounded-xl bg-white/50 p-4;
+}
+
+.userIcon {
+    @apply h-10 w-10 rounded-xl bg-gradient-to-br from-purple-100 to-indigo-100 p-1 text-purple-600;
+}
+
+.username {
+    @apply font-bold text-gray-800;
+}
+
+.userEmail {
+    @apply text-sm text-gray-600;
+}
+
+/* Logout Button - Enhanced */
+.logoutButton {
+    @apply flex w-full transform items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-red-600 hover:to-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
+}
+
+.logoutIcon {
+    @apply mr-3 h-5 w-5;
+}
+
+/* Document Management Buttons - Enhanced */
+.deleteButton {
+    @apply ml-2 inline-flex flex-shrink-0 transform items-center justify-center rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2;
+}
+
+.trashIcon {
+    @apply h-5 w-5;
+}
+
+.docButton {
+    @apply flex w-full items-center gap-2 rounded-xl px-2 py-1 text-left text-sm font-medium text-gray-700 transition-all duration-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 hover:bg-purple-50;
+}
+
+.docButton.selected {
+    @apply border-l-4 border-purple-600 bg-purple-100;
+}
+
+.docButton .docItem {
+    @apply flex min-w-0 flex-1 items-center rounded-lg border-0 bg-transparent px-2 py-2 shadow-none focus:outline-none focus:ring-0;
+}
+
+/* AI Search / Q&A - Enhanced */
+.aiSearchForm {
+    @apply flex flex-col space-y-4 rounded-xl bg-white/50 p-4;
+}
+
+.aiSearchInput {
+    @apply w-full rounded-xl border-2 border-gray-200 bg-white/50 p-3 transition-all duration-300 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500;
+}
+
+.aiSearchButton {
+    @apply transform rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-purple-700 hover:to-indigo-700 hover:shadow-xl;
+}
+
+.aiAnswerContainer {
+    @apply mt-4 rounded-xl border border-gray-200 bg-gradient-to-r from-gray-50 to-purple-50 p-6;
+}
+
+/* No document selected - Enhanced */
+.noDocSelected {
+    @apply flex h-full flex-col items-center justify-center text-center;
+}
+
+.noDocTitle {
+    @apply mb-4 text-2xl font-semibold text-gray-500;
+}
+
+.noDocDescription {
+    @apply text-lg text-gray-400;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        @apply w-72;
+    }
+
+    .mainContent {
+        @apply p-6;
+    }
+
+    .docTitle {
+        @apply text-3xl;
+    }
+
+    .summaryContainer {
+        @apply p-6;
+    }
+
+    .pdfContainer {
+        @apply h-[calc(100vh-24rem)] p-4;
+    }
+}
+
+@media (max-width: 640px) {
+    .container {
+        @apply flex-col;
+    }
+
+    .sidebar {
+        @apply relative h-auto w-full;
+    }
+
+    .mainContent {
+        @apply p-4;
+    }
+
+    .docTitle {
+        @apply text-2xl;
+    }
+
+    .summaryContainer {
+        @apply p-4;
+    }
+
+    .pdfContainer {
+        @apply h-[calc(100vh-28rem)] p-3;
+    }
+
+    .viewModeButtons {
+        @apply space-x-2;
+    }
+
+    .viewModeButton {
+        @apply h-12 w-12;
+    }
+
+    .viewModeIcon {
+        @apply h-5 w-5;
+    }
+}
+
+[data-theme="dark"] .container {
+    @apply bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950;
+}
+
+[data-theme="dark"] .sidebar {
+    @apply border-r border-purple-500/20 bg-slate-950/80;
+}
+
+[data-theme="dark"] .toggleButton {
+    @apply border-purple-500/30 bg-slate-800/90 hover:border-purple-400 hover:bg-purple-900/50;
+}
+
+[data-theme="dark"] .toggleIcon {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .toggleButton:hover .toggleIcon {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .sidebarHeader {
+    @apply border-b border-purple-500/20;
+}
+
+[data-theme="dark"] .logoIcon {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .logoText {
+    @apply bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent;
+}
+
+[data-theme="dark"] .viewModeTitle {
+    @apply border-b border-purple-500/20 pb-2 text-center text-sm font-bold uppercase tracking-wide text-white;
+}
+
+[data-theme="dark"] .iconButton {
+    @apply text-gray-400 hover:bg-purple-900/30 hover:text-purple-300;
+}
+
+[data-theme="dark"] .searchInput {
+    @apply border-slate-600 bg-slate-800 text-white placeholder-gray-400;
+    @apply hover:border-purple-400 hover:bg-slate-700;
+    @apply focus:border-purple-400 focus:bg-slate-800;
+}
+
+[data-theme="dark"] .searchIcon {
+    @apply text-gray-400;
+}
+
+[data-theme="dark"] .viewModeContainer {
+    @apply border-purple-500/20 bg-slate-800/80;
+}
+
+[data-theme="dark"] .viewModeButton {
+    @apply text-gray-300 hover:bg-purple-900/30;
+}
+
+[data-theme="dark"] .viewModeButton.active {
+    @apply bg-purple-900/50 text-purple-300;
+}
+
+[data-theme="dark"] .categoryHeader {
+    @apply text-gray-300 hover:bg-slate-800;
+}
+
+[data-theme="dark"] .categoryIcon {
+    @apply text-gray-400;
+}
+
+[data-theme="dark"] .categoryName {
+    @apply text-gray-200;
+}
+
+[data-theme="dark"] .categoryCount {
+    @apply bg-purple-900/50 text-purple-300;
+}
+
+[data-theme="dark"] .docButton {
+    @apply text-gray-300 hover:bg-slate-800;
+}
+
+[data-theme="dark"] .docButton.selected {
+    @apply border-l-4 border-purple-500 bg-slate-800;
+}
+
+[data-theme="dark"] .docItem {
+    @apply text-gray-300 hover:bg-slate-800;
+}
+
+[data-theme="dark"] .docItem.selected {
+    @apply border-l-4 border-purple-500 bg-slate-800;
+}
+
+[data-theme="dark"] .docTitle {
+    @apply text-white;
+    text-shadow: 0 0 30px rgba(167, 139, 250, 0.5);
+}
+
+[data-theme="dark"] .docName {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .docButton.selected .docName,
+[data-theme="dark"] .docItem.selected .docName {
+    @apply text-white;
+}
+
+[data-theme="dark"] .docIcon {
+    @apply text-purple-400/70;
+}
+
+[data-theme="dark"] .docButton.selected .docIcon,
+[data-theme="dark"] .docItem.selected .docIcon {
+    @apply text-purple-300;
+}
+
+[data-theme="dark"] .docCategory {
+    @apply text-gray-400;
+}
+
+[data-theme="dark"] .sidebarFooter {
+    @apply border-t border-purple-500/20;
+}
+
+[data-theme="dark"] .homeButton {
+    @apply text-gray-300 hover:bg-purple-900/30 hover:text-purple-300;
+}
+
+[data-theme="dark"] .mainContent {
+    @apply bg-slate-900/30;
+}
+
+[data-theme="dark"] .deleteButton {
+    @apply text-gray-500 hover:bg-red-900/60 hover:text-red-300;
+}
+
+[data-theme="dark"] .deleteButton:hover {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+[data-theme="dark"] .summaryContainer {
+    @apply border-purple-500/30 bg-slate-900/90;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(124, 58, 237, 0.15);
+}
+
+[data-theme="dark"] .summaryIcon {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .summaryTitle {
+    @apply text-white;
+}
+
+[data-theme="dark"] .summaryText {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .pdfContainer {
+    @apply border-purple-500/30 bg-slate-900/95;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .pdfViewer {
+    filter: invert(0.9) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+}
+
+[data-theme="dark"] .noDocTitle {
+    @apply text-gray-400;
+}
+
+/* Split Layout Styles for Simple Query and AI Chat */
+.splitLayoutContainer {
+    @apply flex h-[calc(100vh-8rem)] gap-6;
+}
+
+.splitMainPanel {
+    @apply flex flex-1 flex-col;
+}
+
+.splitSidePanel {
+    @apply flex w-[400px] flex-col;
+}
+
+/* Chat message scrolling */
+.chatHistoryContainer {
+    @apply mb-4 flex-1 space-y-4 overflow-y-auto;
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
+}
+
+.sidebarBody {
+    @apply flex-1 overflow-y-auto p-6;
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.purple.300") theme("colors.gray.100");
+}
+
+.sidebarBody::-webkit-scrollbar {
+    @apply w-2;
+}
+
+.sidebarBody::-webkit-scrollbar-track {
+    @apply rounded-full bg-gray-100;
+}
+
+.sidebarBody::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-300;
+}
+
+.sidebarBody::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-400;
+}
+
+.chatHistoryContainer::-webkit-scrollbar {
+    @apply w-2;
+}
+
+.chatHistoryContainer::-webkit-scrollbar-track {
+    @apply rounded-full bg-gray-100;
+}
+
+.chatHistoryContainer::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-300;
+}
+
+.chatHistoryContainer::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-400;
+}
+
+[data-theme="dark"] .chatHistoryContainer {
+    scrollbar-color: theme("colors.purple.600") theme("colors.slate.700");
+}
+
+[data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-track {
+    @apply rounded-full bg-slate-700;
+}
+
+[data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-600;
+}
+
+[data-theme="dark"] .chatHistoryContainer::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-500;
+}
+
+[data-theme="dark"] .sidebarBody {
+    scrollbar-color: theme("colors.purple.600") theme("colors.slate.700");
+}
+
+[data-theme="dark"] .sidebarBody::-webkit-scrollbar-track {
+    @apply rounded-full bg-slate-700;
+}
+
+[data-theme="dark"] .sidebarBody::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-600;
+}
+
+[data-theme="dark"] .sidebarBody::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-500;
+}
+
+.modeToggleWrapper {
+    @apply mb-8 flex flex-col items-center;
+}
+
+.modeToggle {
+    @apply flex items-center overflow-hidden rounded-full border border-gray-200/60 bg-white/90 p-1 shadow-lg backdrop-blur-md dark:border-purple-500/30 dark:bg-slate-900/80;
+}
+
+.modeToggleButton {
+    @apply relative rounded-full px-5 py-2 text-sm font-medium text-gray-600 transition-all duration-200 dark:text-gray-300;
+}
+
+.modeToggleButton:hover {
+    @apply text-purple-600 dark:text-purple-400;
+}
+
+.modeToggleButtonActive {
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md;
+}
+
+.modeToggleButtonActive:hover {
+    @apply text-white;
+}
+
+.modeToggleDescription {
+    @apply mt-2 text-center text-xs text-gray-500 dark:text-gray-400;
+}
+
+/* Responsive adjustments for split layouts */
+@media (max-width: 1024px) {
+    .splitLayoutContainer {
+        @apply h-auto flex-col;
+    }
+
+    .splitSidePanel {
+        @apply h-[400px] w-full;
+    }
+
+    .splitMainPanel {
+        @apply min-h-[500px];
+    }
+}
+
+/* Resize Handle Styles - Enhanced with smoother transitions */
+.resizeHandle {
+    @apply w-1 cursor-ew-resize bg-gray-300;
+    @apply transition-all duration-200 ease-out;
+    z-index: 40; /* Below toggle button but above content */
+    position: relative;
+}
+
+.resizeHandle::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: transparent;
+    transform: translateX(-50%);
+    transition:
+        width 0.2s ease-out,
+        background-color 0.2s ease-out;
+}
+
+.resizeHandle:hover {
+    @apply w-1.5 bg-purple-400;
+    box-shadow: 0 0 12px rgba(147, 51, 234, 0.4);
+}
+
+.resizeHandle:hover::before {
+    width: 100%;
+    background: rgba(147, 51, 234, 0.1);
+}
+
+.resizeHandle:active {
+    @apply w-2 bg-purple-500;
+    box-shadow: 0 0 18px rgba(147, 51, 234, 0.6);
+    transition:
+        width 0.1s ease-out,
+        background-color 0.1s ease-out,
+        box-shadow 0.1s ease-out;
+}
+
+[data-theme="dark"] .resizeHandle {
+    @apply bg-slate-600;
+}
+
+[data-theme="dark"] .resizeHandle:hover {
+    @apply bg-purple-500;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+
+[data-theme="dark"] .resizeHandle:hover::before {
+    background: rgba(168, 85, 247, 0.15);
+}
+
+[data-theme="dark"] .resizeHandle:active {
+    @apply bg-purple-400;
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.7);
+}
+
+/* Reopen Sidebar Buttons */
+.reopenButton {
+    @apply fixed rounded-lg bg-purple-600 p-3 text-white shadow-xl;
+    @apply z-50 transition-all duration-300;
+    @apply hover:scale-105 hover:bg-purple-700;
+    @apply flex items-center gap-2;
+}
+
+.reopenButton:hover {
+    @apply shadow-2xl;
+}
+
+[data-theme="dark"] .reopenButton {
+    @apply bg-purple-700;
+    @apply hover:bg-purple-600;
+}
+
+/* Animation for sidebar collapse/expand */
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sidebarAnimateIn {
+    animation: slideInFromRight 0.3s ease-out;
+}
+
+.sidebarAnimateInLeft {
+    animation: slideInFromLeft 0.3s ease-out;
+}
+
+/* Smooth width transitions during drag */
+.draggableSidebar {
+    transition: none; /* Disable transition during drag for immediate feedback */
+    will-change: width; /* Optimize for smooth resizing */
+}
+
+.dragging {
+    transition: none !important;
+    user-select: none; /* Prevent text selection during drag */
+    -webkit-user-select: none;
+}
+
+.draggableSidebar:not(.dragging) {
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

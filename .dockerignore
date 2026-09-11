@@ -1,16 +1,29 @@
 # Dependencies (reinstalled inside container)
-node_modules
+**/node_modules
 .pnp
 .pnp.js
 
 # Build output (rebuilt inside container)
-.next
-out
-build
-dist
+**/.next
+**/out
+**/build
+**/dist
 
 # Generated assets (created by postinstall from node_modules)
-public/vad
+apps/web/public/vad
+
+# The public site is containerized only by apps/landing/Dockerfile, so a
+# self-hosted deployment can serve its own front door. The web and worker
+# images do not need it, but a .dockerignore is per-context, not per-image, so
+# excluding it outright is what stopped the landing image from building at all.
+#
+# The 26MB deployment demo video this used to exclude is no longer committed —
+# the whole app is ~0.5MB across 61 files — so the cost of carrying it is now
+# negligible. Heavy media stays excluded by extension below in case one comes
+# back.
+apps/landing/**/*.mp4
+apps/landing/**/*.webm
+apps/landing/**/*.mov
 
 # Git
 .git
@@ -60,6 +73,18 @@ sidecar
 
 # Docker files (don't copy into context recursively)
 docker-compose*.yml
-Dockerfile
+apps/web/Dockerfile
+apps/web/Dockerfile.*
+apps/landing/Dockerfile
 .dockerignore
-start-database.sh
+scripts/ops/start-database.sh
+
+# Workspace package build outputs (rebuilt inside container)
+packages/*/dist
+packages/*/.tsbuildinfo
+pipelines/dist
+pipelines/.tsbuildinfo
+
+# Services with their own build contexts
+services
+sidecar

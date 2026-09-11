@@ -1,0 +1,109 @@
+{
+    "name": "@launchstack/llm",
+    "version": "0.1.0",
+    "description": "Everything that calls a model: structured output against a zod schema, message normalization across providers, token-usage accounting, the three answer guardrails, LLM-backed NER, and the vendor wiring (chat-model factory, presets, OpenAI-compatible transport, provider registry). Reads no environment \u2014 configuration is injected.",
+    "license": "Apache-2.0",
+    "type": "module",
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./types": "./src/types.ts",
+        "./guardrails": "./src/guardrails/index.ts",
+        "./providers": "./src/providers/index.ts",
+        "./providers/registry": "./src/providers/registry.ts",
+        "./providers/ner": "./src/providers/ner/index.ts",
+        "./chat-config": "./src/chat-config.ts",
+        "./chat-model-factory": "./src/chat-model-factory.ts",
+        "./openai-client": "./src/openai-client.ts",
+        "./presets": "./src/presets.ts",
+        "./structured-output": "./src/structured-output.ts",
+        "./package.json": "./package.json",
+        "./embeddings": "./src/embeddings/index.ts"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./types": {
+                "types": "./dist/types.d.ts",
+                "default": "./dist/types.js"
+            },
+            "./guardrails": {
+                "types": "./dist/guardrails/index.d.ts",
+                "default": "./dist/guardrails/index.js"
+            },
+            "./providers": {
+                "types": "./dist/providers/index.d.ts",
+                "default": "./dist/providers/index.js"
+            },
+            "./providers/registry": {
+                "types": "./dist/providers/registry.d.ts",
+                "default": "./dist/providers/registry.js"
+            },
+            "./providers/ner": {
+                "types": "./dist/providers/ner/index.d.ts",
+                "default": "./dist/providers/ner/index.js"
+            },
+            "./chat-config": {
+                "types": "./dist/chat-config.d.ts",
+                "default": "./dist/chat-config.js"
+            },
+            "./chat-model-factory": {
+                "types": "./dist/chat-model-factory.d.ts",
+                "default": "./dist/chat-model-factory.js"
+            },
+            "./openai-client": {
+                "types": "./dist/openai-client.d.ts",
+                "default": "./dist/openai-client.js"
+            },
+            "./presets": {
+                "types": "./dist/presets.d.ts",
+                "default": "./dist/presets.js"
+            },
+            "./structured-output": {
+                "types": "./dist/structured-output.d.ts",
+                "default": "./dist/structured-output.js"
+            },
+            "./package.json": "./package.json",
+            "./embeddings": {
+                "types": "./dist/embeddings/index.d.ts",
+                "default": "./dist/embeddings/index.js"
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@launchstack/runtime": "workspace:^",
+        "@langchain/core": "^0.3.74",
+        "@langchain/openai": "^0.6.11",
+        "openai": "^4.62.1",
+        "yaml": "^2.8.1",
+        "zod": "^3.23.8",
+        "zod-to-json-schema": "^3.25.1",
+        "string-similarity-js": "^2.1.4",
+        "@launchstack/store": "workspace:^",
+        "@langchain/ollama": "^0.1.6",
+        "drizzle-orm": "^0.45.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5"
+    }
+}

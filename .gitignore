@@ -2,8 +2,11 @@
 
 # dependencies
 /node_modules
+node_modules/
 /.pnp
 .pnp.js
+
+.pnpm-store
 
 # testing
 /coverage
@@ -15,7 +18,9 @@ db.sqlite
 
 # next.js
 /.next/
+.next/
 /out/
+out/
 next-env.d.ts
 
 # production
@@ -30,11 +35,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
 # local .env files
 # do not commit any ..env files to git, except for the ..env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
 .env
-.env*.local
+.env.bak*
+.env.backup*
+.env*.lo
 
 # vercel
 .vercel
@@ -42,12 +50,38 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# package build outputs
+packages/*/dist/
+
 # idea files
 .idea
 /.localFiles
 .windsurf/rules/markdowncreation.md
 /public/vad
+# Copied from node_modules at build time by apps/web/scripts/copy-pdf-worker.mjs
+apps/web/public/pdf.worker.min.mjs
 *.pyc
 
 # kiro
 .kiro
+backups/
+/models/
+
+
+.claude
+
+# test output
+test-output/
+
+# Personal working notes — never committed. Anchored to the repository root:
+# a bare `notes/` matches any directory of that name at any depth, which
+# silently swallowed apps/web/src/server/notes/ and let a commit ship three
+# imports of a module that was never added.
+/notes/
+*.tgz
+
+# Playwright output. Written beside apps/web/playwright.config.ts, and
+# spelled out in full rather than as a bare `test-results/` — see the
+# note above for what a pattern that matches at any depth can swallow.
+apps/web/test-results/
+apps/web/playwright-report/

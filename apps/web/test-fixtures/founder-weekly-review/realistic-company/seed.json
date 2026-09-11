@@ -1,0 +1,10 @@
+{
+  "reportingPeriod": { "start": "2026-02-16", "end": "2026-02-28" },
+  "workspaceTimezone": "UTC",
+  "founderContext": "Prioritize onboarding reliability and follow up on saved filter adoption.",
+  "documents": [
+    { "title": "Saved export filters release", "category": "Product", "changelog": "Released saved export filters so teams can reuse recurring reporting views.", "timestamp": "2026-02-20T10:00:00.000Z" },
+    { "title": "Onboarding reliability plan", "category": "Planning", "changelog": "Documented retry telemetry and ownership for onboarding reliability work.", "timestamp": "2026-02-24T11:00:00.000Z" },
+    { "title": "Customer Interviews — February 2026", "category": "Customer Feedback", "changelog": "Processed customer feedback for the reporting period.", "timestamp": "2026-02-22T12:00:00.000Z", "chunks": ["Saved export filters would remove repetitive setup from our weekly reporting.", "Onboarding occasionally retries before completing and needs clearer recovery feedback.", "The recently released approval workflow reduced our manual follow-up work."] }
+  ]
+}

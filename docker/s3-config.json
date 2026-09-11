@@ -1,0 +1,28 @@
+{
+    "identities": [
+        {
+            "name": "pdr_admin",
+            "credentials": [
+                {
+                    "accessKey": "pdr_local_key",
+                    "secretKey": "pdr_local_secret"
+                }
+            ],
+            "actions": [
+                "Admin",
+                "Read",
+                "List",
+                "Tagging",
+                "Write",
+                "WriteAcp",
+                "ReadAcp"
+            ]
+        },
+        {
+            "name": "anonymous",
+            "actions": [
+                "Read"
+            ]
+        }
+    ]
+}

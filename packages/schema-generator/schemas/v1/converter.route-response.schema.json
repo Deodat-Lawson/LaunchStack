@@ -1,0 +1,71 @@
+{
+  "$ref": "#/definitions/converter.route-response",
+  "definitions": {
+    "converter.route-response": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "AZURE",
+            "LANDING_AI",
+            "NATIVE_PDF",
+            "DATALAB",
+            "INGESTION",
+            "DOCLING"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "preferred-provider",
+            "force-ocr",
+            "interactive-form",
+            "native-text-layer",
+            "vision-complex",
+            "vision-simple",
+            "vision-unavailable",
+            "not-a-pdf"
+          ]
+        },
+        "pageCount": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "signals": {
+          "type": "object",
+          "properties": {
+            "visionLabel": {
+              "type": "string"
+            },
+            "visionScore": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hasInteractiveForm": {
+              "type": "boolean"
+            },
+            "textSampleChars": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "provider",
+        "reason",
+        "signals"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

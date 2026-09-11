@@ -1,0 +1,73 @@
+%% HISTORICAL SNAPSHOT (pre-ADR-003/ADR-004): the sidecar /embed endpoint shown
+%% below never existed in this repository and was removed per ADR-004; the
+%% dispatch path shown is superseded by the transactional outbox + apps/worker
+%% per ADR-003. See docs/pipeline/pipeline-architecture.md banner.
+flowchart TD
+
+    subgraph LEGEND["Legend"]
+        direction LR
+        L1["Fail-hard stage<br/>(5 retries → failed, retryable)"]:::failhard
+        L2["Fail-soft stage<br/>(silent, optional)"]:::failsoft
+        L3["Persisted write"]:::writeNode
+        L4["External dependency<br/>(placed next to where it's used)"]:::external
+        L5["User-facing done"]:::terminal
+    end
+
+    U["HTTP upload / intake Adapter"] --> OS[("Object storage<br/>via Storage Adapter")]:::external
+    U --> MOD["Document Creation Module"]:::writeNode
+    MOD --> REC["Atomic commit:<br/>document + document_versions v1<br/>currentVersionId → v1<br/>linked ocr_jobs (versionId)"]:::writeNode
+    REC -.-> PG0[("Postgres + pgvector")]:::external
+
+    REC --> DISP["Post-commit dispatch:<br/>Job Dispatcher Interface / Adapter<br/>document/process.requested<br/>stable jobId + event ID(s)<br/>required versionId"]
+    DISP -.-> ING[/"Runner — retries:5, concurrency:3,<br/>throttle:30/min, timeout:120m"/]:::external
+    DISP --> ROUTE{"A · Route by file type"}
+    DISP -.->|"dispatch failure"| DISPATCHFAIL["Same linked ocr_jobs row → failed<br/>retry with same jobId + versionId"]:::failure
+
+    ROUTE -->|"ZIP"| ZIP["Extract entries (≤500 files, ≤10MB each)<br/>store child files + project summary<br/>through Storage Adapter"]
+    ZIP --> ZIPMOD["Document Creation Module<br/>creationKey per child + summary<br/>v1 + current pointer + linked job"]:::writeNode
+    ZIPMOD -.->|"post-commit dispatch per child/summary"| DISP
+    ZIPMOD --> ZIPDELETE["Delete original ZIP document + job<br/>after fan-out"]:::writeNode
+
+    ROUTE -->|"text / code"| FAST["Fast path — OCR skipped entirely"]
+    ROUTE -->|"everything else"| OCR["B · Normalize / OCR<br/>Azure · Landing.AI · Datalab · OSS · pdfjs<br/>(+ optional VLM enrichment)<br/>⚙ Azure PDFs: 2 steps (a-router + b-normalize)<br/>⚙ everything else: 1 combined step (ab-ingest)"]:::failhard
+    OCR -.-> OCRP[/"OCR providers"/]:::external
+
+    OCR --> OCRWRITE["writes: pages → ocr_jobs.ocrResult"]:::writeNode
+    OCRWRITE -.-> PG1[("Postgres")]:::external
+    OCR -.->|"fails all 5 retries"| FAIL["ocr_jobs.status = 'failed'<br/>document.ocrProcessed = false<br/>ocrMetadata.error = 'processing_failed'<br/>linked job + version remain retryable"]:::failure
+
+    FAST --> CHUNK
+    OCRWRITE --> CHUNK["C · Chunk<br/>(parent/child text units)"]:::failhard
+    CHUNK --> CHUNKWRITE["writes: chunks → ocr_jobs.ocrResult<br/>tagged with required versionId"]:::writeNode
+    CHUNKWRITE -.-> PG2[("Postgres")]:::external
+
+    CHUNKWRITE --> EMBED["D · Embed + Store<br/>OpenAI (1536-dim) or sidecar /embed"]:::failhard
+    EMBED -.-> SC[/"sidecar/ folder is DOCX + Whisper only<br/>≠ the SIDECAR_URL ML worker used here"/]:::external
+    EMBED --> EMBEDWRITE["writes version-tagged:<br/>document_structure,<br/>document_context_chunks,<br/>document_retrieval_chunks (vector 1536 + short 512)"]:::writeNode
+    EMBEDWRITE -.-> PG3[("Postgres")]:::external
+
+    EMBEDWRITE --> FIN["E · Finalize"]:::failhard
+    FIN --> FINWRITE["writes: document_metadata<br/>document.ocrProcessed = true<br/>ocr_jobs.status = completed"]:::writeNode
+    FINWRITE -.-> PG4[("Postgres")]:::external
+
+    FINWRITE ==>|"SEARCHABLE — current version is 'done' for the user"| DONE(("Document usable")):::terminal
+    DONE -.-> RETRIEVE["Current-version retrieval only:<br/>row.versionId = document.currentVersionId<br/>no latest/unversioned fallback"]:::terminal
+    RETRIEVE -.-> REPAIR["Legacy repair script:<br/>backfills v1/current/version links<br/>does not redispatch or touch storage"]:::external
+
+    FINWRITE --> GRAPH["F · GraphRAG extract<br/>(entities + relationships, one step)"]:::failsoft
+    GRAPH --> GRAPHWRITE["writes: Postgres kg_entities,<br/>kg_entity_mentions, kg_relationships<br/>(graph source of truth)"]:::writeNode
+    GRAPHWRITE -.-> PG5[("Postgres")]:::external
+
+    GRAPHWRITE --> NEO["G · Neo4j sync"]:::failsoft
+    NEO --> NEOWRITE["writes: Neo4j :Entity / :Section + edges<br/>mirror only — full text stays in Postgres<br/>⚠ can silently stay empty on a 'completed' doc"]:::writeNode
+    NEOWRITE -.-> N4J[("Neo4j — mirror only")]:::external
+
+    FINWRITE -.->|"always carries versionId"| COMPANY["Downstream job:<br/>company-metadata/extract"]
+    FINWRITE -.->|"version-scoped"| REHYDRATE["Downstream job:<br/>notes-anchors/rehydrate<br/>versionId required"]
+
+    classDef failhard fill:#7f1d1d,stroke:#f87171,color:#fff,stroke-width:2px
+    classDef failsoft fill:#78350f,stroke:#fbbf24,color:#fff,stroke-width:2px
+    classDef writeNode fill:#1e293b,stroke:#64748b,color:#e2e8f0,stroke-dasharray: 3 3
+    classDef external fill:#0f172a,stroke:#38bdf8,color:#7dd3fc,stroke-dasharray: 2 2
+    classDef terminal fill:#14532d,stroke:#4ade80,color:#fff,stroke-width:2px
+    classDef failure fill:#450a0a,stroke:#ef4444,color:#fecaca,stroke-dasharray: 4 2

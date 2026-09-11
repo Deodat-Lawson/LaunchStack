@@ -1,0 +1,67 @@
+# Chat model configuration. Mounted read-only into the app and the worker, so
+# changing a model is an edit plus a restart — never an image rebuild.
+#
+# `id` is the id your endpoint serves. CHAT_BASE_URL points at OpenRouter,
+# which accepts both the bare id and the vendor-prefixed form; the prefixed
+# form is written here because it is unambiguous about which vendor serves it.
+#
+# The Gemini 3.x models have no entry in packages/llm/src/presets.ts, so
+# `primary` and `fast` declare their behavior in full. A model with neither a
+# preset nor a `behavior` block is a startup error by design — an unknown model
+# is never silently classified as text-only.
+version: 1
+
+models:
+    # Vision route inherits this model, so it must declare image input.
+    primary:
+        id: google/gemini-3.7-flash
+        behavior:
+            input: [text, image]
+            image:
+                mimeTypes: [image/png, image/jpeg, image/webp, image/heic]
+            reasoning:
+                mode: effort
+                levels:
+                    none: { reasoning_effort: "none" }
+                    low: { reasoning_effort: "low" }
+                    medium: { reasoning_effort: "medium" }
+                    high: { reasoning_effort: "high" }
+                default: "medium"
+            nativeStructuredOutput: [json-object, json-schema, tool-calling]
+            parameters:
+                temperature: supported
+                systemMessages: supported
+                streaming: supported
+                maxOutputTokens: supported
+
+    # The cheap tier. `mode: none` is deliberate rather than asserted: the
+    # lite models' reasoning surface was not verified against this endpoint,
+    # and an over-claimed capability surfaces as a confusing runtime error.
+    # The fast route never asks for reasoning, so nothing is lost.
+    fast:
+        id: google/gemini-3.5-flash-lite
+        behavior:
+            input: [text, image]
+            image:
+                mimeTypes: [image/png, image/jpeg, image/webp, image/heic]
+            reasoning:
+                mode: none
+            nativeStructuredOutput: [json-object, json-schema, tool-calling]
+            parameters:
+                temperature: supported
+                systemMessages: supported
+                streaming: supported
+                maxOutputTokens: supported
+
+    # The reasoning route. No 3.7-generation Pro model is published, so this
+    # stays on the 2.5 preset, whose reasoning contract is a verified catalog
+    # entry rather than an assertion made here.
+    deep:
+        id: google/gemini-2.5-pro
+        preset: google/gemini-2.5-pro
+
+routes:
+    default: primary
+    fast: fast
+    reasoning: deep
+    vision: primary

@@ -1,0 +1,361 @@
+/* Modern Employer Home Page - Matching Homepage Theme */
+
+.container {
+    @apply min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50;
+}
+
+/* Navigation - Modern Glassmorphism */
+.navbar {
+    @apply sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md;
+}
+
+.navContent {
+    @apply mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8;
+}
+
+.logoContainer {
+    @apply flex cursor-pointer items-center space-x-3;
+}
+
+.logoText {
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-2xl font-bold text-transparent transition-all duration-300;
+}
+
+.navActions {
+    @apply flex items-center gap-4;
+}
+
+.profileButton {
+    @apply transform rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-purple-700 hover:to-indigo-700 hover:shadow-xl;
+}
+
+/* Main Content - Enhanced Layout */
+.main {
+    @apply mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8;
+}
+
+.welcomeSection {
+    @apply mb-16 text-center;
+}
+
+.welcomeTitle {
+    @apply mb-6 text-5xl font-extrabold leading-tight md:text-6xl;
+    background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcomeText {
+    @apply mx-auto max-w-4xl text-xl leading-relaxed text-gray-600 md:text-2xl;
+}
+
+/* Stats Grid - Dashboard Style */
+.statsGrid {
+    @apply mb-12 grid grid-cols-2 gap-4 lg:grid-cols-4;
+}
+
+.statsCard {
+    @apply rounded-xl border border-l-4 border-gray-100 bg-white/80 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl;
+}
+
+.statsHeader {
+    @apply mb-2 flex items-center justify-between;
+}
+
+.statsLabel {
+    @apply text-[10px] font-bold uppercase tracking-widest text-gray-500;
+}
+
+.statsIcon {
+    @apply h-4 w-4;
+}
+
+.statsValue {
+    @apply text-3xl font-black text-gray-900;
+}
+
+/* Menu Grid - Premium Card Layout */
+.menuGrid {
+    @apply mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.menuCard {
+    @apply transform cursor-pointer rounded-2xl border border-gray-100 bg-white/80 p-8 shadow-xl backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-purple-300 hover:shadow-2xl;
+}
+
+.cardHeader {
+    @apply mb-6 flex items-start justify-between;
+}
+
+.iconContainer {
+    @apply flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 transition-transform duration-300;
+}
+
+.menuIcon {
+    @apply h-8 w-8 text-purple-600 transition-colors duration-300;
+}
+
+.menuTitle {
+    @apply mb-3 text-2xl font-bold text-gray-900 transition-colors duration-300;
+}
+
+.menuDescription {
+    @apply mb-6 text-lg leading-relaxed text-gray-600;
+}
+
+.cardFooter {
+    @apply mt-auto border-t border-gray-100/50 pt-6;
+}
+
+.getStarted {
+    @apply flex items-center text-lg font-semibold text-purple-600 transition-all duration-300;
+}
+
+.getStarted::after {
+    content: "→";
+    @apply ml-2 transition-transform duration-300;
+}
+
+/* Beta Badge Styles */
+.betaBadge {
+    @apply animate-pulse rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-3 py-1 text-xs font-bold text-white shadow-lg;
+    animation-duration: 2s;
+}
+
+/* Statistics Container - Enhanced Design */
+.statsContainer {
+    @apply grid grid-cols-1 gap-8 md:grid-cols-3;
+}
+
+.stat {
+    @apply transform rounded-2xl border border-gray-100 bg-white/80 p-8 text-center shadow-xl backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl;
+}
+
+.statNumber {
+    @apply mb-3 block text-4xl font-extrabold md:text-5xl;
+    background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.statLabel {
+    @apply text-lg font-medium text-gray-600;
+}
+
+/* Enhanced Hover Effects */
+.menuCard:hover .iconContainer {
+    @apply scale-110 bg-gradient-to-br from-purple-200 to-indigo-200;
+}
+
+.menuCard:hover .menuIcon {
+    @apply text-purple-700;
+}
+
+.menuCard:hover .menuTitle {
+    @apply text-purple-600;
+}
+
+.menuCard:hover .getStarted {
+    @apply text-purple-700;
+}
+
+.menuCard:hover .getStarted::after {
+    @apply translate-x-1;
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-up {
+    animation: slideUp 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Interactive States */
+.menuCard:focus {
+    @apply outline-none ring-2 ring-purple-500 ring-offset-2;
+}
+
+/* Dark Theme Support */
+[data-theme="dark"] .container {
+    @apply bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950;
+}
+
+[data-theme="dark"] .navbar {
+    @apply border-b border-purple-500/20 bg-slate-950/80;
+}
+
+[data-theme="dark"] .logoIcon {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .logoText {
+    @apply bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent;
+}
+
+[data-theme="dark"] .welcomeTitle {
+    background: linear-gradient(135deg, #e5e7eb 0%, #a78bfa 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="dark"] .welcomeText {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .menuCard {
+    @apply border-purple-500/20 bg-slate-900/50 hover:border-purple-400;
+}
+
+[data-theme="dark"] .iconContainer {
+    @apply bg-gradient-to-br from-purple-900/50 to-indigo-900/50;
+}
+
+[data-theme="dark"] .menuIcon {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .menuTitle {
+    @apply text-white;
+}
+
+[data-theme="dark"] .menuCard:hover .menuTitle {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .menuDescription {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .cardFooter {
+    @apply border-purple-500/20;
+}
+
+[data-theme="dark"] .getStarted {
+    @apply text-purple-400;
+}
+
+[data-theme="dark"] .menuCard:hover .getStarted {
+    @apply text-purple-300;
+}
+
+[data-theme="dark"] .betaBadge {
+    @apply bg-gradient-to-r from-orange-600 to-pink-600;
+}
+
+[data-theme="dark"] .stat {
+    @apply border-purple-500/20 bg-slate-900/50;
+}
+
+[data-theme="dark"] .statLabel {
+    @apply text-gray-300;
+}
+
+[data-theme="dark"] .statsCard {
+    @apply border-gray-700 bg-slate-900/50;
+}
+
+[data-theme="dark"] .statsLabel {
+    @apply text-gray-400;
+}
+
+[data-theme="dark"] .statsValue {
+    @apply text-white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main {
+        @apply py-16;
+    }
+
+    .welcomeTitle {
+        @apply text-3xl;
+    }
+
+    .welcomeText {
+        @apply text-lg;
+    }
+
+    .menuGrid {
+        @apply grid-cols-1 gap-6;
+    }
+
+    .menuCard {
+        @apply p-6;
+    }
+
+    .menuTitle {
+        @apply text-xl;
+    }
+
+    .menuDescription {
+        @apply text-base;
+    }
+
+    .statNumber {
+        @apply text-3xl;
+    }
+
+    .statsContainer {
+        @apply gap-6;
+    }
+
+    .statsGrid {
+        @apply grid-cols-2 gap-3;
+    }
+
+    .statsCard {
+        @apply p-4;
+    }
+
+    .statsValue {
+        @apply text-2xl;
+    }
+}
+
+@media (max-width: 640px) {
+    .main {
+        @apply py-12;
+    }
+
+    .navbar {
+        @apply px-4;
+    }
+
+    .menuCard {
+        @apply p-4;
+    }
+
+    .iconContainer {
+        @apply h-12 w-12;
+    }
+
+    .menuIcon {
+        @apply h-6 w-6;
+    }
+}

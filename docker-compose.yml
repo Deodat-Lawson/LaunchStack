@@ -1,18 +1,126 @@
-# Pass env file as argument: docker compose --env-file .env up
+# Usage:
+#   make up         — spin up the required Local services
+#   make down       — stop containers
+#   make down-clean — stop + wipe volumes (fresh DB)
+#   make logs       — tail all container logs
+#
+# Ports:
+#   3000 — Next.js app (reads + command acceptance)
+#   8020 — worker (outbox consumer + Inngest serve; /healthz /readyz)
+#   8288 — Inngest dashboard
+#   5433 — PostgreSQL (for local tools like psql/pgAdmin)
+#   8000 — transcription service
+#   8002 — document-converter service
+#   8003 — adeu-docs-editing service
+#   8004 — gotenberg PDF-rendering service
 #
 # Profiles:
-#   default (no flag)        — db + migrate + app
-#   --profile dev            — adds Inngest dev server (local dashboard at :8288)
-#   --profile minimal        — db only (for local Next.js dev with `pnpm dev`)
-#
-# Examples:
-#   docker compose --env-file .env up                           # production-like
-#   docker compose --env-file .env --profile dev up             # with Inngest dev server
-#   docker compose --env-file .env --profile minimal up db      # just the database
+#   (default)      — everything Local mode requires
+#   --profile ocr  — docling-serve, the converter's parse engine for
+#                    PDFs/Office docs (~800MB RAM). Without it, /convert
+#                    returns a typed 503 and text-file ingestion still works.
+#   --profile backfill — on-demand data backfills
 
-x-app-build-args: &app-build-args
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-  OPENAI_API_KEY: ${OPENAI_API_KEY}
+# Environment shared by the app (command acceptance + reads) and the worker
+# (durable execution). One authority so the two processes can never disagree
+# about providers, storage, or service endpoints.
+x-shared-env: &shared-env
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+  # Anyone running this Compose stack is self-hosting. Declared on the shared
+  # anchor so the app and the worker cannot disagree about metering — they
+  # boot through the same composition root and would misbehave in different
+  # ways if they did.
+  DEPLOYMENT_MODE: ${DEPLOYMENT_MODE:-self-hosted}
+  # Chat: one OpenAI-compatible endpoint. Model ids and route assignments
+  # live in the mounted chat-models.yaml, not in environment variables.
+  CHAT_BASE_URL: ${CHAT_BASE_URL:-}
+  CHAT_API_KEY: ${CHAT_API_KEY:-}
+  CHAT_MODELS_CONFIG: ${CHAT_MODELS_CONFIG:-config/chat-models.yaml}
+  # Non-chat providers — global + per-capability. Never used for chat.
+  AI_BASE_URL: ${AI_BASE_URL:-}
+  AI_API_KEY: ${AI_API_KEY:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  # Base URL and key are read as a PAIR at every level, so forwarding a model
+  # or a lone key is not enough — without its base URL a capability falls
+  # through to "API key not configured" at call time.
+  EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+  EMBEDDING_API_BASE_URL: ${EMBEDDING_API_BASE_URL:-}
+  EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+  RERANK_MODEL: ${RERANK_MODEL:-}
+  RERANK_API_BASE_URL: ${RERANK_API_BASE_URL:-}
+  RERANK_API_KEY: ${RERANK_API_KEY:-}
+  NER_MODEL: ${NER_MODEL:-}
+  NER_API_BASE_URL: ${NER_API_BASE_URL:-}
+  NER_API_KEY: ${NER_API_KEY:-}
+  # Stage F entity extraction is opt-in (ADR-011); the facts leg is on unless "false".
+  ENABLE_ENTITY_EXTRACTION: ${ENABLE_ENTITY_EXTRACTION:-}
+  ENABLE_COMPANY_FACTS_RETRIEVER: ${ENABLE_COMPANY_FACTS_RETRIEVER:-}
+  TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}
+  TRANSCRIPTION_API_BASE_URL: ${TRANSCRIPTION_API_BASE_URL:-}
+  TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+  # Auth (the worker inherits these transitively through the shared
+  # composition root — see ADR-002 consequences; it never uses them)
+  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+  BETTER_AUTH_URL: ${BETTER_AUTH_URL:-}
+  # Services
+  UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
+  NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
+  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
+  INNGEST_DEV: http://inngest-dev:8288
+  EXA_API_KEY: ${EXA_API_KEY:-}
+  DATALAB_API_KEY: ${DATALAB_API_KEY:-}
+  AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
+  AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
+  LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
+  GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+  GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
+  GOOGLE_MODEL: ${GOOGLE_MODEL:-}
+  EMBEDDING_INDEX: ${EMBEDDING_INDEX:-legacy-openai-1536}
+  EMBEDDING_SECRETS_KEY: ${EMBEDDING_SECRETS_KEY:-}
+  # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
+  OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
+  OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+  OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-}
+  OLLAMA_EMBEDDING_DIMENSION: ${OLLAMA_EMBEDDING_DIMENSION:-}
+  OLLAMA_EMBEDDING_VERSION: ${OLLAMA_EMBEDDING_VERSION:-v1}
+  HUGGINGFACE_API_KEY: ${HUGGINGFACE_API_KEY:-}
+  HUGGINGFACE_EMBEDDING_MODEL: ${HUGGINGFACE_EMBEDDING_MODEL:-}
+  HUGGINGFACE_EMBEDDING_DIMENSION: ${HUGGINGFACE_EMBEDDING_DIMENSION:-}
+  HUGGINGFACE_EMBEDDING_VERSION: ${HUGGINGFACE_EMBEDDING_VERSION:-v1}
+  BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
+  TOKEN_SIGNUP_BONUS: ${TOKEN_SIGNUP_BONUS:-10000000}
+  NEXT_PUBLIC_STORAGE_PROVIDER: s3
+  NEXT_PUBLIC_S3_ENDPOINT: http://seaweedfs:8333
+  S3_REGION: ${S3_REGION:-us-east-1}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
+  S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
+  # Compute services (ADR-004). Every service authenticates with a
+  # fail-closed X-API-Key; the local defaults keep `make up` working
+  # without a configured .env — override all of them in production.
+  TRANSCRIPTION_SERVICE_URL: http://transcription:8000
+  TRANSCRIPTION_SERVICE_API_KEY: ${TRANSCRIPTION_SERVICE_API_KEY:-pdr_local_sidecar_key}
+  ADEU_SERVICE_URL: http://adeu-docs-editing:8000
+  ADEU_SERVICE_API_KEY: ${ADEU_SERVICE_API_KEY:-pdr_local_adeu_key}
+  DOCUMENT_CONVERTER_URL: http://document-converter:8002
+  DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
+  OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+  # Gotenberg PDF rendering (ADR-009). Basic auth instead of X-API-Key —
+  # that is the auth Gotenberg ships — but the same fail-closed local-default
+  # contract as the other services: override the password in production.
+  GOTENBERG_SERVICE_URL: http://gotenberg:3000
+  GOTENBERG_SERVICE_USERNAME: launchstack
+  GOTENBERG_SERVICE_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}
+  # Lets the document converter (and the app's own server-side fetches) read
+  # database-backed /api/files URLs, which otherwise require a session
+  # they do not have. Signed by whichever process mints the URL, so app and
+  # worker must share the same value. Database-backed ingestion fails closed
+  # without it, so a local default is provided — override in production.
+  FILE_ACCESS_TOKEN_SECRET: ${FILE_ACCESS_TOKEN_SECRET:-pdr_local_file_access_secret}
+  # Bearer token for /api/metrics. This environment block is an explicit
+  # allowlist, so without the passthrough the route fails closed at 503
+  # even when the host .env sets it.
+  METRICS_SCRAPE_TOKEN: ${METRICS_SCRAPE_TOKEN:-}
 
 services:
   db:
@@ -37,10 +145,8 @@ services:
   migrate:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: migrate
-      args:
-        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -49,57 +155,259 @@ services:
       SKIP_ENV_VALIDATION: "1"
     restart: "no"
 
+  # Data backfills, on demand only — never on boot. Running one automatically
+  # meant an unbounded rescan on every container restart.
+  #
+  #   docker compose --profile backfill run --rm backfill --list
+  #   docker compose --profile backfill run --rm backfill --all
+  backfill:
+    profiles: ["backfill"]
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: builder
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+      SKIP_ENV_VALIDATION: "1"
+    working_dir: /app/apps/web
+    entrypoint: ["pnpm", "db:backfill"]
+    restart: "no"
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: pdr_ai_v2-seaweedfs
+    entrypoint: /etc/seaweedfs/entrypoint.sh
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      # The filer stores its metadata in Postgres, and docker/filer.toml is a
+      # static file mounted read-only — its `password` line can only carry the
+      # local default. SeaweedFS overlays any filer.toml key from
+      # WEED_<SECTION>_<KEY>, so this is what actually authenticates the filer.
+      # Without it, every deployment that sets a real POSTGRES_PASSWORD (i.e.
+      # every production one) crash-loops on `failed SASL auth` and object
+      # storage never comes up.
+      WEED_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
+    volumes:
+      - seaweedfs_data:/data
+      - ./docker/filer.toml:/etc/seaweedfs/filer.toml:ro
+      - ./docker/seaweedfs-entrypoint.sh:/etc/seaweedfs/entrypoint.sh:ro
+
+  # Whisper transcription + yt-dlp download (ADR-004). Auth fails closed:
+  # the key must match the app/worker copy or every call returns 401.
+  transcription:
+    build:
+      context: ./services/transcription
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-transcription
+    restart: unless-stopped
+    environment:
+      TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_SERVICE_API_KEY:-pdr_local_sidecar_key}
+      WHISPER_MODEL: ${WHISPER_MODEL:-base}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  # Authoritative Adeu DOCX redlining service (ADR-004, renamed per ADR-007).
+  # Owns the whole edit workflow, not one library call per route.
+  adeu-docs-editing:
+    build:
+      context: ./services/adeu-ai-docs-editing
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-adeu-docs-editing
+    restart: unless-stopped
+    environment:
+      ADEU_SERVICE_API_KEY: ${ADEU_SERVICE_API_KEY:-pdr_local_adeu_key}
+      # Only object references from these origins may be fetched (SSRF guard,
+      # ADR-004 §6) — same rule the converter enforces. Unset disables object
+      # references entirely and documents must be uploaded inline.
+      ALLOWED_FETCH_ORIGINS: ${ADEU_ALLOWED_FETCH_ORIGINS:-http://app:3000,http://seaweedfs:8333}
+    ports:
+      - "8003:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Optional: Docling parse engine for PDFs/Office docs (DOCX, PPTX, XLSX,
+  # EPUB). Adds ~800MB RAM. Without --profile ocr the converter's /convert
+  # returns a typed 503; routing and text-file ingestion keep working.
+  docling-serve:
+    image: ghcr.io/docling-project/docling-serve
+    container_name: pdr_ai_v2-docling-serve
+    profiles: ["ocr"]
+    restart: unless-stopped
+    environment:
+      DOCLING_SERVE_MAX_NUM_PAGES: "200"
+    volumes:
+      - docling_models:/opt/app-root/src/.cache
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5001/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  # Gotenberg PDF rendering (ADR-009): DOCX/Office → PDF via LibreOffice,
+  # HTML/Markdown → PDF via Chromium. Off-the-shelf image, like docling-serve.
+  # Auth fails closed (--api-enable-basic-auth + the shared-env pair), and the
+  # Chromium deny-list blocks fetches of private-network resources referenced
+  # from user HTML — the SSRF guard the other services express as
+  # ALLOWED_FETCH_ORIGINS. JavaScript is off: nothing the product renders
+  # needs it, and user HTML must not get a scripting engine.
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: pdr_ai_v2-gotenberg
+    restart: unless-stopped
+    command:
+      - gotenberg
+      - --api-timeout=60s
+      - --api-enable-basic-auth
+      - --chromium-disable-javascript=true
+      - --libreoffice-restart-after=10
+      # First alternative is Gotenberg's own default (block file: outside its
+      # /tmp working dir) — overriding the flag replaces it, so it is repeated.
+      - >-
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+    environment:
+      GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
+      GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}
+    ports:
+      - "8004:3000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS -u launchstack:$${GOTENBERG_API_BASIC_AUTH_PASSWORD} http://localhost:3000/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Document converter (ADR-004): routing decisions, vision classification,
+  # PDF page rendering, and docling-backed parsing with typed
+  # EvidenceDocument output. Replaces the old ocr-router + ocr-worker pair.
+  # Reads its own credentials at startup — the app never forwards secrets.
+  document-converter:
+    build:
+      context: ./services/document-converter
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-document-converter
+    restart: unless-stopped
+    environment:
+      CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
+      # Only object references from these origins may be fetched (SSRF guard).
+      ALLOWED_FETCH_ORIGINS: ${CONVERTER_ALLOWED_FETCH_ORIGINS:-http://app:3000,http://seaweedfs:8333}
+      DOCLING_SERVE_URL: ${DOCLING_SERVE_URL:-http://docling-serve:5001}
+      OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-}
+      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-}
+      AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
+      AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
+      LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
+      DATALAB_API_KEY: ${DATALAB_API_KEY:-}
+    ports:
+      - "8002:8002"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8002/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # The sole durable workflow coordinator (ADR-003): outbox consumer +
+  # Inngest serve endpoint. The app accepts commands; this executes them.
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: pdr_ai_v2-worker
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      seaweedfs:
+        condition: service_started
+    volumes:
+      - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
+    environment:
+      <<: *shared-env
+      # The shared-env default (`config/chat-models.yaml`) is RELATIVE and
+      # resolves against this container's WORKDIR /app/apps/worker, where the
+      # file does not exist (it is mounted under /app/apps/web) — the worker
+      # would crash-loop at boot. Pin the absolute path of the mounted copy.
+      CHAT_MODELS_CONFIG: /app/apps/web/config/chat-models.yaml
+      WORKER_PORT: "8020"
+    ports:
+      - "8020:8020"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8020/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: runner
-      args:
-        <<: *app-build-args
     container_name: pdr_ai_v2-app
     restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
+      seaweedfs:
+        condition: service_started
+      # Startup ordering only — the app has typed runtime errors for every
+      # unreachable service, so none of them gates the app's own health.
+      transcription:
+        condition: service_started
+      adeu-docs-editing:
+        condition: service_started
+      document-converter:
+        condition: service_started
+      gotenberg:
+        condition: service_started
+    volumes:
+      # Chat model configuration is non-secret and edited far more often than
+      # the image is rebuilt — mount it read-only rather than baking it in.
+      - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
-      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-      UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
-      NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
-      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
-      INNGEST_DEV: http://inngest-dev:8288
-      TAVILY_API_KEY: ${TAVILY_API_KEY:-}
-      DATALAB_API_KEY: ${DATALAB_API_KEY:-}
-      AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
-      AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
-      LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
-      # Anthropic / Google (optional — enables Claude and Gemini models)
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-}
-      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
-      GOOGLE_MODEL: ${GOOGLE_MODEL:-}
-      # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      <<: *shared-env
     ports:
       - "3000:3000"
 
-  # Inngest dev server — local dashboard & event processing for development
-  # Start with: docker compose --profile dev up
-  # Dashboard: http://localhost:8288
   inngest-dev:
     image: inngest/inngest:latest
     container_name: pdr_ai_v2-inngest
     restart: unless-stopped
     ports:
-      - "8288:8288"
-    command: inngest dev -u http://app:3000/api/inngest
+      - "${INNGEST_PORT:-8288}:8288"
+    # Durable functions are served by the worker, not the app (ADR-003).
+    command: inngest dev -u http://worker:8020/api/inngest
     depends_on:
-      - app
-    profiles:
-      - dev
+      - worker
 
 volumes:
   postgres_data:
+  seaweedfs_data:
+  docling_models:

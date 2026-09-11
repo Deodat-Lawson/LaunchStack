@@ -1,0 +1,3 @@
+ALTER TABLE "pdr_ai_v2_predictive_document_analysis_results" ADD COLUMN "version_id" bigint;--> statement-breakpoint
+ALTER TABLE "pdr_ai_v2_predictive_document_analysis_results" ADD CONSTRAINT "pdr_ai_v2_predictive_document_analysis_results_version_id_pdr_ai_v2_document_versions_id_fk" FOREIGN KEY ("version_id") REFERENCES "public"."pdr_ai_v2_document_versions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "predictive_analysis_document_version_idx" ON "pdr_ai_v2_predictive_document_analysis_results" USING btree ("document_id","version_id");

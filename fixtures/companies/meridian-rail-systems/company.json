@@ -1,0 +1,375 @@
+{
+  "id": "meridian-rail-systems",
+  "name": "Meridian Rail Systems",
+  "archetype": "Technical B2B software with deep product documentation. Tests whether the generator uses precise operational detail, respects hard product limits, and attributes customer-measured numbers correctly.",
+  "knowledgeDepth": "rich",
+  "summary": "Scheduling and yard-management software for short-line and regional freight railroads in North America.",
+  "industry": "Freight rail operations software",
+  "foundedYear": 2016,
+  "headquarters": "Duluth, Minnesota, United States",
+  "size": "61 employees",
+  "website": "https://meridianrail.example",
+
+  "products": [
+    {
+      "name": "Meridian Dispatch",
+      "description": "Scheduling engine producing a conflict-checked movement plan across a rolling 72-hour horizon.",
+      "capabilities": [
+        "Conflict-checked movement planning over a 72-hour horizon",
+        "Treats manual dispatcher edits as hard constraints and re-plans around them",
+        "On-time interchange, crew utilisation and yard dwell reporting",
+        "CSV and PDF report export",
+        "Single-tenant hosted deployment in AWS us-east-2 or ca-central-1"
+      ],
+      "limitations": [
+        "No support for networks above 400 route miles",
+        "No positive train control integration, and none planned",
+        "Solver degrades above roughly 1,200 daily car movements",
+        "No real-time dashboard",
+        "No mobile application",
+        "Canadian French localisation does not cover the reporting module"
+      ],
+      "integrations": ["Railinc TRAIN II", "Trimble TMW", "Generic CSV import"]
+    },
+    {
+      "name": "Meridian Yard",
+      "description": "Classification and switching management for a single yard, including car placement and switch-list generation.",
+      "capabilities": [
+        "Car placement tracking within a yard",
+        "Switch list generation",
+        "Reconciliation against an existing car inventory system"
+      ],
+      "limitations": ["Scoped to a single yard per licence"],
+      "integrations": ["Generic CSV import"]
+    }
+  ],
+
+  "audiences": [
+    {
+      "label": "Short-line operations leadership",
+      "role": "Director of Operations or General Manager at a short-line holding company",
+      "painPoints": [
+        "Scheduling knowledge concentrated in one dispatcher approaching retirement",
+        "Failed or at-risk operational audits",
+        "Interchange partners imposing new data requirements"
+      ],
+      "priorities": [
+        "Continuity when experienced staff leave",
+        "Demonstrable interchange performance",
+        "Avoiding safety-critical scope"
+      ]
+    },
+    {
+      "label": "Dispatchers and yardmasters",
+      "role": "Day-to-day dispatcher or yardmaster",
+      "painPoints": [
+        "Manual plan rebuilds after disruption",
+        "Tools that discard manual edits on re-solve"
+      ],
+      "priorities": ["Keeping manual overrides intact", "Fast re-planning"]
+    }
+  ],
+
+  "differentiators": [
+    "Manual dispatcher edits survive solver re-runs instead of being overwritten",
+    "Purpose-built for short-line and regional networks rather than Class I",
+    "Advisory-only by design, with no safety-critical scope"
+  ],
+  "proofPoints": [
+    "Cedar Ridge Terminal Railway: on-time interchange 71% to 88% over nine months",
+    "Cedar Ridge Terminal Railway: average yard dwell 14.2 to 11.6 hours",
+    "Plan rebuild after disruption reduced from roughly 40 minutes to under one minute at Cedar Ridge"
+  ],
+
+  "markets": {
+    "primary": ["Short-line freight railroads", "Regional freight railroads"],
+    "verticals": ["Freight rail", "Terminal and switching operations"],
+    "geographies": ["United States", "Canada"]
+  },
+
+  "people": [
+    { "name": "Dolores Whitcomb", "role": "Co-founder and Chief Executive Officer" },
+    { "name": "Amos Petrakis", "role": "Co-founder and Head of Product" }
+  ],
+
+  "certifications": ["SOC 2 Type II"],
+
+  "brandVoice": {
+    "tone": "direct, operational, unhurried",
+    "formality": "technical",
+    "sentenceStyle": "Short declarative sentences, one idea each, quantified wherever a number exists.",
+    "vocabulary": ["interchange", "dwell", "consist", "switch list", "movement plan"],
+    "avoid": [
+      "revolutionary",
+      "game-changing",
+      "seamless",
+      "best-in-class",
+      "AI-powered",
+      "headcount reduction"
+    ]
+  },
+
+  "prohibitedCompetitors": ["RailCommand Pro", "TrackLogic Suite"],
+  "allowedProductNames": ["Meridian Dispatch", "Meridian Yard"],
+
+  "documents": [
+    {
+      "path": "docs/company-overview.md",
+      "title": "Meridian Rail Systems — Company Overview",
+      "kind": "overview",
+      "summary": "What the company does, segment boundaries, products, buyers, geography, and explicit non-goals."
+    },
+    {
+      "path": "docs/product-guide.md",
+      "title": "Meridian Dispatch — Product Guide",
+      "kind": "product_guide",
+      "summary": "Solver behaviour, integrations, reporting, deployment and known limitations."
+    },
+    {
+      "path": "docs/case-study-brightline-shortline.md",
+      "title": "Case study — Cedar Ridge Terminal Railway",
+      "kind": "case_study",
+      "summary": "Nine-month measured results at a 180-mile short line, with explicit scope caveats."
+    },
+    {
+      "path": "docs/brand-voice.md",
+      "title": "Meridian Rail Systems — Brand Voice Guide",
+      "kind": "brand_voice",
+      "summary": "Voice rules and prohibited claims, including the safety-critical boundary."
+    }
+  ],
+
+  "sourceFacts": [
+    {
+      "id": "msr-f-001",
+      "kind": "supported",
+      "category": "numeric",
+      "statement": "At Cedar Ridge Terminal Railway, on-time interchange performance rose from 71% to 88%.",
+      "provenance": [
+        {
+          "document": "docs/case-study-brightline-shortline.md",
+          "section": "What changed",
+          "quote": "On-time interchange performance rose from 71% to 88%."
+        }
+      ],
+      "relevantTo": ["meridian-linkedin-interchange-proof"],
+      "contradicts": null,
+      "notes": "Customer-measured, not independently audited. Copy must attribute it to Cedar Ridge rather than present it as a product guarantee."
+    },
+    {
+      "id": "msr-f-002",
+      "kind": "supported",
+      "category": "numeric",
+      "statement": "At Cedar Ridge Terminal Railway, average yard dwell fell from 14.2 hours to 11.6 hours.",
+      "provenance": [
+        {
+          "document": "docs/case-study-brightline-shortline.md",
+          "section": "What changed",
+          "quote": "Average yard dwell fell from 14.2 hours to 11.6 hours."
+        }
+      ],
+      "relevantTo": ["meridian-linkedin-interchange-proof"],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "msr-f-003",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "Manual dispatcher edits are preserved as hard constraints when the solver re-runs.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Scheduling engine",
+          "quote": "Manual dispatcher edits are treated as hard constraints."
+        }
+      ],
+      "relevantTo": ["meridian-linkedin-interchange-proof", "meridian-bluesky-manual-edits"],
+      "contradicts": null,
+      "notes": "The company's primary differentiator."
+    },
+    {
+      "id": "msr-f-004",
+      "kind": "supported",
+      "category": "integration",
+      "statement": "Meridian Dispatch integrates with Railinc TRAIN II, Trimble TMW, and generic CSV import.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Integrations",
+          "quote": "We do not integrate with SAP, Oracle Transportation Management, or any WMS product."
+        }
+      ],
+      "relevantTo": ["meridian-bluesky-manual-edits"],
+      "contradicts": null,
+      "notes": "Quote captures the exclusion boundary; the inclusion list appears as a bullet list in the same section."
+    },
+    {
+      "id": "msr-f-005",
+      "kind": "supported",
+      "category": "geography",
+      "statement": "Meridian operates only in the United States and Canada.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "Where we operate",
+          "quote": "Meridian operates in the United States and Canada only."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "msr-f-006",
+      "kind": "supported",
+      "category": "limitation",
+      "statement": "Meridian is advisory only and performs no positive train control or safety-critical signalling function.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "What we are not",
+          "quote": "We are not a positive train control (PTC) vendor."
+        },
+        {
+          "document": "docs/product-guide.md",
+          "section": "Known limitations",
+          "quote": "No positive train control integration, and none planned."
+        }
+      ],
+      "relevantTo": ["meridian-linkedin-interchange-proof", "meridian-bluesky-manual-edits"],
+      "contradicts": null,
+      "notes": "Regulatory boundary. Any copy implying movement authority is a hard failure."
+    },
+    {
+      "id": "msr-f-007",
+      "kind": "supported",
+      "category": "limitation",
+      "statement": "Meridian does not support networks above 400 route miles.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Known limitations",
+          "quote": "No support for networks above 400 route miles."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+
+    {
+      "id": "msr-f-101",
+      "kind": "contradictory",
+      "category": "integration",
+      "statement": "Meridian Dispatch offers a native SAP integration.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Integrations",
+          "quote": "We do not integrate with SAP, Oracle Transportation Management, or any WMS product."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "msr-f-004",
+      "notes": "Directly negated by the product guide."
+    },
+    {
+      "id": "msr-f-102",
+      "kind": "contradictory",
+      "category": "geography",
+      "statement": "Meridian serves railroads across Europe and Asia.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "Where we operate",
+          "quote": "Meridian operates in the United States and Canada only."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "msr-f-005",
+      "notes": null
+    },
+    {
+      "id": "msr-f-103",
+      "kind": "contradictory",
+      "category": "numeric",
+      "statement": "Cedar Ridge reduced crew headcount by 20% after deploying Meridian Dispatch.",
+      "provenance": [
+        {
+          "document": "docs/case-study-brightline-shortline.md",
+          "section": "What did not change",
+          "quote": "Crew headcount was unchanged."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "msr-f-001",
+      "notes": "Tests the most commercially tempting fabrication for this segment."
+    },
+    {
+      "id": "msr-f-104",
+      "kind": "contradictory",
+      "category": "compliance",
+      "statement": "Meridian Dispatch issues movement authority and is PTC-certified.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "What we are not",
+          "quote": "We are not a positive train control (PTC) vendor."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "msr-f-006",
+      "notes": "Highest-severity contradiction: creates regulatory exposure."
+    },
+
+    {
+      "id": "msr-f-201",
+      "kind": "distractor",
+      "category": "positioning",
+      "statement": "Meridian was founded in 2016 by two former yardmasters and a control-systems engineer.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "What we do",
+          "quote": "Meridian was founded in 2016 by two former yardmasters and a control-systems engineer."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True, but founding history is irrelevant to a capability or proof-point campaign."
+    },
+    {
+      "id": "msr-f-202",
+      "kind": "distractor",
+      "category": "positioning",
+      "statement": "Meridian is headquartered in Duluth, Minnesota and employs 61 people.",
+      "provenance": [
+        {
+          "document": "docs/company-overview.md",
+          "section": "What we do",
+          "quote": "The company is headquartered in Duluth, Minnesota and employs 61 people."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True but irrelevant; headcount is not a buying signal for this audience."
+    },
+    {
+      "id": "msr-f-203",
+      "kind": "distractor",
+      "category": "capability",
+      "statement": "Canadian French localisation covers the dispatcher interface but not the reporting module.",
+      "provenance": [
+        {
+          "document": "docs/product-guide.md",
+          "section": "Known limitations",
+          "quote": "Canadian French localisation covers the dispatcher interface but not the reporting module."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True and specific, but irrelevant to a US-audience interchange-performance campaign."
+    }
+  ]
+}

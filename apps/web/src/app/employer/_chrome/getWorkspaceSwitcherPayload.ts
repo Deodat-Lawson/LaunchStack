@@ -1,0 +1,56 @@
+import { eq, count } from "drizzle-orm";
+
+import { getServerSession } from "~/server/auth";
+
+import { db } from "~/server/db";
+import { company } from "@launchstack/store/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
+import { getActiveCompanyId } from "~/lib/active-workspace";
+
+import type { WorkspaceSwitcherPayload } from "./workspaceSwitcherTypes";
+
+export async function getWorkspaceSwitcherPayload(): Promise<WorkspaceSwitcherPayload | null> {
+    const session = await getServerSession();
+    const userId = session?.user.id;
+    if (!userId) return null;
+
+    let activeCompanyId: bigint | null;
+    try {
+        activeCompanyId = await getActiveCompanyId(userId);
+    } catch {
+        return null;
+    }
+    if (activeCompanyId === null) return null;
+
+    const [user] = await db.select({ id: users.id }).from(users).where(eq(users.userId, userId));
+    if (!user) return null;
+
+    const [activeCompany] = await db
+        .select({
+            name: company.name,
+            swatch: company.swatch,
+        })
+        .from(company)
+        .where(eq(company.id, Number(activeCompanyId)));
+
+    const [{ c: membershipCount } = { c: 0 }] = await db
+        .select({ c: count(userCompanyMemberships.id) })
+        .from(userCompanyMemberships)
+        .where(eq(userCompanyMemberships.userId, BigInt(user.id)));
+
+    if (!activeCompany) return null;
+
+    const initials = activeCompany.name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(p => p.charAt(0).toUpperCase())
+        .join("");
+
+    return {
+        name: activeCompany.name,
+        initials: initials || "✶",
+        swatch: activeCompany.swatch ?? null,
+        membershipCount: Number(membershipCount),
+    };
+}

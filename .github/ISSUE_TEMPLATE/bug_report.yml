@@ -1,0 +1,80 @@
+name: Bug report
+description: Report a reproducible bug in Launchstack
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please check [existing issues](https://github.com/launchstack/launchstack/issues) first.
+        For security vulnerabilities, do NOT open a public issue — see [SECURITY.md](https://github.com/launchstack/launchstack/blob/main/SECURITY.md).
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What's broken?
+      placeholder: A clear, concise description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimum steps to reproduce. A link to a repo or a short code snippet is ideal.
+      placeholder: |
+        1. Install `@launchstack/core@x.y.z`
+        2. Run `createEngine({ ... })` with config X
+        3. Call `engine.foo(bar)`
+        4. Observe error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages, stack traces, and relevant logs.
+    validations:
+      required: true
+
+  - type: input
+    id: core-version
+    attributes:
+      label: "@launchstack/core version (if applicable)"
+      placeholder: "0.1.3 or commit SHA"
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      placeholder: "20.x"
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: Affected area
+      multiple: true
+      options:
+        - "@launchstack/core"
+        - "@launchstack/features"
+        - apps/web
+        - Docker / deployment
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else (OS, package versions, env var combinations, etc.)

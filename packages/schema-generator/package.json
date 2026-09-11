@@ -1,0 +1,53 @@
+{
+    "name": "@launchstack/schema-generator",
+    "version": "0.1.0",
+    "description": "Walks every feature's wire contracts (conversion, orchestration, editing) and emits one versioned JSON Schema bundle under schemas/v1/ \u2014 the single directory the Python services' contract tests validate against. --check fails CI on drift.",
+    "license": "Apache-2.0",
+    "type": "module",
+    "sideEffects": false,
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "schemas",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "./package.json": "./package.json"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+        "clean": "rm -rf dist .tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "vitest run",
+        "schemas:generate": "tsx src/generate.ts",
+        "schemas:check": "tsx src/generate.ts --check"
+    },
+    "dependencies": {
+        "@launchstack/runtime": "workspace:^",
+        "@launchstack/conversion": "workspace:^",
+        "@launchstack/orchestration": "workspace:^",
+        "@launchstack/editing": "workspace:^",
+        "zod": "^3.23.8",
+        "zod-to-json-schema": "^3.25.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2",
+        "vitest": "^3.0.5",
+        "tsx": "^4.19.2"
+    }
+}

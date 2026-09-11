@@ -1,0 +1,17 @@
+{
+  "note": "Posts to score. Replace with real pipeline outputs (Mode A generation) or paste posts to benchmark. `companyContext` should mirror the generation context window (see references/*.md). Entries whose `post` is empty or starts with '<' are skipped.",
+  "candidates": [
+    {
+      "id": "sample-linkedin-1",
+      "platform": "linkedin",
+      "companyContext": "Company Name: <fill>\nCompany Description: <fill>\nIndustry / Sector: <fill>\nEmployee Count Range: <fill>\nCompany Categories: <fill>\nKnowledge Base Signals: <fill>",
+      "post": "<paste a post to score>"
+    },
+    {
+      "id": "sample-x-1",
+      "platform": "x",
+      "companyContext": "Company Name: <fill>\nCompany Description: <fill>\nIndustry / Sector: <fill>\nEmployee Count Range: <fill>\nCompany Categories: <fill>\nKnowledge Base Signals: <fill>",
+      "post": "<paste a post to score>"
+    }
+  ]
+}

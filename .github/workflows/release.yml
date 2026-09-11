@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Prevent two simultaneous releases from racing the npm registry / version PR.
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10.15.1'
+
+jobs:
+  release:
+    name: Publish engine packages
+    runs-on: ubuntu-latest
+    # Skip on forks, which do not have the NPM_TOKEN secret.
+    #
+    # This was previously pinned to a hardcoded repository name that no longer
+    # matched the remote, so the job was silently skipped on every push and the
+    # package was never released. Gating on fork status expresses the actual
+    # intent and survives the repo rename/transfer that open-sourcing involves.
+    if: github.event.repository.fork == false
+
+    permissions:
+      contents: write   # to create the version PR + tags
+      pull-requests: write
+      id-token: write   # for npm provenance
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # All publishable feature packages (ADR-008) release together through
+      # one changesets flow — the engine aggregate resolves against the
+      # feature packages on npm.
+      - name: Build publishable packages
+        run: pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build
+
+      # publint validates the exports map against the tarball, but does NOT
+      # follow relative specifiers inside the emitted JS. A tarball once passed
+      # publint while every import() failed with ERR_MODULE_NOT_FOUND, so this
+      # runs first and is not allowed to fail.
+      - name: Verify every export is loadable under Node ESM
+        run: node scripts/ci/check-package-exports.mjs
+
+      - name: Validate packed tarball (engine aggregate)
+        run: |
+          cd packages/engine
+          pnpm pack --pack-destination ./
+          TARBALL=$(ls launchstack-engine-*.tgz)
+          npx --yes publint ./${TARBALL}
+          npx --yes @arethetypeswrong/cli ./${TARBALL} || true
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          version: pnpm changeset version
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # setup-node's `registry-url` writes an .npmrc whose auth line is
+          # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` — the token is
+          # read from the environment at publish time, NOT baked into the file.
+          # `pnpm release` (pnpm publish) authenticates through that .npmrc, so
+          # without NODE_AUTH_TOKEN set here the publish leg fails with E401.
+          # NPM_TOKEN alone is not enough: only changesets/action's own npm
+          # paths read it. Keep both.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

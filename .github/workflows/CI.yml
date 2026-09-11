@@ -1,112 +1,540 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
-    branches: [stable]
+    branches: [main]
   pull_request:
-    branches: [stable]
+    # `feat/**` so a PR stacked on another feature branch still gets CI.
+    # Without it a stacked PR shows no checks at all until its base merges.
+    branches: [main, "feat/**"]
+
 env:
-  NODE_VERSION: '18'
-  PNPM_VERSION: '8'
+  NODE_VERSION: "20"
+  PNPM_VERSION: "10.15.1"
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: launchstack_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
-      LANGCHAIN_TRACING_V2: ${{ secrets.LANGCHAIN_TRACING_V2 }}
-      LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY}}
-      UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
-      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
-      PGUSER: ${{ secrets.PGUSER }}
-      PGHOST_UNPOOLED: ${{ secrets.PGHOST_UNPOOLED }}
-      PGDATABASE: ${{ secrets.PGDATABASE }}
-      PGPASSWORD: ${{ secrets.PGPASSWORD }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PGHOST: ${{ secrets.PGHOST }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
-      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL}}
-      POSTGRES_URL: ${{ secrets.POSTGRES_URL }} 
-      INNGEST_EVENT_KEY: ${{ secrets.INNGEST_EVENT_KEY }} 
-  
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
+      SKIP_ENV_VALIDATION: "1"
+      # CI never calls the endpoint; these only satisfy env.ts's chat check.
+      # Set explicitly rather than relying on the deprecated OPENAI_API_KEY
+      # translation, so CI exercises the canonical variables.
+      CHAT_BASE_URL: https://ci.invalid/v1
+      CHAT_API_KEY: chat-ci-placeholder
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ci-placeholder' }}
+      BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
+      INNGEST_EVENT_KEY: ci-placeholder
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
-      - name: Setup pnpm 
-        uses: pnpm/action-setup@v2
-        with:
-          node-version: ${{ env.PNPM_VERSOPM }}
+      # Cheap, dependency-free, and fails fast: a workspace package missing
+      # from a Dockerfile deps layer otherwise surfaces ~2 minutes into the
+      # image build as an unresolvable dependency the package does declare.
+      - name: Dockerfile deps layers cover every workspace manifest
+        run: node scripts/ci/check-dockerfile-manifests.mjs
 
-      - name: pnpm install
+      # Same reasoning: dependency-free, runs before install, and the build
+      # error it prevents names the file but not the offending export.
+      - name: Route files export only handlers and segment config
+        run: node scripts/ci/check-route-exports.mjs
+
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Push database schema
-        run: pnpm db:push
+      # The same forward migration command local dev, Docker and the production
+      # image build run. CI used to `drizzle-kit push` here, which meant
+      # the test suite exercised a schema no deploy ever produced.
+      - name: Apply migrations to test database
+        run: pnpm --filter @launchstack/web db:migrate
 
-      - name: Checking lint
+      # Blocking (ADR-006). The legacy `continue-on-error` here hid a fully
+      # red lint state on main for months.
+      - name: Lint
+        env:
+            # The type-aware lint builds a program over every package and
+            # both apps, and outgrows the default Node heap (exit 134 on the
+            # stock runner). 6144 was enough until the distribution,
+            # repo-workspace and workspace-access bricks landed; the runner
+            # has 16GB, so this leaves ample headroom above the peak.
+            NODE_OPTIONS: --max-old-space-size=10240
         run: pnpm lint
 
-      - name: Run tests
-        run: pnpm test
+      - name: Typecheck (all workspace packages, worker included)
+        run: pnpm typecheck
+
+      # Contracts live inside their features (ADR-008); the schema generator
+      # emits the one bundle the Python services test against.
+      - name: Generated wire schemas match the zod source
+        run: pnpm --filter @launchstack/schema-generator schemas:check
+
+      - name: Feature package unit + contract tests
+        run: >-
+          pnpm --filter @launchstack/evidence
+          --filter @launchstack/conversion
+          --filter @launchstack/retrieval
+          --filter @launchstack/document-conversion-engine
+          --filter @launchstack/worker test
+
+      # Includes the outbox + lifecycle integration tests against the real
+      # migrated database above (replay, retry/backoff, dead-letter,
+      # supersession, stale-claim reclaim).
+      - name: Orchestration + indexing tests (integration, real Postgres)
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
+        run: >-
+          pnpm --filter @launchstack/orchestration
+          --filter @launchstack/indexing test
+
+      # Blocking and complete (ADR-006): the nine formerly-excluded legacy
+      # suites are fixed and run with everything else.
+      - name: Web tests
+        run: pnpm --filter @launchstack/web exec jest --runInBand --forceExit
+
+  python-services:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # Torch/whisper are deliberately NOT installed: the transcription tests
+      # fake the transcriber (the service lazy-imports whisper), which also
+      # proves the lazy-import guard keeps working.
+      - name: Install transcription test deps
+        run: |
+          python -m pip install fastapi 'uvicorn[standard]' pydantic \
+            python-multipart yt-dlp numpy
+          python -m pip install -r services/transcription/requirements-dev.txt
+
+      - name: Transcription service tests (incl. protocol contract tests)
+        run: python -m pytest services/transcription/tests -q
+
+      - name: Install adeu-ai-docs-editing deps
+        run: |
+          python -m pip install -r services/adeu-ai-docs-editing/requirements.txt
+          python -m pip install -r services/adeu-ai-docs-editing/requirements-dev.txt
+
+      - name: Adeu docs-editing service tests (incl. protocol contract tests)
+        run: python -m pytest services/adeu-ai-docs-editing/tests -q
+
+  document-converter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/document-converter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install (locked)
+        run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Tests (incl. EvidenceDocument schema validation via ajv)
+        run: npm test
+
+  # Boots the required Local services from the committed compose files and
+  # drives one document through the single ingestion path end-to-end:
+  # lifecycle tx (source version + outbox) → worker → extract → index →
+  # cited, permission-scoped query. The app image itself is built by
+  # docker.yml; its routes are covered by jest — this job gates the pipeline.
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Start deterministic embeddings stub
+        run: |
+          node scripts/ci/fake-embeddings-server.mjs 8099 &
+          sleep 1
+          curl -fsS -X POST localhost:8099/v1/embeddings \
+            -H 'Content-Type: application/json' -d '{"input":"probe"}' > /dev/null
+
+      - name: Build service images
+        run: >-
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build
+          migrate worker document-converter transcription adeu-docs-editing
+
+      - name: Boot the stack
+        env:
+          BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
+        run: >-
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+          db migrate worker document-converter transcription adeu-docs-editing
+
+      - name: Wait for service health
+        run: |
+          wait_healthy() {
+            for i in $(seq 1 60); do
+              if curl -fsS "$1" > /dev/null 2>&1; then echo "healthy: $1"; return 0; fi
+              sleep 5
+            done
+            echo "::error::$1 never became healthy"; return 1
+          }
+          wait_healthy http://localhost:8020/healthz   # worker
+          wait_healthy http://localhost:8002/health    # document-converter
+          wait_healthy http://localhost:8000/health    # transcription
+          wait_healthy http://localhost:8003/health    # adeu-docs-editing
+          curl -fsS http://localhost:8020/readyz
+
+      - name: End-to-end ingestion + cited query
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5433/pdr_ai_v2
+          # Document URLs must be fetchable by the worker CONTAINER, which
+          # reaches the runner-hosted stub via host-gateway.
+          E2E_DOC_BASE: http://host.docker.internal:8099
+        run: pnpm exec tsx scripts/ci/e2e-ingest.mjs
+
+      - name: Dump logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml logs --tail 200
+
+  # ── Migration gates ──────────────────────────────────────────────────────
+  # Needs no database and no secrets, so it is safe on fork PRs. Proves the
+  # TypeScript schema and the committed migrations agree, without connecting
+  # to anything: `drizzle-kit generate` diffs TS against the snapshot chain.
+  schema-drift:
+    runs-on: ubuntu-latest
+    steps:
+      # Full history: the DDL-only gate below diffs against the PR base commit,
+      # which a shallow clone does not contain.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Journal and snapshot integrity
+        run: |
+          pnpm --filter @launchstack/store db:check
+          pnpm --filter @launchstack/web exec drizzle-kit check
+          node packages/store/scripts/check-journal.mjs --set=product
+
+      - name: Regenerate and assert no diff
+        run: |
+          pnpm --filter @launchstack/store exec drizzle-kit generate --name=ci_drift_probe
+          pnpm --filter @launchstack/web exec drizzle-kit generate --name=ci_drift_probe
+          # --porcelain, not `git diff`: drift shows up as an UNTRACKED .sql
+          # file, which `git diff` would not report.
+          if [ -n "$(git status --porcelain -- packages/store/drizzle apps/web/drizzle)" ]; then
+            echo "::error::The TypeScript schema and the committed migrations disagree."
+            echo "Run: pnpm --filter @launchstack/store db:generate --name=<describe-your-change>"
+            git status --porcelain -- packages/store/drizzle apps/web/drizzle
+            git --no-pager diff -- packages/store/drizzle apps/web/drizzle
+            exit 1
+          fi
+
+      # Migrations may contain DDL only. Data changes belong in a resumable,
+      # separately-invoked backfill with its own ledger — not in a file that is
+      # replayed as part of every clean-database build.
+      - name: Migrations are DDL-only
+        run: |
+          base="${{ github.event.pull_request.base.sha || '' }}"
+          if [ -z "$base" ]; then
+            # Push builds have no PR base; compare against the previous commit,
+            # or against the empty tree for a root commit.
+            base=$(git rev-parse --verify --quiet HEAD~1 \
+                   || git hash-object -t tree /dev/null)
+          fi
+          # No `|| true` here. This step used to swallow git's failure: the
+          # checkout was shallow, the base commit was absent, `git diff` died,
+          # and the empty result meant the loop inspected nothing while the step
+          # reported success. Both gates below were silently vacuous.
+          if ! changed=$(git diff --name-only "$base"...HEAD -- 'packages/store/drizzle/*.sql' 'apps/web/drizzle/*.sql'); then
+            echo "::error::Could not diff migrations against $base. The gate cannot run, so it fails."
+            exit 1
+          fi
+          status=0
+          for f in $changed; do
+            [ -f "$f" ] || continue
+            if ! grep -q 'launchstack:allow-dml' "$f" \
+               && grep -qEi '^[[:space:]]*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)' "$f"; then
+              echo "::error file=$f::Migration contains DML. Move it to a backfill."
+              status=1
+            fi
+            if ! grep -q 'launchstack:destructive-ok' "$f" \
+               && grep -qEi '^[[:space:]]*(DROP TABLE|ALTER TABLE .* DROP COLUMN)' "$f"; then
+              echo "::error file=$f::Destructive DDL needs '-- launchstack:destructive-ok'."
+              status=1
+            fi
+          done
+          exit $status
+
+      # `drizzle-kit push` is banned everywhere a real database could be hit.
+      # The check lives in a script so it cannot match its own source, and so
+      # you can run it locally: node scripts/ci/check-no-push.mjs
+      - name: Ban drizzle-kit push on deploy paths
+        run: node scripts/ci/check-no-push.mjs
+
+      # @launchstack/store is published: `packages/store/drizzle` must build a
+      # working database on its own, which holds only while no engine table
+      # references a product table.
+      - name: Engine/product schema boundary
+        run: node scripts/ci/check-schema-boundary.mjs
+
+  # Proves a database can be built from nothing but the committed migrations —
+  # which was impossible before the squash — and that doing it twice is a no-op.
+  migrations-apply:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Ephemeral, localhost-only container that lives for one job. Trust
+          # auth avoids committing a password literal for it.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGURL: postgresql://postgres@localhost:5432
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Create databases
+        run: |
+          for db in ls_clean ls_push; do
+            psql -h localhost -U postgres -d postgres -c "CREATE DATABASE $db"
+          done
+
+      # The engine set must stand alone: that is what an open-source consumer
+      # embedding @launchstack/store applies, without any product tables.
+      - name: Engine migrations alone build a usable database
+        run: |
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_engine_only"
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/store db:migrate
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/store db:verify
+          dangling=$(psql "$PGURL/ls_engine_only" -tAc "SELECT count(*) FROM pg_constraint c WHERE c.contype='f' AND NOT EXISTS (SELECT 1 FROM pg_class t WHERE t.oid=c.confrelid)")
+          [ "$dangling" = "0" ] || { echo "::error::engine schema has $dangling dangling FK(s)"; exit 1; }
+
+      - name: Apply both migration sets to an empty database
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:migrate
+
+      - name: Assert no migrations pending
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:verify
+
+      - name: Assert re-running is a no-op
+        run: |
+          out=$(DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:migrate)
+          echo "$out"
+          [ "$(echo "$out" | grep -c 'database is up to date')" = "2" ] || {
+            echo "::error::second db:migrate run was not a no-op for both sets"; exit 1; }
+
+      # The strong gate. `generate` proves TS <-> SQL agree on paper; this
+      # proves the SQL actually materialises the right physical schema. push
+      # runs into a deliberately EMPTY database, so there is nothing to
+      # introspect and nothing it could drop.
+      - name: Build the same schema from TypeScript
+        run: |
+          psql "$PGURL/ls_push" -c 'CREATE EXTENSION IF NOT EXISTS vector'
+          # Both configs push into the same empty database: engine tables first
+          # so the product config's foreign keys resolve.
+          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
+            pnpm --filter @launchstack/store exec drizzle-kit push --force
+          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
+            pnpm --filter @launchstack/web exec drizzle-kit push --force
+
+      - name: Assert the two schemas are identical
+        run: |
+          dump() {
+            docker run --rm --network host pgvector/pgvector:pg16 \
+              pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
+              | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
+              | sed -E 's/[[:space:]]+$//'
+          }
+          dump ls_clean > /tmp/from_migrations.sql
+          dump ls_push  > /tmp/from_typescript.sql
+          if ! diff -u /tmp/from_migrations.sql /tmp/from_typescript.sql > /tmp/drift.diff; then
+            echo "::error::Migrations do not reproduce the TypeScript schema."
+            echo "  left  = built from packages/store/drizzle"
+            echo "  right = built from packages/store/src/db/schema.ts"
+            cat /tmp/drift.diff
+            exit 1
+          fi
+          echo "identical ($(wc -l < /tmp/from_migrations.sql) lines compared)"
+
+  # Catches the class of bug the old `0001` embodied: a migration that works on
+  # an empty database but not on one that already has the previous release's
+  # schema. Self-skips until the first tag cut under the new system.
+  upgrade-from-release:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Ephemeral, localhost-only container that lives for one job. Trust
+          # auth avoids committing a password literal for it.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGURL: postgresql://postgres@localhost:5432
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply the previous release's migrations, then HEAD's on top
+        run: |
+          TAG=$(git tag --list 'v*' --sort=-v:refname | head -n1)
+          if [ -z "$TAG" ] || ! git cat-file -e "$TAG:packages/store/drizzle" 2>/dev/null; then
+            echo "No prior tag carrying packages/store/drizzle — skipping."
+            echo "This job becomes meaningful once a release is tagged after the squash."
+            exit 0
+          fi
+          echo "upgrading from $TAG"
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_upgrade"
+          rm -rf /tmp/prev && mkdir -p /tmp/prev
+          git archive "$TAG" packages/store/drizzle packages/store/scripts apps/web/drizzle \
+            | tar -x -C /tmp/prev
+
+          # Previous release, both sets — engine first.
+          DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/store/scripts/migrate.mjs
+          if [ -d /tmp/prev/apps/web/drizzle ]; then
+            DATABASE_URL="$PGURL/ls_upgrade" \
+              node /tmp/prev/packages/store/scripts/migrate.mjs --set=product
+          fi
+          # Then HEAD's, both sets.
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:migrate
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:verify
+
+          # An upgraded database must end up structurally identical to one
+          # built from scratch — otherwise the migrations are order-dependent.
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_fresh"
+          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/web db:migrate
+          dump() {
+            docker run --rm --network host pgvector/pgvector:pg16 \
+              pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
+              | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
+              | sed -E 's/[[:space:]]+$//'
+          }
+          dump ls_upgrade > /tmp/upgraded.sql
+          dump ls_fresh   > /tmp/fresh.sql
+          if ! diff -u /tmp/fresh.sql /tmp/upgraded.sql; then
+            echo "::error::An upgraded database differs from a freshly-built one."
+            exit 1
+          fi
+          echo "upgrade path matches a clean build"
 
   build:
     runs-on: ubuntu-latest
+    needs: check
 
     env:
-      LANGCHAIN_TRACING_V2: ${{ secrets.LANGCHAIN_TRACING_V2 }}
-      LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY}}
-      UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
-      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
-      PGUSER: ${{ secrets.PGUSER }}
-      PGHOST_UNPOOLED: ${{ secrets.PGHOST_UNPOOLED }}
-      PGDATABASE: ${{ secrets.PGDATABASE }}
-      PGPASSWORD: ${{ secrets.PGPASSWORD }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PGHOST: ${{ secrets.PGHOST }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
-      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL}}
-      POSTGRES_URL: ${{ secrets.POSTGRES_URL }} 
-      INNGEST_EVENT_KEY: ${{ secrets.INNGEST_EVENT_KEY }} 
-      
+      SKIP_ENV_VALIDATION: "1"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
-      - name: Setup pnpm 
-        uses: pnpm/action-setup@v2
-        with:
-          pnpm-version: ${{ env.PNPM_VERSION }}
-
-      - name: pnpm install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build application
-        run: pnpm build
-        
+      # `ignoreBuildErrors`/`ignoreDuringBuilds` are gone from next.config
+      # (ADR-006): this build fails on type or lint errors.
+      # The public site (launchstack.app). It needs no database, no auth secret,
+      # and no engine packages — if this build ever starts requiring one of
+      # them, something has leaked back across the split. Runs before the web
+      # build because it is the faster of the two to fail.
+      - name: Build landing site
+        run: pnpm --filter @launchstack/landing build
 
-    
+      - name: Build web app
+        run: pnpm --filter @launchstack/web build
+
+      - name: Build publishable packages
+        run: pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/launchstack/launchstack/discussions
+    about: Ask questions, share ideas, get help from the community.
+  - name: Security vulnerability
+    url: https://github.com/launchstack/launchstack/blob/main/SECURITY.md
+    about: Report privately — do not open a public issue.

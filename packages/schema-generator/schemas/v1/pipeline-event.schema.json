@@ -1,0 +1,490 @@
+{
+  "$ref": "#/definitions/pipeline-event",
+  "definitions": {
+    "pipeline-event": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "source.version.created"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "sourceVersionId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "ocrJobId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "documentUrl": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "documentName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "category": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "originalFilename": {
+                  "type": "string"
+                },
+                "isWebsite": {
+                  "type": "boolean"
+                },
+                "archiveIdentity": {
+                  "type": "string"
+                },
+                "transcriptionMetadata": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "forceOCR": {
+                      "type": "boolean"
+                    },
+                    "preferredProvider": {
+                      "type": "string",
+                      "enum": [
+                        "AZURE",
+                        "LANDING_AI",
+                        "NATIVE_PDF",
+                        "DATALAB",
+                        "INGESTION",
+                        "DOCLING"
+                      ]
+                    },
+                    "embeddingIndexKey": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "sourceId",
+                "sourceVersionId",
+                "ocrJobId",
+                "documentUrl",
+                "documentName",
+                "category",
+                "userId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "evidence.version.extracted"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "sourceVersionId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "ocrJobId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "provider": {
+                  "type": "string",
+                  "enum": [
+                    "AZURE",
+                    "LANDING_AI",
+                    "NATIVE_PDF",
+                    "DATALAB",
+                    "INGESTION",
+                    "DOCLING"
+                  ]
+                },
+                "pageCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "usedFastTextPath": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "sourceId",
+                "sourceVersionId",
+                "ocrJobId",
+                "provider",
+                "usedFastTextPath"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "evidence.version.indexed"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "sourceVersionId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "ocrJobId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "embeddingIndexKey": {
+                  "type": "string"
+                },
+                "contextChunkCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "retrievalChunkCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "graphSynced": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "sourceId",
+                "sourceVersionId",
+                "ocrJobId",
+                "contextChunkCount",
+                "retrievalChunkCount",
+                "graphSynced"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "company.state.projection.requested"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "projection": {
+                  "type": "string",
+                  "const": "company-metadata"
+                },
+                "sourceId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "sourceVersionId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "projection",
+                "sourceId",
+                "sourceVersionId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "company.state.projected"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "projection": {
+                  "type": "string",
+                  "const": "company-metadata"
+                },
+                "sourceId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "sourceVersionId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "projection"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "note.embedding.requested"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "noteId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "reason": {
+                  "type": "string",
+                  "enum": [
+                    "created",
+                    "updated"
+                  ]
+                }
+              },
+              "required": [
+                "noteId",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

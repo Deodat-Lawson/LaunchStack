@@ -1,0 +1,94 @@
+{
+  "$ref": "#/definitions/document-editor.review-items-response",
+  "definitions": {
+    "document-editor.review-items-response": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "insert",
+                  "delete",
+                  "format",
+                  "comment"
+                ]
+              },
+              "author": {
+                "type": "string"
+              },
+              "date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "anchor_text": {
+                "type": "string"
+              },
+              "paired_with": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "offset": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "context": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "author",
+              "text",
+              "anchor_text",
+              "offset",
+              "context"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "change_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "comment_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "filename",
+        "items",
+        "authors",
+        "change_count",
+        "comment_count"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

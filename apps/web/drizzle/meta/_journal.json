@@ -1,0 +1,132 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785814104505,
+      "tag": "20260804032824_product_baseline",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786146482828,
+      "tag": "20260807234802_founder_weekly_review",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786228646563,
+      "tag": "20260808223726_document_creation_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786229348295,
+      "tag": "20260808224908_founder_weekly_review_async_collection",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786683913812,
+      "tag": "20260814050513_email_pipeline",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786941135920,
+      "tag": "20260817043215_mindmap_app",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786944851065,
+      "tag": "20260817053411_mindmap_presence",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1787442919298,
+      "tag": "20260822235519_marketing-history-publish-writeback",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788032041550,
+      "tag": "20260829193401_lowly_silverclaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788036212629,
+      "tag": "20260829204332_google_drive_links",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788037408131,
+      "tag": "20260829210328_workspace_connections_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1788118573347,
+      "tag": "20260830193613_claude_artifacts",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1788396468893,
+      "tag": "20260903004748_repo_workspaces",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1788489462403,
+      "tag": "20260904023742_distribution_pipeline",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1788491665025,
+      "tag": "20260904031425_workspace_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1788584047514,
+      "tag": "20260905045407_mindmap_published_revision",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1788651652871,
+      "tag": "20260905234052_workspace_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1788825566173,
+      "tag": "20260907235926_drive_link_origin",
+      "breakpoints": true
+    }
+  ]
+}

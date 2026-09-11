@@ -1,0 +1,22 @@
+{
+  "$ref": "#/definitions/document-editor.diff-response",
+  "definitions": {
+    "document-editor.diff-response": {
+      "type": "object",
+      "properties": {
+        "diff": {
+          "type": "string"
+        },
+        "has_differences": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "diff",
+        "has_differences"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -1,0 +1,172 @@
+{
+  "$ref": "#/definitions/document-editor.batch-result",
+  "definitions": {
+    "document-editor.batch-result": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "applied_edits": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skipped_edits": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "applied_actions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skipped_actions": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "applied_edits",
+            "skipped_edits",
+            "applied_actions",
+            "skipped_actions"
+          ],
+          "additionalProperties": false
+        },
+        "edits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "index": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "target_text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "new_text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "occurrences_modified": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "heading_path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "page": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "index": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "reason"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "skipped_details": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "occurrences_modified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actions_already_resolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "author_impersonation_warning": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "adeu_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "summary",
+        "edits",
+        "failed",
+        "skipped_details",
+        "occurrences_modified",
+        "actions_already_resolved"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

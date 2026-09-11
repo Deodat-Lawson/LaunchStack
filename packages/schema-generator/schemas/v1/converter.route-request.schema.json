@@ -1,0 +1,47 @@
+{
+  "$ref": "#/definitions/converter.route-request",
+  "definitions": {
+    "converter.route-request": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "documentUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "mimeType": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "forceOCR": {
+          "type": "boolean"
+        },
+        "preferredProvider": {
+          "type": "string",
+          "enum": [
+            "AZURE",
+            "LANDING_AI",
+            "NATIVE_PDF",
+            "DATALAB",
+            "INGESTION",
+            "DOCLING"
+          ]
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "documentUrl"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

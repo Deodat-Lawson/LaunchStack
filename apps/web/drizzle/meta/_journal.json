@@ -113,6 +113,20 @@
       "when": 1788584047514,
       "tag": "20260905045407_mindmap_published_revision",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1788651652871,
+      "tag": "20260905234052_workspace_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1788825566173,
+      "tag": "20260907235926_drive_link_origin",
+      "breakpoints": true
     }
   ]
 }

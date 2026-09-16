@@ -93,6 +93,13 @@ const SessionsBrowser = dynamic(
         ),
     { loading: () => <LoadingPage /> }
 );
+const DistributionApp = dynamic(
+    () =>
+        import("~/app/employer/tools/distribution/components/DistributionApp").then(
+            m => m.DistributionApp
+        ),
+    { loading: () => <LoadingPage /> }
+);
 
 interface PaneProps {
     onClose: () => void;
@@ -502,6 +509,14 @@ export function AgentSessionsStudioPane({ context }: PaneProps & { context?: Stu
                 onOpenDocument={context?.sessions?.onOpenDocument}
                 onContinue={context?.sessions?.onContinue}
             />
+        </div>
+    );
+}
+
+export function DistributionStudioPane(_: PaneProps) {
+    return (
+        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+            <DistributionApp embedded />
         </div>
     );
 }
@@ -916,6 +931,8 @@ export function renderStudioPane(
                     initialSection={context?.settings?.section}
                 />
             );
+        case "distribution":
+            return <DistributionStudioPane onClose={onClose} />;
         default:
             if (feature.comingSoon) {
                 return (

@@ -230,6 +230,7 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "upload",
             "upload-local",
             "uploadthing",
+            "google-docs",
             "storage",
             "ocr",
             "graph",
@@ -240,8 +241,10 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "updateUploadPreference",
         ],
         notes:
-            "The largest and least consistent service: ten separate upload entry points, and " +
-            "RPC-style routes that shadow the documents resource.",
+            "The largest and least consistent service: eleven separate upload entry points, and " +
+            "RPC-style routes that shadow the documents resource. `google-docs` is the odd one " +
+            "— it authors a new source in Drive rather than accepting bytes — but it lands in " +
+            "the same document store, so it belongs here rather than with the connectors.",
     },
     {
         id: "retrieval",

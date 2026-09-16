@@ -10,6 +10,7 @@ import {
 import { RenameSourceDialog } from "~/app/employer/documents/_workspace/RenameSourceDialog";
 import { SourceRail } from "~/app/employer/documents/_workspace/SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "~/app/employer/documents/_workspace/types";
+import type { HistoryEntry } from "~/lib/workspace-history";
 import {
     UNFILED_FOLDER,
     expandFolderPaths,
@@ -51,6 +52,78 @@ const FIXTURE_SOURCES: WorkspaceSource[] = [
 
 const FIXTURE_FOLDER_PATHS = ["Contracts/Archive", "Engineering/Specs", "HR"];
 
+/** Minutes ago, as the feed's ISO timestamp. */
+function ago(minutes: number): string {
+    return new Date(Date.now() - minutes * 60_000).toISOString();
+}
+
+/**
+ * A history fixture that covers every row state the rail can draw: a chat, a
+ * run mid-flight, a failed run, a run with no surface to open, and enough
+ * spread in time to produce more than one date heading.
+ */
+const FIXTURE_HISTORY: HistoryEntry[] = [
+    {
+        id: "chat:s1",
+        kind: "chat",
+        refId: "s1",
+        title: "What is the indemnity cap in the Globex MSA, and does it survive termination?",
+        status: "done",
+        at: ago(12),
+        href: "/employer/documents?session=s1",
+        messageCount: 6,
+    },
+    {
+        id: "distribution:r1",
+        kind: "distribution",
+        refId: "r1",
+        title: "Q3 channel partners",
+        subtitle: "Partner discovery",
+        status: "running",
+        at: ago(35),
+        href: "/employer/tools/distribution",
+    },
+    {
+        id: "repo-explainer:j1",
+        kind: "repo-explainer",
+        refId: "j1",
+        title: "acme/web — architecture",
+        subtitle: "Explain the ingestion path end to end",
+        status: "done",
+        at: ago(60 * 5),
+        href: "/employer/tools/repo-explainer",
+    },
+    {
+        id: "trend-search:t1",
+        kind: "trend-search",
+        refId: "t1",
+        title: "AI tooling adoption in mid-market fintech",
+        subtitle: "Trend search",
+        status: "failed",
+        at: ago(60 * 26),
+    },
+    {
+        id: "chat:s2",
+        kind: "chat",
+        refId: "s2",
+        title: "Summarise the handbook's leave policy",
+        status: "done",
+        at: ago(60 * 30),
+        href: "/employer/documents?session=s2",
+        messageCount: 2,
+    },
+    {
+        id: "email:c1",
+        kind: "email",
+        refId: "c1",
+        title: "Renewal nudge — March cohort",
+        subtitle: "Bring lapsed trials back with a case study",
+        status: "queued",
+        at: ago(60 * 24 * 9),
+        href: "/employer/tools/email-pipeline",
+    },
+];
+
 /**
  * Local harness for the source rail: nested folders, folder drag-and-drop,
  * the folder menu, and the folder dialogs, all against in-memory state so the
@@ -67,6 +140,8 @@ export function SourceRailPreview() {
     const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
     const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
     const [opened, setOpened] = useState<string | null>(null);
+    const [entries, setEntries] = useState<HistoryEntry[]>(FIXTURE_HISTORY);
+    const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
 
     const folders = useMemo<WorkspaceFolder[]>(
         () =>
@@ -161,6 +236,39 @@ export function SourceRailPreview() {
                 setActiveFolder={setActiveFolder}
                 activeTag={activeTag}
                 setActiveTag={setActiveTag}
+                history={{
+                    entries,
+                    loading: false,
+                    error: null,
+                    degraded: [],
+                    activeSessionId,
+                    onNewChat: () => {
+                        setActiveSessionId(null);
+                        setOpened("new-chat");
+                    },
+                    onResumeSession: id => {
+                        setActiveSessionId(id);
+                        setOpened(`resume-session:${id}`);
+                    },
+                    onOpenRun: entry => setOpened(`open-run:${entry.id}`),
+                    onRenameSession: (id, title) => {
+                        setEntries(prev =>
+                            prev.map(entry =>
+                                entry.refId === id && entry.kind === "chat"
+                                    ? { ...entry, title }
+                                    : entry
+                            )
+                        );
+                        setOpened(`rename-session:${id}`);
+                    },
+                    onDeleteSession: id => {
+                        setEntries(prev =>
+                            prev.filter(entry => !(entry.kind === "chat" && entry.refId === id))
+                        );
+                        setOpened(`delete-session:${id}`);
+                    },
+                    onRefresh: () => setOpened("refresh-history"),
+                }}
             />
             {opened && (
                 <div

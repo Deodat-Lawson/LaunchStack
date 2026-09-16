@@ -4,9 +4,12 @@ import type { Permission } from "~/lib/authz/permissions";
 // set kept for this file's existing entries (see apps/web/README.md).
 import {
     AppWindow as IconArtifact,
+    Compass as IconDistribution,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
 } from "lucide-react";
+// Brand marks live in the shared icon home, not the legacy set below.
+import { IconGoogleDocs } from "~/components/icons/brand";
 import {
     IconAudio,
     IconBolt,
@@ -297,6 +300,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/agent-sessions",
     },
     {
+        id: "distribution",
+        label: "Distribution",
+        Icon: IconDistribution,
+        desc: "Find importers, distributors and retail accounts; run each relationship to a deal",
+        href: "/employer/tools/distribution",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -416,7 +426,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             },
             {
                 // Maps live in the library beside every other source. Picking
-                // this opens the template picker.
+                // this opens its Studio app tab.
                 id: "mindmap",
                 label: "Mindmap",
                 Icon: IconMindmap,
@@ -471,6 +481,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconMegaphone,
                 desc: "Multi-channel campaigns from your company knowledge",
             },
+            {
+                // Distribution is embedded in Studio and also has a standalone
+                // route for direct links.
+                id: "distribution",
+                label: "Distribution",
+                Icon: IconDistribution,
+                desc: "Find importers, distributors and retail accounts for what you sell — evidence-backed dossiers, fit scores, and a pipeline to a signed agreement",
+                href: "/employer/tools/distribution",
+            },
         ],
     },
     {
@@ -512,8 +531,10 @@ export interface AddSourceTab {
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
-        // Authoring, not ingesting: these open the Mindmap app, and the diagram
-        // becomes a citable source once it is published back here.
+        // Authoring, not ingesting: these hand the user an editor rather than
+        // asking for a file. A mindmap becomes citable once it is published
+        // back here; a Google Doc is citable from the moment it is created and
+        // re-syncs as it is edited.
         group: "Create",
         items: [
             {
@@ -521,6 +542,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 label: "Mindmap",
                 Icon: IconMindmap,
                 desc: "Diagram it, then cite it",
+            },
+            {
+                id: "google-doc",
+                label: "Google Doc",
+                Icon: IconGoogleDocs,
+                desc: "Write it in Google Docs",
             },
         ],
     },

@@ -21,6 +21,7 @@ import {
     displayFolderPath,
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
+import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
@@ -33,6 +34,8 @@ import { FolderDialog, type FolderDialogRequest } from "./FolderDialog";
 import { MindmapEditorHost } from "./MindmapEditorHost";
 import { RenameSourceDialog } from "./RenameSourceDialog";
 import { SourceRail } from "./SourceRail";
+import * as sessionApi from "./sessionApi";
+import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
@@ -84,6 +87,35 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     meetings: "/employer/documents?feature=meetings",
 };
 
+/**
+ * A stored turn becomes a thread turn. `citations` and `attachments` are
+ * replayed as they were written — the rail's own render payload, round-tripped
+ * rather than re-derived, so a reopened chat shows the citations that answer
+ * actually carried even if the library has moved on since.
+ */
+function toThreadMessage(stored: sessionApi.SessionMessagePayload): ThreadMessage {
+    return {
+        role: stored.role,
+        text: stored.text,
+        refs: stored.refs,
+        citations: stored.citations as ThreadMessage["citations"],
+        attachments: stored.attachments as ThreadMessage["attachments"],
+        model: stored.model ?? undefined,
+        tokens: stored.tokens ?? undefined,
+    };
+}
+
+function toStoredMessage(message: ThreadMessage): sessionApi.SessionMessagePayload {
+    return {
+        role: message.role,
+        text: message.text,
+        refs: message.refs,
+        citations: message.citations,
+        attachments: message.attachments,
+        model: message.model ?? null,
+        tokens: message.tokens ?? null,
+    };
+}
 function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
     const parts = [first, last].filter(Boolean) as string[];
     if (parts.length > 0) {
@@ -158,6 +190,23 @@ export function WorkspaceShell() {
     const [continuation, setContinuation] = useState<{ title: string; context: string } | null>(
         null
     );
+    /**
+     * The open chat's stored id, mirrored in `?session=<id>` so a reload — or a
+     * link to yourself — lands back in the same conversation.
+     *
+     * Held in a ref as well as the URL because a send that *creates* the
+     * session must know, in that same callback, that the next send is an
+     * append; waiting for the router to land would save the second turn as a
+     * second chat.
+     */
+    const sessionParam = searchParams.get("session");
+    const sessionIdRef = useRef<string | null>(null);
+    /** The session whose transcript is already on screen — the hydrate guard. */
+    const hydratedSession = useRef<string | null>(null);
+    const continuationRef = useRef<{ title: string; context: string } | null>(null);
+    useEffect(() => {
+        continuationRef.current = continuation;
+    }, [continuation]);
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     const [addOpen, setAddOpen] = useState(false);
@@ -291,6 +340,156 @@ export function WorkspaceShell() {
 
     const { sendQuery, loading: isSending } = useAIChat();
 
+    // ---------------------------------------------------------------------
+    // Session persistence
+    // ---------------------------------------------------------------------
+
+    const history = useWorkspaceHistory(Boolean(userId));
+    // Destructured so the callbacks below depend on the stable functions rather
+    // than on the hook's object, which is new on every history state change.
+    const {
+        refresh: refreshHistory,
+        renameEntry: renameHistoryEntry,
+        removeEntry: removeHistoryEntry,
+    } = history;
+
+    useEffect(() => {
+        sessionIdRef.current = sessionParam;
+    }, [sessionParam]);
+
+    const setSessionParam = useCallback(
+        (id: string | null) => {
+            const params = new URLSearchParams(searchParams.toString());
+            if (id) params.set("session", id);
+            else params.delete("session");
+            const query = params.toString();
+            // `replace`, not `push`: saving a chat is not a navigation, and it
+            // should not make the back button undo the last thing you typed.
+            router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
+        },
+        [router, searchParams]
+    );
+
+    /** Load a stored transcript into the composer. Runs once per session id. */
+    useEffect(() => {
+        if (!sessionParam || hydratedSession.current === sessionParam) return;
+        hydratedSession.current = sessionParam;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const stored = await sessionApi.fetchSession(sessionParam);
+                if (cancelled) return;
+                if (!stored) {
+                    // Deleted here or in another tab. Drop the param rather
+                    // than sitting on a link to nothing.
+                    hydratedSession.current = null;
+                    setSessionParam(null);
+                    toast.error("That chat is no longer available");
+                    return;
+                }
+                setThread((stored.messages ?? []).map(toThreadMessage));
+                setContinuation(stored.continuation ?? null);
+                if (stored.contextSourceIds.length > 0) setSelected(stored.contextSourceIds);
+                setActiveFeatureId("chat");
+            } catch {
+                if (!cancelled) toast.error("Couldn't reopen that chat");
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [sessionParam, setSessionParam, setActiveFeatureId]);
+
+    /**
+     * Store a completed exchange.
+     *
+     * Both turns go together, after the answer lands, so the stored transcript
+     * is exactly what the person saw — including an error turn, which is part
+     * of that conversation whether or not it is flattering. A failure here is
+     * logged and swallowed: history is a convenience, and losing it must never
+     * interrupt the chat that is working.
+     */
+    const persistTurns = useCallback(
+        async (
+            turns: ThreadMessage[],
+            contextSourceIds: string[],
+            /** What was already on screen. Only matters for the first save. */
+            priorTurns: ThreadMessage[]
+        ) => {
+            try {
+                const openSessionId = sessionIdRef.current;
+                if (openSessionId) {
+                    await sessionApi.appendMessages(openSessionId, {
+                        messages: turns.map(toStoredMessage),
+                        contextSourceIds,
+                    });
+                } else {
+                    // Nothing is stored yet, so the whole thread belongs to the
+                    // new session — including the note that opens a continued
+                    // import, which would otherwise vanish on reopen. The tail
+                    // slice respects the endpoint's per-write cap.
+                    const opening = [...priorTurns, ...turns].slice(-MAX_SESSION_APPEND);
+                    const created = await sessionApi.createSession({
+                        messages: opening.map(toStoredMessage),
+                        contextSourceIds,
+                        continuation: continuationRef.current,
+                    });
+                    sessionIdRef.current = created.id;
+                    // Mark it hydrated before the URL changes: the transcript
+                    // is already on screen, and refetching it would be a
+                    // round trip to replace the thread with itself.
+                    hydratedSession.current = created.id;
+                    setSessionParam(created.id);
+                }
+                void refreshHistory();
+            } catch (error) {
+                console.error("[workspace] couldn't save this chat turn", error);
+            }
+        },
+        [refreshHistory, setSessionParam]
+    );
+
+    const startNewChat = useCallback(() => {
+        setThread([]);
+        setContinuation(null);
+        sessionIdRef.current = null;
+        hydratedSession.current = null;
+        setSessionParam(null);
+        setActiveFeatureId("chat");
+    }, [setSessionParam, setActiveFeatureId]);
+
+    const resumeSession = useCallback(
+        (id: string) => {
+            setActiveFeatureId("chat");
+            if (id === sessionIdRef.current) return;
+            setSessionParam(id);
+        },
+        [setSessionParam, setActiveFeatureId]
+    );
+
+    const handleRenameSession = useCallback(
+        (id: string, title: string) => {
+            renameHistoryEntry(`chat:${id}`, title);
+            sessionApi.renameSession(id, title).catch(() => {
+                toast.error("Couldn't rename that chat");
+                void refreshHistory();
+            });
+        },
+        [renameHistoryEntry, refreshHistory]
+    );
+
+    const handleDeleteSession = useCallback(
+        (id: string) => {
+            removeHistoryEntry(`chat:${id}`);
+            if (id === sessionIdRef.current) startNewChat();
+            sessionApi.deleteSession(id).catch(() => {
+                toast.error("Couldn't delete that chat");
+                void refreshHistory();
+            });
+        },
+        [removeHistoryEntry, refreshHistory, startNewChat]
+    );
+
     /**
      * Pick up an imported agent session where it left off: pin the transcript
      * document as a source, load its tail into the continuation context, and
@@ -353,15 +552,13 @@ export function WorkspaceShell() {
                       .slice(-12000)
                 : undefined;
 
-            setThread(prev => [
-                ...prev,
-                {
-                    role: "user",
-                    text: send.text,
-                    refs: send.refs,
-                    attachments: send.attachments.length > 0 ? send.attachments : undefined,
-                },
-            ]);
+            const userTurn: ThreadMessage = {
+                role: "user",
+                text: send.text,
+                refs: send.refs,
+                attachments: send.attachments.length > 0 ? send.attachments : undefined,
+            };
+            setThread(prev => [...prev, userTurn]);
 
             const numericIds = send.refs
                 .map(r => sources.find(s => s.id === r)?.documentId)
@@ -393,6 +590,7 @@ export function WorkspaceShell() {
                 })),
             });
 
+            let assistantTurn: ThreadMessage;
             if (data.success) {
                 const citations = (data.references ?? [])
                     .map((r): ThreadReference | null => {
@@ -409,30 +607,29 @@ export function WorkspaceShell() {
                     .filter((c): c is ThreadReference => Boolean(c))
                     .slice(0, 4);
 
-                setThread(prev => [
-                    ...prev,
-                    {
-                        role: "assistant",
-                        text: data.summarizedAnswer ?? "No answer.",
-                        citations,
-                        model: data.aiModel,
-                        tokens: data.chunksAnalyzed,
-                    },
-                ]);
+                assistantTurn = {
+                    role: "assistant",
+                    text: data.summarizedAnswer ?? "No answer.",
+                    citations,
+                    model: data.aiModel,
+                    tokens: data.chunksAnalyzed,
+                };
             } else {
-                setThread(prev => [
-                    ...prev,
-                    {
-                        role: "assistant",
-                        text:
-                            data.message ??
-                            data.error ??
-                            "Couldn't reach the model. Try again in a moment.",
-                    },
-                ]);
+                assistantTurn = {
+                    role: "assistant",
+                    text:
+                        data.message ??
+                        data.error ??
+                        "Couldn't reach the model. Try again in a moment.",
+                };
             }
+
+            setThread(prev => [...prev, assistantTurn]);
+            // `thread` here is the transcript as it stood before this send —
+            // exactly the "prior turns" a first save needs.
+            void persistTurns([userTurn, assistantTurn], send.refs, thread);
         },
-        [sources, sendQuery, companyId, continuation, thread]
+        [sources, sendQuery, companyId, continuation, thread, persistTurns]
     );
 
     const handleOpenSource = useCallback(
@@ -698,7 +895,7 @@ export function WorkspaceShell() {
     // return leg — reopen the modal on that provider's tab and toast the outcome.
     const featureParam = searchParams.get("feature");
     const addParam = searchParams.get("add");
-    /** With `?add=1`: which Add-source tab to open on (`tab=mindmap` for the template picker). */
+    /** With `?add=1`: which Add-source tab to open on (`tab=mindmap` for the mindmap creator). */
     const tabParam = searchParams.get("tab");
     const connectorParam = searchParams.get("connector");
     const connectorResultParam = searchParams.get("result");
@@ -882,6 +1079,21 @@ export function WorkspaceShell() {
                     activeTag={activeTag}
                     setActiveTag={setActiveTag}
                     onClose={() => setRailHidden(true)}
+                    history={{
+                        entries: history.entries,
+                        loading: history.loading,
+                        error: history.error,
+                        degraded: history.degraded,
+                        activeSessionId: sessionParam,
+                        onNewChat: startNewChat,
+                        onResumeSession: resumeSession,
+                        onOpenRun: entry => {
+                            if (entry.href) router.push(entry.href);
+                        },
+                        onRenameSession: handleRenameSession,
+                        onDeleteSession: handleDeleteSession,
+                        onRefresh: () => void refreshHistory(),
+                    }}
                 />
             )}
 
@@ -922,10 +1134,7 @@ export function WorkspaceShell() {
                             isSending={isSending}
                             onOpenCitation={handleOpenCitation}
                             onOpenAdd={() => setAddOpen(true)}
-                            onNewChat={() => {
-                                setThread([]);
-                                setContinuation(null);
-                            }}
+                            onNewChat={startNewChat}
                             openPalette={() => setPalOpen(true)}
                             onStudioNavigate={navigateStudio}
                             userInitials={initials}

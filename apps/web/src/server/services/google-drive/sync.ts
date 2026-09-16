@@ -154,6 +154,9 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
     // keeps its id but loses headRevisionId/md5Checksum, and pulls must go
     // through export. Persistently flagged — export re-conversion is lossy.
     const native = meta.mimeType === GOOGLE_DOC_MIME;
+    // ...but a doc born in Google Docs (Create → Google Doc) has no source
+    // formatting to lose. Native is its normal state, not a degradation.
+    const lossyConversion = native && link.origin !== "created";
     const marker = native
         ? meta.version
             ? `v${meta.version}`
@@ -257,7 +260,7 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
         lastSyncedRevisionId: marker,
         lastSyncedMd5: native ? null : (meta.md5Checksum ?? null),
         lastSyncedVersionId: BigInt(lifecycle.versionId),
-        fidelityWarning: native || link.fidelityWarning,
+        fidelityWarning: lossyConversion || link.fidelityWarning,
         lastCheckedAt: now,
         lastSyncedAt: now,
         lastError: null,
@@ -267,7 +270,7 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
         kind: "synced",
         versionId: lifecycle.versionId,
         versionNumber: lifecycle.version.versionNumber,
-        fidelityWarning: native || link.fidelityWarning,
+        fidelityWarning: lossyConversion || link.fidelityWarning,
     };
 }
 
@@ -306,9 +309,15 @@ export interface UnlinkResult {
 }
 
 /**
- * Leg 5: a final blocking pull, then park the link. The Drive copy is trashed
- * by default — a live-looking Doc that silently stopped syncing is this
- * feature's worst failure seed — unless the caller asks to keep it.
+ * Leg 5: a final blocking pull, then park the link.
+ *
+ * What happens to the Drive file depends on which side it was born on. For an
+ * uploaded document (`origin: "linked"`) Drive holds a copy, and a live-looking
+ * Doc that silently stopped syncing is this feature's worst failure seed — so
+ * the copy is trashed. For a document created in Google Docs
+ * (`origin: "created"`) Drive holds the *original*, and trashing it would
+ * destroy the only editable copy — so it is kept. An explicit `keepDriveFile`
+ * overrides either way.
  */
 export async function unlinkDocument(params: {
     documentId: number;
@@ -327,8 +336,10 @@ export async function unlinkDocument(params: {
         return { finalPull, trashed: false };
     }
 
+    const keepDriveFile = params.keepDriveFile ?? link.origin === "created";
+
     let trashed = false;
-    if (!params.keepDriveFile && finalPull.kind !== "auth_revoked") {
+    if (!keepDriveFile && finalPull.kind !== "auth_revoked") {
         const connection = await loadConnection(Number(link.connectionId));
         if (connection && connection.status === "active") {
             try {

@@ -3,8 +3,11 @@
  *
  * Final blocking pull, then park the link. Refuses to complete when the final
  * pull fails retryably — unlinking while edits may be stranded in Drive is
- * the silent-loss scenario the design forbids. The Drive copy is trashed by
- * default; `keepDriveFile: true` leaves it (it stops syncing).
+ * the silent-loss scenario the design forbids.
+ *
+ * Omitting `keepDriveFile` lets the service decide from the link's origin: an
+ * uploaded document's Drive *copy* is trashed, a document created in Google
+ * Docs keeps its Drive *original*. Send the field explicitly to force either.
  */
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -23,12 +26,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         const auth = await authorizeDriveRoute(rawId);
         if (!auth.ok) return auth.response;
 
-        let keepDriveFile = false;
+        let keepDriveFile: boolean | undefined;
         try {
             const body: unknown = await request.json().catch(() => undefined);
-            keepDriveFile = BodySchema.parse(body)?.keepDriveFile ?? false;
+            keepDriveFile = BodySchema.parse(body)?.keepDriveFile;
         } catch {
-            // An empty or malformed body means the default: trash the copy.
+            // An empty or malformed body leaves the choice to the origin rule.
         }
 
         try {

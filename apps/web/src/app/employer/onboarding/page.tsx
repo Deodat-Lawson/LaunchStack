@@ -7,6 +7,7 @@ import {
     Building2,
     ChevronLeft,
     ChevronRight,
+    Compass,
     FileSearch,
     Megaphone,
     Upload,
@@ -369,6 +370,12 @@ function QuickStartStep({
             title: "Create a marketing campaign",
             text: "Generate platform-ready posts using your company knowledge",
             href: "/employer/tools/marketing-pipeline",
+        },
+        {
+            Icon: Compass,
+            title: "Find distribution partners",
+            text: "Discover importers, distributors and retailers for what you sell, with evidence-backed dossiers",
+            href: "/employer/tools/distribution",
         },
         {
             Icon: Building2,

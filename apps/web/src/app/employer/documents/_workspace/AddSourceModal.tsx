@@ -20,6 +20,7 @@ import {
     IconX,
     type IconProps,
 } from "./icons";
+import { Button } from "~/components/ui/button";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
@@ -41,6 +42,10 @@ import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-
  *   - Mindmap: `/api/mindmaps` → the workspace opens the new map's editor in
  *     place; it is a source from the moment it exists and citable once
  *     published.
+ *   - Google Doc: `/api/google-docs` → creates a native Doc in the workspace's
+ *     Drive and opens it in a new tab; the source exists here immediately and
+ *     the Drive reconciler folds later edits back in. The tab is hidden unless
+ *     `/api/connectors/google` reports the feature enabled.
  *   - Connectors: Drive/Slack/GitHub start the workspace OAuth flow at
  *     `/api/connectors/<provider>/oauth/start`; Gmail/Notion/Dropbox remain
  *     coming-soon CTAs.
@@ -76,6 +81,14 @@ export interface AddSourceModalProps {
 interface UploadResult {
     url: string;
     provider: "s3" | "database";
+}
+
+/** Shape of GET /api/connectors/google — gates the Create → Google Doc tab. */
+interface GoogleConnectionStatus {
+    enabled: boolean;
+    connected: boolean;
+    accountEmail?: string | null;
+    connectUrl?: string;
 }
 
 // Uses the provider-agnostic /api/upload-local route so uploads work whether the
@@ -196,6 +209,7 @@ export function AddSourceModal({
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
+    const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
 
     useEffect(() => {
         if (!open) return;
@@ -212,9 +226,33 @@ export function AddSourceModal({
         return () => window.removeEventListener("keydown", onEsc);
     }, [open, onClose]);
 
+    // Drive-linked files are dark by default. Rather than show a permanently
+    // greyed tab on every deployment that has not enabled them, ask once per
+    // opening and leave the tab out until we know it is available.
+    useEffect(() => {
+        if (!open) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/connectors/google");
+                if (!res.ok) return;
+                const body = (await res.json()) as GoogleConnectionStatus;
+                if (!cancelled) setGoogleStatus(body);
+            } catch {
+                // Leave it unknown; the tab stays hidden.
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [open]);
+
     if (!open) return null;
 
-    const allTabs: AddSourceTab[] = ADD_TABS.flatMap(g => g.items);
+    const groups = googleStatus?.enabled
+        ? ADD_TABS
+        : ADD_TABS.map(g => ({ ...g, items: g.items.filter(i => i.id !== "google-doc") }));
+    const allTabs: AddSourceTab[] = groups.flatMap(g => g.items);
     const active = allTabs.find(t => t.id === tab) ?? allTabs[0]!;
 
     const handleUploaded = () => {
@@ -225,6 +263,8 @@ export function AddSourceModal({
     let panel: React.ReactNode = null;
     if (tab === "mindmap") {
         panel = <MindmapPanel folder={folder} onCreated={onMindmapCreated} />;
+    } else if (tab === "google-doc") {
+        panel = <GoogleDocPanel folder={folder} status={googleStatus} onCreated={handleUploaded} />;
     } else if (tab === "files") {
         panel = (
             <FilesPanel
@@ -314,7 +354,7 @@ export function AddSourceModal({
                     >
                         <div style={{ fontSize: 15, fontWeight: 700 }}>Add a source</div>
                     </div>
-                    {ADD_TABS.map(g => (
+                    {groups.map(g => (
                         <div key={g.group}>
                             <div
                                 className="mono"
@@ -738,6 +778,168 @@ function MindmapPanel({
                     );
                 })}
             </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Create → Google Doc
+// ---------------------------------------------------------------------------
+
+/**
+ * Creates a real Google Doc in the workspace's Drive and opens it in a new
+ * tab. Unlike the Mindmap path, the source exists in LaunchStack immediately —
+ * seeded with its title — and the Drive reconciler folds later edits back in
+ * as new versions, so we stay put rather than navigating away.
+ */
+function GoogleDocPanel({
+    folder,
+    status,
+    onCreated,
+}: {
+    folder: string;
+    status: GoogleConnectionStatus | null;
+    onCreated: () => void;
+}) {
+    const [title, setTitle] = useState("");
+    const [busy, setBusy] = useState(false);
+
+    if (status && !status.connected) {
+        return (
+            <div>
+                <p
+                    style={{
+                        fontSize: 13,
+                        color: "var(--ink-3)",
+                        marginBottom: 14,
+                        lineHeight: 1.55,
+                    }}
+                >
+                    Connect a Google account for this workspace and new documents will be created in
+                    its Drive, in a <strong style={{ color: "var(--ink-2)" }}>LaunchStack</strong>{" "}
+                    folder.
+                </p>
+                <Button
+                    onClick={() => {
+                        window.location.href =
+                            status.connectUrl ?? "/api/connectors/google/oauth/start";
+                    }}
+                >
+                    Connect Google
+                </Button>
+            </div>
+        );
+    }
+
+    const create = async () => {
+        // Open the tab synchronously so popup blockers allow it, then point it.
+        const newTab = window.open("", "_blank");
+        setBusy(true);
+        try {
+            const res = await fetch("/api/google-docs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: title.trim() || undefined, folder }),
+            });
+            const body = (await res.json()) as { url?: string | null; message?: string };
+            if (!res.ok) throw new Error(body.message ?? `HTTP ${res.status}`);
+            if (body.url && newTab) newTab.location.href = body.url;
+            else newTab?.close();
+            toast.success("Created in Google Docs");
+            onCreated();
+        } catch (err) {
+            newTab?.close();
+            toast.error(err instanceof Error ? err.message : "Couldn't create that document");
+            setBusy(false);
+        }
+    };
+
+    return (
+        <div>
+            <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
+                Write it in Google Docs
+                {status?.accountEmail ? ` as ${status.accountEmail}` : ""}. It is filed under{" "}
+                <strong style={{ color: "var(--ink-2)" }}>{folder}</strong> right away, and edits
+                sync back as new versions your workspace can cite.
+            </p>
+
+            <label
+                style={{
+                    display: "block",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "var(--ink-2)",
+                    marginBottom: 6,
+                }}
+            >
+                Title
+                <input
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    placeholder="Untitled document"
+                    maxLength={200}
+                    disabled={busy}
+                    onKeyDown={e => {
+                        if (e.key === "Enter" && !busy) void create();
+                    }}
+                    style={{
+                        display: "block",
+                        width: "100%",
+                        marginTop: 6,
+                        padding: "8px 10px",
+                        borderRadius: 8,
+                        border: "1px solid var(--line)",
+                        background: "var(--panel)",
+                        color: "var(--ink)",
+                        fontSize: 13,
+                        fontWeight: 400,
+                    }}
+                />
+            </label>
+
+            <button
+                disabled={busy}
+                onClick={() => void create()}
+                style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 10,
+                    width: "100%",
+                    marginTop: 12,
+                    padding: "10px 12px",
+                    borderRadius: 10,
+                    border: "1px solid var(--line)",
+                    background: busy ? "var(--accent-soft)" : "var(--panel)",
+                    textAlign: "left",
+                    cursor: busy ? "wait" : "pointer",
+                }}
+            >
+                <span style={{ fontSize: 18, lineHeight: 1.2 }} aria-hidden>
+                    📄
+                </span>
+                <span style={{ minWidth: 0 }}>
+                    <span
+                        style={{
+                            display: "block",
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: "var(--ink)",
+                        }}
+                    >
+                        Blank document
+                    </span>
+                    <span
+                        style={{
+                            display: "block",
+                            fontSize: 11.5,
+                            color: "var(--ink-3)",
+                            lineHeight: 1.4,
+                        }}
+                    >
+                        {busy ? "Creating in Google Docs…" : "Opens in a new tab"}
+                    </span>
+                </span>
+            </button>
         </div>
     );
 }

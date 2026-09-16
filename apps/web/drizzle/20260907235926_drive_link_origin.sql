@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_document_drive_links" ADD COLUMN "origin" varchar(16) DEFAULT 'linked' NOT NULL;

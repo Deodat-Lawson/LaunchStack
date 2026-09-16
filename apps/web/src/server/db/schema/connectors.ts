@@ -153,6 +153,20 @@ export const documentDriveLinks = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        /**
+         * Which side the file was born on.
+         *
+         * 'linked'  — an uploaded document we copied out to Drive. Drive holds a
+         *             copy; converting it to a native Doc is lossy, and unlink
+         *             trashes the copy.
+         * 'created' — born in Google Docs from Create → Google Doc. Drive holds
+         *             the *original*; there is no source formatting to lose, so
+         *             no fidelity warning, and unlink keeps the Drive file.
+         *
+         * Declared last on purpose: `ADD COLUMN` appends, so the migrate-vs-push
+         * schema comparison in CI only agrees if the field sits here too.
+         */
+        origin: varchar("origin", { length: 16 }).notNull().default("linked"),
     },
     table => ({
         documentUnique: uniqueIndex("document_drive_links_document_unique").on(table.documentId),

@@ -28,7 +28,8 @@
         "test:e2e": "playwright test",
         "test:evals": "jest __tests__/lib/evals",
         "typecheck": "tsc --noEmit",
-        "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest"
+        "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest",
+        "distribution:fixture": "tsx ./scripts/run-distribution-fixture.ts"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1004.0",

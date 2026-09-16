@@ -186,6 +186,66 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 | 3.9.1 | Message | Clear "pending approval" message naming the workspace; product APIs answer 403 until approved. |
 ---
 
+### 3.10 Distribution (`/employer/tools/distribution`)
+
+Finds importers, distributors, wholesalers and retail accounts for what the
+company sells, researches each with sourced evidence, scores fit, and runs the
+relationship through stages. Reachable from the Studio drawer (Tools →
+Distribution), the ⌘K palette, and onboarding.
+
+**No login, no data:** `/dev/distribution` mounts the real page over an
+in-memory API simulator. Turn on "Use sample data" in Runs and press the
+button; everything below can be exercised there first.
+
+**Sample data on a real workspace (no API keys, no credits):**
+
+1. Program tab → New program. Name, offering, at least one two-letter
+   territory (for example `DE; NL:Amsterdam:20000`), at least one partner kind.
+   Add `nordwind-import.example` under existing partners' domains to see
+   exclusion in action.
+2. Runs tab → switch on **Use sample data** → Run with sample data. The run
+   completes inline in a few seconds and shows a `sample` badge. Expand the
+   row: sources `web ok`, `trade ok`, `place skipped`; shortlisted equals
+   enriched; one candidate flagged by screening.
+3. Partners tab: every candidate is `Researched` with a fit score and an
+   evidence count; the excluded domain never appears; "Shady Trading Ltd"
+   carries a screening flag; "Canal Concept Stores" (thin site) scores low.
+4. Open a partner: the drawer shows the dossier (every fact tagged
+   `E<n>`), the evidence list with verbatim quotes and source links, the fit
+   breakdown, and "Dossier in Sources" (published under *Distribution /
+   Sample*).
+5. Stage rules: move `Researched → Contacted` without an owner → refused with
+   "An owner is required". Set an owner, move again → succeeds and the
+   timeline gains a `Moved` entry. Move to `In conversation` without a next
+   action → refused. `Negotiating → Contracted` without an agreement →
+   refused; add an agreement, move → succeeds.
+6. Log activity (reply, meeting), add a note; both appear in the timeline and
+   clear staleness.
+7. Overview tab: the funnel, the coverage matrix (territory × kind: covered /
+   in play / gap) and "Partners needing attention" match what you did.
+8. Import partners (header button): paste
+   `Nordic Foods AS,nordicfoods.no,NO,distributor,NO,active`. It appears as
+   `Active`, source import, and its domain joins the program's exclusions.
+9. Draft outreach from a `Researched`/`Contacted` partner: a campaign is
+   drafted in Email (approve it there — nothing is sent from here). Try it on
+   an `Active` or excluded partner: it is refused with the reason.
+10. Run sample data again: no duplicate organisations or partners appear.
+
+**Live discovery (needs `OPENAI_API_KEY` + `EXA_API_KEY` or `SERPER_API_KEY`;
+optional `FOURSQUARE_SERVICE_KEY`, `OPENSANCTIONS_API_URL`,
+`TRADE_DATA_PROVIDER`):** leave "Use sample data" off and start a run. It is
+queued to the worker; the Runs table polls every 5 s through
+`profiling → planning → gathering → resolving → enriching → … → completed`.
+Expect a few minutes for 25 candidates. Check that every dossier fact links
+to a real page containing the quote, and that credits per completed
+candidate appear on the run row.
+
+**From the terminal:** `pnpm --filter @launchstack/web distribution:fixture -- --company <id>`
+runs the sample pipeline against `DATABASE_URL` and prints the summary and
+partners (`--publish` also publishes dossiers into Sources). The same path is
+covered by `apps/web/__tests__/api/distribution/pipeline.e2e.test.ts` against
+the local test database.
+
 ## 4. Members and viewers (Everyone shares one document screen; what differs is what their role permits)
 
 ### 4.1 Member

@@ -178,6 +178,10 @@ describe("editor shell", () => {
         await user.keyboard("{ArrowLeft}");
         view.container.hidden = false;
         expect(screen.getByText("2 / 2")).toBeInTheDocument();
+        view.container.setAttribute("aria-hidden", "true");
+        await user.keyboard("{ArrowLeft}");
+        view.container.removeAttribute("aria-hidden");
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
         await user.keyboard("{PageUp}");
         expect(screen.getByText("1 / 2")).toBeInTheDocument();
         await user.keyboard("{PageDown}");

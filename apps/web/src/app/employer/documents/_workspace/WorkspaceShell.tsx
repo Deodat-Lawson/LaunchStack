@@ -1168,15 +1168,17 @@ export function WorkspaceShell() {
                             }
                         />
                     ) : featureId === "mindmap" && editedMindmap?.mindmapId ? (
-                        <MindmapEditorHost
-                            key={editedMindmap.mindmapId}
-                            mindmapId={editedMindmap.mindmapId}
-                            onBack={() => {
-                                setEditedMindmapId(null);
-                                openSource(editedMindmap.id);
-                            }}
-                            onChanged={() => void refresh()}
-                        />
+                        <div className="h-full min-h-0" aria-hidden={!!viewerSource && !editing}>
+                            <MindmapEditorHost
+                                key={editedMindmap.mindmapId}
+                                mindmapId={editedMindmap.mindmapId}
+                                onBack={() => {
+                                    setEditedMindmapId(null);
+                                    openSource(editedMindmap.id);
+                                }}
+                                onChanged={() => void refresh()}
+                            />
+                        </div>
                     ) : (
                         <ExpandedFeatureView
                             featureId={featureId}

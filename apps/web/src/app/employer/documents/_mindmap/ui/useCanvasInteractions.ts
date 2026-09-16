@@ -205,7 +205,7 @@ export function useCanvasInteractions(
     // Space temporarily swaps to the hand tool, the way every canvas app does.
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
-            if (svgRef.current?.closest("[hidden]")) return;
+            if (svgRef.current?.closest('[hidden], [aria-hidden="true"]')) return;
             if (e.code !== "Space") return;
             const target = e.target as HTMLElement | null;
             if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;

@@ -91,7 +91,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         const stage = stageRef.current;
         return (
             !!stage &&
-            !stage.closest("[hidden]") &&
+            !stage.closest('[hidden], [aria-hidden="true"]') &&
             !document.activeElement?.closest('[role="tablist"], [data-studio-tab-strip]')
         );
     }, []);

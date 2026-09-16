@@ -120,10 +120,14 @@ function SessionRow({
     item,
     busy,
     onImport,
+    onOpenDocument,
+    onContinue,
 }: {
     item: AgentSessionItem;
     busy: boolean;
     onImport: (item: AgentSessionItem) => void;
+    onOpenDocument?: (documentId: number) => void;
+    onContinue?: (documentId: number) => void;
 }) {
     const router = useRouter();
     const { label, Icon } = TOOL_META[item.tool];
@@ -196,11 +200,14 @@ function SessionRow({
                                         size="sm"
                                         variant="outline"
                                         className="h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents/viewer?docId=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => {
+                                            const documentId = item.imported!.documentId;
+                                            if (onOpenDocument) onOpenDocument(documentId);
+                                            else
+                                                router.push(
+                                                    `/employer/documents/viewer?docId=${documentId}`
+                                                );
+                                        }}
                                     >
                                         <ExternalLink className="h-3.5 w-3.5" />
                                         Open
@@ -215,11 +222,14 @@ function SessionRow({
                                     <Button
                                         size="sm"
                                         className="bg-brand hover:bg-brand-hi text-brand-fg h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents?feature=chat&continue=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => {
+                                            const documentId = item.imported!.documentId;
+                                            if (onContinue) onContinue(documentId);
+                                            else
+                                                router.push(
+                                                    `/employer/documents?feature=chat&continue=${documentId}`
+                                                );
+                                        }}
                                     >
                                         <MessageSquarePlus className="h-3.5 w-3.5" />
                                         Continue
@@ -251,7 +261,14 @@ function SessionRow({
     );
 }
 
-export function SessionsBrowser() {
+export interface SessionsBrowserProps {
+    /** Keeps transcript/document navigation inside an embedded Studio workspace. */
+    onOpenDocument?: (documentId: number) => void;
+    /** Continues an imported transcript through the host workspace chat. */
+    onContinue?: (documentId: number) => void;
+}
+
+export function SessionsBrowser({ onOpenDocument, onContinue }: SessionsBrowserProps = {}) {
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
@@ -572,6 +589,8 @@ export function SessionsBrowser() {
                                 item={item}
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
+                                onOpenDocument={onOpenDocument}
+                                onContinue={onContinue}
                             />
                         ))}
                     </div>

@@ -64,6 +64,29 @@ hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
   `process.cwd()`. Do not move or rename without fixing that coupling.
 - Anything a component imports goes through the bundler, not `public/`.
 
+## Studio workspace tabs
+
+Studio apps open in the center workspace, one tab per app. The Studio picker,
+header menu, command palette, Knowledge shortcut, and Settings actions all reuse
+the same open-tab state. Artifacts gallery/viewer and Coding sessions stay
+embedded; their standalone routes remain available.
+
+- Click a tab to switch. Open panels stay mounted, preserving local drafts,
+  selections, and scroll until closed; tab layout is scoped to the current
+  workspace mount, not persisted across reloads.
+- Drag tabs to reorder. With a tab focused, Left/Right and Home/End switch tabs;
+  Alt+Left/Right moves the tab, and Delete closes it.
+- The close button or middle-click closes a tab, not its saved data. Closing the
+  active tab selects its right neighbor, then its left neighbor. Closing the last
+  tab shows an empty workspace with an Open Studio action.
+- The strip scrolls horizontally when crowded and uses the shared kit/tokens in
+  both themes. Hidden Mindmap editors retain their store and autosave, but ignore
+  global keyboard and paste events.
+
+`StudioTabs.tsx` owns tab ordering, selection, closing, and accessible panel
+lifetimes. `WorkspaceShell.tsx` owns permission-filtered app navigation and
+workspace data; `StudioPanes.tsx` embeds the actual app surfaces.
+
 ## Route areas with their own README
 
 Most features are a page and a few components. Two are large enough to document

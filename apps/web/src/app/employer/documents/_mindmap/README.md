@@ -15,12 +15,12 @@ Documents workspace beside every upload, found by the same three search boxes
 (the rail, Knowledge, ⌘K — node labels included), filed in the same folders,
 and opened, renamed, moved and deleted through the same controls.
 
-| Surface | Where                                           | What it is                                                                                        |
-| ------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Preview | `/employer/documents?source=m<id>`              | The workspace viewer showing the live canvas read-only (`ui/MindmapPreview`), with **Edit**       |
-| Editor  | `/employer/documents?source=m<id>&edit=1`       | `MindmapEditor` mounted in the workspace's main area; the rail stays. Back returns to the preview |
-| Create  | Documents → **Add a source → Create → Mindmap** | Picks a template, creates the row, opens the editor in place                                      |
-| Create  | Documents → Studio → **Mindmap**                | Opens that same tab                                                                               |
+| Surface | Where                                           | What it is                                                                                                             |
+| ------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Preview | `/employer/documents?source=m<id>`              | The workspace viewer showing the live canvas read-only (`ui/MindmapPreview`), with **Edit**                            |
+| Editor  | `/employer/documents?source=m<id>&edit=1`       | `MindmapEditor` mounted in the Mindmap workspace tab; switching tabs preserves the editor. Back returns to the preview |
+| Create  | Documents → **Add a source → Create → Mindmap** | Picks a template, creates the row, opens the editor in the Mindmap tab                                                 |
+| Create  | Documents → Studio → **Mindmap → New mindmap**  | Opens the Mindmap app tab, then the same template picker                                                               |
 
 Both params persist in the URL and transitions push history, so the browser's
 back button walks editor → preview → library. `/employer/mindmap/[id]` survives

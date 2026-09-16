@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { IconChevronRight } from "./icons";
@@ -10,14 +10,20 @@ import type { SettingsSectionId } from "./SettingsHub";
 import type { StudioFeature } from "./types";
 
 /**
- * Data the workspace shell owns but some panes need. Passed explicitly rather
- * than through context so a pane rendered from the drawer — which has no
- * workspace state — fails visibly instead of silently rendering empty.
+ * Workspace-owned data and navigation for embedded app panels.
+ * Explicit context lets standalone entry points retain their own navigation.
  */
 export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
+    /** Settings deep links can target a section without remounting the hub. */
+    settings?: { section?: SettingsSectionId };
+    /** Session actions can stay inside the host workspace when embedded. */
+    sessions?: {
+        onOpenDocument: (documentId: number) => void;
+        onContinue: (documentId: number) => void;
+    };
 }
 
 const DocumentGenerator = dynamic(
@@ -64,6 +70,27 @@ const MarketingPipelineWorkspace = dynamic(
         import(
             "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace"
         ).then(m => m.MarketingPipelineWorkspace),
+    { loading: () => <LoadingPage /> }
+);
+const ArtifactGallery = dynamic(
+    () =>
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactGallery").then(
+            m => m.ArtifactGallery
+        ),
+    { loading: () => <LoadingPage /> }
+);
+
+const ArtifactViewer = dynamic(
+    () =>
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactViewer").then(m => m.ArtifactViewer),
+    { loading: () => <LoadingPage /> }
+);
+
+const SessionsBrowser = dynamic(
+    () =>
+        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
+            m => m.SessionsBrowser
+        ),
     { loading: () => <LoadingPage /> }
 );
 
@@ -443,6 +470,41 @@ export function CompanySettingsPane({
         </div>
     );
 }
+/**
+ * Artifacts keep gallery/viewer navigation in one mounted Studio tab. The
+ * standalone gallery and viewer still own route navigation when these
+ * callbacks are omitted.
+ */
+export function ArtifactsStudioPane(_: PaneProps) {
+    const [viewerId, setViewerId] = useState<number | null>(null);
+
+    return (
+        <div
+            style={{
+                height: "100%",
+                minHeight: 0,
+                overflowY: viewerId === null ? "auto" : "hidden",
+            }}
+        >
+            {viewerId === null ? (
+                <ArtifactGallery onOpenArtifact={setViewerId} />
+            ) : (
+                <ArtifactViewer id={viewerId} onBack={() => setViewerId(null)} />
+            )}
+        </div>
+    );
+}
+
+export function AgentSessionsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return (
+        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+            <SessionsBrowser
+                onOpenDocument={context?.sessions?.onOpenDocument}
+                onContinue={context?.sessions?.onContinue}
+            />
+        </div>
+    );
+}
 
 export function MeetingsStudioPane(_: PaneProps) {
     return (
@@ -806,12 +868,7 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
     );
 }
 
-/**
- * Single-entry pane renderer used by the Studio drawer *and* the main
- * workspace area when a non-chat feature is expanded. `onClose` is the pane's
- * exit path — the drawer passes its own close handler; the main area passes
- * return-to-chat after removing the chrome back control (Studio sidebar Chat handles that too).
- */
+/** Shared app renderer. The workspace keeps each open panel mounted and closes its tab on exit. */
 export function renderStudioPane(
     feature: StudioFeature,
     onClose: () => void,
@@ -842,6 +899,10 @@ export function renderStudioPane(
             return <AudioGenPane onClose={onClose} />;
         case "marketing":
             return <MarketingPipelinePane onClose={onClose} />;
+        case "artifacts":
+            return <ArtifactsStudioPane onClose={onClose} />;
+        case "agent-sessions":
+            return <AgentSessionsStudioPane onClose={onClose} context={context} />;
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":
@@ -849,7 +910,12 @@ export function renderStudioPane(
         case "analytics":
             return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
         case "settings":
-            return <CompanySettingsPane onClose={onClose} />;
+            return (
+                <CompanySettingsPane
+                    onClose={onClose}
+                    initialSection={context?.settings?.section}
+                />
+            );
         default:
             if (feature.comingSoon) {
                 return (

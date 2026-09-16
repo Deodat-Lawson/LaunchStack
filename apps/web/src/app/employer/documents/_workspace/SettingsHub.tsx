@@ -176,6 +176,14 @@ export interface SettingsHubProps {
 export function SettingsHub({ embedded = false, initialSection }: SettingsHubProps) {
     const [section, setSection] = useState<SettingsSectionId>(initialSection ?? "processing");
     const [actions, setActions] = useState<SettingsSectionActions | null>(null);
+    // Studio tabs stay mounted while their active settings section changes.
+    // Apply a new deep-link target without remounting the whole settings app,
+    // and discard actions published by the previous section.
+    useEffect(() => {
+        if (!initialSection) return;
+        setActions(null);
+        setSection(initialSection);
+    }, [initialSection]);
 
     // `/employer/settings#byok`, `#metadata`, `#statistics` and friends were all
     // real destinations once. Keep every one of them working rather than quietly

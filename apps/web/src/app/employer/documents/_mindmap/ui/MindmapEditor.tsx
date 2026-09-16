@@ -87,6 +87,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
 
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
+    const isActive = useCallback(() => {
+        const stage = stageRef.current;
+        return (
+            !!stage &&
+            !stage.closest("[hidden]") &&
+            !document.activeElement?.closest('[role="tablist"]')
+        );
+    }, []);
 
     const [leftOpen, setLeftOpen] = useState(true);
     const [rightOpen, setRightOpen] = useState(true);
@@ -166,12 +174,13 @@ export function MindmapEditor(props: MindmapEditorProps) {
     useEffect(() => {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
+            if (!isActive() || e.defaultPrevented) return;
             if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") stepPage(1);
             if (e.key === "ArrowLeft" || e.key === "PageUp") stepPage(-1);
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [presenting, stepPage]);
+    }, [presenting, stepPage, isActive]);
 
     const editSelection = useCallback(() => {
         const state = store.getState();
@@ -185,6 +194,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
     }, [store]);
 
     useKeyboard(store, {
+        isActive,
         onSave: () => void autosave.saveNow({ snapshot: true }),
         onFind: () => setFindOpen(true),
         onCommandPalette: () => setPaletteOpen(true),
@@ -239,7 +249,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         [getSvgElement, stageSize, store]
     );
 
-    useClipboardPaste(store, () => worldPointAt());
+    useClipboardPaste(store, () => worldPointAt(), isActive);
 
     /**
      * Drops land at the pointer: a shape dragged from the palette, image files

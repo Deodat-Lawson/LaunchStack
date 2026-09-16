@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Studio workspace tabs** - Workspace apps, tools, and Settings open in themed center tabs with switching, close controls, drag reordering, and keyboard navigation. Open panes retain local state; Artifacts and Coding sessions embed their existing surfaces instead of navigating away. Inactive Mindmap tabs ignore global keyboard and paste events.
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing

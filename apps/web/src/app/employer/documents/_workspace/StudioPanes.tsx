@@ -18,9 +18,10 @@ export interface StudioPaneContext {
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
     /** Settings deep links can target a section without remounting the hub. */
-    settings?: { section?: SettingsSectionId };
+    settings?: { section?: SettingsSectionId; navigationKey?: number };
     /** Session actions can stay inside the host workspace when embedded. */
     sessions?: {
+        onImported?: () => Promise<void>;
         onOpenDocument: (documentId: number) => void;
         onContinue: (documentId: number) => void;
     };
@@ -470,10 +471,11 @@ export function NotesPane(_: PaneProps) {
 
 export function CompanySettingsPane({
     initialSection,
-}: PaneProps & { initialSection?: SettingsSectionId }) {
+    navigationKey,
+}: PaneProps & { initialSection?: SettingsSectionId; navigationKey?: number }) {
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-            <SettingsHub embedded initialSection={initialSection} />
+            <SettingsHub embedded initialSection={initialSection} navigationKey={navigationKey} />
         </div>
     );
 }
@@ -506,6 +508,7 @@ export function AgentSessionsStudioPane({ context }: PaneProps & { context?: Stu
     return (
         <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
             <SessionsBrowser
+                onImported={context?.sessions?.onImported}
                 onOpenDocument={context?.sessions?.onOpenDocument}
                 onContinue={context?.sessions?.onContinue}
             />
@@ -921,14 +924,27 @@ export function renderStudioPane(
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":
-            return <CompanySettingsPane onClose={onClose} initialSection="company" />;
+            return (
+                <CompanySettingsPane
+                    onClose={onClose}
+                    initialSection="company"
+                    navigationKey={context?.settings?.navigationKey}
+                />
+            );
         case "analytics":
-            return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
+            return (
+                <CompanySettingsPane
+                    onClose={onClose}
+                    initialSection="analytics"
+                    navigationKey={context?.settings?.navigationKey}
+                />
+            );
         case "settings":
             return (
                 <CompanySettingsPane
                     onClose={onClose}
                     initialSection={context?.settings?.section}
+                    navigationKey={context?.settings?.navigationKey}
                 />
             );
         case "distribution":

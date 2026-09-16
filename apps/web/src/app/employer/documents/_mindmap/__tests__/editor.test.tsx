@@ -160,10 +160,28 @@ describe("editor shell", () => {
         expect(screen.getByText("Comment")).toBeInTheDocument();
     });
 
-    it("offers Share and Present in the header", () => {
-        mountEditor();
-        expect(screen.getByRole("button", { name: /Share/ })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /Present/ })).toBeInTheDocument();
+    it("steps presentation pages only while the editor is visible", async () => {
+        const user = userEvent.setup();
+        const view = mountEditor();
+        await user.click(screen.getByLabelText("Add page"));
+        await user.click(screen.getByRole("button", { name: "Present" }));
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
+
+        await user.keyboard("{ArrowLeft}");
+        expect(screen.getByText("1 / 2")).toBeInTheDocument();
+        await user.keyboard("{ArrowRight}");
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
+        await user.keyboard("{PageUp} ");
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
+
+        view.container.hidden = true;
+        await user.keyboard("{ArrowLeft}");
+        view.container.hidden = false;
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
+        await user.keyboard("{PageUp}");
+        expect(screen.getByText("1 / 2")).toBeInTheDocument();
+        await user.keyboard("{PageDown}");
+        expect(screen.getByText("2 / 2")).toBeInTheDocument();
     });
 
     it("opens the export dialog on ⌘E", async () => {

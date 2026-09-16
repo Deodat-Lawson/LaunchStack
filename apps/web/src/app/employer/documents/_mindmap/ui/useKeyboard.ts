@@ -104,13 +104,8 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                 return;
             }
 
-            if (state.presenting) {
-                // Presentation mode only listens for movement and exit.
-                if (key === "ArrowRight" || key === "ArrowDown" || key === " ") {
-                    e.preventDefault();
-                }
-                return;
-            }
+            // Presentation navigation owns its keys in the editor shell.
+            if (state.presenting) return;
 
             // -- modifier combos -------------------------------------------
             if (mod) {

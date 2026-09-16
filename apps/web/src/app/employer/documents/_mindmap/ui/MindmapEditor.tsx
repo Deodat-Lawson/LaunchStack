@@ -92,7 +92,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         return (
             !!stage &&
             !stage.closest("[hidden]") &&
-            !document.activeElement?.closest('[role="tablist"]')
+            !document.activeElement?.closest('[role="tablist"], [data-studio-tab-strip]')
         );
     }, []);
 
@@ -175,8 +175,13 @@ export function MindmapEditor(props: MindmapEditorProps) {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
             if (!isActive() || e.defaultPrevented) return;
-            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") stepPage(1);
-            if (e.key === "ArrowLeft" || e.key === "PageUp") stepPage(-1);
+            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+                e.preventDefault();
+                stepPage(1);
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+                e.preventDefault();
+                stepPage(-1);
+            }
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);

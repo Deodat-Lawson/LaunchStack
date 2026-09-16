@@ -141,7 +141,13 @@ export function WorkspaceShell() {
         close: closeTab,
         move: moveTab,
     } = useStudioTabs();
-    const [settingsSection, setSettingsSection] = useState<SettingsSectionId | undefined>();
+    const [settingsTarget, setSettingsTarget] = useState<{
+        section?: SettingsSectionId;
+        navigationKey: number;
+    }>({ navigationKey: 0 });
+    const requestSettingsSection = useCallback((section: SettingsSectionId) => {
+        setSettingsTarget(current => ({ section, navigationKey: current.navigationKey + 1 }));
+    }, []);
 
     // Legacy `?view=X` URLs redirect to their new destinations. Any other params
     // (docId, versionId, prompt, etc.) are carried across so deep links survive.
@@ -224,14 +230,20 @@ export function WorkspaceShell() {
     const editParam = searchParams.get("edit") === "1";
     const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
     const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
+    // A source preview may change while this app tab is hidden. Keep the
+    // edited document mounted until the editor or its tab is explicitly closed.
+    const [editedMindmapId, setEditedMindmapId] = useState<string | null>(null);
+    const editedMindmap = sources.find(source => source.id === editedMindmapId);
     /** Read by the shortcut listener so the editor's own keys win while it is open. */
     const editingRef = useRef(false);
     useEffect(() => {
-        editingRef.current = editing && activeFeatureId === "mindmap";
-    }, [editing, activeFeatureId]);
+        editingRef.current = !!editedMindmap?.mindmapId && activeFeatureId === "mindmap";
+    }, [editedMindmap?.mindmapId, activeFeatureId]);
     useEffect(() => {
-        if (editing) setActiveFeatureId("mindmap");
-    }, [editing, viewerSource?.mindmapId, setActiveFeatureId]);
+        if (!editing || viewerSource?.id !== sourceParam) return;
+        setEditedMindmapId(sourceParam);
+        setActiveFeatureId("mindmap");
+    }, [editing, sourceParam, viewerSource?.id, setActiveFeatureId]);
     /** Cited passage to locate + highlight when the viewer was opened from a citation. */
     const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
 
@@ -359,7 +371,7 @@ export function WorkspaceShell() {
 
     const setSessionParam = useCallback(
         (id: string | null) => {
-            const params = new URLSearchParams(searchParams.toString());
+            const params = new URLSearchParams(window.location.search);
             if (id) params.set("session", id);
             else params.delete("session");
             const query = params.toString();
@@ -367,7 +379,7 @@ export function WorkspaceShell() {
             // should not make the back button undo the last thing you typed.
             router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
         },
-        [router, searchParams]
+        [router]
     );
 
     /** Load a stored transcript into the composer. Runs once per session id. */
@@ -498,8 +510,6 @@ export function WorkspaceShell() {
      */
     const startContinuation = useCallback(
         async (docId: number) => {
-            setActiveFeatureId("chat");
-            setSelected(prev => (prev.includes(`d${docId}`) ? prev : [`d${docId}`, ...prev]));
             try {
                 const res = await fetch("/api/fetchDocument", {
                     method: "POST",
@@ -517,9 +527,11 @@ export function WorkspaceShell() {
                 const parsed = parseSessionTranscript(await contentRes.text());
                 const title = parsed.title ?? doc.title;
 
+                startNewChat();
+                setSelected(prev => (prev.includes(`d${docId}`) ? prev : [`d${docId}`, ...prev]));
+
                 setContinuation({ title, context: buildContinuationContext(parsed) });
-                setThread(prev => [
-                    ...prev,
+                setThread([
                     {
                         role: "assistant",
                         text: `Continuing **${title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.`,
@@ -530,7 +542,7 @@ export function WorkspaceShell() {
                 toast.error("Couldn't load the imported session to continue it");
             }
         },
-        [setActiveFeatureId]
+        [startNewChat]
     );
 
     const sendMessage = useCallback(
@@ -860,25 +872,25 @@ export function WorkspaceShell() {
             if (!Object.hasOwn(STUDIO_FEATURES_BY_ID, featureId)) return;
             const feature = STUDIO_FEATURES_BY_ID[featureId];
             if (!feature || !can(feature.requires)) return;
-            if (requestedId === "metadata") setSettingsSection("company");
-            if (requestedId === "analytics") setSettingsSection("analytics");
+            if (requestedId === "metadata") requestSettingsSection("company");
+            if (requestedId === "analytics") requestSettingsSection("analytics");
             setActiveFeatureId(featureId);
             setStudioOpen(false);
         },
-        [can, setActiveFeatureId]
+        [can, setActiveFeatureId, requestSettingsSection]
     );
 
     const navigateStudio = useCallback(
         (href: string) => {
             const url = new URL(href, window.location.origin);
             if (url.pathname === "/employer/settings") {
-                if (url.hash === "#company") setSettingsSection("company");
+                if (url.hash === "#company") requestSettingsSection("company");
                 expandFeature("settings");
                 return;
             }
             router.push(href);
         },
-        [expandFeature, router]
+        [expandFeature, router, requestSettingsSection]
     );
 
     const visibleTabs = tabIds.flatMap(id => {
@@ -1103,7 +1115,10 @@ export function WorkspaceShell() {
                 onSelect={expandFeature}
                 onClose={id => {
                     closeTab(id);
-                    if (id === "mindmap" && editing) closeSource();
+                    if (id === "mindmap") {
+                        setEditedMindmapId(null);
+                        if (editing) closeSource();
+                    }
                 }}
                 onMove={moveTab}
                 onOpenStudio={openFeature}
@@ -1152,11 +1167,14 @@ export function WorkspaceShell() {
                                 />
                             }
                         />
-                    ) : featureId === "mindmap" && editing && viewerSource?.mindmapId ? (
+                    ) : featureId === "mindmap" && editedMindmap?.mindmapId ? (
                         <MindmapEditorHost
-                            key={viewerSource.mindmapId}
-                            mindmapId={viewerSource.mindmapId}
-                            onBack={() => openSource(viewerSource.id)}
+                            key={editedMindmap.mindmapId}
+                            mindmapId={editedMindmap.mindmapId}
+                            onBack={() => {
+                                setEditedMindmapId(null);
+                                openSource(editedMindmap.id);
+                            }}
                             onChanged={() => void refresh()}
                         />
                     ) : (
@@ -1173,8 +1191,9 @@ export function WorkspaceShell() {
                             onOpenSettings={() => expandFeature("settings")}
                             onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
                             paneContext={{
-                                settings: { section: settingsSection },
+                                settings: settingsTarget,
                                 sessions: {
+                                    onImported: refresh,
                                     onOpenDocument: id => openSource(`d${id}`),
                                     onContinue: id => void startContinuation(id),
                                 },

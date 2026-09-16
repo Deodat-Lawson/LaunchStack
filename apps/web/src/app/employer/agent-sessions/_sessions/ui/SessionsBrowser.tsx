@@ -266,9 +266,15 @@ export interface SessionsBrowserProps {
     onOpenDocument?: (documentId: number) => void;
     /** Continues an imported transcript through the host workspace chat. */
     onContinue?: (documentId: number) => void;
+    /** Lets an embedded host refresh workspace sources before imported rows become actionable. */
+    onImported?: () => Promise<void>;
 }
 
-export function SessionsBrowser({ onOpenDocument, onContinue }: SessionsBrowserProps = {}) {
+export function SessionsBrowser({
+    onOpenDocument,
+    onContinue,
+    onImported,
+}: SessionsBrowserProps = {}) {
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
@@ -331,11 +337,27 @@ export function SessionsBrowser({ onOpenDocument, onContinue }: SessionsBrowserP
         []
     );
 
+    const refreshAfterImport = useCallback(async () => {
+        if (!onImported) return;
+        try {
+            await onImported();
+        } catch (cause) {
+            toast.error(
+                cause instanceof Error
+                    ? cause.message
+                    : "Imported sessions could not be refreshed in the workspace"
+            );
+        }
+    }, [onImported]);
+
     const importOne = useCallback(
         async (item: AgentSessionItem) => {
             setBusyIds(prev => new Set(prev).add(item.sourceId));
             try {
                 const report = await importSessions([item.sourceId]);
+                if (report.stored.length > 0) {
+                    await refreshAfterImport();
+                }
                 applyReport(report.stored, report.failed);
                 if (report.stored.length > 0) {
                     toast.success(
@@ -358,13 +380,16 @@ export function SessionsBrowser({ onOpenDocument, onContinue }: SessionsBrowserP
                 });
             }
         },
-        [applyReport]
+        [applyReport, refreshAfterImport]
     );
 
     const importAll = useCallback(async () => {
         setImportingAll(true);
         try {
             const report = await importAllSessions();
+            if (report.stored.length > 0) {
+                await refreshAfterImport();
+            }
             applyReport(report.stored, report.failed);
             toast.success(
                 `Imported ${report.counts.stored} of ${report.counts.discovered} sessions`
@@ -374,7 +399,7 @@ export function SessionsBrowser({ onOpenDocument, onContinue }: SessionsBrowserP
         } finally {
             setImportingAll(false);
         }
-    }, [applyReport]);
+    }, [applyReport, refreshAfterImport]);
 
     const projects = useMemo(() => {
         const seen = new Set<string>();

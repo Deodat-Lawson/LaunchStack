@@ -114,6 +114,7 @@ export function StudioTabs({
         >
             <div
                 ref={stripRef}
+                data-studio-tab-strip
                 className="border-line bg-panel-2 flex min-h-10 shrink-0 items-center border-b"
             >
                 {leadingSlot}

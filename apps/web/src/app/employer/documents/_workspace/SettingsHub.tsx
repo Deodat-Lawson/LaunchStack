@@ -16,7 +16,7 @@
  * time. That is what makes five sections read as one product rather than five.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { Users } from "lucide-react";
@@ -171,19 +171,31 @@ export interface SettingsHubProps {
     /** Inside the workspace shell rather than as a standalone page. */
     embedded?: boolean;
     initialSection?: SettingsSectionId;
+    /** Changes when the host receives an explicit navigation request. */
+    navigationKey?: number;
 }
 
-export function SettingsHub({ embedded = false, initialSection }: SettingsHubProps) {
+export function SettingsHub({ embedded = false, initialSection, navigationKey }: SettingsHubProps) {
     const [section, setSection] = useState<SettingsSectionId>(initialSection ?? "processing");
     const [actions, setActions] = useState<SettingsSectionActions | null>(null);
+    const sectionRef = useRef(section);
+    sectionRef.current = section;
+    // A section's published actions belong to that section. Dropping them on
+    // every switch stops a stale Save button from outliving the form it saved.
+    const selectSection = useCallback((next: SettingsSectionId) => {
+        setActions(null);
+        setSection(next);
+    }, []);
+
     // Studio tabs stay mounted while their active settings section changes.
     // Apply a new deep-link target without remounting the whole settings app,
-    // and discard actions published by the previous section.
+    // and discard actions published by the previous section. The ref keeps
+    // `section` out of the dependency list so a manual selection is not
+    // immediately overridden by this host-navigation effect.
     useEffect(() => {
-        if (!initialSection) return;
-        setActions(null);
-        setSection(initialSection);
-    }, [initialSection]);
+        if (!initialSection || sectionRef.current === initialSection) return;
+        selectSection(initialSection);
+    }, [initialSection, navigationKey, selectSection]);
 
     // `/employer/settings#byok`, `#metadata`, `#statistics` and friends were all
     // real destinations once. Keep every one of them working rather than quietly
@@ -200,13 +212,6 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
         window.addEventListener("hashchange", applyHash);
         return () => window.removeEventListener("hashchange", applyHash);
     }, [initialSection]);
-
-    // A section's published actions belong to that section. Dropping them on
-    // every switch stops a stale Save button from outliving the form it saved.
-    const selectSection = useCallback((next: SettingsSectionId) => {
-        setActions(null);
-        setSection(next);
-    }, []);
 
     const registerActions = useCallback((next: SettingsSectionActions | null) => {
         setActions(next);

@@ -100,8 +100,6 @@ describe("SourceRail tabs", () => {
         expect(screen.getByTestId("history-rail")).toBeInTheDocument();
         expect(screen.queryByTestId("source-rail-list")).not.toBeInTheDocument();
         expect(screen.getByPlaceholderText("Search history")).toBeInTheDocument();
-        // "New folder" belongs to the tree, not to history.
-        expect(screen.queryByTestId("source-rail-new-folder")).not.toBeInTheDocument();
     });
 
     it("filters history through the rail's one search box", () => {

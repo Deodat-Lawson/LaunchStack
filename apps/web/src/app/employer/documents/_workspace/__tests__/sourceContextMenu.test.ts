@@ -1,6 +1,7 @@
 import {
     buildBlankRailMenuItems,
     buildFolderMenuItems,
+    buildSelectionMenuItems,
     buildSourceMenuItems,
     isPersistedSource,
 } from "../sourceContextMenu";
@@ -264,5 +265,77 @@ describe("access items", () => {
         const share = items.find(item => item.id === "share-folder");
         if (share?.type === "item") share.onSelect();
         expect(onShare).toHaveBeenCalled();
+    });
+});
+
+describe("buildSelectionMenuItems", () => {
+    const folders: WorkspaceFolder[] = [
+        { id: "f1", name: "Plans", color: "x" },
+        { id: "f2", name: "Legal", color: "x" },
+    ];
+    const a: WorkspaceSource = {
+        id: "a",
+        documentId: 1,
+        title: "A",
+        type: "doc",
+        size: "",
+        added: "",
+        folder: "Plans",
+        tags: [],
+        domain: "General",
+    };
+    const b: WorkspaceSource = { ...a, id: "b", documentId: 2, title: "B" };
+    const indexing: WorkspaceSource = { ...a, id: "c", documentId: undefined, title: "C" };
+
+    it("acts on the whole selection and says how many", () => {
+        const onRemoveFromContext = jest.fn();
+        const onMoveToFolder = jest.fn();
+        const onDelete = jest.fn();
+        const items = buildSelectionMenuItems([a, b], folders, {
+            onRemoveFromContext,
+            onMoveToFolder,
+            onDelete,
+        });
+        expect(items[0]).toMatchObject({ type: "label", label: "2 sources selected" });
+        const context = items.find(i => i.id === "context");
+        expect(context?.type === "item" && context.onSelect()).toBeUndefined();
+        expect(onRemoveFromContext).toHaveBeenCalledWith(["a", "b"]);
+
+        const move = items.find(i => i.id === "move");
+        expect(move).toMatchObject({ type: "submenu", label: "Move 2 to folder" });
+        const legal = move?.type === "submenu" ? move.items.find(i => i.id === "move-Legal") : null;
+        // Both sit in Plans, so Plans is checked and Legal is live.
+        expect(
+            move?.type === "submenu" ? move.items.find(i => i.id === "move-Plans") : null
+        ).toMatchObject({
+            checked: true,
+            disabled: true,
+        });
+        if (legal?.type === "item") legal.onSelect();
+        expect(onMoveToFolder).toHaveBeenCalledWith(["a", "b"], "Legal");
+
+        const del = items.find(i => i.id === "delete");
+        expect(del).toMatchObject({ type: "item", label: "Delete 2 sources…", danger: true });
+        if (del?.type === "item") del.onSelect();
+        expect(onDelete).toHaveBeenCalledWith([a, b]);
+    });
+
+    it("skips sources still being indexed and says so", () => {
+        const onDelete = jest.fn();
+        const items = buildSelectionMenuItems([a, indexing], folders, {
+            onDelete,
+            onMoveToFolder: jest.fn(),
+        });
+        expect(items.find(i => i.id === "move")).toMatchObject({ label: "Move 1 of 2 to folder" });
+        const del = items.find(i => i.id === "delete");
+        expect(del).toMatchObject({ label: "Delete 1 of 2 sources…", disabled: false });
+        if (del?.type === "item") del.onSelect();
+        expect(onDelete).toHaveBeenCalledWith([a]);
+
+        const none = buildSelectionMenuItems([indexing], folders, { onDelete });
+        expect(none.find(i => i.id === "delete")).toMatchObject({
+            disabled: true,
+            disabledReason: "These sources are still being indexed.",
+        });
     });
 });

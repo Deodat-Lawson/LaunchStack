@@ -293,6 +293,93 @@ export function buildBlankRailMenuItems(handlers: BlankRailMenuHandlers): Source
     return items;
 }
 
+export interface SelectionMenuHandlers {
+    /** Drop every one of these from the chat context. */
+    onRemoveFromContext?: (ids: string[]) => void;
+    onMoveToFolder?: (ids: string[], folderName: string) => void;
+    onDelete?: (sources: WorkspaceSource[]) => void;
+}
+
+/**
+ * The menu for a right-click inside a multi-selection: every verb acts on
+ * the whole selection, and says so. Sources still being indexed cannot be
+ * moved or deleted yet, so those verbs act on the persisted subset and say
+ * how many that is.
+ */
+export function buildSelectionMenuItems(
+    sources: WorkspaceSource[],
+    folders: WorkspaceFolder[],
+    handlers: SelectionMenuHandlers
+): SourceContextMenuItem[] {
+    const count = sources.length;
+    const noun = count === 1 ? "source" : "sources";
+    const persisted = sources.filter(isPersistedSource);
+    const pending = count - persisted.length;
+    const pendingReason =
+        pending === count
+            ? "These sources are still being indexed."
+            : `${pending} of these ${pending === 1 ? "is" : "are"} still being indexed and will be skipped.`;
+    const folderOf = (source: WorkspaceSource) => source.folder?.trim() || "Unfiled";
+    const sharedFolder = sources.every(s => folderOf(s) === folderOf(sources[0]!))
+        ? folderOf(sources[0]!)
+        : null;
+
+    const items: SourceContextMenuItem[] = [
+        { type: "label", id: "title", label: `${count} ${noun} selected` },
+    ];
+
+    if (handlers.onRemoveFromContext) {
+        items.push({
+            type: "item",
+            id: "context",
+            label: "Remove all from context",
+            icon: "ask",
+            onSelect: () => handlers.onRemoveFromContext?.(sources.map(s => s.id)),
+        });
+    }
+
+    if (handlers.onMoveToFolder) {
+        const folderNames = uniqueFolderNames(folders, sharedFolder ?? "Unfiled");
+        items.push({
+            type: "submenu",
+            id: "move",
+            label: `Move ${persisted.length === count ? count : `${persisted.length} of ${count}`} to folder`,
+            icon: "folder",
+            disabled: persisted.length === 0,
+            disabledReason: persisted.length === 0 ? pendingReason : undefined,
+            items: folderNames.map(name => ({
+                type: "item" as const,
+                id: `move-${name}`,
+                label: displayFolderPath(name),
+                icon: name === sharedFolder ? "check" : undefined,
+                checked: name === sharedFolder,
+                disabled: name === sharedFolder,
+                onSelect: () =>
+                    handlers.onMoveToFolder?.(
+                        persisted.map(s => s.id),
+                        name
+                    ),
+            })),
+        });
+    }
+
+    if (handlers.onDelete) {
+        items.push({ type: "separator", id: "sep-danger" });
+        items.push({
+            type: "item",
+            id: "delete",
+            label: `Delete ${persisted.length === count ? count : `${persisted.length} of ${count}`} ${noun}…`,
+            icon: "delete",
+            danger: true,
+            disabled: persisted.length === 0,
+            disabledReason: persisted.length === 0 ? pendingReason : undefined,
+            onSelect: () => handlers.onDelete?.(persisted),
+        });
+    }
+
+    return items;
+}
+
 function uniqueFolderNames(folders: WorkspaceFolder[], currentFolder: string): string[] {
     const names = new Set<string>(["Unfiled"]);
     for (const folder of folders) {

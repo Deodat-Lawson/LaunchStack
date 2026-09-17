@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { useRegisterActions } from "~/components/context-menu";
+import { APP_TARGET_KIND, readClipboardText } from "~/lib/context-menu";
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
@@ -226,6 +228,8 @@ export function WorkspaceShell() {
     const [addOpen, setAddOpen] = useState(false);
     /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
+    /** Clipboard contents handed to the Add dialog by "Paste to create a source". */
+    const [addPrefill, setAddPrefill] = useState<{ url?: string; text?: string } | null>(null);
     const [palOpen, setPalOpen] = useState(false);
     const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
     const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
@@ -282,7 +286,8 @@ export function WorkspaceShell() {
     }, [sourceParam, sources, sourcesLoading, router, sourceUrl]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
-    const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
+    /** What the delete dialog is about: one source from its row, or a multi-selection. */
+    const [deleteTargets, setDeleteTargets] = useState<WorkspaceSource[] | null>(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
     /** The folder or document whose access dialog is open. */
@@ -728,18 +733,23 @@ export function WorkspaceShell() {
     );
 
     const confirmDeleteSource = useCallback(async () => {
-        if (!deleteSource) return;
+        if (!deleteTargets?.length) return;
         setDeleteBusy(true);
         setDeleteError(null);
         try {
-            await removeSource(deleteSource);
-            setDeleteSource(null);
+            for (const source of deleteTargets) await removeSource(source);
+            setDeleteTargets(null);
         } catch (err) {
             setDeleteError(err instanceof Error ? err.message : "Failed to delete source");
         } finally {
             setDeleteBusy(false);
         }
-    }, [deleteSource, removeSource]);
+    }, [deleteTargets, removeSource]);
+
+    const requestDelete = useCallback((targets: WorkspaceSource[]) => {
+        setDeleteError(null);
+        setDeleteTargets(targets);
+    }, []);
 
     const handleAskAbout = useCallback(
         (source: WorkspaceSource) => {
@@ -753,6 +763,32 @@ export function WorkspaceShell() {
         setAddTab(tabId);
         setAddOpen(true);
     }, []);
+
+    /**
+     * "Paste to create a source": a link on the clipboard opens the URL tab
+     * prefilled, anything else opens the Paste tab with the text in place. A
+     * browser that refuses clipboard reads still gets the Paste tab, empty.
+     */
+    const pasteToCreateSource = useCallback(async () => {
+        const text = (await readClipboardText())?.trim() ?? null;
+        if (text === null) {
+            toast.info("Clipboard access was refused — paste with ⌘V instead");
+            setAddPrefill(null);
+            openAdd("paste");
+            return;
+        }
+        if (!text) {
+            toast.info("The clipboard is empty");
+            return;
+        }
+        if (/^https?:\/\/\S+$/i.test(text)) {
+            setAddPrefill({ url: text });
+            openAdd("url");
+        } else {
+            setAddPrefill({ text });
+            openAdd("paste");
+        }
+    }, [openAdd]);
 
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
@@ -968,6 +1004,54 @@ export function WorkspaceShell() {
         searchParams,
     ]);
 
+    // The workspace's share of the right-click fallback: what you can make
+    // from empty space. Registered only while this shell is mounted.
+    useRegisterActions([
+        {
+            id: "workspace.new-chat",
+            label: "New chat",
+            icon: "newChat",
+            order: 0,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => startNewChat(),
+        },
+        {
+            id: "workspace.add-knowledge",
+            label: "Add knowledge",
+            icon: "plus",
+            shortcut: "⌘U",
+            order: 1,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => openAdd(),
+        },
+        {
+            id: "workspace.paste-source",
+            label: "Paste to create a source",
+            icon: "paste",
+            order: 2,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => pasteToCreateSource(),
+        },
+        {
+            id: "workspace.palette",
+            label: "Command palette",
+            icon: "command",
+            shortcut: "⌘K",
+            order: 3,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => setPalOpen(true),
+        },
+        {
+            id: "workspace.toggle-rail",
+            label: railHidden ? "Show sidebar" : "Hide sidebar",
+            icon: "sidebar",
+            shortcut: "⌘\\",
+            order: 4,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => setRailHidden(v => !v),
+        },
+    ]);
+
     // Keyboard shortcuts
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
@@ -1061,10 +1145,8 @@ export function WorkspaceShell() {
                     onShareFolder={openFolderAccess}
                     onRestrictAccess={openDocumentAccess}
                     onRenameSource={source => setRenameSource(source)}
-                    onDeleteSource={source => {
-                        setDeleteError(null);
-                        setDeleteSource(source);
-                    }}
+                    onDeleteSource={source => requestDelete([source])}
+                    onDeleteSources={requestDelete}
                     onMoveToFolder={
                         canManageFolders
                             ? (id, name) => void handleMoveToFolder(id, name)
@@ -1208,10 +1290,8 @@ export function WorkspaceShell() {
                                 setActiveFeatureId("chat");
                             },
                             onRenameSource: source => setRenameSource(source),
-                            onDeleteSource: source => {
-                                setDeleteError(null);
-                                setDeleteSource(source);
-                            },
+                            onDeleteSource: source => requestDelete([source]),
+                            onDeleteSources: requestDelete,
                             onRestrictAccess: openDocumentAccess,
                             onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                         },
@@ -1237,9 +1317,12 @@ export function WorkspaceShell() {
             <AddSourceModal
                 open={addOpen}
                 initialTab={addTab}
+                initialUrl={addPrefill?.url}
+                initialText={addPrefill?.text}
                 onClose={() => {
                     setAddOpen(false);
                     setAddTab(undefined);
+                    setAddPrefill(null);
                 }}
                 userId={userId ?? null}
                 defaultCategory={activeFolder ?? UNFILED_FOLDER}
@@ -1310,26 +1393,16 @@ export function WorkspaceShell() {
             />
 
             <ConfirmActionDialog
-                open={!!deleteSource}
-                title={
-                    deleteSource && sourceApi.isMindmapSource(deleteSource)
-                        ? "Move this mindmap to the trash?"
-                        : "Delete this source?"
-                }
-                body={
-                    deleteSource
-                        ? sourceApi.isMindmapSource(deleteSource)
-                            ? `“${deleteSource.title}” will leave the library. You can undo this right after.`
-                            : `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
-                        : ""
-                }
+                open={Boolean(deleteTargets?.length)}
+                title={deleteDialogCopy(deleteTargets).title}
+                body={deleteDialogCopy(deleteTargets).body}
                 confirmLabel="Delete"
                 busy={deleteBusy}
                 error={deleteError}
                 onConfirm={() => void confirmDeleteSource()}
                 onClose={() => {
                     if (deleteBusy) return;
-                    setDeleteSource(null);
+                    setDeleteTargets(null);
                     setDeleteError(null);
                 }}
             />
@@ -1446,4 +1519,38 @@ function ExpandedFeatureView({
             </div>
         </main>
     );
+}
+
+/** Title and body for the delete dialog: one source by name, several by count. */
+function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; body: string } {
+    if (!targets?.length) return { title: "", body: "" };
+    if (targets.length === 1) {
+        const source = targets[0]!;
+        return sourceApi.isMindmapSource(source)
+            ? {
+                  title: "Move this mindmap to the trash?",
+                  body: `“${source.title}” will leave the library. You can undo this right after.`,
+              }
+            : {
+                  title: "Delete this source?",
+                  body: `“${source.title}” will be removed from this workspace. This cannot be undone.`,
+              };
+    }
+    const mindmaps = targets.filter(sourceApi.isMindmapSource).length;
+    const documents = targets.length - mindmaps;
+    const parts: string[] = [];
+    if (documents > 0) {
+        parts.push(
+            `${documents} ${documents === 1 ? "document" : "documents"} will be removed from this workspace — this cannot be undone`
+        );
+    }
+    if (mindmaps > 0) {
+        parts.push(
+            `${mindmaps} ${mindmaps === 1 ? "mindmap goes" : "mindmaps go"} to the trash, where you can undo`
+        );
+    }
+    return {
+        title: `Delete ${targets.length} sources?`,
+        body: `${parts.join("; ")}.`,
+    };
 }

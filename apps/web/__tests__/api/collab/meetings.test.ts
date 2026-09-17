@@ -71,6 +71,13 @@ const mockCtx: {
     script: {},
 };
 
+// Autonomy enforcement has its own test; here every room may do everything,
+// and the check must not drag the settings store (and Postgres) in.
+jest.mock("~/server/collab/autonomy", () => ({
+    assertMeetingPlanAllowed: () => Promise.resolve(),
+    assertRoomMayRun: () => Promise.resolve(),
+}));
+
 jest.mock("~/server/auth", () => ({
     getServerSession: () =>
         Promise.resolve(

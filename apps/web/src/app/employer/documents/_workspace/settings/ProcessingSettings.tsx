@@ -11,7 +11,6 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useUser } from "~/lib/auth-client";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, Section } from "~/components/layout/page-shell";
@@ -56,8 +55,6 @@ const INDEX_OPTIONS: { value: string; label: string; desc: string }[] = [
 ];
 
 export function ProcessingSettings({ onActions }: SettingsSectionProps) {
-    const { user } = useUser();
-
     const [loading, setLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [dirty, setDirty] = useState(false);
@@ -209,17 +206,6 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
     return (
         <>
             {status && <StatusNote tone={status.tone}>{status.message}</StatusNote>}
-
-            <Section title="Identity" description="Your account profile.">
-                <Card>
-                    <Field label="Full name">
-                        <TextInput value={user?.name ?? ""} disabled readOnly />
-                    </Field>
-                    <Field label="Email">
-                        <TextInput value={user?.email ?? ""} disabled readOnly />
-                    </Field>
-                </Card>
-            </Section>
 
             <Section
                 title="Embedding index"

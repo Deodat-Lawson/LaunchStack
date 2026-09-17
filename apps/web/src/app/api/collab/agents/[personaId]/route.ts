@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { AGENT_AUTONOMY_LEVELS } from "~/lib/agents/autonomy";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { archivePersona, updatePersona } from "~/server/collab/personas";
 
@@ -28,6 +29,7 @@ const UpdatePersonaSchema = z.object({
     temperature: z.number().min(0).max(2).nullable().optional(),
     maxTurnChars: z.number().int().min(120).max(8000).nullable().optional(),
     accent: z.string().max(32).nullable().optional(),
+    autonomy: z.enum(AGENT_AUTONOMY_LEVELS).nullable().optional(),
 });
 
 export async function PATCH(

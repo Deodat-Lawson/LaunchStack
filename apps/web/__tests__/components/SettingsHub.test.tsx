@@ -14,6 +14,23 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
+const mockReplace = jest.fn();
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
+}));
+
+// The chrome asks who is looking so it can mark a section read-only; an
+// owner sees everything editable.
+jest.mock("~/lib/use-permissions", () => ({
+    usePermissions: () => ({ loaded: true, can: () => true }),
+}));
+
+// Member-scoped sections are registry rows over the settings store; the
+// chrome tests do not need a network.
+jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => ({
+    AccountSection: () => <div data-testid="body-account">account body</div>,
+}));
+
 // Section bodies are exercised by their own tests and by the API tests. Here
 // they are replaced with probes that publish known actions, so the assertions
 // are about the chrome rather than about five unrelated data fetches.
@@ -63,14 +80,6 @@ jest.mock("~/app/employer/metadata/MetadataView", () => ({
     ),
 }));
 
-jest.mock("~/app/employer/statistics/StatisticsView", () => ({
-    StatisticsView: ({ bare }: { bare?: boolean }) => (
-        <div data-testid="body-analytics" data-bare={String(Boolean(bare))}>
-            analytics body
-        </div>
-    ),
-}));
-
 import {
     SettingsHub,
     settingsSectionFromHash,
@@ -94,13 +103,18 @@ describe("settingsSectionFromHash", () => {
         expect(settingsSectionFromHash("#slack")).toBe("integrations");
         expect(settingsSectionFromHash("#metadata")).toBe("company");
         expect(settingsSectionFromHash("#company")).toBe("company");
-        expect(settingsSectionFromHash("#statistics")).toBe("analytics");
-        expect(settingsSectionFromHash("#analytics")).toBe("analytics");
+        expect(settingsSectionFromHash("#password")).toBe("account");
+        expect(settingsSectionFromHash("#trash")).toBe("archive");
+    });
+
+    it("lands a registry key on its section", () => {
+        expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
+        expect(settingsSectionFromHash("#retention.trashDays")).toBe("archive");
     });
 
     it("is case-insensitive and tolerates a missing #", () => {
         expect(settingsSectionFromHash("BYOK")).toBe("processing");
-        expect(settingsSectionFromHash("#Statistics")).toBe("analytics");
+        expect(settingsSectionFromHash("#Agents")).toBe("agents");
     });
 
     it("returns null for an unknown hash rather than guessing", () => {
@@ -112,41 +126,55 @@ describe("settingsSectionFromHash", () => {
 describe("SettingsHub", () => {
     beforeEach(() => {
         setHash("");
+        mockReplace.mockReset();
     });
 
-    it("lists every section in one rail", () => {
+    it("lists every section in one grouped rail", () => {
         render(<SettingsHub />);
         const rail = screen.getByRole("navigation", { name: /settings sections/i });
 
         for (const label of [
-            "Processing",
-            "Agents & nodes",
-            "Integrations",
+            "Account",
+            "Appearance",
+            "Shortcuts",
+            "People and access",
             "Company profile",
-            "Analytics",
+            "Processing",
+            "Models and routes",
+            "Agents and autonomy",
+            "Document defaults",
+            "Integrations",
+            "Usage and costs",
+            "Archive and retention",
+            "Data and privacy",
+            "Labs",
         ]) {
             expect(within(rail).getByText(label)).toBeInTheDocument();
         }
+        for (const group of ["You", "Workspace", "Workspace data"]) {
+            expect(within(rail).getByText(group)).toBeInTheDocument();
+        }
+        expect(within(rail).queryByText("Analytics")).not.toBeInTheDocument();
     });
 
-    it("opens on Processing and gives it the one page heading", async () => {
+    it("opens on Account and gives it the one page heading", async () => {
         render(<SettingsHub />);
 
-        await findBody("body-processing");
+        await findBody("body-account");
         const headings = screen.getAllByRole("heading", { level: 1 });
         expect(headings).toHaveLength(1);
-        expect(headings[0]).toHaveTextContent("How documents get indexed");
+        expect(headings[0]).toHaveTextContent("Who you are, and where you are signed in");
     });
 
     it("switches sections from the rail", async () => {
         const user = userEvent.setup();
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-account");
 
-        await user.click(screen.getByRole("button", { name: /Agents & nodes/i }));
+        await user.click(screen.getByRole("button", { name: /Agents and autonomy/i }));
 
         await findBody("body-agents");
-        expect(screen.queryByTestId("body-processing")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("body-account")).not.toBeInTheDocument();
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
             "Who shows up to a meeting"
         );
@@ -155,12 +183,14 @@ describe("SettingsHub", () => {
     it("renders exactly one primary action, owned by the visible section", async () => {
         const user = userEvent.setup();
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-account");
 
+        await user.click(screen.getByRole("button", { name: /^Processing/i }));
+        await findBody("body-processing");
         expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
 
-        await user.click(screen.getByRole("button", { name: /Agents & nodes/i }));
+        await user.click(screen.getByRole("button", { name: /Agents and autonomy/i }));
         await findBody("body-agents");
 
         expect(screen.getByRole("button", { name: "New agent" })).toBeInTheDocument();
@@ -171,7 +201,7 @@ describe("SettingsHub", () => {
     it("shows no primary action for a read-only section", async () => {
         const user = userEvent.setup();
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-account");
 
         await user.click(screen.getByRole("button", { name: /Integrations/i }));
         await findBody("body-integrations");
@@ -181,20 +211,26 @@ describe("SettingsHub", () => {
     });
 
     it("opens the section named by the URL hash", async () => {
-        setHash("#statistics");
+        setHash("#byok");
         render(<SettingsHub />);
 
-        const body = await findBody("body-analytics");
+        await findBody("body-processing");
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            "How the workspace is being used"
+            "How documents get indexed"
         );
-        // Collapsed views render body-only so the hub owns the column and header.
-        expect(body).toHaveAttribute("data-bare", "true");
+    });
+
+    it("sends the analytics hashes to the Studio, where the dashboard lives now", async () => {
+        setHash("#statistics");
+        render(<SettingsHub />);
+        await waitFor(() =>
+            expect(mockReplace).toHaveBeenCalledWith("/employer/documents?feature=analytics")
+        );
     });
 
     it("honours a hash change after mount", async () => {
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-account");
 
         setHash("#metadata");
         act(() => {
@@ -217,9 +253,7 @@ describe("SettingsHub", () => {
         render(<SettingsHub />);
 
         const rail = screen.getByRole("navigation", { name: /settings sections/i });
-        expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent(
-            "Processing"
-        );
+        expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent("Account");
 
         await user.click(screen.getByRole("button", { name: /Company profile/i }));
         expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent(

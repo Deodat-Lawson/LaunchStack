@@ -6,6 +6,8 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { createDoc, createNode, createPage } from "../model/factory";
+import { isDarkSurface, THEME_BY_ID } from "../model/palette";
+import { applyThemeToDoc } from "../model/theme";
 import type { MindmapDoc } from "../model/types";
 import { MindmapPreview } from "../ui/MindmapPreview";
 
@@ -73,8 +75,19 @@ const fetchMock = jest.fn();
 beforeAll(() => {
     global.fetch = fetchMock as unknown as typeof fetch;
 });
+function setAppTheme(mode: "light" | "dark") {
+    document.documentElement.setAttribute("data-theme", mode);
+}
+
+/** The paper the canvas actually painted, read off the rendered svg. */
+function paperIsDark(container: HTMLElement): boolean {
+    const svg = container.querySelector("svg")!;
+    return svg.getAttribute("data-paper") === "dark";
+}
+
 beforeEach(() => {
     fetchMock.mockReset();
+    setAppTheme("light");
     resizeCallbacks.length = 0;
     CANVAS_BOX.width = 1000;
     CANVAS_BOX.height = 700;
@@ -170,6 +183,49 @@ describe("MindmapPreview", () => {
         resizeStageTo(1400, 900);
 
         expect(currentZoom()).not.toBe(fitted);
+    });
+
+    /**
+     * Board paper is document data, but the ten themes are five identities in
+     * two lightings. A reader in a light app should not be handed a black page,
+     * and a reader in a dark one should not be flashbanged.
+     */
+    describe("lighting follows the reader, without touching the document", () => {
+        it("shows a dark board lit for a light app", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            expect(isDarkSurface(dark.pages[0]!.background.color)).toBe(true);
+
+            setAppTheme("light");
+            const { container } = render(<MindmapPreview doc={dark} />);
+
+            expect(paperIsDark(container)).toBe(false);
+        });
+
+        it("shows a light board lit for a dark app", () => {
+            setAppTheme("dark");
+            const { container } = render(<MindmapPreview doc={sampleDoc()} />);
+
+            expect(paperIsDark(container)).toBe(true);
+        });
+
+        it("leaves the document alone — this is a rendering choice, not an edit", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            const before = JSON.stringify(dark);
+
+            setAppTheme("light");
+            render(<MindmapPreview doc={dark} />);
+
+            expect(JSON.stringify(dark)).toBe(before);
+        });
+
+        it("keeps the board's identity, changing only its lighting", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            setAppTheme("light");
+            render(<MindmapPreview doc={dark} />);
+
+            // Midnight's twin is Launchstack — same cycle, opposite lighting.
+            expect(THEME_BY_ID.default!.cycle).toEqual(THEME_BY_ID.midnight!.cycle);
+        });
     });
 
     it("makes no network requests of its own", () => {

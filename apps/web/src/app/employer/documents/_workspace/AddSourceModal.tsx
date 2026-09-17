@@ -1,5 +1,6 @@
 "use client";
 
+import { useSettingValue } from "~/lib/settings/useSettings";
 import React, { type ComponentType, useEffect, useRef, useState } from "react";
 import {
     displayFolderPath,
@@ -210,6 +211,13 @@ export function AddSourceModal({
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
     const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
+    // Settings → Document defaults: open on Google Doc when Drive linking is
+    // on and the workspace asked for it — only when the caller named no tab.
+    const preferGoogleDoc = useSettingValue<boolean>("documents.createNativeGoogleDoc");
+    useEffect(() => {
+        if (!open || initialTab || !preferGoogleDoc || !googleStatus?.enabled) return;
+        setTab(current => (current === "files" ? "google-doc" : current));
+    }, [open, initialTab, preferGoogleDoc, googleStatus?.enabled]);
 
     useEffect(() => {
         if (!open) return;

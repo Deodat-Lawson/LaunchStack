@@ -1,3 +1,4 @@
+import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
@@ -250,7 +251,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "draft",
         label: "Draft",
         Icon: IconPen,
-        kbd: "⌘D",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.draft")!.defaultKeys),
         desc: "Generate a new document with AI",
         href: "/employer/documents?feature=draft",
     },
@@ -258,7 +259,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "rewrite",
         label: "Rewrite",
         Icon: IconSparkle,
-        kbd: "⌘R",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.rewrite")!.defaultKeys),
         desc: "Improve existing content",
         href: "/employer/documents?feature=rewrite",
     },
@@ -266,7 +267,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
-        kbd: "⌘W",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.workflows")!.defaultKeys),
         desc: "Automate recurring tasks across your sources",
         href: "/employer/documents?feature=workflows",
     },
@@ -274,7 +275,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "notes",
         label: "Notebook",
         Icon: IconNote,
-        kbd: "⌘N",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.notes")!.defaultKeys),
         desc: "Freeform notes that span every source",
         href: "/employer/documents?feature=notes",
     },

@@ -51,6 +51,11 @@ const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHu
     loading: () => <LoadingPage />,
 });
 
+const StatisticsView = dynamic(
+    () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
+    { loading: () => <LoadingPage /> }
+);
+
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
     loading: () => <LoadingPage />,
 });
@@ -440,6 +445,15 @@ export function CompanySettingsPane({
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
+        </div>
+    );
+}
+
+/** Analytics reads, never configures, so it lives here beside the other views. */
+export function AnalyticsPane(_: PaneProps) {
+    return (
+        <div style={{ height: "100%", overflowY: "auto" }}>
+            <StatisticsView embedded />
         </div>
     );
 }
@@ -847,7 +861,7 @@ export function renderStudioPane(
         case "metadata":
             return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":
-            return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
+            return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
         case "distribution":

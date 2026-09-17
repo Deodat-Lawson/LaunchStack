@@ -105,6 +105,19 @@ export interface PhotonRequest {
 const BOX_LON = 0.35;
 const BOX_LAT = 0.25;
 
+/** Photon keys that denote a business rather than a street, area or landmark. */
+const BUSINESS_KEYS = new Set([
+    "shop",
+    "amenity",
+    "office",
+    "craft",
+    "tourism",
+    "industrial",
+    "man_made",
+    "leisure",
+    "healthcare",
+]);
+
 /**
  * Category-filtered search inside a box around each city, then tags from
  * the OSM API. Only elements in the requested country with a website survive.
@@ -149,6 +162,7 @@ export async function searchPhoton(
             for (const f of json.features) {
                 const p = f.properties;
                 if (!p.osm_id || !p.osm_type || !p.name) continue;
+                if (!BUSINESS_KEYS.has(p.osm_key ?? "")) continue;
                 if ((p.countrycode ?? "").toUpperCase() !== req.country.toUpperCase()) continue;
                 const key = `${p.osm_type}${p.osm_id}`;
                 if (!found.has(key)) found.set(key, { feature: f, city });

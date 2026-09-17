@@ -161,6 +161,61 @@ describe("computeFit", () => {
         expect(fit.total).toBeLessThan(25);
     });
 
+    it("credits each of the segment's categories by the words the organisation actually uses", () => {
+        const base = {
+            program,
+            kind: "retailer" as const,
+            territory: { country: "NL" },
+            dossier: null,
+            evidenceCount: 5,
+            newestEvidenceAt: now,
+            knownEntity: false,
+            sellerName: "x",
+            now,
+        };
+        const cafe = computeFit({
+            ...base,
+            org: org({
+                name: "Coffee House",
+                country: "NL",
+                roles: ["retailer"],
+                categories: ["cafe", "coffee_shop"],
+                description: "A neighbourhood café serving specialty coffee from local roasters.",
+            }),
+        });
+        const cannabis = computeFit({
+            ...base,
+            org: org({
+                name: "Coffeeshop Roxy",
+                country: "NL",
+                roles: ["retailer"],
+                categories: ["cannabis"],
+                description: "Coffeeshop in the centre of Amsterdam, open daily.",
+            }),
+        });
+        // "specialty coffee" in full and "roasted coffee" by half: 0.75, boosted to full marks.
+        expect(cafe.categoryOverlap).toBe(25);
+        expect(cannabis.categoryOverlap).toBe(0);
+        expect(cafe.total).toBeGreaterThan(cannabis.total);
+    });
+
+    it("treats plurals and accents as the same word and ignores function words", () => {
+        const fit = computeFit({
+            program: { ...program, categories: ["coffee roasters", "cafés and bars"] },
+            org: org({ categories: [], description: "Roaster, café" }),
+            kind: "retailer",
+            territory: null,
+            dossier: null,
+            evidenceCount: 0,
+            newestEvidenceAt: null,
+            knownEntity: false,
+            sellerName: "x",
+            now,
+        });
+        // roasters→roaster but not coffee (½); cafés→cafe but not bars, "and" not counted (½): 0.5 × 1.5 × 25.
+        expect(fit.categoryOverlap).toBe(19);
+    });
+
     it("never exceeds 100 or drops below 0", () => {
         const fit = computeFit({
             program,

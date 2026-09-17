@@ -279,9 +279,11 @@ their switches are locked.
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,
   certifications, public mailboxes — and assembles the dossier. It runs in
-  the web process after the response and updates the run row per stage, so
-  the run sheet and the rail indicator show progress. Expect 30 s to 3 min
-  depending on how many sites answer. Nothing is paid for.
+  the web process after the response and updates the run row per stage;
+  while it profiles, the run sheet and the rail read "profiling 12 of 25"
+  from the companies stamped so far. Expect 30 s to 4 min depending on how
+  many sites answer. Nothing is paid for. The Runs header says when this is
+  the mode in use.
 - **Live** (a model key plus Exa, Serper or Foursquare): queued to the
   worker; the research agent profiles each company. Needs credits.
 - **Sample** (the switch on Runs): deterministic fixtures, inline, seconds.

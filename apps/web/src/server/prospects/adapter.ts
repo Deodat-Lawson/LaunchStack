@@ -813,7 +813,13 @@ function statusOf(run: RunRecord, startsAt: string, endsBefore: string): StepSta
     return "waiting";
 }
 
-export function toRunDto(run: RunRecord): RunDto {
+/** Where a running run's profiling has got to: shortlist members enriched since it started. */
+export interface RunProgress {
+    profiled: number;
+    shortlisted: number;
+}
+
+export function toRunDto(run: RunRecord, progress: RunProgress | null = null): RunDto {
     const summary = run.summary;
     const sourceChildren: RunStep[] = (
         summary?.sources ??
@@ -852,7 +858,11 @@ export function toRunDto(run: RunRecord): RunDto {
         {
             id: "shortlist",
             label: "Shortlist",
-            detail: summary ? `${summary.shortlisted} of ${summary.resolved} companies` : null,
+            detail: summary
+                ? `${summary.shortlisted} of ${summary.resolved} companies`
+                : run.candidateOrgIds
+                  ? `${run.candidateOrgIds.length} companies`
+                  : null,
             status: statusOf(run, "resolving", "enriching"),
             right: summary?.excluded ? `${summary.excluded} excluded` : null,
         },
@@ -861,7 +871,9 @@ export function toRunDto(run: RunRecord): RunDto {
             label: "Profiles",
             detail: summary
                 ? `${summary.enriched} of ${summary.shortlisted}`
-                : `0 of ${run.options.maxCandidates}`,
+                : progress
+                  ? `${progress.profiled} of ${progress.shortlisted}`
+                  : `0 of ${run.candidateOrgIds?.length ?? run.options.maxCandidates}`,
             status: statusOf(run, "enriching", "completed"),
             right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
         },

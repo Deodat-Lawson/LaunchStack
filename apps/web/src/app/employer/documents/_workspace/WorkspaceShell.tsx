@@ -1063,6 +1063,14 @@ export function WorkspaceShell() {
         if (!featureParam && !addParam && !connectorParam && !continueParam) return;
         if (legacyRedirect) return;
         if (featureParam && FEATURE_IDS.has(featureParam)) {
+            const feature = STUDIO_FEATURES_BY_ID[featureParam];
+            if (feature?.external && feature.href) {
+                // A separate app: hand over to its route and stop here. Falling
+                // through would strip the param with a second navigation to this
+                // page, which cancels the first.
+                router.replace(feature.href);
+                return;
+            }
             expandFeature(featureParam);
         }
         if (addParam) {

@@ -118,6 +118,7 @@ export function RunsScreen() {
     }, [finished, reload]);
     const [expanded, setExpanded] = useState<string | null>(null);
     const runs = res.data?.runs ?? [];
+    const keyless = res.data?.nextMode === "keyless";
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
@@ -126,7 +127,11 @@ export function RunsScreen() {
                 title="Runs"
                 sub={
                     res.data
-                        ? `${runs.length} so far · each run searches the sources this segment has on`
+                        ? `${runs.length} so far · ${
+                              keyless
+                                  ? "no API keys are configured, so runs read public directories and each company's own website"
+                                  : "each run searches the sources this segment has on"
+                          }`
                         : undefined
                 }
                 actions={

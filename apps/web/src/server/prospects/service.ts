@@ -76,6 +76,7 @@ import {
     toCompanyRow,
     toDeal,
     toRunDto,
+    type RunProgress,
     toSegment,
     toSegmentSummary,
     toYield,
@@ -699,9 +700,30 @@ export async function draftOutreach(
 
 // ── Runs and sources ──────────────────────────────────────────────────────
 
+/**
+ * How far a live run's profiling has got, without a progress column: the
+ * shortlist is on the run row and each organisation is stamped when its
+ * profile lands, so "profiled so far" is the shortlist enriched since the
+ * run started. Null once the run has a summary of its own.
+ */
+export async function runProgress(ctx: ProspectsCtx, run: RunRecord): Promise<RunProgress | null> {
+    // Despite its name, the run row's list holds the shortlist's relationship ids.
+    const shortlist = new Set(run.candidateOrgIds ?? []);
+    if (run.summary || run.status === "failed" || shortlist.size === 0) return null;
+    const since = (run.startedAt ?? run.createdAt).getTime();
+    const items = await listPartners(ctx.companyId, { programId: run.programId, limit: 500 });
+    const profiled = items.filter(
+        i =>
+            shortlist.has(i.relationship.id) &&
+            i.org.lastEnrichedAt !== null &&
+            i.org.lastEnrichedAt.getTime() >= since
+    ).length;
+    return { profiled, shortlisted: shortlist.size };
+}
+
 export async function listRunDtos(ctx: ProspectsCtx, programId: string): Promise<RunDto[]> {
     const runs = await listRuns(ctx.companyId, { programId, limit: 50 });
-    return runs.map(toRunDto);
+    return Promise.all(runs.map(async run => toRunDto(run, await runProgress(ctx, run))));
 }
 
 export async function listSources(ctx: ProspectsCtx, programId: string): Promise<SourceRow[]> {

@@ -224,6 +224,19 @@ describe("runs", () => {
         expect(by.people).toBe("skipped");
     });
 
+    it("shows the shortlist and profiling progress while a run is still enriching", () => {
+        const dto = toRunDto(run({ status: "enriching", candidateOrgIds: ["o1", "o2", "o3"] }), {
+            profiled: 1,
+            shortlisted: 3,
+        });
+        const detail = Object.fromEntries(dto.steps.map(s => [s.id, s.detail]));
+        expect(detail.shortlist).toBe("3 companies");
+        expect(detail.profiles).toBe("1 of 3");
+        expect(dto.summary).toBeNull();
+        const early = toRunDto(run({ status: "gathering" }));
+        expect(early.steps.find(s => s.id === "profiles")!.detail).toBe("0 of 25");
+    });
+
     it("turns a completed run's source counts into yield rows", () => {
         const dto = toRunDto(
             run({

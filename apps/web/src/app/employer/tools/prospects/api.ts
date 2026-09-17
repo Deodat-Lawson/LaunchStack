@@ -232,6 +232,9 @@ export interface RunStep {
     children?: RunStep[];
 }
 
+/** How the next run will execute: live providers, or public directories when no key is configured. */
+export type NextRunMode = "live" | "keyless";
+
 export interface RunDto {
     id: string;
     segmentId: string;
@@ -381,7 +384,8 @@ export const prospectsApi = {
             body: JSON.stringify(input),
         }),
 
-    runs: (segmentId: string) => call<{ runs: RunDto[] }>(`/api/prospects/runs${q({ segmentId })}`),
+    runs: (segmentId: string) =>
+        call<{ runs: RunDto[]; nextMode?: NextRunMode }>(`/api/prospects/runs${q({ segmentId })}`),
     run: (id: string) => call<{ run: RunDto }>(`/api/prospects/runs/${id}`),
     startRun: (segmentId: string, options: { sample?: boolean } = {}) =>
         call<{ run: RunDto }>("/api/prospects/runs", {

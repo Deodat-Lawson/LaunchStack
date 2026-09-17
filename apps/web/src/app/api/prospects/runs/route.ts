@@ -37,7 +37,11 @@ export async function GET(request: NextRequest) {
     try {
         const segmentId = request.nextUrl.searchParams.get("segmentId");
         if (!segmentId) return error("segmentId is required", 400);
-        return json({ runs: await listRunDtos(auth.ctx, segmentId) });
+        return json({
+            runs: await listRunDtos(auth.ctx, segmentId),
+            // What "Find companies" will do next in this environment.
+            nextMode: pickRunMode("auto", readRunEnvironment(process.env)),
+        });
     } catch (err) {
         return handleProspectsError("GET runs", err);
     }

@@ -1008,7 +1008,7 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
         if (parts.length === 1) {
             const live = store.liveRuns.filter(r => r.segmentId === segmentId).map(toRun);
             const past = store.pastRuns.filter(r => r.segmentId === segmentId).map(pastToRun);
-            return json({ runs: [...live, ...past] });
+            return json({ runs: [...live, ...past], nextMode: "live" });
         }
         const live = store.liveRuns.find(r => r.id === parts[1]);
         if (live) {

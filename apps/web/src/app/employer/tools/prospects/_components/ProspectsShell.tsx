@@ -116,10 +116,21 @@ function SegmentSwitcher() {
     );
 }
 
+/** The rail's one-line account of a run: which step is running, with its count. */
+const RUNNING_VERB: Record<string, string> = {
+    sources: "searching sources",
+    shortlist: "shortlisting",
+    profiles: "profiling",
+    people: "finding people",
+};
+
 function RunIndicator() {
     const { activeRun, openRunSheet } = useProspects();
     if (!activeRun || !runIsLive(activeRun)) return null;
-    const sources = activeRun.steps.find(s => s.id === "sources");
+    const current = activeRun.steps.find(s => s.status === "running");
+    const doing = current
+        ? `${RUNNING_VERB[current.id] ?? current.label.toLowerCase()}${current.detail ? ` ${current.detail}` : ""}`
+        : null;
     return (
         <button
             type="button"
@@ -128,7 +139,7 @@ function RunIndicator() {
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
             <span className="min-w-0 flex-1 truncate">
-                Finding companies{sources?.detail ? ` · ${sources.detail}` : ""}
+                Finding companies{doing ? ` · ${doing}` : ""}
             </span>
         </button>
     );

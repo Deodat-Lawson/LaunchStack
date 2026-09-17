@@ -246,6 +246,9 @@ export async function getCompanyAccessToken(
     companyId: bigint,
     provider: ConnectorProvider
 ): Promise<string | null> {
+    // A Gmail connection is one member's mailbox, never the workspace's
+    // credential — nothing company-scoped may borrow it.
+    if (provider === "gmail") return null;
     const connection = await getActiveConnection(companyId, provider);
     if (!connection) return null;
     try {

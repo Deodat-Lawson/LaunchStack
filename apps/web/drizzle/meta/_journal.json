@@ -131,6 +131,13 @@
     {
       "idx": 18,
       "version": "7",
+      "when": 1788836451719,
+      "tag": "20260908030051_gmail_connector",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
       "when": 1789620306478,
       "tag": "20260917044506_settings_values_and_agent_autonomy",
       "breakpoints": true

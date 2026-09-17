@@ -930,11 +930,13 @@ export function WorkspaceShell() {
                 "google-drive": "drive",
                 slack: "slack",
                 github: "github",
+                gmail: "gmail",
             };
             const label: Record<string, string> = {
                 "google-drive": "Google Drive",
                 slack: "Slack",
                 github: "GitHub",
+                gmail: "Gmail",
             };
             const tab = tabByProvider[connectorParam];
             const name = label[connectorParam] ?? connectorParam;

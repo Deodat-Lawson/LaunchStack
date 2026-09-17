@@ -136,6 +136,7 @@ function connection(overrides: Partial<ConnectorConnection> = {}): ConnectorConn
         refreshTokenCiphertext: "ct",
         accessTokenCiphertext: null,
         accessTokenExpiresAt: null,
+        ownerUserId: null,
         encryptionKeyVersion: 1,
         scopes: "drive.file",
         status: "active",

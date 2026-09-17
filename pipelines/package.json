@@ -44,6 +44,7 @@
         "./connectors/agent-knowledge": "./src/connectors/agent-knowledge/index.ts",
         "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
         "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
+        "./connectors/gmail": "./src/connectors/gmail/index.ts",
         "./package.json": "./package.json",
         "./distribution": "./src/distribution/index.ts",
         "./distribution/db": "./src/distribution/db.ts",

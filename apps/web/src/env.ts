@@ -344,6 +344,11 @@ const serverSchema = z.object({
     // default 10) — Docs autosaves per keystroke; a settled revision becomes
     // one document version instead of eight.
     GOOGLE_DOCS_SETTLE_MINUTES: optionalString(),
+    // Gmail connector (per-member mailbox sync into a private folder). Uses
+    // the same GOOGLE_OAUTH_* client, but gmail.readonly is a restricted
+    // scope the consent screen must carry (and Google must verify unless the
+    // app is Internal), so it stays dark until the operator flips this on.
+    GMAIL_CONNECTOR_ENABLED: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -547,6 +552,7 @@ function parseServerEnv() {
         GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
         GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
         GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
+        GMAIL_CONNECTOR_ENABLED: process.env.GMAIL_CONNECTOR_ENABLED,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,

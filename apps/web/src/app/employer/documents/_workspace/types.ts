@@ -581,7 +581,7 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         group: "Connect",
         items: [
-            { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Sync labeled threads" },
+            { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
             { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },

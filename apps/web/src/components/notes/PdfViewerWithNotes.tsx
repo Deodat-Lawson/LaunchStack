@@ -102,6 +102,9 @@ interface Props {
     citationHighlight?: ViewerHighlight | null;
 }
 
+/** The floating button row's widest form (+ Note plus the three AI captures). */
+const POPUP_WIDTH_PX = 300;
+
 interface SelectionDraft {
     page: number;
     quads: PdfQuad[];
@@ -363,10 +366,19 @@ export function PdfViewerWithNotes({
             ]);
 
             // Anchor the floating action button just below the last selection
-            // rect, in page-container (the scrollable wrapper) coordinates.
+            // rect, in page-container (the scrollable wrapper) coordinates —
+            // kept far enough from the edges that its centred body stays
+            // inside the container when a drag ends near the margin.
             const containerRect = container.getBoundingClientRect();
             const lastRect = rects[rects.length - 1]!;
-            const buttonX = lastRect.right - containerRect.left + container.scrollLeft;
+            const halfPopup = POPUP_WIDTH_PX / 2 + 8;
+            const buttonX = Math.min(
+                Math.max(
+                    lastRect.right - containerRect.left + container.scrollLeft,
+                    halfPopup,
+                ),
+                container.clientWidth - halfPopup,
+            );
             const buttonY = lastRect.bottom - containerRect.top + container.scrollTop + 6;
 
             setSelectionDraft({

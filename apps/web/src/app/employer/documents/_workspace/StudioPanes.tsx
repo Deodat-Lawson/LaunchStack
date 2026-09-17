@@ -850,6 +850,23 @@ export function renderStudioPane(
             return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
+        case "prospects":
+            return (
+                <DefaultLinkPane
+                    onClose={onClose}
+                    eyebrow="Prospects"
+                    title="Prospects"
+                    body="Say who you sell to and where. Prospects searches for companies that match, profiles each one with cited evidence and a fit score, finds the people to contact, and tracks every deal through to won."
+                    bullets={[
+                        "Segment: what you sell, the buyer type, industries and countries",
+                        "Companies: fit, why they match, where they were found; open one for the cited profile",
+                        "People and outreach: a campaign is drafted in Email for you to approve — nothing is sent automatically",
+                        "Deals: stages with rules, next steps and owners; Runs show what each source produced",
+                    ]}
+                    href={feature.href ?? "/employer/tools/prospects"}
+                    ctaLabel="Open Prospects"
+                />
+            );
         case "distribution":
             return (
                 <DefaultLinkPane

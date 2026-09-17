@@ -20,13 +20,25 @@ export interface ProspectsContextValue {
     runSheetOpen: boolean;
     openRunSheet: (runId?: string) => void;
     closeRunSheet: () => void;
-    startRun: () => Promise<void>;
+    startRun: (options?: { sample?: boolean }) => Promise<void>;
     noteRunFinished: () => void;
+    /** Remembered per browser: run with sample data instead of live providers. */
+    samplePreferred: boolean;
+    setSamplePreferred: (value: boolean) => void;
 }
 
 const Ctx = createContext<ProspectsContextValue | null>(null);
 
 const SEGMENT_KEY = "prospects:segment";
+const SAMPLE_KEY = "prospects:sample";
+
+function readSamplePreference(): boolean {
+    try {
+        return localStorage.getItem(SAMPLE_KEY) === "1";
+    } catch {
+        return false;
+    }
+}
 
 export function ProspectsProvider({
     basePath,
@@ -103,12 +115,27 @@ export function ProspectsProvider({
         if (finished) void reloadSegments();
     }, [finished, reloadSegments]);
 
-    const startRun = useCallback(async () => {
-        if (!segmentId) return;
-        const { run } = await prospectsApi.startRun(segmentId);
-        setActiveRunId(run.id);
-        setRunSheetOpen(true);
-    }, [segmentId]);
+    const [samplePreferred, setSamplePreferredState] = useState(false);
+    useEffect(() => setSamplePreferredState(readSamplePreference()), []);
+    const setSamplePreferred = useCallback((value: boolean) => {
+        setSamplePreferredState(value);
+        try {
+            localStorage.setItem(SAMPLE_KEY, value ? "1" : "0");
+        } catch {
+            /* fine */
+        }
+    }, []);
+
+    const startRun = useCallback(
+        async (options?: { sample?: boolean }) => {
+            if (!segmentId) return;
+            const sample = options?.sample ?? samplePreferred;
+            const { run } = await prospectsApi.startRun(segmentId, sample ? { sample: true } : {});
+            setActiveRunId(run.id);
+            setRunSheetOpen(true);
+        },
+        [segmentId, samplePreferred]
+    );
 
     const openRunSheet = useCallback((runId?: string) => {
         if (runId) setActiveRunId(runId);
@@ -136,6 +163,8 @@ export function ProspectsProvider({
             closeRunSheet,
             startRun,
             noteRunFinished,
+            samplePreferred,
+            setSamplePreferred,
         }),
         [
             basePath,
@@ -152,6 +181,8 @@ export function ProspectsProvider({
             closeRunSheet,
             startRun,
             noteRunFinished,
+            samplePreferred,
+            setSamplePreferred,
         ]
     );
 

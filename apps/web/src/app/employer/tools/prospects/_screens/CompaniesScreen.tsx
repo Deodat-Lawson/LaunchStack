@@ -131,30 +131,17 @@ export function CompaniesScreen() {
 
     const open = useCallback((id: string) => router.push(href(`/companies/${id}`)), [href, router]);
 
-    const outreach = useCallback(
-        async (ids: string[]) => {
-            if (ids.length === 0) return;
-            try {
-                const people = await prospectsApi.people({ segmentId: segmentId! });
-                const personIds = people.people
-                    .filter(p => ids.includes(p.companyId))
-                    .filter(p => p.emailStatus === "verified" || p.emailStatus === "found")
-                    .filter(p => !p.blockedReason)
-                    .map(p => p.id);
-                if (personIds.length === 0) {
-                    toast("No verified or found emails at the selected companies yet.");
-                    return;
-                }
-                const result = await prospectsApi.outreach(personIds);
-                toast.success(
-                    `Campaign drafted in Email with ${result.people} ${result.people === 1 ? "person" : "people"}. Approve it there.`
-                );
-            } catch (e) {
-                toast.error(e instanceof Error ? e.message : "Could not draft outreach");
-            }
-        },
-        [segmentId]
-    );
+    const outreach = useCallback(async (ids: string[]) => {
+        if (ids.length === 0) return;
+        try {
+            const result = await prospectsApi.outreach({ companyIds: ids });
+            toast.success(
+                `Campaign drafted in Email for ${result.people} ${result.people === 1 ? "company" : "companies"}. Approve it there; nothing is sent from here.`
+            );
+        } catch (e) {
+            toast.error(e instanceof Error ? e.message : "Could not draft outreach");
+        }
+    }, []);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {

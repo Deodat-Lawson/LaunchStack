@@ -707,6 +707,79 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
 
     // /segments
     if (parts[0] === "segments") {
+        if (parts.length === 1 && method === "POST") {
+            const body = await readBody(init);
+            const name = typeof body.name === "string" ? body.name.trim() : "";
+            const offering = typeof body.offering === "string" ? body.offering.trim() : "";
+            const industries = Array.isArray(body.industries) ? (body.industries as string[]) : [];
+            const countries = Array.isArray(body.countries) ? (body.countries as string[]) : [];
+            if (!name || !offering || countries.length === 0)
+                return err(400, "Name, what you sell and at least one country are required");
+            const seg: WorldSegment = {
+                id: `seg-${store.seq++}`,
+                name,
+                subtitle: "Draft · not confirmed",
+                headline: `${name} in ${countries.join(", ")}`,
+                status: "draft",
+                derivedAt: nowIso(),
+                confirmedAt: null,
+                basis: { documents: 0, hasProfile: true },
+                fields: [
+                    {
+                        key: "archetype",
+                        label: "Buyer type",
+                        value: offering,
+                        sources: ["from you"],
+                        editable: true,
+                    },
+                    {
+                        key: "industries",
+                        label: "Industries",
+                        value: industries,
+                        sources: ["from you"],
+                        editable: true,
+                    },
+                    { key: "size", label: "Size", value: "Any", sources: [], editable: true },
+                    {
+                        key: "geographies",
+                        label: "Where",
+                        value: countries,
+                        sources: ["from you"],
+                        editable: true,
+                    },
+                    {
+                        key: "seedDomains",
+                        label: "Looks like",
+                        value: [],
+                        sources: [],
+                        editable: true,
+                    },
+                    {
+                        key: "signals",
+                        label: "Signals that matter",
+                        value: [],
+                        sources: [],
+                        editable: true,
+                    },
+                    {
+                        key: "disqualifiers",
+                        label: "Not a fit",
+                        value: [],
+                        sources: [],
+                        editable: true,
+                    },
+                    {
+                        key: "exclusions",
+                        label: "Already customers",
+                        value: "None",
+                        sources: [],
+                        editable: false,
+                    },
+                ],
+            };
+            store.segments.push(seg);
+            return json({ segment: toSegment(seg) }, 201);
+        }
         if (parts.length === 1) return json({ segments: store.segments.map(toSegmentSummary) });
         const seg = store.segments.find(s => s.id === parts[1]);
         if (!seg) return err(404, "Segment not found");
@@ -860,7 +933,21 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
     // /outreach
     if (parts[0] === "outreach" && method === "POST") {
         const body = await readBody(init);
-        const ids = Array.isArray(body.personIds) ? (body.personIds as string[]) : [];
+        const personIds = Array.isArray(body.personIds) ? (body.personIds as string[]) : [];
+        const companyIds = Array.isArray(body.companyIds) ? (body.companyIds as string[]) : [];
+        // Companies as the fallback: their verified and found people.
+        const fromCompanies = store.companies
+            .filter(c => companyIds.includes(c.id))
+            .flatMap(c =>
+                c.people
+                    .filter(p => p.emailStatus === "verified" || p.emailStatus === "found")
+                    .map(p => p.id)
+            );
+        const ids = [...new Set([...personIds, ...fromCompanies])];
+        if (ids.length === 0 && companyIds.length > 0)
+            return err(409, "No verified or found emails at the selected companies yet", {
+                skipped: [],
+            });
         const skipped: Array<{ personId: string; reason: string }> = [];
         const okIds: string[] = [];
         for (const id of ids) {

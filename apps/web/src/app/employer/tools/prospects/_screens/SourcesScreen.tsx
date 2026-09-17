@@ -107,12 +107,20 @@ export function SourcesScreen() {
                                     </>
                                 )}
                             </div>
-                            <Switch
-                                checked={s.enabled && s.available}
-                                disabled={!s.available}
-                                onCheckedChange={v => void toggle(s, v)}
-                                aria-label={`${s.label} ${s.enabled ? "on" : "off"}`}
-                            />
+                            <span
+                                title={
+                                    s.locked
+                                        ? "Per-segment settings arrive with the source registry; keys in the environment decide for now"
+                                        : undefined
+                                }
+                            >
+                                <Switch
+                                    checked={s.enabled && s.available}
+                                    disabled={!s.available || s.locked}
+                                    onCheckedChange={v => void toggle(s, v)}
+                                    aria-label={`${s.label} ${s.enabled ? "on" : "off"}`}
+                                />
+                            </span>
                         </div>
                     ))}
                 </div>

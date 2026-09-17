@@ -5,6 +5,8 @@ import { Fragment, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 import {
     Table,
     TableBody,
@@ -76,10 +78,10 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
                             {s.kind === "signal" ? `${s.found} signals` : s.found}
                         </td>
                         <td className="py-1.5 pr-3 text-right tabular-nums">
-                            {s.kind === "signal" ? "" : s.newCompanies}
+                            {s.kind === "signal" ? "" : (s.newCompanies ?? "—")}
                         </td>
                         <td className="py-1.5 pr-3 text-right tabular-nums">
-                            {s.kind === "signal" ? "" : s.inDeals}
+                            {s.kind === "signal" ? "" : (s.inDeals ?? "—")}
                         </td>
                         <td
                             className={cn(
@@ -100,7 +102,8 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
 }
 
 export function RunsScreen() {
-    const { segmentId, startRun, activeRun, openRunSheet } = useProspects();
+    const { segmentId, startRun, activeRun, openRunSheet, samplePreferred, setSamplePreferred } =
+        useProspects();
     const res = useResource(
         segmentId ? `runs:${segmentId}` : null,
         () => prospectsApi.runs(segmentId!),
@@ -127,19 +130,35 @@ export function RunsScreen() {
                         : undefined
                 }
                 actions={
-                    <Button
-                        size="sm"
-                        onClick={() =>
-                            void startRun().catch((e: unknown) =>
-                                toast.error(
-                                    e instanceof Error ? e.message : "Could not start the run"
+                    <>
+                        <span className="flex items-center gap-2 pr-1">
+                            <Switch
+                                id="prospects-sample"
+                                checked={samplePreferred}
+                                onCheckedChange={setSamplePreferred}
+                                aria-label="Use sample data"
+                            />
+                            <Label
+                                htmlFor="prospects-sample"
+                                className="text-ink-2 text-xs font-normal"
+                            >
+                                Sample data
+                            </Label>
+                        </span>
+                        <Button
+                            size="sm"
+                            onClick={() =>
+                                void startRun({ sample: samplePreferred }).catch((e: unknown) =>
+                                    toast.error(
+                                        e instanceof Error ? e.message : "Could not start the run"
+                                    )
                                 )
-                            )
-                        }
-                        disabled={!segmentId || (activeRun !== null && runIsLive(activeRun))}
-                    >
-                        Find companies
-                    </Button>
+                            }
+                            disabled={!segmentId || (activeRun !== null && runIsLive(activeRun))}
+                        >
+                            Find companies
+                        </Button>
+                    </>
                 }
             />
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}

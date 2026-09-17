@@ -59,7 +59,7 @@ export function PeopleScreen() {
     const outreach = async () => {
         const ids = [...selected];
         try {
-            const result = await prospectsApi.outreach(ids);
+            const result = await prospectsApi.outreach({ personIds: ids });
             toast.success(
                 `Campaign drafted in Email with ${result.people} ${result.people === 1 ? "person" : "people"}.${result.skipped.length ? ` ${result.skipped.length} skipped.` : ""}`
             );

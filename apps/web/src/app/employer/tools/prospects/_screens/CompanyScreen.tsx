@@ -594,6 +594,7 @@ function OutreachDialog({
     company: CompanyDetail;
 }) {
     const eligible = company.people.filter(p => canOutreach(p.emailStatus) && !p.blockedReason);
+    const hasInbox = company.people.some(p => p.emailStatus === "generic" && !p.blockedReason);
     const [chosen, setChosen] = useState<Set<string>>(() => new Set(eligible.map(p => p.id)));
     const [busy, setBusy] = useState(false);
     useEffect(() => {
@@ -604,7 +605,10 @@ function OutreachDialog({
     const submit = async () => {
         setBusy(true);
         try {
-            const result = await prospectsApi.outreach([...chosen]);
+            const result =
+                chosen.size > 0
+                    ? await prospectsApi.outreach({ personIds: [...chosen] })
+                    : await prospectsApi.outreach({ companyIds: [company.id] });
             toast.success(
                 `Campaign drafted in Email with ${result.people} ${result.people === 1 ? "person" : "people"}. Approve it there; nothing is sent from here.`
             );
@@ -680,8 +684,13 @@ function OutreachDialog({
                     <Button variant="ghost" onClick={() => onOpenChange(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={() => void submit()} disabled={busy || chosen.size === 0}>
-                        Draft campaign for {chosen.size}
+                    <Button
+                        onClick={() => void submit()}
+                        disabled={busy || (chosen.size === 0 && !hasInbox)}
+                    >
+                        {chosen.size > 0
+                            ? `Draft campaign for ${chosen.size}`
+                            : "Draft to the public inbox"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

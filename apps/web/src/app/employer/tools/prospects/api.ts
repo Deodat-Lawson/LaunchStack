@@ -69,6 +69,8 @@ export interface SourceRow {
     available: boolean;
     requires: string | null;
     cost: string;
+    /** True when the switch is not available yet (settings arrive with the source registry). */
+    locked?: boolean;
     lastYield: { found: number; newCompanies: number; cost: string; at: string } | null;
 }
 
@@ -79,8 +81,9 @@ export interface SourceYield {
     label: string;
     kind: SourceKind;
     found: number;
-    newCompanies: number;
-    inDeals: number;
+    /** Null when the backend cannot attribute new companies or deals to a source yet. */
+    newCompanies: number | null;
+    inDeals: number | null;
     status: SourceStatus;
     detail: string | null;
 }
@@ -255,6 +258,15 @@ export interface OutreachResult {
     skipped: Array<{ personId: string; reason: string }>;
 }
 
+export interface NewSegmentInput {
+    name: string;
+    /** What you sell, in your words. */
+    offering: string;
+    industries: string[];
+    /** ISO-3166 alpha-2 codes. */
+    countries: string[];
+}
+
 // ─── Client ─────────────────────────────────────────────────────────────────
 
 export class ProspectsApiError extends Error {
@@ -306,6 +318,11 @@ export const prospectsApi = {
         call<{ segment: SegmentDto }>(`/api/prospects/segments/${id}/confirm`, { method: "POST" }),
     deriveSegment: (id: string) =>
         call<{ segment: SegmentDto }>(`/api/prospects/segments/${id}/derive`, { method: "POST" }),
+    createSegment: (input: NewSegmentInput) =>
+        call<{ segment: SegmentDto }>("/api/prospects/segments", {
+            method: "POST",
+            body: JSON.stringify(input),
+        }),
     patchSegment: (id: string, fields: Record<string, string | string[]>) =>
         call<{ segment: SegmentDto }>(`/api/prospects/segments/${id}`, {
             method: "PATCH",
@@ -354,18 +371,22 @@ export const prospectsApi = {
                 status: params.status,
             })}`
         ),
-    outreach: (personIds: string[]) =>
+    /**
+     * People first; companies as the fallback for backends that do not have
+     * people yet (they pick the best public mailbox per company).
+     */
+    outreach: (input: { personIds?: string[]; companyIds?: string[] }) =>
         call<OutreachResult>("/api/prospects/outreach", {
             method: "POST",
-            body: JSON.stringify({ personIds }),
+            body: JSON.stringify(input),
         }),
 
     runs: (segmentId: string) => call<{ runs: RunDto[] }>(`/api/prospects/runs${q({ segmentId })}`),
     run: (id: string) => call<{ run: RunDto }>(`/api/prospects/runs/${id}`),
-    startRun: (segmentId: string) =>
+    startRun: (segmentId: string, options: { sample?: boolean } = {}) =>
         call<{ run: RunDto }>("/api/prospects/runs", {
             method: "POST",
-            body: JSON.stringify({ segmentId }),
+            body: JSON.stringify({ segmentId, ...options }),
         }),
     stopRun: (id: string) =>
         call<{ run: RunDto }>(`/api/prospects/runs/${id}/stop`, { method: "POST" }),

@@ -34,7 +34,7 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
                         />
                         <span
                             className="bg-brand absolute inset-y-0 left-0 rounded-full"
-                            style={{ width: `${max ? (y.inDeals / max) * 100 : 0}%` }}
+                            style={{ width: `${max && y.inDeals ? (y.inDeals / max) * 100 : 0}%` }}
                         />
                     </>
                 )}
@@ -43,7 +43,7 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
                 {off ? <span className="text-ink-3 text-xs">{y.detail ?? "off"}</span> : found}
             </span>
             <span className="text-ink-2 text-right tabular-nums">
-                {off || y.kind === "signal" ? "" : y.inDeals}
+                {off || y.kind === "signal" ? "" : (y.inDeals ?? "—")}
             </span>
         </div>
     );

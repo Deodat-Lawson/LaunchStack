@@ -1,14 +1,16 @@
 "use client";
 
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { ArrowLeft, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
 import { useProspects } from "../_lib/context";
+import { NewSegmentDialog } from "./NewSegmentDialog";
 import { ProspectsWordmark } from "./ProspectsMark";
 import { RunSheet, runIsLive } from "./RunSheet";
 
@@ -49,6 +51,7 @@ function NavLink({ item }: { item: NavItem }) {
 
 function SegmentSwitcher() {
     const { segments, segment, segmentId, setSegmentId, segmentsLoading } = useProspects();
+    const [creating, setCreating] = useState(false);
     if (segmentsLoading && !segment) {
         return (
             <div className="border-line bg-panel rounded-lg border px-2.5 py-2">
@@ -101,14 +104,14 @@ function SegmentSwitcher() {
                 <div className="border-line mt-1 border-t pt-1">
                     <button
                         type="button"
-                        disabled
-                        title="New segments arrive with the pipeline reframe"
-                        className="text-ink-3 w-full rounded-md px-2 py-1.5 text-left text-[13px] disabled:cursor-not-allowed"
+                        onClick={() => setCreating(true)}
+                        className="text-brand-ink hover:bg-panel-2 focus-visible:ring-brand/50 w-full rounded-md px-2 py-1.5 text-left text-[13px] outline-none focus-visible:ring-[3px]"
                     >
                         New segment
                     </button>
                 </div>
             </PopoverContent>
+            <NewSegmentDialog open={creating} onOpenChange={setCreating} />
         </Popover>
     );
 }
@@ -163,6 +166,15 @@ export function ProspectsShell({ children }: { children: React.ReactNode }) {
                     </ul>
                 </nav>
                 <RunIndicator />
+                <div className="mt-auto">
+                    <Link
+                        href="/employer/documents"
+                        className="text-ink-2 hover:text-ink hover:bg-panel/60 focus-visible:ring-brand/50 flex h-8 items-center gap-2 rounded-md px-2 text-[13px] outline-none transition-colors focus-visible:ring-[3px]"
+                    >
+                        <ArrowLeft className="size-3.5" />
+                        Back to Studio
+                    </Link>
+                </div>
             </aside>
             <main className="min-w-0 px-5 pb-12 pt-6 md:px-8">{children}</main>
             <RunSheet />

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 // Brand marks live in the shared icon home, not the legacy set below.
 import { IconGoogleDocs } from "~/components/icons/brand";
+import { IconProspects } from "~/components/icons/prospects";
 import {
     IconAudio,
     IconBolt,
@@ -300,6 +301,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/agent-sessions",
     },
     {
+        id: "prospects",
+        label: "Prospects",
+        Icon: IconProspects,
+        desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
+        href: "/employer/tools/prospects",
+    },
+    {
         id: "distribution",
         label: "Distribution",
         Icon: IconDistribution,
@@ -488,6 +496,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Marketing Pipeline",
                 Icon: IconMegaphone,
                 desc: "Multi-channel campaigns from your company knowledge",
+            },
+            {
+                // A separate app with its own rail: segment, companies, company
+                // pages, people, deals, runs and sources.
+                id: "prospects",
+                label: "Prospects",
+                Icon: IconProspects,
+                desc: "Find the companies that would buy what you sell — cited profiles, fit scores, people to contact, and a deal board",
+                href: "/employer/tools/prospects",
+                external: true,
             },
             {
                 // A separate app with its own route (programs, discovery runs,

@@ -246,6 +246,66 @@ partners (`--publish` also publishes dossiers into Sources). The same path is
 covered by `apps/web/__tests__/api/distribution/pipeline.e2e.test.ts` against
 the local test database.
 
+### 3.11 Prospects (`/dev/prospects`, preview only)
+
+Prospects is the reframe of Distribution: find the companies that would buy
+what the workspace sells, profile them with cited evidence, find the people,
+run the deal. The UI is built; the `/api/prospects/*` routes are not, so it
+runs only in the preview harness over an in-memory simulator. Nothing here
+needs a login, a key or a credit.
+
+**Open `/dev/prospects`** (add `?reset=1` to start over). The rail shows the
+segment "Fulfilment operators · EU", the views with counts, and the segment
+switcher (the second segment is a draft).
+
+1. **Home**: the serif headline names the segment. "To do" lists new high-fit
+   companies, next steps due today and stale deals; each button lands on the
+   right view. The funnel is one row; "Where companies come from" shows each
+   source's yield and how many of its companies are in a deal.
+2. **Companies**: views (All / New / High fit / Not contacted / Excluded) live
+   in the URL. Type `/` to search, `j` `k` to move, `x` to select, `Enter` to
+   open, `o` to add to outreach. Select three rows: the bulk bar floats up
+   with Add to outreach / Move to Qualified / Exclude. "Move to Qualified"
+   refuses companies that cannot move and says so in a toast.
+3. **Company page** (open Delta Logistics): every sentence in About and Why
+   they fit carries a superscript; hover shows the page and quote, click
+   scrolls to the numbered evidence row and flashes it. The stage control
+   lists every stage; illegal moves are disabled with the reason ("Needs an
+   owner", "Needs a next step"). Open Nordlager Fulfilment: it is a lead with
+   no owner — the menu refuses Contacted until you click "Take it". Set a
+   next step inline, then Meeting is allowed. `↑` `↓` move between companies
+   in the list's order.
+4. **Add people to outreach**: the dialog preselects Verified and Found emails,
+   disables Guess and Generic with the reason, and toasts "Campaign drafted in
+   Email". On an excluded company (Excluded view → Globex Logistics) the
+   button is disabled and the people rows say why.
+5. **Find companies** (any screen): a sheet opens with the run's steps. Sources
+   finish one by one over ~8 s with "41 found · 9 new"; Google Maps shows
+   cities; OpenStreetMap and Trustpilot are skipped as off, Glassdoor as "no
+   key". Then Shortlist, Profiles n of 25, People. "Run in background" closes
+   the sheet; the rail keeps a "Finding companies · 4 of 7 done" indicator
+   that reopens it. At ~19 s the run completes and five new companies appear
+   in Companies (view New) and on Home. "Stop" ends a run early and keeps
+   what was found.
+6. **Runs**: the finished run is a row; expanding it shows the yield table per
+   source with status words (ok / off / no key / rate limited).
+7. **People**: filter by email status; only Verified and Found rows can be
+   selected; Add to outreach reports how many were skipped and why.
+8. **Deals**: board by stage (leads stay in Companies). A stale deal has a thin
+   warn rule on the left and says how long it has been quiet. The card's
+   stage menu enforces the same rules as the company page.
+9. **Segment**: every field shows where it came from. Edit a chip list, save:
+   the segment becomes a draft and "Find companies" refuses until you Confirm.
+   Re-derive updates the date.
+10. **Sources**: switches per platform; Glassdoor is disabled with "Needs
+    SERPER_API_KEY". Turn OpenStreetMap on and start a run: it now appears in
+    the step list. The rail's Sources count follows the switches.
+11. **Themes**: the harness follows `data-theme` on `<html>`; check both.
+
+Design rules for the surface are in
+`apps/web/src/app/employer/tools/prospects/DESIGN.md`. The simulator's rules
+are covered by `apps/web/__tests__/prospects/simulator.test.ts`.
+
 ## 4. Members and viewers (Everyone shares one document screen; what differs is what their role permits)
 
 ### 4.1 Member

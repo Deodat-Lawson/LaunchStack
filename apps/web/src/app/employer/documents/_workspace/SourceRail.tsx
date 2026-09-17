@@ -33,7 +33,7 @@ import {
     joinFolderPath,
     type FolderTreeNode,
 } from "~/lib/folders/path";
-import { ContextMenu } from "./ContextMenu";
+import { ActionMenu } from "~/components/ui/action-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import {
     buildBlankRailMenuItems,
@@ -1277,7 +1277,7 @@ export function SourceRail({
                 </div>
             )}
             {menu && (
-                <ContextMenu
+                <ActionMenu
                     open
                     x={menu.x}
                     y={menu.y}

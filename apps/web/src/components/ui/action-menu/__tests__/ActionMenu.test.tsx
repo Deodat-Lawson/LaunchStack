@@ -4,14 +4,14 @@ import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import { ContextMenu } from "../ContextMenu";
-import type { SourceContextMenuItem } from "../sourceContextMenu";
+import { ActionMenu } from "../ActionMenu";
+import type { ActionMenuItem } from "../types";
 
 function items(handlers: {
     onOpen?: () => void;
     onRename?: () => void;
     onDelete?: () => void;
-}): SourceContextMenuItem[] {
+}): ActionMenuItem[] {
     return [
         { type: "label", id: "title", label: "memory.md" },
         {
@@ -40,12 +40,12 @@ function items(handlers: {
     ];
 }
 
-describe("ContextMenu", () => {
+describe("ActionMenu", () => {
     it("renders actions at the click point and runs the selected item", async () => {
         const user = userEvent.setup();
         const onRename = jest.fn();
         const onClose = jest.fn();
-        render(<ContextMenu open x={24} y={48} items={items({ onRename })} onClose={onClose} />);
+        render(<ActionMenu open x={24} y={48} items={items({ onRename })} onClose={onClose} />);
 
         expect(await screen.findByTestId("context-menu")).toBeInTheDocument();
         expect(screen.getByTestId("context-menu-item-rename")).toHaveTextContent("Rename…");
@@ -57,7 +57,7 @@ describe("ContextMenu", () => {
     it("closes on Escape and on backdrop mousedown", async () => {
         const user = userEvent.setup();
         const onClose = jest.fn();
-        render(<ContextMenu open x={10} y={10} items={items({})} onClose={onClose} />);
+        render(<ActionMenu open x={10} y={10} items={items({})} onClose={onClose} />);
         await screen.findByTestId("context-menu");
         await user.keyboard("{Escape}");
         expect(onClose).toHaveBeenCalled();
@@ -76,7 +76,7 @@ describe("ContextMenu", () => {
         const onDelete = jest.fn();
         const onClose = jest.fn();
         render(
-            <ContextMenu
+            <ActionMenu
                 open
                 x={10}
                 y={10}

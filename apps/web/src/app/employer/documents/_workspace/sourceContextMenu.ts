@@ -8,53 +8,15 @@ import {
 } from "~/lib/folders/path";
 import type { WorkspaceFolder, WorkspaceSource } from "./types";
 
+import type { ActionMenuItem } from "~/components/ui/action-menu";
+
 /**
  * Declarative items for the source / folder / blank-rail context menus.
  * Kept as data so the menu chrome can stay dumb and tests can assert the
- * action set without rendering portals.
+ * action set without rendering portals. The item model itself lives with the
+ * menu primitive; this alias keeps the rail's builders reading naturally.
  */
-
-export type SourceContextMenuItem =
-    | {
-          type: "label";
-          id: string;
-          label: string;
-      }
-    | {
-          type: "separator";
-          id: string;
-      }
-    | {
-          type: "item";
-          id: string;
-          label: string;
-          danger?: boolean;
-          disabled?: boolean;
-          disabledReason?: string;
-          checked?: boolean;
-          shortcut?: string;
-          icon?:
-              | "open"
-              | "ask"
-              | "rename"
-              | "copy"
-              | "delete"
-              | "folder"
-              | "plus"
-              | "check"
-              | "lock"
-              | "share";
-          onSelect: () => void;
-      }
-    | {
-          type: "submenu";
-          id: string;
-          label: string;
-          icon?: "folder";
-          disabled?: boolean;
-          disabledReason?: string;
-          items: SourceContextMenuItem[];
-      };
+export type SourceContextMenuItem = ActionMenuItem;
 
 export interface SourceMenuHandlers {
     onOpen?: (source: WorkspaceSource) => void;

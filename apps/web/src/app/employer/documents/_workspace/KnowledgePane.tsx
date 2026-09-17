@@ -15,7 +15,7 @@ import { Lock } from "lucide-react";
 import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
-import { ContextMenu } from "./ContextMenu";
+import { ActionMenu } from "~/components/ui/action-menu";
 import { buildSourceMenuItems } from "./sourceContextMenu";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
@@ -398,7 +398,7 @@ export function KnowledgePane({
                 )}
             </div>
             {menu && (
-                <ContextMenu
+                <ActionMenu
                     open
                     x={menu.x}
                     y={menu.y}

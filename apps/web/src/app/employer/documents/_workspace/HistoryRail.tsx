@@ -26,7 +26,7 @@ import {
     type HistoryKindMeta,
 } from "~/lib/workspace-history";
 
-import { ContextMenu, type SourceContextMenuItem } from "./ContextMenu";
+import { ActionMenu, type ActionMenuItem } from "~/components/ui/action-menu";
 
 /**
  * The History tab of the source rail: chats you can pick back up and pipeline
@@ -313,7 +313,7 @@ export function HistoryRail({
         [entries, query]
     );
 
-    const menuItems = useMemo<SourceContextMenuItem[]>(() => {
+    const menuItems = useMemo<ActionMenuItem[]>(() => {
         const entry = menu?.entry;
         if (!entry) return [];
         return [
@@ -537,7 +537,7 @@ export function HistoryRail({
             </div>
 
             {menu && (
-                <ContextMenu
+                <ActionMenu
                     open
                     x={menu.x}
                     y={menu.y}

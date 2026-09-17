@@ -85,8 +85,15 @@ export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
     return (
         <EditorProvider store={store}>
             <TooltipProvider delayDuration={400}>
+                {/*
+                 * `flex-1 min-w-0 w-full`: the viewer mounts this as an item in
+                 * a flex row, where the default `flex: 0 1 auto` sized it to
+                 * its own content — 158px inside a 706px pane, which is what
+                 * squeezed the board down to 8%. min-w-0 lets the canvas shrink
+                 * below its intrinsic width instead of overflowing.
+                 */}
                 <div
-                    className="bg-surface flex h-full min-h-0 flex-col"
+                    className="bg-surface flex h-full min-h-0 w-full min-w-0 flex-1 flex-col"
                     data-testid="mindmap-preview"
                 >
                     <div ref={stageRef} className="relative flex min-h-0 flex-1">

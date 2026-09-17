@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
+import { ContextMenuProvider } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "../HistoryRail";
 
 /**
@@ -68,7 +69,11 @@ function setup(over: Partial<HistoryRailProps> = {}) {
         onRefresh: jest.fn(),
         ...over,
     };
-    render(<HistoryRail {...props} />);
+    render(
+        <ContextMenuProvider>
+            <HistoryRail {...props} />
+        </ContextMenuProvider>
+    );
     return props;
 }
 

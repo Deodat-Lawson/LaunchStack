@@ -1,5 +1,6 @@
 "use client";
 
+import { ContextTarget } from "~/components/context-menu";
 import { useEffect, useMemo, useState } from "react";
 import { usePermissions } from "~/lib/use-permissions";
 import { IconBolt, IconX } from "./icons";
@@ -178,92 +179,154 @@ export function StudioDrawer({
                                 const isActive = f.id === activeId;
                                 const isComing = f.comingSoon === true;
                                 return (
-                                    <button
+                                    <ContextTarget
                                         key={f.id}
-                                        type="button"
-                                        onClick={() => {
-                                            if (f.id === "chat") {
-                                                if (onOpenWorkspaceChat) {
-                                                    onOpenWorkspaceChat();
-                                                    return;
-                                                }
-                                            }
-                                            setActiveId(f.id);
-                                        }}
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: 9,
-                                            padding: "7px 9px",
-                                            marginBottom: 1,
-                                            borderRadius: 6,
-                                            textAlign: "left",
-                                            background: isActive
-                                                ? "var(--accent-soft)"
-                                                : "transparent",
-                                            transition: "background 100ms",
-                                        }}
-                                        onMouseEnter={e => {
-                                            if (!isActive)
-                                                e.currentTarget.style.background = "var(--line-2)";
-                                        }}
-                                        onMouseLeave={e => {
-                                            if (!isActive)
-                                                e.currentTarget.style.background = "transparent";
+                                        target={{
+                                            kind: "studio-feature",
+                                            id: f.id,
+                                            label: `Actions for ${f.label}`,
+                                            data: f,
+                                            items: () => [
+                                                {
+                                                    type: "item",
+                                                    id: "open",
+                                                    label: "Open",
+                                                    icon: "open",
+                                                    onSelect: () => {
+                                                        if (
+                                                            f.id === "chat" &&
+                                                            onOpenWorkspaceChat
+                                                        ) {
+                                                            onOpenWorkspaceChat();
+                                                            return;
+                                                        }
+                                                        setActiveId(f.id);
+                                                    },
+                                                },
+                                                ...(onExpand && f.id !== "chat"
+                                                    ? [
+                                                          {
+                                                              type: "item" as const,
+                                                              id: "expand",
+                                                              label: "Expand to the main view",
+                                                              icon: "expand" as const,
+                                                              disabled: isComing,
+                                                              disabledReason: isComing
+                                                                  ? "Coming soon."
+                                                                  : undefined,
+                                                              onSelect: () => onExpand(f.id),
+                                                          },
+                                                      ]
+                                                    : []),
+                                                ...(f.href
+                                                    ? [
+                                                          {
+                                                              type: "item" as const,
+                                                              id: "open-tab",
+                                                              label: "Open in a new tab",
+                                                              icon: "external" as const,
+                                                              onSelect: () =>
+                                                                  window.open(
+                                                                      f.href,
+                                                                      "_blank",
+                                                                      "noopener,noreferrer"
+                                                                  ),
+                                                          },
+                                                      ]
+                                                    : []),
+                                            ],
                                         }}
                                     >
-                                        <div
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                if (f.id === "chat") {
+                                                    if (onOpenWorkspaceChat) {
+                                                        onOpenWorkspaceChat();
+                                                        return;
+                                                    }
+                                                }
+                                                setActiveId(f.id);
+                                            }}
                                             style={{
-                                                width: 22,
-                                                height: 22,
-                                                borderRadius: 5,
-                                                background: isActive
-                                                    ? "var(--panel)"
-                                                    : "var(--line-2)",
-                                                color: isActive ? "var(--accent)" : "var(--ink-2)",
+                                                width: "100%",
                                                 display: "flex",
                                                 alignItems: "center",
-                                                justifyContent: "center",
-                                                flexShrink: 0,
+                                                gap: 9,
+                                                padding: "7px 9px",
+                                                marginBottom: 1,
+                                                borderRadius: 6,
+                                                textAlign: "left",
+                                                background: isActive
+                                                    ? "var(--accent-soft)"
+                                                    : "transparent",
+                                                transition: "background 100ms",
+                                            }}
+                                            onMouseEnter={e => {
+                                                if (!isActive)
+                                                    e.currentTarget.style.background =
+                                                        "var(--line-2)";
+                                            }}
+                                            onMouseLeave={e => {
+                                                if (!isActive)
+                                                    e.currentTarget.style.background =
+                                                        "transparent";
                                             }}
                                         >
-                                            <Icon size={12} />
-                                        </div>
-                                        <span
-                                            style={{
-                                                flex: 1,
-                                                fontSize: 12.5,
-                                                fontWeight: isActive ? 600 : 500,
-                                                color: isActive
-                                                    ? "var(--accent-ink)"
-                                                    : "var(--ink-2)",
-                                                whiteSpace: "nowrap",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                            }}
-                                        >
-                                            {f.label}
-                                        </span>
-                                        {isComing && (
-                                            <span
-                                                className="mono"
+                                            <div
                                                 style={{
-                                                    fontSize: 9,
-                                                    fontWeight: 600,
-                                                    letterSpacing: "0.04em",
-                                                    color: "var(--ink-3)",
-                                                    padding: "1px 5px",
-                                                    borderRadius: 4,
-                                                    background: "var(--line-2)",
+                                                    width: 22,
+                                                    height: 22,
+                                                    borderRadius: 5,
+                                                    background: isActive
+                                                        ? "var(--panel)"
+                                                        : "var(--line-2)",
+                                                    color: isActive
+                                                        ? "var(--accent)"
+                                                        : "var(--ink-2)",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
                                                     flexShrink: 0,
                                                 }}
-                                                title="Coming soon"
                                             >
-                                                SOON
+                                                <Icon size={12} />
+                                            </div>
+                                            <span
+                                                style={{
+                                                    flex: 1,
+                                                    fontSize: 12.5,
+                                                    fontWeight: isActive ? 600 : 500,
+                                                    color: isActive
+                                                        ? "var(--accent-ink)"
+                                                        : "var(--ink-2)",
+                                                    whiteSpace: "nowrap",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                }}
+                                            >
+                                                {f.label}
                                             </span>
-                                        )}
-                                    </button>
+                                            {isComing && (
+                                                <span
+                                                    className="mono"
+                                                    style={{
+                                                        fontSize: 9,
+                                                        fontWeight: 600,
+                                                        letterSpacing: "0.04em",
+                                                        color: "var(--ink-3)",
+                                                        padding: "1px 5px",
+                                                        borderRadius: 4,
+                                                        background: "var(--line-2)",
+                                                        flexShrink: 0,
+                                                    }}
+                                                    title="Coming soon"
+                                                >
+                                                    SOON
+                                                </span>
+                                            )}
+                                        </button>
+                                    </ContextTarget>
                                 );
                             })}
                         </div>

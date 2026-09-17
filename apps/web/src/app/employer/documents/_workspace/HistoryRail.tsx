@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState, type CSSProperties } from "react";
+import React, { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
     CalendarDays,
     GitBranch,
@@ -26,7 +26,8 @@ import {
     type HistoryKindMeta,
 } from "~/lib/workspace-history";
 
-import { ContextMenu, type SourceContextMenuItem } from "./ContextMenu";
+import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { useActionMenu, useContextTarget } from "~/components/context-menu";
 
 /**
  * The History tab of the source rail: chats you can pick back up and pipeline
@@ -73,7 +74,8 @@ interface RowProps {
     renaming: boolean;
     now: Date;
     onOpen: () => void;
-    onOpenMenu: (point: { clientX: number; clientY: number }) => void;
+    /** The row's actions, built fresh when the menu opens. */
+    menuItems: () => ActionMenuItem[];
     onCommitRename: (title: string) => void;
     onCancelRename: () => void;
 }
@@ -84,12 +86,21 @@ function HistoryRow({
     renaming,
     now,
     onOpen,
-    onOpenMenu,
+    menuItems,
     onCommitRename,
     onCancelRename,
 }: RowProps) {
     const [hover, setHover] = useState(false);
     const [focused, setFocused] = useState(false);
+    const menu = useActionMenu();
+    const menuLabel = `Actions for ${entry.title}`;
+    const ctxTarget = useContextTarget({
+        kind: "history-entry",
+        id: entry.id,
+        label: menuLabel,
+        data: entry,
+        items: menuItems,
+    });
     const meta = HISTORY_KIND_META[entry.kind];
     const Icon = KIND_ICONS[meta.icon];
     // A row only opens something when there is something to open: a chat
@@ -158,6 +169,7 @@ function HistoryRow({
             tabIndex={openable ? 0 : -1}
             aria-current={active ? "true" : undefined}
             data-testid={`history-row-${entry.id}`}
+            {...ctxTarget}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={() => {
@@ -168,10 +180,6 @@ function HistoryRow({
                     e.preventDefault();
                     onOpen();
                 }
-            }}
-            onContextMenu={e => {
-                e.preventDefault();
-                onOpenMenu(e);
             }}
             style={rowStyle}
         >
@@ -256,12 +264,19 @@ function HistoryRow({
                     <button
                         onClick={e => {
                             e.stopPropagation();
-                            onOpenMenu(e);
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            menu.open({
+                                x: rect.right,
+                                y: rect.bottom,
+                                items: menuItems(),
+                                ariaLabel: menuLabel,
+                                kind: "history-entry",
+                            });
                         }}
                         onFocus={() => setFocused(true)}
                         onBlur={() => setFocused(false)}
                         title="Chat actions"
-                        aria-label={`Actions for ${entry.title}`}
+                        aria-label={menuLabel}
                         style={{
                             position: "absolute",
                             right: 0,
@@ -299,7 +314,6 @@ export function HistoryRail({
     onDeleteSession,
     onRefresh,
 }: HistoryRailProps) {
-    const [menu, setMenu] = useState<{ x: number; y: number; entry: HistoryEntry } | null>(null);
     const [renamingId, setRenamingId] = useState<string | null>(null);
     /**
      * One timestamp for the whole render, so every "2h" in the list is
@@ -313,36 +327,54 @@ export function HistoryRail({
         [entries, query]
     );
 
-    const menuItems = useMemo<SourceContextMenuItem[]>(() => {
-        const entry = menu?.entry;
-        if (!entry) return [];
-        return [
-            { type: "label", id: "title", label: entry.title },
-            {
-                type: "item",
-                id: "open",
-                label: "Open",
-                icon: "open",
-                onSelect: () => onResumeSession(entry.refId),
-            },
-            {
-                type: "item",
-                id: "rename",
-                label: "Rename…",
-                icon: "rename",
-                onSelect: () => setRenamingId(entry.id),
-            },
-            { type: "separator", id: "sep" },
-            {
-                type: "item",
-                id: "delete",
-                label: "Delete chat",
-                icon: "delete",
-                danger: true,
-                onSelect: () => onDeleteSession(entry.refId),
-            },
-        ];
-    }, [menu, onResumeSession, onDeleteSession]);
+    /**
+     * A chat can be reopened, renamed and deleted; a run can only be opened,
+     * and only when it has a surface to open.
+     */
+    const itemsFor = useCallback(
+        (entry: HistoryEntry): ActionMenuItem[] => {
+            if (entry.kind !== "chat") {
+                if (!entry.href) return [];
+                return [
+                    { type: "label", id: "title", label: entry.title },
+                    {
+                        type: "item",
+                        id: "open",
+                        label: "Open",
+                        icon: "open",
+                        onSelect: () => onOpenRun(entry),
+                    },
+                ];
+            }
+            return [
+                { type: "label", id: "title", label: entry.title },
+                {
+                    type: "item",
+                    id: "open",
+                    label: "Open",
+                    icon: "open",
+                    onSelect: () => onResumeSession(entry.refId),
+                },
+                {
+                    type: "item",
+                    id: "rename",
+                    label: "Rename…",
+                    icon: "rename",
+                    onSelect: () => setRenamingId(entry.id),
+                },
+                { type: "separator", id: "sep" },
+                {
+                    type: "item",
+                    id: "delete",
+                    label: "Delete chat",
+                    icon: "delete",
+                    danger: true,
+                    onSelect: () => onDeleteSession(entry.refId),
+                },
+            ];
+        },
+        [onResumeSession, onOpenRun, onDeleteSession]
+    );
 
     const totalShown = groups.reduce((sum, group) => sum + group.entries.length, 0);
 
@@ -486,9 +518,7 @@ export function HistoryRail({
                                         ? onResumeSession(entry.refId)
                                         : onOpenRun(entry)
                                 }
-                                onOpenMenu={point =>
-                                    setMenu({ x: point.clientX, y: point.clientY, entry })
-                                }
+                                menuItems={() => itemsFor(entry)}
                                 onCommitRename={title => {
                                     setRenamingId(null);
                                     const trimmed = title.trim();
@@ -535,17 +565,6 @@ export function HistoryRail({
                     </div>
                 )}
             </div>
-
-            {menu && (
-                <ContextMenu
-                    open
-                    x={menu.x}
-                    y={menu.y}
-                    items={menuItems}
-                    ariaLabel={`Actions for ${menu.entry.title}`}
-                    onClose={() => setMenu(null)}
-                />
-            )}
         </div>
     );
 }

@@ -19,16 +19,108 @@ import {
 } from "~/components/ui/table";
 import { Label } from "~/components/ui/label";
 import { Badge } from "~/components/ui/badge";
+import { toast } from "sonner";
+import type { ReactNode } from "react";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 
 import {
     KIND_LABELS,
     STAGE_LABELS,
     daysAgo,
+    type PartnerItemDto,
     type PartnerKind,
     type RelationshipStage,
 } from "../api";
 import type { DistributionState } from "../useDistribution";
 import { FitBadge, StageBadge } from "./badges";
+import { buildOrderMenuItems, buildPartnerMenuItems } from "./partnerContextMenu";
+
+/** A column header: right-click to change how the table is ordered. */
+function OrderHead({
+    state,
+    className,
+    children,
+}: {
+    state: DistributionState;
+    className?: string;
+    children?: ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "partner-column",
+        label: "Column actions",
+        items: () =>
+            buildOrderMenuItems(state.filters.order, order =>
+                state.setFilters({ ...state.filters, order })
+            ),
+    });
+    return (
+        <TableHead {...ctxTarget} className={className}>
+            {children}
+        </TableHead>
+    );
+}
+
+/** A partner row: the drawer's verbs, reachable without opening it. */
+function PartnerRow({
+    item,
+    state,
+    children,
+}: {
+    item: PartnerItemDto;
+    state: DistributionState;
+    children: ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "partner",
+        id: item.relationship.id,
+        label: `Actions for ${item.org.name}`,
+        data: item,
+        items: () => buildPartnerMenuItems(item, partnerHandlers(item, state, true)),
+    });
+    return (
+        <TableRow
+            {...ctxTarget}
+            className="cursor-pointer"
+            onClick={() => void state.openPartner(item.relationship.id)}
+        >
+            {children}
+        </TableRow>
+    );
+}
+
+/** The handlers a partner's menu needs, shared by the table row and the board card. */
+export function partnerHandlers(
+    item: PartnerItemDto,
+    state: DistributionState,
+    withFilters: boolean
+) {
+    const id = item.relationship.id;
+    return {
+        onOpen: () => void state.openPartner(id),
+        onMoveToStage: (stage: RelationshipStage) =>
+            void state.patchRelationship(id, { stage }, `Moved to ${STAGE_LABELS[stage]}`),
+        onDraftOutreach: () => void state.outreach([id]),
+        onFilterStage: withFilters
+            ? () => state.setFilters({ ...state.filters, stage: item.relationship.stage })
+            : undefined,
+        onFilterKind: withFilters
+            ? () => state.setFilters({ ...state.filters, kind: item.relationship.kind })
+            : undefined,
+        onCopyName: () => {
+            void copyText(item.org.name).then(ok => {
+                if (ok) toast.success("Copied");
+            });
+        },
+        onCopyDomain: item.org.domain
+            ? () => {
+                  void copyText(item.org.domain ?? "").then(ok => {
+                      if (ok) toast.success("Copied");
+                  });
+              }
+            : undefined,
+    };
+}
 
 const ALL = "__all__";
 
@@ -141,15 +233,17 @@ export function PartnersTable({ state }: { state: DistributionState }) {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Organisation</TableHead>
-                            <TableHead>Kind</TableHead>
-                            <TableHead>Territory</TableHead>
-                            <TableHead>Stage</TableHead>
-                            <TableHead>Fit</TableHead>
-                            <TableHead className="text-right">Evidence</TableHead>
-                            <TableHead>Last activity</TableHead>
-                            <TableHead>Next action</TableHead>
-                            <TableHead>Flags</TableHead>
+                            <OrderHead state={state}>Organisation</OrderHead>
+                            <OrderHead state={state}>Kind</OrderHead>
+                            <OrderHead state={state}>Territory</OrderHead>
+                            <OrderHead state={state}>Stage</OrderHead>
+                            <OrderHead state={state}>Fit</OrderHead>
+                            <OrderHead state={state} className="text-right">
+                                Evidence
+                            </OrderHead>
+                            <OrderHead state={state}>Last activity</OrderHead>
+                            <OrderHead state={state}>Next action</OrderHead>
+                            <OrderHead state={state}>Flags</OrderHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -166,11 +260,7 @@ export function PartnersTable({ state }: { state: DistributionState }) {
                             </TableRow>
                         )}
                         {partners.map(item => (
-                            <TableRow
-                                key={item.relationship.id}
-                                className="cursor-pointer"
-                                onClick={() => void state.openPartner(item.relationship.id)}
-                            >
+                            <PartnerRow key={item.relationship.id} item={item} state={state}>
                                 <TableCell>
                                     <div className="text-ink font-medium">{item.org.name}</div>
                                     <div className="text-ink-3 text-xs">
@@ -218,7 +308,7 @@ export function PartnersTable({ state }: { state: DistributionState }) {
                                         </span>
                                     )}
                                 </TableCell>
-                            </TableRow>
+                            </PartnerRow>
                         ))}
                     </TableBody>
                 </Table>

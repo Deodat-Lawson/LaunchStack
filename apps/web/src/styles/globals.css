@@ -160,3 +160,8 @@ textarea {
         transform: rotate(360deg);
     }
 }
+
+/* Long-press opens our menu on touch; the OS callout would fight it. */
+[data-ctx] {
+    -webkit-touch-callout: none;
+}

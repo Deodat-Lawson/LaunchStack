@@ -1,6 +1,6 @@
 /**
- * Same surface language as StudioMenu / CommandPalette: token colors only,
- * inherited from the `.lsw-root` the menu is portaled into.
+ * One surface language with StudioMenu / CommandPalette: token colours only.
+ * Tokens are global, so the menu is themed wherever it is portaled.
  */
 
 .layer {
@@ -78,6 +78,14 @@
     justify-content: center;
     flex-shrink: 0;
     color: var(--ink-3);
+}
+
+.swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
 }
 
 .itemLabel {

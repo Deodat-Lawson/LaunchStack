@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { ContextMenuProvider } from "~/components/context-menu";
 import { SourceRail } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -45,22 +46,24 @@ function Harness(props: HarnessProps) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     return (
-        <SourceRail
-            sources={SOURCES}
-            folders={FOLDERS}
-            selected={selected}
-            setSelected={setSelected}
-            onOpenAdd={jest.fn()}
-            onNewFolder={props.onNewFolder ?? jest.fn()}
-            onRenameFolder={props.onRenameFolder ?? jest.fn()}
-            onMoveFolder={props.onMoveFolder ?? jest.fn()}
-            onDeleteFolder={props.onDeleteFolder ?? jest.fn()}
-            onMoveToFolder={props.onMoveToFolder ?? jest.fn()}
-            activeFolder={activeFolder}
-            setActiveFolder={setActiveFolder}
-            activeTag={activeTag}
-            setActiveTag={setActiveTag}
-        />
+        <ContextMenuProvider>
+            <SourceRail
+                sources={SOURCES}
+                folders={FOLDERS}
+                selected={selected}
+                setSelected={setSelected}
+                onOpenAdd={jest.fn()}
+                onNewFolder={props.onNewFolder ?? jest.fn()}
+                onRenameFolder={props.onRenameFolder ?? jest.fn()}
+                onMoveFolder={props.onMoveFolder ?? jest.fn()}
+                onDeleteFolder={props.onDeleteFolder ?? jest.fn()}
+                onMoveToFolder={props.onMoveToFolder ?? jest.fn()}
+                activeFolder={activeFolder}
+                setActiveFolder={setActiveFolder}
+                activeTag={activeTag}
+                setActiveTag={setActiveTag}
+            />
+        </ContextMenuProvider>
     );
 }
 

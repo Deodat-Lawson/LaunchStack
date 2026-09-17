@@ -10,6 +10,12 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 
+import {
+    DEFAULT_AGENT_AUTONOMY,
+    effectiveAutonomy,
+    isAgentAutonomy,
+    meetingPlanViolations,
+} from "~/lib/agents/autonomy";
 import { IconHash, IconServer, IconSlack, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
 import { initialsOf, personaColor, type AgentPersonaRecord } from "./types";
@@ -54,6 +60,28 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
 
     const personas = useMemo(() => data?.personas.filter(p => !p.archived) ?? [], [data]);
 
+    // The same rule the server enforces, shown before Start rather than after.
+    const defaultAutonomy = isAgentAutonomy(data?.defaults?.autonomy)
+        ? data.defaults.autonomy
+        : DEFAULT_AGENT_AUTONOMY;
+    const roomLevels = useMemo(
+        () =>
+            selected.map(key =>
+                effectiveAutonomy(personas.find(p => p.id === key)?.autonomy, defaultAutonomy)
+            ),
+        [selected, personas, defaultAutonomy]
+    );
+    const mirrorProblems = useMemo(
+        () =>
+            meetingPlanViolations({
+                participants: roomLevels,
+                slackMirrorEnabled: true,
+                slackUseAgentIdentity: true,
+            }),
+        [roomLevels]
+    );
+    const mirrorAllowed = mirrorProblems.length === 0;
+
     // Pre-select the first three so the picker starts from a working room.
     useEffect(() => {
         if (!open || personas.length === 0 || selected.length > 0) return;
@@ -88,7 +116,7 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
                     moderatorKey: policy === "moderated" ? moderator || undefined : undefined,
                     maxTurns,
                     slackChannelId: slackChannelId.trim() || undefined,
-                    slackMirrorEnabled: mirror && slackChannelId.trim().length > 0,
+                    slackMirrorEnabled: mirror && mirrorAllowed && slackChannelId.trim().length > 0,
                     slackUseAgentIdentity: true,
                     autoStart: true,
                 }),
@@ -351,9 +379,11 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
                     <FormField
                         label="Slack mirror"
                         hint={
-                            data?.slack.canPost
-                                ? "Turns are posted to this channel, and messages people write there come back here."
-                                : `Set ${data?.slack.missing.join(" and ") ?? "SLACK_BOT_TOKEN"} to enable mirroring.`
+                            !data?.slack.canPost
+                                ? `Set ${data?.slack.missing.join(" and ") ?? "SLACK_BOT_TOKEN"} to enable mirroring.`
+                                : !mirrorAllowed
+                                  ? mirrorProblems[0]!
+                                  : "Turns are posted to this channel, and messages people write there come back here."
                         }
                     >
                         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -379,9 +409,11 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
                             >
                                 <input
                                     type="checkbox"
-                                    checked={mirror}
+                                    checked={mirror && mirrorAllowed}
                                     disabled={
-                                        !data?.slack.canPost || slackChannelId.trim().length === 0
+                                        !data?.slack.canPost ||
+                                        slackChannelId.trim().length === 0 ||
+                                        !mirrorAllowed
                                     }
                                     onChange={e => setMirror(e.target.checked)}
                                 />

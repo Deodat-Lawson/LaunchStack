@@ -329,6 +329,19 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         },
     },
     {
+        id: "settings",
+        tier: "system",
+        summary:
+            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive — and the profile mirror.",
+        scope: "workspace",
+        routes: ["settings"],
+        notes:
+            "`settings` is the one write path (registry-validated, permission-gated, audited). " +
+            "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
+            "overviews computed for the panel; `settings/account` mirrors a Better Auth name " +
+            "change into the product `users` row.",
+    },
+    {
         id: "platform-ops",
         tier: "system",
         summary: "Health, metrics, runtime configuration, and usage accounting.",

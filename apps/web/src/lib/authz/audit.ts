@@ -23,7 +23,8 @@ export type AuditTargetType =
     | "folder"
     | "document"
     | "connector"
-    | "workspace";
+    | "workspace"
+    | "setting";
 
 export interface AuditEventInput {
     companyId: bigint;

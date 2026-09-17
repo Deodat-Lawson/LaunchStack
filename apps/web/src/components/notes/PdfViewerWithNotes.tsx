@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    memo,
     useCallback,
     useEffect,
     useMemo,
@@ -15,6 +16,7 @@ import {
     findTextRange,
     type ViewerHighlight,
 } from "~/lib/find-text-range";
+import { createSelectionCommitter } from "./_shared/selectionGesture";
 
 /**
  * react-pdf ships `pdfjs-dist` as a transitive dep but expects the host app to
@@ -87,6 +89,12 @@ interface Props {
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
     /**
+     * The selection the viewer would anchor a note to, refreshed when a
+     * selection gesture ends and cleared when it collapses. Lets a parent
+     * offer the same anchor from its own controls — a context menu, say.
+     */
+    onSelectionDraft?: (draft: PdfAnchorCapture | null) => void;
+    /**
      * A cited passage to locate in the text layer, scroll to, and highlight.
      * The page hint narrows the search; without one every page is scanned.
      * Located once per `nonce` — a repeat click re-runs the jump.
@@ -116,6 +124,7 @@ export function PdfViewerWithNotes({
     onCreateAnchoredNote,
     onAiCapture,
     onNotePinClick,
+    onSelectionDraft,
     citationHighlight,
 }: Props) {
     const [numPages, setNumPages] = useState<number | null>(null);
@@ -141,6 +150,53 @@ export function PdfViewerWithNotes({
 
     // Memoize the `file` option so react-pdf doesn't reload on every render.
     const file = useMemo(() => ({ url }), [url]);
+
+    // Everything a page receives is stable across the viewer's own renders,
+    // so a change to the selection draft repaints the floating button and
+    // nothing else — `PdfPage` is memoised on exactly these props.
+    const pageRefCallbacks = useRef<Map<number, (el: HTMLDivElement | null) => void>>(
+        new Map(),
+    );
+    const pageRefFor = useCallback((pageNum: number) => {
+        let cb = pageRefCallbacks.current.get(pageNum);
+        if (!cb) {
+            cb = (el) => {
+                if (el) pageRefs.current.set(pageNum, el);
+                else pageRefs.current.delete(pageNum);
+            };
+            pageRefCallbacks.current.set(pageNum, cb);
+        }
+        return cb;
+    }, []);
+    const onTextLayerReady = useCallback(() => setTextLayerVersion((v) => v + 1), []);
+    const notesByPage = useMemo(() => {
+        const map = new Map<number, PdfNoteLite[]>();
+        for (const note of notes) {
+            if (!note.page || note.quads.length === 0) continue;
+            const list = map.get(note.page) ?? [];
+            list.push(note);
+            map.set(note.page, list);
+        }
+        return map;
+    }, [notes]);
+    const EMPTY_NOTES = useMemo<PdfNoteLite[]>(() => [], []);
+    const pinClickRef = useRef(onNotePinClick);
+    pinClickRef.current = onNotePinClick;
+    const handlePinClick = useCallback((noteId: number) => pinClickRef.current?.(noteId), []);
+
+    const onSelectionDraftRef = useRef(onSelectionDraft);
+    onSelectionDraftRef.current = onSelectionDraft;
+    useEffect(() => {
+        onSelectionDraftRef.current?.(
+            selectionDraft
+                ? {
+                      page: selectionDraft.page,
+                      quads: selectionDraft.quads,
+                      quote: { exact: selectionDraft.quote },
+                  }
+                : null,
+        );
+    }, [selectionDraft]);
 
     const onDocumentLoadSuccess = useCallback(
         ({ numPages: n }: { numPages: number }) => {
@@ -260,7 +316,8 @@ export function PdfViewerWithNotes({
 
     // Capture text selections as anchor candidates. A selection is valid when
     // it falls entirely within one rendered page and has at least one rect
-    // with non-zero area.
+    // with non-zero area. The capture runs once per gesture — see
+    // `createSelectionCommitter` for why not on every `selectionchange`.
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
@@ -321,15 +378,34 @@ export function PdfViewerWithNotes({
             });
         };
 
-        document.addEventListener("selectionchange", handler);
-        return () => document.removeEventListener("selectionchange", handler);
+        const committer = createSelectionCommitter(handler);
+        const onPointerDown = (e: PointerEvent) => {
+            if (!container.contains(e.target as Node)) return;
+            committer.pointerDown(e.button === 0 && e.isPrimary);
+        };
+        const onPointerUp = () => committer.pointerUp();
+        const onSelectionChange = () => committer.selectionChanged();
+        container.addEventListener("pointerdown", onPointerDown);
+        document.addEventListener("pointerup", onPointerUp);
+        document.addEventListener("pointercancel", onPointerUp);
+        document.addEventListener("selectionchange", onSelectionChange);
+        return () => {
+            committer.dispose();
+            container.removeEventListener("pointerdown", onPointerDown);
+            document.removeEventListener("pointerup", onPointerUp);
+            document.removeEventListener("pointercancel", onPointerUp);
+            document.removeEventListener("selectionchange", onSelectionChange);
+        };
     }, [pageGeometry]);
 
     // Clear the selection draft when the user clicks elsewhere (outside the
     // floating button). Without this, the button lingers after the user's
-    // selection collapses programmatically in some browsers.
+    // selection collapses programmatically in some browsers. A secondary
+    // button is left alone: a right-click on the selection opens a menu
+    // that acts on it, and must find it still there.
     useEffect(() => {
         const onPointerDown = (e: PointerEvent) => {
+            if (e.button !== 0) return;
             const target = e.target as HTMLElement | null;
             if (target?.closest("[data-note-anchor-btn]")) return;
             const sel = window.getSelection();
@@ -401,19 +477,12 @@ export function PdfViewerWithNotes({
                                 <PdfPage
                                     key={pageNum}
                                     pageNum={pageNum}
-                                    pageRef={(el) => {
-                                        if (el) pageRefs.current.set(pageNum, el);
-                                        else pageRefs.current.delete(pageNum);
-                                    }}
+                                    pageRef={pageRefFor(pageNum)}
                                     onRenderSuccess={onPageRenderSuccess}
-                                    onTextLayerReady={() =>
-                                        setTextLayerVersion((v) => v + 1)
-                                    }
-                                    notesOnPage={notes.filter(
-                                        (n) => n.page === pageNum && n.quads.length > 0,
-                                    )}
+                                    onTextLayerReady={onTextLayerReady}
+                                    notesOnPage={notesByPage.get(pageNum) ?? EMPTY_NOTES}
                                     highlightedNoteId={scrollToNoteId ?? null}
-                                    onNotePinClick={onNotePinClick}
+                                    onNotePinClick={handlePinClick}
                                     citeQuads={
                                         citeOverlay?.page === pageNum
                                             ? citeOverlay.quads
@@ -536,7 +605,7 @@ interface PdfPageProps {
     citeQuads: PdfQuad[] | null;
 }
 
-function PdfPage({
+const PdfPage = memo(function PdfPage({
     pageNum,
     pageRef,
     onRenderSuccess,
@@ -611,7 +680,7 @@ function PdfPage({
                 })}
         </div>
     );
-}
+});
 
 function NoteOverlay({
     note,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Lock, Pencil, Upload } from "lucide-react";
@@ -14,6 +14,13 @@ import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import {
+    buildDocumentMenuItems,
+    buildVersionMenuItems,
+    type DocumentTargetData,
+} from "./documentContextMenu";
 import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
@@ -80,6 +87,43 @@ export interface DocumentViewerProps {
     onEdit?: (source: WorkspaceSource) => void;
     /** Mindmaps only: the citable copy was created or updated. */
     onPublished?: () => void;
+}
+
+/** Gives one version row its own right-click target without touching its markup. */
+function VersionTarget({
+    version,
+    reverting,
+    onPreview,
+    onRestore,
+    children,
+}: {
+    version: VersionRow;
+    reverting: boolean;
+    onPreview: () => void;
+    onRestore: () => void;
+    children: ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "document-version",
+        id: String(version.id),
+        label: `Actions for version ${version.versionNumber}`,
+        data: version,
+        items: () =>
+            buildVersionMenuItems(
+                version,
+                { reverting },
+                {
+                    onPreview,
+                    onRestore,
+                    onDownload: () => window.open(version.url, "_blank", "noopener,noreferrer"),
+                }
+            ),
+    });
+    return (
+        <div {...ctxTarget} style={{ display: "contents" }}>
+            {children}
+        </div>
+    );
 }
 
 function humanDate(raw: string): string {
@@ -207,6 +251,9 @@ export function DocumentViewer({
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
     const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
+    /** A passage handed to the notes panel by the context menu, as a new note's body. */
+    const [noteSeed, setNoteSeed] = useState<string | null>(null);
+    const titleInputRef = useRef<HTMLInputElement>(null);
 
     const isPdf = fullDoc !== null && getDocumentDisplayType(fullDoc) === "pdf";
 
@@ -556,6 +603,61 @@ export function DocumentViewer({
         router.push(`/employer/documents/viewer?docId=${source.documentId}`);
     };
 
+    const notesAvailable = !isMindmap || Boolean(source.documentId);
+    const addNote = useCallback((text: string) => {
+        setSidebarTab("notes");
+        setNoteSeed(text);
+    }, []);
+
+    /**
+     * The whole viewer is one right-click target; version rows and note
+     * cards inside it declare their own and win when clicked directly.
+     */
+    const documentTarget = useContextTarget<DocumentTargetData>({
+        kind: "document",
+        id: source.id,
+        label: `Actions for ${source.title}`,
+        data: { source, addNote: persisted && notesAvailable ? addNote : undefined },
+        items: () =>
+            buildDocumentMenuItems(
+                source,
+                {
+                    isMindmap,
+                    askable: !isMindmap || source.citability !== "none",
+                    persisted,
+                    originalUrl: fullDoc?.url ?? null,
+                },
+                {
+                    onAskAbout: () => onAskAbout(source),
+                    onRename: () => {
+                        titleInputRef.current?.focus();
+                        titleInputRef.current?.select();
+                    },
+                    onOpenInNewTab: source.documentId
+                        ? () =>
+                              window.open(
+                                  `/employer/documents/viewer?docId=${source.documentId}`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                              )
+                        : undefined,
+                    onDownload: () => {
+                        if (fullDoc?.url) window.open(fullDoc.url, "_blank", "noopener,noreferrer");
+                    },
+                    onCopyLink: () => {
+                        const link = `${window.location.origin}/employer/documents?source=${encodeURIComponent(source.id)}`;
+                        void copyText(link).then(ok => {
+                            if (ok) toast.success("Link copied");
+                        });
+                    },
+                    onShowVersions: () => setSidebarTab("versions"),
+                    onShowNotes: notesAvailable ? () => setSidebarTab("notes") : undefined,
+                    onRestrictAccess: onRestrictAccess ? () => onRestrictAccess(source) : undefined,
+                    onDelete: deleteDocument,
+                }
+            ),
+    });
+
     const statusText =
         saveStatus === "saving"
             ? "Saving…"
@@ -578,6 +680,7 @@ export function DocumentViewer({
 
     return (
         <div
+            {...documentTarget}
             style={{
                 position: "fixed",
                 inset: 0,
@@ -640,6 +743,7 @@ export function DocumentViewer({
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
                         <input
+                            ref={titleInputRef}
                             value={title}
                             onChange={e => {
                                 setTitle(e.target.value);
@@ -1030,9 +1134,11 @@ export function DocumentViewer({
                                 documentId={source.documentId ? String(source.documentId) : null}
                                 versionId={activeVersionId}
                                 prefilledAnchor={pdfAnchorDraft}
+                                prefilledText={noteSeed}
                                 onChanged={() => {
                                     setNotesNonce(n => n + 1);
                                     setPdfAnchorDraft(null);
+                                    setNoteSeed(null);
                                 }}
                                 onNoteClick={({ id, page }) => {
                                     if (page !== null) setPdfScrollToNoteId(id);
@@ -1171,87 +1277,100 @@ export function DocumentViewer({
                                 {versions.map(v => {
                                     const active = v.id === activeVersionId;
                                     return (
-                                        <button
+                                        <VersionTarget
                                             key={v.id}
-                                            onClick={() => {
+                                            version={v}
+                                            reverting={reverting}
+                                            onPreview={() => {
                                                 setActiveVersionId(v.id);
                                                 if (!v.isCurrent) previewVersion(v.id);
                                             }}
-                                            style={{
-                                                width: "100%",
-                                                textAlign: "left",
-                                                padding: "10px 12px",
-                                                borderRadius: 8,
-                                                marginBottom: 2,
-                                                background: active
-                                                    ? "var(--accent-soft)"
-                                                    : "transparent",
-                                                border: "1px solid transparent",
-                                                position: "relative",
-                                            }}
-                                            onMouseEnter={e => {
-                                                if (!active)
-                                                    e.currentTarget.style.background =
-                                                        "var(--line-2)";
-                                            }}
-                                            onMouseLeave={e => {
-                                                if (!active)
-                                                    e.currentTarget.style.background =
-                                                        "transparent";
-                                            }}
+                                            onRestore={() => void restoreVersion(v.id)}
                                         >
-                                            {active && (
-                                                <div
-                                                    style={{
-                                                        position: "absolute",
-                                                        left: 0,
-                                                        top: 10,
-                                                        bottom: 10,
-                                                        width: 2,
-                                                        background: "var(--accent)",
-                                                        borderRadius: "0 2px 2px 0",
-                                                    }}
-                                                />
-                                            )}
-                                            <div
+                                            <button
+                                                onClick={() => {
+                                                    setActiveVersionId(v.id);
+                                                    if (!v.isCurrent) previewVersion(v.id);
+                                                }}
                                                 style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "space-between",
-                                                    marginBottom: 4,
+                                                    width: "100%",
+                                                    textAlign: "left",
+                                                    padding: "10px 12px",
+                                                    borderRadius: 8,
+                                                    marginBottom: 2,
+                                                    background: active
+                                                        ? "var(--accent-soft)"
+                                                        : "transparent",
+                                                    border: "1px solid transparent",
+                                                    position: "relative",
+                                                }}
+                                                onMouseEnter={e => {
+                                                    if (!active)
+                                                        e.currentTarget.style.background =
+                                                            "var(--line-2)";
+                                                }}
+                                                onMouseLeave={e => {
+                                                    if (!active)
+                                                        e.currentTarget.style.background =
+                                                            "transparent";
                                                 }}
                                             >
-                                                <span
-                                                    style={{
-                                                        fontSize: 12,
-                                                        fontWeight: 600,
-                                                        color: active
-                                                            ? "var(--accent-ink)"
-                                                            : "var(--ink)",
-                                                    }}
-                                                >
-                                                    v{v.versionNumber}
-                                                    {v.isCurrent ? " (current)" : ""}
-                                                </span>
-                                                <span
-                                                    className="mono"
-                                                    style={{ fontSize: 10, color: "var(--ink-3)" }}
-                                                >
-                                                    {humanDate(v.createdAt)}
-                                                </span>
-                                            </div>
-                                            {v.changelog && (
+                                                {active && (
+                                                    <div
+                                                        style={{
+                                                            position: "absolute",
+                                                            left: 0,
+                                                            top: 10,
+                                                            bottom: 10,
+                                                            width: 2,
+                                                            background: "var(--accent)",
+                                                            borderRadius: "0 2px 2px 0",
+                                                        }}
+                                                    />
+                                                )}
                                                 <div
                                                     style={{
-                                                        fontSize: 11,
-                                                        color: "var(--ink-3)",
-                                                        lineHeight: 1.4,
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        marginBottom: 4,
                                                     }}
                                                 >
-                                                    {v.changelog}
+                                                    <span
+                                                        style={{
+                                                            fontSize: 12,
+                                                            fontWeight: 600,
+                                                            color: active
+                                                                ? "var(--accent-ink)"
+                                                                : "var(--ink)",
+                                                        }}
+                                                    >
+                                                        v{v.versionNumber}
+                                                        {v.isCurrent ? " (current)" : ""}
+                                                    </span>
+                                                    <span
+                                                        className="mono"
+                                                        style={{
+                                                            fontSize: 10,
+                                                            color: "var(--ink-3)",
+                                                        }}
+                                                    >
+                                                        {humanDate(v.createdAt)}
+                                                    </span>
                                                 </div>
-                                            )}
-                                        </button>
+                                                {v.changelog && (
+                                                    <div
+                                                        style={{
+                                                            fontSize: 11,
+                                                            color: "var(--ink-3)",
+                                                            lineHeight: 1.4,
+                                                        }}
+                                                    >
+                                                        {v.changelog}
+                                                    </div>
+                                                )}
+                                            </button>
+                                        </VersionTarget>
                                     );
                                 })}
                                 {viewingOld && currentVersion && (

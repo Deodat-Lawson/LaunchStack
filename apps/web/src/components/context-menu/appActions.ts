@@ -29,6 +29,8 @@ export function buildAppActions(theme: {
             label: "Copy",
             icon: "copy",
             shortcut: "⌘C",
+            // After the verbs a screen adds for a selection (ask, explain…).
+            order: 50,
             appliesTo: target => target.kind === SELECTION_TARGET_KIND,
             run: async target => {
                 const sel = target.data as TextSelectionInfo;

@@ -5,7 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { useRegisterActions } from "~/components/context-menu";
-import { APP_TARGET_KIND, readClipboardText } from "~/lib/context-menu";
+import {
+    APP_TARGET_KIND,
+    SELECTION_TARGET_KIND,
+    copyText,
+    readClipboardText,
+    type ContextTarget,
+    type MenuOpenContext,
+    type TextSelectionInfo,
+} from "~/lib/context-menu";
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
@@ -24,7 +32,15 @@ import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
-import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
+import {
+    AskPanel,
+    AvatarMenu,
+    JumpToPaletteButton,
+    workspaceMainHeaderBarStyle,
+    type ComposerSeed,
+} from "./AskPanel";
+import type { DocumentTargetData } from "./documentContextMenu";
+import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -230,6 +246,8 @@ export function WorkspaceShell() {
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
     /** Clipboard contents handed to the Add dialog by "Paste to create a source". */
     const [addPrefill, setAddPrefill] = useState<{ url?: string; text?: string } | null>(null);
+    /** A passage the composer should start from — set by "Ask about this" on a selection. */
+    const [composerSeed, setComposerSeed] = useState<ComposerSeed | null>(null);
     const [palOpen, setPalOpen] = useState(false);
     const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
     const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
@@ -651,6 +669,77 @@ export function WorkspaceShell() {
         [sources, sendQuery, companyId, continuation, thread, persistTurns]
     );
 
+    const seedComposer = useCallback((text: string, mode: "append" | "replace") => {
+        setActiveFeatureId("chat");
+        setComposerSeed({ text, mode, nonce: Date.now() });
+    }, []);
+
+    /**
+     * Start a new chat that keeps the transcript up to and including `index`.
+     * The stored chat is left as it was; the next send creates the new one
+     * with these turns in front.
+     */
+    const branchFrom = useCallback(
+        (index: number) => {
+            setThread(prev => prev.slice(0, index + 1));
+            sessionIdRef.current = null;
+            hydratedSession.current = null;
+            setSessionParam(null);
+            setActiveFeatureId("chat");
+            toast.success("Branched into a new chat", {
+                description: "The turns up to here come along; the original chat is untouched.",
+            });
+        },
+        [setSessionParam]
+    );
+
+    /**
+     * Ask the question behind turn `index` again, as a new turn at the end.
+     * Appending, not replacing, keeps the screen and the stored chat the same.
+     */
+    const askAgain = useCallback(
+        (index: number, overrides: { webSearch?: boolean; thinking?: boolean } = {}) => {
+            const turn = thread[index];
+            const question =
+                turn?.role === "user"
+                    ? turn
+                    : [...thread.slice(0, index)].reverse().find(m => m.role === "user");
+            if (!question) {
+                toast.error("There is no question to ask again");
+                return;
+            }
+            void sendMessage({
+                text: question.text,
+                refs: question.refs ?? selected,
+                attachments: question.attachments ?? [],
+                webSearch: overrides.webSearch ?? composerWebSearch,
+                thinking: overrides.thinking ?? composerThinking,
+            });
+        },
+        [thread, selected, sendMessage, composerWebSearch, composerThinking]
+    );
+
+    const saveAnswerAsNote = useCallback(async (text: string) => {
+        const title =
+            text
+                .split("\n")
+                .find(line => line.trim())
+                ?.replace(/[#*_>`]/g, "")
+                .trim()
+                .slice(0, 80) ?? "Chat answer";
+        try {
+            const res = await fetch("/api/notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, contentMarkdown: text, tags: ["chat"] }),
+            });
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            toast.success("Saved to your notebook", { description: title });
+        } catch {
+            toast.error("Couldn't save that note");
+        }
+    }, []);
+
     const handleOpenSource = useCallback(
         (source: WorkspaceSource) => {
             setViewerHighlight(null);
@@ -757,6 +846,25 @@ export function WorkspaceShell() {
             closeSource();
         },
         [closeSource]
+    );
+
+    /** Send a question about a selected passage, scoped to the document it came from. */
+    const askAboutSelection = useCallback(
+        (prefix: string, target: ContextTarget, ctx: MenuOpenContext) => {
+            const home = selectionHome(ctx);
+            const quote = (target.data as TextSelectionInfo).text;
+            if (home?.kind === "document") handleAskAbout(home.source);
+            setActiveFeatureId("chat");
+            const from = home?.kind === "document" ? ` from “${home.source.title}”` : "";
+            void sendMessage({
+                text: `${prefix}${from}:\n\n${quoteBlock(quote).trimEnd()}`,
+                refs: home?.kind === "document" ? [home.source.id] : selected,
+                attachments: [],
+                webSearch: composerWebSearch,
+                thinking: composerThinking,
+            });
+        },
+        [handleAskAbout, sendMessage, selected, composerWebSearch, composerThinking]
     );
 
     const openAdd = useCallback((tabId?: string) => {
@@ -1052,6 +1160,158 @@ export function WorkspaceShell() {
         },
     ]);
 
+    // Session-level verbs on chat turns, and what a selected passage can
+    // become. The panel and the viewer declare the targets; these are the
+    // verbs that need the shell's session state to run.
+    useRegisterActions([
+        {
+            id: "chat.message.ask-again",
+            label: "Ask again",
+            icon: "retry",
+            order: 10,
+            appliesTo: target => target.kind === "chat-message",
+            disabled: () => (isSending ? "Wait for the current answer." : false),
+            children: target => {
+                const { index } = target.data as { index: number };
+                return [
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.same",
+                        label: "Ask again",
+                        icon: "retry",
+                        onSelect: () => askAgain(index),
+                    },
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.web",
+                        label: "Ask again with web search",
+                        icon: "globe",
+                        onSelect: () => askAgain(index, { webSearch: true }),
+                    },
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.think",
+                        label: "Ask again with extended thinking",
+                        icon: "brain",
+                        onSelect: () => askAgain(index, { thinking: true }),
+                    },
+                ];
+            },
+            run: () => undefined,
+        },
+        {
+            id: "chat.message.branch",
+            label: "Branch a new chat from here",
+            icon: "branch",
+            order: 11,
+            appliesTo: target =>
+                target.kind === "chat-message" || target.kind === "chat-user-message",
+            run: target => branchFrom((target.data as { index: number }).index),
+        },
+        {
+            id: "chat.message.save-note",
+            label: "Save answer as a note",
+            icon: "note",
+            order: 12,
+            appliesTo: target => target.kind === "chat-message",
+            run: target => saveAnswerAsNote((target.data as { msg: ThreadMessage }).msg.text),
+        },
+        {
+            id: "chat.message.save-source",
+            label: "Save answer as a source",
+            icon: "plus",
+            order: 13,
+            appliesTo: target => target.kind === "chat-message",
+            run: target => {
+                setAddPrefill({ text: (target.data as { msg: ThreadMessage }).msg.text });
+                openAdd("paste");
+            },
+        },
+        {
+            id: "chat.save-transcript-source",
+            label: "Save transcript as a source",
+            icon: "plus",
+            order: 10,
+            appliesTo: target => target.kind === "chat",
+            disabled: target =>
+                (target.data as { thread: ThreadMessage[] }).thread.length === 0
+                    ? "Nothing to save yet."
+                    : false,
+            run: target => {
+                const data = target.data as { thread: ThreadMessage[]; sources: WorkspaceSource[] };
+                setAddPrefill({ text: transcriptMarkdown(data.thread, data.sources) });
+                openAdd("paste");
+            },
+        },
+        {
+            id: "selection.ask",
+            label: "Ask about this",
+            icon: "ask",
+            order: 0,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind === "document") handleAskAbout(home.source);
+                seedComposer(quoteBlock((target.data as TextSelectionInfo).text), "append");
+            },
+        },
+        {
+            id: "selection.explain",
+            label: "Explain this",
+            icon: "explain",
+            order: 1,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => askAboutSelection("Explain this passage", target, ctx),
+        },
+        {
+            id: "selection.summarise",
+            label: "Summarise this",
+            icon: "transcript",
+            order: 2,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => askAboutSelection("Summarise this passage", target, ctx),
+        },
+        {
+            id: "selection.copy-cited",
+            label: "Copy with citation",
+            icon: "quote",
+            order: 3,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx)?.kind === "document",
+            run: async (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind !== "document") return;
+                const text = citationWithSource(
+                    (target.data as TextSelectionInfo).text,
+                    home.source
+                );
+                if (await copyText(text)) toast.success("Copied with citation");
+            },
+        },
+        {
+            id: "selection.note",
+            label: "Add a note with this",
+            icon: "note",
+            order: 4,
+            appliesTo: (target, ctx) => {
+                const home = selectionHome(ctx);
+                return (
+                    target.kind === SELECTION_TARGET_KIND &&
+                    home?.kind === "document" &&
+                    Boolean(home.addNote)
+                );
+            },
+            run: (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind === "document")
+                    home.addNote?.((target.data as TextSelectionInfo).text);
+            },
+        },
+    ]);
+
     // Keyboard shortcuts
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
@@ -1244,6 +1504,8 @@ export function WorkspaceShell() {
                     sendMessage={sendMessage}
                     isSending={isSending}
                     onOpenCitation={handleOpenCitation}
+                    onOpenSource={handleOpenSource}
+                    composerSeed={composerSeed}
                     onOpenAdd={() => setAddOpen(true)}
                     onNewChat={startNewChat}
                     openPalette={() => setPalOpen(true)}
@@ -1553,4 +1815,26 @@ function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; b
         title: `Delete ${targets.length} sources?`,
         body: `${parts.join("; ")}.`,
     };
+}
+
+type SelectionHome =
+    | { kind: "document"; source: WorkspaceSource; addNote?: (text: string) => void }
+    | { kind: "chat" };
+
+/** Where a text selection lives — the open document, or the chat — read off the target chain. */
+function selectionHome(ctx: MenuOpenContext): SelectionHome | null {
+    for (const target of ctx.chain) {
+        if (target.kind === "document") {
+            const data = target.data as DocumentTargetData;
+            return { kind: "document", source: data.source, addNote: data.addNote };
+        }
+        if (
+            target.kind === "chat-message" ||
+            target.kind === "chat-user-message" ||
+            target.kind === "chat"
+        ) {
+            return { kind: "chat" };
+        }
+    }
+    return null;
 }

@@ -1,5 +1,10 @@
 import { tidyMenuItems, type ActionMenuItem } from "~/components/ui/action-menu";
-import { APP_TARGET_KIND, type ActionDefinition, type ContextTarget, type MenuOpenContext } from "./types";
+import {
+    APP_TARGET_KIND,
+    type ActionDefinition,
+    type ContextTarget,
+    type MenuOpenContext,
+} from "./types";
 
 /**
  * Pure composition: a chain of targets plus the registered actions become one
@@ -76,7 +81,11 @@ export function actionItems(
     return [...normal, { type: "separator", id: `sep-${target.kind}-danger` }, ...danger];
 }
 
-function safeApplies(action: ActionDefinition, target: ContextTarget, ctx: MenuOpenContext): boolean {
+function safeApplies(
+    action: ActionDefinition,
+    target: ContextTarget,
+    ctx: MenuOpenContext
+): boolean {
     try {
         return action.appliesTo(target, ctx);
     } catch {
@@ -90,7 +99,9 @@ export function toItem(
     ctx: MenuOpenContext
 ): ActionMenuItem {
     const label = typeof action.label === "function" ? action.label(target, ctx) : action.label;
-    const reason = action.disabled?.(target, ctx) || undefined;
+    // `false` and "" both mean "enabled" — only a non-empty string is a reason.
+    const verdict = action.disabled?.(target, ctx);
+    const reason = typeof verdict === "string" && verdict.length > 0 ? verdict : undefined;
     if (action.children) {
         return {
             type: "submenu",

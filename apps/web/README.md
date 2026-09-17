@@ -69,8 +69,8 @@ hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
 Most features are a page and a few components. Two are large enough to document
 themselves — read the local README before changing them:
 
-| Area                          | README                               |
-| ----------------------------- | ------------------------------------ |
+| Area                                                                       | README                                          |
+| -------------------------------------------------------------------------- | ----------------------------------------------- |
 | Mindmap (the diagramming editor, a source type of the Documents workspace) | `src/app/employer/documents/_mindmap/README.md` |
 
 Mindmap is the one place in `apps/web` where **colours are deliberately not
@@ -78,6 +78,35 @@ design tokens**: shape fills live inside the saved document, so they are literal
 OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
 changes theme and silently alter someone else's diagram. Its editor chrome uses
 the tokens like everything else.
+
+## Right-click menus
+
+Every screen shares one context-menu layer; nothing hand-rolls a menu.
+
+- **Declare what an element is** with `useContextTarget` from
+  `~/components/context-menu` and spread the result on the element. The
+  descriptor's `items` builder runs when the menu opens, so it sees current
+  props. For markup rendered inside a `.map` (a `<tr>`, a card) wrap it in
+  `<ContextTarget>` instead, or give the row its own component.
+- **Keep the items pure.** Builders live beside the surface
+  (`sourceContextMenu.ts`, `chatContextMenu.ts`, `partnerContextMenu.ts`…),
+  take the object plus a handlers bag, and return `ActionMenuItem[]` — so
+  the action set is unit-tested without a portal.
+- **Verbs that need session state** register with `useRegisterActions`
+  and pick their targets with `appliesTo`; the resolver merges them under
+  the target's own items. App-level actions (`kind === "app"`) are also the
+  ⌘K palette's "Actions" group — nothing is reachable by right-click alone.
+- **Text selections and links** are overlays: register actions for
+  `selection` / `link`, and read where the selection lives off `ctx.chain`.
+- **What stays native:** Shift+right-click always; inputs and textareas
+  unless the target sets `editable: true`; any right-click nothing resolves.
+- **"⋯" buttons** open the same menu through `useActionMenu().open(...)`.
+
+The primitive is `~/components/ui/action-menu` (`ActionMenu`, item model,
+lucide icon map, placement math); the policy is `~/lib/context-menu`
+(resolver, registry, target store, telemetry). The mindmap canvas builds
+its menu the same way; its swatch colours are document data (see its
+README) and use the item's `swatch`, not a token.
 
 ## The migration boundary rule
 

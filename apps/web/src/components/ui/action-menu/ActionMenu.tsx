@@ -216,11 +216,11 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
         items,
         left,
         top,
-        activeId,
-        openSubmenuId,
+        activeId: activeIdProp,
+        openSubmenuId: openSubmenuIdProp,
         labelledBy,
         ariaLabel,
-        onHover,
+        onHover: onHoverProp,
         onActivate,
         onKeyDown,
         parentPos,
@@ -230,6 +230,33 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
 ) {
     const submenuTimer = useRef<number | null>(null);
     const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    // A nested panel runs its own hover state, so a submenu can open a
+    // submenu of its own (the mindmap's shape categories) without the root
+    // layer knowing the tree's depth.
+    const [ownActiveId, setOwnActiveId] = useState<string | null>(null);
+    const [ownSubmenuId, setOwnSubmenuId] = useState<string | null>(null);
+    const activeId = nested ? ownActiveId : activeIdProp;
+    const openSubmenuId = nested ? ownSubmenuId : openSubmenuIdProp;
+    const onHover = nested
+        ? (id: string | null, item: ActionMenuItem | null) => {
+              setOwnActiveId(id);
+              if (item?.type === "submenu" && !item.disabled) setOwnSubmenuId(item.id);
+              else if (item?.type === "item") setOwnSubmenuId(null);
+          }
+        : onHoverProp;
+    // Picking a submenu row in a nested panel opens it here; a leaf pick
+    // climbs to the root layer, which runs it and closes everything.
+    const activate = nested
+        ? (item: ActionMenuItem) => {
+              if (item.type === "submenu") {
+                  if (item.disabled) return;
+                  setOwnActiveId(item.id);
+                  setOwnSubmenuId(item.id);
+                  return;
+              }
+              onActivate(item);
+          }
+        : onActivate;
 
     useEffect(() => {
         return () => {
@@ -307,7 +334,17 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                     const disabled = Boolean(item.disabled);
                     const danger = item.type === "item" && item.danger;
                     const active = item.id === activeId && !disabled;
-                    const icon = iconFor(item.icon);
+                    const icon =
+                        item.type === "item" && item.swatch ? (
+                            <span
+                                className={styles.swatch}
+                                // Document data, not a token: see the item type.
+                                style={{ background: item.swatch }}
+                                aria-hidden
+                            />
+                        ) : (
+                            iconFor(item.icon)
+                        );
                     const itemClass = [
                         styles.item,
                         active ? styles.itemActive : "",
@@ -356,7 +393,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                             onClick={e => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                onActivate(item);
+                                activate(item);
                             }}
                             className={itemClass}
                         >
@@ -388,7 +425,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                     openSubmenuId={null}
                     ariaLabel={openSubmenu.label}
                     onHover={() => undefined}
-                    onActivate={onActivate}
+                    onActivate={activate}
                     parentPos={submenuPos}
                 />
             )}

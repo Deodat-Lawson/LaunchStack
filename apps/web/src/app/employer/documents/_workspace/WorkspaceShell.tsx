@@ -1148,6 +1148,8 @@ export function WorkspaceShell() {
             icon: "command",
             shortcut: "⌘K",
             order: 3,
+            // The palette does not list a way to open itself.
+            palette: false,
             appliesTo: target => target.kind === APP_TARGET_KIND,
             run: () => setPalOpen(true),
         },
@@ -1498,6 +1500,12 @@ export function WorkspaceShell() {
                         mindmapId={viewerSource.mindmapId}
                         onBack={() => openSource(viewerSource.id)}
                         onChanged={() => void refresh()}
+                        onAskAboutNode={text => {
+                            // Pin the map, leave the editor, and start the
+                            // question from the topic's text.
+                            handleAskAbout(viewerSource);
+                            seedComposer(quoteBlock(text), "append");
+                        }}
                     />
                 </main>
             ) : activeFeatureId === "chat" ? (
@@ -1622,10 +1630,6 @@ export function WorkspaceShell() {
                 open={palOpen}
                 onClose={() => setPalOpen(false)}
                 sources={sources}
-                onOpenAdd={() => {
-                    setPalOpen(false);
-                    setTimeout(() => setAddOpen(true), 100);
-                }}
                 onPickSource={id => {
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
                 }}

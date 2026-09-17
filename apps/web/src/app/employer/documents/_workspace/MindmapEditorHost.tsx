@@ -29,8 +29,11 @@ export function MindmapEditorHost({
     mindmapId,
     onBack,
     onChanged,
+    onAskAboutNode,
 }: {
     mindmapId: number;
+    /** "Ask about this in chat" on a topic — see MindmapEditor. */
+    onAskAboutNode?: (text: string) => void;
     /** Leave the editor. */
     onBack: () => void;
     /**
@@ -106,6 +109,7 @@ export function MindmapEditorHost({
             publishedDocumentId={state.mindmap.publishedDocumentId}
             author={author}
             onBack={onBack}
+            onAskAboutNode={onAskAboutNode}
         />
     );
 }

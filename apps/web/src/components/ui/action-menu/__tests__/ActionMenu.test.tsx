@@ -98,3 +98,50 @@ describe("ActionMenu", () => {
         expect(onClose).not.toHaveBeenCalled();
     });
 });
+
+describe("ActionMenu submenus", () => {
+    it("opens a submenu inside a submenu on hover, and runs its pick", async () => {
+        const user = userEvent.setup();
+        const onPick = jest.fn();
+        const onClose = jest.fn();
+        render(
+            <ActionMenu
+                open
+                x={10}
+                y={10}
+                onClose={onClose}
+                items={[
+                    {
+                        type: "submenu",
+                        id: "shape",
+                        label: "Change shape",
+                        items: [
+                            {
+                                type: "submenu",
+                                id: "nodes",
+                                label: "Nodes",
+                                items: [
+                                    { type: "item", id: "topic", label: "Topic", onSelect: onPick },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        type: "item",
+                        id: "swatched",
+                        label: "Slate",
+                        swatch: "oklch(0.6 0.02 280)",
+                        onSelect: jest.fn(),
+                    },
+                ]}
+            />
+        );
+        await user.hover(screen.getByTestId("context-menu-item-shape"));
+        await user.click(screen.getByTestId("context-menu-item-shape"));
+        await user.hover(await screen.findByTestId("context-menu-item-nodes"));
+        await user.click(screen.getByTestId("context-menu-item-nodes"));
+        await user.click(await screen.findByTestId("context-menu-item-topic"));
+        expect(onPick).toHaveBeenCalledTimes(1);
+        expect(onClose).toHaveBeenCalledTimes(1);
+    });
+});

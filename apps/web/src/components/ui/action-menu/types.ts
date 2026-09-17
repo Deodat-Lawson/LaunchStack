@@ -25,6 +25,11 @@ export type ActionMenuItem =
           checked?: boolean;
           shortcut?: string;
           icon?: ActionMenuIconName;
+          /**
+           * A colour dot in place of the icon — for palettes whose colours
+           * are document data, not tokens (the mindmap's swatches).
+           */
+          swatch?: string;
           onSelect: () => void;
       }
     | {

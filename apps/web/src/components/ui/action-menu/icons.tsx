@@ -58,6 +58,7 @@ import {
     Search,
     Send,
     Settings,
+    Shapes,
     ShieldCheck,
     Sparkles,
     Square,
@@ -138,6 +139,7 @@ export const ACTION_MENU_ICONS = {
     translate: Languages,
     transcript: ScrollText,
     mindmap: Workflow,
+    shapes: Shapes,
     // Organising and status.
     star: Star,
     pin: Pin,

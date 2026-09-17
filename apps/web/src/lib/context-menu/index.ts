@@ -24,3 +24,4 @@ export { getAction, listActions, registerActions, resetActionsForTests } from ".
 export { actionItems, resolveMenu, toItem } from "./resolve";
 export { isEditableElement, linkAt, textSelectionAt } from "./dom";
 export { copyText, readClipboardText } from "./clipboard";
+export { recordedContextMenuEvents, trackContextMenuEvent } from "./telemetry";

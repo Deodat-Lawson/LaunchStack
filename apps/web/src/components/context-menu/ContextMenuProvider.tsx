@@ -23,6 +23,7 @@ import {
     resolveMenu,
     targetChainFor,
     textSelectionAt,
+    trackContextMenuEvent,
     type ContextMenuEvent,
     type ContextTarget,
     type MenuOpenContext,
@@ -97,7 +98,11 @@ export function useOptionalActionMenu(): ActionMenuApi | null {
 
 export interface ContextMenuProviderProps {
     children: ReactNode;
-    /** Sink for open / pick / dismiss events. Nothing is recorded without one. */
+    /**
+     * Sink for open / pick / dismiss events. Without one, events go to the
+     * default tracker (`trackContextMenuEvent`): a ring buffer on `window`,
+     * and Vercel Web Analytics where its script is loaded.
+     */
     onEvent?: (event: ContextMenuEvent) => void;
 }
 
@@ -108,7 +113,10 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
     const pickedRef = useRef(false);
     const onEventRef = useRef(onEvent);
     onEventRef.current = onEvent;
-    const emit = useCallback((event: ContextMenuEvent) => onEventRef.current?.(event), []);
+    const emit = useCallback(
+        (event: ContextMenuEvent) => (onEventRef.current ?? trackContextMenuEvent)(event),
+        []
+    );
 
     const { theme, setTheme } = useTheme();
     useRegisterActions(

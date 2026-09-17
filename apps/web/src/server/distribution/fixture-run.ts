@@ -44,29 +44,32 @@ export async function runFixtureDistribution(args: FixtureRunArgs): Promise<RunS
     const program = await getProgram(args.programId, args.companyId);
     if (!program) throw new Error("Program not found");
 
-    const publishDossier = args.skipPublish
-        ? null
-        : async (input: PublishDossierInput) => {
-              const stored = await uploadFile({
-                  filename: input.filename,
-                  data: Buffer.from(input.markdown, "utf8"),
-                  contentType: "text/markdown",
-                  userId: args.userId,
-                  companyId: args.companyId,
-              });
-              const upload = await processDocumentUpload({
-                  user: { userId: args.userId, companyId: args.companyId },
-                  documentName: `[Sample] ${input.title}`,
-                  rawDocumentUrl: stored.url,
-                  creationKey: input.creationKey,
-                  category: FIXTURE_SOURCES_FOLDER,
-                  explicitStorageType: stored.provider,
-                  mimeType: "text/markdown",
-                  originalFilename: input.filename,
-                  requestUrl: args.requestUrl,
-              });
-              return { documentId: upload.document.id };
-          };
+    // Publishing needs the ingestion pipeline's file token; without it the
+    // rows are kept and only the document is skipped (a dev machine, CI).
+    const publishDossier =
+        args.skipPublish || !process.env.FILE_ACCESS_TOKEN_SECRET
+            ? null
+            : async (input: PublishDossierInput) => {
+                  const stored = await uploadFile({
+                      filename: input.filename,
+                      data: Buffer.from(input.markdown, "utf8"),
+                      contentType: "text/markdown",
+                      userId: args.userId,
+                      companyId: args.companyId,
+                  });
+                  const upload = await processDocumentUpload({
+                      user: { userId: args.userId, companyId: args.companyId },
+                      documentName: `[Sample] ${input.title}`,
+                      rawDocumentUrl: stored.url,
+                      creationKey: input.creationKey,
+                      category: FIXTURE_SOURCES_FOLDER,
+                      explicitStorageType: stored.provider,
+                      mimeType: "text/markdown",
+                      originalFilename: input.filename,
+                      requestUrl: args.requestUrl,
+                  });
+                  return { documentId: upload.document.id };
+              };
 
     const ports = createFixturePorts({
         category: program.categories[0] ?? program.offering.slice(0, 40),

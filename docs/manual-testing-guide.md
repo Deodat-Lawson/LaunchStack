@@ -273,8 +273,9 @@ their switches are locked.
 **Run modes.** Find companies picks the mode from the environment:
 
 - **Keyless** (no model or search key configured, which is every fresh dev
-  setup): OpenStreetMap and the Y Combinator directory find organisations
-  with a website in each territory; each site is read by the page profiler
+  setup): OpenStreetMap (Photon category search plus the OSM API, then
+  Overpass, then Nominatim by native-language names) and the Y Combinator
+  directory find organisations with a website in each territory; each site is read by the page profiler
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,
   certifications, public mailboxes — and assembles the dossier. It runs in
@@ -284,6 +285,10 @@ their switches are locked.
 - **Live** (a model key plus Exa, Serper or Foursquare): queued to the
   worker; the research agent profiles each company. Needs credits.
 - **Sample** (the switch on Runs): deterministic fixtures, inline, seconds.
+
+Profiles are published into Sources only when `FILE_ACCESS_TOKEN_SECRET` is
+set (the ingestion pipeline needs it); without it every row is kept and the
+document is skipped, with one warning in the server log.
 
 The run's `caps` line and the Sources yield labels say which mode produced
 it ("OpenStreetMap" and "Public directories (YC)" for keyless; "Sample …" for

@@ -32,33 +32,47 @@ export interface KeylessRunArgs {
     skipPublish?: boolean;
 }
 
+/**
+ * Profiles are published into Sources through the ingestion pipeline, which
+ * needs FILE_ACCESS_TOKEN_SECRET to read database-backed uploads. A dev
+ * environment without it keeps every row and skips only the document.
+ */
+export function canPublishToSources(): boolean {
+    return Boolean(process.env.FILE_ACCESS_TOKEN_SECRET);
+}
+
 export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSummary> {
     const program = await getProgram(args.programId, args.companyId);
     if (!program) throw new Error("Segment not found");
 
-    const publishDossier = args.skipPublish
-        ? null
-        : async (input: PublishDossierInput) => {
-              const stored = await uploadFile({
-                  filename: input.filename,
-                  data: Buffer.from(input.markdown, "utf8"),
-                  contentType: "text/markdown",
-                  userId: args.userId,
-                  companyId: args.companyId,
-              });
-              const upload = await processDocumentUpload({
-                  user: { userId: args.userId, companyId: args.companyId },
-                  documentName: input.title,
-                  rawDocumentUrl: stored.url,
-                  creationKey: input.creationKey,
-                  category: `Prospects / ${program.name}`,
-                  explicitStorageType: stored.provider,
-                  mimeType: "text/markdown",
-                  originalFilename: input.filename,
-                  requestUrl: args.requestUrl,
-              });
-              return { documentId: upload.document.id };
-          };
+    if (!args.skipPublish && !canPublishToSources())
+        console.warn(
+            "[prospects] FILE_ACCESS_TOKEN_SECRET is not set; profiles stay in the database and are not published into Sources."
+        );
+    const publishDossier =
+        args.skipPublish || !canPublishToSources()
+            ? null
+            : async (input: PublishDossierInput) => {
+                  const stored = await uploadFile({
+                      filename: input.filename,
+                      data: Buffer.from(input.markdown, "utf8"),
+                      contentType: "text/markdown",
+                      userId: args.userId,
+                      companyId: args.companyId,
+                  });
+                  const upload = await processDocumentUpload({
+                      user: { userId: args.userId, companyId: args.companyId },
+                      documentName: input.title,
+                      rawDocumentUrl: stored.url,
+                      creationKey: input.creationKey,
+                      category: `Prospects / ${program.name}`,
+                      explicitStorageType: stored.provider,
+                      mimeType: "text/markdown",
+                      originalFilename: input.filename,
+                      requestUrl: args.requestUrl,
+                  });
+                  return { documentId: upload.document.id };
+              };
 
     const ports = createKeylessPorts({ publishDossier, debitCredits: null });
     return runDistributionPipeline(

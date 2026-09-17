@@ -541,6 +541,13 @@ describe("page profiler", () => {
         expect(facts.countries.map(c => c.code).sort()).toEqual(["BE", "NL"]);
         expect(extractFacts(about).staff).toMatchObject({ count: 45, band: "small" });
         expect(firstDescription("Accept all cookies. Log in. Short.", null)).toBeNull();
+        expect(
+            firstDescription(
+                "<!doctype html> Interactive Map Found 156 coffeeshops Open Now Sort by: Highest Rated Nearest Newest. Home Shop Wholesale Blog Contact Careers Press Partners Locations. Harar Coffee is a family-run roastery in Amsterdam that imports green beans directly from Ethiopian cooperatives and roasts them weekly for cafés across the Netherlands. Sign up for our newsletter to get 10% off.",
+                null,
+                "Harar Coffee"
+            )
+        ).toMatch(/^Harar Coffee is a family-run roastery/);
         expect(countriesMentioned("Ships to the UK and Deutschland")).toEqual(
             expect.arrayContaining(["DE", "GB"])
         );

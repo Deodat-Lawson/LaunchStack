@@ -263,11 +263,14 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
 
     const fresh = live.filter(r => r.isNew).sort((a, b) => (b.fit ?? -1) - (a.fit ?? -1));
     const freshHigh = fresh.filter(r => (r.fit ?? 0) >= FIT_THRESHOLD);
-    if (freshHigh.length > 0)
+    // Keyless profiles rarely clear the live threshold (no brands, no known
+    // signal), so a run that found companies still puts them in front of you.
+    const toReview = freshHigh.length > 0 ? freshHigh : fresh;
+    if (toReview.length > 0)
         todo.push({
             id: "review-new",
-            title: `Review ${freshHigh.length} new high-fit ${freshHigh.length === 1 ? "company" : "companies"} from the last run`,
-            detail: freshHigh
+            title: `Review ${toReview.length} new ${freshHigh.length > 0 ? "high-fit " : ""}${toReview.length === 1 ? "company" : "companies"} from the last run`,
+            detail: toReview
                 .slice(0, 3)
                 .map(r => r.name)
                 .join(", "),

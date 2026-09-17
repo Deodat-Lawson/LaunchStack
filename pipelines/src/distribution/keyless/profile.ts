@@ -91,23 +91,48 @@ function snippet(text: string, index: number, length: number, radius = 70): stri
 }
 
 function cleanText(text: string): string {
-    return text.replace(/\s+/g, " ").trim();
+    return text
+        .replace(/<!--[\s\S]*?-->/g, " ")
+        .replace(/<[^>]{0,200}>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 }
 
-/** The first sentence-like run of text that reads like a description rather than navigation. */
-export function firstDescription(text: string, title: string | null): string | null {
+const SELF_WORDS =
+    /\b(we|our|us|wij|onze|ons|wir|unser|unsere|nous|notre|nos|nuestro|nuestra|somos|is een|is a|is an|ist ein|est une?)\b/i;
+const JUNK =
+    /cookie|privacy|javascript|accept all|log ?in|sign ?in|\bmenu\b|©|sort by|filter|found \d+|read more|lees meer|mehr lesen|click here|subscribe|newsletter|add to cart|in winkelwagen|skip to/i;
+
+/**
+ * The sentence that best reads as a self-description rather than navigation:
+ * long enough, mostly lower-case prose, no markup remnants, ideally saying
+ * "we are" or naming the organisation.
+ */
+export function firstDescription(
+    text: string,
+    title: string | null,
+    orgName?: string
+): string | null {
     const clean = cleanText(text);
     const candidates = clean.split(/(?<=[.!?])\s+/).map(s => s.trim());
+    let best: { sentence: string; score: number } | null = null;
     for (const sentence of candidates) {
-        const words = sentence.split(" ");
         if (sentence.length < 60 || sentence.length > 320) continue;
+        const words = sentence.split(" ");
         if (words.length < 8) continue;
-        if (/cookie|privacy|javascript|accept all|log ?in|sign ?in|menu|©/i.test(sentence))
-            continue;
+        if (/[<>{}|]/.test(sentence) || JUNK.test(sentence)) continue;
         if (title && sentence.toLowerCase() === title.toLowerCase()) continue;
-        return sentence;
+        const capitalised = words.filter(w => /^[A-Z]/.test(w)).length / words.length;
+        if (capitalised > 0.5) continue;
+        let score = 0;
+        if (SELF_WORDS.test(sentence)) score += 2;
+        if (orgName && sentence.toLowerCase().includes(orgName.toLowerCase().split(" ")[0]!))
+            score += 1;
+        if (sentence.length >= 90 && sentence.length <= 260) score += 1;
+        if (!best || score > best.score) best = { sentence, score };
+        if (best.score >= 4) break;
     }
-    return null;
+    return best?.sentence ?? null;
 }
 
 function bandFor(count: number): Dossier["sizeBand"] {
@@ -118,7 +143,10 @@ function bandFor(count: number): Dossier["sizeBand"] {
 }
 
 /** Pure extraction from a page's text, exported for tests. */
-export function extractFacts(page: Pick<ReadablePage, "text" | "title">): ExtractedFacts {
+export function extractFacts(
+    page: Pick<ReadablePage, "text" | "title">,
+    orgName?: string
+): ExtractedFacts {
     const text = cleanText(page.text);
     const emails = [...new Set([...text.matchAll(EMAIL_RE)].map(m => m[0].toLowerCase()))].filter(
         e => !/\.(png|jpg|jpeg|gif|svg|webp|css|js)$/i.test(e) && !/example\.com$/i.test(e)
@@ -157,7 +185,7 @@ export function extractFacts(page: Pick<ReadablePage, "text" | "title">): Extrac
         return { code, quote: at >= 0 ? snippet(text, at, name.length) : name };
     });
     return {
-        description: firstDescription(text, page.title),
+        description: firstDescription(text, page.title, orgName),
         emails: emails.slice(0, 6),
         staff,
         certifications: certifications.slice(0, 6),
@@ -279,7 +307,7 @@ export async function profileFromPages(
         return id;
     };
 
-    const facts = pages.map(p => ({ page: p, facts: extractFacts(p) }));
+    const facts = pages.map(p => ({ page: p, facts: extractFacts(p, input.org.name) }));
     const first = facts[0]!;
     const description =
         facts.map(f => f.facts.description).find((d): d is string => Boolean(d)) ?? null;

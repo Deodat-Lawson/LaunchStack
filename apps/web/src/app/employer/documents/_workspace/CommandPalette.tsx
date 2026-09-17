@@ -4,15 +4,56 @@ import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState }
 import { useRouter } from "next/navigation";
 import { searchSettings } from "~/lib/settings/registry";
 import { useSettingValue } from "~/lib/settings/useSettings";
-import { Settings } from "lucide-react";
-import { IconPlus, IconSearch, type IconProps } from "./icons";
+import { Command as CommandIcon, Settings } from "lucide-react";
+import { IconSearch, type IconProps } from "./icons";
+import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
+import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
+
+/**
+ * The palette's "Actions" group is the action registry, flattened: every
+ * app-level verb the context menu offers on empty space is here too, and a
+ * submenu (Theme) becomes one row per choice. That is the rule that keeps
+ * right-click honest — nothing lives in a context menu alone.
+ */
+function registryPaletteItems(onClose: () => void): PaletteItem[] {
+    const ctx = {
+        x: 0,
+        y: 0,
+        via: "keyboard" as const,
+        chain: [{ kind: APP_TARGET_KIND }],
+        selection: null,
+        element: null,
+    };
+    const actions = listActions().filter(action => action.palette !== false);
+    const rows: PaletteItem[] = [];
+    const push = (item: ActionMenuItem, prefix?: string) => {
+        if (item.type === "submenu") {
+            item.items.forEach(child => push(child, item.label));
+            return;
+        }
+        if (item.type !== "item" || item.disabled) return;
+        const Icon = item.icon ? ACTION_MENU_ICONS[item.icon] : CommandIcon;
+        rows.push({
+            kind: "action",
+            id: `registry:${item.id}`,
+            label: prefix ? `${prefix}: ${item.label}` : item.label,
+            sub: item.shortcut ? `Action · ${item.shortcut}` : "Action",
+            Icon: Icon as unknown as ComponentType<IconProps>,
+            onRun: () => {
+                onClose();
+                item.onSelect();
+            },
+        });
+    };
+    actionItems(ctx.chain[0]!, ctx, actions).forEach(item => push(item));
+    return rows;
+}
 
 export interface CommandPaletteProps {
     open: boolean;
     onClose: () => void;
     sources: WorkspaceSource[];
-    onOpenAdd: () => void;
     onPickSource: (id: string) => void;
     /** If provided, feature rows open Studio with this id instead of hard-navigating. */
     onPickFeature?: (featureId: string) => void;
@@ -35,7 +76,6 @@ export function CommandPalette({
     open,
     onClose,
     sources,
-    onOpenAdd,
     onPickSource,
     onPickFeature,
     onPickSetting,
@@ -63,15 +103,9 @@ export function CommandPalette({
     );
 
     const items = useMemo<PaletteItem[]>(() => {
-        const base: PaletteItem[] = [];
-        base.push({
-            kind: "action",
-            id: "add",
-            label: "Add a new source",
-            sub: "Files, folder, audio, connect…",
-            Icon: IconPlus,
-            onRun: onOpenAdd,
-        });
+        // The registry is read when the palette opens, so it reflects what is
+        // mounted right now; `open` is in the deps for that reason.
+        const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps).forEach(f =>
             base.push({
                 kind: "feature",
@@ -123,8 +157,9 @@ export function CommandPalette({
         return matched;
     }, [
         q,
+        open,
+        onClose,
         sources,
-        onOpenAdd,
         onPickSource,
         onPickFeature,
         onPickSetting,

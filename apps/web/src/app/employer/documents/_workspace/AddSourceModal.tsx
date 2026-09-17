@@ -75,6 +75,10 @@ export interface AddSourceModalProps {
      * rather than dropping them on Files first.
      */
     initialTab?: string;
+    /** Prefill for the URL tab — "paste to create a source" with a link on the clipboard. */
+    initialUrl?: string;
+    /** Prefill for the Paste tab — the clipboard's text. */
+    initialText?: string;
     /**
      * A mindmap was created. The workspace opens it in place; without a
      * handler the panel navigates to the workspace itself.
@@ -209,6 +213,8 @@ export function AddSourceModal({
     onUploaded,
     onCreateFolder,
     initialTab,
+    initialUrl,
+    initialText,
     onMindmapCreated,
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
@@ -299,9 +305,23 @@ export function AddSourceModal({
             <FilesPanel kind={tab} userId={userId} category={folder} onUploaded={handleUploaded} />
         );
     } else if (tab === "paste") {
-        panel = <PastePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+        panel = (
+            <PastePanel
+                userId={userId}
+                category={folder}
+                onUploaded={handleUploaded}
+                initialText={initialText}
+            />
+        );
     } else if (tab === "url") {
-        panel = <UrlPanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+        panel = (
+            <UrlPanel
+                userId={userId}
+                category={folder}
+                onUploaded={handleUploaded}
+                initialUrl={initialUrl}
+            />
+        );
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
@@ -1611,11 +1631,16 @@ interface TextPanelProps {
     userId: string | null;
     category: string;
     onUploaded: () => void;
+    initialText?: string;
+    initialUrl?: string;
 }
 
-function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
+function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProps) {
     const [title, setTitle] = useState("");
-    const [text, setText] = useState("");
+    const [text, setText] = useState(initialText ?? "");
+    useEffect(() => {
+        if (initialText) setText(initialText);
+    }, [initialText]);
     const [busy, setBusy] = useState(false);
 
     const submit = async () => {
@@ -1731,8 +1756,11 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
 // URL panel → /api/upload/website
 // ---------------------------------------------------------------------------
 
-function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
-    const [url, setUrl] = useState("");
+function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) {
+    const [url, setUrl] = useState(initialUrl ?? "");
+    useEffect(() => {
+        if (initialUrl) setUrl(initialUrl);
+    }, [initialUrl]);
     const [busy, setBusy] = useState(false);
 
     const submit = async () => {

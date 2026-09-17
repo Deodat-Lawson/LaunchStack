@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import "@uploadthing/react/styles.css";
 import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
+import { ContextMenuProvider } from "~/components/context-menu";
 
 import { type Metadata } from "next";
 import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
@@ -48,7 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         >
             <body suppressHydrationWarning>
                 <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-                    {children}
+                    <ContextMenuProvider>{children}</ContextMenuProvider>
                     <CloudAnalytics />
                 </ThemeProvider>
             </body>

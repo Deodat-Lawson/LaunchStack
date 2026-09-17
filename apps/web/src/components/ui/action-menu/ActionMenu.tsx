@@ -11,99 +11,49 @@ import {
     useState,
     type KeyboardEvent as ReactKeyboardEvent,
     type MouseEvent as ReactMouseEvent,
-    type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-    IconCheck,
-    IconChevronRight,
-    IconCopy,
-    IconEye,
-    IconFolder,
-    IconPen,
-    IconPlus,
-    IconSparkle,
-    IconTrash,
-} from "./icons";
-import { Lock, Users } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { iconFor } from "./icons";
 import { placeMenu, placeSubmenu } from "./placeMenu";
-import type { SourceContextMenuItem } from "./sourceContextMenu";
-import styles from "./ContextMenu.module.css";
+import { actionableItems, type ActionMenuItem } from "./types";
+import styles from "./ActionMenu.module.css";
 
-export type { SourceContextMenuItem };
-
-export interface ContextMenuProps {
+/**
+ * The one floating menu. Controlled: the caller decides when it is open and
+ * where, and hands it a list of `ActionMenuItem`s. Used by right-click, by
+ * "⋯" buttons, and by the keyboard (Shift+F10) — all three land here so
+ * placement, focus, submenus and dismissal behave identically.
+ */
+export interface ActionMenuProps {
     open: boolean;
     x: number;
     y: number;
-    items: SourceContextMenuItem[];
+    items: ActionMenuItem[];
     onClose: () => void;
     ariaLabel?: string;
 }
 
-type MenuIconName = NonNullable<
-    Extract<SourceContextMenuItem, { type: "item" | "submenu" }>["icon"]
->;
-
-/** Mirrors `min-width` in ContextMenu.module.css; used for submenu placement math. */
+/** Mirrors `min-width` in ActionMenu.module.css; used for submenu placement math. */
 const MENU_MIN_WIDTH = 228;
 const SUBMENU_OPEN_DELAY_MS = 120;
 
-function iconFor(name: MenuIconName | undefined): ReactNode {
-    switch (name) {
-        case "open":
-            return <IconEye size={13} />;
-        case "ask":
-            return <IconSparkle size={13} />;
-        case "rename":
-            return <IconPen size={13} />;
-        case "copy":
-            return <IconCopy size={13} />;
-        case "delete":
-            return <IconTrash size={13} />;
-        case "folder":
-            return <IconFolder size={13} />;
-        case "plus":
-            return <IconPlus size={13} />;
-        case "check":
-            return <IconCheck size={13} />;
-        case "lock":
-            return <Lock size={13} />;
-        case "share":
-            return <Users size={13} />;
-        default:
-            return null;
-    }
-}
-
-function actionableItems(items: SourceContextMenuItem[]): SourceContextMenuItem[] {
-    return items.filter(item => item.type === "item" || item.type === "submenu");
-}
-
 function portalRoot(): HTMLElement {
-    // Tokens are global now (the .lsw-root scope is retired), so the body
-    // is a fully-themed portal target.
+    // Tokens are global, so the body is a fully-themed portal target.
     return document.body;
 }
 
-export function ContextMenu({
-    open,
-    x,
-    y,
-    items,
-    onClose,
-    ariaLabel = "Actions",
-}: ContextMenuProps) {
+export function ActionMenu({ open, x, y, items, onClose, ariaLabel = "Actions" }: ActionMenuProps) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
     if (!mounted || !open || items.length === 0) return null;
     return createPortal(
-        <ContextMenuLayer x={x} y={y} items={items} onClose={onClose} ariaLabel={ariaLabel} />,
+        <ActionMenuLayer x={x} y={y} items={items} onClose={onClose} ariaLabel={ariaLabel} />,
         portalRoot()
     );
 }
 
-function ContextMenuLayer({ x, y, items, onClose, ariaLabel }: Omit<ContextMenuProps, "open">) {
+function ActionMenuLayer({ x, y, items, onClose, ariaLabel }: Omit<ActionMenuProps, "open">) {
     const menuRef = useRef<HTMLDivElement>(null);
     const [pos, setPos] = useState({ left: x, top: y });
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -158,7 +108,7 @@ function ContextMenuLayer({ x, y, items, onClose, ariaLabel }: Omit<ContextMenuP
     );
 
     const activate = useCallback(
-        (item: SourceContextMenuItem) => {
+        (item: ActionMenuItem) => {
             if (item.type === "item") {
                 if (item.disabled) return;
                 item.onSelect();
@@ -244,15 +194,15 @@ function ContextMenuLayer({ x, y, items, onClose, ariaLabel }: Omit<ContextMenuP
 }
 
 interface MenuPanelProps {
-    items: SourceContextMenuItem[];
+    items: ActionMenuItem[];
     left: number;
     top: number;
     activeId: string | null;
     openSubmenuId: string | null;
     labelledBy?: string;
     ariaLabel?: string;
-    onHover: (id: string | null, item: SourceContextMenuItem | null) => void;
-    onActivate: (item: SourceContextMenuItem) => void;
+    onHover: (id: string | null, item: ActionMenuItem | null) => void;
+    onActivate: (item: ActionMenuItem) => void;
     onKeyDown?: (e: ReactKeyboardEvent<HTMLDivElement>) => void;
     parentPos: { left: number; top: number };
     nested?: boolean;
@@ -266,11 +216,11 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
         items,
         left,
         top,
-        activeId,
-        openSubmenuId,
+        activeId: activeIdProp,
+        openSubmenuId: openSubmenuIdProp,
         labelledBy,
         ariaLabel,
-        onHover,
+        onHover: onHoverProp,
         onActivate,
         onKeyDown,
         parentPos,
@@ -280,6 +230,33 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
 ) {
     const submenuTimer = useRef<number | null>(null);
     const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    // A nested panel runs its own hover state, so a submenu can open a
+    // submenu of its own (the mindmap's shape categories) without the root
+    // layer knowing the tree's depth.
+    const [ownActiveId, setOwnActiveId] = useState<string | null>(null);
+    const [ownSubmenuId, setOwnSubmenuId] = useState<string | null>(null);
+    const activeId = nested ? ownActiveId : activeIdProp;
+    const openSubmenuId = nested ? ownSubmenuId : openSubmenuIdProp;
+    const onHover = nested
+        ? (id: string | null, item: ActionMenuItem | null) => {
+              setOwnActiveId(id);
+              if (item?.type === "submenu" && !item.disabled) setOwnSubmenuId(item.id);
+              else if (item?.type === "item") setOwnSubmenuId(null);
+          }
+        : onHoverProp;
+    // Picking a submenu row in a nested panel opens it here; a leaf pick
+    // climbs to the root layer, which runs it and closes everything.
+    const activate = nested
+        ? (item: ActionMenuItem) => {
+              if (item.type === "submenu") {
+                  if (item.disabled) return;
+                  setOwnActiveId(item.id);
+                  setOwnSubmenuId(item.id);
+                  return;
+              }
+              onActivate(item);
+          }
+        : onActivate;
 
     useEffect(() => {
         return () => {
@@ -288,7 +265,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
     }, []);
 
     const openSubmenu = items.find(
-        (item): item is Extract<SourceContextMenuItem, { type: "submenu" }> =>
+        (item): item is Extract<ActionMenuItem, { type: "submenu" }> =>
             item.type === "submenu" && item.id === openSubmenuId && !item.disabled
     );
 
@@ -357,7 +334,17 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                     const disabled = Boolean(item.disabled);
                     const danger = item.type === "item" && item.danger;
                     const active = item.id === activeId && !disabled;
-                    const icon = iconFor(item.icon);
+                    const icon =
+                        item.type === "item" && item.swatch ? (
+                            <span
+                                className={styles.swatch}
+                                // Document data, not a token: see the item type.
+                                style={{ background: item.swatch }}
+                                aria-hidden
+                            />
+                        ) : (
+                            iconFor(item.icon)
+                        );
                     const itemClass = [
                         styles.item,
                         active ? styles.itemActive : "",
@@ -406,7 +393,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                             onClick={e => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                onActivate(item);
+                                activate(item);
                             }}
                             className={itemClass}
                         >
@@ -418,7 +405,11 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                                 </span>
                             )}
                             {item.type === "submenu" && (
-                                <IconChevronRight size={12} className={styles.itemChevron} />
+                                <ChevronRight
+                                    size={12}
+                                    className={styles.itemChevron}
+                                    aria-hidden
+                                />
                             )}
                         </div>
                     );
@@ -434,7 +425,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
                     openSubmenuId={null}
                     ariaLabel={openSubmenu.label}
                     onHover={() => undefined}
-                    onActivate={onActivate}
+                    onActivate={activate}
                     parentPos={submenuPos}
                 />
             )}

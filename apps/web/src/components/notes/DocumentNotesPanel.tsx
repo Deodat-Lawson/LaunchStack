@@ -31,6 +31,12 @@ interface Props {
    * clicks "Add note here". The parent clears this after the panel consumes it.
    */
   prefilledAnchor?: PrefilledAnchor | null;
+  /**
+   * When set, the panel opens a new note with this text as its body — the
+   * document's context menu handing over a selected passage. The parent
+   * clears it after the panel consumes it.
+   */
+  prefilledText?: string | null;
   /** Fired when the user clicks an existing note card. The parent can then
    * scroll the document viewer to the anchored location. */
   onNoteClick?: (note: { id: number; page: number | null }) => void;
@@ -41,6 +47,7 @@ export function DocumentNotesPanel({
   versionId,
   onChanged,
   prefilledAnchor,
+  prefilledText,
   onNoteClick,
 }: Props) {
   const [notes, setNotes] = useState<DocumentNote[]>([]);
@@ -90,6 +97,23 @@ export function DocumentNotesPanel({
     });
     setError(null);
   }, [prefilledAnchor]);
+
+  useEffect(() => {
+    if (!prefilledText) return;
+    setDraft({
+      ...EMPTY_DRAFT,
+      id: "new",
+      text: prefilledText,
+      rich: {
+        type: "doc",
+        content: [
+          { type: "paragraph", content: [{ type: "text", text: prefilledText }] },
+        ],
+      },
+      anchorQuote: prefilledText,
+    });
+    setError(null);
+  }, [prefilledText]);
 
   const startNewDraft = () => {
     setDraft({ ...EMPTY_DRAFT, id: "new" });

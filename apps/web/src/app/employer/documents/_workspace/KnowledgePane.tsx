@@ -10,13 +10,14 @@
  * one visual language.
  */
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Lock } from "lucide-react";
 import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
-import { ContextMenu } from "./ContextMenu";
-import { buildSourceMenuItems } from "./sourceContextMenu";
+import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { useContextTarget } from "~/components/context-menu";
+import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
@@ -36,6 +37,8 @@ export interface KnowledgePaneProps {
     onAskAbout: (sourceIds: string[]) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
+    /** Delete several at once — the multi-selection menu's Delete. */
+    onDeleteSources?: (sources: WorkspaceSource[]) => void;
     /** "Restrict access…" — opens the document's access dialog. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
@@ -54,6 +57,7 @@ export function KnowledgePane({
     onAskAbout,
     onRenameSource,
     onDeleteSource,
+    onDeleteSources,
     onRestrictAccess,
     onMoveToFolder,
 }: KnowledgePaneProps) {
@@ -61,54 +65,71 @@ export function KnowledgePane({
     const [folder, setFolder] = useState<string | null>(null);
     const [type, setType] = useState<SourceTypeId | null>(null);
     const [layout, setLayout] = useState<Layout>("grid");
-    const [menu, setMenu] = useState<{
-        x: number;
-        y: number;
-        source: WorkspaceSource;
-    } | null>(null);
-
-    const openSourceMenu = (
-        source: WorkspaceSource,
-        point: { clientX: number; clientY: number }
-    ) => {
-        setMenu({ source, x: point.clientX, y: point.clientY });
-    };
-
-    const menuItems = useMemo(
-        () =>
-            menu
-                ? buildSourceMenuItems(menu.source, folders, selected, {
-                      onOpen: onOpenSource,
-                      onToggleContext: source => {
-                          if (selected.includes(source.id)) {
-                              setSelected(prev => prev.filter(id => id !== source.id));
-                              return;
-                          }
-                          onAskAbout([source.id]);
-                      },
-                      onRename: onRenameSource,
-                      onMoveToFolder,
-                      onCopyTitle: source => {
-                          void navigator.clipboard?.writeText(source.title).catch(() => undefined);
-                      },
-                      onRestrictAccess,
-                      onDelete: onDeleteSource,
-                  })
-                : [],
+    /**
+     * A source's menu. Inside a multi-selection every verb acts on the whole
+     * selection; otherwise on the one card or row.
+     */
+    const menuItemsFor = useCallback(
+        (source: WorkspaceSource): ActionMenuItem[] => {
+            if (selected.length > 1 && selected.includes(source.id)) {
+                const chosen = sources.filter(s => selected.includes(s.id));
+                return buildSelectionMenuItems(chosen, folders, {
+                    onRemoveFromContext: ids =>
+                        setSelected(prev => prev.filter(id => !ids.includes(id))),
+                    onMoveToFolder: onMoveToFolder
+                        ? (ids, name) => ids.forEach(id => onMoveToFolder(id, name))
+                        : undefined,
+                    onDelete: onDeleteSources,
+                });
+            }
+            return buildSourceMenuItems(source, folders, selected, {
+                onOpen: onOpenSource,
+                onToggleContext: s => {
+                    if (selected.includes(s.id)) {
+                        setSelected(prev => prev.filter(id => id !== s.id));
+                        return;
+                    }
+                    onAskAbout([s.id]);
+                },
+                onOpenInNewTab: s => {
+                    if (s.documentId) {
+                        window.open(
+                            `/employer/documents/viewer?docId=${s.documentId}`,
+                            "_blank",
+                            "noopener,noreferrer"
+                        );
+                    }
+                },
+                onRename: onRenameSource,
+                onMoveToFolder,
+                onCopyTitle: s => {
+                    void navigator.clipboard?.writeText(s.title).catch(() => undefined);
+                },
+                onCopyLink: s => {
+                    void navigator.clipboard
+                        ?.writeText(
+                            `${window.location.origin}/employer/documents?source=${encodeURIComponent(s.id)}`
+                        )
+                        .catch(() => undefined);
+                },
+                onRestrictAccess,
+                onDelete: onDeleteSource,
+            });
+        },
         [
-            menu,
+            sources,
             folders,
             selected,
+            setSelected,
             onOpenSource,
             onAskAbout,
             onRenameSource,
-            onRestrictAccess,
             onMoveToFolder,
+            onRestrictAccess,
             onDeleteSource,
-            setSelected,
+            onDeleteSources,
         ]
     );
-
     const counts = useMemo(() => {
         const byType = new Map<SourceTypeId, number>();
         const byFolder = new Map<string, number>();
@@ -383,7 +404,7 @@ export function KnowledgePane({
                                 selected={selected.includes(source.id)}
                                 onToggle={() => toggle(source.id)}
                                 onOpen={() => onOpenSource(source)}
-                                onOpenMenu={openSourceMenu}
+                                menuItems={menuItemsFor}
                             />
                         ))}
                     </div>
@@ -393,20 +414,10 @@ export function KnowledgePane({
                         selected={selected}
                         onToggle={toggle}
                         onOpen={onOpenSource}
-                        onOpenMenu={openSourceMenu}
+                        menuItems={menuItemsFor}
                     />
                 )}
             </div>
-            {menu && (
-                <ContextMenu
-                    open
-                    x={menu.x}
-                    y={menu.y}
-                    items={menuItems}
-                    ariaLabel={`Actions for ${menu.source.title}`}
-                    onClose={() => setMenu(null)}
-                />
-            )}
         </div>
     );
 }
@@ -611,40 +622,40 @@ function SourceCard({
     selected,
     onToggle,
     onOpen,
-    onOpenMenu,
+    menuItems,
 }: {
     source: WorkspaceSource;
     selected: boolean;
     onToggle: () => void;
     onOpen: () => void;
-    onOpenMenu?: (source: WorkspaceSource, point: { clientX: number; clientY: number }) => void;
+    menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
     const meta = SOURCE_META[source.type];
     const domain = DOC_DOMAINS[source.domain] ?? DOC_DOMAINS.General;
+    const ctxTarget = useContextTarget(
+        menuItems
+            ? {
+                  kind: "source",
+                  id: source.id,
+                  label: `Actions for ${source.title}`,
+                  data: source,
+                  items: () => menuItems(source),
+              }
+            : null
+    );
 
     return (
         <div
             onClick={onOpen}
-            onContextMenu={e => {
-                if (!onOpenMenu) return;
-                e.preventDefault();
-                e.stopPropagation();
-                onOpenMenu(source, { clientX: e.clientX, clientY: e.clientY });
-            }}
             role="button"
             tabIndex={0}
             data-testid={`knowledge-card-${source.id}`}
+            {...ctxTarget}
             onKeyDown={e => {
                 if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     onOpen();
-                    return;
                 }
-                if (!onOpenMenu) return;
-                if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
-                e.preventDefault();
-                const rect = e.currentTarget.getBoundingClientRect();
-                onOpenMenu(source, { clientX: rect.left + 16, clientY: rect.bottom });
             }}
             style={{
                 position: "relative",
@@ -821,18 +832,58 @@ function SourceCard({
     );
 }
 
+function SourceTableRow({
+    source,
+    isSelected,
+    onOpen,
+    menuItems,
+    children,
+}: {
+    source: WorkspaceSource;
+    isSelected: boolean;
+    onOpen: (source: WorkspaceSource) => void;
+    menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
+    children: React.ReactNode;
+}) {
+    const ctxTarget = useContextTarget(
+        menuItems
+            ? {
+                  kind: "source",
+                  id: source.id,
+                  label: `Actions for ${source.title}`,
+                  data: source,
+                  items: () => menuItems(source),
+              }
+            : null
+    );
+    return (
+        <tr
+            data-testid={`knowledge-row-${source.id}`}
+            onClick={() => onOpen(source)}
+            {...ctxTarget}
+            style={{
+                borderTop: "1px solid var(--line)",
+                cursor: "pointer",
+                background: isSelected ? "var(--accent-soft)" : "transparent",
+            }}
+        >
+            {children}
+        </tr>
+    );
+}
+
 function SourceTable({
     sources,
     selected,
     onToggle,
     onOpen,
-    onOpenMenu,
+    menuItems,
 }: {
     sources: WorkspaceSource[];
     selected: string[];
     onToggle: (id: string) => void;
     onOpen: (source: WorkspaceSource) => void;
-    onOpenMenu?: (source: WorkspaceSource, point: { clientX: number; clientY: number }) => void;
+    menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
     return (
         <div
@@ -861,26 +912,12 @@ function SourceTable({
                             const domain = DOC_DOMAINS[source.domain] ?? DOC_DOMAINS.General;
                             const isSelected = selected.includes(source.id);
                             return (
-                                <tr
+                                <SourceTableRow
                                     key={source.id}
-                                    data-testid={`knowledge-row-${source.id}`}
-                                    onClick={() => onOpen(source)}
-                                    onContextMenu={e => {
-                                        if (!onOpenMenu) return;
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        onOpenMenu(source, {
-                                            clientX: e.clientX,
-                                            clientY: e.clientY,
-                                        });
-                                    }}
-                                    style={{
-                                        borderTop: "1px solid var(--line)",
-                                        cursor: "pointer",
-                                        background: isSelected
-                                            ? "var(--accent-soft)"
-                                            : "transparent",
-                                    }}
+                                    source={source}
+                                    isSelected={isSelected}
+                                    onOpen={onOpen}
+                                    menuItems={menuItems}
                                 >
                                     <Td>
                                         <button
@@ -959,7 +996,7 @@ function SourceTable({
                                         </span>
                                     </Td>
                                     <Td muted>{source.added || "—"}</Td>
-                                </tr>
+                                </SourceTableRow>
                             );
                         })}
                     </tbody>

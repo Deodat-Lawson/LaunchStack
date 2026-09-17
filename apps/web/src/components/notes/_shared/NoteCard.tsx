@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { Edit2, Quote as QuoteIcon, Trash2 } from "lucide-react";
 import type { DocumentNote } from "~/server/db/schema";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 import {
   type NoteAnchorLite,
   primaryPageOfAnchor,
@@ -32,9 +34,47 @@ export function NoteCard({
     return md.length > 220 ? md.slice(0, 220) + "…" : md;
   }, [note.contentMarkdown, note.content]);
   const page = primaryPageOfAnchor(anchor);
+  const ctxTarget = useContextTarget({
+    kind: "note",
+    id: String(note.id),
+    label: note.title ? `Actions for “${note.title}”` : "Note actions",
+    data: note,
+    items: () => [
+      ...(onClick
+        ? [
+            {
+              type: "item" as const,
+              id: "go",
+              label: "Go to this note",
+              icon: "open" as const,
+              onSelect: onClick,
+            },
+          ]
+        : []),
+      { type: "item" as const, id: "edit", label: "Edit", icon: "rename" as const, onSelect: onEdit },
+      {
+        type: "item" as const,
+        id: "copy",
+        label: "Copy note text",
+        icon: "copy" as const,
+        onSelect: () =>
+          void copyText(note.contentMarkdown ?? note.content ?? note.title ?? ""),
+      },
+      { type: "separator" as const, id: "sep" },
+      {
+        type: "item" as const,
+        id: "delete",
+        label: "Delete…",
+        icon: "delete" as const,
+        danger: true,
+        onSelect: onDelete,
+      },
+    ],
+  });
 
   return (
     <div
+      {...ctxTarget}
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("[data-note-action]")) return;
         onClick?.();

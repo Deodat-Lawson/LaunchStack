@@ -3,9 +3,54 @@
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 
-import { KIND_LABELS, STAGE_LABELS, daysAgo, type RelationshipStage } from "../api";
+import { useContextTarget } from "~/components/context-menu";
+import {
+    KIND_LABELS,
+    STAGE_LABELS,
+    daysAgo,
+    type PartnerItemDto,
+    type RelationshipStage,
+} from "../api";
 import type { DistributionState } from "../useDistribution";
 import { FitBadge } from "./badges";
+import { buildPartnerMenuItems } from "./partnerContextMenu";
+import { partnerHandlers } from "./PartnersTable";
+
+/** A card on the board: open it, or move it to another column from here. */
+function BoardCard({ item, state }: { item: PartnerItemDto; state: DistributionState }) {
+    const ctxTarget = useContextTarget({
+        kind: "partner",
+        id: item.relationship.id,
+        label: `Actions for ${item.org.name}`,
+        data: item,
+        items: () => buildPartnerMenuItems(item, partnerHandlers(item, state, false)),
+    });
+    return (
+        <button
+            {...ctxTarget}
+            onClick={() => void state.openPartner(item.relationship.id)}
+            className={cn(
+                "border-line bg-bg hover:border-brand flex flex-col gap-1 rounded-lg border p-2.5 text-left text-sm transition",
+                item.stale && "border-warn/60"
+            )}
+        >
+            <div className="text-ink truncate font-medium">{item.org.name}</div>
+            <div className="flex flex-wrap items-center gap-1.5">
+                <Badge variant="secondary">{KIND_LABELS[item.relationship.kind]}</Badge>
+                <FitBadge score={item.relationship.fitScore} />
+                {item.relationship.territory && (
+                    <span className="text-ink-3 font-mono text-[11px]">
+                        {item.relationship.territory.country}
+                    </span>
+                )}
+            </div>
+            <div className="text-ink-2 truncate text-[11px]">
+                {item.relationship.nextAction ??
+                    `last activity ${daysAgo(item.relationship.lastActivityAt ?? item.relationship.stageChangedAt)}`}
+            </div>
+        </button>
+    );
+}
 
 const COLUMNS: RelationshipStage[] = [
     "researched",
@@ -48,33 +93,11 @@ export function PipelineBoard({ state }: { state: DistributionState }) {
                             </header>
                             <div className="flex flex-1 flex-col gap-2 p-2">
                                 {items.map(item => (
-                                    <button
+                                    <BoardCard
                                         key={item.relationship.id}
-                                        onClick={() => void state.openPartner(item.relationship.id)}
-                                        className={cn(
-                                            "border-line bg-bg hover:border-brand flex flex-col gap-1 rounded-lg border p-2.5 text-left text-sm transition",
-                                            item.stale && "border-warn/60"
-                                        )}
-                                    >
-                                        <div className="text-ink truncate font-medium">
-                                            {item.org.name}
-                                        </div>
-                                        <div className="flex flex-wrap items-center gap-1.5">
-                                            <Badge variant="secondary">
-                                                {KIND_LABELS[item.relationship.kind]}
-                                            </Badge>
-                                            <FitBadge score={item.relationship.fitScore} />
-                                            {item.relationship.territory && (
-                                                <span className="text-ink-3 font-mono text-[11px]">
-                                                    {item.relationship.territory.country}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="text-ink-2 truncate text-[11px]">
-                                            {item.relationship.nextAction ??
-                                                `last activity ${daysAgo(item.relationship.lastActivityAt ?? item.relationship.stageChangedAt)}`}
-                                        </div>
-                                    </button>
+                                        item={item}
+                                        state={state}
+                                    />
                                 ))}
                                 {items.length === 0 && (
                                     <p className="text-ink-3 px-1 py-4 text-center text-xs">—</p>

@@ -566,6 +566,8 @@ export interface SourceRailProps {
     onDeleteSource?: (source: WorkspaceSource) => void;
     /** Delete several at once — the multi-selection menu's Delete. */
     onDeleteSources?: (sources: WorkspaceSource[]) => void;
+    /** Open the Add dialog with this folder pre-selected. */
+    onAddToFolder?: (path: string) => void;
     activeFolder: string | null;
     setActiveFolder: Dispatch<SetStateAction<string | null>>;
     activeTag: string | null;
@@ -609,6 +611,11 @@ interface BranchContext {
     folderMenuItems: (node: SourceNode) => ActionMenuItem[];
     /** True when the folder, or an ancestor, is restricted to the people granted access. */
     isRestricted: (path: string) => boolean;
+}
+
+/** Every folder path in a subtree, the root included. */
+function collectFolderPaths(node: SourceNode): string[] {
+    return [node.path, ...node.children.flatMap(collectFolderPaths)];
 }
 
 function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchContext }) {
@@ -721,6 +728,7 @@ export function SourceRail({
     onRestrictAccess,
     onDeleteSource,
     onDeleteSources,
+    onAddToFolder,
     activeFolder,
     setActiveFolder,
     activeTag,
@@ -737,6 +745,8 @@ export function SourceRail({
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
     const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
     const [drag, setDrag] = useState<RailDrag | null>(null);
+    /** Sources picked up with "Cut", waiting for "Paste" on a folder. */
+    const [cut, setCut] = useState<string[]>([]);
     useEffect(() => {
         try {
             if (localStorage.getItem(RAIL_TAB_KEY) === "history") setTab("history");
@@ -794,10 +804,26 @@ export function SourceRail({
                         prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
                     );
                 },
+                onOpenInNewTab: s => {
+                    if (s.documentId) {
+                        window.open(
+                            `/employer/documents/viewer?docId=${s.documentId}`,
+                            "_blank",
+                            "noopener,noreferrer"
+                        );
+                    }
+                },
+                onShowInKnowledge: onOpenKnowledge ? () => onOpenKnowledge() : undefined,
                 onRename: onRenameSource,
                 onMoveToFolder,
+                onCut: onMoveToFolder ? s => setCut([s.id]) : undefined,
                 onCopyTitle: s => {
                     void copyText(s.title);
+                },
+                onCopyLink: s => {
+                    void copyText(
+                        `${window.location.origin}/employer/documents?source=${encodeURIComponent(s.id)}`
+                    );
                 },
                 onRestrictAccess,
                 onDelete: onDeleteSource,
@@ -809,12 +835,23 @@ export function SourceRail({
             selected,
             setSelected,
             onOpenSource,
+            onOpenKnowledge,
             onRenameSource,
             onMoveToFolder,
             onRestrictAccess,
             onDeleteSource,
             onDeleteSources,
         ]
+    );
+
+    /** Move whatever was cut into `target`, then empty the buffer. */
+    const pasteCut = useCallback(
+        (target: string) => {
+            if (!onMoveToFolder) return;
+            cut.forEach(id => onMoveToFolder(id, target));
+            setCut([]);
+        },
+        [cut, onMoveToFolder]
     );
 
     const folderMenuItems = useCallback(
@@ -829,6 +866,7 @@ export function SourceRail({
                     : selCount === itemIds.length && itemIds.length > 0
                       ? "all"
                       : "some";
+            const subtree = collectFolderPaths(node);
             return buildFolderMenuItems(path, {
                 onOpen:
                     activeFolder === path
@@ -837,6 +875,21 @@ export function SourceRail({
                               setActiveFolder(path);
                               setActiveTag(null);
                           },
+                onAddSource: onAddToFolder ? () => onAddToFolder(path) : undefined,
+                cutCount: cut.length,
+                onPaste: onMoveToFolder ? () => pasteCut(path) : undefined,
+                onCollapseAll:
+                    subtree.length > 1 || node.items.length > 0
+                        ? collapse =>
+                              setCollapsed(prev => {
+                                  const next = { ...prev };
+                                  subtree.forEach(p => {
+                                      next[p] = collapse;
+                                  });
+                                  return next;
+                              })
+                        : undefined,
+                allCollapsed: subtree.every(p => collapsed[p]),
                 onNewSubfolder: onNewFolder && !isUnfiled ? () => onNewFolder(path) : undefined,
                 onRename:
                     onRenameFolder && !isUnfiled
@@ -872,6 +925,11 @@ export function SourceRail({
             setActiveTag,
             folders,
             folderFor,
+            collapsed,
+            cut.length,
+            pasteCut,
+            onAddToFolder,
+            onMoveToFolder,
             onNewFolder,
             onRenameFolder,
             onMoveFolder,
@@ -888,8 +946,51 @@ export function SourceRail({
             buildBlankRailMenuItems({
                 onAddKnowledge: onOpenAdd,
                 onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
+                cutCount: cut.length,
+                onPaste: onMoveToFolder ? () => pasteCut(UNFILED_FOLDER) : undefined,
             }),
     });
+
+    /** The tab strip: switch halves, or put the rail away. */
+    const tabsTarget = useContextTarget(
+        history
+            ? {
+                  kind: "rail-tabs",
+                  label: "Sidebar tabs",
+                  items: (): ActionMenuItem[] => [
+                      {
+                          type: "item",
+                          id: "tab-sources",
+                          label: "Sources",
+                          icon: activeTab === "sources" ? "check" : "folder",
+                          checked: activeTab === "sources",
+                          onSelect: () => setTab("sources"),
+                      },
+                      {
+                          type: "item",
+                          id: "tab-history",
+                          label: "History",
+                          icon: activeTab === "history" ? "check" : "history",
+                          checked: activeTab === "history",
+                          onSelect: () => setTab("history"),
+                      },
+                      ...(onClose
+                          ? [
+                                { type: "separator" as const, id: "sep-hide" },
+                                {
+                                    type: "item" as const,
+                                    id: "hide",
+                                    label: "Hide sidebar",
+                                    icon: "sidebar" as const,
+                                    shortcut: "⌘\\",
+                                    onSelect: onClose,
+                                },
+                            ]
+                          : []),
+                  ],
+              }
+            : null
+    );
 
     const toggleCollapsed = (path: string) => setCollapsed(p => ({ ...p, [path]: !p[path] }));
 
@@ -1078,6 +1179,7 @@ export function SourceRail({
                 <div
                     role="tablist"
                     aria-label="Sidebar section"
+                    {...tabsTarget}
                     style={{
                         margin: "0 14px 10px",
                         display: "flex",

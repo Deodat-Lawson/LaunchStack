@@ -339,3 +339,71 @@ describe("buildSelectionMenuItems", () => {
         });
     });
 });
+
+describe("rail additions", () => {
+    const source: WorkspaceSource = {
+        id: "d1",
+        documentId: 1,
+        title: "A",
+        type: "doc",
+        size: "",
+        added: "",
+        folder: "Plans",
+        tags: [],
+        domain: "General",
+    };
+
+    it("adds open-in-tab, show-in-knowledge, cut and copy-link when the rail can do them", () => {
+        const onCut = jest.fn();
+        const items = buildSourceMenuItems(source, [], [], {
+            onOpenInNewTab: jest.fn(),
+            onShowInKnowledge: jest.fn(),
+            onCut,
+            onCopyLink: jest.fn(),
+            onCopyTitle: jest.fn(),
+        });
+        expect(items.map(i => i.id)).toEqual([
+            "title",
+            "open-tab",
+            "knowledge",
+            "sep-modify",
+            "cut",
+            "copy",
+            "copy-link",
+        ]);
+        const cut = items.find(i => i.id === "cut");
+        if (cut?.type === "item") cut.onSelect();
+        expect(onCut).toHaveBeenCalledWith(source);
+        // A mindmap has no standalone page to open in a tab.
+        expect(
+            buildSourceMenuItems({ ...source, type: "mindmap" }, [], [], {
+                onOpenInNewTab: jest.fn(),
+            }).find(i => i.id === "open-tab")
+        ).toBeUndefined();
+    });
+
+    it("lets a folder take a paste, add a source, and fold its subtree", () => {
+        const onPaste = jest.fn();
+        const onCollapseAll = jest.fn();
+        const items = buildFolderMenuItems("Plans", {
+            onAddSource: jest.fn(),
+            cutCount: 2,
+            onPaste,
+            onCollapseAll,
+            allCollapsed: false,
+        });
+        expect(items.map(i => i.id)).toEqual(["title", "add-source", "paste", "collapse-all"]);
+        expect(items.find(i => i.id === "paste")).toMatchObject({ label: "Paste 2 sources here" });
+        expect(items.find(i => i.id === "collapse-all")).toMatchObject({ label: "Collapse all" });
+        const fold = items.find(i => i.id === "collapse-all");
+        if (fold?.type === "item") fold.onSelect();
+        expect(onCollapseAll).toHaveBeenCalledWith(true);
+        // Nothing cut: no paste verb at all.
+        expect(
+            buildFolderMenuItems("Plans", { onPaste, cutCount: 0 }).find(i => i.id === "paste")
+        ).toBeUndefined();
+        expect(
+            buildBlankRailMenuItems({ cutCount: 1, onPaste }).find(i => i.id === "paste")
+        ).toMatchObject({ label: "Paste 1 source at the top level" });
+    });
+});

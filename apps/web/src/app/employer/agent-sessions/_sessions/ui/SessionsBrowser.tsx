@@ -11,6 +11,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildSessionMenuItems } from "./sessionContextMenu";
 import {
     ArchiveRestore,
     Bot,
@@ -120,17 +123,56 @@ function SessionRow({
     item,
     busy,
     onImport,
+    onRemoveImport,
 }: {
     item: AgentSessionItem;
     busy: boolean;
     onImport: (item: AgentSessionItem) => void;
+    onRemoveImport?: (item: AgentSessionItem) => void;
 }) {
     const router = useRouter();
     const { label, Icon } = TOOL_META[item.tool];
     const project = projectLabel(item);
+    const imported = item.imported;
+    const ctxTarget = useContextTarget({
+        kind: "agent-session",
+        id: item.sourceId,
+        label: `Actions for ${item.title}`,
+        data: item,
+        items: () =>
+            buildSessionMenuItems(item, {
+                busy,
+                onImport: () => onImport(item),
+                onOpen: imported
+                    ? () => router.push(`/employer/documents/viewer?docId=${imported.documentId}`)
+                    : undefined,
+                onContinue: imported
+                    ? () =>
+                          router.push(
+                              `/employer/documents?feature=chat&continue=${imported.documentId}`
+                          )
+                    : undefined,
+                onCopyPath: item.projectPath
+                    ? () => {
+                          void copyText(item.projectPath ?? "").then(ok => {
+                              if (ok) toast.success("Path copied");
+                          });
+                      }
+                    : undefined,
+                onCopyId: () => {
+                    void copyText(item.sourceId).then(ok => {
+                        if (ok) toast.success("Session id copied");
+                    });
+                },
+                onRemoveImport: onRemoveImport ? () => onRemoveImport(item) : undefined,
+            }),
+    });
 
     return (
-        <div className="border-line bg-panel hover:border-brand/40 group flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors">
+        <div
+            {...ctxTarget}
+            className="border-line bg-panel hover:border-brand/40 group flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors"
+        >
             <div className="bg-brand-soft text-brand-ink flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg">
                 <Icon className="h-4.5 w-4.5" />
             </div>
@@ -343,6 +385,43 @@ export function SessionsBrowser() {
         },
         [applyReport]
     );
+
+    /**
+     * Drop an imported transcript from the workspace. The local session file
+     * is untouched, so the row goes back to "New" and can be imported again.
+     */
+    const removeImport = useCallback(async (item: AgentSessionItem) => {
+        const documentId = item.imported?.documentId;
+        if (!documentId) return;
+        if (
+            !confirm(`Remove the imported transcript of “${item.title}”? The local session stays.`)
+        ) {
+            return;
+        }
+        try {
+            const res = await fetch("/api/deleteDocument", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ docId: String(documentId) }),
+            });
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            setPreview(prev =>
+                prev
+                    ? {
+                          ...prev,
+                          items: prev.items.map(entry =>
+                              entry.sourceId === item.sourceId
+                                  ? { ...entry, imported: null }
+                                  : entry
+                          ),
+                      }
+                    : prev
+            );
+            toast.success("Import removed");
+        } catch {
+            toast.error("Couldn't remove that import");
+        }
+    }, []);
 
     const importAll = useCallback(async () => {
         setImportingAll(true);
@@ -572,6 +651,7 @@ export function SessionsBrowser() {
                                 item={item}
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
+                                onRemoveImport={i => void removeImport(i)}
                             />
                         ))}
                     </div>

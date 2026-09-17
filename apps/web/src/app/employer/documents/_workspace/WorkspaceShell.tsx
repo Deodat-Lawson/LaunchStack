@@ -244,6 +244,8 @@ export function WorkspaceShell() {
     const [addOpen, setAddOpen] = useState(false);
     /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
+    /** A folder the Add dialog should pre-select — "New source in this folder". */
+    const [addFolder, setAddFolder] = useState<string | null>(null);
     /** Clipboard contents handed to the Add dialog by "Paste to create a source". */
     const [addPrefill, setAddPrefill] = useState<{ url?: string; text?: string } | null>(null);
     /** A passage the composer should start from — set by "Ask about this" on a selection. */
@@ -1407,6 +1409,10 @@ export function WorkspaceShell() {
                     onRenameSource={source => setRenameSource(source)}
                     onDeleteSource={source => requestDelete([source])}
                     onDeleteSources={requestDelete}
+                    onAddToFolder={path => {
+                        setAddFolder(path);
+                        openAdd();
+                    }}
                     onMoveToFolder={
                         canManageFolders
                             ? (id, name) => void handleMoveToFolder(id, name)
@@ -1585,9 +1591,10 @@ export function WorkspaceShell() {
                     setAddOpen(false);
                     setAddTab(undefined);
                     setAddPrefill(null);
+                    setAddFolder(null);
                 }}
                 userId={userId ?? null}
-                defaultCategory={activeFolder ?? UNFILED_FOLDER}
+                defaultCategory={addFolder ?? activeFolder ?? UNFILED_FOLDER}
                 folders={folderPaths}
                 onCreateFolder={
                     canManageFolders

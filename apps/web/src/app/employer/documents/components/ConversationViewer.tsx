@@ -12,7 +12,7 @@
  * an error page.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -32,6 +32,8 @@ import {
 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import {
@@ -119,8 +121,24 @@ function SpeakerTurn({
 }) {
     const isUser = role === "user";
     const Icon = isUser ? User : Bot;
+    const bubble = useRef<HTMLDivElement>(null);
+    const ctxTarget = useContextTarget({
+        kind: "transcript-turn",
+        label: isUser ? "User turn" : "Assistant turn",
+        items: () => [
+            {
+                type: "item",
+                id: "copy",
+                label: "Copy this turn",
+                icon: "copy",
+                onSelect: () => {
+                    void copyText(bubble.current?.innerText ?? "");
+                },
+            },
+        ],
+    });
     return (
-        <div className="flex gap-3">
+        <div className="flex gap-3" {...ctxTarget}>
             <div
                 className={`mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${
                     isUser ? "bg-brand text-brand-fg" : "bg-panel-2 text-ink-2 border-line border"
@@ -136,6 +154,7 @@ function SpeakerTurn({
                     {at && <span className="text-ink-4 font-mono text-[10px]">{at}</span>}
                 </div>
                 <div
+                    ref={bubble}
                     className={`rounded-xl border px-4 py-3 ${
                         isUser ? "border-brand/25 bg-brand-soft/60" : "border-line bg-panel"
                     }`}

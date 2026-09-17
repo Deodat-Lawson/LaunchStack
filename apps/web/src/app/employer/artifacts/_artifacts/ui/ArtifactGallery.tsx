@@ -13,10 +13,13 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
+import { ContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 import { cn } from "~/lib/utils";
 
 import { deleteArtifact, listArtifacts, updateArtifact, type ArtifactSummary } from "../lib/api";
 import { artifactTypeMeta, formatBytes } from "./artifact-meta";
+import { buildArtifactMenuItems, buildTrashedArtifactMenuItems } from "./artifactContextMenu";
 import { ImportArtifactDialog } from "./ImportArtifactDialog";
 
 /**
@@ -78,6 +81,53 @@ export function ArtifactGallery() {
             toast.error("That didn't work — try again");
         }
     };
+
+    const moveToFolder = async (id: number, target: string) => {
+        try {
+            await updateArtifact(id, { folder: target });
+            toast.success(`Moved to ${target}`);
+            await load();
+        } catch {
+            toast.error("Couldn't move the artifact");
+        }
+    };
+
+    const copyLink = async (id: number) => {
+        if (await copyText(`${window.location.origin}/employer/artifacts/${id}`)) {
+            toast.success("Link copied");
+        }
+    };
+
+    /** The card's right-click menu — the hover buttons' verbs, plus move and links. */
+    const cardMenuItems = (item: ArtifactSummary) =>
+        scope === "trash"
+            ? buildTrashedArtifactMenuItems(item, {
+                  onRestore: () => void mutate(item.id, "restore"),
+                  onPurge: () => {
+                      if (confirm(`Delete “${item.title}” permanently? This cannot be undone.`)) {
+                          void mutate(item.id, "purge");
+                      }
+                  },
+              })
+            : buildArtifactMenuItems(item, {
+                  onOpen: () => router.push(`/employer/artifacts/${item.id}`),
+                  onOpenInNewTab: () =>
+                      window.open(
+                          `/employer/artifacts/${item.id}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                      ),
+                  onToggleStar: () => void mutate(item.id, item.starred ? "unstar" : "star"),
+                  onDownload: () => window.open(`/api/artifacts/${item.id}/raw`, "_blank"),
+                  onCopyLink: () => void copyLink(item.id),
+                  onOpenOriginal: () => {
+                      if (item.sourceUrl)
+                          window.open(item.sourceUrl, "_blank", "noopener,noreferrer");
+                  },
+                  folders,
+                  onMoveToFolder: target => void moveToFolder(item.id, target),
+                  onTrash: () => void mutate(item.id, "trash"),
+              });
 
     return (
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-8">
@@ -172,93 +222,108 @@ export function ArtifactGallery() {
                         {visible.map(item => {
                             const meta = artifactTypeMeta(item.artifactType);
                             return (
-                                <article
+                                <ContextTarget
                                     key={item.id}
-                                    className="border-line bg-panel hover:border-brand hover:shadow-2 group relative overflow-hidden rounded-xl border transition-all"
+                                    target={{
+                                        kind: "artifact",
+                                        id: String(item.id),
+                                        label: `Actions for ${item.title}`,
+                                        data: item,
+                                        items: () => cardMenuItems(item),
+                                    }}
                                 >
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            router.push(`/employer/artifacts/${item.id}`)
-                                        }
-                                        className="block w-full text-left"
-                                    >
-                                        <div className="bg-panel-2 flex aspect-[4/3] w-full items-center justify-center">
-                                            <div className="flex flex-col items-center gap-2">
-                                                <span className="bg-brand-soft text-brand-ink flex size-12 items-center justify-center rounded-xl">
-                                                    <meta.Icon className="size-6" />
-                                                </span>
-                                                <span className="text-ink-3 text-[11px] font-medium uppercase tracking-wide">
-                                                    {meta.label}
-                                                </span>
+                                    <article className="border-line bg-panel hover:border-brand hover:shadow-2 group relative overflow-hidden rounded-xl border transition-all">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                router.push(`/employer/artifacts/${item.id}`)
+                                            }
+                                            className="block w-full text-left"
+                                        >
+                                            <div className="bg-panel-2 flex aspect-[4/3] w-full items-center justify-center">
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <span className="bg-brand-soft text-brand-ink flex size-12 items-center justify-center rounded-xl">
+                                                        <meta.Icon className="size-6" />
+                                                    </span>
+                                                    <span className="text-ink-3 text-[11px] font-medium uppercase tracking-wide">
+                                                        {meta.label}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="p-3">
-                                            <h3 className="text-ink truncate text-[13.5px] font-medium">
-                                                {item.title}
-                                            </h3>
-                                            <p className="text-ink-3 mt-0.5 text-[11.5px]">
-                                                {formatBytes(item.sizeBytes)} · {item.folder} ·{" "}
-                                                {new Date(item.updatedAt).toLocaleDateString()}
-                                            </p>
-                                        </div>
-                                    </button>
+                                            <div className="p-3">
+                                                <h3 className="text-ink truncate text-[13.5px] font-medium">
+                                                    {item.title}
+                                                </h3>
+                                                <p className="text-ink-3 mt-0.5 text-[11.5px]">
+                                                    {formatBytes(item.sizeBytes)} · {item.folder} ·{" "}
+                                                    {new Date(item.updatedAt).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        </button>
 
-                                    <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                                        {scope === "active" ? (
-                                            <>
-                                                <IconAction
-                                                    title={item.starred ? "Unstar" : "Star"}
-                                                    onClick={() =>
-                                                        void mutate(
-                                                            item.id,
-                                                            item.starred ? "unstar" : "star"
-                                                        )
-                                                    }
-                                                >
-                                                    <Star
-                                                        className={cn(
-                                                            "size-3.5",
-                                                            item.starred && "fill-warn text-warn"
-                                                        )}
-                                                    />
-                                                </IconAction>
-                                                <IconAction
-                                                    title="Download"
-                                                    onClick={() =>
-                                                        window.open(
-                                                            `/api/artifacts/${item.id}/raw`,
-                                                            "_blank"
-                                                        )
-                                                    }
-                                                >
-                                                    <Download className="size-3.5" />
-                                                </IconAction>
-                                                <IconAction
-                                                    title="Move to trash"
-                                                    onClick={() => void mutate(item.id, "trash")}
-                                                >
-                                                    <Trash2 className="size-3.5" />
-                                                </IconAction>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <IconAction
-                                                    title="Restore"
-                                                    onClick={() => void mutate(item.id, "restore")}
-                                                >
-                                                    <RotateCcw className="size-3.5" />
-                                                </IconAction>
-                                                <IconAction
-                                                    title="Delete permanently"
-                                                    onClick={() => void mutate(item.id, "purge")}
-                                                >
-                                                    <Trash2 className="size-3.5" />
-                                                </IconAction>
-                                            </>
-                                        )}
-                                    </div>
-                                </article>
+                                        <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                                            {scope === "active" ? (
+                                                <>
+                                                    <IconAction
+                                                        title={item.starred ? "Unstar" : "Star"}
+                                                        onClick={() =>
+                                                            void mutate(
+                                                                item.id,
+                                                                item.starred ? "unstar" : "star"
+                                                            )
+                                                        }
+                                                    >
+                                                        <Star
+                                                            className={cn(
+                                                                "size-3.5",
+                                                                item.starred &&
+                                                                    "fill-warn text-warn"
+                                                            )}
+                                                        />
+                                                    </IconAction>
+                                                    <IconAction
+                                                        title="Download"
+                                                        onClick={() =>
+                                                            window.open(
+                                                                `/api/artifacts/${item.id}/raw`,
+                                                                "_blank"
+                                                            )
+                                                        }
+                                                    >
+                                                        <Download className="size-3.5" />
+                                                    </IconAction>
+                                                    <IconAction
+                                                        title="Move to trash"
+                                                        onClick={() =>
+                                                            void mutate(item.id, "trash")
+                                                        }
+                                                    >
+                                                        <Trash2 className="size-3.5" />
+                                                    </IconAction>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <IconAction
+                                                        title="Restore"
+                                                        onClick={() =>
+                                                            void mutate(item.id, "restore")
+                                                        }
+                                                    >
+                                                        <RotateCcw className="size-3.5" />
+                                                    </IconAction>
+                                                    <IconAction
+                                                        title="Delete permanently"
+                                                        onClick={() =>
+                                                            void mutate(item.id, "purge")
+                                                        }
+                                                    >
+                                                        <Trash2 className="size-3.5" />
+                                                    </IconAction>
+                                                </>
+                                            )}
+                                        </div>
+                                    </article>
+                                </ContextTarget>
                             );
                         })}
                     </div>

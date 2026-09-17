@@ -91,10 +91,26 @@ export function KnowledgePane({
                     }
                     onAskAbout([s.id]);
                 },
+                onOpenInNewTab: s => {
+                    if (s.documentId) {
+                        window.open(
+                            `/employer/documents/viewer?docId=${s.documentId}`,
+                            "_blank",
+                            "noopener,noreferrer"
+                        );
+                    }
+                },
                 onRename: onRenameSource,
                 onMoveToFolder,
                 onCopyTitle: s => {
                     void navigator.clipboard?.writeText(s.title).catch(() => undefined);
+                },
+                onCopyLink: s => {
+                    void navigator.clipboard
+                        ?.writeText(
+                            `${window.location.origin}/employer/documents?source=${encodeURIComponent(s.id)}`
+                        )
+                        .catch(() => undefined);
                 },
                 onRestrictAccess,
                 onDelete: onDeleteSource,

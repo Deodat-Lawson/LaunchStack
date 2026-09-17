@@ -24,6 +24,12 @@ export interface SourceMenuHandlers {
     onRename?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onCopyTitle?: (source: WorkspaceSource) => void;
+    onOpenInNewTab?: (source: WorkspaceSource) => void;
+    onCopyLink?: (source: WorkspaceSource) => void;
+    /** Browse this source in the full Knowledge surface. */
+    onShowInKnowledge?: (source: WorkspaceSource) => void;
+    /** Pick the source up, to drop it on a folder with "Paste". */
+    onCut?: (source: WorkspaceSource) => void;
     /** Opens the access dialog: who, beyond the folder's audience, may see this document. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDelete?: (source: WorkspaceSource) => void;
@@ -70,7 +76,29 @@ export function buildSourceMenuItems(
         });
     }
 
-    if (handlers.onRename || handlers.onMoveToFolder || handlers.onCopyTitle) {
+    if (handlers.onOpenInNewTab && source.type !== "mindmap") {
+        items.push({
+            type: "item",
+            id: "open-tab",
+            label: "Open in a new tab",
+            icon: "external",
+            disabled: !persisted,
+            disabledReason: persisted ? undefined : indexingReason,
+            onSelect: () => handlers.onOpenInNewTab?.(source),
+        });
+    }
+
+    if (handlers.onShowInKnowledge) {
+        items.push({
+            type: "item",
+            id: "knowledge",
+            label: "Show in Knowledge",
+            icon: "search",
+            onSelect: () => handlers.onShowInKnowledge?.(source),
+        });
+    }
+
+    if (handlers.onRename || handlers.onMoveToFolder || handlers.onCopyTitle || handlers.onCut) {
         items.push({ type: "separator", id: "sep-modify" });
     }
 
@@ -107,6 +135,19 @@ export function buildSourceMenuItems(
         });
     }
 
+    if (handlers.onCut) {
+        items.push({
+            type: "item",
+            id: "cut",
+            label: "Cut",
+            icon: "cut",
+            shortcut: "⌘X",
+            disabled: !persisted,
+            disabledReason: persisted ? undefined : indexingReason,
+            onSelect: () => handlers.onCut?.(source),
+        });
+    }
+
     if (handlers.onCopyTitle) {
         items.push({
             type: "item",
@@ -114,6 +155,16 @@ export function buildSourceMenuItems(
             label: "Copy title",
             icon: "copy",
             onSelect: () => handlers.onCopyTitle?.(source),
+        });
+    }
+
+    if (handlers.onCopyLink) {
+        items.push({
+            type: "item",
+            id: "copy-link",
+            label: "Copy link",
+            icon: "link",
+            onSelect: () => handlers.onCopyLink?.(source),
         });
     }
 
@@ -150,6 +201,15 @@ export interface FolderMenuHandlers {
     /** Focus the rail on this folder's subtree. */
     onOpen?: () => void;
     onNewSubfolder?: () => void;
+    /** Open the Add dialog with this folder pre-selected. */
+    onAddSource?: () => void;
+    /** Sources picked up with "Cut", waiting for a folder. */
+    cutCount?: number;
+    onPaste?: () => void;
+    /** Fold or unfold every folder in this subtree. */
+    onCollapseAll?: (collapse: boolean) => void;
+    /** Whether every folder in the subtree is folded already. */
+    allCollapsed?: boolean;
     onRename?: () => void;
     /** Opens the folder access dialog: everyone in the workspace, or only people added. */
     onShare?: () => void;
@@ -179,13 +239,43 @@ export function buildFolderMenuItems(
             onSelect: () => handlers.onOpen?.(),
         });
     }
+    if (handlers.onAddSource) {
+        items.push({
+            type: "item",
+            id: "add-source",
+            label: "New source in this folder…",
+            icon: "plus",
+            onSelect: () => handlers.onAddSource?.(),
+        });
+    }
     if (handlers.onNewSubfolder) {
         items.push({
             type: "item",
             id: "new-subfolder",
             label: "New subfolder…",
-            icon: "plus",
+            icon: "folder",
             onSelect: () => handlers.onNewSubfolder?.(),
+        });
+    }
+    if (handlers.onPaste && (handlers.cutCount ?? 0) > 0) {
+        const n = handlers.cutCount ?? 0;
+        items.push({
+            type: "item",
+            id: "paste",
+            label: `Paste ${n} ${n === 1 ? "source" : "sources"} here`,
+            icon: "paste",
+            shortcut: "⌘V",
+            onSelect: () => handlers.onPaste?.(),
+        });
+    }
+    if (handlers.onCollapseAll) {
+        const collapse = !handlers.allCollapsed;
+        items.push({
+            type: "item",
+            id: "collapse-all",
+            label: collapse ? "Collapse all" : "Expand all",
+            icon: collapse ? "hide" : "open",
+            onSelect: () => handlers.onCollapseAll?.(collapse),
         });
     }
     if (handlers.onRename) {
@@ -268,10 +358,24 @@ export function buildFolderMenuItems(
 export interface BlankRailMenuHandlers {
     onAddKnowledge?: () => void;
     onNewFolder?: () => void;
+    /** Sources picked up with "Cut"; pasting here files them at the top level. */
+    cutCount?: number;
+    onPaste?: () => void;
 }
 
 export function buildBlankRailMenuItems(handlers: BlankRailMenuHandlers): SourceContextMenuItem[] {
     const items: SourceContextMenuItem[] = [];
+    if (handlers.onPaste && (handlers.cutCount ?? 0) > 0) {
+        const n = handlers.cutCount ?? 0;
+        items.push({
+            type: "item",
+            id: "paste",
+            label: `Paste ${n} ${n === 1 ? "source" : "sources"} at the top level`,
+            icon: "paste",
+            shortcut: "⌘V",
+            onSelect: () => handlers.onPaste?.(),
+        });
+    }
     if (handlers.onAddKnowledge) {
         items.push({
             type: "item",

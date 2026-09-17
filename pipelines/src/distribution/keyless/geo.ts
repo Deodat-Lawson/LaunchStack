@@ -165,3 +165,94 @@ export function countriesMentioned(text: string): string[] {
 export function escapeRegExp(s: string): string {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
+
+/** Words that appear in business names for a category, in the languages of the target markets. */
+const NATIVE_TERMS: Array<{ match: RegExp; terms: string[] }> = [
+    {
+        match: /coffee|roast|espresso/i,
+        terms: ["koffiebranderij", "kaffeerösterei", "torréfacteur", "tostador", "coffee roasters"],
+    },
+    {
+        match: /bak(er|ery)|bread|pastry/i,
+        terms: ["bakkerij", "bäckerei", "boulangerie", "panadería", "bakery"],
+    },
+    { match: /brew|beer/i, terms: ["brouwerij", "brauerei", "brasserie", "cervecería", "brewery"] },
+    {
+        match: /wine|spirits|liquor|distill/i,
+        terms: ["wijnhandel", "weinhandlung", "cave à vin", "distillery"],
+    },
+    { match: /cheese/i, terms: ["kaas", "käse", "fromagerie"] },
+    { match: /butcher|meat/i, terms: ["slagerij", "metzgerei", "boucherie"] },
+    {
+        match: /wholesale/i,
+        terms: ["groothandel", "großhandel", "grossiste", "mayorista", "wholesale"],
+    },
+    {
+        match: /logistic|warehous|fulfil|3pl|freight|storage/i,
+        terms: ["logistiek", "logistik", "logistique", "fulfilment", "fulfillment", "warehousing"],
+    },
+    {
+        match: /import|distribut|trading/i,
+        terms: ["import", "distributie", "vertrieb", "distribution", "trading"],
+    },
+    { match: /florist|flower/i, terms: ["bloemist", "blumen", "fleuriste", "florist"] },
+    {
+        match: /garden|plant|nursery/i,
+        terms: ["tuincentrum", "gartencenter", "jardinerie", "kwekerij", "garden centre"],
+    },
+    { match: /pharma/i, terms: ["apotheek", "apotheke", "pharmacie", "pharmacy"] },
+    { match: /dental|dentist/i, terms: ["tandarts", "zahnarzt", "dentiste", "dental"] },
+    {
+        match: /physio|clinic|medical/i,
+        terms: ["fysiotherapie", "physiotherapie", "kliniek", "klinik", "clinic"],
+    },
+    { match: /gym|fitness/i, terms: ["sportschool", "fitnessstudio", "salle de sport", "gym"] },
+    { match: /bike|bicycle|cycl/i, terms: ["fietsenwinkel", "fahrrad", "vélo", "bike shop"] },
+    {
+        match: /furniture|interior/i,
+        terms: ["meubel", "möbel", "meubles", "interieur", "furniture"],
+    },
+    { match: /print/i, terms: ["drukkerij", "druckerei", "imprimerie", "printing"] },
+    {
+        match: /account|bookkeep|tax/i,
+        terms: ["accountant", "administratiekantoor", "steuerberater", "expert-comptable"],
+    },
+    { match: /law|legal|attorney/i, terms: ["advocaten", "rechtsanwälte", "avocats", "law firm"] },
+    {
+        match: /real ?estate|property/i,
+        terms: ["makelaar", "immobilien", "immobilier", "estate agents"],
+    },
+    {
+        match: /car|auto|garage|dealer/i,
+        terms: ["autobedrijf", "autohaus", "garage", "concessionnaire"],
+    },
+    { match: /hotel/i, terms: ["hotel"] },
+    {
+        match: /restaurant|cafe|café|catering/i,
+        terms: ["restaurant", "café", "catering", "eetcafé"],
+    },
+    {
+        match: /software|saas|tech|startup|digital|agency|it\b/i,
+        terms: ["software", "digital", "tech", "agency", "bureau"],
+    },
+    {
+        match: /manufactur|factory|producer|machin|engineering/i,
+        terms: ["fabriek", "fabrik", "usine", "manufacturing", "engineering"],
+    },
+    {
+        match: /school|education|training|academy/i,
+        terms: ["school", "schule", "école", "academy", "opleiding"],
+    },
+];
+
+/** Name words to search for, in the local languages, from the segment's words. */
+export function nativeTermsFor(keywords: readonly string[], max = 4): string[] {
+    const text = keywords.join(" ");
+    const out: string[] = [];
+    for (const rule of NATIVE_TERMS) {
+        if (!rule.match.test(text)) continue;
+        for (const t of rule.terms) if (!out.includes(t)) out.push(t);
+        if (out.length >= max) break;
+    }
+    return out.slice(0, max);
+}

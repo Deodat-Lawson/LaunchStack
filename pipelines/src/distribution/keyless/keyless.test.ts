@@ -10,7 +10,7 @@ import type { ReadablePage } from "@launchstack/tools/web-research";
 
 import type { PlanInput } from "../plan";
 import type { PartnerOrgRecord, ProgramRecord } from "../types";
-import { countriesMentioned, overpassAreas } from "./geo";
+import { countriesMentioned, nativeTermsFor, overpassAreas } from "./geo";
 import {
     buildOverpassQuery,
     mapOverpassElements,
@@ -19,6 +19,7 @@ import {
     tagSelectorsFor,
 } from "./osm";
 import { searchNominatim } from "./nominatim";
+import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
 import { createKeylessPorts } from "./ports";
 import { extractFacts, firstDescription, profileFromPages } from "./profile";
@@ -274,7 +275,7 @@ describe("Nominatim adapter", () => {
                     { country: "NL", city: null },
                     { country: "NL", city: "Utrecht" },
                 ],
-                keywords: ["koffiebranderij"],
+                terms: ["koffiebranderij"],
             },
             { fetchImpl, pauseMs: 1 }
         );
@@ -290,6 +291,145 @@ describe("Nominatim adapter", () => {
                 categories: ["shop=coffee"],
             }),
         ]);
+    });
+});
+
+describe("Photon + OSM API", () => {
+    it("turns selectors into osm_tag filters and picks cities to box", () => {
+        expect(
+            photonTagsFor(['["shop"="coffee"]', '["craft"="coffee_roaster"]', '["healthcare"~"."]'])
+        ).toEqual(["shop:coffee", "craft:coffee_roaster"]);
+        expect(photonAreas("NL")).toEqual(["Amsterdam", "Rotterdam", "Utrecht"]);
+        expect(photonAreas("DE", "Hamburg")).toEqual(["Hamburg"]);
+        expect(nativeTermsFor(["specialty coffee"])).toEqual([
+            "koffiebranderij",
+            "kaffeerösterei",
+            "torréfacteur",
+            "tostador",
+        ]);
+    });
+
+    it("boxes searches to the city, keeps only the country's results, and reads website tags from the OSM API", async () => {
+        const calls: string[] = [];
+        const fetchImpl: typeof fetch = async url => {
+            const u = urlOf(url);
+            calls.push(u);
+            if (u.includes("photon") && u.includes("q=Amsterdam"))
+                return new Response(
+                    JSON.stringify({
+                        features: [
+                            {
+                                geometry: { coordinates: [4.9, 52.37] },
+                                properties: {
+                                    osm_key: "place",
+                                    countrycode: "NL",
+                                    name: "Amsterdam",
+                                },
+                            },
+                        ],
+                    })
+                );
+            if (u.includes("photon"))
+                return new Response(
+                    JSON.stringify({
+                        features: [
+                            {
+                                geometry: { coordinates: [4.88, 52.36] },
+                                properties: {
+                                    osm_type: "N",
+                                    osm_id: 1,
+                                    osm_key: "shop",
+                                    osm_value: "coffee",
+                                    name: "Bocca",
+                                    countrycode: "NL",
+                                    city: "Amsterdam",
+                                },
+                            },
+                            {
+                                geometry: { coordinates: [30.5, 50.4] },
+                                properties: {
+                                    osm_type: "N",
+                                    osm_id: 2,
+                                    osm_key: "shop",
+                                    osm_value: "coffee",
+                                    name: "Coffee",
+                                    countrycode: "UA",
+                                    city: "Kyiv",
+                                },
+                            },
+                            {
+                                geometry: { coordinates: [4.5, 51.9] },
+                                properties: {
+                                    osm_type: "W",
+                                    osm_id: 3,
+                                    osm_key: "craft",
+                                    osm_value: "coffee_roaster",
+                                    name: "Man Met Bril",
+                                    countrycode: "NL",
+                                    city: "Rotterdam",
+                                },
+                            },
+                        ],
+                    })
+                );
+            if (u.includes("/nodes.json"))
+                return new Response(
+                    JSON.stringify({
+                        elements: [
+                            {
+                                type: "node",
+                                id: 1,
+                                lat: 52.36,
+                                lon: 4.88,
+                                tags: {
+                                    name: "Bocca Coffee",
+                                    shop: "coffee",
+                                    website: "bocca.nl",
+                                    "addr:city": "Amsterdam",
+                                },
+                            },
+                        ],
+                    })
+                );
+            if (u.includes("/ways.json"))
+                return new Response(
+                    JSON.stringify({
+                        elements: [
+                            {
+                                type: "way",
+                                id: 3,
+                                tags: {
+                                    name: "Man Met Bril Koffie",
+                                    craft: "coffee_roaster",
+                                    "contact:website": "https://manmetbrilkoffie.nl/",
+                                },
+                            },
+                        ],
+                    })
+                );
+            return new Response("nope", { status: 404 });
+        };
+        expect(await locateCity("Amsterdam", "NL", { fetchImpl })).toEqual({
+            lat: 52.37,
+            lon: 4.9,
+        });
+        const places = await searchPhoton(
+            {
+                country: "NL",
+                region: "Amsterdam",
+                keywords: ["coffee"],
+                selectors: ['["shop"="coffee"]', '["craft"="coffee_roaster"]'],
+                limit: 10,
+            },
+            { fetchImpl }
+        );
+        const search = calls.find(c => c.includes("osm_tag=shop%3Acoffee"));
+        expect(search).toContain("bbox=4.5500%2C52.1200%2C5.2500%2C52.6200");
+        expect(places.map(p => [p.id, p.name, p.website, p.city])).toEqual([
+            ["osm:node/1", "Bocca Coffee", "https://bocca.nl/", "Amsterdam"],
+            ["osm:way/3", "Man Met Bril Koffie", "https://manmetbrilkoffie.nl/", "Rotterdam"],
+        ]);
+        expect(calls.some(c => c.includes("nodes=2"))).toBe(false);
     });
 });
 
@@ -506,6 +646,9 @@ describe("keyless ports", () => {
                     })
                 );
             if (u.includes("nominatim")) return new Response(JSON.stringify([]));
+            if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
+            if (u.includes("openstreetmap.org/api"))
+                return new Response(JSON.stringify({ elements: [] }));
             if (u.includes("yc-oss"))
                 return new Response(
                     JSON.stringify([

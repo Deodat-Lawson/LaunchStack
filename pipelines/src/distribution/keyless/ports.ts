@@ -15,9 +15,16 @@ import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
 import type { DistributionPorts, PublishDossierInput } from "../run";
-import { overpassAreas } from "./geo";
+import { nativeTermsFor, overpassAreas } from "./geo";
 import { searchNominatim } from "./nominatim";
-import { searchOverpass, KEYLESS_USER_AGENT, type OsmPlace } from "./osm";
+import {
+    OVERPASS_MIRRORS,
+    OVERPASS_URL,
+    searchOverpass,
+    KEYLESS_USER_AGENT,
+    type OsmPlace,
+} from "./osm";
+import { searchPhoton } from "./photon";
 import { buildKeylessPlan, KEYLESS_MODEL_ID, KEYLESS_PLAYBOOK_HASH, keywordsFor } from "./plan";
 import { profileFromPages } from "./profile";
 import { searchYc } from "./yc";
@@ -78,44 +85,76 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
         searchPlaces: async ({ query, categoryIds, territory }) => {
             const keywords = query.split(/\s+/).filter(Boolean);
             const limit = options.placesPerTerritory ?? 40;
-            // Overpass finds organisations by what they are; Nominatim by what they
-            // are called. Both are OpenStreetMap; the second is a lighter service
-            // that still answers when the shared Overpass servers are overloaded.
-            let places: OsmPlace[] = [];
-            let overpassError: Error | null = null;
+            const areas = overpassAreas(territory.country, territory.region ?? null);
+            const places: OsmPlace[] = [];
+            const errors: Error[] = [];
+            const add = (batch: OsmPlace[]) => {
+                for (const p of batch)
+                    if (!places.some(x => x.website === p.website || x.id === p.id)) places.push(p);
+            };
+            // 1. Photon + OSM API: category search boxed to each city; fast and rarely overloaded.
             try {
-                places = await searchOverpass(
-                    {
-                        country: territory.country,
-                        region: territory.region ?? null,
-                        keywords,
-                        selectors: categoryIds,
-                        limit,
-                    },
-                    { fetchImpl }
-                );
-            } catch (error) {
-                overpassError = error instanceof Error ? error : new Error(String(error));
-            }
-            if (places.length < limit) {
-                try {
-                    const named = await searchNominatim(
+                add(
+                    await searchPhoton(
                         {
                             country: territory.country,
-                            areas: overpassAreas(territory.country, territory.region ?? null),
+                            region: territory.region ?? null,
                             keywords,
-                            limit: limit - places.length,
+                            selectors: categoryIds,
+                            limit,
                         },
                         { fetchImpl }
+                    )
+                );
+            } catch (error) {
+                errors.push(error instanceof Error ? error : new Error(String(error)));
+            }
+            // 2. Overpass: the richest query, but the shared servers stall under load, so
+            //    only the primary instance is tried once something was already found.
+            if (places.length < limit) {
+                try {
+                    add(
+                        await searchOverpass(
+                            {
+                                country: territory.country,
+                                region: territory.region ?? null,
+                                keywords,
+                                selectors: categoryIds,
+                                limit: limit - places.length,
+                            },
+                            {
+                                fetchImpl,
+                                urls: places.length > 0 ? [OVERPASS_URL] : OVERPASS_MIRRORS,
+                            }
+                        )
                     );
-                    for (const p of named)
-                        if (!places.some(x => x.website === p.website)) places.push(p);
                 } catch (error) {
-                    if (places.length === 0 && overpassError === null)
-                        overpassError = error instanceof Error ? error : new Error(String(error));
+                    errors.push(error instanceof Error ? error : new Error(String(error)));
                 }
             }
-            if (places.length === 0 && overpassError) throw overpassError;
+            // 3. Nominatim by name, in the local languages ("koffiebranderij", "Bäckerei").
+            if (places.length < limit) {
+                const terms = [
+                    ...new Set([...nativeTermsFor(keywords), ...keywords.slice(0, 1)]),
+                ].slice(0, 4);
+                try {
+                    add(
+                        await searchNominatim(
+                            {
+                                country: territory.country,
+                                areas,
+                                terms,
+                                limit: limit - places.length,
+                            },
+                            { fetchImpl }
+                        )
+                    );
+                } catch (error) {
+                    errors.push(error instanceof Error ? error : new Error(String(error)));
+                }
+            }
+            const firstError = errors[0];
+            if (places.length === 0 && firstError) throw firstError;
             return places.map(p => ({
                 fsqId: p.id,
                 name: p.name,

@@ -75,26 +75,29 @@ export async function searchNominatim(
     req: {
         country: string;
         areas: Array<{ country: string; city: string | null }>;
-        keywords: readonly string[];
+        /** Name words to look for; each is its own request. */
+        terms: readonly string[];
         limit?: number;
     },
     options: { fetchImpl?: typeof fetch; signal?: AbortSignal; url?: string; pauseMs?: number } = {}
 ): Promise<OsmPlace[]> {
     const fetchImpl = options.fetchImpl ?? fetch;
+    const limit = req.limit ?? 40;
     const places: OsmPlace[] = [];
     let first = true;
-    for (const area of req.areas) {
+    const searches = req.areas.flatMap(area => req.terms.map(term => ({ area, term })));
+    for (const { area, term } of searches) {
         if (options.signal?.aborted) break;
         if (!first) await sleep(options.pauseMs ?? 1100);
         first = false;
-        const q = `${req.keywords.join(" ")} ${area.city ?? countryName(area.country)}`.trim();
+        const q = `${term} ${area.city ?? countryName(area.country)}`.trim();
         const params = new URLSearchParams({
             q,
             format: "jsonv2",
             extratags: "1",
             addressdetails: "1",
             countrycodes: area.country.toLowerCase(),
-            limit: String(Math.min(50, req.limit ?? 40)),
+            limit: String(Math.min(50, limit)),
         });
         const response = await fetchImpl(`${options.url ?? NOMINATIM_URL}?${params.toString()}`, {
             headers: { "User-Agent": KEYLESS_USER_AGENT, Accept: "application/json" },
@@ -104,7 +107,7 @@ export async function searchNominatim(
         const json = (await response.json()) as NominatimResult[];
         for (const p of mapNominatimResults(json, area))
             if (!places.some(x => x.website === p.website)) places.push(p);
-        if (places.length >= (req.limit ?? 40)) break;
+        if (places.length >= limit) break;
     }
-    return places.slice(0, req.limit ?? 40);
+    return places.slice(0, limit);
 }

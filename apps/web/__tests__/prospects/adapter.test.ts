@@ -265,10 +265,11 @@ describe("runs", () => {
         expect(dto.summary?.found).toBe(15);
         expect(dto.summary?.durationMs).toBe(252_000);
         expect(dto.summary?.sources.map(s => [s.label, s.found, s.status])).toEqual([
-            ["Web search", 12, "ok"],
-            ["Places", 0, "skipped"],
-            ["Trade data", 3, "ok"],
+            ["Sample web search", 12, "ok"],
+            ["Sample places", 0, "skipped"],
+            ["Sample trade data", 3, "ok"],
         ]);
+        expect(dto.summary?.sources[0]!.sourceId).toBe("fixture:web");
         const sources = dto.steps.find(s => s.id === "sources")!;
         expect(sources.children!.map(c => c.status)).toEqual(["done", "skipped", "done"]);
     });

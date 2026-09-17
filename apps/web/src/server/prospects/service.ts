@@ -113,8 +113,9 @@ export function availability(): SourceAvailability {
     };
 }
 
+/** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
-    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 1;
+    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────
@@ -327,7 +328,9 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
             median !== undefined
                 ? { from: "contacted", to: "meeting", days: Math.round(median) }
                 : null,
-        yield: data.latest?.summary ? data.latest.summary.sources.map(toYield) : [],
+        yield: data.latest?.summary
+            ? data.latest.summary.sources.map(s => toYield(s, data.latest!.options.mode))
+            : [],
         fresh: fresh.slice(0, 4),
     };
 }

@@ -4,7 +4,7 @@
 // Same path as Distribution's runs route: a live run is queued to the worker
 // after a credits pre-check; a sample run executes inline over fixture
 // providers and comes back finished.
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -16,11 +16,19 @@ import { isMeteringEnforced } from "~/server/deployment";
 import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
 import { toRunDto } from "~/server/prospects/adapter";
+import { runKeylessProspects } from "~/server/prospects/keyless-run";
+import { pickRunMode, readRunEnvironment } from "~/server/prospects/run-mode";
 import { listRunDtos } from "~/server/prospects/service";
 
 import { error, handleProspectsError, json, prospectsContext, readBody } from "../_http";
 
-const Schema = z.object({ segmentId: z.string().min(1), sample: z.boolean().optional() });
+const Schema = z.object({
+    segmentId: z.string().min(1),
+    /** Shorthand for mode "sample". */
+    sample: z.boolean().optional(),
+    /** "auto" picks live when a model and a search provider are configured, else keyless. */
+    mode: z.enum(["auto", "sample", "live", "keyless"]).optional(),
+});
 const RUN_MINIMUM_CREDITS = 3_000;
 
 export async function GET(request: NextRequest) {
@@ -55,7 +63,8 @@ export async function POST(request: NextRequest) {
                 if (program.status !== "active")
                     return error("Confirm the segment before running", 409);
 
-                const mode = parsed.data.sample ? "fixture" : "live";
+                const requested = parsed.data.sample ? "sample" : (parsed.data.mode ?? "auto");
+                const mode = pickRunMode(requested, readRunEnvironment(process.env));
                 if (mode === "live" && isMeteringEnforced()) {
                     const sufficient = await hasTokens(ctx.companyId, RUN_MINIMUM_CREDITS);
                     if (!sufficient)
@@ -89,6 +98,25 @@ export async function POST(request: NextRequest) {
                     }
                     const finished = await getRun(run.id, ctx.companyId);
                     return json({ run: toRunDto(finished ?? run) }, 201);
+                }
+                if (mode === "keyless") {
+                    // Public sources take tens of seconds: answer now, work after the
+                    // response, and let the UI poll the run row as the stages advance.
+                    const requestUrl = request.url;
+                    after(async () => {
+                        try {
+                            await runKeylessProspects({
+                                runId: run.id,
+                                companyId: ctx.companyId,
+                                programId: program.id,
+                                userId: ctx.userId,
+                                requestUrl,
+                            });
+                        } catch (keylessError) {
+                            console.error("[prospects] keyless run failed:", keylessError);
+                        }
+                    });
+                    return json({ run: toRunDto(run) }, 202);
                 }
                 await inngest.send({
                     name: "distribution/run.requested",

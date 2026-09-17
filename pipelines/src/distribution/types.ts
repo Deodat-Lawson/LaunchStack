@@ -156,7 +156,12 @@ export const RunOptionsSchema = z.object({
      * research agent: no keys, no credits, deterministic — for testing the
      * pipeline end to end and for exploring the UI with realistic data.
      */
-    mode: z.enum(["live", "fixture"]).default("live"),
+    /**
+     * `keyless` runs the same stages over public, free sources (OpenStreetMap,
+     * the YC directory) and reads each candidate's website with a page
+     * profiler instead of a model: no API key of any kind.
+     */
+    mode: z.enum(["live", "fixture", "keyless"]).default("live"),
 });
 export type RunOptions = z.infer<typeof RunOptionsSchema>;
 

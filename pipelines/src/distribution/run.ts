@@ -26,7 +26,12 @@ import type { RawSearchResult, ReadablePage } from "@launchstack/tools/web-resea
 import type { AgentModelPort, ChatTokenUsage } from "@launchstack/llm";
 
 import * as db from "./db";
-import { runDossierAgent, type DossierAgentResult } from "./dossier-agent";
+import {
+    runDossierAgent,
+    type DossierAgentResult,
+    type DossierAgentInput,
+    type DossierAgentPorts,
+} from "./dossier-agent";
 import { gather, type GatherPorts } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
@@ -109,6 +114,12 @@ export interface DistributionPorts {
     plan?: (
         input: PlanInput
     ) => Promise<{ plan: DiscoveryPlan; modelId?: string; playbookHash: string }>;
+    /**
+     * Candidate profiler. Defaults to the research agent in ./dossier-agent;
+     * keyless mode supplies a page reader that needs no model. Either way
+     * the result passes the same grounding gate before it is stored.
+     */
+    profile?: (ports: DossierAgentPorts, input: DossierAgentInput) => Promise<DossierAgentResult>;
 }
 
 export interface RunContext {
@@ -422,7 +433,8 @@ export async function enrichCandidate(
     if (!program || !org) throw new Error("Program or organisation not found");
 
     const seedUrls = args.seedUrls ?? (org.domain ? [`https://${org.domain}/`] : []);
-    const agentResult: DossierAgentResult = await runDossierAgent(
+    const research = ports.profile ?? runDossierAgent;
+    const agentResult: DossierAgentResult = await research(
         {
             model: ports.model,
             fetchPage: url => ports.fetchPage(url, ctx.signal),

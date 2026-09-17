@@ -509,7 +509,10 @@ export function createFixturePorts(options: FixturePortsOptions): DistributionPo
         for (const q of queries)
             for (const m of q.searchQuery.matchAll(/country:([A-Za-z]{2})/g))
                 countries.add(m[1]!.toUpperCase());
-        const hits = world.filter(o => countries.size === 0 || countries.has(o.country));
+        const matched = world.filter(o => countries.size === 0 || countries.has(o.country));
+        // A program for a territory the fixture world does not cover still gets
+        // sample organisations; gather attributes them to the queried territory.
+        const hits = matched.length > 0 ? matched : world;
         return hits.map(o => ({
             url: `https://${o.domain}/`,
             title: `${o.name} | ${o.kinds.join(", ")} in ${o.city}`,

@@ -1,7 +1,10 @@
 "use client";
 
 import { Loader2, Play } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -18,6 +21,50 @@ import {
 
 import { formatDate, type RunDto } from "../api";
 import type { DistributionState } from "../useDistribution";
+import { buildRunMenuItems } from "./partnerContextMenu";
+
+/** A run row: expand it, start another, or copy its id. */
+function RunRow({
+    run,
+    expanded,
+    running,
+    onToggle,
+    onStartAnother,
+    children,
+}: {
+    run: RunDto;
+    expanded: boolean;
+    running: boolean;
+    onToggle: () => void;
+    onStartAnother: () => void;
+    children: ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "discovery-run",
+        id: run.id,
+        label: `Actions for run ${run.id.slice(0, 8)}`,
+        data: run,
+        items: () =>
+            buildRunMenuItems(
+                run,
+                { expanded, running },
+                {
+                    onToggleDetails: onToggle,
+                    onStartAnother,
+                    onCopyId: () => {
+                        void copyText(run.id).then(ok => {
+                            if (ok) toast.success("Run id copied");
+                        });
+                    },
+                }
+            ),
+    });
+    return (
+        <TableRow {...ctxTarget} className="cursor-pointer" onClick={onToggle}>
+            {children}
+        </TableRow>
+    );
+}
 
 const ACTIVE = new Set([
     "queued",
@@ -177,10 +224,15 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                         )}
                         {state.runs.map(run => (
                             <>
-                                <TableRow
+                                <RunRow
                                     key={run.id}
-                                    className="cursor-pointer"
-                                    onClick={() => setExpanded(expanded === run.id ? null : run.id)}
+                                    run={run}
+                                    expanded={expanded === run.id}
+                                    running={running}
+                                    onToggle={() =>
+                                        setExpanded(expanded === run.id ? null : run.id)
+                                    }
+                                    onStartAnother={() => void state.startRun(maxCandidates)}
                                 >
                                     <TableCell className="text-xs">
                                         {formatDate(run.createdAt)}
@@ -202,7 +254,7 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                                     <TableCell className="text-xs">
                                         {formatDate(run.completedAt)}
                                     </TableCell>
-                                </TableRow>
+                                </RunRow>
                                 {expanded === run.id && (
                                     <TableRow key={`${run.id}-detail`}>
                                         <TableCell colSpan={6} className="bg-panel-2/50">

@@ -3,6 +3,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link2, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildInvitationMenuItems } from "./peopleContextMenu";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -58,6 +61,49 @@ const FALLBACK_ROLES: RoleOption[] = INVITABLE_BUILTIN_ROLES.map(slug => ({
 }));
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** An invitation row: resend, copy the address, or revoke by right-click. */
+function InvitationRow({
+    invitation,
+    open,
+    busy,
+    onResend,
+    onRevoke,
+    children,
+}: {
+    invitation: Invitation;
+    open: boolean;
+    busy: boolean;
+    onResend: () => void;
+    onRevoke: () => void;
+    children: React.ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "invitation",
+        id: String(invitation.id),
+        label: `Actions for the invitation to ${invitation.email}`,
+        data: invitation,
+        items: () =>
+            buildInvitationMenuItems(
+                invitation,
+                { open, busy },
+                {
+                    onResend,
+                    onCopyEmail: () => {
+                        void copyText(invitation.email).then(ok => {
+                            if (ok) toast.success("Email copied");
+                        });
+                    },
+                    onRevoke,
+                }
+            ),
+    });
+    return (
+        <TableRow {...ctxTarget} className={open ? undefined : "opacity-60"}>
+            {children}
+        </TableRow>
+    );
+}
 
 export function InvitationsTab({ can }: InvitationsTabProps) {
     const canInvite = can("members.invite");
@@ -417,7 +463,16 @@ function InvitationList({
                             const busy = busyId === inv.id;
                             return (
                                 <React.Fragment key={inv.id}>
-                                    <TableRow className={open ? undefined : "opacity-60"}>
+                                    <InvitationRow
+                                        invitation={inv}
+                                        open={open}
+                                        busy={busy}
+                                        onResend={() => void resend(inv)}
+                                        onRevoke={() => {
+                                            setRevokeError(null);
+                                            setRevoking(inv);
+                                        }}
+                                    >
                                         <TableCell className="text-ink font-medium">
                                             {inv.email}
                                         </TableCell>
@@ -461,7 +516,7 @@ function InvitationList({
                                                 </div>
                                             )}
                                         </TableCell>
-                                    </TableRow>
+                                    </InvitationRow>
                                     {resent?.id === inv.id && (
                                         <TableRow className="bg-success-soft/60 hover:bg-success-soft/60">
                                             <TableCell colSpan={6}>

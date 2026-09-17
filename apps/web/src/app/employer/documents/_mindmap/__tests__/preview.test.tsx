@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -19,6 +19,18 @@ import { MindmapPreview } from "../ui/MindmapPreview";
 
 const CANVAS_BOX = { x: 0, y: 0, width: 1000, height: 700 };
 
+/** Observers created during a render, so a test can fire a resize at them. */
+const resizeCallbacks: Array<() => void> = [];
+
+/** Restage the measured box and notify every observer, as a real resize would. */
+function resizeStageTo(width: number, height: number) {
+    CANVAS_BOX.width = width;
+    CANVAS_BOX.height = height;
+    act(() => {
+        for (const cb of resizeCallbacks) cb();
+    });
+}
+
 beforeAll(() => {
     Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
         return {
@@ -34,14 +46,16 @@ beforeAll(() => {
         } as DOMRect;
     };
     global.ResizeObserver = class {
+        constructor(private readonly cb: () => void) {}
         observe() {
-            /* jsdom never resizes */
+            resizeCallbacks.push(this.cb);
         }
         unobserve() {
             /* no-op */
         }
         disconnect() {
-            /* no-op */
+            const i = resizeCallbacks.indexOf(this.cb);
+            if (i >= 0) resizeCallbacks.splice(i, 1);
         }
     } as unknown as typeof ResizeObserver;
     Element.prototype.setPointerCapture = function setPointerCapture() {
@@ -61,7 +75,14 @@ beforeAll(() => {
 });
 beforeEach(() => {
     fetchMock.mockReset();
+    resizeCallbacks.length = 0;
+    CANVAS_BOX.width = 1000;
+    CANVAS_BOX.height = 700;
 });
+
+function currentZoom(): number {
+    return Number(screen.getByText(/%$/).textContent.replace("%", ""));
+}
 
 function sampleDoc(): MindmapDoc {
     const root = createNode({
@@ -108,6 +129,47 @@ describe("MindmapPreview", () => {
 
         fireEvent.doubleClick(el, { clientX: 200, clientY: 140 });
         expect(container.querySelector("textarea")).toBeNull();
+    });
+
+    /**
+     * The preview commonly mounts while its panel is still animating open, so
+     * the first measurement is narrow. Framing once against that and never
+     * revisiting it left the board at 8% in a full-width pane.
+     */
+    it("re-frames when the stage grows, rather than keeping the first fit", () => {
+        CANVAS_BOX.width = 160;
+        CANVAS_BOX.height = 1200;
+        render(<MindmapPreview doc={sampleDoc()} />);
+        const cramped = currentZoom();
+
+        resizeStageTo(1000, 700);
+
+        expect(currentZoom()).toBeGreaterThan(cramped);
+    });
+
+    it("stops re-framing once the reader has zoomed", async () => {
+        const user = userEvent.setup();
+        render(<MindmapPreview doc={sampleDoc()} />);
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        const chosen = currentZoom();
+
+        resizeStageTo(1400, 900);
+
+        expect(currentZoom()).toBe(chosen);
+    });
+
+    it("re-arms auto-framing when the reader asks to fit", async () => {
+        const user = userEvent.setup();
+        render(<MindmapPreview doc={sampleDoc()} />);
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        await user.click(screen.getByRole("button", { name: "Fit to screen" }));
+        const fitted = currentZoom();
+
+        resizeStageTo(1400, 900);
+
+        expect(currentZoom()).not.toBe(fitted);
     });
 
     it("makes no network requests of its own", () => {

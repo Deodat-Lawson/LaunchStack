@@ -8,7 +8,7 @@ import { cn } from "~/lib/utils";
 
 import { fitToScreen, setActivePage, zoomByStep } from "../model/commands";
 import { EditorStore, type EditorState } from "../model/store";
-import type { MindmapDoc } from "../model/types";
+import type { MindmapDoc, Viewport } from "../model/types";
 import { Canvas } from "./Canvas";
 import { EditorProvider, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 import type { CanvasCallbacks } from "./useCanvasInteractions";
@@ -34,6 +34,13 @@ const NO_EDIT_CALLBACKS: CanvasCallbacks = {
     onEditText: () => undefined,
 };
 
+/** Viewports are floats; only a difference a reader could have caused counts. */
+function sameViewport(a: Viewport, b: Viewport): boolean {
+    return (
+        Math.abs(a.x - b.x) < 0.5 && Math.abs(a.y - b.y) < 0.5 && Math.abs(a.zoom - b.zoom) < 0.001
+    );
+}
+
 export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
     const [store] = useState(() => {
         const s = new EditorStore(doc);
@@ -44,13 +51,36 @@ export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
 
-    // Frame the document once the stage has real dimensions.
-    const framed = useRef(false);
+    /**
+     * The viewport our own framing last produced, or null before the first one.
+     *
+     * Auto-framing has to survive resizes: the preview commonly mounts while
+     * its panel is still animating open, and a stage measured mid-animation is
+     * narrow. Framing once against that measurement and never revisiting it is
+     * what left the board at 8% in a pane that had since grown to full width.
+     *
+     * But it must also stop the moment the reader pans or zooms, or the board
+     * would snap back under them on the next resize. Comparing the live
+     * viewport against the one we set tells the two apart without the store
+     * having to track intent.
+     */
+    const framedViewport = useRef<Viewport | null>(null);
+
+    const frame = useCallback(
+        (size: { w: number; h: number }) => {
+            if (size.w < 40 || size.h < 40) return;
+            fitToScreen(store, size);
+            framedViewport.current = store.getState().viewport;
+        },
+        [store]
+    );
+
     useEffect(() => {
-        if (framed.current || stageSize.w < 40 || stageSize.h < 40) return;
-        framed.current = true;
-        fitToScreen(store, stageSize);
-    }, [stageSize, store]);
+        const framed = framedViewport.current;
+        // Once the reader has moved the board, the stage is theirs.
+        if (framed && !sameViewport(framed, store.getState().viewport)) return;
+        frame(stageSize);
+    }, [stageSize, frame, store]);
 
     return (
         <EditorProvider store={store}>
@@ -62,7 +92,7 @@ export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
                     <div ref={stageRef} className="relative flex min-h-0 flex-1">
                         <Canvas callbacks={NO_EDIT_CALLBACKS} />
                     </div>
-                    <PreviewBar stageSize={stageSize} />
+                    <PreviewBar stageSize={stageSize} onFrame={frame} />
                 </div>
             </TooltipProvider>
         </EditorProvider>
@@ -75,7 +105,14 @@ const ICON_BUTTON =
     "text-ink-2 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md transition-colors";
 
 /** Page tabs and zoom — the two things a reader needs; nothing that edits. */
-function PreviewBar({ stageSize }: { stageSize: { w: number; h: number } }) {
+function PreviewBar({
+    stageSize,
+    onFrame,
+}: {
+    stageSize: { w: number; h: number };
+    /** Frames the board *and* re-arms auto-framing — asking to fit means "track it again". */
+    onFrame: (size: { w: number; h: number }) => void;
+}) {
     const store = useStore();
     const doc = useCommittedDoc();
     const zoom = useEditor(selectZoom);
@@ -84,9 +121,9 @@ function PreviewBar({ stageSize }: { stageSize: { w: number; h: number } }) {
         (pageId: string) => {
             setActivePage(store, pageId);
             // The new page has its own content; frame it before it is shown.
-            requestAnimationFrame(() => fitToScreen(store, stageSize));
+            requestAnimationFrame(() => onFrame(stageSize));
         },
-        [stageSize, store]
+        [onFrame, stageSize, store]
     );
 
     const zoomLabel = useMemo(() => `${Math.round(zoom * 100)}%`, [zoom]);
@@ -137,7 +174,7 @@ function PreviewBar({ stageSize }: { stageSize: { w: number; h: number } }) {
                 <button
                     type="button"
                     aria-label="Fit to screen"
-                    onClick={() => fitToScreen(store, stageSize)}
+                    onClick={() => onFrame(stageSize)}
                     className={ICON_BUTTON}
                 >
                     <Maximize className="size-3.5" />

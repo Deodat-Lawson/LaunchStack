@@ -34,7 +34,7 @@ export interface RunDto {
     id: string;
     programId: string;
     status: RunStatus;
-    options: { maxCandidates: number };
+    options: { maxCandidates: number; mode?: "live" | "fixture" };
     plan: {
         adjacentBrands: string[];
         strategy: string;
@@ -206,10 +206,10 @@ export const api = {
         call<{ runs: RunDto[] }>(
             `/api/distribution/runs?programId=${encodeURIComponent(programId)}`
         ),
-    startRun: (programId: string, maxCandidates: number) =>
+    startRun: (programId: string, maxCandidates: number, mode: "live" | "fixture" = "live") =>
         call<{ run: RunDto }>("/api/distribution/runs", {
             method: "POST",
-            body: JSON.stringify({ programId, options: { maxCandidates } }),
+            body: JSON.stringify({ programId, options: { maxCandidates, mode } }),
         }),
     listPartners: (params: URLSearchParams) =>
         call<{ partners: PartnerItemDto[] }>(`/api/distribution/partners?${params.toString()}`),

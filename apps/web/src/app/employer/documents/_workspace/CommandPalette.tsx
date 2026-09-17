@@ -2,9 +2,11 @@
 
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { searchSettings } from "~/lib/settings/registry";
+import { useSettingValue } from "~/lib/settings/useSettings";
+import { Command as CommandIcon, Settings } from "lucide-react";
 import { IconSearch, type IconProps } from "./icons";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
-import { Command as CommandIcon } from "lucide-react";
 import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
 
@@ -55,10 +57,12 @@ export interface CommandPaletteProps {
     onPickSource: (id: string) => void;
     /** If provided, feature rows open Studio with this id instead of hard-navigating. */
     onPickFeature?: (featureId: string) => void;
+    /** Opens Settings on the row for this registry key. */
+    onPickSetting?: (key: string) => void;
 }
 
 interface PaletteItem {
-    kind: "action" | "feature" | "source";
+    kind: "action" | "feature" | "source" | "setting";
     id: string;
     label: string;
     sub?: string;
@@ -74,9 +78,12 @@ export function CommandPalette({
     sources,
     onPickSource,
     onPickFeature,
+    onPickSetting,
 }: CommandPaletteProps) {
     const router = useRouter();
     const [q, setQ] = useState("");
+    // The one lab that only surfaces a palette entry: hidden until it is on.
+    const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -99,7 +106,7 @@ export function CommandPalette({
         // The registry is read when the palette opens, so it reflects what is
         // mounted right now; `open` is in the deps for that reason.
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
-        DEMOTED_FEATURES.forEach(f =>
+        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps).forEach(f =>
             base.push({
                 kind: "feature",
                 id: f.id,
@@ -126,13 +133,39 @@ export function CommandPalette({
         });
         const qq = q.toLowerCase().trim();
         if (!qq) return base;
-        return base.filter(
+        const matched = base.filter(
             i =>
                 i.label.toLowerCase().includes(qq) ||
                 (i.sub ?? "").toLowerCase().includes(qq) ||
                 (i.keywords ?? "").toLowerCase().includes(qq)
         );
-    }, [q, open, onClose, sources, onPickSource, onPickFeature, navigate]);
+        // Settings are searched by what people call them, so "dark mode"
+        // finds the theme row even though no label says it.
+        for (const definition of searchSettings(qq, 6)) {
+            matched.push({
+                kind: "setting",
+                id: definition.key,
+                label: definition.label,
+                sub: `Settings · ${definition.description}`,
+                Icon: Settings,
+                onRun: () => {
+                    if (onPickSetting) onPickSetting(definition.key);
+                    else navigate(`/employer/settings#${definition.key}`);
+                },
+            });
+        }
+        return matched;
+    }, [
+        q,
+        open,
+        onClose,
+        sources,
+        onPickSource,
+        onPickFeature,
+        onPickSetting,
+        navigate,
+        predictiveGaps,
+    ]);
 
     useEffect(() => {
         if (idx >= items.length) setIdx(0);
@@ -167,6 +200,7 @@ export function CommandPalette({
         action: { label: "Actions", items: items.filter(i => i.kind === "action") },
         feature: { label: "Features", items: items.filter(i => i.kind === "feature") },
         source: { label: "Sources", items: items.filter(i => i.kind === "source") },
+        setting: { label: "Settings", items: items.filter(i => i.kind === "setting") },
     } as const;
 
     let counter = -1;
@@ -215,7 +249,7 @@ export function CommandPalette({
                             setQ(e.target.value);
                             setIdx(0);
                         }}
-                        placeholder="Jump to anything — sources, features, actions…"
+                        placeholder="Jump to anything — sources, features, settings…"
                         style={{
                             flex: 1,
                             border: "none",

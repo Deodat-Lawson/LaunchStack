@@ -10,6 +10,7 @@ import { and, asc, eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 
 import type { AgentPersona } from "@launchstack/collab";
+import { isAgentAutonomy, type AgentAutonomy } from "~/lib/agents/autonomy";
 import { collabAgentPersona } from "~/server/db/schema";
 import { db } from "~/server/db";
 
@@ -26,9 +27,17 @@ export interface PersonaInput {
     temperature?: number | null;
     maxTurnChars?: number | null;
     accent?: string | null;
+    /** Own autonomy level; null inherits the workspace default. */
+    autonomy?: AgentAutonomy | null;
 }
 
-export function rowToPersona(row: PersonaRow): AgentPersona & { dbId: string; archived: boolean } {
+export interface PersonaRecord extends AgentPersona {
+    dbId: string;
+    archived: boolean;
+    autonomy: AgentAutonomy | null;
+}
+
+export function rowToPersona(row: PersonaRow): PersonaRecord {
     return {
         dbId: row.id,
         id: row.key,
@@ -41,6 +50,7 @@ export function rowToPersona(row: PersonaRow): AgentPersona & { dbId: string; ar
         maxTurnChars: row.maxTurnChars ?? undefined,
         accent: row.accent ?? undefined,
         archived: row.archived,
+        autonomy: isAgentAutonomy(row.autonomy) ? row.autonomy : null,
     };
 }
 
@@ -82,6 +92,7 @@ export async function createPersona(companyId: bigint, input: PersonaInput) {
                     : Math.round(input.temperature * 100),
             maxTurnChars: input.maxTurnChars ?? null,
             accent: input.accent ?? null,
+            autonomy: input.autonomy ?? null,
         })
         .returning();
     if (!row) throw new Error("Failed to create persona");
@@ -91,7 +102,7 @@ export async function createPersona(companyId: bigint, input: PersonaInput) {
 export async function updatePersona(
     companyId: bigint,
     personaDbId: string,
-    patch: Partial<PersonaInput>
+    patch: Partial<PersonaInput> & { archived?: boolean }
 ) {
     const [row] = await db
         .update(collabAgentPersona)
@@ -110,6 +121,8 @@ export async function updatePersona(
                 : {}),
             ...(patch.maxTurnChars !== undefined ? { maxTurnChars: patch.maxTurnChars } : {}),
             ...(patch.accent !== undefined ? { accent: patch.accent } : {}),
+            ...(patch.autonomy !== undefined ? { autonomy: patch.autonomy } : {}),
+            ...(patch.archived !== undefined ? { archived: patch.archived } : {}),
         })
         .where(
             and(eq(collabAgentPersona.companyId, companyId), eq(collabAgentPersona.id, personaDbId))

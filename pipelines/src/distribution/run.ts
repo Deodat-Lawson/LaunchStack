@@ -28,10 +28,11 @@ import type { AgentModelPort, ChatTokenUsage } from "@launchstack/llm";
 import * as db from "./db";
 import { runDossierAgent, type DossierAgentResult } from "./dossier-agent";
 import { gather, type GatherPorts } from "./gather";
-import { planDiscovery, type SellerProfile } from "./plan";
+import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import type {
+    DiscoveryPlan,
     PartnerKind,
     ProgramRecord,
     RelationshipRecord,
@@ -78,11 +79,7 @@ export interface DistributionPorts {
         | null;
     /** Geocode + place search for one city/region query; null when not configured. */
     searchPlaces:
-        | ((args: {
-              query: string;
-              categoryIds?: string[];
-              territory: Territory;
-          }) => Promise<
+        | ((args: { query: string; categoryIds?: string[]; territory: Territory }) => Promise<
               Array<{
                   fsqId: string;
                   name: string;
@@ -104,6 +101,14 @@ export interface DistributionPorts {
     /** Rationale writer; null → template rationale. */
     writeRationale: ((input: string) => Promise<string>) | null;
     creditsPerCandidate: number;
+    /**
+     * Discovery planner. Defaults to the structured LLM call in ./plan; the
+     * fixture ports supply a deterministic plan so the whole pipeline can run
+     * without a model, a key or a credit.
+     */
+    plan?: (
+        input: PlanInput
+    ) => Promise<{ plan: DiscoveryPlan; modelId?: string; playbookHash: string }>;
 }
 
 export interface RunContext {
@@ -226,7 +231,7 @@ export async function prepareRun(
         id: "planning",
         policy: "required",
         run: () =>
-            planDiscovery({
+            (ports.plan ?? planDiscovery)({
                 program,
                 profile,
                 territories,

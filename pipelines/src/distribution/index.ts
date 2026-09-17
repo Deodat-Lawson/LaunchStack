@@ -15,3 +15,4 @@ export * from "./render";
 export * from "./dossier-agent";
 export * from "./run";
 export * from "./ports";
+export * from "./fixture";

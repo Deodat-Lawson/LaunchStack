@@ -9,12 +9,13 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { RunOptionsSchema } from "@launchstack/pipelines/distribution/types";
-import { createRun, getProgram, listRuns } from "@launchstack/pipelines/distribution/db";
+import { createRun, getProgram, getRun, listRuns } from "@launchstack/pipelines/distribution/db";
 import { hasTokens } from "~/lib/credits";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { isMeteringEnforced } from "~/server/deployment";
 import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
 
 const CreateRunSchema = z.object({
@@ -57,7 +58,8 @@ export async function POST(request: NextRequest) {
                 if (!program) return error("Program not found", 404);
                 if (program.status !== "active") return error("Program is archived", 409);
 
-                if (isMeteringEnforced()) {
+                const requestedMode = parsed.data.options?.mode ?? "live";
+                if (requestedMode === "live" && isMeteringEnforced()) {
                     const sufficient = await hasTokens(ctx.data.companyId, RUN_MINIMUM_CREDITS);
                     if (!sufficient) {
                         return NextResponse.json(
@@ -78,6 +80,25 @@ export async function POST(request: NextRequest) {
                     userId: ctx.data.authUserId,
                     options,
                 });
+
+                // Fixture mode: deterministic stand-ins for every provider, executed
+                // inline so the caller gets a finished run back. No keys, no credits.
+                if (options.mode === "fixture") {
+                    try {
+                        await runFixtureDistribution({
+                            runId: run.id,
+                            companyId: ctx.data.companyId,
+                            programId: program.id,
+                            userId: ctx.data.authUserId,
+                            requestUrl: request.url,
+                        });
+                    } catch (fixtureError) {
+                        console.error("[distribution] fixture run failed:", fixtureError);
+                    }
+                    const finished = await getRun(run.id, ctx.data.companyId);
+                    return json({ run: finished ?? run }, 201);
+                }
+
                 await inngest.send({
                     name: "distribution/run.requested",
                     data: {

@@ -1,5 +1,5 @@
-import { Analytics } from "@vercel/analytics/next";
 import { getDeploymentMode } from "~/server/deployment";
+import { AnalyticsGate } from "./AnalyticsGate";
 
 /**
  * Vercel Analytics, mounted only where it belongs.
@@ -16,5 +16,5 @@ import { getDeploymentMode } from "~/server/deployment";
 export function CloudAnalytics() {
     const enabled = getDeploymentMode() === "cloud" || process.env.VERCEL === "1";
     if (!enabled) return null;
-    return <Analytics />;
+    return <AnalyticsGate />;
 }

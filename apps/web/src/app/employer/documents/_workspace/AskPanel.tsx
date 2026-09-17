@@ -9,6 +9,7 @@ import React, {
     useState,
 } from "react";
 import { useTheme } from "next-themes";
+import { writeSettingValue } from "~/lib/settings/useSettings";
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
 import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
 import { useChatRoutes } from "../hooks/useChatRoutes";
@@ -1429,7 +1430,17 @@ export function AvatarMenu({
                     )}
                     <button
                         type="button"
-                        onClick={() => setTheme(isDark ? "light" : "dark")}
+                        onClick={() => {
+                            const next = isDark ? "light" : "dark";
+                            setTheme(next);
+                            // Remembered as a preference, so the choice follows
+                            // the person to their next browser. Best effort.
+                            void writeSettingValue({
+                                key: "appearance.theme",
+                                scope: "member",
+                                value: next,
+                            }).catch(() => undefined);
+                        }}
                         style={{
                             width: "100%",
                             display: "flex",

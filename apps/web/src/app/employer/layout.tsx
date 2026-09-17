@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { DriftShell } from "./_chrome/DriftShell";
+import { PreferenceSync } from "./_chrome/PreferenceSync";
 import { EmployerWorkspaceSwitcherProvider } from "./_chrome/EmployerWorkspaceSwitcherContext";
 import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPayload";
 import { Toaster } from "~/components/ui/sonner";
@@ -15,6 +16,7 @@ export default async function EmployerLayout({ children }: { children: ReactNode
             }}
         >
             <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
+                <PreferenceSync />
                 <DriftShell>{children}</DriftShell>
             </EmployerWorkspaceSwitcherProvider>
             <Toaster richColors position="top-right" />

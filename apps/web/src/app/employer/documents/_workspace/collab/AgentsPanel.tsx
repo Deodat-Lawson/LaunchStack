@@ -15,7 +15,16 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { Field, SelectInput, TextArea, TextInput } from "~/components/field";
+import {
+    AGENT_AUTONOMY_LEVELS,
+    AGENT_AUTONOMY_META,
+    DEFAULT_AGENT_AUTONOMY,
+    effectiveAutonomy,
+    isAgentAutonomy,
+    type AgentAutonomy,
+} from "~/lib/agents/autonomy";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
+import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
 import { IconTrash, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
@@ -34,6 +43,9 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
     const [notice, setNotice] = useState<string | null>(null);
 
     const personas = data?.personas.filter(p => !p.archived) ?? [];
+    const defaultAutonomy: AgentAutonomy = isAgentAutonomy(data?.defaults?.autonomy)
+        ? data.defaults.autonomy
+        : DEFAULT_AGENT_AUTONOMY;
 
     usePublishedActions(
         onActions,
@@ -67,6 +79,15 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             {error && <StatusNote tone="danger">{error}</StatusNote>}
 
             <Section
+                title="Autonomy"
+                description="How much an agent may do without a person in the loop. The room's least autonomous agent decides what a meeting may do; the API refuses the rest."
+            >
+                <Card>
+                    <SettingRow settingKey="agents.defaultAutonomy" />
+                </Card>
+            </Section>
+
+            <Section
                 title="Roster"
                 description="Agents are copied into a meeting when it starts, so editing one changes who shows up next time — never what was said last time."
             >
@@ -84,6 +105,7 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
                             <AgentCard
                                 key={persona.dbId}
                                 persona={persona}
+                                defaultAutonomy={defaultAutonomy}
                                 node={data?.nodes.find(n => n.nodeId === persona.nodeId) ?? null}
                                 onEdit={() => setEditing(persona)}
                                 onArchive={() => void archive(persona)}
@@ -122,16 +144,20 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
 function AgentCard({
     persona,
+    defaultAutonomy,
     node,
     onEdit,
     onArchive,
 }: {
     persona: AgentPersonaRecord;
+    defaultAutonomy: AgentAutonomy;
     node: WorkerNode | null;
     onEdit: () => void;
     onArchive: () => void;
 }) {
     const color = personaColor(persona);
+    const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
+    const inheritsAutonomy = !isAgentAutonomy(persona.autonomy);
     return (
         <Card padding={16} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
@@ -179,6 +205,17 @@ function AgentCard({
             </p>
 
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                <span
+                    title={
+                        (inheritsAutonomy ? "Inherits the workspace default. " : "") +
+                        AGENT_AUTONOMY_META[autonomy].description
+                    }
+                >
+                    <Badge variant={autonomy === "full" ? "secondary" : "warn"}>
+                        {AGENT_AUTONOMY_META[autonomy].label}
+                        {inheritsAutonomy ? " · default" : ""}
+                    </Badge>
+                </span>
                 {persona.route && <Badge variant="secondary">{persona.route}</Badge>}
                 {persona.nodeId ? (
                     <span
@@ -351,6 +388,9 @@ function AgentEditor({
     const [systemPrompt, setSystemPrompt] = useState(persona?.systemPrompt ?? "");
     const [nodeId, setNodeId] = useState(persona?.nodeId ?? "");
     const [route, setRoute] = useState(persona?.route ?? "");
+    const [autonomy, setAutonomy] = useState<string>(
+        isAgentAutonomy(persona?.autonomy) ? persona.autonomy : ""
+    );
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -374,6 +414,7 @@ function AgentEditor({
                         systemPrompt: systemPrompt.trim(),
                         nodeId: nodeId.trim() || null,
                         route: route || null,
+                        autonomy: isAgentAutonomy(autonomy) ? autonomy : null,
                     }),
                 }
             );
@@ -499,6 +540,26 @@ function AgentEditor({
                                 {ROUTES.map(option => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
+                                    </option>
+                                ))}
+                            </SelectInput>
+                        </Field>
+                        <Field
+                            label="Autonomy"
+                            hint={
+                                isAgentAutonomy(autonomy)
+                                    ? AGENT_AUTONOMY_META[autonomy].description
+                                    : "Inherits the workspace default set above."
+                            }
+                        >
+                            <SelectInput
+                                value={autonomy}
+                                onChange={e => setAutonomy(e.target.value)}
+                            >
+                                <option value="">Workspace default</option>
+                                {AGENT_AUTONOMY_LEVELS.map(level => (
+                                    <option key={level} value={level}>
+                                        {AGENT_AUTONOMY_META[level].label}
                                     </option>
                                 ))}
                             </SelectInput>

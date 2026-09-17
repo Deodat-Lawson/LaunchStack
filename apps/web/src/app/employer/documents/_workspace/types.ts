@@ -1,3 +1,4 @@
+import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 // New icons come from lucide-react; `./icons` below is the deprecated legacy
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 // Brand marks live in the shared icon home, not the legacy set below.
 import { IconGoogleDocs } from "~/components/icons/brand";
+import { IconProspects } from "~/components/icons/prospects";
 import {
     IconAudio,
     IconBolt,
@@ -250,7 +252,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "draft",
         label: "Draft",
         Icon: IconPen,
-        kbd: "⌘D",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.draft")!.defaultKeys),
         desc: "Generate a new document with AI",
         href: "/employer/documents?feature=draft",
     },
@@ -258,7 +260,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "rewrite",
         label: "Rewrite",
         Icon: IconSparkle,
-        kbd: "⌘R",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.rewrite")!.defaultKeys),
         desc: "Improve existing content",
         href: "/employer/documents?feature=rewrite",
     },
@@ -266,7 +268,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
-        kbd: "⌘W",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.workflows")!.defaultKeys),
         desc: "Automate recurring tasks across your sources",
         href: "/employer/documents?feature=workflows",
     },
@@ -274,7 +276,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "notes",
         label: "Notebook",
         Icon: IconNote,
-        kbd: "⌘N",
+        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.notes")!.defaultKeys),
         desc: "Freeform notes that span every source",
         href: "/employer/documents?feature=notes",
     },
@@ -298,6 +300,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconSessions,
         desc: "Import Claude Code and Codex conversations",
         href: "/employer/agent-sessions",
+    },
+    {
+        id: "prospects",
+        label: "Prospects",
+        Icon: IconProspects,
+        desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
+        href: "/employer/tools/prospects",
     },
     {
         id: "distribution",
@@ -490,6 +499,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Multi-channel campaigns from your company knowledge",
             },
             {
+                // A separate app with its own rail: segment, companies, company
+                // pages, people, deals, runs and sources.
+                id: "prospects",
+                label: "Prospects",
+                Icon: IconProspects,
+                desc: "Find the companies that would buy what you sell — cited profiles, fit scores, people to contact, and a deal board",
+                href: "/employer/tools/prospects",
+                external: true,
+            },
+            {
                 // A separate app with its own route (programs, discovery runs,
                 // a pipeline board and a dashboard), like Claude Artifacts.
                 id: "distribution",
@@ -580,7 +599,7 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         group: "Connect",
         items: [
-            { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Sync labeled threads" },
+            { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
             { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },

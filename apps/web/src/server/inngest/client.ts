@@ -114,6 +114,16 @@ export type GoogleDriveSyncEvent = {
     };
 };
 
+export type GmailSyncEvent = {
+    name: "gmail/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 export type Events =
     | TrendSearchEvent
     | ClientProspectorEvent
@@ -126,6 +136,7 @@ export type Events =
     | RepoWorkspaceSyncEvent
     | RepoExplainerJobEvent
     | GoogleDriveSyncEvent
+    | GmailSyncEvent
     | DistributionRunEvent;
 
 /**

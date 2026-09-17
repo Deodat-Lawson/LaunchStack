@@ -76,6 +76,11 @@ jest.mock("@launchstack/pipelines/email", () => ({
     prepareEmailCampaign: (...args: unknown[]) => mockPrepareEmailCampaign(...args),
 }));
 
+const mockRunFixture = jest.fn();
+jest.mock("~/server/distribution/fixture-run", () => ({
+    runFixtureDistribution: (...args: unknown[]) => mockRunFixture(...args),
+}));
+
 const mockInngestSend = jest.fn();
 jest.mock("~/server/inngest/client", () => ({
     inngest: { send: (...args: unknown[]) => mockInngestSend(...args) },
@@ -208,6 +213,42 @@ describe("runs", () => {
                 userId: "user-1",
             }),
         });
+    });
+
+    it("runs fixture mode inline and never enqueues or checks credits", async () => {
+        mockDb.getProgram.mockResolvedValue(program);
+        mockDb.createRun.mockResolvedValue({
+            id: "run-fx",
+            status: "queued",
+            companyId: 42n,
+            options: { mode: "fixture" },
+        });
+        mockDb.getRun.mockResolvedValue({
+            id: "run-fx",
+            status: "completed",
+            companyId: 42n,
+            options: { mode: "fixture" },
+        });
+        mockIsMeteringEnforced.mockReturnValue(true);
+        mockRunFixture.mockResolvedValue({ enriched: 3 });
+        const res = await POST_RUNS(
+            req("/api/distribution/runs", "POST", {
+                programId: "prog-1",
+                options: { mode: "fixture", maxCandidates: 3 },
+            })
+        );
+        expect(res.status).toBe(201);
+        expect(await res.json()).toMatchObject({ run: { id: "run-fx", status: "completed" } });
+        expect(mockRunFixture).toHaveBeenCalledWith(
+            expect.objectContaining({
+                runId: "run-fx",
+                companyId: 42n,
+                programId: "prog-1",
+                userId: "user-1",
+            })
+        );
+        expect(mockInngestSend).not.toHaveBeenCalled();
+        expect(mockHasTokens).not.toHaveBeenCalled();
     });
 
     it("refuses with 402 when metering is enforced and credits are short", async () => {

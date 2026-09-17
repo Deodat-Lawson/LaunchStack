@@ -1,5 +1,6 @@
 "use client";
 
+import { useSettingValue } from "~/lib/settings/useSettings";
 import React, { type ComponentType, useEffect, useRef, useState } from "react";
 import {
     displayFolderPath,
@@ -23,6 +24,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
+import { GmailConnectPanel } from "./GmailConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
 import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-meta";
@@ -47,8 +49,10 @@ import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-
  *     the Drive reconciler folds later edits back in. The tab is hidden unless
  *     `/api/connectors/google` reports the feature enabled.
  *   - Connectors: Drive/Slack/GitHub start the workspace OAuth flow at
- *     `/api/connectors/<provider>/oauth/start`; Gmail/Notion/Dropbox remain
- *     coming-soon CTAs.
+ *     `/api/connectors/<provider>/oauth/start`. Gmail has its own panel
+ *     (GmailConnectPanel): the connection is the member's own, started at
+ *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
+ *     in a folder only they can see. Notion/Dropbox remain coming-soon CTAs.
  */
 
 export interface AddSourceModalProps {
@@ -216,6 +220,13 @@ export function AddSourceModal({
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
     const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
+    // Settings → Document defaults: open on Google Doc when Drive linking is
+    // on and the workspace asked for it — only when the caller named no tab.
+    const preferGoogleDoc = useSettingValue<boolean>("documents.createNativeGoogleDoc");
+    useEffect(() => {
+        if (!open || initialTab || !preferGoogleDoc || !googleStatus?.enabled) return;
+        setTab(current => (current === "files" ? "google-doc" : current));
+    }, [open, initialTab, preferGoogleDoc, googleStatus?.enabled]);
 
     useEffect(() => {
         if (!open) return;
@@ -315,6 +326,8 @@ export function AddSourceModal({
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
         panel = <DriveConnectPanel tab={active} />;
+    } else if (tab === "gmail") {
+        panel = <GmailConnectPanel tab={active} />;
     } else if (tab === "agent-sessions") {
         panel = <AgentSessionsLinkPanel />;
     } else {
@@ -2016,7 +2029,12 @@ function useConnectorsOverview(enabled: boolean) {
 }
 
 const PROVIDER_PERKS: Record<string, string[]> = {
-    gmail: ["Select labels or search queries", "Re-syncs every hour", "Attachments included"],
+    gmail: [
+        "Pick labels or Gmail searches",
+        "Private to you — lands in your own folder",
+        "Re-syncs every 15 minutes, read-only",
+        "PDF and Office attachments included",
+    ],
     notion: [
         "Pick workspaces, pages or databases",
         "Updates stream in real-time",

@@ -29,6 +29,8 @@ import {
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { useSettingValue } from "~/lib/settings/useSettings";
+import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
@@ -95,6 +97,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "marketing-pipeline": "/employer/tools/marketing-pipeline",
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/tools/distribution",
+    prospects: "/employer/tools/prospects",
     notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
@@ -119,6 +122,7 @@ const FEATURE_IDS = new Set([
     "audio-gen",
     "marketing",
     "distribution",
+    "prospects",
     "knowledge",
     "meetings",
     "metadata",
@@ -264,6 +268,8 @@ export function WorkspaceShell() {
     const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
     /** Read by the shortcut listener so the editor's own keys win while it is open. */
     const editingRef = useRef(false);
+    /** The latest `expandFeature`, for the keyboard handler declared before it. */
+    const expandFeatureRef = useRef<(featureId: string) => void>(() => undefined);
     useEffect(() => {
         editingRef.current = editing;
     }, [editing]);
@@ -1039,6 +1045,7 @@ export function WorkspaceShell() {
         },
         [openAdd, router]
     );
+    expandFeatureRef.current = expandFeature;
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
     // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal;
@@ -1071,11 +1078,13 @@ export function WorkspaceShell() {
                 "google-drive": "drive",
                 slack: "slack",
                 github: "github",
+                gmail: "gmail",
             };
             const label: Record<string, string> = {
                 "google-drive": "Google Drive",
                 slack: "Slack",
                 github: "GitHub",
+                gmail: "Gmail",
             };
             const tab = tabByProvider[connectorParam];
             const name = label[connectorParam] ?? connectorParam;
@@ -1316,33 +1325,52 @@ export function WorkspaceShell() {
         },
     ]);
 
-    // Keyboard shortcuts
+    // Keyboard shortcuts: the registry in ~/lib/shortcuts/commands, with the
+    // member's overrides from Settings → Shortcuts applied on top.
+    const shortcutOverrides = useSettingValue<ShortcutBindings>("shortcuts.bindings");
+    const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
+    const bindingsRef = useRef(bindings);
+    bindingsRef.current = bindings;
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             // The mindmap editor binds its own ⌘K, `/` and tool keys on the
             // same window; while it is open, its map wins.
             if (editingRef.current) return;
             const tag = (e.target as HTMLElement | null)?.tagName;
-            const inInput = tag === "INPUT" || tag === "TEXTAREA";
-            const mod = e.metaKey || e.ctrlKey;
-            if (mod && e.key.toLowerCase() === "k") {
-                e.preventDefault();
-                setPalOpen(v => !v);
-            } else if (mod && e.key.toLowerCase() === "u") {
-                e.preventDefault();
-                setAddOpen(true);
-            } else if (mod && e.key.toLowerCase() === "j") {
-                e.preventDefault();
-                setStudioOpen(v => !v);
-            } else if (mod && e.key === "\\") {
-                e.preventDefault();
-                setRailHidden(v => !v);
-            } else if (e.key === "/" && !inInput) {
-                e.preventDefault();
-                const el = document.querySelector<HTMLInputElement>(
-                    'input[placeholder="Search your knowledge"]'
-                );
-                el?.focus();
+            const inInput =
+                tag === "INPUT" ||
+                tag === "TEXTAREA" ||
+                Boolean((e.target as HTMLElement | null)?.isContentEditable);
+            const command = commandForEvent(e, bindingsRef.current, { inInput });
+            if (!command) return;
+            e.preventDefault();
+            switch (command.id) {
+                case "palette.toggle":
+                    setPalOpen(v => !v);
+                    break;
+                case "source.add":
+                    setAddOpen(true);
+                    break;
+                case "studio.toggle":
+                    setStudioOpen(v => !v);
+                    break;
+                case "rail.toggle":
+                    setRailHidden(v => !v);
+                    break;
+                case "search.focus": {
+                    const el = document.querySelector<HTMLInputElement>(
+                        'input[placeholder="Search your knowledge"]'
+                    );
+                    el?.focus();
+                    break;
+                }
+                case "settings.open":
+                    expandFeatureRef.current("settings");
+                    break;
+                default:
+                    if (command.id.startsWith("feature.")) {
+                        expandFeatureRef.current(command.id.slice("feature.".length));
+                    }
             }
         };
         window.addEventListener("keydown", onKey);
@@ -1636,6 +1664,13 @@ export function WorkspaceShell() {
                 onPickFeature={id => {
                     setPalOpen(false);
                     setTimeout(() => expandFeature(id), 100);
+                }}
+                onPickSetting={key => {
+                    setPalOpen(false);
+                    // The hub reads the hash on mount and on change; the row
+                    // scrolls itself into view.
+                    window.location.hash = key;
+                    setTimeout(() => expandFeature("settings"), 100);
                 }}
             />
 

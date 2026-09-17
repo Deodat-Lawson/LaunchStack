@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
     generateImage,
@@ -9,36 +9,36 @@ import {
     type ImageToolConfig,
 } from "../src/image-generation";
 
-const PNG = "iVBORw0KGgoAAAANSUhEUg==";
+/** A 1x1 PNG — real bytes, so the base64 → Buffer → upload path is honest. */
+const PNG =
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 
-const CONFIG: ImageToolConfig = {
-    source: "chat",
-    modelId: "google/gemini-2.5-flash-image",
-    endpoint: { baseUrl: "https://openrouter.ai/api/v1", apiKey: "k" },
-};
-
-function mockFetchOnce(body: unknown, init: { ok?: boolean; status?: number } = {}) {
-    const spy = vi.fn().mockResolvedValue({
-        ok: init.ok ?? true,
-        status: init.status ?? 200,
-        json: async () => body,
-        text: async () => JSON.stringify(body),
-    } as unknown as Response);
-    vi.stubGlobal("fetch", spy);
-    return spy;
+/**
+ * Replays one response through the endpoint's injected `fetch`, so the real
+ * OpenRouter provider does the request/response translation. Its image model
+ * targets /images and expects the b64_json envelope.
+ */
+function fakeFetch(response: unknown, init: { status?: number } = {}) {
+    const calls: string[] = [];
+    const fetchImpl = vi.fn(async (input: unknown) => {
+        calls.push(typeof input === "string" ? input : String((input as Request).url));
+        return new Response(JSON.stringify(response), {
+            status: init.status ?? 200,
+            headers: { "content-type": "application/json" },
+        });
+    });
+    return { fetchImpl: fetchImpl as unknown as typeof globalThis.fetch, calls };
 }
 
 function imageResponse(n = 1) {
+    return { created: 1, data: Array.from({ length: n }, () => ({ b64_json: PNG })) };
+}
+
+function configWith(fetchImpl: typeof globalThis.fetch): ImageToolConfig {
     return {
-        choices: [
-            {
-                message: {
-                    images: Array.from({ length: n }, () => ({
-                        image_url: { url: `data:image/png;base64,${PNG}` },
-                    })),
-                },
-            },
-        ],
+        source: "chat",
+        modelId: "google/gemini-2.5-flash-image",
+        endpoint: { baseUrl: "https://openrouter.ai/api/v1", apiKey: "k", fetch: fetchImpl },
     };
 }
 
@@ -55,11 +55,6 @@ function store(): ImageAssetStore & { uploads: Array<{ filename: string; size: n
         },
     };
 }
-
-afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-});
 
 describe("endpoint resolution", () => {
     it("prefers explicit image config over chat", () => {
@@ -108,12 +103,12 @@ describe("endpoint resolution", () => {
 
 describe("generate and persist", () => {
     it("stores the bytes and returns a reference, never the image itself", async () => {
-        mockFetchOnce(imageResponse());
+        const { fetchImpl } = fakeFetch(imageResponse());
         const storage = store();
 
         const result = await generateImage(
             { prompt: "a duck on a bicycle" },
-            { storage, config: CONFIG }
+            { storage, config: configWith(fetchImpl) }
         );
 
         expect(result.data.assets).toHaveLength(1);
@@ -126,9 +121,12 @@ describe("generate and persist", () => {
     });
 
     it("stamps provenance so a run can be traced to a model", async () => {
-        mockFetchOnce(imageResponse());
+        const { fetchImpl } = fakeFetch(imageResponse());
 
-        const result = await generateImage({ prompt: "x" }, { storage: store(), config: CONFIG });
+        const result = await generateImage(
+            { prompt: "x" },
+            { storage: store(), config: configWith(fetchImpl) }
+        );
 
         expect(result.provenance).toMatchObject({
             tool: "image-generation.generate",
@@ -138,53 +136,62 @@ describe("generate and persist", () => {
     });
 
     it("reports spend once per persisted asset", async () => {
-        mockFetchOnce(imageResponse(2));
+        const { fetchImpl } = fakeFetch(imageResponse(2));
         const onSpend = vi.fn();
 
-        await generateImage({ prompt: "x" }, { storage: store(), config: CONFIG, onSpend });
+        await generateImage(
+            { prompt: "x", count: 2 },
+            { storage: store(), config: configWith(fetchImpl), onSpend }
+        );
 
         expect(onSpend).toHaveBeenCalledTimes(2);
     });
 
     it("bills nobody when the write fails after a paid generation", async () => {
-        mockFetchOnce(imageResponse());
+        const { fetchImpl } = fakeFetch(imageResponse());
         const onSpend = vi.fn();
         const failing: ImageAssetStore = {
             upload: () => Promise.reject(new Error("disk full")),
         };
 
         await expect(
-            generateImage({ prompt: "x" }, { storage: failing, config: CONFIG, onSpend })
+            generateImage(
+                { prompt: "x" },
+                { storage: failing, config: configWith(fetchImpl), onSpend }
+            )
         ).rejects.toThrow("disk full");
 
         expect(onSpend).not.toHaveBeenCalled();
     });
 
     it("surfaces provider failures as ToolError with retryability intact", async () => {
-        mockFetchOnce({ error: "upstream" }, { ok: false, status: 503 });
+        const { fetchImpl } = fakeFetch({ error: { message: "upstream" } }, { status: 503 });
 
         await expect(
-            generateImage({ prompt: "x" }, { storage: store(), config: CONFIG })
+            generateImage({ prompt: "x" }, { storage: store(), config: configWith(fetchImpl) })
         ).rejects.toMatchObject({ name: "ToolError", status: 503, retryable: true });
     });
 
-    it("passes endpoint warnings through instead of hiding them", async () => {
-        mockFetchOnce(imageResponse());
+    it("stores every image the endpoint returns", async () => {
+        const { fetchImpl } = fakeFetch(imageResponse(3));
+        const storage = store();
 
         const result = await generateImage(
             { prompt: "x", count: 3 },
-            { storage: store(), config: CONFIG }
+            { storage, config: configWith(fetchImpl) }
         );
 
-        expect(result.data.warnings[0]).toMatchObject({ type: "count-reduced" });
+        expect(result.data.assets).toHaveLength(3);
+        // Distinct filenames, or the third write silently overwrites the first.
+        expect(new Set(storage.uploads.map(u => u.filename)).size).toBe(3);
     });
 
     it("rejects an empty prompt at the schema boundary", async () => {
-        const fetchSpy = mockFetchOnce(imageResponse());
+        const { fetchImpl, calls } = fakeFetch(imageResponse());
 
         await expect(
-            generateImage({ prompt: "   " }, { storage: store(), config: CONFIG })
+            generateImage({ prompt: "   " }, { storage: store(), config: configWith(fetchImpl) })
         ).rejects.toBeInstanceOf(Error);
-        expect(fetchSpy).not.toHaveBeenCalled();
+        expect(calls).toHaveLength(0);
     });
 });

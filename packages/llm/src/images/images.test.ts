@@ -1,95 +1,105 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+/**
+ * These drive the real AI SDK providers through an injected `fetch`, so the
+ * request each shape actually puts on the wire is what gets asserted. A fake
+ * backend would only prove our own mapping; this proves the provider wiring
+ * too, which is the part we no longer write and therefore the part most likely
+ * to change under us on an upgrade.
+ */
+
+import { describe, expect, it, vi } from "vitest";
 
 import { describeImageEndpoint, generateImages, resolveImageApiShape } from "./index";
 import { ImageGenerationError, type ImageEndpointConfig } from "./types";
 
-const PNG = "iVBORw0KGgoAAAANSUhEUg==";
+/** A 1x1 PNG — small, but real bytes, so base64 round-trips are honest. */
+const PNG =
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 
-function mockFetchOnce(body: unknown, init: { ok?: boolean; status?: number } = {}) {
-    const spy = vi.fn().mockResolvedValue({
-        ok: init.ok ?? true,
-        status: init.status ?? 200,
-        json: async () => body,
-        text: async () => JSON.stringify(body),
-    } as unknown as Response);
-    vi.stubGlobal("fetch", spy);
-    return spy;
+interface Captured {
+    url: string;
+    body: Record<string, unknown>;
+    headers: Record<string, string>;
 }
 
-/** The mock always receives a JSON string body; this keeps that knowledge in one place. */
-function sentBody(spy: ReturnType<typeof mockFetchOnce>, call = 0): Record<string, unknown> {
-    const init = (spy.mock.calls[call] as [string, RequestInit])[1];
-    return JSON.parse(init.body as string) as Record<string, unknown>;
-}
-
-function sentUrl(spy: ReturnType<typeof mockFetchOnce>, call = 0): string {
-    return (spy.mock.calls[call] as [string, RequestInit])[0];
+/** Replays one JSON response and records what was sent. */
+function fakeFetch(response: unknown, init: { status?: number } = {}) {
+    const calls: Captured[] = [];
+    const fetchImpl = vi.fn(async (input: unknown, requestInit?: RequestInit) => {
+        const url = typeof input === "string" ? input : String((input as Request).url);
+        const rawHeaders = (requestInit?.headers ?? {}) as Record<string, string>;
+        calls.push({
+            url,
+            body: requestInit?.body
+                ? (JSON.parse(requestInit.body as string) as Record<string, unknown>)
+                : {},
+            headers: Object.fromEntries(
+                Object.entries(rawHeaders).map(([k, v]) => [k.toLowerCase(), v])
+            ),
+        });
+        const status = init.status ?? 200;
+        return new Response(JSON.stringify(response), {
+            status,
+            headers: { "content-type": "application/json" },
+        });
+    });
+    return { fetchImpl: fetchImpl as unknown as typeof globalThis.fetch, calls };
 }
 
 function endpoint(over: Partial<ImageEndpointConfig> = {}): ImageEndpointConfig {
     return { baseUrl: "https://openrouter.ai/api/v1", apiKey: "k", ...over };
 }
 
-afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-});
-
 describe("shape inference — the thing that makes swapping URLs a config change", () => {
     it.each([
-        ["https://openrouter.ai/api/v1", "chat-completions"],
-        ["https://gateway.ai.cloudflare.com/v1/acct/gw", "chat-completions"],
-        ["https://generativelanguage.googleapis.com/v1beta/openai", "images-generations"],
-        ["https://generativelanguage.googleapis.com/v1beta/openai/", "images-generations"],
-        ["https://generativelanguage.googleapis.com/v1beta", "gemini-native"],
-        ["https://api.openai.com/v1", "images-generations"],
-        ["https://some-gateway.internal/v1", "images-generations"],
+        ["https://openrouter.ai/api/v1", "openrouter"],
+        // Not OpenRouter: a proxy that speaks OpenAI routes is the default shape.
+        ["https://gateway.ai.cloudflare.com/v1/acct/gw", "openai-compatible"],
+        ["https://generativelanguage.googleapis.com/v1beta/openai", "openai-compatible"],
+        ["https://generativelanguage.googleapis.com/v1beta/openai/", "openai-compatible"],
+        ["https://generativelanguage.googleapis.com/v1beta", "google-native"],
+        ["https://api.openai.com/v1", "openai-compatible"],
+        ["https://some-gateway.internal/v1", "openai-compatible"],
     ])("reads %s as %s", (url, expected) => {
         expect(resolveImageApiShape(url).shape).toBe(expected);
     });
 
     it("lets an operator override a host whose name lies about its shape", () => {
-        const resolved = resolveImageApiShape("https://openrouter.ai/api/v1", "images-generations");
-        expect(resolved).toMatchObject({ shape: "images-generations", explicit: true });
+        expect(
+            resolveImageApiShape("https://openrouter.ai/api/v1", "openai-compatible")
+        ).toMatchObject({ shape: "openai-compatible", explicit: true });
     });
 
     it("explains its choice, so a misrouted endpoint is debuggable without a request", () => {
-        expect(describeImageEndpoint(endpoint()).reason).toContain("modalities");
+        expect(describeImageEndpoint(endpoint()).reason).toContain("/images");
     });
 
     it("falls back to the common shape rather than throwing on an unparseable URL", () => {
-        expect(resolveImageApiShape("not-a-url").shape).toBe("images-generations");
+        expect(resolveImageApiShape("not-a-url").shape).toBe("openai-compatible");
     });
 });
 
-describe("chat-completions backend (OpenRouter)", () => {
-    it("asks for image output and returns the bytes", async () => {
-        const fetchSpy = mockFetchOnce({
-            choices: [
-                { message: { images: [{ image_url: { url: `data:image/png;base64,${PNG}` } }] } },
-            ],
-        });
+describe("openrouter shape", () => {
+    // OpenRouter's provider targets its own /images endpoint and expects the
+    // b64_json envelope — NOT the chat-completions + modalities path its docs
+    // describe. This fixture is the contract we actually depend on.
+    const imagesResponse = { created: 1, data: [{ b64_json: PNG }] };
+
+    it("posts to /images and returns the bytes", async () => {
+        const { fetchImpl, calls } = fakeFetch(imagesResponse);
 
         const result = await generateImages(
             { prompt: "a duck", modelId: "google/gemini-2.5-flash-image", aspectRatio: "16:9" },
-            endpoint()
+            endpoint({ fetch: fetchImpl })
         );
 
-        expect(result.images).toEqual([{ base64: PNG, mediaType: "image/png" }]);
-        expect(result.shape).toBe("chat-completions");
-
-        expect(sentUrl(fetchSpy)).toBe("https://openrouter.ai/api/v1/chat/completions");
-        const body = sentBody(fetchSpy);
-        expect(body.modalities).toEqual(["image", "text"]);
-        expect(body.image_config).toEqual({ aspect_ratio: "16:9" });
+        expect(result.shape).toBe("openrouter");
+        expect(result.images[0]?.base64).toBe(PNG);
+        expect(calls[0]?.url).toContain("/images");
+        expect(calls[0]?.body.model).toBe("google/gemini-2.5-flash-image");
     });
 
     it("carries input images, which is what makes editing possible", async () => {
-        const fetchSpy = mockFetchOnce({
-            choices: [
-                { message: { images: [{ image_url: { url: `data:image/png;base64,${PNG}` } }] } },
-            ],
-        });
+        const { fetchImpl, calls } = fakeFetch(imagesResponse);
 
         await generateImages(
             {
@@ -97,146 +107,137 @@ describe("chat-completions backend (OpenRouter)", () => {
                 modelId: "google/gemini-2.5-flash-image",
                 inputImages: [{ base64: PNG, mediaType: "image/png" }],
             },
-            endpoint()
+            endpoint({ fetch: fetchImpl })
         );
 
-        const body = sentBody(fetchSpy) as unknown as {
-            messages: Array<{ content: Array<{ type: string }> }>;
-        };
-        expect(body.messages[0]?.content.map(p => p.type)).toEqual(["image_url", "text"]);
+        // The image has to reach the wire, whatever the provider calls the field.
+        expect(JSON.stringify(calls[0]?.body)).toContain(PNG.slice(0, 32));
     });
 
-    it("warns instead of lying when more than one image is asked for", async () => {
-        mockFetchOnce({
-            choices: [
-                { message: { images: [{ image_url: { url: `data:image/png;base64,${PNG}` } }] } },
-            ],
-        });
-
-        const result = await generateImages(
-            { prompt: "a duck", modelId: "m", count: 3 },
-            endpoint()
-        );
-
-        expect(result.images).toHaveLength(1);
-        expect(result.warnings[0]).toMatchObject({ type: "count-reduced" });
-    });
-
-    it("names the model when a text-only one answers with prose", async () => {
-        mockFetchOnce({ choices: [{ message: { content: "Here is a description of a duck." } }] });
-
-        await expect(
-            generateImages({ prompt: "a duck", modelId: "openai/gpt-4o-mini" }, endpoint())
-        ).rejects.toMatchObject({ code: "no_image_returned", retryable: false });
+    it("sends the caller's key as a bearer token", async () => {
+        const { fetchImpl, calls } = fakeFetch(imagesResponse);
+        await generateImages({ prompt: "x", modelId: "m" }, endpoint({ fetch: fetchImpl }));
+        expect(calls[0]?.headers.authorization).toBe("Bearer k");
     });
 });
 
-describe("images-generations backend (OpenAI / Gemini compat)", () => {
-    const openai = endpoint({ baseUrl: "https://api.openai.com/v1" });
-
-    it("requests bytes and converts our ratio into the pixel size it wants", async () => {
-        const fetchSpy = mockFetchOnce({ data: [{ b64_json: PNG }] });
+describe("openai-compatible shape", () => {
+    it("posts to /images/generations and returns the bytes", async () => {
+        const { fetchImpl, calls } = fakeFetch({ data: [{ b64_json: PNG }] });
 
         const result = await generateImages(
-            { prompt: "a duck", modelId: "gpt-image-1", aspectRatio: "16:9" },
-            openai
+            { prompt: "a duck", modelId: "gpt-image-1" },
+            endpoint({ baseUrl: "https://api.openai.com/v1", fetch: fetchImpl })
         );
 
-        expect(result.images).toEqual([{ base64: PNG, mediaType: "image/png" }]);
-        expect(sentUrl(fetchSpy)).toBe("https://api.openai.com/v1/images/generations");
-        expect(sentBody(fetchSpy)).toMatchObject({
-            response_format: "b64_json",
-            size: "1536x1024",
-            n: 1,
-        });
+        expect(result.shape).toBe("openai-compatible");
+        expect(result.images[0]?.base64).toBe(PNG);
+        expect(calls[0]?.url).toContain("/images/generations");
+        expect(calls[0]?.body.prompt).toBe("a duck");
     });
 
-    it("warns that it cannot edit rather than pretending it did", async () => {
-        mockFetchOnce({ data: [{ b64_json: PNG }] });
+    it("routes Google's compatibility path through the same shape", async () => {
+        const { fetchImpl, calls } = fakeFetch({ data: [{ b64_json: PNG }] });
 
         const result = await generateImages(
-            {
-                prompt: "make the hat red",
-                modelId: "gpt-image-1",
-                inputImages: [{ base64: PNG, mediaType: "image/png" }],
-            },
-            openai
+            { prompt: "a duck", modelId: "gemini-2.5-flash-image" },
+            endpoint({
+                baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+                fetch: fetchImpl,
+            })
         );
 
-        expect(result.warnings[0]).toMatchObject({ type: "unsupported-option" });
-        expect(result.warnings[0]?.message).toContain("ignored");
+        expect(result.shape).toBe("openai-compatible");
+        expect(calls[0]?.url).toBe(
+            "https://generativelanguage.googleapis.com/v1beta/openai/images/generations"
+        );
     });
 });
 
-describe("gemini-native backend", () => {
-    const google = endpoint({ baseUrl: "https://generativelanguage.googleapis.com/v1beta" });
-
-    it("puts the model in the path and the key in the Google header", async () => {
-        const fetchSpy = mockFetchOnce({
+describe("google-native shape", () => {
+    it("posts to :generateContent and reads the inline image part", async () => {
+        const { fetchImpl, calls } = fakeFetch({
             candidates: [
-                { content: { parts: [{ inlineData: { mimeType: "image/png", data: PNG } }] } },
+                {
+                    content: {
+                        role: "model",
+                        parts: [{ inlineData: { mimeType: "image/png", data: PNG } }],
+                    },
+                    finishReason: "STOP",
+                },
             ],
         });
 
         const result = await generateImages(
             { prompt: "a duck", modelId: "gemini-2.5-flash-image" },
-            google
+            endpoint({
+                baseUrl: "https://generativelanguage.googleapis.com/v1beta",
+                fetch: fetchImpl,
+            })
         );
 
-        expect(result.images).toEqual([{ base64: PNG, mediaType: "image/png" }]);
-        expect(sentUrl(fetchSpy)).toBe(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent"
-        );
-        const init = (fetchSpy.mock.calls[0] as [string, RequestInit])[1];
-        expect((init.headers as Record<string, string>)["x-goog-api-key"]).toBe("k");
-        const body = sentBody(fetchSpy) as unknown as {
-            generationConfig: { responseModalities: string[] };
-        };
-        expect(body.generationConfig.responseModalities).toEqual(["IMAGE", "TEXT"]);
-    });
-
-    it("reports a safety block as a block, not as a missing image", async () => {
-        mockFetchOnce({ promptFeedback: { blockReason: "SAFETY" } });
-
-        await expect(
-            generateImages({ prompt: "...", modelId: "gemini-2.5-flash-image" }, google)
-        ).rejects.toMatchObject({ code: "content_blocked", retryable: false });
+        expect(result.shape).toBe("google-native");
+        expect(result.images[0]?.base64).toBe(PNG);
+        expect(calls[0]?.url).toContain("gemini-2.5-flash-image");
     });
 });
 
 describe("failure policy", () => {
-    it("marks 4xx non-retryable and 5xx retryable", async () => {
-        mockFetchOnce({ error: "bad model" }, { ok: false, status: 400 });
-        await expect(
-            generateImages({ prompt: "x", modelId: "m" }, endpoint())
-        ).rejects.toMatchObject({ retryable: false, status: 400 });
+    const failing = (status: number) =>
+        endpoint({ fetch: fakeFetch({ error: { message: "nope" } }, { status }).fetchImpl });
 
-        mockFetchOnce({ error: "upstream" }, { ok: false, status: 503 });
+    it("marks 4xx non-retryable and 5xx retryable", async () => {
         await expect(
-            generateImages({ prompt: "x", modelId: "m" }, endpoint())
-        ).rejects.toMatchObject({ retryable: true, status: 503 });
+            generateImages({ prompt: "x", modelId: "m" }, failing(400))
+        ).rejects.toMatchObject({ name: "ImageGenerationError", retryable: false });
+
+        await expect(
+            generateImages({ prompt: "x", modelId: "m" }, failing(503))
+        ).rejects.toMatchObject({ name: "ImageGenerationError", retryable: true });
     });
 
     it("treats 429 as retryable even though it is a 4xx", async () => {
-        mockFetchOnce({ error: "slow down" }, { ok: false, status: 429 });
         await expect(
-            generateImages({ prompt: "x", modelId: "m" }, endpoint())
+            generateImages({ prompt: "x", modelId: "m" }, failing(429))
         ).rejects.toMatchObject({ retryable: true });
     });
 
-    it("refuses an unconfigured endpoint before making a request", async () => {
-        const fetchSpy = mockFetchOnce({});
+    it("reports an auth failure as unauthorized, not a generic provider error", async () => {
         await expect(
-            generateImages({ prompt: "x", modelId: "m" }, endpoint({ baseUrl: "" }))
+            generateImages({ prompt: "x", modelId: "m" }, failing(401))
+        ).rejects.toMatchObject({ code: "unauthorized" });
+    });
+
+    it("never lets a raw SDK error escape", async () => {
+        await expect(
+            generateImages({ prompt: "x", modelId: "m" }, failing(500))
         ).rejects.toBeInstanceOf(ImageGenerationError);
-        expect(fetchSpy).not.toHaveBeenCalled();
+    });
+
+    it("refuses an unconfigured endpoint before making a request", async () => {
+        const { fetchImpl, calls } = fakeFetch({});
+        await expect(
+            generateImages(
+                { prompt: "x", modelId: "m" },
+                endpoint({ baseUrl: "", fetch: fetchImpl })
+            )
+        ).rejects.toMatchObject({ code: "not_configured" });
+        expect(calls).toHaveLength(0);
     });
 
     it("refuses an empty prompt before making a request", async () => {
-        const fetchSpy = mockFetchOnce({});
+        const { fetchImpl, calls } = fakeFetch({});
         await expect(
-            generateImages({ prompt: "   ", modelId: "m" }, endpoint())
+            generateImages({ prompt: "   ", modelId: "m" }, endpoint({ fetch: fetchImpl }))
         ).rejects.toMatchObject({ code: "invalid_request" });
-        expect(fetchSpy).not.toHaveBeenCalled();
+        expect(calls).toHaveLength(0);
+    });
+
+    it("does not retry — a second attempt is a second charge", async () => {
+        const { fetchImpl, calls } = fakeFetch({ error: { message: "boom" } }, { status: 500 });
+        await expect(
+            generateImages({ prompt: "x", modelId: "m" }, endpoint({ fetch: fetchImpl }))
+        ).rejects.toBeInstanceOf(ImageGenerationError);
+        expect(calls).toHaveLength(1);
     });
 });

@@ -22,8 +22,9 @@ registry's rule):
 `IMAGE_MODEL` overrides the default (`google/gemini-2.5-flash-image`, Nano
 Banana). Nano Banana rather than Imagen because this tool exists to be called by
 an agent that will be asked to change what it just made, and only the natively
-multimodal line can edit. `IMAGE_API_SHAPE` forces a wire shape for a gateway
-whose hostname does not imply one.
+multimodal line can edit. `IMAGE_API_SHAPE` (`openrouter` | `openai-compatible` |
+`google-native`) forces a driver for a gateway whose hostname does not imply
+one.
 
 **Three decisions this layer owns.**
 

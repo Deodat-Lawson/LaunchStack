@@ -17,19 +17,19 @@
 /**
  * The wire shapes we know how to speak.
  *
- * - `chat-completions`   OpenAI-shaped chat with `modalities: ["image","text"]`.
+ * - `openrouter`   OpenAI-shaped chat with `modalities: ["image","text"]`.
  *                        Images come back attached to the assistant message.
  *                        This is how OpenRouter does it, and it is the only
  *                        shape that also supports conversational editing.
- * - `images-generations` The classic `POST /images/generations`. OpenAI's own
+ * - `openai-compatible` The classic `POST /images/generations`. OpenAI's own
  *                        endpoint and Gemini's OpenAI-compatibility layer both
  *                        speak it. One prompt in, N images out, no history.
- * - `gemini-native`      Google's Generative Language API `:generateContent`,
+ * - `google-native`      Google's Generative Language API `:generateContent`,
  *                        where an image arrives as an `inlineData` part.
  *                        Reached when someone points us at Google directly
  *                        rather than at its `/openai` compatibility path.
  */
-export type ImageApiShape = "chat-completions" | "images-generations" | "gemini-native";
+export type ImageApiShape = "openrouter" | "openai-compatible" | "google-native";
 
 export interface ImageEndpointConfig {
     /** Base URL, no trailing slash required — callers may include one. */
@@ -46,6 +46,12 @@ export interface ImageEndpointConfig {
     timeoutMs?: number;
     /** Extra headers, e.g. OpenRouter's HTTP-Referer / X-Title attribution. */
     headers?: Record<string, string>;
+    /**
+     * Replaces the provider's HTTP call. Tests drive every shape through this
+     * without a network, and an operator can wrap calls (proxy, tracing)
+     * without forking the provider.
+     */
+    fetch?: typeof globalThis.fetch;
 }
 
 /** An aspect ratio we accept from callers, independent of how a vendor spells it. */
@@ -66,8 +72,8 @@ export interface ImageGenerationRequest {
     count?: number;
     aspectRatio?: ImageAspectRatio;
     /**
-     * Images to edit or use as reference. Only `chat-completions` and
-     * `gemini-native` can carry these; `images-generations` warns and ignores.
+     * Images to edit or use as reference. Only `openrouter` and
+     * `google-native` can carry these; `openai-compatible` warns and ignores.
      */
     inputImages?: ImageInput[];
     /** Escape hatch merged into the request body, after everything else. */
@@ -115,16 +121,6 @@ export class ImageGenerationError extends Error {
     }
 }
 
-/** One backend per wire shape. Selected by `resolveImageApiShape`. */
-export interface ImageBackend {
-    readonly shape: ImageApiShape;
-    generate(
-        request: ImageGenerationRequest,
-        endpoint: ImageEndpointConfig,
-        signal?: AbortSignal
-    ): Promise<ImageGenerationResult>;
-}
-
 /**
  * 4xx is the caller's fault and will fail identically on retry; 408 and 429 are
  * the documented exceptions. 5xx and transport errors are worth retrying.
@@ -133,41 +129,4 @@ export interface ImageBackend {
 export function isRetryableStatus(status: number): boolean {
     if (status === 408 || status === 429) return true;
     return status >= 500;
-}
-
-/** Map a non-OK HTTP response onto our typed error. */
-export async function errorFromResponse(
-    response: Response,
-    shape: ImageApiShape
-): Promise<ImageGenerationError> {
-    let detail = "";
-    try {
-        detail = (await response.text()).slice(0, 600);
-    } catch {
-        // A body we cannot read is not worth failing differently over.
-    }
-    return new ImageGenerationError({
-        code:
-            response.status === 401 || response.status === 403 ? "unauthorized" : "provider_error",
-        message: `Image endpoint (${shape}) returned ${response.status}${detail ? `: ${detail}` : ""}`,
-        status: response.status,
-        retryable: isRetryableStatus(response.status),
-    });
-}
-
-/**
- * Split a `data:` URL into the two things we store. Vendors return generated
- * images this way on the chat-shaped paths.
- */
-export function parseDataUrl(value: string): GeneratedImage | null {
-    const match = /^data:([^;,]+);base64,(.+)$/s.exec(value.trim());
-    if (!match) return null;
-    const [, mediaType, base64] = match;
-    if (!mediaType || !base64) return null;
-    return { mediaType, base64 };
-}
-
-/** Join a base URL and a path without doubling or dropping the separator. */
-export function joinUrl(baseUrl: string, path: string): string {
-    return `${baseUrl.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
 }

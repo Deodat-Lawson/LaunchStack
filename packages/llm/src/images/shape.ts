@@ -7,7 +7,7 @@
  * vendor answered.
  *
  * Inference is deliberately conservative. A host we recognise gets its known
- * shape; everything else falls back to `images-generations`, which is the de
+ * shape; everything else falls back to `openai-compatible`, which is the de
  * facto standard that gateways implement when they implement anything. An
  * operator whose gateway breaks that assumption sets `shape` explicitly rather
  * than us guessing harder — a wrong guess produces a confusing 404, while an
@@ -25,11 +25,11 @@ import type { ImageApiShape } from "./types";
 const GOOGLE_GENAI_HOST = "generativelanguage.googleapis.com";
 
 /**
- * Hosts whose image generation rides on the chat endpoint via `modalities`.
- * OpenRouter is the one we run on; the others are gateways with the same
- * design, listed so a deployment that moves between them keeps working.
+ * OpenRouter's own image API (`POST /images`), which its AI SDK provider
+ * speaks. Only OpenRouter serves it — an aggregator that merely proxies
+ * OpenAI-shaped routes is not this shape and falls through to the default.
  */
-const CHAT_SHAPED_HOSTS = ["openrouter.ai", "gateway.ai.cloudflare.com"];
+const OPENROUTER_HOSTS = ["openrouter.ai"];
 
 export interface ShapeResolution {
     shape: ImageApiShape;
@@ -51,7 +51,7 @@ export function resolveImageApiShape(baseUrl: string, override?: ImageApiShape):
         // An unparseable URL will fail at request time with a clearer message
         // than anything we could invent here. Assume the common shape.
         return {
-            shape: "images-generations",
+            shape: "openai-compatible",
             explicit: false,
             reason: "base URL could not be parsed; assumed the OpenAI-compatible default",
         };
@@ -59,11 +59,11 @@ export function resolveImageApiShape(baseUrl: string, override?: ImageApiShape):
 
     const host = url.hostname.toLowerCase();
 
-    if (CHAT_SHAPED_HOSTS.some(known => host === known || host.endsWith(`.${known}`))) {
+    if (OPENROUTER_HOSTS.some(known => host === known || host.endsWith(`.${known}`))) {
         return {
-            shape: "chat-completions",
+            shape: "openrouter",
             explicit: false,
-            reason: `${host} generates images through /chat/completions with modalities`,
+            reason: `${host} serves OpenRouter's own /images API`,
         };
     }
 
@@ -72,19 +72,19 @@ export function resolveImageApiShape(baseUrl: string, override?: ImageApiShape):
         const isCompatibilityPath = /\/openai\/?$/.test(url.pathname);
         return isCompatibilityPath
             ? {
-                  shape: "images-generations",
+                  shape: "openai-compatible",
                   explicit: false,
                   reason: "Google's OpenAI-compatibility layer serves /images/generations",
               }
             : {
-                  shape: "gemini-native",
+                  shape: "google-native",
                   explicit: false,
                   reason: "Google's native API returns images as inlineData parts",
               };
     }
 
     return {
-        shape: "images-generations",
+        shape: "openai-compatible",
         explicit: false,
         reason: "unrecognised host; assumed the OpenAI-compatible default",
     };

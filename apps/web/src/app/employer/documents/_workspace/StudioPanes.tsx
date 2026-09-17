@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { IconChevronRight } from "./icons";
@@ -10,14 +10,21 @@ import type { SettingsSectionId } from "./SettingsHub";
 import type { StudioFeature } from "./types";
 
 /**
- * Data the workspace shell owns but some panes need. Passed explicitly rather
- * than through context so a pane rendered from the drawer — which has no
- * workspace state — fails visibly instead of silently rendering empty.
+ * Workspace-owned data and navigation for embedded app panels.
+ * Explicit context lets standalone entry points retain their own navigation.
  */
 export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
+    /** Settings deep links can target a section without remounting the hub. */
+    settings?: { section?: SettingsSectionId; navigationKey?: number };
+    /** Session actions can stay inside the host workspace when embedded. */
+    sessions?: {
+        onImported?: () => Promise<void>;
+        onOpenDocument: (documentId: number) => void;
+        onContinue: (documentId: number) => void;
+    };
 }
 
 const DocumentGenerator = dynamic(
@@ -64,6 +71,34 @@ const MarketingPipelineWorkspace = dynamic(
         import(
             "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace"
         ).then(m => m.MarketingPipelineWorkspace),
+    { loading: () => <LoadingPage /> }
+);
+const ArtifactGallery = dynamic(
+    () =>
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactGallery").then(
+            m => m.ArtifactGallery
+        ),
+    { loading: () => <LoadingPage /> }
+);
+
+const ArtifactViewer = dynamic(
+    () =>
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactViewer").then(m => m.ArtifactViewer),
+    { loading: () => <LoadingPage /> }
+);
+
+const SessionsBrowser = dynamic(
+    () =>
+        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
+            m => m.SessionsBrowser
+        ),
+    { loading: () => <LoadingPage /> }
+);
+const DistributionApp = dynamic(
+    () =>
+        import("~/app/employer/tools/distribution/components/DistributionApp").then(
+            m => m.DistributionApp
+        ),
     { loading: () => <LoadingPage /> }
 );
 
@@ -436,10 +471,55 @@ export function NotesPane(_: PaneProps) {
 
 export function CompanySettingsPane({
     initialSection,
-}: PaneProps & { initialSection?: SettingsSectionId }) {
+    navigationKey,
+}: PaneProps & { initialSection?: SettingsSectionId; navigationKey?: number }) {
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-            <SettingsHub embedded initialSection={initialSection} />
+            <SettingsHub embedded initialSection={initialSection} navigationKey={navigationKey} />
+        </div>
+    );
+}
+/**
+ * Artifacts keep gallery/viewer navigation in one mounted Studio tab. The
+ * standalone gallery and viewer still own route navigation when these
+ * callbacks are omitted.
+ */
+export function ArtifactsStudioPane(_: PaneProps) {
+    const [viewerId, setViewerId] = useState<number | null>(null);
+
+    return (
+        <div
+            style={{
+                height: "100%",
+                minHeight: 0,
+                overflowY: viewerId === null ? "auto" : "hidden",
+            }}
+        >
+            {viewerId === null ? (
+                <ArtifactGallery onOpenArtifact={setViewerId} />
+            ) : (
+                <ArtifactViewer id={viewerId} onBack={() => setViewerId(null)} />
+            )}
+        </div>
+    );
+}
+
+export function AgentSessionsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return (
+        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+            <SessionsBrowser
+                onImported={context?.sessions?.onImported}
+                onOpenDocument={context?.sessions?.onOpenDocument}
+                onContinue={context?.sessions?.onContinue}
+            />
+        </div>
+    );
+}
+
+export function DistributionStudioPane(_: PaneProps) {
+    return (
+        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+            <DistributionApp embedded />
         </div>
     );
 }
@@ -806,12 +886,7 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
     );
 }
 
-/**
- * Single-entry pane renderer used by the Studio drawer *and* the main
- * workspace area when a non-chat feature is expanded. `onClose` is the pane's
- * exit path — the drawer passes its own close handler; the main area passes
- * return-to-chat after removing the chrome back control (Studio sidebar Chat handles that too).
- */
+/** Shared app renderer. The workspace keeps each open panel mounted and closes its tab on exit. */
 export function renderStudioPane(
     feature: StudioFeature,
     onClose: () => void,
@@ -842,31 +917,38 @@ export function renderStudioPane(
             return <AudioGenPane onClose={onClose} />;
         case "marketing":
             return <MarketingPipelinePane onClose={onClose} />;
+        case "artifacts":
+            return <ArtifactsStudioPane onClose={onClose} />;
+        case "agent-sessions":
+            return <AgentSessionsStudioPane onClose={onClose} context={context} />;
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":
-            return <CompanySettingsPane onClose={onClose} initialSection="company" />;
-        case "analytics":
-            return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
-        case "settings":
-            return <CompanySettingsPane onClose={onClose} />;
-        case "distribution":
             return (
-                <DefaultLinkPane
+                <CompanySettingsPane
                     onClose={onClose}
-                    eyebrow="Distribution"
-                    title="Distribution"
-                    body="Describe what you sell and where you want it sold. Discovery finds importers, distributors, wholesalers and retail accounts, researches each one with sourced evidence, and scores the fit. Then run every relationship through stages to a signed agreement."
-                    bullets={[
-                        "Programs: your offering, territories and the kinds of partner you want",
-                        "Discovery runs: evidence-backed dossiers published into Sources, with a fit score per candidate",
-                        "Pipeline: stages with rules, next actions, agreements, and a coverage map by territory",
-                        "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
-                    ]}
-                    href={feature.href ?? "/employer/tools/distribution"}
-                    ctaLabel="Open Distribution"
+                    initialSection="company"
+                    navigationKey={context?.settings?.navigationKey}
                 />
             );
+        case "analytics":
+            return (
+                <CompanySettingsPane
+                    onClose={onClose}
+                    initialSection="analytics"
+                    navigationKey={context?.settings?.navigationKey}
+                />
+            );
+        case "settings":
+            return (
+                <CompanySettingsPane
+                    onClose={onClose}
+                    initialSection={context?.settings?.section}
+                    navigationKey={context?.settings?.navigationKey}
+                />
+            );
+        case "distribution":
+            return <DistributionStudioPane onClose={onClose} />;
         default:
             if (feature.comingSoon) {
                 return (

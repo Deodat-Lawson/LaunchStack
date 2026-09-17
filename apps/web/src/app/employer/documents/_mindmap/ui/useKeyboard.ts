@@ -39,6 +39,8 @@ import type { ShapeId, ToolId } from "../model/types";
  */
 
 export interface KeyboardActions {
+    /** Hidden editor tabs retain their store, but must not handle global shortcuts. */
+    isActive: () => boolean;
     onSave: () => void;
     onFind: () => void;
     onCommandPalette: () => void;
@@ -80,6 +82,7 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
 
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
+            if (!ref.current.isActive() || e.defaultPrevented) return;
             if (isTypingTarget(e.target)) return;
             const state = store.getState();
             if (state.editing) return;
@@ -101,13 +104,8 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                 return;
             }
 
-            if (state.presenting) {
-                // Presentation mode only listens for movement and exit.
-                if (key === "ArrowRight" || key === "ArrowDown" || key === " ") {
-                    e.preventDefault();
-                }
-                return;
-            }
+            // Presentation navigation owns its keys in the editor shell.
+            if (state.presenting) return;
 
             // -- modifier combos -------------------------------------------
             if (mod) {

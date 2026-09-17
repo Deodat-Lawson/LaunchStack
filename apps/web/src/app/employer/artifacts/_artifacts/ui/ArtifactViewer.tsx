@@ -40,7 +40,13 @@ import { ArtifactPreview, SourceView } from "./ArtifactPreview";
  * header. The title renames inline (Enter or blur saves); everything else is a
  * PATCH with a toast.
  */
-export function ArtifactViewer({ id }: { id: number }) {
+export interface ArtifactViewerProps {
+    id: number;
+    /** Returns to the embedded gallery; omitted for standalone route navigation. */
+    onBack?: () => void;
+}
+
+export function ArtifactViewer({ id, onBack }: ArtifactViewerProps) {
     const router = useRouter();
     const [artifact, setArtifact] = useState<ArtifactDetail | null>(null);
     const [loading, setLoading] = useState(true);
@@ -49,6 +55,10 @@ export function ArtifactViewer({ id }: { id: number }) {
     const [titleDraft, setTitleDraft] = useState("");
     const [copied, setCopied] = useState(false);
     const [folders, setFolders] = useState<string[]>([]);
+    const goBack = useCallback(() => {
+        if (onBack) onBack();
+        else router.push("/employer/artifacts");
+    }, [onBack, router]);
 
     useEffect(() => {
         // Folder list for the "move to" menu; non-critical, so failures are quiet.
@@ -117,7 +127,7 @@ export function ArtifactViewer({ id }: { id: number }) {
         try {
             await deleteArtifact(id);
             toast.success("Moved to trash");
-            router.push("/employer/artifacts");
+            goBack();
         } catch {
             toast.error("Couldn't delete the artifact");
         }
@@ -135,11 +145,7 @@ export function ArtifactViewer({ id }: { id: number }) {
         return (
             <div className="flex h-full flex-col items-center justify-center gap-3">
                 <p className="text-ink-2 text-[14px]">That artifact doesn&apos;t exist anymore.</p>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => router.push("/employer/artifacts")}
-                >
+                <Button variant="outline" size="sm" onClick={goBack}>
                     <ArrowLeft className="size-3.5" />
                     Back to artifacts
                 </Button>
@@ -152,12 +158,7 @@ export function ArtifactViewer({ id }: { id: number }) {
     return (
         <div className="flex h-full flex-col">
             <header className="border-line bg-panel flex flex-wrap items-center gap-2 border-b px-4 py-2.5">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 gap-1.5"
-                    onClick={() => router.push("/employer/artifacts")}
-                >
+                <Button variant="ghost" size="sm" className="h-8 gap-1.5" onClick={goBack}>
                     <ArrowLeft className="size-3.5" />
                     Artifacts
                 </Button>

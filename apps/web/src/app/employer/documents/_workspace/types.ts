@@ -352,23 +352,18 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
 
 /**
  * Studio drawer features grouped by purpose. Tools render interactive panes
- * (or a "coming soon" placeholder if `comingSoon` is true); Management entries
- * link out to their dedicated employer routes.
+ * (or a "coming soon" placeholder if `comingSoon` is true). `href` remains
+ * available for standalone fallbacks when a caller has no Studio host.
  */
 export interface StudioFeature {
     id: string;
     label: string;
     Icon: ComponentType<IconProps>;
     desc: string;
-    /** Destination for link-out features. Required when no interactive pane exists. */
+    /** Optional standalone destination for callers without an embedded host. */
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
-    /**
-     * The feature is a separate app with its own route. Picking it navigates
-     * rather than expanding a pane inside the workspace.
-     */
-    external?: boolean;
     /**
      * Permission a person must hold to see this feature. Checked through
      * `usePermissions().can(...)`, which answers false until loaded — so a
@@ -376,7 +371,6 @@ export interface StudioFeature {
      */
     requires?: Permission;
 }
-
 export interface StudioGroup {
     id: string;
     label: string;
@@ -431,8 +425,8 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Freeform notes that span every source",
             },
             {
-                // Not `external`: maps live in the library beside every other
-                // source. Picking this opens the template picker.
+                // Maps live in the library beside every other source. Picking
+                // this opens its Studio app tab.
                 id: "mindmap",
                 label: "Mindmap",
                 Icon: IconMindmap,
@@ -445,7 +439,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconArtifact,
                 desc: "Import pages and diagrams built in Claude, and manage them here",
                 href: "/employer/artifacts",
-                external: true,
             },
             {
                 id: "agent-sessions",
@@ -453,7 +446,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconSessions,
                 desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
                 href: "/employer/agent-sessions",
-                external: true,
             },
             {
                 id: "workflows",
@@ -490,14 +482,13 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Multi-channel campaigns from your company knowledge",
             },
             {
-                // A separate app with its own route (programs, discovery runs,
-                // a pipeline board and a dashboard), like Claude Artifacts.
+                // Distribution is embedded in Studio and also has a standalone
+                // route for direct links.
                 id: "distribution",
                 label: "Distribution",
                 Icon: IconDistribution,
                 desc: "Find importers, distributors and retail accounts for what you sell — evidence-backed dossiers, fit scores, and a pipeline to a signed agreement",
                 href: "/employer/tools/distribution",
-                external: true,
             },
         ],
     },

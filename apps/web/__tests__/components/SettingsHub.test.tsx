@@ -212,6 +212,29 @@ describe("SettingsHub", () => {
         await findBody("body-agents");
     });
 
+    it("reapplies a repeated host target after a manual section change", async () => {
+        const user = userEvent.setup();
+        const view = render(<SettingsHub initialSection="processing" navigationKey={0} />);
+        await findBody("body-processing");
+
+        await user.click(screen.getByRole("button", { name: /Agents & nodes/i }));
+        await findBody("body-agents");
+        view.rerender(<SettingsHub initialSection="processing" navigationKey={1} />);
+
+        await findBody("body-processing");
+        expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
+    });
+
+    it("preserves published actions when a host target is already visible", async () => {
+        const view = render(<SettingsHub navigationKey={0} />);
+        await findBody("body-processing");
+
+        view.rerender(<SettingsHub initialSection="processing" navigationKey={1} />);
+
+        expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
+    });
+
     it("marks the open section for assistive tech", async () => {
         const user = userEvent.setup();
         render(<SettingsHub />);

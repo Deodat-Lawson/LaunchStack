@@ -21,12 +21,17 @@ import type { Point } from "../model/types";
  * Priority: our own copied shapes, then images, then a whole document, then
  * plain text.
  */
-export function useClipboardPaste(store: EditorStore, getPastePoint: () => Point): void {
-    const at = useRef(getPastePoint);
-    at.current = getPastePoint;
+export function useClipboardPaste(
+    store: EditorStore,
+    getPastePoint: () => Point,
+    isActive: () => boolean
+): void {
+    const at = useRef({ getPastePoint, isActive });
+    at.current = { getPastePoint, isActive };
 
     useEffect(() => {
         const onPaste = (event: ClipboardEvent) => {
+            if (!at.current.isActive() || event.defaultPrevented) return;
             const target = event.target as HTMLElement | null;
             // A paste into a real field belongs to that field.
             if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;
@@ -40,7 +45,7 @@ export function useClipboardPaste(store: EditorStore, getPastePoint: () => Point
             const payload = text ? parsePayload(text) : null;
             if (payload) {
                 event.preventDefault();
-                const point = at.current();
+                const point = at.current.getPastePoint();
                 const { nodes, edges } = instantiate(payload, {
                     x: point.x - payload.origin.x,
                     y: point.y - payload.origin.y,
@@ -60,13 +65,13 @@ export function useClipboardPaste(store: EditorStore, getPastePoint: () => Point
             const files = Array.from(data.files ?? []).filter(isImageFile);
             if (files.length > 0) {
                 event.preventDefault();
-                void insertImages(store, files, at.current());
+                void insertImages(store, files, at.current.getPastePoint());
                 return;
             }
 
             if (!text.trim()) return;
             event.preventDefault();
-            insertText(store, text, at.current());
+            insertText(store, text, at.current.getPastePoint());
         };
 
         window.addEventListener("paste", onPaste);

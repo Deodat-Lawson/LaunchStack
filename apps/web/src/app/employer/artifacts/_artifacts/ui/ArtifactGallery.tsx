@@ -26,7 +26,12 @@ import { ImportArtifactDialog } from "./ImportArtifactDialog";
 
 type Scope = "active" | "trash";
 
-export function ArtifactGallery() {
+export interface ArtifactGalleryProps {
+    /** Keeps viewer navigation inside an embedded Studio tab when provided. */
+    onOpenArtifact?: (id: number) => void;
+}
+
+export function ArtifactGallery({ onOpenArtifact }: ArtifactGalleryProps = {}) {
     const router = useRouter();
     const [items, setItems] = useState<ArtifactSummary[]>([]);
     const [folders, setFolders] = useState<string[]>([]);
@@ -178,9 +183,10 @@ export function ArtifactGallery() {
                                 >
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            router.push(`/employer/artifacts/${item.id}`)
-                                        }
+                                        onClick={() => {
+                                            if (onOpenArtifact) onOpenArtifact(item.id);
+                                            else router.push(`/employer/artifacts/${item.id}`);
+                                        }}
                                         className="block w-full text-left"
                                     >
                                         <div className="bg-panel-2 flex aspect-[4/3] w-full items-center justify-center">
@@ -270,6 +276,7 @@ export function ArtifactGallery() {
                 onOpenChange={setImportOpen}
                 folders={folders}
                 onImported={() => void load()}
+                onOpenArtifact={onOpenArtifact}
             />
         </div>
     );

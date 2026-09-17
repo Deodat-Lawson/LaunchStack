@@ -1,23 +1,22 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { IconBolt } from "./icons";
+
+import { Button } from "~/components/ui/button";
 import { usePermissions } from "~/lib/use-permissions";
 import { STUDIO_GROUPS } from "./types";
 
 export interface StudioMenuProps {
-    /** Fires with the feature id when the user picks one; if omitted, falls back to direct navigation. */
+    /** Fires with the feature id when the user picks one; if omitted, falls back to Studio routing. */
     onPickFeature?: (featureId: string) => void;
-    /** Fires when the main Studio button is clicked; if omitted, opens the menu. */
+    /** Fires when the main Studio button is clicked; if omitted, toggles the app menu. */
     onOpenStudio?: () => void;
 }
 
 /**
- * Studio "header" button + hover mega-menu — lives in the AskPanel / expanded
- * tool topbar. **`onOpenStudio`** should open the drawer/sidebar only; individual
- * tiles call **`onPickFeature`** to jump straight to full-width workspace (parent
- * wires `expandFeature` vs `openFeature` accordingly).
+ * Studio button and compact app menu for the AskPanel / expanded tool topbar.
  *
  * Gated entries (`feature.requires`) are absent until permissions have loaded
  * and say yes — a viewer never sees a Settings tile flash and vanish.
@@ -26,209 +25,134 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
     const router = useRouter();
     const { can } = usePermissions();
     const [menuOpen, setMenuOpen] = useState(false);
-    const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const closeTimer = useRef<number>(0);
 
     const open = () => {
-        if (closeTimer.current) clearTimeout(closeTimer.current);
+        window.clearTimeout(closeTimer.current);
         setMenuOpen(true);
     };
+
     const close = () => {
-        closeTimer.current = setTimeout(() => setMenuOpen(false), 120);
+        closeTimer.current = window.setTimeout(() => setMenuOpen(false), 120);
     };
 
-    const groups = STUDIO_GROUPS.map(g => ({
-        ...g,
-        features: g.features.filter(f => can(f.requires)),
-    })).filter(g => g.features.length > 0);
+    useEffect(
+        () => () => {
+            window.clearTimeout(closeTimer.current);
+        },
+        []
+    );
 
-    const pickFeature = (featureId: string, href?: string) => {
+    useEffect(() => {
+        if (!menuOpen) return;
+
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                setMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [menuOpen]);
+
+    const groups = STUDIO_GROUPS.map(group => ({
+        ...group,
+        features: group.features.filter(feature => can(feature.requires)),
+    })).filter(group => group.features.length > 0);
+
+    const pickFeature = (featureId: string) => {
         setMenuOpen(false);
         if (onPickFeature) {
             onPickFeature(featureId);
-        } else if (href) {
-            router.push(href);
+        } else {
+            router.push(`/employer/documents?feature=${encodeURIComponent(featureId)}`);
         }
     };
 
     return (
-        <div style={{ position: "relative" }} onMouseEnter={open} onMouseLeave={close}>
-            <button
+        <div className="relative" onMouseEnter={open} onMouseLeave={close}>
+            <Button
                 type="button"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
                 onClick={() => {
                     if (onOpenStudio) {
                         setMenuOpen(false);
                         onOpenStudio();
                     } else {
-                        setMenuOpen(v => !v);
+                        setMenuOpen(value => !value);
                     }
                 }}
                 title="Open Studio"
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    padding: "5px 11px 5px 9px",
-                    borderRadius: 8,
-                    background: "linear-gradient(180deg, var(--accent), var(--accent-deep))",
-                    color: "white",
-                    fontSize: 12.5,
-                    fontWeight: 600,
-                    boxShadow: menuOpen
-                        ? "0 2px 10px var(--accent-glow), 0 0 0 3px var(--accent-glow)"
-                        : "0 1px 4px var(--accent-glow)",
-                    transition: "box-shadow 140ms, transform 120ms",
-                    transform: menuOpen ? "translateY(-0.5px)" : "none",
-                }}
+                className="bg-brand text-brand-fg hover:bg-brand/90 h-8 gap-1.5 rounded-lg px-3 text-xs font-semibold shadow-sm"
             >
-                <IconBolt size={13} />
+                <Sparkles className="size-3.5" aria-hidden />
                 Studio
-            </button>
+                <ChevronDown className="size-3 opacity-80" aria-hidden />
+            </Button>
 
             {menuOpen && (
                 <div
-                    style={{
-                        position: "absolute",
-                        top: "calc(100% + 6px)",
-                        right: 0,
-                        zIndex: 60,
-                        width: 460,
-                        padding: 10,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        borderRadius: 12,
-                        boxShadow: "0 18px 42px var(--scrim-shadow), 0 2px 6px rgba(0,0,0,0.06)",
-                        animation: "lsw-fadeIn 120ms ease-out",
-                    }}
+                    role="menu"
+                    aria-label="Studio apps"
+                    className="border-line bg-panel absolute right-0 top-[calc(100%+6px)] z-[60] w-[460px] max-w-[calc(100vw-2rem)] rounded-xl border p-2 shadow-xl"
                 >
-                    <div
-                        style={{
-                            padding: "6px 8px 10px",
-                            display: "flex",
-                            alignItems: "baseline",
-                            gap: 8,
-                        }}
-                    >
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>Studio</div>
-                        <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                    <div className="px-2 pb-2 pt-1">
+                        <div className="text-ink text-sm font-semibold">Studio</div>
+                        <div className="text-ink-3 mt-0.5 text-[11px]">
                             Tools and management for your workspace
                         </div>
                     </div>
 
                     {groups.map(group => (
-                        <div key={group.id} style={{ marginTop: 4 }}>
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    letterSpacing: "0.1em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                    padding: "6px 10px 4px",
-                                }}
-                            >
+                        <section key={group.id} className="mt-1">
+                            <h2 className="text-ink-3 px-2 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em]">
                                 {group.label}
-                            </div>
-                            <div
-                                style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}
-                            >
-                                {group.features.map(f => {
-                                    const Icon = f.Icon;
+                            </h2>
+                            <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                                {group.features.map(feature => {
+                                    const Icon = feature.Icon;
+
                                     return (
-                                        <button
-                                            key={f.id}
+                                        <Button
+                                            key={feature.id}
                                             type="button"
-                                            onClick={() => pickFeature(f.id, f.href)}
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 8,
-                                                padding: "7px 10px",
-                                                minHeight: 40,
-                                                borderRadius: 8,
-                                                textAlign: "left",
-                                                transition: "background 120ms",
-                                            }}
-                                            onMouseEnter={e => {
-                                                e.currentTarget.style.background = "var(--line-2)";
-                                            }}
-                                            onMouseLeave={e => {
-                                                e.currentTarget.style.background = "transparent";
-                                            }}
+                                            role="menuitem"
+                                            variant="ghost"
+                                            onClick={() => pickFeature(feature.id)}
+                                            className="hover:bg-panel-2 h-auto min-h-10 w-full items-start justify-start gap-2 whitespace-normal rounded-lg px-2.5 py-2 text-left font-normal"
                                         >
-                                            <div
-                                                style={{
-                                                    width: 26,
-                                                    height: 26,
-                                                    borderRadius: 6,
-                                                    flexShrink: 0,
-                                                    background: "var(--accent-soft)",
-                                                    color: "var(--accent-ink)",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                }}
+                                            <span
+                                                aria-hidden
+                                                className="bg-brand-soft text-brand mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md"
                                             >
-                                                <Icon size={12} />
-                                            </div>
-                                            <div style={{ flex: 1, minWidth: 0 }}>
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        gap: 6,
-                                                    }}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            fontSize: 12.5,
-                                                            fontWeight: 500,
-                                                            color: "var(--ink)",
-                                                            whiteSpace: "nowrap",
-                                                            overflow: "hidden",
-                                                            textOverflow: "ellipsis",
-                                                        }}
-                                                    >
-                                                        {f.label}
-                                                    </div>
-                                                    {f.comingSoon && (
+                                                <Icon size={14} />
+                                            </span>
+                                            <span className="min-w-0 flex-1">
+                                                <span className="text-ink flex items-center gap-1.5 text-xs font-medium leading-snug">
+                                                    <span className="truncate">
+                                                        {feature.label}
+                                                    </span>
+                                                    {feature.comingSoon && (
                                                         <span
-                                                            className="mono"
-                                                            style={{
-                                                                fontSize: 9,
-                                                                fontWeight: 600,
-                                                                letterSpacing: "0.04em",
-                                                                color: "var(--ink-3)",
-                                                                padding: "1px 5px",
-                                                                borderRadius: 4,
-                                                                background: "var(--line-2)",
-                                                            }}
+                                                            title="Coming soon"
+                                                            className="bg-panel-2 text-ink-3 shrink-0 rounded px-1 py-0.5 font-mono text-[8px] font-semibold uppercase tracking-wide"
                                                         >
                                                             SOON
                                                         </span>
                                                     )}
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        fontSize: 11,
-                                                        color: "var(--ink-3)",
-                                                        lineHeight: 1.35,
-                                                        marginTop: 1,
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis",
-                                                        display: "-webkit-box",
-                                                        WebkitLineClamp: 2,
-                                                        WebkitBoxOrient: "vertical",
-                                                    }}
-                                                >
-                                                    {f.desc}
-                                                </div>
-                                            </div>
-                                        </button>
+                                                </span>
+                                                <span className="text-ink-3 mt-0.5 line-clamp-2 text-[11px] leading-snug">
+                                                    {feature.desc}
+                                                </span>
+                                            </span>
+                                        </Button>
                                     );
                                 })}
                             </div>
-                        </div>
+                        </section>
                     ))}
                 </div>
             )}

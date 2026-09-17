@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { detectArtifactType, isClaudeHostedUrl, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
 
-import { ArtifactApiError, importArtifact } from "../lib/api";
+import { ArtifactApiError, importArtifact, type ArtifactDetail } from "../lib/api";
 import { artifactTypeMeta, formatBytes } from "./artifact-meta";
 
 type Mode = "paste" | "upload" | "url";
@@ -37,11 +37,14 @@ export function ImportArtifactDialog({
     onOpenChange,
     folders,
     onImported,
+    onOpenArtifact,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     folders: string[];
     onImported?: () => void;
+    /** Keeps the newly imported artifact inside an embedded Studio tab. */
+    onOpenArtifact?: (id: ArtifactDetail["id"]) => void;
 }) {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -111,7 +114,8 @@ export function ImportArtifactDialog({
             reset();
             onOpenChange(false);
             onImported?.();
-            router.push(`/employer/artifacts/${artifact.id}`);
+            if (onOpenArtifact) onOpenArtifact(artifact.id);
+            else router.push(`/employer/artifacts/${artifact.id}`);
         } catch (err) {
             if (err instanceof ArtifactApiError && err.code === "claude_share_link") {
                 setError(err.message);

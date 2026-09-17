@@ -47,12 +47,12 @@ export declare const TemplateReviewSchema: z.ZodObject<{
         rationale: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         rationale: string;
-        score: number;
         criterion: "compliance" | "grounding" | "clarity" | "tone" | "spam_risk" | "cta_strength";
+        score: number;
     }, {
         rationale: string;
-        score: number;
         criterion: "compliance" | "grounding" | "clarity" | "tone" | "spam_risk" | "cta_strength";
+        score: number;
     }>, "many">;
     issues: z.ZodArray<z.ZodString, "many">;
     verdict: z.ZodEnum<["pass", "revise"]>;
@@ -62,8 +62,8 @@ export declare const TemplateReviewSchema: z.ZodObject<{
     summary: string;
     scores: {
         rationale: string;
-        score: number;
         criterion: "compliance" | "grounding" | "clarity" | "tone" | "spam_risk" | "cta_strength";
+        score: number;
     }[];
     verdict: "pass" | "revise";
 }, {
@@ -71,8 +71,8 @@ export declare const TemplateReviewSchema: z.ZodObject<{
     summary: string;
     scores: {
         rationale: string;
-        score: number;
         criterion: "compliance" | "grounding" | "clarity" | "tone" | "spam_risk" | "cta_strength";
+        score: number;
     }[];
     verdict: "pass" | "revise";
 }>;

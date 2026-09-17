@@ -267,6 +267,29 @@ export function auditSentence(
         case "settings.changed":
         case "workspace.settings_updated":
         case "settings.updated": {
+            // Registry-backed writes carry the setting's own words.
+            const label = pick(detail, "label");
+            if (typeof label === "string") {
+                const scope = pick(detail, "scope");
+                const scopeId = pick(detail, "scopeId");
+                const where =
+                    scope === "folder" && typeof scopeId === "string"
+                        ? ` for folder “${scopeId}”`
+                        : "";
+                if (detail.reset === true) {
+                    return `${actor} reset “${label}”${where} to inherit`;
+                }
+                const to = detail.to;
+                const shown =
+                    to === null || to === undefined
+                        ? "off"
+                        : typeof to === "string" ||
+                            typeof to === "number" ||
+                            typeof to === "boolean"
+                          ? String(to)
+                          : "a new value";
+                return `${actor} set “${label}”${where} to ${shown}`;
+            }
             const policy = pick(detail, "joinPolicy");
             if (policy === "open") return `${actor} let anyone with a link join immediately`;
             if (policy === "approval") return `${actor} required approval for new members`;

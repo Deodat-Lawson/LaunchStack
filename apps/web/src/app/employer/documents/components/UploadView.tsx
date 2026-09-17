@@ -53,7 +53,6 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
     const [categories, setCategories] = useState<Category[]>([]);
     const [useUploadThing, setUseUploadThing] = useState<boolean>(true);
     const [isUploadThingConfigured, setIsUploadThingConfigured] = useState<boolean>(false);
-    const [isUpdatingPreference, setIsUpdatingPreference] = useState(false);
     const [availableProviders, setAvailableProviders] = useState<AvailableProviders>({
         azure: false,
         datalab: false,
@@ -93,28 +92,6 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
     useEffect(() => {
         void fetchBootstrap();
     }, [fetchBootstrap]);
-
-    const handleToggleUploadMethod = useCallback(async (newValue: boolean) => {
-        setIsUpdatingPreference(true);
-        try {
-            const res = await fetch("/api/updateUploadPreference", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ useUploadThing: newValue }),
-            });
-
-            if (res.ok) {
-                const data = (await res.json()) as { success: boolean; useUploadThing: boolean };
-                if (data.success) setUseUploadThing(data.useUploadThing);
-            } else {
-                console.error("Failed to update upload preference");
-            }
-        } catch (error) {
-            console.error("Error updating upload preference:", error);
-        } finally {
-            setIsUpdatingPreference(false);
-        }
-    }, []);
 
     const handleAddCategory = useCallback(async (newCategory: string) => {
         if (!newCategory.trim()) return;
@@ -161,8 +138,6 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
             categories={categories}
             useUploadThing={useUploadThing}
             isUploadThingConfigured={isUploadThingConfigured}
-            onToggleUploadMethod={handleToggleUploadMethod}
-            isUpdatingPreference={isUpdatingPreference}
             availableProviders={availableProviders}
             onAddCategory={handleAddCategory}
             storageProvider={storageProvider}

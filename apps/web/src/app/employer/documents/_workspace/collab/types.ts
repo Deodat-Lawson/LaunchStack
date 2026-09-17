@@ -112,6 +112,8 @@ export interface AgentPersonaRecord extends MeetingParticipant {
     temperature?: number;
     maxTurnChars?: number;
     archived: boolean;
+    /** Own autonomy level; null inherits `AgentsResponse.defaults.autonomy`. */
+    autonomy?: string | null;
 }
 
 export interface WorkerNode {
@@ -126,6 +128,8 @@ export interface WorkerNode {
 export interface AgentsResponse {
     personas: AgentPersonaRecord[];
     nodes: WorkerNode[];
+    /** Workspace defaults the roster inherits. Absent on older servers. */
+    defaults?: { autonomy: string };
     network: { enabled: boolean; hubId: string | null; hubPath: string };
     slack: { canPost: boolean; canReceive: boolean; missing: string[] };
 }

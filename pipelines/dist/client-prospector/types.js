@@ -1,11 +1,16 @@
 import { z } from "zod";
-// ─── Location, planned search, raw result ────────────────────────────────────
-// Canonical shapes live in @launchstack/tools/place-search (distribution
-// design P0). Re-exported under the prospector's historical names so callers
-// keep their import paths.
-export { LatLngSchema, SearchLocationSchema, DEFAULT_SEARCH_RADIUS, MAX_SEARCH_RADIUS, FoursquareCategoryIdSchema, } from "@launchstack/tools/place-search";
-import { SearchLocationSchema } from "@launchstack/tools/place-search";
+// ─── Location ────────────────────────────────────────────────────────────────
+export const LatLngSchema = z.object({
+    lat: z.number().min(-90).max(90),
+    lng: z.number().min(-180).max(180),
+});
+export const SearchLocationSchema = z.union([
+    LatLngSchema,
+    z.string().min(1).max(500), // city/region name to geocode
+]);
 // ─── Input ───────────────────────────────────────────────────────────────────
+export const DEFAULT_SEARCH_RADIUS = 5000; // 5km
+export const MAX_SEARCH_RADIUS = 50000; // 50km
 export const ProspectorInputSchema = z.object({
     query: z.string().min(1).max(1000),
     companyContext: z.string().min(1).max(2000),
@@ -14,6 +19,9 @@ export const ProspectorInputSchema = z.object({
     categories: z.array(z.string()).optional(), // Foursquare category IDs or names
     excludeChains: z.boolean().optional(), // exclude chain businesses (default: true)
 });
+export const FoursquareCategoryIdSchema = z
+    .string()
+    .regex(/^[0-9a-fA-F]+$/, "Expected a valid Foursquare category ID");
 // ─── Inngest event payload ───────────────────────────────────────────────────
 export const ProspectorEventDataSchema = z.object({
     jobId: z.string(),

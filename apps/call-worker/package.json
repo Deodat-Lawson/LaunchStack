@@ -14,8 +14,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@launchstack/pipelines": "workspace:*",
-    "drizzle-orm": "^0.45.1"
+    "@launchstack/pipelines": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.3.1",

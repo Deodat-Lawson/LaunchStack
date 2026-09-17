@@ -32,6 +32,7 @@ const ENV_PAIRS: Record<ConnectorProvider, string> = {
     "google-drive": "GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET",
     slack: "SLACK_CLIENT_ID and SLACK_CLIENT_SECRET",
     github: "GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET",
+    gmail: "GMAIL_CONNECTOR_ENABLED=true plus GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET",
 };
 
 export function notConfiguredResponse(provider: ConnectorProvider): NextResponse {

@@ -8,8 +8,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import {
+    AGENT_AUTONOMY_LEVELS,
+    DEFAULT_AGENT_AUTONOMY,
+    type AgentAutonomy,
+} from "~/lib/agents/autonomy";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { createPersona, ensureStarterPersonas } from "~/server/collab/personas";
+import { readWorkspaceSetting } from "~/server/settings/store";
 import { getHub, listKnownNodes } from "~/server/collab/runtime";
 import { getSlackStatus } from "~/server/collab/slack";
 
@@ -32,6 +38,7 @@ const CreatePersonaSchema = z.object({
     temperature: z.number().min(0).max(2).nullable().optional(),
     maxTurnChars: z.number().int().min(120).max(8000).nullable().optional(),
     accent: z.string().max(32).nullable().optional(),
+    autonomy: z.enum(AGENT_AUTONOMY_LEVELS).nullable().optional(),
 });
 
 export async function GET() {
@@ -47,10 +54,18 @@ export async function GET() {
         console.error("[collab] could not list worker nodes:", err);
         return hub?.listNodes() ?? [];
     });
+    // The roster's default level, so the client can show an inherited level
+    // without a second request — and fall back to the product default rather
+    // than fail the roster if the settings store is unreachable.
+    const defaultAutonomy = await readWorkspaceSetting<AgentAutonomy>(
+        companyId,
+        "agents.defaultAutonomy"
+    ).catch(() => DEFAULT_AGENT_AUTONOMY);
 
     return NextResponse.json({
         personas,
         nodes,
+        defaults: { autonomy: defaultAutonomy },
         network: {
             enabled: Boolean(hub),
             hubId: hub?.hubId ?? null,

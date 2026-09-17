@@ -33,7 +33,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             return createValidationError(
                 provider === "google-drive"
                     ? "Google Drive connects via /api/connectors/google/oauth/start."
-                    : `Unknown connector provider: ${provider}`
+                    : provider === "gmail"
+                      ? "Gmail connects via /api/connectors/google/oauth/start?provider=gmail."
+                      : `Unknown connector provider: ${provider}`
             );
         }
 

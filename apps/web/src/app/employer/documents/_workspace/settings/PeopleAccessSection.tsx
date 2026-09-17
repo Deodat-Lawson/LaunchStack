@@ -81,7 +81,7 @@ export function PeopleAccessSection({ onActions }: SettingsSectionProps) {
 
     return (
         <div className="flex flex-col gap-6">
-            {can("settings.manage") && <WorkspaceSettingsCard />}
+            <WorkspaceSettingsCard />
 
             <Tabs value={tab} onValueChange={value => setTab(value as TabId)}>
                 <TabsList aria-label="People and access">

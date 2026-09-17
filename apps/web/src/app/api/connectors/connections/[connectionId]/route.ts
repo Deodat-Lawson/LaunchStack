@@ -1,12 +1,13 @@
 /**
  * Disconnect a workspace connection.
  *
- * DELETE — management-gated. Removes the row; for Slack/GitHub it then
- * best-effort revokes the grant at the provider so a copied token dies with
- * the connection (Google rows are simply deleted — the Drive services own no
- * revocation endpoint, matching DELETE /api/connectors/google). Cross-tenant
- * deletes are impossible: the row must belong to the caller's active
- * workspace.
+ * DELETE — management-gated. Removes the row; for Slack/GitHub and Gmail it
+ * then best-effort revokes the grant at the provider so a copied token dies
+ * with the connection (Drive rows are simply deleted — the Drive services
+ * own no revocation endpoint, matching DELETE /api/connectors/google).
+ * Cross-tenant deletes are impossible: the row must belong to the caller's
+ * active workspace. A member disconnects their own Gmail through
+ * DELETE /api/connectors/gmail; this route is the admin's offboarding path.
  */
 
 import { createNotFoundError, createSuccessResponse, handleApiError } from "~/lib/api-utils";
@@ -18,6 +19,7 @@ import {
     PROVIDER_MODULES,
 } from "~/server/services/connectors/config";
 import { deleteConnection, getConnectionById } from "~/server/services/connectors/connection-store";
+import { revokeGoogleToken } from "~/server/services/connectors/gmail/connections";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 
 export const runtime = "nodejs";
@@ -58,6 +60,8 @@ export async function DELETE(
                         console.error(`[connectors] ${provider} revocation failed:`, error);
                     }
                 }
+            } else if (provider === "gmail" && tokens?.refreshToken) {
+                revoked = await revokeGoogleToken(tokens.refreshToken);
             }
 
             return createSuccessResponse(

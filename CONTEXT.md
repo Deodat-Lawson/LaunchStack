@@ -53,8 +53,8 @@ Immutable textual evidence derived from the audio supplied for a Call and visibl
 _Avoid_: Note, recording, complete transcript
 
 **Call Note**:
-The one canonical editable note for a Call, presented as a searchable application-managed workspace file and owned by the first LaunchStack user whose capture start succeeds. It is company-visible by default but the owner can make it private; other users then see the Transcript without a note and cannot create another. Ownership does not transfer in the initial product. Searchability does not grant permission for assistant retrieval; retrieval is outside the initial file-oriented release.
-_Avoid_: User Note, collaborative note, multiple notes per Call, duplicate exported note, automatically indexed company knowledge
+The one canonical editable note for a Call, owned by the first LaunchStack user whose capture start succeeds and treated as an application-managed file for indexing and permission-scoped AI retrieval. The owner can make this company-visible file private; other users then see the Transcript without a note and cannot create another, while unaccepted enrichment proposals and raw Transcript evidence remain distinct from the canonical file.
+_Avoid_: User Note, collaborative note, multiple notes per Call, duplicate exported note, separately opted-in knowledge publication
 
 **Calls Folder**:
 The workspace collection of Call Note files. Call history is another view of those same files, not a separate collection of notes.

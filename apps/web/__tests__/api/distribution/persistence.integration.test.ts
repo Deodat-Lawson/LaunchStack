@@ -116,7 +116,7 @@ describeDb("distribution persistence", () => {
             companyId: companyA,
             programId: program.id,
             userId: "user-1",
-            options: { maxCandidates: 10 },
+            options: { maxCandidates: 10, mode: "live" },
         });
         const exclusions = await listExclusions(companyA, program.id);
         expect(exclusions.domains).toContain("existing-importer.de");
@@ -141,7 +141,7 @@ describeDb("distribution persistence", () => {
             companyId: companyA,
             programId: program.id,
             userId: "user-1",
-            options: { maxCandidates: 10 },
+            options: { maxCandidates: 10, mode: "live" },
         });
         const second = await upsertOrgs({ companyId: companyA, runId: run2.id, orgs: resolved });
         expect(second.map(o => o.id).sort()).toEqual(first.map(o => o.id).sort());

@@ -132,6 +132,14 @@ export const collabAgentPersona = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        /**
+         * How much this agent may do unattended — see `~/lib/agents/autonomy`.
+         * Null inherits the workspace default (`agents.defaultAutonomy`).
+         */
+        autonomy: varchar("autonomy", { length: 16 }),
     },
     table => ({
         companyKeyUnique: uniqueIndex("collab_persona_company_key_idx").on(

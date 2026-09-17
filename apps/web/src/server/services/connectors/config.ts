@@ -13,6 +13,7 @@
 
 import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
 import * as slack from "./providers/slack";
 import type { ProviderGrant, ProviderOAuthConfig, RefreshedProviderToken } from "./providers/types";
@@ -60,6 +61,15 @@ export function isConnectorConfigured(provider: ConnectorProvider): boolean {
     if (provider === "google-drive") {
         return Boolean(env.server.GOOGLE_OAUTH_CLIENT_ID && env.server.GOOGLE_OAUTH_CLIENT_SECRET);
     }
+    // Gmail shares the Google pair but is opt-in: its scope is restricted at
+    // Google and the operator must have prepared the consent screen for it.
+    if (provider === "gmail") {
+        return Boolean(
+            isGmailConnectorEnabled() &&
+                env.server.GOOGLE_OAUTH_CLIENT_ID &&
+                env.server.GOOGLE_OAUTH_CLIENT_SECRET
+        );
+    }
     return Boolean(clientPair(provider));
 }
 
@@ -98,5 +108,6 @@ export function getConnectorProvidersStatus(): ConnectorProvidersStatus {
         "google-drive": { configured: isConnectorConfigured("google-drive") },
         slack: { configured: isConnectorConfigured("slack") },
         github: { configured: isConnectorConfigured("github") },
+        gmail: { configured: isConnectorConfigured("gmail") },
     };
 }

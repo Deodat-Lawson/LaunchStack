@@ -1,4 +1,3 @@
-/// <reference lib="es2024.promise" />
 import type * as NextServerModule from "next/server";
 import { randomUUID } from "node:crypto";
 import { createServer, type Server } from "node:http";
@@ -81,11 +80,23 @@ const proposal = {
     ...CALL_NOTES_ENRICHMENT_PROPOSAL,
 };
 
+// The web suite runs on Node 20, matching the web image; the standalone worker
+// has its own Node 24 test step.
+function deferred() {
+    let resolve!: () => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<void>((resolvePromise, rejectPromise) => {
+        resolve = resolvePromise;
+        reject = rejectPromise;
+    });
+    return { promise, resolve, reject };
+}
+
 /** The only audio substitution: controlled PCM instead of accessing the test machine's devices. */
 class ControlledAudioSource implements AudioSource {
     opened = 0;
     closed = 0;
-    readonly consumed = Promise.withResolvers<void>();
+    readonly consumed = deferred();
     private delivered = 0;
     private readonly queue: PcmFrame[] = [];
     private notify: (() => void) | undefined;
@@ -115,7 +126,7 @@ class ControlledAudioSource implements AudioSource {
                     this.delivered += 1;
                     if (this.delivered === 3) this.consumed.resolve();
                 } else {
-                    const waiting = Promise.withResolvers<void>();
+                    const waiting = deferred();
                     this.notify = waiting.resolve;
                     await waiting.promise;
                 }
@@ -214,7 +225,7 @@ async function startHttpHost(): Promise<HttpTestHost> {
             }
         })();
     });
-    const listening = Promise.withResolvers<void>();
+    const listening = deferred();
     server.listen(0, "127.0.0.1", listening.resolve);
     await listening.promise;
     const address = server.address();
@@ -310,7 +321,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         await Promise.allSettled(mockAfterTasks);
         if (host) {
             host.server.closeAllConnections();
-            const closed = Promise.withResolvers<void>();
+            const closed = deferred();
             host.server.close(error => (error ? closed.reject(error) : closed.resolve()));
             await closed.promise;
         }
@@ -320,9 +331,9 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
     it("stays idle until Start, drains final words on Stop, finalizes and creates a reviewable AI proposal", async () => {
         const microphone = new ControlledAudioSource();
         const system = new ControlledAudioSource();
-        const modelGate = Promise.withResolvers<void>();
+        const modelGate = deferred();
         releaseModel = modelGate.resolve;
-        const enrichmentGate = Promise.withResolvers<void>();
+        const enrichmentGate = deferred();
         releaseEnrichment = enrichmentGate.resolve;
         const section = proposal.chronologicalSections[0]!;
         const partialSection = {
@@ -336,7 +347,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             await enrichmentGate.promise;
             return proposal;
         });
-        const transcriptionStarted = Promise.withResolvers<void>();
+        const transcriptionStarted = deferred();
         let transcriptionRequests = 0;
         const transcription = new OpenAiCompatibleTranscriptionModel({
             baseUrl: "https://transcription.example.test/v1",

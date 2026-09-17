@@ -42,6 +42,18 @@ describe("studio registry", () => {
         expect(broken).toEqual([]);
     });
 
+    it("lists Prospects in the Tools group as a separate app, and in the palette", () => {
+        const feature = STUDIO_FEATURES_BY_ID.prospects;
+        expect(feature).toBeDefined();
+        expect(feature!.external).toBe(true);
+        expect(feature!.href).toBe("/employer/tools/prospects");
+        expect(STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id)).toContain(
+            "prospects"
+        );
+        expect(DEMOTED_FEATURES.map(f => f.id)).toContain("prospects");
+        expect(feature!.requires).toBeUndefined();
+    });
+
     it("lists Distribution in the Tools group as a separate app, and in the palette", () => {
         const feature = STUDIO_FEATURES_BY_ID.distribution;
         expect(feature).toBeDefined();

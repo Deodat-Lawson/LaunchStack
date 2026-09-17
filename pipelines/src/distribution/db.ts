@@ -538,6 +538,22 @@ export async function insertEvidence(args: {
     provenance?: Record<string, unknown> | null;
 }): Promise<EvidenceRecord> {
     const db = getDb();
+    // Re-researching an organisation must not pile up the same fact: the same
+    // claim from the same page is one piece of evidence, whichever run found it.
+    const [existing] = await db
+        .select()
+        .from(partnerEvidence)
+        .where(
+            and(
+                eq(partnerEvidence.companyId, args.companyId),
+                eq(partnerEvidence.orgId, args.orgId),
+                eq(partnerEvidence.kind, args.kind),
+                eq(partnerEvidence.claim, args.claim),
+                eq(partnerEvidence.sourceUrl, args.sourceUrl)
+            )
+        )
+        .limit(1);
+    if (existing) return toEvidence(existing);
     const [row] = await db
         .insert(partnerEvidence)
         .values({
@@ -1194,7 +1210,7 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
 
     // Coverage: territory × kind from the program, filled from relationships.
     const cellMap = new Map<string, CoverageCell>();
-    const kinds = (program?.partnerKinds ?? []);
+    const kinds = program?.partnerKinds ?? [];
     for (const territory of program?.targetTerritories ?? []) {
         for (const kind of kinds) {
             cellMap.set(`${territory.country}|${kind}`, {

@@ -4,5 +4,4 @@
  * need from its subpath rather than this barrel.
  */
 export * from "./founder-weekly-review/index.js";
-export * from "./call-notes/index.js";
 //# sourceMappingURL=index.js.map

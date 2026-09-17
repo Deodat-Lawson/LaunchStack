@@ -16,10 +16,8 @@ interface UploadSettingsProps {
     onBatchSettingsChange: React.Dispatch<React.SetStateAction<BatchSettings>>;
     onApplyBatchSettings: () => void;
     processingMethods: { value: string; label: string; description: string }[];
-    isUploadThingConfigured: boolean;
+    /** Where uploads go; shown as a note, changed under Settings → Document defaults. */
     currentStorageValue: string;
-    onToggleChange: (value: string) => void;
-    isUpdatingPreference: boolean;
     onAddCategory?: (name: string) => Promise<void>;
     storageProvider?: "s3" | "database";
 }
@@ -50,10 +48,7 @@ export function UploadSettings({
     onBatchSettingsChange,
     onApplyBatchSettings,
     processingMethods,
-    isUploadThingConfigured,
     currentStorageValue,
-    onToggleChange,
-    isUpdatingPreference,
     onAddCategory,
     storageProvider,
 }: UploadSettingsProps) {
@@ -371,48 +366,14 @@ export function UploadSettings({
                         </div>
                     </div>
 
-                    {/* Storage method */}
-                    <div>
-                        <label style={labelStyle} htmlFor="storageMethod">
-                            Storage method
-                        </label>
-                        {storageProvider === "s3" ? (
-                            <div
-                                style={{
-                                    ...inputStyle,
-                                    background: "var(--line-2)",
-                                    color: "var(--ink-2)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}
-                            >
-                                S3
-                            </div>
-                        ) : (
-                            <select
-                                id="storageMethod"
-                                value={currentStorageValue}
-                                onChange={e => onToggleChange(e.target.value)}
-                                style={inputStyle}
-                            >
-                                <option value="database">Vercel Blob</option>
-                                <option value="cloud" disabled={!isUploadThingConfigured}>
-                                    UploadThing
-                                    {!isUploadThingConfigured && " (not configured)"}
-                                </option>
-                            </select>
-                        )}
-                        {isUpdatingPreference && (
-                            <div
-                                style={{
-                                    fontSize: 11.5,
-                                    color: "var(--ink-3)",
-                                    marginTop: 4,
-                                }}
-                            >
-                                Updating preference…
-                            </div>
-                        )}
+                    <div style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
+                        Uploads are stored{" "}
+                        {storageProvider === "s3"
+                            ? "in S3"
+                            : currentStorageValue === "cloud"
+                              ? "with UploadThing"
+                              : "in the built-in storage"}
+                        . Change that under Settings → Document defaults.
                     </div>
 
                     <div>

@@ -11,7 +11,9 @@ import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertRoomMayRun } from "~/server/collab/autonomy";
 import { getMeetingRuntime } from "~/server/collab/runtime";
+import { isWorkspaceError } from "~/server/workspace/errors";
 
 export const dynamic = "force-dynamic";
 /** Long enough for several model turns; short enough to stay inside a request. */
@@ -60,6 +62,11 @@ export async function POST(
                 await orchestrator.step();
                 break;
             case "run":
+                // Step is always a person's decision; run is the room acting alone.
+                await assertRoomMayRun(
+                    ctx.data.companyId,
+                    orchestrator.config.participants.map(p => p.id)
+                );
                 await orchestrator.run({ limit: parsed.data.limit ?? 3 });
                 break;
             case "pause":
@@ -85,7 +92,7 @@ export async function POST(
     } catch (err) {
         return NextResponse.json(
             { error: err instanceof Error ? err.message : "Control action failed" },
-            { status: 400 }
+            { status: isWorkspaceError(err) ? err.status : 400 }
         );
     }
 

@@ -79,6 +79,12 @@ jest.mock("~/server/collab/runtime", () => ({
         mockCtx.nodesThrow ? Promise.reject(new Error("db down")) : Promise.resolve(mockCtx.nodes),
 }));
 
+// The roster reports the workspace's default autonomy; the store behind it
+// reaches Postgres, which these tests do not have.
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: () => Promise.resolve("full"),
+}));
+
 jest.mock("~/server/collab/personas", () => ({
     ensureStarterPersonas: () => {
         if (mockCtx.personas.length === 0) {

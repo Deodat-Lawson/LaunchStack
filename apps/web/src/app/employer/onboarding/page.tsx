@@ -7,11 +7,12 @@ import {
     Building2,
     ChevronLeft,
     ChevronRight,
-    Compass,
     FileSearch,
     Megaphone,
     Upload,
 } from "lucide-react";
+
+import { IconProspects } from "~/components/icons/prospects";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Button } from "~/components/ui/button";
@@ -372,10 +373,10 @@ function QuickStartStep({
             href: "/employer/tools/marketing-pipeline",
         },
         {
-            Icon: Compass,
-            title: "Find distribution partners",
-            text: "Discover importers, distributors and retailers for what you sell, with evidence-backed dossiers",
-            href: "/employer/tools/distribution",
+            Icon: IconProspects,
+            title: "Find companies to sell to",
+            text: "Prospects searches for buyers that match what you sell, profiles them with cited evidence, and tracks the deal",
+            href: "/employer/tools/prospects",
         },
         {
             Icon: Building2,

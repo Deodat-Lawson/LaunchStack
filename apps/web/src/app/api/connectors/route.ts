@@ -4,7 +4,9 @@
  * GET — which providers this deployment has OAuth clients for, and the
  * workspace's connections (redacted: names and status only, tokens never
  * leave the server). Any verified member may look; connecting and
- * disconnecting stay management-gated.
+ * disconnecting stay management-gated. Gmail rows are personal: a member
+ * sees their own and nobody else's, so one colleague's address never shows
+ * up in another's settings.
  */
 
 import { inArray } from "drizzle-orm";
@@ -26,7 +28,9 @@ export async function GET(request: Request) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            const connections = await listConnectionsForCompany(ctx.data.companyId);
+            const connections = (await listConnectionsForCompany(ctx.data.companyId)).filter(
+                row => row.ownerUserId == null || row.ownerUserId === ctx.data.userPk
+            );
 
             const grantorPks = [
                 ...new Set(
@@ -57,6 +61,8 @@ export async function GET(request: Request) {
                         row.grantedByUserId != null
                             ? (grantorById.get(Number(row.grantedByUserId))?.name ?? null)
                             : null,
+                    /** True for a per-user connection (Gmail): it is the caller's own. */
+                    personal: row.ownerUserId != null,
                     createdAt: row.createdAt.toISOString(),
                 })),
             });

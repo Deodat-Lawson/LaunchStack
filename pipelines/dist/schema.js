@@ -15,8 +15,6 @@ export * from "./client-prospector/schema.js";
 export * from "./company-metadata/schema.js";
 export * from "./marketing/schema.js";
 export * from "./founder-weekly-review/schema.js";
-export * from "./call-notes/schema.js";
 export * from "./email/schema.js";
 export * from "./repo-workspace/schema.js";
-export * from "./distribution/schema.js";
 //# sourceMappingURL=schema.js.map

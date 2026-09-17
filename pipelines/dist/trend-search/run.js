@@ -1,5 +1,4 @@
 import { executeSearch } from "@launchstack/tools/web-research";
-import { SearchCategoryEnum } from "./types.js";
 import { planQueries } from "./query-planner.js";
 import { synthesizeResults } from "./synthesizer.js";
 const STAGE_LABELS = {
@@ -37,8 +36,7 @@ export async function runTrendSearch(input, options = {}) {
         label: STAGE_LABELS.synthesizing,
     });
     const synthStart = Date.now();
-    const resolvedCategories = categories ??
-        [...new Set(plannedQueries.map(q => q.category))].filter((c) => SearchCategoryEnum.safeParse(c).success);
+    const resolvedCategories = categories ?? [...new Set(plannedQueries.map(q => q.category))];
     const results = await synthesizeResults(rawResults, input.query, input.companyContext, resolvedCategories);
     options.onProgress?.({
         type: "step_complete",

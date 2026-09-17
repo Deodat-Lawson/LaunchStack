@@ -422,9 +422,6 @@ services:
     # Linux deployments must map /dev/snd in an override and set the ALSA
     # device; this service must not be used as complete meeting capture.
     environment:
-      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
-      CALL_WORKER_ID: ${CALL_WORKER_ID:-call-worker-1}
-      CALL_WORKER_POLL_INTERVAL_MS: ${CALL_WORKER_POLL_INTERVAL_MS:-1000}
       CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
       CALL_NOTES_WEB_ORIGIN: ${CALL_NOTES_WEB_ORIGIN:-http://app:3000}
       CALL_NOTES_INTERNAL_TOKEN: ${CALL_NOTES_INTERNAL_TOKEN:-}

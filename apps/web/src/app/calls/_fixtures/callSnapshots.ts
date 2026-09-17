@@ -228,12 +228,3 @@ export const enrichmentReadyCall: CallSnapshot = CallSnapshotSchema.parse({
         resolvedAt: null,
     },
 });
-
-export const sampleCalls: CallSnapshot[] = [
-    pausedCall,
-    northstarPricingReviewCall,
-    partialCall,
-    enrichmentReadyCall,
-    failedCall,
-    redactedCall,
-];

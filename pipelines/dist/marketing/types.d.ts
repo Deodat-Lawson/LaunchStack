@@ -14,19 +14,19 @@ export declare const EvidenceCitationSchema: z.ZodObject<{
     snippet: z.ZodString;
     sourceType: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    sourceType: string | null;
     title: string | null;
-    documentId: string | number | null;
     page: number | null;
+    documentId: string | number | null;
     sectionPath: string | null;
     snippet: string;
+    sourceType: string | null;
 }, {
-    sourceType: string | null;
     title: string | null;
-    documentId: string | number | null;
     page: number | null;
+    documentId: string | number | null;
     sectionPath: string | null;
     snippet: string;
+    sourceType: string | null;
 }>;
 export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;
 export declare const NormalizedClaimSchema: z.ZodObject<{
@@ -41,43 +41,43 @@ export declare const NormalizedClaimSchema: z.ZodObject<{
         snippet: z.ZodString;
         sourceType: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        sourceType: string | null;
         title: string | null;
-        documentId: string | number | null;
         page: number | null;
+        documentId: string | number | null;
         sectionPath: string | null;
         snippet: string;
+        sourceType: string | null;
     }, {
-        sourceType: string | null;
         title: string | null;
-        documentId: string | number | null;
         page: number | null;
+        documentId: string | number | null;
         sectionPath: string | null;
         snippet: string;
+        sourceType: string | null;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    confidence: "high" | "medium" | "low";
+    confidence: "high" | "low" | "medium";
     category: string;
     claim: string;
     citations: {
-        sourceType: string | null;
         title: string | null;
-        documentId: string | number | null;
         page: number | null;
+        documentId: string | number | null;
         sectionPath: string | null;
         snippet: string;
+        sourceType: string | null;
     }[];
 }, {
-    confidence: "high" | "medium" | "low";
+    confidence: "high" | "low" | "medium";
     category: string;
     claim: string;
     citations?: {
-        sourceType: string | null;
         title: string | null;
-        documentId: string | number | null;
         page: number | null;
+        documentId: string | number | null;
         sectionPath: string | null;
         snippet: string;
+        sourceType: string | null;
     }[] | undefined;
 }>;
 export type NormalizedClaim = z.infer<typeof NormalizedClaimSchema>;
@@ -107,63 +107,63 @@ export declare const NormalizedCompanyKnowledgeSchema: z.ZodObject<{
             snippet: z.ZodString;
             sourceType: z.ZodNullable<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }, {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        confidence: "high" | "medium" | "low";
+        confidence: "high" | "low" | "medium";
         category: string;
         claim: string;
         citations: {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }[];
     }, {
-        confidence: "high" | "medium" | "low";
+        confidence: "high" | "low" | "medium";
         category: string;
         claim: string;
         citations?: {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }[] | undefined;
     }>, "many">>;
     summary: z.ZodString;
     missingInformation: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
-    categories: string[];
     summary: string;
+    categories: string[];
     keyDifferentiators: string[];
     technicalEdge: string;
     claims: {
-        confidence: "high" | "medium" | "low";
+        confidence: "high" | "low" | "medium";
         category: string;
         claim: string;
         citations: {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }[];
     }[];
     companyName: string;
@@ -186,16 +186,16 @@ export declare const NormalizedCompanyKnowledgeSchema: z.ZodObject<{
     categories?: string[] | undefined;
     keyDifferentiators?: string[] | undefined;
     claims?: {
-        confidence: "high" | "medium" | "low";
+        confidence: "high" | "low" | "medium";
         category: string;
         claim: string;
         citations?: {
-            sourceType: string | null;
             title: string | null;
-            documentId: string | number | null;
             page: number | null;
+            documentId: string | number | null;
             sectionPath: string | null;
             snippet: string;
+            sourceType: string | null;
         }[] | undefined;
     }[] | undefined;
     targetAudience?: string[] | undefined;
@@ -363,8 +363,8 @@ export declare const MarketingPipelineInputSchema: z.ZodObject<{
     enableVariantRanking: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     platform: "x" | "linkedin" | "reddit" | "bluesky";
-    contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
     prompt?: string | undefined;
+    contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
     targetAudience?: string | undefined;
     maxResearchResults?: number | undefined;
     platformMeta?: {
@@ -375,8 +375,8 @@ export declare const MarketingPipelineInputSchema: z.ZodObject<{
     enableVariantRanking?: boolean | undefined;
 }, {
     platform: "x" | "linkedin" | "reddit" | "bluesky";
-    contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
     prompt?: string | undefined;
+    contentType?: "email" | "post" | "thread" | "ad_copy" | "multi_platform" | undefined;
     targetAudience?: string | undefined;
     maxResearchResults?: number | undefined;
     platformMeta?: {

@@ -22,6 +22,7 @@ const PROVIDER_LABELS: Record<string, string> = {
     "google-drive": "Google Drive",
     slack: "Slack",
     github: "GitHub",
+    gmail: "Gmail",
 };
 
 interface ConnectorsOverview {
@@ -33,6 +34,8 @@ interface ConnectorsOverview {
         status: string;
         statusDetail: string | null;
         grantedBy: string | null;
+        /** A per-user connection (Gmail) — the caller's own, never a colleague's. */
+        personal?: boolean;
         createdAt: string;
     }>;
 }
@@ -193,12 +196,15 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
         [refreshAll, loading, connectors.loading]
     );
 
-    const disconnect = async (connectionId: string, label: string) => {
+    const disconnect = async (connectionId: string, label: string, personal = false) => {
         setDisconnecting(connectionId);
         try {
-            const res = await fetch(`/api/connectors/connections/${connectionId}`, {
-                method: "DELETE",
-            });
+            // A member's own Gmail row is theirs to remove; the generic route
+            // is the management-gated path for workspace connections.
+            const res = await fetch(
+                personal ? "/api/connectors/gmail" : `/api/connectors/connections/${connectionId}`,
+                { method: "DELETE" }
+            );
             if (res.ok) {
                 toast.success(`${label} disconnected`);
                 await refreshConnectors();
@@ -259,14 +265,18 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                     detail={
                                         <>
                                             {row.displayName ?? "connected"}
-                                            {row.grantedBy
-                                                ? ` · connected by ${row.grantedBy}`
-                                                : ""}
+                                            {row.personal
+                                                ? " · your mailbox, private to you"
+                                                : row.grantedBy
+                                                  ? ` · connected by ${row.grantedBy}`
+                                                  : ""}
                                             {row.status !== "active"
                                                 ? ` · ${row.status}${row.statusDetail ? ` — ${row.statusDetail}` : ""}`
                                                 : ""}{" "}
                                             <button
-                                                onClick={() => void disconnect(row.id, label)}
+                                                onClick={() =>
+                                                    void disconnect(row.id, label, row.personal)
+                                                }
                                                 disabled={disconnecting === row.id}
                                                 style={{
                                                     fontSize: 12,

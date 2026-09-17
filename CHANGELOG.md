@@ -9,9 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history, including workspace sessions and Google Drive document origins; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables. Chat history persists the same filtered source context used for retrieval, keeping Call Notes out of assistant context.
+- **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history, including workspace sessions and Google Drive document origins; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables. Chat history persists the same filtered source context used for retrieval, keeping Call Notes out of the workspace's selected-source context.
+- **PR reconciliation and scope audit** — Merged current Gmail, settings, and Prospects changes without losing Call Notes; reconciled migration snapshots without rewriting applied SQL; preserved command-palette Settings deep links when leaving Calls. Removed incidental generated pipeline output changes, unused capture-worker settings/database credentials, its unused direct database dependency, and an unused fixture collection. CI now runs capture-worker tests on Node 24 while the web capture integration test remains compatible with the web application's Node 20 runtime.
+- **Calls redirect build compatibility** — The `/calls` page now uses the required Next.js page-props signature while retaining its workspace/deep-link redirect behavior.
 - **Call title renaming** — Removed the purple outline during inline title editing; text selection remains visible, and keyboard focus is still indicated before editing.
 - **AI proposal review notice** — Kept the subtle highlighted container with a uniform border; removed the thick left accent. Accepted notes do not show a review banner.
+
+### Known gaps
+
+- **Call Notes as indexed files** — The intended product treats canonical Call Notes like normal files for indexing and permission-scoped agent retrieval. This reconciliation retains the existing opt-in note-index path and chat-selection exclusions; it does not implement normal-file/RAG integration. The current implementation gaps and required verification are recorded in `docs/call-notes/implementation-contract.md`.
 
 ### Removed
 

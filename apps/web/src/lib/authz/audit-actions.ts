@@ -41,6 +41,8 @@ export const AUDIT_ACTIONS = [
     "connector.connected",
     "connector.disconnected",
     "settings.changed",
+    "archive.restored",
+    "archive.deleted",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

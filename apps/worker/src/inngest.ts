@@ -31,6 +31,7 @@ import {
     googleDriveSyncCron,
     googleDriveSyncJob,
 } from "~/server/inngest/functions/googleDriveSync";
+import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
 
 export function createInngestHandler() {
     return serve({
@@ -51,6 +52,8 @@ export function createInngestHandler() {
             repoExplainerJob,
             googleDriveSyncJob,
             googleDriveSyncCron,
+            gmailSyncJob,
+            gmailSyncCron,
             distributionRunJob,
         ],
     });

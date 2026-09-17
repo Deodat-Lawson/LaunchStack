@@ -1,8 +1,28 @@
 import { z } from "zod";
-export { LatLngSchema, SearchLocationSchema, DEFAULT_SEARCH_RADIUS, MAX_SEARCH_RADIUS, FoursquareCategoryIdSchema, } from "@launchstack/tools/place-search";
-export type { LatLng, SearchLocation, RawPlaceResult } from "@launchstack/tools/place-search";
-export type { PlannedPlaceSearch as PlannedSearch } from "@launchstack/tools/place-search";
-import type { LatLng } from "@launchstack/tools/place-search";
+export declare const LatLngSchema: z.ZodObject<{
+    lat: z.ZodNumber;
+    lng: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    lat: number;
+    lng: number;
+}, {
+    lat: number;
+    lng: number;
+}>;
+export type LatLng = z.infer<typeof LatLngSchema>;
+export declare const SearchLocationSchema: z.ZodUnion<[z.ZodObject<{
+    lat: z.ZodNumber;
+    lng: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    lat: number;
+    lng: number;
+}, {
+    lat: number;
+    lng: number;
+}>, z.ZodString]>;
+export type SearchLocation = z.infer<typeof SearchLocationSchema>;
+export declare const DEFAULT_SEARCH_RADIUS = 5000;
+export declare const MAX_SEARCH_RADIUS = 50000;
 export declare const ProspectorInputSchema: z.ZodObject<{
     query: z.ZodString;
     companyContext: z.ZodString;
@@ -41,6 +61,30 @@ export declare const ProspectorInputSchema: z.ZodObject<{
     excludeChains?: boolean | undefined;
 }>;
 export type ProspectorInput = z.infer<typeof ProspectorInputSchema>;
+export declare const FoursquareCategoryIdSchema: z.ZodString;
+export interface PlannedSearch {
+    searchQuery: string;
+    categoryIds: string[];
+    rationale: string;
+}
+export interface RawPlaceResult {
+    fsqId: string;
+    name: string;
+    address: string;
+    formattedAddress: string;
+    location: LatLng;
+    categories: Array<{
+        id: string;
+        name: string;
+    }>;
+    phone?: string;
+    website?: string;
+    rating?: number;
+    totalRatings?: number;
+    description?: string;
+    verified?: boolean;
+    distance?: number;
+}
 import type { ProspectResult } from "../schema.js";
 export type { ProspectResult };
 export interface ProspectorOutput {

@@ -6,6 +6,19 @@
 
 This is the shared handoff for the Call Notes implementation lanes. Exported TypeScript, Zod, and Drizzle artifacts are the executable source for wire and persistence shape; this document records the boundaries those artifacts must preserve.
 
+## Product direction and remaining PR gap — 2026-09-17
+
+Call Notes are canonical files, not a separate opt-in knowledge product. The target is the same indexing and permission-scoped agent retrieval behavior as normal files, while retaining the specialized Calls editor. Saved canonical note content belongs in that index; immutable Transcript evidence and unaccepted AI proposals are separate.
+
+The current implementation does **not** yet meet that target:
+
+- Call Note file entries lack a normal document ID and are explicitly excluded from workspace chat selection and saved chat context.
+- The older `set_knowledge_inclusion` command, knowledge sink, and note-embedding retrieval path still exist. They are retained in this reconciliation, not evidence that normal file indexing has been delivered.
+- Company-scoped note retrieval applies opt-in/visibility checks, but user-scoped Ask My Notes does not apply those same Call Note checks. The current behavior is neither the earlier blanket retrieval exclusion nor a complete normal-file permission contract.
+- Follow-up integration must use the existing document ingestion/retrieval path, remove the separate publication gate, connect source selection and citations, and verify update, deletion, private-note access, and existing-note migration behavior.
+
+This PR preparation is limited to merging main, fixing merge interactions, and pruning proven-unused artifacts. The normal-file/RAG integration is explicitly deferred by the user; do not describe this branch as completing that product direction. The 2026-09-05 file-only direction below records the prior implementation boundary and is superseded by this section.
+
 ## Approved product direction — 2026-09-05
 
 - **Explicit Start:** the initial Calls UI requires an authenticated user to explicitly start capture. Speech detection alone must not create a new Call. Voice Activity detection remains responsible for utterance boundaries within a user-started capture.

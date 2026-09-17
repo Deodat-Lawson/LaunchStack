@@ -56,6 +56,30 @@ body {
     transform: scale(0.95);
 }
 
+/* Member preferences applied by PreferenceSync (app/employer/_chrome).
+   Density tightens type and spacing in lists; motion "reduce" mirrors the
+   OS preference for people who set it in the app rather than the OS. */
+html[data-density="compact"] {
+    font-size: 15px;
+}
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-motion="allow"]) *,
+    html:not([data-motion="allow"]) *::before,
+    html:not([data-motion="allow"]) *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
 /* Application-shell defaults, formerly scoped under the (now retired)
    .lsw-root marker class. */
 .mono {

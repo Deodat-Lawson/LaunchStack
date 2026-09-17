@@ -75,6 +75,18 @@ x-shared-env: &shared-env
   GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
   GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
   GOOGLE_MODEL: ${GOOGLE_MODEL:-}
+  # Image generation. Unset is the normal case: the tool falls back to the
+  # CHAT_* pair above, and on an OpenRouter-style endpoint the chat credential
+  # already serves images. These exist for a deployment that wants images to
+  # come from somewhere other than chat — and they are listed here because this
+  # block is an explicit allowlist, so an unlisted variable is invisible to the
+  # container no matter what the host .env says.
+  IMAGE_API_BASE_URL: ${IMAGE_API_BASE_URL:-}
+  IMAGE_API_KEY: ${IMAGE_API_KEY:-}
+  IMAGE_MODEL: ${IMAGE_MODEL:-}
+  # Forces a wire shape (chat-completions | images-generations | gemini-native)
+  # for a gateway whose hostname does not imply one. Normally inferred.
+  IMAGE_API_SHAPE: ${IMAGE_API_SHAPE:-}
   EMBEDDING_INDEX: ${EMBEDDING_INDEX:-legacy-openai-1536}
   EMBEDDING_SECRETS_KEY: ${EMBEDDING_SECRETS_KEY:-}
   # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)

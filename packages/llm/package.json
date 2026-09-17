@@ -20,7 +20,8 @@
         "./presets": "./src/presets.ts",
         "./structured-output": "./src/structured-output.ts",
         "./package.json": "./package.json",
-        "./embeddings": "./src/embeddings/index.ts"
+        "./embeddings": "./src/embeddings/index.ts",
+        "./images": "./src/images/index.ts"
     },
     "files": [
         "dist",

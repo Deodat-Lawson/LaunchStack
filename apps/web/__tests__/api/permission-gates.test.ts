@@ -41,6 +41,8 @@ const mockEnv = {
         GOOGLE_OAUTH_CLIENT_SECRET: "sec",
         GOOGLE_OAUTH_REDIRECT_URL: undefined as string | undefined,
         GOOGLE_DOCS_SETTLE_MINUTES: "10",
+        GMAIL_CONNECTOR_ENABLED: "true",
+        EMBEDDING_SECRETS_KEY: "k",
         APP_PUBLIC_URL: "https://app.test",
         DOCUMENT_CONVERTER_URL: undefined as string | undefined,
         GITHUB_TOKEN: undefined as string | undefined,
@@ -224,6 +226,12 @@ import { POST as commitBatch } from "~/app/api/upload/batches/[batchId]/commit/r
 import { DELETE as disconnectGoogle } from "~/app/api/connectors/google/route";
 import { GET as startGoogleOAuth } from "~/app/api/connectors/google/oauth/start/route";
 import { GET as googleOAuthCallback } from "~/app/api/connectors/google/oauth/callback/route";
+import { GET as gmailLabels } from "~/app/api/connectors/gmail/labels/route";
+import {
+    DELETE as removeGmailItems,
+    POST as addGmailItems,
+} from "~/app/api/connectors/gmail/items/route";
+import { POST as syncGmail } from "~/app/api/connectors/gmail/sync/route";
 import { POST as openInDrive } from "~/app/api/documents/[id]/google-docs/open/route";
 import {
     GET as previewAgentKnowledge,
@@ -428,6 +436,46 @@ const GATES: readonly Gate[] = [
                 params({ batchId: "b1" })
             ),
     },
+    // documents.upload — Gmail is the member's own mailbox, so its gate is
+    // upload access, not connector management.
+    {
+        route: "GET /api/connectors/google/oauth/start?provider=gmail",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            startGoogleOAuth(
+                new Request("http://localhost/api/connectors/google/oauth/start?provider=gmail")
+            ),
+    },
+    {
+        route: "GET /api/connectors/gmail/labels",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => gmailLabels(new Request("http://localhost/api/connectors/gmail/labels")),
+    },
+    {
+        route: "POST /api/connectors/gmail/items",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            addGmailItems(
+                json("/api/connectors/gmail/items", "POST", {
+                    items: [{ kind: "label", value: "INBOX", name: "Inbox" }],
+                })
+            ),
+    },
+    {
+        route: "DELETE /api/connectors/gmail/items",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => removeGmailItems(json("/api/connectors/gmail/items", "DELETE", { ids: ["1"] })),
+    },
+    {
+        route: "POST /api/connectors/gmail/sync",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => syncGmail(json("/api/connectors/gmail/sync", "POST", {})),
+    },
     // connectors.manage
     {
         route: "DELETE /api/connectors/google",
@@ -569,6 +617,21 @@ describe("permission gates", () => {
 
         expect(response.status).toBe(307);
         expect(response.headers.get("location")).toContain("result=error");
+    });
+
+    it("GET /api/connectors/google/oauth/callback (gmail state) sends a viewer back with an error flag", async () => {
+        signInAs("viewer");
+
+        const response = await googleOAuthCallback(
+            new Request(
+                "http://localhost/api/connectors/google/oauth/callback?code=c&state=gmail.s"
+            )
+        );
+
+        expect(response.status).toBe(307);
+        const location = response.headers.get("location") ?? "";
+        expect(location).toContain("connector=gmail");
+        expect(location).toContain("result=error");
     });
 
     it("lets an admin through the same gate (the harness is not refusing everyone)", async () => {

@@ -1346,35 +1346,6 @@ export function SourceRail({
                             .
                         </div>
                     )}
-
-                    {!activeTag && !search && onNewFolder && (
-                        <button
-                            data-testid="source-rail-new-folder"
-                            onClick={() => onNewFolder(activeFolder)}
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 7,
-                                padding: "6px 10px",
-                                marginTop: 8,
-                                borderRadius: 5,
-                                color: "var(--ink-3)",
-                                fontSize: 12,
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.color = "var(--accent)";
-                                e.currentTarget.style.background = "var(--line-2)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.color = "var(--ink-3)";
-                                e.currentTarget.style.background = "transparent";
-                            }}
-                        >
-                            <IconPlus size={11} />
-                            {activeFolder ? "New subfolder" : "New folder"}
-                        </button>
-                    )}
                 </div>
             )}
 

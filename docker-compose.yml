@@ -20,6 +20,7 @@
 #                    PDFs/Office docs (~800MB RAM). Without it, /convert
 #                    returns a typed 503 and text-file ingestion still works.
 #   --profile backfill — on-demand data backfills
+#   --profile seed — fixed development accounts (see the `seed` service)
 
 # Environment shared by the app (command acceptance + reads) and the worker
 # (durable execution). One authority so the two processes can never disagree
@@ -133,6 +134,10 @@ x-shared-env: &shared-env
   # allowlist, so without the passthrough the route fails closed at 503
   # even when the host .env sets it.
   METRICS_SCRAPE_TOKEN: ${METRICS_SCRAPE_TOKEN:-}
+  # Serves the auth-free /dev/* preview pages from a production build. Off
+  # unless set — the published image must never answer these — but a local
+  # stack can turn them on to look at UI without a session.
+  ENABLE_DEV_ROUTES: ${ENABLE_DEV_ROUTES:-}
 
 services:
   db:
@@ -186,6 +191,32 @@ services:
       SKIP_ENV_VALIDATION: "1"
     working_dir: /app/apps/web
     entrypoint: ["pnpm", "db:backfill"]
+    restart: "no"
+
+  # Fixed development accounts — one workspace, one account per built-in
+  # role. On demand only, like backfill: a stack that seeds itself on every
+  # boot is a stack that recreates deleted test users behind your back.
+  #
+  #   docker compose --profile seed run --rm seed
+  #
+  # Requires DEV_SEED_PASSWORD; the script refuses without it.
+  seed:
+    profiles: ["seed"]
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: builder
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+      SKIP_ENV_VALIDATION: "1"
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      DEV_SEED_PASSWORD: ${DEV_SEED_PASSWORD:-}
+      DEV_SEED_WORKSPACE: ${DEV_SEED_WORKSPACE:-}
+    working_dir: /app/apps/web
+    entrypoint: ["pnpm", "db:seed"]
     restart: "no"
 
   seaweedfs:

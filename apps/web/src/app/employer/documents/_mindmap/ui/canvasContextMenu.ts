@@ -1,6 +1,7 @@
-import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { tidyMenuItems, type ActionMenuItem } from "~/components/ui/action-menu";
 import {
     addChildTopic,
+    addSiblingTopic,
     applySwatch,
     clearWaypoints,
     copySelection,
@@ -26,7 +27,7 @@ import {
 import { activePage, graphIndex, nodeById } from "../model/doc";
 import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
-import type { EditorStore } from "../model/store";
+import type { EditorState, EditorStore } from "../model/store";
 import type { EdgeKind } from "../model/types";
 
 /**
@@ -42,11 +43,83 @@ export interface CanvasMenuExtras {
     onAskAboutNode?: (text: string) => void;
 }
 
+/**
+ * The menu, at the depth the editor is showing.
+ *
+ * Everything depth is the full list below. Focus depth is the seven things
+ * people do to a shape, in frequency order, then "More" holding the rest —
+ * so Add child is first and Select connected is a level down instead of
+ * sharing a row with it. Which seven depends on the document's kind: a
+ * flowchart leads with Change shape, a mindmap with Add child. Nothing is
+ * removed at either depth; see the README, "Chrome depths".
+ */
 export function buildCanvasMenuItems(
     store: EditorStore,
     extras: CanvasMenuExtras = {}
 ): ActionMenuItem[] {
     const state = store.getState();
+    const everything = buildEverything(store, extras, state);
+    if (state.chromeDepth !== "focus") return everything;
+    return focusTier(store, state, everything);
+}
+
+function focusTier(
+    store: EditorStore,
+    state: EditorState,
+    everything: ActionMenuItem[]
+): ActionMenuItem[] {
+    const page = activePage(state.doc);
+    const nodeIds = state.selection.filter(s => s.kind === "node").map(s => s.id);
+    const singleNode = nodeIds.length === 1 ? nodeById(page, nodeIds[0]!) : null;
+    // With nothing, or several things, selected the full menu is already short.
+    if (!singleNode) return everything;
+
+    const kind = state.doc.settings.kind;
+    const flow = kind === "flowchart" || kind === "freeform";
+    const byId = new Map(everything.map(item => [item.id, item] as const));
+    const pick = (id: string) => byId.get(id);
+
+    const addSibling: ActionMenuItem = {
+        type: "item",
+        id: "add-sibling",
+        label: "Add sibling topic",
+        icon: "plus",
+        shortcut: "↩",
+        onSelect: () => addSiblingTopic(store, singleNode.id),
+    };
+    const addChild = pick("add-child");
+    const connected: ActionMenuItem | undefined =
+        addChild && addChild.type === "item"
+            ? { ...addChild, label: "Add connected shape" }
+            : addChild;
+
+    const promoted: (ActionMenuItem | undefined)[] = flow
+        ? [pick("ask"), pick("shape"), connected, pick("colour"), pick("duplicate"), pick("delete")]
+        : [
+              pick("ask"),
+              addChild,
+              addSibling,
+              pick("colour"),
+              pick("collapse"),
+              pick("duplicate"),
+              pick("delete"),
+          ];
+    const top = promoted.filter((item): item is ActionMenuItem => item !== undefined);
+    const promotedIds = new Set(top.map(item => item.id));
+
+    const rest = tidyMenuItems(everything.filter(item => !promotedIds.has(item.id)));
+    return tidyMenuItems([
+        ...top,
+        { type: "separator", id: "sep-more" },
+        { type: "submenu", id: "more", label: "More", items: rest },
+    ]);
+}
+
+function buildEverything(
+    store: EditorStore,
+    extras: CanvasMenuExtras,
+    state: EditorState
+): ActionMenuItem[] {
     const page = activePage(state.doc);
     const selection = state.selection;
     const nodeIds = selection.filter(s => s.kind === "node").map(s => s.id);

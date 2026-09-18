@@ -154,11 +154,10 @@ export function Inspector() {
     return (
         <ScrollArea className="h-full">
             <div className="pb-10">
-                {nodes.length === 0 && edges.length === 0 && <PageSettings />}
                 {nodes.length > 0 && <NodeSections nodes={nodes} />}
                 {edges.length > 0 && <EdgeSections edges={edges} />}
                 {(nodes.length > 0 || edges.length > 0) && (
-                    <Section title="Arrange">
+                    <Section title="Arrange" collapsible defaultOpen={false}>
                         <Row>
                             <IconToggle
                                 title="Align left"
@@ -320,27 +319,44 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                 </Select>
             </Section>
 
-            <Section title="Fill & stroke">
-                <Row>
-                    <Label>Fill</Label>
-                    <ColorField
-                        label="Fill colour"
-                        tone="fill"
-                        allowNone
-                        value={fill ?? "none"}
-                        onChange={value => styleSelection(store, { fill: value }, "Fill")}
-                    />
-                </Row>
-                <Row>
-                    <Label>Stroke</Label>
-                    <ColorField
-                        label="Stroke colour"
-                        tone="stroke"
-                        allowNone
-                        value={stroke ?? "none"}
-                        onChange={value => styleSelection(store, { stroke: value }, "Stroke")}
-                    />
-                </Row>
+            {/* The three things people change constantly, pinned at the top
+                and side by side; everything below is reached for rarely. */}
+            <Section title="Colour">
+                <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-center gap-1">
+                        <ColorField
+                            label="Fill colour"
+                            tone="fill"
+                            allowNone
+                            value={fill ?? "none"}
+                            onChange={value => styleSelection(store, { fill: value }, "Fill")}
+                        />
+                        <span className="text-ink-3 text-[10px]">Fill</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                        <ColorField
+                            label="Stroke colour"
+                            tone="stroke"
+                            allowNone
+                            value={stroke ?? "none"}
+                            onChange={value => styleSelection(store, { stroke: value }, "Stroke")}
+                        />
+                        <span className="text-ink-3 text-[10px]">Stroke</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                        <ColorField
+                            label="Text colour"
+                            tone="ink"
+                            value={textColor ?? "var(--ink)"}
+                            onChange={value =>
+                                styleTextSelection(store, { color: value }, "Text colour")
+                            }
+                        />
+                        <span className="text-ink-3 text-[10px]">Text</span>
+                    </div>
+                </div>
+            </Section>
+            <Section title="Shape style" collapsible>
                 <Row>
                     <Label>Weight</Label>
                     <PresetNumberField
@@ -405,17 +421,6 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
             </Section>
 
             <Section title="Text">
-                <Row>
-                    <Label>Colour</Label>
-                    <ColorField
-                        label="Text colour"
-                        tone="ink"
-                        value={textColor ?? "var(--ink)"}
-                        onChange={value =>
-                            styleTextSelection(store, { color: value }, "Text colour")
-                        }
-                    />
-                </Row>
                 <Row>
                     <Label>Size</Label>
                     <PresetNumberField
@@ -522,7 +527,7 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                 </button>
             </Section>
 
-            <Section title="Position & size">
+            <Section title="Position & size" collapsible defaultOpen={false}>
                 <Row>
                     <Label>X / Y</Label>
                     <NumberField
@@ -690,7 +695,12 @@ function ArrowSelect({
 // Page settings (nothing selected)
 // ---------------------------------------------------------------------------
 
-function PageSettings() {
+/**
+ * Theme, canvas and snapping — document-wide settings. Shown from the top
+ * bar's Appearance control rather than as the inspector's idle state, so an
+ * empty selection means an empty panel, not ten themes.
+ */
+export function PageSettings() {
     const store = useStore();
     const doc = useCommittedDoc();
     const page = useMemo(() => activePage(doc), [doc]);

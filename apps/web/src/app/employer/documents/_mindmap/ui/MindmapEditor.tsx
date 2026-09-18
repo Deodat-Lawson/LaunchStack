@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    useSyncExternalStore,
+} from "react";
 import {
     ChevronLeft,
     ChevronRight,
@@ -15,12 +22,22 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/componen
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { docMode, fitToScreen, setActivePage, viewportCentre } from "../model/commands";
+import { toast } from "sonner";
+
+import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/preferences";
+import {
+    docMode,
+    fitToScreen,
+    pauseAutoArrangeAfterManualMove,
+    setActivePage,
+    setAutoLayout,
+    viewportCentre,
+} from "../model/commands";
 import { createNodeAt } from "../model/factory";
 import { isImageFile } from "../lib/images";
 import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
-import { EditorStore, type EditorState } from "../model/store";
+import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import type { Point, ShapeId } from "../model/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
@@ -39,6 +56,9 @@ import { PublishDialog } from "./PublishDialog";
 import { ShapePalette } from "./ShapePalette";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { TextEditorOverlay } from "./TextEditorOverlay";
+import { EmptyCanvasHint } from "./EmptyCanvasHint";
+import { Presenter } from "./Presenter";
+import { SelectionToolbar } from "./SelectionToolbar";
 import { Toolbar } from "./Toolbar";
 import { TopBar } from "./TopBar";
 import { useAutosave } from "./useAutosave";
@@ -72,6 +92,11 @@ export interface MindmapEditorProps {
     /** Display name used as the author on new comments. */
     author: string;
     /**
+     * Prototype of the disclosure plan. `focus` opens with no side panels,
+     * five tools and a toolbar on the selection; unset keeps today's editor.
+     */
+    initialChrome?: ChromeDepth;
+    /**
      * Where the top bar's back arrow goes. The workspace mounts the editor
      * in place and hands it "return to the preview"; the standalone route
      * leaves it unset and gets a link to the library.
@@ -89,7 +114,16 @@ type LeftTab = "shapes" | "outline" | "comments" | "history";
 export function MindmapEditor(props: MindmapEditorProps) {
     // One store per mounted document. `useState` with an initialiser rather
     // than `useMemo`, because a store is state, not a derived value.
-    const [store] = useState(() => new EditorStore(parseDoc(props.initialDoc, props.initialTitle)));
+    const [store] = useState(() => {
+        const created = new EditorStore(parseDoc(props.initialDoc, props.initialTitle));
+        // How much chrome to open with: an explicit request, else what this
+        // person last chose for this kind of diagram, else the kind's default.
+        const kind = created.getState().doc.settings.kind;
+        created.setChromeDepth(
+            props.initialChrome ?? readChromeDepth(kind) ?? defaultChromeDepth(kind)
+        );
+        return created;
+    });
 
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
@@ -104,6 +138,23 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [findOpen, setFindOpen] = useState(false);
     const [presenting, setPresenting] = useState(false);
+    // The shell sits above the provider, so it reads the store directly.
+    const chromeDepth = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().chromeDepth,
+        () => store.getState().chromeDepth
+    );
+    const hasSelection = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().selection.length > 0,
+        () => false
+    );
+    const everything = chromeDepth === "everything";
+    const leftShown = leftOpen && everything;
+    // The inspector is a property sheet. With nothing selected it has no
+    // subject, so the panel closes rather than filling with page settings —
+    // those live behind the top bar's Appearance control.
+    const rightShown = rightOpen && everything && hasSelection;
     const [publishedId, setPublishedId] = useState(props.publishedDocumentId);
 
     const getSvgElement = useCallback(() => stageRef.current?.querySelector("svg") ?? null, []);
@@ -137,16 +188,17 @@ export function MindmapEditor(props: MindmapEditorProps) {
         };
     }, [autosave, onBack]);
 
+    // The store is read for the current value rather than through a state
+    // updater: an updater may run during render, and notifying the store's
+    // subscribers from there is a setState-in-render on every panel.
     const togglePresent = useCallback(() => {
-        setPresenting(current => {
-            const next = !current;
-            store.setPresenting(next);
-            if (next) {
-                setLeftOpen(false);
-                setRightOpen(false);
-            }
-            return next;
-        });
+        const next = !store.getState().presenting;
+        store.setPresenting(next);
+        setPresenting(next);
+        if (next) {
+            setLeftOpen(false);
+            setRightOpen(false);
+        }
     }, [store]);
 
     useEffect(() => {
@@ -221,6 +273,17 @@ export function MindmapEditor(props: MindmapEditorProps) {
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
             onOpenComments: () => setLeftTab("comments"),
+            // A shape placed by hand should stay where it was put, so a Move or
+            // Resize ends auto-arrange — with the way back one click away.
+            onGestureEnd: (label: string) => {
+                if (label !== "Move" && label !== "Resize") return;
+                const paused = pauseAutoArrangeAfterManualMove(store);
+                if (!paused) return;
+                toast("Auto-arrange paused", {
+                    description: "You placed something by hand, so the map stays as you left it.",
+                    action: { label: "Resume", onClick: () => setAutoLayout(store, paused) },
+                });
+            },
         }),
         [store]
     );
@@ -306,8 +369,31 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             onPresent={togglePresent}
                             onShortcuts={() => setShortcutsOpen(true)}
                             onCommandPalette={() => setPaletteOpen(true)}
-                            leftPanelOpen={leftOpen}
-                            rightPanelOpen={rightOpen}
+                            leftPanelOpen={leftShown}
+                            rightPanelOpen={rightShown}
+                            depth={chromeDepth}
+                            onToggleDepth={() => {
+                                const next = everything ? "focus" : "everything";
+                                store.setChromeDepth(next);
+                                writeChromeDepth(store.getState().doc.settings.kind, next);
+                            }}
+                            onHistory={() => {
+                                store.setChromeDepth("everything");
+                                setLeftOpen(true);
+                                setLeftTab("history");
+                            }}
+                            onCopyPresentLink={() => {
+                                const url = `${window.location.origin}/employer/documents?source=m${props.mindmapId}&present=1`;
+                                void navigator.clipboard.writeText(url).then(
+                                    () =>
+                                        toast("Presentation link copied", {
+                                            description:
+                                                "Opens the map straight into Present for anyone in the workspace.",
+                                        }),
+                                    () =>
+                                        toast.error("Couldn't copy the link", { description: url })
+                                );
+                            }}
                             onToggleLeft={() => setLeftOpen(v => !v)}
                             onToggleRight={() => setRightOpen(v => !v)}
                         />
@@ -316,6 +402,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                     <div className="flex min-h-0 flex-1">
                         {!presenting && (
                             <Toolbar
+                                depth={chromeDepth}
                                 onOpenShapes={() => {
                                     setLeftOpen(true);
                                     setLeftTab("shapes");
@@ -333,7 +420,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             autoSaveId="mindmap-editor-panels"
                             className="min-h-0 flex-1"
                         >
-                            {!presenting && leftOpen && (
+                            {!presenting && leftShown && (
                                 <>
                                     <ResizablePanel
                                         id="left"
@@ -427,22 +514,39 @@ export function MindmapEditor(props: MindmapEditorProps) {
 
                                     <ConnectedStaleBanner staleBy={presence.staleBy} />
 
+                                    <SelectionToolbar
+                                        onMore={() => {
+                                            store.setChromeDepth("everything");
+                                            setRightOpen(true);
+                                        }}
+                                    />
+                                    <EmptyCanvasHint
+                                        canvasSize={stageSize}
+                                        onPasteOutline={() => setImportOpen(true)}
+                                    />
+
                                     <FindBar
                                         open={findOpen}
                                         onClose={() => setFindOpen(false)}
                                         canvasSize={stageSize}
                                     />
 
-                                    {presenting && (
-                                        <PresentationControls
-                                            onExit={togglePresent}
-                                            onStep={stepPage}
-                                        />
-                                    )}
+                                    {presenting &&
+                                        (chromeDepth === "focus" ? (
+                                            <Presenter
+                                                canvasSize={stageSize}
+                                                onExit={togglePresent}
+                                            />
+                                        ) : (
+                                            <PresentationControls
+                                                onExit={togglePresent}
+                                                onStep={stepPage}
+                                            />
+                                        ))}
                                 </div>
                             </ResizablePanel>
 
-                            {!presenting && rightOpen && (
+                            {!presenting && rightShown && (
                                 <>
                                     <ResizableHandle />
                                     <ResizablePanel

@@ -67,6 +67,16 @@ export interface TextEditTarget {
     index?: number;
 }
 
+/**
+ * How much chrome the editor shows. `focus` is the canvas, five tools and a
+ * toolbar on the selection; `everything` is every panel. Prototype of the
+ * disclosure plan: the default stays `everything`, so nothing changes unless
+ * a caller asks for it.
+ */
+export type ChromeDepth = "focus" | "everything";
+
+const NO_FOLDS: ReadonlySet<string> = new Set();
+
 export interface EditorState {
     doc: MindmapDoc;
     /**
@@ -99,6 +109,13 @@ export interface EditorState {
     saving: boolean;
     /** Presentation mode hides every panel and fits the current page. */
     presenting: boolean;
+    chromeDepth: ChromeDepth;
+    /**
+     * Branch ids shown as collapsed without being written to the document.
+     * Presenting folds and unfolds through this, so a presentation never
+     * dirties the file it is showing.
+     */
+    folded: ReadonlySet<string>;
     canUndo: boolean;
     canRedo: boolean;
 }
@@ -161,6 +178,8 @@ export class EditorStore {
             savedAt: null,
             saving: false,
             presenting: false,
+            chromeDepth: "everything",
+            folded: NO_FOLDS,
             canUndo: false,
             canRedo: false,
         };
@@ -348,11 +367,16 @@ export class EditorStore {
         };
     }
 
-    endInteraction(): void {
+    /**
+     * Commit a gesture. Returns its label when the document changed, so the
+     * caller can react to *what kind* of edit a hand just made — a Move ends
+     * auto-arrange, for instance — and `null` when nothing happened.
+     */
+    endInteraction(): string | null {
         const base = this.interactionBase;
         this.interactionBase = null;
-        if (!base) return;
-        if (base.doc === this.state.doc) return; // gesture changed nothing
+        if (!base) return null;
+        if (base.doc === this.state.doc) return null; // gesture changed nothing
         this.undoStack.push(base);
         if (this.undoStack.length > HISTORY_LIMIT) this.undoStack.shift();
         this.redoStack = [];
@@ -362,6 +386,7 @@ export class EditorStore {
         this.state = { ...this.state, commitId: this.state.commitId + 1 };
         this.refreshHistoryFlags();
         this.emit();
+        return base.label;
     }
 
     /** Abandon a gesture and restore the document as it was when it began. */
@@ -523,5 +548,13 @@ export class EditorStore {
 
     setPresenting(presenting: boolean): void {
         this.set({ presenting, selection: presenting ? [] : this.state.selection });
+    }
+
+    setChromeDepth(chromeDepth: ChromeDepth): void {
+        this.set({ chromeDepth });
+    }
+
+    setFolded(ids: Iterable<string>): void {
+        this.set({ folded: new Set(ids) });
     }
 }

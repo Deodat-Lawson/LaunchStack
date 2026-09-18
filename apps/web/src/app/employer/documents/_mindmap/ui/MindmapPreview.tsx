@@ -13,6 +13,7 @@ import { applyThemeToDoc } from "../model/theme";
 import type { MindmapDoc, Viewport } from "../model/types";
 import { Canvas } from "./Canvas";
 import { EditorProvider, useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { Presenter } from "./Presenter";
 import { useAppThemeMode } from "./useAppThemeMode";
 import type { CanvasCallbacks } from "./useCanvasInteractions";
 import { useElementSize } from "./useElementSize";
@@ -73,16 +74,25 @@ function litForReader(doc: MindmapDoc, appMode: ThemeMode): MindmapDoc {
     return applyThemeToDoc(doc, counterpart.id);
 }
 
-export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
+export interface MindmapPreviewProps {
+    doc: MindmapDoc;
+    /** Open straight into the branch-by-branch presenter (`?present=1`). */
+    present?: boolean;
+    onExitPresent?: () => void;
+}
+
+export function MindmapPreview({ doc, present = false, onExitPresent }: MindmapPreviewProps) {
     const appMode = useAppThemeMode();
     const lit = useMemo(() => litForReader(doc, appMode), [doc, appMode]);
 
     // The store is built once from the doc it is given, so a change of lighting
     // is a remount rather than an in-place repaint.
-    return <PreviewSurface key={appMode} doc={lit} />;
+    return (
+        <PreviewSurface key={appMode} doc={lit} present={present} onExitPresent={onExitPresent} />
+    );
 }
 
-function PreviewSurface({ doc }: { doc: MindmapDoc }) {
+function PreviewSurface({ doc, present = false, onExitPresent }: MindmapPreviewProps) {
     const [store] = useState(() => {
         const s = new EditorStore(doc);
         s.setPresenting(true);
@@ -139,8 +149,14 @@ function PreviewSurface({ doc }: { doc: MindmapDoc }) {
                 >
                     <div ref={stageRef} className="relative flex min-h-0 flex-1">
                         <Canvas callbacks={NO_EDIT_CALLBACKS} />
+                        {present && (
+                            <Presenter
+                                canvasSize={stageSize}
+                                onExit={onExitPresent ?? (() => undefined)}
+                            />
+                        )}
                     </div>
-                    <PreviewBar stageSize={stageSize} onFrame={frame} />
+                    {!present && <PreviewBar stageSize={stageSize} onFrame={frame} />}
                 </div>
             </TooltipProvider>
         </EditorProvider>

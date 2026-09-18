@@ -23,7 +23,14 @@ import {
     IconShield,
     IconX,
 } from "./icons";
-import { Folder, FolderOpen, Lock } from "lucide-react";
+import { ChevronDown, Folder, FolderOpen, Lock } from "lucide-react";
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {
     UNFILED_FOLDER,
@@ -550,6 +557,8 @@ export interface SourceRailProps {
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
     onOpenAdd: () => void;
+    /** Straight to the mindmap template picker — creating, not uploading. */
+    onNewMindmap?: () => void;
     onOpenSource?: (source: WorkspaceSource) => void;
     /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
     onNewFolder?: (parentPath?: string | null) => void;
@@ -717,6 +726,7 @@ export function SourceRail({
     selected,
     setSelected,
     onOpenAdd,
+    onNewMindmap,
     onOpenSource,
     onNewFolder,
     onRenameFolder,
@@ -1119,32 +1129,70 @@ export function SourceRail({
                         <IconGrid size={13} />
                     </button>
                 )}
-                <button
-                    onClick={onOpenAdd}
-                    title="Add knowledge  ⌘U"
+                {/* A split button: the primary half is the same "Add knowledge"
+                    click it always was, so the frequent path costs nothing
+                    extra. The caret is where the one generative action lives,
+                    instead of as one row among fifteen ways to upload. */}
+                <div
                     style={{
-                        width: 26,
+                        display: "flex",
                         height: 26,
                         borderRadius: 6,
+                        overflow: "hidden",
                         background: "var(--accent)",
                         color: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        transition: "transform 80ms, filter 120ms",
-                    }}
-                    onMouseDown={e => {
-                        e.currentTarget.style.transform = "scale(0.94)";
-                    }}
-                    onMouseUp={e => {
-                        e.currentTarget.style.transform = "scale(1)";
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.transform = "scale(1)";
                     }}
                 >
-                    <IconPlus size={13} />
-                </button>
+                    <button
+                        onClick={onOpenAdd}
+                        title="Add knowledge  ⌘U"
+                        style={{
+                            width: 26,
+                            height: 26,
+                            background: "transparent",
+                            color: "inherit",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "filter 120ms",
+                        }}
+                    >
+                        <IconPlus size={13} />
+                    </button>
+                    {onNewMindmap && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button
+                                    aria-label="More ways to add"
+                                    title="New mindmap and more"
+                                    style={{
+                                        width: 14,
+                                        height: 26,
+                                        background: "transparent",
+                                        color: "inherit",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderLeft: "1px solid oklch(1 0 0 / 0.25)",
+                                    }}
+                                >
+                                    <ChevronDown size={10} />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                <DropdownMenuItem onSelect={onNewMindmap}>
+                                    New mindmap
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={onOpenAdd}>
+                                    Add a source
+                                    <span className="text-ink-3 ml-auto font-mono text-[11px]">
+                                        ⌘U
+                                    </span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
                 {onClose && (
                     <button
                         onClick={onClose}

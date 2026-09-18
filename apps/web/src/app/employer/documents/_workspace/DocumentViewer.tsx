@@ -87,6 +87,9 @@ export interface DocumentViewerProps {
     onEdit?: (source: WorkspaceSource) => void;
     /** Mindmaps only: the citable copy was created or updated. */
     onPublished?: () => void;
+    /** Mindmaps only: open straight into the branch-by-branch presenter. */
+    present?: boolean;
+    onExitPresent?: () => void;
 }
 
 /** Gives one version row its own right-click target without touching its markup. */
@@ -211,6 +214,8 @@ function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
 export function DocumentViewer({
     source,
     highlight,
+    present = false,
+    onExitPresent,
     onClose,
     onRename,
     onDelete,
@@ -941,7 +946,12 @@ export function DocumentViewer({
                                     overflow: "hidden",
                                 }}
                             >
-                                <MindmapPreview key={mindmapDoc.key} doc={mindmapDoc.doc} />
+                                <MindmapPreview
+                                    key={mindmapDoc.key}
+                                    doc={mindmapDoc.doc}
+                                    present={present}
+                                    onExitPresent={onExitPresent}
+                                />
                             </div>
                         ) : mindmapError ? (
                             <div

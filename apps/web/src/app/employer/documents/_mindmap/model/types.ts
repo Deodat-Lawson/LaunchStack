@@ -15,7 +15,7 @@
  * imported from elsewhere may legitimately carry any CSS color.
  */
 
-export const DOC_SCHEMA_VERSION = 1;
+export const DOC_SCHEMA_VERSION = 2;
 
 // ---------------------------------------------------------------------------
 // Geometry primitives
@@ -238,7 +238,27 @@ export interface MindmapDoc {
     settings: DocSettings;
 }
 
+/**
+ * What a document *is*, set from the template it was created from. The editor
+ * reads it to decide how much chrome to open with and which tools lead; the
+ * document itself renders the same either way. Documents saved before this
+ * existed are classified on load — see `inferKind` in serialize.ts.
+ */
+export type DiagramKind = "mindmap" | "flowchart" | "board" | "freeform";
+
+/**
+ * Auto-arrange: the layout to run after each structural edit, or `null` for
+ * off. Structurally a subset of `LayoutOptions` (layout.ts imports this
+ * module, so the full type cannot be named here).
+ */
+export interface AutoLayoutSetting {
+    kind: "mindmap" | "tree" | "org" | "radial" | "grid";
+    direction?: "right" | "left" | "down" | "up";
+}
+
 export interface DocSettings {
+    kind: DiagramKind;
+    autoLayout: AutoLayoutSetting | null;
     snapToGrid: boolean;
     snapToObjects: boolean;
     gridSize: number;

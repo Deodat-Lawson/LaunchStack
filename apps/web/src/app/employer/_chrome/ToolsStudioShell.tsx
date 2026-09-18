@@ -15,7 +15,7 @@ export function ToolsStudioShell({ children }: { children: ReactNode }) {
             data-drift-immersive="true"
             style={{
                 display: "flex",
-                height: "100dvh",
+                height: "calc(100dvh - var(--drift-backbar-h, 0px))",
                 width: "100%",
                 overflow: "hidden",
                 position: "relative",

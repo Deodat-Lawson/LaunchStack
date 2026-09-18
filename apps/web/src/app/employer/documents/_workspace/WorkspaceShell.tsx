@@ -1397,7 +1397,7 @@ export function WorkspaceShell() {
                 // `dvh`, not `vh`: on mobile `100vh` is the viewport with the
                 // URL bar retracted, so the workspace's own bottom chrome ends
                 // up underneath the browser's.
-                height: "100dvh",
+                height: "calc(100dvh - var(--drift-backbar-h, 0px))",
                 width: "100%",
                 overflow: "hidden",
                 position: "relative",

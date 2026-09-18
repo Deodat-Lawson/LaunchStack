@@ -36,6 +36,7 @@ import {
     type WorldSegment,
     type WorldSource,
 } from "./world";
+import { resetBrandSim, simulateBrand } from "./brand-sim";
 
 const ALL_STAGES: SalesStage[] = [
     "lead",
@@ -137,6 +138,7 @@ let store: Store = seed();
 
 export function resetSimulator(): void {
     store = seed();
+    resetBrandSim();
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
@@ -696,6 +698,7 @@ async function readBody(init?: RequestInit): Promise<Record<string, unknown>> {
 /** Answers `/api/prospects/*`; returns null for anything else. */
 export async function simulate(url: string, init?: RequestInit): Promise<Response | null> {
     const u = new URL(url, "http://prospects.local");
+    if (u.pathname.startsWith("/api/brand")) return simulateBrand(u, init, clock());
     if (!u.pathname.startsWith("/api/prospects")) return null;
     const method = (init?.method ?? "GET").toUpperCase();
     const parts = u.pathname

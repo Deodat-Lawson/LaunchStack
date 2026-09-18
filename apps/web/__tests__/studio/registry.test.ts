@@ -1,7 +1,7 @@
 /**
  * The Studio registry is how people find tools. These checks keep it
  * truthful: every link-out feature points at a page that exists, ids are
- * unique across groups and the palette, and the Distribution tool is
+ * unique across groups and the palette, and the Growth app is
  * reachable from the drawer, the palette and the `?feature=` deep link.
  */
 import { existsSync } from "node:fs";
@@ -42,28 +42,25 @@ describe("studio registry", () => {
         expect(broken).toEqual([]);
     });
 
-    it("lists Prospects in the Tools group as a separate app, and in the palette", () => {
-        const feature = STUDIO_FEATURES_BY_ID.prospects;
+    it("lists Growth in the Tools group as a separate app, with Brand and Prospects in the palette", () => {
+        const feature = STUDIO_FEATURES_BY_ID.growth;
         expect(feature).toBeDefined();
         expect(feature!.external).toBe(true);
-        expect(feature!.href).toBe("/employer/tools/prospects");
+        expect(feature!.href).toBe("/employer/tools/growth");
         expect(STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id)).toContain(
-            "prospects"
+            "growth"
         );
-        expect(DEMOTED_FEATURES.map(f => f.id)).toContain("prospects");
+        const palette = Object.fromEntries(DEMOTED_FEATURES.map(f => [f.id, f.href]));
+        expect(palette.growth).toBe("/employer/tools/growth");
+        expect(palette.brand).toBe("/employer/tools/growth/brand");
+        expect(palette.prospects).toBe("/employer/tools/growth/prospects");
+        // Nobody is gated out: any workspace member may open it.
         expect(feature!.requires).toBeUndefined();
     });
 
-    it("lists Distribution in the Tools group as a separate app, and in the palette", () => {
-        const feature = STUDIO_FEATURES_BY_ID.distribution;
-        expect(feature).toBeDefined();
-        expect(feature!.external).toBe(true);
-        expect(feature!.href).toBe("/employer/tools/distribution");
-        expect(STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id)).toContain(
-            "distribution"
-        );
-        expect(DEMOTED_FEATURES.map(f => f.id)).toContain("distribution");
-        // Nobody is gated out: any workspace member may open it.
-        expect(feature!.requires).toBeUndefined();
+    it("no longer lists Marketing, Distribution or Prospects as Studio entries of their own", () => {
+        for (const id of ["marketing", "distribution", "prospects"]) {
+            expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
+        }
     });
 });

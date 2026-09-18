@@ -1,4 +1,10 @@
-# Prospects — design rules for this surface
+# Growth — design rules for this surface
+
+Growth is one app with two areas, Brand and Prospects, in one rail. Shared
+pieces (`PageHeader`, `EmptyState`, `SkeletonRows`, `useResource`, the
+formatters) live at the app level; each area keeps its own screens, API
+client and components. Brand's calendar and composer follow every rule
+below; a network is a monogram in the ink ladder, never a brand colour.
 
 Prospects is an **operate** surface: someone opens it every morning to decide
 who to talk to. The design should vanish into that task. These rules are the

@@ -20,7 +20,7 @@ import {
     resetSimulator,
     setSimulatorClock,
     simulate,
-} from "~/app/dev/prospects/simulator";
+} from "~/app/dev/growth/simulator";
 
 let now = Date.now();
 

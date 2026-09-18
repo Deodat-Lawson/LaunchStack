@@ -58,9 +58,21 @@ export class BrandPostError extends Error {
     }
 }
 
-/** The network's hard limit, or null when it has none (Reddit's is far beyond a post). */
+/**
+ * What each network accepts, for Compose to enforce before saving. The
+ * publish profiles only carry the limits they truncate at; LinkedIn and
+ * Reddit reject over-long posts outright, so their published limits go here.
+ */
+const NETWORK_LIMITS: Record<MarketingPlatform, number | null> = {
+    x: PLATFORM_PROFILES.x.hardCharLimit ?? 280,
+    bluesky: PLATFORM_PROFILES.bluesky.hardCharLimit ?? 300,
+    linkedin: PLATFORM_PROFILES.linkedin.hardCharLimit ?? 3000,
+    reddit: PLATFORM_PROFILES.reddit.hardCharLimit ?? 40_000,
+};
+
+/** The network's post limit; null only if a network has none. */
 export function platformLimit(platform: MarketingPlatform): number | null {
-    return PLATFORM_PROFILES[platform].hardCharLimit;
+    return NETWORK_LIMITS[platform];
 }
 
 /** Why a body cannot go to a network, in the user's words; null when it can. */
@@ -71,6 +83,13 @@ export function bodyProblem(platform: MarketingPlatform, body: string): string |
     if (limit !== null && text.length > limit)
         return `${text.length.toLocaleString()} characters is over ${platformLabel(platform)}'s limit of ${limit.toLocaleString()}.`;
     return null;
+}
+
+/** A Reddit title, trimmed; null when there is nothing to keep. */
+function cleanTitle(title: string | null | undefined): string | null {
+    const trimmed = title?.trim();
+    if (!trimmed) return null;
+    return trimmed;
 }
 
 export function platformLabel(platform: MarketingPlatform): string {
@@ -118,8 +137,9 @@ export async function listBrandPosts(args: {
 }): Promise<BrandPostRecord[]> {
     const db = getDb();
     const conditions = [eq(brandPosts.companyId, args.companyId)];
-    if (args.from) conditions.push(sql`${CALENDAR_AT} >= ${args.from}`);
-    if (args.to) conditions.push(sql`${CALENDAR_AT} < ${args.to}`);
+    // Raw sql params need a string; a Date would reach the driver as an object.
+    if (args.from) conditions.push(sql`${CALENDAR_AT} >= ${args.from.toISOString()}::timestamptz`);
+    if (args.to) conditions.push(sql`${CALENDAR_AT} < ${args.to.toISOString()}::timestamptz`);
     if (args.statuses?.length) conditions.push(inArray(brandPosts.status, [...args.statuses]));
     const rows = await db
         .select()
@@ -158,7 +178,8 @@ export interface CreateBrandPostsArgs {
  */
 export async function createBrandPosts(args: CreateBrandPostsArgs): Promise<BrandPostRecord[]> {
     const platforms = [...new Set(args.platforms)];
-    if (platforms.length === 0) throw new BrandPostError("Pick at least one network.", 400, "no_platform");
+    if (platforms.length === 0)
+        throw new BrandPostError("Pick at least one network.", 400, "no_platform");
     for (const platform of platforms) {
         const problem = bodyProblem(platform, args.body);
         if (problem) throw new BrandPostError(problem, 400, "body_invalid");
@@ -177,7 +198,7 @@ export async function createBrandPosts(args: CreateBrandPostsArgs): Promise<Bran
                 createdByUserId: args.userId,
                 platform,
                 body: args.body.trim(),
-                title: platform === "reddit" ? (args.title?.trim() ?? null) || null : null,
+                title: platform === "reddit" ? cleanTitle(args.title) : null,
                 status: (scheduledAt ? "scheduled" : "draft") as BrandPostStatus,
                 scheduledAt,
                 source: args.source ?? { kind: "compose" },
@@ -247,12 +268,11 @@ export async function updateBrandPost(
             409,
             "not_editable"
         );
-    const body = patch.body !== undefined ? patch.body : existing.body;
+    const body = patch.body ?? existing.body;
     const problem = bodyProblem(existing.platform, body);
     if (problem) throw new BrandPostError(problem, 400, "body_invalid");
 
-    const scheduledAt =
-        patch.scheduledAt !== undefined ? patch.scheduledAt : existing.scheduledAt;
+    const scheduledAt = patch.scheduledAt !== undefined ? patch.scheduledAt : existing.scheduledAt;
     let status: BrandPostStatus = patch.status ?? existing.status;
     if (patch.status === undefined) {
         if (patch.scheduledAt === null) status = "draft";
@@ -272,7 +292,7 @@ export async function updateBrandPost(
             title:
                 existing.platform === "reddit"
                     ? patch.title !== undefined
-                        ? (patch.title?.trim() ?? null) || null
+                        ? cleanTitle(patch.title)
                         : existing.title
                     : null,
             scheduledAt: status === "draft" ? null : scheduledAt,
@@ -410,7 +430,8 @@ export async function publishDueBrandPosts(
             });
             (post.status === "published" ? out.published : out.failed).push(post);
         } catch (error) {
-            if (error instanceof BrandPostError && error.code === "not_publishable") out.skipped += 1;
+            if (error instanceof BrandPostError && error.code === "not_publishable")
+                out.skipped += 1;
             else throw error;
         }
     }

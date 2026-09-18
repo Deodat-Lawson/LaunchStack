@@ -4,11 +4,8 @@
  * limit Compose enforces, and what connecting takes. Presence only; the
  * credential itself never leaves the publish tool's config module.
  */
-import {
-    MarketingPlatformEnum,
-    PLATFORM_PROFILES,
-    type MarketingPlatform,
-} from "@launchstack/tools/platform-profiles";
+import { platformLimit } from "@launchstack/pipelines/marketing/posts";
+import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
 import { describePublishConfig } from "@launchstack/tools/social-publish";
 
 export interface BrandAccount {
@@ -36,12 +33,18 @@ const META: Record<MarketingPlatform, Pick<BrandAccount, "label" | "requires" | 
     },
     x: {
         label: "X",
-        requires: ["An X developer account on pay-per-use", "A bearer token in TWITTER_BEARER_TOKEN"],
+        requires: [
+            "An X developer account on pay-per-use",
+            "A bearer token in TWITTER_BEARER_TOKEN",
+        ],
         note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. No free tier for new developers.",
     },
     bluesky: {
         label: "Bluesky",
-        requires: ["The account's handle in BLUESKY_HANDLE", "An app password in BLUESKY_APP_PASSWORD"],
+        requires: [
+            "The account's handle in BLUESKY_HANDLE",
+            "An app password in BLUESKY_APP_PASSWORD",
+        ],
         note: "Free, no review. Reading back is free too.",
     },
     reddit: {
@@ -54,14 +57,17 @@ const META: Record<MarketingPlatform, Pick<BrandAccount, "label" | "requires" | 
     },
 };
 
+/** The order Compose and Accounts list networks in: the free ones first. */
+const ORDER: MarketingPlatform[] = ["linkedin", "x", "bluesky", "reddit"];
+
 export function listBrandAccounts(): BrandAccount[] {
     const config = describePublishConfig();
-    return MarketingPlatformEnum.options.map(platform => ({
+    return ORDER.map(platform => ({
         platform,
         label: META[platform].label,
         configured: config[platform].configured,
         identity: config[platform].identity,
-        limit: PLATFORM_PROFILES[platform].hardCharLimit,
+        limit: platformLimit(platform),
         requires: META[platform].requires,
         note: META[platform].note,
     }));

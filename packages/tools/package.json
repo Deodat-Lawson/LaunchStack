@@ -2,7 +2,7 @@
     "name": "@launchstack/tools",
     "version": "0.1.0",
     "type": "module",
-    "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed — a brick above search, below the pipelines tier.",
+    "description": "Shared, contract-typed capabilities composed by the pipeline verticals: company context, grounded retrieval, brand voice, persona, web research, social publish, platform profiles, content scoring, claim evidence, and the stage runner. Tools are imported, never deployed \u2014 a brick above search, below the pipelines tier.",
     "license": "Apache-2.0",
     "engines": {
         "node": ">=20"
@@ -31,6 +31,10 @@
         "./grounded-retrieval": {
             "types": "./src/grounded-retrieval/index.ts",
             "default": "./src/grounded-retrieval/index.ts"
+        },
+        "./image-generation": {
+            "types": "./src/image-generation/index.ts",
+            "default": "./src/image-generation/index.ts"
         },
         "./brand-voice": {
             "types": "./src/brand-voice/index.ts",

@@ -98,7 +98,6 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/tools/distribution",
     prospects: "/employer/tools/prospects",
-    notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
     meetings: "/employer/documents?feature=meetings",
@@ -115,7 +114,6 @@ const RAIL_HIDDEN_HEADER_INSET_PX = 28;
 const FEATURE_IDS = new Set([
     "draft",
     "rewrite",
-    "notes",
     "workflows",
     "marketing",
     "distribution",

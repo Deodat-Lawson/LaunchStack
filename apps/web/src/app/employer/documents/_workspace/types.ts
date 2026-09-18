@@ -26,7 +26,6 @@ import {
     IconGmail,
     IconLink,
     IconMegaphone,
-    IconNote,
     IconNotion,
     IconPaste,
     IconPen,
@@ -272,14 +271,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=workflows",
     },
     {
-        id: "notes",
-        label: "Notebook",
-        Icon: IconNote,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.notes")!.defaultKeys),
-        desc: "Freeform notes that span every source",
-        href: "/employer/documents?feature=notes",
-    },
-    {
         id: "mindmap",
         label: "New mindmap",
         Icon: IconMindmap,
@@ -431,12 +422,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Rewrite",
                 Icon: IconSparkle,
                 desc: "Improve existing prose with a diff-first rewrite",
-            },
-            {
-                id: "notes",
-                label: "Notebook",
-                Icon: IconNote,
-                desc: "Freeform notes that span every source",
             },
             {
                 // Not `external`: maps live in the library beside every other

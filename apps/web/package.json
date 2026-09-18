@@ -13,6 +13,7 @@
         "db:verify": "pnpm --filter @launchstack/store db:verify && node ../../packages/store/scripts/migrate.mjs --set=product --check",
         "db:generate": "drizzle-kit generate",
         "db:backfill": "tsx ./scripts/backfill.ts",
+        "db:seed": "tsx ./scripts/seed-dev.ts",
         "db:push:danger": "node ../../packages/store/scripts/guard-push.mjs",
         "db:studio": "pnpm --filter @launchstack/store db:studio",
         "collab:hub": "tsx ./scripts/collab-hub.ts",

@@ -25,7 +25,7 @@ import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./typ
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
-import type { PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
+import type { PdfAnchorCapture, PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
 
 const PdfViewerWithNotes = dynamic(
     () => import("~/components/notes/PdfViewerWithNotes").then(m => m.PdfViewerWithNotes),
@@ -87,6 +87,9 @@ export interface DocumentViewerProps {
     onEdit?: (source: WorkspaceSource) => void;
     /** Mindmaps only: the citable copy was created or updated. */
     onPublished?: () => void;
+    /** Mindmaps only: open straight into the branch-by-branch presenter. */
+    present?: boolean;
+    onExitPresent?: () => void;
 }
 
 /** Gives one version row its own right-click target without touching its markup. */
@@ -211,6 +214,8 @@ function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
 export function DocumentViewer({
     source,
     highlight,
+    present = false,
+    onExitPresent,
     onClose,
     onRename,
     onDelete,
@@ -253,6 +258,8 @@ export function DocumentViewer({
     const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
     /** A passage handed to the notes panel by the context menu, as a new note's body. */
     const [noteSeed, setNoteSeed] = useState<string | null>(null);
+    /** The PDF viewer's current selection, so a note started from the menu keeps its anchor. */
+    const pdfSelection = useRef<PdfAnchorCapture | null>(null);
     const titleInputRef = useRef<HTMLInputElement>(null);
 
     const isPdf = fullDoc !== null && getDocumentDisplayType(fullDoc) === "pdf";
@@ -606,6 +613,17 @@ export function DocumentViewer({
     const notesAvailable = !isMindmap || Boolean(source.documentId);
     const addNote = useCallback((text: string) => {
         setSidebarTab("notes");
+        // In a PDF the selection carries its page and quads: anchor the note
+        // there, exactly as the viewer's own "+ Note" button would.
+        const anchored = pdfSelection.current;
+        if (anchored && anchored.quote.exact === text) {
+            setPdfAnchorDraft({
+                page: anchored.page,
+                quads: anchored.quads,
+                quote: anchored.quote,
+            });
+            return;
+        }
         setNoteSeed(text);
     }, []);
 
@@ -928,7 +946,12 @@ export function DocumentViewer({
                                     overflow: "hidden",
                                 }}
                             >
-                                <MindmapPreview key={mindmapDoc.key} doc={mindmapDoc.doc} />
+                                <MindmapPreview
+                                    key={mindmapDoc.key}
+                                    doc={mindmapDoc.doc}
+                                    present={present}
+                                    onExitPresent={onExitPresent}
+                                />
                             </div>
                         ) : mindmapError ? (
                             <div
@@ -1029,6 +1052,9 @@ export function DocumentViewer({
                                     onNotePinClick={id => {
                                         setPdfScrollToNoteId(id);
                                         setSidebarTab("notes");
+                                    }}
+                                    onSelectionDraft={draft => {
+                                        pdfSelection.current = draft;
                                     }}
                                 />
                             ) : (

@@ -105,6 +105,8 @@ export function defaultEdgeStyle(overrides: Partial<EdgeStyle> = {}): EdgeStyle 
 
 export function defaultSettings(overrides: Partial<DocSettings> = {}): DocSettings {
     return {
+        kind: "freeform",
+        autoLayout: null,
         snapToGrid: true,
         snapToObjects: true,
         gridSize: 10,

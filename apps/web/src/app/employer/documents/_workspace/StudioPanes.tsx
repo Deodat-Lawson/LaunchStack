@@ -373,54 +373,6 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
     );
 }
 
-export function VideoGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Video Generation"
-            body="Turn company knowledge into short explainer videos. Pick sources, set tone, and queue renders — narration and captions are grounded in your indexed documents."
-            bullets={[
-                "Source-grounded storyboards with citation overlays",
-                "Multiple aspect ratios (square, vertical, widescreen)",
-                "Optional voice cloning for a consistent brand voice",
-            ]}
-        />
-    );
-}
-
-export function ImageGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Image Generation"
-            body="Generate hero images, diagrams, and social assets from prompts that reference your sources — product names, audience, and voice pulled from your indexed docs."
-            bullets={[
-                "Brand-consistent palettes derived from your style guide",
-                "Prompt suggestions seeded from pinned sources",
-                "Direct export to the library as a new asset",
-            ]}
-        />
-    );
-}
-
-export function AudioGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Audio Generation"
-            body="Narrate summaries, brief updates, or full documents. Voices, pacing, and tone tuned to your company voice."
-            bullets={[
-                "Document-to-audio with chapter markers",
-                "Multiple voice profiles per workspace",
-                "Attach generated audio back to the source document",
-            ]}
-        />
-    );
-}
-
 export function RewritePane(_: PaneProps) {
     return (
         <LegalGeneratorTheme ambient={false}>
@@ -848,12 +800,6 @@ export function renderStudioPane(
             return <NotesPane onClose={onClose} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "video-gen":
-            return <VideoGenPane onClose={onClose} />;
-        case "image-gen":
-            return <ImageGenPane onClose={onClose} />;
-        case "audio-gen":
-            return <AudioGenPane onClose={onClose} />;
         case "marketing":
             return <MarketingPipelinePane onClose={onClose} />;
         // Company metadata and analytics are sections of Settings now. Their ids

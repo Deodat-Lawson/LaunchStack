@@ -32,6 +32,7 @@ import {
     selectionBounds,
     updatePage,
     withDescendants,
+    isMindmapPage,
 } from "./doc";
 import {
     createEdge,
@@ -73,6 +74,7 @@ import type {
     ShapeId,
     TextStyle,
     VAlign,
+    AutoLayoutSetting,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -131,6 +133,7 @@ export function deleteSelection(store: EditorStore): void {
         { label: "Delete" }
     );
     store.clearSelection();
+    autoArrangeIfOn(store);
 }
 
 /**
@@ -851,6 +854,56 @@ function depthOf(page: DiagramPage, nodeId: string): number {
 }
 
 /** Add a child topic under `parentId` and start editing it. */
+/**
+ * Focus depth keeps the tree tidy as it grows: after a structural edit the
+ * mindmap layout runs over the whole page. The selection is cleared first,
+ * because `runLayout` reads a selection as "only these".
+ */
+function autoArrangeIfOn(store: EditorStore): void {
+    const doc = store.getState().doc;
+    const layout = doc.settings.autoLayout;
+    if (!layout) return;
+    // Only a page that is nothing but topics: see `isMindmapPage`.
+    if (!isMindmapPage(activePage(doc))) return;
+    store.clearSelection();
+    runLayout(store, layout);
+}
+
+// ---------------------------------------------------------------------------
+// Auto-arrange (a document setting — the file remembers it)
+// ---------------------------------------------------------------------------
+
+export function setAutoLayout(store: EditorStore, layout: AutoLayoutSetting | null): void {
+    store.update(doc => ({ ...doc, settings: { ...doc.settings, autoLayout: layout } }), {
+        label: layout ? "Auto-arrange on" : "Auto-arrange off",
+    });
+    if (layout) {
+        store.clearSelection();
+        runLayout(store, layout);
+    }
+}
+
+/** Run the document's arrangement once, now — auto-arrange or not. */
+export function arrangeNow(store: EditorStore): void {
+    const layout = store.getState().doc.settings.autoLayout ?? { kind: "mindmap" as const };
+    store.clearSelection();
+    runLayout(store, layout);
+}
+
+/**
+ * A shape someone placed by hand should stay where they put it, so a manual
+ * move ends auto-arrange. Returns the layout that was running so the caller
+ * can offer to bring it back; `null` when nothing was on.
+ */
+export function pauseAutoArrangeAfterManualMove(store: EditorStore): AutoLayoutSetting | null {
+    const layout = store.getState().doc.settings.autoLayout;
+    if (!layout) return null;
+    store.update(doc => ({ ...doc, settings: { ...doc.settings, autoLayout: null } }), {
+        label: "Auto-arrange paused",
+    });
+    return layout;
+}
+
 export function addChildTopic(store: EditorStore, parentId: string): string | null {
     const page = activePage(store.getState().doc);
     const parent = nodeById(page, parentId);
@@ -881,15 +934,20 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
         data: { depth },
     });
 
+    // A new branch should look like its siblings: take the connector kind
+    // from an existing edge out of this parent, and fall back to the
+    // document default only for the first one.
+    const siblingEdge = page.edges.find(e => e.from.nodeId === parentId);
     const edge = createEdge({
         from: { nodeId: parentId, port: "auto" },
         to: { nodeId: child.id, port: "auto" },
-        kind: store.getState().doc.settings.defaultEdgeKind,
+        kind: siblingEdge?.kind ?? store.getState().doc.settings.defaultEdgeKind,
         style: { stroke: sw.stroke, strokeWidth: Math.max(3 - depth * 0.5, 1.4) },
         endArrow: "none",
     });
 
     store.updatePage(page2 => addEdges(addNodes(page2, [child]), [edge]), { label: "Add topic" });
+    autoArrangeIfOn(store);
     store.selectNodes([child.id]);
     store.setEditing({ kind: "node", id: child.id });
     return child.id;
@@ -914,6 +972,7 @@ export function addSiblingTopic(store: EditorStore, nodeId: string): string | nu
             textStyle: { ...nd.textStyle },
         });
         store.updatePage(p => addNodes(p, [clone]), { label: "Add topic" });
+        autoArrangeIfOn(store);
         store.selectNodes([clone.id]);
         store.setEditing({ kind: "node", id: clone.id });
         return clone.id;

@@ -1,5 +1,7 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
+
 import React, { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, Minus } from "lucide-react";
 
@@ -11,6 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 
 import { DARK_SWATCHES, SWATCHES, THEMES } from "../model/palette";
 
@@ -30,26 +33,64 @@ export function Section({
     title,
     children,
     action,
+    collapsible = false,
+    defaultOpen = true,
 }: {
     title: string;
     children: React.ReactNode;
     action?: React.ReactNode;
+    /**
+     * Sections people reach for constantly stay open; the ones they reach for
+     * rarely start closed, so the panel reads as a hierarchy rather than a
+     * wall of equally weighted rows.
+     */
+    collapsible?: boolean;
+    defaultOpen?: boolean;
 }) {
+    const [open, setOpen] = useState(defaultOpen);
+    const heading = (
+        <h3 className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
+            {title}
+        </h3>
+    );
+    if (!collapsible) {
+        return (
+            <section className="border-line border-b px-3 py-3 last:border-b-0">
+                <div className="mb-2 flex items-center justify-between">
+                    {heading}
+                    {action}
+                </div>
+                <div className="space-y-2">{children}</div>
+            </section>
+        );
+    }
     return (
-        <section className="border-line border-b px-3 py-3 last:border-b-0">
-            <div className="mb-2 flex items-center justify-between">
-                <h3 className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                    {title}
-                </h3>
-                {action}
-            </div>
-            <div className="space-y-2">{children}</div>
-        </section>
+        <Collapsible open={open} onOpenChange={setOpen} asChild>
+            <section className="border-line border-b px-3 py-3 last:border-b-0">
+                <div className="flex items-center justify-between">
+                    <CollapsibleTrigger asChild>
+                        <button
+                            type="button"
+                            className="text-ink-3 hover:text-ink-2 -ml-1 flex items-center gap-1 rounded px-1 py-0.5"
+                            aria-expanded={open}
+                        >
+                            <ChevronRight
+                                className={cn("size-3 transition-transform", open && "rotate-90")}
+                            />
+                            {heading}
+                        </button>
+                    </CollapsibleTrigger>
+                    {action}
+                </div>
+                <CollapsibleContent className="mt-2 space-y-2">{children}</CollapsibleContent>
+            </section>
+        </Collapsible>
     );
 }
 
+/** Rows wrap rather than clip: a narrow panel gets taller, not cut off. */
 export function Row({ children }: { children: React.ReactNode }) {
-    return <div className="flex items-center gap-2">{children}</div>;
+    return <div className="flex flex-wrap items-center gap-2">{children}</div>;
 }
 
 export function Label({ children }: { children: React.ReactNode }) {

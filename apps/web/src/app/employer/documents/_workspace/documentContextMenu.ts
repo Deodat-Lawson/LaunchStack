@@ -44,7 +44,9 @@ export function buildDocumentMenuItems(
     items.push({
         type: "item",
         id: "ask",
-        label: "Ask about this",
+        // Named for what it is: a text selection's own "Ask about this" can
+        // sit in the same menu, right above this one.
+        label: state.isMindmap ? "Ask about this mindmap" : "Ask about this document",
         icon: "ask",
         disabled: !state.askable,
         disabledReason: state.askable ? undefined : "Make this map citable first.",

@@ -191,9 +191,19 @@ export function graphRoots(page: DiagramPage, index?: GraphIndex): DiagramNode[]
  * Ids hidden because an ancestor branch is collapsed. Collapsed nodes stay
  * visible; everything downstream of them does not.
  */
-export function collapsedHidden(page: DiagramPage): Set<string> {
+const NO_FOLDS: ReadonlySet<string> = new Set();
+
+/**
+ * Ids hidden by collapsed branches. `folded` is an extra, transient set of
+ * branch ids to treat as collapsed without writing to the document — how
+ * presenting reveals a map one branch at a time and leaves the file untouched.
+ */
+export function collapsedHidden(
+    page: DiagramPage,
+    folded: ReadonlySet<string> = NO_FOLDS
+): Set<string> {
     const hidden = new Set<string>();
-    const collapsed = page.nodes.filter(nd => nd.collapsed);
+    const collapsed = page.nodes.filter(nd => nd.collapsed === true || folded.has(nd.id));
     if (collapsed.length === 0) return hidden;
     const idx = graphIndex(page);
     // A collapsed node stays visible — only what hangs off it disappears. A
@@ -205,13 +215,13 @@ export function collapsedHidden(page: DiagramPage): Set<string> {
     return hidden;
 }
 
-export function visibleNodes(page: DiagramPage): DiagramNode[] {
-    const hidden = collapsedHidden(page);
+export function visibleNodes(page: DiagramPage, folded?: ReadonlySet<string>): DiagramNode[] {
+    const hidden = collapsedHidden(page, folded);
     return page.nodes.filter(nd => !nd.hidden && !hidden.has(nd.id));
 }
 
-export function visibleEdges(page: DiagramPage): DiagramEdge[] {
-    const hidden = collapsedHidden(page);
+export function visibleEdges(page: DiagramPage, folded?: ReadonlySet<string>): DiagramEdge[] {
+    const hidden = collapsedHidden(page, folded);
     return page.edges.filter(
         e =>
             !e.hidden &&
@@ -414,4 +424,22 @@ export function docText(doc: MindmapDoc): string {
         for (const r of c.replies) parts.push(r.body);
     }
     return parts.join("\n");
+}
+
+const MIND_SHAPES: ReadonlySet<string> = new Set(["mind-root", "mind-branch", "mind-leaf"]);
+
+/**
+ * A page drawn with mindmap topics and nothing that is not one. Auto-arrange
+ * is only ever applied to such a page: a flowchart someone laid out by hand
+ * must never be re-flowed into a tree because one box was deleted.
+ */
+export function isMindmapPage(page: DiagramPage): boolean {
+    const shapes = page.nodes.filter(nd => !nd.hidden);
+    if (shapes.length === 0) return false;
+    return (
+        shapes.some(nd => MIND_SHAPES.has(nd.shape)) &&
+        shapes.every(
+            nd => MIND_SHAPES.has(nd.shape) || nd.shape === "sticky" || nd.shape === "text"
+        )
+    );
 }

@@ -117,9 +117,6 @@ const FEATURE_IDS = new Set([
     "rewrite",
     "notes",
     "workflows",
-    "video-gen",
-    "image-gen",
-    "audio-gen",
     "marketing",
     "distribution",
     "prospects",
@@ -264,6 +261,8 @@ export function WorkspaceShell() {
      */
     const sourceParam = searchParams.get("source");
     const editParam = searchParams.get("edit") === "1";
+    /** `&present=1` opens a mindmap's preview straight into the presenter. */
+    const presentParam = searchParams.get("present") === "1";
     const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
     const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
     /** Read by the shortcut listener so the editor's own keys win while it is open. */
@@ -281,6 +280,7 @@ export function WorkspaceShell() {
             const params = new URLSearchParams(searchParams.toString());
             params.delete("source");
             params.delete("edit");
+            params.delete("present");
             if (id) params.set("source", id);
             if (id && edit) params.set("edit", "1");
             const query = params.toString();
@@ -1418,6 +1418,7 @@ export function WorkspaceShell() {
                     selected={selected}
                     setSelected={setSelected}
                     onOpenAdd={() => openAdd()}
+                    onNewMindmap={() => openAdd("mindmap")}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenSource={handleOpenSource}
                     onNewFolder={
@@ -1744,6 +1745,8 @@ export function WorkspaceShell() {
                     onVersionChanged={() => void refresh()}
                     onEdit={source => openSource(source.id, true)}
                     onPublished={() => void refresh()}
+                    present={presentParam}
+                    onExitPresent={() => router.replace(sourceUrl(viewerSource.id))}
                 />
             )}
         </div>

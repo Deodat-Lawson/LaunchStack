@@ -164,6 +164,12 @@ export interface CanvasCallbacks {
     onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) => void;
     /** Bring the comments panel forward (a pin on the canvas was clicked). */
     onOpenComments?: () => void;
+    /**
+     * A gesture committed a change; `label` is the store's name for it
+     * ("Move", "Resize", …). The shell uses it to end auto-arrange when a
+     * shape was placed by hand.
+     */
+    onGestureEnd?: (label: string) => void;
 }
 
 export function useCanvasInteractions(
@@ -994,7 +1000,8 @@ export function useCanvasInteractions(
                 case "move": {
                     store.setGuides([]);
                     if (g.moved) reparentIntoContainers(store, g.ids);
-                    store.endInteraction();
+                    const settled = store.endInteraction();
+                    if (settled) cb.current.onGestureEnd?.(settled);
                     break;
                 }
 
@@ -1015,7 +1022,8 @@ export function useCanvasInteractions(
                         store.cancelInteraction();
                         break;
                     }
-                    store.endInteraction();
+                    const settled = store.endInteraction();
+                    if (settled) cb.current.onGestureEnd?.(settled);
                     break;
                 }
 

@@ -25,6 +25,8 @@ import {
 } from "../model/commands";
 import type { EditorState } from "../model/store";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+
 import { Minimap } from "./Minimap";
 
 /**
@@ -46,18 +48,14 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
     const activePageId = doc.activePageId;
     const zoom = useEditor(selectZoom);
     const [renaming, setRenaming] = useState<string | null>(null);
-    const [showMinimap, setShowMinimap] = useState(true);
+    // Closed by default and anchored to its button, so it can never sit over
+    // a panel's controls the way the floating version did.
+    const [showMinimap, setShowMinimap] = useState(false);
 
     const zoomLabel = useMemo(() => `${Math.round(zoom * 100)}%`, [zoom]);
 
     return (
         <>
-            {showMinimap && (
-                <div className="pointer-events-auto absolute bottom-14 right-3 z-10">
-                    <Minimap canvasSize={canvasSize} />
-                </div>
-            )}
-
             <div className="border-line bg-panel flex h-10 shrink-0 items-center gap-1 border-t px-2">
                 <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
                     {pages.map(page => {
@@ -151,20 +149,30 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                 </div>
 
                 <div className="flex shrink-0 items-center gap-0.5">
-                    <button
-                        type="button"
-                        onClick={() => setShowMinimap(v => !v)}
-                        title={showMinimap ? "Hide minimap" : "Show minimap"}
-                        aria-pressed={showMinimap}
-                        className={cn(
-                            "flex size-7 items-center justify-center rounded-md transition-colors",
-                            showMinimap
-                                ? "bg-brand-soft text-brand-ink"
-                                : "text-ink-3 hover:bg-panel-2"
-                        )}
-                    >
-                        {showMinimap ? <X className="size-3.5" /> : <MapIcon className="size-4" />}
-                    </button>
+                    <Popover open={showMinimap} onOpenChange={setShowMinimap}>
+                        <PopoverTrigger asChild>
+                            <button
+                                type="button"
+                                title={showMinimap ? "Hide minimap" : "Show minimap"}
+                                aria-pressed={showMinimap}
+                                className={cn(
+                                    "flex size-7 items-center justify-center rounded-md transition-colors",
+                                    showMinimap
+                                        ? "bg-brand-soft text-brand-ink"
+                                        : "text-ink-3 hover:bg-panel-2"
+                                )}
+                            >
+                                {showMinimap ? (
+                                    <X className="size-3.5" />
+                                ) : (
+                                    <MapIcon className="size-4" />
+                                )}
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="top" align="end" className="w-auto p-1">
+                            <Minimap canvasSize={canvasSize} />
+                        </PopoverContent>
+                    </Popover>
                     <button
                         type="button"
                         onClick={() => fitToScreen(store, canvasSize)}

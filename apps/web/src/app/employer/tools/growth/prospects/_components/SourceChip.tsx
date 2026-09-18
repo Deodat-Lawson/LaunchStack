@@ -4,7 +4,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/h
 import { cn } from "~/lib/utils";
 
 import type { FoundVia, SourceKind } from "../api";
-import { relativeTime } from "../_lib/format";
+import { relativeTime } from "../../_lib/format";
 
 const KIND_WORD: Record<SourceKind, string> = {
     api: "Directory or API",

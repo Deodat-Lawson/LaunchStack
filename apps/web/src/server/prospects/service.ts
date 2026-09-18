@@ -59,7 +59,7 @@ import type {
     SegmentSummary,
     SourceRow,
     TodoItem,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 import { env } from "~/env";
 
 import {

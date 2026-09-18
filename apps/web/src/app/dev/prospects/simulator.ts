@@ -1,6 +1,6 @@
 /**
  * In-memory stand-in for `/api/prospects/*`, shaped exactly like the client
- * contract in `~/app/employer/tools/prospects/api`. It implements the rules
+ * contract in `~/app/employer/tools/growth/prospects/api`. It implements the rules
  * the UI relies on — legal stage moves with reasons, outreach refusals,
  * exclusions, a run that progresses in real time and adds companies when it
  * completes — so the screens behave as they will against the real backend.
@@ -23,7 +23,7 @@ import type {
     StageMove,
     StepStatus,
     TodoItem,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 
 import {
     COMPANIES,

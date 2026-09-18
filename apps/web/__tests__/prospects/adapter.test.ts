@@ -20,7 +20,7 @@ import {
     toRunDto,
     viewMatches,
 } from "~/server/prospects/adapter";
-import type { CompanyRow } from "~/app/employer/tools/prospects/api";
+import type { CompanyRow } from "~/app/employer/tools/growth/prospects/api";
 
 const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     id: "rel-1",

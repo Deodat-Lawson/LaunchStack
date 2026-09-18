@@ -13,7 +13,7 @@ import type {
     SegmentField,
     Signal,
     SourceKind,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 
 export const FIT_THRESHOLD = 70;
 

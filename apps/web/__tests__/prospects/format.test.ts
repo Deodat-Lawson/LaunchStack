@@ -3,7 +3,7 @@ import {
     joinNatural,
     plural,
     relativeTime,
-} from "~/app/employer/tools/prospects/_lib/format";
+} from "~/app/employer/tools/growth/_lib/format";
 
 describe("relativeTime", () => {
     const now = new Date("2026-09-17T03:10:00").getTime();

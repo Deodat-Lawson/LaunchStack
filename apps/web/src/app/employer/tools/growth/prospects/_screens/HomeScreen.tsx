@@ -10,14 +10,14 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SourceYield } from "../api";
 import { useProspects } from "../_lib/context";
-import { plural, relativeTime } from "../_lib/format";
+import { plural, relativeTime } from "../../_lib/format";
 import { STAGE_LABELS } from "../_lib/stages";
-import { useResource } from "../_lib/useResource";
-import { EmptyState, InlineError } from "../_components/EmptyState";
+import { useResource } from "../../_lib/useResource";
+import { EmptyState, InlineError } from "../../_components/EmptyState";
 import { FitMeter } from "../_components/FitMeter";
 import { FunnelBar } from "../_components/FunnelBar";
-import { PageHeader, SectionHeading } from "../_components/PageHeader";
-import { SkeletonRows } from "../_components/SkeletonRows";
+import { PageHeader, SectionHeading } from "../../_components/PageHeader";
+import { SkeletonRows } from "../../_components/SkeletonRows";
 
 function YieldRow({ y, max }: { y: SourceYield; max: number }) {
     const off = y.status === "off" || y.status === "skipped";

@@ -11,11 +11,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SegmentField } from "../api";
 import { useProspects } from "../_lib/context";
-import { plural, shortDate } from "../_lib/format";
-import { useResource } from "../_lib/useResource";
-import { InlineError } from "../_components/EmptyState";
-import { PageHeader } from "../_components/PageHeader";
-import { SkeletonRows } from "../_components/SkeletonRows";
+import { plural, shortDate } from "../../_lib/format";
+import { useResource } from "../../_lib/useResource";
+import { InlineError } from "../../_components/EmptyState";
+import { PageHeader } from "../../_components/PageHeader";
+import { SkeletonRows } from "../../_components/SkeletonRows";
 
 function FieldRow({
     field,

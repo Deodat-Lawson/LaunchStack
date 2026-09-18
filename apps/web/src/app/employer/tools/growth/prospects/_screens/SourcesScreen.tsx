@@ -7,11 +7,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SourceKind, type SourceRow } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../_lib/format";
-import { useResource } from "../_lib/useResource";
-import { InlineError } from "../_components/EmptyState";
-import { PageHeader } from "../_components/PageHeader";
-import { SkeletonRows } from "../_components/SkeletonRows";
+import { relativeTime } from "../../_lib/format";
+import { useResource } from "../../_lib/useResource";
+import { InlineError } from "../../_components/EmptyState";
+import { PageHeader } from "../../_components/PageHeader";
+import { SkeletonRows } from "../../_components/SkeletonRows";
 
 const KIND_LABEL: Record<SourceKind, string> = {
     api: "Directory or API",

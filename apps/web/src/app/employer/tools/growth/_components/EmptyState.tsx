@@ -1,6 +1,6 @@
 import { cn } from "~/lib/utils";
 
-import { ProspectsMark } from "./ProspectsMark";
+import { ProspectsMark } from "~/components/icons/prospects";
 
 /**
  * An empty state names what to do next and carries the control that does

@@ -179,6 +179,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
     },
     {
+        id: "brand",
+        tier: "tool",
+        summary:
+            "Establish and run the company's presence: compose once for several networks, schedule or publish, see the calendar, know which accounts are connected.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/marketing",
+        routes: ["brand"],
+        notes: "The Brand area of Growth. Posts are one row per network in brand_posts; the worker's brand-publish-due cron (and the web app's due-check in dev) claims and publishes them through @launchstack/tools/social-publish. Campaign drafting is the marketing pipeline, embedded.",
+    },
+    {
         id: "prospects",
         tier: "tool",
         summary:

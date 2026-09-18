@@ -1,7 +1,7 @@
 /**
  * Prospects over today's Distribution data: pure mappings from the pipeline's
  * records (programs, partner organisations, relationships, evidence, runs) to
- * the Prospects contract in `~/app/employer/tools/prospects/api`.
+ * the Prospects contract in `~/app/employer/tools/growth/prospects/api`.
  *
  * This is the bridge until the pipeline reframe lands. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
@@ -44,7 +44,7 @@ import type {
     SourceYield,
     StageMove,
     StepStatus,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 
 export const FIT_THRESHOLD = 70;
 const DAY = 86_400_000;

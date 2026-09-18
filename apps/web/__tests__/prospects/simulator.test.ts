@@ -14,7 +14,7 @@ import type {
     RunDto,
     SegmentSummary,
     SourceRow,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 import {
     _debugState,
     resetSimulator,

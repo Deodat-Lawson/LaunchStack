@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
 import { markContentPublished, publishContent } from "@launchstack/pipelines/marketing";
+import { recordPublishedBrandPost } from "@launchstack/pipelines/marketing/posts";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
@@ -30,8 +31,9 @@ export async function POST(request: Request) {
             return fail(result.error ?? "Publish failed", 502, { platform });
         }
 
-        // Record the publish against the matching history row (fire-and-forget:
-        // a failed write-back must not fail a post that already went out).
+        // Record the publish against the matching history row and on the Brand
+        // calendar (fire-and-forget: a failed write-back must not fail a post
+        // that already went out).
         const companyId = Number(ctx.data.companyId);
         if (!Number.isNaN(companyId)) {
             void markContentPublished({
@@ -44,6 +46,16 @@ export async function POST(request: Request) {
                 console.warn("[marketing-pipeline/publish] history write-back failed:", err)
             );
         }
+        void recordPublishedBrandPost({
+            companyId: ctx.data.companyId,
+            userId: ctx.data.authUserId,
+            platform,
+            body: message,
+            title: title ?? null,
+            postId: result.postId ?? null,
+            postUrl: result.postUrl ?? null,
+            source: { kind: "campaign" },
+        }).catch(err => console.warn("[marketing-pipeline/publish] calendar write-back failed:", err));
 
         return ok({ platform, postUrl: result.postUrl });
     } catch (error) {

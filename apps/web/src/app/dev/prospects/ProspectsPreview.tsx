@@ -4,16 +4,16 @@ import { Suspense, useEffect, useState } from "react";
 
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { Toaster } from "~/components/ui/sonner";
-import { ProspectsShell } from "~/app/employer/tools/prospects/_components/ProspectsShell";
-import { ProspectsProvider } from "~/app/employer/tools/prospects/_lib/context";
-import { CompaniesScreen } from "~/app/employer/tools/prospects/_screens/CompaniesScreen";
-import { CompanyScreen } from "~/app/employer/tools/prospects/_screens/CompanyScreen";
-import { DealsScreen } from "~/app/employer/tools/prospects/_screens/DealsScreen";
-import { HomeScreen } from "~/app/employer/tools/prospects/_screens/HomeScreen";
-import { PeopleScreen } from "~/app/employer/tools/prospects/_screens/PeopleScreen";
-import { RunsScreen } from "~/app/employer/tools/prospects/_screens/RunsScreen";
-import { SegmentScreen } from "~/app/employer/tools/prospects/_screens/SegmentScreen";
-import { SourcesScreen } from "~/app/employer/tools/prospects/_screens/SourcesScreen";
+import { ProspectsShell } from "~/app/employer/tools/growth/prospects/_components/ProspectsShell";
+import { ProspectsProvider } from "~/app/employer/tools/growth/prospects/_lib/context";
+import { CompaniesScreen } from "~/app/employer/tools/growth/prospects/_screens/CompaniesScreen";
+import { CompanyScreen } from "~/app/employer/tools/growth/prospects/_screens/CompanyScreen";
+import { DealsScreen } from "~/app/employer/tools/growth/prospects/_screens/DealsScreen";
+import { HomeScreen } from "~/app/employer/tools/growth/prospects/_screens/HomeScreen";
+import { PeopleScreen } from "~/app/employer/tools/growth/prospects/_screens/PeopleScreen";
+import { RunsScreen } from "~/app/employer/tools/growth/prospects/_screens/RunsScreen";
+import { SegmentScreen } from "~/app/employer/tools/growth/prospects/_screens/SegmentScreen";
+import { SourcesScreen } from "~/app/employer/tools/growth/prospects/_screens/SourcesScreen";
 
 import { resetSimulator, simulate } from "./simulator";
 

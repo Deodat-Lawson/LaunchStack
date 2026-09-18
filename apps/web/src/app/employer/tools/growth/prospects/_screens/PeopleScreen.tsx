@@ -20,12 +20,12 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 import { prospectsApi, type EmailStatusKind } from "../api";
 import { useProspects } from "../_lib/context";
-import { useResource } from "../_lib/useResource";
+import { useResource } from "../../_lib/useResource";
 import { BulkBar } from "../_components/BulkBar";
 import { EMAIL_STATUS_LABEL, EmailStatus, canOutreach } from "../_components/EmailStatus";
-import { EmptyState, InlineError } from "../_components/EmptyState";
-import { PageHeader } from "../_components/PageHeader";
-import { SkeletonRows } from "../_components/SkeletonRows";
+import { EmptyState, InlineError } from "../../_components/EmptyState";
+import { PageHeader } from "../../_components/PageHeader";
+import { SkeletonRows } from "../../_components/SkeletonRows";
 
 const STATUSES: Array<{ id: "all" | EmailStatusKind; label: string }> = [
     { id: "all", label: "All" },

@@ -16,7 +16,7 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type RunStep } from "../api";
 import { useProspects } from "../_lib/context";
-import { money } from "../_lib/format";
+import { money } from "../../_lib/format";
 
 function StepIcon({ status }: { status: RunStep["status"] }) {
     const base = "size-3.5 shrink-0";

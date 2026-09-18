@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { ProspectsApiError } from "../api";
-
 export interface Resource<T> {
     data: T | null;
     loading: boolean;
@@ -15,7 +13,7 @@ export interface Resource<T> {
 }
 
 /**
- * The one data hook every Prospects screen uses. Keyed by a string so a
+ * The one data hook every Growth screen uses. Keyed by a string so a
  * change of segment or filter refetches; `pollMs` keeps a running run live.
  * Loading is true only for the first fetch of a key, so filters and the
  * primary button stay interactive while a list refreshes.
@@ -43,13 +41,7 @@ export function useResource<T>(
             setError(null);
         } catch (e) {
             if (mine !== seq.current) return;
-            setError(
-                e instanceof ProspectsApiError
-                    ? e.message
-                    : e instanceof Error
-                      ? e.message
-                      : "Something went wrong"
-            );
+            setError(e instanceof Error ? e.message : "Something went wrong");
         } finally {
             if (mine === seq.current) setLoading(false);
         }

@@ -19,12 +19,12 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type SourceYield } from "../api";
 import { useProspects } from "../_lib/context";
-import { duration, money, relativeTime } from "../_lib/format";
-import { useResource } from "../_lib/useResource";
-import { EmptyState, InlineError } from "../_components/EmptyState";
-import { PageHeader } from "../_components/PageHeader";
+import { duration, money, relativeTime } from "../../_lib/format";
+import { useResource } from "../../_lib/useResource";
+import { EmptyState, InlineError } from "../../_components/EmptyState";
+import { PageHeader } from "../../_components/PageHeader";
 import { runIsLive } from "../_components/RunSheet";
-import { SkeletonRows } from "../_components/SkeletonRows";
+import { SkeletonRows } from "../../_components/SkeletonRows";
 
 function StatusWord({ run }: { run: RunDto }) {
     const live = runIsLive(run);

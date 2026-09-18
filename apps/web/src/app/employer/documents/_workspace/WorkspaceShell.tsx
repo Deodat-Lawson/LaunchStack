@@ -1550,7 +1550,6 @@ export function WorkspaceShell() {
                     onOpenSource={handleOpenSource}
                     composerSeed={composerSeed}
                     onOpenAdd={() => setAddOpen(true)}
-                    onNewMindmap={() => openAdd("mindmap")}
                     onNewChat={startNewChat}
                     openPalette={() => setPalOpen(true)}
                     onStudioNavigate={href => router.push(href)}

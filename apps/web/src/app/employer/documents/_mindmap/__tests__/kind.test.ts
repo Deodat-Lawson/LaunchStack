@@ -2,7 +2,7 @@ import { createDoc, createNode, createPage } from "../model/factory";
 import { parseDoc } from "../model/serialize";
 import { buildTemplate, kindForTemplate } from "../model/templates";
 import { TEMPLATE_META } from "../model/template-meta";
-import { DOC_SCHEMA_VERSION } from "../model/types";
+import { DOC_SCHEMA_VERSION, type ShapeId } from "../model/types";
 
 /**
  * The document knows what kind of diagram it is, and old documents are
@@ -50,7 +50,7 @@ describe("diagram kind", () => {
     });
 
     describe("documents saved before kinds existed", () => {
-        function legacy(shapes: string[]) {
+        function legacy(shapes: ShapeId[]) {
             const page = createPage("Page 1", {
                 nodes: shapes.map((shape, i) =>
                     createNode({ shape, x: i * 200, y: 0, w: 120, h: 40 })

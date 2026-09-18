@@ -150,6 +150,18 @@ export const RunOptionsSchema = z.object({
     territories: z.array(TerritorySchema).optional(),
     /** Restrict this run to a subset of the program's partner kinds. */
     partnerKinds: z.array(PartnerKindSchema).optional(),
+    /**
+     * `live` uses the configured providers and the model. `fixture` runs the
+     * same eight stages over canned organisations, pages and a scripted
+     * research agent: no keys, no credits, deterministic — for testing the
+     * pipeline end to end and for exploring the UI with realistic data.
+     */
+    /**
+     * `keyless` runs the same stages over public, free sources (OpenStreetMap,
+     * the YC directory) and reads each candidate's website with a page
+     * profiler instead of a model: no API key of any kind.
+     */
+    mode: z.enum(["live", "fixture", "keyless"]).default("live"),
 });
 export type RunOptions = z.infer<typeof RunOptionsSchema>;
 

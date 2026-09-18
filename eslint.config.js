@@ -92,6 +92,8 @@ const eslintConfig = [
             "eslint.config.js",
             "**/jest.config.mjs",
             "**/jest.config.js",
+            // Jest-only babel plugin (import.meta.url shim); untyped babel AST API.
+            "apps/web/jest-import-meta.cjs",
             "apps/web/public/vad/**",
             // Minified pdf.js worker, copied from node_modules at build time
             // by apps/web/scripts/copy-pdf-worker.mjs. Vendored output, not

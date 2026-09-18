@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
+import { ContextMenuProvider } from "~/components/context-menu";
 import { SourceRail, type SourceRailProps } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -63,18 +64,20 @@ function Harness({ withHistory = true }: { withHistory?: boolean }) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     return (
-        <SourceRail
-            sources={SOURCES}
-            folders={FOLDERS}
-            selected={selected}
-            setSelected={setSelected}
-            onOpenAdd={jest.fn()}
-            activeFolder={activeFolder}
-            setActiveFolder={setActiveFolder}
-            activeTag={activeTag}
-            setActiveTag={setActiveTag}
-            history={withHistory ? history() : undefined}
-        />
+        <ContextMenuProvider>
+            <SourceRail
+                sources={SOURCES}
+                folders={FOLDERS}
+                selected={selected}
+                setSelected={setSelected}
+                onOpenAdd={jest.fn()}
+                activeFolder={activeFolder}
+                setActiveFolder={setActiveFolder}
+                activeTag={activeTag}
+                setActiveTag={setActiveTag}
+                history={withHistory ? history() : undefined}
+            />
+        </ContextMenuProvider>
     );
 }
 

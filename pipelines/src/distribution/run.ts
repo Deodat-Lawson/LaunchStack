@@ -26,12 +26,18 @@ import type { RawSearchResult, ReadablePage } from "@launchstack/tools/web-resea
 import type { AgentModelPort, ChatTokenUsage } from "@launchstack/llm";
 
 import * as db from "./db";
-import { runDossierAgent, type DossierAgentResult } from "./dossier-agent";
+import {
+    runDossierAgent,
+    type DossierAgentResult,
+    type DossierAgentInput,
+    type DossierAgentPorts,
+} from "./dossier-agent";
 import { gather, type GatherPorts } from "./gather";
-import { planDiscovery, type SellerProfile } from "./plan";
+import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import type {
+    DiscoveryPlan,
     PartnerKind,
     ProgramRecord,
     RelationshipRecord,
@@ -78,11 +84,7 @@ export interface DistributionPorts {
         | null;
     /** Geocode + place search for one city/region query; null when not configured. */
     searchPlaces:
-        | ((args: {
-              query: string;
-              categoryIds?: string[];
-              territory: Territory;
-          }) => Promise<
+        | ((args: { query: string; categoryIds?: string[]; territory: Territory }) => Promise<
               Array<{
                   fsqId: string;
                   name: string;
@@ -104,6 +106,20 @@ export interface DistributionPorts {
     /** Rationale writer; null → template rationale. */
     writeRationale: ((input: string) => Promise<string>) | null;
     creditsPerCandidate: number;
+    /**
+     * Discovery planner. Defaults to the structured LLM call in ./plan; the
+     * fixture ports supply a deterministic plan so the whole pipeline can run
+     * without a model, a key or a credit.
+     */
+    plan?: (
+        input: PlanInput
+    ) => Promise<{ plan: DiscoveryPlan; modelId?: string; playbookHash: string }>;
+    /**
+     * Candidate profiler. Defaults to the research agent in ./dossier-agent;
+     * keyless mode supplies a page reader that needs no model. Either way
+     * the result passes the same grounding gate before it is stored.
+     */
+    profile?: (ports: DossierAgentPorts, input: DossierAgentInput) => Promise<DossierAgentResult>;
 }
 
 export interface RunContext {
@@ -226,7 +242,7 @@ export async function prepareRun(
         id: "planning",
         policy: "required",
         run: () =>
-            planDiscovery({
+            (ports.plan ?? planDiscovery)({
                 program,
                 profile,
                 territories,
@@ -417,7 +433,8 @@ export async function enrichCandidate(
     if (!program || !org) throw new Error("Program or organisation not found");
 
     const seedUrls = args.seedUrls ?? (org.domain ? [`https://${org.domain}/`] : []);
-    const agentResult: DossierAgentResult = await runDossierAgent(
+    const research = ports.profile ?? runDossierAgent;
+    const agentResult: DossierAgentResult = await research(
         {
             model: ports.model,
             fetchPage: url => ports.fetchPage(url, ctx.signal),

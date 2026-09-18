@@ -179,6 +179,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
     },
     {
+        id: "prospects",
+        tier: "tool",
+        summary:
+            "Find the companies that would buy what the workspace sells: segments, cited company profiles, people to contact, deals with stage rules, and an outreach hand-off to email campaigns.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/distribution",
+        routes: ["prospects"],
+        notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -327,6 +337,19 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
             "workspace/members/leave": "Removes the caller's own membership.",
             fetchUserInfo: "User-level identity, not workspace-scoped.",
         },
+    },
+    {
+        id: "settings",
+        tier: "system",
+        summary:
+            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive — and the profile mirror.",
+        scope: "workspace",
+        routes: ["settings"],
+        notes:
+            "`settings` is the one write path (registry-validated, permission-gated, audited). " +
+            "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
+            "overviews computed for the panel; `settings/account` mirrors a Better Auth name " +
+            "change into the product `users` row.",
     },
     {
         id: "platform-ops",

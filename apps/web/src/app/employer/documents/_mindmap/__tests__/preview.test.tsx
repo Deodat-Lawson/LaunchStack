@@ -1,11 +1,13 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { createDoc, createNode, createPage } from "../model/factory";
+import { isDarkSurface, THEME_BY_ID } from "../model/palette";
+import { applyThemeToDoc } from "../model/theme";
 import type { MindmapDoc } from "../model/types";
 import { MindmapPreview } from "../ui/MindmapPreview";
 
@@ -18,6 +20,18 @@ import { MindmapPreview } from "../ui/MindmapPreview";
  */
 
 const CANVAS_BOX = { x: 0, y: 0, width: 1000, height: 700 };
+
+/** Observers created during a render, so a test can fire a resize at them. */
+const resizeCallbacks: Array<() => void> = [];
+
+/** Restage the measured box and notify every observer, as a real resize would. */
+function resizeStageTo(width: number, height: number) {
+    CANVAS_BOX.width = width;
+    CANVAS_BOX.height = height;
+    act(() => {
+        for (const cb of resizeCallbacks) cb();
+    });
+}
 
 beforeAll(() => {
     Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
@@ -34,14 +48,16 @@ beforeAll(() => {
         } as DOMRect;
     };
     global.ResizeObserver = class {
+        constructor(private readonly cb: () => void) {}
         observe() {
-            /* jsdom never resizes */
+            resizeCallbacks.push(this.cb);
         }
         unobserve() {
             /* no-op */
         }
         disconnect() {
-            /* no-op */
+            const i = resizeCallbacks.indexOf(this.cb);
+            if (i >= 0) resizeCallbacks.splice(i, 1);
         }
     } as unknown as typeof ResizeObserver;
     Element.prototype.setPointerCapture = function setPointerCapture() {
@@ -59,9 +75,27 @@ const fetchMock = jest.fn();
 beforeAll(() => {
     global.fetch = fetchMock as unknown as typeof fetch;
 });
+function setAppTheme(mode: "light" | "dark") {
+    document.documentElement.setAttribute("data-theme", mode);
+}
+
+/** The paper the canvas actually painted, read off the rendered svg. */
+function paperIsDark(container: HTMLElement): boolean {
+    const svg = container.querySelector("svg")!;
+    return svg.getAttribute("data-paper") === "dark";
+}
+
 beforeEach(() => {
     fetchMock.mockReset();
+    setAppTheme("light");
+    resizeCallbacks.length = 0;
+    CANVAS_BOX.width = 1000;
+    CANVAS_BOX.height = 700;
 });
+
+function currentZoom(): number {
+    return Number(screen.getByText(/%$/).textContent.replace("%", ""));
+}
 
 function sampleDoc(): MindmapDoc {
     const root = createNode({
@@ -108,6 +142,90 @@ describe("MindmapPreview", () => {
 
         fireEvent.doubleClick(el, { clientX: 200, clientY: 140 });
         expect(container.querySelector("textarea")).toBeNull();
+    });
+
+    /**
+     * The preview commonly mounts while its panel is still animating open, so
+     * the first measurement is narrow. Framing once against that and never
+     * revisiting it left the board at 8% in a full-width pane.
+     */
+    it("re-frames when the stage grows, rather than keeping the first fit", () => {
+        CANVAS_BOX.width = 160;
+        CANVAS_BOX.height = 1200;
+        render(<MindmapPreview doc={sampleDoc()} />);
+        const cramped = currentZoom();
+
+        resizeStageTo(1000, 700);
+
+        expect(currentZoom()).toBeGreaterThan(cramped);
+    });
+
+    it("stops re-framing once the reader has zoomed", async () => {
+        const user = userEvent.setup();
+        render(<MindmapPreview doc={sampleDoc()} />);
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        const chosen = currentZoom();
+
+        resizeStageTo(1400, 900);
+
+        expect(currentZoom()).toBe(chosen);
+    });
+
+    it("re-arms auto-framing when the reader asks to fit", async () => {
+        const user = userEvent.setup();
+        render(<MindmapPreview doc={sampleDoc()} />);
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        await user.click(screen.getByRole("button", { name: "Fit to screen" }));
+        const fitted = currentZoom();
+
+        resizeStageTo(1400, 900);
+
+        expect(currentZoom()).not.toBe(fitted);
+    });
+
+    /**
+     * Board paper is document data, but the ten themes are five identities in
+     * two lightings. A reader in a light app should not be handed a black page,
+     * and a reader in a dark one should not be flashbanged.
+     */
+    describe("lighting follows the reader, without touching the document", () => {
+        it("shows a dark board lit for a light app", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            expect(isDarkSurface(dark.pages[0]!.background.color)).toBe(true);
+
+            setAppTheme("light");
+            const { container } = render(<MindmapPreview doc={dark} />);
+
+            expect(paperIsDark(container)).toBe(false);
+        });
+
+        it("shows a light board lit for a dark app", () => {
+            setAppTheme("dark");
+            const { container } = render(<MindmapPreview doc={sampleDoc()} />);
+
+            expect(paperIsDark(container)).toBe(true);
+        });
+
+        it("leaves the document alone — this is a rendering choice, not an edit", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            const before = JSON.stringify(dark);
+
+            setAppTheme("light");
+            render(<MindmapPreview doc={dark} />);
+
+            expect(JSON.stringify(dark)).toBe(before);
+        });
+
+        it("keeps the board's identity, changing only its lighting", () => {
+            const dark = applyThemeToDoc(sampleDoc(), "midnight");
+            setAppTheme("light");
+            render(<MindmapPreview doc={dark} />);
+
+            // Midnight's twin is Launchstack — same cycle, opposite lighting.
+            expect(THEME_BY_ID.default!.cycle).toEqual(THEME_BY_ID.midnight!.cycle);
+        });
     });
 
     it("makes no network requests of its own", () => {

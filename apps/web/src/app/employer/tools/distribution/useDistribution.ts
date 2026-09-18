@@ -236,9 +236,14 @@ export function useDistribution() {
                 await api.updateProgram(id, patch);
                 await loadPrograms();
             }, "Program saved"),
-        startRun: (maxCandidates: number) =>
+        startRun: (maxCandidates: number, mode: "live" | "fixture" = "live") =>
             programId
-                ? act(() => api.startRun(programId, maxCandidates), "Discovery run queued")
+                ? act(
+                      () => api.startRun(programId, maxCandidates, mode),
+                      mode === "fixture"
+                          ? "Sample run finished — partners, evidence and dossiers were created from fixture data"
+                          : "Discovery run queued"
+                  )
                 : Promise.resolve(false),
         patchRelationship: (id: string, patch: unknown, success?: string) =>
             act(() => api.patchRelationship(id, patch), success),

@@ -13,6 +13,9 @@ import {
     Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildArtifactMenuItems } from "./artifactContextMenu";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -123,6 +126,49 @@ export function ArtifactViewer({ id }: { id: number }) {
         }
     };
 
+    /** The whole viewer is one target: the header's verbs, reachable from anywhere in it. */
+    const viewerTarget = useContextTarget(
+        artifact
+            ? {
+                  kind: "artifact",
+                  id: String(artifact.id),
+                  label: `Actions for ${artifact.title}`,
+                  data: artifact,
+                  items: () =>
+                      buildArtifactMenuItems(artifact, {
+                          onOpenInNewTab: () =>
+                              window.open(
+                                  `/employer/artifacts/${artifact.id}`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                              ),
+                          onToggleStar: () =>
+                              void patch(
+                                  { starred: !artifact.starred },
+                                  "Couldn't change the star"
+                              ),
+                          onDownload: () =>
+                              window.open(`/api/artifacts/${artifact.id}/raw`, "_blank"),
+                          onCopyLink: () => {
+                              void copyText(window.location.href).then(ok => {
+                                  if (ok) toast.success("Link copied");
+                              });
+                          },
+                          onCopySource: () => void copySource(),
+                          onOpenOriginal: () => {
+                              if (artifact.sourceUrl) {
+                                  window.open(artifact.sourceUrl, "_blank", "noopener,noreferrer");
+                              }
+                          },
+                          folders,
+                          onMoveToFolder: folder =>
+                              void patch({ folder }, "Couldn't move the artifact"),
+                          onTrash: () => void trash(),
+                      }),
+              }
+            : null
+    );
+
     if (loading) {
         return (
             <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-[13px]">
@@ -150,7 +196,7 @@ export function ArtifactViewer({ id }: { id: number }) {
     const meta = artifactTypeMeta(artifact.artifactType);
 
     return (
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col" {...viewerTarget}>
             <header className="border-line bg-panel flex flex-wrap items-center gap-2 border-b px-4 py-2.5">
                 <Button
                     variant="ghost"

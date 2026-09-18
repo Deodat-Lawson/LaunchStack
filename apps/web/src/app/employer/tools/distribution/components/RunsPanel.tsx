@@ -1,12 +1,16 @@
 "use client";
 
 import { Loader2, Play } from "lucide-react";
-import { useState } from "react";
+import { Fragment, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 import {
     Table,
     TableBody,
@@ -18,6 +22,50 @@ import {
 
 import { formatDate, type RunDto } from "../api";
 import type { DistributionState } from "../useDistribution";
+import { buildRunMenuItems } from "./partnerContextMenu";
+
+/** A run row: expand it, start another, or copy its id. */
+function RunRow({
+    run,
+    expanded,
+    running,
+    onToggle,
+    onStartAnother,
+    children,
+}: {
+    run: RunDto;
+    expanded: boolean;
+    running: boolean;
+    onToggle: () => void;
+    onStartAnother: () => void;
+    children: ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "discovery-run",
+        id: run.id,
+        label: `Actions for run ${run.id.slice(0, 8)}`,
+        data: run,
+        items: () =>
+            buildRunMenuItems(
+                run,
+                { expanded, running },
+                {
+                    onToggleDetails: onToggle,
+                    onStartAnother,
+                    onCopyId: () => {
+                        void copyText(run.id).then(ok => {
+                            if (ok) toast.success("Run id copied");
+                        });
+                    },
+                }
+            ),
+    });
+    return (
+        <TableRow {...ctxTarget} className="cursor-pointer" onClick={onToggle}>
+            {children}
+        </TableRow>
+    );
+}
 
 const ACTIVE = new Set([
     "queued",
@@ -103,6 +151,7 @@ function RunDetail({ run }: { run: RunDto }) {
 
 export function RunsPanel({ state }: { state: DistributionState }) {
     const [maxCandidates, setMaxCandidates] = useState(25);
+    const [sample, setSample] = useState(false);
     const [starting, setStarting] = useState(false);
     const [expanded, setExpanded] = useState<string | null>(null);
     const running = state.runs.some(r => ACTIVE.has(r.status));
@@ -131,11 +180,17 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                         }
                     />
                 </div>
+                <div className="flex items-center gap-2 pb-2">
+                    <Switch id="sample-run" checked={sample} onCheckedChange={setSample} />
+                    <Label htmlFor="sample-run" className="text-ink-2 text-xs">
+                        Use sample data
+                    </Label>
+                </div>
                 <Button
                     disabled={!state.programId || starting || running}
                     onClick={async () => {
                         setStarting(true);
-                        await state.startRun(maxCandidates);
+                        await state.startRun(maxCandidates, sample ? "fixture" : "live");
                         setStarting(false);
                     }}
                 >
@@ -144,11 +199,16 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                     ) : (
                         <Play className="h-4 w-4" />
                     )}
-                    {running ? "A run is in progress" : "Start discovery run"}
+                    {running
+                        ? "A run is in progress"
+                        : sample
+                          ? "Run with sample data"
+                          : "Start discovery run"}
                 </Button>
                 <p className="text-ink-3 text-xs">
-                    Credits are debited per completed candidate, after its research. Existing
-                    partners and anyone already contacted are excluded automatically.
+                    {sample
+                        ? "Sample data runs the same eight stages over fixture organisations with a scripted researcher: no API keys, no credits, finishes in seconds. Dossiers land in the “Distribution / Sample” folder in Sources."
+                        : "Credits are debited per completed candidate, after its research. Existing partners and anyone already contacted are excluded automatically."}
                 </p>
             </div>
 
@@ -176,17 +236,26 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                             </TableRow>
                         )}
                         {state.runs.map(run => (
-                            <>
-                                <TableRow
-                                    key={run.id}
-                                    className="cursor-pointer"
-                                    onClick={() => setExpanded(expanded === run.id ? null : run.id)}
+                            <Fragment key={run.id}>
+                                <RunRow
+                                    run={run}
+                                    expanded={expanded === run.id}
+                                    running={running}
+                                    onToggle={() =>
+                                        setExpanded(expanded === run.id ? null : run.id)
+                                    }
+                                    onStartAnother={() => void state.startRun(maxCandidates)}
                                 >
                                     <TableCell className="text-xs">
                                         {formatDate(run.createdAt)}
                                     </TableCell>
                                     <TableCell>
-                                        <RunStatus run={run} />
+                                        <span className="inline-flex items-center gap-1.5">
+                                            <RunStatus run={run} />
+                                            {run.options.mode === "fixture" && (
+                                                <Badge variant="secondary">sample</Badge>
+                                            )}
+                                        </span>
                                     </TableCell>
                                     <TableCell className="text-right font-mono text-xs tabular-nums">
                                         {run.summary?.shortlisted ??
@@ -202,15 +271,15 @@ export function RunsPanel({ state }: { state: DistributionState }) {
                                     <TableCell className="text-xs">
                                         {formatDate(run.completedAt)}
                                     </TableCell>
-                                </TableRow>
+                                </RunRow>
                                 {expanded === run.id && (
-                                    <TableRow key={`${run.id}-detail`}>
+                                    <TableRow>
                                         <TableCell colSpan={6} className="bg-panel-2/50">
                                             <RunDetail run={run} />
                                         </TableCell>
                                     </TableRow>
                                 )}
-                            </>
+                            </Fragment>
                         ))}
                     </TableBody>
                 </Table>

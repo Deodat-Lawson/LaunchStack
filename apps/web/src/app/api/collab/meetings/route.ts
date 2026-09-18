@@ -7,7 +7,9 @@ import { z } from "zod";
 
 import type { AgentPersona } from "@launchstack/collab";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertMeetingPlanAllowed } from "~/server/collab/autonomy";
 import { createMeetingForCompany, listMeetingsForCompany } from "~/server/collab/runtime";
+import { isWorkspaceError } from "~/server/workspace/errors";
 import { ensureStarterPersonas, listPersonas } from "~/server/collab/personas";
 import { getChannelStore } from "~/server/collab/store";
 
@@ -112,6 +114,20 @@ export async function POST(request: Request) {
             { error: `Unknown moderator "${input.moderatorKey}"` },
             { status: 400 }
         );
+    }
+
+    // What the room may do is decided by its least autonomous agent.
+    try {
+        await assertMeetingPlanAllowed(companyId, {
+            participantKeys: input.participantKeys,
+            slackMirrorEnabled: input.slackMirrorEnabled,
+            slackUseAgentIdentity: input.slackUseAgentIdentity,
+        });
+    } catch (err) {
+        if (isWorkspaceError(err)) {
+            return NextResponse.json({ error: err.message }, { status: err.status });
+        }
+        throw err;
     }
 
     const { row, orchestrator } = await createMeetingForCompany({

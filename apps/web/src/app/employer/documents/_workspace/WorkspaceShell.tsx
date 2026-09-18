@@ -4,6 +4,16 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { useRegisterActions } from "~/components/context-menu";
+import {
+    APP_TARGET_KIND,
+    SELECTION_TARGET_KIND,
+    copyText,
+    readClipboardText,
+    type ContextTarget,
+    type MenuOpenContext,
+    type TextSelectionInfo,
+} from "~/lib/context-menu";
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
@@ -19,10 +29,20 @@ import {
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { useSettingValue } from "~/lib/settings/useSettings";
+import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
-import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
+import {
+    AskPanel,
+    AvatarMenu,
+    JumpToPaletteButton,
+    workspaceMainHeaderBarStyle,
+    type ComposerSeed,
+} from "./AskPanel";
+import type { DocumentTargetData } from "./documentContextMenu";
+import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -77,6 +97,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "marketing-pipeline": "/employer/tools/marketing-pipeline",
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/tools/distribution",
+    prospects: "/employer/tools/prospects",
     notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
@@ -96,11 +117,9 @@ const FEATURE_IDS = new Set([
     "rewrite",
     "notes",
     "workflows",
-    "video-gen",
-    "image-gen",
-    "audio-gen",
     "marketing",
     "distribution",
+    "prospects",
     "knowledge",
     "meetings",
     "metadata",
@@ -226,6 +245,12 @@ export function WorkspaceShell() {
     const [addOpen, setAddOpen] = useState(false);
     /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
     const [addTab, setAddTab] = useState<string | undefined>(undefined);
+    /** A folder the Add dialog should pre-select — "New source in this folder". */
+    const [addFolder, setAddFolder] = useState<string | null>(null);
+    /** Clipboard contents handed to the Add dialog by "Paste to create a source". */
+    const [addPrefill, setAddPrefill] = useState<{ url?: string; text?: string } | null>(null);
+    /** A passage the composer should start from — set by "Ask about this" on a selection. */
+    const [composerSeed, setComposerSeed] = useState<ComposerSeed | null>(null);
     const [palOpen, setPalOpen] = useState(false);
     const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
     const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
@@ -242,6 +267,8 @@ export function WorkspaceShell() {
     const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
     /** Read by the shortcut listener so the editor's own keys win while it is open. */
     const editingRef = useRef(false);
+    /** The latest `expandFeature`, for the keyboard handler declared before it. */
+    const expandFeatureRef = useRef<(featureId: string) => void>(() => undefined);
     useEffect(() => {
         editingRef.current = editing;
     }, [editing]);
@@ -285,7 +312,8 @@ export function WorkspaceShell() {
     }, [sourceParam, sources, sourcesLoading, router, sourceUrl]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
-    const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
+    /** What the delete dialog is about: one source from its row, or a multi-selection. */
+    const [deleteTargets, setDeleteTargets] = useState<WorkspaceSource[] | null>(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
     /** The folder or document whose access dialog is open. */
@@ -649,6 +677,77 @@ export function WorkspaceShell() {
         [sources, sendQuery, companyId, continuation, thread, persistTurns]
     );
 
+    const seedComposer = useCallback((text: string, mode: "append" | "replace") => {
+        setActiveFeatureId("chat");
+        setComposerSeed({ text, mode, nonce: Date.now() });
+    }, []);
+
+    /**
+     * Start a new chat that keeps the transcript up to and including `index`.
+     * The stored chat is left as it was; the next send creates the new one
+     * with these turns in front.
+     */
+    const branchFrom = useCallback(
+        (index: number) => {
+            setThread(prev => prev.slice(0, index + 1));
+            sessionIdRef.current = null;
+            hydratedSession.current = null;
+            setSessionParam(null);
+            setActiveFeatureId("chat");
+            toast.success("Branched into a new chat", {
+                description: "The turns up to here come along; the original chat is untouched.",
+            });
+        },
+        [setSessionParam]
+    );
+
+    /**
+     * Ask the question behind turn `index` again, as a new turn at the end.
+     * Appending, not replacing, keeps the screen and the stored chat the same.
+     */
+    const askAgain = useCallback(
+        (index: number, overrides: { webSearch?: boolean; thinking?: boolean } = {}) => {
+            const turn = thread[index];
+            const question =
+                turn?.role === "user"
+                    ? turn
+                    : [...thread.slice(0, index)].reverse().find(m => m.role === "user");
+            if (!question) {
+                toast.error("There is no question to ask again");
+                return;
+            }
+            void sendMessage({
+                text: question.text,
+                refs: question.refs ?? selected,
+                attachments: question.attachments ?? [],
+                webSearch: overrides.webSearch ?? composerWebSearch,
+                thinking: overrides.thinking ?? composerThinking,
+            });
+        },
+        [thread, selected, sendMessage, composerWebSearch, composerThinking]
+    );
+
+    const saveAnswerAsNote = useCallback(async (text: string) => {
+        const title =
+            text
+                .split("\n")
+                .find(line => line.trim())
+                ?.replace(/[#*_>`]/g, "")
+                .trim()
+                .slice(0, 80) ?? "Chat answer";
+        try {
+            const res = await fetch("/api/notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, contentMarkdown: text, tags: ["chat"] }),
+            });
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            toast.success("Saved to your notebook", { description: title });
+        } catch {
+            toast.error("Couldn't save that note");
+        }
+    }, []);
+
     const handleOpenSource = useCallback(
         (source: WorkspaceSource) => {
             setViewerHighlight(null);
@@ -731,18 +830,23 @@ export function WorkspaceShell() {
     );
 
     const confirmDeleteSource = useCallback(async () => {
-        if (!deleteSource) return;
+        if (!deleteTargets?.length) return;
         setDeleteBusy(true);
         setDeleteError(null);
         try {
-            await removeSource(deleteSource);
-            setDeleteSource(null);
+            for (const source of deleteTargets) await removeSource(source);
+            setDeleteTargets(null);
         } catch (err) {
             setDeleteError(err instanceof Error ? err.message : "Failed to delete source");
         } finally {
             setDeleteBusy(false);
         }
-    }, [deleteSource, removeSource]);
+    }, [deleteTargets, removeSource]);
+
+    const requestDelete = useCallback((targets: WorkspaceSource[]) => {
+        setDeleteError(null);
+        setDeleteTargets(targets);
+    }, []);
 
     const handleAskAbout = useCallback(
         (source: WorkspaceSource) => {
@@ -752,10 +856,55 @@ export function WorkspaceShell() {
         [closeSource]
     );
 
+    /** Send a question about a selected passage, scoped to the document it came from. */
+    const askAboutSelection = useCallback(
+        (prefix: string, target: ContextTarget, ctx: MenuOpenContext) => {
+            const home = selectionHome(ctx);
+            const quote = (target.data as TextSelectionInfo).text;
+            if (home?.kind === "document") handleAskAbout(home.source);
+            setActiveFeatureId("chat");
+            const from = home?.kind === "document" ? ` from “${home.source.title}”` : "";
+            void sendMessage({
+                text: `${prefix}${from}:\n\n${quoteBlock(quote).trimEnd()}`,
+                refs: home?.kind === "document" ? [home.source.id] : selected,
+                attachments: [],
+                webSearch: composerWebSearch,
+                thinking: composerThinking,
+            });
+        },
+        [handleAskAbout, sendMessage, selected, composerWebSearch, composerThinking]
+    );
+
     const openAdd = useCallback((tabId?: string) => {
         setAddTab(tabId);
         setAddOpen(true);
     }, []);
+
+    /**
+     * "Paste to create a source": a link on the clipboard opens the URL tab
+     * prefilled, anything else opens the Paste tab with the text in place. A
+     * browser that refuses clipboard reads still gets the Paste tab, empty.
+     */
+    const pasteToCreateSource = useCallback(async () => {
+        const text = (await readClipboardText())?.trim() ?? null;
+        if (text === null) {
+            toast.info("Clipboard access was refused — paste with ⌘V instead");
+            setAddPrefill(null);
+            openAdd("paste");
+            return;
+        }
+        if (!text) {
+            toast.info("The clipboard is empty");
+            return;
+        }
+        if (/^https?:\/\/\S+$/i.test(text)) {
+            setAddPrefill({ url: text });
+            openAdd("url");
+        } else {
+            setAddPrefill({ text });
+            openAdd("paste");
+        }
+    }, [openAdd]);
 
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
@@ -896,6 +1045,7 @@ export function WorkspaceShell() {
         },
         [openAdd, router]
     );
+    expandFeatureRef.current = expandFeature;
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
     // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal;
@@ -928,11 +1078,13 @@ export function WorkspaceShell() {
                 "google-drive": "drive",
                 slack: "slack",
                 github: "github",
+                gmail: "gmail",
             };
             const label: Record<string, string> = {
                 "google-drive": "Google Drive",
                 slack: "Slack",
                 github: "GitHub",
+                gmail: "Gmail",
             };
             const tab = tabByProvider[connectorParam];
             const name = label[connectorParam] ?? connectorParam;
@@ -971,33 +1123,254 @@ export function WorkspaceShell() {
         searchParams,
     ]);
 
-    // Keyboard shortcuts
+    // The workspace's share of the right-click fallback: what you can make
+    // from empty space. Registered only while this shell is mounted.
+    useRegisterActions([
+        {
+            id: "workspace.new-chat",
+            label: "New chat",
+            icon: "newChat",
+            order: 0,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => startNewChat(),
+        },
+        {
+            id: "workspace.add-knowledge",
+            label: "Add knowledge",
+            icon: "plus",
+            shortcut: "⌘U",
+            order: 1,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => openAdd(),
+        },
+        {
+            id: "workspace.paste-source",
+            label: "Paste to create a source",
+            icon: "paste",
+            order: 2,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => pasteToCreateSource(),
+        },
+        {
+            id: "workspace.palette",
+            label: "Command palette",
+            icon: "command",
+            shortcut: "⌘K",
+            order: 3,
+            // The palette does not list a way to open itself.
+            palette: false,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => setPalOpen(true),
+        },
+        {
+            id: "workspace.toggle-rail",
+            label: railHidden ? "Show sidebar" : "Hide sidebar",
+            icon: "sidebar",
+            shortcut: "⌘\\",
+            order: 4,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            run: () => setRailHidden(v => !v),
+        },
+    ]);
+
+    // Session-level verbs on chat turns, and what a selected passage can
+    // become. The panel and the viewer declare the targets; these are the
+    // verbs that need the shell's session state to run.
+    useRegisterActions([
+        {
+            id: "chat.message.ask-again",
+            label: "Ask again",
+            icon: "retry",
+            order: 10,
+            appliesTo: target => target.kind === "chat-message",
+            disabled: () => (isSending ? "Wait for the current answer." : false),
+            children: target => {
+                const { index } = target.data as { index: number };
+                return [
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.same",
+                        label: "Ask again",
+                        icon: "retry",
+                        onSelect: () => askAgain(index),
+                    },
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.web",
+                        label: "Ask again with web search",
+                        icon: "globe",
+                        onSelect: () => askAgain(index, { webSearch: true }),
+                    },
+                    {
+                        type: "item",
+                        id: "chat.message.ask-again.think",
+                        label: "Ask again with extended thinking",
+                        icon: "brain",
+                        onSelect: () => askAgain(index, { thinking: true }),
+                    },
+                ];
+            },
+            run: () => undefined,
+        },
+        {
+            id: "chat.message.branch",
+            label: "Branch a new chat from here",
+            icon: "branch",
+            order: 11,
+            appliesTo: target =>
+                target.kind === "chat-message" || target.kind === "chat-user-message",
+            run: target => branchFrom((target.data as { index: number }).index),
+        },
+        {
+            id: "chat.message.save-note",
+            label: "Save answer as a note",
+            icon: "note",
+            order: 12,
+            appliesTo: target => target.kind === "chat-message",
+            run: target => saveAnswerAsNote((target.data as { msg: ThreadMessage }).msg.text),
+        },
+        {
+            id: "chat.message.save-source",
+            label: "Save answer as a source",
+            icon: "plus",
+            order: 13,
+            appliesTo: target => target.kind === "chat-message",
+            run: target => {
+                setAddPrefill({ text: (target.data as { msg: ThreadMessage }).msg.text });
+                openAdd("paste");
+            },
+        },
+        {
+            id: "chat.save-transcript-source",
+            label: "Save transcript as a source",
+            icon: "plus",
+            order: 10,
+            appliesTo: target => target.kind === "chat",
+            disabled: target =>
+                (target.data as { thread: ThreadMessage[] }).thread.length === 0
+                    ? "Nothing to save yet."
+                    : false,
+            run: target => {
+                const data = target.data as { thread: ThreadMessage[]; sources: WorkspaceSource[] };
+                setAddPrefill({ text: transcriptMarkdown(data.thread, data.sources) });
+                openAdd("paste");
+            },
+        },
+        {
+            id: "selection.ask",
+            label: "Ask about this",
+            icon: "ask",
+            order: 0,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind === "document") handleAskAbout(home.source);
+                seedComposer(quoteBlock((target.data as TextSelectionInfo).text), "append");
+            },
+        },
+        {
+            id: "selection.explain",
+            label: "Explain this",
+            icon: "explain",
+            order: 1,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => askAboutSelection("Explain this passage", target, ctx),
+        },
+        {
+            id: "selection.summarise",
+            label: "Summarise this",
+            icon: "transcript",
+            order: 2,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
+            run: (target, ctx) => askAboutSelection("Summarise this passage", target, ctx),
+        },
+        {
+            id: "selection.copy-cited",
+            label: "Copy with citation",
+            icon: "quote",
+            order: 3,
+            appliesTo: (target, ctx) =>
+                target.kind === SELECTION_TARGET_KIND && selectionHome(ctx)?.kind === "document",
+            run: async (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind !== "document") return;
+                const text = citationWithSource(
+                    (target.data as TextSelectionInfo).text,
+                    home.source
+                );
+                if (await copyText(text)) toast.success("Copied with citation");
+            },
+        },
+        {
+            id: "selection.note",
+            label: "Add a note with this",
+            icon: "note",
+            order: 4,
+            appliesTo: (target, ctx) => {
+                const home = selectionHome(ctx);
+                return (
+                    target.kind === SELECTION_TARGET_KIND &&
+                    home?.kind === "document" &&
+                    Boolean(home.addNote)
+                );
+            },
+            run: (target, ctx) => {
+                const home = selectionHome(ctx);
+                if (home?.kind === "document")
+                    home.addNote?.((target.data as TextSelectionInfo).text);
+            },
+        },
+    ]);
+
+    // Keyboard shortcuts: the registry in ~/lib/shortcuts/commands, with the
+    // member's overrides from Settings → Shortcuts applied on top.
+    const shortcutOverrides = useSettingValue<ShortcutBindings>("shortcuts.bindings");
+    const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
+    const bindingsRef = useRef(bindings);
+    bindingsRef.current = bindings;
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             // The mindmap editor binds its own ⌘K, `/` and tool keys on the
             // same window; while it is open, its map wins.
             if (editingRef.current) return;
             const tag = (e.target as HTMLElement | null)?.tagName;
-            const inInput = tag === "INPUT" || tag === "TEXTAREA";
-            const mod = e.metaKey || e.ctrlKey;
-            if (mod && e.key.toLowerCase() === "k") {
-                e.preventDefault();
-                setPalOpen(v => !v);
-            } else if (mod && e.key.toLowerCase() === "u") {
-                e.preventDefault();
-                setAddOpen(true);
-            } else if (mod && e.key.toLowerCase() === "j") {
-                e.preventDefault();
-                setStudioOpen(v => !v);
-            } else if (mod && e.key === "\\") {
-                e.preventDefault();
-                setRailHidden(v => !v);
-            } else if (e.key === "/" && !inInput) {
-                e.preventDefault();
-                const el = document.querySelector<HTMLInputElement>(
-                    'input[placeholder="Search your knowledge"]'
-                );
-                el?.focus();
+            const inInput =
+                tag === "INPUT" ||
+                tag === "TEXTAREA" ||
+                Boolean((e.target as HTMLElement | null)?.isContentEditable);
+            const command = commandForEvent(e, bindingsRef.current, { inInput });
+            if (!command) return;
+            e.preventDefault();
+            switch (command.id) {
+                case "palette.toggle":
+                    setPalOpen(v => !v);
+                    break;
+                case "source.add":
+                    setAddOpen(true);
+                    break;
+                case "studio.toggle":
+                    setStudioOpen(v => !v);
+                    break;
+                case "rail.toggle":
+                    setRailHidden(v => !v);
+                    break;
+                case "search.focus": {
+                    const el = document.querySelector<HTMLInputElement>(
+                        'input[placeholder="Search your knowledge"]'
+                    );
+                    el?.focus();
+                    break;
+                }
+                case "settings.open":
+                    expandFeatureRef.current("settings");
+                    break;
+                default:
+                    if (command.id.startsWith("feature.")) {
+                        expandFeatureRef.current(command.id.slice("feature.".length));
+                    }
             }
         };
         window.addEventListener("keydown", onKey);
@@ -1065,9 +1438,11 @@ export function WorkspaceShell() {
                     onShareFolder={openFolderAccess}
                     onRestrictAccess={openDocumentAccess}
                     onRenameSource={source => setRenameSource(source)}
-                    onDeleteSource={source => {
-                        setDeleteError(null);
-                        setDeleteSource(source);
+                    onDeleteSource={source => requestDelete([source])}
+                    onDeleteSources={requestDelete}
+                    onAddToFolder={path => {
+                        setAddFolder(path);
+                        openAdd();
                     }}
                     onMoveToFolder={
                         canManageFolders
@@ -1154,6 +1529,12 @@ export function WorkspaceShell() {
                         mindmapId={viewerSource.mindmapId}
                         onBack={() => openSource(viewerSource.id)}
                         onChanged={() => void refresh()}
+                        onAskAboutNode={text => {
+                            // Pin the map, leave the editor, and start the
+                            // question from the topic's text.
+                            handleAskAbout(viewerSource);
+                            seedComposer(quoteBlock(text), "append");
+                        }}
                     />
                 </main>
             ) : activeFeatureId === "chat" ? (
@@ -1166,6 +1547,8 @@ export function WorkspaceShell() {
                     sendMessage={sendMessage}
                     isSending={isSending}
                     onOpenCitation={handleOpenCitation}
+                    onOpenSource={handleOpenSource}
+                    composerSeed={composerSeed}
                     onOpenAdd={() => setAddOpen(true)}
                     onNewMindmap={() => openAdd("mindmap")}
                     onNewChat={startNewChat}
@@ -1213,10 +1596,8 @@ export function WorkspaceShell() {
                                 setActiveFeatureId("chat");
                             },
                             onRenameSource: source => setRenameSource(source),
-                            onDeleteSource: source => {
-                                setDeleteError(null);
-                                setDeleteSource(source);
-                            },
+                            onDeleteSource: source => requestDelete([source]),
+                            onDeleteSources: requestDelete,
                             onRestrictAccess: openDocumentAccess,
                             onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                         },
@@ -1242,12 +1623,16 @@ export function WorkspaceShell() {
             <AddSourceModal
                 open={addOpen}
                 initialTab={addTab}
+                initialUrl={addPrefill?.url}
+                initialText={addPrefill?.text}
                 onClose={() => {
                     setAddOpen(false);
                     setAddTab(undefined);
+                    setAddPrefill(null);
+                    setAddFolder(null);
                 }}
                 userId={userId ?? null}
-                defaultCategory={activeFolder ?? UNFILED_FOLDER}
+                defaultCategory={addFolder ?? activeFolder ?? UNFILED_FOLDER}
                 folders={folderPaths}
                 onCreateFolder={
                     canManageFolders
@@ -1275,16 +1660,19 @@ export function WorkspaceShell() {
                 open={palOpen}
                 onClose={() => setPalOpen(false)}
                 sources={sources}
-                onOpenAdd={() => {
-                    setPalOpen(false);
-                    setTimeout(() => setAddOpen(true), 100);
-                }}
                 onPickSource={id => {
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
                 }}
                 onPickFeature={id => {
                     setPalOpen(false);
                     setTimeout(() => expandFeature(id), 100);
+                }}
+                onPickSetting={key => {
+                    setPalOpen(false);
+                    // The hub reads the hash on mount and on change; the row
+                    // scrolls itself into view.
+                    window.location.hash = key;
+                    setTimeout(() => expandFeature("settings"), 100);
                 }}
             />
 
@@ -1315,26 +1703,16 @@ export function WorkspaceShell() {
             />
 
             <ConfirmActionDialog
-                open={!!deleteSource}
-                title={
-                    deleteSource && sourceApi.isMindmapSource(deleteSource)
-                        ? "Move this mindmap to the trash?"
-                        : "Delete this source?"
-                }
-                body={
-                    deleteSource
-                        ? sourceApi.isMindmapSource(deleteSource)
-                            ? `“${deleteSource.title}” will leave the library. You can undo this right after.`
-                            : `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
-                        : ""
-                }
+                open={Boolean(deleteTargets?.length)}
+                title={deleteDialogCopy(deleteTargets).title}
+                body={deleteDialogCopy(deleteTargets).body}
                 confirmLabel="Delete"
                 busy={deleteBusy}
                 error={deleteError}
                 onConfirm={() => void confirmDeleteSource()}
                 onClose={() => {
                     if (deleteBusy) return;
-                    setDeleteSource(null);
+                    setDeleteTargets(null);
                     setDeleteError(null);
                 }}
             />
@@ -1453,4 +1831,60 @@ function ExpandedFeatureView({
             </div>
         </main>
     );
+}
+
+/** Title and body for the delete dialog: one source by name, several by count. */
+function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; body: string } {
+    if (!targets?.length) return { title: "", body: "" };
+    if (targets.length === 1) {
+        const source = targets[0]!;
+        return sourceApi.isMindmapSource(source)
+            ? {
+                  title: "Move this mindmap to the trash?",
+                  body: `“${source.title}” will leave the library. You can undo this right after.`,
+              }
+            : {
+                  title: "Delete this source?",
+                  body: `“${source.title}” will be removed from this workspace. This cannot be undone.`,
+              };
+    }
+    const mindmaps = targets.filter(sourceApi.isMindmapSource).length;
+    const documents = targets.length - mindmaps;
+    const parts: string[] = [];
+    if (documents > 0) {
+        parts.push(
+            `${documents} ${documents === 1 ? "document" : "documents"} will be removed from this workspace — this cannot be undone`
+        );
+    }
+    if (mindmaps > 0) {
+        parts.push(
+            `${mindmaps} ${mindmaps === 1 ? "mindmap goes" : "mindmaps go"} to the trash, where you can undo`
+        );
+    }
+    return {
+        title: `Delete ${targets.length} sources?`,
+        body: `${parts.join("; ")}.`,
+    };
+}
+
+type SelectionHome =
+    | { kind: "document"; source: WorkspaceSource; addNote?: (text: string) => void }
+    | { kind: "chat" };
+
+/** Where a text selection lives — the open document, or the chat — read off the target chain. */
+function selectionHome(ctx: MenuOpenContext): SelectionHome | null {
+    for (const target of ctx.chain) {
+        if (target.kind === "document") {
+            const data = target.data as DocumentTargetData;
+            return { kind: "document", source: data.source, addNote: data.addNote };
+        }
+        if (
+            target.kind === "chat-message" ||
+            target.kind === "chat-user-message" ||
+            target.kind === "chat"
+        ) {
+            return { kind: "chat" };
+        }
+    }
+    return null;
 }

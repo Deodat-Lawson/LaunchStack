@@ -51,6 +51,11 @@ const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHu
     loading: () => <LoadingPage />,
 });
 
+const StatisticsView = dynamic(
+    () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
+    { loading: () => <LoadingPage /> }
+);
+
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
     loading: () => <LoadingPage />,
 });
@@ -368,54 +373,6 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
     );
 }
 
-export function VideoGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Video Generation"
-            body="Turn company knowledge into short explainer videos. Pick sources, set tone, and queue renders — narration and captions are grounded in your indexed documents."
-            bullets={[
-                "Source-grounded storyboards with citation overlays",
-                "Multiple aspect ratios (square, vertical, widescreen)",
-                "Optional voice cloning for a consistent brand voice",
-            ]}
-        />
-    );
-}
-
-export function ImageGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Image Generation"
-            body="Generate hero images, diagrams, and social assets from prompts that reference your sources — product names, audience, and voice pulled from your indexed docs."
-            bullets={[
-                "Brand-consistent palettes derived from your style guide",
-                "Prompt suggestions seeded from pinned sources",
-                "Direct export to the library as a new asset",
-            ]}
-        />
-    );
-}
-
-export function AudioGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Audio Generation"
-            body="Narrate summaries, brief updates, or full documents. Voices, pacing, and tone tuned to your company voice."
-            bullets={[
-                "Document-to-audio with chapter markers",
-                "Multiple voice profiles per workspace",
-                "Attach generated audio back to the source document",
-            ]}
-        />
-    );
-}
-
 export function RewritePane(_: PaneProps) {
     return (
         <LegalGeneratorTheme ambient={false}>
@@ -440,6 +397,15 @@ export function CompanySettingsPane({
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
+        </div>
+    );
+}
+
+/** Analytics reads, never configures, so it lives here beside the other views. */
+export function AnalyticsPane(_: PaneProps) {
+    return (
+        <div style={{ height: "100%", overflowY: "auto" }}>
+            <StatisticsView embedded />
         </div>
     );
 }
@@ -834,12 +800,6 @@ export function renderStudioPane(
             return <NotesPane onClose={onClose} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "video-gen":
-            return <VideoGenPane onClose={onClose} />;
-        case "image-gen":
-            return <ImageGenPane onClose={onClose} />;
-        case "audio-gen":
-            return <AudioGenPane onClose={onClose} />;
         case "marketing":
             return <MarketingPipelinePane onClose={onClose} />;
         // Company metadata and analytics are sections of Settings now. Their ids
@@ -847,9 +807,26 @@ export function renderStudioPane(
         case "metadata":
             return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":
-            return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
+            return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
+        case "prospects":
+            return (
+                <DefaultLinkPane
+                    onClose={onClose}
+                    eyebrow="Prospects"
+                    title="Prospects"
+                    body="Say who you sell to and where. Prospects searches for companies that match, profiles each one with cited evidence and a fit score, finds the people to contact, and tracks every deal through to won."
+                    bullets={[
+                        "Segment: what you sell, the buyer type, industries and countries",
+                        "Companies: fit, why they match, where they were found; open one for the cited profile",
+                        "People and outreach: a campaign is drafted in Email for you to approve — nothing is sent automatically",
+                        "Deals: stages with rules, next steps and owners; Runs show what each source produced",
+                    ]}
+                    href={feature.href ?? "/employer/tools/prospects"}
+                    ctaLabel="Open Prospects"
+                />
+            );
         case "distribution":
             return (
                 <DefaultLinkPane

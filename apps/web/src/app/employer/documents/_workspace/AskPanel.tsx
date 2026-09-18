@@ -9,6 +9,7 @@ import React, {
     useState,
 } from "react";
 import { useTheme } from "next-themes";
+import { writeSettingValue } from "~/lib/settings/useSettings";
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
 import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
 import { useChatRoutes } from "../hooks/useChatRoutes";
@@ -40,6 +41,19 @@ import {
     type WorkspaceSource,
 } from "./types";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText, readClipboardText } from "~/lib/context-menu";
+import {
+    buildAnswerMenuItems,
+    buildAttachmentMenuItems,
+    buildChatPaneMenuItems,
+    buildCitationMenuItems,
+    buildComposerMenuItems,
+    buildContextChipMenuItems,
+    buildQuestionMenuItems,
+} from "./chatContextMenu";
+import { downloadTextFile, quoteBlock, transcriptFilename, transcriptMarkdown } from "./transcript";
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
@@ -65,18 +79,44 @@ export function workspaceMainHeaderBarStyle(leadingChromeInsetPx = 0): React.CSS
     };
 }
 
+/** Text to put in the composer: a quote to reply around, or a question to edit. */
+export interface ComposerSeed {
+    text: string;
+    mode: "append" | "replace";
+    /** Distinguishes repeat seeds with the same text. */
+    nonce: number;
+}
+
+async function copyWithToast(text: string, what = "Copied"): Promise<void> {
+    if (await copyText(text)) toast.success(what);
+    else toast.error("Couldn't copy");
+}
+
 interface SourceChipProps {
     source: WorkspaceSource;
     onRemove?: () => void;
+    onOpen?: () => void;
     size?: "sm" | "md";
 }
 
-export function SourceChip({ source, onRemove, size = "md" }: SourceChipProps) {
+export function SourceChip({ source, onRemove, onOpen, size = "md" }: SourceChipProps) {
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const small = size === "sm";
+    const ctxTarget = useContextTarget(
+        onOpen || onRemove
+            ? {
+                  kind: "context-chip",
+                  id: source.id,
+                  label: `Actions for ${source.title}`,
+                  data: source,
+                  items: () => buildContextChipMenuItems(source, { onOpen, onRemove }),
+              }
+            : null
+    );
     return (
         <span
+            {...ctxTarget}
             style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -151,23 +191,114 @@ function renderText(txt: string) {
     });
 }
 
-interface MessageProps {
-    msg: ThreadMessage;
-    sources: WorkspaceSource[];
-    /** Opens the cited document scrolled to (and highlighting) the cited passage. */
-    onOpenCitation?: (cite: ThreadReference) => void;
+/**
+ * A layout-neutral wrapper that gives one citation its own right-click
+ * target; the button inside keeps its markup and its click.
+ */
+function CitationTarget({
+    cite,
+    source,
+    inContext,
+    onOpen,
+    onToggleContext,
+    children,
+}: {
+    cite: ThreadReference;
+    source: WorkspaceSource;
+    inContext: boolean;
+    onOpen?: (cite: ThreadReference) => void;
+    onToggleContext: (source: WorkspaceSource) => void;
+    children: React.ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "citation",
+        id: `${source.id}:${cite.page ?? ""}`,
+        label: `Citation from ${source.title}`,
+        data: { cite, source },
+        items: () =>
+            buildCitationMenuItems(cite, source, {
+                onOpen,
+                onCopy: text => void copyWithToast(text),
+                inContext,
+                onToggleContext,
+            }),
+    });
+    return (
+        <div {...ctxTarget} style={{ display: "contents" }}>
+            {children}
+        </div>
+    );
 }
 
-function Message({ msg, sources, onOpenCitation }: MessageProps) {
+interface MessageProps {
+    msg: ThreadMessage;
+    /** Position in the thread — what session-level verbs (branch, ask again) act on. */
+    index: number;
+    sources: WorkspaceSource[];
+    selected: string[];
+    setSelected: Dispatch<SetStateAction<string[]>>;
+    /** Opens the cited document scrolled to (and highlighting) the cited passage. */
+    onOpenCitation?: (cite: ThreadReference) => void;
+    onOpenSource?: (source: WorkspaceSource) => void;
+    /** Puts a quote of this text in the composer. */
+    onQuote: (text: string) => void;
+    /** Puts this text in the composer to change and resend. */
+    onEdit: (text: string) => void;
+}
+
+function Message({
+    msg,
+    index,
+    sources,
+    selected,
+    setSelected,
+    onOpenCitation,
+    onOpenSource,
+    onQuote,
+    onEdit,
+}: MessageProps) {
     const isUser = msg.role === "user";
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
     const cites = msg.citations ?? [];
+    const ctxTarget = useContextTarget(
+        isUser
+            ? {
+                  kind: "chat-user-message",
+                  id: String(index),
+                  label: "Question actions",
+                  data: { msg, index },
+                  items: () =>
+                      buildQuestionMenuItems(msg, {
+                          onCopy: text => void copyWithToast(text),
+                          onQuote,
+                          onEdit,
+                      }),
+              }
+            : {
+                  kind: "chat-message",
+                  id: String(index),
+                  label: "Answer actions",
+                  data: { msg, index },
+                  items: () =>
+                      buildAnswerMenuItems(msg, {
+                          onCopy: text => void copyWithToast(text),
+                          onQuote,
+                      }),
+              }
+    );
+    const toggleContext = (source: WorkspaceSource) =>
+        setSelected(prev =>
+            prev.includes(source.id) ? prev.filter(id => id !== source.id) : [...prev, source.id]
+        );
 
     if (isUser) {
         return (
-            <div style={{ animation: "lsw-fadeIn 200ms ease-out", marginBottom: 28 }}>
+            <div
+                {...ctxTarget}
+                style={{ animation: "lsw-fadeIn 200ms ease-out", marginBottom: 28 }}
+            >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                     <div
                         style={{
@@ -199,7 +330,12 @@ function Message({ msg, sources, onOpenCitation }: MessageProps) {
                 {refs.length > 0 && (
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
                         {refs.map(s => (
-                            <SourceChip key={s.id} source={s} size="sm" />
+                            <SourceChip
+                                key={s.id}
+                                source={s}
+                                size="sm"
+                                onOpen={onOpenSource ? () => onOpenSource(s) : undefined}
+                            />
                         ))}
                     </div>
                 )}
@@ -215,7 +351,7 @@ function Message({ msg, sources, onOpenCitation }: MessageProps) {
     }
 
     return (
-        <div style={{ animation: "lsw-fadeIn 240ms ease-out", marginBottom: 28 }}>
+        <div {...ctxTarget} style={{ animation: "lsw-fadeIn 240ms ease-out", marginBottom: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <div
                     style={{
@@ -291,107 +427,115 @@ function Message({ msg, sources, onOpenCitation }: MessageProps) {
                         const meta = SOURCE_META[s.type];
                         const Icon = meta.Icon;
                         return (
-                            <button
+                            <CitationTarget
                                 key={i}
-                                type="button"
-                                onClick={() => onOpenCitation?.(c)}
-                                title="Open the source at this passage"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    gap: 10,
-                                    width: "100%",
-                                    textAlign: "left",
-                                    padding: "8px 8px",
-                                    margin: "0 -8px",
-                                    borderRadius: 8,
-                                    borderTop: i > 0 ? "1px solid var(--line)" : "none",
-                                    background: "transparent",
-                                    cursor: onOpenCitation ? "pointer" : "default",
-                                    transition: "background 120ms",
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.background = "var(--panel)";
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.background = "transparent";
-                                }}
+                                cite={c}
+                                source={s}
+                                inContext={selected.includes(s.id)}
+                                onOpen={onOpenCitation}
+                                onToggleContext={toggleContext}
                             >
-                                <div
+                                <button
+                                    type="button"
+                                    onClick={() => onOpenCitation?.(c)}
+                                    title="Open the source at this passage"
                                     style={{
-                                        width: 22,
-                                        height: 22,
-                                        borderRadius: 5,
-                                        background: "var(--panel)",
-                                        border: "1px solid var(--line)",
                                         display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: meta.color,
-                                        flexShrink: 0,
-                                        marginTop: 1,
+                                        alignItems: "flex-start",
+                                        gap: 10,
+                                        width: "100%",
+                                        textAlign: "left",
+                                        padding: "8px 8px",
+                                        margin: "0 -8px",
+                                        borderRadius: 8,
+                                        borderTop: i > 0 ? "1px solid var(--line)" : "none",
+                                        background: "transparent",
+                                        cursor: onOpenCitation ? "pointer" : "default",
+                                        transition: "background 120ms",
+                                    }}
+                                    onMouseEnter={e => {
+                                        e.currentTarget.style.background = "var(--panel)";
+                                    }}
+                                    onMouseLeave={e => {
+                                        e.currentTarget.style.background = "transparent";
                                     }}
                                 >
-                                    <Icon size={12} />
-                                </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
                                     <div
                                         style={{
+                                            width: 22,
+                                            height: 22,
+                                            borderRadius: 5,
+                                            background: "var(--panel)",
+                                            border: "1px solid var(--line)",
                                             display: "flex",
                                             alignItems: "center",
-                                            gap: 6,
-                                            fontSize: 12,
-                                            fontWeight: 600,
-                                            color: "var(--ink)",
+                                            justifyContent: "center",
+                                            color: meta.color,
+                                            flexShrink: 0,
+                                            marginTop: 1,
                                         }}
                                     >
-                                        <span
+                                        <Icon size={12} />
+                                    </div>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div
                                             style={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                whiteSpace: "nowrap",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 6,
+                                                fontSize: 12,
+                                                fontWeight: 600,
+                                                color: "var(--ink)",
                                             }}
                                         >
-                                            {s.title}
-                                        </span>
-                                        {typeof c.page === "number" && (
                                             <span
-                                                className="mono"
                                                 style={{
-                                                    flexShrink: 0,
-                                                    fontSize: 10,
-                                                    fontWeight: 600,
-                                                    padding: "1px 6px",
-                                                    borderRadius: 4,
-                                                    background: "var(--accent-soft)",
-                                                    color: "var(--accent-ink)",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    whiteSpace: "nowrap",
                                                 }}
                                             >
-                                                p. {c.page}
+                                                {s.title}
                                             </span>
-                                        )}
+                                            {typeof c.page === "number" && (
+                                                <span
+                                                    className="mono"
+                                                    style={{
+                                                        flexShrink: 0,
+                                                        fontSize: 10,
+                                                        fontWeight: 600,
+                                                        padding: "1px 6px",
+                                                        borderRadius: 4,
+                                                        background: "var(--accent-soft)",
+                                                        color: "var(--accent-ink)",
+                                                    }}
+                                                >
+                                                    p. {c.page}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div
+                                            style={{
+                                                fontSize: 12,
+                                                color: "var(--ink-3)",
+                                                marginTop: 2,
+                                                lineHeight: 1.5,
+                                            }}
+                                        >
+                                            {c.snippet}
+                                        </div>
                                     </div>
-                                    <div
+                                    <span
                                         style={{
-                                            fontSize: 12,
                                             color: "var(--ink-3)",
-                                            marginTop: 2,
-                                            lineHeight: 1.5,
+                                            flexShrink: 0,
+                                            alignSelf: "center",
                                         }}
                                     >
-                                        {c.snippet}
-                                    </div>
-                                </div>
-                                <span
-                                    style={{
-                                        color: "var(--ink-3)",
-                                        flexShrink: 0,
-                                        alignSelf: "center",
-                                    }}
-                                >
-                                    <IconChevronRight size={12} />
-                                </span>
-                            </button>
+                                        <IconChevronRight size={12} />
+                                    </span>
+                                </button>
+                            </CitationTarget>
                         );
                     })}
                 </div>
@@ -455,6 +599,9 @@ interface ComposerProps {
     onToggleWebSearch: () => void;
     thinking: boolean;
     onToggleThinking: () => void;
+    onOpenSource?: (source: WorkspaceSource) => void;
+    /** Text handed in from outside: a quote to reply around, or a question to edit. */
+    seed?: ComposerSeed | null;
 }
 
 const ATTACH_MAX_COUNT = 5;
@@ -519,6 +666,8 @@ function Composer({
     onToggleWebSearch,
     thinking,
     onToggleThinking,
+    onOpenSource,
+    seed,
 }: ComposerProps) {
     const [text, setText] = useState("");
     const [focus, setFocus] = useState(false);
@@ -633,8 +782,91 @@ function Composer({
         setAttachError(null);
     };
 
+    // A seed lands in the box and puts the caret at its end, so the person can
+    // keep typing: a quote goes under whatever is there, an edit replaces it.
+    useEffect(() => {
+        if (!seed) return;
+        setText(prev =>
+            seed.mode === "replace" || !prev.trim()
+                ? seed.text
+                : `${prev.replace(/\s+$/, "")}\n\n${seed.text}`
+        );
+        const el = ref.current;
+        if (!el) return;
+        window.requestAnimationFrame(() => {
+            el.focus();
+            el.setSelectionRange(el.value.length, el.value.length);
+        });
+    }, [seed]);
+
+    const selectedText = () => {
+        const el = ref.current;
+        return el ? el.value.slice(el.selectionStart, el.selectionEnd) : "";
+    };
+    const replaceSelection = (insert: string) => {
+        const el = ref.current;
+        if (!el) {
+            setText(prev => prev + insert);
+            return;
+        }
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        setText(el.value.slice(0, start) + insert + el.value.slice(end));
+        window.requestAnimationFrame(() => {
+            el.focus();
+            el.setSelectionRange(start + insert.length, start + insert.length);
+        });
+    };
+    // The box opts into right-click (the browser's menu has nothing to offer a
+    // plain textarea that this one lacks); chips inside it stay their own targets.
+    const composerTarget = useContextTarget({
+        kind: "composer",
+        label: "Composer actions",
+        editable: true,
+        items: () =>
+            buildComposerMenuItems(
+                {
+                    hasSelection: selectedText().length > 0,
+                    hasContent: text.trim().length > 0 || attachments.length > 0,
+                    uploading,
+                    disabled: Boolean(disabled),
+                    webSearch,
+                    thinking,
+                    reasoningEnabled: Boolean(chatRoutes.reasoningEnabled),
+                    reasoningDisabledReason: chatRoutes.reasoningDisabledReason ?? undefined,
+                },
+                {
+                    onCut: () => {
+                        const cut = selectedText();
+                        void copyText(cut).then(ok => {
+                            if (ok) replaceSelection("");
+                            else toast.error("Couldn't cut");
+                        });
+                    },
+                    onCopy: () => void copyWithToast(selectedText()),
+                    onPaste: () =>
+                        void readClipboardText().then(clip => {
+                            if (clip === null) {
+                                toast.info("Clipboard access was refused — paste with ⌘V instead");
+                            } else {
+                                replaceSelection(clip);
+                            }
+                        }),
+                    onAttach: () => fileInputRef.current?.click(),
+                    onToggleWebSearch,
+                    onToggleThinking,
+                    onClear: () => {
+                        setText("");
+                        setAttachments([]);
+                        setAttachError(null);
+                    },
+                }
+            ),
+    });
+
     return (
         <div
+            {...composerTarget}
             style={{
                 margin: "0 auto",
                 maxWidth: CHAT_COLUMN_MAX_PX,
@@ -678,6 +910,7 @@ function Composer({
                             key={s.id}
                             source={s}
                             size="sm"
+                            onOpen={onOpenSource ? () => onOpenSource(s) : undefined}
                             onRemove={() => setSelected(selected.filter(x => x !== s.id))}
                         />
                     ))}
@@ -945,8 +1178,20 @@ interface AttachmentChipProps {
 
 function AttachmentChip({ attachment, onRemove }: AttachmentChipProps) {
     const isImage = attachment.kind === "image";
+    const ctxTarget = useContextTarget({
+        kind: "attachment",
+        id: attachment.id,
+        label: `Actions for ${attachment.name}`,
+        data: attachment,
+        items: () =>
+            buildAttachmentMenuItems(attachment, {
+                onOpen: () => window.open(attachment.url, "_blank", "noopener,noreferrer"),
+                onRemove,
+            }),
+    });
     return (
         <span
+            {...ctxTarget}
             style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -1185,7 +1430,17 @@ export function AvatarMenu({
                     )}
                     <button
                         type="button"
-                        onClick={() => setTheme(isDark ? "light" : "dark")}
+                        onClick={() => {
+                            const next = isDark ? "light" : "dark";
+                            setTheme(next);
+                            // Remembered as a preference, so the choice follows
+                            // the person to their next browser. Best effort.
+                            void writeSettingValue({
+                                key: "appearance.theme",
+                                scope: "member",
+                                value: next,
+                            }).catch(() => undefined);
+                        }}
                         style={{
                             width: "100%",
                             display: "flex",
@@ -1319,6 +1574,10 @@ export interface AskPanelProps {
     isSending: boolean;
     /** Opens the cited document scrolled to (and highlighting) the cited passage. */
     onOpenCitation?: (cite: ThreadReference) => void;
+    /** Opens a source from a context chip. */
+    onOpenSource?: (source: WorkspaceSource) => void;
+    /** Text the shell wants in the composer — a passage to ask about. */
+    composerSeed?: ComposerSeed | null;
     onOpenAdd: () => void;
     onNewChat: () => void;
     openPalette: () => void;
@@ -1346,6 +1605,8 @@ export function AskPanel({
     sendMessage,
     isSending,
     onOpenCitation,
+    onOpenSource,
+    composerSeed,
     onOpenAdd,
     onNewChat,
     openPalette,
@@ -1370,6 +1631,41 @@ export function AskPanel({
     }, [thread, isSending]);
 
     const isEmpty = thread.length === 0;
+
+    // One seed channel for the composer: the shell's seed and the panel's own
+    // quote / edit verbs both land here, latest wins.
+    const [seed, setSeed] = useState<ComposerSeed | null>(null);
+    useEffect(() => {
+        if (composerSeed) setSeed(composerSeed);
+    }, [composerSeed]);
+    const quote = useCallback(
+        (text: string) => setSeed({ text: quoteBlock(text), mode: "append", nonce: Date.now() }),
+        []
+    );
+    const edit = useCallback(
+        (text: string) => setSeed({ text, mode: "replace", nonce: Date.now() }),
+        []
+    );
+
+    const paneTarget = useContextTarget({
+        kind: "chat",
+        label: "Chat actions",
+        data: { thread, sources },
+        items: () =>
+            buildChatPaneMenuItems({
+                isEmpty,
+                hasContext: selected.length > 0,
+                onNewChat,
+                onClearContext: () => setSelected([]),
+                onExportMarkdown: () =>
+                    downloadTextFile(
+                        transcriptFilename(thread),
+                        transcriptMarkdown(thread, sources)
+                    ),
+                onOpenPalette: openPalette,
+            }),
+    });
+
     const latestRole = thread.at(-1)?.role;
     const showTyping = isSending && latestRole === "user";
 
@@ -1402,6 +1698,7 @@ export function AskPanel({
 
     return (
         <main
+            {...paneTarget}
             style={{
                 flex: 1,
                 display: "flex",
@@ -1488,8 +1785,14 @@ export function AskPanel({
                                 <Message
                                     key={i}
                                     msg={m}
+                                    index={i}
                                     sources={sources}
+                                    selected={selected}
+                                    setSelected={setSelected}
                                     onOpenCitation={onOpenCitation}
+                                    onOpenSource={onOpenSource}
+                                    onQuote={quote}
+                                    onEdit={edit}
                                 />
                             ))}
                             {showTyping && <TypingIndicator />}
@@ -1517,6 +1820,8 @@ export function AskPanel({
                     onToggleWebSearch={onToggleWebSearch}
                     thinking={thinking}
                     onToggleThinking={onToggleThinking}
+                    onOpenSource={onOpenSource}
+                    seed={seed}
                 />
                 <div
                     style={{

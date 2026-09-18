@@ -6,6 +6,7 @@ import React, {
     type Dispatch,
     type MouseEvent,
     type SetStateAction,
+    useCallback,
     useEffect,
     useMemo,
     useRef,
@@ -40,20 +41,16 @@ import {
     joinFolderPath,
     type FolderTreeNode,
 } from "~/lib/folders/path";
-import { ContextMenu } from "./ContextMenu";
+import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import {
     buildBlankRailMenuItems,
+    buildSelectionMenuItems,
     buildFolderMenuItems,
     buildSourceMenuItems,
-    type SourceContextMenuItem,
 } from "./sourceContextMenu";
 import { SOURCE_META, type WorkspaceFolder, type WorkspaceSource } from "./types";
-
-type RailMenu =
-    | { kind: "source"; x: number; y: number; source: WorkspaceSource }
-    | { kind: "folder"; x: number; y: number; folderPath: string; itemIds: string[] }
-    | { kind: "blank"; x: number; y: number };
 
 /** What is being dragged over the rail: a source into a folder, or a folder into a folder. */
 type RailDrag = { kind: "source"; id: string } | { kind: "folder"; path: string };
@@ -173,14 +170,28 @@ interface SourceRowProps {
     selected: boolean;
     toggleSelected: (id: string) => void;
     onOpen?: (source: WorkspaceSource) => void;
-    onOpenMenu?: (point: { clientX: number; clientY: number }, source: WorkspaceSource) => void;
+    /** The row's actions; absent when the rail is read-only. */
+    menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }
 
-function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: SourceRowProps) {
+function SourceRow({ source, selected, toggleSelected, onOpen, menuItems }: SourceRowProps) {
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
+    const menu = useActionMenu();
+    const menuLabel = `Actions for ${source.title}`;
+    const ctxTarget = useContextTarget(
+        menuItems
+            ? {
+                  kind: "source",
+                  id: source.id,
+                  label: menuLabel,
+                  data: source,
+                  items: () => menuItems(source),
+              }
+            : null
+    );
     const tags = source.tags ?? [];
     const visibleTags = tags.slice(0, 2);
     const extra = tags.length - visibleTags.length;
@@ -189,21 +200,9 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
     return (
         <div
             data-testid={`source-row-${source.id}`}
+            {...ctxTarget}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            onContextMenu={e => {
-                if (!onOpenMenu) return;
-                e.preventDefault();
-                e.stopPropagation();
-                onOpenMenu({ clientX: e.clientX, clientY: e.clientY }, source);
-            }}
-            onKeyDown={e => {
-                if (!onOpenMenu) return;
-                if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
-                e.preventDefault();
-                const rect = e.currentTarget.getBoundingClientRect();
-                onOpenMenu({ clientX: rect.left + 16, clientY: rect.bottom }, source);
-            }}
             style={{
                 display: "flex",
                 alignItems: "center",
@@ -317,18 +316,24 @@ function SourceRow({ source, selected, toggleSelected, onOpen, onOpenMenu }: Sou
                     )}
                 </div>
             </div>
-            {onOpenMenu && (
+            {menuItems && (
                 <button
                     type="button"
                     data-testid={`source-row-menu-${source.id}`}
-                    aria-label={`Actions for ${source.title}`}
+                    aria-label={menuLabel}
                     aria-haspopup="menu"
                     title="Actions"
                     onClick={e => {
                         e.preventDefault();
                         e.stopPropagation();
                         const rect = e.currentTarget.getBoundingClientRect();
-                        onOpenMenu({ clientX: rect.right, clientY: rect.bottom }, source);
+                        menu.open({
+                            x: rect.right,
+                            y: rect.bottom,
+                            items: menuItems(source),
+                            ariaLabel: menuLabel,
+                            kind: "source",
+                        });
                     }}
                     onFocus={() => setMenuFocus(true)}
                     onBlur={() => setMenuFocus(false)}
@@ -373,7 +378,8 @@ interface FolderHeaderProps {
     collapsed: boolean;
     onToggle: () => void;
     onSelectAll: (ids: string[], add: boolean) => void;
-    onOpenMenu?: (point: { clientX: number; clientY: number }) => void;
+    /** The folder's actions; absent when folders are read-only. */
+    menuItems?: () => ActionMenuItem[];
     selected: string[];
     dragOver: boolean;
     /** Folders can be picked up and dropped into other folders. */
@@ -388,7 +394,7 @@ function FolderHeader({
     collapsed,
     onToggle,
     onSelectAll,
-    onOpenMenu,
+    menuItems,
     selected,
     dragOver,
     draggable,
@@ -397,6 +403,13 @@ function FolderHeader({
 }: FolderHeaderProps) {
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
+    const menu = useActionMenu();
+    const menuLabel = `Actions for folder ${displayFolderPath(node.path)}`;
+    const ctxTarget = useContextTarget(
+        menuItems
+            ? { kind: "folder", id: node.path, label: menuLabel, data: node, items: menuItems }
+            : null
+    );
     const itemIds = collectItemIds(node);
     const selCount = itemIds.filter(id => selected.includes(id)).length;
     const state: CheckState =
@@ -409,6 +422,7 @@ function FolderHeader({
     return (
         <div
             data-testid={`folder-row-${node.path}`}
+            {...ctxTarget}
             draggable={draggable}
             onDragStart={e => {
                 if (!draggable) return;
@@ -420,12 +434,6 @@ function FolderHeader({
             onDragEnd={onDragEnd}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            onContextMenu={e => {
-                if (!onOpenMenu) return;
-                e.preventDefault();
-                e.stopPropagation();
-                onOpenMenu({ clientX: e.clientX, clientY: e.clientY });
-            }}
             style={{
                 display: "flex",
                 alignItems: "center",
@@ -491,18 +499,24 @@ function FolderHeader({
                         style={{ color: "var(--ink-3)", flexShrink: 0 }}
                     />
                 )}
-                {onOpenMenu && (
+                {menuItems && (
                     <button
                         type="button"
                         data-testid={`folder-menu-${node.path}`}
-                        aria-label={`Actions for folder ${displayFolderPath(node.path)}`}
+                        aria-label={menuLabel}
                         aria-haspopup="menu"
                         title="Folder actions"
                         onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
                             const rect = e.currentTarget.getBoundingClientRect();
-                            onOpenMenu({ clientX: rect.right, clientY: rect.bottom });
+                            menu.open({
+                                x: rect.right,
+                                y: rect.bottom,
+                                items: menuItems(),
+                                ariaLabel: menuLabel,
+                                kind: "folder",
+                            });
                         }}
                         onFocus={() => setMenuFocus(true)}
                         onBlur={() => setMenuFocus(false)}
@@ -559,6 +573,10 @@ export interface SourceRailProps {
     /** "Restrict access…" — who can see this one document. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
+    /** Delete several at once — the multi-selection menu's Delete. */
+    onDeleteSources?: (sources: WorkspaceSource[]) => void;
+    /** Open the Add dialog with this folder pre-selected. */
+    onAddToFolder?: (path: string) => void;
     activeFolder: string | null;
     setActiveFolder: Dispatch<SetStateAction<string | null>>;
     activeTag: string | null;
@@ -598,10 +616,15 @@ interface BranchContext {
     canDragFolders: boolean;
     dropOnFolder: (target: string) => void;
     onOpenSource?: (source: WorkspaceSource) => void;
-    openSourceMenu: (point: { clientX: number; clientY: number }, source: WorkspaceSource) => void;
-    openFolderMenu: (point: { clientX: number; clientY: number }, node: SourceNode) => void;
+    sourceMenuItems: (source: WorkspaceSource) => ActionMenuItem[];
+    folderMenuItems: (node: SourceNode) => ActionMenuItem[];
     /** True when the folder, or an ancestor, is restricted to the people granted access. */
     isRestricted: (path: string) => boolean;
+}
+
+/** Every folder path in a subtree, the root included. */
+function collectFolderPaths(node: SourceNode): string[] {
+    return [node.path, ...node.children.flatMap(collectFolderPaths)];
 }
 
 function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchContext }) {
@@ -625,7 +648,7 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
                         selected={ctx.selected.includes(s.id)}
                         toggleSelected={ctx.toggleSelected}
                         onOpen={ctx.onOpenSource}
-                        onOpenMenu={ctx.openSourceMenu}
+                        menuItems={ctx.sourceMenuItems}
                     />
                 </div>
             ))}
@@ -676,7 +699,7 @@ function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
                 collapsed={isCollapsed}
                 onToggle={() => ctx.toggleCollapsed(node.path)}
                 onSelectAll={ctx.selectMany}
-                onOpenMenu={point => ctx.openFolderMenu(point, node)}
+                menuItems={() => ctx.folderMenuItems(node)}
                 dragOver={isDragOver}
                 draggable={ctx.canDragFolders && !isUnfiled}
                 onDragStart={() => ctx.setDrag({ kind: "folder", path: node.path })}
@@ -714,6 +737,8 @@ export function SourceRail({
     onRenameSource,
     onRestrictAccess,
     onDeleteSource,
+    onDeleteSources,
+    onAddToFolder,
     activeFolder,
     setActiveFolder,
     activeTag,
@@ -730,8 +755,8 @@ export function SourceRail({
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
     const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
     const [drag, setDrag] = useState<RailDrag | null>(null);
-    const [menu, setMenu] = useState<RailMenu | null>(null);
-
+    /** Sources picked up with "Cut", waiting for "Paste" on a folder. */
+    const [cut, setCut] = useState<string[]>([]);
     useEffect(() => {
         try {
             if (localStorage.getItem(RAIL_TAB_KEY) === "history") setTab("history");
@@ -753,46 +778,105 @@ export function SourceRail({
     // A rail without history props can never sit on a tab that isn't there.
     const activeTab: RailTab = history ? tab : "sources";
 
-    const closeMenu = () => setMenu(null);
+    const folderFor = useCallback(
+        (path: string): WorkspaceFolder =>
+            folders.find(f => f.name === path) ?? {
+                id: `f-${path}`,
+                name: path,
+                color: "var(--ink-3)",
+            },
+        [folders]
+    );
 
-    const folderFor = (path: string): WorkspaceFolder =>
-        folders.find(f => f.name === path) ?? {
-            id: `f-${path}`,
-            name: path,
-            color: "var(--ink-3)",
-        };
-
-    const menuItems = useMemo<SourceContextMenuItem[]>(() => {
-        if (!menu) return [];
-        if (menu.kind === "source") {
-            return buildSourceMenuItems(menu.source, folders, selected, {
+    /**
+     * A source's menu. Inside a multi-selection every verb acts on the whole
+     * selection; outside it, on the one row — the selection is left alone,
+     * because here "selected" means "in the chat's context", and collapsing
+     * it on a stray right-click would silently change the next answer.
+     */
+    const sourceMenuItems = useCallback(
+        (source: WorkspaceSource): ActionMenuItem[] => {
+            if (selected.length > 1 && selected.includes(source.id)) {
+                const chosen = sources.filter(s => selected.includes(s.id));
+                return buildSelectionMenuItems(chosen, folders, {
+                    onRemoveFromContext: ids =>
+                        setSelected(prev => prev.filter(id => !ids.includes(id))),
+                    onMoveToFolder: onMoveToFolder
+                        ? (ids, name) => ids.forEach(id => onMoveToFolder(id, name))
+                        : undefined,
+                    onDelete: onDeleteSources,
+                });
+            }
+            return buildSourceMenuItems(source, folders, selected, {
                 onOpen: onOpenSource,
-                onToggleContext: source => {
+                onToggleContext: s => {
                     setSelected(prev =>
-                        prev.includes(source.id)
-                            ? prev.filter(id => id !== source.id)
-                            : [...prev, source.id]
+                        prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
                     );
                 },
+                onOpenInNewTab: s => {
+                    if (s.documentId) {
+                        window.open(
+                            `/employer/documents/viewer?docId=${s.documentId}`,
+                            "_blank",
+                            "noopener,noreferrer"
+                        );
+                    }
+                },
+                onShowInKnowledge: onOpenKnowledge ? () => onOpenKnowledge() : undefined,
                 onRename: onRenameSource,
                 onMoveToFolder,
-                onCopyTitle: source => {
-                    void copyText(source.title);
+                onCut: onMoveToFolder ? s => setCut([s.id]) : undefined,
+                onCopyTitle: s => {
+                    void copyText(s.title);
+                },
+                onCopyLink: s => {
+                    void copyText(
+                        `${window.location.origin}/employer/documents?source=${encodeURIComponent(s.id)}`
+                    );
                 },
                 onRestrictAccess,
                 onDelete: onDeleteSource,
             });
-        }
-        if (menu.kind === "folder") {
-            const path = menu.folderPath;
+        },
+        [
+            sources,
+            folders,
+            selected,
+            setSelected,
+            onOpenSource,
+            onOpenKnowledge,
+            onRenameSource,
+            onMoveToFolder,
+            onRestrictAccess,
+            onDeleteSource,
+            onDeleteSources,
+        ]
+    );
+
+    /** Move whatever was cut into `target`, then empty the buffer. */
+    const pasteCut = useCallback(
+        (target: string) => {
+            if (!onMoveToFolder) return;
+            cut.forEach(id => onMoveToFolder(id, target));
+            setCut([]);
+        },
+        [cut, onMoveToFolder]
+    );
+
+    const folderMenuItems = useCallback(
+        (node: SourceNode): ActionMenuItem[] => {
+            const path = node.path;
+            const itemIds = collectItemIds(node);
             const isUnfiled = path === UNFILED_FOLDER;
-            const selCount = menu.itemIds.filter(id => selected.includes(id)).length;
+            const selCount = itemIds.filter(id => selected.includes(id)).length;
             const selectState: "none" | "some" | "all" =
                 selCount === 0
                     ? "none"
-                    : selCount === menu.itemIds.length && menu.itemIds.length > 0
+                    : selCount === itemIds.length && itemIds.length > 0
                       ? "all"
                       : "some";
+            const subtree = collectFolderPaths(node);
             return buildFolderMenuItems(path, {
                 onOpen:
                     activeFolder === path
@@ -801,6 +885,21 @@ export function SourceRail({
                               setActiveFolder(path);
                               setActiveTag(null);
                           },
+                onAddSource: onAddToFolder ? () => onAddToFolder(path) : undefined,
+                cutCount: cut.length,
+                onPaste: onMoveToFolder ? () => pasteCut(path) : undefined,
+                onCollapseAll:
+                    subtree.length > 1 || node.items.length > 0
+                        ? collapse =>
+                              setCollapsed(prev => {
+                                  const next = { ...prev };
+                                  subtree.forEach(p => {
+                                      next[p] = collapse;
+                                  });
+                                  return next;
+                              })
+                        : undefined,
+                allCollapsed: subtree.every(p => collapsed[p]),
                 onNewSubfolder: onNewFolder && !isUnfiled ? () => onNewFolder(path) : undefined,
                 onRename:
                     onRenameFolder && !isUnfiled
@@ -818,42 +917,90 @@ export function SourceRail({
                     setSelected(prev => {
                         if (add) {
                             const set = new Set(prev);
-                            menu.itemIds.forEach(id => set.add(id));
+                            itemIds.forEach(id => set.add(id));
                             return [...set];
                         }
-                        return prev.filter(id => !menu.itemIds.includes(id));
+                        return prev.filter(id => !itemIds.includes(id));
                     });
                 },
                 selectState,
                 folders: folders.map(f => f.name),
             });
-        }
-        return buildBlankRailMenuItems({
-            onAddKnowledge: onOpenAdd,
-            onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
-        });
-        // folderFor is derived from `folders`, which is a dependency.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        menu,
-        folders,
-        selected,
-        activeFolder,
-        onOpenSource,
-        onRenameSource,
-        onRestrictAccess,
-        onMoveToFolder,
-        onDeleteSource,
-        onRenameFolder,
-        onShareFolder,
-        onMoveFolder,
-        onDeleteFolder,
-        onOpenAdd,
-        onNewFolder,
-        setSelected,
-        setActiveFolder,
-        setActiveTag,
-    ]);
+        },
+        [
+            selected,
+            setSelected,
+            activeFolder,
+            setActiveFolder,
+            setActiveTag,
+            folders,
+            folderFor,
+            collapsed,
+            cut.length,
+            pasteCut,
+            onAddToFolder,
+            onMoveToFolder,
+            onNewFolder,
+            onRenameFolder,
+            onMoveFolder,
+            onDeleteFolder,
+            onShareFolder,
+        ]
+    );
+
+    /** Empty rail space: the verbs that make something new. */
+    const railTarget = useContextTarget({
+        kind: "rail",
+        label: "Sidebar actions",
+        items: () =>
+            buildBlankRailMenuItems({
+                onAddKnowledge: onOpenAdd,
+                onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
+                cutCount: cut.length,
+                onPaste: onMoveToFolder ? () => pasteCut(UNFILED_FOLDER) : undefined,
+            }),
+    });
+
+    /** The tab strip: switch halves, or put the rail away. */
+    const tabsTarget = useContextTarget(
+        history
+            ? {
+                  kind: "rail-tabs",
+                  label: "Sidebar tabs",
+                  items: (): ActionMenuItem[] => [
+                      {
+                          type: "item",
+                          id: "tab-sources",
+                          label: "Sources",
+                          icon: activeTab === "sources" ? "check" : "folder",
+                          checked: activeTab === "sources",
+                          onSelect: () => setTab("sources"),
+                      },
+                      {
+                          type: "item",
+                          id: "tab-history",
+                          label: "History",
+                          icon: activeTab === "history" ? "check" : "history",
+                          checked: activeTab === "history",
+                          onSelect: () => setTab("history"),
+                      },
+                      ...(onClose
+                          ? [
+                                { type: "separator" as const, id: "sep-hide" },
+                                {
+                                    type: "item" as const,
+                                    id: "hide",
+                                    label: "Hide sidebar",
+                                    icon: "sidebar" as const,
+                                    shortcut: "⌘\\",
+                                    onSelect: onClose,
+                                },
+                            ]
+                          : []),
+                  ],
+              }
+            : null
+    );
 
     const toggleCollapsed = (path: string) => setCollapsed(p => ({ ...p, [path]: !p[path] }));
 
@@ -930,16 +1077,8 @@ export function SourceRail({
         canDragFolders: Boolean(onMoveFolder),
         dropOnFolder,
         onOpenSource,
-        openSourceMenu: (point, source) =>
-            setMenu({ kind: "source", x: point.clientX, y: point.clientY, source }),
-        openFolderMenu: (point, node) =>
-            setMenu({
-                kind: "folder",
-                x: point.clientX,
-                y: point.clientY,
-                folderPath: node.path,
-                itemIds: collectItemIds(node),
-            }),
+        sourceMenuItems,
+        folderMenuItems,
     };
 
     const asideStyle: CSSProperties = {
@@ -1088,6 +1227,7 @@ export function SourceRail({
                 <div
                     role="tablist"
                     aria-label="Sidebar section"
+                    {...tabsTarget}
                     style={{
                         margin: "0 14px 10px",
                         display: "flex",
@@ -1208,10 +1348,7 @@ export function SourceRail({
             ) : (
                 <div
                     data-testid="source-rail-list"
-                    onContextMenu={e => {
-                        e.preventDefault();
-                        setMenu({ kind: "blank", x: e.clientX, y: e.clientY });
-                    }}
+                    {...railTarget}
                     onDragOver={e => {
                         // Empty rail space is the top level: a nested folder dropped
                         // here moves out of its parent.
@@ -1323,22 +1460,6 @@ export function SourceRail({
                         clear
                     </button>
                 </div>
-            )}
-            {menu && (
-                <ContextMenu
-                    open
-                    x={menu.x}
-                    y={menu.y}
-                    items={menuItems}
-                    ariaLabel={
-                        menu.kind === "source"
-                            ? `Actions for ${menu.source.title}`
-                            : menu.kind === "folder"
-                              ? `Actions for folder ${displayFolderPath(menu.folderPath)}`
-                              : "Sidebar actions"
-                    }
-                    onClose={closeMenu}
-                />
             )}
         </aside>
     );

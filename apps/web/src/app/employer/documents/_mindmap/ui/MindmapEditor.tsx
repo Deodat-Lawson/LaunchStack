@@ -41,7 +41,8 @@ import { EditorStore, type ChromeDepth, type EditorState } from "../model/store"
 import type { Point, ShapeId } from "../model/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
-import { CanvasContextMenu } from "./CanvasContextMenu";
+import { useContextTarget } from "~/components/context-menu";
+import { buildCanvasMenuItems } from "./canvasContextMenu";
 import { buildCommands, CommandPalette } from "./CommandPalette";
 import { CommentsPanel } from "./CommentsPanel";
 import { EditorProvider, useCommittedDoc, useEditor } from "./EditorContext";
@@ -101,6 +102,11 @@ export interface MindmapEditorProps {
      * leaves it unset and gets a link to the library.
      */
     onBack?: () => void;
+    /**
+     * "Ask about this in chat" on a topic. The workspace wires it to the
+     * composer; the standalone route leaves it unset and the verb is absent.
+     */
+    onAskAboutNode?: (text: string) => void;
 }
 
 type LeftTab = "shapes" | "outline" | "comments" | "history";
@@ -247,11 +253,22 @@ export function MindmapEditor(props: MindmapEditorProps) {
         getViewportSize: () => stageSize,
     });
 
+    // The canvas is one right-click target. Its own handler fixes the
+    // selection under the cursor first (React's delegated handler runs before
+    // the document-level one), so the menu built here always acts on what
+    // was clicked. Right-drags pan, and the handler swallows their event.
+    const onAskAboutNode = props.onAskAboutNode;
+    const canvasTarget = useContextTarget({
+        kind: "mindmap-canvas",
+        label: "Canvas actions",
+        items: () => buildCanvasMenuItems(store, { onAskAboutNode }),
+    });
+
     const canvasCallbacks = useMemo(
         () => ({
-            // Radix's context menu opens itself from the same event; the canvas
-            // handler's job is only to make sure the right thing is selected,
-            // which `useCanvasInteractions` already did before calling this.
+            // The shared context-menu layer opens from the same event; the
+            // canvas handler's job is only to make sure the right thing is
+            // selected, which `useCanvasInteractions` already did before this.
             onContextMenuAt: () => undefined,
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
@@ -485,17 +502,15 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                     }}
                                     onDrop={onDrop}
                                 >
-                                    <CanvasContextMenu>
-                                        <div className="flex min-h-0 min-w-0 flex-1">
-                                            <Canvas
-                                                callbacks={canvasCallbacks}
-                                                peers={presence.peers}
-                                                onCursorMove={presence.reportCursor}
-                                            >
-                                                <TextEditorOverlay />
-                                            </Canvas>
-                                        </div>
-                                    </CanvasContextMenu>
+                                    <div className="flex min-h-0 min-w-0 flex-1" {...canvasTarget}>
+                                        <Canvas
+                                            callbacks={canvasCallbacks}
+                                            peers={presence.peers}
+                                            onCursorMove={presence.reportCursor}
+                                        >
+                                            <TextEditorOverlay />
+                                        </Canvas>
+                                    </div>
 
                                     <ConnectedStaleBanner staleBy={presence.staleBy} />
 

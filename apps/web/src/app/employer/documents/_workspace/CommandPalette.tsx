@@ -2,21 +2,67 @@
 
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconPlus, IconSearch, type IconProps } from "./icons";
+import { searchSettings } from "~/lib/settings/registry";
+import { useSettingValue } from "~/lib/settings/useSettings";
+import { Command as CommandIcon, Settings } from "lucide-react";
+import { IconSearch, type IconProps } from "./icons";
+import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
+import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
+
+/**
+ * The palette's "Actions" group is the action registry, flattened: every
+ * app-level verb the context menu offers on empty space is here too, and a
+ * submenu (Theme) becomes one row per choice. That is the rule that keeps
+ * right-click honest — nothing lives in a context menu alone.
+ */
+function registryPaletteItems(onClose: () => void): PaletteItem[] {
+    const ctx = {
+        x: 0,
+        y: 0,
+        via: "keyboard" as const,
+        chain: [{ kind: APP_TARGET_KIND }],
+        selection: null,
+        element: null,
+    };
+    const actions = listActions().filter(action => action.palette !== false);
+    const rows: PaletteItem[] = [];
+    const push = (item: ActionMenuItem, prefix?: string) => {
+        if (item.type === "submenu") {
+            item.items.forEach(child => push(child, item.label));
+            return;
+        }
+        if (item.type !== "item" || item.disabled) return;
+        const Icon = item.icon ? ACTION_MENU_ICONS[item.icon] : CommandIcon;
+        rows.push({
+            kind: "action",
+            id: `registry:${item.id}`,
+            label: prefix ? `${prefix}: ${item.label}` : item.label,
+            sub: item.shortcut ? `Action · ${item.shortcut}` : "Action",
+            Icon: Icon as unknown as ComponentType<IconProps>,
+            onRun: () => {
+                onClose();
+                item.onSelect();
+            },
+        });
+    };
+    actionItems(ctx.chain[0]!, ctx, actions).forEach(item => push(item));
+    return rows;
+}
 
 export interface CommandPaletteProps {
     open: boolean;
     onClose: () => void;
     sources: WorkspaceSource[];
-    onOpenAdd: () => void;
     onPickSource: (id: string) => void;
     /** If provided, feature rows open Studio with this id instead of hard-navigating. */
     onPickFeature?: (featureId: string) => void;
+    /** Opens Settings on the row for this registry key. */
+    onPickSetting?: (key: string) => void;
 }
 
 interface PaletteItem {
-    kind: "action" | "feature" | "source";
+    kind: "action" | "feature" | "source" | "setting";
     id: string;
     label: string;
     sub?: string;
@@ -30,12 +76,14 @@ export function CommandPalette({
     open,
     onClose,
     sources,
-    onOpenAdd,
     onPickSource,
     onPickFeature,
+    onPickSetting,
 }: CommandPaletteProps) {
     const router = useRouter();
     const [q, setQ] = useState("");
+    // The one lab that only surfaces a palette entry: hidden until it is on.
+    const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,16 +103,10 @@ export function CommandPalette({
     );
 
     const items = useMemo<PaletteItem[]>(() => {
-        const base: PaletteItem[] = [];
-        base.push({
-            kind: "action",
-            id: "add",
-            label: "Add a new source",
-            sub: "Files, folder, audio, connect…",
-            Icon: IconPlus,
-            onRun: onOpenAdd,
-        });
-        DEMOTED_FEATURES.forEach(f =>
+        // The registry is read when the palette opens, so it reflects what is
+        // mounted right now; `open` is in the deps for that reason.
+        const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
+        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps).forEach(f =>
             base.push({
                 kind: "feature",
                 id: f.id,
@@ -91,13 +133,39 @@ export function CommandPalette({
         });
         const qq = q.toLowerCase().trim();
         if (!qq) return base;
-        return base.filter(
+        const matched = base.filter(
             i =>
                 i.label.toLowerCase().includes(qq) ||
                 (i.sub ?? "").toLowerCase().includes(qq) ||
                 (i.keywords ?? "").toLowerCase().includes(qq)
         );
-    }, [q, sources, onOpenAdd, onPickSource, onPickFeature, navigate]);
+        // Settings are searched by what people call them, so "dark mode"
+        // finds the theme row even though no label says it.
+        for (const definition of searchSettings(qq, 6)) {
+            matched.push({
+                kind: "setting",
+                id: definition.key,
+                label: definition.label,
+                sub: `Settings · ${definition.description}`,
+                Icon: Settings,
+                onRun: () => {
+                    if (onPickSetting) onPickSetting(definition.key);
+                    else navigate(`/employer/settings#${definition.key}`);
+                },
+            });
+        }
+        return matched;
+    }, [
+        q,
+        open,
+        onClose,
+        sources,
+        onPickSource,
+        onPickFeature,
+        onPickSetting,
+        navigate,
+        predictiveGaps,
+    ]);
 
     useEffect(() => {
         if (idx >= items.length) setIdx(0);
@@ -132,6 +200,7 @@ export function CommandPalette({
         action: { label: "Actions", items: items.filter(i => i.kind === "action") },
         feature: { label: "Features", items: items.filter(i => i.kind === "feature") },
         source: { label: "Sources", items: items.filter(i => i.kind === "source") },
+        setting: { label: "Settings", items: items.filter(i => i.kind === "setting") },
     } as const;
 
     let counter = -1;
@@ -180,7 +249,7 @@ export function CommandPalette({
                             setQ(e.target.value);
                             setIdx(0);
                         }}
-                        placeholder="Jump to anything — sources, features, actions…"
+                        placeholder="Jump to anything — sources, features, settings…"
                         style={{
                             flex: 1,
                             border: "none",

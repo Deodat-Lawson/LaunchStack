@@ -6,8 +6,13 @@
  * grant; the row records who made it): users belong to multiple workspaces,
  * every consumer of the synced data is company-owned, and the reconciler and
  * sync jobs run in the worker with no user session. One table serves every
- * OAuth provider — `provider` discriminates — Google Drive, Slack, and GitHub
- * today.
+ * OAuth provider — `provider` discriminates — Google Drive, Slack, GitHub,
+ * and Gmail today.
+ *
+ * Gmail is the one per-user provider: a mailbox is personal, so its row is
+ * owned by a member (`ownerUserId`, one connection per member per
+ * workspace) and its synced threads land in a folder only that member can
+ * see. Workspace-scoped rows leave `ownerUserId` null.
  *
  * Token shape varies by provider. Google issues a refresh token and short
  * -lived access tokens (cached in-process by the Drive services); Slack bot
@@ -40,7 +45,7 @@ import { company, document, documentVersions } from "@launchstack/store/schema";
 import { users } from "./identity";
 
 /** Providers a workspace can connect. Route segments and DB values alike. */
-export const CONNECTOR_PROVIDERS = ["google-drive", "slack", "github"] as const;
+export const CONNECTOR_PROVIDERS = ["google-drive", "slack", "github", "gmail"] as const;
 export type ConnectorProvider = (typeof CONNECTOR_PROVIDERS)[number];
 
 export function isConnectorProvider(value: string): value is ConnectorProvider {
@@ -98,6 +103,15 @@ export const connectorConnections = pgTable(
         accessTokenCiphertext: text("access_token_ciphertext"),
         /** Null when the stored access token does not expire. */
         accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
+        /**
+         * Set only for per-user providers (Gmail): the member this connection
+         * belongs to. Ownership, not attribution — the row dies with the
+         * user, unlike `grantedByUserId`, which merely records who clicked.
+         * Declared last for the same ADD COLUMN reason as the two above.
+         */
+        ownerUserId: bigint("owner_user_id", { mode: "bigint" }).references(() => users.id, {
+            onDelete: "cascade",
+        }),
     },
     table => ({
         companyProviderAccountUnique: uniqueIndex(
@@ -107,6 +121,12 @@ export const connectorConnections = pgTable(
             table.companyId,
             table.provider
         ),
+        /** One per-user connection per member per workspace per provider. */
+        companyProviderOwnerUnique: uniqueIndex(
+            "connector_connections_company_provider_owner_unique"
+        )
+            .on(table.companyId, table.provider, table.ownerUserId)
+            .where(sql`owner_user_id is not null`),
     })
 );
 
@@ -231,6 +251,59 @@ export const googleDrivePickedItem = pgTable(
     })
 );
 
+/**
+ * Gmail sync bookkeeping — the mailbox `historyId` cursor and the sync lease.
+ * One row per Gmail connection, created on connect. Same shape as the Drive
+ * state row; Gmail's cursor is a history id instead of a changes page token.
+ */
+export const gmailSyncState = pgTable("gmail_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    /** Mailbox history cursor; advances only inside the sync lease. */
+    historyId: varchar("history_id", { length: 64 }),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, skipped, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
+/**
+ * What the member chose to sync: Gmail labels (by id) and free-text search
+ * queries. Under gmail.readonly the app could read the whole mailbox; these
+ * rows are the entire universe the sync actually touches.
+ */
+export const gmailSyncScope = pgTable(
+    "gmail_sync_scope",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** label | query */
+        kind: varchar("kind", { length: 8 }).notNull(),
+        /** The label id (`Label_12`, `INBOX`) or the Gmail search query. */
+        value: varchar("value", { length: 512 }).notNull(),
+        /** Display name — the label's name, or the query itself. */
+        name: text("name").notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionValueUnique: uniqueIndex("gmail_scope_conn_kind_value_idx").on(
+            table.connectionId,
+            table.kind,
+            table.value
+        ),
+        connectionIdx: index("gmail_scope_connection_idx").on(table.connectionId),
+    })
+);
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -262,3 +335,5 @@ export type ConnectorConnection = InferSelectModel<typeof connectorConnections>;
 export type DocumentDriveLink = InferSelectModel<typeof documentDriveLinks>;
 export type GoogleDriveSyncState = InferSelectModel<typeof googleDriveSyncState>;
 export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedItem>;
+export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
+export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;

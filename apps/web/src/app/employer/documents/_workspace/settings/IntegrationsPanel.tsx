@@ -10,7 +10,9 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ContextTarget } from "~/components/context-menu";
 
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
@@ -22,6 +24,7 @@ const PROVIDER_LABELS: Record<string, string> = {
     "google-drive": "Google Drive",
     slack: "Slack",
     github: "GitHub",
+    gmail: "Gmail",
 };
 
 interface ConnectorsOverview {
@@ -33,6 +36,8 @@ interface ConnectorsOverview {
         status: string;
         statusDetail: string | null;
         grantedBy: string | null;
+        /** A per-user connection (Gmail) — the caller's own, never a colleague's. */
+        personal?: boolean;
         createdAt: string;
     }>;
 }
@@ -101,62 +106,115 @@ function GoogleDriveSection() {
             title="Google Drive"
             description="Link PDFs and Word documents to Google Drive so they can be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs. Settled edits sync back as document versions."
         >
-            <Card>
-                {!status ? (
-                    <StatusNote tone="muted">Checking configuration…</StatusNote>
-                ) : !status.enabled ? (
-                    <StatusRow
-                        label="Drive linking"
-                        ok={false}
-                        detail={
-                            <>
-                                Set <Code>GOOGLE_DOCS_EDITING_ENABLED=true</Code>,{" "}
-                                <Code>GOOGLE_OAUTH_CLIENT_ID</Code> and{" "}
-                                <Code>GOOGLE_OAUTH_CLIENT_SECRET</Code> (a GCP OAuth client with the{" "}
-                                <Code>drive.file</Code> scope) to enable this feature.
-                            </>
-                        }
-                    />
-                ) : (
-                    <>
+            <ContextTarget
+                target={{
+                    kind: "drive-connection",
+                    label: "Google Drive actions",
+                    items: () =>
+                        !status?.enabled
+                            ? []
+                            : [
+                                  {
+                                      type: "item" as const,
+                                      id: "connect",
+                                      label: status.connected
+                                          ? "Reconnect…"
+                                          : "Connect Google Drive…",
+                                      icon: "refresh" as const,
+                                      onSelect: () => {
+                                          window.location.href =
+                                              status.connectUrl ??
+                                              "/api/connectors/google/oauth/start";
+                                      },
+                                  },
+                                  ...(status.connected
+                                      ? [
+                                            { type: "separator" as const, id: "sep" },
+                                            {
+                                                type: "item" as const,
+                                                id: "disconnect",
+                                                label: "Disconnect…",
+                                                icon: "disconnect" as const,
+                                                danger: true,
+                                                disabled: busy,
+                                                onSelect: () => {
+                                                    if (
+                                                        confirm(
+                                                            "Disconnect Google Drive from this workspace?"
+                                                        )
+                                                    ) {
+                                                        void disconnect();
+                                                    }
+                                                },
+                                            },
+                                        ]
+                                      : []),
+                              ],
+                }}
+            >
+                <Card>
+                    {!status ? (
+                        <StatusNote tone="muted">Checking configuration…</StatusNote>
+                    ) : !status.enabled ? (
                         <StatusRow
-                            label="Workspace account"
-                            ok={status.connected}
+                            label="Drive linking"
+                            ok={false}
                             detail={
-                                status.connected ? (
-                                    <>
-                                        Connected as <Code>{status.accountEmail ?? "unknown"}</Code>
-                                        . Linked files live in this account&apos;s My Drive.
-                                    </>
-                                ) : (
-                                    "No Google account is connected for this workspace yet."
-                                )
+                                <>
+                                    Set <Code>GOOGLE_DOCS_EDITING_ENABLED=true</Code>,{" "}
+                                    <Code>GOOGLE_OAUTH_CLIENT_ID</Code> and{" "}
+                                    <Code>GOOGLE_OAUTH_CLIENT_SECRET</Code> (a GCP OAuth client with
+                                    the <Code>drive.file</Code> scope) to enable this feature.
+                                </>
                             }
                         />
-                        <div style={{ display: "flex", gap: 8, paddingTop: 10 }}>
-                            <Button
-                                size="sm"
-                                variant={status.connected ? "outline" : "default"}
-                                asChild
-                            >
-                                <a href={status.connectUrl ?? "/api/connectors/google/oauth/start"}>
-                                    {status.connected ? "Reconnect" : "Connect Google Drive"}
-                                </a>
-                            </Button>
-                            {status.connected && (
+                    ) : (
+                        <>
+                            <StatusRow
+                                label="Workspace account"
+                                ok={status.connected}
+                                detail={
+                                    status.connected ? (
+                                        <>
+                                            Connected as{" "}
+                                            <Code>{status.accountEmail ?? "unknown"}</Code>. Linked
+                                            files live in this account&apos;s My Drive.
+                                        </>
+                                    ) : (
+                                        "No Google account is connected for this workspace yet."
+                                    )
+                                }
+                            />
+                            <div style={{ display: "flex", gap: 8, paddingTop: 10 }}>
                                 <Button
                                     size="sm"
-                                    variant="ghost"
-                                    onClick={() => void disconnect()}
-                                    disabled={busy}
+                                    variant={status.connected ? "outline" : "default"}
+                                    asChild
                                 >
-                                    {busy ? "Disconnecting…" : "Disconnect"}
+                                    <a
+                                        href={
+                                            status.connectUrl ??
+                                            "/api/connectors/google/oauth/start"
+                                        }
+                                    >
+                                        {status.connected ? "Reconnect" : "Connect Google Drive"}
+                                    </a>
                                 </Button>
-                            )}
-                        </div>
-                    </>
-                )}
-            </Card>
+                                {status.connected && (
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => void disconnect()}
+                                        disabled={busy}
+                                    >
+                                        {busy ? "Disconnecting…" : "Disconnect"}
+                                    </Button>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </Card>
+            </ContextTarget>
         </Section>
     );
 }
@@ -170,7 +228,15 @@ const SLACK_COMMANDS: Array<[string, string]> = [
     ["!help", "Post the command reference into the channel"],
 ];
 
+/** Which Add-source tab reconnects a provider — the same map the workspace uses. */
+const RECONNECT_TAB: Record<string, string> = {
+    "google-drive": "drive",
+    slack: "slack",
+    github: "github",
+};
+
 export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
+    const router = useRouter();
     const { data, loading, refresh } = useAgents();
     const connectors = useConnectorsOverview();
     const refreshConnectors = connectors.refresh;
@@ -193,12 +259,15 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
         [refreshAll, loading, connectors.loading]
     );
 
-    const disconnect = async (connectionId: string, label: string) => {
+    const disconnect = async (connectionId: string, label: string, personal = false) => {
         setDisconnecting(connectionId);
         try {
-            const res = await fetch(`/api/connectors/connections/${connectionId}`, {
-                method: "DELETE",
-            });
+            // A member's own Gmail row is theirs to remove; the generic route
+            // is the management-gated path for workspace connections.
+            const res = await fetch(
+                personal ? "/api/connectors/gmail" : `/api/connectors/connections/${connectionId}`,
+                { method: "DELETE" }
+            );
             if (res.ok) {
                 toast.success(`${label} disconnected`);
                 await refreshConnectors();
@@ -251,43 +320,95 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     ) : (
                         connectors.data?.connections.map(row => {
                             const label = PROVIDER_LABELS[row.provider] ?? row.provider;
+                            const reconnectTab = RECONNECT_TAB[row.provider];
                             return (
-                                <StatusRow
+                                <ContextTarget
                                     key={row.id}
-                                    label={label}
-                                    ok={row.status === "active"}
-                                    detail={
-                                        <>
-                                            {row.displayName ?? "connected"}
-                                            {row.grantedBy
-                                                ? ` · connected by ${row.grantedBy}`
-                                                : ""}
-                                            {row.status !== "active"
-                                                ? ` · ${row.status}${row.statusDetail ? ` — ${row.statusDetail}` : ""}`
-                                                : ""}{" "}
-                                            <button
-                                                onClick={() => void disconnect(row.id, label)}
-                                                disabled={disconnecting === row.id}
-                                                style={{
-                                                    fontSize: 12,
-                                                    fontWeight: 600,
-                                                    color: "var(--ink-2)",
-                                                    padding: "2px 8px",
-                                                    borderRadius: 6,
-                                                    border: "1px solid var(--line)",
-                                                    cursor:
-                                                        disconnecting === row.id
-                                                            ? "wait"
-                                                            : "pointer",
-                                                }}
-                                            >
-                                                {disconnecting === row.id
-                                                    ? "Removing…"
-                                                    : "Disconnect"}
-                                            </button>
-                                        </>
-                                    }
-                                />
+                                    target={{
+                                        kind: "connection",
+                                        id: row.id,
+                                        label: `Actions for ${label}`,
+                                        data: row,
+                                        items: () => [
+                                            ...(reconnectTab
+                                                ? [
+                                                      {
+                                                          type: "item" as const,
+                                                          id: "reconnect",
+                                                          label: "Reconnect…",
+                                                          icon: "refresh" as const,
+                                                          onSelect: () =>
+                                                              router.push(
+                                                                  `/employer/documents?add=1&tab=${reconnectTab}`
+                                                              ),
+                                                      },
+                                                  ]
+                                                : []),
+                                            { type: "separator" as const, id: "sep" },
+                                            {
+                                                type: "item" as const,
+                                                id: "disconnect",
+                                                label: "Disconnect…",
+                                                icon: "disconnect" as const,
+                                                danger: true,
+                                                disabled: disconnecting === row.id,
+                                                onSelect: () => {
+                                                    if (
+                                                        confirm(
+                                                            `Disconnect ${label} from this workspace?`
+                                                        )
+                                                    ) {
+                                                        void disconnect(
+                                                            row.id,
+                                                            label,
+                                                            row.personal
+                                                        );
+                                                    }
+                                                },
+                                            },
+                                        ],
+                                    }}
+                                >
+                                    <StatusRow
+                                        label={label}
+                                        ok={row.status === "active"}
+                                        detail={
+                                            <>
+                                                {row.displayName ?? "connected"}
+                                                {row.personal
+                                                    ? " · your mailbox, private to you"
+                                                    : row.grantedBy
+                                                      ? ` · connected by ${row.grantedBy}`
+                                                      : ""}
+                                                {row.status !== "active"
+                                                    ? ` · ${row.status}${row.statusDetail ? ` — ${row.statusDetail}` : ""}`
+                                                    : ""}{" "}
+                                                <button
+                                                    onClick={() =>
+                                                        void disconnect(row.id, label, row.personal)
+                                                    }
+                                                    disabled={disconnecting === row.id}
+                                                    style={{
+                                                        fontSize: 12,
+                                                        fontWeight: 600,
+                                                        color: "var(--ink-2)",
+                                                        padding: "2px 8px",
+                                                        borderRadius: 6,
+                                                        border: "1px solid var(--line)",
+                                                        cursor:
+                                                            disconnecting === row.id
+                                                                ? "wait"
+                                                                : "pointer",
+                                                    }}
+                                                >
+                                                    {disconnecting === row.id
+                                                        ? "Removing…"
+                                                        : "Disconnect"}
+                                                </button>
+                                            </>
+                                        }
+                                    />
+                                </ContextTarget>
                             );
                         })
                     )}

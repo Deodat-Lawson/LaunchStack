@@ -25,6 +25,22 @@ import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
+import dynamic from "next/dynamic";
+
+/**
+ * Real miniatures of each template, so a person picks by recognising the
+ * diagram rather than decoding an emoji. Loaded only when this tab opens: the
+ * thumbnail builds the template, which drags the shape library and layout
+ * engine along — see template-meta.ts on why the list itself stays light.
+ */
+const TemplateThumbnail = dynamic(
+    () =>
+        import("~/app/employer/documents/_mindmap/ui/TemplateThumbnail").then(
+            m => m.TemplateThumbnail
+        ),
+    { ssr: false, loading: () => null }
+);
+
 import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-meta";
 
 /**
@@ -749,8 +765,19 @@ function MindmapPanel({
                                 opacity: busy !== null && !isBusy ? 0.55 : 1,
                             }}
                         >
-                            <span style={{ fontSize: 18, lineHeight: 1.2 }} aria-hidden>
-                                {template.glyph}
+                            <span
+                                aria-hidden
+                                style={{
+                                    width: 64,
+                                    height: 44,
+                                    flex: "none",
+                                    borderRadius: 6,
+                                    overflow: "hidden",
+                                    border: "1px solid var(--line)",
+                                    background: "var(--panel-2)",
+                                }}
+                            >
+                                <TemplateThumbnail templateId={template.id} />
                             </span>
                             <span style={{ minWidth: 0 }}>
                                 <span

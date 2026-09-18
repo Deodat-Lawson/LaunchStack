@@ -186,6 +186,43 @@ file opens anywhere. Images are stored as data URIs for the same reason: an SVG
 loaded through `<img>` cannot fetch external resources, so a linked image would
 vanish from every exported PNG.
 
+## Chrome depths
+
+The editor is a full diagramming application, and most people who open it
+want four branches and a Present button. So the chrome has two depths, and
+the document's kind picks which one it opens at:
+
+| Depth          | What is on screen                                                                              | Opens for                            |
+| -------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------ |
+| **Focus**      | The canvas, a rail of five tools, a toolbar on the selection, a 7‑item context menu, ⌘K        | `kind: "mindmap"` and `"board"`      |
+| **Everything** | Both side panels, the 60‑shape library, the full inspector, snapping, arrange — today's editor | `kind: "flowchart"` and `"freeform"` |
+
+`DocSettings.kind` is set from the template's category by `buildTemplate`
+(`kindForTemplate`). Documents saved before it existed are classified on load
+by `inferKind` in `serialize.ts`: a page drawn with nothing but topics is a
+mindmap, anything else — an empty page included — keeps Everything. The
+person's own choice wins over both, remembered per kind in `localStorage`
+(`lib/preferences.ts`), and the Simple ⇄ Everything toggle in the top bar
+is how they make it. Every command and shortcut works in both depths; ⌘K
+lists the same commands in both, and `__tests__/chrome-depth.test.tsx`
+asserts that, plus a budget on how many controls Focus may show.
+
+Three things follow from the depth being _chrome_ and nothing more:
+
+- **The document renders identically in both.** Depth is `EditorState`, never
+  `DocSettings`; a file does not know or care how it was last looked at.
+- **Auto-arrange is document data** (`settings.autoLayout`), on for the
+  `blank` and `mindmap` templates. `commands.ts` re-runs it after every
+  structural edit — but only on a page that is nothing but topics
+  (`isMindmapPage`), so a flowchart is never re-flowed into a tree because one
+  box was deleted. A hand-placed Move or Resize pauses it, with Resume in the
+  toast.
+- **Presenting folds through view state.** `EditorState.folded` is a set of
+  branch ids the canvas treats as collapsed; `ui/Presenter.tsx` reveals a map
+  one branch at a time through it, and the file is never dirtied. The
+  workspace preview opens straight into it with `&present=1`, which Share →
+  "Copy presentation link" produces.
+
 ## Working on the UI
 
 `/dev/mindmap` mounts the editor inside the real chrome chain — employer layout
@@ -197,7 +234,7 @@ workspace viewer uses instead, which shares the canvas and therefore its
 layout bugs. The route 404s in production.
 
 Because it reproduces the chain rather than approximating it, layout that works
-there works in the app: the shell is what has to hand the editor a *definite*
+there works in the app: the shell is what has to hand the editor a _definite_
 height, and getting that wrong is not visible from the editor alone.
 
 ## Tests

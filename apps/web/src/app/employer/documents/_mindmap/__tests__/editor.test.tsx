@@ -99,6 +99,9 @@ function mountEditor() {
             folder="Unfiled"
             publishedDocumentId={null}
             author="Ada Lovelace"
+            // These tests drive every panel; the mindmap template would
+            // otherwise open in focus depth with both of them closed.
+            initialChrome="everything"
         />
     );
 }

@@ -11,6 +11,7 @@ import { EditorStore, type EditorState } from "../model/store";
 import type { MindmapDoc } from "../model/types";
 import { Canvas } from "./Canvas";
 import { EditorProvider, useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { Presenter } from "./Presenter";
 import type { CanvasCallbacks } from "./useCanvasInteractions";
 import { useElementSize } from "./useElementSize";
 
@@ -34,7 +35,16 @@ const NO_EDIT_CALLBACKS: CanvasCallbacks = {
     onEditText: () => undefined,
 };
 
-export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
+export function MindmapPreview({
+    doc,
+    present = false,
+    onExitPresent,
+}: {
+    doc: MindmapDoc;
+    /** Open straight into the branch-by-branch presenter (`?present=1`). */
+    present?: boolean;
+    onExitPresent?: () => void;
+}) {
     const [store] = useState(() => {
         const s = new EditorStore(doc);
         s.setPresenting(true);
@@ -61,8 +71,14 @@ export function MindmapPreview({ doc }: { doc: MindmapDoc }) {
                 >
                     <div ref={stageRef} className="relative flex min-h-0 flex-1">
                         <Canvas callbacks={NO_EDIT_CALLBACKS} />
+                        {present && (
+                            <Presenter
+                                canvasSize={stageSize}
+                                onExit={onExitPresent ?? (() => undefined)}
+                            />
+                        )}
                     </div>
-                    <PreviewBar stageSize={stageSize} />
+                    {!present && <PreviewBar stageSize={stageSize} />}
                 </div>
             </TooltipProvider>
         </EditorProvider>

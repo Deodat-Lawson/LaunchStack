@@ -16,6 +16,7 @@ import {
 
 import {
     addChildTopic,
+    addSiblingTopic,
     applySwatch,
     clearWaypoints,
     copySelection,
@@ -55,10 +56,14 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  */
 
 const selectSelection = (s: EditorState) => s.selection;
+const selectDepth = (s: EditorState) => s.chromeDepth;
+const selectKind = (s: EditorState) => s.doc.settings.kind;
 
 export function CanvasContextMenu({ children }: { children: React.ReactNode }) {
     const store = useStore();
     const selection = useEditor(selectSelection);
+    const depth = useEditor(selectDepth);
+    const kind = useEditor(selectKind);
     const doc = useCommittedDoc();
     const page = useMemo(() => activePage(doc), [doc]);
 
@@ -82,60 +87,74 @@ export function CanvasContextMenu({ children }: { children: React.ReactNode }) {
         return map;
     }, []);
 
+    // Focus depth: the seven things people do to a shape, then "More" for the
+    // rest. Frequency-ordered, so Add child is first and Select connected is
+    // three levels down instead of sharing a row with it. The order is the
+    // kind's: a flowchart leads with Change shape, a mindmap with Add child.
+    const focusTier = depth === "focus" && singleNode !== null && hasSelection;
+    const flow = kind === "flowchart" || kind === "freeform";
+
+    const changeShapeSub = (
+        <ContextMenuSub>
+            <ContextMenuSubTrigger>Change shape</ContextMenuSubTrigger>
+            <ContextMenuSubContent className="w-52">
+                {SHAPE_CATEGORIES.map(category => (
+                    <ContextMenuSub key={category}>
+                        <ContextMenuSubTrigger>{category}</ContextMenuSubTrigger>
+                        <ContextMenuSubContent className="max-h-80 w-52 overflow-y-auto">
+                            {(shapesByCategory.get(category) ?? []).map(def => (
+                                <ContextMenuItem
+                                    key={def.id}
+                                    onSelect={() => setShapeType(store, def.id)}
+                                >
+                                    {def.name}
+                                </ContextMenuItem>
+                            ))}
+                        </ContextMenuSubContent>
+                    </ContextMenuSub>
+                ))}
+            </ContextMenuSubContent>
+        </ContextMenuSub>
+    );
+
+    const colourItems = SWATCHES.map(swatch => (
+        <ContextMenuItem key={swatch.id} onSelect={() => applySwatch(store, swatch.id)}>
+            <span
+                className="border-line size-3 rounded-full border"
+                style={{ background: swatch.stroke }}
+            />
+            {swatch.name}
+        </ContextMenuItem>
+    ));
+
     return (
         <ContextMenu>
             <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
             <ContextMenuContent className="w-60">
-                {!hasSelection && (
+                {focusTier && singleNode && (
                     <>
-                        <ContextMenuItem onSelect={() => void pasteClipboard(store)}>
-                            Paste
-                            <ContextMenuShortcut>⌘V</ContextMenuShortcut>
+                        {flow && changeShapeSub}
+                        <ContextMenuItem onSelect={() => addChildTopic(store, singleNode.id)}>
+                            {flow ? "Add connected shape" : "Add child topic"}
+                            <ContextMenuShortcut>⇥</ContextMenuShortcut>
                         </ContextMenuItem>
-                        <ContextMenuSeparator />
+                        {!flow && (
+                            <ContextMenuItem onSelect={() => addSiblingTopic(store, singleNode.id)}>
+                                Add sibling topic
+                                <ContextMenuShortcut>↩</ContextMenuShortcut>
+                            </ContextMenuItem>
+                        )}
                         <ContextMenuSub>
-                            <ContextMenuSubTrigger>Auto-layout</ContextMenuSubTrigger>
-                            <ContextMenuSubContent>
-                                <ContextMenuItem
-                                    onSelect={() => runLayout(store, { kind: "mindmap" })}
-                                >
-                                    Mindmap
-                                </ContextMenuItem>
-                                <ContextMenuItem
-                                    onSelect={() =>
-                                        runLayout(store, { kind: "tree", direction: "right" })
-                                    }
-                                >
-                                    Tree — left to right
-                                </ContextMenuItem>
-                                <ContextMenuItem onSelect={() => runLayout(store, { kind: "org" })}>
-                                    Org chart — top down
-                                </ContextMenuItem>
-                                <ContextMenuItem
-                                    onSelect={() => runLayout(store, { kind: "radial" })}
-                                >
-                                    Radial
-                                </ContextMenuItem>
-                                <ContextMenuItem
-                                    onSelect={() => runLayout(store, { kind: "grid" })}
-                                >
-                                    Grid
-                                </ContextMenuItem>
+                            <ContextMenuSubTrigger>Colour</ContextMenuSubTrigger>
+                            <ContextMenuSubContent className="w-44">
+                                {colourItems}
                             </ContextMenuSubContent>
                         </ContextMenuSub>
-                    </>
-                )}
-
-                {hasSelection && (
-                    <>
-                        <ContextMenuItem onSelect={() => void cutSelection(store)}>
-                            Cut
-                            <ContextMenuShortcut>⌘X</ContextMenuShortcut>
-                        </ContextMenuItem>
-                        <ContextMenuItem onSelect={() => void copySelection(store)}>
-                            Copy
-                            <ContextMenuShortcut>⌘C</ContextMenuShortcut>
-                        </ContextMenuItem>
+                        {!flow && hasChildren && (
+                            <ContextMenuItem onSelect={() => toggleCollapse(store, singleNode.id)}>
+                                {singleNode.collapsed ? "Expand branch" : "Collapse branch"}
+                            </ContextMenuItem>
+                        )}
                         <ContextMenuItem onSelect={() => duplicateSelection(store)}>
                             Duplicate
                             <ContextMenuShortcut>⌘D</ContextMenuShortcut>
@@ -148,154 +167,328 @@ export function CanvasContextMenu({ children }: { children: React.ReactNode }) {
                             <ContextMenuShortcut>⌫</ContextMenuShortcut>
                         </ContextMenuItem>
                         <ContextMenuSeparator />
-                    </>
-                )}
-
-                {singleNode && (
-                    <>
-                        <ContextMenuItem onSelect={() => addChildTopic(store, singleNode.id)}>
-                            Add child topic
-                            <ContextMenuShortcut>⇥</ContextMenuShortcut>
-                        </ContextMenuItem>
-                        {hasChildren && (
-                            <ContextMenuItem onSelect={() => toggleCollapse(store, singleNode.id)}>
-                                {singleNode.collapsed ? "Expand branch" : "Collapse branch"}
-                            </ContextMenuItem>
-                        )}
-                        {hasChildren && (
-                            <>
-                                <ContextMenuItem
-                                    onSelect={() => deleteNodeReconnecting(store, singleNode.id)}
-                                >
-                                    Delete and reconnect
+                        <ContextMenuSub>
+                            <ContextMenuSubTrigger>More</ContextMenuSubTrigger>
+                            <ContextMenuSubContent className="w-56">
+                                <ContextMenuItem onSelect={() => void cutSelection(store)}>
+                                    Cut
+                                    <ContextMenuShortcut>⌘X</ContextMenuShortcut>
                                 </ContextMenuItem>
-                                <ContextMenuItem
-                                    onSelect={() => deleteBranch(store, singleNode.id)}
-                                    className="text-danger"
-                                >
-                                    Delete whole branch
+                                <ContextMenuItem onSelect={() => void copySelection(store)}>
+                                    Copy
+                                    <ContextMenuShortcut>⌘C</ContextMenuShortcut>
                                 </ContextMenuItem>
-                            </>
-                        )}
-                        <ContextMenuSeparator />
-                    </>
-                )}
-
-                {nodeIds.length > 0 && (
-                    <>
-                        <ContextMenuSub>
-                            <ContextMenuSubTrigger>Colour</ContextMenuSubTrigger>
-                            <ContextMenuSubContent className="w-44">
-                                {SWATCHES.map(swatch => (
-                                    <ContextMenuItem
-                                        key={swatch.id}
-                                        onSelect={() => applySwatch(store, swatch.id)}
-                                    >
-                                        <span
-                                            className="border-line size-3 rounded-full border"
-                                            style={{ background: swatch.stroke }}
-                                        />
-                                        {swatch.name}
-                                    </ContextMenuItem>
-                                ))}
-                            </ContextMenuSubContent>
-                        </ContextMenuSub>
-
-                        <ContextMenuSub>
-                            <ContextMenuSubTrigger>Change shape</ContextMenuSubTrigger>
-                            <ContextMenuSubContent className="w-52">
-                                {SHAPE_CATEGORIES.map(category => (
-                                    <ContextMenuSub key={category}>
-                                        <ContextMenuSubTrigger>{category}</ContextMenuSubTrigger>
-                                        <ContextMenuSubContent className="max-h-80 w-52 overflow-y-auto">
-                                            {(shapesByCategory.get(category) ?? []).map(def => (
-                                                <ContextMenuItem
-                                                    key={def.id}
-                                                    onSelect={() => setShapeType(store, def.id)}
-                                                >
-                                                    {def.name}
-                                                </ContextMenuItem>
-                                            ))}
-                                        </ContextMenuSubContent>
-                                    </ContextMenuSub>
-                                ))}
-                            </ContextMenuSubContent>
-                        </ContextMenuSub>
-
-                        <ContextMenuItem onSelect={() => fitNodeToText(store, nodeIds)}>
-                            Fit shape to text
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                    </>
-                )}
-
-                {edgeIds.length > 0 && (
-                    <>
-                        <ContextMenuSub>
-                            <ContextMenuSubTrigger>Connector route</ContextMenuSubTrigger>
-                            <ContextMenuSubContent>
-                                {(["straight", "elbow", "curved"] as EdgeKind[]).map(kind => (
-                                    <ContextMenuItem
-                                        key={kind}
-                                        onSelect={() => setEdgeKind(store, kind)}
-                                    >
-                                        {kind[0]!.toUpperCase() + kind.slice(1)}
-                                    </ContextMenuItem>
-                                ))}
-                            </ContextMenuSubContent>
-                        </ContextMenuSub>
-                        <ContextMenuItem onSelect={() => reverseEdges(store)}>
-                            Reverse direction
-                        </ContextMenuItem>
-                        <ContextMenuItem onSelect={() => clearWaypoints(store)}>
-                            Reset route
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                    </>
-                )}
-
-                {hasSelection && (
-                    <>
-                        <ContextMenuSub>
-                            <ContextMenuSubTrigger>Order</ContextMenuSubTrigger>
-                            <ContextMenuSubContent>
+                                <ContextMenuSeparator />
+                                {hasChildren && (
+                                    <>
+                                        <ContextMenuItem
+                                            onSelect={() =>
+                                                deleteNodeReconnecting(store, singleNode.id)
+                                            }
+                                        >
+                                            Delete and reconnect
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => deleteBranch(store, singleNode.id)}
+                                            className="text-danger"
+                                        >
+                                            Delete whole branch
+                                        </ContextMenuItem>
+                                        <ContextMenuSeparator />
+                                    </>
+                                )}
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Change shape</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent className="w-52">
+                                        {SHAPE_CATEGORIES.map(category => (
+                                            <ContextMenuSub key={category}>
+                                                <ContextMenuSubTrigger>
+                                                    {category}
+                                                </ContextMenuSubTrigger>
+                                                <ContextMenuSubContent className="max-h-80 w-52 overflow-y-auto">
+                                                    {(shapesByCategory.get(category) ?? []).map(
+                                                        def => (
+                                                            <ContextMenuItem
+                                                                key={def.id}
+                                                                onSelect={() =>
+                                                                    setShapeType(store, def.id)
+                                                                }
+                                                            >
+                                                                {def.name}
+                                                            </ContextMenuItem>
+                                                        )
+                                                    )}
+                                                </ContextMenuSubContent>
+                                            </ContextMenuSub>
+                                        ))}
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+                                <ContextMenuItem onSelect={() => fitNodeToText(store, nodeIds)}>
+                                    Fit shape to text
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
                                 <ContextMenuItem onSelect={() => reorder(store, "front")}>
                                     Bring to front
-                                    <ContextMenuShortcut>⇧⌘]</ContextMenuShortcut>
-                                </ContextMenuItem>
-                                <ContextMenuItem onSelect={() => reorder(store, "forward")}>
-                                    Bring forward
-                                    <ContextMenuShortcut>⌘]</ContextMenuShortcut>
-                                </ContextMenuItem>
-                                <ContextMenuItem onSelect={() => reorder(store, "backward")}>
-                                    Send backward
-                                    <ContextMenuShortcut>⌘[</ContextMenuShortcut>
                                 </ContextMenuItem>
                                 <ContextMenuItem onSelect={() => reorder(store, "back")}>
                                     Send to back
-                                    <ContextMenuShortcut>⇧⌘[</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => groupSelection(store)}>
+                                    Group
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => ungroupSelection(store)}>
+                                    Ungroup
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => toggleLock(store)}>
+                                    Lock / unlock
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                                <ContextMenuItem onSelect={() => selectSameShape(store)}>
+                                    Select all of this shape
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => selectConnected(store)}>
+                                    Select connected
                                 </ContextMenuItem>
                             </ContextMenuSubContent>
                         </ContextMenuSub>
-                        <ContextMenuItem onSelect={() => groupSelection(store)}>
-                            Group
-                            <ContextMenuShortcut>⌘G</ContextMenuShortcut>
-                        </ContextMenuItem>
-                        <ContextMenuItem onSelect={() => ungroupSelection(store)}>
-                            Ungroup
-                            <ContextMenuShortcut>⇧⌘G</ContextMenuShortcut>
-                        </ContextMenuItem>
-                        <ContextMenuItem onSelect={() => toggleLock(store)}>
-                            Lock / unlock
-                            <ContextMenuShortcut>⌘L</ContextMenuShortcut>
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem onSelect={() => selectSameShape(store)}>
-                            Select all of this shape
-                        </ContextMenuItem>
-                        <ContextMenuItem onSelect={() => selectConnected(store)}>
-                            Select connected
-                        </ContextMenuItem>
+                    </>
+                )}
+
+                {!focusTier && (
+                    <>
+                        {!hasSelection && (
+                            <>
+                                <ContextMenuItem onSelect={() => void pasteClipboard(store)}>
+                                    Paste
+                                    <ContextMenuShortcut>⌘V</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Auto-layout</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent>
+                                        <ContextMenuItem
+                                            onSelect={() => runLayout(store, { kind: "mindmap" })}
+                                        >
+                                            Mindmap
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() =>
+                                                runLayout(store, {
+                                                    kind: "tree",
+                                                    direction: "right",
+                                                })
+                                            }
+                                        >
+                                            Tree — left to right
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => runLayout(store, { kind: "org" })}
+                                        >
+                                            Org chart — top down
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => runLayout(store, { kind: "radial" })}
+                                        >
+                                            Radial
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => runLayout(store, { kind: "grid" })}
+                                        >
+                                            Grid
+                                        </ContextMenuItem>
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+                            </>
+                        )}
+
+                        {hasSelection && (
+                            <>
+                                <ContextMenuItem onSelect={() => void cutSelection(store)}>
+                                    Cut
+                                    <ContextMenuShortcut>⌘X</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => void copySelection(store)}>
+                                    Copy
+                                    <ContextMenuShortcut>⌘C</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => duplicateSelection(store)}>
+                                    Duplicate
+                                    <ContextMenuShortcut>⌘D</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem
+                                    onSelect={() => deleteSelection(store)}
+                                    className="text-danger"
+                                >
+                                    Delete
+                                    <ContextMenuShortcut>⌫</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                            </>
+                        )}
+
+                        {singleNode && (
+                            <>
+                                <ContextMenuItem
+                                    onSelect={() => addChildTopic(store, singleNode.id)}
+                                >
+                                    Add child topic
+                                    <ContextMenuShortcut>⇥</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                {hasChildren && (
+                                    <ContextMenuItem
+                                        onSelect={() => toggleCollapse(store, singleNode.id)}
+                                    >
+                                        {singleNode.collapsed ? "Expand branch" : "Collapse branch"}
+                                    </ContextMenuItem>
+                                )}
+                                {hasChildren && (
+                                    <>
+                                        <ContextMenuItem
+                                            onSelect={() =>
+                                                deleteNodeReconnecting(store, singleNode.id)
+                                            }
+                                        >
+                                            Delete and reconnect
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => deleteBranch(store, singleNode.id)}
+                                            className="text-danger"
+                                        >
+                                            Delete whole branch
+                                        </ContextMenuItem>
+                                    </>
+                                )}
+                                <ContextMenuSeparator />
+                            </>
+                        )}
+
+                        {nodeIds.length > 0 && (
+                            <>
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Colour</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent className="w-44">
+                                        {SWATCHES.map(swatch => (
+                                            <ContextMenuItem
+                                                key={swatch.id}
+                                                onSelect={() => applySwatch(store, swatch.id)}
+                                            >
+                                                <span
+                                                    className="border-line size-3 rounded-full border"
+                                                    style={{ background: swatch.stroke }}
+                                                />
+                                                {swatch.name}
+                                            </ContextMenuItem>
+                                        ))}
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Change shape</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent className="w-52">
+                                        {SHAPE_CATEGORIES.map(category => (
+                                            <ContextMenuSub key={category}>
+                                                <ContextMenuSubTrigger>
+                                                    {category}
+                                                </ContextMenuSubTrigger>
+                                                <ContextMenuSubContent className="max-h-80 w-52 overflow-y-auto">
+                                                    {(shapesByCategory.get(category) ?? []).map(
+                                                        def => (
+                                                            <ContextMenuItem
+                                                                key={def.id}
+                                                                onSelect={() =>
+                                                                    setShapeType(store, def.id)
+                                                                }
+                                                            >
+                                                                {def.name}
+                                                            </ContextMenuItem>
+                                                        )
+                                                    )}
+                                                </ContextMenuSubContent>
+                                            </ContextMenuSub>
+                                        ))}
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+
+                                <ContextMenuItem onSelect={() => fitNodeToText(store, nodeIds)}>
+                                    Fit shape to text
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                            </>
+                        )}
+
+                        {edgeIds.length > 0 && (
+                            <>
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Connector route</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent>
+                                        {(["straight", "elbow", "curved"] as EdgeKind[]).map(
+                                            kind => (
+                                                <ContextMenuItem
+                                                    key={kind}
+                                                    onSelect={() => setEdgeKind(store, kind)}
+                                                >
+                                                    {kind[0]!.toUpperCase() + kind.slice(1)}
+                                                </ContextMenuItem>
+                                            )
+                                        )}
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+                                <ContextMenuItem onSelect={() => reverseEdges(store)}>
+                                    Reverse direction
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => clearWaypoints(store)}>
+                                    Reset route
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                            </>
+                        )}
+
+                        {hasSelection && (
+                            <>
+                                <ContextMenuSub>
+                                    <ContextMenuSubTrigger>Order</ContextMenuSubTrigger>
+                                    <ContextMenuSubContent>
+                                        <ContextMenuItem onSelect={() => reorder(store, "front")}>
+                                            Bring to front
+                                            <ContextMenuShortcut>⇧⌘]</ContextMenuShortcut>
+                                        </ContextMenuItem>
+                                        <ContextMenuItem onSelect={() => reorder(store, "forward")}>
+                                            Bring forward
+                                            <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+                                        </ContextMenuItem>
+                                        <ContextMenuItem
+                                            onSelect={() => reorder(store, "backward")}
+                                        >
+                                            Send backward
+                                            <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+                                        </ContextMenuItem>
+                                        <ContextMenuItem onSelect={() => reorder(store, "back")}>
+                                            Send to back
+                                            <ContextMenuShortcut>⇧⌘[</ContextMenuShortcut>
+                                        </ContextMenuItem>
+                                    </ContextMenuSubContent>
+                                </ContextMenuSub>
+                                <ContextMenuItem onSelect={() => groupSelection(store)}>
+                                    Group
+                                    <ContextMenuShortcut>⌘G</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => ungroupSelection(store)}>
+                                    Ungroup
+                                    <ContextMenuShortcut>⇧⌘G</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => toggleLock(store)}>
+                                    Lock / unlock
+                                    <ContextMenuShortcut>⌘L</ContextMenuShortcut>
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                                <ContextMenuItem onSelect={() => selectSameShape(store)}>
+                                    Select all of this shape
+                                </ContextMenuItem>
+                                <ContextMenuItem onSelect={() => selectConnected(store)}>
+                                    Select connected
+                                </ContextMenuItem>
+                            </>
+                        )}
                     </>
                 )}
             </ContextMenuContent>

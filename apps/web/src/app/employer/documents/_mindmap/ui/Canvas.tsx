@@ -57,6 +57,7 @@ const selectRenderState = (s: EditorState) => ({
     editing: s.editing,
     highlighted: s.highlighted,
     presenting: s.presenting,
+    folded: s.folded,
 });
 
 export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps) {
@@ -75,8 +76,8 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
         [doc]
     );
 
-    const nodes = useMemo(() => visibleNodes(page), [page]);
-    const edges = useMemo(() => visibleEdges(page), [page]);
+    const nodes = useMemo(() => visibleNodes(page, render.folded), [page, render.folded]);
+    const edges = useMemo(() => visibleEdges(page, render.folded), [page, render.folded]);
     const lookup = useMemo(() => nodeLookup(page), [page]);
     // `routeEdgeCached` returns the previous `RoutedEdge` object for any edge
     // whose own inputs did not change, so this Map is rebuilt each frame but
@@ -773,6 +774,7 @@ function shallowEqualRenderState(a: RenderState, b: RenderState): boolean {
         a.hoverEdgeId === b.hoverEdgeId &&
         a.editing === b.editing &&
         a.highlighted === b.highlighted &&
-        a.presenting === b.presenting
+        a.presenting === b.presenting &&
+        a.folded === b.folded
     );
 }

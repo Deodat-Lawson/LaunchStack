@@ -665,7 +665,14 @@ export function WorkspaceShell() {
                     text: data.summarizedAnswer ?? "No answer.",
                     citations,
                     model: data.aiModel,
-                    tokens: data.chunksAnalyzed,
+                    tokens: data.tokenUsage?.totalTokens,
+                    tokenBreakdown: data.tokenUsage
+                        ? {
+                              inputTokens: data.tokenUsage.inputTokens,
+                              outputTokens: data.tokenUsage.outputTokens,
+                          }
+                        : undefined,
+                    chunksAnalyzed: data.chunksAnalyzed,
                 };
             } else {
                 assistantTurn = {

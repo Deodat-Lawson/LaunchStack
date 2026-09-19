@@ -55,6 +55,8 @@ export interface AIChatResponse {
     retrievalMethod?: string;
     processingTimeMs?: number;
     chunksAnalyzed?: number;
+    /** Real LLM usage for the turn — what metering debits against. */
+    tokenUsage?: { inputTokens: number; outputTokens: number; totalTokens: number };
     fusionWeights?: number[];
     searchScope?: "document" | "company" | "archive" | "selected";
     aiModel?: string;

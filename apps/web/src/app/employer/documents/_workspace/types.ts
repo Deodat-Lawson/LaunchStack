@@ -198,7 +198,16 @@ export interface ThreadMessage {
     refs?: string[];
     citations?: ThreadReference[];
     model?: string;
+    /**
+     * Total LLM tokens for the turn. Named for what it is: this used to be set
+     * from `chunksAnalyzed`, so the UI reported a retrieval count as a token
+     * count and always read far too low.
+     */
     tokens?: number;
+    /** Prompt/completion split, when the endpoint reported one. */
+    tokenBreakdown?: { inputTokens: number; outputTokens: number };
+    /** Retrieved chunks the answer was grounded in — a different number. */
+    chunksAnalyzed?: number;
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];

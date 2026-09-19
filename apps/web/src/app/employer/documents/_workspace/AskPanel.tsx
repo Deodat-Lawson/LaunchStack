@@ -540,11 +540,29 @@ function Message({
                     })}
                 </div>
             )}
-            {typeof msg.tokens === "number" && (
+            {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
                 <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
                     <span style={{ marginLeft: "auto" }} className="mono">
-                        <span style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            {msg.tokens} tokens
+                        <span
+                            style={{ fontSize: 10, color: "var(--ink-3)" }}
+                            title={
+                                msg.tokenBreakdown
+                                    ? `${msg.tokenBreakdown.inputTokens.toLocaleString()} prompt + ${msg.tokenBreakdown.outputTokens.toLocaleString()} completion`
+                                    : undefined
+                            }
+                        >
+                            {/* Two different numbers, told apart: tokens are what
+                                the model billed, chunks are what it read. */}
+                            {typeof msg.tokens === "number"
+                                ? `${msg.tokens.toLocaleString()} tokens`
+                                : null}
+                            {typeof msg.tokens === "number" &&
+                            typeof msg.chunksAnalyzed === "number"
+                                ? " · "
+                                : null}
+                            {typeof msg.chunksAnalyzed === "number"
+                                ? `${msg.chunksAnalyzed} ${msg.chunksAnalyzed === 1 ? "chunk" : "chunks"}`
+                                : null}
                         </span>
                     </span>
                 </div>

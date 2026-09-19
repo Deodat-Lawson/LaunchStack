@@ -10,21 +10,25 @@ export function plainTextOfAnswer(text: string): string {
     return text.replace(/\*\*([^*]+)\*\*/g, "$1");
 }
 
-/** `“passage” — Title, p. 4` — a quote that says where it came from. */
-export function citationWithSource(
-    quote: string,
-    source: Pick<WorkspaceSource, "title">,
-    page?: number | null
-): string {
-    const where = page ? `${source.title}, p. ${page}` : source.title;
-    return `“${quote.trim()}” — ${where}`;
+/**
+ * `“passage” — Title` — a quote that says where it came from.
+ *
+ * No page number, deliberately. Indexing writes `page_number: 1` for every
+ * chunk of every document, so a page shown here was never a real location —
+ * it said "p. 1" whether the passage came from the first page or the
+ * fortieth. Printing it made a citation look precise while being wrong, which
+ * is worse than omitting it. Restore the argument once the chunker records
+ * real pages and existing documents have been reindexed.
+ */
+export function citationWithSource(quote: string, source: Pick<WorkspaceSource, "title">): string {
+    return `“${quote.trim()}” — ${source.title}`;
 }
 
 export function citationOfReference(
     cite: ThreadReference,
     source: Pick<WorkspaceSource, "title">
 ): string {
-    return citationWithSource(cite.snippet, source, cite.page);
+    return citationWithSource(cite.snippet, source);
 }
 
 /** The whole conversation as Markdown, citations included. */

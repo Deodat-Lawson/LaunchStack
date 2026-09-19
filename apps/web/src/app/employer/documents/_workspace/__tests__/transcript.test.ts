@@ -27,12 +27,15 @@ describe("transcript helpers", () => {
     });
 
     it("quotes a passage with where it came from", () => {
-        expect(citationWithSource("  liability is capped ", source, 4)).toBe(
-            "“liability is capped” — Vendor MSA, p. 4"
-        );
-        expect(citationWithSource("liability is capped", source)).toBe(
+        expect(citationWithSource("  liability is capped ", source)).toBe(
             "“liability is capped” — Vendor MSA"
         );
+    });
+
+    it("does not claim a page, because indexing does not record one", () => {
+        // Every chunk is stored with page_number 1, so a page here would be a
+        // precise-looking lie. Pinned so it is a deliberate decision to undo.
+        expect(citationWithSource("liability is capped", source)).not.toContain("p.");
     });
 
     it("renders the whole thread as Markdown with citations", () => {
@@ -49,7 +52,7 @@ describe("transcript helpers", () => {
         expect(md).toContain("# Chat transcript");
         expect(md).toContain("## You\n\nWhat is the liability cap?\n\n_Asked over: Vendor MSA_");
         expect(md).toContain("## Launchstack (sonnet)\n\n**12 months** of fees.");
-        expect(md).toContain("- “capped at twelve months” — Vendor MSA, p. 4");
+        expect(md).toContain("- “capped at twelve months” — Vendor MSA");
         expect(transcriptFilename(thread)).toBe("what-is-the-liability-cap.md");
         expect(transcriptFilename([])).toBe("chat.md");
     });

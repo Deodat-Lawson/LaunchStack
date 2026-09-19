@@ -65,6 +65,7 @@ function setup(over: Partial<HistoryRailProps> = {}) {
         onResumeSession: jest.fn(),
         onOpenRun: jest.fn(),
         onRenameSession: jest.fn(),
+        onDeleteRun: jest.fn(),
         onDeleteSession: jest.fn(),
         onRefresh: jest.fn(),
         ...over,
@@ -104,6 +105,52 @@ describe("HistoryRail", () => {
         fireEvent.click(screen.getByTestId("history-row-distribution:r1"));
         expect(props.onOpenRun).toHaveBeenCalledWith(RUN);
         expect(props.onResumeSession).not.toHaveBeenCalled();
+    });
+
+    /**
+     * Runs used to offer only "Open", and a run with no surface offered
+     * nothing at all — so a partner discovery sat in the sidebar forever with
+     * no way to remove it.
+     */
+    describe("deleting a run", () => {
+        function openMenuOn(testId: string) {
+            fireEvent.contextMenu(screen.getByTestId(testId));
+        }
+
+        it("offers a delete on a run", async () => {
+            setup();
+            openMenuOn("history-row-distribution:r1");
+            expect(await screen.findByText("Delete…")).toBeInTheDocument();
+        });
+
+        it("offers a delete even when there is no surface to open", async () => {
+            setup();
+            openMenuOn("history-row-trend-search:t1");
+            expect(await screen.findByText("Delete…")).toBeInTheDocument();
+            expect(screen.queryByText("Open")).not.toBeInTheDocument();
+        });
+
+        it("asks before deleting, and passes the whole entry", async () => {
+            const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
+            const props = setup();
+            openMenuOn("history-row-distribution:r1");
+            fireEvent.click(await screen.findByText("Delete…"));
+
+            expect(confirmSpy).toHaveBeenCalled();
+            // The whole entry: the caller needs the kind as well as the id.
+            expect(props.onDeleteRun).toHaveBeenCalledWith(RUN);
+            confirmSpy.mockRestore();
+        });
+
+        it("deletes nothing when the question is declined", async () => {
+            const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+            const props = setup();
+            openMenuOn("history-row-distribution:r1");
+            fireEvent.click(await screen.findByText("Delete…"));
+
+            expect(props.onDeleteRun).not.toHaveBeenCalled();
+            confirmSpy.mockRestore();
+        });
     });
 
     it("does nothing when a run has no surface to open", () => {

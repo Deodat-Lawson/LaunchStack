@@ -65,6 +65,8 @@ export interface HistoryRailProps {
     onOpenRun: (entry: HistoryEntry) => void;
     onRenameSession: (sessionId: string, title: string) => void;
     onDeleteSession: (sessionId: string) => void;
+    /** Delete a pipeline run. Absent for kinds whose rows cannot be removed. */
+    onDeleteRun: (entry: HistoryEntry) => void;
     onRefresh: () => void;
 }
 
@@ -312,6 +314,7 @@ export function HistoryRail({
     onOpenRun,
     onRenameSession,
     onDeleteSession,
+    onDeleteRun,
     onRefresh,
 }: HistoryRailProps) {
     const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -334,17 +337,37 @@ export function HistoryRail({
     const itemsFor = useCallback(
         (entry: HistoryEntry): ActionMenuItem[] => {
             if (entry.kind !== "chat") {
-                if (!entry.href) return [];
-                return [
+                const items: ActionMenuItem[] = [
                     { type: "label", id: "title", label: entry.title },
-                    {
+                ];
+                // A vertical with no surface yet still has a row worth
+                // removing, so the open is conditional and the delete is not.
+                if (entry.href) {
+                    items.push({
                         type: "item",
                         id: "open",
                         label: "Open",
                         icon: "open",
                         onSelect: () => onOpenRun(entry),
+                    });
+                    items.push({ type: "separator", id: "sep" });
+                }
+                items.push({
+                    type: "item",
+                    id: "delete",
+                    // The ellipsis promises the confirm that follows, matching
+                    // how the source rail labels its own destructive items.
+                    label: "Delete…",
+                    icon: "delete",
+                    danger: true,
+                    onSelect: () => {
+                        // A run cannot be restored, so it is worth one question.
+                        if (window.confirm(`Delete “${entry.title}”? This cannot be undone.`)) {
+                            onDeleteRun(entry);
+                        }
                     },
-                ];
+                });
+                return items;
             }
             return [
                 { type: "label", id: "title", label: entry.title },
@@ -373,7 +396,7 @@ export function HistoryRail({
                 },
             ];
         },
-        [onResumeSession, onOpenRun, onDeleteSession]
+        [onResumeSession, onOpenRun, onDeleteSession, onDeleteRun]
     );
 
     const totalShown = groups.reduce((sum, group) => sum + group.entries.length, 0);

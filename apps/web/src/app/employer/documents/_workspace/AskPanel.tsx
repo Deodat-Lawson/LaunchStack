@@ -556,22 +556,6 @@ function Message({
                                             >
                                                 {s.title}
                                             </span>
-                                            {typeof c.page === "number" && (
-                                                <span
-                                                    className="mono"
-                                                    style={{
-                                                        flexShrink: 0,
-                                                        fontSize: 10,
-                                                        fontWeight: 600,
-                                                        padding: "1px 6px",
-                                                        borderRadius: 4,
-                                                        background: "var(--accent-soft)",
-                                                        color: "var(--accent-ink)",
-                                                    }}
-                                                >
-                                                    p. {c.page}
-                                                </span>
-                                            )}
                                         </div>
                                         <div
                                             style={{

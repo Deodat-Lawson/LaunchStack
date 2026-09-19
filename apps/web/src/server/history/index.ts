@@ -93,3 +93,25 @@ export function parseKindsParam(values: string[]): HistoryKind[] | undefined {
         .filter(isHistoryKind);
     return kinds.length > 0 ? [...new Set(kinds)] : undefined;
 }
+
+/**
+ * Delete one history row, whichever vertical owns it.
+ *
+ * The rail knows a kind and a refId and nothing else — no vertical's table,
+ * no vertical's endpoint — which is the same contract that lets it render a
+ * new kind without a client change. Chat is not handled here: sessions are
+ * personal rather than workspace-scoped and already have their own delete.
+ *
+ * Returns false when no row matched, so a caller cannot tell "already gone"
+ * from "belongs to another workspace". Both are a 404 to the client.
+ */
+export async function deleteHistoryEntry(input: {
+    companyId: bigint;
+    userId: string;
+    kind: HistoryKind;
+    refId: string;
+}): Promise<boolean> {
+    const loader = PIPELINE_LOADERS.find(candidate => candidate.kind === input.kind);
+    if (!loader?.remove) return false;
+    return loader.remove({ companyId: input.companyId, userId: input.userId }, input.refId);
+}

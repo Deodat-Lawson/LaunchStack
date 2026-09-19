@@ -28,7 +28,7 @@ import {
     displayFolderPath,
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
-import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { MAX_SESSION_APPEND, type HistoryEntry } from "~/lib/workspace-history";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
 import { useAIChat } from "../hooks/useAIChat";
@@ -545,6 +545,29 @@ export function WorkspaceShell() {
             });
         },
         [removeHistoryEntry, refreshHistory, startNewChat]
+    );
+
+    /**
+     * Delete a pipeline run — a partner discovery, a trend search, a repo
+     * explainer job. Same shape as the chat delete above: drop the row now so
+     * the rail responds, and put it back if the server disagrees.
+     */
+    const handleDeleteRun = useCallback(
+        (entry: HistoryEntry) => {
+            removeHistoryEntry(entry.id);
+            void fetch(`/api/workspace/history/${entry.kind}/${encodeURIComponent(entry.refId)}`, {
+                method: "DELETE",
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error(String(res.status));
+                    toast.success("Deleted");
+                })
+                .catch(() => {
+                    toast.error("Couldn't delete that");
+                    void refreshHistory();
+                });
+        },
+        [removeHistoryEntry, refreshHistory]
     );
 
     /**
@@ -1437,7 +1460,6 @@ export function WorkspaceShell() {
                     selected={selected}
                     setSelected={setSelected}
                     onOpenAdd={() => openAdd()}
-                    onNewMindmap={() => openAdd("mindmap")}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenSource={handleOpenSource}
                     onNewFolder={
@@ -1494,6 +1516,7 @@ export function WorkspaceShell() {
                         },
                         onRenameSession: handleRenameSession,
                         onDeleteSession: handleDeleteSession,
+                        onDeleteRun: handleDeleteRun,
                         onRefresh: () => void refreshHistory(),
                     }}
                 />

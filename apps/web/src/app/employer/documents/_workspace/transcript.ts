@@ -78,3 +78,49 @@ export function downloadTextFile(name: string, text: string, type = "text/markdo
     a.remove();
     URL.revokeObjectURL(url);
 }
+
+/** A question that carries a quoted passage, split into its parts. */
+export interface QuotedMessage {
+    /** What was asked, before the quote. */
+    lead: string;
+    /** The passage, `>` markers stripped and line breaks kept. Null if none. */
+    quote: string | null;
+    /** Anything typed after the quote. */
+    trail: string;
+}
+
+/**
+ * Split a message into question and quoted passage.
+ *
+ * `quoteBlock()` writes a Markdown blockquote, but the chat renders a user
+ * turn as plain text — so the `>` markers showed up literally and, with
+ * `white-space: normal`, the whole thing collapsed onto one line. Reading the
+ * markers back out lets the UI draw the passage as a passage.
+ *
+ * Only a contiguous run of `>` lines counts, so a line that merely starts with
+ * a chevron mid-question does not silently become a quote.
+ */
+export function parseQuotedMessage(text: string): QuotedMessage {
+    const lines = text.split("\n");
+    const first = lines.findIndex(line => /^\s*>/.test(line));
+    if (first === -1) return { lead: text.trim(), quote: null, trail: "" };
+
+    let last = first;
+    while (last + 1 < lines.length && /^\s*>/.test(lines[last + 1] ?? "")) last += 1;
+
+    const quote = lines
+        .slice(first, last + 1)
+        // `>` alone is a blank line inside the quote, not a line reading ">".
+        .map(line => line.replace(/^\s*>\s?/, ""))
+        .join("\n")
+        .trim();
+
+    return {
+        lead: lines.slice(0, first).join("\n").trim(),
+        quote: quote.length > 0 ? quote : null,
+        trail: lines
+            .slice(last + 1)
+            .join("\n")
+            .trim(),
+    };
+}

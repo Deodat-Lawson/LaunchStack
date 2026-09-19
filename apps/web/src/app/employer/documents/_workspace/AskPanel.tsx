@@ -5,6 +5,7 @@ import React, {
     type SetStateAction,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from "react";
@@ -53,7 +54,13 @@ import {
     buildContextChipMenuItems,
     buildQuestionMenuItems,
 } from "./chatContextMenu";
-import { downloadTextFile, quoteBlock, transcriptFilename, transcriptMarkdown } from "./transcript";
+import {
+    downloadTextFile,
+    parseQuotedMessage,
+    quoteBlock,
+    transcriptFilename,
+    transcriptMarkdown,
+} from "./transcript";
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
@@ -246,6 +253,63 @@ interface MessageProps {
     onEdit: (text: string) => void;
 }
 
+/**
+ * A question, with any quoted passage drawn as one.
+ *
+ * Quoting writes a Markdown blockquote into the message, but this turn is
+ * rendered as plain text — so the `>` markers were visible and, under
+ * `white-space: normal`, a multi-line passage collapsed onto a single line
+ * indistinguishable from the question. Both halves are now drawn for what they
+ * are, and `pre-wrap` keeps the line breaks in either.
+ */
+function QuestionBody({ text }: { text: string }) {
+    const { lead, quote, trail } = useMemo(() => parseQuotedMessage(text), [text]);
+    const prose: React.CSSProperties = {
+        fontSize: 17,
+        lineHeight: 1.55,
+        color: "var(--ink)",
+        fontWeight: 400,
+        whiteSpace: "pre-wrap",
+    };
+
+    if (!quote) {
+        return (
+            <div className="serif" style={prose}>
+                {text}
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {lead && (
+                <div className="serif" style={prose}>
+                    {lead}
+                </div>
+            )}
+            <blockquote
+                data-testid="question-quote"
+                style={{
+                    margin: 0,
+                    paddingLeft: 12,
+                    borderLeft: "2px solid var(--line-2)",
+                    color: "var(--ink-2)",
+                    fontSize: 14.5,
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-wrap",
+                }}
+            >
+                {quote}
+            </blockquote>
+            {trail && (
+                <div className="serif" style={prose}>
+                    {trail}
+                </div>
+            )}
+        </div>
+    );
+}
+
 function Message({
     msg,
     index,
@@ -321,12 +385,7 @@ function Message({
                         </span>
                     )}
                 </div>
-                <div
-                    className="serif"
-                    style={{ fontSize: 17, lineHeight: 1.55, color: "var(--ink)", fontWeight: 400 }}
-                >
-                    {msg.text}
-                </div>
+                <QuestionBody text={msg.text} />
                 {refs.length > 0 && (
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
                         {refs.map(s => (

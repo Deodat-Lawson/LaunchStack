@@ -14,13 +14,13 @@ import type {
     RunDto,
     SegmentSummary,
     SourceRow,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 import {
     _debugState,
     resetSimulator,
     setSimulatorClock,
     simulate,
-} from "~/app/dev/prospects/simulator";
+} from "~/app/dev/growth/simulator";
 
 let now = Date.now();
 

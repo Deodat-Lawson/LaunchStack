@@ -64,14 +64,6 @@ const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.Knowle
     loading: () => <LoadingPage />,
 });
 
-const MarketingPipelineWorkspace = dynamic(
-    () =>
-        import(
-            "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace"
-        ).then(m => m.MarketingPipelineWorkspace),
-    { loading: () => <LoadingPage /> }
-);
-
 interface PaneProps {
     onClose: () => void;
 }
@@ -557,18 +549,6 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
     );
 }
 
-export function MarketingPipelinePane(_: PaneProps) {
-    return (
-        <InlineFeatureShell
-            eyebrow="Marketing"
-            title="Marketing Pipeline"
-            subtitle="Pick a channel, describe the promotion — drafts use your indexed company knowledge. Progress and results stay in the bordered area below the form."
-        >
-            <MarketingPipelineWorkspace embedded />
-        </InlineFeatureShell>
-    );
-}
-
 export function WorkflowsPane({ onClose }: PaneProps) {
     return (
         <PaneShell
@@ -800,8 +780,6 @@ export function renderStudioPane(
             return <NotesPane onClose={onClose} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "marketing":
-            return <MarketingPipelinePane onClose={onClose} />;
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":
@@ -810,38 +788,21 @@ export function renderStudioPane(
             return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
-        case "prospects":
+        case "growth":
             return (
                 <DefaultLinkPane
                     onClose={onClose}
-                    eyebrow="Prospects"
-                    title="Prospects"
-                    body="Say who you sell to and where. Prospects searches for companies that match, profiles each one with cited evidence and a fit score, finds the people to contact, and tracks every deal through to won."
+                    eyebrow="Growth"
+                    title="Growth"
+                    body="One app for making the company known and finding the companies that will buy. Brand composes once for every network, schedules it, shows the calendar and generates campaigns from your documents. Prospects finds buyers that match what you sell, profiles them with cited evidence, and runs every deal to won."
                     bullets={[
-                        "Segment: what you sell, the buyer type, industries and countries",
-                        "Companies: fit, why they match, where they were found; open one for the cited profile",
-                        "People and outreach: a campaign is drafted in Email for you to approve — nothing is sent automatically",
-                        "Deals: stages with rules, next steps and owners; Runs show what each source produced",
-                    ]}
-                    href={feature.href ?? "/employer/tools/prospects"}
-                    ctaLabel="Open Prospects"
-                />
-            );
-        case "distribution":
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Distribution"
-                    title="Distribution"
-                    body="Describe what you sell and where you want it sold. Discovery finds importers, distributors, wholesalers and retail accounts, researches each one with sourced evidence, and scores the fit. Then run every relationship through stages to a signed agreement."
-                    bullets={[
-                        "Programs: your offering, territories and the kinds of partner you want",
-                        "Discovery runs: evidence-backed dossiers published into Sources, with a fit score per candidate",
-                        "Pipeline: stages with rules, next actions, agreements, and a coverage map by territory",
+                        "Brand: Compose, Calendar, Campaigns, Accounts — LinkedIn, X, Bluesky and Reddit",
+                        "Prospects: Segment, Companies with cited profiles and fit, People, Deals, Runs, Sources",
                         "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
+                        "Everything is grounded in the same company knowledge",
                     ]}
-                    href={feature.href ?? "/employer/tools/distribution"}
-                    ctaLabel="Open Distribution"
+                    href={feature.href ?? "/employer/tools/growth"}
+                    ctaLabel="Open Growth"
                 />
             );
         default:

@@ -141,6 +141,13 @@
       "when": 1789620306478,
       "tag": "20260917044506_settings_values_and_agent_autonomy",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1789701428387,
+      "tag": "20260918031708_brand_posts",
+      "breakpoints": true
     }
   ]
 }

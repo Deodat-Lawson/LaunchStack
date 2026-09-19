@@ -5,6 +5,7 @@
  * provenance. The public instance asks for a User-Agent, one query at a
  * time and modest timeouts; this adapter does exactly that.
  */
+import type { PartnerKind } from "../types";
 import { escapeRegExp, overpassAreas } from "./geo";
 
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
@@ -432,4 +433,40 @@ export async function searchOverpass(
     }
     if (places.length === 0 && lastError) throw lastError;
     return places.slice(0, req.limit ?? 40);
+}
+
+/** Food service and shops that sell to the public: a retailer for a segment's purposes. */
+const RETAIL_AMENITIES = new Set([
+    "cafe",
+    "restaurant",
+    "bar",
+    "pub",
+    "fast_food",
+    "ice_cream",
+    "food_court",
+    "marketplace",
+    "pharmacy",
+]);
+
+/**
+ * What a directory tag says about an organisation's role, and nothing more:
+ * a shop sells to the public, a wholesale shop to the trade, a craft or
+ * industrial listing makes things. Tags that say nothing yield nothing, so
+ * the requested kind is never echoed back as a finding.
+ */
+export function rolesForOsmCategories(categories: readonly string[]): PartnerKind[] {
+    const roles = new Set<PartnerKind>();
+    for (const category of categories) {
+        const [key, value = ""] = category.split("=");
+        if (key === "shop")
+            roles.add(value === "wholesale" || value === "trade" ? "wholesaler" : "retailer");
+        else if (key === "amenity" && RETAIL_AMENITIES.has(value)) roles.add("retailer");
+        else if (
+            key === "craft" ||
+            key === "industrial" ||
+            (key === "man_made" && value === "works")
+        )
+            roles.add("supplier");
+    }
+    return [...roles];
 }

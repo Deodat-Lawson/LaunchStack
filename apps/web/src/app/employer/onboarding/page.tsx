@@ -193,8 +193,8 @@ function WelcomeStep({ onNext, onSkip }: { onNext: () => void; onSkip: () => voi
                     />
                     <FeatureTile
                         Icon={Megaphone}
-                        title="Marketing pipeline"
-                        text="Generate on-brand posts for LinkedIn, X, Reddit in one click"
+                        title="Brand"
+                        text="Compose once, schedule everywhere; campaigns drafted from your own documents"
                     />
                     <FeatureTile
                         Icon={FileSearch}
@@ -368,15 +368,15 @@ function QuickStartStep({
         },
         {
             Icon: Megaphone,
-            title: "Create a marketing campaign",
-            text: "Generate platform-ready posts using your company knowledge",
-            href: "/employer/tools/marketing-pipeline",
+            title: "Establish your brand",
+            text: "Compose a post for every network, schedule it, or generate a campaign from your documents",
+            href: "/employer/tools/growth/brand",
         },
         {
             Icon: IconProspects,
             title: "Find companies to sell to",
             text: "Prospects searches for buyers that match what you sell, profiles them with cited evidence, and tracks the deal",
-            href: "/employer/tools/prospects",
+            href: "/employer/tools/growth/prospects",
         },
         {
             Icon: Building2,

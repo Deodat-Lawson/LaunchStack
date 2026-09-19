@@ -5,13 +5,12 @@ import type { Permission } from "~/lib/authz/permissions";
 // set kept for this file's existing entries (see apps/web/README.md).
 import {
     AppWindow as IconArtifact,
-    Compass as IconDistribution,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
 } from "lucide-react";
 // Brand marks live in the shared icon home, not the legacy set below.
 import { IconGoogleDocs } from "~/components/icons/brand";
-import { IconProspects } from "~/components/icons/prospects";
+import { IconGrowth, IconProspects } from "~/components/icons/prospects";
 import {
     IconAudio,
     IconBolt,
@@ -301,18 +300,25 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/agent-sessions",
     },
     {
+        id: "growth",
+        label: "Growth",
+        Icon: IconGrowth,
+        desc: "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals",
+        href: "/employer/tools/growth",
+    },
+    {
+        id: "brand",
+        label: "Brand",
+        Icon: IconMegaphone,
+        desc: "Compose once for every network, schedule it, see the calendar, generate campaigns from your documents",
+        href: "/employer/tools/growth/brand",
+    },
+    {
         id: "prospects",
         label: "Prospects",
         Icon: IconProspects,
         desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
-        href: "/employer/tools/prospects",
-    },
-    {
-        id: "distribution",
-        label: "Distribution",
-        Icon: IconDistribution,
-        desc: "Find importers, distributors and retail accounts; run each relationship to a deal",
-        href: "/employer/tools/distribution",
+        href: "/employer/tools/growth/prospects",
     },
     {
         id: "audit",
@@ -464,29 +470,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 external: true,
             },
             {
-                id: "marketing",
-                label: "Marketing Pipeline",
-                Icon: IconMegaphone,
-                desc: "Multi-channel campaigns from your company knowledge",
-            },
-            {
-                // A separate app with its own rail: segment, companies, company
-                // pages, people, deals, runs and sources.
-                id: "prospects",
-                label: "Prospects",
-                Icon: IconProspects,
-                desc: "Find the companies that would buy what you sell — cited profiles, fit scores, people to contact, and a deal board",
-                href: "/employer/tools/prospects",
-                external: true,
-            },
-            {
-                // A separate app with its own route (programs, discovery runs,
-                // a pipeline board and a dashboard), like Claude Artifacts.
-                id: "distribution",
-                label: "Distribution",
-                Icon: IconDistribution,
-                desc: "Find importers, distributors and retail accounts for what you sell — evidence-backed dossiers, fit scores, and a pipeline to a signed agreement",
-                href: "/employer/tools/distribution",
+                // One app with its own rail for the whole growth motion: Brand
+                // (compose, schedule, calendar, campaigns, accounts) and Prospects
+                // (segment, companies, people, deals, runs, sources).
+                id: "growth",
+                label: "Growth",
+                Icon: IconGrowth,
+                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
+                href: "/employer/tools/growth",
                 external: true,
             },
         ],

@@ -195,73 +195,62 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 ---
 
-### 3.10 Distribution (`/employer/tools/distribution`)
+### 3.10 Growth › Brand (`/employer/tools/growth/brand`)
 
-Finds importers, distributors, wholesalers and retail accounts for what the
-company sells, researches each with sourced evidence, scores fit, and runs the
-relationship through stages. Reachable from the Studio drawer (Tools →
-Distribution), the ⌘K palette, and onboarding.
+Growth is one app for the two halves of growing a company: **Brand** (make it
+known) and **Prospects** (find the companies that will buy). One rail, two
+groups; `/employer/tools/growth` opens on Brand. Reachable from the Studio
+drawer (Tools → Growth), the ⌘K palette (Growth, Brand, Prospects), the
+onboarding tiles, and `?feature=growth|brand|prospects|marketing|distribution`
+on the workspace. The old routes `/employer/tools/marketing-pipeline`,
+`/employer/tools/distribution` and `/employer/tools/prospects/*` redirect in.
 
-**No login, no data:** `/dev/distribution` mounts the real page over an
-in-memory API simulator. Turn on "Use sample data" in Runs and press the
-button; everything below can be exercised there first.
+Brand is the marketing tool reframed around running a presence, the way
+Hootsuite does: compose once, schedule or publish, see the calendar, know
+which accounts are connected. Posts are one row per network in
+`brand_posts`; the worker's `brand-publish-due` cron (every minute) claims
+due rows with one conditional update and publishes them through the existing
+adapters (LinkedIn, X, Bluesky, Reddit). Without a worker (dev), the web app
+runs the same claim after answering a calendar request that shows something
+due, so scheduling works with no infrastructure.
 
-**Sample data on a real workspace (no API keys, no credits):**
+**Accounts** are the deployment's credentials today (`LINKEDIN_ACCESS_TOKEN`,
+`TWITTER_BEARER_TOKEN`, `BLUESKY_HANDLE` + `BLUESKY_APP_PASSWORD`,
+`REDDIT_CLIENT_ID/SECRET/USER_AGENT`); a fresh dev setup has none connected,
+and a post to an unconnected network fails with the network's error and stays
+on the calendar as failed. Per-workspace sign-in is the next phase.
 
-1. Program tab → New program. Name, offering, at least one two-letter
-   territory (for example `DE; NL:Amsterdam:20000`), at least one partner kind.
-   Add `nordwind-import.example` under existing partners' domains to see
-   exclusion in action.
-2. Runs tab → switch on **Use sample data** → Run with sample data. The run
-   completes inline in a few seconds and shows a `sample` badge. Expand the
-   row: sources `web ok`, `trade ok`, `place skipped`; shortlisted equals
-   enriched; one candidate flagged by screening.
-3. Partners tab: every candidate is `Researched` with a fit score and an
-   evidence count; the excluded domain never appears; "Shady Trading Ltd"
-   carries a screening flag; "Canal Concept Stores" (thin site) scores low.
-4. Open a partner: the drawer shows the dossier (every fact tagged
-   `E<n>`), the evidence list with verbatim quotes and source links, the fit
-   breakdown, and "Dossier in Sources" (published under _Distribution /
-   Sample_).
-5. Stage rules: move `Researched → Contacted` without an owner → refused with
-   "An owner is required". Set an owner, move again → succeeds and the
-   timeline gains a `Moved` entry. Move to `In conversation` without a next
-   action → refused. `Negotiating → Contracted` without an agreement →
-   refused; add an agreement, move → succeeds.
-6. Log activity (reply, meeting), add a note; both appear in the timeline and
-   clear staleness.
-7. Overview tab: the funnel, the coverage matrix (territory × kind: covered /
-   in play / gap) and "Partners needing attention" match what you did.
-8. Import partners (header button): paste
-   `Nordic Foods AS,nordicfoods.no,NO,distributor,NO,active`. It appears as
-   `Active`, source import, and its domain joins the program's exclusions.
-9. Draft outreach from a `Researched`/`Contacted` partner: a campaign is
-   drafted in Email (approve it there — nothing is sent from here). Try it on
-   an `Active` or excluded partner: it is refused with the reason.
-10. Run sample data again: no duplicate organisations or partners appear.
+1. Open Growth: the rail shows Brand (Overview, Compose, Calendar, Campaigns,
+   Accounts) above Prospects with its segment switcher; Overview says how
+   many networks are connected and lists what is coming up and what went out.
+2. Compose: type a post, tick LinkedIn and X, watch the counters; over 280
+   characters the X row and preview turn red and the primary button disables.
+   Choose "Schedule for" (defaults to the next quarter hour), Schedule → the
+   calendar opens on this week with one block per network.
+3. Calendar: click a block → the popover shows the text, the due time and the
+   actions. Move it, cancel it (stays, struck through), delete a draft. When
+   a scheduled time passes, the row reads "Due" and the header offers
+   "Publish overdue now"; within a minute the due-check (or the worker) tries
+   it, and with no credentials it lands as failed with the reason.
+4. Compose → "Publish now" to Bluesky with credentials configured: the post
+   goes out and the row shows "Published" with an Open link.
+5. Campaigns: the generator, embedded; "Schedule…" beside "Publish" hands the
+   edited post to Compose with the network preselected.
+6. Accounts: each network's status, limit, cost note and what connecting
+   takes. No credential is ever shown.
+7. Harness: `/dev/growth` mounts every screen over the in-memory simulator
+   (Brand endpoints included: a published post, a scheduled pair, a failed
+   one, a draft; scheduling and publishing work in memory). `?reset=1` starts
+   over.
 
-**Live discovery (needs `OPENAI_API_KEY` + `EXA_API_KEY` or `SERPER_API_KEY`;
-optional `FOURSQUARE_SERVICE_KEY`, `OPENSANCTIONS_API_URL`,
-`TRADE_DATA_PROVIDER`):** leave "Use sample data" off and start a run. It is
-queued to the worker; the Runs table polls every 5 s through
-`profiling → planning → gathering → resolving → enriching → … → completed`.
-Expect a few minutes for 25 candidates. Check that every dossier fact links
-to a real page containing the quote, and that credits per completed
-candidate appear on the run row.
-
-**From the terminal:** `pnpm --filter @launchstack/web distribution:fixture -- --company <id>`
-runs the sample pipeline against `DATABASE_URL` and prints the summary and
-partners (`--publish` also publishes dossiers into Sources). The same path is
-covered by `apps/web/__tests__/api/distribution/pipeline.e2e.test.ts` against
-the local test database.
-
-### 3.11 Prospects (`/employer/tools/prospects`)
+### 3.11 Growth › Prospects (`/employer/tools/growth/prospects`)
 
 Prospects is the reframe of Distribution: find the companies that would buy
 what the workspace sells, profile them with cited evidence, find the people,
-run the deal. Reachable from the Studio drawer (Tools → Prospects), the ⌘K
-palette, `/employer/documents?feature=prospects`, and the onboarding tile;
-the rail's "Back to Studio" returns to the workspace.
+run the deal. It is the second group in the Growth rail (Tools → Growth in the Studio, the
+⌘K palette's Prospects link, `/employer/documents?feature=prospects`, the
+onboarding tile); `/employer/tools/prospects/*` redirects here. The rail's
+"Back to Studio" returns to the workspace.
 
 **In the app** the `/api/prospects/*` routes are an adapter over today's
 Distribution data: a segment is a program, a company is a discovered
@@ -279,9 +268,11 @@ their switches are locked.
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,
   certifications, public mailboxes — and assembles the dossier. It runs in
-  the web process after the response and updates the run row per stage, so
-  the run sheet and the rail indicator show progress. Expect 30 s to 3 min
-  depending on how many sites answer. Nothing is paid for.
+  the web process after the response and updates the run row per stage;
+  while it profiles, the run sheet and the rail read "profiling 12 of 25"
+  from the companies stamped so far. Expect 30 s to 4 min depending on how
+  many sites answer. Nothing is paid for. The Runs header says when this is
+  the mode in use.
 - **Live** (a model key plus Exa, Serper or Foursquare): queued to the
   worker; the research agent profiles each company. Needs credits.
 - **Sample** (the switch on Runs): deterministic fixtures, inline, seconds.
@@ -315,7 +306,7 @@ abstract software categories mostly reach the YC directory.
 6. Live runs need the same keys and credits as Distribution and are queued
    to the worker; the Runs table and the rail indicator poll until done.
 
-**Preview harness** `/dev/prospects` (add `?reset=1` to start over) mounts
+**Preview harness** `/dev/growth/prospects` (add `?reset=1` to start over) mounts
 the same screens over an in-memory simulator with a richer fixture world.
 Everything below can be exercised there without a login, a key or a credit.
 The rail shows the segment "Fulfilment operators · EU", the views with

@@ -13,6 +13,12 @@
 
 import type { MarketingPlatform } from "../platform-profiles";
 import { blueskyAdapter } from "./adapters/bluesky";
+import {
+    getBlueskyCredentials,
+    getLinkedInAccessToken,
+    getRedditCredentials,
+    getTwitterBearerToken,
+} from "./config";
 import { linkedinAdapter } from "./adapters/linkedin";
 import { redditAdapter } from "./adapters/reddit";
 import { xAdapter } from "./adapters/x";
@@ -44,3 +50,25 @@ export async function publishContent(
 ): Promise<PublishResult> {
     return publishToPlatform({ platform, message, title });
 }
+
+export interface PublishConfigState {
+    /** The deployment holds credentials for this network. */
+    configured: boolean;
+    /** The account those credentials name, when the credential itself says (a Bluesky handle). */
+    identity: string | null;
+}
+
+/**
+ * Which networks this deployment can publish to. Reports presence only; no
+ * credential ever leaves config.ts.
+ */
+export function describePublishConfig(): Record<MarketingPlatform, PublishConfigState> {
+    const bluesky = getBlueskyCredentials();
+    return {
+        x: { configured: Boolean(getTwitterBearerToken()), identity: null },
+        linkedin: { configured: Boolean(getLinkedInAccessToken()), identity: null },
+        bluesky: { configured: bluesky !== null, identity: bluesky?.handle ?? null },
+        reddit: { configured: getRedditCredentials() !== null, identity: null },
+    };
+}
+

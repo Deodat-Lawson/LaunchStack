@@ -94,10 +94,11 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     employees: "/employer/settings#people",
     settings: "/employer/settings",
     metadata: "/employer/documents?feature=metadata",
-    "marketing-pipeline": "/employer/tools/marketing-pipeline",
+    "marketing-pipeline": "/employer/tools/growth/brand/campaigns",
     "repo-explainer": "/employer/tools/repo-explainer",
-    distribution: "/employer/tools/distribution",
-    prospects: "/employer/tools/prospects",
+    distribution: "/employer/tools/growth/prospects",
+    prospects: "/employer/tools/growth/prospects",
+    growth: "/employer/tools/growth",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
     meetings: "/employer/documents?feature=meetings",
@@ -111,13 +112,22 @@ const RAIL_HIDDEN_HEADER_INSET_PX = 28;
  * corresponding pane; draft/rewrite/workflows/notes remain independently
  * reachable via the AskPanel QuickPen view.
  */
+/**
+ * Feature ids that used to be Studio entries of their own and now live inside
+ * Growth. Old `?feature=` links land on the right area.
+ */
+const RETIRED_FEATURE_HREFS: Record<string, string> = {
+    marketing: "/employer/tools/growth/brand/campaigns",
+    distribution: "/employer/tools/growth/prospects",
+    prospects: "/employer/tools/growth/prospects",
+    brand: "/employer/tools/growth/brand",
+};
+
 const FEATURE_IDS = new Set([
     "draft",
     "rewrite",
     "workflows",
-    "marketing",
-    "distribution",
-    "prospects",
+    "growth",
     "knowledge",
     "meetings",
     "metadata",
@@ -1060,7 +1070,19 @@ export function WorkspaceShell() {
     useEffect(() => {
         if (!featureParam && !addParam && !connectorParam && !continueParam) return;
         if (legacyRedirect) return;
+        if (featureParam && RETIRED_FEATURE_HREFS[featureParam]) {
+            router.replace(RETIRED_FEATURE_HREFS[featureParam]);
+            return;
+        }
         if (featureParam && FEATURE_IDS.has(featureParam)) {
+            const feature = STUDIO_FEATURES_BY_ID[featureParam];
+            if (feature?.external && feature.href) {
+                // A separate app: hand over to its route and stop here. Falling
+                // through would strip the param with a second navigation to this
+                // page, which cancels the first.
+                router.replace(feature.href);
+                return;
+            }
             expandFeature(featureParam);
         }
         if (addParam) {

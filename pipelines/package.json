@@ -32,6 +32,7 @@
         "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
         "./marketing": "./src/marketing/index.ts",
         "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
+        "./marketing/posts": "./src/marketing/posts.ts",
         "./email": "./src/email/index.ts",
         "./email/types": "./src/email/types.ts",
         "./email/merge": "./src/email/merge.ts",
@@ -157,6 +158,10 @@
             "./marketing/benchmark": {
                 "types": "./dist/marketing/benchmark/index.d.ts",
                 "default": "./dist/marketing/benchmark/index.js"
+            },
+            "./marketing/posts": {
+                "types": "./dist/marketing/posts.d.ts",
+                "default": "./dist/marketing/posts.js"
             },
             "./email": {
                 "types": "./dist/email/index.d.ts",

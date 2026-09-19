@@ -51,3 +51,8 @@ export function ProspectsMark({
 export function IconProspects({ size = 18, className }: { size?: number; className?: string }) {
     return <ProspectsMark size={size} className={className} />;
 }
+
+/** The Growth app's registry icon: the same overlap, now for the whole motion. */
+export function IconGrowth({ size = 18, className }: { size?: number; className?: string }) {
+    return <ProspectsMark size={size} className={className} />;
+}

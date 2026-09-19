@@ -31,12 +31,28 @@ export const WORKSPACES: BackTarget = { href: "/workspaces", label: "Workspaces"
  */
 const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
     {
-        prefix: "/employer/tools/prospects/companies/",
-        target: { href: "/employer/tools/prospects/companies", label: "Companies" },
+        prefix: "/employer/tools/growth/prospects/companies/",
+        target: { href: "/employer/tools/growth/prospects/companies", label: "Companies" },
     },
     {
-        prefix: "/employer/tools/prospects/",
-        target: { href: "/employer/tools/prospects", label: "Prospects" },
+        prefix: "/employer/tools/growth/prospects/",
+        target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
+    },
+    {
+        prefix: "/employer/tools/growth/brand/",
+        target: { href: "/employer/tools/growth/brand", label: "Brand" },
+    },
+    // Both halves of Growth sit under it, so anything else there goes to the
+    // app's own home rather than all the way out to the Studio.
+    {
+        prefix: "/employer/tools/growth/",
+        target: { href: "/employer/tools/growth", label: "Growth" },
+    },
+    // `/employer/tools/prospects/*` is the old location, kept as a redirect
+    // shim. Send it to where Prospects actually lives now.
+    {
+        prefix: "/employer/tools/prospects",
+        target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
     },
     { prefix: "/employer/artifacts/", target: { href: "/employer/artifacts", label: "Artifacts" } },
     { prefix: "/employer/documents/", target: STUDIO },

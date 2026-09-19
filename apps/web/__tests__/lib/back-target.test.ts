@@ -17,7 +17,7 @@ describe("backTargetFor", () => {
             "/employer/contact",
             "/employer/agent-sessions",
             "/employer/artifacts",
-            "/employer/tools/prospects",
+            "/employer/tools/growth",
             "/employer/tools/marketing-pipeline",
             "/employer/tools/knowledge-graph",
             "/employer/tools/distribution",
@@ -38,13 +38,23 @@ describe("backTargetFor", () => {
             href: "/employer/artifacts",
             label: "Artifacts",
         });
-        expect(backTargetFor("/employer/tools/prospects/deals")).toEqual({
-            href: "/employer/tools/prospects",
+        expect(backTargetFor("/employer/tools/growth/prospects/deals")).toEqual({
+            href: "/employer/tools/growth/prospects",
             label: "Prospects",
         });
-        expect(backTargetFor("/employer/tools/prospects/companies/42")).toEqual({
-            href: "/employer/tools/prospects/companies",
+        expect(backTargetFor("/employer/tools/growth/prospects/companies/42")).toEqual({
+            href: "/employer/tools/growth/prospects/companies",
             label: "Companies",
+        });
+        expect(backTargetFor("/employer/tools/growth/brand/calendar")).toEqual({
+            href: "/employer/tools/growth/brand",
+            label: "Brand",
+        });
+        // Prospects moved under Growth; the old path is a redirect shim and
+        // must not send anyone back to where it no longer lives.
+        expect(backTargetFor("/employer/tools/prospects/deals")).toEqual({
+            href: "/employer/tools/growth/prospects",
+            label: "Prospects",
         });
     });
 
@@ -52,8 +62,9 @@ describe("backTargetFor", () => {
         for (const path of [
             "/employer/documents",
             "/employer/artifacts",
-            "/employer/tools/prospects",
-            "/employer/tools/prospects/companies",
+            "/employer/tools/growth",
+            "/employer/tools/growth/prospects",
+            "/employer/tools/growth/prospects/companies",
             "/employer/settings",
         ]) {
             expect(backTargetFor(path)?.href).not.toBe(path);

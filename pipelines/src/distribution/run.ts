@@ -92,6 +92,8 @@ export interface DistributionPorts {
                   formattedAddress: string;
                   location: { lat: number; lng: number };
                   categories: Array<{ id: string; name: string }>;
+                  /** Roles the directory's own tags establish, if any. */
+                  roles?: PartnerKind[];
               }>
           >)
         | null;
@@ -369,14 +371,19 @@ export async function prepareRun(
                 programId: ctx.programId,
                 items,
             });
-            // Keep only the shortlist's relationships that are still candidates (never re-research an engaged partner).
-            const shortlistOrgIds = new Set(items.map(i => i.orgId));
-            const candidateIds = relationships
-                .filter(
-                    r =>
-                        shortlistOrgIds.has(r.orgId) &&
-                        (r.stage === "candidate" || r.stage === "researched")
-                )
+            // Keep one still-unengaged relationship per shortlisted organisation (never
+            // re-research an engaged partner, never research the same company twice);
+            // the one in the kind just picked wins over an older kind.
+            const wantedKind = new Map(items.map(i => [i.orgId, i.kind]));
+            const perOrg = new Map<string, (typeof relationships)[number]>();
+            for (const r of relationships) {
+                if (!wantedKind.has(r.orgId)) continue;
+                if (r.stage !== "candidate" && r.stage !== "researched") continue;
+                const current = perOrg.get(r.orgId);
+                if (!current || (r.kind === wantedKind.get(r.orgId) && current.kind !== r.kind))
+                    perOrg.set(r.orgId, r);
+            }
+            const candidateIds = [...perOrg.values()]
                 .sort(
                     (a, b) =>
                         items.findIndex(i => i.orgId === a.orgId) -

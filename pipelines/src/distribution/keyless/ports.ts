@@ -21,6 +21,7 @@ import {
     OVERPASS_MIRRORS,
     OVERPASS_URL,
     searchOverpass,
+    rolesForOsmCategories,
     KEYLESS_USER_AGENT,
     type OsmPlace,
 } from "./osm";
@@ -162,6 +163,7 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                 formattedAddress: p.address,
                 location: { lat: p.lat, lng: p.lng },
                 categories: p.categories.map(c => ({ id: c, name: c.split("=")[1] ?? c })),
+                roles: rolesForOsmCategories(p.categories),
             }));
         },
         tradeData: null,

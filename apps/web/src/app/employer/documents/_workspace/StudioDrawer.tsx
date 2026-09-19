@@ -39,7 +39,6 @@ const CUSTOM_PANE_IDS = new Set([
     "draft",
     "rewrite",
     "workflows",
-    "marketing",
     "metadata",
     "settings",
     "analytics",

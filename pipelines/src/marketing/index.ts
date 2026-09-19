@@ -24,3 +24,5 @@ export {
 // Re-export the full types surface so the @launchstack/features/marketing-pipeline
 // barrel is the single import path callers need.
 export * from "./types";
+
+export * from "./posts";

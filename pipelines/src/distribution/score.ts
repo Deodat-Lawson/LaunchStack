@@ -40,12 +40,86 @@ const WEIGHTS = {
     knownSignal: 10,
 } as const;
 
+/** Function words in the target markets' languages; they never count as category evidence. */
+const STOP_WORDS = new Set([
+    "and",
+    "the",
+    "for",
+    "with",
+    "from",
+    "our",
+    "your",
+    "all",
+    "any",
+    "other",
+    "more",
+    "than",
+    "into",
+    "per",
+    "und",
+    "der",
+    "die",
+    "das",
+    "fur",
+    "fuer",
+    "mit",
+    "von",
+    "aus",
+    "den",
+    "dem",
+    "ein",
+    "eine",
+    "van",
+    "het",
+    "een",
+    "voor",
+    "met",
+    "uit",
+    "les",
+    "des",
+    "pour",
+    "avec",
+    "une",
+    "sur",
+    "los",
+    "las",
+    "para",
+    "con",
+    "del",
+]);
+
+/** A plain plural's singular ("roasters" → "roaster"); null when the word has none. */
+function singular(word: string): string | null {
+    return word.length > 4 && word.endsWith("s") && !word.endsWith("ss") ? word.slice(0, -1) : null;
+}
+
+/** Lower-cased, accent-folded words of at least three characters, minus function words. */
+function words(value: string): string[] {
+    return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{M}/gu, "")
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter(t => t.length > 2 && !STOP_WORDS.has(t));
+}
+
+/** The words of several texts plus each plural's singular, for membership tests. */
 function tokens(values: readonly string[]): Set<string> {
     const out = new Set<string>();
     for (const value of values) {
-        for (const t of value.toLowerCase().split(/[^\p{L}\p{N}]+/u)) if (t.length > 2) out.add(t);
+        for (const t of words(value)) {
+            out.add(t);
+            const s = singular(t);
+            if (s) out.add(s);
+        }
     }
     return out;
+}
+
+function has(terms: Set<string>, word: string): boolean {
+    if (terms.has(word)) return true;
+    const s = singular(word);
+    return s !== null && terms.has(s);
 }
 
 function overlapRatio(a: Set<string>, b: Set<string>): number {
@@ -53,6 +127,27 @@ function overlapRatio(a: Set<string>, b: Set<string>): number {
     let hits = 0;
     for (const t of a) if (b.has(t)) hits += 1;
     return hits / Math.min(a.size, b.size);
+}
+
+/**
+ * How much of the program's categories the organisation's own terms cover,
+ * in [0, 1]. Each category phrase earns the share of its words the
+ * organisation uses ("coffee roaster" against a site that only says
+ * "coffee" is half), so one matched category out of three still counts. A
+ * program without categories falls back to word overlap with its offering.
+ */
+export function categoryCoverage(
+    program: Pick<ProgramRecord, "categories" | "offering">,
+    orgTerms: Set<string>
+): number {
+    const phrases = program.categories.map(words).filter(p => p.length > 0);
+    if (phrases.length === 0) return overlapRatio(tokens([program.offering]), orgTerms);
+    let sum = 0;
+    for (const phrase of phrases) {
+        const unique = [...new Set(phrase)];
+        sum += unique.filter(w => has(orgTerms, w)).length / unique.length;
+    }
+    return sum / phrases.length;
 }
 
 export function computeFit(input: ScoreInput): FitBreakdown {
@@ -76,16 +171,17 @@ export function computeFit(input: ScoreInput): FitBreakdown {
             return zero(`Named competitor: ${competitor}.`);
     }
 
-    // Category overlap: program categories vs org categories + brands carried + evidence-derived categories.
-    const programTerms = tokens([...input.program.categories, input.program.offering]);
+    // Category overlap: the program's categories against everything the organisation
+    // calls itself — name, directory categories, description, brands, dossier summary.
     const orgTerms = tokens([
+        input.org.name,
         ...input.org.categories,
         input.org.description ?? "",
         ...(input.dossier?.brandsCarried.map(b => b.brand) ?? []),
         input.dossier?.summary ?? "",
     ]);
     const categoryOverlap = Math.round(
-        WEIGHTS.categoryOverlap * Math.min(1, overlapRatio(programTerms, orgTerms) * 1.5)
+        WEIGHTS.categoryOverlap * Math.min(1, categoryCoverage(input.program, orgTerms) * 1.5)
     );
 
     // Territory: org country equals the relationship territory (or any program territory).

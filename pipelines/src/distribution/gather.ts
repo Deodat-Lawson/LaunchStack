@@ -8,7 +8,7 @@ import type { OrgMention } from "@launchstack/tools/org-resolver";
 import type { TradeDataProvider } from "@launchstack/tools/trade-data";
 import type { RawSearchResult } from "@launchstack/tools/web-research";
 
-import type { PlannedSourceQuery, SourceCount, Territory } from "./types";
+import type { PartnerKind, PlannedSourceQuery, SourceCount, Territory } from "./types";
 
 export interface GatherPorts {
     /** Web search over planned queries; null when unavailable. */
@@ -23,6 +23,8 @@ export interface GatherPorts {
                   formattedAddress: string;
                   location: { lat: number; lng: number };
                   categories: Array<{ id: string; name: string }>;
+                  /** Roles the directory's own tags establish; the query's kind is the fallback. */
+                  roles?: PartnerKind[];
               }>
           >)
         | null;
@@ -204,7 +206,7 @@ export async function gather(
                             country: query.territory.country,
                             region: query.territory.region ?? null,
                             city: query.territory.region ?? null,
-                            roles: [query.partnerKind],
+                            roles: place.roles?.length ? place.roles : [query.partnerKind],
                             categories: place.categories.map(c => c.name),
                             description: place.formattedAddress,
                             source: `place:${place.fsqId}`,

@@ -15,6 +15,7 @@ import {
     buildOverpassQuery,
     mapOverpassElements,
     nameRegexFor,
+    rolesForOsmCategories,
     searchOverpass,
     tagSelectorsFor,
 } from "./osm";
@@ -81,6 +82,16 @@ describe("OpenStreetMap adapter", () => {
         );
         expect(tagSelectorsFor(["quantum flux capacitors"])).toEqual([]);
         expect(nameRegexFor(["specialty coffee", "roaster"])).toBe("specialty|coffee|roaster");
+    });
+
+    it("reads a role from a directory tag only when the tag states one", () => {
+        expect(rolesForOsmCategories(["shop=coffee", "cuisine=coffee_shop"])).toEqual(["retailer"]);
+        expect(rolesForOsmCategories(["shop=wholesale"])).toEqual(["wholesaler"]);
+        expect(rolesForOsmCategories(["craft=coffee_roaster", "amenity=cafe"])).toEqual([
+            "supplier",
+            "retailer",
+        ]);
+        expect(rolesForOsmCategories(["office=company", "building=yes"])).toEqual([]);
     });
 
     it("scopes big countries to cities and small ones to the whole country", () => {
@@ -309,7 +320,7 @@ describe("Photon + OSM API", () => {
         ]);
     });
 
-    it("boxes searches to the city, keeps only the country's results, and reads website tags from the OSM API", async () => {
+    it("boxes searches to the city, keeps only the country's businesses, and reads website tags from the OSM API", async () => {
         const calls: string[] = [];
         const fetchImpl: typeof fetch = async url => {
             const u = urlOf(url);
@@ -367,6 +378,18 @@ describe("Photon + OSM API", () => {
                                     name: "Man Met Bril",
                                     countrycode: "NL",
                                     city: "Rotterdam",
+                                },
+                            },
+                            {
+                                geometry: { coordinates: [4.9, 52.37] },
+                                properties: {
+                                    osm_type: "W",
+                                    osm_id: 4,
+                                    osm_key: "highway",
+                                    osm_value: "residential",
+                                    name: "Coffee Lane",
+                                    countrycode: "NL",
+                                    city: "Amsterdam",
                                 },
                             },
                         ],
@@ -430,6 +453,10 @@ describe("Photon + OSM API", () => {
             ["osm:way/3", "Man Met Bril Koffie", "https://manmetbrilkoffie.nl/", "Rotterdam"],
         ]);
         expect(calls.some(c => c.includes("nodes=2"))).toBe(false);
+        // The street named after coffee is never looked up.
+        expect(calls.filter(c => c.includes("/ways.json")).map(c => c.split("ways=")[1])).toEqual([
+            "3",
+        ]);
     });
 });
 
@@ -529,6 +556,22 @@ describe("page profiler", () => {
         updatedAt: null,
     };
 
+    it("passes over links, price lists and entity soup when picking a self-description", () => {
+        expect(
+            firstDescription(
+                "Peru Decaf &euro; 23.50 Ethiopia Sidamo &euro; 24.00 Bestel nu in onze webshop vandaag. Home (https://hocc.example/) is where our chocolate and coffee story begins for everyone who visits us in Amsterdam. Wij zijn een specialty koffiebranderij in Utrecht die sinds 2010 koffie brandt voor caf\u00e9s en restaurants in heel Nederland.",
+                "Shop",
+                "Bocca"
+            )
+        ).toMatch(/^Wij zijn een specialty koffiebranderij/);
+        expect(
+            firstDescription(
+                "Home (https://hocc.example/) is where it all begins for us and our friends in the city.",
+                null
+            )
+        ).toBeNull();
+    });
+
     it("extracts what a page literally says", () => {
         const facts = extractFacts(home);
         expect(facts.description).toMatch(/^Bocca is a specialty coffee roaster/);
@@ -605,6 +648,39 @@ describe("page profiler", () => {
         ]);
         expect(recorded.every(e => e.sourceUrl.startsWith("https://bocca.example/"))).toBe(true);
         expect(result.modelId).toBe("keyless/page-reader");
+    });
+
+    it("leaves roles empty when the site names none instead of echoing the requested kind", async () => {
+        const quiet = page(
+            "https://quiet.example/",
+            "Quiet",
+            "Welcome to Quiet, a small neighbourhood café in the centre of Utrecht. We serve breakfast and lunch every day of the week and our espresso bar pours coffee from morning to evening. Questions? Write to hello@quiet.example and we will get back to you."
+        );
+        let nextId = 1;
+        const result = await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    if (url === "https://quiet.example/") return quiet;
+                    throw new Error("404");
+                },
+                recordEvidence: async () => nextId++,
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org: { ...org, name: "Quiet", domain: "quiet.example" },
+                kind: "retailer",
+                territory: { country: "NL" },
+                seedUrls: ["https://quiet.example/"],
+                hsCodes: [],
+            }
+        );
+        expect(result.outcome.status).toBe("ok");
+        if (result.outcome.status !== "ok") return;
+        expect(result.outcome.dossier.roles).toEqual([]);
+        expect(
+            result.outcome.dossier.openQuestions.some(q => q.includes("does not say whether"))
+        ).toBe(true);
     });
 
     it("fails the gate honestly when the site cannot be read", async () => {
@@ -693,6 +769,7 @@ describe("keyless ports", () => {
                 name: "Roast & Co",
                 website: "https://roastco.example/",
                 categories: [{ id: "shop=coffee", name: "coffee" }],
+                roles: ["retailer"],
             }),
         ]);
         const web = await ports.searchWeb!([

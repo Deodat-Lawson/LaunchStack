@@ -36,7 +36,10 @@ function buildInitialSteps(): PipelineStepState[] {
  * Used by both the copy flow and publishPost so what we publish matches what
  * the user would have pasted.
  */
-function toPlatformText(platform: MarketingSession["platform"] | undefined, text: string): string {
+export function toPlatformText(
+    platform: MarketingSession["platform"] | undefined,
+    text: string
+): string {
     return platform === "reddit" ? text : markdownToPlainText(text);
 }
 

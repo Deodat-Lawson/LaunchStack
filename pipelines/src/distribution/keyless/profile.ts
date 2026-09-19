@@ -90,10 +90,33 @@ function snippet(text: string, index: number, length: number, radius = 70): stri
     return text.slice(start, end).replace(/\s+/g, " ").trim();
 }
 
+const ENTITIES: Record<string, string> = {
+    amp: "&",
+    nbsp: " ",
+    quot: '"',
+    apos: "'",
+    euro: "€",
+    pound: "£",
+    times: "×",
+    ndash: "–",
+    mdash: "—",
+    hellip: "…",
+    eacute: "é",
+    egrave: "è",
+    uuml: "ü",
+    ouml: "ö",
+    auml: "ä",
+    szlig: "ß",
+    copy: "©",
+    reg: "®",
+};
+
 function cleanText(text: string): string {
     return text
         .replace(/<!--[\s\S]*?-->/g, " ")
         .replace(/<[^>]{0,200}>/g, " ")
+        .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+        .replace(/&([a-z]+);/gi, (whole, name: string) => ENTITIES[name.toLowerCase()] ?? whole)
         .replace(/\s+/g, " ")
         .trim();
 }
@@ -121,6 +144,9 @@ export function firstDescription(
         const words = sentence.split(" ");
         if (words.length < 8) continue;
         if (/[<>{}|]/.test(sentence) || JUNK.test(sentence)) continue;
+        // Links, leftover entities and price lists are navigation, not prose.
+        if (/https?:\/\/|www\.|&#?\w+;/i.test(sentence)) continue;
+        if ((sentence.match(/\d/g)?.length ?? 0) > sentence.length * 0.12) continue;
         if (title && sentence.toLowerCase() === title.toLowerCase()) continue;
         const capitalised = words.filter(w => /^[A-Z]/.test(w)).length / words.length;
         if (capitalised > 0.5) continue;
@@ -440,7 +466,7 @@ export async function profileFromPages(
 
     const dossier: Dossier = {
         summary: summary.slice(0, 1500),
-        roles: roles.length > 0 ? roles : [input.kind],
+        roles,
         brandsCarried: [],
         territories,
         retailCoverage: [],

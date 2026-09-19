@@ -1090,6 +1090,25 @@ export function WorkspaceShell() {
      * is gated is kept in the reducer but dropped here, so the tab comes back
      * if the permission does.
      */
+    /**
+     * Where the chat panel's own chrome sends people. Settings is a Studio app
+     * now, so following the link would leave the workspace and close every
+     * open tab to reach something that is one tab away. The hash is how the
+     * settings panel picks its section, mounted or not.
+     */
+    const navigateStudio = useCallback(
+        (href: string) => {
+            const url = new URL(href, window.location.origin);
+            if (url.pathname === "/employer/settings") {
+                if (url.hash) window.location.hash = url.hash;
+                expandFeature("settings");
+                return;
+            }
+            router.push(href);
+        },
+        [expandFeature, router]
+    );
+
     const visibleTabs = tabIds.flatMap(id => {
         const feature = resolveStudioFeature(id);
         return feature && can(feature.requires) ? [feature] : [];
@@ -1593,7 +1612,7 @@ export function WorkspaceShell() {
                             onOpenAdd={() => setAddOpen(true)}
                             onNewChat={startNewChat}
                             openPalette={() => setPalOpen(true)}
-                            onStudioNavigate={href => router.push(href)}
+                            onStudioNavigate={navigateStudio}
                             userInitials={initials}
                             userName={userName}
                             userEmail={userEmail}

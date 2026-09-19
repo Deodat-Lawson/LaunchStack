@@ -15,14 +15,37 @@ import type { DiagramPage, MindmapDoc } from "../model/types";
 
 const StoreContext = createContext<EditorStore | null>(null);
 
+/**
+ * Whether this editor is the one on screen. Studio keeps every open app
+ * mounted, so an editor in a background tab still has its window listeners
+ * installed; they ask this before acting. The default answers true, which is
+ * right for the standalone route, the read-only preview and every test.
+ */
+const ActiveContext = createContext<() => boolean>(() => true);
+
 export function EditorProvider({
     store,
+    isActive,
     children,
 }: {
     store: EditorStore;
+    isActive?: () => boolean;
     children: React.ReactNode;
 }) {
-    return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+    return (
+        <StoreContext.Provider value={store}>
+            {isActive ? (
+                <ActiveContext.Provider value={isActive}>{children}</ActiveContext.Provider>
+            ) : (
+                children
+            )}
+        </StoreContext.Provider>
+    );
+}
+
+/** Reads the flag above. Callable during an event, not during render. */
+export function useIsActive(): () => boolean {
+    return useContext(ActiveContext);
 }
 
 export function useStore(): EditorStore {

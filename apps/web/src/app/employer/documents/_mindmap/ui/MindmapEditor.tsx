@@ -92,6 +92,13 @@ export interface MindmapEditorProps {
     /** Display name used as the author on new comments. */
     author: string;
     /**
+     * False while the editor is mounted but off screen. A Studio tab keeps
+     * its panes mounted so drafts and undo survive a switch, which means a
+     * hidden editor is still listening on `window` unless it is told not to.
+     * Defaults to true for the standalone route and the read-only preview.
+     */
+    active?: boolean;
+    /**
      * Prototype of the disclosure plan. `focus` opens with no side panels,
      * five tools and a toolbar on the selection; unset keeps today's editor.
      */
@@ -127,6 +134,23 @@ export function MindmapEditor(props: MindmapEditorProps) {
 
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
+    /**
+     * Read by every window-level listener below. A ref, not the prop, because
+     * the listeners are installed once and must see the current answer.
+     *
+     * Two things make an editor inactive: its Studio tab is not the one on
+     * screen (`props.active`), or the focus sits in the tab strip itself —
+     * Delete there closes a tab and must not also delete the selected shapes.
+     * The strip marks itself with `data-studio-tab-strip`; a bare
+     * `[role="tablist"]` would also match the source rail's own section tabs.
+     */
+    const activeProp = props.active ?? true;
+    const activeRef = useRef(activeProp);
+    activeRef.current = activeProp;
+    const isActive = useCallback(
+        () => activeRef.current && !document.activeElement?.closest("[data-studio-tab-strip]"),
+        []
+    );
 
     const [leftOpen, setLeftOpen] = useState(true);
     const [rightOpen, setRightOpen] = useState(true);
@@ -224,12 +248,18 @@ export function MindmapEditor(props: MindmapEditorProps) {
     useEffect(() => {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") stepPage(1);
-            if (e.key === "ArrowLeft" || e.key === "PageUp") stepPage(-1);
+            if (!isActive() || e.defaultPrevented) return;
+            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+                e.preventDefault();
+                stepPage(1);
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+                e.preventDefault();
+                stepPage(-1);
+            }
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [presenting, stepPage]);
+    }, [presenting, stepPage, isActive]);
 
     const editSelection = useCallback(() => {
         const state = store.getState();
@@ -243,6 +273,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
     }, [store]);
 
     useKeyboard(store, {
+        isActive,
         onSave: () => void autosave.saveNow({ snapshot: true }),
         onFind: () => setFindOpen(true),
         onCommandPalette: () => setPaletteOpen(true),
@@ -319,7 +350,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         [getSvgElement, stageSize, store]
     );
 
-    useClipboardPaste(store, () => worldPointAt());
+    useClipboardPaste(store, () => worldPointAt(), isActive);
 
     /**
      * Drops land at the pointer: a shape dragged from the palette, image files
@@ -355,7 +386,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
     );
 
     return (
-        <EditorProvider store={store}>
+        <EditorProvider store={store} isActive={isActive}>
             <TooltipProvider delayDuration={400}>
                 <div className="bg-surface flex h-full min-h-0 flex-col">
                     {!presenting && (
@@ -535,6 +566,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                         (chromeDepth === "focus" ? (
                                             <Presenter
                                                 canvasSize={stageSize}
+                                                isActive={isActive}
                                                 onExit={togglePresent}
                                             />
                                         ) : (

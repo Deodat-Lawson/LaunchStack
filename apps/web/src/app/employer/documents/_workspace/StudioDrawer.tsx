@@ -1,460 +1,171 @@
 "use client";
 
+import { useMemo } from "react";
+import { Sparkles } from "lucide-react";
+
 import { ContextTarget } from "~/components/context-menu";
-import { useEffect, useMemo, useState } from "react";
+import { Button } from "~/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "~/components/ui/dialog";
+import { cn } from "~/lib/utils";
 import { usePermissions } from "~/lib/use-permissions";
-import { IconBolt, IconX } from "./icons";
-import { renderStudioPane } from "./StudioPanes";
-import { STUDIO_GROUPS, type StudioFeature } from "./types";
+import { STUDIO_GROUPS } from "./types";
 
 export interface StudioDrawerProps {
     open: boolean;
-    initialFeatureId?: string | null;
     onClose: () => void;
-    /**
-     * When `true`, renders as a flex sibling that fills the remaining workspace
-     * width (replacing the chat area). When `false` (default), keeps the legacy
-     * right-side overlay behavior with its own backdrop.
-     */
-    inline?: boolean;
-    /**
-     * Feature id that's currently rendered in the main workspace area. Hides the
-     * Expand button when viewing the already-expanded feature.
-     */
+    /** Open the app, in a tab or by navigating — the shell decides which. */
+    onPickFeature: (featureId: string) => void;
+    /** The app showing right now, marked in the picker. */
     activeFeatureId?: string;
-    /**
-     * Promote the current pane to the main workspace area — the drawer closes
-     * and the picked feature replaces Chat. If omitted, the Expand button is
-     * hidden.
-     */
-    onExpand?: (featureId: string) => void;
-    /** When user picks Chat in the rail, leave Studio and focus the workspace chat (expanded or main AskPanel). */
-    onOpenWorkspaceChat?: () => void;
 }
 
-/** Feature ids that render an interactive pane (not just a link-out). */
-const CUSTOM_PANE_IDS = new Set([
-    "knowledge",
-    "meetings",
-    "draft",
-    "rewrite",
-    "notes",
-    "workflows",
-    "metadata",
-    "settings",
-    "analytics",
-]);
-
-export function StudioDrawer({
-    open,
-    initialFeatureId,
-    onClose,
-    inline = false,
-    activeFeatureId,
-    onExpand,
-    onOpenWorkspaceChat,
-}: StudioDrawerProps) {
+/**
+ * Studio's app picker.
+ *
+ * It used to host the panes itself, beside a rail, with an Expand button that
+ * promoted one into the workspace. Apps live in tabs now and stay mounted, so
+ * there is nothing left to expand: this picks one and gets out of the way.
+ */
+export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: StudioDrawerProps) {
     // Fails closed: until permissions have loaded, gated entries are absent.
     const { can } = usePermissions();
     const visibleGroups = useMemo(
         () =>
-            STUDIO_GROUPS.map(g => ({
-                ...g,
-                features: g.features.filter(f => can(f.requires)),
-            })).filter(g => g.features.length > 0),
+            STUDIO_GROUPS.map(group => ({
+                ...group,
+                features: group.features.filter(feature => can(feature.requires)),
+            })).filter(group => group.features.length > 0),
         [can]
     );
 
-    const firstFeatureId = visibleGroups[0]?.features[0]?.id ?? "draft";
-    const [activeId, setActiveId] = useState<string>(initialFeatureId ?? firstFeatureId);
-
-    useEffect(() => {
-        if (open && initialFeatureId) setActiveId(initialFeatureId);
-    }, [open, initialFeatureId]);
-
-    useEffect(() => {
-        if (!open) return;
-        const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
-        };
-        window.addEventListener("keydown", onEsc);
-        return () => window.removeEventListener("keydown", onEsc);
-    }, [open, onClose]);
-
-    const active: StudioFeature = useMemo(() => {
-        for (const g of visibleGroups) {
-            const found = g.features.find(f => f.id === activeId);
-            if (found) return found;
-        }
-        return (
-            visibleGroups[0]?.features[0] ?? {
-                id: "draft",
-                label: "Templated Drafts",
-                Icon: () => null,
-                desc: "",
-            }
-        );
-    }, [visibleGroups, activeId]);
-
-    if (!open) return null;
-
-    const pane = renderStudioPane(active, onClose);
-    const canExpand = !!onExpand && activeFeatureId !== active.id;
-
-    const body = (
-        <div
-            onClick={e => e.stopPropagation()}
-            style={{
-                width: inline ? "100%" : CUSTOM_PANE_IDS.has(active.id) ? 1280 : 820,
-                maxWidth: inline ? "100%" : "96vw",
-                height: "100%",
-                flex: inline ? 1 : undefined,
-                background: "var(--panel)",
-                borderLeft: inline ? "none" : "1px solid var(--line)",
-                boxShadow: inline ? "none" : "-24px 0 60px var(--scrim-shadow)",
-                display: "flex",
-                animation: inline ? "lsw-fadeIn 140ms ease-out" : "lsw-drawerIn 220ms ease-out",
-                transition: "width 180ms ease-out",
-            }}
-        >
-            {/* Left rail — grouped feature list */}
-            <aside
-                style={{
-                    width: 240,
-                    flexShrink: 0,
-                    borderRight: "1px solid var(--line)",
-                    background: "var(--panel-2)",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden",
-                }}
-            >
-                <div
-                    style={{
-                        padding: "14px 14px 10px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 9,
-                    }}
-                >
-                    <div
-                        style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: 5,
-                            background: "var(--accent-soft)",
-                            color: "var(--accent)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <IconBolt size={13} />
-                    </div>
-                    <div style={{ fontSize: 13, fontWeight: 700, flex: 1 }}>Studio</div>
-                </div>
-
-                <div style={{ padding: "2px 8px 8px", overflowY: "auto", flex: 1 }}>
-                    {visibleGroups.map((group, gi) => (
-                        <div key={group.id} style={{ marginTop: gi === 0 ? 0 : 12 }}>
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    letterSpacing: "0.1em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                    padding: "6px 10px 4px",
-                                }}
-                            >
-                                {group.label}
-                            </div>
-                            {group.features.map(f => {
-                                const Icon = f.Icon;
-                                const isActive = f.id === activeId;
-                                const isComing = f.comingSoon === true;
-                                return (
-                                    <ContextTarget
-                                        key={f.id}
-                                        target={{
-                                            kind: "studio-feature",
-                                            id: f.id,
-                                            label: `Actions for ${f.label}`,
-                                            data: f,
-                                            items: () => [
-                                                {
-                                                    type: "item",
-                                                    id: "open",
-                                                    label: "Open",
-                                                    icon: "open",
-                                                    onSelect: () => {
-                                                        if (
-                                                            f.id === "chat" &&
-                                                            onOpenWorkspaceChat
-                                                        ) {
-                                                            onOpenWorkspaceChat();
-                                                            return;
-                                                        }
-                                                        setActiveId(f.id);
-                                                    },
-                                                },
-                                                ...(onExpand && f.id !== "chat"
-                                                    ? [
-                                                          {
-                                                              type: "item" as const,
-                                                              id: "expand",
-                                                              label: "Expand to the main view",
-                                                              icon: "expand" as const,
-                                                              disabled: isComing,
-                                                              disabledReason: isComing
-                                                                  ? "Coming soon."
-                                                                  : undefined,
-                                                              onSelect: () => onExpand(f.id),
-                                                          },
-                                                      ]
-                                                    : []),
-                                                ...(f.href
-                                                    ? [
-                                                          {
-                                                              type: "item" as const,
-                                                              id: "open-tab",
-                                                              label: "Open in a new tab",
-                                                              icon: "external" as const,
-                                                              onSelect: () =>
-                                                                  window.open(
-                                                                      f.href,
-                                                                      "_blank",
-                                                                      "noopener,noreferrer"
-                                                                  ),
-                                                          },
-                                                      ]
-                                                    : []),
-                                            ],
-                                        }}
-                                    >
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                if (f.id === "chat") {
-                                                    if (onOpenWorkspaceChat) {
-                                                        onOpenWorkspaceChat();
-                                                        return;
-                                                    }
-                                                }
-                                                setActiveId(f.id);
-                                            }}
-                                            style={{
-                                                width: "100%",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 9,
-                                                padding: "7px 9px",
-                                                marginBottom: 1,
-                                                borderRadius: 6,
-                                                textAlign: "left",
-                                                background: isActive
-                                                    ? "var(--accent-soft)"
-                                                    : "transparent",
-                                                transition: "background 100ms",
-                                            }}
-                                            onMouseEnter={e => {
-                                                if (!isActive)
-                                                    e.currentTarget.style.background =
-                                                        "var(--line-2)";
-                                            }}
-                                            onMouseLeave={e => {
-                                                if (!isActive)
-                                                    e.currentTarget.style.background =
-                                                        "transparent";
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    width: 22,
-                                                    height: 22,
-                                                    borderRadius: 5,
-                                                    background: isActive
-                                                        ? "var(--panel)"
-                                                        : "var(--line-2)",
-                                                    color: isActive
-                                                        ? "var(--accent)"
-                                                        : "var(--ink-2)",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    flexShrink: 0,
-                                                }}
-                                            >
-                                                <Icon size={12} />
-                                            </div>
-                                            <span
-                                                style={{
-                                                    flex: 1,
-                                                    fontSize: 12.5,
-                                                    fontWeight: isActive ? 600 : 500,
-                                                    color: isActive
-                                                        ? "var(--accent-ink)"
-                                                        : "var(--ink-2)",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                }}
-                                            >
-                                                {f.label}
-                                            </span>
-                                            {isComing && (
-                                                <span
-                                                    className="mono"
-                                                    style={{
-                                                        fontSize: 9,
-                                                        fontWeight: 600,
-                                                        letterSpacing: "0.04em",
-                                                        color: "var(--ink-3)",
-                                                        padding: "1px 5px",
-                                                        borderRadius: 4,
-                                                        background: "var(--line-2)",
-                                                        flexShrink: 0,
-                                                    }}
-                                                    title="Coming soon"
-                                                >
-                                                    SOON
-                                                </span>
-                                            )}
-                                        </button>
-                                    </ContextTarget>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </div>
-            </aside>
-
-            {/* Right detail pane — chrome row reserves space so panes (e.g. Settings) don’t sit under Expand/Close */}
-            <section
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden",
-                    minWidth: 0,
-                }}
-            >
-                <div
-                    style={{
-                        flexShrink: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                        gap: 6,
-                        padding: "10px 12px",
-                        borderBottom: "1px solid var(--line)",
-                        background: "var(--panel)",
-                    }}
-                >
-                    {canExpand && (
-                        <button
-                            type="button"
-                            onClick={() => onExpand(active.id)}
-                            title={`Expand ${active.label} to main view`}
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 6,
-                                height: 30,
-                                padding: "0 12px",
-                                borderRadius: 7,
-                                border: "1px solid var(--line)",
-                                background: "var(--panel)",
-                                color: "var(--ink-2)",
-                                fontSize: 12,
-                                fontWeight: 600,
-                                cursor: "pointer",
-                                transition: "background 120ms, color 120ms, border-color 120ms",
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "var(--accent-soft)";
-                                e.currentTarget.style.color = "var(--accent-ink)";
-                                e.currentTarget.style.borderColor = "var(--accent)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "var(--panel)";
-                                e.currentTarget.style.color = "var(--ink-2)";
-                                e.currentTarget.style.borderColor = "var(--line)";
-                            }}
-                        >
-                            <svg
-                                width={12}
-                                height={12}
-                                viewBox="0 0 20 20"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={1.8}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M4 8V4h4M16 12v4h-4M4 4l5 5M16 16l-5-5" />
-                            </svg>
-                            Expand
-                        </button>
-                    )}
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        title="Close Studio"
-                        style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 7,
-                            color: "var(--ink-3)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                            e.currentTarget.style.color = "var(--ink)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                            e.currentTarget.style.color = "var(--ink-3)";
-                        }}
-                    >
-                        <IconX size={14} />
-                    </button>
-                </div>
-                <div
-                    style={{
-                        flex: 1,
-                        minHeight: 0,
-                        overflow: "hidden",
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
-                    {pane}
-                </div>
-            </section>
-        </div>
-    );
-
-    if (inline) return body;
+    const pickFeature = (featureId: string) => {
+        onPickFeature(featureId);
+        onClose();
+    };
 
     return (
-        <div
-            onClick={onClose}
-            style={{
-                position: "fixed",
-                inset: 0,
-                zIndex: 90,
-                background: "var(--scrim)",
-                backdropFilter: "blur(3px)",
-                display: "flex",
-                justifyContent: "flex-end",
-                animation: "lsw-fadeIn 140ms",
+        <Dialog
+            open={open}
+            onOpenChange={nextOpen => {
+                if (!nextOpen) onClose();
             }}
         >
-            {body}
-        </div>
+            <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-2xl">
+                <DialogHeader className="border-line px-5 pb-4 pr-12 pt-5">
+                    <DialogTitle className="flex items-center gap-2 text-base">
+                        <span className="bg-brand-soft text-brand flex size-8 items-center justify-center rounded-lg">
+                            <Sparkles className="size-4" aria-hidden />
+                        </span>
+                        Studio apps
+                    </DialogTitle>
+                    <DialogDescription>
+                        Open a workspace app. Your access decides which apps are listed.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="max-h-[70vh] overflow-y-auto px-5 pb-5">
+                    {visibleGroups.map(group => (
+                        <section key={group.id} className="mt-5 first:mt-1">
+                            <h2 className="text-ink-3 mb-2 px-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">
+                                {group.label}
+                            </h2>
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                {group.features.map(feature => {
+                                    const Icon = feature.Icon;
+                                    const isActive = feature.id === activeFeatureId;
+                                    const isComing = feature.comingSoon === true;
+
+                                    return (
+                                        <ContextTarget
+                                            key={feature.id}
+                                            target={{
+                                                kind: "studio-feature",
+                                                id: feature.id,
+                                                label: `Actions for ${feature.label}`,
+                                                data: feature,
+                                                items: () => [
+                                                    {
+                                                        type: "item",
+                                                        id: "open",
+                                                        label: "Open",
+                                                        icon: "open",
+                                                        disabled: isComing,
+                                                        disabledReason: isComing
+                                                            ? "Coming soon."
+                                                            : undefined,
+                                                        onSelect: () => pickFeature(feature.id),
+                                                    },
+                                                    ...(feature.href
+                                                        ? [
+                                                              {
+                                                                  type: "item" as const,
+                                                                  id: "open-tab",
+                                                                  label: "Open in a new tab",
+                                                                  icon: "external" as const,
+                                                                  onSelect: () =>
+                                                                      window.open(
+                                                                          feature.href,
+                                                                          "_blank",
+                                                                          "noopener,noreferrer"
+                                                                      ),
+                                                              },
+                                                          ]
+                                                        : []),
+                                                ],
+                                            }}
+                                        >
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                aria-current={isActive ? "page" : undefined}
+                                                onClick={() => pickFeature(feature.id)}
+                                                className={cn(
+                                                    "border-line bg-panel hover:border-brand hover:bg-brand-soft h-auto min-h-[76px] w-full items-start gap-3 rounded-lg px-3 py-3 text-left font-normal shadow-none transition-colors",
+                                                    isActive && "border-brand bg-brand-soft"
+                                                )}
+                                            >
+                                                <span
+                                                    aria-hidden
+                                                    className={cn(
+                                                        "bg-panel-2 text-ink-2 mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md",
+                                                        isActive && "bg-panel text-brand"
+                                                    )}
+                                                >
+                                                    <Icon size={16} />
+                                                </span>
+                                                <span className="min-w-0 flex-1">
+                                                    <span className="text-ink flex items-center gap-2 text-[13px] font-semibold leading-snug">
+                                                        <span className="truncate">
+                                                            {feature.label}
+                                                        </span>
+                                                        {isComing && (
+                                                            <span
+                                                                title="Coming soon"
+                                                                className="bg-panel-2 text-ink-3 shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wide"
+                                                            >
+                                                                SOON
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                    <span className="text-ink-3 mt-1 line-clamp-2 whitespace-normal text-[11px] leading-snug">
+                                                        {feature.desc}
+                                                    </span>
+                                                </span>
+                                            </Button>
+                                        </ContextTarget>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    ))}
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 }

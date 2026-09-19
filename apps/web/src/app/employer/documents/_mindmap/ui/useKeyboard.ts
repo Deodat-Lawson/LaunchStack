@@ -39,6 +39,8 @@ import type { ShapeId, ToolId } from "../model/types";
  */
 
 export interface KeyboardActions {
+    /** A hidden editor keeps its store but must not answer window keys. */
+    isActive: () => boolean;
     onSave: () => void;
     onFind: () => void;
     onCommandPalette: () => void;
@@ -80,6 +82,7 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
 
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
+            if (!ref.current.isActive() || e.defaultPrevented) return;
             if (isTypingTarget(e.target)) return;
             const state = store.getState();
             if (state.editing) return;

@@ -3,7 +3,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { PanelLeftOpen } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { Button } from "~/components/ui/button";
 import { useRegisterActions } from "~/components/context-menu";
 import {
     APP_TARGET_KIND,
@@ -46,7 +48,6 @@ import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
-import { IconChevronRight } from "./icons";
 import { DeleteFolderDialog } from "./DeleteFolderDialog";
 import { FolderDialog, type FolderDialogRequest } from "./FolderDialog";
 import { MindmapEditorHost } from "./MindmapEditorHost";
@@ -57,8 +58,9 @@ import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
+import { StudioTabs, useStudioTabs } from "./StudioTabs";
 import * as sourceApi from "./sourceApi";
-import { STUDIO_FEATURES_BY_ID } from "./types";
+import { demotedFeatureHref, resolveStudioFeature } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
     CitationHighlight,
@@ -105,14 +107,6 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     meetings: "/employer/documents?feature=meetings",
 };
 
-/** Extra horizontal inset for AskPanel / expanded feature headers when rail is hidden (clears overlay “show sidebar” at 12+28px + ~8px gap minus default 20px padding). */
-const RAIL_HIDDEN_HEADER_INSET_PX = 28;
-
-/**
- * Features accessible via `?feature=X`. All open the Studio drawer on the
- * corresponding pane; draft/rewrite/workflows/notes remain independently
- * reachable via the AskPanel QuickPen view.
- */
 /**
  * Feature ids that used to be Studio entries of their own and now live inside
  * Growth. Old `?feature=` links land on the right area.
@@ -123,20 +117,6 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
     prospects: "/employer/tools/growth/prospects",
     brand: "/employer/tools/growth/brand",
 };
-
-const FEATURE_IDS = new Set([
-    "draft",
-    "rewrite",
-    "notes",
-    "workflows",
-    "growth",
-    "knowledge",
-    "meetings",
-    "metadata",
-    "settings",
-    "analytics",
-    "mindmap",
-]);
 
 /**
  * A stored turn becomes a thread turn. `citations` and `attachments` are
@@ -217,6 +197,7 @@ export function WorkspaceShell() {
         folders,
         companyId,
         can,
+        permissionsLoaded,
         refresh,
         // The URL names a source; until the list has loaded, an id that is not
         // in it yet is "not loaded", not "gone".
@@ -279,9 +260,6 @@ export function WorkspaceShell() {
     const editingRef = useRef(false);
     /** The latest `expandFeature`, for the keyboard handler declared before it. */
     const expandFeatureRef = useRef<(featureId: string) => void>(() => undefined);
-    useEffect(() => {
-        editingRef.current = editing;
-    }, [editing]);
     /** Cited passage to locate + highlight when the viewer was opened from a citation. */
     const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
 
@@ -329,13 +307,44 @@ export function WorkspaceShell() {
     /** The folder or document whose access dialog is open. */
     const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
-    const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
     /**
-     * Which feature is "expanded" into the main workspace area. Defaults to
-     * `chat`, which renders the AskPanel; any other id renders the corresponding
-     * pane inline. Set via the drawer's Expand button or `?feature=X` deep links.
+     * Which apps are open, in strip order, and which one is on screen. Every
+     * open app stays mounted, so switching keeps drafts, scroll and undo.
+     *
+     * `open` both inserts and focuses, which is why it is bound to the old
+     * `setActiveFeatureId` name: the chat tab can be closed now, and every
+     * existing `setActiveFeatureId("chat")` has to mean "bring chat back".
      */
-    const [activeFeatureId, setActiveFeatureId] = useState<string>("chat");
+    const {
+        ids: tabIds,
+        activeId: activeFeatureId,
+        open: setActiveFeatureId,
+        close: closeTab,
+        move: moveTab,
+    } = useStudioTabs();
+    /**
+     * The map the Mindmap tab is editing. Held here rather than read off
+     * `?source=&edit=1` because the URL moves on while the tab stays open —
+     * previewing another source must not unmount a live editor.
+     */
+    const [editedMindmapId, setEditedMindmapId] = useState<string | null>(null);
+    const editedMindmap = sources.find(source => source.id === editedMindmapId);
+    /** `?source=…&edit=1` opens the map in the Mindmap tab and shows that tab. */
+    useEffect(() => {
+        if (!editing || viewerSource?.id !== sourceParam) return;
+        setEditedMindmapId(sourceParam);
+        setActiveFeatureId("mindmap");
+    }, [editing, sourceParam, viewerSource?.id, setActiveFeatureId]);
+    /**
+     * The editor owns the keyboard only while it is the tab on screen and
+     * nothing is laid over it — a PDF preview above a live editor must not
+     * leave the workspace shortcuts dead.
+     */
+    const mindmapTabActive =
+        activeFeatureId === "mindmap" && Boolean(editedMindmap?.mindmapId) && !viewerSource;
+    useEffect(() => {
+        editingRef.current = mindmapTabActive;
+    }, [mindmapTabActive]);
     const [railHidden, setRailHidden] = useState(false);
     const railHiddenReady = useRef(false);
 
@@ -457,7 +466,7 @@ export function WorkspaceShell() {
         return () => {
             cancelled = true;
         };
-    }, [sessionParam, setSessionParam]);
+    }, [sessionParam, setSessionParam, setActiveFeatureId]);
 
     /**
      * Store a completed exchange.
@@ -515,7 +524,7 @@ export function WorkspaceShell() {
         hydratedSession.current = null;
         setSessionParam(null);
         setActiveFeatureId("chat");
-    }, [setSessionParam]);
+    }, [setSessionParam, setActiveFeatureId]);
 
     const resumeSession = useCallback(
         (id: string) => {
@@ -523,7 +532,7 @@ export function WorkspaceShell() {
             if (id === sessionIdRef.current) return;
             setSessionParam(id);
         },
-        [setSessionParam]
+        [setSessionParam, setActiveFeatureId]
     );
 
     const handleRenameSession = useCallback(
@@ -555,38 +564,42 @@ export function WorkspaceShell() {
      * open the thread with a note saying so. Fired by `?continue=<docId>` from
      * the conversation viewer and the sessions browser.
      */
-    const startContinuation = useCallback(async (docId: number) => {
-        setActiveFeatureId("chat");
-        setSelected(prev => (prev.includes(`d${docId}`) ? prev : [`d${docId}`, ...prev]));
-        try {
-            const res = await fetch("/api/fetchDocument", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: "{}",
-            });
-            if (!res.ok) throw new Error(`Failed to fetch documents (${res.status})`);
-            const docs = (await res.json()) as { id: number; title: string; url: string }[];
-            const doc = docs.find(d => d.id === docId);
-            if (!doc) throw new Error("Document not found");
+    const startContinuation = useCallback(
+        async (docId: number) => {
+            setActiveFeatureId("chat");
+            setSelected(prev => (prev.includes(`d${docId}`) ? prev : [`d${docId}`, ...prev]));
+            try {
+                const res = await fetch("/api/fetchDocument", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: "{}",
+                });
+                if (!res.ok) throw new Error(`Failed to fetch documents (${res.status})`);
+                const docs = (await res.json()) as { id: number; title: string; url: string }[];
+                const doc = docs.find(d => d.id === docId);
+                if (!doc) throw new Error("Document not found");
 
-            const contentRes = await fetch(doc.url);
-            if (!contentRes.ok) throw new Error(`Failed to load transcript (${contentRes.status})`);
-            const parsed = parseSessionTranscript(await contentRes.text());
-            const title = parsed.title ?? doc.title;
+                const contentRes = await fetch(doc.url);
+                if (!contentRes.ok)
+                    throw new Error(`Failed to load transcript (${contentRes.status})`);
+                const parsed = parseSessionTranscript(await contentRes.text());
+                const title = parsed.title ?? doc.title;
 
-            setContinuation({ title, context: buildContinuationContext(parsed) });
-            setThread(prev => [
-                ...prev,
-                {
-                    role: "assistant",
-                    text: `Continuing **${title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.`,
-                    refs: [`d${docId}`],
-                },
-            ]);
-        } catch {
-            toast.error("Couldn't load the imported session to continue it");
-        }
-    }, []);
+                setContinuation({ title, context: buildContinuationContext(parsed) });
+                setThread(prev => [
+                    ...prev,
+                    {
+                        role: "assistant",
+                        text: `Continuing **${title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.`,
+                        refs: [`d${docId}`],
+                    },
+                ]);
+            } catch {
+                toast.error("Couldn't load the imported session to continue it");
+            }
+        },
+        [setActiveFeatureId]
+    );
 
     const sendMessage = useCallback(
         async (send: ComposerSend) => {
@@ -687,10 +700,13 @@ export function WorkspaceShell() {
         [sources, sendQuery, companyId, continuation, thread, persistTurns]
     );
 
-    const seedComposer = useCallback((text: string, mode: "append" | "replace") => {
-        setActiveFeatureId("chat");
-        setComposerSeed({ text, mode, nonce: Date.now() });
-    }, []);
+    const seedComposer = useCallback(
+        (text: string, mode: "append" | "replace") => {
+            setActiveFeatureId("chat");
+            setComposerSeed({ text, mode, nonce: Date.now() });
+        },
+        [setActiveFeatureId]
+    );
 
     /**
      * Start a new chat that keeps the transcript up to and including `index`.
@@ -708,7 +724,7 @@ export function WorkspaceShell() {
                 description: "The turns up to here come along; the original chat is untouched.",
             });
         },
-        [setSessionParam]
+        [setSessionParam, setActiveFeatureId]
     );
 
     /**
@@ -882,7 +898,14 @@ export function WorkspaceShell() {
                 thinking: composerThinking,
             });
         },
-        [handleAskAbout, sendMessage, selected, composerWebSearch, composerThinking]
+        [
+            handleAskAbout,
+            sendMessage,
+            selected,
+            composerWebSearch,
+            composerThinking,
+            setActiveFeatureId,
+        ]
     );
 
     const openAdd = useCallback((tabId?: string) => {
@@ -1024,38 +1047,56 @@ export function WorkspaceShell() {
         };
     }, [deleteFolderPath, sources, folderPaths]);
 
-    /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
-    const openFeature = useCallback(
-        (featureId?: string) => {
-            setStudioFeatureId(featureId ?? activeFeatureId);
-            setStudioOpen(true);
-        },
-        [activeFeatureId]
-    );
+    /** Opens the Studio picker — the header “Studio” control and the ⌘J toggle. */
+    const openFeature = useCallback(() => setStudioOpen(true), []);
 
-    /** Fills the main workspace with a feature and closes the drawer — used by mega-menu picks, palette, FAB pins. */
+    /**
+     * Every way of picking an app ends here: the picker, the Studio menu, the
+     * command palette, a keyboard shortcut and `?feature=`. One of three
+     * things happens, and never nothing: the app opens in a tab, a separate
+     * app is navigated to, or — for the palette rows that are shortcuts to
+     * somewhere else entirely — we follow that destination.
+     */
     const expandFeature = useCallback(
         (featureId: string) => {
-            const feature = STUDIO_FEATURES_BY_ID[featureId];
-            // A mindmap is a source, not a pane: "Mindmap" means "start one".
-            if (featureId === "mindmap") {
-                setStudioOpen(false);
-                openAdd("mindmap");
-                return;
-            }
-            // Separate apps own their own route: navigate rather than
-            // expanding a pane whose only content is a link to that route.
+            const feature = resolveStudioFeature(featureId);
+            // A separate app with its own routes and chrome. Navigate; a tab
+            // cannot hold a route tree.
             if (feature?.external && feature.href) {
                 setStudioOpen(false);
                 router.push(feature.href);
                 return;
             }
+            if (!feature) {
+                // Retired ids and palette rows that point outside Studio.
+                const href = RETIRED_FEATURE_HREFS[featureId] ?? demotedFeatureHref(featureId);
+                if (href) {
+                    setStudioOpen(false);
+                    router.push(href);
+                }
+                return;
+            }
+            // Fails closed: `can` answers false until permissions load.
+            if (!can(feature.requires)) return;
             setActiveFeatureId(featureId);
             setStudioOpen(false);
         },
-        [openAdd, router]
+        [can, router, setActiveFeatureId]
     );
     expandFeatureRef.current = expandFeature;
+
+    /**
+     * The strip shows the open apps this person may see. An id whose feature
+     * is gated is kept in the reducer but dropped here, so the tab comes back
+     * if the permission does.
+     */
+    const visibleTabs = tabIds.flatMap(id => {
+        const feature = resolveStudioFeature(id);
+        return feature && can(feature.requires) ? [feature] : [];
+    });
+    const visibleActiveId = visibleTabs.some(feature => feature.id === activeFeatureId)
+        ? activeFeatureId
+        : (visibleTabs[0]?.id ?? "");
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
     // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal;
@@ -1076,8 +1117,8 @@ export function WorkspaceShell() {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
             return;
         }
-        if (featureParam && FEATURE_IDS.has(featureParam)) {
-            const feature = STUDIO_FEATURES_BY_ID[featureParam];
+        if (featureParam) {
+            const feature = resolveStudioFeature(featureParam);
             if (feature?.external && feature.href) {
                 // A separate app: hand over to its route and stop here. Falling
                 // through would strip the param with a second navigation to this
@@ -1085,6 +1126,10 @@ export function WorkspaceShell() {
                 router.replace(feature.href);
                 return;
             }
+            // A gated app must not be dropped just because permissions have
+            // not landed. Wait for them — the effect re-runs — but only for
+            // the feature param, so a connector return still toasts on time.
+            if (feature?.requires && !permissionsLoaded) return;
             expandFeature(featureParam);
         }
         if (addParam) {
@@ -1139,6 +1184,7 @@ export function WorkspaceShell() {
         connectorResultParam,
         continueParam,
         legacyRedirect,
+        permissionsLoaded,
         expandFeature,
         startContinuation,
         router,
@@ -1355,6 +1401,9 @@ export function WorkspaceShell() {
     bindingsRef.current = bindings;
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
+            // Something focused has already acted on this key — the tab strip
+            // closing a tab, for instance. Don't run a second command on it.
+            if (e.defaultPrevented) return;
             // The mindmap editor binds its own ⌘K, `/` and tool keys on the
             // same window; while it is open, its map wins.
             if (editingRef.current) return;
@@ -1494,152 +1543,143 @@ export function WorkspaceShell() {
                 />
             )}
 
-            {railHidden && (
-                <button
-                    onClick={() => setRailHidden(false)}
-                    title="Show sidebar  ⌘\"
-                    aria-label="Show sidebar"
-                    style={{
-                        position: "absolute",
-                        top: 14,
-                        left: 12,
-                        zIndex: 5,
-                        width: 28,
-                        height: 28,
-                        borderRadius: 7,
-                        border: "1px solid var(--line)",
-                        background: "var(--panel)",
-                        color: "var(--ink-2)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-                        transition: "background 120ms, color 120ms, border-color 120ms",
-                    }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.borderColor = "var(--accent)";
-                        e.currentTarget.style.color = "var(--accent)";
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.borderColor = "var(--line)";
-                        e.currentTarget.style.color = "var(--ink-2)";
-                    }}
-                >
-                    <IconChevronRight size={14} />
-                </button>
-            )}
-
-            {editing && viewerSource?.mindmapId ? (
-                // The editor takes the main area and the rail stays, so
-                // another source is one click away without "leaving". It
-                // needs a definite height: this column is the flex row's
-                // full height, and `minHeight: 0` lets the canvas shrink to it.
-                <main
-                    style={{
-                        flex: 1,
-                        minWidth: 0,
-                        minHeight: 0,
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden",
-                        background: "var(--bg)",
-                    }}
-                >
-                    <MindmapEditorHost
-                        key={viewerSource.mindmapId}
-                        mindmapId={viewerSource.mindmapId}
-                        onBack={() => openSource(viewerSource.id)}
-                        onChanged={() => void refresh()}
-                        onAskAboutNode={text => {
-                            // Pin the map, leave the editor, and start the
-                            // question from the topic's text.
-                            handleAskAbout(viewerSource);
-                            seedComposer(quoteBlock(text), "append");
-                        }}
-                    />
-                </main>
-            ) : activeFeatureId === "chat" ? (
-                <AskPanel
-                    leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
-                    sources={sources}
-                    selected={selected}
-                    setSelected={setSelected}
-                    thread={thread}
-                    sendMessage={sendMessage}
-                    isSending={isSending}
-                    onOpenCitation={handleOpenCitation}
-                    onOpenSource={handleOpenSource}
-                    composerSeed={composerSeed}
-                    onOpenAdd={() => setAddOpen(true)}
-                    onNewChat={startNewChat}
-                    openPalette={() => setPalOpen(true)}
-                    onStudioNavigate={href => router.push(href)}
-                    userInitials={initials}
-                    userName={userName}
-                    userEmail={userEmail}
-                    onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
-                    webSearch={composerWebSearch}
-                    onToggleWebSearch={() => setComposerWebSearch(v => !v)}
-                    thinking={composerThinking}
-                    onToggleThinking={() => setComposerThinking(v => !v)}
-                    studioSlot={
-                        <StudioMenu
+            <StudioTabs
+                features={visibleTabs}
+                activeId={visibleActiveId}
+                onSelect={id => {
+                    // The editor tells the library what changed when it
+                    // unmounts, and it no longer unmounts on a tab switch.
+                    if (visibleActiveId === "mindmap" && id !== "mindmap") void refresh();
+                    expandFeature(id);
+                }}
+                onClose={id => {
+                    closeTab(id);
+                    if (id === "mindmap") {
+                        setEditedMindmapId(null);
+                        if (editing) closeSource();
+                        void refresh();
+                    }
+                }}
+                onMove={moveTab}
+                onOpenStudio={openFeature}
+                leadingSlot={
+                    railHidden ? (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-ink-3 mx-1 size-8"
+                            title="Show sidebar  ⌘\"
+                            aria-label="Show sidebar"
+                            onClick={() => setRailHidden(false)}
+                        >
+                            <PanelLeftOpen className="size-4" />
+                        </Button>
+                    ) : undefined
+                }
+            >
+                {(featureId, paneActive) =>
+                    featureId === "chat" ? (
+                        <AskPanel
+                            leadingChromeInsetPx={0}
+                            sources={sources}
+                            selected={selected}
+                            setSelected={setSelected}
+                            thread={thread}
+                            sendMessage={sendMessage}
+                            isSending={isSending}
+                            onOpenCitation={handleOpenCitation}
+                            onOpenSource={handleOpenSource}
+                            composerSeed={composerSeed}
+                            onOpenAdd={() => setAddOpen(true)}
+                            onNewChat={startNewChat}
+                            openPalette={() => setPalOpen(true)}
+                            onStudioNavigate={href => router.push(href)}
+                            userInitials={initials}
+                            userName={userName}
+                            userEmail={userEmail}
+                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+                            webSearch={composerWebSearch}
+                            onToggleWebSearch={() => setComposerWebSearch(v => !v)}
+                            thinking={composerThinking}
+                            onToggleThinking={() => setComposerThinking(v => !v)}
+                            studioSlot={
+                                <StudioMenu
+                                    onOpenStudio={() => openFeature()}
+                                    onPickFeature={id => expandFeature(id)}
+                                />
+                            }
+                        />
+                    ) : featureId === "mindmap" && editedMindmap?.mindmapId ? (
+                        // The editor stays mounted behind a source preview —
+                        // that is the point of tabs — so it is told when it is
+                        // covered rather than being torn down and rebuilt.
+                        <div className="h-full min-h-0">
+                            <MindmapEditorHost
+                                key={editedMindmap.mindmapId}
+                                mindmapId={editedMindmap.mindmapId}
+                                active={paneActive && !viewerSource}
+                                onBack={() => {
+                                    setEditedMindmapId(null);
+                                    openSource(editedMindmap.id);
+                                }}
+                                onChanged={() => void refresh()}
+                                onAskAboutNode={text => {
+                                    // Pin the map, leave the editor, and start
+                                    // the question from the topic's text.
+                                    handleAskAbout(editedMindmap);
+                                    seedComposer(quoteBlock(text), "append");
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <ExpandedFeatureView
+                            featureId={featureId}
+                            onPaneExit={() => closeTab(featureId)}
                             onOpenStudio={() => openFeature()}
                             onPickFeature={id => expandFeature(id)}
+                            openPalette={() => setPalOpen(true)}
+                            userInitials={initials}
+                            userName={userName}
+                            userEmail={userEmail}
+                            // Settings is a workspace surface now, not a separate destination.
+                            onOpenSettings={() => expandFeature("settings")}
+                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+                            paneContext={{
+                                knowledge: {
+                                    sources,
+                                    folders,
+                                    selected,
+                                    setSelected,
+                                    onOpenSource: handleOpenSource,
+                                    onOpenAdd: openAdd,
+                                    onAskAbout: ids => {
+                                        setSelected(ids);
+                                        setActiveFeatureId("chat");
+                                    },
+                                    onRenameSource: source => setRenameSource(source),
+                                    onDeleteSource: source => requestDelete([source]),
+                                    onDeleteSources: requestDelete,
+                                    onRestrictAccess: openDocumentAccess,
+                                    onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
+                                },
+                                mindmap: { onCreate: () => openAdd("mindmap") },
+                                sessions: {
+                                    onImported: refresh,
+                                    onOpenDocument: id => openSource(`d${id}`),
+                                    onContinue: id => void startContinuation(id),
+                                },
+                            }}
                         />
-                    }
-                />
-            ) : (
-                <ExpandedFeatureView
-                    featureId={activeFeatureId}
-                    leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
-                    onPaneExit={() => setActiveFeatureId("chat")}
-                    onOpenStudio={() => openFeature()}
-                    onPickFeature={id => expandFeature(id)}
-                    openPalette={() => setPalOpen(true)}
-                    userInitials={initials}
-                    userName={userName}
-                    userEmail={userEmail}
-                    // Settings is a workspace surface now, not a separate destination.
-                    onOpenSettings={() => expandFeature("settings")}
-                    onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
-                    paneContext={{
-                        knowledge: {
-                            sources,
-                            folders,
-                            selected,
-                            setSelected,
-                            onOpenSource: handleOpenSource,
-                            onOpenAdd: openAdd,
-                            onAskAbout: ids => {
-                                setSelected(ids);
-                                setActiveFeatureId("chat");
-                            },
-                            onRenameSource: source => setRenameSource(source),
-                            onDeleteSource: source => requestDelete([source]),
-                            onDeleteSources: requestDelete,
-                            onRestrictAccess: openDocumentAccess,
-                            onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
-                        },
-                        mindmap: { onCreate: () => openAdd("mindmap") },
-                    }}
-                />
-            )}
+                    )
+                }
+            </StudioTabs>
 
-            {studioOpen && (
-                <StudioDrawer
-                    open
-                    initialFeatureId={studioFeatureId}
-                    activeFeatureId={activeFeatureId}
-                    onClose={() => setStudioOpen(false)}
-                    onExpand={expandFeature}
-                    onOpenWorkspaceChat={() => {
-                        setActiveFeatureId("chat");
-                        setStudioOpen(false);
-                    }}
-                />
-            )}
+            <StudioDrawer
+                open={studioOpen}
+                activeFeatureId={visibleActiveId}
+                onClose={() => setStudioOpen(false)}
+                onPickFeature={expandFeature}
+            />
 
             <AddSourceModal
                 open={addOpen}
@@ -1769,9 +1809,7 @@ export function WorkspaceShell() {
 
 interface ExpandedFeatureViewProps {
     featureId: string;
-    /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
-    leadingChromeInsetPx?: number;
-    /** Return to workspace chat when panes invoke their exit / close callbacks. */
+    /** Close this app's tab when the pane invokes its exit / close callback. */
     onPaneExit: () => void;
     onOpenStudio: () => void;
     onPickFeature: (featureId: string) => void;
@@ -1786,11 +1824,11 @@ interface ExpandedFeatureViewProps {
 }
 
 /**
- * Main-area container for a Studio feature expanded from the drawer; top bar aligns with AskPanel (jump, Studio, avatar).
+ * One app's panel. The tab strip above owns navigation; this is the panel's
+ * own chrome, aligned with the AskPanel header (jump, Studio, avatar).
  */
 function ExpandedFeatureView({
     featureId,
-    leadingChromeInsetPx = 0,
     onPaneExit,
     onOpenStudio,
     onPickFeature,
@@ -1802,12 +1840,13 @@ function ExpandedFeatureView({
     onSignOut,
     paneContext,
 }: ExpandedFeatureViewProps) {
-    const feature = STUDIO_FEATURES_BY_ID[featureId];
+    const feature = resolveStudioFeature(featureId);
 
     return (
         <main
             style={{
                 flex: 1,
+                minHeight: 0,
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
@@ -1815,7 +1854,7 @@ function ExpandedFeatureView({
                 background: "var(--bg)",
             }}
         >
-            <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
+            <div style={workspaceMainHeaderBarStyle()}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 600 }}>
                         {feature?.label ?? "Studio"}
@@ -1846,7 +1885,7 @@ function ExpandedFeatureView({
                             fontSize: 13,
                         }}
                     >
-                        Unknown feature — returning to Chat…
+                        This app is not available.
                     </div>
                 )}
             </div>

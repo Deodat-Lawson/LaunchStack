@@ -22,9 +22,12 @@ import { useCommittedDoc, useStore } from "./EditorContext";
 
 export function Presenter({
     canvasSize,
+    isActive,
     onExit,
 }: {
     canvasSize: { w: number; h: number };
+    /** False while the editor is mounted off screen; arrows belong elsewhere. */
+    isActive?: () => boolean;
     onExit: () => void;
 }) {
     const store = useStore();
@@ -83,6 +86,10 @@ export function Presenter({
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
+            // Gated rather than unmounted: unmounting runs the cleanup that
+            // unfolds the map, so hiding the tab would lose the presentation.
+            if (isActive && !isActive()) return;
+            if (e.defaultPrevented) return;
             if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
                 e.preventDefault();
                 go(step + 1);
@@ -94,7 +101,7 @@ export function Presenter({
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [go, step]);
+    }, [go, step, isActive]);
 
     const last = branches.length + 1;
     const label =

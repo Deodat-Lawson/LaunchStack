@@ -79,6 +79,29 @@ OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
 changes theme and silently alter someone else's diagram. Its editor chrome uses
 the tokens like everything else.
 
+## Studio apps and the tab strip
+
+The workspace centre is a tab strip. One tab per open app, and **every open
+pane stays mounted** — switching keeps drafts, scroll and undo. The state lives
+in `useStudioTabs` (`documents/_workspace/StudioTabs.tsx`); the shell renders
+the panel for each id through `renderStudioPane`.
+
+- **A reorder names a neighbour, not a position.** The strip renders a list
+  filtered by permission while the reducer holds the unfiltered one, so
+  `move(id, beforeId)` is the only form that cannot address the wrong slot.
+- **An app is a tab unless it is a route tree.** Growth has its own layout and
+  nested pages, so it keeps `external: true` on its registry entry and Studio
+  navigates to it. Everything else mounts in place.
+- **Every id the shell can open must resolve** through `resolveStudioFeature`,
+  because a tab needs a label and an icon. Panes reachable only by link —
+  Workflows, Analytics, Company profile — are named there rather than in
+  `STUDIO_GROUPS`, which keeps them out of the picker but able to open.
+- **A hidden pane is still mounted**, so anything that listens on `window`,
+  polls or autosaves has to know it is off screen. The render prop hands each
+  pane an `active` flag; the mindmap editor threads it down to its keyboard,
+  paste and canvas hooks. Do not sniff the DOM for a `hidden` ancestor, and do
+  not key off `[role="tablist"]` — the source rail has one of those too.
+
 ## Right-click menus
 
 Every screen shares one context-menu layer; nothing hand-rolls a menu.

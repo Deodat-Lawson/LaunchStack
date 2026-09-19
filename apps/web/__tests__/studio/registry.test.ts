@@ -11,6 +11,8 @@ import {
     DEMOTED_FEATURES,
     STUDIO_FEATURES_BY_ID,
     STUDIO_GROUPS,
+    demotedFeatureHref,
+    resolveStudioFeature,
 } from "~/app/employer/documents/_workspace/types";
 
 const APP_ROOT = join(process.cwd(), "src", "app");
@@ -62,5 +64,41 @@ describe("studio registry", () => {
         for (const id of ["marketing", "distribution", "prospects"]) {
             expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
         }
+    });
+
+    it("opens Artifacts and Coding sessions in a tab, keeping their routes for direct links", () => {
+        for (const id of ["artifacts", "agent-sessions"]) {
+            const feature = STUDIO_FEATURES_BY_ID[id];
+            expect(feature).toBeDefined();
+            // Not external: the shell mounts these rather than navigating.
+            expect(feature!.external).toBeUndefined();
+            expect(pageExists(feature!.href!)).toBe(true);
+        }
+    });
+
+    it("names Growth as the one app a tab cannot hold", () => {
+        const external = STUDIO_GROUPS.flatMap(g => g.features).filter(f => f.external);
+        expect(external.map(f => f.id)).toEqual(["growth"]);
+    });
+
+    it("can name every app the workspace is able to open in a tab", () => {
+        // A tab needs a label and an icon. These three have a working pane and
+        // a live way in — a shortcut, a palette row, an old bookmark — but no
+        // tile in the picker, so the registry has to be able to name them.
+        for (const id of ["workflows", "analytics", "metadata"]) {
+            expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
+            const feature = resolveStudioFeature(id);
+            expect(feature).toBeDefined();
+            expect(feature!.label).toBeTruthy();
+            expect(feature!.Icon).toBeTruthy();
+        }
+    });
+
+    it("sends a palette row with nowhere of its own to its real destination", () => {
+        expect(demotedFeatureHref("brand")).toBe("/employer/tools/growth/brand");
+        expect(demotedFeatureHref("team")).toBe("/employer/settings#people");
+        // Its href points back at this page, so following it would loop.
+        expect(demotedFeatureHref("rewrite")).toBeUndefined();
+        expect(demotedFeatureHref("nonsense")).toBeUndefined();
     });
 });

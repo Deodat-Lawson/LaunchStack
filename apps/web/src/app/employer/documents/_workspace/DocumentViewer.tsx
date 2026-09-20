@@ -274,7 +274,10 @@ export function DocumentViewer({
             return;
         }
         const observer = new ResizeObserver(([entry]) => {
-            setNarrow((entry?.contentRect.width ?? Infinity) < 760);
+            const width = entry?.contentRect.width ?? 0;
+            // A pane with no box — hidden, or mid-reparent — has no layout
+            // question to answer.
+            if (width > 0) setNarrow(width < 760);
         });
         observer.observe(element);
         return () => observer.disconnect();
@@ -473,14 +476,17 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
-    // ESC closes
+    // ESC dismisses the overlay. A column is not dismissed — it is closed
+    // from its tab — and this listener is on the window, so an embedded
+    // viewer would close every open document at once, from anywhere.
     useEffect(() => {
+        if (embedded) return;
         const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape" && !e.defaultPrevented) onClose();
         };
         window.addEventListener("keydown", onEsc);
         return () => window.removeEventListener("keydown", onEsc);
-    }, [onClose]);
+    }, [onClose, embedded]);
 
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
@@ -822,12 +828,23 @@ export function DocumentViewer({
                                 color: "var(--ink-3)",
                                 display: "flex",
                                 gap: 6,
+                                // In a narrow column the kind and the date
+                                // wrap under each other and shove the
+                                // buttons about; the save state is the only
+                                // part that is worth the room.
+                                ...(narrow ? { whiteSpace: "nowrap" as const } : null),
                             }}
                         >
-                            <span>{meta.label}</span>
-                            <span>·</span>
-                            <span className="mono">{source.size || source.added || ""}</span>
-                            <span>·</span>
+                            {!narrow && (
+                                <>
+                                    <span>{meta.label}</span>
+                                    <span>·</span>
+                                    <span className="mono">
+                                        {source.size || source.added || ""}
+                                    </span>
+                                    <span>·</span>
+                                </>
+                            )}
                             <span style={{ color: statusColor }}>{statusText}</span>
                         </div>
                     </div>

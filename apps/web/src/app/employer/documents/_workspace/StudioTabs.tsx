@@ -48,11 +48,20 @@ export interface StudioTabsProps {
     /** The show-sidebar control, in the leftmost column only. */
     leadingSlot?: ReactNode;
     /**
+     * The workspace's own controls — palette, Studio, avatar — in the
+     * leftmost column only. They live here rather than in a pane's header so
+     * they are drawn exactly once however the centre is split, and whatever
+     * kind of pane happens to be leftmost.
+     */
+    trailingSlot?: ReactNode;
+    /**
      * Called with the element each tab's panel should be rendered into. The
      * host renders the panes itself and portals them here, so that handing a
      * tab to another column does not tear its pane down and build it again.
      */
     registerSlot: (tabId: string, element: HTMLElement | null) => void;
+    /** Shown in place of the panels when this column holds nothing. */
+    emptyState?: ReactNode;
 }
 
 /** The id being dragged, shared across strips so a drop knows what it caught. */
@@ -82,7 +91,9 @@ export function StudioTabs({
     onOpenStudio,
     onFocus,
     leadingSlot,
+    trailingSlot,
     registerSlot,
+    emptyState,
 }: StudioTabsProps) {
     const stripRef = useRef<HTMLDivElement>(null);
     const [dropTarget, setDropTarget] = useState<{ id: string; after: boolean } | null>(null);
@@ -149,10 +160,10 @@ export function StudioTabs({
                 ref={stripRef}
                 data-studio-tab-strip
                 data-focused={focused}
-                className="border-line bg-panel-2 flex h-10 shrink-0 items-center gap-1 border-b px-1.5"
+                className="border-line bg-panel-2 flex h-10 shrink-0 items-center gap-1 border-b pl-1.5 pr-1"
             >
                 {leadingSlot}
-                <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain">
+                <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1">
                     <TabsList
                         aria-label={inColumn("Open apps")}
                         className="h-10 w-max min-w-full items-center justify-start gap-1 rounded-none bg-transparent p-0"
@@ -215,13 +226,13 @@ export function StudioTabs({
                                             "group relative flex h-7 shrink-0 items-center rounded-md pr-1 transition-colors",
                                             active
                                                 ? focused
-                                                    ? "bg-panel text-ink shadow-1"
-                                                    : "bg-panel/70 text-ink-2"
+                                                    ? "bg-brand-soft text-brand-ink"
+                                                    : "bg-panel ring-line text-ink-2 ring-1"
                                                 : "text-ink-3 hover:bg-line-2 hover:text-ink-2",
                                             dropTarget?.id === tab.id &&
                                                 (dropTarget.after
-                                                    ? "after:bg-brand after:absolute after:inset-y-0.5 after:-right-1 after:w-0.5 after:rounded-full"
-                                                    : "before:bg-brand before:absolute before:inset-y-0.5 before:-left-1 before:w-0.5 before:rounded-full")
+                                                    ? "after:bg-brand after:absolute after:inset-y-0.5 after:right-0 after:w-0.5 after:rounded-full"
+                                                    : "before:bg-brand before:absolute before:inset-y-0.5 before:left-0 before:w-0.5 before:rounded-full")
                                         )}
                                         draggable
                                         onDragStart={event => {
@@ -289,7 +300,12 @@ export function StudioTabs({
                                                 "h-7 max-w-56 flex-none justify-start gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-xs shadow-none",
                                                 "data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
                                                 active
-                                                    ? "text-ink data-[state=active]:text-ink dark:data-[state=active]:text-ink font-semibold"
+                                                    ? cn(
+                                                          "font-semibold",
+                                                          focused
+                                                              ? "text-brand-ink data-[state=active]:text-brand-ink dark:data-[state=active]:text-brand-ink"
+                                                              : "text-ink-2 data-[state=active]:text-ink-2 dark:data-[state=active]:text-ink-2"
+                                                      )
                                                     : "text-ink-3 font-medium"
                                             )}
                                             onKeyDown={event => {
@@ -332,7 +348,7 @@ export function StudioTabs({
                                             variant="ghost"
                                             size="icon"
                                             className={cn(
-                                                "hover:bg-line-2 hover:text-ink size-5 rounded-sm transition-opacity",
+                                                "hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-5 rounded-sm transition-opacity",
                                                 // Reached by mouse, or by
                                                 // Delete on the tab; a stop of
                                                 // its own would put one in
@@ -342,7 +358,7 @@ export function StudioTabs({
                                                     : "opacity-0 group-hover:opacity-100"
                                             )}
                                             tabIndex={-1}
-                                            aria-label={`Close ${tab.label}`}
+                                            aria-hidden
                                             title={`Close ${tab.label}`}
                                             onPointerDown={event => event.stopPropagation()}
                                             onClick={() => closeTab(tab.id)}
@@ -380,7 +396,7 @@ export function StudioTabs({
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
+                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
                     aria-label={inColumn("Split to the right")}
                     title="Split to the right"
                     disabled={!canSplit || tabs.length < 2}
@@ -392,17 +408,19 @@ export function StudioTabs({
                     variant="ghost"
                     size="icon"
                     data-studio-add
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
+                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
                     aria-label={inColumn("Open a Studio app")}
                     title="Open a Studio app"
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />
                 </Button>
+                {trailingSlot}
             </div>
             <span role="status" aria-live="polite" className="sr-only">
                 {announcement}
             </span>
+            {tabs.length === 0 && emptyState}
             {tabs.map(tab => (
                 <TabsContent
                     key={tab.id}

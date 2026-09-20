@@ -34,6 +34,14 @@ describe("StudioTabs", () => {
         Element.prototype.scrollIntoView = jest.fn();
     });
 
+    /**
+     * The × is aria-hidden: closing is already announced twice over, by
+     * Delete on the tab and by the tab's own menu, so a screen reader is not
+     * told about it a third time. It is still there for a mouse.
+     */
+    const closeButton = (label: string) =>
+        document.querySelector<HTMLElement>(`[title="Close ${label}"]`)!;
+
     function renderStrip(overrides: Partial<React.ComponentProps<typeof StudioTabs>> = {}) {
         const props = {
             onSelect: jest.fn(),
@@ -96,7 +104,7 @@ describe("StudioTabs", () => {
 
     it("closes from the X and from a middle click, but not a left click on the strip", () => {
         const { props } = renderStrip();
-        fireEvent.click(screen.getByRole("button", { name: "Close Knowledge" }));
+        fireEvent.click(closeButton("Knowledge"));
         expect(props.onClose).toHaveBeenCalledWith("knowledge");
 
         middleClick(screen.getByRole("tab", { name: /Drafts/ }), 1);
@@ -174,10 +182,9 @@ describe("StudioTabs", () => {
         const tabs = screen.getAllByRole("tab");
         expect(tabs[1]).toHaveAttribute("aria-posinset", "2");
         expect(tabs[1]).toHaveAttribute("aria-setsize", "3");
-        expect(screen.getByRole("button", { name: "Close Chat" })).toHaveAttribute(
-            "tabindex",
-            "-1"
-        );
+        const close = closeButton("Chat");
+        expect(close).toHaveAttribute("tabindex", "-1");
+        expect(close).toHaveAttribute("aria-hidden", "true");
     });
 
     it("marks which column is the current one", () => {

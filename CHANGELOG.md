@@ -17,8 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     the strip; drag a tab from one column into another
   - A pane moved between columns keeps its draft, scroll and undo — it is the
     same pane, not a rebuilt one
-  - New bindings in Settings → Shortcuts: split, focus the next or previous
-    column, close the current app
+  - New bindings in Settings → Shortcuts: split (⌘⌥\), focus the next or
+    previous column (⌘⌥] and ⌘⌥[), close the current app (⌘⌥W)
+  - The palette, Studio and avatar controls move into the tab strip, where
+    they are drawn once however the centre is split
   - The document viewer folds its versions and notes rail into a Details
     panel once its column is too narrow for both
 - **Studio apps open in centre tabs** - the workspace centre is a tab strip

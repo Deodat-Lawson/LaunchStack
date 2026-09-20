@@ -1582,23 +1582,11 @@ export interface AskPanelProps {
     onNewChat: () => void;
     openPalette: () => void;
     onStudioNavigate: (href: string) => void;
-    /**
-     * The palette, Studio and avatar controls belong to the workspace, not to
-     * this panel. With the centre split they would otherwise appear once per
-     * column, so only the leftmost one draws them.
-     */
-    showShellChrome?: boolean;
-    userInitials: string;
-    userName?: string;
-    userEmail?: string;
-    onSignOut?: () => void;
     /** Composer options persisted across turns — owned by WorkspaceShell. */
     webSearch: boolean;
     onToggleWebSearch: () => void;
     thinking: boolean;
     onToggleThinking: () => void;
-    /** Right-side custom slot, e.g. the Studio hover-menu button. */
-    studioSlot?: React.ReactNode;
     /** Extra pixels added to header `padding-left` when an overlay chrome control (e.g. show sidebar) sits at the viewport edge — see WorkspaceShell. */
     leadingChromeInsetPx?: number;
 }
@@ -1617,16 +1605,10 @@ export function AskPanel({
     onNewChat,
     openPalette,
     onStudioNavigate,
-    showShellChrome = true,
-    userInitials,
-    userName,
-    userEmail,
-    onSignOut,
     webSearch,
     onToggleWebSearch,
     thinking,
     onToggleThinking,
-    studioSlot,
     leadingChromeInsetPx = 0,
 }: AskPanelProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -1753,20 +1735,6 @@ export function AskPanel({
                     <IconPlus size={12} />
                     New chat
                 </button>
-
-                {showShellChrome && (
-                    <>
-                        <JumpToPaletteButton onClick={openPalette} />
-                        {studioSlot}
-                        <AvatarMenu
-                            userInitials={userInitials}
-                            userName={userName}
-                            userEmail={userEmail}
-                            onOpenSettings={() => onStudioNavigate("/employer/settings")}
-                            onSignOut={onSignOut}
-                        />
-                    </>
-                )}
             </div>
 
             <div

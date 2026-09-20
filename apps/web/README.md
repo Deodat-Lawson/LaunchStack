@@ -114,11 +114,18 @@ one column's strip; `StudioSplitView.tsx` puts the columns in a
   Workflows, Analytics, Company profile — are named there rather than in
   `STUDIO_GROUPS`, which keeps them out of the picker but able to open. A
   source opened to the side is a tab too, under the `source:` prefix.
-- **Chrome belongs to the leftmost column.** The palette, Studio and avatar
-  controls are the workspace's, not a pane's; three columns would otherwise
-  show three avatar menus.
+- **Chrome lives in the leftmost strip, not in a pane.** The palette, Studio
+  and avatar controls are the workspace's. Asking each pane to draw them when
+  it happens to be leftmost gave three avatar menus in three columns, and none
+  at all when the leftmost column held a document.
 - **Do not key anything off `[role="tablist"]`** — the source rail has one.
   The strip marks itself `data-studio-tab-strip`.
+- **`moveBefore` only works on a connected node.** It is how a pane changes
+  column without losing focus or scroll, but it throws on a detached one, so
+  it is guarded by `isConnected` with a snapshot-and-restore fallback.
+- **The strip survives an empty column.** It carries the sidebar control, the
+  chrome and the only way to open anything, so the empty state goes inside it
+  rather than in place of it.
 
 ## Right-click menus
 

@@ -132,7 +132,6 @@ function renderPanel(overrides: {
             onNewChat={jest.fn()}
             openPalette={jest.fn()}
             onStudioNavigate={overrides.onStudioNavigate ?? jest.fn()}
-            userInitials="TL"
             webSearch={false}
             onToggleWebSearch={jest.fn()}
             thinking={false}

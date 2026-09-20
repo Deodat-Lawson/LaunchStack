@@ -150,10 +150,13 @@ describe("StudioSplitView", () => {
         expect(props.onFocusGroup).toHaveBeenCalledWith("g1");
     });
 
-    it("offers a way back into Studio when nothing at all is open", () => {
+    it("keeps the strip, and offers a way back into Studio, when nothing is open", () => {
         renderView(layoutOf([[]]));
         expect(screen.getByText("Nothing open")).toBeInTheDocument();
-        expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+        expect(screen.queryAllByRole("tab")).toHaveLength(0);
+        // The strip survives an empty workspace: it carries the sidebar
+        // control, the account menu and the only way to open anything.
+        expect(screen.getByRole("button", { name: "Open a Studio app" })).toBeInTheDocument();
     });
 
     it("drops a tab the workspace can no longer name", () => {

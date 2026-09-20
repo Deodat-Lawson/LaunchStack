@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
@@ -28,6 +28,8 @@ export interface StudioSplitViewProps {
     onOpenStudio: () => void;
     /** The show-sidebar control, which belongs to the leftmost column only. */
     leadingSlot?: ReactNode;
+    /** Palette, Studio and avatar — drawn once, in the leftmost column. */
+    trailingSlot?: ReactNode;
     /** Shown when nothing at all is open. */
     emptyState: ReactNode;
 }
@@ -59,16 +61,44 @@ export function StudioSplitView({
     onFocusGroup,
     onOpenStudio,
     leadingSlot,
+    trailingSlot,
     emptyState,
 }: StudioSplitViewProps) {
     /** Where each column wants its current pane put. */
     const [slots, setSlots] = useState<Record<string, HTMLElement | null>>({});
     /** One stable host node per open tab, created once and reparented after. */
     const hosts = useRef(new Map<string, HTMLDivElement>());
+    const rootRef = useRef<HTMLDivElement>(null);
+    const columnCount = useRef(layout.groups.length);
+
+    /**
+     * A column's strip tries to move focus when a tab closes, but when the
+     * last tab goes the whole strip goes with it and focus lands on the body.
+     * This outlives the column, so it can hand focus to whichever one took
+     * over — and only then, so a page load is left alone.
+     */
+    useLayoutEffect(() => {
+        const shrank = layout.groups.length < columnCount.current;
+        columnCount.current = layout.groups.length;
+        if (!shrank) return;
+        if (document.activeElement && document.activeElement !== document.body) return;
+        const strip = rootRef.current?.querySelector<HTMLElement>(
+            '[data-studio-tab-strip][data-focused="true"]'
+        );
+        const target =
+            strip?.querySelector<HTMLElement>('[role="tab"][data-state="active"]') ??
+            strip?.querySelector<HTMLElement>("[data-studio-add]");
+        target?.focus();
+    }, [layout.groups.length, layout.activeGroupId]);
 
     const registerSlot = useCallback((tabId: string, element: HTMLElement | null) => {
         setSlots(prev => (prev[tabId] === element ? prev : { ...prev, [tabId]: element }));
     }, []);
+
+    const claimColumn = (tabId: string) => {
+        const group = groupOf(layout, tabId);
+        if (group && group.id !== layout.activeGroupId) onFocusGroup(group.id);
+    };
 
     const hostFor = (tabId: string) => {
         let host = hosts.current.get(tabId);
@@ -80,15 +110,46 @@ export function StudioSplitView({
         return host;
     };
 
-    const ids = openTabIds(layout).filter(id => tabFor(id));
+    // Every open tab, named or not. A tab the workspace cannot currently
+    // name — a source mid-refresh — is kept off the strip but keeps its pane,
+    // because one unlucky render must not destroy someone's work.
+    const ids = openTabIds(layout);
 
     // Move each host under the column showing it, and drop the hosts of tabs
     // that have closed so a reopened tab starts clean rather than resurrected.
-    useEffect(() => {
+    useLayoutEffect(() => {
         for (const id of ids) {
             const slot = slots[id];
             const host = hosts.current.get(id);
-            if (slot && host && host.parentElement !== slot) slot.appendChild(host);
+            if (!slot || !host || host.parentElement === slot) continue;
+
+            // Taking a node out of the document blurs whatever was focused in
+            // it and resets every scroller inside. `moveBefore` moves it
+            // without that (Chrome 133+), but only for a node already in the
+            // document — on the first mount it throws — so it is tried and
+            // the manual restore below is the fallback.
+            const moveBefore = (slot as { moveBefore?: (node: Node, ref: Node | null) => void })
+                .moveBefore;
+            if (typeof moveBefore === "function" && host.isConnected) {
+                try {
+                    moveBefore.call(slot, host, null);
+                    continue;
+                } catch {
+                    // Not a move the browser can make state-preserving.
+                }
+            }
+            const focused = host.contains(document.activeElement)
+                ? (document.activeElement as HTMLElement)
+                : null;
+            const scrolled = [...host.querySelectorAll<HTMLElement>("*")]
+                .filter(el => el.scrollTop || el.scrollLeft)
+                .map(el => ({ el, top: el.scrollTop, left: el.scrollLeft }));
+            slot.appendChild(host);
+            for (const { el, top, left } of scrolled) {
+                el.scrollTop = top;
+                el.scrollLeft = left;
+            }
+            focused?.focus({ preventScroll: true });
         }
         const open = new Set(ids);
         for (const [id, host] of hosts.current) {
@@ -99,32 +160,24 @@ export function StudioSplitView({
         }
     });
 
-    const single = layout.groups.length === 1;
-    const nothingOpen = single && layout.groups[0]!.tabIds.length === 0;
-
     return (
-        <div className="flex min-h-0 min-w-0 flex-1">
+        <div ref={rootRef} className="flex min-h-0 min-w-0 flex-1">
             <ResizablePanelGroup direction="horizontal" className="min-h-0 min-w-0 flex-1">
                 {layout.groups.map((group, index) => {
                     const tabs = group.tabIds.flatMap(id => {
                         const tab = tabFor(id);
                         return tab ? [tab] : [];
                     });
-                    return [
-                        index > 0 ? (
-                            <ResizableHandle key={`${group.id}-handle`} withHandle />
-                        ) : null,
-                        <ResizablePanel
-                            key={group.id}
-                            id={group.id}
-                            order={index}
-                            defaultSize={100 / layout.groups.length}
-                            minSize={18}
-                            className="flex min-h-0 min-w-0 flex-col"
-                        >
-                            {nothingOpen ? (
-                                emptyState
-                            ) : (
+                    return (
+                        <Fragment key={group.id}>
+                            {index > 0 && <ResizableHandle withHandle />}
+                            <ResizablePanel
+                                id={group.id}
+                                order={index}
+                                defaultSize={100 / layout.groups.length}
+                                minSize={18}
+                                className="flex min-h-0 min-w-0 flex-col"
+                            >
                                 <StudioTabs
                                     groupId={group.id}
                                     index={index}
@@ -149,11 +202,13 @@ export function StudioSplitView({
                                     }}
                                     onFocus={() => onFocusGroup(group.id)}
                                     leadingSlot={index === 0 ? leadingSlot : undefined}
+                                    trailingSlot={index === 0 ? trailingSlot : undefined}
                                     registerSlot={registerSlot}
+                                    emptyState={emptyState}
                                 />
-                            )}
-                        </ResizablePanel>,
-                    ];
+                            </ResizablePanel>
+                        </Fragment>
+                    );
                 })}
             </ResizablePanelGroup>
 
@@ -161,13 +216,12 @@ export function StudioSplitView({
                 createPortal(
                     <div
                         className="flex h-full min-h-0 min-w-0 flex-1 flex-col"
-                        // The pane is portalled, so a pointer event in it
-                        // reaches this component rather than its column.
-                        // Tell the layout which column was touched.
-                        onPointerDownCapture={() => {
-                            const group = groupOf(layout, id);
-                            if (group) onFocusGroup(group.id);
-                        }}
+                        // The pane is portalled, so events in it reach this
+                        // component rather than its column. Tell the layout
+                        // which column was touched — by pointer or by Tab,
+                        // since the column verbs act on the focused one.
+                        onPointerDownCapture={() => claimColumn(id)}
+                        onFocusCapture={() => claimColumn(id)}
                     >
                         {renderPane(id)}
                     </div>,

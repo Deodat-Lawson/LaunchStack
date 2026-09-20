@@ -80,7 +80,6 @@ function Harness({
                 onNewChat={onNewChat}
                 openPalette={jest.fn()}
                 onStudioNavigate={jest.fn()}
-                userInitials="TL"
                 webSearch={false}
                 onToggleWebSearch={jest.fn()}
                 thinking={false}

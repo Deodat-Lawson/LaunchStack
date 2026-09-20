@@ -814,9 +814,15 @@ export function WorkspaceShell() {
     const handleOpenSource = useCallback(
         (source: WorkspaceSource) => {
             setViewerHighlight(null);
+            // Already beside the chat: bring that column forward rather than
+            // laying an overlay over the split.
+            if (groupOf(layout, tabIdOfSource(source.id))) {
+                setActiveFeatureId(tabIdOfSource(source.id));
+                return;
+            }
             openSource(source.id);
         },
-        [openSource]
+        [openSource, layout, setActiveFeatureId]
     );
 
     /** A citation click opens the cited document with the passage highlighted. */
@@ -1123,7 +1129,12 @@ export function WorkspaceShell() {
     expandFeatureRef.current = expandFeature;
     paneVerbsRef.current = {
         split: () => activeFeatureId && splitTab(activeFeatureId),
-        close: () => activeFeatureId && closeTab(activeFeatureId),
+        close: () => {
+            const group = groupOf(layout, activeFeatureId);
+            if (!group) return;
+            releaseTabs([activeFeatureId]);
+            closeTabIn(group.id, activeFeatureId);
+        },
         focusAdjacent: focusAdjacentGroup,
     };
 
@@ -1170,6 +1181,71 @@ export function WorkspaceShell() {
             return feature && can(feature.requires) ? feature : undefined;
         },
         [sources, can]
+    );
+
+    /**
+     * A source open in a column can be deleted from the rail, or trashed from
+     * the viewer, while it is on screen. Close its tab rather than leaving a
+     * column holding a document that is not in the library any more.
+     */
+    useEffect(() => {
+        if (sourcesLoading) return;
+        for (const group of layout.groups) {
+            for (const id of group.tabIds) {
+                if (!id.startsWith(SOURCE_TAB_PREFIX)) continue;
+                if (!sources.some(source => source.id === sourceIdOfTab(id))) {
+                    closeTabIn(group.id, id);
+                }
+            }
+        }
+    }, [sources, sourcesLoading, layout, closeTabIn]);
+
+    /**
+     * Show a tab. Studio apps go through `expandFeature`, which knows about
+     * permissions, external apps and retired ids; a source is not in that
+     * registry and simply becomes the visible tab of its column.
+     */
+    const selectTab = useCallback(
+        (id: string) => {
+            // The editor reports what changed by unmounting, and a tab does
+            // not unmount; refresh as it leaves instead, or the rail keeps
+            // the pre-edit title.
+            if (activeFeatureId === "mindmap" && id !== "mindmap") void refresh();
+            if (id.startsWith(SOURCE_TAB_PREFIX)) {
+                setActiveFeatureId(id);
+                return;
+            }
+            expandFeature(id);
+        },
+        [activeFeatureId, refresh, setActiveFeatureId, expandFeature]
+    );
+
+    /**
+     * The mindmap tab owns more than a pane: an edited map, and `&edit=1` in
+     * the URL. Every way of closing it has to let go of both — its own close,
+     * "close the others", "close everything to the right", and the keyboard.
+     */
+    const releaseTabs = useCallback(
+        (closing: string[]) => {
+            if (!closing.includes("mindmap")) return;
+            setEditedMindmapId(null);
+            if (editing) closeSource();
+            void refresh();
+        },
+        [editing, closeSource, refresh]
+    );
+
+    /** Which ids a verb is about to take out of a column. */
+    const tabsRemovedBy = useCallback(
+        (groupId: string, id: string, verb: "others" | "right") => {
+            const group = layout.groups.find(item => item.id === groupId);
+            if (!group) return [];
+            const at = group.tabIds.indexOf(id);
+            return verb === "others"
+                ? group.tabIds.filter(other => other !== id)
+                : group.tabIds.slice(at + 1);
+        },
+        [layout]
     );
 
     /** Put a source in a column of its own, beside whatever is open. */
@@ -1516,9 +1592,6 @@ export function WorkspaceShell() {
             // Something focused has already acted on this key — the tab strip
             // closing a tab, for instance. Don't run a second command on it.
             if (e.defaultPrevented) return;
-            // The mindmap editor binds its own ⌘K, `/` and tool keys on the
-            // same window; while it is open, its map wins.
-            if (editingRef.current) return;
             const tag = (e.target as HTMLElement | null)?.tagName;
             const inInput =
                 tag === "INPUT" ||
@@ -1526,6 +1599,11 @@ export function WorkspaceShell() {
                 Boolean((e.target as HTMLElement | null)?.isContentEditable);
             const command = commandForEvent(e, bindingsRef.current, { inInput });
             if (!command) return;
+            // The mindmap editor binds its own ⌘K, `/` and tool keys on the
+            // same window; while it is focused, its map wins. The column
+            // verbs are the exception: they move between columns and close
+            // this one, so the editor must not be able to trap someone in it.
+            if (editingRef.current && !command.id.startsWith("pane.")) return;
             e.preventDefault();
             switch (command.id) {
                 case "palette.toggle":
@@ -1671,28 +1749,46 @@ export function WorkspaceShell() {
             <StudioSplitView
                 layout={layout}
                 tabFor={tabFor}
-                onSelect={expandFeature}
+                onSelect={selectTab}
                 onClose={(groupId, id) => {
+                    releaseTabs([id]);
                     closeTabIn(groupId, id);
-                    if (id === "mindmap") {
-                        setEditedMindmapId(null);
-                        if (editing) closeSource();
-                        void refresh();
-                    }
                 }}
-                onCloseOthers={closeOthers}
-                onCloseToRight={closeToRight}
+                onCloseOthers={(groupId, id) => {
+                    releaseTabs(tabsRemovedBy(groupId, id, "others"));
+                    closeOthers(groupId, id);
+                }}
+                onCloseToRight={(groupId, id) => {
+                    releaseTabs(tabsRemovedBy(groupId, id, "right"));
+                    closeToRight(groupId, id);
+                }}
                 onSplit={splitTab}
                 onMove={moveTab}
                 onFocusGroup={focusGroup}
                 onOpenStudio={openFeature}
+                trailingSlot={
+                    <>
+                        <JumpToPaletteButton onClick={() => setPalOpen(true)} />
+                        <StudioMenu
+                            onOpenStudio={() => openFeature()}
+                            onPickFeature={id => expandFeature(id)}
+                        />
+                        <AvatarMenu
+                            userInitials={initials}
+                            userName={userName}
+                            userEmail={userEmail}
+                            onOpenSettings={() => expandFeature("settings")}
+                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+                        />
+                    </>
+                }
                 leadingSlot={
                     railHidden ? (
                         <Button
                             variant="ghost"
                             size="icon"
                             className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
-                            title="Show sidebar  ⌘\\"
+                            title={"Show sidebar  ⌘\\"}
                             aria-label="Show sidebar"
                             onClick={() => setRailHidden(false)}
                         >
@@ -1717,10 +1813,6 @@ export function WorkspaceShell() {
                     const paneGroup = groupOf(layout, paneId);
                     const paneFocused =
                         paneGroup?.id === layout.activeGroupId && paneGroup.activeId === paneId;
-                    // One column draws the workspace's own controls; three
-                    // avatar menus in a row would be absurd.
-                    const primaryColumn = paneGroup?.id === layout.groups[0]?.id;
-
                     return paneId === "chat" ? (
                         <AskPanel
                             leadingChromeInsetPx={0}
@@ -1737,21 +1829,10 @@ export function WorkspaceShell() {
                             onNewChat={startNewChat}
                             openPalette={() => setPalOpen(true)}
                             onStudioNavigate={navigateStudio}
-                            userInitials={initials}
-                            userName={userName}
-                            userEmail={userEmail}
-                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
                             webSearch={composerWebSearch}
                             onToggleWebSearch={() => setComposerWebSearch(v => !v)}
                             thinking={composerThinking}
                             onToggleThinking={() => setComposerThinking(v => !v)}
-                            showShellChrome={primaryColumn}
-                            studioSlot={
-                                <StudioMenu
-                                    onOpenStudio={() => openFeature()}
-                                    onPickFeature={id => expandFeature(id)}
-                                />
-                            }
                         />
                     ) : paneId.startsWith(SOURCE_TAB_PREFIX) ? (
                         <EmbeddedSourcePane
@@ -1791,17 +1872,7 @@ export function WorkspaceShell() {
                     ) : (
                         <ExpandedFeatureView
                             featureId={paneId}
-                            showShellChrome={primaryColumn}
                             onPaneExit={() => closeTab(paneId)}
-                            onOpenStudio={() => openFeature()}
-                            onPickFeature={id => expandFeature(id)}
-                            openPalette={() => setPalOpen(true)}
-                            userInitials={initials}
-                            userName={userName}
-                            userEmail={userEmail}
-                            // Settings is a workspace surface now, not a separate destination.
-                            onOpenSettings={() => expandFeature("settings")}
-                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
                             paneContext={{
                                 knowledge: {
                                     sources,
@@ -1970,9 +2041,10 @@ export function WorkspaceShell() {
  * A source in a column of its own, beside the chat rather than over it.
  *
  * The viewer is the same one the overlay uses; only its placement differs.
- * The source is looked up on every render because the library moves under it
- * — a rename should retitle the tab, and a delete should not leave a pane
- * rendering a document that is gone.
+ * The source is looked up on every render because the library moves under it,
+ * so a rename retitles the pane. The missing case is a belt to the shell's
+ * braces: the shell closes a tab whose source has gone, and this keeps the
+ * column readable for the render in between.
  */
 function EmbeddedSourcePane({
     sourceId,
@@ -2009,18 +2081,8 @@ function EmbeddedSourcePane({
 
 interface ExpandedFeatureViewProps {
     featureId: string;
-    /** Only the leftmost column draws the workspace's palette, Studio and avatar. */
-    showShellChrome?: boolean;
     /** Close this app's tab when the pane invokes its exit / close callback. */
     onPaneExit: () => void;
-    onOpenStudio: () => void;
-    onPickFeature: (featureId: string) => void;
-    openPalette: () => void;
-    userInitials: string;
-    userName?: string;
-    userEmail?: string;
-    onOpenSettings: () => void;
-    onSignOut?: () => void;
     /** Workspace-owned data some panes need (Knowledge in particular). */
     paneContext?: StudioPaneContext;
 }
@@ -2029,20 +2091,7 @@ interface ExpandedFeatureViewProps {
  * One app's panel. The tab strip above owns navigation; this is the panel's
  * own chrome, aligned with the AskPanel header (jump, Studio, avatar).
  */
-function ExpandedFeatureView({
-    featureId,
-    showShellChrome = true,
-    onPaneExit,
-    onOpenStudio,
-    onPickFeature,
-    openPalette,
-    userInitials,
-    userName,
-    userEmail,
-    onOpenSettings,
-    onSignOut,
-    paneContext,
-}: ExpandedFeatureViewProps) {
+function ExpandedFeatureView({ featureId, onPaneExit, paneContext }: ExpandedFeatureViewProps) {
     const feature = resolveStudioFeature(featureId);
 
     return (
@@ -2064,19 +2113,6 @@ function ExpandedFeatureView({
                     </div>
                     <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{feature?.desc ?? ""}</div>
                 </div>
-                {showShellChrome && (
-                    <>
-                        <JumpToPaletteButton onClick={openPalette} />
-                        <StudioMenu onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
-                        <AvatarMenu
-                            userInitials={userInitials}
-                            userName={userName}
-                            userEmail={userEmail}
-                            onOpenSettings={onOpenSettings}
-                            onSignOut={onSignOut}
-                        />
-                    </>
-                )}
             </div>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 {feature ? (

@@ -182,6 +182,11 @@ export function reduceLayout(layout: PaneLayout, action: PaneAction): PaneLayout
                 return reduceLayout(layout, { type: "open", id: action.id, groupId: existing.id });
             }
             const at = layout.groups.findIndex(group => group.id === layout.activeGroupId);
+            // An empty column is already a column to the side; filling it
+            // beats stranding it and spending one of the three on a blank.
+            if (layout.groups[at]?.tabIds.length === 0) {
+                return reduceLayout(layout, { type: "open", id: action.id });
+            }
             const beside = layout.groups[at + 1];
             if (beside) {
                 return reduceLayout(layout, { type: "open", id: action.id, groupId: beside.id });
@@ -192,7 +197,9 @@ export function reduceLayout(layout: PaneLayout, action: PaneAction): PaneLayout
             const created = newGroup(`g${layout.seq}`, [action.id]);
             const groups = [...layout.groups];
             groups.splice(at + 1, 0, created);
-            return { groups, activeGroupId: created.id, seq: layout.seq + 1 };
+            // Prune like every other create path: a column emptied earlier
+            // must not survive just because this action added another.
+            return prune({ groups, activeGroupId: created.id, seq: layout.seq + 1 }, created.id);
         }
 
         case "split": {

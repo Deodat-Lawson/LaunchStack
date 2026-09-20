@@ -96,6 +96,37 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         defaultKeys: "Mod+,",
         when: "always",
     },
+    {
+        id: "pane.split",
+        label: "Split to the right",
+        description: "Give the app you are looking at a column of its own.",
+        // Mod+\\ alone is the sidebar toggle.
+        defaultKeys: "Mod+Alt+\\",
+        when: "always",
+    },
+    {
+        id: "pane.focusNext",
+        label: "Focus the next column",
+        description: "Move between the columns of a split workspace.",
+        defaultKeys: "Mod+Alt+]",
+        when: "always",
+    },
+    {
+        id: "pane.focusPrevious",
+        label: "Focus the previous column",
+        description: "Move between the columns of a split workspace.",
+        defaultKeys: "Mod+Alt+[",
+        when: "always",
+    },
+    {
+        id: "pane.close",
+        label: "Close this app",
+        // Not Mod+Shift+W: that closes the browser window, and the page
+        // never sees it.
+        description: "Close the tab the focused column is showing.",
+        defaultKeys: "Mod+Alt+W",
+        when: "always",
+    },
 ];
 
 export const SHORTCUT_COMMANDS_BY_ID: ReadonlyMap<string, ShortcutCommand> = new Map(

@@ -259,9 +259,6 @@ export function AskStartersPreview() {
                 onNewChat={() => setThread([])}
                 openPalette={() => setLastNavigation("palette")}
                 onStudioNavigate={href => setLastNavigation(href)}
-                userInitials="TL"
-                userName="Preview User"
-                userEmail="preview@example.com"
                 webSearch={false}
                 onToggleWebSearch={() => undefined}
                 thinking={false}

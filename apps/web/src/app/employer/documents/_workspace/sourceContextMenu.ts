@@ -20,6 +20,8 @@ export type SourceContextMenuItem = ActionMenuItem;
 
 export interface SourceMenuHandlers {
     onOpen?: (source: WorkspaceSource) => void;
+    /** Put it in a column beside whatever is open, rather than over it. */
+    onOpenBeside?: (source: WorkspaceSource) => void;
     onToggleContext?: (source: WorkspaceSource) => void;
     onRename?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
@@ -63,6 +65,16 @@ export function buildSourceMenuItems(
             label: "Open",
             icon: "open",
             onSelect: () => handlers.onOpen?.(source),
+        });
+    }
+
+    if (handlers.onOpenBeside) {
+        items.push({
+            type: "item",
+            id: "open-beside",
+            label: "Open to the side",
+            icon: "split",
+            onSelect: () => handlers.onOpenBeside?.(source),
         });
     }
 

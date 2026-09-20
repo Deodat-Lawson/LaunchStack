@@ -43,8 +43,16 @@ import { ArtifactPreview, SourceView } from "./ArtifactPreview";
  * header. The title renames inline (Enter or blur saves); everything else is a
  * PATCH with a toast.
  */
-export function ArtifactViewer({ id }: { id: number }) {
+export function ArtifactViewer({
+    id,
+    onBack,
+}: {
+    id: number;
+    /** Supplied by a host that owns the gallery — the Studio tab swaps back. */
+    onBack?: () => void;
+}) {
     const router = useRouter();
+    const backToGallery = () => (onBack ? onBack() : router.push("/employer/artifacts"));
     const [artifact, setArtifact] = useState<ArtifactDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [missing, setMissing] = useState(false);
@@ -120,7 +128,7 @@ export function ArtifactViewer({ id }: { id: number }) {
         try {
             await deleteArtifact(id);
             toast.success("Moved to trash");
-            router.push("/employer/artifacts");
+            backToGallery();
         } catch {
             toast.error("Couldn't delete the artifact");
         }
@@ -181,11 +189,7 @@ export function ArtifactViewer({ id }: { id: number }) {
         return (
             <div className="flex h-full flex-col items-center justify-center gap-3">
                 <p className="text-ink-2 text-[14px]">That artifact doesn&apos;t exist anymore.</p>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => router.push("/employer/artifacts")}
-                >
+                <Button variant="outline" size="sm" onClick={() => backToGallery()}>
                     <ArrowLeft className="size-3.5" />
                     Back to artifacts
                 </Button>
@@ -202,7 +206,7 @@ export function ArtifactViewer({ id }: { id: number }) {
                     variant="ghost"
                     size="sm"
                     className="h-8 gap-1.5"
-                    onClick={() => router.push("/employer/artifacts")}
+                    onClick={() => backToGallery()}
                 >
                     <ArrowLeft className="size-3.5" />
                     Artifacts

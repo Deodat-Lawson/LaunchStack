@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Lock, Pencil, Upload } from "lucide-react";
+import { Lock, PanelRight, Pencil, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "~/lib/auth-client";
 import { IconChevronLeft, IconFolder, IconSparkle, IconTrash } from "./icons";
@@ -90,6 +90,12 @@ export interface DocumentViewerProps {
     /** Mindmaps only: open straight into the branch-by-branch presenter. */
     present?: boolean;
     onExitPresent?: () => void;
+    /**
+     * Render in the flow of a Studio column instead of covering the workspace.
+     * The overlay is still how a preview opens; this is how a document sits
+     * beside the chat it is being discussed in.
+     */
+    embedded?: boolean;
 }
 
 /** Gives one version row its own right-click target without touching its markup. */
@@ -216,6 +222,7 @@ export function DocumentViewer({
     highlight,
     present = false,
     onExitPresent,
+    embedded = false,
     onClose,
     onRename,
     onDelete,
@@ -252,6 +259,29 @@ export function DocumentViewer({
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
+    /**
+     * Versions and notes sit in a 320px rail beside the document. In a Studio
+     * column that can be most of the width, so below this the rail becomes a
+     * panel the Details button slides over the document instead.
+     */
+    const rootRef = useRef<HTMLDivElement>(null);
+    const [narrow, setNarrow] = useState(false);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    useEffect(() => {
+        const element = rootRef.current;
+        if (!embedded || !element || typeof ResizeObserver === "undefined") {
+            setNarrow(false);
+            return;
+        }
+        const observer = new ResizeObserver(([entry]) => {
+            const width = entry?.contentRect.width ?? 0;
+            // A pane with no box — hidden, or mid-reparent — has no layout
+            // question to answer.
+            if (width > 0) setNarrow(width < 760);
+        });
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, [embedded]);
     const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
@@ -446,14 +476,17 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
-    // ESC closes
+    // ESC dismisses the overlay. A column is not dismissed — it is closed
+    // from its tab — and this listener is on the window, so an embedded
+    // viewer would close every open document at once, from anywhere.
     useEffect(() => {
+        if (embedded) return;
         const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape" && !e.defaultPrevented) onClose();
         };
         window.addEventListener("keydown", onEsc);
         return () => window.removeEventListener("keydown", onEsc);
-    }, [onClose]);
+    }, [onClose, embedded]);
 
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
@@ -699,12 +732,14 @@ export function DocumentViewer({
     return (
         <div
             {...documentTarget}
+            ref={rootRef}
             style={{
-                position: "fixed",
-                inset: 0,
-                zIndex: 80,
+                // Embedded, it is one column among several and must not
+                // escape its panel; as an overlay it owns the screen.
+                ...(embedded
+                    ? { position: "relative", flex: 1, minWidth: 0, minHeight: 0 }
+                    : { position: "fixed", inset: 0, zIndex: 80, animation: "lsw-fadeIn 180ms" }),
                 background: "var(--bg)",
-                animation: "lsw-fadeIn 180ms",
                 display: "flex",
                 flexDirection: "column",
             }}
@@ -720,21 +755,25 @@ export function DocumentViewer({
                     flexShrink: 0,
                 }}
             >
-                <button
-                    onClick={onClose}
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "6px 10px",
-                        borderRadius: 7,
-                        color: "var(--ink-2)",
-                        fontSize: 12,
-                        border: "1px solid var(--line)",
-                    }}
-                >
-                    <IconChevronLeft size={12} /> Library
-                </button>
+                {/* In a column the tab's own close is the way out, and a
+                    "Library" button beside the chat would mean nothing. */}
+                {!embedded && (
+                    <button
+                        onClick={onClose}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            padding: "6px 10px",
+                            borderRadius: 7,
+                            color: "var(--ink-2)",
+                            fontSize: 12,
+                            border: "1px solid var(--line)",
+                        }}
+                    >
+                        <IconChevronLeft size={12} /> Library
+                    </button>
+                )}
                 <div
                     style={{
                         display: "flex",
@@ -789,12 +828,23 @@ export function DocumentViewer({
                                 color: "var(--ink-3)",
                                 display: "flex",
                                 gap: 6,
+                                // In a narrow column the kind and the date
+                                // wrap under each other and shove the
+                                // buttons about; the save state is the only
+                                // part that is worth the room.
+                                ...(narrow ? { whiteSpace: "nowrap" as const } : null),
                             }}
                         >
-                            <span>{meta.label}</span>
-                            <span>·</span>
-                            <span className="mono">{source.size || source.added || ""}</span>
-                            <span>·</span>
+                            {!narrow && (
+                                <>
+                                    <span>{meta.label}</span>
+                                    <span>·</span>
+                                    <span className="mono">
+                                        {source.size || source.added || ""}
+                                    </span>
+                                    <span>·</span>
+                                </>
+                            )}
                             <span style={{ color: statusColor }}>{statusText}</span>
                         </div>
                     </div>
@@ -902,9 +952,29 @@ export function DocumentViewer({
                 >
                     <IconTrash size={13} />
                 </button>
+                {narrow && (
+                    <button
+                        onClick={() => setDetailsOpen(open => !open)}
+                        aria-pressed={detailsOpen}
+                        style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: 7,
+                            color: detailsOpen ? "var(--accent-ink)" : "var(--ink-2)",
+                            background: detailsOpen ? "var(--accent-soft)" : "transparent",
+                            border: "1px solid var(--line)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                        title="Versions and notes"
+                    >
+                        <PanelRight size={13} />
+                    </button>
+                )}
             </div>
 
-            <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+            <div style={{ flex: 1, display: "flex", overflow: "hidden", position: "relative" }}>
                 <div
                     style={{
                         flex: 1,
@@ -1120,14 +1190,28 @@ export function DocumentViewer({
                 </div>
 
                 <aside
+                    hidden={narrow && !detailsOpen}
                     style={{
                         width: 320,
+                        maxWidth: "100%",
                         flexShrink: 0,
                         borderLeft: "1px solid var(--line)",
                         background: "var(--panel)",
-                        display: "flex",
+                        display: narrow && !detailsOpen ? "none" : "flex",
                         flexDirection: "column",
                         overflow: "hidden",
+                        // Over the document rather than squeezing it, once
+                        // there is not enough width for both.
+                        ...(narrow
+                            ? {
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  zIndex: 2,
+                                  boxShadow: "var(--shadow-3)",
+                              }
+                            : null),
                     }}
                 >
                     <div

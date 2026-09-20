@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Split the workspace centre** - columns side by side, each its own strip of
+  tabs
+  - Chat beside a document, or chat beside a tool beside a document, up to
+    three columns with a draggable divider
+  - "Open to the side" on any source; "Split to the right" on a tab or from
+    the strip; drag a tab from one column into another
+  - A pane moved between columns keeps its draft, scroll and undo — it is the
+    same pane, not a rebuilt one
+  - New bindings in Settings → Shortcuts: split (⌘⌥\), focus the next or
+    previous column (⌘⌥] and ⌘⌥[), close the current app (⌘⌥W)
+  - The palette, Studio and avatar controls move into the tab strip, where
+    they are drawn once however the centre is split
+  - The document viewer folds its versions and notes rail into a Details
+    panel once its column is too narrow for both
+- **Studio apps open in centre tabs** - the workspace centre is a tab strip
+  rather than one pane at a time
+  - Open, close, middle-click close, drag to reorder, Alt+Arrow to reorder,
+    Delete or Backspace to close, overflow scroll, and an empty-workspace state
+  - Every open pane stays mounted, so switching apps keeps drafts, scroll
+    position and undo history
+  - Claude Artifacts and Coding sessions now open inside the workspace instead
+    of navigating away; both keep their standalone routes for direct links
+  - The Studio drawer is a picker: it no longer hosts panes, and the Expand
+    button is gone because there is nothing left to expand into
+  - A mindmap in a background tab, or behind a source preview, no longer
+    consumes keyboard and paste events
+  - `?feature=workflows`, `?feature=analytics` and `?feature=metadata` open
+    their panes again instead of showing "Unknown feature"
+
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing

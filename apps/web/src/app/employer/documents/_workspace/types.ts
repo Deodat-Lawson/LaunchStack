@@ -379,8 +379,9 @@ export interface StudioFeature {
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
     /**
-     * The feature is a separate app with its own route. Picking it navigates
-     * rather than expanding a pane inside the workspace.
+     * The feature is a separate app with its own routes and chrome — Growth,
+     * for instance, whose rail and nested pages cannot be mounted in a tab.
+     * Picking it navigates instead of opening a Studio tab.
      */
     external?: boolean;
     /**
@@ -452,16 +453,19 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Claude Artifacts",
                 Icon: IconArtifact,
                 desc: "Import pages and diagrams built in Claude, and manage them here",
+                // Not `external`: the gallery and viewer are plain client
+                // components, so Studio mounts them in a tab. The route stays
+                // for direct links and for opening one in a browser tab.
                 href: "/employer/artifacts",
-                external: true,
             },
             {
                 id: "agent-sessions",
                 label: "Coding sessions",
                 Icon: IconSessions,
                 desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
+                // Not `external`, like Artifacts: continuing a session in chat
+                // is a move between two Studio tabs, not a page load.
                 href: "/employer/agent-sessions",
-                external: true,
             },
             {
                 // One app with its own rail for the whole growth motion: Brand
@@ -504,6 +508,52 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
     });
     return acc;
 }, {});
+
+/**
+ * Panes that are no longer Studio entries but are still reachable by link:
+ * `?feature=metadata` from an old bookmark, `?feature=analytics`, which is where
+ * `SettingsHub` sends `#analytics`, and `workflows`, which keeps a pane, a
+ * palette row and the `feature.workflows` shortcut but no picker tile. Each
+ * renders a real pane; a tab needs a label and an icon, so
+ * `resolveStudioFeature` has to be able to name them.
+ */
+const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
+    workflows: {
+        id: "workflows",
+        label: "Workflows",
+        Icon: IconWorkflow,
+        desc: "Automate recurring tasks across your sources",
+    },
+    metadata: {
+        id: "metadata",
+        label: "Company profile",
+        Icon: IconBuilding,
+        desc: "What the workspace knows about your company",
+    },
+    analytics: {
+        id: "analytics",
+        label: "Analytics",
+        Icon: IconChart,
+        desc: "Documents, queries, and activity",
+    },
+};
+
+/**
+ * The one lookup the workspace shell opens a tab from. Every id it accepts
+ * renders a real pane; anything else answers `undefined` and the caller
+ * navigates or does nothing rather than opening a tab with no name.
+ */
+export function resolveStudioFeature(id: string): StudioFeature | undefined {
+    return STUDIO_FEATURES_BY_ID[id] ?? LINK_ONLY_FEATURES[id];
+}
+
+/** Where a palette entry that is not a Studio app points. */
+export function demotedFeatureHref(id: string): string | undefined {
+    const href = DEMOTED_FEATURES.find(f => f.id === id)?.href;
+    // A `?feature=` href would come straight back here; those ids have no
+    // destination beyond this page and are left alone.
+    return href?.startsWith("/employer/documents?feature=") ? undefined : href;
+}
 
 /** Add-source modal tabs, grouped Upload / Connect. */
 export interface AddSourceTab {

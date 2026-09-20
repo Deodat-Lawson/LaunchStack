@@ -79,6 +79,54 @@ OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
 changes theme and silently alter someone else's diagram. Its editor chrome uses
 the tokens like everything else.
 
+## The workspace centre: columns and tabs
+
+The centre is one or more columns side by side, each its own strip of tabs.
+Chat beside a document, or chat beside a tool beside a document. **Every open
+pane stays mounted** — switching tabs, and moving a tab between columns, keeps
+drafts, scroll and undo.
+
+Three files: `paneLayout.ts` is the state and every verb; `StudioTabs.tsx` is
+one column's strip; `StudioSplitView.tsx` puts the columns in a
+`ResizablePanelGroup` and hosts the panes.
+
+- **A move names a neighbour, not a position.** A strip renders a list filtered
+  by permission while the reducer holds the unfiltered one, so
+  `move(id, toGroupId, beforeId)` is the only form that cannot address the
+  wrong slot.
+- **Panes are not rendered inside their column.** Each gets a host element the
+  split view creates once and then moves with `appendChild`. Portalling into
+  the column's own slot looks equivalent and is not: React compares a portal's
+  container when it reconciles, so changing it destroys the pane and builds a
+  new one — the exact thing tabs exist to prevent. There is a mount-counter
+  test for this; the regression is invisible on a pane with no state.
+- **Register a slot from a layout effect, never an inline `ref` callback.** An
+  inline callback is a new function each render, so React calls it with `null`
+  and then the element every pass, which never settles when the host keeps
+  slots in state.
+- **Visible is not focused.** With columns, one pane per column is visible but
+  only one is focused. Anything that owns the keyboard — the mindmap editor,
+  above all — gates on focus, or it eats keys meant for the pane next to it.
+- **An app is a tab unless it is a route tree.** Growth has its own layout and
+  nested pages, so it keeps `external: true` and Studio navigates to it.
+- **Every id the shell can open must resolve** through `resolveStudioFeature`,
+  because a tab needs a label and an icon. Panes reachable only by link —
+  Workflows, Analytics, Company profile — are named there rather than in
+  `STUDIO_GROUPS`, which keeps them out of the picker but able to open. A
+  source opened to the side is a tab too, under the `source:` prefix.
+- **Chrome lives in the leftmost strip, not in a pane.** The palette, Studio
+  and avatar controls are the workspace's. Asking each pane to draw them when
+  it happens to be leftmost gave three avatar menus in three columns, and none
+  at all when the leftmost column held a document.
+- **Do not key anything off `[role="tablist"]`** — the source rail has one.
+  The strip marks itself `data-studio-tab-strip`.
+- **`moveBefore` only works on a connected node.** It is how a pane changes
+  column without losing focus or scroll, but it throws on a detached one, so
+  it is guarded by `isConnected` with a snapshot-and-restore fallback.
+- **The strip survives an empty column.** It carries the sidebar control, the
+  chrome and the only way to open anything, so the empty state goes inside it
+  rather than in place of it.
+
 ## Right-click menus
 
 Every screen shares one context-menu layer; nothing hand-rolls a menu.

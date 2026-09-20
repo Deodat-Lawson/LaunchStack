@@ -1256,6 +1256,10 @@ export function DocumentViewer({
                                 versionId={activeVersionId}
                                 prefilledAnchor={pdfAnchorDraft}
                                 prefilledText={noteSeed}
+                                // Set by a card click and by a pin click in
+                                // the page, so the open card and the shown
+                                // passage always name the same note.
+                                activeNoteId={pdfScrollToNoteId}
                                 onChanged={() => {
                                     setNotesNonce(n => n + 1);
                                     setPdfAnchorDraft(null);

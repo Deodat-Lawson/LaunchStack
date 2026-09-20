@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus } from "lucide-react";
 import type { DocumentNote } from "~/server/db/schema";
@@ -9,6 +9,7 @@ import {
     type DraftState,
     EMPTY_DRAFT,
     type NoteAnchorLite,
+    orderNotesForReading,
     type PrefilledAnchor,
     primaryPageOfAnchor,
 } from "./_shared/anchor";
@@ -50,6 +51,12 @@ interface Props {
      * find their passage.
      */
     onNoteClick?: (note: { id: number; page: number | null; quote: string | null }) => void;
+    /**
+     * The note the document is currently showing, so the column can open the
+     * matching card. Clicking a pin in the document sets this, which is what
+     * makes the pairing work in both directions rather than only outward.
+     */
+    activeNoteId?: number | null;
 }
 
 /** Trimmed text, or null when there is none worth searching for. */
@@ -66,6 +73,7 @@ export function DocumentNotesPanel({
     prefilledAnchor,
     prefilledText,
     onNoteClick,
+    activeNoteId = null,
 }: Props) {
     const [notes, setNotes] = useState<DocumentNote[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +82,17 @@ export function DocumentNotesPanel({
     const [error, setError] = useState<string | null>(null);
     /** The note a delete has been asked for, pending the confirm dialog. */
     const [pendingDelete, setPendingDelete] = useState<DocumentNote | null>(null);
+    const activeCardRef = useRef<HTMLDivElement | null>(null);
+
+    const ordered = useMemo(() => orderNotesForReading(notes), [notes]);
+
+    // Bring the open card into view when the document is what opened it —
+    // clicking a pin in the page should not leave its note off-screen in a
+    // long column. `nearest` so a card already visible does not jump.
+    useEffect(() => {
+        if (activeNoteId === null) return;
+        activeCardRef.current?.scrollIntoView({ block: "nearest" });
+    }, [activeNoteId]);
 
     const fetchNotes = useCallback(async () => {
         if (!documentId) {
@@ -367,25 +386,37 @@ export function DocumentNotesPanel({
                         </div>
                     </div>
                 ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                        {notes.map(n => (
-                            <NoteCard
-                                key={n.id}
-                                note={n}
-                                editing={draft.id === n.id}
-                                onEdit={() => startEditDraft(n)}
-                                onDelete={() => setPendingDelete(n)}
-                                onClick={() => {
-                                    const anchor = n.anchor as NoteAnchorLite | null;
-                                    onNoteClick?.({
-                                        id: n.id,
-                                        page: primaryPageOfAnchor(anchor),
-                                        // A blank quote is no quote: `??` would keep the empty
-                                        // string and the viewer would search for nothing.
-                                        quote: nonEmpty(anchor?.quote?.exact),
-                                    });
-                                }}
-                            />
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 6,
+                            padding: "0 6px",
+                        }}
+                    >
+                        {ordered.map(n => (
+                            // The wrapper only exists to hold a ref: NoteCard
+                            // does not forward one, and the open card has to be
+                            // scrollable-to when the document is what opened it.
+                            <div key={n.id} ref={n.id === activeNoteId ? activeCardRef : undefined}>
+                                <NoteCard
+                                    note={n}
+                                    editing={draft.id === n.id}
+                                    active={n.id === activeNoteId}
+                                    onEdit={() => startEditDraft(n)}
+                                    onDelete={() => setPendingDelete(n)}
+                                    onClick={() => {
+                                        const anchor = n.anchor as NoteAnchorLite | null;
+                                        onNoteClick?.({
+                                            id: n.id,
+                                            page: primaryPageOfAnchor(anchor),
+                                            // A blank quote is no quote: `??` would keep the empty
+                                            // string and the viewer would search for nothing.
+                                            quote: nonEmpty(anchor?.quote?.exact),
+                                        });
+                                    }}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}

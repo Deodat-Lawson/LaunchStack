@@ -27,7 +27,6 @@ import { toast } from "sonner";
 import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/preferences";
 import {
     docMode,
-    fitToScreen,
     pauseAutoArrangeAfterManualMove,
     setActivePage,
     setAutoLayout,
@@ -61,6 +60,7 @@ import { Presenter } from "./Presenter";
 import { SelectionToolbar } from "./SelectionToolbar";
 import { Toolbar } from "./Toolbar";
 import { TopBar } from "./TopBar";
+import { useAutoFit } from "./useAutoFit";
 import { useAutosave } from "./useAutosave";
 import { importDocumentFile, insertImages, useClipboardPaste } from "./useClipboardPaste";
 import { useElementSize } from "./useElementSize";
@@ -186,13 +186,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const autosave = useAutosave(store, props.mindmapId, props.initialRevision, getSvgElement);
     const presence = usePresence(store, props.mindmapId, props.author, autosave.revision);
 
-    // Frame the document once the canvas has real dimensions.
-    const framed = useRef(false);
-    useEffect(() => {
-        if (framed.current || stageSize.w < 40 || stageSize.h < 40) return;
-        framed.current = true;
-        fitToScreen(store, stageSize);
-    }, [stageSize, store]);
+    // Frame the board, and keep framing it until the author moves it. The
+    // canvas is not at its final size on mount — the panels are still sliding
+    // in — and a template framed against that half-width stage is what opened
+    // at 5%.
+    const frame = useAutoFit(store, stageSize);
 
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);
@@ -228,8 +226,8 @@ export function MindmapEditor(props: MindmapEditorProps) {
     useEffect(() => {
         if (!presenting) return;
         // Refit whenever presentation starts, so the audience sees everything.
-        fitToScreen(store, stageSize);
-    }, [presenting, stageSize, store]);
+        frame(stageSize);
+    }, [presenting, stageSize, frame]);
 
     /** Step through pages like slides while presenting. */
     const stepPage = useCallback(
@@ -240,9 +238,9 @@ export function MindmapEditor(props: MindmapEditorProps) {
             if (!next) return;
             setActivePage(store, next.id);
             // The new page has its own content; frame it before it is shown.
-            requestAnimationFrame(() => fitToScreen(store, stageSize));
+            requestAnimationFrame(() => frame(stageSize));
         },
-        [stageSize, store]
+        [stageSize, frame, store]
     );
 
     useEffect(() => {
@@ -328,9 +326,9 @@ export function MindmapEditor(props: MindmapEditorProps) {
                 onPublish: () => setPublishOpen(true),
                 onPresent: togglePresent,
                 onShortcuts: () => setShortcutsOpen(true),
-                onFit: () => fitToScreen(store, stageSize),
+                onFit: () => frame(stageSize),
             }),
-        [autosave, stageSize, store, togglePresent]
+        [autosave, frame, stageSize, store, togglePresent]
     );
 
     /** Screen point → world, for drops. Falls back to the viewport centre. */

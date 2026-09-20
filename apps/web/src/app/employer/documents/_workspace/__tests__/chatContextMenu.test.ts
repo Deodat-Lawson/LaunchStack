@@ -70,7 +70,7 @@ describe("chat menu builders", () => {
         pick(items, "copy-passage");
         expect(onCopy).toHaveBeenLastCalledWith("capped at twelve months");
         pick(items, "copy-cited");
-        expect(onCopy).toHaveBeenLastCalledWith("“capped at twelve months” — Vendor MSA, p. 4");
+        expect(onCopy).toHaveBeenLastCalledWith("“capped at twelve months” — Vendor MSA");
         expect(pick(items, "context").label).toBe("Add source to context");
         expect(onToggleContext).toHaveBeenCalledWith(source);
 

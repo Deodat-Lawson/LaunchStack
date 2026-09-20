@@ -1,0 +1,77 @@
+/* Height lives in DriftShell.module.css as --drift-backbar-h: the immersive
+   shells subtract it from 100dvh, so the bar and the page cannot both claim
+   the viewport. Changing it here alone would push those shells off-screen. */
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--drift-backbar-h);
+    flex-shrink: 0;
+    padding-inline: 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    font-size: 12.5px;
+    /* Above a tool's own sticky rail, which would otherwise scroll over it. */
+    position: relative;
+    z-index: 30;
+}
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding-inline: 8px 10px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    font-weight: 500;
+    transition:
+        background 120ms,
+        color 120ms;
+}
+
+.back:hover {
+    background: var(--line-2);
+    color: var(--ink);
+}
+
+.back:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.trail {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--ink-3);
+    /* The trail is context, not navigation — it yields before the control. */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sep {
+    color: var(--line-2);
+}
+
+@media (max-width: 560px) {
+    /* On a phone the destination is what matters; the trail is the first thing
+       that can go. */
+    .trail {
+        display: none;
+    }
+}

@@ -5,6 +5,7 @@ import React, {
     type SetStateAction,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from "react";
@@ -53,7 +54,13 @@ import {
     buildContextChipMenuItems,
     buildQuestionMenuItems,
 } from "./chatContextMenu";
-import { downloadTextFile, quoteBlock, transcriptFilename, transcriptMarkdown } from "./transcript";
+import {
+    downloadTextFile,
+    parseQuotedMessage,
+    quoteBlock,
+    transcriptFilename,
+    transcriptMarkdown,
+} from "./transcript";
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
@@ -246,6 +253,63 @@ interface MessageProps {
     onEdit: (text: string) => void;
 }
 
+/**
+ * A question, with any quoted passage drawn as one.
+ *
+ * Quoting writes a Markdown blockquote into the message, but this turn is
+ * rendered as plain text — so the `>` markers were visible and, under
+ * `white-space: normal`, a multi-line passage collapsed onto a single line
+ * indistinguishable from the question. Both halves are now drawn for what they
+ * are, and `pre-wrap` keeps the line breaks in either.
+ */
+function QuestionBody({ text }: { text: string }) {
+    const { lead, quote, trail } = useMemo(() => parseQuotedMessage(text), [text]);
+    const prose: React.CSSProperties = {
+        fontSize: 17,
+        lineHeight: 1.55,
+        color: "var(--ink)",
+        fontWeight: 400,
+        whiteSpace: "pre-wrap",
+    };
+
+    if (!quote) {
+        return (
+            <div className="serif" style={prose}>
+                {text}
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {lead && (
+                <div className="serif" style={prose}>
+                    {lead}
+                </div>
+            )}
+            <blockquote
+                data-testid="question-quote"
+                style={{
+                    margin: 0,
+                    paddingLeft: 12,
+                    borderLeft: "2px solid var(--line-2)",
+                    color: "var(--ink-2)",
+                    fontSize: 14.5,
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-wrap",
+                }}
+            >
+                {quote}
+            </blockquote>
+            {trail && (
+                <div className="serif" style={prose}>
+                    {trail}
+                </div>
+            )}
+        </div>
+    );
+}
+
 function Message({
     msg,
     index,
@@ -321,12 +385,7 @@ function Message({
                         </span>
                     )}
                 </div>
-                <div
-                    className="serif"
-                    style={{ fontSize: 17, lineHeight: 1.55, color: "var(--ink)", fontWeight: 400 }}
-                >
-                    {msg.text}
-                </div>
+                <QuestionBody text={msg.text} />
                 {refs.length > 0 && (
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
                         {refs.map(s => (
@@ -497,22 +556,6 @@ function Message({
                                             >
                                                 {s.title}
                                             </span>
-                                            {typeof c.page === "number" && (
-                                                <span
-                                                    className="mono"
-                                                    style={{
-                                                        flexShrink: 0,
-                                                        fontSize: 10,
-                                                        fontWeight: 600,
-                                                        padding: "1px 6px",
-                                                        borderRadius: 4,
-                                                        background: "var(--accent-soft)",
-                                                        color: "var(--accent-ink)",
-                                                    }}
-                                                >
-                                                    p. {c.page}
-                                                </span>
-                                            )}
                                         </div>
                                         <div
                                             style={{
@@ -540,11 +583,29 @@ function Message({
                     })}
                 </div>
             )}
-            {typeof msg.tokens === "number" && (
+            {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
                 <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
                     <span style={{ marginLeft: "auto" }} className="mono">
-                        <span style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            {msg.tokens} tokens
+                        <span
+                            style={{ fontSize: 10, color: "var(--ink-3)" }}
+                            title={
+                                msg.tokenBreakdown
+                                    ? `${msg.tokenBreakdown.inputTokens.toLocaleString()} prompt + ${msg.tokenBreakdown.outputTokens.toLocaleString()} completion`
+                                    : undefined
+                            }
+                        >
+                            {/* Two different numbers, told apart: tokens are what
+                                the model billed, chunks are what it read. */}
+                            {typeof msg.tokens === "number"
+                                ? `${msg.tokens.toLocaleString()} tokens`
+                                : null}
+                            {typeof msg.tokens === "number" &&
+                            typeof msg.chunksAnalyzed === "number"
+                                ? " · "
+                                : null}
+                            {typeof msg.chunksAnalyzed === "number"
+                                ? `${msg.chunksAnalyzed} ${msg.chunksAnalyzed === 1 ? "chunk" : "chunks"}`
+                                : null}
                         </span>
                     </span>
                 </div>

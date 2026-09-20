@@ -18,7 +18,7 @@ import { STUDIO_FEATURES_BY_ID } from "~/app/employer/documents/_workspace/types
  * when it is handed to another column, which is the whole point of the
  * feature and the easiest thing to break.
  */
-const PREVIEW_IDS = ["chat", "knowledge", "draft", "rewrite", "notes", "artifacts"];
+const PREVIEW_IDS = ["chat", "knowledge", "draft", "rewrite", "meetings", "artifacts"];
 
 export function StudioTabsPreview() {
     const { layout, open, openBeside, close, closeOthers, closeToRight, move, split, focusGroup } =

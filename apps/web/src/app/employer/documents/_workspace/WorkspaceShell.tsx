@@ -30,7 +30,7 @@ import {
     displayFolderPath,
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
-import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { MAX_SESSION_APPEND, type HistoryEntry } from "~/lib/workspace-history";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
 import { useAIChat } from "../hooks/useAIChat";
@@ -110,7 +110,6 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     distribution: "/employer/tools/growth/prospects",
     prospects: "/employer/tools/growth/prospects",
     growth: "/employer/tools/growth",
-    notes: "/employer/documents?feature=notes",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
     meetings: "/employer/documents?feature=meetings",
@@ -596,6 +595,29 @@ export function WorkspaceShell() {
     );
 
     /**
+     * Delete a pipeline run — a partner discovery, a trend search, a repo
+     * explainer job. Same shape as the chat delete above: drop the row now so
+     * the rail responds, and put it back if the server disagrees.
+     */
+    const handleDeleteRun = useCallback(
+        (entry: HistoryEntry) => {
+            removeHistoryEntry(entry.id);
+            void fetch(`/api/workspace/history/${entry.kind}/${encodeURIComponent(entry.refId)}`, {
+                method: "DELETE",
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error(String(res.status));
+                    toast.success("Deleted");
+                })
+                .catch(() => {
+                    toast.error("Couldn't delete that");
+                    void refreshHistory();
+                });
+        },
+        [removeHistoryEntry, refreshHistory]
+    );
+
+    /**
      * Pick up an imported agent session where it left off: pin the transcript
      * document as a source, load its tail into the continuation context, and
      * open the thread with a note saying so. Fired by `?continue=<docId>` from
@@ -717,7 +739,14 @@ export function WorkspaceShell() {
                     text: data.summarizedAnswer ?? "No answer.",
                     citations,
                     model: data.aiModel,
-                    tokens: data.chunksAnalyzed,
+                    tokens: data.tokenUsage?.totalTokens,
+                    tokenBreakdown: data.tokenUsage
+                        ? {
+                              inputTokens: data.tokenUsage.inputTokens,
+                              outputTokens: data.tokenUsage.outputTokens,
+                          }
+                        : undefined,
+                    chunksAnalyzed: data.chunksAnalyzed,
                 };
             } else {
                 assistantTurn = {
@@ -1670,7 +1699,7 @@ export function WorkspaceShell() {
                 // `dvh`, not `vh`: on mobile `100vh` is the viewport with the
                 // URL bar retracted, so the workspace's own bottom chrome ends
                 // up underneath the browser's.
-                height: "100dvh",
+                height: "calc(100dvh - var(--drift-backbar-h, 0px))",
                 width: "100%",
                 overflow: "hidden",
                 position: "relative",
@@ -1683,7 +1712,6 @@ export function WorkspaceShell() {
                     selected={selected}
                     setSelected={setSelected}
                     onOpenAdd={() => openAdd()}
-                    onNewMindmap={() => openAdd("mindmap")}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenSource={handleOpenSource}
                     onOpenSourceBeside={openSourceBeside}
@@ -1741,6 +1769,7 @@ export function WorkspaceShell() {
                         },
                         onRenameSession: handleRenameSession,
                         onDeleteSession: handleDeleteSession,
+                        onDeleteRun: handleDeleteRun,
                         onRefresh: () => void refreshHistory(),
                     }}
                 />

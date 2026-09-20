@@ -12,7 +12,11 @@ import type { ThreadMessage, ThreadReference, WorkspaceSource } from "../types";
  * Citations under a grounded answer are the bridge from the answer back to
  * the evidence: clicking one must hand the full reference (snippet + page +
  * matchText) to the shell so the viewer can open the document at that
- * passage. This pins the click path and the page badge.
+ * passage. This pins the click path.
+ *
+ * No page is shown: indexing stores `page_number: 1` for every chunk, so the
+ * badge said "p. 1" wherever a passage came from. The page still travels in
+ * the reference — the viewer uses it — it is just not claimed in the UI.
  */
 
 jest.mock("next-themes", () => ({
@@ -79,11 +83,13 @@ function renderPanel(onOpenCitation: (c: ThreadReference) => void) {
 }
 
 describe("AskPanel citations", () => {
-    it("renders the citation with its page badge", () => {
+    it("renders the citation without claiming a page", () => {
         renderPanel(jest.fn());
         expect(screen.getByText(/Grounded in 1 source/)).toBeInTheDocument();
         expect(screen.getByText(CITATION.snippet)).toBeInTheDocument();
-        expect(screen.getByText("p. 4")).toBeInTheDocument();
+        // Every chunk is indexed as page 1, so any page here would be a
+        // precise-looking lie. Pinned so re-adding it is deliberate.
+        expect(screen.queryByText(/^p\. \d+$/)).not.toBeInTheDocument();
     });
 
     it("hands the full reference to onOpenCitation on click", async () => {

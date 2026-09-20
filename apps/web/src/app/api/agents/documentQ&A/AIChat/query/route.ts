@@ -767,6 +767,14 @@ export async function POST(request: Request) {
                 retrievalMethod,
                 processingTimeMs: totalTime,
                 chunksAnalyzed: documents.length,
+                // The same numbers the metering above debits against. They were
+                // computed and then thrown away, which left the UI labelling
+                // `chunksAnalyzed` as "tokens" because it had nothing else.
+                tokenUsage: {
+                    inputTokens: promptTokens,
+                    outputTokens: completionTokens,
+                    totalTokens: usage.totalTokens ?? promptTokens + completionTokens,
+                },
                 fusionWeights: [0.4, 0.6],
                 searchScope,
                 aiModel: selectedAiModel,

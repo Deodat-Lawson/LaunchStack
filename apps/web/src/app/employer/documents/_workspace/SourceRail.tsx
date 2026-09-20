@@ -560,6 +560,8 @@ export interface SourceRailProps {
     /** Straight to the mindmap template picker — creating, not uploading. */
     onNewMindmap?: () => void;
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** Open it in a column beside the chat instead of over the workspace. */
+    onOpenSourceBeside?: (source: WorkspaceSource) => void;
     /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
     onNewFolder?: (parentPath?: string | null) => void;
     onRenameFolder?: (folder: WorkspaceFolder) => void;
@@ -616,6 +618,8 @@ interface BranchContext {
     canDragFolders: boolean;
     dropOnFolder: (target: string) => void;
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** Open it in a column beside the chat instead of over the workspace. */
+    onOpenSourceBeside?: (source: WorkspaceSource) => void;
     sourceMenuItems: (source: WorkspaceSource) => ActionMenuItem[];
     folderMenuItems: (node: SourceNode) => ActionMenuItem[];
     /** True when the folder, or an ancestor, is restricted to the people granted access. */
@@ -728,6 +732,7 @@ export function SourceRail({
     onOpenAdd,
     onNewMindmap,
     onOpenSource,
+    onOpenSourceBeside,
     onNewFolder,
     onRenameFolder,
     onShareFolder,
@@ -809,6 +814,7 @@ export function SourceRail({
             }
             return buildSourceMenuItems(source, folders, selected, {
                 onOpen: onOpenSource,
+                onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
                     setSelected(prev =>
                         prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
@@ -845,6 +851,7 @@ export function SourceRail({
             selected,
             setSelected,
             onOpenSource,
+            onOpenSourceBeside,
             onOpenKnowledge,
             onRenameSource,
             onMoveToFolder,

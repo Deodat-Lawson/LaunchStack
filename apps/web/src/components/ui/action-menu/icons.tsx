@@ -12,6 +12,7 @@ import {
     Clock,
     Code,
     Command,
+    Columns2,
     Copy,
     Download,
     Eraser,
@@ -79,6 +80,7 @@ import {
     Users,
     Workflow,
     type LucideIcon,
+    X,
 } from "lucide-react";
 
 /**
@@ -98,12 +100,14 @@ export const ACTION_MENU_ICONS = {
     lock: Lock,
     share: Users,
     // Navigation and links.
+    close: X,
     external: ExternalLink,
     link: Link,
     reveal: FolderOpen,
     sidebar: PanelLeft,
     command: Command,
     expand: Maximize2,
+    split: Columns2,
     // Files and data.
     download: Download,
     upload: Upload,

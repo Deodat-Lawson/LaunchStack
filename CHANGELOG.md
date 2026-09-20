@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Split the workspace centre** - columns side by side, each its own strip of
+  tabs
+  - Chat beside a document, or chat beside a tool beside a document, up to
+    three columns with a draggable divider
+  - "Open to the side" on any source; "Split to the right" on a tab or from
+    the strip; drag a tab from one column into another
+  - A pane moved between columns keeps its draft, scroll and undo — it is the
+    same pane, not a rebuilt one
+  - New bindings in Settings → Shortcuts: split, focus the next or previous
+    column, close the current app
+  - The document viewer folds its versions and notes rail into a Details
+    panel once its column is too narrow for both
 - **Studio apps open in centre tabs** - the workspace centre is a tab strip
   rather than one pane at a time
   - Open, close, middle-click close, drag to reorder, Alt+Arrow to reorder,

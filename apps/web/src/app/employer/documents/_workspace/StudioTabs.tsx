@@ -1,126 +1,110 @@
 "use client";
 
-import { useCallback, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
-import { PanelsTopLeft, Plus, X } from "lucide-react";
+import {
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+    type ComponentType,
+    type ReactNode,
+} from "react";
+import { Columns2, Plus, X } from "lucide-react";
+
+import { ContextTarget } from "~/components/context-menu";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { cn } from "~/lib/utils";
-import type { StudioFeature } from "./types";
+import type { IconProps } from "./icons";
 
-interface TabState {
-    ids: string[];
+/** What a tab needs to draw itself. Studio features and sources both satisfy it. */
+export interface PaneTab {
+    id: string;
+    label: string;
+    Icon: ComponentType<IconProps>;
+    desc?: string;
+}
+
+export interface StudioTabsProps {
+    /** The column this strip belongs to; drops from other columns land here. */
+    groupId: string;
+    /** Which column this is, and how many there are, for naming the controls. */
+    index: number;
+    groupCount: number;
+    tabs: PaneTab[];
     activeId: string;
-}
-
-/**
- * A move names the neighbour it lands in front of, not a numeric index:
- * the strip renders a *filtered* list (permission-gated apps are absent)
- * while the reducer owns the unfiltered one, so any index the strip computed
- * would address the wrong slot the moment the two lists disagree.
- * `beforeId: null` means "to the end".
- */
-type TabAction =
-    | { type: "open"; id: string }
-    | { type: "close"; id: string }
-    | { type: "move"; id: string; beforeId: string | null };
-
-export function reduceTabs(state: TabState, action: TabAction): TabState {
-    const index = state.ids.indexOf(action.id);
-    switch (action.type) {
-        case "open":
-            return {
-                ids: index < 0 ? [...state.ids, action.id] : state.ids,
-                activeId: action.id,
-            };
-        case "close": {
-            if (index < 0) return state;
-            const ids = state.ids.filter(id => id !== action.id);
-            return {
-                ids,
-                activeId:
-                    state.activeId === action.id
-                        ? // Whatever slid into this slot; closing the last tab
-                          // falls back to the new last, and closing the only
-                          // tab leaves nothing open.
-                          (ids[index] ?? ids.at(-1) ?? "")
-                        : state.activeId,
-            };
-        }
-        case "move": {
-            if (index < 0 || action.beforeId === action.id) return state;
-            const rest = state.ids.filter(id => id !== action.id);
-            const at = action.beforeId === null ? rest.length : rest.indexOf(action.beforeId);
-            if (at < 0) return state;
-            const ids = [...rest.slice(0, at), action.id, ...rest.slice(at)];
-            if (ids.every((id, i) => id === state.ids[i])) return state;
-            return { ...state, ids };
-        }
-    }
-}
-
-/** Chat is the workspace's front door, so it is the one tab open on arrival. */
-const INITIAL_TABS: TabState = { ids: ["chat"], activeId: "chat" };
-
-export function useStudioTabs() {
-    const [state, dispatch] = useReducer(reduceTabs, INITIAL_TABS);
-    const open = useCallback((id: string) => dispatch({ type: "open", id }), []);
-    const close = useCallback((id: string) => dispatch({ type: "close", id }), []);
-    const move = useCallback(
-        (id: string, beforeId: string | null) => dispatch({ type: "move", id, beforeId }),
-        []
-    );
-    return { ...state, open, close, move };
-}
-
-interface StudioTabsProps {
-    /** Open apps, in strip order, already filtered to what this person may see. */
-    features: StudioFeature[];
-    activeId: string;
+    /** The column the workspace considers current. Only one is, at a time. */
+    focused: boolean;
+    /** False when every column is taken, which greys the split control. */
+    canSplit: boolean;
     onSelect: (id: string) => void;
     onClose: (id: string) => void;
-    onMove: (id: string, beforeId: string | null) => void;
+    onCloseOthers: (id: string) => void;
+    onCloseToRight: (id: string) => void;
+    onSplit: (id: string) => void;
+    /** A drop, from this strip or another: put `id` in front of `beforeId`. */
+    onMove: (id: string, toGroupId: string, beforeId: string | null) => void;
     onOpenStudio: () => void;
+    onFocus: () => void;
+    /** The show-sidebar control, in the leftmost column only. */
     leadingSlot?: ReactNode;
     /**
-     * `active` is false for every pane but the one on screen. Panes that own
-     * window listeners, polling or autosave gate on it rather than inspecting
-     * the DOM for a `hidden` ancestor.
+     * Called with the element each tab's panel should be rendered into. The
+     * host renders the panes itself and portals them here, so that handing a
+     * tab to another column does not tear its pane down and build it again.
      */
-    children: (id: string, active: boolean) => ReactNode;
+    registerSlot: (tabId: string, element: HTMLElement | null) => void;
 }
 
-/** One mounted panel per open app. Switching never discards local drafts or scroll. */
+/** The id being dragged, shared across strips so a drop knows what it caught. */
+const DRAG_MIME = "application/x-studio-tab";
+
+/**
+ * One column of the workspace centre: a strip of tabs over a panel.
+ *
+ * The strip is the segmented control the rest of the workspace uses — a
+ * recessed bar with the current tab raised out of it — rather than the
+ * underlined file tabs of a code editor, which nothing else here looks like.
+ */
 export function StudioTabs({
-    features,
+    groupId,
+    index: groupIndex,
+    groupCount,
+    tabs,
     activeId,
+    focused,
+    canSplit,
     onSelect,
     onClose,
+    onCloseOthers,
+    onCloseToRight,
+    onSplit,
     onMove,
     onOpenStudio,
+    onFocus,
     leadingSlot,
-    children,
+    registerSlot,
 }: StudioTabsProps) {
     const stripRef = useRef<HTMLDivElement>(null);
-    const draggedId = useRef<string | null>(null);
     const [dropTarget, setDropTarget] = useState<{ id: string; after: boolean } | null>(null);
+    const [dropAtEnd, setDropAtEnd] = useState(false);
     const [announcement, setAnnouncement] = useState("");
 
-    const order = features.map(feature => feature.id).join("|");
+    const order = tabs.map(tab => tab.id).join("|");
     useEffect(() => {
         const el = stripRef.current?.querySelector<HTMLElement>(
             '[role="tab"][data-state="active"]'
         );
         // Optional call as well as optional chain: jsdom has no scrollIntoView.
         el?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
-        // `order`, not `features.length`: a reorder can push the active tab
-        // off the edge of the overflow strip without changing either.
+        // `order`, not the tab count: a reorder can push the active tab off
+        // the edge of the strip without changing either it or the count.
     }, [activeId, order]);
 
     /**
      * Closing the focused tab must not drop focus onto `document.body` — that
      * would strand a keyboard user at the top of the page. Focus follows to
-     * whichever tab took its place, or to the Studio button when the last one
-     * closes.
+     * whichever tab took its place, or to the Studio button when the column
+     * empties.
      */
     const closeTab = (id: string) => {
         const focusWasInStrip = stripRef.current?.contains(document.activeElement);
@@ -129,179 +113,288 @@ export function StudioTabs({
         requestAnimationFrame(() => {
             const target =
                 stripRef.current?.querySelector<HTMLElement>('[role="tab"][data-state="active"]') ??
-                stripRef.current?.querySelector<HTMLElement>('[aria-label="Open Studio apps"]');
+                stripRef.current?.querySelector<HTMLElement>("[data-studio-add]");
             target?.focus();
         });
     };
 
     /** Alt+Arrow: step one place, expressed as the neighbour to land in front of. */
-    const moveByKeyboard = (feature: StudioFeature, index: number, delta: -1 | 1) => {
+    const moveByKeyboard = (tab: PaneTab, index: number, delta: -1 | 1) => {
         const to = index + delta;
-        if (to < 0 || to > features.length - 1) return;
+        if (to < 0 || to > tabs.length - 1) return;
         const beforeId =
-            delta === -1 ? (features[index - 1]?.id ?? null) : (features[index + 2]?.id ?? null);
-        onMove(feature.id, beforeId);
-        setAnnouncement(`${feature.label} moved to position ${to + 1} of ${features.length}`);
+            delta === -1 ? (tabs[index - 1]?.id ?? null) : (tabs[index + 2]?.id ?? null);
+        onMove(tab.id, groupId, beforeId);
+        setAnnouncement(`${tab.label} moved to position ${to + 1} of ${tabs.length}`);
     };
+
+    /** "Split to the right" reads the same in every column; the column has to say which. */
+    const inColumn = (label: string) =>
+        groupCount > 1 ? `${label}, column ${groupIndex + 1} of ${groupCount}` : label;
+
+    const readDragId = (event: React.DragEvent) =>
+        event.dataTransfer.getData(DRAG_MIME) || event.dataTransfer.getData("text/plain");
 
     return (
         <Tabs
             value={activeId}
             onValueChange={onSelect}
-            className="h-full min-h-0 min-w-0 flex-1 gap-0 overflow-hidden"
+            // Pointer down rather than click: the column should be current
+            // before whatever was clicked acts on it.
+            onPointerDownCapture={onFocus}
+            onFocusCapture={onFocus}
+            className="bg-surface flex h-full min-h-0 min-w-0 flex-1 flex-col gap-0 overflow-hidden"
         >
             <div
                 ref={stripRef}
                 data-studio-tab-strip
-                className="border-line bg-panel-2 flex min-h-10 shrink-0 items-center border-b"
+                data-focused={focused}
+                className="border-line bg-panel-2 flex h-10 shrink-0 items-center gap-1 border-b px-1.5"
             >
                 {leadingSlot}
                 <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain">
                     <TabsList
-                        aria-label="Studio apps"
-                        className="h-10 min-w-full justify-start gap-0 rounded-none bg-transparent p-0"
+                        aria-label={inColumn("Open apps")}
+                        className="h-10 w-max min-w-full items-center justify-start gap-1 rounded-none bg-transparent p-0"
                     >
-                        {features.map((feature, index) => {
-                            const active = feature.id === activeId;
-                            const Icon = feature.Icon;
+                        {tabs.map((tab, index) => {
+                            const active = tab.id === activeId;
+                            const Icon = tab.Icon;
                             return (
-                                <div
-                                    key={feature.id}
-                                    role="presentation"
-                                    className={cn(
-                                        "border-line relative flex h-full shrink-0 items-center border-r border-t-2",
-                                        active
-                                            ? "border-t-brand bg-panel"
-                                            : "text-ink-3 border-t-transparent",
-                                        dropTarget?.id === feature.id &&
-                                            (dropTarget.after
-                                                ? "after:bg-brand after:absolute after:inset-y-0 after:right-0 after:w-0.5"
-                                                : "before:bg-brand before:absolute before:inset-y-0 before:left-0 before:w-0.5")
-                                    )}
-                                    draggable
-                                    onDragStart={event => {
-                                        draggedId.current = feature.id;
-                                        event.dataTransfer.effectAllowed = "move";
-                                        event.dataTransfer.setData("text/plain", feature.id);
-                                    }}
-                                    onDragOver={event => {
-                                        if (!draggedId.current) return;
-                                        event.preventDefault();
-                                        event.dataTransfer.dropEffect = "move";
-                                        const rect = event.currentTarget.getBoundingClientRect();
-                                        setDropTarget({
-                                            id: feature.id,
-                                            after: event.clientX > rect.left + rect.width / 2,
-                                        });
-                                    }}
-                                    onDragLeave={event => {
-                                        // Fires when the pointer crosses into
-                                        // the trigger or the close button too.
-                                        if (
-                                            !event.currentTarget.contains(
-                                                event.relatedTarget as Node | null
-                                            )
-                                        ) {
-                                            setDropTarget(null);
-                                        }
-                                    }}
-                                    onDrop={event => {
-                                        event.preventDefault();
-                                        const id = draggedId.current;
-                                        if (id) {
-                                            const rect =
-                                                event.currentTarget.getBoundingClientRect();
-                                            const after =
-                                                event.clientX > rect.left + rect.width / 2;
-                                            onMove(
-                                                id,
-                                                after
-                                                    ? (features[index + 1]?.id ?? null)
-                                                    : feature.id
-                                            );
-                                        }
-                                        draggedId.current = null;
-                                        setDropTarget(null);
-                                    }}
-                                    onDragEnd={() => {
-                                        draggedId.current = null;
-                                        setDropTarget(null);
-                                    }}
-                                    onAuxClick={event => {
-                                        if (event.button === 1) {
-                                            event.preventDefault();
-                                            closeTab(feature.id);
-                                        }
+                                <ContextTarget
+                                    key={tab.id}
+                                    target={{
+                                        kind: "studio-tab",
+                                        id: tab.id,
+                                        label: `Actions for ${tab.label}`,
+                                        data: tab,
+                                        items: () => [
+                                            {
+                                                type: "item",
+                                                id: "split",
+                                                label: "Split to the right",
+                                                icon: "split",
+                                                disabled: !canSplit || tabs.length < 2,
+                                                disabledReason: !canSplit
+                                                    ? "Every column is taken."
+                                                    : "It is already the only tab here.",
+                                                onSelect: () => onSplit(tab.id),
+                                            },
+                                            { type: "separator", id: "sep" },
+                                            {
+                                                type: "item",
+                                                id: "close",
+                                                label: "Close",
+                                                icon: "close",
+                                                onSelect: () => closeTab(tab.id),
+                                            },
+                                            {
+                                                type: "item",
+                                                id: "close-others",
+                                                label: "Close the others",
+                                                icon: "close",
+                                                disabled: tabs.length < 2,
+                                                disabledReason: "Nothing else is open here.",
+                                                onSelect: () => onCloseOthers(tab.id),
+                                            },
+                                            {
+                                                type: "item",
+                                                id: "close-right",
+                                                label: "Close everything to the right",
+                                                icon: "close",
+                                                disabled: index >= tabs.length - 1,
+                                                disabledReason: "Nothing is to the right.",
+                                                onSelect: () => onCloseToRight(tab.id),
+                                            },
+                                        ],
                                     }}
                                 >
-                                    <TabsTrigger
-                                        value={feature.id}
-                                        aria-setsize={features.length}
-                                        aria-posinset={index + 1}
-                                        title={`${feature.label} — drag to reorder; Alt+Arrow to move; Delete to close`}
-                                        className="text-ink-2 data-[state=active]:text-ink dark:data-[state=active]:text-ink h-full max-w-52 flex-none justify-start gap-2 rounded-none border-0 bg-transparent px-3 pr-1 text-xs shadow-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent"
-                                        onKeyDown={event => {
+                                    <div
+                                        role="presentation"
+                                        className={cn(
+                                            "group relative flex h-7 shrink-0 items-center rounded-md pr-1 transition-colors",
+                                            active
+                                                ? focused
+                                                    ? "bg-panel text-ink shadow-1"
+                                                    : "bg-panel/70 text-ink-2"
+                                                : "text-ink-3 hover:bg-line-2 hover:text-ink-2",
+                                            dropTarget?.id === tab.id &&
+                                                (dropTarget.after
+                                                    ? "after:bg-brand after:absolute after:inset-y-0.5 after:-right-1 after:w-0.5 after:rounded-full"
+                                                    : "before:bg-brand before:absolute before:inset-y-0.5 before:-left-1 before:w-0.5 before:rounded-full")
+                                        )}
+                                        draggable
+                                        onDragStart={event => {
+                                            event.dataTransfer.effectAllowed = "move";
+                                            event.dataTransfer.setData(DRAG_MIME, tab.id);
+                                            event.dataTransfer.setData("text/plain", tab.label);
+                                        }}
+                                        onDragOver={event => {
+                                            if (!event.dataTransfer.types.includes(DRAG_MIME))
+                                                return;
+                                            event.preventDefault();
+                                            event.dataTransfer.dropEffect = "move";
+                                            const rect =
+                                                event.currentTarget.getBoundingClientRect();
+                                            setDropAtEnd(false);
+                                            setDropTarget({
+                                                id: tab.id,
+                                                after: event.clientX > rect.left + rect.width / 2,
+                                            });
+                                        }}
+                                        onDragLeave={event => {
+                                            // Also fires crossing into the
+                                            // trigger or the close button.
                                             if (
-                                                event.altKey &&
-                                                (event.key === "ArrowLeft" ||
-                                                    event.key === "ArrowRight")
+                                                !event.currentTarget.contains(
+                                                    event.relatedTarget as Node | null
+                                                )
                                             ) {
-                                                event.preventDefault();
-                                                // Radix moves selection on bare
-                                                // arrows; this is a reorder, so
-                                                // it must not also navigate.
-                                                event.stopPropagation();
-                                                moveByKeyboard(
-                                                    feature,
-                                                    index,
-                                                    event.key === "ArrowLeft" ? -1 : 1
+                                                setDropTarget(null);
+                                            }
+                                        }}
+                                        onDrop={event => {
+                                            event.preventDefault();
+                                            const dragged = readDragId(event);
+                                            if (dragged) {
+                                                const rect =
+                                                    event.currentTarget.getBoundingClientRect();
+                                                const after =
+                                                    event.clientX > rect.left + rect.width / 2;
+                                                onMove(
+                                                    dragged,
+                                                    groupId,
+                                                    after ? (tabs[index + 1]?.id ?? null) : tab.id
                                                 );
-                                            } else if (
-                                                event.key === "Delete" ||
-                                                event.key === "Backspace"
-                                            ) {
-                                                // Both halves matter: the
-                                                // mindmap editor's keyboard
-                                                // hook bails on
-                                                // `defaultPrevented`, so
-                                                // without this a tab Delete
-                                                // also deletes the selected
-                                                // shapes behind it.
+                                            }
+                                            setDropTarget(null);
+                                        }}
+                                        onDragEnd={() => {
+                                            setDropTarget(null);
+                                            setDropAtEnd(false);
+                                        }}
+                                        onAuxClick={event => {
+                                            if (event.button === 1) {
                                                 event.preventDefault();
-                                                event.stopPropagation();
-                                                closeTab(feature.id);
+                                                closeTab(tab.id);
                                             }
                                         }}
                                     >
-                                        <Icon size={14} />
-                                        <span className="truncate">{feature.label}</span>
-                                    </TabsTrigger>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="text-ink-3 mx-1 size-6 rounded-sm"
-                                        // Reached by mouse, or by Delete on
-                                        // the tab; a stop of its own here
-                                        // would put one in front of every tab.
-                                        tabIndex={-1}
-                                        aria-label={`Close ${feature.label} tab`}
-                                        title={`Close ${feature.label} tab`}
-                                        onPointerDown={event => event.stopPropagation()}
-                                        onClick={() => closeTab(feature.id)}
-                                    >
-                                        <X className="size-3" />
-                                    </Button>
-                                </div>
+                                        <TabsTrigger
+                                            value={tab.id}
+                                            aria-setsize={tabs.length}
+                                            aria-posinset={index + 1}
+                                            title={`${tab.label}${tab.desc ? ` — ${tab.desc}` : ""}`}
+                                            className={cn(
+                                                "h-7 max-w-56 flex-none justify-start gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-xs shadow-none",
+                                                "data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
+                                                active
+                                                    ? "text-ink data-[state=active]:text-ink dark:data-[state=active]:text-ink font-semibold"
+                                                    : "text-ink-3 font-medium"
+                                            )}
+                                            onKeyDown={event => {
+                                                if (
+                                                    event.altKey &&
+                                                    (event.key === "ArrowLeft" ||
+                                                        event.key === "ArrowRight")
+                                                ) {
+                                                    event.preventDefault();
+                                                    // Radix moves selection on
+                                                    // bare arrows; a reorder
+                                                    // must not also navigate.
+                                                    event.stopPropagation();
+                                                    moveByKeyboard(
+                                                        tab,
+                                                        index,
+                                                        event.key === "ArrowLeft" ? -1 : 1
+                                                    );
+                                                } else if (
+                                                    event.key === "Delete" ||
+                                                    event.key === "Backspace"
+                                                ) {
+                                                    // Both halves matter: the
+                                                    // mindmap editor's keyboard
+                                                    // hook bails on
+                                                    // `defaultPrevented`, so
+                                                    // without this a tab Delete
+                                                    // also deletes the shapes
+                                                    // behind it.
+                                                    event.preventDefault();
+                                                    event.stopPropagation();
+                                                    closeTab(tab.id);
+                                                }
+                                            }}
+                                        >
+                                            <Icon size={13} />
+                                            <span className="truncate">{tab.label}</span>
+                                        </TabsTrigger>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className={cn(
+                                                "hover:bg-line-2 hover:text-ink size-5 rounded-sm transition-opacity",
+                                                // Reached by mouse, or by
+                                                // Delete on the tab; a stop of
+                                                // its own would put one in
+                                                // front of every tab.
+                                                active
+                                                    ? "opacity-100"
+                                                    : "opacity-0 group-hover:opacity-100"
+                                            )}
+                                            tabIndex={-1}
+                                            aria-label={`Close ${tab.label}`}
+                                            title={`Close ${tab.label}`}
+                                            onPointerDown={event => event.stopPropagation()}
+                                            onClick={() => closeTab(tab.id)}
+                                        >
+                                            <X className="size-3" />
+                                        </Button>
+                                    </div>
+                                </ContextTarget>
                             );
                         })}
+                        {/* Dropping past the last tab appends to this column. */}
+                        <div
+                            aria-hidden
+                            className={cn(
+                                "h-7 min-w-8 flex-1 rounded-md border border-dashed border-transparent transition-colors",
+                                dropAtEnd && "border-brand bg-brand-soft"
+                            )}
+                            onDragOver={event => {
+                                if (!event.dataTransfer.types.includes(DRAG_MIME)) return;
+                                event.preventDefault();
+                                event.dataTransfer.dropEffect = "move";
+                                setDropTarget(null);
+                                setDropAtEnd(true);
+                            }}
+                            onDragLeave={() => setDropAtEnd(false)}
+                            onDrop={event => {
+                                event.preventDefault();
+                                const dragged = readDragId(event);
+                                if (dragged) onMove(dragged, groupId, null);
+                                setDropAtEnd(false);
+                            }}
+                        />
                     </TabsList>
                 </div>
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="text-ink-3 mx-1 size-8"
-                    aria-label="Open Studio apps"
-                    title="Open Studio apps"
+                    className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
+                    aria-label={inColumn("Split to the right")}
+                    title="Split to the right"
+                    disabled={!canSplit || tabs.length < 2}
+                    onClick={() => activeId && onSplit(activeId)}
+                >
+                    <Columns2 className="size-4" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    data-studio-add
+                    className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
+                    aria-label={inColumn("Open a Studio app")}
+                    title="Open a Studio app"
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />
@@ -310,32 +403,44 @@ export function StudioTabs({
             <span role="status" aria-live="polite" className="sr-only">
                 {announcement}
             </span>
-            {features.map(feature => (
+            {tabs.map(tab => (
                 <TabsContent
-                    key={feature.id}
-                    value={feature.id}
+                    key={tab.id}
+                    value={tab.id}
                     // `forceMount` keeps every open app rendered; `hidden`
                     // is ours because forceMount stops Radix setting it.
                     forceMount
-                    hidden={feature.id !== activeId}
+                    hidden={tab.id !== activeId}
                     className="bg-surface min-h-0 min-w-0 flex-1 overflow-hidden data-[state=active]:flex data-[state=inactive]:hidden data-[state=active]:flex-col"
                 >
-                    {children(feature.id, feature.id === activeId)}
+                    <PaneSlot tabId={tab.id} register={registerSlot} />
                 </TabsContent>
             ))}
-            {features.length === 0 && (
-                <div className="bg-surface text-ink-3 flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-                    <PanelsTopLeft className="text-ink-3 size-9" strokeWidth={1.25} />
-                    <h2 className="text-ink text-base font-medium">
-                        Your workspace, ready when you are
-                    </h2>
-                    <p className="max-w-sm text-sm">Open an app from Studio to get started.</p>
-                    <Button variant="outline" onClick={onOpenStudio}>
-                        <Plus className="size-4" />
-                        Open Studio
-                    </Button>
-                </div>
-            )}
         </Tabs>
     );
+}
+
+/**
+ * Where one pane goes.
+ *
+ * The registration lives in a layout effect rather than on the `ref` prop
+ * because an inline ref callback is a new function on every render, so React
+ * would call it with null and then the element each pass — which, when the
+ * host keeps the slots in state, never settles.
+ */
+function PaneSlot({
+    tabId,
+    register,
+}: {
+    tabId: string;
+    register: (tabId: string, element: HTMLElement | null) => void;
+}) {
+    const ref = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        register(tabId, ref.current);
+        return () => register(tabId, null);
+    }, [tabId, register]);
+
+    return <div ref={ref} className="flex h-full min-h-0 min-w-0 flex-1 flex-col" />;
 }

@@ -256,6 +256,17 @@ export function DocumentViewer({
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
     const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
+    /**
+     * A note click locates its passage by text, the same way a citation does.
+     * Kept separate from the `highlight` prop so a later citation click wins:
+     * the prop is the shell's intent, this is the panel's.
+     */
+    const [noteHighlight, setNoteHighlight] = useState<CitationHighlight | null>(null);
+
+    // A new citation from the shell supersedes whatever note was being shown.
+    useEffect(() => {
+        if (highlight) setNoteHighlight(null);
+    }, [highlight]);
     /** A passage handed to the notes panel by the context menu, as a new note's body. */
     const [noteSeed, setNoteSeed] = useState<string | null>(null);
     /** The PDF viewer's current selection, so a note started from the menu keeps its anchor. */
@@ -1012,7 +1023,7 @@ export function DocumentViewer({
                                 <PdfViewerWithNotes
                                     url={fullDoc.url}
                                     notes={toPdfNoteLites(pdfNotes)}
-                                    citationHighlight={highlight ?? null}
+                                    citationHighlight={noteHighlight ?? highlight ?? null}
                                     scrollToNoteId={pdfScrollToNoteId}
                                     onCreateAnchoredNote={anchor => {
                                         setPdfAnchorDraft({
@@ -1166,8 +1177,21 @@ export function DocumentViewer({
                                     setPdfAnchorDraft(null);
                                     setNoteSeed(null);
                                 }}
-                                onNoteClick={({ id, page }) => {
-                                    if (page !== null) setPdfScrollToNoteId(id);
+                                onNoteClick={({ id, page, quote }) => {
+                                    // Prefer the quote: the stored page is 1
+                                    // for every note, so scrolling to it went
+                                    // nowhere. Fall back to the page only when
+                                    // there is nothing to search for.
+                                    if (quote) {
+                                        setNoteHighlight({
+                                            text: quote,
+                                            page: null,
+                                            nonce: Date.now(),
+                                        });
+                                        setPdfScrollToNoteId(id);
+                                    } else if (page !== null) {
+                                        setPdfScrollToNoteId(id);
+                                    }
                                 }}
                             />
                         </div>

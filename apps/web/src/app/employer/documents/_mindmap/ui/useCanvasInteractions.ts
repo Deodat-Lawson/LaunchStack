@@ -39,6 +39,7 @@ import { routeEdge, waypointInsertIndex } from "../model/routing";
 import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "../model/resize";
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
+import { useIsActive } from "./EditorContext";
 import type { DiagramNode, Point, PortId, Rect, ShapeId } from "../model/types";
 
 /**
@@ -179,6 +180,11 @@ export function useCanvasInteractions(
 ): CanvasInteractions {
     const gesture = useRef<Gesture>({ ...IDLE });
     const spaceHeld = useRef(false);
+    // Space swaps to the hand tool on a window listener, so a canvas in a
+    // background Studio tab has to be told it is not the one being typed at.
+    const isActive = useIsActive();
+    const isActiveRef = useRef(isActive);
+    isActiveRef.current = isActive;
     /** A right-button drag pans; while it lasts the context menu is deferred. */
     const rightPan = useRef(false);
     /**
@@ -211,6 +217,7 @@ export function useCanvasInteractions(
     // Space temporarily swaps to the hand tool, the way every canvas app does.
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
+            if (!isActiveRef.current()) return;
             if (e.code !== "Space") return;
             const target = e.target as HTMLElement | null;
             if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;

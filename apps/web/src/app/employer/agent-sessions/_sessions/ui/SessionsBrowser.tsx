@@ -124,16 +124,30 @@ function SessionRow({
     busy,
     onImport,
     onRemoveImport,
+    onOpenDocument,
+    onContinue,
 }: {
     item: AgentSessionItem;
     busy: boolean;
     onImport: (item: AgentSessionItem) => void;
     onRemoveImport?: (item: AgentSessionItem) => void;
+    /** Supplied when a host can show the transcript without navigating. */
+    onOpenDocument?: (documentId: number) => void;
+    /** Supplied when a host can start the continuation in place. */
+    onContinue?: (documentId: number) => void;
 }) {
     const router = useRouter();
     const { label, Icon } = TOOL_META[item.tool];
     const project = projectLabel(item);
     const imported = item.imported;
+    const openTranscript = (documentId: number) =>
+        onOpenDocument
+            ? onOpenDocument(documentId)
+            : router.push(`/employer/documents/viewer?docId=${documentId}`);
+    const continueInChat = (documentId: number) =>
+        onContinue
+            ? onContinue(documentId)
+            : router.push(`/employer/documents?feature=chat&continue=${documentId}`);
     const ctxTarget = useContextTarget({
         kind: "agent-session",
         id: item.sourceId,
@@ -143,15 +157,8 @@ function SessionRow({
             buildSessionMenuItems(item, {
                 busy,
                 onImport: () => onImport(item),
-                onOpen: imported
-                    ? () => router.push(`/employer/documents/viewer?docId=${imported.documentId}`)
-                    : undefined,
-                onContinue: imported
-                    ? () =>
-                          router.push(
-                              `/employer/documents?feature=chat&continue=${imported.documentId}`
-                          )
-                    : undefined,
+                onOpen: imported ? () => openTranscript(imported.documentId) : undefined,
+                onContinue: imported ? () => continueInChat(imported.documentId) : undefined,
                 onCopyPath: item.projectPath
                     ? () => {
                           void copyText(item.projectPath ?? "").then(ok => {
@@ -238,11 +245,7 @@ function SessionRow({
                                         size="sm"
                                         variant="outline"
                                         className="h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents/viewer?docId=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => openTranscript(item.imported!.documentId)}
                                     >
                                         <ExternalLink className="h-3.5 w-3.5" />
                                         Open
@@ -257,11 +260,7 @@ function SessionRow({
                                     <Button
                                         size="sm"
                                         className="bg-brand hover:bg-brand-hi text-brand-fg h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents?feature=chat&continue=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => continueInChat(item.imported!.documentId)}
                                     >
                                         <MessageSquarePlus className="h-3.5 w-3.5" />
                                         Continue
@@ -293,7 +292,21 @@ function SessionRow({
     );
 }
 
-export function SessionsBrowser() {
+export interface SessionsBrowserProps {
+    /**
+     * A host that shows the workspace library alongside this browser refreshes
+     * it once an import lands, so Open and Continue have something to open.
+     */
+    onImported?: () => Promise<void>;
+    onOpenDocument?: (documentId: number) => void;
+    onContinue?: (documentId: number) => void;
+}
+
+export function SessionsBrowser({
+    onImported,
+    onOpenDocument,
+    onContinue,
+}: SessionsBrowserProps = {}) {
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
@@ -352,8 +365,11 @@ export function SessionsBrowser() {
                     `${failed.length} session${failed.length === 1 ? "" : "s"} failed to import`
                 );
             }
+            // The host's library is what Open and Continue read from, so it
+            // has to see the new document before either becomes useful.
+            if (stored.length > 0) void onImported?.();
         },
-        []
+        [onImported]
     );
 
     const importOne = useCallback(
@@ -652,6 +668,8 @@ export function SessionsBrowser() {
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
                                 onRemoveImport={i => void removeImport(i)}
+                                onOpenDocument={onOpenDocument}
+                                onContinue={onContinue}
                             />
                         ))}
                     </div>

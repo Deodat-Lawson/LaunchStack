@@ -33,6 +33,8 @@ export interface KnowledgePaneProps {
     selected: string[];
     setSelected: React.Dispatch<React.SetStateAction<string[]>>;
     onOpenSource: (source: WorkspaceSource) => void;
+    /** Open it in a column beside the chat instead of over the workspace. */
+    onOpenSourceBeside?: (source: WorkspaceSource) => void;
     onOpenAdd: (tabId?: string) => void;
     onAskAbout: (sourceIds: string[]) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
@@ -53,6 +55,7 @@ export function KnowledgePane({
     selected,
     setSelected,
     onOpenSource,
+    onOpenSourceBeside,
     onOpenAdd,
     onAskAbout,
     onRenameSource,
@@ -84,6 +87,7 @@ export function KnowledgePane({
             }
             return buildSourceMenuItems(source, folders, selected, {
                 onOpen: onOpenSource,
+                onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
                     if (selected.includes(s.id)) {
                         setSelected(prev => prev.filter(id => id !== s.id));
@@ -122,6 +126,7 @@ export function KnowledgePane({
             selected,
             setSelected,
             onOpenSource,
+            onOpenSourceBeside,
             onAskAbout,
             onRenameSource,
             onMoveToFolder,

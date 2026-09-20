@@ -29,8 +29,18 @@ import { ImportArtifactDialog } from "./ImportArtifactDialog";
 
 type Scope = "active" | "trash";
 
-export function ArtifactGallery() {
+export function ArtifactGallery({
+    onOpenArtifact,
+}: {
+    /**
+     * Supplied by a host that can show the viewer itself — the Studio tab
+     * swaps panels instead of navigating. The route omits it and pushes.
+     */
+    onOpenArtifact?: (id: number) => void;
+} = {}) {
     const router = useRouter();
+    const openArtifact = (id: number) =>
+        onOpenArtifact ? onOpenArtifact(id) : router.push(`/employer/artifacts/${id}`);
     const [items, setItems] = useState<ArtifactSummary[]>([]);
     const [folders, setFolders] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
@@ -110,7 +120,7 @@ export function ArtifactGallery() {
                   },
               })
             : buildArtifactMenuItems(item, {
-                  onOpen: () => router.push(`/employer/artifacts/${item.id}`),
+                  onOpen: () => openArtifact(item.id),
                   onOpenInNewTab: () =>
                       window.open(
                           `/employer/artifacts/${item.id}`,
@@ -235,9 +245,7 @@ export function ArtifactGallery() {
                                     <article className="border-line bg-panel hover:border-brand hover:shadow-2 group relative overflow-hidden rounded-xl border transition-all">
                                         <button
                                             type="button"
-                                            onClick={() =>
-                                                router.push(`/employer/artifacts/${item.id}`)
-                                            }
+                                            onClick={() => openArtifact(item.id)}
                                             className="block w-full text-left"
                                         >
                                             <div className="bg-panel-2 flex aspect-[4/3] w-full items-center justify-center">

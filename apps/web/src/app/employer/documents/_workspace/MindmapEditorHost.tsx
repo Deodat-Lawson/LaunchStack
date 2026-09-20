@@ -27,11 +27,18 @@ type HostState =
 
 export function MindmapEditorHost({
     mindmapId,
+    active = true,
     onBack,
     onChanged,
     onAskAboutNode,
 }: {
     mindmapId: number;
+    /**
+     * False while the editor is mounted but off screen — another Studio tab
+     * is showing, or a source preview covers it. The editor keeps its store
+     * and its undo history but stops answering window keys and pastes.
+     */
+    active?: boolean;
     /** "Ask about this in chat" on a topic — see MindmapEditor. */
     onAskAboutNode?: (text: string) => void;
     /** Leave the editor. */
@@ -108,6 +115,7 @@ export function MindmapEditorHost({
             folder={state.mindmap.folder}
             publishedDocumentId={state.mindmap.publishedDocumentId}
             author={author}
+            active={active}
             onBack={onBack}
             onAskAboutNode={onAskAboutNode}
         />

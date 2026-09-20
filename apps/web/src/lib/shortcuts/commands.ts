@@ -83,13 +83,6 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         when: "always",
     },
     {
-        id: "feature.notes",
-        label: "Open Notebook",
-        description: "Freeform notes that span every source.",
-        defaultKeys: "Mod+Shift+N",
-        when: "always",
-    },
-    {
         id: "feature.meetings",
         label: "Open Meetings",
         description: "Agents working an objective in a channel you can join.",
@@ -114,7 +107,6 @@ export const FEATURE_COMMAND_IDS: Readonly<Record<string, string>> = {
     draft: "feature.draft",
     rewrite: "feature.rewrite",
     workflows: "feature.workflows",
-    notes: "feature.notes",
     meetings: "feature.meetings",
 };
 

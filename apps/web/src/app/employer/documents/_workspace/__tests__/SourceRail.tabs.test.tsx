@@ -53,6 +53,7 @@ function history(over: Partial<NonNullable<SourceRailProps["history"]>> = {}) {
         onResumeSession: jest.fn(),
         onOpenRun: jest.fn(),
         onRenameSession: jest.fn(),
+        onDeleteRun: jest.fn(),
         onDeleteSession: jest.fn(),
         onRefresh: jest.fn(),
         ...over,

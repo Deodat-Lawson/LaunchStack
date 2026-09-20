@@ -21,7 +21,7 @@
  * page for it — they just do not pretend to be links.
  */
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import type { HistoryEntry, HistoryStatus } from "~/lib/workspace-history";
 import { db } from "~/server/db";
@@ -47,6 +47,21 @@ export interface HistoryLoaderContext {
 export interface HistoryLoader {
     kind: HistoryEntry["kind"];
     load(ctx: HistoryLoaderContext): Promise<HistoryEntry[]>;
+    /**
+     * Remove one row, scoped to the workspace. Returns false when nothing
+     * matched, which is how a caller tells "already gone" from "not yours" —
+     * both answer 404, and neither leaks whether the id exists elsewhere.
+     *
+     * Optional: a kind that has no safe delete simply omits it and the rail
+     * offers no delete for its rows, the same way a kind with no `href`
+     * offers no open.
+     */
+    remove?(ctx: HistoryRemoveContext, refId: string): Promise<boolean>;
+}
+
+export interface HistoryRemoveContext {
+    companyId: bigint;
+    userId: string;
 }
 
 /**
@@ -109,6 +124,13 @@ const trendSearchLoader: HistoryLoader = {
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
         }));
     },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(trendSearchJobs)
+            .where(and(eq(trendSearchJobs.id, refId), eq(trendSearchJobs.companyId, companyId)))
+            .returning({ id: trendSearchJobs.id });
+        return deleted.length > 0;
+    },
 };
 
 const prospectorLoader: HistoryLoader = {
@@ -137,6 +159,18 @@ const prospectorLoader: HistoryLoader = {
             status: normalizeStatus(row.status, { done: ["completed"] }),
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
         }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(clientProspectorJobs)
+            .where(
+                and(
+                    eq(clientProspectorJobs.id, refId),
+                    eq(clientProspectorJobs.companyId, companyId)
+                )
+            )
+            .returning({ id: clientProspectorJobs.id });
+        return deleted.length > 0;
     },
 };
 
@@ -175,6 +209,13 @@ const repoExplainerLoader: HistoryLoader = {
             };
         });
     },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(repoExplainerJobs)
+            .where(and(eq(repoExplainerJobs.id, refId), eq(repoExplainerJobs.companyId, companyId)))
+            .returning({ id: repoExplainerJobs.id });
+        return deleted.length > 0;
+    },
 };
 
 const distributionLoader: HistoryLoader = {
@@ -205,6 +246,13 @@ const distributionLoader: HistoryLoader = {
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
             href: "/employer/tools/distribution",
         }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(distributionRuns)
+            .where(and(eq(distributionRuns.id, refId), eq(distributionRuns.companyId, companyId)))
+            .returning({ id: distributionRuns.id });
+        return deleted.length > 0;
     },
 };
 
@@ -241,6 +289,17 @@ const emailLoader: HistoryLoader = {
             href: "/employer/tools/email-pipeline",
         }));
     },
+    async remove({ companyId }, refId) {
+        // The only kind keyed by a serial, so its refId is a stringified
+        // number and has to be turned back before it can match.
+        const id = Number(refId);
+        if (!Number.isInteger(id)) return false;
+        const deleted = await db
+            .delete(emailCampaigns)
+            .where(and(eq(emailCampaigns.id, id), eq(emailCampaigns.companyId, companyId)))
+            .returning({ id: emailCampaigns.id });
+        return deleted.length > 0;
+    },
 };
 
 const weeklyReviewLoader: HistoryLoader = {
@@ -273,6 +332,18 @@ const weeklyReviewLoader: HistoryLoader = {
             status: normalizeStatus(row.status, { done: ["published", "draft"] }),
             at: activityAt(row.publishedAt, row.generatedAt, row.updatedAt, row.createdAt),
         }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(founderWeeklyReviewRuns)
+            .where(
+                and(
+                    eq(founderWeeklyReviewRuns.id, refId),
+                    eq(founderWeeklyReviewRuns.companyId, companyId)
+                )
+            )
+            .returning({ id: founderWeeklyReviewRuns.id });
+        return deleted.length > 0;
     },
 };
 

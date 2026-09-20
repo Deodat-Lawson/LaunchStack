@@ -1,21 +1,22 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Maximize, Minus, Plus } from "lucide-react";
 
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { fitToScreen, setActivePage, zoomByStep } from "../model/commands";
+import { setActivePage, zoomByStep } from "../model/commands";
 import { counterpartTheme, THEME_BY_ID, themeMode, type ThemeMode } from "../model/palette";
 import { EditorStore, type EditorState } from "../model/store";
 import { applyThemeToDoc } from "../model/theme";
-import type { MindmapDoc, Viewport } from "../model/types";
+import type { MindmapDoc } from "../model/types";
 import { Canvas } from "./Canvas";
 import { EditorProvider, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 import { Presenter } from "./Presenter";
 import { useAppThemeMode } from "./useAppThemeMode";
 import type { CanvasCallbacks } from "./useCanvasInteractions";
+import { useAutoFit } from "./useAutoFit";
 import { useElementSize } from "./useElementSize";
 
 /**
@@ -37,13 +38,6 @@ const NO_EDIT_CALLBACKS: CanvasCallbacks = {
     onContextMenuAt: () => undefined,
     onEditText: () => undefined,
 };
-
-/** Viewports are floats; only a difference a reader could have caused counts. */
-function sameViewport(a: Viewport, b: Viewport): boolean {
-    return (
-        Math.abs(a.x - b.x) < 0.5 && Math.abs(a.y - b.y) < 0.5 && Math.abs(a.zoom - b.zoom) < 0.001
-    );
-}
 
 /**
  * The same board, lit for whoever is reading it.
@@ -102,36 +96,7 @@ function PreviewSurface({ doc, present = false, onExitPresent }: MindmapPreviewP
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
 
-    /**
-     * The viewport our own framing last produced, or null before the first one.
-     *
-     * Auto-framing has to survive resizes: the preview commonly mounts while
-     * its panel is still animating open, and a stage measured mid-animation is
-     * narrow. Framing once against that measurement and never revisiting it is
-     * what left the board at 8% in a pane that had since grown to full width.
-     *
-     * But it must also stop the moment the reader pans or zooms, or the board
-     * would snap back under them on the next resize. Comparing the live
-     * viewport against the one we set tells the two apart without the store
-     * having to track intent.
-     */
-    const framedViewport = useRef<Viewport | null>(null);
-
-    const frame = useCallback(
-        (size: { w: number; h: number }) => {
-            if (size.w < 40 || size.h < 40) return;
-            fitToScreen(store, size);
-            framedViewport.current = store.getState().viewport;
-        },
-        [store]
-    );
-
-    useEffect(() => {
-        const framed = framedViewport.current;
-        // Once the reader has moved the board, the stage is theirs.
-        if (framed && !sameViewport(framed, store.getState().viewport)) return;
-        frame(stageSize);
-    }, [stageSize, frame, store]);
+    const frame = useAutoFit(store, stageSize);
 
     return (
         <EditorProvider store={store}>

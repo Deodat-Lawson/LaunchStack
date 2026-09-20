@@ -169,116 +169,121 @@ export function CommentsPanel({
                                 </p>
                             )}
                             {group.threads.map(thread => (
-                        <article
-                            key={thread.id}
-                            className={cn(
-                                "border-line bg-panel rounded-lg border p-2.5",
-                                group.highlight && "border-brand",
-                                thread.resolved && "opacity-60"
-                            )}
-                        >
-                            <header className="mb-1 flex items-center gap-2">
-                                <span className="text-ink text-[12px] font-semibold">
-                                    {thread.author}
-                                </span>
-                                <time className="text-ink-3 text-[11px]">
-                                    {formatWhen(thread.createdAt)}
-                                </time>
-                                <span className="flex-1" />
-                                <button
-                                    type="button"
-                                    title={thread.resolved ? "Reopen" : "Resolve"}
-                                    onClick={() =>
-                                        resolveComment(store, thread.id, !thread.resolved)
-                                    }
-                                    className="text-ink-3 hover:text-success"
-                                >
-                                    {thread.resolved ? (
-                                        <Undo2 className="size-3.5" />
-                                    ) : (
-                                        <Check className="size-3.5" />
+                                <article
+                                    key={thread.id}
+                                    className={cn(
+                                        "border-line bg-panel rounded-lg border p-2.5",
+                                        group.highlight && "border-brand",
+                                        thread.resolved && "opacity-60"
                                     )}
-                                </button>
-                                <button
-                                    type="button"
-                                    title="Delete thread"
-                                    onClick={() => deleteComment(store, thread.id)}
-                                    className="text-ink-3 hover:text-danger"
                                 >
-                                    <Trash2 className="size-3.5" />
-                                </button>
-                            </header>
-
-                            <p className="text-ink-2 whitespace-pre-wrap text-[13px] leading-relaxed">
-                                {thread.body}
-                            </p>
-
-                            {thread.nodeId && (
-                                <button
-                                    type="button"
-                                    onClick={() => focusNode(store, thread.nodeId!, canvasSize)}
-                                    className="text-brand-ink mt-1.5 text-[11px] underline-offset-2 hover:underline"
-                                >
-                                    Jump to shape
-                                </button>
-                            )}
-
-                            {thread.replies.length > 0 && (
-                                <ul className="border-line mt-2 space-y-1.5 border-l-2 pl-2.5">
-                                    {thread.replies.map(reply => (
-                                        <li key={reply.id}>
-                                            <span className="text-ink text-[12px] font-semibold">
-                                                {reply.author}
-                                            </span>{" "}
-                                            <span className="text-ink-3 text-[11px]">
-                                                {formatWhen(reply.createdAt)}
-                                            </span>
-                                            <p className="text-ink-2 whitespace-pre-wrap text-[12.5px]">
-                                                {reply.body}
-                                            </p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-
-                            {replyTo === thread.id ? (
-                                <div className="mt-2">
-                                    <Textarea
-                                        autoFocus
-                                        value={replyDraft}
-                                        onChange={e => setReplyDraft(e.target.value)}
-                                        onKeyDown={e => {
-                                            e.stopPropagation();
-                                            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                                                if (replyDraft.trim()) {
-                                                    replyToComment(
-                                                        store,
-                                                        thread.id,
-                                                        author,
-                                                        replyDraft.trim()
-                                                    );
-                                                }
-                                                setReplyDraft("");
-                                                setReplyTo(null);
+                                    <header className="mb-1 flex items-center gap-2">
+                                        <span className="text-ink text-[12px] font-semibold">
+                                            {thread.author}
+                                        </span>
+                                        <time className="text-ink-3 text-[11px]">
+                                            {formatWhen(thread.createdAt)}
+                                        </time>
+                                        <span className="flex-1" />
+                                        <button
+                                            type="button"
+                                            title={thread.resolved ? "Reopen" : "Resolve"}
+                                            onClick={() =>
+                                                resolveComment(store, thread.id, !thread.resolved)
                                             }
-                                            if (e.key === "Escape") setReplyTo(null);
-                                        }}
-                                        placeholder="Reply…"
-                                        className="min-h-[52px] resize-none text-[13px]"
-                                    />
-                                </div>
-                            ) : (
-                                !thread.resolved && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setReplyTo(thread.id)}
-                                        className="text-ink-3 hover:text-ink-2 mt-1.5 text-[11px] underline-offset-2 hover:underline"
-                                    >
-                                        Reply
-                                    </button>
-                                )
-                            )}
-                        </article>
+                                            className="text-ink-3 hover:text-success"
+                                        >
+                                            {thread.resolved ? (
+                                                <Undo2 className="size-3.5" />
+                                            ) : (
+                                                <Check className="size-3.5" />
+                                            )}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            title="Delete thread"
+                                            onClick={() => deleteComment(store, thread.id)}
+                                            className="text-ink-3 hover:text-danger"
+                                        >
+                                            <Trash2 className="size-3.5" />
+                                        </button>
+                                    </header>
+
+                                    <p className="text-ink-2 whitespace-pre-wrap text-[13px] leading-relaxed">
+                                        {thread.body}
+                                    </p>
+
+                                    {thread.nodeId && (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                focusNode(store, thread.nodeId!, canvasSize)
+                                            }
+                                            className="text-brand-ink mt-1.5 text-[11px] underline-offset-2 hover:underline"
+                                        >
+                                            Jump to shape
+                                        </button>
+                                    )}
+
+                                    {thread.replies.length > 0 && (
+                                        <ul className="border-line mt-2 space-y-1.5 border-l-2 pl-2.5">
+                                            {thread.replies.map(reply => (
+                                                <li key={reply.id}>
+                                                    <span className="text-ink text-[12px] font-semibold">
+                                                        {reply.author}
+                                                    </span>{" "}
+                                                    <span className="text-ink-3 text-[11px]">
+                                                        {formatWhen(reply.createdAt)}
+                                                    </span>
+                                                    <p className="text-ink-2 whitespace-pre-wrap text-[12.5px]">
+                                                        {reply.body}
+                                                    </p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+
+                                    {replyTo === thread.id ? (
+                                        <div className="mt-2">
+                                            <Textarea
+                                                autoFocus
+                                                value={replyDraft}
+                                                onChange={e => setReplyDraft(e.target.value)}
+                                                onKeyDown={e => {
+                                                    e.stopPropagation();
+                                                    if (
+                                                        e.key === "Enter" &&
+                                                        (e.metaKey || e.ctrlKey)
+                                                    ) {
+                                                        if (replyDraft.trim()) {
+                                                            replyToComment(
+                                                                store,
+                                                                thread.id,
+                                                                author,
+                                                                replyDraft.trim()
+                                                            );
+                                                        }
+                                                        setReplyDraft("");
+                                                        setReplyTo(null);
+                                                    }
+                                                    if (e.key === "Escape") setReplyTo(null);
+                                                }}
+                                                placeholder="Reply…"
+                                                className="min-h-[52px] resize-none text-[13px]"
+                                            />
+                                        </div>
+                                    ) : (
+                                        !thread.resolved && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setReplyTo(thread.id)}
+                                                className="text-ink-3 hover:text-ink-2 mt-1.5 text-[11px] underline-offset-2 hover:underline"
+                                            >
+                                                Reply
+                                            </button>
+                                        )
+                                    )}
+                                </article>
                             ))}
                         </React.Fragment>
                     ))}

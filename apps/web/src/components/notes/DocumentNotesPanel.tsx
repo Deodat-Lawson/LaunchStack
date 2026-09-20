@@ -15,6 +15,7 @@ import {
 import { NoteCard } from "./_shared/NoteCard";
 import { NoteDraftEditor } from "./_shared/NoteDraftEditor";
 import { BacklinksPanel } from "./BacklinksPanel";
+import { markdownToTiptapJson } from "./StickyNoteEditor";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 
 export type { PrefilledAnchor } from "./_shared/anchor";
@@ -142,7 +143,12 @@ export function DocumentNotesPanel({
         setDraft({
             id: note.id,
             title: note.title ?? "",
-            rich: (note.contentRich as JSONContent | null) ?? null,
+            // Notes the agent captured have no rich body — only markdown.
+            // Feeding the editor `null` for those opened it empty, and
+            // saving wrote that emptiness back over the note.
+            rich:
+                (note.contentRich as JSONContent | null) ??
+                markdownToTiptapJson(note.contentMarkdown ?? note.content),
             text: note.contentMarkdown ?? note.content ?? "",
             tags: note.tags ?? [],
             anchorQuote: anchor?.quote?.exact ?? "",

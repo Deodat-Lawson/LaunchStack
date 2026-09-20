@@ -345,3 +345,198 @@ export function tiptapJsonToMarkdown(doc: JSONContent | null | undefined): strin
     out.push(walk(doc, 0));
     return out.filter(Boolean).join("").trim();
 }
+
+/**
+ * Parse the inline span of one block into Tiptap text nodes, honouring the
+ * four marks the serializer above emits: bold, italic, code and link.
+ *
+ * Scanning for the earliest opener rather than running four passes is what
+ * keeps `**bold with `code` inside**` from being mangled — the outer mark
+ * wins and the inner one is parsed from its content.
+ */
+function inlineNodes(input: string, marks: JSONContent["marks"] = []): JSONContent[] {
+    if (!input) return [];
+
+    const patterns: Array<{
+        re: RegExp;
+        mark: (m: RegExpExecArray) => NonNullable<JSONContent["marks"]>[number];
+        body: (m: RegExpExecArray) => string;
+    }> = [
+        // Code first: its content is literal, so nothing inside it is a mark.
+        { re: /`([^`]+)`/, mark: () => ({ type: "code" }), body: m => m[1] ?? "" },
+        {
+            re: /\[([^\]]+)\]\(([^)\s]+)\)/,
+            mark: m => ({ type: "link", attrs: { href: m[2] ?? "" } }),
+            body: m => m[1] ?? "",
+        },
+        { re: /\*\*([^*]+)\*\*/, mark: () => ({ type: "bold" }), body: m => m[1] ?? "" },
+        { re: /(?<!\*)\*([^*]+)\*(?!\*)/, mark: () => ({ type: "italic" }), body: m => m[1] ?? "" },
+        { re: /_([^_]+)_/, mark: () => ({ type: "italic" }), body: m => m[1] ?? "" },
+    ];
+
+    let earliest: {
+        index: number;
+        match: RegExpExecArray;
+        spec: (typeof patterns)[number];
+    } | null = null;
+    for (const spec of patterns) {
+        const match = spec.re.exec(input);
+        if (match && (earliest === null || match.index < earliest.index)) {
+            earliest = { index: match.index, match, spec };
+        }
+    }
+
+    const textNode = (text: string): JSONContent[] =>
+        text ? [{ type: "text", text, ...(marks.length ? { marks } : {}) }] : [];
+
+    if (!earliest) return textNode(input);
+
+    const { index, match, spec } = earliest;
+    const inner = spec.body(match);
+    // A mark that already applies is not added twice; Tiptap tolerates it,
+    // but a duplicate makes the JSON harder to read in the database.
+    const nextMarks = [...(marks ?? [])];
+    const added = spec.mark(match);
+    if (!nextMarks.some(m => m.type === added.type)) nextMarks.push(added);
+
+    return [
+        ...textNode(input.slice(0, index)),
+        ...inlineNodes(inner, nextMarks),
+        ...inlineNodes(input.slice(index + match[0].length), marks),
+    ];
+}
+
+/**
+ * Convert markdown into Tiptap JSON — the inverse of
+ * `tiptapJsonToMarkdown`, and deliberately the same small grammar.
+ *
+ * This exists because notes the agent captures store only markdown:
+ * `content_rich` is null for every one of them. The editor is fed Tiptap
+ * JSON, so opening such a note for editing showed the title with an empty
+ * body, and saving from there wrote that emptiness back — the note's text
+ * was destroyed by the act of looking at it. Parsing the markdown on the way
+ * in keeps those notes editable.
+ *
+ * Anything outside the grammar the serializer emits stays literal text,
+ * which is the safe direction to fail: a stray asterisk survives the round
+ * trip, a dropped paragraph does not.
+ */
+export function markdownToTiptapJson(markdown: string | null | undefined): JSONContent | null {
+    const src = (markdown ?? "").replace(/\r\n?/g, "\n");
+    if (!src.trim()) return null;
+
+    const lines = src.split("\n");
+    const blocks: JSONContent[] = [];
+    let i = 0;
+
+    const paragraphOf = (text: string): JSONContent => {
+        const content = inlineNodes(text.trim());
+        return content.length ? { type: "paragraph", content } : { type: "paragraph" };
+    };
+
+    while (i < lines.length) {
+        const line = lines[i] ?? "";
+
+        if (!line.trim()) {
+            i++;
+            continue;
+        }
+
+        // Fenced code. Everything to the closing fence is literal, and an
+        // unclosed fence runs to the end rather than swallowing the parse.
+        if (line.startsWith("```")) {
+            i++;
+            const body: string[] = [];
+            while (i < lines.length && !/^```\s*$/.test(lines[i] ?? "")) {
+                body.push(lines[i] ?? "");
+                i++;
+            }
+            i++;
+            const text = body.join("\n");
+            blocks.push({
+                type: "codeBlock",
+                ...(text ? { content: [{ type: "text", text }] } : {}),
+            });
+            continue;
+        }
+
+        const heading = /^(#{1,6})\s+(.*)$/.exec(line);
+        if (heading) {
+            // The editor only registers levels 2 and 3; anything else would
+            // be dropped by the schema, so it is clamped instead.
+            const level = Math.min(3, Math.max(2, (heading[1] ?? "##").length));
+            blocks.push({
+                type: "heading",
+                attrs: { level },
+                content: inlineNodes((heading[2] ?? "").trim()),
+            });
+            i++;
+            continue;
+        }
+
+        if (/^>\s?/.test(line)) {
+            const quoted: string[] = [];
+            while (i < lines.length && /^>\s?/.test(lines[i] ?? "")) {
+                quoted.push((lines[i] ?? "").replace(/^>\s?/, ""));
+                i++;
+            }
+            blocks.push({
+                type: "blockquote",
+                content: [paragraphOf(quoted.join("\n"))],
+            });
+            continue;
+        }
+
+        const bullet = /^\s*[-*+]\s+/;
+        if (bullet.test(line)) {
+            const items: JSONContent[] = [];
+            while (i < lines.length && bullet.test(lines[i] ?? "")) {
+                items.push({
+                    type: "listItem",
+                    content: [paragraphOf((lines[i] ?? "").replace(bullet, ""))],
+                });
+                i++;
+            }
+            blocks.push({ type: "bulletList", content: items });
+            continue;
+        }
+
+        const ordered = /^\s*\d+[.)]\s+/;
+        if (ordered.test(line)) {
+            const items: JSONContent[] = [];
+            while (i < lines.length && ordered.test(lines[i] ?? "")) {
+                items.push({
+                    type: "listItem",
+                    content: [paragraphOf((lines[i] ?? "").replace(ordered, ""))],
+                });
+                i++;
+            }
+            blocks.push({ type: "orderedList", attrs: { start: 1 }, content: items });
+            continue;
+        }
+
+        // A run of plain lines is one paragraph. The serializer joins blocks
+        // with a blank line, so a single newline inside a block was a soft
+        // break and is restored as one.
+        const para: string[] = [];
+        while (i < lines.length) {
+            const next = lines[i] ?? "";
+            if (
+                !next.trim() ||
+                next.startsWith("```") ||
+                /^(#{1,6})\s+/.test(next) ||
+                /^>\s?/.test(next) ||
+                bullet.test(next) ||
+                ordered.test(next)
+            ) {
+                break;
+            }
+            para.push(next);
+            i++;
+        }
+        blocks.push(paragraphOf(para.join("\n")));
+    }
+
+    if (blocks.length === 0) return null;
+    return { type: "doc", content: blocks };
+}

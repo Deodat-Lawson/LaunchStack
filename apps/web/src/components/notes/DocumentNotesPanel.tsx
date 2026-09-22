@@ -8,6 +8,7 @@ import {
     buildAnchorFromDraft,
     type DraftState,
     EMPTY_DRAFT,
+    documentPositionOfAnchor,
     type NoteAnchorLite,
     orderNotesForReading,
     type PrefilledAnchor,
@@ -49,8 +50,23 @@ interface Props {
      * a real position — so scrolling to the page number always landed on page
      * one. The quoted text can be searched for, which is how citations already
      * find their passage.
+     *
+     * `located` says the note carries a real position — quads from a
+     * selection. Those should be shown where they are, not searched for: the
+     * quote can occur more than once, and a search lands on the first copy.
      */
-    onNoteClick?: (note: { id: number; page: number | null; quote: string | null }) => void;
+    onNoteClick?: (note: {
+        id: number;
+        page: number | null;
+        quote: string | null;
+        located: boolean;
+    }) => void;
+    /**
+     * Fired after a note is deleted, with its id, so the document can drop
+     * anything it is still showing for that note. `onChanged` alone could
+     * refresh the pins but not say which highlight had just lost its note.
+     */
+    onDeleted?: (id: number) => void;
     /**
      * The note the document is currently showing, so the column can open the
      * matching card. Clicking a pin in the document sets this, which is what
@@ -73,6 +89,7 @@ export function DocumentNotesPanel({
     prefilledAnchor,
     prefilledText,
     onNoteClick,
+    onDeleted,
     activeNoteId = null,
 }: Props) {
     const [notes, setNotes] = useState<DocumentNote[]>([]);
@@ -240,6 +257,7 @@ export function DocumentNotesPanel({
             const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error(`Failed (${res.status})`);
             setNotes(prev => prev.filter(n => n.id !== id));
+            onDeleted?.(id);
             onChanged?.();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Delete failed");
@@ -413,6 +431,7 @@ export function DocumentNotesPanel({
                                             // A blank quote is no quote: `??` would keep the empty
                                             // string and the viewer would search for nothing.
                                             quote: nonEmpty(anchor?.quote?.exact),
+                                            located: documentPositionOfAnchor(anchor) !== null,
                                         });
                                     }}
                                 />
@@ -442,7 +461,9 @@ export function DocumentNotesPanel({
                 {documentId && (
                     <BacklinksPanel
                         documentId={documentId}
-                        onOpenNote={id => onNoteClick?.({ id, page: null, quote: null })}
+                        onOpenNote={id =>
+                            onNoteClick?.({ id, page: null, quote: null, located: false })
+                        }
                     />
                 )}
             </div>

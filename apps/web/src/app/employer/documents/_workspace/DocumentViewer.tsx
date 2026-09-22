@@ -1265,12 +1265,20 @@ export function DocumentViewer({
                                     setPdfAnchorDraft(null);
                                     setNoteSeed(null);
                                 }}
-                                onNoteClick={({ id, page, quote }) => {
-                                    // Prefer the quote: the stored page is 1
-                                    // for every note, so scrolling to it went
-                                    // nowhere. Fall back to the page only when
-                                    // there is nothing to search for.
-                                    if (quote) {
+                                onNoteClick={({ id, page, quote, located }) => {
+                                    // A note made from a selection knows where
+                                    // it is, and its own pin already draws the
+                                    // passage — scroll there. Searching for the
+                                    // quote instead found its first copy, which
+                                    // in a repetitive document is some other
+                                    // line entirely.
+                                    if (located) {
+                                        setNoteHighlight(null);
+                                        setPdfScrollToNoteId(id);
+                                    } else if (quote) {
+                                        // No position: agent-captured notes store
+                                        // page 1 with no quads, so the quote is
+                                        // the only thing that can find them.
                                         setNoteHighlight({
                                             text: quote,
                                             page: null,
@@ -1280,6 +1288,14 @@ export function DocumentViewer({
                                     } else if (page !== null) {
                                         setPdfScrollToNoteId(id);
                                     }
+                                }}
+                                onDeleted={id => {
+                                    // The highlight a note click drew belongs to
+                                    // that note; left in place it outlived it,
+                                    // marking a passage nothing annotates.
+                                    if (id !== pdfScrollToNoteId) return;
+                                    setNoteHighlight(null);
+                                    setPdfScrollToNoteId(null);
                                 }}
                             />
                         </div>

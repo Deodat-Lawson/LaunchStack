@@ -438,10 +438,15 @@ export function DocumentViewer({
     }, [source.documentId, isPdf, notesNonce]);
 
     // When the PDF viewer captures a selection, pop the notes panel open so
-    // the user can type the body without hunting for the sidebar.
+    // the user can type the body without hunting for the sidebar. Switching
+    // the tab is not enough in a narrow column — beside the chat, where Ask AI
+    // now puts documents — because the whole panel is folded away there, and
+    // "+ Note" opened a draft nobody could see.
     useEffect(() => {
-        if (pdfAnchorDraft) setSidebarTab("notes");
-    }, [pdfAnchorDraft]);
+        if (!pdfAnchorDraft && !noteSeed) return;
+        setSidebarTab("notes");
+        setDetailsOpen(true);
+    }, [pdfAnchorDraft, noteSeed]);
 
     // Fetch version history on mount
     useEffect(() => {
@@ -1117,6 +1122,9 @@ export function DocumentViewer({
                                     onNotePinClick={id => {
                                         setPdfScrollToNoteId(id);
                                         setSidebarTab("notes");
+                                        // A pin opens its card; in a narrow
+                                        // column the panel holding it is shut.
+                                        setDetailsOpen(true);
                                     }}
                                     onSelectionDraft={draft => {
                                         pdfSelection.current = draft;

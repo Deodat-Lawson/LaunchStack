@@ -275,4 +275,76 @@ describe("paneLayout", () => {
             expect(isTabVisible(layout, "draft")).toBe(false);
         });
     });
+
+    /**
+     * Asking about a document used to close it: the preview went away and the
+     * chat took the screen. `pair` keeps the document in view beside the chat,
+     * and the one thing it must never do is leave both in the same column,
+     * where focusing the chat hides the document it was meant to keep.
+     */
+    describe("pair", () => {
+        const pair = (layout: PaneLayout) =>
+            reduceLayout(layout, { type: "pair", id: "source:d1", anchorId: "chat" });
+
+        it("opens the document in a new column beside the chat and focuses the chat", () => {
+            const next = pair(initialLayout());
+            expect(shape(next)).toBe("[chat] | [source:d1]");
+            expect(next.activeGroupId).toBe("g0");
+        });
+
+        it("pulls the document out of the chat's column rather than hiding it", () => {
+            const next = pair(layoutOf([["chat", "source:d1"]]));
+            expect(shape(next)).toBe("[chat] | [source:d1]");
+            expect(isTabVisible(next, "source:d1")).toBe(true);
+            expect(isTabVisible(next, "chat")).toBe(true);
+        });
+
+        it("leaves a document that already has its own column where it is", () => {
+            const next = pair(layoutOf([["chat"], ["knowledge", "source:d1"]]));
+            expect(shape(next)).toBe("[chat] | knowledge,[source:d1]");
+            expect(next.activeGroupId).toBe("g0");
+        });
+
+        it("uses the column to the right of the chat when one exists", () => {
+            const next = pair(layoutOf([["chat"], ["knowledge"]]));
+            expect(shape(next)).toBe("[chat] | knowledge,[source:d1]");
+        });
+
+        it("goes left of the chat when the chat is last and there is no room", () => {
+            const full = layoutOf([["a"], ["b"], ["chat"]], 2);
+            expect(full.groups).toHaveLength(MAX_GROUPS);
+            const next = pair(full);
+            expect(shape(next)).toBe("[a] | b,[source:d1] | [chat]");
+            expect(groupOf(next, "source:d1")?.id).not.toBe(groupOf(next, "chat")?.id);
+        });
+
+        it("reopens a closed chat, still beside the document", () => {
+            const next = pair(layoutOf([["source:d1"]]));
+            expect(isTabVisible(next, "chat")).toBe(true);
+            expect(isTabVisible(next, "source:d1")).toBe(true);
+            expect(groupOf(next, "source:d1")?.id).not.toBe(groupOf(next, "chat")?.id);
+        });
+
+        it("never leaves both in the same column, whatever the starting layout", () => {
+            const starts: string[][][] = [
+                [["chat"]],
+                [["chat", "source:d1"]],
+                [["source:d1", "chat"]],
+                [["knowledge"], ["chat", "source:d1"]],
+                [["a"], ["b"], ["chat", "source:d1"]],
+                [["a", "source:d1"], ["b"], ["chat"]],
+                [["source:d1"], ["a"], ["b"]],
+            ];
+            for (const columns of starts) {
+                for (let focus = 0; focus < columns.length; focus++) {
+                    const next = pair(layoutOf(columns, focus));
+                    expect(isTabVisible(next, "chat")).toBe(true);
+                    expect(isTabVisible(next, "source:d1")).toBe(true);
+                    expect(groupOf(next, "chat")?.id).not.toBe(groupOf(next, "source:d1")?.id);
+                    expect(next.groups.length).toBeLessThanOrEqual(MAX_GROUPS);
+                    expect(next.activeGroupId).toBe(groupOf(next, "chat")?.id);
+                }
+            }
+        });
+    });
 });

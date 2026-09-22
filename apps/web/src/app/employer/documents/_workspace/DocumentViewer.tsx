@@ -82,6 +82,12 @@ export interface DocumentViewerProps {
     /** "Restrict access" — who can see this document. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
+    /**
+     * "Ask AI" on a selected passage: the passage goes to the chat as a quote
+     * and the document stays in view beside it. Absent, the PDF selection
+     * popup offers only "+ Note".
+     */
+    onAskAboutPassage?: (source: WorkspaceSource, quote: string) => void;
     onVersionChanged?: () => void;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
@@ -228,6 +234,7 @@ export function DocumentViewer({
     onDelete,
     onRestrictAccess,
     onAskAbout,
+    onAskAboutPassage,
     onVersionChanged,
     onEdit,
     onPublished,
@@ -1102,34 +1109,11 @@ export function DocumentViewer({
                                             quote: anchor.quote,
                                         });
                                     }}
-                                    onAiCapture={(anchor, intent) => {
-                                        void fetch("/api/notes/ai-capture", {
-                                            method: "POST",
-                                            headers: { "Content-Type": "application/json" },
-                                            body: JSON.stringify({
-                                                selection: anchor.quote.exact,
-                                                intent,
-                                                sourceContext: {
-                                                    documentId: source.documentId,
-                                                    documentTitle: fullDoc?.title,
-                                                    versionId: activeVersionId ?? undefined,
-                                                    page: anchor.page,
-                                                },
-                                            }),
-                                        })
-                                            .then(async res => {
-                                                if (!res.ok) {
-                                                    throw new Error(
-                                                        `AI capture failed (${res.status})`
-                                                    );
-                                                }
-                                                setNotesNonce(n => n + 1);
-                                                setSidebarTab("notes");
-                                            })
-                                            .catch(err => {
-                                                console.error("[ai-capture] failed:", err);
-                                            });
-                                    }}
+                                    onAskAi={
+                                        onAskAboutPassage
+                                            ? quote => onAskAboutPassage(source, quote)
+                                            : undefined
+                                    }
                                     onNotePinClick={id => {
                                         setPdfScrollToNoteId(id);
                                         setSidebarTab("notes");

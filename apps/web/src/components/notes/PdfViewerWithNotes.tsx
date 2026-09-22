@@ -66,11 +66,15 @@ interface Props {
      */
     onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
     /**
-     * When set, the selection popup also shows three AI-capture buttons.
-     * `intent` selects the prompt the server uses. Parent should call
-     * `/api/notes/ai-capture` with the selection + the requested intent.
+     * When set, the selection popup offers "Ask AI": the passage goes to the
+     * chat as a quote, with the document kept in view beside it.
+     *
+     * This replaced three buttons — Summarize, Action, Decision — that each
+     * wrote an AI-generated note. They answered a question the reader had not
+     * asked, in a fixed shape, and filed the answer as a note; asking lets the
+     * reader say what they actually want to know about the passage.
      */
-    onAiCapture?: (anchor: PdfAnchorCapture, intent: "summary" | "action" | "decision") => void;
+    onAskAi?: (quote: string) => void;
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
     /**
@@ -110,7 +114,7 @@ export function PdfViewerWithNotes({
     notes,
     scrollToNoteId,
     onCreateAnchoredNote,
-    onAiCapture,
+    onAskAi,
     onNotePinClick,
     onSelectionDraft,
     citationHighlight,
@@ -400,16 +404,9 @@ export function PdfViewerWithNotes({
         setSelectionDraft(null);
     };
 
-    const handleAiCapture = (intent: "summary" | "action" | "decision") => {
-        if (!selectionDraft || !onAiCapture) return;
-        onAiCapture(
-            {
-                page: selectionDraft.page,
-                quads: selectionDraft.quads,
-                quote: { exact: selectionDraft.quote },
-            },
-            intent
-        );
+    const handleAskAi = () => {
+        if (!selectionDraft || !onAskAi) return;
+        onAskAi(selectionDraft.quote);
         window.getSelection()?.removeAllRanges();
         setSelectionDraft(null);
     };
@@ -494,33 +491,15 @@ export function PdfViewerWithNotes({
                     >
                         + Note
                     </button>
-                    {onAiCapture && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("summary")}
-                                title="Summarize as note"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Summarize
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("action")}
-                                title="Extract action item"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Action
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("decision")}
-                                title="Extract decision"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Decision
-                            </button>
-                        </>
+                    {onAskAi && (
+                        <button
+                            type="button"
+                            onClick={handleAskAi}
+                            title="Ask about this passage in the chat"
+                            style={askBtnStyle}
+                        >
+                            ✦ Ask AI
+                        </button>
                     )}
                 </div>
             )}
@@ -528,7 +507,7 @@ export function PdfViewerWithNotes({
     );
 }
 
-const aiBtnStyle: React.CSSProperties = {
+const askBtnStyle: React.CSSProperties = {
     padding: "5px 8px",
     borderRadius: 6,
     background: "var(--panel-2)",

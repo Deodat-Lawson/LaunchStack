@@ -338,6 +338,7 @@ export function WorkspaceShell() {
         closeToRight,
         move: moveTab,
         split: splitTab,
+        pair: pairTabs,
         focusGroup,
         focusAdjacentGroup,
     } = useStudioLayout();
@@ -946,12 +947,39 @@ export function WorkspaceShell() {
         setDeleteTargets(targets);
     }, []);
 
+    /** Put a source in the chat's context without changing what is on screen. */
+    const pinSource = useCallback((source: WorkspaceSource) => {
+        setSelected(prev => (prev.includes(source.id) ? prev : [source.id, ...prev]));
+    }, []);
+
+    /**
+     * Ask about a document without losing it. This used to pin the source and
+     * close the preview, so the thing being asked about vanished the moment
+     * the question started. Now the document moves into a tab of its own
+     * beside the chat, and the chat takes the focus.
+     */
     const handleAskAbout = useCallback(
         (source: WorkspaceSource) => {
-            setSelected(prev => (prev.includes(source.id) ? prev : [source.id, ...prev]));
-            closeSource();
+            pinSource(source);
+            // The overlay and the column would both be showing it otherwise.
+            if (sourceParam) closeSource();
+            setViewerHighlight(null);
+            pairTabs(tabIdOfSource(source.id), "chat");
         },
-        [closeSource]
+        [pinSource, sourceParam, closeSource, pairTabs]
+    );
+
+    /**
+     * "Ask AI" on a passage: the document stays beside the chat, and the
+     * passage lands in the composer as a quote for the question to be
+     * written under — not sent, since the question is the reader's to ask.
+     */
+    const askAboutPassage = useCallback(
+        (source: WorkspaceSource, quote: string) => {
+            handleAskAbout(source);
+            seedComposer(quoteBlock(quote), "append");
+        },
+        [handleAskAbout, seedComposer]
     );
 
     /** Send a question about a selected passage, scoped to the document it came from. */
@@ -1550,8 +1578,9 @@ export function WorkspaceShell() {
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
             run: (target, ctx) => {
                 const home = selectionHome(ctx);
-                if (home?.kind === "document") handleAskAbout(home.source);
-                seedComposer(quoteBlock((target.data as TextSelectionInfo).text), "append");
+                const quote = (target.data as TextSelectionInfo).text;
+                if (home?.kind === "document") askAboutPassage(home.source, quote);
+                else seedComposer(quoteBlock(quote), "append");
             },
         },
         {
@@ -1872,6 +1901,7 @@ export function WorkspaceShell() {
                             onDelete={source => void handleDeleteSource(source)}
                             onRestrictAccess={openDocumentAccess}
                             onAskAbout={handleAskAbout}
+                            onAskAboutPassage={askAboutPassage}
                             onVersionChanged={() => void refresh()}
                             onEdit={source => openSource(source.id, true)}
                             onPublished={() => void refresh()}
@@ -1893,7 +1923,10 @@ export function WorkspaceShell() {
                                 onAskAboutNode={text => {
                                     // Pin the map, leave the editor, and start
                                     // the question from the topic's text.
-                                    handleAskAbout(editedMindmap);
+                                    // The editor is already a tab of its own,
+                                    // so pin only — a preview beside it would
+                                    // show the same map twice.
+                                    pinSource(editedMindmap);
                                     seedComposer(quoteBlock(text), "append");
                                 }}
                             />
@@ -2055,6 +2088,7 @@ export function WorkspaceShell() {
                     onDelete={source => void handleDeleteSource(source)}
                     onRestrictAccess={openDocumentAccess}
                     onAskAbout={handleAskAbout}
+                    onAskAboutPassage={askAboutPassage}
                     onVersionChanged={() => void refresh()}
                     onEdit={source => openSource(source.id, true)}
                     onPublished={() => void refresh()}
@@ -2088,6 +2122,7 @@ function EmbeddedSourcePane({
     onDelete: (source: WorkspaceSource) => void;
     onRestrictAccess: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
+    onAskAboutPassage: (source: WorkspaceSource, quote: string) => void;
     onVersionChanged: () => void;
     onEdit: (source: WorkspaceSource) => void;
     onPublished: () => void;

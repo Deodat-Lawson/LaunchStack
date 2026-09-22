@@ -40,6 +40,7 @@ import {
     Users,
 } from "lucide-react";
 
+import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import type { Permission } from "~/lib/authz/permissions";
@@ -378,6 +379,10 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 aria-label="Settings sections"
                 className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4"
             >
+                {/* Standalone, the way back leads the rail as it does in
+                    Documents. Embedded as a Studio tab there is nowhere to go
+                    back to — the tab strip is the navigation. */}
+                {!embedded && <RailBackLink className="mb-2" />}
                 <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
                     Settings
                 </div>

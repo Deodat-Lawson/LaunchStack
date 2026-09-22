@@ -29,6 +29,8 @@ import styles from "./BackBar.module.css";
  * the breadcrumb surface that `BreadcrumbContext` has been collecting for and
  * nothing has ever rendered.
  */
+// On a page whose sidebar shows `RailBackLink`, this bar is hidden by CSS
+// (`DriftShell.module.css`) and the sidebar's header carries the way back.
 export function BackBar() {
     const pathname = usePathname();
     const { crumbs } = useBreadcrumbs();
@@ -40,7 +42,7 @@ export function BackBar() {
     const trail = crumbs.slice(1).filter(Boolean);
 
     return (
-        <div className={styles.bar} data-testid="back-bar">
+        <div className={styles.bar} data-back-bar data-testid="back-bar">
             <Link
                 href={target.href}
                 className={styles.back}

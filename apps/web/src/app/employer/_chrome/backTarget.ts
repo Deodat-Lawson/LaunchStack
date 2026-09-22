@@ -42,12 +42,10 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/growth/brand/",
         target: { href: "/employer/tools/growth/brand", label: "Brand" },
     },
-    // Both halves of Growth sit under it, so anything else there goes to the
-    // app's own home rather than all the way out to the Studio.
-    {
-        prefix: "/employer/tools/growth/",
-        target: { href: "/employer/tools/growth", label: "Growth" },
-    },
+    // Growth has no home of its own: `/employer/tools/growth` redirects to
+    // Brand. Pointing its halves at it sent Brand back to Brand and Prospects
+    // sideways into Brand, so above Brand and Prospects is the Studio.
+    { prefix: "/employer/tools/growth/", target: STUDIO },
     // `/employer/tools/prospects/*` is the old location, kept as a redirect
     // shim. Send it to where Prospects actually lives now.
     {

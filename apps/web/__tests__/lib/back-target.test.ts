@@ -71,6 +71,17 @@ describe("backTargetFor", () => {
         }
     });
 
+    /**
+     * `/employer/tools/growth` redirects to Brand, so "never points at itself"
+     * was true on paper and false in the browser: Brand's back went to Growth,
+     * which came straight back to Brand. A page that only redirects is not a
+     * place to go back to.
+     */
+    it("sends Growth's two halves out to the Studio, not to a redirect back into them", () => {
+        expect(backTargetFor("/employer/tools/growth/brand")).toEqual(STUDIO);
+        expect(backTargetFor("/employer/tools/growth/prospects")).toEqual(STUDIO);
+    });
+
     it("ignores a trailing slash", () => {
         expect(backTargetFor("/employer/settings/")).toEqual(STUDIO);
         expect(backTargetFor("/employer/documents/")).toEqual(WORKSPACES);

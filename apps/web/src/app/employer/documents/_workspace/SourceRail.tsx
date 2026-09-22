@@ -26,6 +26,7 @@ import {
 import { Folder, FolderOpen, Lock } from "lucide-react";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
+import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
 import {
     UNFILED_FOLDER,
     buildFolderTree,
@@ -1093,8 +1094,13 @@ export function SourceRail({
 
     return (
         <aside style={asideStyle}>
+            {/* The way back sits in the sidebar's own header, above the
+                brand, instead of in a strip across the whole page. */}
+            <div style={{ padding: "8px 8px 0" }}>
+                <RailBackLink />
+            </div>
             <div
-                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 9 }}
+                style={{ padding: "8px 14px 10px", display: "flex", alignItems: "center", gap: 9 }}
             >
                 <LaunchstackMark size={22} title={logoLabel} />
                 <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em", flex: 1 }}>

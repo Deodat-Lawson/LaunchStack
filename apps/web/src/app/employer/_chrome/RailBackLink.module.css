@@ -1,0 +1,40 @@
+/* Quiet on purpose: it sits above the rail's own brand row and must read as
+   the way out, not as a second title. Same hover idiom as the rail's rows. */
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding-inline: 6px 8px;
+    border-radius: 6px;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 0;
+    transition:
+        background 120ms,
+        color 120ms;
+}
+
+.link:hover {
+    background: var(--line-2);
+    color: var(--ink);
+}
+
+.link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

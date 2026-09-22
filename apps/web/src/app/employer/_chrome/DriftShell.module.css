@@ -60,3 +60,16 @@
     height: 100%;
     min-height: 0;
 }
+
+/* A sidebar that carries the back link in its own header (`RailBackLink`)
+   takes over from the bar: the strip goes, and so does the height the
+   immersive shells were subtracting for it. Keyed on the link being in the
+   page rather than on the route, so a collapsed sidebar — or a page without
+   one — brings the bar straight back instead of leaving no way out. */
+.app:has([data-rail-back]) {
+    --drift-backbar-h: 0px;
+}
+
+.app:has([data-rail-back]) .main > [data-back-bar] {
+    display: none;
+}

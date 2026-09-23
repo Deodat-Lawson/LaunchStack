@@ -22,14 +22,29 @@ export interface StudioMenuProps {
  * Gated entries (`feature.requires`) are absent until permissions have loaded
  * and say yes — a viewer never sees a Settings tile flash and vanish.
  */
+/** The menu's natural width, and the gap it keeps from the window's edge. */
+const MENU_WIDTH_PX = 460;
+const MENU_EDGE_PX = 8;
+
 export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
     const router = useRouter();
     const { can } = usePermissions();
     const [menuOpen, setMenuOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    /**
+     * Where the menu sits against its button. It hangs from the button's
+     * right edge at 460px, which from a narrow first column — or a phone —
+     * put its left side off the screen. It is capped to the window and moved
+     * right just far enough to stay on it.
+     */
+    const [placement, setPlacement] = useState({ width: MENU_WIDTH_PX, shift: 0 });
 
     const open = () => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
+        const right = buttonRef.current?.getBoundingClientRect().right ?? MENU_WIDTH_PX;
+        const width = Math.min(MENU_WIDTH_PX, window.innerWidth - MENU_EDGE_PX * 2);
+        setPlacement({ width, shift: Math.max(0, width + MENU_EDGE_PX - right) });
         setMenuOpen(true);
     };
     const close = () => {
@@ -53,6 +68,7 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
     return (
         <div style={{ position: "relative" }} onMouseEnter={open} onMouseLeave={close}>
             <button
+                ref={buttonRef}
                 type="button"
                 onClick={() => {
                     if (onOpenStudio) {
@@ -81,7 +97,7 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
                 }}
             >
                 <IconBolt size={13} />
-                Studio
+                <span className="group-data-[compact=true]/strip:hidden">Studio</span>
             </button>
 
             {menuOpen && (
@@ -89,9 +105,9 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
                     style={{
                         position: "absolute",
                         top: "calc(100% + 6px)",
-                        right: 0,
+                        right: -placement.shift,
                         zIndex: 60,
-                        width: 460,
+                        width: placement.width,
                         padding: 10,
                         background: "var(--panel)",
                         border: "1px solid var(--line)",

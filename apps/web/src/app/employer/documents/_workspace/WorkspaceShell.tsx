@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { PanelLeftOpen, PanelsTopLeft, Plus } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { Button } from "~/components/ui/button";
+import { Sheet, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { useRegisterActions } from "~/components/context-menu";
 import {
     APP_TARGET_KIND,
@@ -339,6 +340,7 @@ export function WorkspaceShell() {
         move: moveTab,
         split: splitTab,
         pair: pairTabs,
+        merge: mergeColumns,
         focusGroup,
         focusAdjacentGroup,
     } = useStudioLayout();
@@ -384,6 +386,30 @@ export function WorkspaceShell() {
     }, [mindmapTabActive]);
     const [railHidden, setRailHidden] = useState(false);
     const railHiddenReady = useRef(false);
+    /**
+     * On a phone the sidebar cannot dock: at 390px its 280px left the chat —
+     * and any document beside it — a column one word wide. Below the
+     * breakpoint it becomes a drawer over the workspace instead, shut until
+     * asked for. `railHidden` stays the desktop choice and is not touched.
+     */
+    const compactViewport = useCompactViewport();
+    const [railDrawerOpen, setRailDrawerOpen] = useState(false);
+    useEffect(() => {
+        if (!compactViewport) setRailDrawerOpen(false);
+    }, [compactViewport]);
+    const railVisible = compactViewport ? railDrawerOpen : !railHidden;
+    // Columns cannot sit side by side on a phone. A split carried over from a
+    // wider window, or made by any verb that slipped through, folds into one.
+    useEffect(() => {
+        if (compactViewport && layout.groups.length > 1) mergeColumns();
+    }, [compactViewport, layout.groups.length, mergeColumns]);
+    const toggleRail = useCallback(() => {
+        if (compactViewport) setRailDrawerOpen(open => !open);
+        else setRailHidden(hidden => !hidden);
+    }, [compactViewport]);
+    /** For the window key handler, which is bound once and must not go stale. */
+    const toggleRailRef = useRef(toggleRail);
+    toggleRailRef.current = toggleRail;
 
     useEffect(() => {
         try {
@@ -964,9 +990,16 @@ export function WorkspaceShell() {
             // The overlay and the column would both be showing it otherwise.
             if (sourceParam) closeSource();
             setViewerHighlight(null);
+            if (compactViewport) {
+                // No room for two columns: the document becomes a tab beside
+                // the chat's in the same strip, and the chat comes forward.
+                setActiveFeatureId(tabIdOfSource(source.id));
+                setActiveFeatureId("chat");
+                return;
+            }
             pairTabs(tabIdOfSource(source.id), "chat");
         },
-        [pinSource, sourceParam, closeSource, pairTabs]
+        [pinSource, sourceParam, closeSource, pairTabs, compactViewport, setActiveFeatureId]
     );
 
     /**
@@ -1312,9 +1345,11 @@ export function WorkspaceShell() {
             // document, one on top of the other.
             closeSource();
             setViewerHighlight(null);
-            openBeside(tabIdOfSource(source.id));
+            // "To the side" has no side on a phone; it opens as a tab.
+            if (compactViewport) setActiveFeatureId(tabIdOfSource(source.id));
+            else openBeside(tabIdOfSource(source.id));
         },
-        [closeSource, openBeside]
+        [closeSource, openBeside, compactViewport, setActiveFeatureId]
     );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
@@ -1477,12 +1512,12 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.toggle-rail",
-            label: railHidden ? "Show sidebar" : "Hide sidebar",
+            label: railVisible ? "Hide sidebar" : "Show sidebar",
             icon: "sidebar",
             shortcut: "⌘\\",
             order: 4,
             appliesTo: target => target.kind === APP_TARGET_KIND,
-            run: () => setRailHidden(v => !v),
+            run: toggleRail,
         },
     ]);
 
@@ -1674,7 +1709,7 @@ export function WorkspaceShell() {
                     setStudioOpen(v => !v);
                     break;
                 case "rail.toggle":
-                    setRailHidden(v => !v);
+                    toggleRailRef.current();
                     break;
                 case "search.focus": {
                     const el = document.querySelector<HTMLInputElement>(
@@ -1734,78 +1769,182 @@ export function WorkspaceShell() {
                 position: "relative",
             }}
         >
-            {!railHidden && (
-                <SourceRail
-                    sources={sources}
-                    folders={folders}
-                    selected={selected}
-                    setSelected={setSelected}
-                    onOpenAdd={() => openAdd()}
-                    onOpenKnowledge={() => expandFeature("knowledge")}
-                    onOpenSource={handleOpenSource}
-                    onOpenSourceBeside={openSourceBeside}
-                    onNewFolder={
-                        canManageFolders
-                            ? parentPath =>
-                                  setFolderDialog({
-                                      mode: "create",
-                                      parentPath: parentPath ?? null,
-                                  })
-                            : undefined
-                    }
-                    onRenameFolder={
-                        canManageFolders
-                            ? folder => setFolderDialog({ mode: "rename", path: folder.name })
-                            : undefined
-                    }
-                    onMoveFolder={
-                        canManageFolders
-                            ? (path, target) => void handleMoveFolder(path, target)
-                            : undefined
-                    }
-                    onDeleteFolder={
-                        canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
-                    }
-                    onShareFolder={openFolderAccess}
-                    onRestrictAccess={openDocumentAccess}
-                    onRenameSource={source => setRenameSource(source)}
-                    onDeleteSource={source => requestDelete([source])}
-                    onDeleteSources={requestDelete}
-                    onAddToFolder={path => {
-                        setAddFolder(path);
-                        openAdd();
-                    }}
-                    onMoveToFolder={
-                        canManageFolders
-                            ? (id, name) => void handleMoveToFolder(id, name)
-                            : undefined
-                    }
-                    activeFolder={activeFolder}
-                    setActiveFolder={setActiveFolder}
-                    activeTag={activeTag}
-                    setActiveTag={setActiveTag}
-                    onClose={() => setRailHidden(true)}
-                    history={{
-                        entries: history.entries,
-                        loading: history.loading,
-                        error: history.error,
-                        degraded: history.degraded,
-                        activeSessionId: sessionParam,
-                        onNewChat: startNewChat,
-                        onResumeSession: resumeSession,
-                        onOpenRun: entry => {
-                            if (entry.href) router.push(entry.href);
-                        },
-                        onRenameSession: handleRenameSession,
-                        onDeleteSession: handleDeleteSession,
-                        onDeleteRun: handleDeleteRun,
-                        onRefresh: () => void refreshHistory(),
-                    }}
-                />
+            {compactViewport ? (
+                <Sheet open={railDrawerOpen} onOpenChange={setRailDrawerOpen}>
+                    {/* The sidebar brings its own close; the sheet's would sit
+                        on top of it in the same corner. */}
+                    <SheetContent
+                        side="left"
+                        className="w-auto max-w-[85vw] gap-0 p-0 sm:max-w-[85vw] [&>button:last-child]:hidden"
+                    >
+                        <SheetTitle className="sr-only">Sources</SheetTitle>
+                        <SourceRail
+                            sources={sources}
+                            folders={folders}
+                            selected={selected}
+                            setSelected={setSelected}
+                            onOpenAdd={() => openAdd()}
+                            onOpenKnowledge={() => expandFeature("knowledge")}
+                            onOpenSource={source => {
+                                // Out of the way of what it opened, on a phone.
+                                setRailDrawerOpen(false);
+                                handleOpenSource(source);
+                            }}
+                            onOpenSourceBeside={source => {
+                                setRailDrawerOpen(false);
+                                openSourceBeside(source);
+                            }}
+                            onNewFolder={
+                                canManageFolders
+                                    ? parentPath =>
+                                          setFolderDialog({
+                                              mode: "create",
+                                              parentPath: parentPath ?? null,
+                                          })
+                                    : undefined
+                            }
+                            onRenameFolder={
+                                canManageFolders
+                                    ? folder =>
+                                          setFolderDialog({ mode: "rename", path: folder.name })
+                                    : undefined
+                            }
+                            onMoveFolder={
+                                canManageFolders
+                                    ? (path, target) => void handleMoveFolder(path, target)
+                                    : undefined
+                            }
+                            onDeleteFolder={
+                                canManageFolders
+                                    ? folder => setDeleteFolderPath(folder.name)
+                                    : undefined
+                            }
+                            onShareFolder={openFolderAccess}
+                            onRestrictAccess={openDocumentAccess}
+                            onRenameSource={source => setRenameSource(source)}
+                            onDeleteSource={source => requestDelete([source])}
+                            onDeleteSources={requestDelete}
+                            onAddToFolder={path => {
+                                setAddFolder(path);
+                                openAdd();
+                            }}
+                            onMoveToFolder={
+                                canManageFolders
+                                    ? (id, name) => void handleMoveToFolder(id, name)
+                                    : undefined
+                            }
+                            activeFolder={activeFolder}
+                            setActiveFolder={setActiveFolder}
+                            activeTag={activeTag}
+                            setActiveTag={setActiveTag}
+                            onClose={() =>
+                                compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
+                            }
+                            history={{
+                                entries: history.entries,
+                                loading: history.loading,
+                                error: history.error,
+                                degraded: history.degraded,
+                                activeSessionId: sessionParam,
+                                onNewChat: startNewChat,
+                                onResumeSession: resumeSession,
+                                onOpenRun: entry => {
+                                    if (entry.href) router.push(entry.href);
+                                },
+                                onRenameSession: handleRenameSession,
+                                onDeleteSession: handleDeleteSession,
+                                onDeleteRun: handleDeleteRun,
+                                onRefresh: () => void refreshHistory(),
+                            }}
+                        />
+                    </SheetContent>
+                </Sheet>
+            ) : (
+                !railHidden && (
+                    <SourceRail
+                        sources={sources}
+                        folders={folders}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onOpenAdd={() => openAdd()}
+                        onOpenKnowledge={() => expandFeature("knowledge")}
+                        onOpenSource={source => {
+                            // Out of the way of what it opened, on a phone.
+                            setRailDrawerOpen(false);
+                            handleOpenSource(source);
+                        }}
+                        onOpenSourceBeside={source => {
+                            setRailDrawerOpen(false);
+                            openSourceBeside(source);
+                        }}
+                        onNewFolder={
+                            canManageFolders
+                                ? parentPath =>
+                                      setFolderDialog({
+                                          mode: "create",
+                                          parentPath: parentPath ?? null,
+                                      })
+                                : undefined
+                        }
+                        onRenameFolder={
+                            canManageFolders
+                                ? folder => setFolderDialog({ mode: "rename", path: folder.name })
+                                : undefined
+                        }
+                        onMoveFolder={
+                            canManageFolders
+                                ? (path, target) => void handleMoveFolder(path, target)
+                                : undefined
+                        }
+                        onDeleteFolder={
+                            canManageFolders
+                                ? folder => setDeleteFolderPath(folder.name)
+                                : undefined
+                        }
+                        onShareFolder={openFolderAccess}
+                        onRestrictAccess={openDocumentAccess}
+                        onRenameSource={source => setRenameSource(source)}
+                        onDeleteSource={source => requestDelete([source])}
+                        onDeleteSources={requestDelete}
+                        onAddToFolder={path => {
+                            setAddFolder(path);
+                            openAdd();
+                        }}
+                        onMoveToFolder={
+                            canManageFolders
+                                ? (id, name) => void handleMoveToFolder(id, name)
+                                : undefined
+                        }
+                        activeFolder={activeFolder}
+                        setActiveFolder={setActiveFolder}
+                        activeTag={activeTag}
+                        setActiveTag={setActiveTag}
+                        onClose={() =>
+                            compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
+                        }
+                        history={{
+                            entries: history.entries,
+                            loading: history.loading,
+                            error: history.error,
+                            degraded: history.degraded,
+                            activeSessionId: sessionParam,
+                            onNewChat: startNewChat,
+                            onResumeSession: resumeSession,
+                            onOpenRun: entry => {
+                                if (entry.href) router.push(entry.href);
+                            },
+                            onRenameSession: handleRenameSession,
+                            onDeleteSession: handleDeleteSession,
+                            onDeleteRun: handleDeleteRun,
+                            onRefresh: () => void refreshHistory(),
+                        }}
+                    />
+                )
             )}
 
             <StudioSplitView
                 layout={layout}
+                splittable={!compactViewport}
                 tabFor={tabFor}
                 onSelect={selectTab}
                 onClose={(groupId, id) => {
@@ -1841,14 +1980,14 @@ export function WorkspaceShell() {
                     </>
                 }
                 leadingSlot={
-                    railHidden ? (
+                    !railVisible ? (
                         <Button
                             variant="ghost"
                             size="icon"
                             className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
                             title={"Show sidebar  ⌘\\"}
                             aria-label="Show sidebar"
-                            onClick={() => setRailHidden(false)}
+                            onClick={toggleRail}
                         >
                             <PanelLeftOpen className="size-4" />
                         </Button>
@@ -2109,6 +2248,23 @@ export function WorkspaceShell() {
  * braces: the shell closes a tab whose source has gone, and this keeps the
  * column readable for the render in between.
  */
+/** Below this, the sidebar is a drawer rather than a docked column. */
+const COMPACT_VIEWPORT_BELOW_PX = 768;
+
+/** Whether the window is phone-narrow. False on the server and on first paint. */
+function useCompactViewport(): boolean {
+    const [compact, setCompact] = useState(false);
+    useEffect(() => {
+        if (typeof window.matchMedia !== "function") return;
+        const query = window.matchMedia(`(max-width: ${COMPACT_VIEWPORT_BELOW_PX - 1}px)`);
+        const update = () => setCompact(query.matches);
+        update();
+        query.addEventListener("change", update);
+        return () => query.removeEventListener("change", update);
+    }, []);
+    return compact;
+}
+
 function EmbeddedSourcePane({
     sourceId,
     sources,

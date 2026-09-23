@@ -64,6 +64,7 @@ import {
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
+import { WORKSPACE_HEADER_HEIGHT_PX } from "./workspaceHeader";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -74,6 +75,9 @@ const CHAT_GUTTER_X_PX = 24;
 export function workspaceMainHeaderBarStyle(leadingChromeInsetPx = 0): React.CSSProperties {
     return {
         flexShrink: 0,
+        // Fixed, so the rule under it lines up with the next column's.
+        height: WORKSPACE_HEADER_HEIGHT_PX,
+        boxSizing: "border-box",
         borderBottom: "1px solid var(--line)",
         background: "var(--panel)",
         paddingTop: 10,
@@ -1392,8 +1396,9 @@ export function JumpToPaletteButton({ onClick }: { onClick: () => void }) {
             }}
         >
             <IconSearch size={12} />
+            {/* The shortcut hint is the first thing a narrow strip gives up. */}
             <span
-                className="mono"
+                className="mono group-data-[compact=true]/strip:hidden"
                 style={{
                     fontSize: 10,
                     padding: "1px 5px",
@@ -1759,9 +1764,16 @@ export function AskPanel({
             }}
         >
             <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
+                {/* One line each, cut short rather than wrapped: the bar is a
+                    fixed height so its rule meets the next column's, and a
+                    wrapped subtitle ran out of the top of it. */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{titleText}</div>
-                    <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{subText}</div>
+                    <div className="truncate" style={{ fontSize: 13, fontWeight: 600 }}>
+                        {titleText}
+                    </div>
+                    <div className="truncate" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                        {subText}
+                    </div>
                 </div>
 
                 <button

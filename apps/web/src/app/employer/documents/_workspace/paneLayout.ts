@@ -71,6 +71,12 @@ export type PaneAction =
      * view while the chat takes the keyboard.
      */
     | { type: "pair"; id: string; anchorId: string }
+    /**
+     * Fold every column into the focused one, keeping left-to-right order and
+     * what that column was showing. For a window too narrow for columns: on a
+     * phone two of them were 195px each, a strip nobody could read.
+     */
+    | { type: "merge" }
     | { type: "focusGroup"; groupId: string }
     | { type: "focusAdjacentGroup"; delta: -1 | 1 };
 
@@ -262,6 +268,17 @@ export function reduceLayout(layout: PaneLayout, action: PaneAction): PaneLayout
             return reduceLayout(next, { type: "open", id: action.anchorId });
         }
 
+        case "merge": {
+            if (layout.groups.length < 2) return layout;
+            const focused =
+                layout.groups.find(group => group.id === layout.activeGroupId) ?? layout.groups[0]!;
+            return {
+                ...layout,
+                groups: [{ ...focused, tabIds: openTabIds(layout) }],
+                activeGroupId: focused.id,
+            };
+        }
+
         case "close":
             return prune(
                 {
@@ -370,6 +387,7 @@ export function useStudioLayout(initial: PaneLayout = initialLayout()) {
         (id: string, anchorId: string) => dispatch({ type: "pair", id, anchorId }),
         []
     );
+    const merge = useCallback(() => dispatch({ type: "merge" }), []);
     const focusGroup = useCallback(
         (groupId: string) => dispatch({ type: "focusGroup", groupId }),
         []
@@ -389,6 +407,7 @@ export function useStudioLayout(initial: PaneLayout = initialLayout()) {
         move,
         split,
         pair,
+        merge,
         focusGroup,
         focusAdjacentGroup,
     };

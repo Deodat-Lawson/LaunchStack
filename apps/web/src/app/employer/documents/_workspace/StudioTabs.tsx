@@ -17,6 +17,10 @@ import { cn } from "~/lib/utils";
 import type { IconProps } from "./icons";
 
 /** What a tab needs to draw itself. Studio features and sources both satisfy it. */
+
+/** Below this, the strip's chrome drops to icons. */
+const STRIP_COMPACT_BELOW_PX = 440;
+
 export interface PaneTab {
     id: string;
     label: string;
@@ -36,6 +40,8 @@ export interface StudioTabsProps {
     focused: boolean;
     /** False when every column is taken, which greys the split control. */
     canSplit: boolean;
+    /** False on a phone: no split control at all, in the strip or the tab's menu. */
+    splittable?: boolean;
     onSelect: (id: string) => void;
     onClose: (id: string) => void;
     onCloseOthers: (id: string) => void;
@@ -82,6 +88,7 @@ export function StudioTabs({
     activeId,
     focused,
     canSplit,
+    splittable = true,
     onSelect,
     onClose,
     onCloseOthers,
@@ -96,6 +103,23 @@ export function StudioTabs({
     emptyState,
 }: StudioTabsProps) {
     const stripRef = useRef<HTMLDivElement>(null);
+    /**
+     * Whether this column's strip is too narrow for the workspace chrome at
+     * full size. The first column carries the palette, Studio and the avatar,
+     * about 190px on their own; at the 208px a column can be dragged to they
+     * pushed the tabs out and ran past the column's edge.
+     */
+    const [stripCompact, setStripCompact] = useState(false);
+    useEffect(() => {
+        const element = stripRef.current;
+        if (!element || typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(([entry]) => {
+            const width = entry?.contentRect.width ?? 0;
+            if (width > 0) setStripCompact(width < STRIP_COMPACT_BELOW_PX);
+        });
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
     const [dropTarget, setDropTarget] = useState<{ id: string; after: boolean } | null>(null);
     const [dropAtEnd, setDropAtEnd] = useState(false);
     const [announcement, setAnnouncement] = useState("");
@@ -160,7 +184,11 @@ export function StudioTabs({
                 ref={stripRef}
                 data-studio-tab-strip
                 data-focused={focused}
-                className="border-line bg-panel-2 flex h-10 shrink-0 items-center gap-1 border-b pl-1.5 pr-1"
+                // Marks a narrow strip so the chrome in it — the palette's
+                // ⌘K, the Studio label — can drop to icons with a CSS variant
+                // instead of pushing the tabs out of the column.
+                data-compact={stripCompact ? "true" : undefined}
+                className="border-line bg-panel-2 group/strip flex h-10 shrink-0 items-center gap-1 border-b pl-1.5 pr-1"
             >
                 {leadingSlot}
                 <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1">
@@ -180,18 +208,22 @@ export function StudioTabs({
                                         label: `Actions for ${tab.label}`,
                                         data: tab,
                                         items: () => [
-                                            {
-                                                type: "item",
-                                                id: "split",
-                                                label: "Split to the right",
-                                                icon: "split",
-                                                disabled: !canSplit || tabs.length < 2,
-                                                disabledReason: !canSplit
-                                                    ? "Every column is taken."
-                                                    : "It is already the only tab here.",
-                                                onSelect: () => onSplit(tab.id),
-                                            },
-                                            { type: "separator", id: "sep" },
+                                            ...(splittable
+                                                ? [
+                                                      {
+                                                          type: "item" as const,
+                                                          id: "split",
+                                                          label: "Split to the right",
+                                                          icon: "split" as const,
+                                                          disabled: !canSplit || tabs.length < 2,
+                                                          disabledReason: !canSplit
+                                                              ? "Every column is taken."
+                                                              : "It is already the only tab here.",
+                                                          onSelect: () => onSplit(tab.id),
+                                                      },
+                                                      { type: "separator" as const, id: "sep" },
+                                                  ]
+                                                : []),
                                             {
                                                 type: "item",
                                                 id: "close",
@@ -393,17 +425,19 @@ export function StudioTabs({
                         />
                     </TabsList>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
-                    aria-label={inColumn("Split to the right")}
-                    title="Split to the right"
-                    disabled={!canSplit || tabs.length < 2}
-                    onClick={() => activeId && onSplit(activeId)}
-                >
-                    <Columns2 className="size-4" />
-                </Button>
+                {splittable && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
+                        aria-label={inColumn("Split to the right")}
+                        title="Split to the right"
+                        disabled={!canSplit || tabs.length < 2}
+                        onClick={() => activeId && onSplit(activeId)}
+                    >
+                        <Columns2 className="size-4" />
+                    </Button>
+                )}
                 <Button
                     variant="ghost"
                     size="icon"

@@ -347,4 +347,36 @@ describe("paneLayout", () => {
             }
         });
     });
+
+    /**
+     * A phone cannot show columns side by side, so a split made on a wide
+     * window, or by "ask about this", folds back into one column there.
+     */
+    describe("merge", () => {
+        it("folds every column into the focused one, left to right", () => {
+            const next = reduceLayout(layoutOf([["chat", "a"], ["source:d1"], ["b"]], 1), {
+                type: "merge",
+            });
+            expect(next.groups).toHaveLength(1);
+            expect(next.groups[0]!.tabIds).toEqual(["chat", "a", "source:d1", "b"]);
+        });
+
+        it("keeps showing what the focused column was showing", () => {
+            const next = reduceLayout(layoutOf([["chat"], ["source:d1"]], 0), { type: "merge" });
+            expect(shape(next)).toBe("[chat],source:d1");
+            expect(next.activeGroupId).toBe("g0");
+        });
+
+        it("leaves a single column alone", () => {
+            const layout = layoutOf([["chat", "source:d1"]]);
+            expect(reduceLayout(layout, { type: "merge" })).toBe(layout);
+        });
+
+        it("keeps every tab: nothing open before is lost after", () => {
+            const layout = layoutOf([["a", "b"], ["c"], ["d", "e"]], 2);
+            const next = reduceLayout(layout, { type: "merge" });
+            expect([...openTabIds(next)].sort()).toEqual([...openTabIds(layout)].sort());
+            expect(shape(next)).toBe("a,b,c,[d],e");
+        });
+    });
 });

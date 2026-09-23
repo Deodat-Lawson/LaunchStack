@@ -89,6 +89,18 @@ describe("studio registry", () => {
         expect(editor?.Icon).toBeTruthy();
     });
 
+    it("puts Growth first in Tools and Investor relations second, opening in a tab", () => {
+        const tools = STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id);
+        expect(tools.slice(0, 2)).toEqual(["growth", "investors"]);
+        const investors = STUDIO_FEATURES_BY_ID.investors!;
+        expect(investors.label).toBe("Investor relations");
+        expect(investors.external).toBeUndefined();
+        expect(investors.requires).toBeUndefined();
+        // ⌘K reaches it too, and opens the tab rather than following a link.
+        expect(DEMOTED_FEATURES.some(f => f.id === "investors")).toBe(true);
+        expect(demotedFeatureHref("investors")).toBeUndefined();
+    });
+
     it("names Growth as the one app a tab cannot hold", () => {
         const external = STUDIO_GROUPS.flatMap(g => g.features).filter(f => f.external);
         expect(external.map(f => f.id)).toEqual(["growth"]);

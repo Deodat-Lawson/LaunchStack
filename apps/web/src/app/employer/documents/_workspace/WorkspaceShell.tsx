@@ -2123,6 +2123,13 @@ export function WorkspaceShell() {
                                     onOpenDocument: id => openSource(`d${id}`),
                                     onContinue: id => void startContinuation(id),
                                 },
+                                investors: {
+                                    onDraftInChat: prompt => seedComposer(prompt, "replace"),
+                                    onSaveAsSource: markdown => {
+                                        setAddPrefill({ text: markdown });
+                                        openAdd("paste");
+                                    },
+                                },
                             }}
                         />
                     );

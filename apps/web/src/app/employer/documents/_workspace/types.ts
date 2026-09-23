@@ -13,6 +13,7 @@ import {
     File as IconFile,
     Folder as IconFolder,
     Globe as IconGlobe,
+    HandCoins as IconInvestors,
     Link as IconLink,
     Megaphone as IconMegaphone,
     ClipboardList as IconPaste,
@@ -319,6 +320,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/tools/growth/prospects",
     },
     {
+        id: "investors",
+        label: "Investor relations",
+        Icon: IconInvestors,
+        desc: "Find venture funds raising now, and draft the pitch from your sources",
+        href: "/employer/documents?feature=investors",
+    },
+    {
         id: "audit",
         label: "Predictive gaps",
         Icon: IconShield,
@@ -426,6 +434,27 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         label: "Tools",
         features: [
             {
+                // One app with its own rail for the whole growth motion: Brand
+                // (compose, schedule, calendar, campaigns, accounts) and Prospects
+                // (segment, companies, people, deals, runs, sources).
+                id: "growth",
+                label: "Growth",
+                Icon: IconGrowth,
+                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
+                href: "/employer/tools/growth",
+                external: true,
+            },
+            {
+                // Second only to Growth: being known, then being funded. Not
+                // `external` — the search and the pitch starters are one pane,
+                // and "Draft in chat" is a move to the chat tab beside it.
+                id: "investors",
+                label: "Investor relations",
+                Icon: IconInvestors,
+                desc: "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources",
+                href: "/employer/documents?feature=investors",
+            },
+            {
                 id: "draft",
                 label: "Templated Drafts",
                 Icon: IconPen,
@@ -455,17 +484,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 // Not `external`, like Artifacts: continuing a session in chat
                 // is a move between two Studio tabs, not a page load.
                 href: "/employer/agent-sessions",
-            },
-            {
-                // One app with its own rail for the whole growth motion: Brand
-                // (compose, schedule, calendar, campaigns, accounts) and Prospects
-                // (segment, companies, people, deals, runs, sources).
-                id: "growth",
-                label: "Growth",
-                Icon: IconGrowth,
-                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
-                href: "/employer/tools/growth",
-                external: true,
             },
         ],
     },

@@ -4,16 +4,16 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";
 import { type Metadata } from "next";
 
-import { inter, instrumentSerif, jetbrainsMono } from "./fonts";
+import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 import { SITE_URL } from "~/config/site";
 
 export const metadata: Metadata = {
     title: {
-        default: "Launchstack — The Open-Source Launch Stack for Tech Founders",
+        default: "Launchstack — The Open-Source Startup Operating System",
         template: "%s | Launchstack",
     },
     description:
-        "Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. Self-host with your own API keys.",
+        "Your knowledge, decisions, and next moves in one focused workspace. The open-source startup operating system for founders. Free to self-host.",
     keywords: [
         "open source startup tools",
         "free tools for tech founders",
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
         locale: "en_US",
         url: SITE_URL,
         siteName: "Launchstack",
-        title: "Launchstack — The Open-Source Launch Stack for Tech Founders",
+        title: "Launchstack — The Open-Source Startup Operating System",
         description:
-            "Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. Self-host with your own API keys.",
+            "Your knowledge, decisions, and next moves in one focused workspace. The open-source startup operating system for founders. Free to self-host.",
         // No explicit `images` here: the file-convention app/opengraph-image.tsx
         // renders the 1200x630 card. The previous hardcoded '/og-image.png' pointed
         // at a file that has never existed in public/.
     },
     twitter: {
         card: "summary_large_image",
-        title: "Launchstack — The Open-Source Launch Stack for Tech Founders",
+        title: "Launchstack — The Open-Source Startup Operating System",
         description:
             "Free, open-source AI platform for document analysis, compliance gap detection, team management, and startup growth. Self-host with your own API keys.",
     },
@@ -69,7 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html
             lang="en"
-            className={`${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+            className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
             <body suppressHydrationWarning>

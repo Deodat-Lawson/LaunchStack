@@ -39,6 +39,8 @@ export interface StudioTabsProps {
     canSplit: boolean;
     /** False on a phone: no split control at all, in the strip or the tab's menu. */
     splittable?: boolean;
+    /** The key that opens the same picker as "+", shown in its tooltip. */
+    studioKeys?: string | null;
     onSelect: (id: string) => void;
     onClose: (id: string) => void;
     onCloseOthers: (id: string) => void;
@@ -86,6 +88,7 @@ export function StudioTabs({
     focused,
     canSplit,
     splittable = true,
+    studioKeys,
     onSelect,
     onClose,
     onCloseOthers,
@@ -420,7 +423,7 @@ export function StudioTabs({
                     data-studio-add
                     className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
                     aria-label={inColumn("Open a Studio app")}
-                    title="Open a Studio app"
+                    title={studioKeys ? `Open a Studio app  ${studioKeys}` : "Open a Studio app"}
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />

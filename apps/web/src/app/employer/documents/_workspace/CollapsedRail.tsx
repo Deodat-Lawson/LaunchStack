@@ -6,12 +6,16 @@ import { PanelLeftOpen, Plus, Search } from "lucide-react";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { Button } from "~/components/ui/button";
 
+import { type ShortcutHints, withShortcut } from "./ShortcutHint";
+
 interface CollapsedRailProps {
     onExpand: () => void;
     onOpenPalette: () => void;
     onOpenAdd: () => void;
     /** The account, as its avatar alone. */
     accountSlot: ReactNode;
+    /** The member's keys, shown in each control's tooltip. */
+    shortcuts?: ShortcutHints;
 }
 
 /**
@@ -30,6 +34,7 @@ export function CollapsedRail({
     onOpenPalette,
     onOpenAdd,
     accountSlot,
+    shortcuts,
 }: CollapsedRailProps) {
     const iconButton =
         "text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 size-8 rounded-md";
@@ -44,7 +49,7 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onExpand}
-                title={"Show sidebar  ⌘\\"}
+                title={withShortcut("Show sidebar", shortcuts?.rail)}
                 aria-label="Show sidebar"
                 className={`${iconButton} mt-2`}
             >
@@ -54,7 +59,7 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onOpenPalette}
-                title="Jump to anything  ⌘K"
+                title={withShortcut("Jump to anything", shortcuts?.palette)}
                 aria-label="Jump to anything"
                 className={iconButton}
             >
@@ -64,7 +69,7 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onOpenAdd}
-                title="Add knowledge  ⌘U"
+                title={withShortcut("Add knowledge", shortcuts?.add)}
                 aria-label="Add knowledge"
                 className="bg-brand text-brand-fg hover:bg-brand/90 hover:text-brand-fg mt-1 size-[26px] rounded-md"
             >

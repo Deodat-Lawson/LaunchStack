@@ -33,7 +33,13 @@ import {
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
 import { MAX_SESSION_APPEND, type HistoryEntry } from "~/lib/workspace-history";
 import { useSettingValue } from "~/lib/settings/useSettings";
-import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
+import {
+    commandForEvent,
+    formatKeys,
+    resolveBindings,
+    type ShortcutBindings,
+} from "~/lib/shortcuts/commands";
+import type { ShortcutHints } from "./ShortcutHint";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
@@ -1675,6 +1681,20 @@ export function WorkspaceShell() {
     const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
     const bindingsRef = useRef(bindings);
     bindingsRef.current = bindings;
+    /** The member's keys, formatted for the controls that show them. */
+    const shortcutHints = useMemo<ShortcutHints>(() => {
+        const hint = (id: string) => {
+            const keys = bindings.get(id);
+            return keys ? formatKeys(keys) : null;
+        };
+        return {
+            palette: hint("palette.toggle"),
+            add: hint("source.add"),
+            rail: hint("rail.toggle"),
+            search: hint("search.focus"),
+            studio: hint("studio.toggle"),
+        };
+    }, [bindings]);
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             // Something focused has already acted on this key — the tab strip
@@ -1707,10 +1727,9 @@ export function WorkspaceShell() {
                     toggleRailRef.current();
                     break;
                 case "search.focus": {
-                    const el = document.querySelector<HTMLInputElement>(
-                        'input[placeholder="Search your knowledge"]'
-                    );
-                    el?.focus();
+                    // By attribute, not placeholder: the placeholder changes
+                    // with the sidebar's tab, and on History this found nothing.
+                    document.querySelector<HTMLInputElement>("[data-rail-search]")?.focus();
                     break;
                 }
                 case "settings.open":
@@ -1793,6 +1812,7 @@ export function WorkspaceShell() {
                             onOpenAdd={() => openAdd()}
                             onOpenKnowledge={() => expandFeature("knowledge")}
                             onOpenPalette={() => setPalOpen(true)}
+                            shortcuts={shortcutHints}
                             accountSlot={accountMenu("row")}
                             onOpenSource={source => {
                                 // Out of the way of what it opened, on a phone.
@@ -1877,6 +1897,7 @@ export function WorkspaceShell() {
                     onOpenAdd={() => openAdd()}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenPalette={() => setPalOpen(true)}
+                    shortcuts={shortcutHints}
                     accountSlot={accountMenu("row")}
                     onOpenSource={source => {
                         // Out of the way of what it opened, on a phone.
@@ -1951,6 +1972,7 @@ export function WorkspaceShell() {
                 <CollapsedRail
                     onExpand={toggleRail}
                     onOpenPalette={() => setPalOpen(true)}
+                    shortcuts={shortcutHints}
                     onOpenAdd={() => openAdd()}
                     accountSlot={accountMenu("avatar")}
                 />
@@ -1959,6 +1981,7 @@ export function WorkspaceShell() {
             <StudioSplitView
                 layout={layout}
                 splittable={!compactViewport}
+                studioKeys={shortcutHints.studio}
                 tabFor={tabFor}
                 onSelect={selectTab}
                 onClose={(groupId, id) => {

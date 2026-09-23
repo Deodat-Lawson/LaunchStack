@@ -17,15 +17,13 @@ import {
     IconCheck,
     IconChevronLeft,
     IconChevronRight,
-    IconGrid,
     IconMore,
-    IconPlus,
     IconSearch,
     IconShield,
     IconX,
 } from "./icons";
-import { Folder, FolderOpen, Lock, Search } from "lucide-react";
-import { Button } from "~/components/ui/button";
+import { Folder, FolderOpen, Lock, Plus, Search } from "lucide-react";
+import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {
@@ -595,6 +593,8 @@ export interface SourceRailProps {
      */
     onOpenPalette?: () => void;
     accountSlot?: ReactNode;
+    /** The member's own keys for the sidebar's commands, formatted for show. */
+    shortcuts?: ShortcutHints;
     /**
      * Everything the History tab needs. Omit it and the rail is sources-only,
      * with no tab strip — which is what the minimal embeddings want.
@@ -755,6 +755,7 @@ export function SourceRail({
     onOpenKnowledge,
     onOpenPalette,
     accountSlot,
+    shortcuts,
     history,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
@@ -1109,9 +1110,8 @@ export function SourceRail({
                 style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
             >
                 <LaunchstackMark size={22} title={logoLabel} />
-                {/* Four controls share the row (search, Knowledge, add,
-                    hide), so the name yields before any of them is pushed
-                    past the sidebar's edge. */}
+                {/* The name yields before the hide control is pushed past
+                    the sidebar's edge. */}
                 <div
                     style={{
                         fontSize: 13,
@@ -1127,68 +1127,10 @@ export function SourceRail({
                 >
                     {logoLabel}
                 </div>
-                {onOpenPalette && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onOpenPalette}
-                        title="Jump to anything  ⌘K"
-                        aria-label="Jump to anything"
-                        data-testid="rail-palette"
-                        className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 size-[26px] rounded-md"
-                    >
-                        <Search className="size-[13px]" />
-                    </Button>
-                )}
-                {onOpenKnowledge && (
-                    <button
-                        onClick={onOpenKnowledge}
-                        title="Open Knowledge"
-                        aria-label="Open Knowledge"
-                        style={{
-                            width: 26,
-                            height: 26,
-                            borderRadius: 6,
-                            background: "transparent",
-                            color: "var(--ink-3)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "background 120ms, color 120ms",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                            e.currentTarget.style.color = "var(--ink)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                            e.currentTarget.style.color = "var(--ink-3)";
-                        }}
-                    >
-                        <IconGrid size={13} />
-                    </button>
-                )}
-                <button
-                    onClick={onOpenAdd}
-                    title="Add knowledge  ⌘U"
-                    style={{
-                        width: 26,
-                        height: 26,
-                        borderRadius: 6,
-                        background: "var(--accent)",
-                        color: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        transition: "filter 120ms",
-                    }}
-                >
-                    <IconPlus size={13} />
-                </button>
                 {onClose && (
                     <button
                         onClick={onClose}
-                        title="Hide sidebar  ⌘\"
+                        title={withShortcut("Hide sidebar", shortcuts?.rail)}
                         aria-label="Hide sidebar"
                         style={{
                             width: 26,
@@ -1213,6 +1155,30 @@ export function SourceRail({
                         <IconChevronLeft size={14} />
                     </button>
                 )}
+            </div>
+
+            {/* The sidebar's commands, named and with their keys showing.
+                They were bare icons in the header, which hid ⌘K and ⌘U in
+                tooltips; shortcuts are how this workspace is meant to be
+                driven, so they sit where the action is, as in Linear's and
+                Notion's sidebars. */}
+            <div className="flex flex-col gap-px px-2 pb-2.5">
+                {onOpenPalette && (
+                    <RailCommand
+                        icon={<Search className="size-3.5" />}
+                        label="Jump to anything"
+                        keys={shortcuts?.palette}
+                        onClick={onOpenPalette}
+                        testId="rail-palette"
+                    />
+                )}
+                <RailCommand
+                    icon={<Plus className="text-brand size-3.5" />}
+                    label="Add knowledge"
+                    keys={shortcuts?.add}
+                    onClick={onOpenAdd}
+                    testId="rail-add"
+                />
             </div>
 
             {history && (
@@ -1281,6 +1247,10 @@ export function SourceRail({
                         onChange={e => setSearch(e.target.value)}
                         onFocus={() => setSearchFocus(true)}
                         onBlur={() => setSearchFocus(false)}
+                        // What `/` focuses. Found by this, not by the placeholder,
+                        // which changes with the tab — on History, `/` found
+                        // nothing and did nothing.
+                        data-rail-search
                         placeholder={
                             activeTab === "history" ? "Search history" : "Search your knowledge"
                         }
@@ -1293,6 +1263,7 @@ export function SourceRail({
                             color: "var(--ink)",
                         }}
                     />
+                    {!searchFocus && !search && <ShortcutHint keys={shortcuts?.search} />}
                 </div>
             </div>
 
@@ -1432,5 +1403,33 @@ export function SourceRail({
                 <div className="border-line shrink-0 border-t p-1.5">{accountSlot}</div>
             )}
         </aside>
+    );
+}
+
+/** One of the sidebar's commands: an icon, its name, and its key. */
+function RailCommand({
+    icon,
+    label,
+    keys,
+    onClick,
+    testId,
+}: {
+    icon: ReactNode;
+    label: string;
+    keys: string | null | undefined;
+    onClick: () => void;
+    testId: string;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            data-testid={testId}
+            className="text-ink-2 hover:bg-line-2 hover:text-ink focus-visible:ring-brand/50 flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-left text-[13px] outline-none transition-colors focus-visible:ring-[3px]"
+        >
+            <span className="text-ink-3 flex shrink-0 items-center">{icon}</span>
+            <span className="min-w-0 flex-1 truncate">{label}</span>
+            <ShortcutHint keys={keys} />
+        </button>
     );
 }

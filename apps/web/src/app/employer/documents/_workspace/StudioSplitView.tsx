@@ -38,6 +38,8 @@ export interface StudioSplitViewProps {
      * reason about columns that would make no sense there.
      */
     splittable?: boolean;
+    /** The key for Studio's picker, for the "+" tooltips. */
+    studioKeys?: string | null;
 }
 
 /**
@@ -70,6 +72,7 @@ export function StudioSplitView({
     trailingSlot,
     emptyState,
     splittable = true,
+    studioKeys,
 }: StudioSplitViewProps) {
     /** Where each column wants its current pane put. */
     const [slots, setSlots] = useState<Record<string, HTMLElement | null>>({});
@@ -198,6 +201,7 @@ export function StudioSplitView({
                                     focused={group.id === layout.activeGroupId}
                                     canSplit={splittable && layout.groups.length < MAX_GROUPS}
                                     splittable={splittable}
+                                    studioKeys={studioKeys}
                                     onSelect={onSelect}
                                     onClose={id => onClose(group.id, id)}
                                     onCloseOthers={id => onCloseOthers(group.id, id)}

@@ -162,7 +162,7 @@ export function StickyNoteEditor({
           border-radius: 4px;
           padding: 0 4px;
           font-size: 12px;
-          font-family: var(--font-jetbrains-mono, monospace);
+          font-family: var(--font-mono);
         }
         .sticky-note-editor-content pre {
           background: var(--panel-2);
@@ -171,7 +171,7 @@ export function StickyNoteEditor({
           padding: 8px 10px;
           overflow-x: auto;
           font-size: 12px;
-          font-family: var(--font-jetbrains-mono, monospace);
+          font-family: var(--font-mono);
           margin: 6px 0;
         }
         .sticky-note-editor-content pre code {

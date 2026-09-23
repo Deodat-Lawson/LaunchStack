@@ -13,22 +13,6 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import {
-    IconBroadcast,
-    IconCheck,
-    IconClock,
-    IconHand,
-    IconHash,
-    IconPause,
-    IconPlay,
-    IconPlus,
-    IconRobot,
-    IconServer,
-    IconSlack,
-    IconStop,
-    IconUser,
-    IconX,
-} from "../icons";
 import { NewMeetingDialog } from "./NewMeetingDialog";
 import { useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
 import {
@@ -40,6 +24,22 @@ import {
     type MeetingParticipant,
     type MeetingSummary,
 } from "./types";
+import {
+    Radio as IconBroadcast,
+    Check as IconCheck,
+    Clock as IconClock,
+    Hand as IconHand,
+    Hash as IconHash,
+    Pause as IconPause,
+    Play as IconPlay,
+    Plus as IconPlus,
+    Bot as IconRobot,
+    Server as IconServer,
+    Square as IconStop,
+    User as IconUser,
+    X as IconX,
+} from "lucide-react";
+import { IconSlack } from "~/components/icons/brand";
 
 export interface MeetingsPaneProps {
     /** Rendered inside the workspace main area rather than as a standalone page. */
@@ -348,7 +348,7 @@ function EmptyChannel({ loading, onNew }: { loading: boolean; onNew: () => void 
             <IconHash size={26} style={{ color: "var(--ink-3)", opacity: 0.5 }} />
             <div style={{ maxWidth: 420 }}>
                 <h3
-                    className="serif"
+                    className="display"
                     style={{ fontSize: 20, margin: "0 0 8px", color: "var(--ink)" }}
                 >
                     Meetings happen in channels

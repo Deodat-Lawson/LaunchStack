@@ -45,15 +45,38 @@ danger/warn/info`. Opacity modifiers compose (`bg-panel-2/30`). New hex
 - Dark mode keys off `data-theme="dark"` on `<html>` (next-themes sets it).
   `dark:` variants and `[data-theme="dark"]` CSS both work; never branch on
   `resolvedTheme` in JS just to pick colors — use a token that flips.
-- Fonts: `var(--font-sans|serif|mono)` (Inter Tight/Inter, Instrument Serif,
-  JetBrains Mono, loaded once in `src/app/fonts.ts`). Never name a font
-  family in CSS directly.
+
+## Type
+
+One typeface system across apps/web and apps/landing:
+
+| Token               | Face                          | Use                                         |
+| ------------------- | ----------------------------- | ------------------------------------------- |
+| `var(--font-sans)`  | Inter (variable, `opsz` axis) | every word of UI — body, labels, headings   |
+| `var(--font-mono)`  | JetBrains Mono                | code, IDs, keys, tabular data               |
+| `var(--font-serif)` | system serif (no web font)    | user content that asks for serif — never UI |
+
+- Both faces load once, in `src/app/fonts.ts`; the landing app keeps a
+  byte-identical copy. Nothing else imports `next/font` (lint error), and no
+  code names a family or reads `--font-inter` / `--font-jetbrains-mono`
+  directly (`__tests__/brand/typography.test.ts`). Tailwind: `font-sans`,
+  `font-mono`.
+- Headings: the `display` class (sans at `--fw-display`, 600). Inter's
+  optical-size axis switches to the Display cut from the font size, so there
+  is no second heading face. An accent word inside a heading is set in the
+  brand colour, not in italic or another family.
+- Renderers that cannot take `var()` (canvas, mermaid) call
+  `resolveFontStack("sans" | "mono" | "serif")` from `~/lib/fonts` —
+  next/font serves hashed family names, so a literal `"Inter"` never matches.
 
 ## Icons
 
-`lucide-react` for everything, except brand marks (Slack, Notion, Gmail,
-Drive, Dropbox, YouTube, GitHub) from `~/components/icons/brand`. The old
-hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
+`lucide-react` for every glyph, in both apps; its defaults (24-unit grid,
+2px stroke) are the house style. Brand marks come from
+`~/components/icons/brand` (apps/web) — lucide's brand glyphs (`Github`,
+`Youtube`, …) are deprecated, gone in lucide v1, and a lint error. Other icon
+libraries are a lint error. A registry that holds either kind types its
+entries with `IconComponent` from `~/components/icons/types`.
 
 ## Assets
 
@@ -166,8 +189,7 @@ migration. Nobody rewrites the ~100 inline-style files as a project.
 
 ## Deprecated (do not extend)
 
-| Module                                        | Replacement                               |
-| --------------------------------------------- | ----------------------------------------- |
-| `app/employer/documents/_workspace/icons.tsx` | lucide-react + `~/components/icons/brand` |
-
-Lint warnings on these are a ratchet: the count only goes down.
+Nothing is currently deprecated. `app/employer/documents/_workspace/icons.tsx`
+was deleted once its last consumer moved to lucide-react; importing it is a
+lint error. Lint warnings on anything listed here are a ratchet: the count
+only goes down.

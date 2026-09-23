@@ -479,7 +479,7 @@ function SectionHeader({
                             </Badge>
                         )}
                     </div>
-                    <h1 className="serif text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
+                    <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
                         {definition.title}
                     </h1>
                     <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">

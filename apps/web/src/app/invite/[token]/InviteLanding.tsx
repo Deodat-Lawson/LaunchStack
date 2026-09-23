@@ -175,7 +175,7 @@ export function InviteLanding({ token }: { token: string }) {
 
                     {load.phase === "ready" && (
                         <>
-                            <h1 className="serif text-ink m-0 mb-2 text-[32px] leading-[1.1] tracking-tight">
+                            <h1 className="display text-ink m-0 mb-2 text-[32px] leading-[1.1] tracking-tight">
                                 Join {load.preview.workspaceName}.
                             </h1>
                             <p className="text-ink-3 m-0 mb-6 text-sm leading-relaxed">

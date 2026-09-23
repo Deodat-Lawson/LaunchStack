@@ -162,7 +162,7 @@ function WelcomeStep({ onNext, onSkip }: { onNext: () => void; onSkip: () => voi
                     Welcome
                 </div>
                 <h1
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 34,
                         lineHeight: 1.1,
@@ -293,7 +293,7 @@ function CompanyInfoStep({
                     About you
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 28,
                         lineHeight: 1.15,
@@ -403,7 +403,7 @@ function QuickStartStep({
                     You&apos;re in
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 28,
                         lineHeight: 1.15,

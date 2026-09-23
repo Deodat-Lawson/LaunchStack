@@ -928,8 +928,7 @@ function PreviewDocument({
                         style={{
                             color: "var(--ink-3)",
                             fontSize: 11,
-                            fontFamily:
-                                "var(--font-jetbrains-mono, JetBrains Mono), ui-monospace, monospace",
+                            fontFamily: "var(--font-mono)",
                             letterSpacing: "0.04em",
                         }}
                     >

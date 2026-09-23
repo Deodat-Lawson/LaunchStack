@@ -26,9 +26,9 @@ import {
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
-import { IconTrash, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
 import { initialsOf, personaColor, type AgentPersonaRecord, type WorkerNode } from "./types";
+import { Trash2 as IconTrash, X as IconX } from "lucide-react";
 
 const ROUTES = [
     { value: "", label: "Default route" },
@@ -471,7 +471,7 @@ function AgentEditor({
                     }}
                 >
                     <h2
-                        className="serif"
+                        className="display"
                         style={{ flex: 1, fontSize: 20, margin: 0, color: "var(--ink)" }}
                     >
                         {isNew ? "New agent" : `Edit ${persona.displayName}`}

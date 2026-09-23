@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { ogFonts } from "./_components/og-fonts";
 import { OgMark } from "./_components/og-mark";
 
 export const runtime = "edge";
@@ -7,7 +8,7 @@ export const alt =
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
     return new ImageResponse(
         (
             <div
@@ -20,7 +21,7 @@ export default function OGImage() {
                     padding: "65px 75px",
                     background: "#09070f",
                     color: "#f5f4f8",
-                    fontFamily: "sans-serif",
+                    fontFamily: "Inter, sans-serif",
                 }}
             >
                 <div style={{ display: "flex", gap: 13, alignItems: "center" }}>
@@ -71,6 +72,6 @@ export default function OGImage() {
                 </div>
             </div>
         ),
-        size
+        { ...size, fonts: await ogFonts() }
     );
 }

@@ -88,7 +88,7 @@ export default function PendingApproval() {
                         <div className="bg-brand-soft text-brand mx-auto mb-4 flex h-[60px] w-[60px] items-center justify-center rounded-[18px]">
                             <Clock className="h-7 w-7" />
                         </div>
-                        <h1 className="serif text-ink m-0 text-[28px] leading-[1.15] tracking-tight">
+                        <h1 className="display text-ink m-0 text-[28px] leading-[1.15] tracking-tight">
                             {suspended ? "Your access is suspended" : "Waiting for approval"}
                         </h1>
                         <p className="text-ink-3 mx-auto mt-2 max-w-[420px] text-sm leading-relaxed">

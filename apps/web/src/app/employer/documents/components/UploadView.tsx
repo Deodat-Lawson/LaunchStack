@@ -191,7 +191,7 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
                         Upload
                     </div>
                     <h1
-                        className="serif"
+                        className="display"
                         style={{
                             fontSize: 38,
                             lineHeight: 1.08,

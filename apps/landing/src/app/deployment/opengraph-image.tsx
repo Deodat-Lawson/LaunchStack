@@ -1,9 +1,8 @@
 import { ImageResponse } from "next/og";
-
 import { OgMark } from "../_components/og-mark";
 
 export const runtime = "edge";
-export const alt = "Deploy Launchstack — Vercel, Docker, or Self-Hosted";
+export const alt = "Deploy your Launchstack workspace — app, worker, models, and connections";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -12,81 +11,60 @@ export default function OGImage() {
         (
             <div
                 style={{
-                    height: "100%",
                     width: "100%",
+                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background:
-                        "linear-gradient(135deg, #080010 0%, #1a0533 40%, #2d1052 70%, #080010 100%)",
-                    fontFamily: "system-ui, sans-serif",
+                    padding: "72px 80px",
+                    background: "#1b1825",
+                    color: "#f5f4f8",
+                    fontFamily: "sans-serif",
                 }}
             >
                 <div
                     style={{
-                        position: "absolute",
-                        top: "-20%",
-                        left: "30%",
-                        width: "40%",
-                        height: "60%",
-                        background:
-                            "radial-gradient(ellipse, rgba(147, 51, 234, 0.3), transparent)",
-                        display: "flex",
-                    }}
-                />
-                <div
-                    style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "16px",
-                        marginBottom: "24px",
+                        gap: "14px",
+                        fontSize: 30,
+                        fontWeight: 600,
                     }}
                 >
-                    <OgMark size={56} />
-                    <span
-                        style={{
-                            fontSize: "40px",
-                            fontWeight: 700,
-                            color: "white",
-                            letterSpacing: "-1px",
-                        }}
-                    >
-                        Launchstack
+                    <OgMark size={42} />
+                    Launchstack
+                    <span style={{ color: "#b6a9d9", marginLeft: 16, fontSize: 20 }}>
+                        Deployment guide
                     </span>
                 </div>
                 <div
                     style={{
-                        fontSize: "56px",
-                        fontWeight: 700,
-                        color: "white",
-                        textAlign: "center",
-                        lineHeight: 1.2,
                         display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
+                        marginTop: 68,
+                        fontSize: 64,
+                        fontWeight: 600,
+                        lineHeight: 1.12,
+                        letterSpacing: "-2px",
+                        maxWidth: 850,
                     }}
                 >
-                    <span>Self-Host in</span>
-                    <span style={{ color: "#a78bfa" }}>Under 30 Minutes</span>
+                    Your workspace.
+                    <br />
+                    Your infrastructure.
                 </div>
-                <div style={{ display: "flex", gap: "12px", marginTop: "32px" }}>
-                    {["Vercel", "Docker", "Self-Hosted"].map(label => (
-                        <div
-                            key={label}
-                            style={{
-                                padding: "8px 20px",
-                                borderRadius: "999px",
-                                border: "1px solid rgba(147, 51, 234, 0.5)",
-                                color: "#c4b5fd",
-                                fontSize: "16px",
-                                fontWeight: 600,
-                                display: "flex",
-                            }}
-                        >
-                            {label}
-                        </div>
-                    ))}
+                <div style={{ display: "flex", marginTop: 26, color: "#c9c5d2", fontSize: 24 }}>
+                    App + worker · Models · Storage · Connections
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        marginTop: "auto",
+                        paddingTop: 28,
+                        borderTop: "1px solid #42394f",
+                        color: "#b6a9d9",
+                        fontSize: 18,
+                    }}
+                >
+                    The open-source startup operating system
                 </div>
             </div>
         ),

@@ -19,7 +19,35 @@ const compat = new FlatCompat({
 // file — it never merges them. Every block below that re-declares
 // no-restricted-imports for an apps/web scope must therefore carry the full
 // set of error-level restrictions itself; these shared pieces keep that
-// composition in one place.
+// composition in one place. The same holds for every other rule id: a ban
+// that must coexist with a different severity on the same files (the
+// warn-level hex ratchet on no-restricted-syntax) goes on its own rule id
+// instead of sharing one.
+
+// Deleted packages and renamed bricks (ADR-008), banned everywhere — so every
+// scoped no-restricted-imports below must include it.
+const legacyBan = {
+    group: [
+        "@launchstack/core",
+        "@launchstack/core/*",
+        "@launchstack/protocol",
+        "@launchstack/protocol/*",
+        "@launchstack/application",
+        "@launchstack/application/*",
+        "@launchstack/adapters",
+        "@launchstack/adapters/*",
+        "@launchstack/features",
+        "@launchstack/features/*",
+        "@launchstack/search",
+        "@launchstack/search/*",
+    ],
+    message:
+        "Deleted package (ADR-008) or renamed brick " +
+        "(@launchstack/search → @launchstack/retrieval). Import the " +
+        "owning feature package instead: store/llm/conversion/indexing/" +
+        "retrieval/orchestration/editing/collab/runtime/engine/pipelines.",
+};
+
 const chatClientImportBans = [
     {
         name: "@langchain/openai",
@@ -56,6 +84,25 @@ const oldKitTombstone = {
     group: ["~/app/employer/documents/components/ui/*", "**/documents/components/ui/*"],
     message: "The base kit moved: import from ~/components/ui/<name>.",
 };
+
+// ADR-010: the retired management-role shim.
+const membershipRolesMessage =
+    "Deleted (ADR-010). Gate on ctx.data.can(permission) from ~/lib/authz/permissions.";
+const membershipRolesPath = { name: "~/lib/membership-roles", message: membershipRolesMessage };
+const membershipRolesPattern = {
+    group: ["**/lib/membership-roles"],
+    message: membershipRolesMessage,
+};
+
+// The full error-level import set for apps/web/src. Narrower web scopes (the
+// route areas) pass their extra bans as patterns rather than redeclaring it.
+const webImportBans = (...patterns) => [
+    "error",
+    {
+        paths: [...chatClientImportBans, membershipRolesPath],
+        patterns: [legacyBan, oldKitTombstone, membershipRolesPattern, ...patterns],
+    },
+];
 
 // no-restricted-imports matches the raw specifier, so relative escapes from
 // a route area must be banned explicitly alongside the alias forms.
@@ -221,10 +268,21 @@ const eslintConfig = [
             "@typescript-eslint/no-non-null-assertion": "off",
         },
     },
+    // The flat legacy ban, everywhere. First, so every narrower block below
+    // (which replaces it) can re-include it.
+    {
+        files: ["**/*.{ts,tsx,mjs}"],
+        ignores: ["**/node_modules/**", "**/dist/**"],
+        rules: {
+            "no-restricted-imports": ["error", { patterns: [legacyBan] }],
+        },
+    },
     // Every chat request goes through one OpenAI-compatible transport, which
     // is the only module allowed to construct a chat client. A feature that
     // builds its own skips route resolution, declared-behavior filtering, and
     // usage normalization — and can silently borrow an unrelated API key.
+    // This is the whole ban for scopes with no narrower block (e.g.
+    // packages/editing); the narrower blocks below repeat it.
     {
         files: [
             "packages/**/src/**/*.{ts,tsx}",
@@ -233,7 +291,10 @@ const eslintConfig = [
         ],
         ignores: ["packages/llm/src/openai-compatible-transport.ts"],
         rules: {
-            "no-restricted-imports": ["error", { paths: chatClientImportBans }],
+            "no-restricted-imports": [
+                "error",
+                { paths: chatClientImportBans, patterns: [legacyBan] },
+            ],
         },
     },
 
@@ -244,27 +305,6 @@ const eslintConfig = [
     // tier ban, the per-package dependency direction, and the chat-transport
     // path bans from above.
     ...(() => {
-        const legacyBan = {
-            group: [
-                "@launchstack/core",
-                "@launchstack/core/*",
-                "@launchstack/protocol",
-                "@launchstack/protocol/*",
-                "@launchstack/application",
-                "@launchstack/application/*",
-                "@launchstack/adapters",
-                "@launchstack/adapters/*",
-                "@launchstack/features",
-                "@launchstack/features/*",
-                "@launchstack/search",
-                "@launchstack/search/*",
-            ],
-            message:
-                "Deleted package (ADR-008) or renamed brick " +
-                "(@launchstack/search → @launchstack/retrieval). Import the " +
-                "owning feature package instead: store/llm/conversion/indexing/" +
-                "retrieval/orchestration/editing/collab/runtime/engine/pipelines.",
-        };
         const frameworkBan = {
             group: ["next/*", "next", "@clerk/*", "react", "react-dom", "~/*"],
             message:
@@ -317,14 +357,6 @@ const eslintConfig = [
             "no-restricted-imports": ["error", { paths: chatClientImportBans, patterns }],
         });
         return [
-            // The flat legacy ban, everywhere.
-            {
-                files: ["**/*.{ts,tsx,mjs}"],
-                ignores: ["**/node_modules/**", "**/dist/**"],
-                rules: {
-                    "no-restricted-imports": ["error", { patterns: [legacyBan] }],
-                },
-            },
             {
                 files: ["packages/runtime/src/**/*.ts", "packages/evidence/src/**/*.ts"],
                 rules: {
@@ -561,65 +593,40 @@ const eslintConfig = [
     {
         files: ["apps/web/src/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": [
-                "error",
-                { paths: chatClientImportBans, patterns: [oldKitTombstone] },
-            ],
+            "no-restricted-imports": webImportBans(),
         },
     },
     // Route areas are products: employer and employee must not reach into
     // each other. Shared pieces belong in ~/components, ~/lib, or
-    // ~/app/_components. Both legs are hard errors; the one sanctioned
-    // exception (the shared document workspace, rendered by both products)
-    // carries an inline eslint-disable at its import site until the
-    // feature gets a neutral home.
+    // ~/app/_components. Both legs are hard errors. The employee area was
+    // deleted with ADR-010 (and with it the one sanctioned, inline-disabled
+    // exception); its block stays so a stale branch cannot revive the area
+    // unguarded.
     {
         files: ["apps/web/src/app/employer/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    paths: chatClientImportBans,
-                    patterns: [
-                        oldKitTombstone,
-                        {
-                            group: [
-                                "~/app/employee/*",
-                                "**/app/employee/*",
-                                ...relativeReaches("employee"),
-                            ],
-                            message:
-                                "employer must not import from the employee area; " +
-                                "promote shared code to ~/components or ~/lib.",
-                        },
-                    ],
-                },
-            ],
+            "no-restricted-imports": webImportBans({
+                group: ["~/app/employee/*", "**/app/employee/*", ...relativeReaches("employee")],
+                message:
+                    "employer must not import from the employee area; " +
+                    "promote shared code to ~/components or ~/lib.",
+            }),
         },
     },
     {
         files: ["apps/web/src/app/employee/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    paths: chatClientImportBans,
-                    patterns: [
-                        oldKitTombstone,
-                        {
-                            group: [
-                                "~/app/employer/*",
-                                "**/app/employer/*",
-                                "~/styles/Employer/*",
-                                ...relativeReaches("employer"),
-                            ],
-                            message:
-                                "employee must not import from the employer area; " +
-                                "promote shared code to ~/components or ~/lib.",
-                        },
-                    ],
-                },
-            ],
+            "no-restricted-imports": webImportBans({
+                group: [
+                    "~/app/employer/*",
+                    "**/app/employer/*",
+                    "~/styles/Employer/*",
+                    ...relativeReaches("employer"),
+                ],
+                message:
+                    "employee must not import from the employer area; " +
+                    "promote shared code to ~/components or ~/lib.",
+            }),
         },
     },
     {
@@ -636,36 +643,34 @@ const eslintConfig = [
     // role. The retired management-role shim and the legacy global
     // `users.role` / `users.status` columns must not come back through a
     // stale branch. Error-level: the count is zero and stays zero.
+    //
+    // The shim ban is composed into webImportBans for apps/web/src; tests get
+    // it here, beside the legacy ban this block would otherwise drop. The
+    // column ban uses no-restricted-properties, not no-restricted-syntax, so
+    // the warn-level hex ratchet below cannot replace it on .tsx files.
     {
-        files: ["apps/web/src/**/*.{ts,tsx}", "apps/web/__tests__/**/*.{ts,tsx}"],
+        files: ["apps/web/__tests__/**/*.{ts,tsx}"],
         rules: {
             "no-restricted-imports": [
                 "error",
                 {
-                    paths: [
-                        {
-                            name: "~/lib/membership-roles",
-                            message:
-                                "Deleted (ADR-010). Gate on ctx.data.can(permission) from ~/lib/authz/permissions.",
-                        },
-                    ],
-                    patterns: [
-                        {
-                            group: ["**/lib/membership-roles"],
-                            message:
-                                "Deleted (ADR-010). Gate on ctx.data.can(permission) from ~/lib/authz/permissions.",
-                        },
-                    ],
+                    paths: [membershipRolesPath],
+                    patterns: [legacyBan, membershipRolesPattern],
                 },
             ],
-            "no-restricted-syntax": [
+        },
+    },
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}", "apps/web/__tests__/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-properties": [
                 "error",
-                {
-                    selector:
-                        "MemberExpression[object.name='users'][property.name=/^(role|status)$/]",
+                ...["role", "status"].map(property => ({
+                    object: "users",
+                    property,
                     message:
                         "users.role / users.status are legacy and unread (ADR-010). Use the membership row: user_company_memberships.role + status.",
-                },
+                })),
             ],
         },
     },

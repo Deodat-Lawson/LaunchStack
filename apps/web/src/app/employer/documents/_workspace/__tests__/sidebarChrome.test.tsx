@@ -21,6 +21,12 @@ jest.mock("next-themes", () => ({
 jest.mock("~/lib/settings/useSettings", () => ({
     writeSettingValue: jest.fn(() => Promise.resolve()),
 }));
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
+}));
+jest.mock("~/lib/use-permissions", () => ({
+    usePermissions: () => ({ can: () => true, loaded: true }),
+}));
 jest.mock("../../../_chrome/EmployerWorkspaceSwitcherContext", () => ({
     useEmployerWorkspaceSwitcher: () => ({
         name: "LaunchStack Dev",
@@ -32,6 +38,7 @@ jest.mock("../../../_chrome/EmployerWorkspaceSwitcherContext", () => ({
 
 import { AccountMenu } from "../AccountMenu";
 import { CollapsedRail } from "../CollapsedRail";
+import { StudioMenu } from "../StudioMenu";
 
 /**
  * Open from the keyboard. Radix opens a menu on pointer down, which jsdom's
@@ -140,5 +147,45 @@ describe("AccountMenu", () => {
         openMenu(screen.getByTestId("account-menu"));
         fireEvent.click(await screen.findByText("Switch to dark theme"));
         expect(mockSetTheme).toHaveBeenCalledWith("dark");
+    });
+});
+
+/**
+ * The launcher moved into the sidebar, whose `overflow: hidden` clipped a
+ * menu drawn inside it: only the part within the sidebar's 280px showed.
+ * The menu must render outside whatever the launcher sits in.
+ */
+describe("StudioMenu", () => {
+    function setup() {
+        const onPickFeature = jest.fn();
+        const onOpenStudio = jest.fn();
+        render(
+            <aside data-testid="sidebar" style={{ width: 280, overflow: "hidden" }}>
+                <StudioMenu onPickFeature={onPickFeature} onOpenStudio={onOpenStudio} />
+            </aside>
+        );
+        return { onPickFeature, onOpenStudio };
+    }
+
+    it("opens outside the sidebar, where its overflow cannot clip it", async () => {
+        setup();
+        // A hover card opens on keyboard focus as well as on hover.
+        screen.getByTestId("studio-launcher").focus();
+        const menu = await screen.findByTestId("studio-menu");
+        expect(screen.getByTestId("sidebar")).not.toContainElement(menu);
+        expect(document.body).toContainElement(menu);
+    });
+
+    it("jumps straight to an app from the menu", async () => {
+        const { onPickFeature } = setup();
+        screen.getByTestId("studio-launcher").focus();
+        fireEvent.click(await screen.findByText("Knowledge"));
+        expect(onPickFeature).toHaveBeenCalledWith("knowledge");
+    });
+
+    it("opens Studio itself when the bolt is clicked", () => {
+        const { onOpenStudio } = setup();
+        fireEvent.click(screen.getByTestId("studio-launcher"));
+        expect(onOpenStudio).toHaveBeenCalled();
     });
 });

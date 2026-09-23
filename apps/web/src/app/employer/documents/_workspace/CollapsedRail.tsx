@@ -40,8 +40,6 @@ export function CollapsedRail({
         <nav
             aria-label="Workspace"
             data-testid="collapsed-rail"
-            // Menus opened from the strip open beside its edge.
-            data-menu-anchor
             className="border-line bg-panel flex h-full w-12 shrink-0 flex-col items-center gap-1 border-r py-3"
         >
             <LaunchstackMark size={22} title="Launchstack" />

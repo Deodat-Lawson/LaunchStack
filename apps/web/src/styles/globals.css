@@ -13,7 +13,6 @@
         background: var(--bg);
         color: var(--ink);
         font-family: var(--font-sans);
-        font-feature-settings: "cv11", "ss01", "ss03";
         -webkit-font-smoothing: antialiased;
     }
 }
@@ -85,9 +84,16 @@ html[data-motion="reduce"] *::after {
 .mono {
     font-family: var(--font-mono);
 }
-.serif {
-    font-family: var(--font-serif);
-    font-feature-settings: normal;
+/* Display headings: the product sans at display weight. Inter's optical-
+   size axis switches to the Display cut from the font size alone, so a
+   heading needs only a size. An accent word inside one is coloured, not
+   italicised (see the accentWord classes). */
+.display {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-display);
+}
+.display em {
+    font-style: normal;
 }
 /* Specificity (0,0,1) via :where() — any single class on a button (e.g.
    CSS modules or Tailwind utilities) overrides padding, border, and

@@ -15,25 +15,6 @@ import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwi
 import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
 import { useChatRoutes } from "../hooks/useChatRoutes";
 import {
-    IconArrowUp,
-    IconBolt,
-    IconBrain,
-    IconChevronRight,
-    IconFile,
-    IconGlobe,
-    IconImage,
-    IconLogout,
-    IconMoon,
-    IconPaperclip,
-    IconPlus,
-    IconSearch,
-    IconSettings,
-    IconShield,
-    IconSun,
-    IconUser,
-    IconX,
-} from "./icons";
-import {
     SOURCE_META,
     type ComposerSend,
     type EphemeralAttachment,
@@ -41,7 +22,26 @@ import {
     type ThreadReference,
     type WorkspaceSource,
 } from "./types";
-import { Plus } from "lucide-react";
+import {
+    Plus,
+    ArrowUp as IconArrowUp,
+    Zap as IconBolt,
+    Brain as IconBrain,
+    ChevronRight as IconChevronRight,
+    File as IconFile,
+    Globe as IconGlobe,
+    Image as IconImage,
+    LogOut as IconLogout,
+    Moon as IconMoon,
+    Paperclip as IconPaperclip,
+    Plus as IconPlus,
+    Search as IconSearch,
+    Settings as IconSettings,
+    Shield as IconShield,
+    Sun as IconSun,
+    User as IconUser,
+    X as IconX,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
@@ -273,20 +273,12 @@ function QuestionBody({ text }: { text: string }) {
     };
 
     if (!quote) {
-        return (
-            <div className="serif" style={prose}>
-                {text}
-            </div>
-        );
+        return <div style={prose}>{text}</div>;
     }
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {lead && (
-                <div className="serif" style={prose}>
-                    {lead}
-                </div>
-            )}
+            {lead && <div style={prose}>{lead}</div>}
             <blockquote
                 data-testid="question-quote"
                 style={{
@@ -301,11 +293,7 @@ function QuestionBody({ text }: { text: string }) {
             >
                 {quote}
             </blockquote>
-            {trail && (
-                <div className="serif" style={prose}>
-                    {trail}
-                </div>
-            )}
+            {trail && <div style={prose}>{trail}</div>}
         </div>
     );
 }
@@ -1330,7 +1318,7 @@ function EmptyState({
     return (
         <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
             <div className="mb-10 text-center">
-                <div className="serif text-ink mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
+                <div className="display text-ink mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
                     What do you want to <em className="text-brand">ask</em> yourself?
                 </div>
                 <div className="text-ink-3 text-sm">

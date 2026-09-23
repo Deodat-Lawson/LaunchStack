@@ -22,7 +22,6 @@
     color: var(--ink);
     background: var(--bg);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
     position: relative;
     overflow-x: hidden;
@@ -34,16 +33,16 @@
     color: var(--ink);
 }
 
-.serif {
-    /* Not italic, not a serif drop-in: the accent phrase differs by weight and
-     colour within the same family, which reads as emphasis rather than as a
-     different typeface pasted in. */
+.accentWord {
+    /* The accent phrase differs by weight and colour within the same
+     family, which reads as emphasis rather than as a different typeface
+     pasted in. */
     font-weight: 700;
     letter-spacing: -0.045em;
     color: var(--accent);
 }
 .mono {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 
 /* ---------------- AMBIENT BG ---------------- */
@@ -303,7 +302,7 @@
     padding-left: 8px;
     margin-left: 2px;
     border-left: 1px solid var(--line-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 500;
     color: var(--ink);
@@ -655,7 +654,7 @@
     border-radius: 5px;
     background: var(--panel-2);
     border: 1px solid var(--line-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-2);
 }
@@ -884,7 +883,7 @@
     box-shadow: 0 20px 40px oklch(0 0 0 / 0.06);
 }
 .workflowNum {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 34px;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
@@ -931,7 +930,6 @@
     font-size: 16px;
     line-height: 1.55;
     color: var(--ink);
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
     font-style: italic;
 }
 .testi blockquote::before {
@@ -1206,7 +1204,7 @@
     border: 1px solid var(--line);
     border-radius: 14px;
     padding: 18px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     box-shadow: 0 24px 50px oklch(0 0 0 / 0.06);
 }

@@ -11,6 +11,8 @@
  * layout tests to be meaningful.
  */
 
+import { resolveFontStack } from "~/lib/fonts";
+
 import type { FontFamily, TextStyle } from "./types";
 
 export interface TextLine {
@@ -35,17 +37,15 @@ export function fontFamilyCss(family: FontFamily): string {
     return FONT_STACK[family];
 }
 
-/** CSS `font` shorthand for a style, used for both canvas metrics and SVG. */
+/**
+ * Canvas `font` shorthand for measuring a style. The family is the resolved
+ * token stack — the same faces `fontFamilyCss` draws with — so wrapping is
+ * measured in the font that renders, not a system stand-in.
+ */
 function fontShorthand(style: TextStyle): string {
     const weight = style.bold ? "700" : "400";
     const italic = style.italic ? "italic " : "";
-    const family =
-        style.family === "mono"
-            ? "ui-monospace, monospace"
-            : style.family === "serif"
-              ? "Georgia, serif"
-              : "system-ui, sans-serif";
-    return `${italic}${weight} ${style.size}px ${family}`;
+    return `${italic}${weight} ${style.size}px ${resolveFontStack(style.family)}`;
 }
 
 // ---------------------------------------------------------------------------

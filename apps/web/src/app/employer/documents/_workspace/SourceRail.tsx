@@ -13,17 +13,19 @@ import React, {
     useState,
 } from "react";
 import {
-    IconCheck,
-    IconChevronLeft,
-    IconChevronRight,
-    IconGrid,
-    IconMore,
-    IconPlus,
-    IconSearch,
-    IconShield,
-    IconX,
-} from "./icons";
-import { Folder, FolderOpen, Lock } from "lucide-react";
+    Folder,
+    FolderOpen,
+    Lock,
+    Check as IconCheck,
+    ChevronLeft as IconChevronLeft,
+    ChevronRight as IconChevronRight,
+    LayoutGrid as IconGrid,
+    Ellipsis as IconMore,
+    Plus as IconPlus,
+    Search as IconSearch,
+    Shield as IconShield,
+    X as IconX,
+} from "lucide-react";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {

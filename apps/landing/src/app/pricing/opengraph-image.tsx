@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { ogFonts } from "../_components/og-fonts";
 
 import { OgMark } from "../_components/og-mark";
 
@@ -7,7 +8,7 @@ export const alt = "Launchstack Pricing — Free & Open Source for Every Founder
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
     return new ImageResponse(
         (
             <div
@@ -20,7 +21,7 @@ export default function OGImage() {
                     justifyContent: "center",
                     background:
                         "linear-gradient(135deg, #080010 0%, #1a0533 40%, #2d1052 70%, #080010 100%)",
-                    fontFamily: "system-ui, sans-serif",
+                    fontFamily: "Inter, sans-serif",
                 }}
             >
                 <div
@@ -84,6 +85,6 @@ export default function OGImage() {
                 </p>
             </div>
         ),
-        { ...size }
+        { ...size, fonts: await ogFonts() }
     );
 }

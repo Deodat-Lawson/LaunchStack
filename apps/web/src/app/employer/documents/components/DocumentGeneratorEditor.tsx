@@ -995,7 +995,7 @@ export function DocumentGeneratorEditor({
                             <div className="px-4 py-8">
                                 <div
                                     className="bg-panel border-line/50 text-ink mx-auto min-h-[1056px] max-w-[816px] border px-24 py-20 text-base leading-relaxed shadow-xl"
-                                    style={{ fontFamily: "Georgia, serif" }}
+                                    style={{ fontFamily: "var(--font-serif)" }}
                                 >
                                     {/* Editor stays mounted when rewrite preview shows so Accept can replace content */}
                                     <div className={rewritePreview ? "sr-only" : undefined}>

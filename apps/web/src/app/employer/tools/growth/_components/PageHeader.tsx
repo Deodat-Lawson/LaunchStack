@@ -1,9 +1,9 @@
 import { cn } from "~/lib/utils";
 
 /**
- * The one serif line per screen. `accent` is the phrase set in italic, the
- * way the Studio's "What do you want to *ask* yourself?" does it. Everything
- * else on the page is the UI sans.
+ * The one display line per screen. `accent` is the phrase set in the brand
+ * colour, the way the Studio's "What do you want to *ask* yourself?" does
+ * it — same typeface, emphasis by colour.
  */
 export function PageHeader({
     title,
@@ -27,7 +27,7 @@ export function PageHeader({
             <div className="min-w-0">
                 <h1
                     className={cn(
-                        "text-ink text-balance font-serif font-normal leading-[1.1] tracking-[-0.01em]",
+                        "display text-ink text-balance leading-[1.1] tracking-[-0.02em]",
                         size === "lg" ? "text-[28px] md:text-[30px]" : "text-[24px] md:text-[26px]"
                     )}
                 >
@@ -35,7 +35,7 @@ export function PageHeader({
                     {accent && (
                         <>
                             {" "}
-                            <em className="text-brand-ink italic">{accent}</em>
+                            <em className="text-brand-ink">{accent}</em>
                         </>
                     )}
                 </h1>

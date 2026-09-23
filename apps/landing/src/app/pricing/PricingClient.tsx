@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import React from "react";
-import { ArrowRight, Check, Github, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { GithubMark } from "../_components/GithubMark";
 import { MarketingShell } from "../_components/MarketingShell";
 import styles from "../../styles/marketing.module.css";
 
@@ -14,7 +15,8 @@ export function PricingClient() {
             <section className={styles.pageHero}>
                 <div className={styles.eyebrow}>Pricing</div>
                 <h1 className={styles.pageTitle}>
-                    Open source. <span className={styles.serif}>Nothing is for sale today.</span>
+                    Open source.{" "}
+                    <span className={styles.accentWord}>Nothing is for sale today.</span>
                 </h1>
                 <p className={styles.pageSub}>
                     Launchstack is fully open source under Apache 2.0. Self-hosting is the offering:
@@ -36,7 +38,7 @@ export function PricingClient() {
                         rel="noopener noreferrer"
                         className={`${styles.btn} ${styles.btnOutline} ${styles.btnLg}`}
                     >
-                        <Github size={16} />
+                        <GithubMark size={16} />
                         View on GitHub
                     </a>
                 </div>
@@ -47,7 +49,7 @@ export function PricingClient() {
                     <div className={styles.pricingGrid}>
                         <PriceCard
                             name="Self-Hosted"
-                            badgeIcon={<Github size={14} />}
+                            badgeIcon={<GithubMark size={14} />}
                             badge="Available now"
                             amount="$0"
                             per=" + your keys"

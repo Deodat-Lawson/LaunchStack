@@ -1,43 +1,41 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
-// New icons come from lucide-react; `./icons` below is the deprecated legacy
-// set kept for this file's existing entries (see apps/web/README.md).
+// Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
+    AudioLines as IconAudio,
+    Zap as IconBolt,
+    Building2 as IconBuilding,
+    ChartColumn as IconChart,
+    File as IconFile,
+    Folder as IconFolder,
+    Globe as IconGlobe,
+    Link as IconLink,
+    Megaphone as IconMegaphone,
+    ClipboardList as IconPaste,
+    Pen as IconPen,
+    Settings as IconSettings,
+    Shield as IconShield,
+    Sparkles as IconSparkle,
+    Users as IconUsers,
+    Video as IconVideo,
+    Workflow as IconWorkflow,
 } from "lucide-react";
-// Brand marks live in the shared icon home, not the legacy set below.
-import { IconGoogleDocs } from "~/components/icons/brand";
-import { IconGrowth, IconProspects } from "~/components/icons/prospects";
 import {
-    IconAudio,
-    IconBolt,
-    IconBuilding,
-    IconChart,
+    IconGoogleDocs,
     IconDropbox,
     IconDrive,
-    IconFile,
-    IconFolder,
     IconGithub,
-    IconGlobe,
     IconGmail,
-    IconLink,
-    IconMegaphone,
     IconNotion,
-    IconPaste,
-    IconPen,
-    IconSettings,
-    IconShield,
     IconSlack,
-    IconSparkle,
-    IconUsers,
-    IconVideo,
-    IconWorkflow,
     IconYoutube,
-    type IconProps,
-} from "./icons";
+} from "~/components/icons/brand";
+import { IconGrowth, IconProspects } from "~/components/icons/prospects";
+import type { IconProps } from "~/components/icons/types";
 
 export type SourceTypeId =
     | "doc"

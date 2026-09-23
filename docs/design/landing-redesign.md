@@ -2,7 +2,7 @@
 
 ## Design direction
 
-The home page presents Launchstack as a workspace for founders' knowledge, decisions, and next moves. The interactive demonstration uses clearly labeled sample data. The landing page inherits the product's shared purple color system, light and dark surfaces, text colors, borders, radii, and shadows from `packages/design-tokens/tokens.css`. Inter Tight uses the same `--font-sans` token as the application. The theme follows the existing next-themes provider and can be changed from the header.
+The home page presents Launchstack as a workspace for founders' knowledge, decisions, and next moves. The interactive demonstration uses clearly labeled sample data. The landing page inherits the product's shared purple color system, light and dark surfaces, text colors, borders, radii, and shadows from `packages/design-tokens/tokens.css`. Type is the product's: Inter through the shared `--font-sans` token (see `apps/web/README.md`, Type). The theme follows the existing next-themes provider and can be changed from the header.
 
 The preview follows the product's `SourceRail` and `AskPanel` presentation: Sources/History tabs, searchable source rows, a conversation header, user and assistant messages, rounded source citations, and a composer-style question area. The spacious marketing composition remains specific to the landing page. The demo uses a 280px source rail, 24px chat gutters, and a 760px maximum conversation width, matching the product workspace. All brand marks retain their original geometry; monochrome source marks invert in dark mode for legibility.
 

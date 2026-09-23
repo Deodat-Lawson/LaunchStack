@@ -68,14 +68,70 @@ const relativeReaches = area => [
     `../../../../../../${area}/*`,
 ];
 
-const deprecatedModuleWarns = [
-    {
-        group: ["**/_workspace/icons"],
-        message:
-            "Legacy icon set. Use lucide-react for general icons " +
-            "and ~/components/icons/brand for brand marks.",
-    },
+// One icon set and one font loader, product-wide (apps/web + apps/landing).
+// lucide-react's brand glyphs are deprecated and removed in v1, so brand
+// marks come from each app's own brand module; every other icon library is
+// out. The counts are zero, so these are errors.
+const LUCIDE_BRAND_GLYPHS = [
+    "Chrome",
+    "Codepen",
+    "Codesandbox",
+    "Dribbble",
+    "Facebook",
+    "Figma",
+    "Framer",
+    "Github",
+    "Gitlab",
+    "Instagram",
+    "Linkedin",
+    "Pocket",
+    "Slack",
+    "Trello",
+    "Twitch",
+    "Twitter",
+    "Youtube",
 ];
+const iconAndFontBans = {
+    paths: [
+        {
+            name: "lucide-react",
+            importNames: LUCIDE_BRAND_GLYPHS.flatMap(n => [n, `${n}Icon`, `Lucide${n}`]),
+            message:
+                "lucide's brand glyphs are deprecated (gone in v1). Use " +
+                "~/components/icons/brand (apps/web) or GithubMark (apps/landing).",
+        },
+    ],
+    patterns: [
+        {
+            group: [
+                "react-icons",
+                "react-icons/*",
+                "@heroicons/*",
+                "@radix-ui/react-icons",
+                "@tabler/icons-react",
+                "@phosphor-icons/*",
+                "phosphor-react",
+                "react-feather",
+                "@fortawesome/*",
+                "@mui/icons-material",
+                "@mui/icons-material/*",
+            ],
+            message: "Icons come from lucide-react — one set across every app.",
+        },
+        {
+            group: ["**/_workspace/icons"],
+            message:
+                "Deleted: the hand-drawn set was replaced by lucide-react " +
+                "(glyphs) and ~/components/icons/brand (brand marks).",
+        },
+        {
+            group: ["next/font/*"],
+            message:
+                "Fonts load once, in src/app/fonts.ts. Use var(--font-sans) / " +
+                "var(--font-mono) or the font-sans / font-mono classes.",
+        },
+    ],
+};
 
 const eslintConfig = [
     {
@@ -622,14 +678,13 @@ const eslintConfig = [
             ],
         },
     },
+    // Icons and fonts, on the @typescript-eslint twin rule so no base
+    // no-restricted-imports block can replace it (see the note above).
     {
-        files: ["apps/web/src/**/*.{ts,tsx}"],
-        ignores: ["apps/web/src/app/employer/documents/_workspace/**"],
+        files: ["apps/web/src/**/*.{ts,tsx}", "apps/landing/src/**/*.{ts,tsx}"],
+        ignores: ["apps/*/src/app/fonts.ts"],
         rules: {
-            "@typescript-eslint/no-restricted-imports": [
-                "warn",
-                { patterns: deprecatedModuleWarns },
-            ],
+            "@typescript-eslint/no-restricted-imports": ["error", iconAndFontBans],
         },
     },
     // ADR-010: authorization is `ctx.data.can(permission)` over the membership

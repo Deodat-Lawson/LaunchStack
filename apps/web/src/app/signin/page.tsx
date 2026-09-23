@@ -13,7 +13,7 @@ import { LANDING_URL } from "~/config/landing";
 /**
  * Sign-in page.
  *
- * Launchstack design (OKLCH tokens, Inter + Instrument Serif, accent-purple).
+ * Launchstack design (OKLCH tokens, Inter + JetBrains Mono, accent-purple).
  * The credentials form talks to our own better-auth endpoints; everything
  * around it is a thin branded shell that tells solo founders / devs /
  * students what they're signing into. No enterprise "50+ companies" pitch.
@@ -69,7 +69,7 @@ const SigninPage: React.FC = () => {
                             Welcome back
                         </div>
                         <h1
-                            className="serif"
+                            className="display"
                             style={{
                                 fontSize: 32,
                                 lineHeight: 1.1,

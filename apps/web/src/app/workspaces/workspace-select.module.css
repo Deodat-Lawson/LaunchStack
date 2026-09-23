@@ -8,11 +8,6 @@
     position: relative;
     color: var(--ink);
 }
-.serif {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
-}
 .mono {
     font-family: var(--font-mono);
 }

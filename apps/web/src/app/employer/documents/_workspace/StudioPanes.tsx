@@ -3,11 +3,11 @@
 import React, { useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { IconChevronRight } from "./icons";
 import LoadingPage from "~/app/_components/loading";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
 import type { StudioFeature } from "./types";
+import { ChevronRight as IconChevronRight } from "lucide-react";
 
 /**
  * Data the workspace shell owns but some panes need. Passed explicitly rather
@@ -125,7 +125,7 @@ function PaneShell({
                     {eyebrow}
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 28,
                         lineHeight: 1.15,
@@ -255,7 +255,7 @@ function InlineFeatureShell({
                     {eyebrow}
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 22,
                         lineHeight: 1.15,

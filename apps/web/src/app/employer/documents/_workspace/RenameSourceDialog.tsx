@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IconFile } from "./icons";
 import { isPersistedSource } from "./sourceContextMenu";
 import type { WorkspaceSource } from "./types";
+import { File as IconFile } from "lucide-react";
 
 export interface RenameSourceDialogProps {
     open: boolean;

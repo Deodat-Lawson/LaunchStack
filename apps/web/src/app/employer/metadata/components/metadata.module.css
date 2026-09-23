@@ -128,7 +128,7 @@
     font-weight: 500;
 }
 .tocCount {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-4);
 }
@@ -150,7 +150,7 @@
     border-radius: 5px;
     background: var(--panel-2);
     border: 1px solid var(--line-2);
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10.5px;
     color: var(--ink-2);
 }
@@ -950,7 +950,7 @@
     border-color: var(--line);
 }
 .tagGeo {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11.5px;
 }
 .tagManual {
@@ -1024,7 +1024,7 @@
     flex-wrap: wrap;
 }
 .legalJuris {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10.5px;
     color: var(--ink-3);
     padding: 1px 6px;
@@ -1039,7 +1039,7 @@
     margin-top: 2px;
 }
 .legalId {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink-2);
 }
@@ -1107,7 +1107,7 @@
     gap: 8px;
 }
 .provValueMono {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .liveDot {
     width: 7px;

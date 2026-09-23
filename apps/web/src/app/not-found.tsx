@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { LogIn, BookOpen, Github } from "lucide-react";
+import { LogIn, BookOpen } from "lucide-react";
+import { IconGithub } from "~/components/icons/brand";
 import type { Metadata } from "next";
 import { LaunchstackMark } from "./_components/LaunchstackLogo";
 import { LANDING_DEPLOYMENT_URL } from "~/config/landing";
@@ -58,7 +59,7 @@ export default function NotFound() {
                         rel="noopener noreferrer"
                         className="hover:text-brand-ink flex items-center gap-1.5 transition-colors"
                     >
-                        <Github className="h-3.5 w-3.5" /> GitHub
+                        <IconGithub size={14} /> GitHub
                     </a>
                 </div>
             </div>

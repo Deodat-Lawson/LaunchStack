@@ -3,10 +3,17 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Lock, PanelRightClose, Pencil, Sparkles, Trash2, Upload } from "lucide-react";
+import {
+    Folder as IconFolder,
+    Lock,
+    PanelRightClose,
+    Pencil,
+    Sparkles,
+    Trash2,
+    Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "~/lib/auth-client";
-import { IconFolder } from "./icons";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { getMindmap } from "../_mindmap/lib/api";

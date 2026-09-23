@@ -14,15 +14,18 @@ import React, {
     useState,
 } from "react";
 import {
-    IconCheck,
-    IconChevronLeft,
-    IconChevronRight,
-    IconMore,
-    IconSearch,
-    IconShield,
-    IconX,
-} from "./icons";
-import { Folder, FolderOpen, Lock, Plus, Search } from "lucide-react";
+    Folder,
+    FolderOpen,
+    Lock,
+    Plus,
+    Check as IconCheck,
+    ChevronLeft as IconChevronLeft,
+    ChevronRight as IconChevronRight,
+    Ellipsis as IconMore,
+    Search as IconSearch,
+    Shield as IconShield,
+    X as IconX,
+} from "lucide-react";
 import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
@@ -1165,7 +1168,7 @@ export function SourceRail({
             <div className="flex flex-col gap-px px-2 pb-2.5">
                 {onOpenPalette && (
                     <RailCommand
-                        icon={<Search className="size-3.5" />}
+                        icon={<IconSearch className="size-3.5" />}
                         label="Jump to anything"
                         keys={shortcuts?.palette}
                         onClick={onOpenPalette}

@@ -14,7 +14,7 @@ import { ContextTarget } from "~/components/context-menu";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { cn } from "~/lib/utils";
-import type { IconProps } from "./icons";
+import type { IconProps } from "~/components/icons/types";
 
 /** What a tab needs to draw itself. Studio features and sources both satisfy it. */
 

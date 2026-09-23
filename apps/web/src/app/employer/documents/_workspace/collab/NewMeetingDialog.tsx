@@ -16,9 +16,10 @@ import {
     isAgentAutonomy,
     meetingPlanViolations,
 } from "~/lib/agents/autonomy";
-import { IconHash, IconServer, IconSlack, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
 import { initialsOf, personaColor, type AgentPersonaRecord } from "./types";
+import { Hash as IconHash, Server as IconServer, X as IconX } from "lucide-react";
+import { IconSlack } from "~/components/icons/brand";
 
 export interface NewMeetingDialogProps {
     open: boolean;
@@ -202,7 +203,7 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
                             New meeting
                         </div>
                         <h2
-                            className="serif"
+                            className="display"
                             style={{ fontSize: 22, margin: "4px 0 0", color: "var(--ink)" }}
                         >
                             Open a channel and put the agents in it

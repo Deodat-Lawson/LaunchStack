@@ -438,15 +438,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Improve existing prose with a diff-first rewrite",
             },
             {
-                // Not `external`: maps live in the library beside every other
-                // source. Picking this opens the template picker.
-                id: "mindmap",
-                label: "Mindmap",
-                Icon: IconMindmap,
-                desc: "Diagrams, mindmaps and flowcharts — sources you draw",
-                href: "/employer/documents?add=1&tab=mindmap",
-            },
-            {
                 id: "artifacts",
                 label: "Claude Artifacts",
                 Icon: IconArtifact,
@@ -516,6 +507,18 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
  * `resolveStudioFeature` has to be able to name them.
  */
 const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
+    // A map is a source, not a tool: it is made from Add knowledge (the
+    // Mindmap tab, or "New mindmap" in ⌘K) and lives in the library beside
+    // every other source. It was also a Studio tile, which made the thing you
+    // draw look like an app you run. The editor still opens as a tab, and a
+    // tab needs a name and an icon, so it is named here.
+    mindmap: {
+        id: "mindmap",
+        label: "Mindmap",
+        Icon: IconMindmap,
+        desc: "Diagrams, mindmaps and flowcharts — sources you draw",
+        href: "/employer/documents?add=1&tab=mindmap",
+    },
     workflows: {
         id: "workflows",
         label: "Workflows",

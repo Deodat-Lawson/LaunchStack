@@ -8,6 +8,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 import {
+    ADD_TABS,
     DEMOTED_FEATURES,
     STUDIO_FEATURES_BY_ID,
     STUDIO_GROUPS,
@@ -74,6 +75,18 @@ describe("studio registry", () => {
             expect(feature!.external).toBeUndefined();
             expect(pageExists(feature!.href!)).toBe(true);
         }
+    });
+
+    it("treats a mindmap as a source you make, not a Studio app", () => {
+        // Not a tile: a map is made from Add knowledge and lives with the
+        // other sources.
+        expect(STUDIO_FEATURES_BY_ID.mindmap).toBeUndefined();
+        expect(ADD_TABS.flatMap(g => g.items).some(tab => tab.id === "mindmap")).toBe(true);
+        expect(DEMOTED_FEATURES.some(f => f.id === "mindmap")).toBe(true);
+        // But the editor still opens as a tab, which needs a name and an icon.
+        const editor = resolveStudioFeature("mindmap");
+        expect(editor?.label).toBe("Mindmap");
+        expect(editor?.Icon).toBeTruthy();
     });
 
     it("names Growth as the one app a tab cannot hold", () => {

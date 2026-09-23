@@ -2,7 +2,7 @@
     /* The back bar's height, subtracted by anything that claims the viewport.
        Declared here because `.app` is the common ancestor of both the bar and
        every immersive child. */
-    --drift-backbar-h: 38px;
+    --drift-backbar-h: 44px;
 
     position: relative;
     width: 100%;

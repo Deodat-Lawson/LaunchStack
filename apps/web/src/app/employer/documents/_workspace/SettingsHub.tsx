@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 
 import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
+import { WorkspaceSwitchCard } from "~/app/employer/_chrome/WorkspaceSwitchCard";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import type { Permission } from "~/lib/authz/permissions";
@@ -382,7 +383,10 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 {/* Standalone, the way back leads the rail as it does in
                     Documents. Embedded as a Studio tab there is nowhere to go
                     back to — the tab strip is the navigation. */}
-                {!embedded && <RailBackLink className="mb-2" />}
+                {!embedded && <RailBackLink className="mb-3" />}
+                {/* The workspace these settings belong to, and the one place
+                    to switch to another — not a back arrow in the Studio. */}
+                <WorkspaceSwitchCard className="mb-4" />
                 <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
                     Settings
                 </div>

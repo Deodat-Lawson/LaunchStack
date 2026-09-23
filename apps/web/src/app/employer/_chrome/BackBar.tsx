@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { BackButton } from "./BackButton";
 import { useBreadcrumbs } from "./BreadcrumbContext";
 import { backTargetFor } from "./backTarget";
 import styles from "./BackBar.module.css";
@@ -43,15 +42,7 @@ export function BackBar() {
 
     return (
         <div className={styles.bar} data-back-bar data-testid="back-bar">
-            <Link
-                href={target.href}
-                className={styles.back}
-                data-testid="back-bar-link"
-                aria-label={`Back to ${target.label}`}
-            >
-                <ArrowLeft aria-hidden className={styles.icon} />
-                <span>{target.label}</span>
-            </Link>
+            <BackButton to={target} data-testid="back-bar-link" />
             {trail.length > 0 && (
                 <nav aria-label="Breadcrumb" className={styles.trail}>
                     {trail.map((crumb, i) => (

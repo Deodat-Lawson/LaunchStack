@@ -86,6 +86,8 @@ jest.mock("~/server/settings/store", () => ({
 }));
 
 jest.mock("~/server/collab/personas", () => ({
+    listPersonas: (_companyId: bigint, includeArchived = false) =>
+        Promise.resolve(mockCtx.personas.filter(p => includeArchived || !p.archived)),
     ensureStarterPersonas: () => {
         if (mockCtx.personas.length === 0) {
             mockCtx.personas.push({

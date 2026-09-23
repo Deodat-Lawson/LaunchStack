@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 
 import { buildMinutes } from "@launchstack/collab";
+import { meetingWorkflow } from "~/lib/agents/meeting-workflows";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 import { getChannelStore } from "~/server/collab/store";
@@ -48,6 +49,9 @@ export async function GET(
             participants: runtime.config.participants,
             turnPolicy: runtime.config.turnPolicy,
             maxTurns: runtime.config.maxTurns,
+            phases: runtime.config.phases ?? [],
+            workflowKey: runtime.config.workflowKey ?? null,
+            workflowTitle: meetingWorkflow(runtime.config.workflowKey)?.title ?? null,
             channelId: runtime.config.channelId,
             channelSlug: channel?.slug ?? null,
             slack: runtime.config.slack ?? null,

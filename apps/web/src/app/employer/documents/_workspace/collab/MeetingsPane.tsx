@@ -12,6 +12,9 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Home, ListChecks, Square, Workflow, Zap } from "lucide-react";
+
+import { cn } from "~/lib/utils";
 
 import {
     IconBroadcast,
@@ -29,8 +32,9 @@ import {
     IconUser,
     IconX,
 } from "../icons";
+import { MeetingsHome } from "./MeetingsHome";
 import { NewMeetingDialog } from "./NewMeetingDialog";
-import { useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
+import { useAgents, useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
 import {
     initialsOf,
     MEETING_STATUS_META,
@@ -38,34 +42,57 @@ import {
     statusColor,
     type ChannelMessage,
     type MeetingParticipant,
+    type MeetingPhase,
     type MeetingSummary,
 } from "./types";
 
 export interface MeetingsPaneProps {
     /** Rendered inside the workspace main area rather than as a standalone page. */
     embedded?: boolean;
+    /** Opens the Agents app — a Studio move the shell makes, when hosted there. */
+    onOpenAgents?: () => void;
+    /**
+     * A request from elsewhere (the Agents app's "Put in a meeting") to open
+     * the new-meeting dialog. The nonce makes repeat requests distinct.
+     */
+    newMeetingRequest?: { workflowKey?: string | null; seats?: string[]; nonce: number } | null;
 }
 
-export function MeetingsPane(_props: MeetingsPaneProps = {}) {
+export function MeetingsPane({ onOpenAgents, newMeetingRequest }: MeetingsPaneProps = {}) {
     const { meetings, loading: listLoading, error: listError, refresh } = useMeetingList();
+    const roster = useAgents();
+    // `null` is the dashboard. The pane lands there on purpose: the old
+    // behaviour of jumping into the most recent channel is what made the
+    // feature read as "a chat I did not start".
     const [selectedId, setSelectedId] = useState<string | null>(null);
-    const [creating, setCreating] = useState(false);
+    const [creating, setCreating] = useState<{
+        workflowKey: string | null;
+        seats?: string[];
+    } | null>(null);
 
-    // Land on the most recent meeting so the pane is never an empty frame when
-    // there is something to show.
     useEffect(() => {
-        if (!selectedId && meetings.length > 0) setSelectedId(meetings[0]!.id);
-    }, [meetings, selectedId]);
+        if (newMeetingRequest) {
+            setCreating({
+                workflowKey: newMeetingRequest.workflowKey ?? null,
+                seats: newMeetingRequest.seats,
+            });
+        }
+    }, [newMeetingRequest]);
 
     const meeting = useMeeting(selectedId);
 
     const handleCreated = useCallback(
         async (meetingId: string) => {
-            setCreating(false);
+            setCreating(null);
             await refresh();
             setSelectedId(meetingId);
         },
         [refresh]
+    );
+
+    const agents = useMemo(
+        () => roster.data?.personas.filter(p => !p.archived) ?? [],
+        [roster.data]
     );
 
     return (
@@ -76,18 +103,28 @@ export function MeetingsPane(_props: MeetingsPaneProps = {}) {
                 error={listError}
                 selectedId={selectedId}
                 onSelect={setSelectedId}
-                onNew={() => setCreating(true)}
+                onHome={() => setSelectedId(null)}
+                onNew={() => setCreating({ workflowKey: null })}
             />
 
             {selectedId ? (
                 <ChannelView key={selectedId} controller={meeting} onEnded={() => void refresh()} />
             ) : (
-                <EmptyChannel loading={listLoading} onNew={() => setCreating(true)} />
+                <MeetingsHome
+                    meetings={meetings}
+                    agents={agents}
+                    loading={listLoading || roster.loading}
+                    onStart={workflowKey => setCreating({ workflowKey: workflowKey ?? null })}
+                    onOpen={setSelectedId}
+                    onManageAgents={onOpenAgents}
+                />
             )}
 
             <NewMeetingDialog
-                open={creating}
-                onClose={() => setCreating(false)}
+                open={creating !== null}
+                initialWorkflowKey={creating?.workflowKey ?? null}
+                initialSeats={creating?.seats ?? null}
+                onClose={() => setCreating(null)}
                 onCreated={id => void handleCreated(id)}
             />
         </div>
@@ -104,6 +141,7 @@ function ChannelList({
     error,
     selectedId,
     onSelect,
+    onHome,
     onNew,
 }: {
     meetings: MeetingSummary[];
@@ -111,6 +149,7 @@ function ChannelList({
     error: string | null;
     selectedId: string | null;
     onSelect: (id: string) => void;
+    onHome: () => void;
     onNew: () => void;
 }) {
     const live = meetings.filter(m => m.status === "running" || m.status === "human_control");
@@ -183,6 +222,28 @@ function ChannelList({
             </div>
 
             <div style={{ flex: 1, overflowY: "auto", padding: "8px 8px 16px", minHeight: 0 }}>
+                <button
+                    type="button"
+                    onClick={onHome}
+                    aria-current={selectedId === null ? "page" : undefined}
+                    className={cn(
+                        "mb-1 flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[12.5px] transition-colors",
+                        selectedId === null
+                            ? "bg-brand-soft text-brand-ink font-semibold"
+                            : "text-ink-2 hover:bg-line-2"
+                    )}
+                >
+                    <Home className="size-3.5 shrink-0 opacity-70" />
+                    Home
+                    <span
+                        className={cn(
+                            "ml-auto text-[10.5px] font-normal",
+                            selectedId === null ? "text-brand-ink/70" : "text-ink-3"
+                        )}
+                    >
+                        workflows
+                    </span>
+                </button>
                 {loading && meetings.length === 0 && (
                     <div style={{ padding: "12px 8px", fontSize: 12.5, color: "var(--ink-3)" }}>
                         Loading…
@@ -202,8 +263,7 @@ function ChannelList({
                             lineHeight: 1.6,
                         }}
                     >
-                        No meetings yet. Start one and your agents will work through the agenda in a
-                        channel you can read — and interrupt.
+                        No meetings yet. Pick a workflow on the home screen to start one.
                     </div>
                 )}
 
@@ -331,57 +391,6 @@ function ChannelRow({
     );
 }
 
-function EmptyChannel({ loading, onNew }: { loading: boolean; onNew: () => void }) {
-    return (
-        <div
-            style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 14,
-                padding: 32,
-                textAlign: "center",
-            }}
-        >
-            <IconHash size={26} style={{ color: "var(--ink-3)", opacity: 0.5 }} />
-            <div style={{ maxWidth: 420 }}>
-                <h3
-                    className="serif"
-                    style={{ fontSize: 20, margin: "0 0 8px", color: "var(--ink)" }}
-                >
-                    Meetings happen in channels
-                </h3>
-                <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--ink-3)", margin: 0 }}>
-                    Pick the agents, state the objective, and watch them work through it. Read
-                    along, jump in with a comment, or take the floor entirely — the transcript is
-                    the same one Slack mirrors.
-                </p>
-            </div>
-            {!loading && (
-                <button
-                    onClick={onNew}
-                    style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 7,
-                        padding: "9px 16px",
-                        borderRadius: 8,
-                        background: "var(--accent)",
-                        color: "white",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        boxShadow: "0 2px 10px var(--accent-glow)",
-                    }}
-                >
-                    <IconPlus size={13} /> Start a meeting
-                </button>
-            )}
-        </div>
-    );
-}
-
 // ---------------------------------------------------------------------------
 // Channel view
 // ---------------------------------------------------------------------------
@@ -393,10 +402,22 @@ function ChannelView({
     controller: ReturnType<typeof useMeeting>;
     onEnded: () => void;
 }) {
-    const { detail, state, messages, minutes, loading, error, busy, control, postMessage } =
-        controller;
+    const {
+        detail,
+        state,
+        messages,
+        minutes,
+        loading,
+        error,
+        busy,
+        control,
+        postMessage,
+        runUntilDone,
+        stopRunning,
+        running,
+    } = controller;
     const [draft, setDraft] = useState("");
-    const [showMinutes, setShowMinutes] = useState(false);
+    const [sidePanel, setSidePanel] = useState<"plan" | "minutes" | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const pinnedToBottom = useRef(true);
 
@@ -479,10 +500,17 @@ function ChannelView({
                 participants={detail.participants}
                 state={state}
                 busy={busy}
+                running={running}
+                phases={detail.phases}
+                workflowTitle={detail.workflowTitle}
                 slackChannelId={detail.slack?.channelId ?? null}
                 onControl={(action, options) => void control(action, options)}
-                onToggleMinutes={() => setShowMinutes(v => !v)}
-                minutesOpen={showMinutes}
+                onRunToEnd={() => void runUntilDone()}
+                onStop={stopRunning}
+                sidePanel={sidePanel}
+                onToggleSidePanel={panel =>
+                    setSidePanel(current => (current === panel ? null : panel))
+                }
             />
 
             {error && (
@@ -540,8 +568,19 @@ function ChannelView({
                     )}
                 </div>
 
-                {showMinutes && minutes && (
-                    <MinutesPanel minutes={minutes} onClose={() => setShowMinutes(false)} />
+                {sidePanel === "minutes" && minutes && (
+                    <MinutesPanel minutes={minutes} onClose={() => setSidePanel(null)} />
+                )}
+                {sidePanel === "plan" && (
+                    <PlanPanel
+                        phases={detail.phases}
+                        agenda={detail.agenda}
+                        participants={detail.participants}
+                        state={state}
+                        maxTurns={detail.maxTurns}
+                        workflowTitle={detail.workflowTitle}
+                        onClose={() => setSidePanel(null)}
+                    />
                 )}
             </div>
 
@@ -570,10 +609,15 @@ function ChannelHeader({
     participants,
     state,
     busy,
+    running,
+    phases,
+    workflowTitle,
     slackChannelId,
     onControl,
-    onToggleMinutes,
-    minutesOpen,
+    onRunToEnd,
+    onStop,
+    sidePanel,
+    onToggleSidePanel,
 }: {
     title: string;
     slug: string | null;
@@ -581,14 +625,20 @@ function ChannelHeader({
     participants: MeetingParticipant[];
     state: NonNullable<ReturnType<typeof useMeeting>["state"]>;
     busy: string | null;
+    running: boolean;
+    phases: MeetingPhase[];
+    workflowTitle: string | null;
     slackChannelId: string | null;
     onControl: (action: ControlAction, options?: { asPersonaId?: string; limit?: number }) => void;
-    onToggleMinutes: () => void;
-    minutesOpen: boolean;
+    onRunToEnd: () => void;
+    onStop: () => void;
+    sidePanel: "plan" | "minutes" | null;
+    onToggleSidePanel: (panel: "plan" | "minutes") => void;
 }) {
     const meta = MEETING_STATUS_META[state.status];
     const finished = state.status === "completed" || state.status === "failed";
     const holdsFloor = state.status === "human_control";
+    const phase = state.phaseIndex !== undefined ? phases[state.phaseIndex] : undefined;
 
     return (
         <header
@@ -602,14 +652,34 @@ function ChannelHeader({
                 flexShrink: 0,
             }}
         >
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <IconHash size={15} style={{ color: "var(--ink-3)" }} />
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
+                <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+                    <div
+                        style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}
+                    >
+                        <IconHash size={15} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
                         <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
                             {slug ?? title}
                         </span>
                         <StatusPill label={meta.label} tone={meta.tone} />
+                        {workflowTitle && (
+                            <span
+                                title="The workflow this meeting follows"
+                                className="border-line text-ink-3 inline-flex items-center gap-1 rounded-[5px] border px-1.5 py-px text-[10.5px]"
+                            >
+                                <Workflow className="size-2.5" /> {workflowTitle}
+                            </span>
+                        )}
+                        {phase && !finished && (
+                            <button
+                                type="button"
+                                onClick={() => onToggleSidePanel("plan")}
+                                title={phase.goal}
+                                className="bg-brand-soft text-brand-ink inline-flex items-center gap-1 rounded-[5px] px-1.5 py-px text-[10.5px] font-semibold"
+                            >
+                                Phase {(state.phaseIndex ?? 0) + 1}/{phases.length} · {phase.title}
+                            </button>
+                        )}
                         {slackChannelId && (
                             <span
                                 title={`Mirrored to Slack channel ${slackChannelId}`}
@@ -643,7 +713,16 @@ function ChannelHeader({
                     </div>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        flexWrap: "wrap",
+                        justifyContent: "flex-end",
+                        marginLeft: "auto",
+                    }}
+                >
                     {!finished && state.status !== "running" && (
                         <ControlButton
                             icon={<IconPlay size={12} />}
@@ -653,24 +732,43 @@ function ChannelHeader({
                             onClick={() =>
                                 state.status === "paused" || state.status === "human_control"
                                     ? onControl("resume")
-                                    : onControl("run", { limit: 3 })
+                                    : onRunToEnd()
                             }
                         />
                     )}
-                    {state.status === "running" && (
+                    {state.status === "running" && !running && (
                         <>
                             <ControlButton
-                                icon={<IconPlay size={12} />}
-                                label="Run 3 turns"
+                                icon={<Zap size={12} />}
+                                label="Run to the end"
                                 primary
                                 busy={busy === "run"}
-                                onClick={() => onControl("run", { limit: 3 })}
+                                onClick={onRunToEnd}
+                            />
+                            <ControlButton
+                                icon={<IconPlay size={12} />}
+                                label="One turn"
+                                busy={busy === "step"}
+                                onClick={() => onControl("step")}
                             />
                             <ControlButton
                                 icon={<IconPause size={12} />}
                                 label="Pause"
                                 busy={busy === "pause"}
                                 onClick={() => onControl("pause")}
+                            />
+                        </>
+                    )}
+                    {state.status === "running" && running && (
+                        <>
+                            <span className="text-ink-3 inline-flex items-center gap-1.5 text-[11.5px]">
+                                <span className="bg-success size-1.5 animate-pulse rounded-full" />
+                                Running…
+                            </span>
+                            <ControlButton
+                                icon={<Square size={11} />}
+                                label="Stop after this turn"
+                                onClick={onStop}
                             />
                         </>
                     )}
@@ -699,9 +797,16 @@ function ChannelHeader({
                         />
                     )}
                     <ControlButton
+                        icon={<ListChecks size={12} />}
+                        label="Plan"
+                        active={sidePanel === "plan"}
+                        onClick={() => onToggleSidePanel("plan")}
+                    />
+                    <ControlButton
                         icon={<IconClock size={12} />}
-                        label={minutesOpen ? "Hide minutes" : "Minutes"}
-                        onClick={onToggleMinutes}
+                        label="Minutes"
+                        active={sidePanel === "minutes"}
+                        onClick={() => onToggleSidePanel("minutes")}
                     />
                 </div>
             </div>
@@ -776,18 +881,21 @@ function ControlButton({
     onClick,
     primary,
     busy,
+    active,
 }: {
     icon: React.ReactNode;
     label: string;
     onClick: () => void;
     primary?: boolean;
     busy?: boolean;
+    active?: boolean;
 }) {
     return (
         <button
             onClick={onClick}
             disabled={busy}
             title={label}
+            aria-pressed={active}
             style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -796,9 +904,15 @@ function ControlButton({
                 borderRadius: 7,
                 fontSize: 11.5,
                 fontWeight: 600,
-                border: primary ? "1px solid transparent" : "1px solid var(--line)",
-                background: primary ? "var(--accent)" : "var(--panel-2)",
-                color: primary ? "white" : "var(--ink-2)",
+                border: primary
+                    ? "1px solid transparent"
+                    : `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
+                background: primary
+                    ? "var(--accent)"
+                    : active
+                      ? "var(--accent-soft)"
+                      : "var(--panel-2)",
+                color: primary ? "white" : active ? "var(--accent-ink)" : "var(--ink-2)",
                 opacity: busy ? 0.6 : 1,
                 cursor: busy ? "progress" : "pointer",
                 whiteSpace: "nowrap",
@@ -887,6 +1001,19 @@ function MessageRow({
     participant?: MeetingParticipant;
 }) {
     if (message.kind === "system") {
+        const isPhase = message.meta?.event === "phase";
+        if (isPhase) {
+            return (
+                <div className="my-2 flex items-center gap-3 px-6">
+                    <span className="bg-line h-px flex-1" />
+                    <span className="bg-brand-soft text-brand-ink inline-flex max-w-[70%] items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold">
+                        <Workflow className="size-3 shrink-0" />
+                        <span className="truncate">{message.text}</span>
+                    </span>
+                    <span className="bg-line h-px flex-1" />
+                </div>
+            );
+        }
         return (
             <div
                 style={{
@@ -1052,6 +1179,147 @@ function formatTime(iso: string): string {
     return Number.isNaN(date.getTime())
         ? ""
         : date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
+
+// ---------------------------------------------------------------------------
+// Plan — the phases and agenda, with where the meeting is
+// ---------------------------------------------------------------------------
+
+function PlanPanel({
+    phases,
+    agenda,
+    participants,
+    state,
+    maxTurns,
+    workflowTitle,
+    onClose,
+}: {
+    phases: MeetingPhase[];
+    agenda: string[];
+    participants: MeetingParticipant[];
+    state: NonNullable<ReturnType<typeof useMeeting>["state"]>;
+    maxTurns: number;
+    workflowTitle: string | null;
+    onClose: () => void;
+}) {
+    const byId = new Map(participants.map(p => [p.id, p]));
+    // Phase boundaries are a pure function of the turn index; recomputing
+    // them here keeps the panel honest about progress even between polls.
+    let start = 0;
+    const rows = phases.map((phase, index) => {
+        const phaseStart = start;
+        start += Math.max(1, phase.turns);
+        const done = Math.max(0, Math.min(phase.turns, state.turnIndex - phaseStart));
+        const current = state.phaseIndex === index && state.status !== "completed";
+        return {
+            phase,
+            index,
+            done,
+            current,
+            complete: state.turnIndex >= phaseStart + phase.turns,
+        };
+    });
+
+    return (
+        <aside className="border-line bg-panel w-[300px] shrink-0 overflow-y-auto border-l px-4 pb-6 pt-3.5">
+            <div className="mb-3 flex items-center gap-2">
+                <div className="mono text-ink-3 flex-1 text-[10px] font-bold uppercase tracking-[0.1em]">
+                    Plan{workflowTitle ? ` · ${workflowTitle}` : ""}
+                </div>
+                <button onClick={onClose} aria-label="Close plan" className="text-ink-3">
+                    <IconX size={13} />
+                </button>
+            </div>
+
+            <div className="text-ink-3 mb-3 text-[11.5px]">
+                Turn {Math.min(state.turnIndex, maxTurns)} of {maxTurns}
+                {state.status === "completed" ? " · ended" : ""}
+            </div>
+
+            {rows.length === 0 ? (
+                <div className="text-ink-3 mb-4 text-[12px] leading-relaxed">
+                    No phases — the turn policy runs the whole meeting. Start the next one from a
+                    workflow to get diverge / critique / decide stretches.
+                </div>
+            ) : (
+                <ol className="m-0 mb-5 flex list-none flex-col gap-2 p-0">
+                    {rows.map(({ phase, index, done, current, complete }) => {
+                        const speakers = (phase.speakerIds ?? [])
+                            .map(id => byId.get(id))
+                            .filter((p): p is MeetingParticipant => Boolean(p));
+                        return (
+                            <li
+                                key={phase.id}
+                                aria-current={current ? "step" : undefined}
+                                className={cn(
+                                    "rounded-lg border px-3 py-2.5",
+                                    current
+                                        ? "border-brand bg-brand-soft/60"
+                                        : complete
+                                          ? "border-line bg-panel-2 opacity-70"
+                                          : "border-line bg-panel-2"
+                                )}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span className="mono text-ink-3 text-[10px] font-bold">
+                                        {index + 1}
+                                    </span>
+                                    <span className="text-ink flex-1 text-[12.5px] font-semibold">
+                                        {phase.title}
+                                    </span>
+                                    <span className="mono text-ink-3 text-[10px]">
+                                        {done}/{phase.turns}
+                                    </span>
+                                </div>
+                                <div className="text-ink-2 mt-1 text-[11.5px] leading-snug">
+                                    {phase.goal}
+                                </div>
+                                <div className="bg-line mt-2 h-1 overflow-hidden rounded-full">
+                                    <div
+                                        className="bg-brand h-full rounded-full transition-[width]"
+                                        style={{
+                                            width: `${(done / Math.max(1, phase.turns)) * 100}%`,
+                                        }}
+                                    />
+                                </div>
+                                <div className="mt-2 flex items-center gap-1">
+                                    {speakers.length === 0 ? (
+                                        <span className="text-ink-3 text-[10.5px]">
+                                            Everyone speaks
+                                        </span>
+                                    ) : (
+                                        speakers.map(p => (
+                                            <span
+                                                key={p.id}
+                                                title={`${p.displayName} — ${p.role}`}
+                                                className="inline-flex size-5 items-center justify-center rounded-full text-[7px] font-bold text-white"
+                                                style={{ background: personaColor(p) }}
+                                            >
+                                                {initialsOf(p.displayName)}
+                                            </span>
+                                        ))
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ol>
+            )}
+
+            {agenda.length > 0 && (
+                <>
+                    <div className="mono text-ink-3 mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.1em]">
+                        Agenda
+                    </div>
+                    <ol className="text-ink-2 m-0 pl-4 text-[12px] leading-relaxed">
+                        {agenda.map((item, index) => (
+                            <li key={`${index}-${item}`}>{item}</li>
+                        ))}
+                    </ol>
+                </>
+            )}
+        </aside>
+    );
 }
 
 // ---------------------------------------------------------------------------

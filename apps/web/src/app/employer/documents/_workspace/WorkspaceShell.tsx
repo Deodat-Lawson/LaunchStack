@@ -35,6 +35,8 @@ import { useSettingValue } from "~/lib/settings/useSettings";
 import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/shortcuts/commands";
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
+import { useAgents } from "./collab/useMeetings";
+import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
 import {
     AskPanel,
@@ -141,6 +143,11 @@ function toThreadMessage(stored: sessionApi.SessionMessagePayload): ThreadMessag
         attachments: stored.attachments as ThreadMessage["attachments"],
         model: stored.model ?? undefined,
         tokens: stored.tokens ?? undefined,
+        // Only the handle is stored; the panel resolves the name and colour
+        // against the live roster, so a rename shows everywhere at once.
+        agent: stored.agentKey
+            ? { key: stored.agentKey, displayName: "", role: "", accent: null }
+            : undefined,
     };
 }
 
@@ -153,6 +160,7 @@ function toStoredMessage(message: ThreadMessage): sessionApi.SessionMessagePaylo
         attachments: message.attachments,
         model: message.model ?? null,
         tokens: message.tokens ?? null,
+        agentKey: message.agent?.key ?? null,
     };
 }
 
@@ -408,7 +416,39 @@ export function WorkspaceShell() {
     // those are turn-scoped, owned by the Composer.
     const [composerWebSearch, setComposerWebSearch] = useState(false);
     const [composerThinking, setComposerThinking] = useState(false);
+    // The agent the chat is held with. A preference like Web/Think, and also
+    // stored on the session so a reopened chat keeps its voice.
+    const [composerAgentKey, setComposerAgentKey] = useState<string | null>(null);
+    const composerAgentKeyRef = useRef<string | null>(null);
+    composerAgentKeyRef.current = composerAgentKey;
     const composerPrefsReady = useRef(false);
+    // "Put in a meeting" from the Agents app: the Meetings tab opens its
+    // dialog with these seats. The nonce makes a repeat request distinct.
+    const [newMeetingRequest, setNewMeetingRequest] = useState<{
+        workflowKey?: string | null;
+        seats?: string[];
+        nonce: number;
+    } | null>(null);
+
+    // The roster: one fetch, shared by the picker, `@` completion and the
+    // transcript's attribution of stored turns.
+    const roster = useAgents();
+    const chatAgents = useMemo<ChatAgentOption[]>(
+        () =>
+            (roster.data?.personas ?? [])
+                .filter(p => !p.archived)
+                .map(p => ({
+                    id: p.id,
+                    displayName: p.displayName,
+                    role: p.role,
+                    description: p.description,
+                    accent: p.accent ?? null,
+                    mode: p.mode,
+                    tools: p.tools,
+                    builtin: p.builtin,
+                })),
+        [roster.data]
+    );
 
     useEffect(() => {
         try {
@@ -417,9 +457,11 @@ export function WorkspaceShell() {
                 const parsed = JSON.parse(raw) as {
                     webSearch?: boolean;
                     thinking?: boolean;
+                    agentKey?: string | null;
                 };
                 if (typeof parsed.webSearch === "boolean") setComposerWebSearch(parsed.webSearch);
                 if (typeof parsed.thinking === "boolean") setComposerThinking(parsed.thinking);
+                if (typeof parsed.agentKey === "string") setComposerAgentKey(parsed.agentKey);
             }
         } catch {
             // Corrupt storage — fall back to defaults.
@@ -435,12 +477,13 @@ export function WorkspaceShell() {
                 JSON.stringify({
                     webSearch: composerWebSearch,
                     thinking: composerThinking,
+                    agentKey: composerAgentKey,
                 })
             );
         } catch {
             // Quota / private mode — drop silently.
         }
-    }, [composerWebSearch, composerThinking]);
+    }, [composerWebSearch, composerThinking, composerAgentKey]);
 
     const { sendQuery, loading: isSending } = useAIChat();
 
@@ -494,6 +537,7 @@ export function WorkspaceShell() {
                 setThread((stored.messages ?? []).map(toThreadMessage));
                 setContinuation(stored.continuation ?? null);
                 if (stored.contextSourceIds.length > 0) setSelected(stored.contextSourceIds);
+                if (stored.agentKey !== undefined) setComposerAgentKey(stored.agentKey ?? null);
                 setActiveFeatureId("chat");
             } catch {
                 if (!cancelled) toast.error("Couldn't reopen that chat");
@@ -526,6 +570,7 @@ export function WorkspaceShell() {
                     await sessionApi.appendMessages(openSessionId, {
                         messages: turns.map(toStoredMessage),
                         contextSourceIds,
+                        agentKey: composerAgentKeyRef.current,
                     });
                 } else {
                     // Nothing is stored yet, so the whole thread belongs to the
@@ -537,6 +582,7 @@ export function WorkspaceShell() {
                         messages: opening.map(toStoredMessage),
                         contextSourceIds,
                         continuation: continuationRef.current,
+                        agentKey: composerAgentKeyRef.current,
                     });
                     sessionIdRef.current = created.id;
                     // Mark it hydrated before the URL changes: the transcript
@@ -679,11 +725,22 @@ export function WorkspaceShell() {
                       .slice(-12000)
                 : undefined;
 
+            const askedAgent = send.agentKey
+                ? chatAgents.find(a => a.id === send.agentKey)
+                : undefined;
             const userTurn: ThreadMessage = {
                 role: "user",
                 text: send.text,
                 refs: send.refs,
                 attachments: send.attachments.length > 0 ? send.attachments : undefined,
+                agent: askedAgent
+                    ? {
+                          key: askedAgent.id,
+                          displayName: askedAgent.displayName,
+                          role: askedAgent.role,
+                          accent: askedAgent.accent ?? null,
+                      }
+                    : undefined,
             };
             setThread(prev => [...prev, userTurn]);
 
@@ -709,6 +766,7 @@ export function WorkspaceShell() {
                 enableWebSearch: send.webSearch,
                 thinkingMode: send.thinking,
                 conversationHistory,
+                agentKey: send.agentKey,
                 attachments: send.attachments.map(a => ({
                     url: a.url,
                     name: a.name,
@@ -747,6 +805,15 @@ export function WorkspaceShell() {
                           }
                         : undefined,
                     chunksAnalyzed: data.chunksAnalyzed,
+                    agent: data.agent
+                        ? {
+                              key: data.agent.key,
+                              displayName: data.agent.displayName,
+                              role: data.agent.role,
+                              accent: data.agent.accent,
+                              notes: data.agent.notes,
+                          }
+                        : undefined,
                 };
             } else {
                 assistantTurn = {
@@ -763,7 +830,7 @@ export function WorkspaceShell() {
             // exactly the "prior turns" a first save needs.
             void persistTurns([userTurn, assistantTurn], send.refs, thread);
         },
-        [sources, sendQuery, companyId, continuation, thread, persistTurns]
+        [sources, sendQuery, companyId, continuation, thread, persistTurns, chatAgents]
     );
 
     const seedComposer = useCallback(
@@ -814,9 +881,10 @@ export function WorkspaceShell() {
                 attachments: question.attachments ?? [],
                 webSearch: overrides.webSearch ?? composerWebSearch,
                 thinking: overrides.thinking ?? composerThinking,
+                agentKey: question.agent?.key ?? composerAgentKey,
             });
         },
-        [thread, selected, sendMessage, composerWebSearch, composerThinking]
+        [thread, selected, sendMessage, composerWebSearch, composerThinking, composerAgentKey]
     );
 
     const saveAnswerAsNote = useCallback(async (text: string) => {
@@ -968,6 +1036,7 @@ export function WorkspaceShell() {
                 attachments: [],
                 webSearch: composerWebSearch,
                 thinking: composerThinking,
+                agentKey: composerAgentKey,
             });
         },
         [
@@ -976,6 +1045,7 @@ export function WorkspaceShell() {
             selected,
             composerWebSearch,
             composerThinking,
+            composerAgentKey,
             setActiveFeatureId,
         ]
     );
@@ -1862,6 +1932,9 @@ export function WorkspaceShell() {
                             onToggleWebSearch={() => setComposerWebSearch(v => !v)}
                             thinking={composerThinking}
                             onToggleThinking={() => setComposerThinking(v => !v)}
+                            agents={chatAgents}
+                            agentKey={composerAgentKey}
+                            onChangeAgent={setComposerAgentKey}
                         />
                     ) : paneId.startsWith(SOURCE_TAB_PREFIX) ? (
                         <EmbeddedSourcePane
@@ -1922,6 +1995,24 @@ export function WorkspaceShell() {
                                     onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
                                 },
                                 mindmap: { onCreate: () => openAdd("mindmap") },
+                                agents: {
+                                    onUseInChat: agentKey => {
+                                        setComposerAgentKey(agentKey);
+                                        setActiveFeatureId("chat");
+                                        toast.success(
+                                            `${chatAgents.find(a => a.id === agentKey)?.displayName ?? agentKey} will answer your next message`
+                                        );
+                                    },
+                                    onStartMeeting: agentKey => {
+                                        setNewMeetingRequest({
+                                            seats: [agentKey],
+                                            nonce: Date.now(),
+                                        });
+                                        expandFeature("meetings");
+                                    },
+                                    onOpenAgents: () => expandFeature("agents"),
+                                    newMeetingRequest,
+                                },
                                 sessions: {
                                     onImported: refresh,
                                     onOpenDocument: id => openSource(`d${id}`),

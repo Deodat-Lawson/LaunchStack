@@ -1,9 +1,11 @@
 /**
- * Agent personas: the roster a workspace draws its meeting participants from.
+ * Agent personas: the roster a workspace draws its meeting participants — and
+ * its chat agents — from.
  *
  * Personas are stored per company and *copied* into a meeting when it starts.
  * Editing a persona changes who shows up to the next meeting, never what was
- * said in a previous one.
+ * said in a previous one. The same rows back the chat composer's agent picker
+ * and `@handle` mentions, so an agent is one thing wherever it appears.
  */
 
 import { and, asc, eq } from "drizzle-orm";
@@ -11,6 +13,19 @@ import { randomUUID } from "node:crypto";
 
 import type { AgentPersona } from "@launchstack/collab";
 import { isAgentAutonomy, type AgentAutonomy } from "~/lib/agents/autonomy";
+import {
+    DEFAULT_AGENT_MODE,
+    isAgentMode,
+    isAgentRoute,
+    isAgentStyle,
+    normalizeToolPolicy,
+    type AgentDefinition,
+    type AgentMode,
+    type AgentRouteId,
+    type AgentStyleId,
+    type AgentToolPolicy,
+} from "~/lib/agents/definition";
+import { STARTER_AGENTS } from "~/lib/agents/starter-agents";
 import { collabAgentPersona } from "~/server/db/schema";
 import { db } from "~/server/db";
 
@@ -21,20 +36,34 @@ export interface PersonaInput {
     displayName: string;
     role: string;
     systemPrompt: string;
+    description?: string | null;
+    mode?: AgentMode | null;
+    tools?: AgentToolPolicy | null;
+    style?: AgentStyleId | null;
     nodeId?: string | null;
-    route?: string | null;
+    route?: AgentRouteId | null;
     /** 0–2, stored as an integer ×100 so the column stays exact. */
     temperature?: number | null;
     maxTurnChars?: number | null;
     accent?: string | null;
     /** Own autonomy level; null inherits the workspace default. */
     autonomy?: AgentAutonomy | null;
+    builtin?: boolean;
 }
 
+/**
+ * A roster row as the app sees it: the meeting engine's `AgentPersona` (so it
+ * can be seated as-is) plus the harness fields and the storage identity.
+ */
 export interface PersonaRecord extends AgentPersona {
     dbId: string;
     archived: boolean;
     autonomy: AgentAutonomy | null;
+    description: string;
+    mode: AgentMode;
+    tools: AgentToolPolicy | null;
+    style: AgentStyleId | null;
+    builtin: boolean;
 }
 
 export function rowToPersona(row: PersonaRow): PersonaRecord {
@@ -51,6 +80,46 @@ export function rowToPersona(row: PersonaRow): PersonaRecord {
         accent: row.accent ?? undefined,
         archived: row.archived,
         autonomy: isAgentAutonomy(row.autonomy) ? row.autonomy : null,
+        description: row.description ?? "",
+        mode: isAgentMode(row.mode) ? row.mode : DEFAULT_AGENT_MODE,
+        tools: normalizeToolPolicy(row.tools),
+        style: isAgentStyle(row.style) ? row.style : null,
+        builtin: row.builtin,
+    };
+}
+
+/** The definition view of a row — what the file format and the chat resolver read. */
+export function personaToDefinition(persona: PersonaRecord): AgentDefinition {
+    return {
+        key: persona.id,
+        displayName: persona.displayName,
+        role: persona.role,
+        description: persona.description,
+        systemPrompt: persona.systemPrompt,
+        mode: persona.mode,
+        tools: persona.tools,
+        style: persona.style,
+        route: isAgentRoute(persona.route) && persona.route !== "default" ? persona.route : null,
+        temperature: persona.temperature ?? null,
+        maxTurnChars: persona.maxTurnChars ?? null,
+        accent: persona.accent ?? null,
+        autonomy: persona.autonomy,
+        nodeId: persona.nodeId ?? null,
+    };
+}
+
+/** The frozen copy a meeting seats. Harness-only fields stay behind. */
+export function personaToParticipant(persona: PersonaRecord): AgentPersona {
+    return {
+        id: persona.id,
+        displayName: persona.displayName,
+        role: persona.role,
+        systemPrompt: persona.systemPrompt,
+        nodeId: persona.nodeId,
+        route: persona.route,
+        temperature: persona.temperature,
+        maxTurnChars: persona.maxTurnChars,
+        accent: persona.accent,
     };
 }
 
@@ -74,6 +143,21 @@ export async function getPersonaByKey(companyId: bigint, key: string) {
     return row ? rowToPersona(row) : null;
 }
 
+export async function getPersonaById(companyId: bigint, personaDbId: string) {
+    const [row] = await db
+        .select()
+        .from(collabAgentPersona)
+        .where(
+            and(eq(collabAgentPersona.companyId, companyId), eq(collabAgentPersona.id, personaDbId))
+        )
+        .limit(1);
+    return row ? rowToPersona(row) : null;
+}
+
+function temperatureColumn(value: number | null | undefined): number | null {
+    return value === null || value === undefined ? null : Math.round(value * 100);
+}
+
 export async function createPersona(companyId: bigint, input: PersonaInput) {
     const [row] = await db
         .insert(collabAgentPersona)
@@ -84,15 +168,17 @@ export async function createPersona(companyId: bigint, input: PersonaInput) {
             displayName: input.displayName,
             role: input.role,
             systemPrompt: input.systemPrompt,
+            description: input.description ?? null,
+            mode: input.mode ?? null,
+            tools: input.tools ?? null,
+            style: input.style ?? null,
             nodeId: input.nodeId ?? null,
             route: input.route ?? null,
-            temperature:
-                input.temperature === null || input.temperature === undefined
-                    ? null
-                    : Math.round(input.temperature * 100),
+            temperature: temperatureColumn(input.temperature),
             maxTurnChars: input.maxTurnChars ?? null,
             accent: input.accent ?? null,
             autonomy: input.autonomy ?? null,
+            builtin: input.builtin ?? false,
         })
         .returning();
     if (!row) throw new Error("Failed to create persona");
@@ -111,13 +197,14 @@ export async function updatePersona(
             ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
             ...(patch.role !== undefined ? { role: patch.role } : {}),
             ...(patch.systemPrompt !== undefined ? { systemPrompt: patch.systemPrompt } : {}),
+            ...(patch.description !== undefined ? { description: patch.description } : {}),
+            ...(patch.mode !== undefined ? { mode: patch.mode } : {}),
+            ...(patch.tools !== undefined ? { tools: patch.tools } : {}),
+            ...(patch.style !== undefined ? { style: patch.style } : {}),
             ...(patch.nodeId !== undefined ? { nodeId: patch.nodeId } : {}),
             ...(patch.route !== undefined ? { route: patch.route } : {}),
             ...(patch.temperature !== undefined
-                ? {
-                      temperature:
-                          patch.temperature === null ? null : Math.round(patch.temperature * 100),
-                  }
+                ? { temperature: temperatureColumn(patch.temperature) }
                 : {}),
             ...(patch.maxTurnChars !== undefined ? { maxTurnChars: patch.maxTurnChars } : {}),
             ...(patch.accent !== undefined ? { accent: patch.accent } : {}),
@@ -146,47 +233,50 @@ export async function archivePersona(companyId: bigint, personaDbId: string) {
     return row ? rowToPersona(row) : null;
 }
 
-/**
- * The roster a workspace starts with. Chosen to be immediately useful for a
- * document-heavy product: someone who drives, someone who checks feasibility,
- * someone who checks the numbers, and someone who reads the fine print.
- */
-export const STARTER_PERSONAS: PersonaInput[] = [
-    {
-        key: "facilitator",
-        displayName: "Ada",
-        role: "Facilitator",
-        systemPrompt:
-            "You run the meeting. Open with the objective, keep the agenda moving, ask a named participant when a point needs an owner, and close once the objective is met. Never answer a question you should be routing to a specialist.",
-        accent: "oklch(0.55 0.14 250)",
-    },
-    {
-        key: "analyst",
-        displayName: "Ravi",
-        role: "Analyst",
-        systemPrompt:
-            "You reason from the documents in the workspace. Quote figures and clause references when they exist, and say plainly when the sources do not support a claim rather than filling the gap.",
-        accent: "oklch(0.58 0.15 165)",
-    },
-    {
-        key: "engineer",
-        displayName: "Sam",
-        role: "Engineering lead",
-        systemPrompt:
-            "You judge feasibility and cost of delivery. Give estimates in sprints, name the long pole, and flag anything that would need a migration or a rollback plan.",
-        accent: "oklch(0.55 0.14 225)",
-    },
-    {
-        key: "counsel",
-        displayName: "Mira",
-        role: "Risk & compliance",
-        systemPrompt:
-            "You read for exposure: missing exhibits, unclear obligations, retention and privacy requirements. Be specific about which clause or control creates the risk. You are not giving legal advice.",
-        accent: "oklch(0.6 0.17 50)",
-    },
-];
+/** An archived starter comes back when it is re-seeded; anything else stays retired. */
+export async function unarchivePersona(companyId: bigint, personaDbId: string) {
+    const [row] = await db
+        .update(collabAgentPersona)
+        .set({ archived: false })
+        .where(
+            and(eq(collabAgentPersona.companyId, companyId), eq(collabAgentPersona.id, personaDbId))
+        )
+        .returning();
+    return row ? rowToPersona(row) : null;
+}
 
-/** Idempotently seeds the starter roster. Returns the full roster. */
+function starterToInput(agent: (typeof STARTER_AGENTS)[number]): PersonaInput {
+    return {
+        key: agent.key,
+        displayName: agent.displayName,
+        role: agent.role,
+        systemPrompt: agent.systemPrompt,
+        description: agent.description,
+        mode: agent.mode,
+        tools: agent.tools,
+        style: agent.style,
+        route: agent.route,
+        temperature: agent.temperature,
+        maxTurnChars: agent.maxTurnChars,
+        accent: agent.accent,
+        autonomy: agent.autonomy,
+        nodeId: agent.nodeId,
+        builtin: true,
+    };
+}
+
+/**
+ * The roster a workspace starts with: the ten starter agents from
+ * `~/lib/agents/starter-agents`. Kept as a named export because the API and
+ * the tests refer to it by this name.
+ */
+export const STARTER_PERSONAS: PersonaInput[] = STARTER_AGENTS.map(starterToInput);
+
+/**
+ * Idempotently seeds the starter roster. A starter that already exists — under
+ * any edits, archived or not — is left alone; only missing handles are added.
+ * Returns the live roster.
+ */
 export async function ensureStarterPersonas(companyId: bigint) {
     const existing = await listPersonas(companyId, true);
     const have = new Set(existing.map(p => p.id));
@@ -195,4 +285,32 @@ export async function ensureStarterPersonas(companyId: bigint) {
         await createPersona(companyId, persona);
     }
     return listPersonas(companyId);
+}
+
+/**
+ * Restores a starter agent to its shipped definition. Only the fields the
+ * starter defines are rewritten; the node assignment is an operator choice
+ * and survives.
+ */
+export async function resetStarterPersona(companyId: bigint, personaDbId: string) {
+    const current = await getPersonaById(companyId, personaDbId);
+    if (!current) return null;
+    const starter = STARTER_AGENTS.find(agent => agent.key === current.id);
+    if (!starter) return null;
+    const input = starterToInput(starter);
+    return updatePersona(companyId, personaDbId, {
+        displayName: input.displayName,
+        role: input.role,
+        systemPrompt: input.systemPrompt,
+        description: input.description,
+        mode: input.mode,
+        tools: input.tools,
+        style: input.style,
+        route: input.route,
+        temperature: input.temperature,
+        maxTurnChars: input.maxTurnChars,
+        accent: input.accent,
+        autonomy: input.autonomy,
+        archived: false,
+    });
 }

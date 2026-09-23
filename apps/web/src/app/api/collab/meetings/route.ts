@@ -5,12 +5,17 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import type { AgentPersona } from "@launchstack/collab";
+import { phasePlanProblems, type AgentPersona, type MeetingPhase } from "@launchstack/collab";
+import { meetingWorkflow } from "~/lib/agents/meeting-workflows";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertMeetingPlanAllowed } from "~/server/collab/autonomy";
 import { createMeetingForCompany, listMeetingsForCompany } from "~/server/collab/runtime";
 import { isWorkspaceError } from "~/server/workspace/errors";
-import { ensureStarterPersonas, listPersonas } from "~/server/collab/personas";
+import {
+    ensureStarterPersonas,
+    listPersonas,
+    personaToParticipant,
+} from "~/server/collab/personas";
 import { getChannelStore } from "~/server/collab/store";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +30,21 @@ const CreateMeetingSchema = z.object({
     moderatorKey: z.string().optional(),
     maxTurns: z.number().int().min(1).max(60).optional(),
     context: z.array(z.string().max(4000)).max(20).optional(),
+    /** The workflow template the plan came from, for the room header. */
+    workflowKey: z.string().max(64).optional(),
+    /** The phase plan the engine walks. Speakers must be in the room. */
+    phases: z
+        .array(
+            z.object({
+                id: z.string().min(1).max(48),
+                title: z.string().min(1).max(80),
+                goal: z.string().min(1).max(600),
+                turns: z.number().int().min(1).max(30),
+                speakerIds: z.array(z.string().min(1)).max(10).optional(),
+            })
+        )
+        .max(12)
+        .optional(),
     channelId: z.string().optional(),
     slackChannelId: z.string().optional(),
     slackMirrorEnabled: z.boolean().optional(),
@@ -62,6 +82,13 @@ export async function GET() {
                 nodeId: p.nodeId ?? null,
                 accent: p.accent ?? null,
             })),
+            workflowKey: row.workflowKey ?? null,
+            workflowTitle: meetingWorkflow(row.workflowKey)?.title ?? null,
+            phases: (row.phases ?? []).map(phase => ({
+                id: phase.id,
+                title: phase.title,
+                turns: phase.turns,
+            })),
             slackChannelId: row.slackChannelId,
             slackMirrorEnabled: row.slackMirrorEnabled,
             createdAt: row.createdAt.toISOString(),
@@ -96,22 +123,38 @@ export async function POST(request: Request) {
         if (!persona) {
             return NextResponse.json({ error: `Unknown participant "${key}"` }, { status: 400 });
         }
-        participants.push({
-            id: persona.id,
-            displayName: persona.displayName,
-            role: persona.role,
-            systemPrompt: persona.systemPrompt,
-            nodeId: persona.nodeId,
-            route: persona.route,
-            temperature: persona.temperature,
-            maxTurnChars: persona.maxTurnChars,
-            accent: persona.accent,
-        });
+        participants.push(personaToParticipant(persona));
     }
 
     if (input.moderatorKey && !byKey.has(input.moderatorKey)) {
         return NextResponse.json(
             { error: `Unknown moderator "${input.moderatorKey}"` },
+            { status: 400 }
+        );
+    }
+
+    // A phase plan is a promise about the transcript's shape; refuse one the
+    // engine could not keep (a phase whose speakers are all absent, say).
+    const phases: MeetingPhase[] | undefined = input.phases?.map(phase => ({
+        id: phase.id,
+        title: phase.title,
+        goal: phase.goal,
+        turns: phase.turns,
+        ...(phase.speakerIds && phase.speakerIds.length > 0
+            ? { speakerIds: phase.speakerIds.filter(id => byKey.has(id)) }
+            : {}),
+    }));
+    const planProblems = phasePlanProblems(phases, participants);
+    if (planProblems.length > 0) {
+        return NextResponse.json({ error: planProblems.join(" ") }, { status: 400 });
+    }
+    if (
+        input.workflowKey &&
+        input.workflowKey !== "custom" &&
+        !meetingWorkflow(input.workflowKey)
+    ) {
+        return NextResponse.json(
+            { error: `Unknown workflow "${input.workflowKey}"` },
             { status: 400 }
         );
     }
@@ -143,6 +186,8 @@ export async function POST(request: Request) {
         },
         maxTurns: input.maxTurns,
         context: input.context,
+        phases,
+        workflowKey: input.workflowKey,
         channelId: input.channelId,
         slackChannelId: input.slackChannelId,
         slackMirrorEnabled: input.slackMirrorEnabled,

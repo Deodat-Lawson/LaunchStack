@@ -28,6 +28,17 @@ export interface StudioPaneContext {
         onOpenDocument?: (documentId: number) => void;
         onContinue?: (documentId: number) => void;
     };
+    /**
+     * Agents and Meetings hand off to each other and to the chat: "use in
+     * chat" picks the agent in the composer, "put in a meeting" opens the
+     * new-meeting dialog. Both are moves between tabs the shell owns.
+     */
+    agents?: {
+        onUseInChat?: (agentKey: string) => void;
+        onStartMeeting?: (agentKey: string) => void;
+        onOpenAgents?: () => void;
+        newMeetingRequest?: { workflowKey?: string | null; seats?: string[]; nonce: number } | null;
+    };
 }
 
 const DocumentGenerator = dynamic(
@@ -60,6 +71,10 @@ const StatisticsView = dynamic(
     () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
     { loading: () => <LoadingPage /> }
 );
+
+const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
+    loading: () => <LoadingPage />,
+});
 
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
     loading: () => <LoadingPage />,
@@ -456,10 +471,25 @@ export function AnalyticsPane(_: PaneProps) {
     );
 }
 
-export function MeetingsStudioPane(_: PaneProps) {
+export function MeetingsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-            <MeetingsPane embedded />
+            <MeetingsPane
+                embedded
+                onOpenAgents={context?.agents?.onOpenAgents}
+                newMeetingRequest={context?.agents?.newMeetingRequest ?? null}
+            />
+        </div>
+    );
+}
+
+export function AgentsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return (
+        <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+            <AgentsPane
+                onUseInChat={context?.agents?.onUseInChat}
+                onStartMeeting={context?.agents?.onStartMeeting}
+            />
         </div>
     );
 }
@@ -825,7 +855,9 @@ export function renderStudioPane(
         case "mindmap":
             return <MindmapStudioPane onClose={onClose} context={context} />;
         case "meetings":
-            return <MeetingsStudioPane onClose={onClose} />;
+            return <MeetingsStudioPane onClose={onClose} context={context} />;
+        case "agents":
+            return <AgentsStudioPane onClose={onClose} context={context} />;
         case "draft":
             return <DraftPane onClose={onClose} />;
         case "rewrite":

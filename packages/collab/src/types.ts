@@ -168,6 +168,26 @@ export interface SlackMirrorConfig {
     useAgentIdentity?: boolean;
 }
 
+/**
+ * One stretch of a meeting with its own goal and, optionally, its own
+ * speakers. Phases are what turn a meeting into a workflow: diverge with
+ * everyone, critique with the sceptic, converge with the chair. See
+ * `phases.ts` for the arithmetic; it is a pure function of the turn index.
+ */
+export interface MeetingPhase {
+    id: string;
+    title: string;
+    /** What this stretch of the meeting is for. Injected into the prompt. */
+    goal: string;
+    /** Turns this phase lasts. The last phase absorbs any remaining turns. */
+    turns: number;
+    /**
+     * Persona ids allowed to speak during the phase. Empty or omitted means
+     * everyone in the room.
+     */
+    speakerIds?: string[];
+}
+
 export interface MeetingConfig {
     id: string;
     channelId: string;
@@ -178,6 +198,13 @@ export interface MeetingConfig {
     agenda: string[];
     participants: AgentPersona[];
     turnPolicy: TurnPolicy;
+    /**
+     * The workflow this meeting follows, in order. Optional: a meeting with no
+     * phases is one open discussion under the turn policy.
+     */
+    phases?: MeetingPhase[];
+    /** Key of the workflow template the phases came from, for the UI. */
+    workflowKey?: string;
     /** Hard stop. The orchestrator never exceeds this many agent turns. */
     maxTurns: number;
     /**
@@ -200,6 +227,8 @@ export interface MeetingState {
     turnIndex: number;
     /** Persona id expected to speak next, or null when the meeting has ended. */
     nextSpeakerId: string | null;
+    /** Index of the phase in force, when the meeting has phases. */
+    phaseIndex?: number;
     /** Set while a human holds control. */
     controller?: {
         humanId: string;

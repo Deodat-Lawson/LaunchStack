@@ -4,6 +4,9 @@
  * the UI has one place to look when the API changes.
  */
 
+import type { AgentAutonomy } from "~/lib/agents/autonomy";
+import type { AgentMode, AgentStyleId, AgentToolPolicy } from "~/lib/agents/definition";
+
 export type MeetingStatus =
     | "scheduled"
     | "running"
@@ -22,6 +25,15 @@ export interface MeetingParticipant {
     accent?: string | null;
 }
 
+/** One phase of a meeting's workflow, as the engine walks it. */
+export interface MeetingPhase {
+    id: string;
+    title: string;
+    goal: string;
+    turns: number;
+    speakerIds?: string[];
+}
+
 export interface MeetingSummary {
     id: string;
     title: string;
@@ -32,6 +44,10 @@ export interface MeetingSummary {
     channelId: string;
     channelSlug: string | null;
     participants: MeetingParticipant[];
+    workflowKey: string | null;
+    workflowTitle: string | null;
+    /** Titles and lengths only — enough for a progress strip. */
+    phases: Array<Pick<MeetingPhase, "id" | "title" | "turns">>;
     slackChannelId: string | null;
     slackMirrorEnabled: boolean;
     createdAt: string;
@@ -62,6 +78,8 @@ export interface MeetingState {
     status: MeetingStatus;
     turnIndex: number;
     nextSpeakerId: string | null;
+    /** Index of the phase in force, when the meeting has phases. */
+    phaseIndex?: number;
     controller?: {
         humanId: string;
         displayName: string;
@@ -95,6 +113,9 @@ export interface MeetingDetail {
         participants: MeetingParticipant[];
         turnPolicy: { kind: string; moderatorId?: string };
         maxTurns: number;
+        phases: MeetingPhase[];
+        workflowKey: string | null;
+        workflowTitle: string | null;
         channelId: string;
         channelSlug: string | null;
         slack: { channelId: string; enabled: boolean; useAgentIdentity?: boolean } | null;
@@ -106,6 +127,10 @@ export interface MeetingDetail {
     minutes: MeetingMinutes;
 }
 
+/**
+ * A roster row: the meeting participant plus the harness fields the chat
+ * and the Agents page read. See `~/lib/agents/definition` for what each means.
+ */
 export interface AgentPersonaRecord extends MeetingParticipant {
     dbId: string;
     systemPrompt: string;
@@ -113,8 +138,21 @@ export interface AgentPersonaRecord extends MeetingParticipant {
     maxTurnChars?: number;
     archived: boolean;
     /** Own autonomy level; null inherits `AgentsResponse.defaults.autonomy`. */
-    autonomy?: string | null;
+    autonomy?: AgentAutonomy | null;
+    /** One line on when to use this agent. */
+    description: string;
+    mode: AgentMode;
+    tools: AgentToolPolicy | null;
+    style: AgentStyleId | null;
+    /** Seeded from the starter roster; can be reset to its shipped definition. */
+    builtin: boolean;
 }
+
+/** What the chat needs to know about an agent to pick it and attribute turns. */
+export type ChatAgentOption = Pick<
+    AgentPersonaRecord,
+    "id" | "displayName" | "role" | "description" | "accent" | "mode" | "tools" | "builtin"
+>;
 
 export interface WorkerNode {
     nodeId: string;

@@ -12,6 +12,7 @@ import type { AgentRuntime, AgentTurnResult, TurnContext } from "./agent";
 import { DEFAULT_COMPLETION_MARKER } from "./agent";
 import type { Clock } from "./clock";
 import { systemClock } from "./clock";
+import { phaseAt, phaseParticipants } from "./phases";
 import type { ChannelStore } from "./store";
 import { selectNextSpeaker } from "./turn-policy";
 import type {
@@ -128,20 +129,36 @@ export class MeetingOrchestrator {
             this.config.agenda.length > 0
                 ? `\nAgenda:\n${this.config.agenda.map((a, i) => `${i + 1}. ${a}`).join("\n")}`
                 : "";
+        const phases = this.config.phases ?? [];
+        const plan =
+            phases.length > 0
+                ? `\nWorkflow:\n${phases
+                      .map(
+                          (phase, i) =>
+                              `${i + 1}. ${phase.title} — ${phase.goal} (${phase.turns} turn${
+                                  phase.turns === 1 ? "" : "s"
+                              })`
+                      )
+                      .join("\n")}`
+                : "";
         await this.store.append({
             channelId: this.config.channelId,
             author: { kind: "agent", id: "system", displayName: "Launchstack" },
             kind: "system",
-            text: `*${this.config.title}* started.\nObjective: ${this.config.objective}${agenda}\nParticipants: ${this.config.participants
+            text: `*${this.config.title}* started.\nObjective: ${this.config.objective}${agenda}${plan}\nParticipants: ${this.config.participants
                 .map(p => `${p.displayName} (@${p.id})`)
                 .join(", ")}`,
             meta: { meetingId: this.config.id, event: "started" },
         });
 
+        const opening = phaseAt(phases, this.state.turnIndex);
+        if (opening) await this.announcePhase(opening.index);
+
         this.state = {
             ...this.state,
             status: "running",
             startedAt: this.clock.iso(),
+            phaseIndex: opening?.index,
             nextSpeakerId: this.peekNextSpeaker(await this.transcript())?.id ?? null,
         };
         this.emit("meeting.started");
@@ -237,6 +254,7 @@ export class MeetingOrchestrator {
             }
             // Burn the turn so a persistently dead node cannot loop forever.
             this.state = { ...this.state, turnIndex: this.state.turnIndex + 1 };
+            await this.advancePhase();
             this.state = {
                 ...this.state,
                 nextSpeakerId: this.peekNextSpeaker(await this.transcript())?.id ?? null,
@@ -272,6 +290,7 @@ export class MeetingOrchestrator {
             return { state: this.getState(), done: true, message };
         }
 
+        await this.advancePhase();
         this.state = {
             ...this.state,
             nextSpeakerId: this.peekNextSpeaker(await this.transcript())?.id ?? null,
@@ -407,6 +426,7 @@ export class MeetingOrchestrator {
         // rotation keeps advancing instead of handing the floor straight back.
         if (asPersonaId) {
             this.state = { ...this.state, turnIndex: this.state.turnIndex + 1 };
+            await this.advancePhase();
         }
         this.state = {
             ...this.state,
@@ -466,12 +486,50 @@ export class MeetingOrchestrator {
         return this.store.read(this.config.channelId);
     }
 
+    /**
+     * Speaker selection is the turn policy applied to the *phase's* room: the
+     * phase narrows who is eligible, and its turn offset restarts the rotation
+     * so every phase opens with its first speaker (the chair, under
+     * `moderated`). Without phases this is the plain policy over everyone.
+     */
     private peekNextSpeaker(transcript: ChannelMessage[]): AgentPersona | null {
+        const position = phaseAt(this.config.phases, this.state.turnIndex);
         return selectNextSpeaker({
-            participants: this.config.participants,
+            participants: phaseParticipants(this.config.participants, position?.phase),
             transcript,
-            turnIndex: this.state.turnIndex,
+            turnIndex: position ? position.offset : this.state.turnIndex,
             policy: this.config.turnPolicy,
+        });
+    }
+
+    /**
+     * Moves `phaseIndex` to whatever phase the turn index now falls in and
+     * announces the change in the channel — the transcript, not the UI, is
+     * where a reader learns the room moved from critique to decision.
+     */
+    private async advancePhase(): Promise<void> {
+        const position = phaseAt(this.config.phases, this.state.turnIndex);
+        if (!position || position.index === this.state.phaseIndex) return;
+        await this.announcePhase(position.index);
+        this.state = { ...this.state, phaseIndex: position.index };
+    }
+
+    private async announcePhase(index: number): Promise<void> {
+        const phases = this.config.phases ?? [];
+        const phase = phases[index];
+        if (!phase) return;
+        const speakers =
+            phase.speakerIds && phase.speakerIds.length > 0
+                ? ` Speaking: ${phaseParticipants(this.config.participants, phase)
+                      .map(p => `@${p.id}`)
+                      .join(", ")}.`
+                : "";
+        await this.store.append({
+            channelId: this.config.channelId,
+            author: { kind: "agent", id: "system", displayName: "Launchstack" },
+            kind: "system",
+            text: `Phase ${index + 1} of ${phases.length} — ${phase.title}: ${phase.goal}${speakers}`,
+            meta: { meetingId: this.config.id, event: "phase", phaseIndex: index },
         });
     }
 
@@ -494,6 +552,22 @@ export class MeetingOrchestrator {
             turnIndex: this.state.turnIndex,
             maxTurns: this.config.maxTurns,
             completionMarker: this.completionMarker,
+            phase: this.phaseContext(),
+        };
+    }
+
+    private phaseContext(): TurnContext["phase"] {
+        const phases = this.config.phases ?? [];
+        const position = phaseAt(phases, this.state.turnIndex);
+        if (!position) return undefined;
+        return {
+            index: position.index,
+            count: phases.length,
+            title: position.phase.title,
+            goal: position.phase.goal,
+            offset: position.offset,
+            turns: Math.max(1, Math.floor(position.phase.turns)),
+            last: position.last,
         };
     }
 }

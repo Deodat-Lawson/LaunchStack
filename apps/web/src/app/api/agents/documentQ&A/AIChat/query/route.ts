@@ -46,9 +46,32 @@ import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
+import { mentionedAgentKeys } from "~/lib/agents/definition";
+import {
+    ChatAgentError,
+    agentResponseInfo,
+    agentSystemPromptBlock,
+    resolveChatAgent,
+} from "~/server/collab/chat-agent";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+/**
+ * Handles in the caller's roster, consulted only when the question contains
+ * something shaped like a mention — a turn with no `@` never pays for the
+ * lookup, and a roster that cannot be read simply means no mention matched.
+ */
+async function knownAgentKeys(companyId: bigint, question: string): Promise<string[]> {
+    if (!/(^|[^\w@])@[a-z0-9]/i.test(question)) return [];
+    try {
+        const { listPersonas } = await import("~/server/collab/personas");
+        return (await listPersonas(companyId)).map(persona => persona.id);
+    } catch (err) {
+        console.warn("[AIChat] could not read the agent roster for mentions:", err);
+        return [];
+    }
+}
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
 
@@ -232,18 +255,19 @@ export async function POST(request: Request) {
             const {
                 documentId,
                 question,
-                style,
+                style: requestedStyle,
                 searchScope,
                 archiveName,
                 selectedDocumentIds,
-                enableWebSearch,
+                enableWebSearch: requestedWebSearch,
                 aiPersona,
                 aiModel,
                 provider,
                 conversationHistory,
                 embeddingIndexKey,
-                thinkingMode,
-                attachments,
+                thinkingMode: requestedThinking,
+                attachments: requestedAttachments,
+                agentKey: requestedAgentKey,
             } = validation.data;
 
             const userCompanyId = ctx.data.companyId;
@@ -251,15 +275,54 @@ export async function POST(request: Request) {
             const scope = await ctx.data.documentScope();
             observeScopeSize(scope);
 
+            // The agent for this turn: an `@handle` in the question wins over
+            // the composer's pick, the way a mention summons a subagent in
+            // OpenCode. Its tool policy decides which toggles survive.
+            let agent = null;
+            try {
+                const mentioned = mentionedAgentKeys(
+                    question,
+                    await knownAgentKeys(userCompanyId, question)
+                );
+                const agentKey = mentioned[0] ?? requestedAgentKey;
+                agent = await resolveChatAgent(userCompanyId, agentKey, {
+                    webSearch: Boolean(requestedWebSearch),
+                    thinking: Boolean(requestedThinking),
+                    hasAttachments: (requestedAttachments ?? []).length > 0,
+                    mentioned: mentioned.length > 0,
+                });
+            } catch (agentError) {
+                if (agentError instanceof ChatAgentError) {
+                    recordResult("error");
+                    return NextResponse.json(
+                        { success: false, message: agentError.message },
+                        { status: agentError.status }
+                    );
+                }
+                throw agentError;
+            }
+            const enableWebSearch = agent ? agent.turn.webSearch : Boolean(requestedWebSearch);
+            const thinkingMode = agent ? agent.turn.thinking : Boolean(requestedThinking);
+            const attachments = agent?.turn.attachmentsDropped ? [] : requestedAttachments;
+            const style = agent?.turn.style ?? requestedStyle;
+
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for
             // context we are about to discard helps nobody.
             const imageAttachments = (attachments ?? []).filter(a => a.kind === "image");
             const textAttachments = (attachments ?? []).filter(a => a.kind === "text");
-            const { route, requiredCapabilities } = selectChatRoute({
+            const selected = selectChatRoute({
                 vision: imageAttachments.length > 0,
                 reasoning: Boolean(thinkingMode),
+                // An agent's preferred route applies when nothing stronger —
+                // an image, a Think toggle — has already chosen one.
+                fast: agent?.turn.route === "fast",
             });
+            const route =
+                selected.route === "default" && agent?.turn.route && agent.turn.route !== "vision"
+                    ? agent.turn.route
+                    : selected.route;
+            const requiredCapabilities = selected.requiredCapabilities;
 
             let resolved;
             try {
@@ -267,6 +330,7 @@ export async function POST(request: Request) {
                     route,
                     requiredCapabilities,
                     reasoningControl: { enabled: Boolean(thinkingMode) },
+                    temperature: agent?.turn.temperature ?? undefined,
                 });
             } catch (modelError) {
                 recordResult("error");
@@ -656,8 +720,12 @@ export async function POST(request: Request) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
 
-            // Build comprehensive prompts
-            const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
+            // Build comprehensive prompts. The agent's standing instructions go
+            // above the style prompt: who is speaking first, then how.
+            const stylePrompt = getSystemPrompt(selectedStyle, aiPersona);
+            const systemPrompt = agent
+                ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
+                : stylePrompt;
             const webSearchInstruction = getWebSearchInstruction(
                 enableWebSearchFlag,
                 webSearch.results,
@@ -778,6 +846,7 @@ export async function POST(request: Request) {
                 fusionWeights: [0.4, 0.6],
                 searchScope,
                 aiModel: selectedAiModel,
+                agent: agentResponseInfo(agent),
                 webSources: enableWebSearchFlag ? webSearch.results : undefined,
                 webSearch: enableWebSearchFlag
                     ? {

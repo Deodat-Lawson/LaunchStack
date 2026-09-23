@@ -12,6 +12,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
+import type { MeetingPhase } from "@launchstack/collab";
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
@@ -140,6 +141,18 @@ export const collabAgentPersona = pgTable(
          * Null inherits the workspace default (`agents.defaultAutonomy`).
          */
         autonomy: varchar("autonomy", { length: 16 }),
+        // The agent harness (see `~/lib/agents/definition`). Appended after
+        // autonomy for the same column-order reason.
+        /** One line on when to use this agent — read by people and @-menus. */
+        description: text("description"),
+        /** `primary` | `subagent` | `all`. Null reads as `all`. */
+        mode: varchar("mode", { length: 16 }),
+        /** Tool allow-list; only denials are recorded. Null = everything allowed. */
+        tools: jsonb("tools").$type<Record<string, boolean>>(),
+        /** Response style applied under the instructions in chat. Null = the chat default. */
+        style: varchar("style", { length: 24 }),
+        /** Seeded from the starter roster. Editable; marks what "reset" restores. */
+        builtin: boolean("builtin").notNull().default(false),
     },
     table => ({
         companyKeyUnique: uniqueIndex("collab_persona_company_key_idx").on(
@@ -202,6 +215,12 @@ export const collabMeeting = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Workflows, added after the table shipped: declared last so a
+        // migrated database matches a freshly pushed one column for column.
+        /** Template the phases came from (`~/lib/agents/meeting-workflows`). */
+        workflowKey: varchar("workflow_key", { length: 64 }),
+        /** Frozen phase plan — `MeetingPhase[]` — the engine walks by turn index. */
+        phases: jsonb("phases").$type<MeetingPhase[]>(),
     },
     table => ({
         companyIdx: index("collab_meeting_company_idx").on(table.companyId),

@@ -170,6 +170,7 @@ describe("AskPanel starter questions", () => {
             attachments: [],
             webSearch: false,
             thinking: false,
+            agentKey: null,
         });
     });
 

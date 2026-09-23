@@ -588,14 +588,12 @@ export interface SourceRailProps {
      */
     onOpenKnowledge?: () => void;
     /**
-     * The app-wide controls the sidebar now carries: the command palette,
-     * the Studio launcher and the account. They used to sit at the end of
-     * the first column's tab strip, which put them mid-screen whenever a
-     * second column opened. With a launcher, the header's Knowledge icon
-     * gives way to it — Knowledge is the launcher's first entry.
+     * The app-wide controls the sidebar carries: the command palette and the
+     * account. They used to sit at the end of the first column's tab strip,
+     * which put them mid-screen whenever a second column opened. Opening an
+     * app is not one of them — each column's "+" does that, in that column.
      */
     onOpenPalette?: () => void;
-    studioSlot?: ReactNode;
     accountSlot?: ReactNode;
     /**
      * Everything the History tab needs. Omit it and the rail is sources-only,
@@ -756,7 +754,6 @@ export function SourceRail({
     onClose,
     onOpenKnowledge,
     onOpenPalette,
-    studioSlot,
     accountSlot,
     history,
 }: SourceRailProps) {
@@ -1112,7 +1109,7 @@ export function SourceRail({
                 style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
             >
                 <LaunchstackMark size={22} title={logoLabel} />
-                {/* Four controls share the row now (search, Studio, add,
+                {/* Four controls share the row (search, Knowledge, add,
                     hide), so the name yields before any of them is pushed
                     past the sidebar's edge. */}
                 <div
@@ -1143,8 +1140,7 @@ export function SourceRail({
                         <Search className="size-[13px]" />
                     </Button>
                 )}
-                {studioSlot}
-                {!studioSlot && onOpenKnowledge && (
+                {onOpenKnowledge && (
                     <button
                         onClick={onOpenKnowledge}
                         title="Open Knowledge"

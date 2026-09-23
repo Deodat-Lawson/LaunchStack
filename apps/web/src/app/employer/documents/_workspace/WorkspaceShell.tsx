@@ -51,7 +51,6 @@ import { SourceRail } from "./SourceRail";
 import * as sessionApi from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { StudioDrawer } from "./StudioDrawer";
-import { StudioMenu } from "./StudioMenu";
 import { AccountMenu } from "./AccountMenu";
 import { CollapsedRail } from "./CollapsedRail";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
@@ -1751,14 +1750,6 @@ export function WorkspaceShell() {
     const userEmail = user?.email;
     const initials = initialsOf(firstName, restNames.at(-1), userEmail);
 
-    /** Studio's launcher, for the sidebar's header or the collapsed strip. */
-    const studioLauncher = (side: "bottom" | "right") => (
-        <StudioMenu
-            side={side}
-            onOpenStudio={() => openFeature()}
-            onPickFeature={id => expandFeature(id)}
-        />
-    );
     /** The account, at the sidebar's foot or as the collapsed strip's avatar. */
     const accountMenu = (variant: "row" | "avatar") => (
         <AccountMenu
@@ -1802,7 +1793,6 @@ export function WorkspaceShell() {
                             onOpenAdd={() => openAdd()}
                             onOpenKnowledge={() => expandFeature("knowledge")}
                             onOpenPalette={() => setPalOpen(true)}
-                            studioSlot={studioLauncher("bottom")}
                             accountSlot={accountMenu("row")}
                             onOpenSource={source => {
                                 // Out of the way of what it opened, on a phone.
@@ -1887,7 +1877,6 @@ export function WorkspaceShell() {
                     onOpenAdd={() => openAdd()}
                     onOpenKnowledge={() => expandFeature("knowledge")}
                     onOpenPalette={() => setPalOpen(true)}
-                    studioSlot={studioLauncher("bottom")}
                     accountSlot={accountMenu("row")}
                     onOpenSource={source => {
                         // Out of the way of what it opened, on a phone.
@@ -1963,7 +1952,6 @@ export function WorkspaceShell() {
                     onExpand={toggleRail}
                     onOpenPalette={() => setPalOpen(true)}
                     onOpenAdd={() => openAdd()}
-                    studioSlot={studioLauncher("right")}
                     accountSlot={accountMenu("avatar")}
                 />
             )}

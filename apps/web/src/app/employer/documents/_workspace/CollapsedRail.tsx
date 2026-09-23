@@ -10,8 +10,6 @@ interface CollapsedRailProps {
     onExpand: () => void;
     onOpenPalette: () => void;
     onOpenAdd: () => void;
-    /** The Studio launcher, opening to the side. */
-    studioSlot: ReactNode;
     /** The account, as its avatar alone. */
     accountSlot: ReactNode;
 }
@@ -21,17 +19,16 @@ interface CollapsedRailProps {
  * controls, the way VS Code's activity bar and Obsidian's ribbon stay put
  * when their panels close.
  *
- * Hiding the sidebar used to take these with it. Now that search, Studio and
- * the account live in the sidebar rather than in a tab strip, a sidebar that
+ * Hiding the sidebar used to take these with it. Now that search and the
+ * account live in the sidebar rather than in a tab strip, a sidebar that
  * vanished entirely would take the only way to them too — so on a wide
  * window it narrows to this instead. On a phone the sidebar is a drawer and
- * carries them itself.
+ * carries them itself. Opening an app is each column's "+", not this.
  */
 export function CollapsedRail({
     onExpand,
     onOpenPalette,
     onOpenAdd,
-    studioSlot,
     accountSlot,
 }: CollapsedRailProps) {
     const iconButton =
@@ -63,7 +60,6 @@ export function CollapsedRail({
             >
                 <Search className="size-4" />
             </Button>
-            {studioSlot}
             <Button
                 variant="ghost"
                 size="icon"

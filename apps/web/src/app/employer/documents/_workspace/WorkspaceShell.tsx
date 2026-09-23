@@ -31,7 +31,7 @@ import {
     displayFolderPath,
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
-import { MAX_SESSION_APPEND, type HistoryEntry } from "~/lib/workspace-history";
+import { HISTORY_KIND_META, type HistoryEntry, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import {
     commandForEvent,
@@ -2176,6 +2176,14 @@ export function WorkspaceShell() {
                 open={palOpen}
                 onClose={() => setPalOpen(false)}
                 sources={sources}
+                history={history.entries}
+                onPickHistory={entry => {
+                    setPalOpen(false);
+                    // As the History tab does: a chat reopens, a run opens
+                    // its own surface.
+                    if (HISTORY_KIND_META[entry.kind].resumable) resumeSession(entry.refId);
+                    else if (entry.href) router.push(entry.href);
+                }}
                 onPickSource={id => {
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
                 }}

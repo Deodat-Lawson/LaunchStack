@@ -1254,9 +1254,12 @@ export function SourceRail({
                         // which changes with the tab — on History, `/` found
                         // nothing and did nothing.
                         data-rail-search
-                        placeholder={
-                            activeTab === "history" ? "Search history" : "Search your knowledge"
-                        }
+                        // "Filter", not "Search": it narrows the list below and
+                        // leaves you here to act on what is left — tick sources
+                        // as context, move them, reopen a chat. ⌘K is the search
+                        // that jumps; calling this one search too made it read
+                        // as a smaller copy of that.
+                        placeholder={activeTab === "history" ? "Filter history" : "Filter sources"}
                         style={{
                             flex: 1,
                             background: "transparent",

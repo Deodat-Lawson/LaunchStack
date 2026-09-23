@@ -56,8 +56,8 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
     },
     {
         id: "search.focus",
-        label: "Focus search",
-        description: "Put the cursor in the knowledge search box.",
+        label: "Filter the sidebar",
+        description: "Put the cursor in the sidebar's filter, on Sources or History.",
         defaultKeys: "/",
         when: "outside-input",
     },

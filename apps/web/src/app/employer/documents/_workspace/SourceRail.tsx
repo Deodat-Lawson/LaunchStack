@@ -5,6 +5,7 @@ import React, {
     type CSSProperties,
     type Dispatch,
     type MouseEvent,
+    type ReactNode,
     type SetStateAction,
     useCallback,
     useEffect,
@@ -23,7 +24,8 @@ import {
     IconShield,
     IconX,
 } from "./icons";
-import { Folder, FolderOpen, Lock } from "lucide-react";
+import { Folder, FolderOpen, Lock, Search } from "lucide-react";
+import { Button } from "~/components/ui/button";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {
@@ -586,6 +588,16 @@ export interface SourceRailProps {
      */
     onOpenKnowledge?: () => void;
     /**
+     * The app-wide controls the sidebar now carries: the command palette,
+     * the Studio launcher and the account. They used to sit at the end of
+     * the first column's tab strip, which put them mid-screen whenever a
+     * second column opened. With a launcher, the header's Knowledge icon
+     * gives way to it — Knowledge is the launcher's first entry.
+     */
+    onOpenPalette?: () => void;
+    studioSlot?: ReactNode;
+    accountSlot?: ReactNode;
+    /**
      * Everything the History tab needs. Omit it and the rail is sources-only,
      * with no tab strip — which is what the minimal embeddings want.
      */
@@ -743,6 +755,9 @@ export function SourceRail({
     logoLabel = "Launchstack",
     onClose,
     onOpenKnowledge,
+    onOpenPalette,
+    studioSlot,
+    accountSlot,
     history,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
@@ -1094,13 +1109,42 @@ export function SourceRail({
     return (
         <aside style={asideStyle}>
             <div
-                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 9 }}
+                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
             >
                 <LaunchstackMark size={22} title={logoLabel} />
-                <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em", flex: 1 }}>
+                {/* Four controls share the row now (search, Studio, add,
+                    hide), so the name yields before any of them is pushed
+                    past the sidebar's edge. */}
+                <div
+                    style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: "-0.01em",
+                        flex: 1,
+                        minWidth: 0,
+                        marginLeft: 5,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                    }}
+                >
                     {logoLabel}
                 </div>
-                {onOpenKnowledge && (
+                {onOpenPalette && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onOpenPalette}
+                        title="Jump to anything  ⌘K"
+                        aria-label="Jump to anything"
+                        data-testid="rail-palette"
+                        className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 size-[26px] rounded-md"
+                    >
+                        <Search className="size-[13px]" />
+                    </Button>
+                )}
+                {studioSlot}
+                {!studioSlot && onOpenKnowledge && (
                     <button
                         onClick={onOpenKnowledge}
                         title="Open Knowledge"
@@ -1383,6 +1427,13 @@ export function SourceRail({
                         clear
                     </button>
                 </div>
+            )}
+
+            {accountSlot && (
+                // The account sits at the foot of the sidebar, as it does in
+                // most apps with one — in the same place whatever the columns
+                // beside it are doing.
+                <div className="border-line shrink-0 border-t p-1.5">{accountSlot}</div>
             )}
         </aside>
     );

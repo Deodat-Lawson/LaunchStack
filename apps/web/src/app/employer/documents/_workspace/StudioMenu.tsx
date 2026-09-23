@@ -11,40 +11,63 @@ export interface StudioMenuProps {
     onPickFeature?: (featureId: string) => void;
     /** Fires when the main Studio button is clicked; if omitted, opens the menu. */
     onOpenStudio?: () => void;
+    /** Where the menu opens: under the button, or beside it (collapsed sidebar). */
+    side?: "bottom" | "right";
 }
 
+/** The menu's natural width, and the gap it keeps from the window's edge. */
+const MENU_WIDTH_PX = 460;
+const MENU_EDGE_PX = 8;
+const MENU_GAP_PX = 6;
+
 /**
- * Studio "header" button + hover mega-menu — lives in the AskPanel / expanded
- * tool topbar. **`onOpenStudio`** should open the drawer/sidebar only; individual
- * tiles call **`onPickFeature`** to jump straight to full-width workspace (parent
- * wires `expandFeature` vs `openFeature` accordingly).
+ * Studio's launcher — a bolt in the sidebar's header, or in the collapsed
+ * strip — with its hover mega-menu. It used to be a labelled button at the
+ * end of the first column's tab strip, which put an app-wide control
+ * wherever that column happened to end. **`onOpenStudio`** opens Studio
+ * itself; individual tiles call **`onPickFeature`** to jump straight to that
+ * app (parent wires `expandFeature` vs `openFeature` accordingly).
  *
  * Gated entries (`feature.requires`) are absent until permissions have loaded
  * and say yes — a viewer never sees a Settings tile flash and vanish.
  */
-/** The menu's natural width, and the gap it keeps from the window's edge. */
-const MENU_WIDTH_PX = 460;
-const MENU_EDGE_PX = 8;
-
-export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
+export function StudioMenu({ onPickFeature, onOpenStudio, side = "bottom" }: StudioMenuProps) {
     const router = useRouter();
     const { can } = usePermissions();
     const [menuOpen, setMenuOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     /**
-     * Where the menu sits against its button. It hangs from the button's
-     * right edge at 460px, which from a narrow first column — or a phone —
-     * put its left side off the screen. It is capped to the window and moved
-     * right just far enough to stay on it.
+     * Where the menu sits, relative to its button, worked out from where the
+     * button is on screen when it opens. A pill hangs the menu from its right
+     * edge; the sidebar's icon drops it from its left edge, or opens it to the
+     * side when the sidebar is collapsed. Whichever, it is capped to the
+     * window and kept on it — hung from a narrow column's edge at 460px it
+     * used to leave the screen.
      */
-    const [placement, setPlacement] = useState({ width: MENU_WIDTH_PX, shift: 0 });
+    const [placement, setPlacement] = useState({ width: MENU_WIDTH_PX, left: 0, top: 0 });
 
     const open = () => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
-        const right = buttonRef.current?.getBoundingClientRect().right ?? MENU_WIDTH_PX;
+        const rect = buttonRef.current?.getBoundingClientRect();
         const width = Math.min(MENU_WIDTH_PX, window.innerWidth - MENU_EDGE_PX * 2);
-        setPlacement({ width, shift: Math.max(0, width + MENU_EDGE_PX - right) });
+        if (rect) {
+            // Beside the strip it sits in, not beside the bolt: from the
+            // bolt, the menu covered the strip's own edge.
+            const edge =
+                buttonRef.current?.closest("[data-menu-anchor]")?.getBoundingClientRect().right ??
+                rect.right;
+            const wanted = side === "right" ? edge + MENU_GAP_PX : rect.left;
+            const onScreen = Math.min(
+                Math.max(wanted, MENU_EDGE_PX),
+                window.innerWidth - width - MENU_EDGE_PX
+            );
+            setPlacement({
+                width,
+                left: onScreen - rect.left,
+                top: side === "right" ? 0 : rect.height + MENU_GAP_PX,
+            });
+        }
         setMenuOpen(true);
     };
     const close = () => {
@@ -78,34 +101,21 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
                         setMenuOpen(v => !v);
                     }
                 }}
-                title="Open Studio"
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    padding: "5px 11px 5px 9px",
-                    borderRadius: 8,
-                    background: "linear-gradient(180deg, var(--accent), var(--accent-deep))",
-                    color: "white",
-                    fontSize: 12.5,
-                    fontWeight: 600,
-                    boxShadow: menuOpen
-                        ? "0 2px 10px var(--accent-glow), 0 0 0 3px var(--accent-glow)"
-                        : "0 1px 4px var(--accent-glow)",
-                    transition: "box-shadow 140ms, transform 120ms",
-                    transform: menuOpen ? "translateY(-0.5px)" : "none",
-                }}
+                title="Studio"
+                aria-label="Open Studio"
+                data-testid="studio-launcher"
+                className="text-brand hover:bg-line-2 data-[open=true]:bg-line-2 flex size-[26px] items-center justify-center rounded-md transition-colors"
+                data-open={menuOpen ? "true" : undefined}
             >
-                <IconBolt size={13} />
-                <span className="group-data-[compact=true]/strip:hidden">Studio</span>
+                <IconBolt size={14} />
             </button>
 
             {menuOpen && (
                 <div
                     style={{
                         position: "absolute",
-                        top: "calc(100% + 6px)",
-                        right: -placement.shift,
+                        top: placement.top,
+                        left: placement.left,
                         zIndex: 60,
                         width: placement.width,
                         padding: 10,

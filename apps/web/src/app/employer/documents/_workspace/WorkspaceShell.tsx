@@ -37,13 +37,7 @@ import { commandForEvent, resolveBindings, type ShortcutBindings } from "~/lib/s
 import { useAIChat } from "../hooks/useAIChat";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { AddSourceModal } from "./AddSourceModal";
-import {
-    AskPanel,
-    AvatarMenu,
-    JumpToPaletteButton,
-    workspaceMainHeaderBarStyle,
-    type ComposerSeed,
-} from "./AskPanel";
+import { AskPanel, workspaceMainHeaderBarStyle, type ComposerSeed } from "./AskPanel";
 import type { DocumentTargetData } from "./documentContextMenu";
 import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
@@ -58,6 +52,8 @@ import * as sessionApi from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
+import { AccountMenu } from "./AccountMenu";
+import { CollapsedRail } from "./CollapsedRail";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
 import { StudioSplitView } from "./StudioSplitView";
 import type { PaneTab } from "./StudioTabs";
@@ -1755,6 +1751,26 @@ export function WorkspaceShell() {
     const userEmail = user?.email;
     const initials = initialsOf(firstName, restNames.at(-1), userEmail);
 
+    /** Studio's launcher, for the sidebar's header or the collapsed strip. */
+    const studioLauncher = (side: "bottom" | "right") => (
+        <StudioMenu
+            side={side}
+            onOpenStudio={() => openFeature()}
+            onPickFeature={id => expandFeature(id)}
+        />
+    );
+    /** The account, at the sidebar's foot or as the collapsed strip's avatar. */
+    const accountMenu = (variant: "row" | "avatar") => (
+        <AccountMenu
+            variant={variant}
+            userInitials={initials}
+            userName={userName}
+            userEmail={userEmail}
+            onOpenSettings={() => expandFeature("settings")}
+            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+        />
+    );
+
     return (
         <div
             data-drift-immersive="true"
@@ -1785,6 +1801,9 @@ export function WorkspaceShell() {
                             setSelected={setSelected}
                             onOpenAdd={() => openAdd()}
                             onOpenKnowledge={() => expandFeature("knowledge")}
+                            onOpenPalette={() => setPalOpen(true)}
+                            studioSlot={studioLauncher("bottom")}
+                            accountSlot={accountMenu("row")}
                             onOpenSource={source => {
                                 // Out of the way of what it opened, on a phone.
                                 setRailDrawerOpen(false);
@@ -1859,87 +1878,94 @@ export function WorkspaceShell() {
                         />
                     </SheetContent>
                 </Sheet>
+            ) : !railHidden ? (
+                <SourceRail
+                    sources={sources}
+                    folders={folders}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onOpenAdd={() => openAdd()}
+                    onOpenKnowledge={() => expandFeature("knowledge")}
+                    onOpenPalette={() => setPalOpen(true)}
+                    studioSlot={studioLauncher("bottom")}
+                    accountSlot={accountMenu("row")}
+                    onOpenSource={source => {
+                        // Out of the way of what it opened, on a phone.
+                        setRailDrawerOpen(false);
+                        handleOpenSource(source);
+                    }}
+                    onOpenSourceBeside={source => {
+                        setRailDrawerOpen(false);
+                        openSourceBeside(source);
+                    }}
+                    onNewFolder={
+                        canManageFolders
+                            ? parentPath =>
+                                  setFolderDialog({
+                                      mode: "create",
+                                      parentPath: parentPath ?? null,
+                                  })
+                            : undefined
+                    }
+                    onRenameFolder={
+                        canManageFolders
+                            ? folder => setFolderDialog({ mode: "rename", path: folder.name })
+                            : undefined
+                    }
+                    onMoveFolder={
+                        canManageFolders
+                            ? (path, target) => void handleMoveFolder(path, target)
+                            : undefined
+                    }
+                    onDeleteFolder={
+                        canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
+                    }
+                    onShareFolder={openFolderAccess}
+                    onRestrictAccess={openDocumentAccess}
+                    onRenameSource={source => setRenameSource(source)}
+                    onDeleteSource={source => requestDelete([source])}
+                    onDeleteSources={requestDelete}
+                    onAddToFolder={path => {
+                        setAddFolder(path);
+                        openAdd();
+                    }}
+                    onMoveToFolder={
+                        canManageFolders
+                            ? (id, name) => void handleMoveToFolder(id, name)
+                            : undefined
+                    }
+                    activeFolder={activeFolder}
+                    setActiveFolder={setActiveFolder}
+                    activeTag={activeTag}
+                    setActiveTag={setActiveTag}
+                    onClose={() =>
+                        compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
+                    }
+                    history={{
+                        entries: history.entries,
+                        loading: history.loading,
+                        error: history.error,
+                        degraded: history.degraded,
+                        activeSessionId: sessionParam,
+                        onNewChat: startNewChat,
+                        onResumeSession: resumeSession,
+                        onOpenRun: entry => {
+                            if (entry.href) router.push(entry.href);
+                        },
+                        onRenameSession: handleRenameSession,
+                        onDeleteSession: handleDeleteSession,
+                        onDeleteRun: handleDeleteRun,
+                        onRefresh: () => void refreshHistory(),
+                    }}
+                />
             ) : (
-                !railHidden && (
-                    <SourceRail
-                        sources={sources}
-                        folders={folders}
-                        selected={selected}
-                        setSelected={setSelected}
-                        onOpenAdd={() => openAdd()}
-                        onOpenKnowledge={() => expandFeature("knowledge")}
-                        onOpenSource={source => {
-                            // Out of the way of what it opened, on a phone.
-                            setRailDrawerOpen(false);
-                            handleOpenSource(source);
-                        }}
-                        onOpenSourceBeside={source => {
-                            setRailDrawerOpen(false);
-                            openSourceBeside(source);
-                        }}
-                        onNewFolder={
-                            canManageFolders
-                                ? parentPath =>
-                                      setFolderDialog({
-                                          mode: "create",
-                                          parentPath: parentPath ?? null,
-                                      })
-                                : undefined
-                        }
-                        onRenameFolder={
-                            canManageFolders
-                                ? folder => setFolderDialog({ mode: "rename", path: folder.name })
-                                : undefined
-                        }
-                        onMoveFolder={
-                            canManageFolders
-                                ? (path, target) => void handleMoveFolder(path, target)
-                                : undefined
-                        }
-                        onDeleteFolder={
-                            canManageFolders
-                                ? folder => setDeleteFolderPath(folder.name)
-                                : undefined
-                        }
-                        onShareFolder={openFolderAccess}
-                        onRestrictAccess={openDocumentAccess}
-                        onRenameSource={source => setRenameSource(source)}
-                        onDeleteSource={source => requestDelete([source])}
-                        onDeleteSources={requestDelete}
-                        onAddToFolder={path => {
-                            setAddFolder(path);
-                            openAdd();
-                        }}
-                        onMoveToFolder={
-                            canManageFolders
-                                ? (id, name) => void handleMoveToFolder(id, name)
-                                : undefined
-                        }
-                        activeFolder={activeFolder}
-                        setActiveFolder={setActiveFolder}
-                        activeTag={activeTag}
-                        setActiveTag={setActiveTag}
-                        onClose={() =>
-                            compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
-                        }
-                        history={{
-                            entries: history.entries,
-                            loading: history.loading,
-                            error: history.error,
-                            degraded: history.degraded,
-                            activeSessionId: sessionParam,
-                            onNewChat: startNewChat,
-                            onResumeSession: resumeSession,
-                            onOpenRun: entry => {
-                                if (entry.href) router.push(entry.href);
-                            },
-                            onRenameSession: handleRenameSession,
-                            onDeleteSession: handleDeleteSession,
-                            onDeleteRun: handleDeleteRun,
-                            onRefresh: () => void refreshHistory(),
-                        }}
-                    />
-                )
+                <CollapsedRail
+                    onExpand={toggleRail}
+                    onOpenPalette={() => setPalOpen(true)}
+                    onOpenAdd={() => openAdd()}
+                    studioSlot={studioLauncher("right")}
+                    accountSlot={accountMenu("avatar")}
+                />
             )}
 
             <StudioSplitView
@@ -1963,24 +1989,11 @@ export function WorkspaceShell() {
                 onMove={moveTab}
                 onFocusGroup={focusGroup}
                 onOpenStudio={openFeature}
-                trailingSlot={
-                    <>
-                        <JumpToPaletteButton onClick={() => setPalOpen(true)} />
-                        <StudioMenu
-                            onOpenStudio={() => openFeature()}
-                            onPickFeature={id => expandFeature(id)}
-                        />
-                        <AvatarMenu
-                            userInitials={initials}
-                            userName={userName}
-                            userEmail={userEmail}
-                            onOpenSettings={() => expandFeature("settings")}
-                            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
-                        />
-                    </>
-                }
+                // App-wide controls live in the sidebar now. The strip keeps
+                // only its own tabs — plus, on a phone, the button that opens
+                // the drawer those controls are in.
                 leadingSlot={
-                    !railVisible ? (
+                    compactViewport && !railDrawerOpen ? (
                         <Button
                             variant="ghost"
                             size="icon"

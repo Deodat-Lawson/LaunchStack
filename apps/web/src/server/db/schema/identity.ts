@@ -57,6 +57,12 @@ export const users = pgTable(
         pronouns: varchar("pronouns", { length: 40 }),
         timeZone: varchar("time_zone", { length: 64 }),
         bio: varchar("bio", { length: 280 }),
+        /**
+         * When we last offered this person their sign-in provider's photo
+         * (Google, GitHub). Set on the first attempt, success or not, so the
+         * photo is copied in once and never comes back after they remove it.
+         */
+        providerPhotoCheckedAt: timestamp("provider_photo_checked_at", { withTimezone: true }),
     },
     table => ({
         companyIdIdx: index("users_company_id_idx").on(table.companyId),

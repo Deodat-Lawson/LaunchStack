@@ -1,5 +1,5 @@
 {
-  "id": "d182039a-26da-4b90-9572-c218b7999ca5",
+  "id": "a1e99758-f73f-4589-8968-b66026547e5a",
   "prevId": "6fa31e9f-15b0-4134-89a9-d541afb0bb59",
   "version": "7",
   "dialect": "postgresql",
@@ -6369,6 +6369,12 @@
         "bio": {
           "name": "bio",
           "type": "varchar(280)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_photo_checked_at": {
+          "name": "provider_photo_checked_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         }

@@ -347,6 +347,11 @@ function scopeFilter(caller: ProfileCaller, scope: ProfileScope) {
         : and(owner, eq(profileImages.companyId, requireWorkspace(caller)));
 }
 
+/** Random and URL-safe: the id is the image's whole URL, so it must not be guessable. */
+export function newProfileImageId(): string {
+    return randomBytes(16).toString("base64url");
+}
+
 function isUniqueViolation(error: unknown): boolean {
     return (
         typeof error === "object" &&
@@ -366,7 +371,7 @@ export async function replaceProfilePhoto(
         await db.transaction(async tx => {
             await tx.delete(profileImages).where(scopeFilter(caller, scope));
             await tx.insert(profileImages).values({
-                id: randomBytes(16).toString("base64url"),
+                id: newProfileImageId(),
                 userId: caller.userPk,
                 companyId,
                 mimeType: photo.mimeType,

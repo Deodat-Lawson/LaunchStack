@@ -18,8 +18,7 @@ import {
 } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
-import { profileImageUrl, resolveProfile } from "~/lib/profile/resolve";
-import { memberPhotoIds, overrideFrom } from "~/server/profile/store";
+import { lookFromRow, memberPhotoIds } from "~/server/profile/store";
 import {
     canActOnMember,
     canAssignRole,
@@ -162,23 +161,7 @@ async function toMemberViews(ctx: WorkspaceContext, rows: MemberRow[]): Promise<
     ]);
     return rows.map(row => {
         const role = normalizeRoleSlug(row.role);
-        const photo = photos.get(String(row.id));
-        const look = resolveProfile(
-            {
-                name: row.name,
-                email: row.email,
-                displayName: row.displayName,
-                title: row.title,
-                pronouns: row.pronouns,
-                timeZone: row.timeZone,
-                bio: row.bio,
-                avatarUrl: profileImageUrl(photo?.global),
-            },
-            overrideFrom(
-                { displayName: row.workspaceDisplayName, title: row.workspaceTitle },
-                photo?.workspace ?? null
-            )
-        );
+        const look = lookFromRow({ ...row, member: true }, photos.get(String(row.id)));
         return {
             id: Number(row.id),
             authUserId: row.authUserId,

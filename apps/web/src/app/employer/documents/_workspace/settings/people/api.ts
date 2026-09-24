@@ -107,7 +107,7 @@ export interface PermissionInfo {
 export interface AuditEvent {
     id: number;
     action: string;
-    actor: { authUserId: string; name: string; email: string } | null;
+    actor: { authUserId: string; name: string; email: string; avatarUrl: string | null } | null;
     targetType: string;
     targetId: string | null;
     detail: Record<string, unknown> | null;

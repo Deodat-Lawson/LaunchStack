@@ -14,6 +14,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 import type { MyProfile } from "./resolve";
+import { resetPeopleCache } from "./use-people";
 
 interface State {
     data: MyProfile | null;
@@ -54,7 +55,7 @@ export function refreshMyProfile(): Promise<MyProfile | null> {
                 return null;
             }
             const data = (await response.json()) as MyProfile;
-            emit({ data, error: null, loaded: true });
+            setMyProfile(data);
             return data;
         })
         .catch(() => {
@@ -70,6 +71,9 @@ export function refreshMyProfile(): Promise<MyProfile | null> {
 
 /** Replaces the cached profile with a server response (every write route returns one). */
 export function setMyProfile(data: MyProfile) {
+    // Other people can look different in another workspace; drop their looks
+    // when this tab's active workspace changes.
+    if (state.data && state.data.workspace?.id !== data.workspace?.id) resetPeopleCache();
     fetchedAt = Date.now();
     emit({ data, error: null, loaded: true });
 }

@@ -44,6 +44,26 @@ export interface EffectiveProfile {
     initials: string;
 }
 
+/**
+ * How one person appears in one workspace — the single shape every avatar and
+ * name in the app renders from (member lists, the audit log, presence,
+ * meetings, viewers). Built server-side by `workspaceLooks`.
+ */
+export interface PersonLook {
+    authUserId: string;
+    /** Full name. */
+    name: string;
+    email: string;
+    /** Override here, else profile display name, else full name, else email. */
+    displayName: string;
+    title: string | null;
+    pronouns: string | null;
+    /** Null when they have no photo — or have left the workspace, since the image route would refuse it. */
+    avatarUrl: string | null;
+    /** Still has a membership (any status) in the workspace. */
+    member: boolean;
+}
+
 /** `GET /api/profile` — the caller's profile, their override in the active workspace, and the result. */
 export interface MyProfile {
     profile: ProfileFields;

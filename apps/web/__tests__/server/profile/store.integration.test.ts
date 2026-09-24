@@ -38,6 +38,7 @@ import {
     replaceProfilePhoto,
     updateProfile,
     updateWorkspaceOverride,
+    workspaceLooks,
     type ProfileCaller,
 } from "~/server/profile/store";
 import { leaveWorkspace, listMembers } from "~/server/workspace/members";
@@ -224,6 +225,21 @@ describeIfDatabase("profile store (Postgres)", () => {
             .from(profileImages)
             .where(and(eq(profileImages.userId, pk.ada), eq(profileImages.companyId, B)));
         expect(left).toEqual([]);
+
+        // Beta still renders Ada in its history, by name and without a photo:
+        // she is no longer a member, and the image route would refuse it.
+        const inBeta = await workspaceLooks(B, ["auth-ada", "auth-cai", "auth-nobody", null]);
+        expect(inBeta.get("auth-ada")).toMatchObject({
+            member: false,
+            displayName: "Ada",
+            avatarUrl: null,
+        });
+        expect(inBeta.get("auth-cai")).toMatchObject({ member: true, displayName: "Cai Person" });
+        expect(inBeta.has("auth-nobody")).toBe(false);
+
+        // Acme, where she still is, gets her profile photo.
+        const inAcme = await workspaceLooks(A, ["auth-ada"]);
+        expect(inAcme.get("auth-ada")?.avatarUrl).toMatch(/^\/api\/profile-images\//);
 
         // The profile photo is the person's and survives both.
         const removed = await removeProfilePhoto(caller("ada", A), "global");

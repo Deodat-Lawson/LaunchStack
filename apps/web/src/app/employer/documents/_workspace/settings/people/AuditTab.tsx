@@ -4,6 +4,7 @@ import { AUDIT_ACTIONS } from "~/lib/authz/audit-actions";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, Download } from "lucide-react";
 
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -232,12 +233,13 @@ export function AuditTab({ can }: AuditTabProps) {
                             return (
                                 <li key={event.id} className="border-line border-b last:border-b-0">
                                     <div className="flex items-start gap-3 px-4 py-3">
-                                        <span
-                                            aria-hidden
-                                            className="bg-brand-soft text-brand-ink mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
-                                        >
-                                            {actorName.charAt(0).toUpperCase()}
-                                        </span>
+                                        <ProfileAvatar
+                                            name={actorName}
+                                            email={event.actor?.email}
+                                            src={event.actor?.avatarUrl}
+                                            className="mt-0.5 size-7"
+                                            fallbackClassName="text-[11px]"
+                                        />
                                         <div className="min-w-0 flex-1">
                                             <div className="text-ink text-[13.5px] leading-snug">
                                                 {auditSentence(event)}

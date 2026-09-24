@@ -21,6 +21,7 @@ import {
     profileImageUrl,
     resolveProfile,
     type MyProfile,
+    type PersonLook,
     type ProfileFields,
     type WorkspaceProfileOverride,
 } from "~/lib/profile/resolve";
@@ -153,6 +154,121 @@ export function overrideFrom(
     workspacePhotoId: string | null
 ): WorkspaceProfileOverride {
     return { ...text, avatarUrl: profileImageUrl(workspacePhotoId) };
+}
+
+/** What `lookFromRow` needs: a `users` row plus the membership's override text. */
+export interface LookRow {
+    authUserId: string;
+    name: string;
+    email: string;
+    displayName: string | null;
+    title: string | null;
+    pronouns: string | null;
+    timeZone: string | null;
+    bio: string | null;
+    workspaceDisplayName: string | null;
+    workspaceTitle: string | null;
+    /** Has a membership (any status) in the workspace being rendered. */
+    member: boolean;
+}
+
+/**
+ * One person as one workspace sees them. Someone who has left keeps their
+ * name but loses the photo and any override: the image route would refuse
+ * the photo, and the override went with the membership.
+ */
+export function lookFromRow(
+    row: LookRow,
+    photos: { global: string | null; workspace: string | null } | undefined
+): PersonLook {
+    const look = resolveProfile(
+        {
+            name: row.name,
+            email: row.email,
+            displayName: row.displayName,
+            title: row.title,
+            pronouns: row.pronouns,
+            timeZone: row.timeZone,
+            bio: row.bio,
+            avatarUrl: row.member ? profileImageUrl(photos?.global) : null,
+        },
+        row.member
+            ? overrideFrom(
+                  { displayName: row.workspaceDisplayName, title: row.workspaceTitle },
+                  photos?.workspace ?? null
+              )
+            : null
+    );
+    return {
+        authUserId: row.authUserId,
+        name: look.name,
+        email: look.email,
+        displayName: look.displayName,
+        title: look.title,
+        pronouns: look.pronouns,
+        avatarUrl: look.avatarUrl,
+        member: row.member,
+    };
+}
+
+/** Most ids any one surface asks about at once (a page of audit events, a meeting). */
+export const LOOKS_MAX_IDS = 200;
+
+/**
+ * How each of these people appears in one workspace, keyed by auth subject
+ * id — the id audit events, presence rows, meeting messages and document
+ * views already store. Unknown ids are simply absent.
+ */
+export async function workspaceLooks(
+    companyId: bigint,
+    authUserIds: Iterable<string | null | undefined>
+): Promise<Map<string, PersonLook>> {
+    const ids = [...new Set([...authUserIds].filter((id): id is string => Boolean(id)))].slice(
+        0,
+        LOOKS_MAX_IDS
+    );
+    const out = new Map<string, PersonLook>();
+    if (ids.length === 0) return out;
+
+    const rows = await db
+        .select({
+            userPk: users.id,
+            authUserId: users.userId,
+            name: users.name,
+            email: users.email,
+            displayName: users.displayName,
+            title: users.title,
+            pronouns: users.pronouns,
+            timeZone: users.timeZone,
+            bio: users.bio,
+            workspaceDisplayName: userCompanyMemberships.profileDisplayName,
+            workspaceTitle: userCompanyMemberships.profileTitle,
+            membershipId: userCompanyMemberships.id,
+        })
+        .from(users)
+        .leftJoin(
+            userCompanyMemberships,
+            and(
+                eq(userCompanyMemberships.userId, users.id),
+                eq(userCompanyMemberships.companyId, companyId)
+            )
+        )
+        .where(inArray(users.userId, ids));
+
+    const photos = await memberPhotoIds(
+        companyId,
+        rows.filter(row => row.membershipId !== null).map(row => BigInt(row.userPk))
+    );
+    for (const row of rows) {
+        out.set(
+            row.authUserId,
+            lookFromRow(
+                { ...row, member: row.membershipId !== null },
+                photos.get(String(row.userPk))
+            )
+        );
+    }
+    return out;
 }
 
 // ---------------------------------------------------------------------------

@@ -4,7 +4,9 @@ import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } fr
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
+import { useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -154,6 +156,8 @@ export function WorkspaceSelectClient({
 }: Props) {
     const router = useRouter();
     const { signOut } = useAuth();
+    // Your profile photo (not a workspace's override): no workspace is open here.
+    const myPhoto = useMyProfile().data?.profile.avatarUrl ?? null;
     const { theme, setTheme, resolvedTheme } = useTheme();
     const isDark = (resolvedTheme ?? theme) === "dark";
     // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
@@ -368,8 +372,6 @@ export function WorkspaceSelectClient({
         }
     }
 
-    const accountInitials = initialsOf(account.name);
-
     return (
         <div className={styles.body}>
             <div className={styles.ambient} aria-hidden="true">
@@ -386,7 +388,13 @@ export function WorkspaceSelectClient({
                 </div>
                 <div className={styles.spacer} />
                 <div className={styles.me} title="Switch account">
-                    <span className={styles.meAvatar}>{accountInitials}</span>
+                    <ProfileAvatar
+                        name={account.name}
+                        email={account.email}
+                        src={myPhoto}
+                        className="size-[22px]"
+                        fallbackClassName="text-[10px]"
+                    />
                     <span>{account.name}</span>
                     {account.email ? (
                         <span className={styles.meEmail}>· {account.email}</span>
@@ -557,18 +565,30 @@ export function WorkspaceSelectClient({
                                     </div>
                                     {showPile ? (
                                         <div className={styles.pile} aria-label="Members">
-                                            {pile.map((p, i) => (
-                                                <span
-                                                    key={`${ws.id}-pile-${i}`}
-                                                    className={
-                                                        p.extraClass
-                                                            ? `${styles.av} ${p.extraClass}`
-                                                            : styles.av
-                                                    }
-                                                >
-                                                    {p.label}
-                                                </span>
-                                            ))}
+                                            {pile.map((p, i) =>
+                                                // The first seat is you: your real photo.
+                                                i === 0 ? (
+                                                    <ProfileAvatar
+                                                        key={`${ws.id}-pile-${i}`}
+                                                        name={account.name}
+                                                        email={account.email}
+                                                        src={myPhoto}
+                                                        className={`${styles.av} size-[22px]`}
+                                                        fallbackClassName="text-[9.5px]"
+                                                    />
+                                                ) : (
+                                                    <span
+                                                        key={`${ws.id}-pile-${i}`}
+                                                        className={
+                                                            p.extraClass
+                                                                ? `${styles.av} ${p.extraClass}`
+                                                                : styles.av
+                                                        }
+                                                    >
+                                                        {p.label}
+                                                    </span>
+                                                )
+                                            )}
                                             {ws.memberCount > 4 ? (
                                                 <span className={`${styles.av} ${styles.avMore}`}>
                                                     +{ws.memberCount - 4}

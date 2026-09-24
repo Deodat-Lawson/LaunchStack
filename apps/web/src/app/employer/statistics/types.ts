@@ -35,6 +35,7 @@ export interface DashboardData {
 export interface Viewer {
     name: string;
     email: string;
+    avatarUrl: string | null;
     viewedAt: string;
     role: string;
 }

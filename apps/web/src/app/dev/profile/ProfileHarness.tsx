@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import { PresenceAvatars } from "~/app/employer/documents/_mindmap/ui/PresenceLayer";
 import { AvatarMenu } from "~/app/employer/documents/_workspace/AskPanel";
+import { AuditTab } from "~/app/employer/documents/_workspace/settings/people/AuditTab";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
 import { MembersTab } from "~/app/employer/documents/_workspace/settings/people/MembersTab";
 import type { Member } from "~/app/employer/documents/_workspace/settings/people/api";
@@ -20,8 +22,9 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
 
 /**
  * Local harness for profiles. Mounts the real Account → Profile editor, the
- * real header AvatarMenu and the real Members table, with `/api/profile*`
- * and `/api/workspace/members` answered from memory — the same zod schemas
+ * real header AvatarMenu, Members table, Mindmap presence stack and audit
+ * log, with `/api/profile*`, `/api/workspace/members` and
+ * `/api/workspace/audit` answered from memory — the same zod schemas
  * and the same `resolveProfile` the server uses, so validation and
  * per-workspace resolution behave as they do for real. The photo route keeps
  * the uploaded (browser-cropped) PNG as a blob URL and reports its size in
@@ -175,6 +178,42 @@ function installFetchStub(onChange: () => void): () => void {
             return json({ members: teammates(), counts: { active: 3, pending: 0, suspended: 0 } });
         }
         if (url.pathname === "/api/workspace/roles") return json({ error: "stub" }, 503);
+        if (url.pathname === "/api/workspace/audit") {
+            const me = snapshot().effective;
+            return json({
+                events: [
+                    {
+                        id: 2,
+                        action: "member.role_changed",
+                        actor: {
+                            authUserId: "ada",
+                            name: me.name,
+                            email: me.email,
+                            avatarUrl: me.avatarUrl,
+                        },
+                        targetType: "member",
+                        targetId: "2",
+                        detail: { targetName: "Bob Okafor", fromRole: "member", toRole: "admin" },
+                        createdAt: new Date(Date.now() - 3_600_000).toISOString(),
+                    },
+                    {
+                        id: 1,
+                        action: "member.joined",
+                        actor: {
+                            authUserId: "cai",
+                            name: "Cai Rivera",
+                            email: "cai@launchstack.test",
+                            avatarUrl: null,
+                        },
+                        targetType: "member",
+                        targetId: "3",
+                        detail: null,
+                        createdAt: new Date(Date.now() - 86_400_000).toISOString(),
+                    },
+                ],
+                nextCursor: null,
+            });
+        }
         return original(input, init);
     }) as typeof window.fetch;
     return () => {
@@ -235,6 +274,36 @@ export function ProfileHarness() {
                 <ProfileEditor onActions={setActions} emailVerified />
                 <h2 className="mb-3 mt-10 text-base font-bold">Members</h2>
                 <MembersTab key={version} can={() => false} />
+                <h2 className="mb-3 mt-10 text-base font-bold">Mindmap presence</h2>
+                <div className="border-line bg-panel flex items-center gap-3 rounded-lg border px-4 py-3">
+                    <PresenceAvatars
+                        peers={[
+                            {
+                                userId: "ada",
+                                displayName: me?.displayName ?? null,
+                                avatarUrl: me?.avatarUrl ?? null,
+                                pageId: null,
+                                cursor: null,
+                                selection: [],
+                                revisionSeen: 0,
+                                lastSeenAt: new Date().toISOString(),
+                            },
+                            {
+                                userId: "cai",
+                                displayName: "Cai Rivera",
+                                avatarUrl: null,
+                                pageId: null,
+                                cursor: null,
+                                selection: [],
+                                revisionSeen: 0,
+                                lastSeenAt: new Date().toISOString(),
+                            },
+                        ]}
+                    />
+                    <span className="text-ink-3 text-xs">Ring: each person’s cursor colour</span>
+                </div>
+                <h2 className="mb-3 mt-10 text-base font-bold">Audit log</h2>
+                <AuditTab key={`audit-${version}`} can={() => true} />
             </main>
         </div>
     );

@@ -52,6 +52,7 @@ export async function POST(request: Request) {
         temperature: definition.temperature,
         maxTurnChars: definition.maxTurnChars,
         accent: definition.accent,
+        avatarUrl: definition.avatarUrl,
         autonomy: definition.autonomy,
         nodeId: definition.nodeId,
     });

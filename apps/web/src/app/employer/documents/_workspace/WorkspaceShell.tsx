@@ -429,6 +429,10 @@ export function WorkspaceShell() {
         seats?: string[];
         nonce: number;
     } | null>(null);
+    // "Open X in Agents" from the palette: the Agents tab selects that agent.
+    const [openAgentRequest, setOpenAgentRequest] = useState<{ key: string; nonce: number } | null>(
+        null
+    );
 
     // The roster: one fetch, shared by the picker, `@` completion and the
     // transcript's attribution of stored turns.
@@ -443,6 +447,7 @@ export function WorkspaceShell() {
                     role: p.role,
                     description: p.description,
                     accent: p.accent ?? null,
+                    avatarUrl: p.avatarUrl ?? null,
                     mode: p.mode,
                     tools: p.tools,
                     builtin: p.builtin,
@@ -739,6 +744,7 @@ export function WorkspaceShell() {
                           displayName: askedAgent.displayName,
                           role: askedAgent.role,
                           accent: askedAgent.accent ?? null,
+                          avatarUrl: askedAgent.avatarUrl ?? null,
                       }
                     : undefined,
             };
@@ -811,6 +817,7 @@ export function WorkspaceShell() {
                               displayName: data.agent.displayName,
                               role: data.agent.role,
                               accent: data.agent.accent,
+                              avatarUrl: data.agent.avatarUrl ?? null,
                               notes: data.agent.notes,
                           }
                         : undefined,
@@ -2012,6 +2019,7 @@ export function WorkspaceShell() {
                                     },
                                     onOpenAgents: () => expandFeature("agents"),
                                     newMeetingRequest,
+                                    openAgentRequest,
                                 },
                                 sessions: {
                                     onImported: refresh,
@@ -2073,6 +2081,17 @@ export function WorkspaceShell() {
                 sources={sources}
                 onPickSource={id => {
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
+                }}
+                agents={chatAgents}
+                onAskAgent={agentKey => {
+                    setPalOpen(false);
+                    setComposerAgentKey(agentKey);
+                    setActiveFeatureId("chat");
+                }}
+                onOpenAgent={agentKey => {
+                    setPalOpen(false);
+                    setOpenAgentRequest({ key: agentKey, nonce: Date.now() });
+                    setTimeout(() => expandFeature("agents"), 100);
                 }}
                 onPickFeature={id => {
                     setPalOpen(false);

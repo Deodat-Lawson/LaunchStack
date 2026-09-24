@@ -1,4 +1,7 @@
-import { isAgentKey } from "~/lib/agents/definition";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+import { isAgentKey, isAgentToolId } from "~/lib/agents/definition";
 import { STARTER_AGENTS, STARTER_AGENT_KEYS } from "~/lib/agents/starter-agents";
 
 describe("starter agents", () => {
@@ -21,5 +24,23 @@ describe("starter agents", () => {
             expect(agent.systemPrompt.length).toBeGreaterThan(80);
             expect(agent.accent).toMatch(/^oklch\(/);
         }
+    });
+
+    it("grounds every agent in a named method with at least one source", () => {
+        for (const agent of STARTER_AGENTS) {
+            expect(agent.basis.summary.length).toBeGreaterThan(40);
+            expect(agent.basis.sources.length).toBeGreaterThan(0);
+            for (const source of agent.basis.sources)
+                expect(source.title.length).toBeGreaterThan(5);
+        }
+    });
+
+    it("names only registry tools, and ships a picture that exists", () => {
+        for (const agent of STARTER_AGENTS) {
+            for (const id of agent.tools ?? []) expect(isAgentToolId(id)).toBe(true);
+            expect(agent.avatarUrl).toBe(`/agents/${agent.key}.jpg`);
+            expect(existsSync(join(process.cwd(), "public", agent.avatarUrl!))).toBe(true);
+        }
+        expect(existsSync(join(process.cwd(), "public", "agents", "CREDITS.md"))).toBe(true);
     });
 });

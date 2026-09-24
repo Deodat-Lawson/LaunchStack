@@ -41,7 +41,8 @@ import {
 import { cn } from "~/lib/utils";
 
 import { useAgents } from "./useMeetings";
-import { initialsOf, personaColor, type AgentPersonaRecord, type MeetingPhase } from "./types";
+import { AgentAvatar } from "./AgentAvatar";
+import { personaColor, type AgentPersonaRecord, type MeetingPhase } from "./types";
 
 export interface NewMeetingDialogProps {
     open: boolean;
@@ -389,16 +390,13 @@ export function NewMeetingDialog({
                                                             </span>
                                                         ) : (
                                                             speakers.map(p => (
-                                                                <span
+                                                                <AgentAvatar
                                                                     key={p.id}
+                                                                    agent={p}
+                                                                    size={20}
                                                                     title={p.displayName}
-                                                                    className="border-panel-2 inline-flex size-5 items-center justify-center rounded-full border-2 text-[7px] font-bold text-white"
-                                                                    style={{
-                                                                        background: personaColor(p),
-                                                                    }}
-                                                                >
-                                                                    {initialsOf(p.displayName)}
-                                                                </span>
+                                                                    className="border-panel-2 rounded-full border-2"
+                                                                />
                                                             ))
                                                         )}
                                                     </div>
@@ -613,15 +611,11 @@ function SeatToggle({
             )}
             style={selected ? { borderColor: color } : undefined}
         >
-            <span
-                className="inline-flex size-5 items-center justify-center rounded-full text-[8px] font-bold"
-                style={{
-                    background: selected ? color : "var(--line)",
-                    color: selected ? "white" : "var(--ink-3)",
-                }}
-            >
-                {initialsOf(persona.displayName)}
-            </span>
+            <AgentAvatar
+                agent={persona}
+                size={20}
+                className={cn(!selected && "opacity-60 grayscale")}
+            />
             <span className={cn(selected ? "font-semibold" : "font-medium")}>
                 {persona.displayName}
             </span>

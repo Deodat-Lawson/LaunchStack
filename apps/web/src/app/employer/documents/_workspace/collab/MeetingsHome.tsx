@@ -13,6 +13,7 @@
 import React, { useMemo } from "react";
 import {
     ArrowRight,
+    BookOpen,
     Bot,
     Clock,
     ListChecks,
@@ -33,10 +34,9 @@ import {
 } from "~/lib/agents/meeting-workflows";
 import { cn } from "~/lib/utils";
 
+import { AgentAvatar } from "./AgentAvatar";
 import {
-    initialsOf,
     MEETING_STATUS_META,
-    personaColor,
     statusColor,
     type AgentPersonaRecord,
     type MeetingSummary,
@@ -167,7 +167,7 @@ export function MeetingsHome({
                     <SectionHeading
                         Icon={Workflow}
                         title="Start from a workflow"
-                        hint="Each card is a recipe with phases the engine enforces. Everything is editable before you start."
+                        hint="Each card is a method teams already run — named on the card — turned into phases the engine enforces. Everything is editable before you start."
                     />
                     <div className="flex flex-col gap-5">
                         {grouped.map(([category, workflows]) => (
@@ -210,12 +210,7 @@ export function MeetingsHome({
                                 title={agent.description || agent.role}
                                 className="border-line bg-panel text-ink-2 inline-flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-[12px]"
                             >
-                                <span
-                                    className="inline-flex size-5 items-center justify-center rounded-full text-[8px] font-bold text-white"
-                                    style={{ background: personaColor(agent) }}
-                                >
-                                    {initialsOf(agent.displayName)}
-                                </span>
+                                <AgentAvatar agent={agent} size={20} />
                                 <span className="font-medium">{agent.displayName}</span>
                                 <span className="text-ink-3">{agent.role}</span>
                             </span>
@@ -287,6 +282,19 @@ function WorkflowCard({
                 </span>
             </div>
             <p className="text-ink-3 m-0 text-[12px] leading-relaxed">{workflow.description}</p>
+            {workflow.basis && (
+                <div
+                    className="text-ink-3 flex items-start gap-1.5 text-[11.5px] leading-snug"
+                    title={`${workflow.basis.origin} Used by: ${workflow.basis.usedBy}`}
+                >
+                    <BookOpen className="mt-px size-3 shrink-0" />
+                    <span>
+                        <span className="text-ink-2 font-medium">{workflow.basis.name}</span>
+                        {" · "}
+                        {workflow.basis.usedBy}
+                    </span>
+                </div>
+            )}
             {workflow.phases.length > 0 ? (
                 <ol className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
                     {workflow.phases.map((phase, index) => (
@@ -312,14 +320,13 @@ function WorkflowCard({
             <div className="flex items-center gap-2">
                 <div className="flex -space-x-1.5">
                     {seats.slice(0, 6).map(agent => (
-                        <span
+                        <AgentAvatar
                             key={agent.id}
+                            agent={agent}
+                            size={24}
                             title={`${agent.displayName} — ${agent.role}`}
-                            className="border-panel inline-flex size-6 items-center justify-center rounded-full border-2 text-[8px] font-bold text-white"
-                            style={{ background: personaColor(agent) }}
-                        >
-                            {initialsOf(agent.displayName)}
-                        </span>
+                            className="border-panel rounded-full border-2"
+                        />
                     ))}
                 </div>
                 <span className="text-ink-3 text-[11.5px]">
@@ -374,14 +381,13 @@ function MeetingCard({ meeting, onOpen }: { meeting: MeetingSummary; onOpen: () 
             <div className="flex items-center gap-2.5">
                 <div className="flex -space-x-1.5">
                     {meeting.participants.slice(0, 6).map(p => (
-                        <span
+                        <AgentAvatar
                             key={p.id}
+                            agent={p}
+                            size={20}
                             title={`${p.displayName} — ${p.role}`}
-                            className="border-panel inline-flex size-5 items-center justify-center rounded-full border-2 text-[7px] font-bold text-white"
-                            style={{ background: personaColor(p) }}
-                        >
-                            {initialsOf(p.displayName)}
-                        </span>
+                            className="border-panel rounded-full border-2"
+                        />
                     ))}
                 </div>
                 <div className="bg-line-2 h-1 flex-1 overflow-hidden rounded-full">

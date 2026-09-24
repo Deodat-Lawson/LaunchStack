@@ -15,6 +15,7 @@ import { Download, FileText, RotateCcw, Upload } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
     Dialog,
     DialogContent,
@@ -23,7 +24,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "~/components/ui/dialog";
-import { Switch } from "~/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Field, SelectInput, TextArea, TextInput } from "~/components/field";
 import { AGENT_AUTONOMY_LEVELS, AGENT_AUTONOMY_META, isAgentAutonomy } from "~/lib/agents/autonomy";
@@ -31,14 +31,14 @@ import {
     AGENT_MODES,
     AGENT_MODE_META,
     AGENT_STYLE_IDS,
-    AGENT_TOOL_IDS,
-    AGENT_TOOL_META,
+    AGENT_TOOLS,
     coerceAgentDefinition,
+    enabledTools,
     isAgentMode,
     isAgentRoute,
+    normalizeAvatarUrl,
     toAgentKey,
     type AgentDefinition,
-    type AgentToolPolicy,
 } from "~/lib/agents/definition";
 import {
     AgentFileError,
@@ -48,7 +48,8 @@ import {
 } from "~/lib/agents/agent-file";
 import { cn } from "~/lib/utils";
 
-import { initialsOf, personaColor, type AgentPersonaRecord } from "./types";
+import { AgentAvatar, DEFAULT_AVATARS } from "./AgentAvatar";
+import { personaColor, type AgentPersonaRecord } from "./types";
 
 const ROUTES = [
     { value: "", label: "Default route" },
@@ -104,7 +105,9 @@ interface FormState {
     maxTurnChars: string;
     nodeId: string;
     accent: string;
-    tools: AgentToolPolicy;
+    avatarUrl: string;
+    /** Null = every tool; otherwise the checked ids. */
+    tools: string[] | null;
 }
 
 function fromPersona(
@@ -126,6 +129,7 @@ function fromPersona(
               maxTurnChars: persona.maxTurnChars ?? null,
               nodeId: persona.nodeId ?? null,
               accent: persona.accent ?? null,
+              avatarUrl: persona.avatarUrl ?? null,
               tools: persona.tools,
           }
         : (seed ?? {});
@@ -149,7 +153,8 @@ function fromPersona(
                 : String(source.maxTurnChars),
         nodeId: source.nodeId ?? "",
         accent: source.accent ?? ACCENTS[(source.key?.length ?? 0) % ACCENTS.length]!,
-        tools: source.tools ?? {},
+        avatarUrl: source.avatarUrl ?? "",
+        tools: source.tools ?? null,
     };
 }
 
@@ -168,6 +173,7 @@ function toDefinition(form: FormState): AgentDefinition {
         maxTurnChars: form.maxTurnChars === "" ? null : Number(form.maxTurnChars),
         nodeId: form.nodeId || null,
         accent: form.accent || null,
+        avatarUrl: form.avatarUrl || null,
         tools: form.tools,
     });
 }
@@ -187,6 +193,7 @@ function toPayload(definition: AgentDefinition) {
         maxTurnChars: definition.maxTurnChars,
         nodeId: definition.nodeId,
         accent: definition.accent,
+        avatarUrl: definition.avatarUrl,
         autonomy: definition.autonomy,
     };
 }
@@ -294,12 +301,15 @@ export function AgentEditor({
         <Dialog open={open} onOpenChange={next => !next && onClose()}>
             <DialogContent className="flex max-h-[90vh] w-[min(720px,calc(100vw-32px))] max-w-none flex-col gap-0 p-0">
                 <DialogHeader className="border-line flex-row items-center gap-3 border-b px-5 py-4 text-left">
-                    <span
-                        className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-[12px] font-bold text-white"
-                        style={{ background: color }}
-                    >
-                        {initialsOf(form.displayName || "?")}
-                    </span>
+                    <AgentAvatar
+                        agent={{
+                            id: form.key || "new",
+                            displayName: form.displayName || "?",
+                            accent: color,
+                            avatarUrl: normalizeAvatarUrl(form.avatarUrl),
+                        }}
+                        size={36}
+                    />
                     <div className="min-w-0 flex-1">
                         <DialogTitle className="serif text-ink text-[20px]">
                             {isNew ? "New agent" : `Edit ${persona.displayName}`}
@@ -515,38 +525,103 @@ export function AgentEditor({
 
                         <Field
                             label="Tools"
-                            hint="What a chat turn with this agent may use. Everything is on unless switched off here."
+                            hint={
+                                form.tools === null
+                                    ? "Every tool, including ones added later. Untick one to restrict this agent."
+                                    : `${form.tools.length} of ${AGENT_TOOLS.length} tools. New tools stay off until you add them.`
+                            }
                         >
                             <div className="border-line bg-panel-2 divide-line divide-y rounded-lg border">
-                                {AGENT_TOOL_IDS.map(id => {
-                                    const on = form.tools[id] !== false;
+                                {AGENT_TOOLS.map(tool => {
+                                    const on = form.tools === null || form.tools.includes(tool.id);
                                     return (
                                         <label
-                                            key={id}
+                                            key={tool.id}
                                             className="flex cursor-pointer items-center gap-3 px-3 py-2.5"
                                         >
+                                            <Checkbox
+                                                checked={on}
+                                                onCheckedChange={checked => {
+                                                    const current = enabledTools(form.tools);
+                                                    const next = checked
+                                                        ? [...current, tool.id]
+                                                        : current.filter(id => id !== tool.id);
+                                                    const every = AGENT_TOOLS.every(t =>
+                                                        next.includes(t.id)
+                                                    );
+                                                    update("tools", every ? null : next);
+                                                }}
+                                                aria-label={tool.label}
+                                            />
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-ink text-[13px] font-medium">
-                                                    {AGENT_TOOL_META[id].label}
+                                                <div className="text-ink flex items-center gap-2 text-[13px] font-medium">
+                                                    {tool.label}
+                                                    <span className="mono text-ink-4 text-[10.5px]">
+                                                        {tool.id}
+                                                    </span>
+                                                    {tool.perTurnToggle && (
+                                                        <span className="text-ink-3 text-[10.5px]">
+                                                            · needs the message toggle
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <div className="text-ink-3 text-[11.5px]">
-                                                    {AGENT_TOOL_META[id].description}
+                                                    {tool.description}
                                                 </div>
                                             </div>
-                                            <Switch
-                                                checked={on}
-                                                onCheckedChange={checked =>
-                                                    update("tools", {
-                                                        ...form.tools,
-                                                        [id]: checked ? undefined : false,
-                                                    })
-                                                }
-                                                aria-label={AGENT_TOOL_META[id].label}
-                                            />
                                         </label>
                                     );
                                 })}
                             </div>
+                        </Field>
+
+                        <Field
+                            label="Picture"
+                            hint="Shown instead of initials in chat, meetings and the roster. Pick one of the shipped works, paste an https link, or leave it blank for initials."
+                        >
+                            <div className="flex flex-wrap items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    onClick={() => update("avatarUrl", "")}
+                                    aria-pressed={form.avatarUrl === ""}
+                                    title="Initials on the accent colour"
+                                    className={cn(
+                                        "inline-flex size-9 items-center justify-center rounded-lg border-2 text-[11px] font-bold text-white",
+                                        form.avatarUrl === "" ? "border-ink" : "border-transparent"
+                                    )}
+                                    style={{ background: color }}
+                                >
+                                    {(form.displayName || "?").slice(0, 2).toUpperCase()}
+                                </button>
+                                {DEFAULT_AVATARS.map(option => (
+                                    <button
+                                        key={option.url}
+                                        type="button"
+                                        onClick={() => update("avatarUrl", option.url)}
+                                        aria-pressed={form.avatarUrl === option.url}
+                                        title={option.label}
+                                        className={cn(
+                                            "size-9 overflow-hidden rounded-lg border-2 transition-transform",
+                                            form.avatarUrl === option.url
+                                                ? "border-ink scale-105"
+                                                : "border-transparent hover:scale-105"
+                                        )}
+                                    >
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={option.url}
+                                            alt={option.label}
+                                            className="size-full object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                            <TextInput
+                                value={form.avatarUrl}
+                                onChange={e => update("avatarUrl", e.target.value)}
+                                placeholder="https://… or /agents/analyst.jpg"
+                                className="mt-2"
+                            />
                         </Field>
 
                         <div className="grid grid-cols-2 gap-x-4">

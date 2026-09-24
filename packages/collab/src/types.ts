@@ -61,6 +61,8 @@ export interface AgentPersona {
     maxTurnChars?: number;
     /** Free-form colour/emoji used by the UI and by the Slack bridge. */
     accent?: string;
+    /** Picture the UI shows instead of initials. The engine never reads it. */
+    avatarUrl?: string;
 }
 
 export interface HumanParticipant {

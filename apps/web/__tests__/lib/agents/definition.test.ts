@@ -5,10 +5,13 @@
  */
 
 import {
+    AGENT_TOOL_IDS,
     coerceAgentDefinition,
-    deniedTools,
+    disabledTools,
+    enabledTools,
     mentionQueryAt,
     mentionedAgentKeys,
+    normalizeToolList,
     resolveChatTurn,
     toAgentKey,
     usableAsPrimary,
@@ -43,16 +46,35 @@ describe("mentions", () => {
     });
 });
 
-describe("tool policy", () => {
-    it("records only denials", () => {
-        expect(deniedTools({ web: false, reasoning: true })).toEqual(["web"]);
-        expect(deniedTools(null)).toEqual([]);
+describe("tool list", () => {
+    it("null means every tool; a list means exactly those", () => {
+        expect(disabledTools(null)).toEqual([]);
+        expect(enabledTools(null)).toEqual([...AGENT_TOOL_IDS]);
+        expect(disabledTools(["retrieval", "reasoning"])).toEqual(["web", "attachments"]);
+        expect(enabledTools(["reasoning", "retrieval"])).toEqual(["retrieval", "reasoning"]);
     });
 
-    it("switches off what the agent denies and says so", () => {
+    it("reads a list, an OpenCode map, and drops unknown ids", () => {
+        expect(normalizeToolList(["web", "nope", "retrieval"])).toEqual(["retrieval", "web"]);
+        expect(normalizeToolList({ web: false })).toEqual([
+            "retrieval",
+            "reasoning",
+            "attachments",
+        ]);
+        expect(normalizeToolList({ retrieval: true, reasoning: true })).toEqual([
+            "retrieval",
+            "reasoning",
+        ]);
+        // Naming every tool is the same as naming none: future tools stay on.
+        expect(normalizeToolList([...AGENT_TOOL_IDS])).toBeNull();
+        expect(normalizeToolList(undefined)).toBeNull();
+        expect(normalizeToolList("web")).toBeNull();
+    });
+
+    it("switches off what the agent lacks and says so", () => {
         const turn = resolveChatTurn(
             {
-                tools: { web: false, attachments: false },
+                tools: ["retrieval", "reasoning"],
                 route: "reasoning",
                 style: "detailed",
                 temperature: 0.2,
@@ -97,13 +119,30 @@ describe("coercion", () => {
             route: "default",
             temperature: 7,
             tools: { web: false, bogus: false },
+            avatarUrl: "javascript:alert(1)",
         });
         expect(agent.key).toBe("finance-partner");
         expect(agent.displayName).toBe("Dana");
         expect(agent.mode).toBe("all");
         expect(agent.route).toBeNull();
         expect(agent.temperature).toBe(2);
-        expect(agent.tools).toEqual({ web: false });
+        expect(agent.tools).toEqual(["retrieval", "reasoning", "attachments"]);
+        expect(agent.avatarUrl).toBeNull();
+    });
+
+    it("keeps a same-origin path or an https picture, nothing else", () => {
+        expect(
+            coerceAgentDefinition({ key: "a", avatarUrl: "/agents/analyst.jpg" }).avatarUrl
+        ).toBe("/agents/analyst.jpg");
+        expect(
+            coerceAgentDefinition({ key: "a", avatarUrl: "https://x.test/p.png" }).avatarUrl
+        ).toBe("https://x.test/p.png");
+        expect(
+            coerceAgentDefinition({ key: "a", avatarUrl: "http://x.test/p.png" }).avatarUrl
+        ).toBeNull();
+        expect(
+            coerceAgentDefinition({ key: "a", avatarUrl: "//evil.test/p.png" }).avatarUrl
+        ).toBeNull();
     });
 
     it("makes handles mention-safe", () => {

@@ -46,7 +46,8 @@ import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
-import { mentionedAgentKeys } from "~/lib/agents/definition";
+import { isAgentStyle, mentionedAgentKeys, type AgentStyleId } from "~/lib/agents/definition";
+import { readSettingValue } from "~/server/settings/store";
 import {
     ChatAgentError,
     agentResponseInfo,
@@ -56,6 +57,18 @@ import {
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+/** The `chat.responseStyle` setting for this person, or the product default when unreadable. */
+async function defaultAssistantStyle(
+    ctx: Parameters<typeof readSettingValue>[0]
+): Promise<AgentStyleId> {
+    try {
+        const value = await readSettingValue<string>(ctx, "chat.responseStyle");
+        return isAgentStyle(value) ? value : "concise";
+    } catch {
+        return "concise";
+    }
+}
 
 /**
  * Handles in the caller's roster, consulted only when the question contains
@@ -304,7 +317,13 @@ export async function POST(request: Request) {
             const enableWebSearch = agent ? agent.turn.webSearch : Boolean(requestedWebSearch);
             const thinkingMode = agent ? agent.turn.thinking : Boolean(requestedThinking);
             const attachments = agent?.turn.attachmentsDropped ? [] : requestedAttachments;
-            const style = agent?.turn.style ?? requestedStyle;
+            // Style is the agent's when it has one; otherwise the person's own
+            // setting for the default assistant (member over workspace over the
+            // product default), unless the request named one explicitly.
+            const style =
+                agent?.turn.style ??
+                (requestedStyle !== "concise" ? requestedStyle : null) ??
+                (await defaultAssistantStyle(ctx.data));
 
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for

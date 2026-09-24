@@ -52,13 +52,22 @@ describe("meeting workflows", () => {
     });
 
     it("drops speakers who are not in the room and opens an emptied phase to everyone", () => {
-        const decision = meetingWorkflow("decision-review")!;
+        const decision = meetingWorkflow("daci-decision")!;
         const phases = phasesForRoom(decision, ["analyst", "finance"]);
         const challenge = phases.find(p => p.id === "challenge")!;
         // The critic is not in the room, nor the facilitator: nobody named → everyone.
         expect(challenge.speakerIds).toBeUndefined();
-        const analyse = phases.find(p => p.id === "analyse")!;
-        expect(analyse.speakerIds).toEqual(["analyst", "finance"]);
+        const contribute = phases.find(p => p.id === "contribute")!;
+        expect(contribute.speakerIds).toEqual(["analyst", "finance"]);
+    });
+
+    it("names the method behind every phased recipe", () => {
+        for (const workflow of MEETING_WORKFLOWS) {
+            if (workflow.phases.length === 0) continue;
+            expect(workflow.basis?.name.length).toBeGreaterThan(2);
+            expect(workflow.basis?.origin.length).toBeGreaterThan(20);
+            expect(workflow.basis?.usedBy.length).toBeGreaterThan(5);
+        }
     });
 
     it("has an open discussion with no phases", () => {

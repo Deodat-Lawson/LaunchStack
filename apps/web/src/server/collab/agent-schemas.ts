@@ -11,7 +11,8 @@ import {
     AGENT_MODES,
     AGENT_ROUTE_IDS,
     AGENT_STYLE_IDS,
-    AGENT_TOOL_IDS,
+    isAgentToolId,
+    normalizeAvatarUrl,
 } from "~/lib/agents/definition";
 
 /** Persona handles are used as `@key` in transcripts, so keep them mention-safe. */
@@ -21,11 +22,20 @@ export const PersonaKeySchema = z
     .max(48)
     .regex(AGENT_KEY_PATTERN, "Use lowercase letters, digits, - and _");
 
-const toolEntries = Object.fromEntries(
-    AGENT_TOOL_IDS.map(id => [id, z.boolean().optional()])
-) as Record<(typeof AGENT_TOOL_IDS)[number], z.ZodOptional<z.ZodBoolean>>;
+/** A list of registry tool ids, or null for every tool. Unknown ids are refused. */
+export const ToolListSchema = z
+    .array(z.string().max(48).refine(isAgentToolId, "Unknown tool"))
+    .max(32)
+    .nullable();
 
-export const ToolPolicySchema = z.object(toolEntries).strict().nullable();
+/** A same-origin path or an https URL; the normaliser is the single rule. */
+export const AvatarUrlSchema = z
+    .string()
+    .max(512)
+    .nullable()
+    .refine(value => value === null || normalizeAvatarUrl(value) !== null, {
+        message: "Use a path under /agents or an https URL",
+    });
 
 export const PersonaFieldsSchema = z.object({
     key: PersonaKeySchema,
@@ -34,8 +44,9 @@ export const PersonaFieldsSchema = z.object({
     systemPrompt: z.string().min(1).max(12_000),
     description: z.string().max(240).nullable().optional(),
     mode: z.enum(AGENT_MODES).nullable().optional(),
-    tools: ToolPolicySchema.optional(),
+    tools: ToolListSchema.optional(),
     style: z.enum(AGENT_STYLE_IDS).nullable().optional(),
+    avatarUrl: AvatarUrlSchema.optional(),
     nodeId: z.string().max(120).nullable().optional(),
     route: z.enum(AGENT_ROUTE_IDS).nullable().optional(),
     temperature: z.number().min(0).max(2).nullable().optional(),

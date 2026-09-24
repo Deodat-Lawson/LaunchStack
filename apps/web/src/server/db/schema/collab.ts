@@ -147,12 +147,14 @@ export const collabAgentPersona = pgTable(
         description: text("description"),
         /** `primary` | `subagent` | `all`. Null reads as `all`. */
         mode: varchar("mode", { length: 16 }),
-        /** Tool allow-list; only denials are recorded. Null = everything allowed. */
-        tools: jsonb("tools").$type<Record<string, boolean>>(),
+        /** Tool ids from `~/lib/agents/tools`. Null = every tool, including later ones. */
+        tools: jsonb("tools").$type<string[]>(),
         /** Response style applied under the instructions in chat. Null = the chat default. */
         style: varchar("style", { length: 24 }),
         /** Seeded from the starter roster. Editable; marks what "reset" restores. */
         builtin: boolean("builtin").notNull().default(false),
+        /** Picture shown instead of initials: a path under /agents or an https URL. */
+        avatarUrl: varchar("avatar_url", { length: 512 }),
     },
     table => ({
         companyKeyUnique: uniqueIndex("collab_persona_company_key_idx").on(

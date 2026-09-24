@@ -85,6 +85,7 @@ export function agentResponseInfo(resolution: ChatAgentResolution | null) {
         displayName: resolution.persona.displayName,
         role: resolution.persona.role,
         accent: resolution.persona.accent ?? null,
+        avatarUrl: resolution.persona.avatarUrl ?? null,
         notes: resolution.turn.notes,
     };
 }

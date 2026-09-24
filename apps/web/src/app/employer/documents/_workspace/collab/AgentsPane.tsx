@@ -41,25 +41,28 @@ import {
 import { agentFileName, serializeAgentFile } from "~/lib/agents/agent-file";
 import {
     AGENT_MODE_META,
-    AGENT_TOOL_IDS,
-    AGENT_TOOL_META,
+    AGENT_TOOLS,
     agentAllows,
     coerceAgentDefinition,
     type AgentDefinition,
 } from "~/lib/agents/definition";
+import { starterAgent } from "~/lib/agents/starter-agents";
 import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
 
 import type { AIChatResponse } from "../../hooks/useAIChat";
+import { AgentAvatar } from "./AgentAvatar";
 import { AgentEditor } from "./AgentEditor";
 import { useAgents } from "./useMeetings";
-import { initialsOf, personaColor, type AgentPersonaRecord } from "./types";
+import { type AgentPersonaRecord } from "./types";
 
 export interface AgentsPaneProps {
     /** Picks the agent in the chat composer and switches to the chat tab. */
     onUseInChat?: (agentKey: string) => void;
     /** Opens the new-meeting dialog with this agent seated. */
     onStartMeeting?: (agentKey: string) => void;
+    /** Selects an agent by handle — the palette's "Open X in Agents". */
+    selectRequest?: { key: string; nonce: number } | null;
 }
 
 function toDefinition(persona: AgentPersonaRecord): AgentDefinition {
@@ -76,12 +79,13 @@ function toDefinition(persona: AgentPersonaRecord): AgentDefinition {
         temperature: persona.temperature,
         maxTurnChars: persona.maxTurnChars,
         accent: persona.accent,
+        avatarUrl: persona.avatarUrl,
         autonomy: persona.autonomy,
         nodeId: persona.nodeId,
     });
 }
 
-export function AgentsPane({ onUseInChat, onStartMeeting }: AgentsPaneProps) {
+export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: AgentsPaneProps) {
     const { data, loading, error, refresh } = useAgents({ includeArchived: true });
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [query, setQuery] = useState("");
@@ -104,6 +108,13 @@ export function AgentsPane({ onUseInChat, onStartMeeting }: AgentsPaneProps) {
     useEffect(() => {
         if (!selectedId && active.length > 0) setSelectedId(active[0]!.dbId);
     }, [active, selectedId]);
+
+    // A request from the palette wins over the landing choice, once per nonce.
+    useEffect(() => {
+        if (!selectRequest) return;
+        const match = personas.find(p => p.id === selectRequest.key);
+        if (match) setSelectedId(match.dbId);
+    }, [selectRequest, personas]);
 
     const filtered = useMemo(() => {
         const needle = query.trim().toLowerCase();
@@ -350,9 +361,9 @@ export function AgentsPane({ onUseInChat, onStartMeeting }: AgentsPaneProps) {
                             Pick an agent, or write one
                         </div>
                         <p className="max-w-sm text-[12.5px] leading-relaxed">
-                            An agent is a name, a role and standing instructions. The same agent
-                            sits in meetings, answers in chat when picked or @mentioned, and can be
-                            exported as a file.
+                            An agent is a name, a role and standing instructions grounded in a
+                            method that works. The same agent sits in meetings, answers in chat when
+                            picked or @mentioned, and can be exported as a file.
                         </p>
                     </div>
                 )}
@@ -397,12 +408,7 @@ function RosterRow({
                 muted && "opacity-60"
             )}
         >
-            <span
-                className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
-                style={{ background: personaColor(persona) }}
-            >
-                {initialsOf(persona.displayName)}
-            </span>
+            <AgentAvatar agent={persona} size={28} />
             <span className="min-w-0 flex-1">
                 <span className="flex items-baseline gap-1.5">
                     <span
@@ -463,19 +469,14 @@ function AgentDetail({
     const [tab, setTab] = useState("try");
     const definition = useMemo(() => toDefinition(persona), [persona]);
     const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
-    const color = personaColor(persona);
+    const starter = persona.builtin ? starterAgent(persona.id) : undefined;
 
     return (
         <div className="flex min-h-0 flex-1 flex-col">
             <header className="border-line bg-panel border-b px-6 pb-4 pt-5">
-                <div className="flex items-start gap-4">
-                    <span
-                        className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl text-[15px] font-bold text-white"
-                        style={{ background: color }}
-                    >
-                        {initialsOf(persona.displayName)}
-                    </span>
-                    <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-start gap-4">
+                    <AgentAvatar agent={persona} size={56} />
+                    <div className="min-w-[260px] flex-1">
                         <div className="flex flex-wrap items-baseline gap-x-2">
                             <h1 className="serif text-ink m-0 text-[24px] leading-tight">
                                 {persona.displayName}
@@ -493,7 +494,7 @@ function AgentDetail({
                             </p>
                         )}
                     </div>
-                    <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+                    <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
                         {persona.archived ? (
                             <Button variant="outline" size="sm" onClick={onRestore}>
                                 <RotateCcw className="size-3.5" /> Bring back
@@ -576,12 +577,12 @@ function AgentDetail({
                     )}
                     {persona.nodeId && <Badge variant="outline">node {persona.nodeId}</Badge>}
                     <span className="text-ink-4 mx-1">·</span>
-                    {AGENT_TOOL_IDS.map(id => {
-                        const on = agentAllows(persona.tools, id);
+                    {AGENT_TOOLS.map(tool => {
+                        const on = agentAllows(persona.tools, tool.id);
                         return (
                             <span
-                                key={id}
-                                title={AGENT_TOOL_META[id].description}
+                                key={tool.id}
+                                title={`${tool.description}${on ? "" : " (off for this agent)"}`}
                                 className={cn(
                                     "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px]",
                                     on
@@ -589,10 +590,15 @@ function AgentDetail({
                                         : "bg-line-2 text-ink-3 line-through"
                                 )}
                             >
-                                {AGENT_TOOL_META[id].label}
+                                {tool.label}
                             </span>
                         );
                     })}
+                    {persona.tools === null && (
+                        <span className="text-ink-3 text-[11px]">
+                            · every tool, including new ones
+                        </span>
+                    )}
                 </div>
             </header>
 
@@ -621,6 +627,37 @@ function AgentDetail({
                     <pre className="text-ink-2 border-line bg-panel m-0 max-w-[760px] whitespace-pre-wrap rounded-xl border px-5 py-4 font-sans text-[13.5px] leading-relaxed">
                         {persona.systemPrompt}
                     </pre>
+                    {starter && (
+                        <div className="border-line bg-panel-2 mt-5 max-w-[760px] rounded-xl border px-5 py-4">
+                            <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
+                                Where this comes from
+                            </div>
+                            <p className="text-ink-2 m-0 text-[13px] leading-relaxed">
+                                {starter.basis.summary}
+                            </p>
+                            <ul className="m-0 mt-2 list-none p-0">
+                                {starter.basis.sources.map(source => (
+                                    <li
+                                        key={source.title}
+                                        className="text-ink-3 text-[12px] leading-relaxed"
+                                    >
+                                        {source.url ? (
+                                            <a
+                                                href={source.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-brand-ink underline-offset-2 hover:underline"
+                                            >
+                                                {source.title}
+                                            </a>
+                                        ) : (
+                                            source.title
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     <div className="text-ink-3 mt-4 max-w-[760px] text-[12px] leading-relaxed">
                         In chat these instructions go above the answer style
                         {persona.style ? ` (${persona.style})` : ""}; in a meeting they go under the
@@ -813,12 +850,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                                             You
                                         </span>
                                     ) : (
-                                        <span
-                                            className="inline-flex size-5 items-center justify-center rounded-full text-[8px] font-bold text-white"
-                                            style={{ background: personaColor(persona) }}
-                                        >
-                                            {initialsOf(persona.displayName)}
-                                        </span>
+                                        <AgentAvatar agent={persona} size={20} />
                                     )}
                                     <span className="text-ink text-[12.5px] font-semibold">
                                         {turn.role === "user" ? "You" : persona.displayName}

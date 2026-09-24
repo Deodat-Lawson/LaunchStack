@@ -43,6 +43,7 @@ export interface AIChatAgentInfo {
     displayName: string;
     role: string;
     accent: string | null;
+    avatarUrl?: string | null;
     /** What the agent's tool policy changed about this turn, for the UI. */
     notes: string[];
 }

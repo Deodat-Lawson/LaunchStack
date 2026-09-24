@@ -9,6 +9,7 @@
  */
 
 import { parseAgentFile } from "~/lib/agents/agent-file";
+import { starterDefinition } from "~/lib/agents/starter-agents";
 import { resolveChatTurn } from "~/lib/agents/definition";
 import { STARTER_AGENTS } from "~/lib/agents/starter-agents";
 import type {
@@ -100,7 +101,7 @@ export class CollabSimulator {
     private seq = 0;
 
     constructor() {
-        this.personas = STARTER_AGENTS.map((agent, index) => ({
+        this.personas = STARTER_AGENTS.map(starterDefinition).map((agent, index) => ({
             dbId: `persona_${index}`,
             id: agent.key,
             displayName: agent.displayName,
@@ -114,6 +115,7 @@ export class CollabSimulator {
             temperature: agent.temperature ?? undefined,
             maxTurnChars: agent.maxTurnChars ?? undefined,
             accent: agent.accent,
+            avatarUrl: agent.avatarUrl,
             autonomy: agent.autonomy,
             nodeId: null,
             archived: false,
@@ -157,6 +159,7 @@ export class CollabSimulator {
             temperature: typeof input.temperature === "number" ? input.temperature : undefined,
             maxTurnChars: typeof input.maxTurnChars === "number" ? input.maxTurnChars : undefined,
             accent: (input.accent as string | null) ?? null,
+            avatarUrl: (input.avatarUrl as string | null) ?? null,
             autonomy: (input.autonomy as AgentPersonaRecord["autonomy"]) ?? null,
             nodeId: (input.nodeId as string | null) ?? null,
             archived: false,
@@ -183,6 +186,7 @@ export class CollabSimulator {
                 ? { temperature: patch.temperature ?? undefined }
                 : {}),
             ...(patch.accent !== undefined ? { accent: patch.accent } : {}),
+            ...(patch.avatarUrl !== undefined ? { avatarUrl: patch.avatarUrl } : {}),
             ...(patch.autonomy !== undefined ? { autonomy: patch.autonomy } : {}),
             ...(patch.nodeId !== undefined ? { nodeId: patch.nodeId } : {}),
             ...(patch.archived !== undefined ? { archived: patch.archived } : {}),
@@ -205,6 +209,7 @@ export class CollabSimulator {
             route: starter.route,
             temperature: starter.temperature ?? undefined,
             accent: starter.accent,
+            avatarUrl: starter.avatarUrl,
             archived: false,
         });
         return persona;
@@ -523,6 +528,7 @@ export class CollabSimulator {
                 role: p.role,
                 nodeId: null,
                 accent: p.accent ?? null,
+                avatarUrl: p.avatarUrl ?? null,
             })),
             workflowKey: meeting.workflowKey,
             workflowTitle: meeting.workflowTitle,
@@ -604,6 +610,7 @@ export class CollabSimulator {
                           displayName: persona.displayName,
                           role: persona.role,
                           accent: persona.accent ?? null,
+                          avatarUrl: persona.avatarUrl ?? null,
                           notes: turn?.notes ?? [],
                       }
                     : null,

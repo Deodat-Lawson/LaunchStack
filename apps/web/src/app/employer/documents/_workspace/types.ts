@@ -237,6 +237,7 @@ export interface ThreadAgent {
     displayName: string;
     role: string;
     accent: string | null;
+    avatarUrl?: string | null;
     /** What the agent's tool policy changed about the turn (web off, etc.). */
     notes?: string[];
 }

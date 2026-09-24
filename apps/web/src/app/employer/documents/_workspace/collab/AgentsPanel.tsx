@@ -23,14 +23,15 @@ import {
     isAgentAutonomy,
     type AgentAutonomy,
 } from "~/lib/agents/autonomy";
-import { AGENT_MODE_META, AGENT_TOOL_META, deniedTools } from "~/lib/agents/definition";
+import { AGENT_MODE_META, agentTool, disabledTools } from "~/lib/agents/definition";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
 import { IconTrash } from "../icons";
+import { AgentAvatar } from "./AgentAvatar";
 import { AgentEditor } from "./AgentEditor";
 import { useAgents } from "./useMeetings";
-import { initialsOf, personaColor, type AgentPersonaRecord, type WorkerNode } from "./types";
+import { type AgentPersonaRecord, type WorkerNode } from "./types";
 
 export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
     const { data, loading, error, refresh } = useAgents();
@@ -95,6 +96,15 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             >
                 <Card>
                     <SettingRow settingKey="agents.defaultAutonomy" />
+                </Card>
+            </Section>
+
+            <Section
+                title="The default assistant"
+                description="How Launchstack answers in chat when no agent is picked. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
+            >
+                <Card>
+                    <SettingRow settingKey="chat.responseStyle" />
                 </Card>
             </Section>
 
@@ -175,30 +185,13 @@ function AgentCard({
     onArchive: () => void;
     onReset?: () => void;
 }) {
-    const color = personaColor(persona);
     const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
     const inheritsAutonomy = !isAgentAutonomy(persona.autonomy);
-    const denied = deniedTools(persona.tools);
+    const denied = disabledTools(persona.tools);
     return (
         <Card padding={16} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                <span
-                    style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: 9,
-                        background: color,
-                        color: "white",
-                        fontSize: 11,
-                        fontWeight: 700,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                    }}
-                >
-                    {initialsOf(persona.displayName)}
-                </span>
+                <AgentAvatar agent={persona} size={32} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>
                         {persona.displayName}
@@ -243,9 +236,9 @@ function AgentCard({
                     </span>
                 )}
                 {denied.map(tool => (
-                    <span key={tool} title={`${AGENT_TOOL_META[tool].label} is switched off`}>
+                    <span key={tool} title={`${agentTool(tool)?.label ?? tool} is switched off`}>
                         <Badge variant="outline">
-                            no {AGENT_TOOL_META[tool].label.toLowerCase()}
+                            no {(agentTool(tool)?.label ?? tool).toLowerCase()}
                         </Badge>
                     </span>
                 ))}

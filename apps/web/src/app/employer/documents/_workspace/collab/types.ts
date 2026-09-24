@@ -5,7 +5,7 @@
  */
 
 import type { AgentAutonomy } from "~/lib/agents/autonomy";
-import type { AgentMode, AgentStyleId, AgentToolPolicy } from "~/lib/agents/definition";
+import type { AgentMode, AgentStyleId, AgentToolList } from "~/lib/agents/definition";
 
 export type MeetingStatus =
     | "scheduled"
@@ -23,6 +23,8 @@ export interface MeetingParticipant {
     nodeId?: string | null;
     route?: string | null;
     accent?: string | null;
+    /** Picture shown instead of initials, when the agent has one. */
+    avatarUrl?: string | null;
 }
 
 /** One phase of a meeting's workflow, as the engine walks it. */
@@ -142,7 +144,8 @@ export interface AgentPersonaRecord extends MeetingParticipant {
     /** One line on when to use this agent. */
     description: string;
     mode: AgentMode;
-    tools: AgentToolPolicy | null;
+    /** Tool ids from the registry; null = every tool. */
+    tools: AgentToolList;
     style: AgentStyleId | null;
     /** Seeded from the starter roster; can be reset to its shipped definition. */
     builtin: boolean;
@@ -151,7 +154,15 @@ export interface AgentPersonaRecord extends MeetingParticipant {
 /** What the chat needs to know about an agent to pick it and attribute turns. */
 export type ChatAgentOption = Pick<
     AgentPersonaRecord,
-    "id" | "displayName" | "role" | "description" | "accent" | "mode" | "tools" | "builtin"
+    | "id"
+    | "displayName"
+    | "role"
+    | "description"
+    | "accent"
+    | "avatarUrl"
+    | "mode"
+    | "tools"
+    | "builtin"
 >;
 
 export interface WorkerNode {

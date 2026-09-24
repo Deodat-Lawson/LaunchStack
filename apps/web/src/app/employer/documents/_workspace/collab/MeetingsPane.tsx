@@ -32,6 +32,7 @@ import {
     IconUser,
     IconX,
 } from "../icons";
+import { AgentAvatar } from "./AgentAvatar";
 import { MeetingsHome } from "./MeetingsHome";
 import { NewMeetingDialog } from "./NewMeetingDialog";
 import { useAgents, useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
@@ -958,7 +959,7 @@ function ParticipantChip({
                 opacity: occupied ? 0.55 : 1,
             }}
         >
-            <Avatar name={participant.displayName} color={color} size={16} />@{participant.id}
+            <AgentAvatar agent={participant} size={16} />@{participant.id}
             {participant.nodeId && <IconServer size={9} style={{ opacity: 0.6 }} />}
         </span>
     );
@@ -1057,7 +1058,20 @@ function MessageRow({
             }}
         >
             <div style={{ width: 26, flexShrink: 0 }}>
-                {!grouped && <Avatar name={message.author.displayName} color={color} />}
+                {!grouped &&
+                    (isHuman ? (
+                        <Avatar name={message.author.displayName} color={color} />
+                    ) : (
+                        <AgentAvatar
+                            agent={{
+                                id: message.author.id,
+                                displayName: message.author.displayName,
+                                accent: participant?.accent ?? null,
+                                avatarUrl: participant?.avatarUrl ?? null,
+                            }}
+                            size={26}
+                        />
+                    ))}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
                 {!grouped && (
@@ -1162,9 +1176,14 @@ function TypingHint({
     return (
         <div style={{ display: "flex", gap: 10, padding: "8px 24px", alignItems: "center" }}>
             <div style={{ width: 26, flexShrink: 0 }}>
-                <Avatar
-                    name={participant?.displayName ?? nextSpeakerId}
-                    color={personaColor(participant ?? { id: nextSpeakerId })}
+                <AgentAvatar
+                    agent={{
+                        id: nextSpeakerId,
+                        displayName: participant?.displayName ?? nextSpeakerId,
+                        accent: participant?.accent ?? null,
+                        avatarUrl: participant?.avatarUrl ?? null,
+                    }}
+                    size={26}
                 />
             </div>
             <span style={{ fontSize: 12, color: "var(--ink-3)", fontStyle: "italic" }}>
@@ -1289,14 +1308,12 @@ function PlanPanel({
                                         </span>
                                     ) : (
                                         speakers.map(p => (
-                                            <span
+                                            <AgentAvatar
                                                 key={p.id}
+                                                agent={p}
+                                                size={20}
                                                 title={`${p.displayName} — ${p.role}`}
-                                                className="inline-flex size-5 items-center justify-center rounded-full text-[7px] font-bold text-white"
-                                                style={{ background: personaColor(p) }}
-                                            >
-                                                {initialsOf(p.displayName)}
-                                            </span>
+                                            />
                                         ))
                                     )}
                                 </div>

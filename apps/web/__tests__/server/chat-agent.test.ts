@@ -90,7 +90,7 @@ describe("resolveChatAgent", () => {
 
     it("applies the tool policy, route and style to the turn", async () => {
         roster.finance = persona({
-            tools: { web: false, attachments: false },
+            tools: ["retrieval", "reasoning"],
             route: "reasoning",
             style: "organized",
             temperature: 0.2,

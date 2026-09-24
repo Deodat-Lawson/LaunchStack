@@ -81,6 +81,7 @@ export async function GET() {
                 role: p.role,
                 nodeId: p.nodeId ?? null,
                 accent: p.accent ?? null,
+                avatarUrl: p.avatarUrl ?? null,
             })),
             workflowKey: row.workflowKey ?? null,
             workflowTitle: meetingWorkflow(row.workflowKey)?.title ?? null,

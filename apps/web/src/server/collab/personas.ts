@@ -18,14 +18,15 @@ import {
     isAgentMode,
     isAgentRoute,
     isAgentStyle,
-    normalizeToolPolicy,
+    normalizeAvatarUrl,
+    normalizeToolList,
     type AgentDefinition,
     type AgentMode,
     type AgentRouteId,
     type AgentStyleId,
-    type AgentToolPolicy,
+    type AgentToolList,
 } from "~/lib/agents/definition";
-import { STARTER_AGENTS } from "~/lib/agents/starter-agents";
+import { STARTER_AGENTS, starterDefinition, type StarterAgent } from "~/lib/agents/starter-agents";
 import { collabAgentPersona } from "~/server/db/schema";
 import { db } from "~/server/db";
 
@@ -38,8 +39,10 @@ export interface PersonaInput {
     systemPrompt: string;
     description?: string | null;
     mode?: AgentMode | null;
-    tools?: AgentToolPolicy | null;
+    /** Tool ids from `~/lib/agents/tools`; null = every tool. */
+    tools?: AgentToolList;
     style?: AgentStyleId | null;
+    avatarUrl?: string | null;
     nodeId?: string | null;
     route?: AgentRouteId | null;
     /** 0–2, stored as an integer ×100 so the column stays exact. */
@@ -61,7 +64,7 @@ export interface PersonaRecord extends AgentPersona {
     autonomy: AgentAutonomy | null;
     description: string;
     mode: AgentMode;
-    tools: AgentToolPolicy | null;
+    tools: AgentToolList;
     style: AgentStyleId | null;
     builtin: boolean;
 }
@@ -78,11 +81,12 @@ export function rowToPersona(row: PersonaRow): PersonaRecord {
         temperature: row.temperature === null ? undefined : row.temperature / 100,
         maxTurnChars: row.maxTurnChars ?? undefined,
         accent: row.accent ?? undefined,
+        avatarUrl: normalizeAvatarUrl(row.avatarUrl) ?? undefined,
         archived: row.archived,
         autonomy: isAgentAutonomy(row.autonomy) ? row.autonomy : null,
         description: row.description ?? "",
         mode: isAgentMode(row.mode) ? row.mode : DEFAULT_AGENT_MODE,
-        tools: normalizeToolPolicy(row.tools),
+        tools: normalizeToolList(row.tools),
         style: isAgentStyle(row.style) ? row.style : null,
         builtin: row.builtin,
     };
@@ -103,6 +107,7 @@ export function personaToDefinition(persona: PersonaRecord): AgentDefinition {
         temperature: persona.temperature ?? null,
         maxTurnChars: persona.maxTurnChars ?? null,
         accent: persona.accent ?? null,
+        avatarUrl: persona.avatarUrl ?? null,
         autonomy: persona.autonomy,
         nodeId: persona.nodeId ?? null,
     };
@@ -120,6 +125,7 @@ export function personaToParticipant(persona: PersonaRecord): AgentPersona {
         temperature: persona.temperature,
         maxTurnChars: persona.maxTurnChars,
         accent: persona.accent,
+        avatarUrl: persona.avatarUrl,
     };
 }
 
@@ -172,6 +178,7 @@ export async function createPersona(companyId: bigint, input: PersonaInput) {
             mode: input.mode ?? null,
             tools: input.tools ?? null,
             style: input.style ?? null,
+            avatarUrl: input.avatarUrl ?? null,
             nodeId: input.nodeId ?? null,
             route: input.route ?? null,
             temperature: temperatureColumn(input.temperature),
@@ -201,6 +208,7 @@ export async function updatePersona(
             ...(patch.mode !== undefined ? { mode: patch.mode } : {}),
             ...(patch.tools !== undefined ? { tools: patch.tools } : {}),
             ...(patch.style !== undefined ? { style: patch.style } : {}),
+            ...(patch.avatarUrl !== undefined ? { avatarUrl: patch.avatarUrl } : {}),
             ...(patch.nodeId !== undefined ? { nodeId: patch.nodeId } : {}),
             ...(patch.route !== undefined ? { route: patch.route } : {}),
             ...(patch.temperature !== undefined
@@ -245,7 +253,8 @@ export async function unarchivePersona(companyId: bigint, personaDbId: string) {
     return row ? rowToPersona(row) : null;
 }
 
-function starterToInput(agent: (typeof STARTER_AGENTS)[number]): PersonaInput {
+function starterToInput(starter: StarterAgent): PersonaInput {
+    const agent = starterDefinition(starter);
     return {
         key: agent.key,
         displayName: agent.displayName,
@@ -255,6 +264,7 @@ function starterToInput(agent: (typeof STARTER_AGENTS)[number]): PersonaInput {
         mode: agent.mode,
         tools: agent.tools,
         style: agent.style,
+        avatarUrl: agent.avatarUrl,
         route: agent.route,
         temperature: agent.temperature,
         maxTurnChars: agent.maxTurnChars,
@@ -310,6 +320,7 @@ export async function resetStarterPersona(companyId: bigint, personaDbId: string
         temperature: input.temperature,
         maxTurnChars: input.maxTurnChars,
         accent: input.accent,
+        avatarUrl: input.avatarUrl,
         autonomy: input.autonomy,
         archived: false,
     });

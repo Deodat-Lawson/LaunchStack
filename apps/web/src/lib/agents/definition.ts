@@ -15,6 +15,7 @@
  */
 
 import { isAgentAutonomy, type AgentAutonomy } from "./autonomy";
+import { agentAllows, normalizeToolList, type AgentToolList } from "./tools";
 
 // ---------------------------------------------------------------------------
 // Modes
@@ -49,53 +50,21 @@ export function isAgentMode(value: unknown): value is AgentMode {
 }
 
 // ---------------------------------------------------------------------------
-// Tools
+// Tools — the registry lives in ./tools; re-exported so callers have one import
 // ---------------------------------------------------------------------------
 
-/** The capabilities a chat turn can use. An agent may switch each off. */
-export const AGENT_TOOL_IDS = ["retrieval", "web", "reasoning", "attachments"] as const;
-export type AgentToolId = (typeof AGENT_TOOL_IDS)[number];
-
-/** `undefined` for a tool means allowed — the allow-list only records denials. */
-export type AgentToolPolicy = Partial<Record<AgentToolId, boolean>>;
-
-export const AGENT_TOOL_META: Record<AgentToolId, { label: string; description: string }> = {
-    retrieval: {
-        label: "Workspace retrieval",
-        description: "Search the workspace's sources and cite passages from them.",
-    },
-    web: {
-        label: "Web search",
-        description: "Search the web when the person turns it on for a turn.",
-    },
-    reasoning: {
-        label: "Extended reasoning",
-        description: "Use the reasoning route and think before answering.",
-    },
-    attachments: {
-        label: "Attachments",
-        description: "Read files and images attached to a message.",
-    },
-};
-
-export function agentAllows(tools: AgentToolPolicy | null | undefined, id: AgentToolId): boolean {
-    return tools?.[id] !== false;
-}
-
-/** Tool ids an agent has switched off, for badges and the definition file. */
-export function deniedTools(tools: AgentToolPolicy | null | undefined): AgentToolId[] {
-    return AGENT_TOOL_IDS.filter(id => tools?.[id] === false);
-}
-
-export function normalizeToolPolicy(value: unknown): AgentToolPolicy | null {
-    if (!value || typeof value !== "object") return null;
-    const policy: AgentToolPolicy = {};
-    for (const id of AGENT_TOOL_IDS) {
-        const raw = (value as Record<string, unknown>)[id];
-        if (typeof raw === "boolean") policy[id] = raw;
-    }
-    return Object.keys(policy).length > 0 ? policy : null;
-}
+export {
+    AGENT_TOOLS,
+    AGENT_TOOL_IDS,
+    agentAllows,
+    agentTool,
+    disabledTools,
+    enabledTools,
+    isAgentToolId,
+    normalizeToolList,
+    type AgentToolList,
+    type AgentToolSpec,
+} from "./tools";
 
 // ---------------------------------------------------------------------------
 // Response styles the chat already supports
@@ -136,7 +105,8 @@ export interface AgentDefinition {
     /** The standing instructions — the body of the definition file. */
     systemPrompt: string;
     mode: AgentMode;
-    tools: AgentToolPolicy | null;
+    /** Tool ids from the registry; null = every tool. */
+    tools: AgentToolList;
     /** Response style the chat applies under the instructions; null = the chat's default. */
     style: AgentStyleId | null;
     /** Model route hint (`fast`, `reasoning`, …); null = the deployment default. */
@@ -145,6 +115,8 @@ export interface AgentDefinition {
     maxTurnChars: number | null;
     /** Colour used for the avatar and the transcript. */
     accent: string | null;
+    /** Picture shown instead of initials — a path under /agents or an https URL. */
+    avatarUrl: string | null;
     /** Own autonomy level; null inherits the workspace default. */
     autonomy: AgentAutonomy | null;
     /** Which worker node serves this agent; null = this app. */
@@ -273,6 +245,16 @@ export function usableAsSubagent(agent: Pick<AgentDefinition, "mode">): boolean 
     return agent.mode !== "primary";
 }
 
+/** A same-origin path (`/agents/analyst.jpg`) or an https URL; anything else is dropped. */
+export function normalizeAvatarUrl(value: unknown): string | null {
+    if (typeof value !== "string") return null;
+    const trimmed = value.trim();
+    if (trimmed.length === 0 || trimmed.length > 512) return null;
+    if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return trimmed;
+    if (/^https:\/\/[^\s]+$/i.test(trimmed)) return trimmed;
+    return null;
+}
+
 /** Reads a loosely-typed record (a DB row, a parsed file) into a definition. */
 export function coerceAgentDefinition(
     input: Partial<Record<keyof AgentDefinition, unknown>> & { key: string }
@@ -292,13 +274,14 @@ export function coerceAgentDefinition(
         description: typeof input.description === "string" ? input.description.trim() : "",
         systemPrompt: typeof input.systemPrompt === "string" ? input.systemPrompt.trim() : "",
         mode: isAgentMode(input.mode) ? input.mode : DEFAULT_AGENT_MODE,
-        tools: normalizeToolPolicy(input.tools),
+        tools: normalizeToolList(input.tools),
         style: isAgentStyle(input.style) ? input.style : null,
         route: isAgentRoute(input.route) && input.route !== "default" ? input.route : null,
         temperature,
         maxTurnChars,
         accent:
             typeof input.accent === "string" && input.accent.trim() ? input.accent.trim() : null,
+        avatarUrl: normalizeAvatarUrl(input.avatarUrl),
         autonomy: isAgentAutonomy(input.autonomy) ? input.autonomy : null,
         nodeId:
             typeof input.nodeId === "string" && input.nodeId.trim() ? input.nodeId.trim() : null,

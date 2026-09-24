@@ -20,23 +20,22 @@
  * temperature: 0.3
  * autonomy: propose
  * tools:
- *   web: false
+ *   - retrieval
+ *   - reasoning
  * color: oklch(0.6 0.15 30)
+ * avatar: /agents/finance.jpg
  * ---
  * You guard the margin. …
  * ```
  *
  * The parser reads the subset of YAML those files actually use — scalar keys,
- * booleans, numbers, and one level of nested map — and nothing else, on
- * purpose: a dependency-free parser is one the browser can run too.
+ * booleans, numbers, a list of scalars, and one level of nested map — and
+ * nothing else, on purpose: a dependency-free parser is one the browser can
+ * run too. `tools:` accepts both a list (this file, Claude Code) and the
+ * OpenCode map of booleans.
  */
 
-import {
-    AGENT_TOOL_IDS,
-    coerceAgentDefinition,
-    deniedTools,
-    type AgentDefinition,
-} from "./definition";
+import { coerceAgentDefinition, enabledTools, type AgentDefinition } from "./definition";
 
 export interface ParsedAgentFile {
     definition: AgentDefinition;
@@ -52,7 +51,7 @@ export class AgentFileError extends Error {
 }
 
 type Scalar = string | number | boolean | null;
-type FrontMatter = Record<string, Scalar | Record<string, Scalar>>;
+type FrontMatter = Record<string, Scalar | Scalar[] | Record<string, Scalar>>;
 
 function parseScalar(raw: string): Scalar {
     const value = raw.trim();
@@ -73,11 +72,20 @@ function splitFrontMatter(text: string): { matter: FrontMatter; body: string } {
     if (!match) throw new AgentFileError("Missing front matter: the file must start with ---");
 
     const matter: FrontMatter = {};
-    let nested: { key: string; map: Record<string, Scalar> } | null = null;
+    let nested: { key: string; map: Record<string, Scalar>; list: Scalar[] } | null = null;
     for (const rawLine of match[1]!.split("\n")) {
         if (!rawLine.trim() || rawLine.trim().startsWith("#")) continue;
         const indented = /^\s+/.test(rawLine);
         const line = rawLine.trim();
+
+        // A list item under the open key: `  - retrieval`.
+        if (indented && line.startsWith("- ")) {
+            if (!nested) throw new AgentFileError(`Unexpected list item: "${line}"`);
+            nested.list.push(parseScalar(line.slice(2)));
+            matter[nested.key] = nested.list;
+            continue;
+        }
+
         const colon = line.indexOf(":");
         if (colon <= 0) throw new AgentFileError(`Cannot read front matter line: "${line}"`);
         const key = line.slice(0, colon).trim();
@@ -86,14 +94,20 @@ function splitFrontMatter(text: string): { matter: FrontMatter; body: string } {
         if (indented) {
             if (!nested) throw new AgentFileError(`Unexpected indented line: "${line}"`);
             nested.map[key] = parseScalar(rest);
+            matter[nested.key] = nested.map;
             continue;
         }
         if (rest.trim() === "") {
-            nested = { key, map: {} };
+            nested = { key, map: {}, list: [] };
             matter[key] = nested.map;
             continue;
         }
         nested = null;
+        // Inline list: `tools: retrieval, web` (Claude Code's spelling).
+        if (key === "tools" && rest.includes(",")) {
+            matter[key] = rest.split(",").map(item => parseScalar(item));
+            continue;
+        }
         matter[key] = parseScalar(rest);
     }
     return { matter, body: match[2]!.trim() };
@@ -117,6 +131,8 @@ const KNOWN_KEYS = new Set([
     "tools",
     "color",
     "accent",
+    "avatar",
+    "avatarUrl",
     "node",
     "nodeId",
 ]);
@@ -138,13 +154,9 @@ export function parseAgentFile(text: string): ParsedAgentFile {
             "The body under the front matter is the system prompt; it is empty"
         );
 
-    const tools = matter.tools;
-    const toolPolicy: Record<string, unknown> = {};
-    if (tools && typeof tools === "object") {
-        for (const id of AGENT_TOOL_IDS) {
-            if (typeof tools[id] === "boolean") toolPolicy[id] = tools[id];
-        }
-    }
+    // `tools` arrives as a list, an inline list, or the OpenCode map; the
+    // registry's normaliser reads all three. Absent means every tool.
+    const tools = "tools" in matter ? matter.tools : undefined;
 
     const definition = coerceAgentDefinition({
         key,
@@ -153,12 +165,13 @@ export function parseAgentFile(text: string): ParsedAgentFile {
         description: scalar("description") ?? "",
         systemPrompt: body,
         mode: scalar("mode"),
-        tools: toolPolicy,
+        tools,
         style: scalar("style"),
         route: scalar("model") ?? scalar("route"),
         temperature: scalar("temperature"),
         maxTurnChars: scalar("maxTurnChars") ?? scalar("max_turn_chars"),
         accent: scalar("color") ?? scalar("accent"),
+        avatarUrl: scalar("avatar") ?? scalar("avatarUrl"),
         autonomy: scalar("autonomy"),
         nodeId: scalar("node") ?? scalar("nodeId"),
     });
@@ -196,12 +209,12 @@ export function serializeAgentFile(agent: AgentDefinition): string {
     if (agent.temperature !== null) lines.push(`temperature: ${agent.temperature}`);
     if (agent.maxTurnChars !== null) lines.push(`maxTurnChars: ${agent.maxTurnChars}`);
     if (agent.autonomy) lines.push(`autonomy: ${agent.autonomy}`);
-    const denied = deniedTools(agent.tools);
-    if (denied.length > 0) {
+    if (agent.tools !== null) {
         lines.push("tools:");
-        for (const id of denied) lines.push(`  ${id}: false`);
+        for (const id of enabledTools(agent.tools)) lines.push(`  - ${id}`);
     }
     if (agent.accent) lines.push(`color: ${yamlScalar(agent.accent)}`);
+    if (agent.avatarUrl) lines.push(`avatar: ${yamlScalar(agent.avatarUrl)}`);
     if (agent.nodeId) lines.push(`node: ${yamlScalar(agent.nodeId)}`);
     lines.push("---", "", agent.systemPrompt.trim(), "");
     return lines.join("\n");

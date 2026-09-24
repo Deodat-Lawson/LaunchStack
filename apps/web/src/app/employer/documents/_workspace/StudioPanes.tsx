@@ -38,6 +38,8 @@ export interface StudioPaneContext {
         onStartMeeting?: (agentKey: string) => void;
         onOpenAgents?: () => void;
         newMeetingRequest?: { workflowKey?: string | null; seats?: string[]; nonce: number } | null;
+        /** A request to select one agent in the Agents app (from the palette). */
+        openAgentRequest?: { key: string; nonce: number } | null;
     };
 }
 
@@ -489,6 +491,7 @@ export function AgentsStudioPane({ context }: PaneProps & { context?: StudioPane
             <AgentsPane
                 onUseInChat={context?.agents?.onUseInChat}
                 onStartMeeting={context?.agents?.onStartMeeting}
+                selectRequest={context?.agents?.openAgentRequest ?? null}
             />
         </div>
     );

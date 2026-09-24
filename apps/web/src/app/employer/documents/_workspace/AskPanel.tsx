@@ -52,7 +52,8 @@ import {
     usableAsPrimary,
     usableAsSubagent,
 } from "~/lib/agents/definition";
-import { initialsOf, personaColor, type ChatAgentOption } from "./collab/types";
+import { AgentAvatar } from "./collab/AgentAvatar";
+import { personaColor, type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
 import {
@@ -346,6 +347,7 @@ function Message({
                         displayName: live.displayName,
                         role: live.role,
                         accent: live.accent ?? null,
+                        avatarUrl: live.avatarUrl ?? null,
                     }
                   : { ...msg.agent, displayName: msg.agent.displayName || `@${msg.agent.key}` };
           })()
@@ -450,23 +452,16 @@ function Message({
         <div {...ctxTarget} style={{ animation: "lsw-fadeIn 240ms ease-out", marginBottom: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 {agent ? (
-                    <div
-                        title={`${agent.displayName}${agent.role ? ` — ${agent.role}` : ""}`}
-                        style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: "50%",
-                            background: agent.accent ?? personaColor({ id: agent.key }),
-                            color: "white",
-                            fontSize: 8,
-                            fontWeight: 700,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
+                    <AgentAvatar
+                        agent={{
+                            id: agent.key,
+                            displayName: agent.displayName,
+                            accent: agent.accent,
+                            avatarUrl: agent.avatarUrl ?? null,
                         }}
-                    >
-                        {initialsOf(agent.displayName)}
-                    </div>
+                        size={22}
+                        title={`${agent.displayName}${agent.role ? ` — ${agent.role}` : ""}`}
+                    />
                 ) : (
                     <div
                         style={{
@@ -1165,12 +1160,7 @@ function Composer({
                                     : "text-ink-2"
                             )}
                         >
-                            <span
-                                className="inline-flex size-5 items-center justify-center rounded-full text-[8px] font-bold text-white"
-                                style={{ background: personaColor(option) }}
-                            >
-                                {initialsOf(option.displayName)}
-                            </span>
+                            <AgentAvatar agent={option} size={20} />
                             <span className="text-[12.5px] font-medium">{option.displayName}</span>
                             <span className="mono text-[11px] opacity-70">@{option.id}</span>
                             <span className="ml-auto truncate text-[11px] opacity-70">
@@ -1445,22 +1435,7 @@ function AgentPill({
                 >
                     {shown ? (
                         <>
-                            <span
-                                style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: "50%",
-                                    background: personaColor(shown),
-                                    color: "white",
-                                    fontSize: 8,
-                                    fontWeight: 700,
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                {initialsOf(shown.displayName)}
-                            </span>
+                            <AgentAvatar agent={shown} size={18} />
                             <span style={{ fontWeight: 600 }}>{shown.displayName}</span>
                             {mentioned && (
                                 <span style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
@@ -1525,12 +1500,7 @@ function AgentPill({
                                     : "text-ink-2 hover:bg-line-2"
                             )}
                         >
-                            <span
-                                className="inline-flex size-6 items-center justify-center rounded-full text-[9px] font-bold text-white"
-                                style={{ background: personaColor(option) }}
-                            >
-                                {initialsOf(option.displayName)}
-                            </span>
+                            <AgentAvatar agent={option} size={24} />
                             <span className="min-w-0 flex-1">
                                 <span className="flex items-baseline gap-1.5">
                                     <span className="text-[12.5px] font-medium">

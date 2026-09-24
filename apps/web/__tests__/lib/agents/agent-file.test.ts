@@ -5,7 +5,7 @@
 
 import { AgentFileError, parseAgentFile, serializeAgentFile } from "~/lib/agents/agent-file";
 import type { AgentDefinition } from "~/lib/agents/definition";
-import { STARTER_AGENTS } from "~/lib/agents/starter-agents";
+import { STARTER_AGENTS, starterDefinition } from "~/lib/agents/starter-agents";
 
 const DANA: AgentDefinition = {
     key: "finance",
@@ -14,12 +14,13 @@ const DANA: AgentDefinition = {
     description: "Guards margin: asks what it costs.",
     systemPrompt: "You guard the margin.\n\nAsk what it costs.",
     mode: "all",
-    tools: { web: false },
+    tools: ["retrieval", "reasoning", "attachments"],
     style: "organized",
     route: "reasoning",
     temperature: 0.2,
     maxTurnChars: 1200,
     accent: "oklch(0.6 0.15 30)",
+    avatarUrl: "/agents/finance.jpg",
     autonomy: "propose",
     nodeId: null,
 };
@@ -33,10 +34,24 @@ describe("agent file", () => {
         expect(unknownKeys).toEqual([]);
     });
 
+    it("writes tools as a list and the picture as `avatar`", () => {
+        const text = serializeAgentFile(DANA);
+        expect(text).toContain("tools:\n  - retrieval\n  - reasoning\n  - attachments\n");
+        expect(text).toContain("avatar: /agents/finance.jpg");
+        // An unrestricted agent writes no tools key at all.
+        expect(serializeAgentFile({ ...DANA, tools: null })).not.toContain("tools:");
+    });
+
     it("round-trips every starter agent", () => {
         for (const starter of STARTER_AGENTS) {
-            expect(parseAgentFile(serializeAgentFile(starter)).definition).toEqual(starter);
+            const definition = starterDefinition(starter);
+            expect(parseAgentFile(serializeAgentFile(definition)).definition).toEqual(definition);
         }
+    });
+
+    it("reads Claude Code's inline tool list", () => {
+        const file = "---\nname: reviewer\ntools: retrieval, reasoning\n---\nReview.";
+        expect(parseAgentFile(file).definition.tools).toEqual(["retrieval", "reasoning"]);
     });
 
     it("reads an OpenCode-style file with a model and nested tools", () => {
@@ -59,7 +74,7 @@ describe("agent file", () => {
         expect(definition.key).toBe("security-reviewer");
         expect(definition.mode).toBe("subagent");
         expect(definition.route).toBe("reasoning");
-        expect(definition.tools).toEqual({ web: false, attachments: false });
+        expect(definition.tools).toEqual(["retrieval", "reasoning"]);
         expect(definition.displayName).toBe("security-reviewer");
         expect(definition.role).toBe("security-reviewer");
         expect(definition.systemPrompt).toBe(

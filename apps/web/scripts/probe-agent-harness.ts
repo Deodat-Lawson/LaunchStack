@@ -46,9 +46,15 @@ async function main() {
     const again = await ensureStarterPersonas(companyId);
     assert(again.length === 10, "seeding is idempotent");
 
-    await updatePersona(companyId, finance.dbId, { tools: { web: false }, mode: "subagent" });
+    await updatePersona(companyId, finance.dbId, {
+        tools: ["retrieval", "reasoning", "attachments"],
+        mode: "subagent",
+    });
     const edited = await getPersonaByKey(companyId, "finance");
-    assert(edited?.tools?.web === false && edited.mode === "subagent", "tools and mode persist");
+    assert(
+        edited?.tools !== null && !edited?.tools?.includes("web") && edited?.mode === "subagent",
+        "tools and mode persist"
+    );
     await expectReject(
         () =>
             resolveChatAgent(companyId, "finance", {

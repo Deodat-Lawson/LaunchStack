@@ -1,5 +1,5 @@
 {
-  "id": "e4dc3c2d-7087-4ad6-8569-699e813d6818",
+  "id": "74722058-0f6c-462c-84be-f350b45dc9dc",
   "prevId": "6fa31e9f-15b0-4134-89a9-d541afb0bb59",
   "version": "7",
   "dialect": "postgresql",
@@ -2849,6 +2849,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {

@@ -250,8 +250,13 @@ export function ProfileEditor({
         setPhotoBusy("workspace");
         try {
             await sendProfileWrite("/api/profile/workspace", { method: "DELETE" });
-            setDraft(null);
-            lastBase.current = null;
+            // Only the workspace fields reset. Unsaved profile edits stay: the
+            // store update above rebases the draft, which keeps edited fields,
+            // so the workspace ones are cleared explicitly (an unsaved edit
+            // there is exactly what Reset is meant to throw away).
+            setDraft(current =>
+                current ? { ...current, workspaceDisplayName: "", workspaceTitle: "" } : current
+            );
             toast.success("Using your profile in this workspace");
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Could not reset.");

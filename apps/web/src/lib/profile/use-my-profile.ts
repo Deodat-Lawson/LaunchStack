@@ -5,10 +5,14 @@
  *
  * One module-level store rather than a fetch per component: the avatar in
  * the header and the editor in Settings read the same object, so saving a
- * photo in one repaints the other with no reload. A component mounting
- * revalidates in the background (at most once every few seconds), which is
- * also how the store follows a workspace switch — the new workspace's shell
- * mounts and asks again.
+ * photo in one repaints the other with no reload.
+ *
+ * Every mount revalidates (components mounting together share one request).
+ * The profile depends on the active workspace, and client-side navigation
+ * keeps this module alive across a switch, so a time-based "fresh enough"
+ * window would let one workspace's look survive into the next. Anything that
+ * changes the active workspace also calls `resetMyProfile()` before it
+ * navigates, so the old look is never shown while the new one loads.
  */
 
 import { useEffect, useSyncExternalStore } from "react";
@@ -22,12 +26,13 @@ interface State {
     loaded: boolean;
 }
 
-let state: State = { data: null, error: null, loaded: false };
-let inflight: Promise<MyProfile | null> | null = null;
-let fetchedAt = 0;
-const listeners = new Set<() => void>();
+const EMPTY: State = { data: null, error: null, loaded: false };
 
-const REVALIDATE_AFTER_MS = 3_000;
+let state: State = EMPTY;
+let inflight: Promise<MyProfile | null> | null = null;
+/** Bumped by `resetMyProfile`; a response from an older generation is dropped. */
+let generation = 0;
+const listeners = new Set<() => void>();
 
 function emit(next: Partial<State>) {
     state = { ...state, ...next };
@@ -40,8 +45,10 @@ function subscribe(listener: () => void) {
 }
 
 export function refreshMyProfile(): Promise<MyProfile | null> {
-    inflight ??= fetch("/api/profile", { cache: "no-store" })
+    const started = generation;
+    const current = (inflight ??= fetch("/api/profile", { cache: "no-store" })
         .then(async response => {
+            if (started !== generation) return null;
             if (!response.ok) {
                 const body = (await response.json().catch(() => ({}))) as { error?: string };
                 // 401/404 are "no profile yet", not an error worth showing.
@@ -55,18 +62,20 @@ export function refreshMyProfile(): Promise<MyProfile | null> {
                 return null;
             }
             const data = (await response.json()) as MyProfile;
+            if (started !== generation) return null;
             setMyProfile(data);
             return data;
         })
         .catch(() => {
-            emit({ loaded: true, error: "Could not load your profile." });
+            if (started === generation) {
+                emit({ loaded: true, error: "Could not load your profile." });
+            }
             return null;
         })
         .finally(() => {
-            fetchedAt = Date.now();
-            inflight = null;
-        });
-    return inflight;
+            if (inflight === current) inflight = null;
+        }));
+    return current;
 }
 
 /** Replaces the cached profile with a server response (every write route returns one). */
@@ -74,8 +83,20 @@ export function setMyProfile(data: MyProfile) {
     // Other people can look different in another workspace; drop their looks
     // when this tab's active workspace changes.
     if (state.data && state.data.workspace?.id !== data.workspace?.id) resetPeopleCache();
-    fetchedAt = Date.now();
     emit({ data, error: null, loaded: true });
+}
+
+/**
+ * Forget the cached profile (and other people's looks). Call it when the
+ * active workspace is about to change — switching, creating or joining one —
+ * so the next screen loads its own look instead of showing the last one's.
+ */
+export function resetMyProfile() {
+    generation += 1;
+    inflight = null;
+    resetPeopleCache();
+    state = EMPTY;
+    for (const listener of listeners) listener();
 }
 
 /** `enabled: false` reads the cache without fetching — for chrome that renders signed out too. */
@@ -86,9 +107,7 @@ export function useMyProfile({ enabled = true }: { enabled?: boolean } = {}): St
         () => state
     );
     useEffect(() => {
-        if (enabled && !inflight && Date.now() - fetchedAt > REVALIDATE_AFTER_MS) {
-            void refreshMyProfile();
-        }
+        if (enabled) void refreshMyProfile();
     }, [enabled]);
     return snapshot;
 }

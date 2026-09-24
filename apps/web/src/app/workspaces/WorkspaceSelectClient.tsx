@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
-import { useMyProfile } from "~/lib/profile/use-my-profile";
+import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -270,6 +270,7 @@ export function WorkspaceSelectClient({
                 return;
             }
             const data = (await res.json()) as { redirectTo?: string };
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
         } catch (err) {
             console.error(err);
@@ -312,6 +313,7 @@ export function WorkspaceSelectClient({
                 setSubmitting(false);
                 return;
             }
+            resetMyProfile();
             router.push("/employer/documents");
             router.refresh();
         } catch (err) {
@@ -345,6 +347,7 @@ export function WorkspaceSelectClient({
                 setAcceptingId(null);
                 return;
             }
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
             router.refresh();
         } catch (err) {

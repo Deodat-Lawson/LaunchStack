@@ -48,7 +48,11 @@ export function providerPhotoSource(raw: string | null | undefined): URL | null 
     } catch {
         return null;
     }
-    if (url.protocol !== "https:" || url.username || url.password || url.port) return null;
+    // https, default port, and nothing between the scheme and the host: a URL
+    // carrying userinfo does not start with its own origin.
+    if (url.protocol !== "https:" || url.port !== "" || !url.href.startsWith(`${url.origin}/`)) {
+        return null;
+    }
     const provider = Object.entries(PROVIDER_PHOTO_HOSTS).find(([, host]) =>
         host.test(url.hostname)
     )?.[0];

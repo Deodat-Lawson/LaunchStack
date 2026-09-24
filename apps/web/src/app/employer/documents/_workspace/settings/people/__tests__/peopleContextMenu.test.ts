@@ -6,6 +6,10 @@ const member: Member = {
     authUserId: "u1",
     name: "Ada",
     email: "ada@example.com",
+    displayName: "Ada",
+    title: null,
+    pronouns: null,
+    avatarUrl: null,
     role: "member",
     roleName: "Member",
     status: "active",
@@ -33,7 +37,14 @@ describe("member menu builder", () => {
         const h = handlers();
         const items = buildMemberMenuItems(
             member,
-            { roles, roleEditable: true, canManage: true, canTransfer: true, owner: false, busy: false },
+            {
+                roles,
+                roleEditable: true,
+                canManage: true,
+                canTransfer: true,
+                owner: false,
+                busy: false,
+            },
             h
         );
         expect(items.map(i => i.id)).toEqual([
@@ -50,26 +61,52 @@ describe("member menu builder", () => {
         const admin = role?.type === "submenu" ? role.items.find(i => i.id === "role-admin") : null;
         if (admin?.type === "item") admin.onSelect();
         expect(h.onChangeRole).toHaveBeenCalledWith("admin");
-        expect(role?.type === "submenu" ? role.items.find(i => i.id === "role-member") : null).toMatchObject({
+        expect(
+            role?.type === "submenu" ? role.items.find(i => i.id === "role-member") : null
+        ).toMatchObject({
             checked: true,
             disabled: true,
         });
     });
 
     it("offers approve to a pending member and reinstate to a suspended one", () => {
-        const state = { roles, roleEditable: false, canManage: true, canTransfer: false, owner: false, busy: false };
+        const state = {
+            roles,
+            roleEditable: false,
+            canManage: true,
+            canTransfer: false,
+            owner: false,
+            busy: false,
+        };
         const pending = buildMemberMenuItems({ ...member, status: "pending" }, state, handlers());
-        expect(pending.map(i => i.id)).toEqual(["title", "copy-email", "sep-access", "approve", "sep-danger", "remove"]);
-        const suspended = buildMemberMenuItems({ ...member, status: "suspended" }, state, handlers());
+        expect(pending.map(i => i.id)).toEqual([
+            "title",
+            "copy-email",
+            "sep-access",
+            "approve",
+            "sep-danger",
+            "remove",
+        ]);
+        const suspended = buildMemberMenuItems(
+            { ...member, status: "suspended" },
+            state,
+            handlers()
+        );
         expect(suspended.find(i => i.id === "reinstate")).toBeDefined();
     });
 
     it("gives yourself and the owner only the harmless verbs", () => {
-        const state = { roles, roleEditable: false, canManage: true, canTransfer: true, owner: false, busy: false };
-        expect(buildMemberMenuItems({ ...member, isSelf: true }, state, handlers()).map(i => i.id)).toEqual([
-            "title",
-            "copy-email",
-        ]);
+        const state = {
+            roles,
+            roleEditable: false,
+            canManage: true,
+            canTransfer: true,
+            owner: false,
+            busy: false,
+        };
+        expect(
+            buildMemberMenuItems({ ...member, isSelf: true }, state, handlers()).map(i => i.id)
+        ).toEqual(["title", "copy-email"]);
         expect(
             buildMemberMenuItems(member, { ...state, owner: true }, handlers()).map(i => i.id)
         ).toEqual(["title", "copy-email"]);
@@ -90,12 +127,22 @@ describe("invitation menu builder", () => {
     };
 
     it("resends and revokes an open invitation, but only copies a closed one", () => {
-        const open = buildInvitationMenuItems(invitation, { open: true, busy: false }, {
-            onResend: jest.fn(),
-            onCopyEmail: jest.fn(),
-            onRevoke: jest.fn(),
-        });
-        expect(open.map(i => i.id)).toEqual(["title", "resend", "copy-email", "sep-danger", "revoke"]);
+        const open = buildInvitationMenuItems(
+            invitation,
+            { open: true, busy: false },
+            {
+                onResend: jest.fn(),
+                onCopyEmail: jest.fn(),
+                onRevoke: jest.fn(),
+            }
+        );
+        expect(open.map(i => i.id)).toEqual([
+            "title",
+            "resend",
+            "copy-email",
+            "sep-danger",
+            "revoke",
+        ]);
         const closed = buildInvitationMenuItems(
             { ...invitation, status: "accepted" },
             { open: false, busy: false },

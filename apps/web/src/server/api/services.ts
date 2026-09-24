@@ -329,9 +329,17 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         id: "workspace",
         tier: "system",
         summary:
-            "Accounts, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
+            "Accounts, profiles, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
         scope: "mixed",
-        routes: ["auth", "workspaces", "signup", "workspace", "fetchUserInfo"],
+        routes: [
+            "auth",
+            "workspaces",
+            "signup",
+            "workspace",
+            "fetchUserInfo",
+            "profile",
+            "profile-images",
+        ],
         unscopedRoutes: {
             "auth/*": "better-auth's own surface — sign-in/out/up, sessions, password reset.",
             "signup/*": "Runs before a user row or membership exists.",
@@ -346,20 +354,25 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
                 "Session only: creates the membership it would otherwise require.",
             "workspace/members/leave": "Removes the caller's own membership.",
             fetchUserInfo: "User-level identity, not workspace-scoped.",
+            profile:
+                "A profile belongs to the person; the workspace half is added when one is active.",
+            "profile/photo": "Same: `scope=global` works without a workspace.",
+            "profile-images/[id]":
+                "One person's photo shows in every workspace they share with the viewer; visibility is checked per image.",
         },
     },
     {
         id: "settings",
         tier: "system",
         summary:
-            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive — and the profile mirror.",
+            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive.",
         scope: "workspace",
         routes: ["settings"],
         notes:
             "`settings` is the one write path (registry-validated, permission-gated, audited). " +
             "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
-            "overviews computed for the panel; `settings/account` mirrors a Better Auth name " +
-            "change into the product `users` row.",
+            "overviews computed for the panel. The Account section's profile is the `workspace` " +
+            "service's `profile` routes.",
     },
     {
         id: "platform-ops",

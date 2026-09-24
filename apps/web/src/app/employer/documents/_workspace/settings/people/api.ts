@@ -17,8 +17,14 @@ import type {
 export interface Member {
     id: number;
     authUserId: string;
+    /** Full name. */
     name: string;
     email: string;
+    /** How they appear in this workspace (override, else profile, else name). */
+    displayName: string;
+    title: string | null;
+    pronouns: string | null;
+    avatarUrl: string | null;
     role: string;
     roleName: string;
     status: MembershipStatus;

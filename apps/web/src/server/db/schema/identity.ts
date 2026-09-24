@@ -15,6 +15,7 @@ import {
     bigint,
     bigserial,
     boolean,
+    customType,
     index,
     integer,
     timestamp,
@@ -46,6 +47,16 @@ export const users = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // The person's profile — the same in every workspace unless a
+        // membership overrides it (see `userCompanyMemberships`). Limits
+        // mirror `~/lib/profile/fields`. Declared last: ADD COLUMN appends
+        // physically (see the note on `invite_codes`).
+        displayName: varchar("display_name", { length: 80 }),
+        title: varchar("title", { length: 100 }),
+        pronouns: varchar("pronouns", { length: 40 }),
+        timeZone: varchar("time_zone", { length: 64 }),
+        bio: varchar("bio", { length: 280 }),
     },
     table => ({
         companyIdIdx: index("users_company_id_idx").on(table.companyId),
@@ -120,6 +131,12 @@ export const userCompanyMemberships = pgTable(
         // Added after the table shipped — see the note on `invite_codes`.
         status: varchar("status", { length: 16 }).default("active").notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // How this person appears in this workspace only. Null means "use my
+        // profile". The photo override is a `profile_images` row keyed by
+        // (user, company). Removed with the membership.
+        profileDisplayName: varchar("profile_display_name", { length: 80 }),
+        profileTitle: varchar("profile_title", { length: 100 }),
     },
     table => ({
         uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(
@@ -132,6 +149,58 @@ export const userCompanyMemberships = pgTable(
             table.companyId,
             table.status
         ),
+    })
+);
+
+// ============================================================================
+// Profile photos
+// ============================================================================
+// Re-encoded server-side (square WebP, metadata stripped) and small, so the
+// bytes live in Postgres rather than the document storage backend: every
+// deployment serves them the same way, and they never pass through the
+// company-scoped `/api/files` route, which could not show one person's photo
+// in two workspaces.
+//
+// One row per scope: `company_id` null is the person's own photo; a set
+// `company_id` is their photo for that workspace only. Replacing a photo
+// inserts a new row with a new id, so `/api/profile-images/<id>` is
+// immutable and cacheable forever.
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({
+    dataType: () => "bytea",
+});
+
+export const profileImages = pgTable(
+    "profile_images",
+    {
+        /** Random, URL-safe; the image URL is `/api/profile-images/<id>`. */
+        id: varchar("id", { length: 32 }).primaryKey(),
+        userId: bigint("user_id", { mode: "bigint" })
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        /** Null: shown wherever this person has no override. Set: that workspace only. */
+        companyId: bigint("company_id", { mode: "bigint" }).references(() => company.id, {
+            onDelete: "cascade",
+        }),
+        mimeType: varchar("mime_type", { length: 32 }).notNull(),
+        data: bytea("data").notNull(),
+        byteSize: integer("byte_size").notNull(),
+        width: integer("width").notNull(),
+        height: integer("height").notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        /** One photo per person … */
+        userGlobalUnique: uniqueIndex("profile_images_user_global_unique")
+            .on(table.userId)
+            .where(sql`company_id is null`),
+        /** … and at most one override per workspace. */
+        userCompanyUnique: uniqueIndex("profile_images_user_company_unique")
+            .on(table.userId, table.companyId)
+            .where(sql`company_id is not null`),
+        companyIdIdx: index("profile_images_company_id_idx").on(table.companyId),
     })
 );
 
@@ -169,3 +238,5 @@ export type User = InferSelectModel<typeof users>;
 export type InviteCode = InferSelectModel<typeof inviteCodes>;
 
 export type UserCompanyMembership = InferSelectModel<typeof userCompanyMemberships>;
+
+export type ProfileImage = InferSelectModel<typeof profileImages>;

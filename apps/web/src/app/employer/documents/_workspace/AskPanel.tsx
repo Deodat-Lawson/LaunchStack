@@ -61,7 +61,9 @@ import {
     transcriptFilename,
     transcriptMarkdown,
 } from "./transcript";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
 
@@ -1353,9 +1355,11 @@ function EmptyState({
 const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
 
 export interface AvatarMenuProps {
-    userInitials: string;
+    /** How the active workspace sees you — `useMyProfile().data.effective`. */
     userName?: string;
     userEmail?: string;
+    userTitle?: string | null;
+    avatarUrl?: string | null;
     onOpenSettings: () => void;
     onSignOut?: () => void;
 }
@@ -1397,9 +1401,10 @@ export function JumpToPaletteButton({ onClick }: { onClick: () => void }) {
 }
 
 export function AvatarMenu({
-    userInitials,
     userName,
     userEmail,
+    userTitle,
+    avatarUrl,
     onOpenSettings,
     onSignOut,
 }: AvatarMenuProps) {
@@ -1419,28 +1424,17 @@ export function AvatarMenu({
 
     return (
         <div ref={ref} style={{ position: "relative" }}>
-            <button
+            <Button
                 type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Account menu"
+                aria-expanded={open}
                 onClick={() => setOpen(v => !v)}
-                style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: "50%",
-                    background:
-                        "linear-gradient(135deg, oklch(0.7 0.12 282), oklch(0.55 0.18 260))",
-                    color: "white",
-                    fontSize: 12,
-                    fontWeight: 700,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 0,
-                    border: "none",
-                    cursor: "pointer",
-                }}
+                className="size-8 rounded-full p-0 hover:bg-transparent"
             >
-                {userInitials}
-            </button>
+                <ProfileAvatar name={userName} email={userEmail} src={avatarUrl} />
+            </Button>
             {open && (
                 <div
                     style={{
@@ -1458,18 +1452,25 @@ export function AvatarMenu({
                     }}
                 >
                     <div
-                        style={{
-                            padding: "10px 10px 10px",
-                            borderBottom: workspaceSwitcher ? "none" : "1px solid var(--line)",
-                            marginBottom: workspaceSwitcher ? 0 : 6,
-                        }}
-                    >
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>
-                            {userName ?? "Your account"}
-                        </div>
-                        {userEmail && (
-                            <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{userEmail}</div>
+                        className={cn(
+                            "flex items-center gap-2.5 p-2.5",
+                            !workspaceSwitcher && "border-line mb-1.5 border-b"
                         )}
+                    >
+                        <ProfileAvatar
+                            name={userName}
+                            email={userEmail}
+                            src={avatarUrl}
+                            className="size-9"
+                        />
+                        <div className="min-w-0">
+                            <div className="text-ink truncate text-[13px] font-semibold">
+                                {userName ?? "Your account"}
+                            </div>
+                            <div className="text-ink-3 truncate text-[11px]">
+                                {userTitle ?? userEmail}
+                            </div>
+                        </div>
                     </div>
                     {workspaceSwitcher && (
                         <WorkspaceSwitcherDropdownRow

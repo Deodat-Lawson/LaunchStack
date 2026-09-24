@@ -311,7 +311,7 @@ export function AgentEditor({
                         size={36}
                     />
                     <div className="min-w-0 flex-1">
-                        <DialogTitle className="serif text-ink text-[20px]">
+                        <DialogTitle className="display text-ink text-[20px]">
                             {isNew ? "New agent" : `Edit ${persona.displayName}`}
                         </DialogTitle>
                         <DialogDescription className="mt-0.5">

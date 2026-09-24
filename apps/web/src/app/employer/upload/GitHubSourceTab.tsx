@@ -1,15 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-    Github,
-    Loader2,
-    ChevronDown,
-    ChevronUp,
-    Lock,
-    CheckCircle,
-    AlertCircle,
-} from "lucide-react";
+import { Loader2, ChevronDown, ChevronUp, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { IconGithub } from "~/components/icons/brand";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -46,7 +39,7 @@ const codeBlockStyle: React.CSSProperties = {
     padding: "10px 12px",
     borderRadius: 8,
     overflowX: "auto",
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'JetBrains Mono', monospace",
+    fontFamily: "var(--font-mono)",
     lineHeight: 1.5,
     wordBreak: "break-all",
     whiteSpace: "pre-wrap",
@@ -269,7 +262,7 @@ export function GitHubSourceTab({
                         </>
                     ) : (
                         <>
-                            <Github size={14} />
+                            <IconGithub size={14} />
                             Index repository
                         </>
                     )}

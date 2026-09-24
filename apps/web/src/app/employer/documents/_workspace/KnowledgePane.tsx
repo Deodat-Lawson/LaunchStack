@@ -11,10 +11,18 @@
  */
 
 import React, { useCallback, useMemo, useState } from "react";
-import { Lock } from "lucide-react";
+import {
+    Lock,
+    Check as IconCheck,
+    Funnel as IconFilter,
+    LayoutGrid as IconGrid,
+    List as IconList,
+    Plus as IconPlus,
+    Search as IconSearch,
+    X as IconX,
+} from "lucide-react";
 import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
-import { IconCheck, IconFilter, IconGrid, IconList, IconPlus, IconSearch, IconX } from "./icons";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
@@ -200,7 +208,7 @@ export function KnowledgePane({
                             Knowledge
                         </div>
                         <h2
-                            className="serif"
+                            className="display"
                             style={{
                                 fontSize: 24,
                                 margin: "3px 0 0",
@@ -1070,7 +1078,7 @@ function EmptyState({
                 textAlign: "center",
             }}
         >
-            <h3 className="serif" style={{ fontSize: 19, margin: 0, color: "var(--ink)" }}>
+            <h3 className="display" style={{ fontSize: 19, margin: 0, color: "var(--ink)" }}>
                 {filtersActive ? "Nothing matches those filters" : "No knowledge yet"}
             </h3>
             <p

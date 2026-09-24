@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -390,18 +391,7 @@ export function WorkspaceSelectClient({
                     {account.email ? (
                         <span className={styles.meEmail}>· {account.email}</span>
                     ) : null}
-                    <svg
-                        className={styles.meChevron}
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        aria-hidden
-                    >
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
+                    <ChevronDown className={styles.meChevron} size={12} aria-hidden />
                 </div>
                 <button
                     className={styles.signout}
@@ -417,34 +407,7 @@ export function WorkspaceSelectClient({
                     aria-label="Toggle theme"
                     onClick={() => setTheme(isDark ? "light" : "dark")}
                 >
-                    {isDark ? (
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    ) : (
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="4" />
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-                        </svg>
-                    )}
+                    {isDark ? <Moon size={15} /> : <Sun size={15} />}
                 </button>
             </div>
 
@@ -453,18 +416,7 @@ export function WorkspaceSelectClient({
                     <div className={styles.stepperRow}>
                         <span className={`${styles.seg} ${styles.segDone}`}>
                             <span className={styles.dot}>
-                                <svg
-                                    width="9"
-                                    height="9"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="3.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
+                                <Check size={9} strokeWidth={3.5} />
                             </span>
                             Account
                         </span>
@@ -486,7 +438,7 @@ export function WorkspaceSelectClient({
                         </div>
                     ) : null}
                     <h1 className={styles.hTitle}>
-                        Pick a <span className={`${styles.serif} ${styles.accent}`}>workspace</span>
+                        Pick a <span className={styles.accent}>workspace</span>
                     </h1>
                     <p className={styles.hSub}>
                         A workspace is where your knowledge graph, sources, and workflows live. Open
@@ -497,20 +449,7 @@ export function WorkspaceSelectClient({
 
                 <div className={styles.searchRow}>
                     <div className={styles.search}>
-                        <svg
-                            className={styles.searchIcon}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
-                        </svg>
+                        <Search className={styles.searchIcon} size={14} />
                         <input
                             ref={searchRef}
                             type="text"
@@ -745,19 +684,7 @@ export function WorkspaceSelectClient({
                         onClick={() => setEditorOpen(true)}
                     >
                         <div className={styles.createIcon}>
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
+                            <Plus size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>Create a new workspace</div>
@@ -765,20 +692,7 @@ export function WorkspaceSelectClient({
                                 For a new company or product. Empty knowledge graph, ready to fill.
                             </div>
                         </div>
-                        <svg
-                            className={styles.ctArrow}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
                     <button
                         type="button"
@@ -786,20 +700,7 @@ export function WorkspaceSelectClient({
                         onClick={() => setError("Importing from another tool is coming soon.")}
                     >
                         <div className={`${styles.createIcon} ${styles.createIconAlt}`}>
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="17 8 12 3 7 8" />
-                                <line x1="12" y1="3" x2="12" y2="15" />
-                            </svg>
+                            <Upload size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>Import from another tool</div>
@@ -808,20 +709,7 @@ export function WorkspaceSelectClient({
                                 as a starting point.
                             </div>
                         </div>
-                        <svg
-                            className={styles.ctArrow}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
                 </div>
 
@@ -846,19 +734,7 @@ export function WorkspaceSelectClient({
                                 aria-label="Close"
                                 onClick={() => setEditorOpen(false)}
                             >
-                                <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <line x1="18" y1="6" x2="6" y2="18" />
-                                    <line x1="6" y1="6" x2="18" y2="18" />
-                                </svg>
+                                <X size={14} />
                             </button>
                         </div>
 
@@ -899,18 +775,7 @@ export function WorkspaceSelectClient({
                                     >
                                         {slugAvailable ? (
                                             <>
-                                                <svg
-                                                    width="11"
-                                                    height="11"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="3"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <polyline points="20 6 9 17 4 12" />
-                                                </svg>
+                                                <Check size={11} strokeWidth={3} />
                                                 <span>Available</span>
                                             </>
                                         ) : (
@@ -1016,19 +881,7 @@ export function WorkspaceSelectClient({
                                 }
                             >
                                 {submitting ? "Creating…" : "Create & continue"}
-                                <svg
-                                    width="13"
-                                    height="13"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                    <polyline points="12 5 19 12 12 19" />
-                                </svg>
+                                <ArrowRight size={13} strokeWidth={2.5} />
                             </button>
                         </div>
                     </div>

@@ -1036,22 +1036,22 @@ interface PipelineEmptyProps {
 
 function PipelineEmpty({ hasText, isProcessing, selectedCount }: PipelineEmptyProps) {
     let title = "Ready to ";
-    let serif = "rewrite";
+    let accent = "rewrite";
     let sub: string;
 
     if (isProcessing) {
         title = "Drafting the ";
-        serif = "rewrite";
+        accent = "rewrite";
         sub =
             "Drift is reading every selected section and proposing changes. This usually takes about 10 seconds.";
     } else if (!hasText) {
         title = "Paste a ";
-        serif = "source";
+        accent = "source";
         sub =
             "Drop in the text you want to rewrite using the source field on the left, then run the rewrite.";
     } else if (selectedCount === 0) {
         title = "Pick a ";
-        serif = "section";
+        accent = "section";
         sub =
             "Select at least one section in the left rail. Drift only rewrites the parts you ask for.";
     } else {
@@ -1066,7 +1066,7 @@ function PipelineEmpty({ hasText, isProcessing, selectedCount }: PipelineEmptyPr
             </div>
             <h1 className={s.rwsPipeEmptyTitle}>
                 {title}
-                <em>{serif}</em>
+                <em>{accent}</em>
             </h1>
             <p className={s.rwsPipeEmptySub}>{sub}</p>
         </div>

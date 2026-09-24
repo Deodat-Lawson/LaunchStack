@@ -478,7 +478,7 @@ function AgentDetail({
                     <AgentAvatar agent={persona} size={56} />
                     <div className="min-w-[260px] flex-1">
                         <div className="flex flex-wrap items-baseline gap-x-2">
-                            <h1 className="serif text-ink m-0 text-[24px] leading-tight">
+                            <h1 className="display text-ink m-0 text-[24px] leading-tight">
                                 {persona.displayName}
                             </h1>
                             <span className="mono text-ink-3 text-[12px]">@{persona.id}</span>

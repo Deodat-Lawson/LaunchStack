@@ -12,26 +12,30 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Home, ListChecks, Square, Workflow, Zap } from "lucide-react";
+import {
+    Home,
+    ListChecks,
+    Square,
+    Workflow,
+    Zap,
+    Radio as IconBroadcast,
+    Check as IconCheck,
+    Clock as IconClock,
+    Hand as IconHand,
+    Hash as IconHash,
+    Pause as IconPause,
+    Play as IconPlay,
+    Plus as IconPlus,
+    Bot as IconRobot,
+    Server as IconServer,
+    Square as IconStop,
+    User as IconUser,
+    X as IconX,
+} from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
-import {
-    IconBroadcast,
-    IconCheck,
-    IconClock,
-    IconHand,
-    IconHash,
-    IconPause,
-    IconPlay,
-    IconPlus,
-    IconRobot,
-    IconServer,
-    IconSlack,
-    IconStop,
-    IconUser,
-    IconX,
-} from "../icons";
+import { IconSlack } from "~/components/icons/brand";
 import { AgentAvatar } from "./AgentAvatar";
 import { MeetingsHome } from "./MeetingsHome";
 import { NewMeetingDialog } from "./NewMeetingDialog";

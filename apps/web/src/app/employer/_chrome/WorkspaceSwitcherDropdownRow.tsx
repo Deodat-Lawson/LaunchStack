@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronsRight } from "lucide-react";
 import Link from "next/link";
 
 import type { WorkspaceSwitcherPayload } from "./workspaceSwitcherTypes";
@@ -23,21 +24,7 @@ export function WorkspaceSwitcherDropdownRow({
         >
             <span className={`${styles.mark} ${swatchClass}`}>{payload.initials}</span>
             <span className={styles.dropdownRowName}>{payload.name}</span>
-            <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={styles.dropdownRowChevron}
-                aria-hidden="true"
-            >
-                <polyline points="8 18 14 12 8 6" />
-                <polyline points="13 18 19 12 13 6" />
-            </svg>
+            <ChevronsRight size={12} className={styles.dropdownRowChevron} aria-hidden="true" />
         </Link>
     );
 }

@@ -408,7 +408,7 @@ export function RewriteDiffView() {
                                 <h1 className={s.title}>
                                     Refine your{" "}
                                     <span className={s.highlight}>
-                                        <span className={s.serif}>prose</span>
+                                        <span className={s.accentWord}>prose</span>
                                     </span>
                                 </h1>
                                 <p className={s.sub} style={{ maxWidth: 560 }}>

@@ -98,7 +98,7 @@ export function MeetingsHome({
                         <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
                             Meetings
                         </div>
-                        <h1 className="serif text-ink m-0 text-[30px] leading-[1.1] tracking-tight">
+                        <h1 className="display text-ink m-0 text-[30px] leading-[1.1] tracking-tight">
                             Put your agents in a room and give them a job
                         </h1>
                         <p className="text-ink-3 mt-2 max-w-[640px] text-[13.5px] leading-relaxed">

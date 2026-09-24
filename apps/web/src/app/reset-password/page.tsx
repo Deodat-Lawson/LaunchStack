@@ -50,7 +50,7 @@ function ResetPasswordPage() {
             <div className="flex flex-1 items-center justify-center px-6 py-12">
                 <div className="w-full max-w-md">
                     <h1
-                        className="serif"
+                        className="display"
                         style={{
                             fontSize: 32,
                             lineHeight: 1.1,

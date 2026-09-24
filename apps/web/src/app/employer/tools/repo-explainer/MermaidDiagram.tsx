@@ -2,6 +2,7 @@
 
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
+import { resolveFontStack } from "~/lib/fonts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Image as ImageIcon } from "lucide-react";
 
@@ -93,7 +94,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                               lineColor: "#8b5cf6",
                               secondaryColor: "#4c1d95",
                               tertiaryColor: "#1e1b4b",
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: resolveFontStack("sans"),
                           }
                         : {
                               primaryColor: "#ede9fe",
@@ -102,7 +103,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                               lineColor: "#6d28d9",
                               secondaryColor: "#f5f3ff",
                               tertiaryColor: "#faf5ff",
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: resolveFontStack("sans"),
                           },
                 });
 

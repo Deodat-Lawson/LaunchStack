@@ -10,17 +10,17 @@ import {
     validateFolderPath,
 } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
-import { Lock, MessagesSquare } from "lucide-react";
-import { toast } from "sonner";
 import {
-    IconBolt,
-    IconCheck,
-    IconChevronDown,
-    IconFolder,
-    IconPlus,
-    IconX,
-    type IconProps,
-} from "./icons";
+    Lock,
+    MessagesSquare,
+    Zap as IconBolt,
+    Check as IconCheck,
+    ChevronDown as IconChevronDown,
+    Folder as IconFolder,
+    Plus as IconPlus,
+    X as IconX,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
@@ -44,6 +44,7 @@ const TemplateThumbnail = dynamic(
 );
 
 import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-meta";
+import type { IconProps } from "~/components/icons/types";
 
 /**
  * AddSourceModal — tabbed create/upload/connect modal matching the Launstack

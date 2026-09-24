@@ -4,14 +4,14 @@ import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState }
 import { useRouter } from "next/navigation";
 import { searchSettings } from "~/lib/settings/registry";
 import { useSettingValue } from "~/lib/settings/useSettings";
-import { Command as CommandIcon, Settings } from "lucide-react";
-import { IconSearch, type IconProps } from "./icons";
+import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
 import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { usableAsPrimary } from "~/lib/agents/definition";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
 import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
+import type { IconProps } from "~/components/icons/types";
 
 /** An agent's picture as a palette icon — the same avatar the chat shows. */
 function AgentPaletteIcon(agent: ChatAgentOption): ComponentType<IconProps> {

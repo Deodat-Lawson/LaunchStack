@@ -2,9 +2,9 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconBolt } from "./icons";
 import { usePermissions } from "~/lib/use-permissions";
 import { STUDIO_GROUPS } from "./types";
+import { Zap as IconBolt } from "lucide-react";
 
 export interface StudioMenuProps {
     /** Fires with the feature id when the user picks one; if omitted, falls back to direct navigation. */

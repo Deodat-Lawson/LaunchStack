@@ -227,7 +227,7 @@ export function NewMeetingDialog({
                     <div className="mono text-ink-3 text-[10px] font-bold uppercase tracking-[0.1em]">
                         New meeting
                     </div>
-                    <DialogTitle className="serif text-ink text-[22px]">
+                    <DialogTitle className="display text-ink text-[22px]">
                         Pick a workflow, choose the room, press start
                     </DialogTitle>
                     <DialogDescription>

@@ -27,7 +27,7 @@ import { AGENT_MODE_META, agentTool, disabledTools } from "~/lib/agents/definiti
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
-import { IconTrash } from "../icons";
+import { Trash2 as IconTrash } from "lucide-react";
 import { AgentAvatar } from "./AgentAvatar";
 import { AgentEditor } from "./AgentEditor";
 import { useAgents } from "./useMeetings";

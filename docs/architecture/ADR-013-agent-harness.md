@@ -37,14 +37,22 @@ subagent summoned with `@handle`.
    the shipped starter are API routes.
 3. **Ten starter agents** (`~/lib/agents/starter-agents`) seed every
    workspace idempotently by handle; the original four handles are kept so
-   stored transcripts resolve. Each carries a `basis` — the named method its
-   instructions follow (DACI, superforecasting habits, MetaGPT's Architect,
-   ISO 31000, WBR input/output metrics, Working Backwards + Cagan's four
-   risks, Dunford positioning, MEDDIC + Challenger, the Mom Test + JTBD
-   forces, Schwenk's devil's-advocacy meta-analysis) with sources, shown on
-   the Agents page. Pictures are public-domain artworks from Wikimedia
-   Commons (`apps/web/public/agents/CREDITS.md`).
-   3a. **Response style is an agent setting.** The chat's old per-request
+   stored transcripts resolve. Every system prompt is a prompt file people
+   already run with language models, stored verbatim from its source —
+   fabric's pattern files (MIT: `summarize_meeting`, `analyze_claims`,
+   `review_design`, `explain_terms_and_conditions`, `create_prd`,
+   `analyze_sales_call`, `analyze_product_feedback`) and awesome-chatgpt-
+   prompts (CC0: *Business Risk & Scenario Analyzer*, *Advertiser*, *devil
+   adv*). The only edits are dropping a trailing input marker or a sample
+   first request; `source.adaptation` names it and a test asserts the
+   source's opening line survives. The engine supplies the medium around
+   each prompt (room, objective, phase, grounding, channel etiquette), so a
+   single-input prompt works as a meeting seat unchanged. Every prompt and
+   a ten-turn phased meeting are run against a real model by
+   `apps/web/scripts/battle-test-agents.ts` before a change to the roster
+   ships. Pictures are public-domain artworks from Wikimedia Commons
+   (`apps/web/public/agents/CREDITS.md`).
+3a. **Response style is an agent setting.** The chat's old per-request
    `style` was not exposed anywhere in the UI. An agent now carries its own
    style; the only chat-level style left is `chat.responseStyle`, a registry
    setting (workspace or member scope) that governs the default assistant

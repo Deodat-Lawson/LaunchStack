@@ -137,7 +137,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "decide",
         basis: {
             name: "Six Thinking Hats",
-            origin: "Edward de Bono (1985). Parallel thinking: the group wears one hat at a time instead of arguing positions.",
+            origin: "Edward de Bono's parallel-thinking method: the group wears one hat at a time instead of arguing positions.",
             usedBy: "Facilitation practice worldwide; standard templates in Miro, Mural and SessionLab.",
             url: "https://www.sessionlab.com/methods/six-thinking-hats",
         },
@@ -212,7 +212,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "decide",
         basis: {
             name: "Lightning Decision Jam (LDJ)",
-            origin: "Jonathan Courtney, AJ&Smart (2017), distilled from the Google Ventures design sprint's decision techniques.",
+            origin: "Jonathan Courtney at AJ&Smart, distilled from the Google Ventures design sprint's decision techniques.",
             usedBy: "AJ&Smart's workshops; templates in Miro, Mural and the Open Practice Library.",
             url: "https://www.sessionlab.com/methods/lightning-decision-jam-ldj",
         },
@@ -278,9 +278,9 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "review",
         basis: {
             name: "Pre-mortem",
-            origin: "Gary Klein, 'Performing a Project Premortem', Harvard Business Review (2007). Builds on Mitchell, Russo & Pennington (1989): prospective hindsight raises correct identification of reasons for an outcome by about 30%.",
-            usedBy: "Atlassian Team Playbook, Kahneman's recommended practice in Thinking, Fast and Slow, and product and engineering teams before launches.",
-            url: "https://hbr.org/2007/09/performing-a-project-premortem",
+            origin: "Gary Klein's pre-mortem: assume the plan has already failed and write down why, before committing to it.",
+            usedBy: "Atlassian Team Playbook, Miro and Mural templates, and product and engineering teams before launches.",
+            url: "https://www.atlassian.com/team-playbook/plays/pre-mortem",
         },
         phases: [
             {
@@ -326,7 +326,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "review",
         basis: {
             name: "Working Backwards PR/FAQ",
-            origin: "Amazon's product-development process, described by Colin Bryar and Bill Carr in Working Backwards (2021): write the press release and FAQ first, iterate until the customer experience is clear.",
+            origin: "Amazon's product-development process: write the press release and FAQ first, iterate until the customer experience is clear.",
             usedBy: "Amazon and AWS for new products; widely adopted by product teams as the PR/FAQ document.",
             url: "https://workingbackwards.com/concepts/working-backwards-pr-faq-process/",
         },
@@ -438,7 +438,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "review",
         basis: {
             name: "4Ls retrospective",
-            origin: "Mary Gorman and Ellen Gottesdiener (2010); documented as a play in the Atlassian Team Playbook.",
+            origin: "A retrospective format documented as a play in the Atlassian Team Playbook.",
             usedBy: "Agile teams' sprint retrospectives; built-in templates in Jira, Miro and Retrium.",
             url: "https://www.atlassian.com/team-playbook/plays/4-ls-retrospective-technique",
         },
@@ -503,7 +503,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "explore",
         basis: {
             name: "The Mom Test + jobs-to-be-done forces",
-            origin: "Rob Fitzpatrick, The Mom Test (2013): talk about their life, ask about specifics in the past, listen; and the four forces of a switch (push, pull, anxiety, habit) from Bob Moesta's JTBD interviewing.",
+            origin: "The Mom Test rules for customer conversations (talk about their life, ask about specifics in the past, listen) and the four forces of a switch (push, pull, anxiety, habit) from jobs-to-be-done interviewing.",
             usedBy: "Customer-discovery practice in accelerators and product teams; the interview standard YC and Lean Startup courses teach.",
         },
         phases: [
@@ -568,7 +568,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "run",
         basis: {
             name: "Amazon Weekly Business Review (WBR)",
-            origin: "Amazon's metrics meeting, described in Bryar & Carr's Working Backwards (2021): a deck of input and output metrics, reviewed for variance and exceptions, ending in actions.",
+            origin: "Amazon's weekly metrics meeting: a deck of input and output metrics, reviewed for variance and exceptions, ending in actions.",
             usedBy: "Amazon; adopted by operators as the WBR, with templates from Working Backwards LLC and Commoncog.",
             url: "https://commoncog.com/the-amazon-weekly-business-review/",
         },
@@ -617,7 +617,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         category: "run",
         basis: {
             name: "OKRs",
-            origin: "Andy Grove's objectives and key results at Intel, brought to Google by John Doerr and set out in Measure What Matters (2018).",
+            origin: "Objectives and key results as run at Intel and Google: one qualitative objective, a few measurable key results.",
             usedBy: "Google, and most of the startup ecosystem; the default goal framework in Lattice, Asana Goals and Notion templates.",
             url: "https://www.whatmatters.com/faqs/okr-meaning-definition-example",
         },

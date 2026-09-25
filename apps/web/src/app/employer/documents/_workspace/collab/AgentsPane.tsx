@@ -630,32 +630,21 @@ function AgentDetail({
                     {starter && (
                         <div className="border-line bg-panel-2 mt-5 max-w-[760px] rounded-xl border px-5 py-4">
                             <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                Where this comes from
+                                Prompt source
                             </div>
                             <p className="text-ink-2 m-0 text-[13px] leading-relaxed">
-                                {starter.basis.summary}
+                                Taken from{" "}
+                                <a
+                                    href={starter.source.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-brand-ink underline-offset-2 hover:underline"
+                                >
+                                    {starter.source.name}
+                                </a>{" "}
+                                — <span className="mono text-[12px]">{starter.source.file}</span> ·{" "}
+                                {starter.source.license}. {starter.source.adaptation}
                             </p>
-                            <ul className="m-0 mt-2 list-none p-0">
-                                {starter.basis.sources.map(source => (
-                                    <li
-                                        key={source.title}
-                                        className="text-ink-3 text-[12px] leading-relaxed"
-                                    >
-                                        {source.url ? (
-                                            <a
-                                                href={source.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-brand-ink underline-offset-2 hover:underline"
-                                            >
-                                                {source.title}
-                                            </a>
-                                        ) : (
-                                            source.title
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
                     )}
                     <div className="text-ink-3 mt-4 max-w-[760px] text-[12px] leading-relaxed">

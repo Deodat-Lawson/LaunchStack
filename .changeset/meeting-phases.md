@@ -11,3 +11,8 @@ as a system message (`meta.event === "phase"`), exposes `state.phaseIndex`,
 and injects the current phase into every turn's prompt. `createMeeting`
 accepts `phases` and `workflowKey`; `phasePlanProblems` validates a plan
 against a room. Meetings without phases are unchanged.
+
+Minutes also recognise a chaired meeting's close: "recommendation for the
+approver", "we recommend", and a sentence that starts with "Option:" or
+"Recommendation:" count as decisions; "Owner:" and "X owns …" count as
+action items.

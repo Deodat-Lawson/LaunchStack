@@ -26,12 +26,15 @@ describe("starter agents", () => {
         }
     });
 
-    it("grounds every agent in a named method with at least one source", () => {
+    it("takes every prompt from a named, licensed prompt file, verbatim", () => {
         for (const agent of STARTER_AGENTS) {
-            expect(agent.basis.summary.length).toBeGreaterThan(40);
-            expect(agent.basis.sources.length).toBeGreaterThan(0);
-            for (const source of agent.basis.sources)
-                expect(source.title.length).toBeGreaterThan(5);
+            expect(agent.source.name.length).toBeGreaterThan(3);
+            expect(agent.source.file.length).toBeGreaterThan(3);
+            expect(agent.source.url).toMatch(/^https:\/\//);
+            expect(agent.source.license.length).toBeGreaterThan(2);
+            // The stored prompt is the source text, not a paraphrase: the
+            // source's own opening line must appear in it unchanged.
+            expect(agent.systemPrompt).toContain(agent.source.fingerprint);
         }
     });
 

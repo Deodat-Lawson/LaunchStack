@@ -16,6 +16,7 @@ import {
     type ChartConfig,
 } from "~/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Badge } from "~/components/ui/badge";
 import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import {
@@ -37,7 +38,6 @@ import {
     ExternalLink,
 } from "lucide-react";
 import { Card } from "~/components/ui/card";
-import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -346,24 +346,23 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                         <TableRow key={i} className="group">
                                                             <TableCell className="py-2.5">
                                                                 <div className="flex items-center gap-3">
-                                                                    <div
-                                                                        className={cn(
-                                                                            "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
+                                                                    <ProfileAvatar
+                                                                        name={viewer.name}
+                                                                        email={viewer.email}
+                                                                        src={viewer.avatarUrl}
+                                                                        // Without a photo, the colour still says the role.
+                                                                        fallbackClassName={
                                                                             normalizeRoleSlug(
                                                                                 viewer.role
                                                                             ) === "owner"
-                                                                                ? "bg-brand"
+                                                                                ? undefined
                                                                                 : normalizeRoleSlug(
                                                                                         viewer.role
                                                                                     ) === "admin"
                                                                                   ? "bg-info"
                                                                                   : "bg-ink-4"
-                                                                        )}
-                                                                    >
-                                                                        {viewer.name
-                                                                            .charAt(0)
-                                                                            .toUpperCase()}
-                                                                    </div>
+                                                                        }
+                                                                    />
                                                                     <div className="min-w-0">
                                                                         <p className="truncate text-sm font-medium">
                                                                             {viewer.name}

@@ -1,386 +1,451 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus } from "lucide-react";
 import type { DocumentNote } from "~/server/db/schema";
 import {
-  buildAnchorFromDraft,
-  type DraftState,
-  EMPTY_DRAFT,
-  type NoteAnchorLite,
-  type PrefilledAnchor,
-  primaryPageOfAnchor,
+    buildAnchorFromDraft,
+    type DraftState,
+    EMPTY_DRAFT,
+    type NoteAnchorLite,
+    orderNotesForReading,
+    type PrefilledAnchor,
+    primaryPageOfAnchor,
 } from "./_shared/anchor";
 import { NoteCard } from "./_shared/NoteCard";
 import { NoteDraftEditor } from "./_shared/NoteDraftEditor";
 import { BacklinksPanel } from "./BacklinksPanel";
+import { markdownToTiptapJson } from "./StickyNoteEditor";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 
 export type { PrefilledAnchor } from "./_shared/anchor";
 
 interface Props {
-  /** Document identifier — stringified so it matches `documentNotes.documentId`. */
-  documentId: string | null;
-  /** Current version the document is being viewed against. */
-  versionId: number | null;
-  /** Called after any CRUD success so the caller can refresh surrounding UI. */
-  onChanged?: () => void;
-  /**
-   * When set, the panel switches into "new note" draft mode with this anchor
-   * pre-populated — used by the PDF viewer when the user highlights text and
-   * clicks "Add note here". The parent clears this after the panel consumes it.
-   */
-  prefilledAnchor?: PrefilledAnchor | null;
-  /**
-   * When set, the panel opens a new note with this text as its body — the
-   * document's context menu handing over a selected passage. The parent
-   * clears it after the panel consumes it.
-   */
-  prefilledText?: string | null;
-  /** Fired when the user clicks an existing note card. The parent can then
-   * scroll the document viewer to the anchored location. */
-  onNoteClick?: (note: { id: number; page: number | null }) => void;
+    /** Document identifier — stringified so it matches `documentNotes.documentId`. */
+    documentId: string | null;
+    /** Current version the document is being viewed against. */
+    versionId: number | null;
+    /** Called after any CRUD success so the caller can refresh surrounding UI. */
+    onChanged?: () => void;
+    /**
+     * When set, the panel switches into "new note" draft mode with this anchor
+     * pre-populated — used by the PDF viewer when the user highlights text and
+     * clicks "Add note here". The parent clears this after the panel consumes it.
+     */
+    prefilledAnchor?: PrefilledAnchor | null;
+    /**
+     * When set, the panel opens a new note with this text as its body — the
+     * document's context menu handing over a selected passage. The parent
+     * clears it after the panel consumes it.
+     */
+    prefilledText?: string | null;
+    /**
+     * Fired when the user clicks an existing note card, so the parent can take
+     * the viewer to the passage.
+     *
+     * `quote` is what actually locates it. Anchors carry a page, but every note
+     * in practice has `page: 1` and no quads — the capture path never recorded
+     * a real position — so scrolling to the page number always landed on page
+     * one. The quoted text can be searched for, which is how citations already
+     * find their passage.
+     */
+    onNoteClick?: (note: { id: number; page: number | null; quote: string | null }) => void;
+    /**
+     * The note the document is currently showing, so the column can open the
+     * matching card. Clicking a pin in the document sets this, which is what
+     * makes the pairing work in both directions rather than only outward.
+     */
+    activeNoteId?: number | null;
+}
+
+/** Trimmed text, or null when there is none worth searching for. */
+function nonEmpty(value: string | undefined | null): string | null {
+    const trimmed = value?.trim();
+    if (!trimmed) return null;
+    return trimmed;
 }
 
 export function DocumentNotesPanel({
-  documentId,
-  versionId,
-  onChanged,
-  prefilledAnchor,
-  prefilledText,
-  onNoteClick,
+    documentId,
+    versionId,
+    onChanged,
+    prefilledAnchor,
+    prefilledText,
+    onNoteClick,
+    activeNoteId = null,
 }: Props) {
-  const [notes, setNotes] = useState<DocumentNote[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [draft, setDraft] = useState<DraftState>(EMPTY_DRAFT);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+    const [notes, setNotes] = useState<DocumentNote[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [draft, setDraft] = useState<DraftState>(EMPTY_DRAFT);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    /** The note a delete has been asked for, pending the confirm dialog. */
+    const [pendingDelete, setPendingDelete] = useState<DocumentNote | null>(null);
+    const activeCardRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchNotes = useCallback(async () => {
-    if (!documentId) {
-      setNotes([]);
-      setIsLoading(false);
-      return;
-    }
-    try {
-      const res = await fetch(
-        `/api/notes?documentId=${encodeURIComponent(documentId)}`,
-      );
-      if (!res.ok) throw new Error(`Failed (${res.status})`);
-      const data = (await res.json()) as { notes: DocumentNote[] };
-      setNotes(data.notes ?? []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch notes");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [documentId]);
+    const ordered = useMemo(() => orderNotesForReading(notes), [notes]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    void fetchNotes();
-  }, [fetchNotes]);
+    // Bring the open card into view when the document is what opened it —
+    // clicking a pin in the page should not leave its note off-screen in a
+    // long column. `nearest` so a card already visible does not jump.
+    useEffect(() => {
+        if (activeNoteId === null) return;
+        activeCardRef.current?.scrollIntoView({ block: "nearest" });
+    }, [activeNoteId]);
 
-  // Open the editor automatically when the parent hands us a selection
-  // captured from the PDF viewer.
-  useEffect(() => {
-    if (!prefilledAnchor) return;
-    setDraft({
-      id: "new",
-      title: "",
-      rich: null,
-      text: "",
-      tags: [],
-      anchorQuote: prefilledAnchor.quote.exact,
-      anchorPage: String(prefilledAnchor.page),
-      anchorQuads: prefilledAnchor.quads,
-    });
-    setError(null);
-  }, [prefilledAnchor]);
-
-  useEffect(() => {
-    if (!prefilledText) return;
-    setDraft({
-      ...EMPTY_DRAFT,
-      id: "new",
-      text: prefilledText,
-      rich: {
-        type: "doc",
-        content: [
-          { type: "paragraph", content: [{ type: "text", text: prefilledText }] },
-        ],
-      },
-      anchorQuote: prefilledText,
-    });
-    setError(null);
-  }, [prefilledText]);
-
-  const startNewDraft = () => {
-    setDraft({ ...EMPTY_DRAFT, id: "new" });
-    setError(null);
-  };
-
-  const startEditDraft = (note: DocumentNote) => {
-    const anchor = note.anchor as NoteAnchorLite | null;
-    const primary = anchor?.primary as
-      | { kind?: string; page?: number; quads?: Array<[number, number, number, number]> }
-      | undefined;
-    setDraft({
-      id: note.id,
-      title: note.title ?? "",
-      rich: (note.contentRich as JSONContent | null) ?? null,
-      text: note.contentMarkdown ?? note.content ?? "",
-      tags: (note.tags) ?? [],
-      anchorQuote: anchor?.quote?.exact ?? "",
-      anchorPage: primaryPageOfAnchor(anchor)?.toString() ?? "",
-      anchorQuads: Array.isArray(primary?.quads) ? primary.quads : [],
-    });
-    setError(null);
-  };
-
-  const cancelDraft = () => {
-    setDraft(EMPTY_DRAFT);
-    setError(null);
-  };
-
-  const saveDraft = async () => {
-    if (!draft.id) return;
-    if (!draft.title.trim() && !draft.text.trim() && !draft.rich) {
-      setError("Add a title or body first.");
-      return;
-    }
-    setSaving(true);
-    setError(null);
-    try {
-      const anchor = buildAnchorFromDraft(draft);
-      const payload: Record<string, unknown> = {
-        title: draft.title.trim() || undefined,
-        contentRich: draft.rich ?? undefined,
-        contentMarkdown: draft.text || undefined,
-        tags: draft.tags,
-        anchor: anchor ?? undefined,
-        anchorStatus: anchor ? "resolved" : undefined,
-      };
-
-      if (draft.id === "new") {
-        payload.documentId = documentId ?? undefined;
-        if (versionId !== null) payload.versionId = versionId;
-        const res = await fetch("/api/notes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) {
-          const body = (await res.json().catch(() => ({}))) as { error?: string };
-          throw new Error(body.error ?? `Failed (${res.status})`);
+    const fetchNotes = useCallback(async () => {
+        if (!documentId) {
+            setNotes([]);
+            setIsLoading(false);
+            return;
         }
-      } else {
-        const res = await fetch(`/api/notes/${draft.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) {
-          const body = (await res.json().catch(() => ({}))) as { error?: string };
-          throw new Error(body.error ?? `Failed (${res.status})`);
+        try {
+            const res = await fetch(`/api/notes?documentId=${encodeURIComponent(documentId)}`);
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            const data = (await res.json()) as { notes: DocumentNote[] };
+            setNotes(data.notes ?? []);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to fetch notes");
+        } finally {
+            setIsLoading(false);
         }
-      }
+    }, [documentId]);
 
-      cancelDraft();
-      await fetchNotes();
-      onChanged?.();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
-    } finally {
-      setSaving(false);
-    }
-  };
+    useEffect(() => {
+        setIsLoading(true);
+        void fetchNotes();
+    }, [fetchNotes]);
 
-  const deleteNote = async (id: number) => {
-    if (!confirm("Delete this note? This cannot be undone.")) return;
-    try {
-      const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error(`Failed (${res.status})`);
-      setNotes((prev) => prev.filter((n) => n.id !== id));
-      onChanged?.();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
-    }
-  };
+    // Open the editor automatically when the parent hands us a selection
+    // captured from the PDF viewer.
+    useEffect(() => {
+        if (!prefilledAnchor) return;
+        setDraft({
+            id: "new",
+            title: "",
+            rich: null,
+            text: "",
+            tags: [],
+            anchorQuote: prefilledAnchor.quote.exact,
+            anchorPage: String(prefilledAnchor.page),
+            anchorQuads: prefilledAnchor.quads,
+        });
+        setError(null);
+    }, [prefilledAnchor]);
 
-  const editingExisting = draft.id !== null && draft.id !== "new";
+    useEffect(() => {
+        if (!prefilledText) return;
+        setDraft({
+            ...EMPTY_DRAFT,
+            id: "new",
+            text: prefilledText,
+            rich: {
+                type: "doc",
+                content: [{ type: "paragraph", content: [{ type: "text", text: prefilledText }] }],
+            },
+            anchorQuote: prefilledText,
+        });
+        setError(null);
+    }, [prefilledText]);
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          padding: "14px 16px 10px",
-          borderBottom: "1px solid var(--line-2)",
-        }}
-      >
+    const startNewDraft = () => {
+        setDraft({ ...EMPTY_DRAFT, id: "new" });
+        setError(null);
+    };
+
+    const startEditDraft = (note: DocumentNote) => {
+        const anchor = note.anchor as NoteAnchorLite | null;
+        const primary = anchor?.primary as
+            | { kind?: string; page?: number; quads?: Array<[number, number, number, number]> }
+            | undefined;
+        setDraft({
+            id: note.id,
+            title: note.title ?? "",
+            // Notes the agent captured have no rich body — only markdown.
+            // Feeding the editor `null` for those opened it empty, and
+            // saving wrote that emptiness back over the note.
+            rich:
+                (note.contentRich as JSONContent | null) ??
+                markdownToTiptapJson(note.contentMarkdown ?? note.content),
+            text: note.contentMarkdown ?? note.content ?? "",
+            tags: note.tags ?? [],
+            anchorQuote: anchor?.quote?.exact ?? "",
+            anchorPage: primaryPageOfAnchor(anchor)?.toString() ?? "",
+            anchorQuads: Array.isArray(primary?.quads) ? primary.quads : [],
+        });
+        setError(null);
+    };
+
+    const cancelDraft = () => {
+        setDraft(EMPTY_DRAFT);
+        setError(null);
+    };
+
+    const saveDraft = async () => {
+        if (!draft.id) return;
+        if (!draft.title.trim() && !draft.text.trim() && !draft.rich) {
+            setError("Add a title or body first.");
+            return;
+        }
+        setSaving(true);
+        setError(null);
+        try {
+            const anchor = buildAnchorFromDraft(draft);
+            const payload: Record<string, unknown> = {
+                title: draft.title.trim() || undefined,
+                contentRich: draft.rich ?? undefined,
+                contentMarkdown: draft.text || undefined,
+                tags: draft.tags,
+                anchor: anchor ?? undefined,
+                anchorStatus: anchor ? "resolved" : undefined,
+            };
+
+            if (draft.id === "new") {
+                payload.documentId = documentId ?? undefined;
+                if (versionId !== null) payload.versionId = versionId;
+                const res = await fetch("/api/notes", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: string };
+                    throw new Error(body.error ?? `Failed (${res.status})`);
+                }
+            } else {
+                const res = await fetch(`/api/notes/${draft.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: string };
+                    throw new Error(body.error ?? `Failed (${res.status})`);
+                }
+            }
+
+            cancelDraft();
+            await fetchNotes();
+            onChanged?.();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Save failed");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const deleteNote = async (id: number) => {
+        try {
+            const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            setNotes(prev => prev.filter(n => n.id !== id));
+            onChanged?.();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Delete failed");
+        }
+    };
+
+    const editingExisting = draft.id !== null && draft.id !== "new";
+
+    return (
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                overflow: "hidden",
+            }}
         >
-          <div
-            className="mono"
-            style={{
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: "0.08em",
-              color: "var(--ink-3)",
-              textTransform: "uppercase",
-            }}
-          >
-            Notes
-          </div>
-          <span
-            className="mono"
-            style={{
-              fontSize: 10,
-              padding: "1px 6px",
-              borderRadius: 4,
-              background: "var(--panel-2)",
-              color: "var(--ink-3)",
-            }}
-          >
-            {notes.length}
-          </span>
-        </div>
-        <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
-          Sticky annotations on this source.
-        </div>
-        <button
-          type="button"
-          onClick={startNewDraft}
-          disabled={draft.id !== null || !documentId}
-          style={{
-            marginTop: 8,
-            width: "100%",
-            padding: "7px 10px",
-            borderRadius: 7,
-            background:
-              draft.id !== null || !documentId ? "var(--line)" : "var(--accent)",
-            color:
-              draft.id !== null || !documentId ? "var(--ink-3)" : "white",
-            fontSize: 12,
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-            cursor:
-              draft.id !== null || !documentId ? "not-allowed" : "pointer",
-          }}
-        >
-          <Plus size={13} /> New note
-        </button>
-      </div>
-
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "10px 10px 16px",
-        }}
-      >
-        {error && draft.id === null && (
-          <div
-            style={{
-              margin: "0 6px 10px",
-              padding: "8px 10px",
-              borderRadius: 7,
-              background: "oklch(0.96 0.04 30)",
-              border: "1px solid oklch(0.86 0.11 30)",
-              color: "oklch(0.4 0.14 30)",
-              fontSize: 11,
-              lineHeight: 1.4,
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        {draft.id !== null && (
-          <NoteDraftEditor
-            draft={draft}
-            setDraft={setDraft}
-            saving={saving}
-            error={error}
-            onSave={() => void saveDraft()}
-            onCancel={cancelDraft}
-            supportsAnchor
-            editingExisting={editingExisting}
-          />
-        )}
-
-        {isLoading ? (
-          <div
-            style={{
-              padding: "14px 16px",
-              color: "var(--ink-3)",
-              fontSize: 11,
-            }}
-          >
-            Loading notes…
-          </div>
-        ) : notes.length === 0 && draft.id === null ? (
-          <div
-            style={{
-              padding: "32px 16px",
-              textAlign: "center",
-              color: "var(--ink-3)",
-              fontSize: 12,
-            }}
-          >
-            <FileText
-              size={28}
-              style={{ margin: "0 auto 8px", opacity: 0.3 }}
-            />
-            <div>No notes on this source yet.</div>
-            <div style={{ fontSize: 11, opacity: 0.7, marginTop: 4 }}>
-              Click &ldquo;New note&rdquo; to start.
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: 6 }}
-          >
-            {notes.map((n) => (
-              <NoteCard
-                key={n.id}
-                note={n}
-                editing={draft.id === n.id}
-                onEdit={() => startEditDraft(n)}
-                onDelete={() => void deleteNote(n.id)}
-                onClick={() => {
-                  onNoteClick?.({
-                    id: n.id,
-                    page: primaryPageOfAnchor(n.anchor as NoteAnchorLite | null),
-                  });
+            <div
+                style={{
+                    padding: "14px 16px 10px",
+                    borderBottom: "1px solid var(--line-2)",
                 }}
-              />
-            ))}
-          </div>
-        )}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <div
+                        className="mono"
+                        style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            letterSpacing: "0.08em",
+                            color: "var(--ink-3)",
+                            textTransform: "uppercase",
+                        }}
+                    >
+                        Notes
+                    </div>
+                    <span
+                        className="mono"
+                        style={{
+                            fontSize: 10,
+                            padding: "1px 6px",
+                            borderRadius: 4,
+                            background: "var(--panel-2)",
+                            color: "var(--ink-3)",
+                        }}
+                    >
+                        {notes.length}
+                    </span>
+                </div>
+                <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
+                    Sticky annotations on this source.
+                </div>
+                <button
+                    type="button"
+                    onClick={startNewDraft}
+                    disabled={draft.id !== null || !documentId}
+                    style={{
+                        marginTop: 8,
+                        width: "100%",
+                        padding: "7px 10px",
+                        borderRadius: 7,
+                        background:
+                            draft.id !== null || !documentId ? "var(--line)" : "var(--accent)",
+                        color: draft.id !== null || !documentId ? "var(--ink-3)" : "white",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 6,
+                        cursor: draft.id !== null || !documentId ? "not-allowed" : "pointer",
+                    }}
+                >
+                    <Plus size={13} /> New note
+                </button>
+            </div>
 
-        {documentId && (
-          <BacklinksPanel
-            documentId={documentId}
-            onOpenNote={(id) => onNoteClick?.({ id, page: null })}
-          />
-        )}
-      </div>
-    </div>
-  );
+            <div
+                style={{
+                    flex: 1,
+                    overflowY: "auto",
+                    padding: "10px 10px 16px",
+                }}
+            >
+                {error && draft.id === null && (
+                    <div
+                        style={{
+                            margin: "0 6px 10px",
+                            padding: "8px 10px",
+                            borderRadius: 7,
+                            background: "oklch(0.96 0.04 30)",
+                            border: "1px solid oklch(0.86 0.11 30)",
+                            color: "oklch(0.4 0.14 30)",
+                            fontSize: 11,
+                            lineHeight: 1.4,
+                        }}
+                    >
+                        {error}
+                    </div>
+                )}
+
+                {draft.id !== null && (
+                    <NoteDraftEditor
+                        draft={draft}
+                        setDraft={setDraft}
+                        saving={saving}
+                        error={error}
+                        onSave={() => void saveDraft()}
+                        onCancel={cancelDraft}
+                        supportsAnchor
+                        editingExisting={editingExisting}
+                    />
+                )}
+
+                {isLoading ? (
+                    <div
+                        style={{
+                            padding: "14px 16px",
+                            color: "var(--ink-3)",
+                            fontSize: 11,
+                        }}
+                    >
+                        Loading notes…
+                    </div>
+                ) : notes.length === 0 && draft.id === null ? (
+                    <div
+                        style={{
+                            padding: "32px 16px",
+                            textAlign: "center",
+                            color: "var(--ink-3)",
+                            fontSize: 12,
+                        }}
+                    >
+                        <FileText size={28} style={{ margin: "0 auto 8px", opacity: 0.3 }} />
+                        <div>No notes on this source yet.</div>
+                        <div style={{ fontSize: 11, opacity: 0.7, marginTop: 4 }}>
+                            Click &ldquo;New note&rdquo; to start.
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 6,
+                            padding: "0 6px",
+                        }}
+                    >
+                        {ordered.map(n => (
+                            // The wrapper only exists to hold a ref: NoteCard
+                            // does not forward one, and the open card has to be
+                            // scrollable-to when the document is what opened it.
+                            <div key={n.id} ref={n.id === activeNoteId ? activeCardRef : undefined}>
+                                <NoteCard
+                                    note={n}
+                                    editing={draft.id === n.id}
+                                    active={n.id === activeNoteId}
+                                    onEdit={() => startEditDraft(n)}
+                                    onDelete={() => setPendingDelete(n)}
+                                    onClick={() => {
+                                        const anchor = n.anchor as NoteAnchorLite | null;
+                                        onNoteClick?.({
+                                            id: n.id,
+                                            page: primaryPageOfAnchor(anchor),
+                                            // A blank quote is no quote: `??` would keep the empty
+                                            // string and the viewer would search for nothing.
+                                            quote: nonEmpty(anchor?.quote?.exact),
+                                        });
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <ConfirmDialog
+                    open={pendingDelete !== null}
+                    onOpenChange={next => {
+                        if (!next) setPendingDelete(null);
+                    }}
+                    title="Delete this note?"
+                    description={
+                        pendingDelete?.title
+                            ? `“${pendingDelete.title}” will be removed. This cannot be undone.`
+                            : "This note will be removed. This cannot be undone."
+                    }
+                    onConfirm={() => {
+                        const target = pendingDelete;
+                        setPendingDelete(null);
+                        if (target) void deleteNote(target.id);
+                    }}
+                />
+
+                {documentId && (
+                    <BacklinksPanel
+                        documentId={documentId}
+                        onOpenNote={id => onNoteClick?.({ id, page: null, quote: null })}
+                    />
+                )}
+            </div>
+        </div>
+    );
 }

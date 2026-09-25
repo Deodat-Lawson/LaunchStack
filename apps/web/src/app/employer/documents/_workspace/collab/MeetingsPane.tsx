@@ -41,7 +41,6 @@ import { MeetingsHome } from "./MeetingsHome";
 import { NewMeetingDialog } from "./NewMeetingDialog";
 import { useAgents, useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
 import {
-    initialsOf,
     MEETING_STATUS_META,
     personaColor,
     statusColor,
@@ -50,6 +49,9 @@ import {
     type MeetingPhase,
     type MeetingSummary,
 } from "./types";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
+import type { PersonLook } from "~/lib/profile/resolve";
+import { usePeople } from "~/lib/profile/use-people";
 
 export interface MeetingsPaneProps {
     /** Rendered inside the workspace main area rather than as a standalone page. */
@@ -451,6 +453,14 @@ function ChannelView({
         return map;
     }, [detail]);
 
+    // People who spoke, as this workspace sees them (photo, display name).
+    const people = usePeople(
+        useMemo(
+            () => messages.filter(m => m.author.kind === "human").map(m => m.author.id),
+            [messages]
+        )
+    );
+
     const canSend = Boolean(state && state.status !== "completed" && state.status !== "failed");
     const holdsFloor = state?.status === "human_control";
     const seat = state?.controller?.asPersonaId;
@@ -563,6 +573,11 @@ function ChannelView({
                             participant={participantsById.get(
                                 message.author.onBehalfOfPersonaId ?? message.author.id
                             )}
+                            person={
+                                message.author.kind === "human"
+                                    ? people[message.author.id]
+                                    : undefined
+                            }
                         />
                     ))}
                     {state.status === "running" && state.nextSpeakerId && (
@@ -969,29 +984,6 @@ function ParticipantChip({
     );
 }
 
-function Avatar({ name, color, size = 26 }: { name: string; color: string; size?: number }) {
-    return (
-        <span
-            style={{
-                width: size,
-                height: size,
-                borderRadius: size > 20 ? 7 : "50%",
-                background: color,
-                color: "white",
-                fontSize: size > 20 ? 10.5 : 8,
-                fontWeight: 700,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                letterSpacing: "0.02em",
-            }}
-        >
-            {initialsOf(name)}
-        </span>
-    );
-}
-
 // ---------------------------------------------------------------------------
 // Transcript
 // ---------------------------------------------------------------------------
@@ -1000,10 +992,13 @@ function MessageRow({
     message,
     previous,
     participant,
+    person,
 }: {
     message: ChannelMessage;
     previous?: ChannelMessage;
     participant?: MeetingParticipant;
+    /** A human author's profile in this workspace, once looked up. */
+    person?: PersonLook;
 }) {
     if (message.kind === "system") {
         const isPhase = message.meta?.event === "phase";
@@ -1047,9 +1042,6 @@ function MessageRow({
         previous.author.onBehalfOfPersonaId === message.author.onBehalfOfPersonaId;
 
     const isHuman = message.author.kind === "human";
-    const color = isHuman
-        ? "oklch(0.5 0.02 280)"
-        : personaColor(participant ?? { id: message.author.id });
     const servedBy =
         typeof message.meta?.servedByNode === "string" ? message.meta.servedByNode : null;
 
@@ -1064,7 +1056,13 @@ function MessageRow({
             <div style={{ width: 26, flexShrink: 0 }}>
                 {!grouped &&
                     (isHuman ? (
-                        <Avatar name={message.author.displayName} color={color} />
+                        <ProfileAvatar
+                            name={person?.displayName ?? message.author.displayName}
+                            email={person?.email}
+                            src={person?.avatarUrl}
+                            className="size-[26px]"
+                            fallbackClassName="text-[10.5px]"
+                        />
                     ) : (
                         <AgentAvatar
                             agent={{
@@ -1083,7 +1081,7 @@ function MessageRow({
                         style={{ display: "flex", alignItems: "baseline", gap: 7, marginBottom: 2 }}
                     >
                         <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink)" }}>
-                            {message.author.displayName}
+                            {person?.displayName ?? message.author.displayName}
                         </span>
                         <span
                             style={{

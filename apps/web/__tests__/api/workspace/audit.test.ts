@@ -51,6 +51,8 @@ describe("GET /api/workspace/audit", () => {
             authUserId: "user-a",
             name: "Ann",
             email: "ann@example.com",
+            // No profile row in this fake database, so no photo: initials.
+            avatarUrl: null,
         });
 
         const second = await GET(

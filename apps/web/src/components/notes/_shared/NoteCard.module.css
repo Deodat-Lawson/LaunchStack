@@ -1,0 +1,33 @@
+/*
+ * Card chrome that inline styles cannot express: hover and focus-within.
+ *
+ * The actions' opacity lives here rather than on the element, because an
+ * inline style outranks every rule in this file — setting it inline is what
+ * made a hovered card keep its buttons hidden.
+ *
+ * They are hidden by opacity rather than unmounted, so a keyboard user still
+ * reaches them by tabbing; `:focus-within` brings them back the moment focus
+ * lands inside, which `display: none` would have made impossible.
+ */
+
+.card:hover {
+    border-color: var(--line);
+    background: var(--panel-2);
+}
+
+/* The open card is already lifted; hover must not repaint it underneath. */
+.card[data-active="true"]:hover {
+    background: var(--panel);
+}
+
+.actions {
+    opacity: 0;
+    transition: opacity 120ms ease;
+}
+
+.card[data-active="true"] .actions,
+.card[data-editing="true"] .actions,
+.card:hover .actions,
+.card:focus-within .actions {
+    opacity: 1;
+}

@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { PanelLeftOpen, PanelsTopLeft, Plus } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { firstFilled } from "~/lib/profile/resolve";
+import { useMyProfile } from "~/lib/profile/use-my-profile";
 import { Button } from "~/components/ui/button";
 import { useRegisterActions } from "~/components/context-menu";
 import {
@@ -164,23 +166,12 @@ function toStoredMessage(message: ThreadMessage): sessionApi.SessionMessagePaylo
     };
 }
 
-function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
-    const parts = [first, last].filter(Boolean) as string[];
-    if (parts.length > 0) {
-        return parts
-            .map(p => p[0]?.toUpperCase())
-            .join("")
-            .slice(0, 2);
-    }
-    if (email) return email[0]?.toUpperCase() ?? "U";
-    return "U";
-}
-
 export function WorkspaceShell() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { isLoaded, isSignedIn, userId, signOut } = useAuth();
     const { user } = useUser();
+    const { data: myProfile } = useMyProfile();
 
     // Legacy `?view=X` URLs redirect to their new destinations. Any other params
     // (docId, versionId, prompt, etc.) are carried across so deep links survive.
@@ -1762,11 +1753,10 @@ export function WorkspaceShell() {
     // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
     if (legacyRedirect) return <LoadingPage />;
 
-    const trimmedName = user?.name.trim();
-    const userName = trimmedName?.length ? trimmedName : undefined;
-    const [firstName, ...restNames] = (userName ?? "").split(/\s+/);
-    const userEmail = user?.email;
-    const initials = initialsOf(firstName, restNames.at(-1), userEmail);
+    // How this workspace sees you; the session's name until the profile loads.
+    const me = myProfile?.effective;
+    const userName = me?.displayName ?? firstFilled(user?.name) ?? undefined;
+    const userEmail = me?.email ?? user?.email;
 
     return (
         <div
@@ -1880,9 +1870,10 @@ export function WorkspaceShell() {
                             onPickFeature={id => expandFeature(id)}
                         />
                         <AvatarMenu
-                            userInitials={initials}
                             userName={userName}
                             userEmail={userEmail}
+                            userTitle={me?.title}
+                            avatarUrl={me?.avatarUrl}
                             onOpenSettings={() => expandFeature("settings")}
                             onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
                         />

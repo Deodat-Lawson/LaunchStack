@@ -10,6 +10,7 @@ import { Button } from "~/components/ui/button";
 import { withNext } from "~/components/auth/next-path";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { roleLabel } from "~/lib/authz/permissions";
+import { resetMyProfile } from "~/lib/profile/use-my-profile";
 
 interface Preview {
     workspaceName: string;
@@ -127,6 +128,7 @@ export function InviteLanding({ token }: { token: string }) {
             }
             const data = (await res.json()) as { redirectTo?: string };
             setJoin({ phase: "joined" });
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
         } catch {
             setJoin({

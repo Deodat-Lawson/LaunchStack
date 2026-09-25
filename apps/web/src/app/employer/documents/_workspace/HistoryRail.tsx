@@ -27,6 +27,7 @@ import {
 } from "~/lib/workspace-history";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 
 /**
@@ -318,6 +319,8 @@ export function HistoryRail({
     onRefresh,
 }: HistoryRailProps) {
     const [renamingId, setRenamingId] = useState<string | null>(null);
+    /** The run a delete has been asked for, pending the confirm dialog. */
+    const [pendingDelete, setPendingDelete] = useState<HistoryEntry | null>(null);
     /**
      * One timestamp for the whole render, so every "2h" in the list is
      * measured from the same instant and rows can't disagree.
@@ -360,12 +363,10 @@ export function HistoryRail({
                     label: "Delete…",
                     icon: "delete",
                     danger: true,
-                    onSelect: () => {
-                        // A run cannot be restored, so it is worth one question.
-                        if (window.confirm(`Delete “${entry.title}”? This cannot be undone.`)) {
-                            onDeleteRun(entry);
-                        }
-                    },
+                    // A run cannot be restored, so it is worth one question —
+                    // asked in the app, since `window.confirm` is suppressed
+                    // outright in embedded web views.
+                    onSelect: () => setPendingDelete(entry),
                 });
                 return items;
             }
@@ -396,7 +397,7 @@ export function HistoryRail({
                 },
             ];
         },
-        [onResumeSession, onOpenRun, onDeleteSession, onDeleteRun]
+        [onResumeSession, onOpenRun, onDeleteSession]
     );
 
     const totalShown = groups.reduce((sum, group) => sum + group.entries.length, 0);
@@ -588,6 +589,24 @@ export function HistoryRail({
                     </div>
                 )}
             </div>
+
+            <ConfirmDialog
+                open={pendingDelete !== null}
+                onOpenChange={next => {
+                    if (!next) setPendingDelete(null);
+                }}
+                title="Delete this run?"
+                description={
+                    pendingDelete
+                        ? `“${pendingDelete.title}” will be removed from history. This cannot be undone.`
+                        : undefined
+                }
+                onConfirm={() => {
+                    const target = pendingDelete;
+                    setPendingDelete(null);
+                    if (target) onDeleteRun(target);
+                }}
+            />
         </div>
     );
 }

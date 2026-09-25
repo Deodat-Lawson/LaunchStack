@@ -1,5 +1,5 @@
 {
-  "id": "74722058-0f6c-462c-84be-f350b45dc9dc",
+  "id": "a1e99758-f73f-4589-8968-b66026547e5a",
   "prevId": "6fa31e9f-15b0-4134-89a9-d541afb0bb59",
   "version": "7",
   "dialect": "postgresql",
@@ -2818,43 +2818,6 @@
           "type": "varchar(16)",
           "primaryKey": false,
           "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "mode": {
-          "name": "mode",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tools": {
-          "name": "tools",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "style": {
-          "name": "style",
-          "type": "varchar(24)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "builtin": {
-          "name": "builtin",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "avatar_url": {
-          "name": "avatar_url",
-          "type": "varchar(512)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -3186,18 +3149,6 @@
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "workflow_key": {
-          "name": "workflow_key",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "phases": {
-          "name": "phases",
-          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         }
@@ -5999,6 +5950,155 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.pdr_ai_v2_profile_images": {
+      "name": "pdr_ai_v2_profile_images",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(32)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "bytea",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "byte_size": {
+          "name": "byte_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "profile_images_user_global_unique": {
+          "name": "profile_images_user_global_unique",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "company_id is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "profile_images_user_company_unique": {
+          "name": "profile_images_user_company_unique",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "company_id is not null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "profile_images_company_id_idx": {
+          "name": "profile_images_company_id_idx",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pdr_ai_v2_profile_images_user_id_pdr_ai_v2_users_id_fk": {
+          "name": "pdr_ai_v2_profile_images_user_id_pdr_ai_v2_users_id_fk",
+          "tableFrom": "pdr_ai_v2_profile_images",
+          "tableTo": "pdr_ai_v2_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pdr_ai_v2_profile_images_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_profile_images_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_profile_images",
+          "tableTo": "pdr_ai_v2_company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.pdr_ai_v2_user_company_memberships": {
       "name": "pdr_ai_v2_user_company_memberships",
       "schema": "",
@@ -6051,6 +6151,18 @@
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_display_name": {
+          "name": "profile_display_name",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_title": {
+          "name": "profile_title",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
         }
@@ -6226,6 +6338,42 @@
         },
         "updated_at": {
           "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pronouns": {
+          "name": "pronouns",
+          "type": "varchar(40)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_zone": {
+          "name": "time_zone",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "varchar(280)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_photo_checked_at": {
+          "name": "provider_photo_checked_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -6869,12 +7017,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
-        },
-        "agent_key": {
-          "name": "agent_key",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -6996,12 +7138,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
-        },
-        "agent_key": {
-          "name": "agent_key",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {

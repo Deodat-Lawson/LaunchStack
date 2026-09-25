@@ -148,6 +148,13 @@
       "when": 1789701428387,
       "tag": "20260918031708_brand_posts",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1790222016700,
+      "tag": "20260924035336_user_profiles",
+      "breakpoints": true
     }
   ]
 }

@@ -11,33 +11,43 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
+import { Button } from "~/components/ui/button";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { useMyProfile } from "~/lib/profile/use-my-profile";
 
 /**
  * Avatar + sign-out menu for the signed-in user. Replaces Clerk's
- * <UserButton>: an initial in a circle that opens a small account menu.
- * Renders nothing while signed out or loading, so callers can drop it in
- * unconditionally.
+ * <UserButton>: their photo (or initials) in a circle that opens a small
+ * account menu. Renders nothing while signed out or loading, so callers can
+ * drop it in unconditionally. Before a profile exists (mid-signup) it shows
+ * the session's name.
  */
 export function UserMenu({ afterSignOutUrl = "/signin" }: { afterSignOutUrl?: string }) {
     const { signOut } = useAuth();
     const { user } = useUser();
+    const { data: profile } = useMyProfile({ enabled: Boolean(user) });
 
     if (!user) return null;
 
-    const name = user.name.trim();
-    const initial = (name || user.email).charAt(0).toUpperCase() || "U";
+    const name = profile?.effective.displayName ?? user.name.trim();
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button
+                <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     aria-label="Account menu"
-                    className="bg-brand flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-white"
+                    className="size-8 rounded-full p-0 hover:bg-transparent"
                 >
-                    {initial}
-                </button>
+                    <ProfileAvatar
+                        name={name}
+                        email={user.email}
+                        src={profile?.effective.avatarUrl}
+                    />
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-52">
                 <DropdownMenuLabel>

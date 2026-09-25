@@ -146,6 +146,8 @@ jest.mock("~/server/collab/personas", () => ({
 import { GET, POST } from "~/app/api/collab/agents/route";
 import { DELETE, PATCH } from "~/app/api/collab/agents/[personaId]/route";
 
+const listAgents = () => GET(new Request("http://localhost/api/collab/agents"));
+
 function jsonRequest(body: unknown, method = "POST") {
     return new Request("http://localhost/api/collab/agents", {
         method,
@@ -173,7 +175,7 @@ describe("collab agents routes", () => {
 
     it("rejects unauthenticated callers", async () => {
         mockCtx.userId = null;
-        expect((await GET()).status).toBe(401);
+        expect((await listAgents()).status).toBe(401);
         expect((await POST(jsonRequest(VALID))).status).toBe(401);
         expect(
             (
@@ -192,14 +194,14 @@ describe("collab agents routes", () => {
     });
 
     it("seeds a starter roster so the picker is never empty", async () => {
-        const body = (await (await GET()).json()) as { personas: StoredPersona[] };
+        const body = (await (await listAgents()).json()) as { personas: StoredPersona[] };
         expect(body.personas.length).toBeGreaterThan(0);
         expect(body.personas[0]!.id).toBe("facilitator");
     });
 
     it("reports where a worker should point and what Slack still needs", async () => {
         mockCtx.slack = { canPost: false, canReceive: false, missing: ["SLACK_BOT_TOKEN"] };
-        const body = (await (await GET()).json()) as {
+        const body = (await (await listAgents()).json()) as {
             network: { enabled: boolean; hubId: string | null; hubPath: string };
             slack: { missing: string[] };
         };
@@ -214,7 +216,7 @@ describe("collab agents routes", () => {
 
     it("reports the network as disabled when no hub secret is configured", async () => {
         mockCtx.hubEnabled = false;
-        const body = (await (await GET()).json()) as {
+        const body = (await (await listAgents()).json()) as {
             network: { enabled: boolean; hubId: string | null };
         };
         expect(body.network).toMatchObject({ enabled: false, hubId: null });
@@ -232,7 +234,7 @@ describe("collab agents routes", () => {
             },
             { nodeId: "old-box", personaIds: [], lastSeenAt: 0, queuedEvents: 0, connected: false },
         ];
-        const body = (await (await GET()).json()) as { nodes: WorkerNode[] };
+        const body = (await (await listAgents()).json()) as { nodes: WorkerNode[] };
         expect(body.nodes.map(n => n.nodeId)).toEqual(["gpu-box-1", "old-box"]);
     });
 
@@ -248,7 +250,7 @@ describe("collab agents routes", () => {
             },
         ];
 
-        const response = await GET();
+        const response = await listAgents();
         expect(response.status).toBe(200);
         const body = (await response.json()) as { personas: StoredPersona[]; nodes: WorkerNode[] };
         expect(body.personas.length).toBeGreaterThan(0);
@@ -350,7 +352,7 @@ describe("collab agents routes", () => {
 
             // The row survives; it just stops appearing in the roster.
             expect(mockCtx.personas.find(p => p.dbId === "p_finance")).toBeDefined();
-            const listed = (await (await GET()).json()) as { personas: StoredPersona[] };
+            const listed = (await (await listAgents()).json()) as { personas: StoredPersona[] };
             expect(listed.personas.some(p => p.id === "finance")).toBe(false);
         });
 

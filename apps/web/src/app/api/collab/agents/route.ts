@@ -22,14 +22,12 @@ import { getSlackStatus } from "~/server/collab/slack";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request?: Request) {
+export async function GET(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
     const { companyId } = ctx.data;
-    const includeArchived = request
-        ? new URL(request.url).searchParams.get("archived") === "1"
-        : false;
+    const includeArchived = new URL(request.url).searchParams.get("archived") === "1";
 
     // Seeding returns the live roster; `?archived=1` widens it for the Agents
     // page, which offers retired agents a way back.

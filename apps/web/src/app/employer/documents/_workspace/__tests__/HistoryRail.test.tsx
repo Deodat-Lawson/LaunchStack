@@ -130,26 +130,28 @@ describe("HistoryRail", () => {
             expect(screen.queryByText("Open")).not.toBeInTheDocument();
         });
 
-        it("asks before deleting, and passes the whole entry", async () => {
-            const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
+        it("asks in the app before deleting, and passes the whole entry", async () => {
             const props = setup();
             openMenuOn("history-row-distribution:r1");
             fireEvent.click(await screen.findByText("Delete…"));
 
-            expect(confirmSpy).toHaveBeenCalled();
+            // An in-app dialog, not window.confirm: embedded web views
+            // suppress the native one, which made delete look broken.
+            expect(await screen.findByTestId("confirm-dialog")).toBeInTheDocument();
+            expect(props.onDeleteRun).not.toHaveBeenCalled();
+
+            fireEvent.click(screen.getByTestId("confirm-accept"));
             // The whole entry: the caller needs the kind as well as the id.
             expect(props.onDeleteRun).toHaveBeenCalledWith(RUN);
-            confirmSpy.mockRestore();
         });
 
-        it("deletes nothing when the question is declined", async () => {
-            const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+        it("deletes nothing when the dialog is dismissed", async () => {
             const props = setup();
             openMenuOn("history-row-distribution:r1");
             fireEvent.click(await screen.findByText("Delete…"));
+            fireEvent.click(await screen.findByTestId("confirm-cancel"));
 
             expect(props.onDeleteRun).not.toHaveBeenCalled();
-            confirmSpy.mockRestore();
         });
     });
 

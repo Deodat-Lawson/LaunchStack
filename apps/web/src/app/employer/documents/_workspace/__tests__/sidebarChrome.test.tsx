@@ -77,7 +77,6 @@ describe("CollapsedRail", () => {
 describe("AccountMenu", () => {
     function setup(variant: "row" | "avatar" = "row") {
         const props = {
-            userInitials: "DO",
             userName: "Dev Owner",
             userEmail: "owner@launchstack.test",
             onOpenSettings: jest.fn(),
@@ -92,6 +91,23 @@ describe("AccountMenu", () => {
         const trigger = screen.getByTestId("account-menu");
         expect(trigger).toHaveTextContent("Dev Owner");
         expect(trigger).toHaveTextContent("owner@launchstack.test");
+    });
+
+    it("shows the profile's title in place of the email, and both in the menu", async () => {
+        render(
+            <AccountMenu
+                variant="row"
+                userName="Dev Owner"
+                userEmail="owner@launchstack.test"
+                userTitle="Founder & CEO"
+                onOpenSettings={jest.fn()}
+            />
+        );
+        const trigger = screen.getByTestId("account-menu");
+        expect(trigger).toHaveTextContent("Founder & CEO");
+        expect(trigger).not.toHaveTextContent("owner@launchstack.test");
+        openMenu(trigger);
+        expect(await screen.findByText("owner@launchstack.test")).toBeInTheDocument();
     });
 
     it("is the avatar alone in the collapsed strip, and still says whose it is", () => {

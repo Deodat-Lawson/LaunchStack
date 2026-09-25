@@ -12,6 +12,7 @@ import {
     Sun,
 } from "lucide-react";
 
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,9 +28,13 @@ import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwi
 const DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
 
 export interface AccountMenuProps {
-    userInitials: string;
+    /** How the active workspace sees you — `useMyProfile().data.effective`. */
     userName?: string;
     userEmail?: string;
+    /** The profile's title, shown in place of the email when there is one. */
+    userTitle?: string | null;
+    /** The profile photo; initials on the brand colour without one. */
+    avatarUrl?: string | null;
     onOpenSettings: () => void;
     onSignOut?: () => void;
     /**
@@ -52,9 +57,10 @@ export interface AccountMenuProps {
  * the columns are doing.
  */
 export function AccountMenu({
-    userInitials,
     userName,
     userEmail,
+    userTitle,
+    avatarUrl,
     onOpenSettings,
     onSignOut,
     variant,
@@ -64,13 +70,16 @@ export function AccountMenu({
     const workspace = useEmployerWorkspaceSwitcher();
     const name = userName ?? "Your account";
 
+    const subtitle = userTitle ?? userEmail;
+
     const avatar = (
-        <span
-            aria-hidden
-            className="text-brand-fg flex size-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--accent),var(--accent-deep))] text-[11px] font-bold"
-        >
-            {userInitials}
-        </span>
+        <ProfileAvatar
+            name={userName}
+            email={userEmail}
+            src={avatarUrl}
+            className="size-7 shrink-0"
+            fallbackClassName="text-[11px]"
+        />
     );
 
     return (
@@ -88,9 +97,9 @@ export function AccountMenu({
                             <span className="text-ink block truncate text-[12.5px] font-semibold">
                                 {name}
                             </span>
-                            {userEmail && (
+                            {subtitle && (
                                 <span className="text-ink-3 block truncate text-[11px]">
-                                    {userEmail}
+                                    {subtitle}
                                 </span>
                             )}
                         </span>
@@ -120,6 +129,9 @@ export function AccountMenu({
                     <span className="text-ink block truncate text-[13px] font-semibold">
                         {name}
                     </span>
+                    {userTitle && (
+                        <span className="text-ink-2 block truncate text-[11.5px]">{userTitle}</span>
+                    )}
                     {userEmail && (
                         <span className="text-ink-3 block truncate text-[11px]">{userEmail}</span>
                     )}

@@ -8,6 +8,7 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships, workspaceInvitations } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
+import { workspacePiles } from "~/server/profile/teammates";
 
 import { WorkspaceSelectClient, type PendingInvite } from "./WorkspaceSelectClient";
 
@@ -84,6 +85,13 @@ export default async function WorkspacesPage({
               .orderBy(desc(workspaceInvitations.createdAt))
         : [];
 
+    // Real faces for each workspace's avatar pile (see workspacePiles for
+    // who is shown where).
+    const piles = await workspacePiles(
+        { userPk: BigInt(user.id), authUserId: userId },
+        rows.map(r => ({ companyId: BigInt(r.id), role: r.role, status: r.status }))
+    );
+
     const activeCompanyId = await getActiveCompanyId(userId);
     const params = await searchParams;
     const fromSignup = params.from === "signup";
@@ -97,6 +105,8 @@ export default async function WorkspacesPage({
         role: r.role,
         status: r.status,
         memberCount: Number(r.memberCount ?? 1),
+        me: piles.get(r.id.toString())?.me ?? null,
+        teammates: piles.get(r.id.toString())?.teammates ?? [],
         lastOpenedAt: r.lastOpenedAt.toISOString(),
         // A null active id is a safe recovery state: the user can choose one
         // of their live memberships instead of inheriting a stale default.

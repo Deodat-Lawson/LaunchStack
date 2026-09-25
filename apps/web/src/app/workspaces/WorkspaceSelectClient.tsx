@@ -4,7 +4,9 @@ import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } fr
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
+import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -22,9 +24,18 @@ type Workspace = {
     /** Membership status: active, pending approval, or suspended. */
     status: string;
     memberCount: number;
+    /** You as this workspace sees you; null falls back to your profile. */
+    me: PileSeat | null;
+    /** A few real teammates, or none where you can't view the member list. */
+    teammates: PileSeat[];
     lastOpenedAt: string;
     isActive: boolean;
 };
+
+type PileSeat = { name: string; avatarUrl: string | null };
+
+/** Faces shown before the pile collapses to "+N". */
+const PILE_FACES = 4;
 
 type Account = {
     name: string;
@@ -102,41 +113,6 @@ function roleBadgeClass(role: string): string {
     return `${styles.roleBadge} ${styles.roleEditor}`;
 }
 
-const ALTPILE = [styles.avAlt1, styles.avAlt2, styles.avAlt3] as const;
-
-function syntheticMemberInitials(seed: string, index: number): string {
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-    let h = 0;
-    for (let i = 0; i < seed.length; i++) {
-        h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    }
-    h = (h + index * 17) >>> 0;
-    const a = alphabet[h % alphabet.length] ?? "A";
-    const b = alphabet[(h >>> 8) % alphabet.length] ?? "B";
-    return a + b;
-}
-
-function memberPileParts(
-    memberCount: number,
-    accountName: string,
-    seed: string
-): { label: string; extraClass?: string }[] {
-    const n = Math.max(1, memberCount);
-    const showPlus = n > 4;
-    const letterSlots = showPlus ? 4 : Math.min(4, n);
-    const out: { label: string; extraClass?: string }[] = [
-        { label: initialsOf(accountName), extraClass: undefined },
-    ];
-    for (let i = 1; i < letterSlots; i++) {
-        const alt = ALTPILE[(i - 1) % ALTPILE.length];
-        out.push({
-            label: syntheticMemberInitials(seed, i),
-            extraClass: alt,
-        });
-    }
-    return out;
-}
-
 const SWATCH_GRADIENTS: Record<number, string> = {
     1: "linear-gradient(135deg, var(--accent), var(--accent-deep))",
     2: "linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.20 220))",
@@ -154,6 +130,8 @@ export function WorkspaceSelectClient({
 }: Props) {
     const router = useRouter();
     const { signOut } = useAuth();
+    // Your profile photo (not a workspace's override): no workspace is open here.
+    const myPhoto = useMyProfile().data?.profile.avatarUrl ?? null;
     const { theme, setTheme, resolvedTheme } = useTheme();
     const isDark = (resolvedTheme ?? theme) === "dark";
     // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
@@ -183,7 +161,15 @@ export function WorkspaceSelectClient({
         const q = query.trim().toLowerCase();
         if (!q) return workspaces;
         return workspaces.filter(w => {
-            const haystack = [w.name, w.slug, w.role, w.description ?? ""].join(" ").toLowerCase();
+            const haystack = [
+                w.name,
+                w.slug,
+                w.role,
+                w.description ?? "",
+                ...w.teammates.map(t => t.name),
+            ]
+                .join(" ")
+                .toLowerCase();
             return haystack.includes(q);
         });
     }, [workspaces, query]);
@@ -284,6 +270,7 @@ export function WorkspaceSelectClient({
                 return;
             }
             const data = (await res.json()) as { redirectTo?: string };
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
         } catch (err) {
             console.error(err);
@@ -326,6 +313,7 @@ export function WorkspaceSelectClient({
                 setSubmitting(false);
                 return;
             }
+            resetMyProfile();
             router.push("/employer/documents");
             router.refresh();
         } catch (err) {
@@ -359,6 +347,7 @@ export function WorkspaceSelectClient({
                 setAcceptingId(null);
                 return;
             }
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
             router.refresh();
         } catch (err) {
@@ -367,8 +356,6 @@ export function WorkspaceSelectClient({
             setAcceptingId(null);
         }
     }
-
-    const accountInitials = initialsOf(account.name);
 
     return (
         <div className={styles.body}>
@@ -386,7 +373,13 @@ export function WorkspaceSelectClient({
                 </div>
                 <div className={styles.spacer} />
                 <div className={styles.me} title="Switch account">
-                    <span className={styles.meAvatar}>{accountInitials}</span>
+                    <ProfileAvatar
+                        name={account.name}
+                        email={account.email}
+                        src={myPhoto}
+                        className="size-[22px]"
+                        fallbackClassName="text-[10px]"
+                    />
                     <span>{account.name}</span>
                     {account.email ? (
                         <span className={styles.meEmail}>· {account.email}</span>
@@ -492,13 +485,12 @@ export function WorkspaceSelectClient({
                                 ws.memberCount === 1 ? "Just you" : `${ws.memberCount} members`;
                             const isSwitching = switchingId === ws.id;
                             const showPile = ws.memberCount > 1;
-                            const pile = showPile
-                                ? memberPileParts(
-                                      ws.memberCount,
-                                      account.name,
-                                      `${ws.id}:${ws.slug}`
-                                  )
-                                : [];
+                            // You first, then real teammates; the rest is a count.
+                            const pile: PileSeat[] = [
+                                ws.me ?? { name: account.name, avatarUrl: myPhoto },
+                                ...ws.teammates,
+                            ].slice(0, PILE_FACES);
+                            const hidden = Math.max(0, ws.memberCount - pile.length);
                             return (
                                 <button
                                     key={ws.id}
@@ -556,22 +548,22 @@ export function WorkspaceSelectClient({
                                         </div>
                                     </div>
                                     {showPile ? (
-                                        <div className={styles.pile} aria-label="Members">
+                                        <div
+                                            className={styles.pile}
+                                            aria-label={`Members: ${pile.map(p => p.name).join(", ")}${hidden > 0 ? ` and ${hidden} more` : ""}`}
+                                        >
                                             {pile.map((p, i) => (
-                                                <span
+                                                <ProfileAvatar
                                                     key={`${ws.id}-pile-${i}`}
-                                                    className={
-                                                        p.extraClass
-                                                            ? `${styles.av} ${p.extraClass}`
-                                                            : styles.av
-                                                    }
-                                                >
-                                                    {p.label}
-                                                </span>
+                                                    name={p.name}
+                                                    src={p.avatarUrl}
+                                                    className={`${styles.av} size-[22px]`}
+                                                    fallbackClassName="text-[9.5px]"
+                                                />
                                             ))}
-                                            {ws.memberCount > 4 ? (
+                                            {hidden > 0 ? (
                                                 <span className={`${styles.av} ${styles.avMore}`}>
-                                                    +{ws.memberCount - 4}
+                                                    +{hidden}
                                                 </span>
                                             ) : null}
                                         </div>

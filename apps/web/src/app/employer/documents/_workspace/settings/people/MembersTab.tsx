@@ -7,6 +7,7 @@ import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
 import { buildMemberMenuItems, type MemberMenuHandlers } from "./peopleContextMenu";
 
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -342,18 +343,40 @@ export function MembersTab({ can }: MembersTabProps) {
                                             }}
                                         >
                                             <TableCell>
-                                                <div className="flex min-w-0 flex-col">
-                                                    <span className="text-ink flex items-center gap-2 font-medium">
-                                                        <span className="truncate">
-                                                            {member.name || member.email}
+                                                <div className="flex min-w-0 items-center gap-3">
+                                                    <ProfileAvatar
+                                                        name={member.displayName}
+                                                        email={member.email}
+                                                        src={member.avatarUrl}
+                                                    />
+                                                    <div className="flex min-w-0 flex-col">
+                                                        <span className="text-ink flex items-center gap-2 font-medium">
+                                                            <span
+                                                                className="truncate"
+                                                                title={
+                                                                    member.displayName !==
+                                                                    member.name
+                                                                        ? member.name
+                                                                        : undefined
+                                                                }
+                                                            >
+                                                                {member.displayName}
+                                                            </span>
+                                                            {member.pronouns && (
+                                                                <span className="text-ink-3 shrink-0 text-xs font-normal">
+                                                                    {member.pronouns}
+                                                                </span>
+                                                            )}
+                                                            {member.isSelf && (
+                                                                <Badge variant="outline">You</Badge>
+                                                            )}
                                                         </span>
-                                                        {member.isSelf && (
-                                                            <Badge variant="outline">You</Badge>
-                                                        )}
-                                                    </span>
-                                                    <span className="text-ink-3 truncate text-xs">
-                                                        {member.email}
-                                                    </span>
+                                                        <span className="text-ink-3 truncate text-xs">
+                                                            {member.title
+                                                                ? `${member.title} · ${member.email}`
+                                                                : member.email}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </TableCell>
                                             <TableCell>

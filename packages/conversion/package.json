@@ -34,7 +34,6 @@
         "./ocr/adapters/ossAdapter": "./src/ocr-processing/adapters/ossAdapter.ts",
         "./package.json": "./package.json",
         "./ocr/config-types": "./src/ocr-processing/config-types.ts",
-        "./heading-chunker": "./src/heading-chunker.ts",
         "./ocr/processor": "./src/ocr-processing/processor.ts",
         "./ocr/chunker": "./src/ocr-processing/chunker.ts",
         "./ocr/code-chunker": "./src/ocr-processing/code-chunker.ts"
@@ -149,10 +148,6 @@
             "./ocr/config-types": {
                 "types": "./dist/ocr-processing/config-types.d.ts",
                 "default": "./dist/ocr-processing/config-types.js"
-            },
-            "./heading-chunker": {
-                "types": "./dist/heading-chunker.d.ts",
-                "default": "./dist/heading-chunker.js"
             },
             "./ocr/processor": {
                 "types": "./dist/ocr-processing/processor.d.ts",

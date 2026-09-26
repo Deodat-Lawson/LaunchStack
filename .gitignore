@@ -52,6 +52,10 @@ yarn-error.log*
 
 # package build outputs
 packages/*/dist/
+# pipelines/ left packages/ in ADR-008 and its dist/ was committed because the
+# pattern above no longer matched. Workspace consumers import src/ (see the
+# package's exports); dist/ is only built for publishing.
+pipelines/dist/
 
 # idea files
 .idea

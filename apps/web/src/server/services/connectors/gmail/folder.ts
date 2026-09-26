@@ -45,7 +45,11 @@ async function categoryIdFor(companyId: bigint, path: string): Promise<bigint | 
     return row ? BigInt(row.id) : null;
 }
 
-async function restrictFolder(companyId: bigint, categoryId: bigint, updatedBy: string): Promise<void> {
+async function restrictFolder(
+    companyId: bigint,
+    categoryId: bigint,
+    updatedBy: string
+): Promise<void> {
     await db
         .insert(folderSettings)
         .values({ categoryId, companyId, visibility: "restricted", updatedBy })

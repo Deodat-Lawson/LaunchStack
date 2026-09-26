@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import type { DiscoveredKnowledgeItem, KnowledgeItem, KnowledgeSink, StoredKnowledgeItem } from "../types";
+import type {
+    DiscoveredKnowledgeItem,
+    KnowledgeItem,
+    KnowledgeSink,
+    StoredKnowledgeItem,
+} from "../types";
 import {
     GmailApiError,
     GmailHistoryExpiredError,
@@ -23,10 +28,20 @@ function message(input: {
     date: string;
     text: string;
     labels?: string[];
-    attachments?: { partId: string; filename: string; mimeType: string; size: number; attachmentId: string }[];
+    attachments?: {
+        partId: string;
+        filename: string;
+        mimeType: string;
+        size: number;
+        attachmentId: string;
+    }[];
 }): GmailMessage {
     const parts: GmailPart[] = [
-        { partId: "0", mimeType: "text/plain", body: { data: b64(input.text), size: input.text.length } },
+        {
+            partId: "0",
+            mimeType: "text/plain",
+            body: { data: b64(input.text), size: input.text.length },
+        },
         ...(input.attachments ?? []).map(att => ({
             partId: att.partId,
             mimeType: att.mimeType,
@@ -117,7 +132,9 @@ class FakeMailbox implements GmailClient {
             throw new GmailHistoryExpiredError(params.startHistoryId);
         }
         return {
-            history: this.history.filter(record => Number(record.id) > Number(params.startHistoryId)),
+            history: this.history.filter(
+                record => Number(record.id) > Number(params.startHistoryId)
+            ),
             historyId: this.historyId,
         };
     }
@@ -131,7 +148,10 @@ class FakeMailbox implements GmailClient {
 }
 
 class MemorySink implements KnowledgeSink {
-    readonly items = new Map<string, { hash: string; content: string | Uint8Array; title: string }>();
+    readonly items = new Map<
+        string,
+        { hash: string; content: string | Uint8Array; title: string }
+    >();
     readonly stores: string[] = [];
     private nextId = 1;
 
@@ -141,7 +161,11 @@ class MemorySink implements KnowledgeSink {
 
     async store(item: KnowledgeItem): Promise<StoredKnowledgeItem> {
         const existed = this.items.has(item.sourceId);
-        this.items.set(item.sourceId, { hash: item.contentHash, content: item.content, title: item.title });
+        this.items.set(item.sourceId, {
+            hash: item.contentHash,
+            content: item.content,
+            title: item.title,
+        });
         this.stores.push(item.sourceId);
         return {
             sourceId: item.sourceId,
@@ -165,7 +189,13 @@ function mailboxWithTwoThreads(): FakeMailbox {
             text: "Please review the attached.",
             labels: ["INBOX", "Label_1"],
             attachments: [
-                { partId: "1", filename: "term-sheet.pdf", mimeType: "application/pdf", size: 10, attachmentId: "att-pdf" },
+                {
+                    partId: "1",
+                    filename: "term-sheet.pdf",
+                    mimeType: "application/pdf",
+                    size: 10,
+                    attachmentId: "att-pdf",
+                },
             ],
         }),
         message({
@@ -188,7 +218,13 @@ function mailboxWithTwoThreads(): FakeMailbox {
             text: "Tacos?",
             labels: ["INBOX", "Label_1"],
             attachments: [
-                { partId: "1", filename: "menu.png", mimeType: "image/png", size: 10, attachmentId: "att-png" },
+                {
+                    partId: "1",
+                    filename: "menu.png",
+                    mimeType: "image/png",
+                    size: 10,
+                    attachmentId: "att-png",
+                },
             ],
         }),
     ]);
@@ -291,7 +327,10 @@ describe("syncGmail", () => {
         expect(String(sink.items.get("tA")!.content)).toContain("Signed.");
         // The unchanged attachment was confirmed by fingerprint, never re-downloaded.
         expect(result.skipped.map(s => `${s.sourceId}:${s.reason}`)).toEqual(["tA:a1:1:unchanged"]);
-        expect(box.calls.filter(c => c.startsWith("get:"))).toEqual(["get:tA:minimal", "get:tA:full"]);
+        expect(box.calls.filter(c => c.startsWith("get:"))).toEqual([
+            "get:tA:minimal",
+            "get:tA:full",
+        ]);
         expect(box.calls.filter(c => c.startsWith("attachment:"))).toEqual([]);
         // Incremental runs never declare anything missing.
         expect(result.missingSourceIds).toEqual([]);
@@ -305,7 +344,10 @@ describe("syncGmail", () => {
 
         box.historyId = "120";
         box.history = [
-            { id: "115", labelsRemoved: [{ message: { id: "b1", threadId: "tB" }, labelIds: ["UNREAD"] }] },
+            {
+                id: "115",
+                labelsRemoved: [{ message: { id: "b1", threadId: "tB" }, labelIds: ["UNREAD"] }],
+            },
         ];
         box.calls = [];
 

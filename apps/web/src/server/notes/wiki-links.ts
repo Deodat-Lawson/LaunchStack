@@ -17,11 +17,7 @@ import { sql, and, eq, inArray, isNull, or } from "drizzle-orm";
 import type { JSONContent } from "@tiptap/react";
 
 import { db } from "~/server/db";
-import {
-  documentNotes,
-  noteLinks,
-  type NoteLinkTargetType,
-} from "~/server/db/schema";
+import { documentNotes, noteLinks, type NoteLinkTargetType } from "~/server/db/schema";
 import { document } from "@launchstack/store/schema";
 import { users } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
@@ -33,8 +29,8 @@ import type { DocumentScope } from "~/lib/authz/scope-types";
  * re-syncing links) the whole workspace is searchable.
  */
 function linkableDocumentsWhere(companyId: string, scope: DocumentScope | undefined) {
-  const id = BigInt(companyId);
-  return scope ? scopedDocumentWhere(id, scope) : eq(document.companyId, id);
+    const id = BigInt(companyId);
+    return scope ? scopedDocumentWhere(id, scope) : eq(document.companyId, id);
 }
 
 /**
@@ -45,46 +41,46 @@ function linkableDocumentsWhere(companyId: string, scope: DocumentScope | undefi
 const WIKI_LINK_RE = /\[\[([^\[\]\n]{1,200})\]\]/g;
 
 export interface WikiLinkRef {
-  /** Raw label between the double brackets, trimmed. */
-  title: string;
+    /** Raw label between the double brackets, trimmed. */
+    title: string;
 }
 
 export function extractWikiLinks(rich: JSONContent | null | undefined): WikiLinkRef[] {
-  if (!rich) return [];
-  const seen = new Set<string>();
-  const out: WikiLinkRef[] = [];
+    if (!rich) return [];
+    const seen = new Set<string>();
+    const out: WikiLinkRef[] = [];
 
-  const walk = (node: JSONContent) => {
-    if (!node) return;
-    if (node.type === "text" && typeof node.text === "string") {
-      let m: RegExpExecArray | null;
-      WIKI_LINK_RE.lastIndex = 0;
-      while ((m = WIKI_LINK_RE.exec(node.text)) !== null) {
-        const title = m[1]?.trim();
-        if (!title || seen.has(title.toLowerCase())) continue;
-        seen.add(title.toLowerCase());
-        out.push({ title });
-      }
-    }
-    for (const child of node.content ?? []) walk(child);
-  };
-  walk(rich);
-  return out;
+    const walk = (node: JSONContent) => {
+        if (!node) return;
+        if (node.type === "text" && typeof node.text === "string") {
+            let m: RegExpExecArray | null;
+            WIKI_LINK_RE.lastIndex = 0;
+            while ((m = WIKI_LINK_RE.exec(node.text)) !== null) {
+                const title = m[1]?.trim();
+                if (!title || seen.has(title.toLowerCase())) continue;
+                seen.add(title.toLowerCase());
+                out.push({ title });
+            }
+        }
+        for (const child of node.content ?? []) walk(child);
+    };
+    walk(rich);
+    return out;
 }
 
 interface ResolveCtx {
-  companyId: string | null;
-  /** Excluded from match — prevents a note from linking to itself. */
-  selfNoteId?: number;
-  /** The caller's document scope; a link may not resolve to a document they cannot see. */
-  scope?: DocumentScope;
+    companyId: string | null;
+    /** Excluded from match — prevents a note from linking to itself. */
+    selfNoteId?: number;
+    /** The caller's document scope; a link may not resolve to a document they cannot see. */
+    scope?: DocumentScope;
 }
 
 interface ResolvedRef {
-  title: string;
-  targetType: NoteLinkTargetType;
-  targetNoteId: number | null;
-  targetDocumentId: string | null;
+    title: string;
+    targetType: NoteLinkTargetType;
+    targetNoteId: number | null;
+    targetDocumentId: string | null;
 }
 
 /**
@@ -93,84 +89,80 @@ interface ResolvedRef {
  * stable target. Falls back to a note title match. Unresolved refs are
  * returned with `targetType: "note"` and both ids null.
  */
-async function resolveRefs(
-  refs: WikiLinkRef[],
-  ctx: ResolveCtx,
-): Promise<ResolvedRef[]> {
-  if (refs.length === 0) return [];
-  const titles = refs.map((r) => r.title);
-  const titleLower = titles.map((t) => t.toLowerCase());
+async function resolveRefs(refs: WikiLinkRef[], ctx: ResolveCtx): Promise<ResolvedRef[]> {
+    if (refs.length === 0) return [];
+    const titles = refs.map(r => r.title);
+    const titleLower = titles.map(t => t.toLowerCase());
 
-  const docMatches = ctx.companyId
-    ? await db
-        .select({ id: document.id, title: document.title })
-        .from(document)
+    const docMatches = ctx.companyId
+        ? await db
+              .select({ id: document.id, title: document.title })
+              .from(document)
+              .where(
+                  and(
+                      linkableDocumentsWhere(ctx.companyId, ctx.scope),
+                      // varchar lower(title) match
+                      inArray(sql<string>`lower(${document.title})`, titleLower)
+                  )
+              )
+        : [];
+
+    const noteMatches = await db
+        .select({ id: documentNotes.id, title: documentNotes.title })
+        .from(documentNotes)
         .where(
-          and(
-            linkableDocumentsWhere(ctx.companyId, ctx.scope),
-            // varchar lower(title) match
-            inArray(sql<string>`lower(${document.title})`, titleLower),
-          ),
-        )
-    : [];
+            and(
+                ctx.companyId
+                    ? eq(documentNotes.companyId, ctx.companyId)
+                    : isNull(documentNotes.companyId),
+                inArray(sql<string>`lower(${documentNotes.title})`, titleLower)
+            )
+        );
 
-  const noteMatches = await db
-    .select({ id: documentNotes.id, title: documentNotes.title })
-    .from(documentNotes)
-    .where(
-      and(
-        ctx.companyId
-          ? eq(documentNotes.companyId, ctx.companyId)
-          : isNull(documentNotes.companyId),
-        inArray(sql<string>`lower(${documentNotes.title})`, titleLower),
-      ),
-    );
-
-  const docByTitle = new Map<string, number>();
-  for (const d of docMatches) {
-    if (d.title) docByTitle.set(d.title.toLowerCase(), d.id);
-  }
-  const noteByTitle = new Map<string, number>();
-  for (const n of noteMatches) {
-    if (n.title && n.id !== ctx.selfNoteId)
-      noteByTitle.set(n.title.toLowerCase(), n.id);
-  }
-
-  return refs.map((r) => {
-    const lower = r.title.toLowerCase();
-    const docId = docByTitle.get(lower);
-    if (docId !== undefined) {
-      return {
-        title: r.title,
-        targetType: "document" as const,
-        targetNoteId: null,
-        targetDocumentId: String(docId),
-      };
+    const docByTitle = new Map<string, number>();
+    for (const d of docMatches) {
+        if (d.title) docByTitle.set(d.title.toLowerCase(), d.id);
     }
-    const noteId = noteByTitle.get(lower);
-    if (noteId !== undefined) {
-      return {
-        title: r.title,
-        targetType: "note" as const,
-        targetNoteId: noteId,
-        targetDocumentId: null,
-      };
+    const noteByTitle = new Map<string, number>();
+    for (const n of noteMatches) {
+        if (n.title && n.id !== ctx.selfNoteId) noteByTitle.set(n.title.toLowerCase(), n.id);
     }
-    return {
-      title: r.title,
-      targetType: "note" as const,
-      targetNoteId: null,
-      targetDocumentId: null,
-    };
-  });
+
+    return refs.map(r => {
+        const lower = r.title.toLowerCase();
+        const docId = docByTitle.get(lower);
+        if (docId !== undefined) {
+            return {
+                title: r.title,
+                targetType: "document" as const,
+                targetNoteId: null,
+                targetDocumentId: String(docId),
+            };
+        }
+        const noteId = noteByTitle.get(lower);
+        if (noteId !== undefined) {
+            return {
+                title: r.title,
+                targetType: "note" as const,
+                targetNoteId: noteId,
+                targetDocumentId: null,
+            };
+        }
+        return {
+            title: r.title,
+            targetType: "note" as const,
+            targetNoteId: null,
+            targetDocumentId: null,
+        };
+    });
 }
 
 interface SyncArgs {
-  noteId: number;
-  rich: JSONContent | null | undefined;
-  companyId: string | null;
-  /** The author's document scope. Routes pass it; a worker without a person may omit it. */
-  scope?: DocumentScope;
+    noteId: number;
+    rich: JSONContent | null | undefined;
+    companyId: string | null;
+    /** The author's document scope. Routes pass it; a worker without a person may omit it. */
+    scope?: DocumentScope;
 }
 
 /**
@@ -179,50 +171,41 @@ interface SyncArgs {
  * timestamps.
  */
 export async function syncNoteLinks(args: SyncArgs): Promise<void> {
-  const refs = extractWikiLinks(args.rich);
-  const resolved = await resolveRefs(refs, {
-    companyId: args.companyId,
-    selfNoteId: args.noteId,
-    scope: args.scope,
-  });
+    const refs = extractWikiLinks(args.rich);
+    const resolved = await resolveRefs(refs, {
+        companyId: args.companyId,
+        selfNoteId: args.noteId,
+        scope: args.scope,
+    });
 
-  await db
-    .delete(noteLinks)
-    .where(eq(noteLinks.sourceNoteId, args.noteId));
+    await db.delete(noteLinks).where(eq(noteLinks.sourceNoteId, args.noteId));
 
-  if (resolved.length === 0) return;
+    if (resolved.length === 0) return;
 
-  await db.insert(noteLinks).values(
-    resolved.map((r) => ({
-      sourceNoteId: args.noteId,
-      targetType: r.targetType,
-      targetNoteId: r.targetNoteId,
-      targetDocumentId: r.targetDocumentId,
-      targetTitle: r.title,
-      resolvedAt:
-        r.targetNoteId !== null || r.targetDocumentId !== null
-          ? new Date()
-          : null,
-      companyId: args.companyId,
-    })),
-  );
+    await db.insert(noteLinks).values(
+        resolved.map(r => ({
+            sourceNoteId: args.noteId,
+            targetType: r.targetType,
+            targetNoteId: r.targetNoteId,
+            targetDocumentId: r.targetDocumentId,
+            targetTitle: r.title,
+            resolvedAt: r.targetNoteId !== null || r.targetDocumentId !== null ? new Date() : null,
+            companyId: args.companyId,
+        }))
+    );
 }
 
 /**
  * Resolve the user's `companyId` from the auth user id. Returns it as a
  * stringified bigint to match the varchar shape stored on note rows.
  */
-export async function getCompanyIdForUser(
-  userId: string,
-): Promise<string | null> {
-  const [row] = await db
-    .select({ companyId: users.companyId })
-    .from(users)
-    .where(eq(users.userId, userId))
-    .limit(1);
-  return row?.companyId !== undefined && row.companyId !== null
-    ? String(row.companyId)
-    : null;
+export async function getCompanyIdForUser(userId: string): Promise<string | null> {
+    const [row] = await db
+        .select({ companyId: users.companyId })
+        .from(users)
+        .where(eq(users.userId, userId))
+        .limit(1);
+    return row?.companyId !== undefined && row.companyId !== null ? String(row.companyId) : null;
 }
 
 /**
@@ -231,83 +214,83 @@ export async function getCompanyIdForUser(
  * scoped by the user's `companyId`.
  */
 export async function searchWikiLinkCandidates(
-  title: string,
-  ctx: {
-    companyId: string | null;
-    userId: string;
-    limit?: number;
-    /** The caller's document scope; the picker must not offer documents they cannot see. */
-    scope?: DocumentScope;
-  },
+    title: string,
+    ctx: {
+        companyId: string | null;
+        userId: string;
+        limit?: number;
+        /** The caller's document scope; the picker must not offer documents they cannot see. */
+        scope?: DocumentScope;
+    }
 ): Promise<
-  Array<
-    | {
-        targetType: "document";
-        targetDocumentId: string;
-        title: string;
-      }
-    | { targetType: "note"; targetNoteId: number; title: string }
-  >
+    Array<
+        | {
+              targetType: "document";
+              targetDocumentId: string;
+              title: string;
+          }
+        | { targetType: "note"; targetNoteId: number; title: string }
+    >
 > {
-  const trimmed = title.trim();
-  if (!trimmed) return [];
-  const limit = ctx.limit ?? 8;
-  const pattern = `%${trimmed}%`;
+    const trimmed = title.trim();
+    if (!trimmed) return [];
+    const limit = ctx.limit ?? 8;
+    const pattern = `%${trimmed}%`;
 
-  const docs = ctx.companyId
-    ? await db
-        .select({ id: document.id, title: document.title })
-        .from(document)
+    const docs = ctx.companyId
+        ? await db
+              .select({ id: document.id, title: document.title })
+              .from(document)
+              .where(
+                  and(
+                      linkableDocumentsWhere(ctx.companyId, ctx.scope),
+                      sql<boolean>`${document.title} ILIKE ${pattern}`
+                  )
+              )
+              .limit(limit)
+        : [];
+
+    // Scope must match `resolveRefs` above: that function resolves note targets
+    // workspace-wide, so an author-only picker would hide exactly the notes a
+    // typed link still resolves to — the reference lands in the database while
+    // the autocomplete claims the note does not exist. Legacy rows with no
+    // company belong to no workspace, so those stay scoped to their author.
+    const ownedLegacyNote = and(
+        isNull(documentNotes.companyId),
+        eq(documentNotes.userId, ctx.userId)
+    );
+
+    const notes = await db
+        .select({ id: documentNotes.id, title: documentNotes.title })
+        .from(documentNotes)
         .where(
-          and(
-            linkableDocumentsWhere(ctx.companyId, ctx.scope),
-            sql<boolean>`${document.title} ILIKE ${pattern}`,
-          ),
+            and(
+                ctx.companyId
+                    ? or(eq(documentNotes.companyId, ctx.companyId), ownedLegacyNote)
+                    : ownedLegacyNote,
+                sql<boolean>`${documentNotes.title} ILIKE ${pattern}`
+            )
         )
-        .limit(limit)
-    : [];
+        .limit(limit);
 
-  // Scope must match `resolveRefs` above: that function resolves note targets
-  // workspace-wide, so an author-only picker would hide exactly the notes a
-  // typed link still resolves to — the reference lands in the database while
-  // the autocomplete claims the note does not exist. Legacy rows with no
-  // company belong to no workspace, so those stay scoped to their author.
-  const ownedLegacyNote = and(
-    isNull(documentNotes.companyId),
-    eq(documentNotes.userId, ctx.userId),
-  );
-
-  const notes = await db
-    .select({ id: documentNotes.id, title: documentNotes.title })
-    .from(documentNotes)
-    .where(
-      and(
-        ctx.companyId
-          ? or(eq(documentNotes.companyId, ctx.companyId), ownedLegacyNote)
-          : ownedLegacyNote,
-        sql<boolean>`${documentNotes.title} ILIKE ${pattern}`,
-      ),
-    )
-    .limit(limit);
-
-  return [
-    ...docs.map(
-      (d) =>
-        ({
-          targetType: "document" as const,
-          targetDocumentId: String(d.id),
-          title: d.title,
-        }) as const,
-    ),
-    ...notes
-      .filter((n): n is { id: number; title: string } => n.title !== null)
-      .map(
-        (n) =>
-          ({
-            targetType: "note" as const,
-            targetNoteId: n.id,
-            title: n.title,
-          }) as const,
-      ),
-  ].slice(0, limit);
+    return [
+        ...docs.map(
+            d =>
+                ({
+                    targetType: "document" as const,
+                    targetDocumentId: String(d.id),
+                    title: d.title,
+                }) as const
+        ),
+        ...notes
+            .filter((n): n is { id: number; title: string } => n.title !== null)
+            .map(
+                n =>
+                    ({
+                        targetType: "note" as const,
+                        targetNoteId: n.id,
+                        title: n.title,
+                    }) as const
+            ),
+    ].slice(0, limit);
 }

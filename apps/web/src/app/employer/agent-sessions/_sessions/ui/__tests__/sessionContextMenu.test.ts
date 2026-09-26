@@ -30,7 +30,13 @@ const handlers = () => ({
 describe("session menu builder", () => {
     it("lets a new session be imported and its ids copied, nothing more", () => {
         const items = buildSessionMenuItems(base, handlers());
-        expect(items.map(i => i.id)).toEqual(["title", "import", "sep-copy", "copy-path", "copy-id"]);
+        expect(items.map(i => i.id)).toEqual([
+            "title",
+            "import",
+            "sep-copy",
+            "copy-path",
+            "copy-id",
+        ]);
         expect(items.find(i => i.id === "import")).toMatchObject({ label: "Import" });
     });
 
@@ -60,7 +66,10 @@ describe("session menu builder", () => {
     });
 
     it("holds the import while one is running, and skips the path when there is none", () => {
-        const items = buildSessionMenuItems({ ...base, projectPath: null }, { ...handlers(), busy: true });
+        const items = buildSessionMenuItems(
+            { ...base, projectPath: null },
+            { ...handlers(), busy: true }
+        );
         expect(items.find(i => i.id === "import")).toMatchObject({
             disabled: true,
             disabledReason: "An import is already running.",

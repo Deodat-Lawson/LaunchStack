@@ -63,7 +63,10 @@ export async function claimSyncLease(connectionId: number): Promise<boolean> {
         .where(
             and(
                 eq(gmailSyncState.connectionId, connectionId),
-                or(isNull(gmailSyncState.syncLockedAt), lt(gmailSyncState.syncLockedAt, staleBefore))
+                or(
+                    isNull(gmailSyncState.syncLockedAt),
+                    lt(gmailSyncState.syncLockedAt, staleBefore)
+                )
             )
         )
         .returning({ connectionId: gmailSyncState.connectionId });
@@ -117,7 +120,14 @@ export async function addScope(connectionId: number, items: readonly ScopeInput[
     if (items.length === 0) return;
     await db
         .insert(gmailSyncScope)
-        .values(items.map(item => ({ connectionId, kind: item.kind, value: item.value, name: item.name })))
+        .values(
+            items.map(item => ({
+                connectionId,
+                kind: item.kind,
+                value: item.value,
+                name: item.name,
+            }))
+        )
         // Re-picking the same label converges on its row (the name may have changed).
         .onConflictDoUpdate({
             target: [gmailSyncScope.connectionId, gmailSyncScope.kind, gmailSyncScope.value],
@@ -129,7 +139,9 @@ export async function removeScope(connectionId: number, ids: readonly bigint[]):
     if (ids.length === 0) return 0;
     const removed = await db
         .delete(gmailSyncScope)
-        .where(and(eq(gmailSyncScope.connectionId, connectionId), inArray(gmailSyncScope.id, [...ids])))
+        .where(
+            and(eq(gmailSyncScope.connectionId, connectionId), inArray(gmailSyncScope.id, [...ids]))
+        )
         .returning({ id: gmailSyncScope.id });
     return removed.length;
 }

@@ -142,6 +142,10 @@
                 "types": "./dist/grounded-retrieval/index.d.ts",
                 "default": "./dist/grounded-retrieval/index.js"
             },
+            "./image-generation": {
+                "types": "./dist/image-generation/index.d.ts",
+                "default": "./dist/image-generation/index.js"
+            },
             "./brand-voice": {
                 "types": "./dist/brand-voice/index.d.ts",
                 "default": "./dist/brand-voice/index.js"

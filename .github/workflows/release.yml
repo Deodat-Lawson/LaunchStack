@@ -55,6 +55,12 @@ jobs:
       - name: Build publishable packages
         run: pnpm -r --filter './packages/*' --filter '@launchstack/pipelines' build
 
+      # The loadability check below only tries what publishConfig.exports
+      # lists; a subpath missing from it would never be loaded, so the two
+      # maps must agree first.
+      - name: Workspace and published export maps list the same subpaths
+        run: node scripts/ci/check-export-parity.mjs
+
       # publint validates the exports map against the tarball, but does NOT
       # follow relative specifiers inside the emitted JS. A tarball once passed
       # publint while every import() failed with ERR_MODULE_NOT_FOUND, so this

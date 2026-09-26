@@ -1,7 +1,10 @@
 /** @jest-environment jsdom */
 
 import React, { useState } from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { hydrateRoot } from "react-dom/client";
+// The node build: the browser one needs a TextEncoder jsdom does not have.
+import { renderToString } from "react-dom/server.node";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import { ContextMenuProvider } from "~/components/context-menu";
@@ -56,7 +59,7 @@ function layoutOf(columns: string[][], activeIndex = 0): PaneLayout {
     };
 }
 
-function renderView(layout: PaneLayout, overrides: Record<string, unknown> = {}) {
+function viewOf(overrides: Record<string, unknown> = {}) {
     const props = {
         onSelect: jest.fn(),
         onClose: jest.fn(),
@@ -79,6 +82,11 @@ function renderView(layout: PaneLayout, overrides: Record<string, unknown> = {})
             />
         </ContextMenuProvider>
     );
+    return { props, ui };
+}
+
+function renderView(layout: PaneLayout, overrides: Record<string, unknown> = {}) {
+    const { props, ui } = viewOf(overrides);
     const view = render(ui(layout));
     return { props, rerender: (next: PaneLayout) => view.rerender(ui(next)) };
 }
@@ -157,6 +165,47 @@ describe("StudioSplitView", () => {
         // The strip survives an empty workspace: it carries the sidebar
         // control, the account menu and the only way to open anything.
         expect(screen.getByRole("button", { name: "Open a Studio app" })).toBeInTheDocument();
+    });
+
+    it("brings the panes in after hydrating server markup, and still moves them intact", () => {
+        const { ui } = viewOf();
+        const container = document.createElement("div");
+        document.body.appendChild(container);
+
+        // React 18, which jest runs, warns about every useLayoutEffect it
+        // meets on the server; the app router renders with React 19, which
+        // dropped that warning. Anything else logged here is a real problem.
+        const errors = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        let root!: ReturnType<typeof hydrateRoot>;
+        try {
+            // The server has no document to make pane hosts with, so its
+            // markup is the columns alone (see StudioSplitView.ssr.test.tsx).
+            container.innerHTML = renderToString(ui(layoutOf([["chat"], ["knowledge"]])));
+            expect(within(container).queryByLabelText("chat draft")).not.toBeInTheDocument();
+
+            act(() => {
+                root = hydrateRoot(container, ui(layoutOf([["chat"], ["knowledge"]])));
+            });
+            // Leaving the panes out of the server's markup is not a mismatch.
+            const complaints = errors.mock.calls
+                .map(call => String(call[0]))
+                .filter(message => !message.includes("useLayoutEffect does nothing on the server"));
+            expect(complaints).toEqual([]);
+        } finally {
+            errors.mockRestore();
+        }
+
+        const before = within(container).getByLabelText("chat draft");
+        fireEvent.change(before, { target: { value: "half a sentence" } });
+        act(() => root.render(ui(layoutOf([[], ["knowledge", "chat"]], 1))));
+
+        const after = within(container).getByLabelText("chat draft");
+        expect(after).toBe(before);
+        expect(after).toHaveValue("half a sentence");
+        expect(mounts.chat).toBe(1);
+
+        act(() => root.unmount());
+        container.remove();
     });
 
     it("drops a tab the workspace can no longer name", () => {

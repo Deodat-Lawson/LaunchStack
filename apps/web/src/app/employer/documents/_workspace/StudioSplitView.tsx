@@ -1,6 +1,14 @@
 "use client";
 
-import { Fragment, useCallback, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import {
+    Fragment,
+    useCallback,
+    useLayoutEffect,
+    useRef,
+    useState,
+    useSyncExternalStore,
+    type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
@@ -42,6 +50,12 @@ export interface StudioSplitViewProps {
     studioKeys?: string | null;
 }
 
+// Whether there is a document to make pane hosts in. Nothing ever changes it,
+// so there is nothing to subscribe to; the two snapshots are the point.
+const noSubscription = () => () => undefined;
+const inBrowser = () => true;
+const onServer = () => false;
+
 /**
  * The workspace centre: columns side by side, each its own strip of tabs.
  *
@@ -80,6 +94,13 @@ export function StudioSplitView({
     const hosts = useRef(new Map<string, HTMLDivElement>());
     const rootRef = useRef<HTMLDivElement>(null);
     const columnCount = useRef(layout.groups.length);
+    /**
+     * The hosts are made with `document`, which the server does not have, so
+     * the panes are left out of its markup. A mount in the browser has them
+     * from its first render; a hydrated one gets them right after, and they
+     * could not have hydrated anyway — they were never in the server's HTML.
+     */
+    const canHostPanes = useSyncExternalStore(noSubscription, inBrowser, onServer);
 
     /**
      * A column's strip tries to move focus when a tab closes, but when the
@@ -224,23 +245,24 @@ export function StudioSplitView({
                 })}
             </ResizablePanelGroup>
 
-            {ids.map(id =>
-                createPortal(
-                    <div
-                        className="flex h-full min-h-0 min-w-0 flex-1 flex-col"
-                        // The pane is portalled, so events in it reach this
-                        // component rather than its column. Tell the layout
-                        // which column was touched — by pointer or by Tab,
-                        // since the column verbs act on the focused one.
-                        onPointerDownCapture={() => claimColumn(id)}
-                        onFocusCapture={() => claimColumn(id)}
-                    >
-                        {renderPane(id)}
-                    </div>,
-                    hostFor(id),
-                    id
-                )
-            )}
+            {canHostPanes &&
+                ids.map(id =>
+                    createPortal(
+                        <div
+                            className="flex h-full min-h-0 min-w-0 flex-1 flex-col"
+                            // The pane is portalled, so events in it reach this
+                            // component rather than its column. Tell the layout
+                            // which column was touched — by pointer or by Tab,
+                            // since the column verbs act on the focused one.
+                            onPointerDownCapture={() => claimColumn(id)}
+                            onFocusCapture={() => claimColumn(id)}
+                        >
+                            {renderPane(id)}
+                        </div>,
+                        hostFor(id),
+                        id
+                    )
+                )}
         </div>
     );
 }

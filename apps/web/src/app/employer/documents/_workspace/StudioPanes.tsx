@@ -28,6 +28,14 @@ export interface StudioPaneContext {
         onOpenDocument?: (documentId: number) => void;
         onContinue?: (documentId: number) => void;
     };
+    /**
+     * Investor relations drafts in the chat tab and saves a fund list as a
+     * source — both moves the shell owns.
+     */
+    investors?: {
+        onDraftInChat: (prompt: string) => void;
+        onSaveAsSource: (markdown: string) => void;
+    };
 }
 
 const DocumentGenerator = dynamic(
@@ -49,6 +57,11 @@ const LegalGeneratorTheme = dynamic(
         import("~/app/employer/documents/components/LegalGeneratorTheme").then(
             m => m.LegalGeneratorTheme
         ),
+    { loading: () => <LoadingPage /> }
+);
+
+const InvestorsPane = dynamic(
+    () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
     { loading: () => <LoadingPage /> }
 );
 
@@ -836,6 +849,13 @@ export function renderStudioPane(
             return <ArtifactsStudioPane onClose={onClose} />;
         case "agent-sessions":
             return <AgentSessionsStudioPane onClose={onClose} context={context} />;
+        case "investors":
+            return (
+                <InvestorsPane
+                    onDraftInChat={context?.investors?.onDraftInChat}
+                    onSaveAsSource={context?.investors?.onSaveAsSource}
+                />
+            );
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":

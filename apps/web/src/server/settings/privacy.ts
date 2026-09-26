@@ -141,6 +141,14 @@ export function privacyOverview(): PrivacyOverview {
             enabled: server.GOOGLE_DOCS_EDITING_ENABLED === "true",
             note: "Only files someone links or creates in Drive; synced back as versions.",
         },
+        {
+            id: "sec-edgar",
+            label: "Investor search",
+            host: "efts.sec.gov",
+            sends: "metadata",
+            enabled: true,
+            note: "Only the words and state typed into Find investors. Never document text.",
+        },
     ];
 
     return {

@@ -65,6 +65,18 @@ export type PaneAction =
     | { type: "move"; id: string; toGroupId: string; beforeId: string | null }
     /** Give `id` a column of its own, immediately right of the one it is in. */
     | { type: "split"; id: string }
+    /**
+     * Show `id` and `anchorId` side by side — never in the same column — and
+     * focus the anchor. Asking about a document is this: the document stays in
+     * view while the chat takes the keyboard.
+     */
+    | { type: "pair"; id: string; anchorId: string }
+    /**
+     * Fold every column into the focused one, keeping left-to-right order and
+     * what that column was showing. For a window too narrow for columns: on a
+     * phone two of them were 195px each, a strip nobody could read.
+     */
+    | { type: "merge" }
     | { type: "focusGroup"; groupId: string }
     | { type: "focusAdjacentGroup"; delta: -1 | 1 };
 
@@ -216,6 +228,57 @@ export function reduceLayout(layout: PaneLayout, action: PaneAction): PaneLayout
             return prune({ groups, activeGroupId: created.id, seq: layout.seq + 1 }, created.id);
         }
 
+        case "pair": {
+            if (action.id === action.anchorId) return layout;
+            // The anchor has to be showing before anything can sit beside it.
+            let next = groupOf(layout, action.anchorId)
+                ? layout
+                : reduceLayout(layout, { type: "open", id: action.anchorId });
+            const anchorGroup = groupOf(next, action.anchorId);
+            if (!anchorGroup) return layout;
+            const held = groupOf(next, action.id);
+
+            if (held && held.id !== anchorGroup.id) {
+                // Already in a column of its own: show it there.
+                next = reduceLayout(next, { type: "open", id: action.id, groupId: held.id });
+            } else {
+                // Not open, or sharing the anchor's column — where focusing the
+                // anchor would hide it, which is the whole failure this action
+                // exists to prevent. It needs a different column.
+                const at = next.groups.findIndex(group => group.id === anchorGroup.id);
+                const neighbour =
+                    next.groups[at + 1] ??
+                    (next.groups.length >= MAX_GROUPS ? next.groups[at - 1] : undefined);
+                if (neighbour) {
+                    next = reduceLayout(next, {
+                        type: "open",
+                        id: action.id,
+                        groupId: neighbour.id,
+                    });
+                } else {
+                    const created = newGroup(`g${next.seq}`, [action.id]);
+                    const groups = next.groups.map(group =>
+                        group.id === anchorGroup.id ? withoutTab(group, action.id) : group
+                    );
+                    groups.splice(at + 1, 0, created);
+                    next = { groups, activeGroupId: created.id, seq: next.seq + 1 };
+                }
+            }
+            // Focus goes to the anchor: it is what is about to be typed into.
+            return reduceLayout(next, { type: "open", id: action.anchorId });
+        }
+
+        case "merge": {
+            if (layout.groups.length < 2) return layout;
+            const focused =
+                layout.groups.find(group => group.id === layout.activeGroupId) ?? layout.groups[0]!;
+            return {
+                ...layout,
+                groups: [{ ...focused, tabIds: openTabIds(layout) }],
+                activeGroupId: focused.id,
+            };
+        }
+
         case "close":
             return prune(
                 {
@@ -320,6 +383,11 @@ export function useStudioLayout(initial: PaneLayout = initialLayout()) {
         []
     );
     const split = useCallback((id: string) => dispatch({ type: "split", id }), []);
+    const pair = useCallback(
+        (id: string, anchorId: string) => dispatch({ type: "pair", id, anchorId }),
+        []
+    );
+    const merge = useCallback(() => dispatch({ type: "merge" }), []);
     const focusGroup = useCallback(
         (groupId: string) => dispatch({ type: "focusGroup", groupId }),
         []
@@ -338,6 +406,8 @@ export function useStudioLayout(initial: PaneLayout = initialLayout()) {
         closeToRight,
         move,
         split,
+        pair,
+        merge,
         focusGroup,
         focusAdjacentGroup,
     };

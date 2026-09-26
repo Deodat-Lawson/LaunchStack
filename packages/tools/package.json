@@ -81,6 +81,10 @@
             "types": "./src/trade-data/index.ts",
             "default": "./src/trade-data/index.ts"
         },
+        "./investor-search": {
+            "types": "./src/investor-search/index.ts",
+            "default": "./src/investor-search/index.ts"
+        },
         "./compliance-screen": {
             "types": "./src/compliance-screen/index.ts",
             "default": "./src/compliance-screen/index.ts"
@@ -182,6 +186,10 @@
             "./trade-data": {
                 "types": "./dist/trade-data/index.d.ts",
                 "default": "./dist/trade-data/index.js"
+            },
+            "./investor-search": {
+                "types": "./dist/investor-search/index.d.ts",
+                "default": "./dist/investor-search/index.js"
             },
             "./compliance-screen": {
                 "types": "./dist/compliance-screen/index.d.ts",

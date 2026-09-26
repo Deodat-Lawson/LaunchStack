@@ -1,4 +1,4 @@
-import { backTargetFor, STUDIO, WORKSPACES } from "~/app/employer/_chrome/backTarget";
+import { backTargetFor, STUDIO } from "~/app/employer/_chrome/backTarget";
 
 /**
  * The back control is only trustworthy if the same page always sends you to
@@ -28,9 +28,15 @@ describe("backTargetFor", () => {
         }
     });
 
-    it("sends the Studio itself up to the workspace picker, so home is not a dead end", () => {
-        expect(backTargetFor("/employer/documents")).toEqual(WORKSPACES);
-        expect(backTargetFor("/employer/home")).toEqual(WORKSPACES);
+    /**
+     * The Studio is the top of the app. It used to point "back" at the
+     * workspace picker, but a workspace is a separate environment: leaving
+     * one is switching, and that lives in Settings, not behind a back arrow.
+     */
+    it("gives the Studio itself no way back — switching workspace is not back", () => {
+        expect(backTargetFor("/employer/documents")).toBeNull();
+        expect(backTargetFor("/employer/home")).toBeNull();
+        expect(backTargetFor("/employer")).toBeNull();
     });
 
     it("prefers the nearest section over the Studio", () => {
@@ -71,9 +77,20 @@ describe("backTargetFor", () => {
         }
     });
 
+    /**
+     * `/employer/tools/growth` redirects to Brand, so "never points at itself"
+     * was true on paper and false in the browser: Brand's back went to Growth,
+     * which came straight back to Brand. A page that only redirects is not a
+     * place to go back to.
+     */
+    it("sends Growth's two halves out to the Studio, not to a redirect back into them", () => {
+        expect(backTargetFor("/employer/tools/growth/brand")).toEqual(STUDIO);
+        expect(backTargetFor("/employer/tools/growth/prospects")).toEqual(STUDIO);
+    });
+
     it("ignores a trailing slash", () => {
         expect(backTargetFor("/employer/settings/")).toEqual(STUDIO);
-        expect(backTargetFor("/employer/documents/")).toEqual(WORKSPACES);
+        expect(backTargetFor("/employer/documents/")).toBeNull();
     });
 
     it("stays out of the way outside the workspace", () => {

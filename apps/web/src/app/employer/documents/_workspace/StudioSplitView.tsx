@@ -32,6 +32,14 @@ export interface StudioSplitViewProps {
     trailingSlot?: ReactNode;
     /** Shown when nothing at all is open. */
     emptyState: ReactNode;
+    /**
+     * False on a phone, where columns cannot sit side by side. The split
+     * control is then not offered at all, rather than shown disabled with a
+     * reason about columns that would make no sense there.
+     */
+    splittable?: boolean;
+    /** The key for Studio's picker, for the "+" tooltips. */
+    studioKeys?: string | null;
 }
 
 /**
@@ -63,6 +71,8 @@ export function StudioSplitView({
     leadingSlot,
     trailingSlot,
     emptyState,
+    splittable = true,
+    studioKeys,
 }: StudioSplitViewProps) {
     /** Where each column wants its current pane put. */
     const [slots, setSlots] = useState<Record<string, HTMLElement | null>>({});
@@ -189,7 +199,9 @@ export function StudioSplitView({
                                             : (tabs[0]?.id ?? "")
                                     }
                                     focused={group.id === layout.activeGroupId}
-                                    canSplit={layout.groups.length < MAX_GROUPS}
+                                    canSplit={splittable && layout.groups.length < MAX_GROUPS}
+                                    splittable={splittable}
+                                    studioKeys={studioKeys}
                                     onSelect={onSelect}
                                     onClose={id => onClose(group.id, id)}
                                     onCloseOthers={id => onCloseOthers(group.id, id)}

@@ -199,6 +199,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
     },
     {
+        id: "investors",
+        tier: "tool",
+        summary:
+            "Find the venture funds raising now and pitch them: SEC Form D search with the people, size and amount closed, plus pitch drafts from the workspace's sources.",
+        scope: "workspace",
+        feature: "@launchstack/tools/investor-search",
+        routes: ["investors"],
+        notes: "Stateless: every search reads SEC EDGAR live (keyless, paced under SEC's 10 req/s). Pitch drafting is the chat, seeded from the Studio pane.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",

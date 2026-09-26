@@ -9,42 +9,14 @@
     height: var(--drift-backbar-h);
     flex-shrink: 0;
     padding-inline: 12px;
-    border-bottom: 1px solid var(--line);
-    background: var(--panel);
+    /* No strip of its own: on a page without a sidebar the way back is a
+       button at the page's top-left, like the preview's "‹ Library", not a
+       band across the screen. */
+    background: transparent;
     font-size: 12.5px;
     /* Above a tool's own sticky rail, which would otherwise scroll over it. */
     position: relative;
     z-index: 30;
-}
-
-.back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 26px;
-    padding-inline: 8px 10px;
-    border-radius: 6px;
-    color: var(--ink-2);
-    font-weight: 500;
-    transition:
-        background 120ms,
-        color 120ms;
-}
-
-.back:hover {
-    background: var(--line-2);
-    color: var(--ink);
-}
-
-.back:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-}
-
-.icon {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
 }
 
 .trail {

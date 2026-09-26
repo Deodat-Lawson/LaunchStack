@@ -51,15 +51,13 @@ export function textSelectionAt(
     // Prefer a point test: the click must land inside the highlighted run,
     // not merely on an element the run passes through.
     const doc = el?.ownerDocument ?? document;
-    const caretFromPoint = (
-        doc as Document & {
-            caretRangeFromPoint?: (x: number, y: number) => Range | null;
-            caretPositionFromPoint?: (
-                x: number,
-                y: number
-            ) => { offsetNode: Node; offset: number } | null;
-        }
-    );
+    const caretFromPoint = doc as Document & {
+        caretRangeFromPoint?: (x: number, y: number) => Range | null;
+        caretPositionFromPoint?: (
+            x: number,
+            y: number
+        ) => { offsetNode: Node; offset: number } | null;
+    };
     if (point) {
         if (typeof caretFromPoint.caretPositionFromPoint === "function") {
             const pos = caretFromPoint.caretPositionFromPoint(point.x, point.y);

@@ -12,8 +12,8 @@ export const EMBEDDING_DIM = 1536;
 export const EMBEDDING_SHORT_DIM = 512;
 
 export interface EmbeddingProviderConfig {
-  apiKey: string | undefined;
-  baseURL: string | undefined;
+    apiKey: string | undefined;
+    baseURL: string | undefined;
 }
 
 /**
@@ -27,23 +27,22 @@ export interface EmbeddingProviderConfig {
  * `assertEmbeddingConfigured`.
  */
 export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
-  if (process.env.EMBEDDING_API_BASE_URL) {
-    return {
-      apiKey: process.env.EMBEDDING_API_KEY,
-      baseURL: process.env.EMBEDDING_API_BASE_URL,
-    };
-  }
+    if (process.env.EMBEDDING_API_BASE_URL) {
+        return {
+            apiKey: process.env.EMBEDDING_API_KEY,
+            baseURL: process.env.EMBEDDING_API_BASE_URL,
+        };
+    }
 
-  if (process.env.AI_BASE_URL) {
-    return {
-      apiKey: process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY,
-      baseURL: process.env.AI_BASE_URL,
-    };
-  }
+    if (process.env.AI_BASE_URL) {
+        return {
+            apiKey: process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY,
+            baseURL: process.env.AI_BASE_URL,
+        };
+    }
 
-  return { apiKey: undefined, baseURL: undefined };
+    return { apiKey: undefined, baseURL: undefined };
 }
-
 
 /**
  * The notes pipeline's one embeddings provider, generated through
@@ -53,24 +52,24 @@ export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
  * an endpoint just returns nothing).
  */
 export function createNotesEmbeddingsProvider(): EmbeddingsProvider | null {
-  const { apiKey, baseURL } = resolveEmbeddingConfig();
-  if (!apiKey || !baseURL) return null;
+    const { apiKey, baseURL } = resolveEmbeddingConfig();
+    if (!apiKey || !baseURL) return null;
 
-  const config = {
-    apiKey,
-    baseUrl: baseURL,
-    model: EMBEDDING_MODEL,
-    dimensions: EMBEDDING_DIM,
-  };
+    const config = {
+        apiKey,
+        baseUrl: baseURL,
+        model: EMBEDDING_MODEL,
+        dimensions: EMBEDDING_DIM,
+    };
 
-  return {
-    embedQuery: async (query: string) => {
-      const { embeddings } = await generateEmbeddings([query], config);
-      return embeddings[0] ?? [];
-    },
-    embedDocuments: async (documents: string[]) => {
-      const { embeddings } = await generateEmbeddings(documents, config);
-      return embeddings;
-    },
-  };
+    return {
+        embedQuery: async (query: string) => {
+            const { embeddings } = await generateEmbeddings([query], config);
+            return embeddings[0] ?? [];
+        },
+        embedDocuments: async (documents: string[]) => {
+            const { embeddings } = await generateEmbeddings(documents, config);
+            return embeddings;
+        },
+    };
 }

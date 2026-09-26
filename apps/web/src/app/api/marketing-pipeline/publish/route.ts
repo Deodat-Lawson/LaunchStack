@@ -55,7 +55,9 @@ export async function POST(request: Request) {
             postId: result.postId ?? null,
             postUrl: result.postUrl ?? null,
             source: { kind: "campaign" },
-        }).catch(err => console.warn("[marketing-pipeline/publish] calendar write-back failed:", err));
+        }).catch(err =>
+            console.warn("[marketing-pipeline/publish] calendar write-back failed:", err)
+        );
 
         return ok({ platform, postUrl: result.postUrl });
     } catch (error) {

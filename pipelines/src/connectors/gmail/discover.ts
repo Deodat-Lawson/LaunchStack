@@ -64,7 +64,9 @@ export async function discoverGmailThreads(options: DiscoverGmailOptions): Promi
         try {
             do {
                 const page = await options.client.listThreads({
-                    ...(selector.kind === "label" ? { labelIds: [selector.value] } : { q: selector.value }),
+                    ...(selector.kind === "label"
+                        ? { labelIds: [selector.value] }
+                        : { q: selector.value }),
                     pageToken,
                 });
                 for (const ref of page.threads ?? []) {
@@ -86,7 +88,10 @@ export async function discoverGmailThreads(options: DiscoverGmailOptions): Promi
             // take the others down with it.
             skipped.push({
                 sourceId: `selector:${selector.kind}:${selector.value}`,
-                reason: error instanceof GmailApiError && error.status === 400 ? "excluded" : "unreadable",
+                reason:
+                    error instanceof GmailApiError && error.status === 400
+                        ? "excluded"
+                        : "unreadable",
                 detail: describeError(error),
             });
         }

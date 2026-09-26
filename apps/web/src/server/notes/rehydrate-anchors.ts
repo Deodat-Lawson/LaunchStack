@@ -72,16 +72,13 @@ interface ChunkRow {
  */
 export async function rehydrateNotesForDocument(
     documentId: number,
-    newVersionId: number,
+    newVersionId: number
 ): Promise<RehydrationResult> {
     const notes = await db
         .select()
         .from(documentNotes)
         .where(
-            and(
-                eq(documentNotes.documentId, String(documentId)),
-                isNotNull(documentNotes.anchor),
-            ),
+            and(eq(documentNotes.documentId, String(documentId)), isNotNull(documentNotes.anchor))
         );
 
     const result: RehydrationResult = {
@@ -100,7 +97,7 @@ export async function rehydrateNotesForDocument(
     if (chunks.length === 0) {
         // OCR pipeline hasn't populated chunks yet. Let the caller retry.
         throw new Error(
-            `[rehydrate] no context chunks for document=${documentId} version=${newVersionId} yet`,
+            `[rehydrate] no context chunks for document=${documentId} version=${newVersionId} yet`
         );
     }
 
@@ -128,8 +125,7 @@ export async function rehydrateNotesForDocument(
         // Orphaned notes keep their original versionId — the quote no
         // longer lives in this version, so moving them would be a lie.
         // Resolved/drifted advance to the new version.
-        const nextVersionId =
-            status === "orphaned" ? note.versionId : newVersionBig;
+        const nextVersionId = status === "orphaned" ? note.versionId : newVersionBig;
 
         await db
             .update(documentNotes)
@@ -153,10 +149,7 @@ export async function rehydrateNotesForDocument(
     return result;
 }
 
-async function fetchChunksForVersion(
-    documentId: number,
-    versionId: number,
-): Promise<ChunkRow[]> {
+async function fetchChunksForVersion(documentId: number, versionId: number): Promise<ChunkRow[]> {
     const rows = await db
         .select({
             id: documentContextChunks.id,
@@ -167,13 +160,10 @@ async function fetchChunksForVersion(
         .where(
             and(
                 eq(documentContextChunks.documentId, BigInt(documentId)),
-                eq(documentContextChunks.versionId, BigInt(versionId)),
-            ),
+                eq(documentContextChunks.versionId, BigInt(versionId))
+            )
         )
-        .orderBy(
-            asc(documentContextChunks.pageNumber),
-            asc(documentContextChunks.id),
-        );
+        .orderBy(asc(documentContextChunks.pageNumber), asc(documentContextChunks.id));
     return rows;
 }
 
@@ -182,11 +172,7 @@ type MatchOutcome =
     | { kind: "drifted"; chunk: ChunkRow; index: number }
     | { kind: "orphaned" };
 
-function matchQuoteInChunks(
-    quote: string,
-    chunks: ChunkRow[],
-    dmp: DiffMatchPatch,
-): MatchOutcome {
+function matchQuoteInChunks(quote: string, chunks: ChunkRow[], dmp: DiffMatchPatch): MatchOutcome {
     const normQuote = normalize(quote);
     if (!normQuote) return { kind: "orphaned" };
 
@@ -220,10 +206,7 @@ function normalize(text: string): string {
  * chunk's page (quads require the viewer; we recompute them when the
  * user next opens the note in a PDF.js-capable renderer).
  */
-function rebuildAnchor(
-    anchor: NoteAnchor,
-    outcome: MatchOutcome,
-): NoteAnchor {
+function rebuildAnchor(anchor: NoteAnchor, outcome: MatchOutcome): NoteAnchor {
     if (outcome.kind === "orphaned") {
         // Drop primary — it no longer points anywhere truthful.
         const { primary: _primary, ...rest } = anchor;
@@ -251,7 +234,7 @@ function rebuildAnchor(
 export async function waitForVersionChunks(
     documentId: number,
     versionId: number,
-    opts: { maxWaitMs?: number; initialDelayMs?: number } = {},
+    opts: { maxWaitMs?: number; initialDelayMs?: number } = {}
 ): Promise<boolean> {
     const maxWait = opts.maxWaitMs ?? 180_000; // 3 min default
     let delay = opts.initialDelayMs ?? 2_000;
@@ -264,11 +247,11 @@ export async function waitForVersionChunks(
             .where(
                 and(
                     eq(documentContextChunks.documentId, BigInt(documentId)),
-                    eq(documentContextChunks.versionId, BigInt(versionId)),
-                ),
+                    eq(documentContextChunks.versionId, BigInt(versionId))
+                )
             );
         if ((row?.n ?? 0) > 0) return true;
-        await new Promise((r) => setTimeout(r, delay));
+        await new Promise(r => setTimeout(r, delay));
         delay = Math.min(delay * 1.6, 15_000);
     }
     return false;

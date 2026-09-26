@@ -6,8 +6,8 @@ import type { DocumentNote } from "~/server/db/schema";
  * wire. The frontend already types `versionId` as `number | null`.
  */
 export function serializeNote(note: DocumentNote) {
-  return {
-    ...note,
-    versionId: note.versionId !== null ? Number(note.versionId) : null,
-  };
+    return {
+        ...note,
+        versionId: note.versionId !== null ? Number(note.versionId) : null,
+    };
 }

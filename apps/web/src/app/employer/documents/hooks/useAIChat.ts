@@ -33,6 +33,19 @@ export interface AIChatRequest {
         | "math-reasoning";
     thinkingMode?: boolean;
     attachments?: AIChatAttachmentPayload[];
+    /** Handle of the workspace agent answering this turn; null = the default assistant. */
+    agentKey?: string | null;
+}
+
+/** The agent that answered, echoed back so the transcript can attribute the turn. */
+export interface AIChatAgentInfo {
+    key: string;
+    displayName: string;
+    role: string;
+    accent: string | null;
+    avatarUrl?: string | null;
+    /** What the agent's tool policy changed about this turn, for the UI. */
+    notes: string[];
 }
 
 export interface WebSource {
@@ -62,6 +75,7 @@ export interface AIChatResponse {
     aiModel?: string;
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
+    agent?: AIChatAgentInfo | null;
     message?: string;
     error?: string;
     details?: string;
@@ -92,6 +106,7 @@ export function useAIChat() {
                     aiPersona: params.aiPersona,
                     thinkingMode: params.thinkingMode,
                     attachments: params.attachments,
+                    agentKey: params.agentKey ?? undefined,
                 }),
             });
 

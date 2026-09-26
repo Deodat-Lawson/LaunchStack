@@ -4,6 +4,7 @@ import type { Permission } from "~/lib/authz/permissions";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
+    Bot as IconAgents,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
     AudioLines as IconAudio,
@@ -210,6 +211,8 @@ export interface ThreadMessage {
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];
+    /** The agent that answered (assistant) or was addressed (user). */
+    agent?: ThreadAgent;
 }
 
 /**
@@ -223,6 +226,19 @@ export interface ComposerSend {
     attachments: EphemeralAttachment[];
     webSearch: boolean;
     thinking: boolean;
+    /** The agent this turn is addressed to; null = the workspace's default assistant. */
+    agentKey: string | null;
+}
+
+/** How the transcript attributes an agent's answer. */
+export interface ThreadAgent {
+    key: string;
+    displayName: string;
+    role: string;
+    accent: string | null;
+    avatarUrl?: string | null;
+    /** What the agent's tool policy changed about the turn (web off, etc.). */
+    notes?: string[];
 }
 
 export interface DemotedFeature {
@@ -252,6 +268,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconUsers,
         desc: "Agents work an objective in a channel you can join",
         href: "/employer/documents?feature=meetings",
+    },
+    {
+        id: "agents",
+        label: "Agents",
+        Icon: IconAgents,
+        desc: "The roster: try an agent, edit its instructions, import one",
+        href: "/employer/documents?feature=agents",
     },
     {
         id: "draft",
@@ -426,6 +449,12 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Meetings",
                 Icon: IconUsers,
                 desc: "Agents work an objective in a channel — step in whenever you want",
+            },
+            {
+                id: "agents",
+                label: "Agents",
+                Icon: IconAgents,
+                desc: "Who your agents are: try them, edit their instructions, import a definition file",
             },
         ],
     },

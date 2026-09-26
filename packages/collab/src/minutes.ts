@@ -29,7 +29,20 @@ const DECISION_CUES = [
     "final call",
     "locking in",
     "we'll proceed with",
+    // A chaired meeting closes on a recommendation for the approver, and a
+    // room that writes "Option: ship it" has decided as surely as one that
+    // writes "Decision:".
+    "recommendation for the approver",
+    "we recommend",
+    "recommended option",
 ];
+
+/**
+ * Cues that only count at the start of a sentence, after any list marker or
+ * emphasis: "- **Option:** ship it" is a decision; "please stress-test this
+ * option:" is not.
+ */
+const LEADING_DECISION_CUES = ["option:", "recommendation:"];
 
 const ACTION_CUES = [
     "action item",
@@ -47,6 +60,10 @@ const ACTION_CUES = [
     "by friday",
     "by monday",
     "by end of week",
+    // Ownership stated in the third person — "Owner: @finance", "Sam owns
+    // the migration" — is an action item as much as "I'll own" is.
+    "owner:",
+    " owns ",
 ];
 
 /** Splits a message into sentences without dragging in an NLP dependency. */
@@ -60,6 +77,11 @@ function sentences(text: string): string[] {
 function matchesCue(sentence: string, cues: string[]): boolean {
     const lower = sentence.toLowerCase();
     return cues.some(c => lower.includes(c));
+}
+
+function startsWithCue(sentence: string, cues: string[]): boolean {
+    const lower = sentence.toLowerCase().replace(/^[\s\-*_>#\d.)]+/, "");
+    return cues.some(c => lower.startsWith(c));
 }
 
 /**
@@ -104,7 +126,10 @@ export function buildMinutes(
 
     for (const m of chat) {
         for (const s of sentences(m.text)) {
-            if (matchesCue(s, DECISION_CUES) && decisions.length < 25) {
+            if (
+                (matchesCue(s, DECISION_CUES) || startsWithCue(s, LEADING_DECISION_CUES)) &&
+                decisions.length < 25
+            ) {
                 decisions.push({ text: s, sourceSeq: m.seq, author: m.author.displayName });
             } else if (matchesCue(s, ACTION_CUES) && actionItems.length < 25) {
                 const speakerId = m.author.onBehalfOfPersonaId ?? m.author.id;

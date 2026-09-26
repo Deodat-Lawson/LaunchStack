@@ -20,6 +20,8 @@ import {
     type WorkspaceSource,
 } from "./types";
 import {
+    Bot,
+    Check,
     Plus,
     ArrowUp as IconArrowUp,
     Zap as IconBolt,
@@ -34,6 +36,17 @@ import {
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
+import {
+    mentionQueryAt,
+    mentionedAgentKeys,
+    resolveChatTurn,
+    usableAsPrimary,
+    usableAsSubagent,
+} from "~/lib/agents/definition";
+import { AgentAvatar } from "./collab/AgentAvatar";
+import { personaColor, type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
 import {
@@ -234,6 +247,8 @@ function CitationTarget({
 
 interface MessageProps {
     msg: ThreadMessage;
+    /** The live roster, so a stored handle renders with its current name. */
+    agents?: ChatAgentOption[];
     /** Position in the thread — what session-level verbs (branch, ask again) act on. */
     index: number;
     sources: WorkspaceSource[];
@@ -303,8 +318,25 @@ function Message({
     onOpenSource,
     onQuote,
     onEdit,
+    agents,
 }: MessageProps) {
     const isUser = msg.role === "user";
+    // Stored turns carry only the handle; the live roster supplies the name
+    // and colour, and a retired agent still shows under its handle.
+    const agent = msg.agent
+        ? (() => {
+              const live = agents?.find(a => a.id === msg.agent!.key);
+              return live
+                  ? {
+                        ...msg.agent,
+                        displayName: live.displayName,
+                        role: live.role,
+                        accent: live.accent ?? null,
+                        avatarUrl: live.avatarUrl ?? null,
+                    }
+                  : { ...msg.agent, displayName: msg.agent.displayName || `@${msg.agent.key}` };
+          })()
+        : null;
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
@@ -362,6 +394,15 @@ function Message({
                         <IconUser size={12} />
                     </div>
                     <span style={{ fontSize: 13, fontWeight: 600 }}>You</span>
+                    {agent && (
+                        <span
+                            title={`Asked ${agent.displayName}${agent.role ? ` (${agent.role})` : ""}`}
+                            className="mono"
+                            style={{ fontSize: 10, color: "var(--ink-3)" }}
+                        >
+                            · to @{agent.key}
+                        </span>
+                    )}
                     {refs.length > 0 && (
                         <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
                             · asking over {refs.length} source{refs.length !== 1 ? "s" : ""}
@@ -395,21 +436,39 @@ function Message({
     return (
         <div {...ctxTarget} style={{ animation: "lsw-fadeIn 240ms ease-out", marginBottom: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <div
-                    style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: "50%",
-                        background: "var(--accent-soft)",
-                        color: "var(--accent)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <IconBolt size={12} />
-                </div>
-                <span style={{ fontSize: 13, fontWeight: 600 }}>Launchstack</span>
+                {agent ? (
+                    <AgentAvatar
+                        agent={{
+                            id: agent.key,
+                            displayName: agent.displayName,
+                            accent: agent.accent,
+                            avatarUrl: agent.avatarUrl ?? null,
+                        }}
+                        size={22}
+                        title={`${agent.displayName}${agent.role ? ` — ${agent.role}` : ""}`}
+                    />
+                ) : (
+                    <div
+                        style={{
+                            width: 22,
+                            height: 22,
+                            borderRadius: "50%",
+                            background: "var(--accent-soft)",
+                            color: "var(--accent)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <IconBolt size={12} />
+                    </div>
+                )}
+                <span style={{ fontSize: 13, fontWeight: 600 }}>
+                    {agent ? agent.displayName : "Launchstack"}
+                </span>
+                {agent?.role && (
+                    <span style={{ fontSize: 11, color: "var(--ink-3)" }}>{agent.role}</span>
+                )}
                 {msg.model && (
                     <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
                         · {msg.model}
@@ -646,6 +705,11 @@ interface ComposerProps {
     onOpenSource?: (source: WorkspaceSource) => void;
     /** Text handed in from outside: a quote to reply around, or a question to edit. */
     seed?: ComposerSeed | null;
+    /** The roster, for the agent picker and `@handle` completion. */
+    agents: ChatAgentOption[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey: string | null;
+    onChangeAgent: (key: string | null) => void;
 }
 
 const ATTACH_MAX_COUNT = 5;
@@ -712,6 +776,9 @@ function Composer({
     onToggleThinking,
     onOpenSource,
     seed,
+    agents,
+    agentKey,
+    onChangeAgent,
 }: ComposerProps) {
     const [text, setText] = useState("");
     const [focus, setFocus] = useState(false);
@@ -726,6 +793,54 @@ function Composer({
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
 
+    // The agent for the *next* send: an `@handle` in the box summons that agent
+    // for one turn (OpenCode's subagent mention); otherwise the picked agent.
+    const agent = agents.find(a => a.id === agentKey) ?? null;
+    const mentionable = useMemo(() => agents.filter(usableAsSubagent), [agents]);
+    const mentionedKey = mentionedAgentKeys(
+        text,
+        mentionable.map(a => a.id)
+    )[0];
+    const turnAgent = (mentionedKey ? agents.find(a => a.id === mentionedKey) : null) ?? agent;
+    const turnEffects = resolveChatTurn(
+        turnAgent ? { tools: turnAgent.tools, route: null, style: null, temperature: null } : null,
+        { webSearch, thinking, hasAttachments: attachments.length > 0 }
+    );
+
+    // `@` completion: the handle being typed at the caret, and the matches.
+    const [mention, setMention] = useState<{ query: string; start: number } | null>(null);
+    const [mentionIndex, setMentionIndex] = useState(0);
+    const mentionMatches = useMemo(() => {
+        if (!mention) return [];
+        return mentionable
+            .filter(
+                a =>
+                    a.id.startsWith(mention.query) ||
+                    a.displayName.toLowerCase().startsWith(mention.query)
+            )
+            .slice(0, 6);
+    }, [mention, mentionable]);
+
+    const syncMention = (value: string) => {
+        const el = ref.current;
+        setMention(el ? mentionQueryAt(value, el.selectionStart ?? value.length) : null);
+        setMentionIndex(0);
+    };
+
+    const insertMention = (option: ChatAgentOption) => {
+        if (!mention) return;
+        const el = ref.current;
+        const caret = el?.selectionStart ?? text.length;
+        const next = `${text.slice(0, mention.start)}@${option.id} ${text.slice(caret)}`;
+        setText(next);
+        setMention(null);
+        const position = mention.start + option.id.length + 2;
+        window.requestAnimationFrame(() => {
+            el?.focus();
+            el?.setSelectionRange(position, position);
+        });
+    };
+
     const handleSend = () => {
         if (!text.trim() || disabled || uploading) return;
         onSend({
@@ -734,8 +849,10 @@ function Composer({
             attachments,
             webSearch,
             thinking,
+            agentKey: mentionedKey ?? agentKey,
         });
         setText("");
+        setMention(null);
         setAttachments([]);
         setAttachError(null);
     };
@@ -1004,22 +1121,89 @@ function Composer({
                     {attachError}
                 </div>
             )}
+            {mentionMatches.length > 0 && (
+                <div
+                    role="listbox"
+                    aria-label="Agents"
+                    className="border-line bg-panel mb-2 overflow-hidden rounded-lg border shadow-md"
+                >
+                    {mentionMatches.map((option, index) => (
+                        <button
+                            key={option.id}
+                            type="button"
+                            role="option"
+                            aria-selected={index === mentionIndex}
+                            onMouseDown={e => {
+                                e.preventDefault();
+                                insertMention(option);
+                            }}
+                            onMouseEnter={() => setMentionIndex(index)}
+                            className={cn(
+                                "flex w-full items-center gap-2.5 px-3 py-1.5 text-left",
+                                index === mentionIndex
+                                    ? "bg-brand-soft text-brand-ink"
+                                    : "text-ink-2"
+                            )}
+                        >
+                            <AgentAvatar agent={option} size={20} />
+                            <span className="text-[12.5px] font-medium">{option.displayName}</span>
+                            <span className="mono text-[11px] opacity-70">@{option.id}</span>
+                            <span className="ml-auto truncate text-[11px] opacity-70">
+                                {option.description || option.role}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
             <textarea
                 ref={ref}
                 value={text}
-                onChange={e => setText(e.target.value)}
+                onChange={e => {
+                    setText(e.target.value);
+                    syncMention(e.target.value);
+                }}
+                onClick={() => syncMention(text)}
                 onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
+                onBlur={() => {
+                    setFocus(false);
+                    setMention(null);
+                }}
                 onKeyDown={e => {
+                    if (mentionMatches.length > 0) {
+                        if (e.key === "ArrowDown") {
+                            e.preventDefault();
+                            setMentionIndex(i => (i + 1) % mentionMatches.length);
+                            return;
+                        }
+                        if (e.key === "ArrowUp") {
+                            e.preventDefault();
+                            setMentionIndex(
+                                i => (i - 1 + mentionMatches.length) % mentionMatches.length
+                            );
+                            return;
+                        }
+                        if (e.key === "Enter" || e.key === "Tab") {
+                            e.preventDefault();
+                            insertMention(mentionMatches[mentionIndex] ?? mentionMatches[0]!);
+                            return;
+                        }
+                        if (e.key === "Escape") {
+                            e.preventDefault();
+                            setMention(null);
+                            return;
+                        }
+                    }
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         handleSend();
                     }
                 }}
                 placeholder={
-                    selSources.length > 0
-                        ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
-                        : "Ask anything. Pick sources on the left, or just type."
+                    agent
+                        ? `Ask ${agent.displayName}, your ${agent.role.toLowerCase()}… or @mention another agent`
+                        : selSources.length > 0
+                          ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
+                          : "Ask anything. Pick sources on the left, type @ to bring in an agent."
                 }
                 style={{
                     width: "100%",
@@ -1071,6 +1255,16 @@ function Composer({
                             flex: "1 1 auto",
                         }}
                     >
+                        <AgentPill
+                            agents={agents}
+                            agent={agent}
+                            mentioned={
+                                mentionedKey && mentionedKey !== agentKey
+                                    ? (agents.find(a => a.id === mentionedKey) ?? null)
+                                    : null
+                            }
+                            onChange={onChangeAgent}
+                        />
                         <ToolbarPill
                             label="Attach"
                             title={`Attach up to ${ATTACH_MAX_COUNT} files to this message only (PDFs, DOCX, images, text)`}
@@ -1107,6 +1301,12 @@ function Composer({
                             onClick={onToggleThinking}
                         />
                     </div>
+                    {turnEffects.notes.length > 0 && (
+                        <div className="text-ink-3 basis-full text-[11px]" role="status">
+                            {turnAgent?.displayName ?? "This agent"}: {turnEffects.notes.join("; ")}
+                            .
+                        </div>
+                    )}
                     <div
                         style={{
                             display: "flex",
@@ -1170,6 +1370,145 @@ interface ToolbarPillProps {
     disabled?: boolean;
     onClick: () => void;
     badge?: string;
+}
+
+/**
+ * The composer's agent picker — OpenCode's Tab-to-switch primary agent, as a
+ * pill. Shows who answers next: the picked agent, or the one an `@handle` in
+ * the box summons for this turn.
+ */
+function AgentPill({
+    agents,
+    agent,
+    mentioned,
+    onChange,
+}: {
+    agents: ChatAgentOption[];
+    agent: ChatAgentOption | null;
+    /** An agent an `@handle` in the draft summons for the next turn only. */
+    mentioned: ChatAgentOption | null;
+    onChange: (key: string | null) => void;
+}) {
+    const [open, setOpen] = useState(false);
+    const primaries = agents.filter(usableAsPrimary);
+    const shown = mentioned ?? agent;
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <button
+                    type="button"
+                    title={
+                        mentioned
+                            ? `@${mentioned.id} answers this turn (mentioned)`
+                            : agent
+                              ? `${agent.displayName} — ${agent.role}. Click to change.`
+                              : "Pick an agent to hold this chat with"
+                    }
+                    aria-label="Agent"
+                    style={{
+                        fontSize: 12,
+                        padding: shown ? "4px 10px 4px 4px" : "6px 10px",
+                        borderRadius: 8,
+                        color: shown ? "var(--ink)" : "var(--ink-2)",
+                        background: shown ? "var(--panel-2)" : "transparent",
+                        border: `1px solid ${shown ? (shown.accent ?? personaColor(shown)) : "var(--line)"}`,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        transition: "background 120ms, border-color 120ms, color 120ms",
+                    }}
+                >
+                    {shown ? (
+                        <>
+                            <AgentAvatar agent={shown} size={18} />
+                            <span style={{ fontWeight: 600 }}>{shown.displayName}</span>
+                            {mentioned && (
+                                <span style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
+                                    this turn
+                                </span>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <Bot size={12} />
+                            Agent
+                        </>
+                    )}
+                </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-[320px] p-1.5">
+                <div className="text-ink-3 px-2 pb-1.5 pt-1 text-[11px]">
+                    Who holds this chat. Type <span className="mono">@handle</span> in a message to
+                    bring another agent in for one turn.
+                </div>
+                <button
+                    type="button"
+                    role="option"
+                    aria-selected={agent === null}
+                    onClick={() => {
+                        onChange(null);
+                        setOpen(false);
+                    }}
+                    className={cn(
+                        "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left",
+                        agent === null
+                            ? "bg-brand-soft text-brand-ink"
+                            : "text-ink-2 hover:bg-line-2"
+                    )}
+                >
+                    <span className="bg-brand-soft text-brand inline-flex size-6 items-center justify-center rounded-full">
+                        <IconBolt size={11} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                        <span className="block text-[12.5px] font-medium">Launchstack</span>
+                        <span className="block text-[11px] opacity-70">
+                            The workspace assistant
+                        </span>
+                    </span>
+                    {agent === null && <Check className="size-3.5" />}
+                </button>
+                <div className="max-h-[320px] overflow-y-auto">
+                    {primaries.map(option => (
+                        <button
+                            key={option.id}
+                            type="button"
+                            role="option"
+                            aria-selected={agent?.id === option.id}
+                            onClick={() => {
+                                onChange(option.id);
+                                setOpen(false);
+                            }}
+                            className={cn(
+                                "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left",
+                                agent?.id === option.id
+                                    ? "bg-brand-soft text-brand-ink"
+                                    : "text-ink-2 hover:bg-line-2"
+                            )}
+                        >
+                            <AgentAvatar agent={option} size={24} />
+                            <span className="min-w-0 flex-1">
+                                <span className="flex items-baseline gap-1.5">
+                                    <span className="text-[12.5px] font-medium">
+                                        {option.displayName}
+                                    </span>
+                                    <span className="mono text-[10.5px] opacity-70">
+                                        @{option.id}
+                                    </span>
+                                </span>
+                                <span className="block truncate text-[11px] opacity-70">
+                                    {option.description || option.role}
+                                </span>
+                            </span>
+                            {agent?.id === option.id && <Check className="size-3.5 shrink-0" />}
+                        </button>
+                    ))}
+                    {primaries.length === 0 && (
+                        <div className="text-ink-3 px-2 py-2 text-[12px]">No agents yet.</div>
+                    )}
+                </div>
+            </PopoverContent>
+        </Popover>
+    );
 }
 
 function ToolbarPill({ label, title, icon, active, disabled, onClick, badge }: ToolbarPillProps) {
@@ -1367,6 +1706,11 @@ export interface AskPanelProps {
     onToggleWebSearch: () => void;
     thinking: boolean;
     onToggleThinking: () => void;
+    /** The roster, for the agent picker, `@handle` completion and attribution. */
+    agents?: ChatAgentOption[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey?: string | null;
+    onChangeAgent?: (key: string | null) => void;
     /** Extra pixels added to header `padding-left` when an overlay chrome control (e.g. show sidebar) sits at the viewport edge — see WorkspaceShell. */
     leadingChromeInsetPx?: number;
 }
@@ -1389,6 +1733,9 @@ export function AskPanel({
     onToggleWebSearch,
     thinking,
     onToggleThinking,
+    agents = [],
+    agentKey = null,
+    onChangeAgent,
     leadingChromeInsetPx = 0,
 }: AskPanelProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -1460,9 +1807,10 @@ export function AskPanel({
                 attachments: [],
                 webSearch,
                 thinking,
+                agentKey,
             });
         },
-        [selected, setSelected, sendMessage, webSearch, thinking]
+        [selected, setSelected, sendMessage, webSearch, thinking, agentKey]
     );
 
     return (
@@ -1559,6 +1907,7 @@ export function AskPanel({
                                     onOpenSource={onOpenSource}
                                     onQuote={quote}
                                     onEdit={edit}
+                                    agents={agents}
                                 />
                             ))}
                             {showTyping && <TypingIndicator />}
@@ -1588,6 +1937,9 @@ export function AskPanel({
                     onToggleThinking={onToggleThinking}
                     onOpenSource={onOpenSource}
                     seed={seed}
+                    agents={agents}
+                    agentKey={agentKey}
+                    onChangeAgent={onChangeAgent ?? (() => undefined)}
                 />
                 <div
                     style={{
@@ -1598,7 +1950,9 @@ export function AskPanel({
                         color: "var(--ink-3)",
                     }}
                 >
-                    Grounded answers only — cites every source it uses.
+                    {agentKey && agents.find(a => a.id === agentKey)
+                        ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
+                        : "Grounded answers only — cites every source it uses."}
                 </div>
             </div>
         </main>

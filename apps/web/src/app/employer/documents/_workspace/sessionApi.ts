@@ -16,6 +16,8 @@ export interface SessionMessagePayload {
     attachments?: unknown[];
     model?: string | null;
     tokens?: number | null;
+    /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
+    agentKey?: string | null;
 }
 
 export interface StoredSession {
@@ -24,6 +26,8 @@ export interface StoredSession {
     messageCount: number;
     pinned: boolean;
     contextSourceIds: string[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey?: string | null;
     lastMessageAt: string;
     createdAt: string;
     continuation?: { title: string; context: string } | null;
@@ -52,6 +56,7 @@ export async function createSession(input: {
     title?: string;
     contextSourceIds?: string[];
     continuation?: { title: string; context: string } | null;
+    agentKey?: string | null;
 }): Promise<StoredSession> {
     const res = await fetch("/api/workspace/sessions", {
         method: "POST",
@@ -64,7 +69,12 @@ export async function createSession(input: {
 
 export async function appendMessages(
     sessionId: string,
-    input: { messages: SessionMessagePayload[]; contextSourceIds?: string[] }
+    input: {
+        messages: SessionMessagePayload[];
+        contextSourceIds?: string[];
+        /** `undefined` leaves the chat's agent alone; `null` clears it. */
+        agentKey?: string | null;
+    }
 ): Promise<StoredSession> {
     const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}/messages`, {
         method: "POST",

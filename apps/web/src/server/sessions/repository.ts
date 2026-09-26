@@ -38,6 +38,8 @@ export interface SessionMessageInput {
     attachments?: unknown[];
     model?: string | null;
     tokens?: number | null;
+    /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
+    agentKey?: string | null;
 }
 
 export interface SessionSummary {
@@ -46,6 +48,8 @@ export interface SessionSummary {
     messageCount: number;
     pinned: boolean;
     contextSourceIds: string[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey: string | null;
     lastMessageAt: string;
     createdAt: string;
 }
@@ -71,6 +75,7 @@ function toSummary(row: WorkspaceSessionRow): SessionSummary {
         messageCount: row.messageCount,
         pinned: row.pinned,
         contextSourceIds: row.contextSourceIds ?? [],
+        agentKey: row.agentKey ?? null,
         lastMessageAt: iso(row.lastMessageAt),
         createdAt: iso(row.createdAt),
     };
@@ -86,6 +91,7 @@ function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
         attachments: row.attachments ?? undefined,
         model: row.model,
         tokens: row.tokens,
+        agentKey: row.agentKey ?? null,
         createdAt: iso(row.createdAt),
     };
 }
@@ -129,6 +135,7 @@ export async function createSession(
         title?: string;
         contextSourceIds?: string[];
         continuation?: { title: string; context: string } | null;
+        agentKey?: string | null;
     }
 ): Promise<SessionDetail> {
     const messages = input.messages.slice(0, MAX_SESSION_APPEND);
@@ -147,6 +154,7 @@ export async function createSession(
                 title,
                 contextSourceIds: input.contextSourceIds ?? [],
                 continuation: input.continuation ?? null,
+                agentKey: input.agentKey ?? null,
                 messageCount: messages.length,
                 lastMessageAt: now,
                 createdAt: now,
@@ -166,6 +174,7 @@ export async function createSession(
                     attachments: message.attachments ?? null,
                     model: message.model ?? null,
                     tokens: message.tokens ?? null,
+                    agentKey: message.agentKey ?? null,
                 }))
             );
         }
@@ -217,7 +226,12 @@ export async function getSession(
 export async function appendMessages(
     owner: SessionOwner,
     sessionId: string,
-    input: { messages: SessionMessageInput[]; contextSourceIds?: string[] }
+    input: {
+        messages: SessionMessageInput[];
+        contextSourceIds?: string[];
+        /** `undefined` leaves the chat's agent alone; `null` clears it. */
+        agentKey?: string | null;
+    }
 ): Promise<SessionSummary | null> {
     const messages = input.messages.slice(0, MAX_SESSION_APPEND);
     if (messages.length === 0) return null;
@@ -241,6 +255,7 @@ export async function appendMessages(
                 attachments: message.attachments ?? null,
                 model: message.model ?? null,
                 tokens: message.tokens ?? null,
+                agentKey: message.agentKey ?? null,
             }))
         );
 
@@ -250,6 +265,7 @@ export async function appendMessages(
             .set({
                 messageCount: sql`${workspaceSessions.messageCount} + ${messages.length}`,
                 ...(input.contextSourceIds ? { contextSourceIds: input.contextSourceIds } : {}),
+                ...(input.agentKey !== undefined ? { agentKey: input.agentKey } : {}),
                 lastMessageAt: now,
                 updatedAt: now,
             })
@@ -263,11 +279,12 @@ export async function appendMessages(
 export async function updateSession(
     owner: SessionOwner,
     sessionId: string,
-    patch: { title?: string; pinned?: boolean }
+    patch: { title?: string; pinned?: boolean; agentKey?: string | null }
 ): Promise<SessionSummary | null> {
     const values: Record<string, unknown> = { updatedAt: new Date() };
     if (patch.title !== undefined) values.title = patch.title.trim().slice(0, 300);
     if (patch.pinned !== undefined) values.pinned = patch.pinned;
+    if (patch.agentKey !== undefined) values.agentKey = patch.agentKey;
 
     const [row] = await db
         .update(workspaceSessions)

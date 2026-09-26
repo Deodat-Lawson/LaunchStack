@@ -25,6 +25,7 @@ import {
     AGENT_AUTONOMY_META,
     DEFAULT_AGENT_AUTONOMY,
 } from "~/lib/agents/autonomy";
+import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
 
 import type { SettingControl, SettingsSectionId, StoredScope } from "./types";
 
@@ -224,6 +225,51 @@ export const SETTINGS: readonly SettingDefinition[] = [
                 label: AGENT_AUTONOMY_META[level].label,
                 description: AGENT_AUTONOMY_META[level].description,
             })),
+        },
+    },
+    {
+        key: "chat.responseStyle",
+        section: "agents",
+        label: "Answer style of the default assistant",
+        description:
+            "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
+        aliases: [
+            "response style",
+            "concise",
+            "detailed",
+            "academic",
+            "organized",
+            "answer length",
+            "tone",
+        ],
+        scopes: ["workspace", "member"],
+        permission: "settings.manage",
+        schema: z.enum(AGENT_STYLE_IDS),
+        default: "concise",
+        control: {
+            kind: "select",
+            options: [
+                {
+                    value: "concise",
+                    label: "Concise",
+                    description: "Direct and short. Under 150 words when it can be.",
+                },
+                {
+                    value: "detailed",
+                    label: "Detailed",
+                    description: "Comprehensive, with context and background.",
+                },
+                {
+                    value: "academic",
+                    label: "Academic",
+                    description: "Analytical and precise, formal structure.",
+                },
+                {
+                    value: "organized",
+                    label: "Organized",
+                    description: "Sections and bullets, built to scan.",
+                },
+            ],
         },
     },
     {

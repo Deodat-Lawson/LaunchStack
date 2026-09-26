@@ -26,6 +26,7 @@ import {
     type AgentPersona,
     type AgentRuntime,
     type MeetingConfig,
+    type MeetingPhase,
     type MeetingState,
     type SlackClient,
     type TurnPolicy,
@@ -105,6 +106,8 @@ export function rowToConfig(row: MeetingRow): MeetingConfig {
         maxTurns: row.maxTurns,
         completionMarker: row.completionMarker ?? undefined,
         context: row.context ?? undefined,
+        phases: row.phases ?? undefined,
+        workflowKey: row.workflowKey ?? undefined,
         slack: row.slackChannelId
             ? {
                   channelId: row.slackChannelId,
@@ -121,11 +124,29 @@ export function rowToState(row: MeetingRow): MeetingState {
         status: row.status,
         turnIndex: row.turnIndex,
         nextSpeakerId: row.nextSpeakerId,
+        phaseIndex: phaseIndexFromRow(row),
         controller: (row.controller as MeetingState["controller"]) ?? undefined,
         startedAt: row.startedAt?.toISOString(),
         endedAt: row.endedAt?.toISOString(),
         error: row.error ?? undefined,
     };
+}
+
+/**
+ * The phase cursor is not a column: it is a pure function of the turn index
+ * and the frozen plan, so it is recomputed on load rather than stored and
+ * risked drifting.
+ */
+function phaseIndexFromRow(row: MeetingRow): number | undefined {
+    const phases = row.phases ?? [];
+    if (phases.length === 0 || row.status === "scheduled") return undefined;
+    let start = 0;
+    for (let index = 0; index < phases.length; index++) {
+        const turns = Math.max(1, Math.floor(phases[index]!.turns));
+        if (row.turnIndex < start + turns || index === phases.length - 1) return index;
+        start += turns;
+    }
+    return undefined;
 }
 
 async function persistState(meetingId: string, state: MeetingState): Promise<void> {
@@ -271,6 +292,9 @@ export interface NewMeetingInput {
     turnPolicy?: TurnPolicy;
     maxTurns?: number;
     context?: string[];
+    /** The workflow the meeting follows; see `~/lib/agents/meeting-workflows`. */
+    phases?: MeetingPhase[];
+    workflowKey?: string;
     /** Reuse an existing channel instead of opening a new one. */
     channelId?: string;
     slackChannelId?: string;
@@ -310,6 +334,8 @@ export async function createMeetingForCompany(input: NewMeetingInput) {
             moderatorPersonaId: input.turnPolicy?.moderatorId,
             maxTurns: input.maxTurns ?? 12,
             context: input.context,
+            phases: input.phases && input.phases.length > 0 ? input.phases : null,
+            workflowKey: input.workflowKey ?? null,
             slackChannelId: input.slackChannelId,
             slackMirrorEnabled: input.slackMirrorEnabled ?? false,
             slackUseAgentIdentity: input.slackUseAgentIdentity ?? false,

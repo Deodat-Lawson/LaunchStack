@@ -4,10 +4,25 @@ import { useEffect, useState } from "react";
 import { AskPanel } from "~/app/employer/documents/_workspace/AskPanel";
 import type {
     ComposerSend,
+    ThreadAgent,
     ThreadMessage,
     WorkspaceSource,
 } from "~/app/employer/documents/_workspace/types";
 import type { AskStartersPayload } from "~/lib/ask-starters/contract";
+import type { ChatAgentOption } from "~/app/employer/documents/_workspace/collab/types";
+import { STARTER_AGENTS } from "~/lib/agents/starter-agents";
+
+/** The starter roster, as the composer's picker and `@` menu see it. */
+const PREVIEW_AGENTS: ChatAgentOption[] = STARTER_AGENTS.map(agent => ({
+    id: agent.key,
+    displayName: agent.displayName,
+    role: agent.role,
+    description: agent.description,
+    accent: agent.accent,
+    mode: agent.mode,
+    tools: agent.tools,
+    builtin: true,
+}));
 
 /**
  * Local harness for the Ask panel's starter questions. Mounts the real
@@ -203,6 +218,7 @@ export function AskStartersPreview() {
     const [selected, setSelected] = useState<string[]>([]);
     const [isSending, setIsSending] = useState(false);
     const [lastNavigation, setLastNavigation] = useState<string | null>(null);
+    const [agentKey, setAgentKey] = useState<string | null>(null);
 
     useEffect(() => {
         const restore = installFetchStub(new URLSearchParams(window.location.search));
@@ -211,7 +227,19 @@ export function AskStartersPreview() {
     }, []);
 
     const sendMessage = (send: ComposerSend) => {
-        setThread(prev => [...prev, { role: "user", text: send.text, refs: send.refs }]);
+        const agent = PREVIEW_AGENTS.find(a => a.id === send.agentKey);
+        const attribution: ThreadAgent | undefined = agent
+            ? {
+                  key: agent.id,
+                  displayName: agent.displayName,
+                  role: agent.role,
+                  accent: agent.accent ?? null,
+              }
+            : undefined;
+        setThread(prev => [
+            ...prev,
+            { role: "user", text: send.text, refs: send.refs, agent: attribution },
+        ]);
         setIsSending(true);
         window.setTimeout(() => {
             const cited = send.refs[0] ?? SOURCES[0]!.id;
@@ -231,6 +259,8 @@ export function AskStartersPreview() {
                         },
                     ],
                     model: "preview",
+                    // The real route echoes the agent that answered; mirror it.
+                    agent: attribution,
                 },
             ]);
             setIsSending(false);
@@ -263,6 +293,9 @@ export function AskStartersPreview() {
                 onToggleWebSearch={() => undefined}
                 thinking={false}
                 onToggleThinking={() => undefined}
+                agents={PREVIEW_AGENTS}
+                agentKey={agentKey}
+                onChangeAgent={setAgentKey}
             />
             {lastNavigation && (
                 <div

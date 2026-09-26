@@ -1,12 +1,12 @@
 /**
  * The workspace's agent roster.
  *
- * GET seeds the starter personas on first read so the Agents pane is never
- * an empty state that the user has to escape from.
+ * GET seeds the starter agents on first read so the Agents pane is never an
+ * empty state that the user has to escape from. The same roster serves
+ * meetings, the chat composer's agent picker and `@handle` mentions.
  */
 
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import {
     AGENT_AUTONOMY_LEVELS,
@@ -14,39 +14,25 @@ import {
     type AgentAutonomy,
 } from "~/lib/agents/autonomy";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { createPersona, ensureStarterPersonas } from "~/server/collab/personas";
+import { CreatePersonaSchema } from "~/server/collab/agent-schemas";
+import { createPersona, ensureStarterPersonas, listPersonas } from "~/server/collab/personas";
 import { readWorkspaceSetting } from "~/server/settings/store";
 import { getHub, listKnownNodes } from "~/server/collab/runtime";
 import { getSlackStatus } from "~/server/collab/slack";
 
 export const dynamic = "force-dynamic";
 
-/** Persona handles are used as `@key` in transcripts, so keep them mention-safe. */
-const PersonaKey = z
-    .string()
-    .min(2)
-    .max(48)
-    .regex(/^[a-z0-9][a-z0-9_-]*$/, "Use lowercase letters, digits, - and _");
-
-const CreatePersonaSchema = z.object({
-    key: PersonaKey,
-    displayName: z.string().min(1).max(80),
-    role: z.string().min(1).max(80),
-    systemPrompt: z.string().min(1).max(6000),
-    nodeId: z.string().max(120).nullable().optional(),
-    route: z.enum(["default", "fast", "reasoning", "vision"]).nullable().optional(),
-    temperature: z.number().min(0).max(2).nullable().optional(),
-    maxTurnChars: z.number().int().min(120).max(8000).nullable().optional(),
-    accent: z.string().max(32).nullable().optional(),
-    autonomy: z.enum(AGENT_AUTONOMY_LEVELS).nullable().optional(),
-});
-
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
     const { companyId } = ctx.data;
-    const personas = await ensureStarterPersonas(companyId);
+    const includeArchived = new URL(request.url).searchParams.get("archived") === "1";
+
+    // Seeding returns the live roster; `?archived=1` widens it for the Agents
+    // page, which offers retired agents a way back.
+    const seeded = await ensureStarterPersonas(companyId);
+    const personas = includeArchived ? await listPersonas(companyId, true) : seeded;
     const hub = getHub();
     // Node bookkeeping must never take the roster down with it — a persona whose
     // node is unreachable is exactly when this page needs to render.
@@ -65,7 +51,7 @@ export async function GET() {
     return NextResponse.json({
         personas,
         nodes,
-        defaults: { autonomy: defaultAutonomy },
+        defaults: { autonomy: defaultAutonomy, autonomyLevels: AGENT_AUTONOMY_LEVELS },
         network: {
             enabled: Boolean(hub),
             hubId: hub?.hubId ?? null,

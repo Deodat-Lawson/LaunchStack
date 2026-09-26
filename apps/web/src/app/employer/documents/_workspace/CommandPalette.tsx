@@ -7,6 +7,9 @@ import { useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
 import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
+import { usableAsPrimary } from "~/lib/agents/definition";
+import { AgentAvatar } from "./collab/AgentAvatar";
+import type { ChatAgentOption } from "./collab/types";
 import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
@@ -16,6 +19,13 @@ import {
     relativeTime,
 } from "~/lib/workspace-history";
 import type { IconProps } from "~/components/icons/types";
+
+/** An agent's picture as a palette icon — the same avatar the chat shows. */
+function AgentPaletteIcon(agent: ChatAgentOption): ComponentType<IconProps> {
+    const Icon = ({ size = 14 }: IconProps) => <AgentAvatar agent={agent} size={size} />;
+    Icon.displayName = `AgentPaletteIcon(${agent.id})`;
+    return Icon;
+}
 
 /**
  * The palette's "Actions" group is the action registry, flattened: every
@@ -62,6 +72,12 @@ export interface CommandPaletteProps {
     onClose: () => void;
     sources: WorkspaceSource[];
     onPickSource: (id: string) => void;
+    /** The roster; each agent becomes two rows — ask it, or open it. */
+    agents?: ChatAgentOption[];
+    /** Picks the agent in the chat composer and shows the chat. */
+    onAskAgent?: (agentKey: string) => void;
+    /** Opens the Agents app. */
+    onOpenAgent?: (agentKey: string) => void;
     /** If provided, feature rows open Studio with this id instead of hard-navigating. */
     onPickFeature?: (featureId: string) => void;
     /** Opens Settings on the row for this registry key. */
@@ -81,7 +97,7 @@ const RECENT_HISTORY = 5;
 const MATCHED_HISTORY = 20;
 
 interface PaletteItem {
-    kind: "action" | "feature" | "source" | "history" | "setting";
+    kind: "action" | "feature" | "source" | "history" | "setting" | "agent";
     id: string;
     label: string;
     sub?: string;
@@ -96,6 +112,9 @@ export function CommandPalette({
     onClose,
     sources,
     onPickSource,
+    agents = [],
+    onAskAgent,
+    onOpenAgent,
     onPickFeature,
     onPickSetting,
     history,
@@ -140,6 +159,33 @@ export function CommandPalette({
                 },
             })
         );
+        // Agents are searched by name, handle, role and what they are for, so
+        // "margin" finds Dana and "pushback" finds Vera.
+        agents.forEach(agent => {
+            const keywords = `@${agent.id} ${agent.role} ${agent.description}`;
+            if (onAskAgent && usableAsPrimary(agent)) {
+                base.push({
+                    kind: "agent",
+                    id: `ask:${agent.id}`,
+                    label: `Ask ${agent.displayName}`,
+                    sub: `${agent.role} · ${agent.description || `@${agent.id}`}`,
+                    keywords,
+                    Icon: AgentPaletteIcon(agent),
+                    onRun: () => onAskAgent(agent.id),
+                });
+            }
+            if (onOpenAgent) {
+                base.push({
+                    kind: "agent",
+                    id: `open:${agent.id}`,
+                    label: `Open ${agent.displayName} in Agents`,
+                    sub: `Edit, try, export · @${agent.id}`,
+                    keywords,
+                    Icon: AgentPaletteIcon(agent),
+                    onRun: () => onOpenAgent(agent.id),
+                });
+            }
+        });
         sources.forEach(s => {
             const meta = SOURCE_META[s.type] ?? SOURCE_META.doc;
             base.push({
@@ -205,6 +251,9 @@ export function CommandPalette({
         onClose,
         sources,
         onPickSource,
+        agents,
+        onAskAgent,
+        onOpenAgent,
         onPickFeature,
         onPickSetting,
         history,
@@ -245,6 +294,7 @@ export function CommandPalette({
     const groups = {
         action: { label: "Actions", items: items.filter(i => i.kind === "action") },
         feature: { label: "Features", items: items.filter(i => i.kind === "feature") },
+        agent: { label: "Agents", items: items.filter(i => i.kind === "agent") },
         source: { label: "Sources", items: items.filter(i => i.kind === "source") },
         history: { label: "History", items: items.filter(i => i.kind === "history") },
         setting: { label: "Settings", items: items.filter(i => i.kind === "setting") },

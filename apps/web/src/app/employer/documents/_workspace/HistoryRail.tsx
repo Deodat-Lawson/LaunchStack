@@ -41,7 +41,7 @@ import { useActionMenu, useContextTarget } from "~/components/context-menu";
  * it, and a link that goes nowhere would be worse than no link.
  */
 
-const KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
+export const HISTORY_KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
     chat: MessageSquare,
     globe: Globe,
     "map-pin": MapPin,
@@ -105,7 +105,7 @@ function HistoryRow({
         items: menuItems,
     });
     const meta = HISTORY_KIND_META[entry.kind];
-    const Icon = KIND_ICONS[meta.icon];
+    const Icon = HISTORY_KIND_ICONS[meta.icon];
     // A row only opens something when there is something to open: a chat
     // always resumes, a run needs a surface.
     const openable = meta.resumable || Boolean(entry.href);

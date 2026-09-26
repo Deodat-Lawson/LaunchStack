@@ -4,14 +4,13 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
-    Lock,
-    PanelRight,
-    Pencil,
-    Upload,
-    ChevronLeft as IconChevronLeft,
     Folder as IconFolder,
-    Sparkles as IconSparkle,
-    Trash2 as IconTrash,
+    Lock,
+    PanelRightClose,
+    Pencil,
+    Sparkles,
+    Trash2,
+    Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "~/lib/auth-client";
@@ -30,6 +29,7 @@ import {
     type DocumentTargetData,
 } from "./documentContextMenu";
 import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
+import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
@@ -90,6 +90,12 @@ export interface DocumentViewerProps {
     /** "Restrict access" — who can see this document. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
+    /**
+     * "Ask AI" on a selected passage: the passage goes to the chat as a quote
+     * and the document stays in view beside it. Absent, the PDF selection
+     * popup offers only "+ Note".
+     */
+    onAskAboutPassage?: (source: WorkspaceSource, quote: string) => void;
     onVersionChanged?: () => void;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
@@ -105,6 +111,16 @@ export interface DocumentViewerProps {
      */
     embedded?: boolean;
 }
+
+/**
+ * Below this width the versions-and-notes rail stops docking beside the
+ * document and slides over it instead: 320px of rail plus a readable page
+ * needs roughly this much.
+ */
+const NARROW_BELOW_PX = 760;
+
+/** Remembers a reader's choice to hide the docked rail. Per browser, on purpose. */
+const DETAILS_HIDDEN_KEY = "documentViewer.detailsHidden.v1";
 
 /** Gives one version row its own right-click target without touching its markup. */
 function VersionTarget({
@@ -236,6 +252,7 @@ export function DocumentViewer({
     onDelete,
     onRestrictAccess,
     onAskAbout,
+    onAskAboutPassage,
     onVersionChanged,
     onEdit,
     onPublished,
@@ -273,23 +290,65 @@ export function DocumentViewer({
      * panel the Details button slides over the document instead.
      */
     const rootRef = useRef<HTMLDivElement>(null);
-    const [narrow, setNarrow] = useState(false);
-    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [viewerWidth, setViewerWidth] = useState(0);
+    const narrow = viewerWidth > 0 && viewerWidth < NARROW_BELOW_PX;
     useEffect(() => {
         const element = rootRef.current;
-        if (!embedded || !element || typeof ResizeObserver === "undefined") {
-            setNarrow(false);
-            return;
-        }
+        if (!element || typeof ResizeObserver === "undefined") return;
+        // Measured as an overlay too, not only in a column: on a phone the
+        // full-screen preview is just as narrow, and a docked 320px rail
+        // there left the document a sliver beside it.
         const observer = new ResizeObserver(([entry]) => {
             const width = entry?.contentRect.width ?? 0;
             // A pane with no box — hidden, or mid-reparent — has no layout
             // question to answer.
-            if (width > 0) setNarrow(width < 760);
+            if (width > 0) setViewerWidth(Math.round(width));
         });
         observer.observe(element);
         return () => observer.disconnect();
-    }, [embedded]);
+    }, []);
+
+    /**
+     * Whether versions and notes are showing. Wide, the rail is docked and
+     * shown unless the reader hid it — a choice remembered across documents,
+     * since someone who reads without it wants that everywhere. Narrow, it
+     * is an overlay, shut until asked for, and never remembered: opening it
+     * there is always for one thing.
+     */
+    const [dockHidden, setDockHidden] = useState(false);
+    const [overlayOpen, setOverlayOpen] = useState(false);
+    useEffect(() => {
+        try {
+            if (localStorage.getItem(DETAILS_HIDDEN_KEY) === "1") setDockHidden(true);
+        } catch {
+            // Private mode / blocked storage — fall back to shown.
+        }
+    }, []);
+    const detailsVisible = narrow ? overlayOpen : !dockHidden;
+    const setDetailsVisible = useCallback(
+        (visible: boolean) => {
+            if (narrow) {
+                setOverlayOpen(visible);
+                return;
+            }
+            setDockHidden(!visible);
+            try {
+                localStorage.setItem(DETAILS_HIDDEN_KEY, visible ? "0" : "1");
+            } catch {
+                // Quota / private mode — the choice just is not remembered.
+            }
+        },
+        [narrow]
+    );
+    /**
+     * Bring the rail into view for something that happens in it — a new
+     * note's draft, a pin's card. Not remembered: it is shown for this, and
+     * the reader's own choice stands for the next document.
+     */
+    const showDetails = useCallback(() => {
+        setOverlayOpen(true);
+        setDockHidden(false);
+    }, []);
     const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
@@ -439,10 +498,15 @@ export function DocumentViewer({
     }, [source.documentId, isPdf, notesNonce]);
 
     // When the PDF viewer captures a selection, pop the notes panel open so
-    // the user can type the body without hunting for the sidebar.
+    // the user can type the body without hunting for the sidebar. Switching
+    // the tab is not enough in a narrow column — beside the chat, where Ask AI
+    // now puts documents — because the whole panel is folded away there, and
+    // "+ Note" opened a draft nobody could see.
     useEffect(() => {
-        if (pdfAnchorDraft) setSidebarTab("notes");
-    }, [pdfAnchorDraft]);
+        if (!pdfAnchorDraft && !noteSeed) return;
+        setSidebarTab("notes");
+        showDetails();
+    }, [pdfAnchorDraft, noteSeed, showDetails]);
 
     // Fetch version history on mount
     useEffect(() => {
@@ -745,6 +809,73 @@ export function DocumentViewer({
               ? "var(--accent)"
               : "var(--ok)";
 
+    /** The header's buttons, in the order they give way when room runs out. */
+    const headerActions: HeaderAction[] = [
+        ...(isMindmap && onEdit
+            ? [
+                  {
+                      id: "edit",
+                      label: "Edit",
+                      icon: <Pencil className="size-3.5" />,
+                      onSelect: () => onEdit(source),
+                      tone: "primary" as const,
+                      testId: "viewer-edit-mindmap",
+                  },
+              ]
+            : []),
+        ...(isMindmap && source.citability !== "citable"
+            ? [
+                  {
+                      id: "publish",
+                      label: publishing
+                          ? "Publishing…"
+                          : source.citability === "stale"
+                            ? "Update citable copy"
+                            : "Make citable",
+                      icon: <Upload className="size-3.5" />,
+                      onSelect: () => void publishMindmap(),
+                      disabled: publishing || !persisted,
+                      hint:
+                          source.citability === "stale"
+                              ? "The citable copy is older than this map"
+                              : "Index this map so answers can cite it",
+                  },
+              ]
+            : []),
+        ...(!isMindmap || source.citability !== "none"
+            ? [
+                  {
+                      id: "ask",
+                      label: "Ask about this",
+                      icon: <Sparkles className="size-3.5" />,
+                      onSelect: () => onAskAbout(source),
+                      testId: "viewer-ask",
+                  },
+              ]
+            : []),
+        ...(onRestrictAccess
+            ? [
+                  {
+                      id: "restrict",
+                      label: source.restricted ? "Change who can see this" : "Restrict access",
+                      icon: <Lock className="size-3.5" />,
+                      onSelect: () => onRestrictAccess(source),
+                      iconOnly: true,
+                      tone: source.restricted ? ("on" as const) : undefined,
+                  },
+              ]
+            : []),
+        {
+            id: "delete",
+            label: "Delete document",
+            icon: <Trash2 className="size-3.5" />,
+            onSelect: deleteDocument,
+            iconOnly: true,
+            tone: "danger",
+            testId: "viewer-delete",
+        },
+    ];
+
     const currentVersion = versions.find(v => v.id === activeVersionId);
     const viewingOld = activeVersionId !== null && currentVersion && !currentVersion.isCurrent;
 
@@ -752,6 +883,18 @@ export function DocumentViewer({
         <div
             {...documentTarget}
             ref={rootRef}
+            data-testid="document-viewer"
+            data-embedded={embedded ? "true" : undefined}
+            data-narrow={narrow ? "true" : undefined}
+            onKeyDown={e => {
+                // An open overlay rail is the nearest thing to dismiss:
+                // Escape shuts it, and marking the event handled keeps the
+                // window listener from closing the whole preview as well.
+                if (e.key === "Escape" && narrow && overlayOpen) {
+                    e.preventDefault();
+                    setOverlayOpen(false);
+                }
+            }}
             style={{
                 // Embedded, it is one column among several and must not
                 // escape its panel; as an overlay it owns the screen.
@@ -763,235 +906,43 @@ export function DocumentViewer({
                 flexDirection: "column",
             }}
         >
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 14,
-                    padding: "10px 18px",
-                    borderBottom: "1px solid var(--line)",
-                    background: "var(--panel)",
-                    flexShrink: 0,
+            <DocumentViewerHeader
+                width={viewerWidth}
+                // In a column the tab's own close is the way out, and a
+                // "Library" button beside the chat would mean nothing.
+                onBack={embedded ? undefined : onClose}
+                kindIcon={<Icon size={13} />}
+                kindColor={meta.color}
+                title={
+                    <input
+                        ref={titleInputRef}
+                        value={title}
+                        aria-label="Title"
+                        onChange={e => {
+                            setTitle(e.target.value);
+                            setDirty(true);
+                        }}
+                        onBlur={() => void saveTitle()}
+                        // A class, not an imperative style: the old onFocus
+                        // painted the field grey and nothing painted it back.
+                        className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none"
+                    />
+                }
+                meta={
+                    <>
+                        <span>{meta.label}</span>
+                        <span>·</span>
+                        <span className="mono">{source.size || source.added || ""}</span>
+                        <span>·</span>
+                    </>
+                }
+                status={{ text: statusText, color: statusColor }}
+                actions={headerActions}
+                details={{
+                    visible: detailsVisible,
+                    onToggle: () => setDetailsVisible(!detailsVisible),
                 }}
-            >
-                {/* In a column the tab's own close is the way out, and a
-                    "Library" button beside the chat would mean nothing. */}
-                {!embedded && (
-                    <button
-                        onClick={onClose}
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                            padding: "6px 10px",
-                            borderRadius: 7,
-                            color: "var(--ink-2)",
-                            fontSize: 12,
-                            border: "1px solid var(--line)",
-                        }}
-                    >
-                        <IconChevronLeft size={12} /> Library
-                    </button>
-                )}
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        flex: 1,
-                        minWidth: 0,
-                    }}
-                >
-                    <div
-                        style={{
-                            width: 26,
-                            height: 26,
-                            borderRadius: 6,
-                            background: "var(--line-2)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: meta.color,
-                            flexShrink: 0,
-                        }}
-                    >
-                        <Icon size={13} />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                        <input
-                            ref={titleInputRef}
-                            value={title}
-                            onChange={e => {
-                                setTitle(e.target.value);
-                                setDirty(true);
-                            }}
-                            onBlur={() => void saveTitle()}
-                            style={{
-                                fontSize: 14,
-                                fontWeight: 600,
-                                color: "var(--ink)",
-                                background: "transparent",
-                                border: "none",
-                                outline: "none",
-                                padding: "2px 4px",
-                                borderRadius: 4,
-                                width: "100%",
-                            }}
-                            onFocus={e => {
-                                e.target.style.background = "var(--line-2)";
-                            }}
-                        />
-                        <div
-                            style={{
-                                fontSize: 11,
-                                color: "var(--ink-3)",
-                                display: "flex",
-                                gap: 6,
-                                // In a narrow column the kind and the date
-                                // wrap under each other and shove the
-                                // buttons about; the save state is the only
-                                // part that is worth the room.
-                                ...(narrow ? { whiteSpace: "nowrap" as const } : null),
-                            }}
-                        >
-                            {!narrow && (
-                                <>
-                                    <span>{meta.label}</span>
-                                    <span>·</span>
-                                    <span className="mono">
-                                        {source.size || source.added || ""}
-                                    </span>
-                                    <span>·</span>
-                                </>
-                            )}
-                            <span style={{ color: statusColor }}>{statusText}</span>
-                        </div>
-                    </div>
-                </div>
-                {isMindmap && onEdit && (
-                    <button
-                        onClick={() => onEdit(source)}
-                        data-testid="viewer-edit-mindmap"
-                        style={{
-                            fontSize: 12,
-                            fontWeight: 600,
-                            padding: "6px 12px",
-                            borderRadius: 7,
-                            background: "var(--accent)",
-                            color: "white",
-                            border: "1px solid transparent",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                        }}
-                    >
-                        <Pencil style={{ width: 12, height: 12 }} /> Edit
-                    </button>
-                )}
-                {isMindmap && source.citability !== "citable" && (
-                    <button
-                        onClick={() => void publishMindmap()}
-                        disabled={publishing || !persisted}
-                        title={
-                            source.citability === "stale"
-                                ? "The citable copy is older than this map"
-                                : "Index this map so answers can cite it"
-                        }
-                        style={{
-                            fontSize: 12,
-                            padding: "6px 10px",
-                            borderRadius: 7,
-                            color: "var(--ink-2)",
-                            border: "1px solid var(--line)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            opacity: publishing ? 0.6 : 1,
-                        }}
-                    >
-                        <Upload style={{ width: 12, height: 12 }} />
-                        {publishing
-                            ? "Publishing…"
-                            : source.citability === "stale"
-                              ? "Update citable copy"
-                              : "Make citable"}
-                    </button>
-                )}
-                {(!isMindmap || source.citability !== "none") && (
-                    <button
-                        onClick={() => onAskAbout(source)}
-                        style={{
-                            fontSize: 12,
-                            padding: "6px 10px",
-                            borderRadius: 7,
-                            color: "var(--ink-2)",
-                            border: "1px solid var(--line)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                        }}
-                    >
-                        <IconSparkle size={12} /> Ask about this
-                    </button>
-                )}
-                {onRestrictAccess && (
-                    <button
-                        onClick={() => onRestrictAccess(source)}
-                        title={source.restricted ? "Change who can see this" : "Restrict access"}
-                        aria-label={
-                            source.restricted ? "Change who can see this" : "Restrict access"
-                        }
-                        style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 7,
-                            color: source.restricted ? "var(--accent)" : "var(--ink-2)",
-                            border: "1px solid var(--line)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <Lock size={13} />
-                    </button>
-                )}
-                <button
-                    onClick={deleteDocument}
-                    style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 7,
-                        color: "var(--danger)",
-                        border: "1px solid var(--line)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                    title="Delete document"
-                >
-                    <IconTrash size={13} />
-                </button>
-                {narrow && (
-                    <button
-                        onClick={() => setDetailsOpen(open => !open)}
-                        aria-pressed={detailsOpen}
-                        style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 7,
-                            color: detailsOpen ? "var(--accent-ink)" : "var(--ink-2)",
-                            background: detailsOpen ? "var(--accent-soft)" : "transparent",
-                            border: "1px solid var(--line)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                        title="Versions and notes"
-                    >
-                        <PanelRight size={13} />
-                    </button>
-                )}
-            </div>
+            />
 
             <div style={{ flex: 1, display: "flex", overflow: "hidden", position: "relative" }}>
                 <div
@@ -1050,6 +1001,7 @@ export function DocumentViewer({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     padding: "60px 40px",
+                                    overflowWrap: "anywhere",
                                     textAlign: "center",
                                     color: "var(--ink-3)",
                                     fontSize: 14,
@@ -1110,37 +1062,17 @@ export function DocumentViewer({
                                             quote: anchor.quote,
                                         });
                                     }}
-                                    onAiCapture={(anchor, intent) => {
-                                        void fetch("/api/notes/ai-capture", {
-                                            method: "POST",
-                                            headers: { "Content-Type": "application/json" },
-                                            body: JSON.stringify({
-                                                selection: anchor.quote.exact,
-                                                intent,
-                                                sourceContext: {
-                                                    documentId: source.documentId,
-                                                    documentTitle: fullDoc?.title,
-                                                    versionId: activeVersionId ?? undefined,
-                                                    page: anchor.page,
-                                                },
-                                            }),
-                                        })
-                                            .then(async res => {
-                                                if (!res.ok) {
-                                                    throw new Error(
-                                                        `AI capture failed (${res.status})`
-                                                    );
-                                                }
-                                                setNotesNonce(n => n + 1);
-                                                setSidebarTab("notes");
-                                            })
-                                            .catch(err => {
-                                                console.error("[ai-capture] failed:", err);
-                                            });
-                                    }}
+                                    onAskAi={
+                                        onAskAboutPassage
+                                            ? quote => onAskAboutPassage(source, quote)
+                                            : undefined
+                                    }
                                     onNotePinClick={id => {
                                         setPdfScrollToNoteId(id);
                                         setSidebarTab("notes");
+                                        // A pin opens its card, so the rail
+                                        // holding it has to be showing.
+                                        showDetails();
                                     }}
                                     onSelectionDraft={draft => {
                                         pdfSelection.current = draft;
@@ -1173,6 +1105,7 @@ export function DocumentViewer({
                                 justifyContent: "center",
                                 gap: 12,
                                 padding: "60px 40px",
+                                overflowWrap: "anywhere",
                                 color: "var(--ink-3)",
                                 fontSize: 14,
                             }}
@@ -1209,14 +1142,15 @@ export function DocumentViewer({
                 </div>
 
                 <aside
-                    hidden={narrow && !detailsOpen}
+                    hidden={!detailsVisible}
+                    data-testid="viewer-details"
                     style={{
                         width: 320,
                         maxWidth: "100%",
                         flexShrink: 0,
                         borderLeft: "1px solid var(--line)",
                         background: "var(--panel)",
-                        display: narrow && !detailsOpen ? "none" : "flex",
+                        display: detailsVisible ? "flex" : "none",
                         flexDirection: "column",
                         overflow: "hidden",
                         // Over the document rather than squeezing it, once
@@ -1255,6 +1189,29 @@ export function DocumentViewer({
                                 onClick={() => setSidebarTab("notes")}
                             />
                         )}
+                        {/* Hide from where the eye already is, as well as
+                            from the header's toggle. */}
+                        <button
+                            type="button"
+                            onClick={() => setDetailsVisible(false)}
+                            aria-label="Hide versions and notes"
+                            title="Hide versions and notes"
+                            data-testid="viewer-details-hide"
+                            style={{
+                                marginLeft: "auto",
+                                alignSelf: "center",
+                                width: 26,
+                                height: 26,
+                                borderRadius: 6,
+                                color: "var(--ink-3)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                            }}
+                        >
+                            <PanelRightClose size={13} />
+                        </button>
                     </div>
 
                     {sidebarTab === "notes" && (!isMindmap || Boolean(source.documentId)) ? (
@@ -1273,12 +1230,20 @@ export function DocumentViewer({
                                     setPdfAnchorDraft(null);
                                     setNoteSeed(null);
                                 }}
-                                onNoteClick={({ id, page, quote }) => {
-                                    // Prefer the quote: the stored page is 1
-                                    // for every note, so scrolling to it went
-                                    // nowhere. Fall back to the page only when
-                                    // there is nothing to search for.
-                                    if (quote) {
+                                onNoteClick={({ id, page, quote, located }) => {
+                                    // A note made from a selection knows where
+                                    // it is, and its own pin already draws the
+                                    // passage — scroll there. Searching for the
+                                    // quote instead found its first copy, which
+                                    // in a repetitive document is some other
+                                    // line entirely.
+                                    if (located) {
+                                        setNoteHighlight(null);
+                                        setPdfScrollToNoteId(id);
+                                    } else if (quote) {
+                                        // No position: agent-captured notes store
+                                        // page 1 with no quads, so the quote is
+                                        // the only thing that can find them.
                                         setNoteHighlight({
                                             text: quote,
                                             page: null,
@@ -1288,6 +1253,14 @@ export function DocumentViewer({
                                     } else if (page !== null) {
                                         setPdfScrollToNoteId(id);
                                     }
+                                }}
+                                onDeleted={id => {
+                                    // The highlight a note click drew belongs to
+                                    // that note; left in place it outlived it,
+                                    // marking a passage nothing annotates.
+                                    if (id !== pdfScrollToNoteId) return;
+                                    setNoteHighlight(null);
+                                    setPdfScrollToNoteId(null);
                                 }}
                             />
                         </div>

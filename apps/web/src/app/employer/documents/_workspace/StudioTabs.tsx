@@ -17,6 +17,7 @@ import { cn } from "~/lib/utils";
 import type { IconProps } from "~/components/icons/types";
 
 /** What a tab needs to draw itself. Studio features and sources both satisfy it. */
+
 export interface PaneTab {
     id: string;
     label: string;
@@ -36,6 +37,10 @@ export interface StudioTabsProps {
     focused: boolean;
     /** False when every column is taken, which greys the split control. */
     canSplit: boolean;
+    /** False on a phone: no split control at all, in the strip or the tab's menu. */
+    splittable?: boolean;
+    /** The key that opens the same picker as "+", shown in its tooltip. */
+    studioKeys?: string | null;
     onSelect: (id: string) => void;
     onClose: (id: string) => void;
     onCloseOthers: (id: string) => void;
@@ -82,6 +87,8 @@ export function StudioTabs({
     activeId,
     focused,
     canSplit,
+    splittable = true,
+    studioKeys,
     onSelect,
     onClose,
     onCloseOthers,
@@ -180,18 +187,22 @@ export function StudioTabs({
                                         label: `Actions for ${tab.label}`,
                                         data: tab,
                                         items: () => [
-                                            {
-                                                type: "item",
-                                                id: "split",
-                                                label: "Split to the right",
-                                                icon: "split",
-                                                disabled: !canSplit || tabs.length < 2,
-                                                disabledReason: !canSplit
-                                                    ? "Every column is taken."
-                                                    : "It is already the only tab here.",
-                                                onSelect: () => onSplit(tab.id),
-                                            },
-                                            { type: "separator", id: "sep" },
+                                            ...(splittable
+                                                ? [
+                                                      {
+                                                          type: "item" as const,
+                                                          id: "split",
+                                                          label: "Split to the right",
+                                                          icon: "split" as const,
+                                                          disabled: !canSplit || tabs.length < 2,
+                                                          disabledReason: !canSplit
+                                                              ? "Every column is taken."
+                                                              : "It is already the only tab here.",
+                                                          onSelect: () => onSplit(tab.id),
+                                                      },
+                                                      { type: "separator" as const, id: "sep" },
+                                                  ]
+                                                : []),
                                             {
                                                 type: "item",
                                                 id: "close",
@@ -393,24 +404,26 @@ export function StudioTabs({
                         />
                     </TabsList>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
-                    aria-label={inColumn("Split to the right")}
-                    title="Split to the right"
-                    disabled={!canSplit || tabs.length < 2}
-                    onClick={() => activeId && onSplit(activeId)}
-                >
-                    <Columns2 className="size-4" />
-                </Button>
+                {splittable && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
+                        aria-label={inColumn("Split to the right")}
+                        title="Split to the right"
+                        disabled={!canSplit || tabs.length < 2}
+                        onClick={() => activeId && onSplit(activeId)}
+                    >
+                        <Columns2 className="size-4" />
+                    </Button>
+                )}
                 <Button
                     variant="ghost"
                     size="icon"
                     data-studio-add
                     className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
                     aria-label={inColumn("Open a Studio app")}
-                    title="Open a Studio app"
+                    title={studioKeys ? `Open a Studio app  ${studioKeys}` : "Open a Studio app"}
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />

@@ -9,10 +9,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { useTheme } from "next-themes";
-import { writeSettingValue } from "~/lib/settings/useSettings";
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
-import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
 import { useChatRoutes } from "../hooks/useChatRoutes";
 import {
     SOURCE_META,
@@ -30,17 +27,11 @@ import {
     Zap as IconBolt,
     Brain as IconBrain,
     ChevronRight as IconChevronRight,
-    File as IconFile,
     Globe as IconGlobe,
     Image as IconImage,
-    LogOut as IconLogout,
-    Moon as IconMoon,
     Paperclip as IconPaperclip,
     Plus as IconPlus,
-    Search as IconSearch,
-    Settings as IconSettings,
     Shield as IconShield,
-    Sun as IconSun,
     User as IconUser,
     X as IconX,
 } from "lucide-react";
@@ -74,10 +65,10 @@ import {
     transcriptFilename,
     transcriptMarkdown,
 } from "./transcript";
-import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
+import { WORKSPACE_HEADER_HEIGHT_PX } from "./workspaceHeader";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -88,6 +79,9 @@ const CHAT_GUTTER_X_PX = 24;
 export function workspaceMainHeaderBarStyle(leadingChromeInsetPx = 0): React.CSSProperties {
     return {
         flexShrink: 0,
+        // Fixed, so the rule under it lines up with the next column's.
+        height: WORKSPACE_HEADER_HEIGHT_PX,
+        boxSizing: "border-box",
         borderBottom: "1px solid var(--line)",
         background: "var(--panel)",
         paddingTop: 10,
@@ -1690,269 +1684,6 @@ function EmptyState({
 
 /** Public README — same destination as the public site's footer "Documentation"
  *  link (apps/landing, MarketingShell). */
-const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
-
-export interface AvatarMenuProps {
-    /** How the active workspace sees you — `useMyProfile().data.effective`. */
-    userName?: string;
-    userEmail?: string;
-    userTitle?: string | null;
-    avatarUrl?: string | null;
-    onOpenSettings: () => void;
-    onSignOut?: () => void;
-}
-
-/** Matches the workspace header “jump” control (⌘K) — reused in ExpandedFeatureView. */
-export function JumpToPaletteButton({ onClick }: { onClick: () => void }) {
-    return (
-        <button
-            onClick={onClick}
-            title="Jump to anything  ⌘K"
-            type="button"
-            style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "5px 9px",
-                borderRadius: 7,
-                border: "1px solid var(--line)",
-                background: "var(--line-2)",
-                fontSize: 12,
-                color: "var(--ink-3)",
-            }}
-        >
-            <IconSearch size={12} />
-            <span
-                className="mono"
-                style={{
-                    fontSize: 10,
-                    padding: "1px 5px",
-                    border: "1px solid var(--line)",
-                    borderRadius: 4,
-                    background: "var(--panel)",
-                }}
-            >
-                ⌘K
-            </span>
-        </button>
-    );
-}
-
-export function AvatarMenu({
-    userName,
-    userEmail,
-    userTitle,
-    avatarUrl,
-    onOpenSettings,
-    onSignOut,
-}: AvatarMenuProps) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-    const { resolvedTheme, setTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
-    const workspaceSwitcher = useEmployerWorkspaceSwitcher();
-
-    useEffect(() => {
-        const onClick = (e: globalThis.MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-        };
-        document.addEventListener("mousedown", onClick);
-        return () => document.removeEventListener("mousedown", onClick);
-    }, []);
-
-    return (
-        <div ref={ref} style={{ position: "relative" }}>
-            <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label="Account menu"
-                aria-expanded={open}
-                onClick={() => setOpen(v => !v)}
-                className="size-8 rounded-full p-0 hover:bg-transparent"
-            >
-                <ProfileAvatar name={userName} email={userEmail} src={avatarUrl} />
-            </Button>
-            {open && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "calc(100% + 8px)",
-                        right: 0,
-                        width: 240,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        borderRadius: 12,
-                        boxShadow: "0 16px 40px var(--scrim-shadow)",
-                        padding: 6,
-                        zIndex: 50,
-                        animation: "lsw-fadeIn 120ms",
-                    }}
-                >
-                    <div
-                        className={cn(
-                            "flex items-center gap-2.5 p-2.5",
-                            !workspaceSwitcher && "border-line mb-1.5 border-b"
-                        )}
-                    >
-                        <ProfileAvatar
-                            name={userName}
-                            email={userEmail}
-                            src={avatarUrl}
-                            className="size-9"
-                        />
-                        <div className="min-w-0">
-                            <div className="text-ink truncate text-[13px] font-semibold">
-                                {userName ?? "Your account"}
-                            </div>
-                            <div className="text-ink-3 truncate text-[11px]">
-                                {userTitle ?? userEmail}
-                            </div>
-                        </div>
-                    </div>
-                    {workspaceSwitcher && (
-                        <WorkspaceSwitcherDropdownRow
-                            payload={workspaceSwitcher}
-                            onNavigate={() => setOpen(false)}
-                        />
-                    )}
-                    <button
-                        type="button"
-                        onClick={() => {
-                            const next = isDark ? "light" : "dark";
-                            setTheme(next);
-                            // Remembered as a preference, so the choice follows
-                            // the person to their next browser. Best effort.
-                            void writeSettingValue({
-                                key: "appearance.theme",
-                                scope: "member",
-                                value: next,
-                            }).catch(() => undefined);
-                        }}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                            textAlign: "left",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        {isDark ? <IconSun size={14} /> : <IconMoon size={14} />}
-                        <span style={{ flex: 1 }}>Switch to {isDark ? "light" : "dark"} theme</span>
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setOpen(false);
-                            onOpenSettings();
-                        }}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                            textAlign: "left",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        <IconSettings size={14} />
-                        <span style={{ flex: 1 }}>Settings</span>
-                    </button>
-                    <a
-                        href={EMPLOYER_DOCS_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setOpen(false)}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            textDecoration: "none",
-                            boxSizing: "border-box",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        <IconFile size={14} />
-                        <span style={{ flex: 1 }}>Documentation</span>
-                        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            ↗
-                        </span>
-                    </a>
-                    {onSignOut && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setOpen(false);
-                                onSignOut();
-                            }}
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                padding: "7px 10px",
-                                borderRadius: 7,
-                                fontSize: 13,
-                                color: "var(--ink-2)",
-                                cursor: "pointer",
-                                background: "transparent",
-                                border: "none",
-                                textAlign: "left",
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "var(--line-2)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "transparent";
-                            }}
-                        >
-                            <IconLogout size={14} />
-                            <span style={{ flex: 1 }}>Log out</span>
-                        </button>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-}
-
 export interface AskPanelProps {
     sources: WorkspaceSource[];
     selected: string[];
@@ -2095,9 +1826,16 @@ export function AskPanel({
             }}
         >
             <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
+                {/* One line each, cut short rather than wrapped: the bar is a
+                    fixed height so its rule meets the next column's, and a
+                    wrapped subtitle ran out of the top of it. */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{titleText}</div>
-                    <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{subText}</div>
+                    <div className="truncate" style={{ fontSize: 13, fontWeight: 600 }}>
+                        {titleText}
+                    </div>
+                    <div className="truncate" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                        {subText}
+                    </div>
                 </div>
 
                 <button

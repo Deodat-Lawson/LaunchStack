@@ -89,6 +89,8 @@ const serverSchema = z.object({
     OPENSANCTIONS_API_URL: optionalString(),
     OPENSANCTIONS_API_KEY: optionalString(),
     TRADE_DATA_PROVIDER: optionalString(),
+    // Investor relations — SEC asks every automated caller for "<name> <email>".
+    SEC_EDGAR_USER_AGENT: optionalString(),
     // Platform API Keys for Marketing Pipeline
     REDDIT_CLIENT_ID: optionalString(),
     REDDIT_CLIENT_SECRET: optionalString(),
@@ -462,6 +464,7 @@ function parseServerEnv() {
         OPENSANCTIONS_API_URL: process.env.OPENSANCTIONS_API_URL,
         OPENSANCTIONS_API_KEY: process.env.OPENSANCTIONS_API_KEY,
         TRADE_DATA_PROVIDER: process.env.TRADE_DATA_PROVIDER,
+        SEC_EDGAR_USER_AGENT: process.env.SEC_EDGAR_USER_AGENT,
         SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
             | "exa"
             | "serper"

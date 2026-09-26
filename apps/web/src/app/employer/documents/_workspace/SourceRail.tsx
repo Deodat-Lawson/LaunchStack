@@ -5,6 +5,7 @@ import React, {
     type CSSProperties,
     type Dispatch,
     type MouseEvent,
+    type ReactNode,
     type SetStateAction,
     useCallback,
     useEffect,
@@ -16,16 +17,16 @@ import {
     Folder,
     FolderOpen,
     Lock,
+    Plus,
     Check as IconCheck,
     ChevronLeft as IconChevronLeft,
     ChevronRight as IconChevronRight,
-    LayoutGrid as IconGrid,
     Ellipsis as IconMore,
-    Plus as IconPlus,
     Search as IconSearch,
     Shield as IconShield,
     X as IconX,
 } from "lucide-react";
+import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import {
@@ -588,6 +589,16 @@ export interface SourceRailProps {
      */
     onOpenKnowledge?: () => void;
     /**
+     * The app-wide controls the sidebar carries: the command palette and the
+     * account. They used to sit at the end of the first column's tab strip,
+     * which put them mid-screen whenever a second column opened. Opening an
+     * app is not one of them — each column's "+" does that, in that column.
+     */
+    onOpenPalette?: () => void;
+    accountSlot?: ReactNode;
+    /** The member's own keys for the sidebar's commands, formatted for show. */
+    shortcuts?: ShortcutHints;
+    /**
      * Everything the History tab needs. Omit it and the rail is sources-only,
      * with no tab strip — which is what the minimal embeddings want.
      */
@@ -745,6 +756,9 @@ export function SourceRail({
     logoLabel = "Launchstack",
     onClose,
     onOpenKnowledge,
+    onOpenPalette,
+    accountSlot,
+    shortcuts,
     history,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
@@ -1096,61 +1110,30 @@ export function SourceRail({
     return (
         <aside style={asideStyle}>
             <div
-                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 9 }}
+                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
             >
                 <LaunchstackMark size={22} title={logoLabel} />
-                <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em", flex: 1 }}>
-                    {logoLabel}
-                </div>
-                {onOpenKnowledge && (
-                    <button
-                        onClick={onOpenKnowledge}
-                        title="Open Knowledge"
-                        aria-label="Open Knowledge"
-                        style={{
-                            width: 26,
-                            height: 26,
-                            borderRadius: 6,
-                            background: "transparent",
-                            color: "var(--ink-3)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "background 120ms, color 120ms",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                            e.currentTarget.style.color = "var(--ink)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                            e.currentTarget.style.color = "var(--ink-3)";
-                        }}
-                    >
-                        <IconGrid size={13} />
-                    </button>
-                )}
-                <button
-                    onClick={onOpenAdd}
-                    title="Add knowledge  ⌘U"
+                {/* The name yields before the hide control is pushed past
+                    the sidebar's edge. */}
+                <div
                     style={{
-                        width: 26,
-                        height: 26,
-                        borderRadius: 6,
-                        background: "var(--accent)",
-                        color: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        transition: "filter 120ms",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: "-0.01em",
+                        flex: 1,
+                        minWidth: 0,
+                        marginLeft: 5,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
                     }}
                 >
-                    <IconPlus size={13} />
-                </button>
+                    {logoLabel}
+                </div>
                 {onClose && (
                     <button
                         onClick={onClose}
-                        title="Hide sidebar  ⌘\"
+                        title={withShortcut("Hide sidebar", shortcuts?.rail)}
                         aria-label="Hide sidebar"
                         style={{
                             width: 26,
@@ -1175,6 +1158,30 @@ export function SourceRail({
                         <IconChevronLeft size={14} />
                     </button>
                 )}
+            </div>
+
+            {/* The sidebar's commands, named and with their keys showing.
+                They were bare icons in the header, which hid ⌘K and ⌘U in
+                tooltips; shortcuts are how this workspace is meant to be
+                driven, so they sit where the action is, as in Linear's and
+                Notion's sidebars. */}
+            <div className="flex flex-col gap-px px-2 pb-2.5">
+                {onOpenPalette && (
+                    <RailCommand
+                        icon={<IconSearch className="size-3.5" />}
+                        label="Jump to anything"
+                        keys={shortcuts?.palette}
+                        onClick={onOpenPalette}
+                        testId="rail-palette"
+                    />
+                )}
+                <RailCommand
+                    icon={<Plus className="text-brand size-3.5" />}
+                    label="Add knowledge"
+                    keys={shortcuts?.add}
+                    onClick={onOpenAdd}
+                    testId="rail-add"
+                />
             </div>
 
             {history && (
@@ -1243,9 +1250,16 @@ export function SourceRail({
                         onChange={e => setSearch(e.target.value)}
                         onFocus={() => setSearchFocus(true)}
                         onBlur={() => setSearchFocus(false)}
-                        placeholder={
-                            activeTab === "history" ? "Search history" : "Search your knowledge"
-                        }
+                        // What `/` focuses. Found by this, not by the placeholder,
+                        // which changes with the tab — on History, `/` found
+                        // nothing and did nothing.
+                        data-rail-search
+                        // "Filter", not "Search": it narrows the list below and
+                        // leaves you here to act on what is left — tick sources
+                        // as context, move them, reopen a chat. ⌘K is the search
+                        // that jumps; calling this one search too made it read
+                        // as a smaller copy of that.
+                        placeholder={activeTab === "history" ? "Filter history" : "Filter sources"}
                         style={{
                             flex: 1,
                             background: "transparent",
@@ -1255,6 +1269,7 @@ export function SourceRail({
                             color: "var(--ink)",
                         }}
                     />
+                    {!searchFocus && !search && <ShortcutHint keys={shortcuts?.search} />}
                 </div>
             </div>
 
@@ -1386,6 +1401,41 @@ export function SourceRail({
                     </button>
                 </div>
             )}
+
+            {accountSlot && (
+                // The account sits at the foot of the sidebar, as it does in
+                // most apps with one — in the same place whatever the columns
+                // beside it are doing.
+                <div className="border-line shrink-0 border-t p-1.5">{accountSlot}</div>
+            )}
         </aside>
+    );
+}
+
+/** One of the sidebar's commands: an icon, its name, and its key. */
+function RailCommand({
+    icon,
+    label,
+    keys,
+    onClick,
+    testId,
+}: {
+    icon: ReactNode;
+    label: string;
+    keys: string | null | undefined;
+    onClick: () => void;
+    testId: string;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            data-testid={testId}
+            className="text-ink-2 hover:bg-line-2 hover:text-ink focus-visible:ring-brand/50 flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-left text-[13px] outline-none transition-colors focus-visible:ring-[3px]"
+        >
+            <span className="text-ink-3 flex shrink-0 items-center">{icon}</span>
+            <span className="min-w-0 flex-1 truncate">{label}</span>
+            <ShortcutHint keys={keys} />
+        </button>
     );
 }

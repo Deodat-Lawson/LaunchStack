@@ -1,11 +1,13 @@
 "use client";
 
-import { ArrowLeft, Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { ProspectsMark } from "~/components/icons/prospects";
+import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
+import { STUDIO } from "~/app/employer/_chrome/backTarget";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
@@ -185,8 +187,16 @@ export function GrowthShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="bg-surface text-ink grid min-h-full w-full flex-1 grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)]">
             <aside className="bg-surface-2 border-line flex flex-col gap-4 border-b px-2.5 pb-16 pt-3.5 md:sticky md:top-0 md:h-dvh md:overflow-y-auto md:border-b-0 md:border-r">
-                <div className="px-1.5">
-                    <GrowthWordmark />
+                {/* The way out of Growth, in the header where Documents keeps
+                    it — it used to sit at the foot of this rail, below
+                    everything, where nobody looks for it. Moving between
+                    Brand and Prospects is what the rest of the rail is for,
+                    so this always leaves the app. */}
+                <div className="flex flex-col gap-2">
+                    <RailBackLink target={STUDIO} />
+                    <div className="px-1.5">
+                        <GrowthWordmark />
+                    </div>
                 </div>
                 <nav aria-label="Brand">
                     <GroupLabel>Brand</GroupLabel>
@@ -206,15 +216,6 @@ export function GrowthShell({ children }: { children: React.ReactNode }) {
                     </ul>
                     <RunIndicator />
                 </nav>
-                <div className="mt-auto">
-                    <Link
-                        href="/employer/documents"
-                        className="text-ink-2 hover:text-ink hover:bg-panel/60 focus-visible:ring-brand/50 flex h-8 items-center gap-2 rounded-md px-2 text-[13px] outline-none transition-colors focus-visible:ring-[3px]"
-                    >
-                        <ArrowLeft className="size-3.5" />
-                        Back to Studio
-                    </Link>
-                </div>
             </aside>
             <main className="min-w-0 px-5 pb-12 pt-6 md:px-8">{children}</main>
             <RunSheet />

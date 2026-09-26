@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { PresenceAvatars } from "~/app/employer/documents/_mindmap/ui/PresenceLayer";
-import { AvatarMenu } from "~/app/employer/documents/_workspace/AskPanel";
+import { AccountMenu } from "~/app/employer/documents/_workspace/AccountMenu";
 import { AuditTab } from "~/app/employer/documents/_workspace/settings/people/AuditTab";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
 import { MembersTab } from "~/app/employer/documents/_workspace/settings/people/MembersTab";
@@ -22,7 +22,7 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
 
 /**
  * Local harness for profiles. Mounts the real Account → Profile editor, the
- * real header AvatarMenu, Members table, Mindmap presence stack and audit
+ * real sidebar AccountMenu, Members table, Mindmap presence stack and audit
  * log, with `/api/profile*`, `/api/workspace/members` and
  * `/api/workspace/audit` answered from memory — the same zod schemas
  * and the same `resolveProfile` the server uses, so validation and
@@ -244,7 +244,8 @@ export function ProfileHarness() {
             <Toaster richColors position="top-right" />
             <header className="border-line flex items-center justify-between border-b px-6 py-3">
                 <div className="text-sm font-semibold">Profile harness</div>
-                <AvatarMenu
+                <AccountMenu
+                    variant="avatar"
                     userName={me?.displayName}
                     userEmail={me?.email}
                     userTitle={me?.title}

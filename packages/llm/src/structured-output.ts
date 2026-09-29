@@ -15,6 +15,7 @@
 import type { BaseMessageLike } from "@langchain/core/messages";
 import { HumanMessage } from "@langchain/core/messages";
 import { JsonOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
+import { zodResponseFormat } from "openai/helpers/zod";
 import type { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import type { ResolvedChatModel } from "./chat-model-factory";
@@ -244,13 +245,17 @@ async function invokeNativeStreaming<T>(
     // Passing JSON Schema instead of Zod is important here: LangChain's Zod
     // parser is a final parser and therefore buffers the whole stream, whereas
     // its JSON-schema parser uses a cumulative partial JSON parser.
-    const structured = resolved.chat.withStructuredOutput(
-        zodToJsonSchema(schema) as Record<string, unknown>,
-        {
-            name: options.name,
-            method: LANGCHAIN_METHOD[native],
-        }
-    );
+    // Match the SDK's non-streaming Zod conversion: plain JSON Schema drops
+    // strict mode and leaves defaulted properties out of the required list.
+    const outputSchema =
+        native === "json-schema"
+            ? zodResponseFormat(schema, options.name).json_schema.schema
+            : zodToJsonSchema(schema);
+    const structured = resolved.chat.withStructuredOutput(outputSchema as Record<string, unknown>, {
+        name: options.name,
+        method: LANGCHAIN_METHOD[native],
+        ...(native === "json-schema" ? { strict: true } : {}),
+    });
     const prompt =
         native === "json-object"
             ? [

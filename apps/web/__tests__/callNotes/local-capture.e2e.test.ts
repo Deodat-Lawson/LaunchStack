@@ -44,7 +44,12 @@ jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspacePermission: (...args: unknown[]): unknown => mockWorkspacePermission(...args),
 }));
 jest.mock("~/lib/models", () => ({
-    resolveConfiguredChatModel: () => ({ name: "fixture", modelId: "deterministic-enrichment" }),
+    resolveConfiguredChatRoute: () => ({ definition: { behavior: {} } }),
+    resolveConfiguredChatModel: () => ({
+        name: "fixture",
+        modelId: "deterministic-enrichment",
+        behavior: {},
+    }),
 }));
 jest.mock("@launchstack/llm", () => ({
     invokeStructured: (...args: unknown[]) => mockInvokeStructured(...args),

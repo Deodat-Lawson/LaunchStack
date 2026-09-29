@@ -5,7 +5,7 @@ import {
 } from "@launchstack/pipelines/call-notes";
 import { invokeStructured } from "@launchstack/llm";
 
-import { resolveConfiguredChatModel } from "~/lib/models";
+import { resolveConfiguredChatModel, resolveConfiguredChatRoute } from "~/lib/models";
 import { ConfiguredCallNotesEnrichmentModel } from "~/server/call-notes/enrichment-model";
 import { buildCallNotesEnrichmentPrompt } from "~/server/call-notes/enrichment-prompts";
 import {
@@ -19,6 +19,7 @@ jest.mock("@launchstack/llm", () => ({
 
 jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: jest.fn(),
+    resolveConfiguredChatRoute: jest.fn(),
 }));
 
 const INPUT = EnrichmentInputSchema.parse({
@@ -163,10 +164,14 @@ describe("ConfiguredCallNotesEnrichmentModel", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        (resolveConfiguredChatRoute as jest.Mock).mockReturnValue({
+            definition: { behavior: {} },
+        });
         resolveModelMock.mockReturnValue({
             route: "reasoning",
             name: "configured-label",
             modelId: "configured-reasoning-model",
+            behavior: {},
         });
         invokeStructuredMock.mockResolvedValue(GROUNDED_PROPOSAL);
     });
@@ -196,5 +201,198 @@ describe("ConfiguredCallNotesEnrichmentModel", () => {
         await expect(new ConfiguredCallNotesEnrichmentModel().generate(INPUT)).rejects.toBe(
             failure
         );
+    });
+
+    it("bounds long requests, preserves ordered coverage, and keeps owner context separate", async () => {
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: Array.from({ length: 60 }, (_, index) => ({
+                ...INPUT.transcript[0],
+                id: `segment-${index}`,
+                receiveOrder: index,
+                text: `FACT_${index} ${"Discussion detail. ".repeat(100)}`,
+            })),
+            note: { ...INPUT.note, contentMarkdown: "OWNER_ONLY ".repeat(4_000) },
+        });
+        const before = structuredClone(input);
+        let active = 0;
+        let peak = 0;
+        const covered: string[] = [];
+        let finalPrompt:
+            | {
+                  finalizedTranscript: { summaries: string[] };
+                  currentOwnerCallNote: { body: string[] };
+              }
+            | undefined;
+        invokeStructuredMock.mockImplementation(async (_model, _schema, messages, options) => {
+            expect(
+                Buffer.byteLength(
+                    messages.map((message: { content: string }) => message.content).join("")
+                )
+            ).toBeLessThanOrEqual(24_000);
+            const prompt = JSON.parse(messages[1].content);
+            if (options.name === "call_notes_enrichment_v1") {
+                expect(active).toBe(0);
+                finalPrompt = prompt;
+                return GROUNDED_PROPOSAL;
+            }
+            active += 1;
+            peak = Math.max(peak, active);
+            const text = prompt.excerpts.join("\n");
+            await Promise.resolve();
+            if (text.includes("FACT_0 ")) await Promise.resolve();
+            active -= 1;
+            if (prompt.source === "owner_note") {
+                expect(text).not.toContain("FACT_");
+                return { summary: "OWNER_ONLY" };
+            }
+            expect(text).not.toContain("OWNER_ONLY");
+            const facts = text.match(/FACT_\d+/g) ?? [];
+            covered.push(...facts);
+            return { summary: facts.length ? facts.join(" ") : "Known transcript gap." };
+        });
+
+        await new ConfiguredCallNotesEnrichmentModel().generate(input);
+
+        const expected = input.transcript.map((_, index) => `FACT_${index}`);
+        expect(covered.sort()).toEqual([...expected].sort());
+        expect(finalPrompt!.finalizedTranscript.summaries.join(" ").match(/FACT_\d+/g)).toEqual(
+            expected
+        );
+        expect(finalPrompt!.currentOwnerCallNote.body.join(" ")).toContain("OWNER_ONLY");
+        expect(peak).toBe(2);
+        expect(input).toEqual(before);
+    });
+
+    it("reduces summaries again when their combined size exceeds the final budget", async () => {
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: Array.from({ length: 80 }, (_, index) => ({
+                ...INPUT.transcript[0],
+                id: `segment-${index}`,
+                text: `FACT_${index} ${"word ".repeat(3_800)}`,
+            })),
+        });
+        let reducedSummaries = false;
+        let finalFacts: string[] = [];
+        invokeStructuredMock.mockImplementation(async (_model, _schema, messages, options) => {
+            expect(
+                Buffer.byteLength(
+                    messages.map((message: { content: string }) => message.content).join("")
+                )
+            ).toBeLessThanOrEqual(24_000);
+            const prompt = JSON.parse(messages[1].content);
+            if (options.name === "call_notes_enrichment_v1") {
+                finalFacts = prompt.finalizedTranscript.summaries.join(" ").match(/FACT_\d+/g);
+                return GROUNDED_PROPOSAL;
+            }
+            const text = prompt.excerpts.join("\n");
+            if (!text.includes("segmentId")) reducedSummaries = true;
+            return {
+                summary: `${(text.match(/FACT_\d+/g) ?? []).join(" ")} ${"detail ".repeat(150)}`,
+            };
+        });
+
+        await new ConfiguredCallNotesEnrichmentModel().generate(input);
+
+        expect(reducedSummaries).toBe(true);
+        expect(finalFacts).toEqual(input.transcript.map((_, index) => `FACT_${index}`));
+    });
+
+    it("splits oversized Unicode segments without losing text or speaker attribution", async () => {
+        const text = "你好世界🌍".repeat(3_000);
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: [{ ...INPUT.transcript[0], text }],
+            gaps: [],
+        });
+        const fragments: string[] = [];
+        invokeStructuredMock.mockImplementation(async (_model, _schema, messages, options) => {
+            expect(
+                Buffer.byteLength(
+                    messages.map((message: { content: string }) => message.content).join("")
+                )
+            ).toBeLessThanOrEqual(24_000);
+            if (options.name === "call_notes_enrichment_v1") return GROUNDED_PROPOSAL;
+            const prompt = JSON.parse(messages[1].content);
+            for (const excerpt of prompt.excerpts as string[]) {
+                const boundary = excerpt.indexOf("\n");
+                expect(JSON.parse(excerpt.slice(0, boundary)).speaker).toBe("Maya Customer");
+                const fragment = excerpt.slice(boundary + 1);
+                expect(Buffer.from(fragment, "utf8").toString("utf8")).toBe(fragment);
+                fragments.push(fragment);
+            }
+            return { summary: "Discussion in Chinese." };
+        });
+
+        await new ConfiguredCallNotesEnrichmentModel().generate(input);
+
+        expect(fragments.join("")).toBe(text);
+    });
+
+    it("stops after a failed summary wave without composing partial evidence", async () => {
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: Array.from({ length: 10 }, (_, index) => ({
+                ...INPUT.transcript[0],
+                id: `segment-${index}`,
+                text: "evidence ".repeat(2_000),
+            })),
+        });
+        const failure = new Error("Provider rate limit");
+        let summaries = 0;
+        let finalCalls = 0;
+        invokeStructuredMock.mockImplementation(async (_model, _schema, _messages, options) => {
+            if (options.name === "call_notes_enrichment_v1") finalCalls += 1;
+            else summaries += 1;
+            throw failure;
+        });
+
+        await expect(new ConfiguredCallNotesEnrichmentModel().generate(input)).rejects.toBe(
+            failure
+        );
+        expect(summaries).toBe(2);
+        expect(finalCalls).toBe(0);
+    });
+
+    it("honors smaller declared contexts instead of relying on the default budget", async () => {
+        resolveModelMock.mockReturnValue({
+            route: "reasoning",
+            name: "small-context",
+            modelId: "small-context",
+            behavior: { limits: { contextTokens: 16_384 } },
+        });
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: [{ ...INPUT.transcript[0], text: "context ".repeat(2_000) }],
+        });
+        invokeStructuredMock.mockImplementation(async (_model, _schema, messages, options) => {
+            const promptBytes = Buffer.byteLength(
+                messages.map((message: { content: string }) => message.content).join("")
+            );
+            expect(promptBytes).toBeLessThanOrEqual(16_384 - 4_096 - 4_096);
+            return options.name === "call_notes_enrichment_v1"
+                ? GROUNDED_PROPOSAL
+                : { summary: "Onboarding context." };
+        });
+
+        await new ConfiguredCallNotesEnrichmentModel().generate(input);
+    });
+
+    it("rejects oversized summaries rather than truncating evidence or sending an oversized final request", async () => {
+        const input = EnrichmentInputSchema.parse({
+            ...INPUT,
+            transcript: [{ ...INPUT.transcript[0], text: "detail ".repeat(2_800) }],
+        });
+        let finalCalls = 0;
+        invokeStructuredMock.mockImplementation(async (_model, _schema, _messages, options) => {
+            if (options.name === "call_notes_enrichment_v1") finalCalls += 1;
+            return { summary: "膨".repeat(1_800) };
+        });
+
+        await expect(new ConfiguredCallNotesEnrichmentModel().generate(input)).rejects.toThrow(
+            "Summary exceeds its encoded byte budget"
+        );
+        expect(finalCalls).toBe(0);
     });
 });

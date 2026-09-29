@@ -488,6 +488,55 @@ describe("structured output", () => {
         expect(result).toEqual({ answer: "partial", score: 1 });
     });
 
+    it("keeps native schema enforcement for streamed objects with defaulted nested fields", async () => {
+        const NoteSchema = z.object({
+            sections: z.array(
+                z.object({
+                    text: z.string(),
+                    labels: z.array(z.string()).default([]),
+                })
+            ),
+        });
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                streamChunk(response, '{"sections":[{"text":"Meeting note","labels":[]}]}');
+                response.end("data: [DONE]\n\n");
+            },
+        });
+        const resolved = resolveChatModel({
+            config: deployment(
+                FULL_SUPPORT.replace(
+                    "nativeStructuredOutput: []",
+                    "nativeStructuredOutput: [json-schema]"
+                )
+            ),
+            streaming: true,
+        });
+        const result = await invokeStructured(resolved, NoteSchema, [new HumanMessage("q")], {
+            name: "note",
+            onPartial: () => undefined,
+        });
+        expect(result).toEqual({ sections: [{ text: "Meeting note", labels: [] }] });
+        expect(captured[0]!.body.response_format).toMatchObject({
+            type: "json_schema",
+            json_schema: {
+                strict: true,
+                schema: {
+                    properties: {
+                        sections: {
+                            items: {
+                                required: ["text", "labels"],
+                                additionalProperties: false,
+                                properties: { labels: { type: "array" } },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });
+
     it("clears an invalid streamed preview before its single repair produces a valid result", async () => {
         let request = 0;
         respondWith = () => ({

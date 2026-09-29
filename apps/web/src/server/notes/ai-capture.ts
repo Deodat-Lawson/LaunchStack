@@ -18,29 +18,29 @@ import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 export type AiCaptureIntent = "summary" | "action" | "decision";
 
 interface CaptureArgs {
-  selection: string;
-  intent: AiCaptureIntent;
-  /** Optional surrounding context the LLM can use as a hint. */
-  documentTitle?: string | null;
-  page?: number | null;
+    selection: string;
+    intent: AiCaptureIntent;
+    /** Optional surrounding context the LLM can use as a hint. */
+    documentTitle?: string | null;
+    page?: number | null;
 }
 
 const SYSTEM_PROMPT_BY_INTENT: Record<AiCaptureIntent, string> = {
-  summary: `You convert a highlighted passage into a tight study note.
+    summary: `You convert a highlighted passage into a tight study note.
 Rules:
 - 2 to 4 sentences. Plain English, no marketing tone.
 - Lead with the main idea. Strip filler.
 - Preserve specific names, numbers, and dates exactly.
 - Output markdown only — no preamble, no quotes around the answer.`,
 
-  action: `You convert a highlighted passage into a concrete action item.
+    action: `You convert a highlighted passage into a concrete action item.
 Rules:
 - Start with a verb. Be specific about what, who (if mentioned), and by when (if mentioned).
 - One action per line. Use a markdown checkbox: \`- [ ] do X\`.
 - If there is no clear action, output exactly: \`- [ ] (no clear action — review source)\`
 - Markdown only.`,
 
-  decision: `You convert a highlighted passage into a decision log entry.
+    decision: `You convert a highlighted passage into a decision log entry.
 Format (markdown):
 **Decision:** <one sentence>
 **Why:** <reasoning, 1–2 sentences>
@@ -51,43 +51,41 @@ Output markdown only — no preamble.`,
 };
 
 const SUGGESTED_TITLE: Record<AiCaptureIntent, string> = {
-  summary: "Summary",
-  action: "Action item",
-  decision: "Decision",
+    summary: "Summary",
+    action: "Action item",
+    decision: "Decision",
 };
 
 export interface CaptureResult {
-  markdown: string;
-  suggestedTitle: string;
+    markdown: string;
+    suggestedTitle: string;
 }
 
-export async function captureFromSelection(
-  args: CaptureArgs,
-): Promise<CaptureResult> {
-  const { selection, intent } = args;
-  const trimmed = selection.trim();
-  if (!trimmed) {
-    return { markdown: "", suggestedTitle: SUGGESTED_TITLE[intent] };
-  }
+export async function captureFromSelection(args: CaptureArgs): Promise<CaptureResult> {
+    const { selection, intent } = args;
+    const trimmed = selection.trim();
+    if (!trimmed) {
+        return { markdown: "", suggestedTitle: SUGGESTED_TITLE[intent] };
+    }
 
-  const contextLine =
-    args.documentTitle || args.page
-      ? `Source: ${[args.documentTitle, args.page ? `page ${args.page}` : null]
-          .filter(Boolean)
-          .join(", ")}\n\n`
-      : "";
+    const contextLine =
+        args.documentTitle || args.page
+            ? `Source: ${[args.documentTitle, args.page ? `page ${args.page}` : null]
+                  .filter(Boolean)
+                  .join(", ")}\n\n`
+            : "";
 
-  const resolved = resolveConfiguredChatModel({ route: "fast" });
-  const reply = await resolved.chat.invoke(
-    resolved.prepareMessages([
-      new SystemMessage(SYSTEM_PROMPT_BY_INTENT[intent]),
-      new HumanMessage(`${contextLine}Passage:\n\n"""\n${trimmed}\n"""`),
-    ]),
-  );
-  const markdown = normalizeModelContent(reply.content).trim();
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
+    const reply = await resolved.chat.invoke(
+        resolved.prepareMessages([
+            new SystemMessage(SYSTEM_PROMPT_BY_INTENT[intent]),
+            new HumanMessage(`${contextLine}Passage:\n\n"""\n${trimmed}\n"""`),
+        ])
+    );
+    const markdown = normalizeModelContent(reply.content).trim();
 
-  return {
-    markdown,
-    suggestedTitle: SUGGESTED_TITLE[intent],
-  };
+    return {
+        markdown,
+        suggestedTitle: SUGGESTED_TITLE[intent],
+    };
 }

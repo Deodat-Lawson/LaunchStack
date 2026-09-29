@@ -10,24 +10,41 @@ import {
     validateFolderPath,
 } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
-import { Lock, MessagesSquare } from "lucide-react";
-import { toast } from "sonner";
 import {
-    IconBolt,
-    IconCheck,
-    IconChevronDown,
-    IconFolder,
-    IconPlus,
-    IconX,
-    type IconProps,
-} from "./icons";
+    Lock,
+    MessagesSquare,
+    Zap as IconBolt,
+    Check as IconCheck,
+    ChevronDown as IconChevronDown,
+    Folder as IconFolder,
+    Plus as IconPlus,
+    X as IconX,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
+import dynamic from "next/dynamic";
+
+/**
+ * Real miniatures of each template, so a person picks by recognising the
+ * diagram rather than decoding an emoji. Loaded only when this tab opens: the
+ * thumbnail builds the template, which drags the shape library and layout
+ * engine along — see template-meta.ts on why the list itself stays light.
+ */
+const TemplateThumbnail = dynamic(
+    () =>
+        import("~/app/employer/documents/_mindmap/ui/TemplateThumbnail").then(
+            m => m.TemplateThumbnail
+        ),
+    { ssr: false, loading: () => null }
+);
+
 import { TEMPLATE_META } from "~/app/employer/documents/_mindmap/model/template-meta";
+import type { IconProps } from "~/components/icons/types";
 
 /**
  * AddSourceModal — tabbed create/upload/connect modal matching the Launstack
@@ -75,6 +92,10 @@ export interface AddSourceModalProps {
      * rather than dropping them on Files first.
      */
     initialTab?: string;
+    /** Prefill for the URL tab — "paste to create a source" with a link on the clipboard. */
+    initialUrl?: string;
+    /** Prefill for the Paste tab — the clipboard's text. */
+    initialText?: string;
     /**
      * A mindmap was created. The workspace opens it in place; without a
      * handler the panel navigates to the workspace itself.
@@ -209,6 +230,8 @@ export function AddSourceModal({
     onUploaded,
     onCreateFolder,
     initialTab,
+    initialUrl,
+    initialText,
     onMindmapCreated,
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
@@ -299,9 +322,23 @@ export function AddSourceModal({
             <FilesPanel kind={tab} userId={userId} category={folder} onUploaded={handleUploaded} />
         );
     } else if (tab === "paste") {
-        panel = <PastePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+        panel = (
+            <PastePanel
+                userId={userId}
+                category={folder}
+                onUploaded={handleUploaded}
+                initialText={initialText}
+            />
+        );
     } else if (tab === "url") {
-        panel = <UrlPanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+        panel = (
+            <UrlPanel
+                userId={userId}
+                category={folder}
+                onUploaded={handleUploaded}
+                initialUrl={initialUrl}
+            />
+        );
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
@@ -762,8 +799,19 @@ function MindmapPanel({
                                 opacity: busy !== null && !isBusy ? 0.55 : 1,
                             }}
                         >
-                            <span style={{ fontSize: 18, lineHeight: 1.2 }} aria-hidden>
-                                {template.glyph}
+                            <span
+                                aria-hidden
+                                style={{
+                                    width: 64,
+                                    height: 44,
+                                    flex: "none",
+                                    borderRadius: 6,
+                                    overflow: "hidden",
+                                    border: "1px solid var(--line)",
+                                    background: "var(--panel-2)",
+                                }}
+                            >
+                                <TemplateThumbnail templateId={template.id} />
                             </span>
                             <span style={{ minWidth: 0 }}>
                                 <span
@@ -1611,11 +1659,16 @@ interface TextPanelProps {
     userId: string | null;
     category: string;
     onUploaded: () => void;
+    initialText?: string;
+    initialUrl?: string;
 }
 
-function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
+function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProps) {
     const [title, setTitle] = useState("");
-    const [text, setText] = useState("");
+    const [text, setText] = useState(initialText ?? "");
+    useEffect(() => {
+        if (initialText) setText(initialText);
+    }, [initialText]);
     const [busy, setBusy] = useState(false);
 
     const submit = async () => {
@@ -1731,8 +1784,11 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
 // URL panel → /api/upload/website
 // ---------------------------------------------------------------------------
 
-function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
-    const [url, setUrl] = useState("");
+function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) {
+    const [url, setUrl] = useState(initialUrl ?? "");
+    useEffect(() => {
+        if (initialUrl) setUrl(initialUrl);
+    }, [initialUrl]);
     const [busy, setBusy] = useState(false);
 
     const submit = async () => {

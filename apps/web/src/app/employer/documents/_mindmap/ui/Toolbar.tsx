@@ -21,9 +21,12 @@ import {
 import { cn } from "~/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 
-import type { EditorState } from "../model/store";
-import type { ShapeId, ToolId } from "../model/types";
+import type { ChromeDepth, EditorState } from "../model/store";
+import type { DiagramKind, ShapeId, ToolId } from "../model/types";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+
 import { useEditor, useStore } from "./EditorContext";
+import { ShapePalette } from "./ShapePalette";
 
 /**
  * The tool strip.
@@ -76,13 +79,35 @@ const QUICK_SHAPES: readonly ToolEntry[] = [
     { id: "diamond", tool: "shape", shape: "diamond", Icon: Diamond, label: "Diamond", hint: "D" },
 ];
 
-const selectTool = (s: EditorState) => `${s.tool}:${s.pendingShape ?? ""}`;
+/**
+ * Focus depth shows the tools this kind of diagram needs and nothing from the
+ * others; the rest stay one click away behind "All shapes". Everything depth
+ * shows the full rail regardless of kind.
+ */
+const TOOLSETS: Record<DiagramKind, ReadonlySet<string>> = {
+    mindmap: new Set(["select", "topic", "connector", "text", "sticky"]),
+    board: new Set(["select", "sticky", "text", "frame", "connector"]),
+    flowchart: new Set(TOOLS.map(t => t.id)),
+    freeform: new Set(TOOLS.map(t => t.id)),
+};
 
-export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
+const selectTool = (s: EditorState) => `${s.tool}:${s.pendingShape ?? ""}`;
+const selectKind = (s: EditorState) => s.doc.settings.kind;
+
+export function Toolbar({
+    onOpenShapes,
+    depth = "everything",
+}: {
+    onOpenShapes: () => void;
+    depth?: ChromeDepth;
+}) {
     const store = useStore();
     const active = useEditor(selectTool);
 
     const isActive = (entry: ToolEntry) => active === `${entry.tool}:${entry.shape ?? ""}`;
+    const kind = useEditor(selectKind);
+    const focus = depth === "focus";
+    const tools = focus ? TOOLS.filter(t => TOOLSETS[kind].has(t.id)) : TOOLS;
 
     return (
         // The editor is pinned to the viewport, so on a short window this strip
@@ -90,7 +115,7 @@ export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
         // tool reachable; without `shrink-0` on the buttons flex would instead
         // squash 13 icons into whatever height is left.
         <div className="border-line bg-panel flex shrink-0 flex-col items-center gap-1 overflow-y-auto border-r px-1.5 py-2">
-            {TOOLS.map(entry => (
+            {tools.map(entry => (
                 <ToolButton
                     key={entry.id}
                     entry={entry}
@@ -101,28 +126,57 @@ export function Toolbar({ onOpenShapes }: { onOpenShapes: () => void }) {
 
             <div className="bg-line my-1 h-px w-6 shrink-0" />
 
-            {QUICK_SHAPES.map(entry => (
-                <ToolButton
-                    key={entry.id}
-                    entry={entry}
-                    active={isActive(entry)}
-                    onClick={() => store.setTool(entry.tool, entry.shape ?? null)}
-                />
-            ))}
+            {!focus &&
+                QUICK_SHAPES.map(entry => (
+                    <ToolButton
+                        key={entry.id}
+                        entry={entry}
+                        active={isActive(entry)}
+                        onClick={() => store.setTool(entry.tool, entry.shape ?? null)}
+                    />
+                ))}
 
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <button
-                        type="button"
-                        onClick={onOpenShapes}
-                        className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
-                        aria-label="All shapes"
+            {focus ? (
+                // No side panel in focus depth, so the library opens beside the
+                // rail instead — one click, and the canvas keeps its width.
+                <Popover>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <PopoverTrigger asChild>
+                                <button
+                                    type="button"
+                                    className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
+                                    aria-label="All shapes"
+                                >
+                                    <Shapes className="size-[18px]" />
+                                </button>
+                            </PopoverTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">All shapes</TooltipContent>
+                    </Tooltip>
+                    <PopoverContent
+                        side="right"
+                        align="start"
+                        className="flex h-[460px] w-[300px] flex-col p-0"
                     >
-                        <Shapes className="size-[18px]" />
-                    </button>
-                </TooltipTrigger>
-                <TooltipContent side="right">All shapes</TooltipContent>
-            </Tooltip>
+                        <ShapePalette />
+                    </PopoverContent>
+                </Popover>
+            ) : (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <button
+                            type="button"
+                            onClick={onOpenShapes}
+                            className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
+                            aria-label="All shapes"
+                        >
+                            <Shapes className="size-[18px]" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">All shapes</TooltipContent>
+                </Tooltip>
+            )}
         </div>
     );
 }

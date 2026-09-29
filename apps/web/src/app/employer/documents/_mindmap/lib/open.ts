@@ -19,7 +19,11 @@ export function openMindmapDocument(mindmap: MindmapDetail): { doc: MindmapDoc; 
     const doc = parseDoc(mindmap.doc, mindmap.title);
     const empty = doc.pages.every(page => page.nodes.length === 0);
     const template = mindmap.templateId ? TEMPLATE_BY_ID[mindmap.templateId] : undefined;
-    if (!empty || !template || template.id === "blank") return { doc, seeded: false };
+    // The blank template used to be skipped here, since an empty page is an
+    // empty page. It no longer is: the template also carries the document's
+    // kind and auto-arrange setting, and a blank mindmap without them opens
+    // as a freeform drawing with every panel showing.
+    if (!empty || !template) return { doc, seeded: false };
     // Seed the board lit the way this person is working. It is stored, not
     // re-derived per viewer, so the document stays stable once shared — and it
     // is far better than handing someone in dark mode a white page.

@@ -232,7 +232,8 @@ export function createGmailClient(options: GmailClientOptions): GmailClient {
                 body = null;
             }
             const reasons = errorReasons(body);
-            const message = body?.error?.message ?? `Gmail API request failed (HTTP ${response.status})`;
+            const message =
+                body?.error?.message ?? `Gmail API request failed (HTTP ${response.status})`;
 
             if (response.status === 401) throw new GmailAuthError(message, 401);
             if (response.status === 403 && reasons.some(r => AUTH_403_REASONS.includes(r))) {

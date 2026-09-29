@@ -59,7 +59,7 @@ import type {
     SegmentSummary,
     SourceRow,
     TodoItem,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 import { env } from "~/env";
 
 import {
@@ -76,6 +76,7 @@ import {
     toCompanyRow,
     toDeal,
     toRunDto,
+    type RunProgress,
     toSegment,
     toSegmentSummary,
     toYield,
@@ -113,8 +114,9 @@ export function availability(): SourceAvailability {
     };
 }
 
+/** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
-    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 1;
+    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────
@@ -262,11 +264,14 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
 
     const fresh = live.filter(r => r.isNew).sort((a, b) => (b.fit ?? -1) - (a.fit ?? -1));
     const freshHigh = fresh.filter(r => (r.fit ?? 0) >= FIT_THRESHOLD);
-    if (freshHigh.length > 0)
+    // Keyless profiles rarely clear the live threshold (no brands, no known
+    // signal), so a run that found companies still puts them in front of you.
+    const toReview = freshHigh.length > 0 ? freshHigh : fresh;
+    if (toReview.length > 0)
         todo.push({
             id: "review-new",
-            title: `Review ${freshHigh.length} new high-fit ${freshHigh.length === 1 ? "company" : "companies"} from the last run`,
-            detail: freshHigh
+            title: `Review ${toReview.length} new ${freshHigh.length > 0 ? "high-fit " : ""}${toReview.length === 1 ? "company" : "companies"} from the last run`,
+            detail: toReview
                 .slice(0, 3)
                 .map(r => r.name)
                 .join(", "),
@@ -327,7 +332,9 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
             median !== undefined
                 ? { from: "contacted", to: "meeting", days: Math.round(median) }
                 : null,
-        yield: data.latest?.summary ? data.latest.summary.sources.map(toYield) : [],
+        yield: data.latest?.summary
+            ? data.latest.summary.sources.map(s => toYield(s, data.latest!.options.mode))
+            : [],
         fresh: fresh.slice(0, 4),
     };
 }
@@ -693,9 +700,30 @@ export async function draftOutreach(
 
 // ── Runs and sources ──────────────────────────────────────────────────────
 
+/**
+ * How far a live run's profiling has got, without a progress column: the
+ * shortlist is on the run row and each organisation is stamped when its
+ * profile lands, so "profiled so far" is the shortlist enriched since the
+ * run started. Null once the run has a summary of its own.
+ */
+export async function runProgress(ctx: ProspectsCtx, run: RunRecord): Promise<RunProgress | null> {
+    // Despite its name, the run row's list holds the shortlist's relationship ids.
+    const shortlist = new Set(run.candidateOrgIds ?? []);
+    if (run.summary || run.status === "failed" || shortlist.size === 0) return null;
+    const since = (run.startedAt ?? run.createdAt).getTime();
+    const items = await listPartners(ctx.companyId, { programId: run.programId, limit: 500 });
+    const profiled = items.filter(
+        i =>
+            shortlist.has(i.relationship.id) &&
+            i.org.lastEnrichedAt !== null &&
+            i.org.lastEnrichedAt.getTime() >= since
+    ).length;
+    return { profiled, shortlisted: shortlist.size };
+}
+
 export async function listRunDtos(ctx: ProspectsCtx, programId: string): Promise<RunDto[]> {
     const runs = await listRuns(ctx.companyId, { programId, limit: 50 });
-    return runs.map(toRunDto);
+    return Promise.all(runs.map(async run => toRunDto(run, await runProgress(ctx, run))));
 }
 
 export async function listSources(ctx: ProspectsCtx, programId: string): Promise<SourceRow[]> {

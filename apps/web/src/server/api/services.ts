@@ -191,6 +191,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
     },
     {
+        id: "brand",
+        tier: "tool",
+        summary:
+            "Establish and run the company's presence: compose once for several networks, schedule or publish, see the calendar, know which accounts are connected.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/marketing",
+        routes: ["brand"],
+        notes: "The Brand area of Growth. Posts are one row per network in brand_posts; the worker's brand-publish-due cron (and the web app's due-check in dev) claims and publishes them through @launchstack/tools/social-publish. Campaign drafting is the marketing pipeline, embedded.",
+    },
+    {
         id: "prospects",
         tier: "tool",
         summary:
@@ -199,6 +209,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         feature: "@launchstack/pipelines/distribution",
         routes: ["prospects"],
         notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
+    },
+    {
+        id: "investors",
+        tier: "tool",
+        summary:
+            "Find the venture funds raising now and pitch them: SEC Form D search with the people, size and amount closed, plus pitch drafts from the workspace's sources.",
+        scope: "workspace",
+        feature: "@launchstack/tools/investor-search",
+        routes: ["investors"],
+        notes: "Stateless: every search reads SEC EDGAR live (keyless, paced under SEC's 10 req/s). Pitch drafting is the chat, seeded from the Studio pane.",
     },
     {
         id: "mindmaps",
@@ -331,9 +351,17 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         id: "workspace",
         tier: "system",
         summary:
-            "Accounts, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
+            "Accounts, profiles, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
         scope: "mixed",
-        routes: ["auth", "workspaces", "signup", "workspace", "fetchUserInfo"],
+        routes: [
+            "auth",
+            "workspaces",
+            "signup",
+            "workspace",
+            "fetchUserInfo",
+            "profile",
+            "profile-images",
+        ],
         unscopedRoutes: {
             "auth/*": "better-auth's own surface — sign-in/out/up, sessions, password reset.",
             "signup/*": "Runs before a user row or membership exists.",
@@ -348,20 +376,25 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
                 "Session only: creates the membership it would otherwise require.",
             "workspace/members/leave": "Removes the caller's own membership.",
             fetchUserInfo: "User-level identity, not workspace-scoped.",
+            profile:
+                "A profile belongs to the person; the workspace half is added when one is active.",
+            "profile/photo": "Same: `scope=global` works without a workspace.",
+            "profile-images/[id]":
+                "One person's photo shows in every workspace they share with the viewer; visibility is checked per image.",
         },
     },
     {
         id: "settings",
         tier: "system",
         summary:
-            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive — and the profile mirror.",
+            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive.",
         scope: "workspace",
         routes: ["settings"],
         notes:
             "`settings` is the one write path (registry-validated, permission-gated, audited). " +
             "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
-            "overviews computed for the panel; `settings/account` mirrors a Better Auth name " +
-            "change into the product `users` row.",
+            "overviews computed for the panel. The Account section's profile is the `workspace` " +
+            "service's `profile` routes.",
     },
     {
         id: "platform-ops",

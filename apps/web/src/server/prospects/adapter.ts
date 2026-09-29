@@ -1,7 +1,7 @@
 /**
  * Prospects over today's Distribution data: pure mappings from the pipeline's
  * records (programs, partner organisations, relationships, evidence, runs) to
- * the Prospects contract in `~/app/employer/tools/prospects/api`.
+ * the Prospects contract in `~/app/employer/tools/growth/prospects/api`.
  *
  * This is the bridge until the pipeline reframe lands. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
@@ -44,7 +44,7 @@ import type {
     SourceYield,
     StageMove,
     StepStatus,
-} from "~/app/employer/tools/prospects/api";
+} from "~/app/employer/tools/growth/prospects/api";
 
 export const FIT_THRESHOLD = 70;
 const DAY = 86_400_000;
@@ -662,11 +662,33 @@ const SOURCE_LABEL: Record<SourceCount["source"], string> = {
     place: "Places",
     trade: "Trade data",
 };
+const KEYLESS_LABEL: Record<SourceCount["source"], string> = {
+    web: "Public directories (YC)",
+    place: "OpenStreetMap",
+    trade: "Trade data",
+};
+const FIXTURE_LABEL: Record<SourceCount["source"], string> = {
+    web: "Sample web search",
+    place: "Sample places",
+    trade: "Sample trade data",
+};
+
+export function sourceLabel(
+    source: SourceCount["source"],
+    mode: RunRecord["options"]["mode"]
+): string {
+    return mode === "keyless"
+        ? KEYLESS_LABEL[source]
+        : mode === "fixture"
+          ? FIXTURE_LABEL[source]
+          : SOURCE_LABEL[source];
+}
 
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
-    const yieldFor = (id: SourceCount["source"]) => {
+    const mode = latest?.options.mode ?? null;
+    const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
         const s = latest?.summary?.sources.find(x => x.source === id);
-        if (!latest || !s || s.status === "skipped") return null;
+        if (!latest || mode !== forMode || !s || s.status === "skipped") return null;
         return {
             found: s.results,
             newCompanies: 0,
@@ -676,16 +698,43 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
     };
     return [
         {
+            id: "osm",
+            label: "OpenStreetMap",
+            kind: "api",
+            description:
+                "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured.",
+            enabled: true,
+            available: true,
+            requires: null,
+            cost: "free",
+            locked: true,
+            lastYield: yieldFor("place", "keyless"),
+        },
+        {
+            id: "yc",
+            label: "Y Combinator directory",
+            kind: "api",
+            description:
+                "Active YC companies in the segment's countries whose blurb matches its words. Free, no key.",
+            enabled: true,
+            available: true,
+            requires: null,
+            cost: "free",
+            locked: true,
+            lastYield: yieldFor("web", "keyless"),
+        },
+        {
             id: "web",
             label: "Web search",
             kind: "api",
-            description: "Exa or Serper search for organisations in each territory.",
+            description:
+                "Exa or Serper search for organisations in each territory; needs a model for the research agent.",
             enabled: avail.web,
             available: avail.web,
             requires: "EXA_API_KEY or SERPER_API_KEY",
             cost: "credits per run",
             locked: true,
-            lastYield: yieldFor("web"),
+            lastYield: yieldFor("web", "live"),
         },
         {
             id: "place",
@@ -697,7 +746,7 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             requires: "FOURSQUARE_SERVICE_KEY",
             cost: "included",
             locked: true,
-            lastYield: yieldFor("place"),
+            lastYield: yieldFor("place", "live"),
         },
         {
             id: "trade",
@@ -709,7 +758,7 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             requires: "TRADE_DATA_PROVIDER",
             cost: "provider rates",
             locked: true,
-            lastYield: yieldFor("trade"),
+            lastYield: yieldFor("trade", "live"),
         },
         {
             id: "screening",
@@ -739,10 +788,10 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
     ];
 }
 
-export function toYield(s: SourceCount): SourceYield {
+export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "live"): SourceYield {
     return {
-        sourceId: s.source,
-        label: SOURCE_LABEL[s.source],
+        sourceId: `${mode}:${s.source}`,
+        label: sourceLabel(s.source, mode),
         kind: "api",
         found: s.results,
         newCompanies: null,
@@ -764,7 +813,13 @@ function statusOf(run: RunRecord, startsAt: string, endsBefore: string): StepSta
     return "waiting";
 }
 
-export function toRunDto(run: RunRecord): RunDto {
+/** Where a running run's profiling has got to: shortlist members enriched since it started. */
+export interface RunProgress {
+    profiled: number;
+    shortlisted: number;
+}
+
+export function toRunDto(run: RunRecord, progress: RunProgress | null = null): RunDto {
     const summary = run.summary;
     const sourceChildren: RunStep[] = (
         summary?.sources ??
@@ -777,7 +832,7 @@ export function toRunDto(run: RunRecord): RunDto {
         }))
     ).map(s => ({
         id: s.source,
-        label: SOURCE_LABEL[s.source],
+        label: sourceLabel(s.source, run.options.mode),
         detail: s.detail ?? (s.status === "skipped" && !summary ? null : null),
         status: !summary
             ? statusOf(run, "gathering", "resolving")
@@ -803,7 +858,11 @@ export function toRunDto(run: RunRecord): RunDto {
         {
             id: "shortlist",
             label: "Shortlist",
-            detail: summary ? `${summary.shortlisted} of ${summary.resolved} companies` : null,
+            detail: summary
+                ? `${summary.shortlisted} of ${summary.resolved} companies`
+                : run.candidateOrgIds
+                  ? `${run.candidateOrgIds.length} companies`
+                  : null,
             status: statusOf(run, "resolving", "enriching"),
             right: summary?.excluded ? `${summary.excluded} excluded` : null,
         },
@@ -812,7 +871,9 @@ export function toRunDto(run: RunRecord): RunDto {
             label: "Profiles",
             detail: summary
                 ? `${summary.enriched} of ${summary.shortlisted}`
-                : `0 of ${run.options.maxCandidates}`,
+                : progress
+                  ? `${progress.profiled} of ${progress.shortlisted}`
+                  : `0 of ${run.candidateOrgIds?.length ?? run.options.maxCandidates}`,
             status: statusOf(run, "enriching", "completed"),
             right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
         },
@@ -845,7 +906,7 @@ export function toRunDto(run: RunRecord): RunDto {
         completedAt: iso(run.completedAt),
         steps,
         spend: { usd: 0, usdCap: 0, credits: run.creditsUsed },
-        caps: `${run.options.maxCandidates} candidates${run.options.mode === "fixture" ? " · sample data" : ""}`,
+        caps: `${run.options.maxCandidates} candidates${run.options.mode === "fixture" ? " · sample data" : run.options.mode === "keyless" ? " · public sources, no keys" : ""}`,
         summary: summary
             ? {
                   found: summary.mentions,
@@ -853,7 +914,7 @@ export function toRunDto(run: RunRecord): RunDto {
                   profiled: summary.enriched,
                   people: 0,
                   durationMs,
-                  sources: summary.sources.map(toYield),
+                  sources: summary.sources.map(s => toYield(s, run.options.mode)),
               }
             : null,
         errorMessage: run.errorMessage,

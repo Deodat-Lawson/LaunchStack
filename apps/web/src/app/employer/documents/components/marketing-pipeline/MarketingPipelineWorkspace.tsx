@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import {
     AlertTriangle,
     Brain,
+    CalendarClock,
     Check,
     ChevronDown,
     ChevronRight,
@@ -36,6 +37,7 @@ import {
     type ClaimSourceUI,
     type ContentType,
     type FormalityLevel,
+    type MarketingPlatform,
     type MessageVariant,
     type PipelineStagesUI,
     type PipelineStepState,
@@ -50,6 +52,11 @@ export interface MarketingPipelineWorkspaceProps {
     showDnaDebugSection?: boolean;
     /** When true, render without the standalone page header (used inside the Studio drawer). */
     embedded?: boolean;
+    /**
+     * Offered beside Publish when the host can put a post on a calendar: the
+     * Brand area hands the edited text to Compose to schedule it.
+     */
+    onSchedule?: (draft: { platform: MarketingPlatform; message: string }) => void;
 }
 
 function usePlatformLogoClassNames() {
@@ -1182,6 +1189,7 @@ export function MarketingPipelineWorkspace({
     debug = false,
     showDnaDebugSection = false,
     embedded = false,
+    onSchedule,
 }: MarketingPipelineWorkspaceProps) {
     const [debugOpen, setDebugOpen] = useState(false);
     const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
@@ -1711,6 +1719,23 @@ export function MarketingPipelineWorkspace({
                                                             ? "Scoring…"
                                                             : "Evaluate quality"}
                                                     </button>
+                                                    {onSchedule && result.platform && (
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionSecondary}
+                                                            onClick={() =>
+                                                                onSchedule({
+                                                                    platform: result.platform,
+                                                                    message: editableMessage,
+                                                                })
+                                                            }
+                                                            disabled={!editableMessage.trim()}
+                                                            title="Put this post on the Brand calendar"
+                                                        >
+                                                            <CalendarClock size={14} />
+                                                            Schedule…
+                                                        </button>
+                                                    )}
                                                     <button
                                                         type="button"
                                                         className={styles.actionPrimary}

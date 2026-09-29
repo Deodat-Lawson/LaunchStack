@@ -181,12 +181,14 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
 
     const refresh = useCallback(async () => {
         if (!userId) {
+            // Signed out, or the session has not resolved yet. Clear the last
+            // user's rows, but stay "loading": the URL sync reads a finished,
+            // empty list as "that source is gone" and drops `?source=`.
             setDocuments([]);
             setMindmaps([]);
             setFolderRows([]);
             setCallNoteFiles([]);
             setOptimistic([]);
-            setLoading(false);
             return;
         }
         setError(null);

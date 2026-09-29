@@ -26,7 +26,12 @@ import type { RawSearchResult, ReadablePage } from "@launchstack/tools/web-resea
 import type { AgentModelPort, ChatTokenUsage } from "@launchstack/llm";
 
 import * as db from "./db";
-import { runDossierAgent, type DossierAgentResult } from "./dossier-agent";
+import {
+    runDossierAgent,
+    type DossierAgentResult,
+    type DossierAgentInput,
+    type DossierAgentPorts,
+} from "./dossier-agent";
 import { gather, type GatherPorts } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
@@ -87,6 +92,8 @@ export interface DistributionPorts {
                   formattedAddress: string;
                   location: { lat: number; lng: number };
                   categories: Array<{ id: string; name: string }>;
+                  /** Roles the directory's own tags establish, if any. */
+                  roles?: PartnerKind[];
               }>
           >)
         | null;
@@ -109,6 +116,12 @@ export interface DistributionPorts {
     plan?: (
         input: PlanInput
     ) => Promise<{ plan: DiscoveryPlan; modelId?: string; playbookHash: string }>;
+    /**
+     * Candidate profiler. Defaults to the research agent in ./dossier-agent;
+     * keyless mode supplies a page reader that needs no model. Either way
+     * the result passes the same grounding gate before it is stored.
+     */
+    profile?: (ports: DossierAgentPorts, input: DossierAgentInput) => Promise<DossierAgentResult>;
 }
 
 export interface RunContext {
@@ -358,14 +371,19 @@ export async function prepareRun(
                 programId: ctx.programId,
                 items,
             });
-            // Keep only the shortlist's relationships that are still candidates (never re-research an engaged partner).
-            const shortlistOrgIds = new Set(items.map(i => i.orgId));
-            const candidateIds = relationships
-                .filter(
-                    r =>
-                        shortlistOrgIds.has(r.orgId) &&
-                        (r.stage === "candidate" || r.stage === "researched")
-                )
+            // Keep one still-unengaged relationship per shortlisted organisation (never
+            // re-research an engaged partner, never research the same company twice);
+            // the one in the kind just picked wins over an older kind.
+            const wantedKind = new Map(items.map(i => [i.orgId, i.kind]));
+            const perOrg = new Map<string, (typeof relationships)[number]>();
+            for (const r of relationships) {
+                if (!wantedKind.has(r.orgId)) continue;
+                if (r.stage !== "candidate" && r.stage !== "researched") continue;
+                const current = perOrg.get(r.orgId);
+                if (!current || (r.kind === wantedKind.get(r.orgId) && current.kind !== r.kind))
+                    perOrg.set(r.orgId, r);
+            }
+            const candidateIds = [...perOrg.values()]
                 .sort(
                     (a, b) =>
                         items.findIndex(i => i.orgId === a.orgId) -
@@ -422,7 +440,8 @@ export async function enrichCandidate(
     if (!program || !org) throw new Error("Program or organisation not found");
 
     const seedUrls = args.seedUrls ?? (org.domain ? [`https://${org.domain}/`] : []);
-    const agentResult: DossierAgentResult = await runDossierAgent(
+    const research = ports.profile ?? runDossierAgent;
+    const agentResult: DossierAgentResult = await research(
         {
             model: ports.model,
             fetchPage: url => ports.fetchPage(url, ctx.signal),

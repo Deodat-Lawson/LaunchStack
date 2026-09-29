@@ -58,12 +58,12 @@ SOFTWARE.
 
 Everything in the pnpm workspace's production dependency tree, which is what CI builds into the two published images.
 
-**1225 runtime packages.**
+**1235 runtime packages.**
 
 | License | Packages |
 | --- | ---: |
-| MIT | 807 |
-| Apache-2.0 | 241 |
+| MIT | 810 |
+| Apache-2.0 | 248 |
 | ISC | 71 |
 | BSD-3-Clause | 36 |
 | Unknown | 17 |
@@ -101,8 +101,11 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 
 | Package | Version | License |
 | --- | --- | --- |
-| `@ai-sdk/provider` | 1.1.3 | Apache-2.0 |
-| `@ai-sdk/provider-utils` | 2.2.8 | Apache-2.0 |
+| `@ai-sdk/gateway` | 4.0.85 | Apache-2.0 |
+| `@ai-sdk/google` | 4.0.74 | Apache-2.0 |
+| `@ai-sdk/openai` | 4.0.69 | Apache-2.0 |
+| `@ai-sdk/provider` | 1.1.3, 4.0.17 | Apache-2.0 |
+| `@ai-sdk/provider-utils` | 2.2.8, 5.0.43 | Apache-2.0 |
 | `@alloc/quick-lru` | 5.2.0 | MIT |
 | `@antfu/install-pkg` | 1.1.0 | MIT |
 | `@anthropic-ai/sdk` | 0.27.3, 0.65.0 | MIT |
@@ -208,8 +211,8 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@floating-ui/utils` | 0.2.10 | MIT |
 | `@google/generative-ai` | 0.24.1 | Apache-2.0 |
 | `@graphql-typed-document-node/core` | 3.2.0 | MIT |
-| `@grpc/grpc-js` | 1.13.4, 1.14.4 | Apache-2.0 |
-| `@grpc/proto-loader` | 0.7.15, 0.8.1 | Apache-2.0 |
+| `@grpc/grpc-js` | 1.14.4 | Apache-2.0 |
+| `@grpc/proto-loader` | 0.8.1 | Apache-2.0 |
 | `@huggingface/inference` | 4.13.15 | MIT |
 | `@huggingface/jinja` | 0.5.6 | MIT |
 | `@huggingface/tasks` | 0.19.90 | MIT |
@@ -254,6 +257,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@nodelib/fs.scandir` | 2.1.5 | MIT |
 | `@nodelib/fs.stat` | 2.0.5 | MIT |
 | `@nodelib/fs.walk` | 1.2.8 | MIT |
+| `@openrouter/ai-sdk-provider` | 3.0.0 | Apache-2.0 |
 | `@opentelemetry/api` | 1.9.0, 1.9.1 | Apache-2.0 |
 | `@opentelemetry/api-logs` | 0.203.0, 0.220.0 | Apache-2.0 |
 | `@opentelemetry/auto-instrumentations-node` | 0.78.0 | Apache-2.0 |
@@ -352,6 +356,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@radix-ui/number` | 1.1.1 | MIT |
 | `@radix-ui/primitive` | 1.1.3, 1.1.7 | MIT |
 | `@radix-ui/react-arrow` | 1.1.7, 1.1.15 | MIT |
+| `@radix-ui/react-checkbox` | 1.3.11 | MIT |
 | `@radix-ui/react-collapsible` | 1.1.12 | MIT |
 | `@radix-ui/react-collection` | 1.1.7, 1.1.15 | MIT |
 | `@radix-ui/react-compose-refs` | 1.1.2, 1.1.5 | MIT |
@@ -371,6 +376,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@radix-ui/react-presence` | 1.1.5, 1.1.10 | MIT |
 | `@radix-ui/react-primitive` | 2.1.3, 2.1.4, 2.1.10 | MIT |
 | `@radix-ui/react-progress` | 1.1.8 | MIT |
+| `@radix-ui/react-radio-group` | 1.4.7 | MIT |
 | `@radix-ui/react-roving-focus` | 1.1.11, 1.1.19 | MIT |
 | `@radix-ui/react-scroll-area` | 1.2.10 | MIT |
 | `@radix-ui/react-select` | 2.2.6 | MIT |
@@ -512,10 +518,10 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@types/d3-zoom` | 3.0.8 | MIT |
 | `@types/debug` | 4.1.13 | MIT |
 | `@types/deep-eql` | 4.0.2 | MIT |
-| `@types/estree` | 1.0.8, 1.0.9 | MIT |
+| `@types/estree` | 1.0.9 | MIT |
 | `@types/estree-jsx` | 1.0.5 | MIT |
 | `@types/geojson` | 7946.0.16 | MIT |
-| `@types/hast` | 3.0.4 | MIT |
+| `@types/hast` | 3.0.5 | MIT |
 | `@types/json-schema` | 7.0.15 | MIT |
 | `@types/katex` | 0.16.7 | MIT |
 | `@types/mdast` | 4.0.4 | MIT |
@@ -543,6 +549,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@upsetjs/venn.js` | 2.0.0 | MIT |
 | `@vercel/analytics` | 1.6.1 | MPL-2.0 |
 | `@vercel/blob` | 2.3.0 | Apache-2.0 |
+| `@vercel/oidc` | 3.2.0 | Apache-2.0 |
 | `@vitest/expect` | 3.2.7 | MIT |
 | `@vitest/mocker` | 3.2.7 | MIT |
 | `@vitest/pretty-format` | 3.2.7 | MIT |
@@ -550,6 +557,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `@vitest/snapshot` | 3.2.7 | MIT |
 | `@vitest/spy` | 3.2.7 | MIT |
 | `@vitest/utils` | 3.2.7 | MIT |
+| `@workflow/serde` | 4.1.0 | Apache-2.0 |
 | `@xmldom/xmldom` | 0.8.11, 0.9.8 | MIT |
 | `abort-controller` | 3.0.0 | MIT |
 | `abort-controller-x` | 0.4.3 | MIT |
@@ -558,6 +566,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `adler-32` | 1.3.1 | Apache-2.0 |
 | `agent-base` | 7.1.4 | MIT |
 | `agentkeepalive` | 4.6.0 | MIT |
+| `ai` | 7.0.105 | Apache-2.0 |
 | `ansi-regex` | 4.1.1, 5.0.1 | MIT |
 | `ansi-styles` | 4.3.0, 5.2.0 | MIT |
 | `any-promise` | 1.3.0 | MIT |
@@ -754,6 +763,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `event-target-shim` | 5.0.1 | MIT |
 | `eventemitter3` | 4.0.7 | MIT |
 | `events` | 3.3.0 | MIT |
+| `eventsource-parser` | 3.1.1 | MIT |
 | `expect-type` | 1.4.0 | Apache-2.0 |
 | `expr-eval` | 2.0.2 | MIT |
 | `extend` | 3.0.2 | MIT |
@@ -1255,7 +1265,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `ulid` | 2.4.0 | MIT |
 | `underscore` | 1.7.0, 1.13.7 | MIT |
 | `underscore.string` | 2.4.0 | MIT |
-| `undici` | 6.23.0, 7.25.0 | MIT |
+| `undici` | 6.23.0, 7.25.0, 7.29.1 | MIT |
 | `undici-types` | 5.26.5, 6.21.0, 7.10.0 | MIT |
 | `unified` | 11.0.5 | MIT |
 | `unist-util-find-after` | 5.0.0 | MIT |
@@ -1319,7 +1329,7 @@ Everything in the pnpm workspace's production dependency tree, which is what CI 
 | `yaml` | 2.9.0 | ISC |
 | `yaml-config` | 0.3.0 | Unknown |
 | `yargs` | 1.3.3 | MIT/X11 |
-| `yargs` | 17.7.2, 17.7.3 | MIT |
+| `yargs` | 17.7.3 | MIT |
 | `yargs-parser` | 21.1.1 | ISC |
 | `yocto-queue` | 1.2.1 | MIT |
 | `zlibjs` | 0.3.1 | MIT |

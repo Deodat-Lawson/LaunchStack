@@ -19,22 +19,33 @@ import {
     Sparkles,
     Undo2,
     Upload,
+    Palette,
+    History as HistoryIcon,
+    Link2,
+    Save,
 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import {
     DropdownMenu,
+    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { runLayout, setTitle } from "../model/commands";
-import type { EditorState } from "../model/store";
+import { arrangeNow, runLayout, setAutoLayout, setTitle } from "../model/commands";
+import type { EditorState, ChromeDepth } from "../model/store";
 import { useEditor, useStore } from "./EditorContext";
+import { PageSettings } from "./Inspector";
 import { PresenceAvatars } from "./PresenceLayer";
 import type { PresencePeer } from "./usePresence";
 
@@ -91,10 +102,21 @@ export interface TopBarProps {
     rightPanelOpen: boolean;
     onToggleLeft: () => void;
     onToggleRight: () => void;
+    /** How much chrome is showing — see `ChromeDepth`. */
+    depth: ChromeDepth;
+    onToggleDepth: () => void;
+    /** Open the version history (the left panel's History tab). */
+    onHistory: () => void;
+    /** Put a link that opens the map straight into Present on the clipboard. */
+    onCopyPresentLink?: () => void;
 }
+
+const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
 
 export function TopBar(props: TopBarProps) {
     const store = useStore();
+    const autoLayout = useEditor(selectAutoLayout);
+    const focus = props.depth === "focus";
     const docTitle = useEditor(selectTitle);
     const state = useEditor(selectSaveState, saveStateEqual);
     const [draft, setDraft] = useState(docTitle);
@@ -147,7 +169,31 @@ export function TopBar(props: TopBarProps) {
                 className="text-ink hover:border-line focus:border-brand h-8 min-w-0 max-w-[280px] flex-shrink rounded-md border border-transparent bg-transparent px-2 text-[14px] font-semibold outline-none transition-colors"
             />
 
-            <SaveState {...state} />
+            {/* One truth about saving: the status is the control. Autosave
+                does the saving; this menu is for the two things it does not
+                do on its own — snapshot a version, and look at the history. */}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button
+                        type="button"
+                        aria-label="Save options"
+                        className="hover:bg-panel-2 rounded-md px-1.5 py-1 transition-colors"
+                    >
+                        <SaveState {...state} />
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                    <DropdownMenuItem onSelect={props.onSave} disabled={state.saving}>
+                        <Save className="size-3.5" />
+                        Save a version
+                        <span className="text-ink-3 ml-auto font-mono text-[11px]">⌘S</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={props.onHistory}>
+                        <HistoryIcon className="size-3.5" />
+                        Version history
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             <div className="bg-line mx-1 h-5 w-px" />
 
@@ -188,29 +234,56 @@ export function TopBar(props: TopBarProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    <DropdownMenuItem onSelect={() => runLayout(store, { kind: "mindmap" })}>
-                        Mindmap (both sides)
+                    <DropdownMenuItem onSelect={() => arrangeNow(store)}>
+                        <Network className="size-3.5" />
+                        Arrange now
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onSelect={() => runLayout(store, { kind: "tree", direction: "right" })}
+                    <DropdownMenuCheckboxItem
+                        checked={autoLayout !== null}
+                        onCheckedChange={checked =>
+                            setAutoLayout(
+                                store,
+                                checked ? (autoLayout ?? { kind: "mindmap" }) : null
+                            )
+                        }
                     >
-                        Tree — left to right
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onSelect={() => runLayout(store, { kind: "tree", direction: "down" })}
-                    >
-                        Tree — top down
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => runLayout(store, { kind: "org" })}>
-                        Org chart
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => runLayout(store, { kind: "radial" })}>
-                        Radial
-                    </DropdownMenuItem>
+                        Auto-arrange as I type
+                    </DropdownMenuCheckboxItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => runLayout(store, { kind: "grid" })}>
-                        Pack into a grid
-                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>Arrange as</DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuItem
+                                onSelect={() => runLayout(store, { kind: "mindmap" })}
+                            >
+                                Mindmap — both sides
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onSelect={() =>
+                                    runLayout(store, { kind: "tree", direction: "right" })
+                                }
+                            >
+                                Tree — left to right
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onSelect={() =>
+                                    runLayout(store, { kind: "tree", direction: "down" })
+                                }
+                            >
+                                Tree — top down
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => runLayout(store, { kind: "org" })}>
+                                Org chart
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => runLayout(store, { kind: "radial" })}>
+                                Radial
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onSelect={() => runLayout(store, { kind: "grid" })}>
+                                Pack into a grid
+                            </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
                 </DropdownMenuContent>
             </DropdownMenu>
 
@@ -231,58 +304,115 @@ export function TopBar(props: TopBarProps) {
                 </TooltipTrigger>
                 <TooltipContent side="bottom">Commands ⌘K</TooltipContent>
             </Tooltip>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <button
-                        type="button"
-                        onClick={props.onShortcuts}
-                        aria-label="Keyboard shortcuts"
-                        className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
-                    >
-                        <Keyboard className="size-4" />
-                    </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Shortcuts ?</TooltipContent>
-            </Tooltip>
+            {!focus && (
+                <>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                type="button"
+                                onClick={props.onShortcuts}
+                                aria-label="Keyboard shortcuts"
+                                className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
+                            >
+                                <Keyboard className="size-4" />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">Shortcuts ?</TooltipContent>
+                    </Tooltip>
 
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <button
-                        type="button"
-                        onClick={props.onToggleLeft}
-                        aria-pressed={props.leftPanelOpen}
-                        aria-label="Toggle left panel"
-                        className={cn(
-                            "flex size-8 items-center justify-center rounded-md transition-colors",
-                            props.leftPanelOpen
-                                ? "bg-brand-soft text-brand-ink"
-                                : "text-ink-2 hover:bg-panel-2"
-                        )}
-                    >
-                        <PanelLeft className="size-4" />
-                    </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Shapes & outline</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <button
-                        type="button"
-                        onClick={props.onToggleRight}
-                        aria-pressed={props.rightPanelOpen}
-                        aria-label="Toggle right panel"
-                        className={cn(
-                            "flex size-8 items-center justify-center rounded-md transition-colors",
-                            props.rightPanelOpen
-                                ? "bg-brand-soft text-brand-ink"
-                                : "text-ink-2 hover:bg-panel-2"
-                        )}
-                    >
-                        <PanelRight className="size-4" />
-                    </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Properties</TooltipContent>
-            </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                type="button"
+                                onClick={props.onToggleLeft}
+                                aria-pressed={props.leftPanelOpen}
+                                aria-label="Toggle left panel"
+                                className={cn(
+                                    "flex size-8 items-center justify-center rounded-md transition-colors",
+                                    props.leftPanelOpen
+                                        ? "bg-brand-soft text-brand-ink"
+                                        : "text-ink-2 hover:bg-panel-2"
+                                )}
+                            >
+                                <PanelLeft className="size-4" />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">Shapes & outline</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                type="button"
+                                onClick={props.onToggleRight}
+                                aria-pressed={props.rightPanelOpen}
+                                aria-label="Toggle right panel"
+                                className={cn(
+                                    "flex size-8 items-center justify-center rounded-md transition-colors",
+                                    props.rightPanelOpen
+                                        ? "bg-brand-soft text-brand-ink"
+                                        : "text-ink-2 hover:bg-panel-2"
+                                )}
+                            >
+                                <PanelRight className="size-4" />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">Properties</TooltipContent>
+                    </Tooltip>
+                </>
+            )}
+
+            <Popover>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <PopoverTrigger asChild>
+                            <button
+                                type="button"
+                                aria-label="Appearance"
+                                className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
+                            >
+                                <Palette className="size-4" />
+                            </button>
+                        </PopoverTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        Appearance — theme, canvas, snapping
+                    </TooltipContent>
+                </Tooltip>
+                <PopoverContent align="end" className="w-[312px] p-0">
+                    <ScrollArea className="h-[520px]">
+                        <PageSettings />
+                    </ScrollArea>
+                </PopoverContent>
+            </Popover>
+
+            <div
+                role="group"
+                aria-label="Chrome depth"
+                className="border-line bg-panel-2 flex h-8 items-center rounded-md border p-0.5 text-[12px]"
+            >
+                <button
+                    type="button"
+                    onClick={focus ? undefined : props.onToggleDepth}
+                    aria-pressed={focus}
+                    className={cn(
+                        "h-7 rounded px-2.5 transition-colors",
+                        focus ? "bg-panel text-ink shadow-sm" : "text-ink-3 hover:text-ink-2"
+                    )}
+                >
+                    Simple
+                </button>
+                <button
+                    type="button"
+                    onClick={focus ? props.onToggleDepth : undefined}
+                    aria-pressed={!focus}
+                    className={cn(
+                        "h-7 rounded px-2.5 transition-colors",
+                        !focus ? "bg-panel text-ink shadow-sm" : "text-ink-3 hover:text-ink-2"
+                    )}
+                >
+                    Everything
+                </button>
+            </div>
 
             <div className="bg-line mx-1 h-5 w-px" />
 
@@ -313,6 +443,12 @@ export function TopBar(props: TopBarProps) {
                         <Upload className="size-3.5" />
                         Import…
                     </DropdownMenuItem>
+                    {props.onCopyPresentLink && (
+                        <DropdownMenuItem onSelect={props.onCopyPresentLink}>
+                            <Link2 className="size-3.5" />
+                            Copy presentation link
+                        </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={props.onPublish}>
                         <Sparkles className="size-3.5" />
@@ -320,11 +456,6 @@ export function TopBar(props: TopBarProps) {
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-
-            <Button size="sm" className="h-8" onClick={props.onSave} disabled={state.saving}>
-                {state.saving ? <Loader2 className="size-4 animate-spin" /> : null}
-                Save
-            </Button>
         </header>
     );
 }

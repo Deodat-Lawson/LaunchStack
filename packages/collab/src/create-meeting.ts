@@ -16,7 +16,14 @@ import type { MeetingHub } from "./net/hub";
 import { SlackChannelBridge } from "./slack/bridge";
 import type { SlackClient } from "./slack/client";
 import type { ChannelStore } from "./store";
-import type { AgentPersona, Channel, MeetingConfig, SlackMirrorConfig, TurnPolicy } from "./types";
+import type {
+    AgentPersona,
+    Channel,
+    MeetingConfig,
+    MeetingPhase,
+    SlackMirrorConfig,
+    TurnPolicy,
+} from "./types";
 
 export interface CreateMeetingInput {
     store: ChannelStore;
@@ -30,6 +37,9 @@ export interface CreateMeetingInput {
     maxTurns?: number;
     context?: string[];
     completionMarker?: string;
+    /** The workflow the meeting follows; see `phases.ts`. */
+    phases?: MeetingPhase[];
+    workflowKey?: string;
     /** Reuse an existing channel instead of creating one. */
     channelId?: string;
     /** Slug for the new channel. Defaults to a slugified title. */
@@ -89,6 +99,8 @@ export async function createMeeting(input: CreateMeetingInput): Promise<CreatedM
         completionMarker: input.completionMarker,
         slack: input.slack?.config,
         context: input.context,
+        phases: input.phases,
+        workflowKey: input.workflowKey,
     };
 
     const runtimes = input.hub ? [...input.runtimes, input.hub.remoteRuntime()] : input.runtimes;

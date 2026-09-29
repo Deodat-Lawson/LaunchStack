@@ -56,8 +56,8 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
     },
     {
         id: "search.focus",
-        label: "Focus search",
-        description: "Put the cursor in the knowledge search box.",
+        label: "Filter the sidebar",
+        description: "Put the cursor in the sidebar's filter, on Sources or History.",
         defaultKeys: "/",
         when: "outside-input",
     },
@@ -83,13 +83,6 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         when: "always",
     },
     {
-        id: "feature.notes",
-        label: "Open Notebook",
-        description: "Freeform notes that span every source.",
-        defaultKeys: "Mod+Shift+N",
-        when: "always",
-    },
-    {
         id: "feature.meetings",
         label: "Open Meetings",
         description: "Agents working an objective in a channel you can join.",
@@ -103,6 +96,37 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         defaultKeys: "Mod+,",
         when: "always",
     },
+    {
+        id: "pane.split",
+        label: "Split to the right",
+        description: "Give the app you are looking at a column of its own.",
+        // Mod+\\ alone is the sidebar toggle.
+        defaultKeys: "Mod+Alt+\\",
+        when: "always",
+    },
+    {
+        id: "pane.focusNext",
+        label: "Focus the next column",
+        description: "Move between the columns of a split workspace.",
+        defaultKeys: "Mod+Alt+]",
+        when: "always",
+    },
+    {
+        id: "pane.focusPrevious",
+        label: "Focus the previous column",
+        description: "Move between the columns of a split workspace.",
+        defaultKeys: "Mod+Alt+[",
+        when: "always",
+    },
+    {
+        id: "pane.close",
+        label: "Close this app",
+        // Not Mod+Shift+W: that closes the browser window, and the page
+        // never sees it.
+        description: "Close the tab the focused column is showing.",
+        defaultKeys: "Mod+Alt+W",
+        when: "always",
+    },
 ];
 
 export const SHORTCUT_COMMANDS_BY_ID: ReadonlyMap<string, ShortcutCommand> = new Map(
@@ -114,7 +138,6 @@ export const FEATURE_COMMAND_IDS: Readonly<Record<string, string>> = {
     draft: "feature.draft",
     rewrite: "feature.rewrite",
     workflows: "feature.workflows",
-    notes: "feature.notes",
     meetings: "feature.meetings",
 };
 

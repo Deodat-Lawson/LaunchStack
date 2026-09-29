@@ -17,6 +17,7 @@ import "@testing-library/jest-dom";
 const mockReplace = jest.fn();
 jest.mock("next/navigation", () => ({
     useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
+    usePathname: () => "/employer/settings",
 }));
 
 // The chrome asks who is looking so it can mark a section read-only; an
@@ -259,5 +260,22 @@ describe("SettingsHub", () => {
         expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent(
             "Company profile"
         );
+    });
+
+    /**
+     * The way back lives in the rail's header now rather than in a strip
+     * across the page. Standalone, Settings is one level under the Studio;
+     * embedded as a Studio tab it has nowhere to go back to.
+     */
+    it("leads the rail with the way back when it is a page of its own", () => {
+        render(<SettingsHub />);
+        const back = screen.getByTestId("rail-back-link");
+        expect(back).toHaveAttribute("href", "/employer/documents");
+        expect(back).toHaveAccessibleName("Back to Studio");
+    });
+
+    it("offers no way back when it is a tab inside the Studio", () => {
+        render(<SettingsHub embedded />);
+        expect(screen.queryByTestId("rail-back-link")).not.toBeInTheDocument();
     });
 });

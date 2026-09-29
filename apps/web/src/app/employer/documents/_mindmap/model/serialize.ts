@@ -18,7 +18,7 @@ import {
     defaultTextStyle,
     makeId,
 } from "./factory";
-import { graphIndex } from "./doc";
+import { graphIndex, isMindmapPage } from "./doc";
 import { branchSwatch } from "./palette";
 import { SHAPE_BY_ID } from "./shapes";
 import { nonEmpty, trimmedOr } from "./strings";
@@ -35,6 +35,8 @@ import {
     type Point,
     type ShapeId,
     type TextStyle,
+    type AutoLayoutSetting,
+    type DiagramKind,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -248,6 +250,51 @@ function parseComment(v: unknown): DocComment | null {
  * Turn arbitrary JSON into a valid document. Never throws: an unrecognisable
  * payload yields an empty document rather than a broken editor.
  */
+const KINDS: readonly DiagramKind[] = ["mindmap", "flowchart", "board", "freeform"];
+const LAYOUT_KINDS: readonly AutoLayoutSetting["kind"][] = [
+    "mindmap",
+    "tree",
+    "org",
+    "radial",
+    "grid",
+];
+const DIRECTIONS: readonly NonNullable<AutoLayoutSetting["direction"]>[] = [
+    "right",
+    "left",
+    "down",
+    "up",
+];
+
+function parseKind(raw: unknown): DiagramKind | null {
+    return typeof raw === "string" && (KINDS as readonly string[]).includes(raw)
+        ? (raw as DiagramKind)
+        : null;
+}
+
+/**
+ * Schema 1 documents carry no kind. A page drawn entirely with mindmap topics
+ * is plainly a mindmap and gets the simple editor; anything else — including
+ * an empty page, which says nothing — keeps the full one.
+ */
+function inferKind(pages: readonly DiagramPage[]): DiagramKind {
+    const drawn = pages.filter(p => p.nodes.length > 0);
+    if (drawn.length === 0) return "freeform";
+    return drawn.every(isMindmapPage) ? "mindmap" : "freeform";
+}
+
+function parseAutoLayout(raw: unknown): AutoLayoutSetting | null {
+    if (!isRecord(raw)) return null;
+    const kind = typeof raw.kind === "string" ? raw.kind : "";
+    if (!(LAYOUT_KINDS as readonly string[]).includes(kind)) return null;
+    const direction = typeof raw.direction === "string" ? raw.direction : "";
+    return {
+        kind: kind as AutoLayoutSetting["kind"],
+        ...((DIRECTIONS as readonly string[]).includes(direction)
+            ? { direction: direction as NonNullable<AutoLayoutSetting["direction"]> }
+            : {}),
+    };
+}
+
 export function parseDoc(raw: unknown, fallbackTitle = "Untitled mindmap"): MindmapDoc {
     if (!isRecord(raw)) return createDoc(fallbackTitle);
 
@@ -269,6 +316,8 @@ export function parseDoc(raw: unknown, fallbackTitle = "Untitled mindmap"): Mind
             ? raw.comments.map(parseComment).filter((c): c is DocComment => c !== null)
             : [],
         settings: defaultSettings({
+            kind: parseKind(settings.kind) ?? inferKind(pages),
+            autoLayout: parseAutoLayout(settings.autoLayout),
             snapToGrid: bool(settings.snapToGrid, true),
             snapToObjects: bool(settings.snapToObjects, true),
             gridSize: num(settings.gridSize, 10),

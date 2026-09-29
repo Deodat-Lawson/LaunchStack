@@ -10,6 +10,7 @@ import { db } from "~/server/db";
 import {
     documentGrants,
     folderGrants,
+    profileImages,
     userCompanyMemberships,
     users,
     workspaceGroupMembers,
@@ -17,6 +18,7 @@ import {
 } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { lookFromRow, memberPhotoIds } from "~/server/profile/store";
 import {
     canActOnMember,
     canAssignRole,
@@ -37,8 +39,14 @@ import { customRoleNames, displayRoleName, requireKnownRole } from "./roles";
 export interface MemberView {
     id: number;
     authUserId: string;
+    /** Full name. Confirmations and the audit trail use it. */
     name: string;
     email: string;
+    /** How they appear in this workspace — their override here, else their profile. */
+    displayName: string;
+    title: string | null;
+    pronouns: string | null;
+    avatarUrl: string | null;
     role: string;
     roleName: string;
     status: MembershipStatus;
@@ -69,6 +77,13 @@ interface MemberRow {
     authUserId: string;
     name: string;
     email: string;
+    displayName: string | null;
+    title: string | null;
+    pronouns: string | null;
+    timeZone: string | null;
+    bio: string | null;
+    workspaceDisplayName: string | null;
+    workspaceTitle: string | null;
     role: string;
     status: string;
     joinedAt: Date;
@@ -82,6 +97,13 @@ async function memberRows(companyId: bigint, userId?: bigint): Promise<MemberRow
             authUserId: users.userId,
             name: users.name,
             email: users.email,
+            displayName: users.displayName,
+            title: users.title,
+            pronouns: users.pronouns,
+            timeZone: users.timeZone,
+            bio: users.bio,
+            workspaceDisplayName: userCompanyMemberships.profileDisplayName,
+            workspaceTitle: userCompanyMemberships.profileTitle,
             role: userCompanyMemberships.role,
             status: userCompanyMemberships.status,
             joinedAt: userCompanyMemberships.createdAt,
@@ -131,20 +153,24 @@ async function groupsByUser(
 }
 
 async function toMemberViews(ctx: WorkspaceContext, rows: MemberRow[]): Promise<MemberView[]> {
-    const [names, groups] = await Promise.all([
+    const userPks = rows.map(r => BigInt(r.id));
+    const [names, groups, photos] = await Promise.all([
         customRoleNames(ctx.companyId),
-        groupsByUser(
-            ctx.companyId,
-            rows.map(r => BigInt(r.id))
-        ),
+        groupsByUser(ctx.companyId, userPks),
+        memberPhotoIds(ctx.companyId, userPks),
     ]);
     return rows.map(row => {
         const role = normalizeRoleSlug(row.role);
+        const look = lookFromRow({ ...row, member: true }, photos.get(String(row.id)));
         return {
             id: Number(row.id),
             authUserId: row.authUserId,
             name: row.name,
             email: row.email,
+            displayName: look.displayName,
+            title: look.title,
+            pronouns: look.pronouns,
+            avatarUrl: look.avatarUrl,
             role,
             roleName: displayRoleName(role, names),
             status: toStatus(row.status),
@@ -308,7 +334,8 @@ export async function updateMember(
 
 /**
  * Everything a departed member leaves behind in this workspace: the
- * membership, their group seats, and grants naming them. The `users` row
+ * membership (with its profile override), their photo for this workspace,
+ * their group seats, and grants naming them. The `users` row
  * stays; if it pointed at this workspace as its default, it is repointed at
  * another workspace they still belong to.
  */
@@ -325,6 +352,9 @@ async function deleteMembershipEverywhere(
                 eq(userCompanyMemberships.userId, userId)
             )
         );
+    await tx
+        .delete(profileImages)
+        .where(and(eq(profileImages.companyId, companyId), eq(profileImages.userId, userId)));
 
     const groups = await tx
         .select({ id: workspaceGroups.id })

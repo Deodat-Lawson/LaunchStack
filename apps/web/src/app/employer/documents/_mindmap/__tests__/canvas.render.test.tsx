@@ -13,7 +13,7 @@ import { EditorStore } from "../model/store";
 import type { MindmapDoc } from "../model/types";
 import { Canvas } from "../ui/Canvas";
 import { EditorProvider } from "../ui/EditorContext";
-import { Inspector } from "../ui/Inspector";
+import { Inspector, PageSettings } from "../ui/Inspector";
 import { OutlinePanel } from "../ui/OutlinePanel";
 import { ShapePalette } from "../ui/ShapePalette";
 import { Toolbar } from "../ui/Toolbar";
@@ -657,17 +657,34 @@ describe("placing a shape", () => {
 });
 
 describe("inspector", () => {
-    it("shows page settings when nothing is selected", () => {
+    it("is empty when nothing is selected — a property sheet needs a subject", () => {
         mount();
-        expect(screen.getByText("Canvas")).toBeInTheDocument();
-        expect(screen.getByText("Theme")).toBeInTheDocument();
+        expect(screen.queryByText("Canvas")).toBeNull();
+        expect(screen.queryByText("Theme")).toBeNull();
     });
 
-    it("switches to shape properties once something is selected", () => {
+    it("keeps theme, canvas and snapping in the page settings the Appearance control shows", () => {
+        const store = new EditorStore(sampleDoc());
+        render(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <PageSettings />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+        expect(screen.getByText("Canvas")).toBeInTheDocument();
+        expect(screen.getByText("Theme")).toBeInTheDocument();
+        expect(screen.getByText("Snapping")).toBeInTheDocument();
+    });
+
+    it("leads with colour once something is selected, and folds the rest", () => {
         const { store, doc } = mount();
         act(() => store.selectNodes([doc.pages[0]!.nodes[0]!.id]));
-        expect(screen.getByText("Fill & stroke")).toBeInTheDocument();
+        expect(screen.getByText("Colour")).toBeInTheDocument();
+        expect(screen.getByText("Shape style")).toBeInTheDocument();
         expect(screen.getByText("Position & size")).toBeInTheDocument();
+        // Closed by default: the geometry fields are not rendered until opened.
+        expect(screen.queryByLabelText("Width")).toBeNull();
     });
 
     it("reports a multi-selection as a count", () => {
@@ -682,6 +699,7 @@ describe("inspector", () => {
         const root = doc.pages[0]!.nodes[0]!;
         act(() => store.selectNodes([root.id]));
 
+        await user.click(screen.getByRole("button", { name: /Position & size/ }));
         const widthField = screen.getByLabelText("Width");
         await user.clear(widthField);
         await user.type(widthField, "321");

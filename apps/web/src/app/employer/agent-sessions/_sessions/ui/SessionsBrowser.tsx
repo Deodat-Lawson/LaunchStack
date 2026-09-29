@@ -11,6 +11,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildSessionMenuItems } from "./sessionContextMenu";
 import {
     ArchiveRestore,
     Bot,
@@ -120,17 +123,63 @@ function SessionRow({
     item,
     busy,
     onImport,
+    onRemoveImport,
+    onOpenDocument,
+    onContinue,
 }: {
     item: AgentSessionItem;
     busy: boolean;
     onImport: (item: AgentSessionItem) => void;
+    onRemoveImport?: (item: AgentSessionItem) => void;
+    /** Supplied when a host can show the transcript without navigating. */
+    onOpenDocument?: (documentId: number) => void;
+    /** Supplied when a host can start the continuation in place. */
+    onContinue?: (documentId: number) => void;
 }) {
     const router = useRouter();
     const { label, Icon } = TOOL_META[item.tool];
     const project = projectLabel(item);
+    const imported = item.imported;
+    const openTranscript = (documentId: number) =>
+        onOpenDocument
+            ? onOpenDocument(documentId)
+            : router.push(`/employer/documents/viewer?docId=${documentId}`);
+    const continueInChat = (documentId: number) =>
+        onContinue
+            ? onContinue(documentId)
+            : router.push(`/employer/documents?feature=chat&continue=${documentId}`);
+    const ctxTarget = useContextTarget({
+        kind: "agent-session",
+        id: item.sourceId,
+        label: `Actions for ${item.title}`,
+        data: item,
+        items: () =>
+            buildSessionMenuItems(item, {
+                busy,
+                onImport: () => onImport(item),
+                onOpen: imported ? () => openTranscript(imported.documentId) : undefined,
+                onContinue: imported ? () => continueInChat(imported.documentId) : undefined,
+                onCopyPath: item.projectPath
+                    ? () => {
+                          void copyText(item.projectPath ?? "").then(ok => {
+                              if (ok) toast.success("Path copied");
+                          });
+                      }
+                    : undefined,
+                onCopyId: () => {
+                    void copyText(item.sourceId).then(ok => {
+                        if (ok) toast.success("Session id copied");
+                    });
+                },
+                onRemoveImport: onRemoveImport ? () => onRemoveImport(item) : undefined,
+            }),
+    });
 
     return (
-        <div className="border-line bg-panel hover:border-brand/40 group flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors">
+        <div
+            {...ctxTarget}
+            className="border-line bg-panel hover:border-brand/40 group flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors"
+        >
             <div className="bg-brand-soft text-brand-ink flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg">
                 <Icon className="h-4.5 w-4.5" />
             </div>
@@ -196,11 +245,7 @@ function SessionRow({
                                         size="sm"
                                         variant="outline"
                                         className="h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents/viewer?docId=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => openTranscript(item.imported!.documentId)}
                                     >
                                         <ExternalLink className="h-3.5 w-3.5" />
                                         Open
@@ -215,11 +260,7 @@ function SessionRow({
                                     <Button
                                         size="sm"
                                         className="bg-brand hover:bg-brand-hi text-brand-fg h-7 gap-1 text-xs"
-                                        onClick={() =>
-                                            router.push(
-                                                `/employer/documents?feature=chat&continue=${item.imported!.documentId}`
-                                            )
-                                        }
+                                        onClick={() => continueInChat(item.imported!.documentId)}
                                     >
                                         <MessageSquarePlus className="h-3.5 w-3.5" />
                                         Continue
@@ -251,7 +292,21 @@ function SessionRow({
     );
 }
 
-export function SessionsBrowser() {
+export interface SessionsBrowserProps {
+    /**
+     * A host that shows the workspace library alongside this browser refreshes
+     * it once an import lands, so Open and Continue have something to open.
+     */
+    onImported?: () => Promise<void>;
+    onOpenDocument?: (documentId: number) => void;
+    onContinue?: (documentId: number) => void;
+}
+
+export function SessionsBrowser({
+    onImported,
+    onOpenDocument,
+    onContinue,
+}: SessionsBrowserProps = {}) {
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
@@ -310,8 +365,11 @@ export function SessionsBrowser() {
                     `${failed.length} session${failed.length === 1 ? "" : "s"} failed to import`
                 );
             }
+            // The host's library is what Open and Continue read from, so it
+            // has to see the new document before either becomes useful.
+            if (stored.length > 0) void onImported?.();
         },
-        []
+        [onImported]
     );
 
     const importOne = useCallback(
@@ -343,6 +401,43 @@ export function SessionsBrowser() {
         },
         [applyReport]
     );
+
+    /**
+     * Drop an imported transcript from the workspace. The local session file
+     * is untouched, so the row goes back to "New" and can be imported again.
+     */
+    const removeImport = useCallback(async (item: AgentSessionItem) => {
+        const documentId = item.imported?.documentId;
+        if (!documentId) return;
+        if (
+            !confirm(`Remove the imported transcript of “${item.title}”? The local session stays.`)
+        ) {
+            return;
+        }
+        try {
+            const res = await fetch("/api/deleteDocument", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ docId: String(documentId) }),
+            });
+            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            setPreview(prev =>
+                prev
+                    ? {
+                          ...prev,
+                          items: prev.items.map(entry =>
+                              entry.sourceId === item.sourceId
+                                  ? { ...entry, imported: null }
+                                  : entry
+                          ),
+                      }
+                    : prev
+            );
+            toast.success("Import removed");
+        } catch {
+            toast.error("Couldn't remove that import");
+        }
+    }, []);
 
     const importAll = useCallback(async () => {
         setImportingAll(true);
@@ -572,6 +667,9 @@ export function SessionsBrowser() {
                                 item={item}
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
+                                onRemoveImport={i => void removeImport(i)}
+                                onOpenDocument={onOpenDocument}
+                                onContinue={onContinue}
                             />
                         ))}
                     </div>

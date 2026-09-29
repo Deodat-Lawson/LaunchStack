@@ -20,7 +20,7 @@ import {
     toRunDto,
     viewMatches,
 } from "~/server/prospects/adapter";
-import type { CompanyRow } from "~/app/employer/tools/prospects/api";
+import type { CompanyRow } from "~/app/employer/tools/growth/prospects/api";
 
 const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     id: "rel-1",
@@ -224,6 +224,19 @@ describe("runs", () => {
         expect(by.people).toBe("skipped");
     });
 
+    it("shows the shortlist and profiling progress while a run is still enriching", () => {
+        const dto = toRunDto(run({ status: "enriching", candidateOrgIds: ["o1", "o2", "o3"] }), {
+            profiled: 1,
+            shortlisted: 3,
+        });
+        const detail = Object.fromEntries(dto.steps.map(s => [s.id, s.detail]));
+        expect(detail.shortlist).toBe("3 companies");
+        expect(detail.profiles).toBe("1 of 3");
+        expect(dto.summary).toBeNull();
+        const early = toRunDto(run({ status: "gathering" }));
+        expect(early.steps.find(s => s.id === "profiles")!.detail).toBe("0 of 25");
+    });
+
     it("turns a completed run's source counts into yield rows", () => {
         const dto = toRunDto(
             run({
@@ -265,10 +278,11 @@ describe("runs", () => {
         expect(dto.summary?.found).toBe(15);
         expect(dto.summary?.durationMs).toBe(252_000);
         expect(dto.summary?.sources.map(s => [s.label, s.found, s.status])).toEqual([
-            ["Web search", 12, "ok"],
-            ["Places", 0, "skipped"],
-            ["Trade data", 3, "ok"],
+            ["Sample web search", 12, "ok"],
+            ["Sample places", 0, "skipped"],
+            ["Sample trade data", 3, "ok"],
         ]);
+        expect(dto.summary?.sources[0]!.sourceId).toBe("fixture:web");
         const sources = dto.steps.find(s => s.id === "sources")!;
         expect(sources.children!.map(c => c.status)).toEqual(["done", "skipped", "done"]);
     });

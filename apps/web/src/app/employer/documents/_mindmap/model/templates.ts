@@ -21,8 +21,13 @@ import {
     type ThemeMode,
 } from "./palette";
 import { applyThemeToDoc } from "./theme";
-import { TEMPLATE_META, type TemplateMeta } from "./template-meta";
-import type { DiagramEdge, DiagramNode, MindmapDoc, ShapeId } from "./types";
+import {
+    TEMPLATE_META,
+    type TemplateMeta,
+    TEMPLATE_META_BY_ID,
+    type TemplateCategory,
+} from "./template-meta";
+import type { DiagramEdge, DiagramNode, MindmapDoc, ShapeId, DiagramKind } from "./types";
 
 export {
     TEMPLATE_CATEGORIES,
@@ -715,5 +720,33 @@ export function buildersMissingMetadata(): string[] {
 export function buildTemplate(id: string, title?: string, mode: ThemeMode = "light"): MindmapDoc {
     const t = TEMPLATE_BY_ID[id] ?? TEMPLATE_BY_ID.blank!;
     const doc = t.build(title);
-    return applyThemeToDoc(doc, defaultThemeFor(mode));
+    const settings = {
+        ...doc.settings,
+        kind: kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category),
+        autoLayout: AUTO_ARRANGED.has(t.id) ? ({ kind: "mindmap" } as const) : null,
+    };
+    return applyThemeToDoc({ ...doc, settings }, defaultThemeFor(mode));
+}
+
+/**
+ * Templates whose whole point is a tree that grows as you type. The concept
+ * map is a graph with cross-links and the brainstorm board is columns of
+ * stickies — a tidy-tree pass would wreck both, so they stay off.
+ */
+const AUTO_ARRANGED: ReadonlySet<string> = new Set(["blank", "mindmap"]);
+
+/** The gallery's category, folded to the kinds the editor distinguishes. */
+export function kindForTemplate(id: string, category: TemplateCategory | undefined): DiagramKind {
+    if (id === "brainstorm") return "board";
+    switch (category) {
+        case "Mindmap":
+            return "mindmap";
+        case "Flowchart":
+        case "Technical":
+            return "flowchart";
+        case "Planning":
+            return "board";
+        default:
+            return "freeform";
+    }
 }

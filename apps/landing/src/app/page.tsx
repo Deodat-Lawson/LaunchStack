@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import React from "react";
 import { LandingClient } from "./_components/LandingClient";
+import { LANDING_FAQS } from "./_components/landingContent";
 import { GITHUB_REPO, SITE_URL } from "~/config/site";
 
 export const metadata: Metadata = {
-    title: "Launchstack — The Open-Source Launch Stack for Tech Founders",
+    title: "Launchstack — The Open-Source Startup Operating System",
     description:
-        "Launchstack is the open-source second brain for founders. Turn uploaded docs, recordings, and repository imports into a living knowledge graph — ask anything, get cited answers.",
+        "Your knowledge, decisions, and next moves in one focused workspace. The open-source startup operating system for founders. Free to self-host.",
     alternates: { canonical: "/" },
 };
 
@@ -55,32 +56,11 @@ const organizationLd = {
 const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-        {
-            "@type": "Question",
-            name: "What is Launchstack?",
-            acceptedAnswer: {
-                "@type": "Answer",
-                text: "Launchstack is a free, open-source AI platform for tech founders. It turns uploaded documents, recordings, and repository imports into a cited knowledge graph you can query in plain English.",
-            },
-        },
-        {
-            "@type": "Question",
-            name: "Is Launchstack really free?",
-            acceptedAnswer: {
-                "@type": "Answer",
-                text: "Yes. Launchstack is 100% free and open source under the Apache 2.0 license. Self-host on your own infrastructure with your own API keys — no usage limits, no hidden costs.",
-            },
-        },
-        {
-            "@type": "Question",
-            name: "Can I self-host Launchstack?",
-            acceptedAnswer: {
-                "@type": "Answer",
-                text: "Absolutely. Run the full stack with Docker Compose on any server you control, or deploy the web app to Vercel with a separately hosted worker for ingestion. Bring your own API keys and maintain full control over your data.",
-            },
-        },
-    ],
+    mainEntity: LANDING_FAQS.map(faq => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
 };
 
 export default function HomePage() {

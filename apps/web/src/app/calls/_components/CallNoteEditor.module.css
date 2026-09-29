@@ -223,7 +223,7 @@
 }
 .fallbackReason {
     color: var(--call-faint, var(--ink-3));
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     overflow-wrap: anywhere;
 }
@@ -248,7 +248,7 @@
     border-radius: 7px;
     color: var(--call-muted, var(--ink-2));
     background: color-mix(in srgb, var(--call-ink, var(--ink)) 5%, var(--call-paper, var(--panel)));
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     line-height: 1.5;
     overflow: auto;

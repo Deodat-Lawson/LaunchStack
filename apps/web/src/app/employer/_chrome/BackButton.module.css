@@ -1,0 +1,50 @@
+/* Mirrors the document preview's "‹ Library" button: same border, radius,
+   type size and chevron, so every way back in the app looks like one thing. */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    max-width: 100%;
+    padding-inline: 8px 11px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--panel);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* Its own size wherever it lands: a sidebar that lays its header out as a
+       flex column would otherwise stretch it into a full-width bar. */
+    align-self: flex-start;
+    justify-self: start;
+    width: fit-content;
+    transition:
+        background 120ms,
+        color 120ms,
+        border-color 120ms;
+}
+
+.button:hover {
+    background: var(--line-2);
+    color: var(--ink);
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

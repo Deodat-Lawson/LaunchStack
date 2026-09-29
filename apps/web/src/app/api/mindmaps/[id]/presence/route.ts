@@ -17,6 +17,7 @@ import { db } from "~/server/db";
 import { mindmapPresence, mindmaps } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
+import { workspaceLooks } from "~/server/profile/store";
 
 /** A client is "here" if it checked in within this window. */
 const PRESENCE_TTL_MS = 20_000;
@@ -25,7 +26,9 @@ const MAX_PEERS = 24;
 
 export interface PresencePeer {
     userId: string;
+    /** From the peer's profile as this workspace sees them; the client-sent name only as a fallback. */
     displayName: string | null;
+    avatarUrl: string | null;
     pageId: string | null;
     cursor: { x: number; y: number } | null;
     selection: string[];
@@ -115,9 +118,14 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             )
             .limit(MAX_PEERS);
 
+        const looks = await workspaceLooks(
+            ctx.data.companyId,
+            rows.map(peer => peer.userId)
+        );
         const peers: PresencePeer[] = rows.map(peer => ({
             userId: peer.userId,
-            displayName: peer.displayName,
+            displayName: looks.get(peer.userId)?.displayName ?? peer.displayName,
+            avatarUrl: looks.get(peer.userId)?.avatarUrl ?? null,
             pageId: peer.pageId,
             cursor:
                 peer.cursorX !== null && peer.cursorY !== null

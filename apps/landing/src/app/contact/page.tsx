@@ -85,7 +85,7 @@ export default function ContactPage() {
             <section className={styles.pageHero}>
                 <div className={styles.eyebrow}>Contact</div>
                 <h1 className={styles.pageTitle}>
-                    Say hi, or <span className={styles.serif}>ask us anything.</span>
+                    Say hi, or <span className={styles.accentWord}>ask us anything.</span>
                 </h1>
                 <p className={styles.pageSub}>
                     We read every message. Fastest path for support or sales questions — drop a note

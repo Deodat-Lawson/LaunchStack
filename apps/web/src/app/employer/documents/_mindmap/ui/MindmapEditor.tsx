@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    useSyncExternalStore,
+} from "react";
 import {
     ChevronLeft,
     ChevronRight,
@@ -15,16 +22,26 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/componen
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { docMode, fitToScreen, setActivePage, viewportCentre } from "../model/commands";
+import { toast } from "sonner";
+
+import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/preferences";
+import {
+    docMode,
+    pauseAutoArrangeAfterManualMove,
+    setActivePage,
+    setAutoLayout,
+    viewportCentre,
+} from "../model/commands";
 import { createNodeAt } from "../model/factory";
 import { isImageFile } from "../lib/images";
 import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
-import { EditorStore, type EditorState } from "../model/store";
+import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import type { Point, ShapeId } from "../model/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
-import { CanvasContextMenu } from "./CanvasContextMenu";
+import { useContextTarget } from "~/components/context-menu";
+import { buildCanvasMenuItems } from "./canvasContextMenu";
 import { buildCommands, CommandPalette } from "./CommandPalette";
 import { CommentsPanel } from "./CommentsPanel";
 import { EditorProvider, useCommittedDoc, useEditor } from "./EditorContext";
@@ -38,8 +55,12 @@ import { PublishDialog } from "./PublishDialog";
 import { ShapePalette } from "./ShapePalette";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { TextEditorOverlay } from "./TextEditorOverlay";
+import { EmptyCanvasHint } from "./EmptyCanvasHint";
+import { Presenter } from "./Presenter";
+import { SelectionToolbar } from "./SelectionToolbar";
 import { Toolbar } from "./Toolbar";
 import { TopBar } from "./TopBar";
+import { useAutoFit } from "./useAutoFit";
 import { useAutosave } from "./useAutosave";
 import { importDocumentFile, insertImages, useClipboardPaste } from "./useClipboardPaste";
 import { useElementSize } from "./useElementSize";
@@ -71,11 +92,28 @@ export interface MindmapEditorProps {
     /** Display name used as the author on new comments. */
     author: string;
     /**
+     * False while the editor is mounted but off screen. A Studio tab keeps
+     * its panes mounted so drafts and undo survive a switch, which means a
+     * hidden editor is still listening on `window` unless it is told not to.
+     * Defaults to true for the standalone route and the read-only preview.
+     */
+    active?: boolean;
+    /**
+     * Prototype of the disclosure plan. `focus` opens with no side panels,
+     * five tools and a toolbar on the selection; unset keeps today's editor.
+     */
+    initialChrome?: ChromeDepth;
+    /**
      * Where the top bar's back arrow goes. The workspace mounts the editor
      * in place and hands it "return to the preview"; the standalone route
      * leaves it unset and gets a link to the library.
      */
     onBack?: () => void;
+    /**
+     * "Ask about this in chat" on a topic. The workspace wires it to the
+     * composer; the standalone route leaves it unset and the verb is absent.
+     */
+    onAskAboutNode?: (text: string) => void;
 }
 
 type LeftTab = "shapes" | "outline" | "comments" | "history";
@@ -83,10 +121,36 @@ type LeftTab = "shapes" | "outline" | "comments" | "history";
 export function MindmapEditor(props: MindmapEditorProps) {
     // One store per mounted document. `useState` with an initialiser rather
     // than `useMemo`, because a store is state, not a derived value.
-    const [store] = useState(() => new EditorStore(parseDoc(props.initialDoc, props.initialTitle)));
+    const [store] = useState(() => {
+        const created = new EditorStore(parseDoc(props.initialDoc, props.initialTitle));
+        // How much chrome to open with: an explicit request, else what this
+        // person last chose for this kind of diagram, else the kind's default.
+        const kind = created.getState().doc.settings.kind;
+        created.setChromeDepth(
+            props.initialChrome ?? readChromeDepth(kind) ?? defaultChromeDepth(kind)
+        );
+        return created;
+    });
 
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
+    /**
+     * Read by every window-level listener below. A ref, not the prop, because
+     * the listeners are installed once and must see the current answer.
+     *
+     * Two things make an editor inactive: its Studio tab is not the one on
+     * screen (`props.active`), or the focus sits in the tab strip itself —
+     * Delete there closes a tab and must not also delete the selected shapes.
+     * The strip marks itself with `data-studio-tab-strip`; a bare
+     * `[role="tablist"]` would also match the source rail's own section tabs.
+     */
+    const activeProp = props.active ?? true;
+    const activeRef = useRef(activeProp);
+    activeRef.current = activeProp;
+    const isActive = useCallback(
+        () => activeRef.current && !document.activeElement?.closest("[data-studio-tab-strip]"),
+        []
+    );
 
     const [leftOpen, setLeftOpen] = useState(true);
     const [rightOpen, setRightOpen] = useState(true);
@@ -98,6 +162,23 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [findOpen, setFindOpen] = useState(false);
     const [presenting, setPresenting] = useState(false);
+    // The shell sits above the provider, so it reads the store directly.
+    const chromeDepth = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().chromeDepth,
+        () => store.getState().chromeDepth
+    );
+    const hasSelection = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().selection.length > 0,
+        () => false
+    );
+    const everything = chromeDepth === "everything";
+    const leftShown = leftOpen && everything;
+    // The inspector is a property sheet. With nothing selected it has no
+    // subject, so the panel closes rather than filling with page settings —
+    // those live behind the top bar's Appearance control.
+    const rightShown = rightOpen && everything && hasSelection;
     const [publishedId, setPublishedId] = useState(props.publishedDocumentId);
 
     const getSvgElement = useCallback(() => stageRef.current?.querySelector("svg") ?? null, []);
@@ -105,13 +186,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const autosave = useAutosave(store, props.mindmapId, props.initialRevision, getSvgElement);
     const presence = usePresence(store, props.mindmapId, props.author, autosave.revision);
 
-    // Frame the document once the canvas has real dimensions.
-    const framed = useRef(false);
-    useEffect(() => {
-        if (framed.current || stageSize.w < 40 || stageSize.h < 40) return;
-        framed.current = true;
-        fitToScreen(store, stageSize);
-    }, [stageSize, store]);
+    // Frame the board, and keep framing it until the author moves it. The
+    // canvas is not at its final size on mount — the panels are still sliding
+    // in — and a template framed against that half-width stage is what opened
+    // at 5%.
+    const frame = useAutoFit(store, stageSize);
 
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);
@@ -131,23 +210,24 @@ export function MindmapEditor(props: MindmapEditorProps) {
         };
     }, [autosave, onBack]);
 
+    // The store is read for the current value rather than through a state
+    // updater: an updater may run during render, and notifying the store's
+    // subscribers from there is a setState-in-render on every panel.
     const togglePresent = useCallback(() => {
-        setPresenting(current => {
-            const next = !current;
-            store.setPresenting(next);
-            if (next) {
-                setLeftOpen(false);
-                setRightOpen(false);
-            }
-            return next;
-        });
+        const next = !store.getState().presenting;
+        store.setPresenting(next);
+        setPresenting(next);
+        if (next) {
+            setLeftOpen(false);
+            setRightOpen(false);
+        }
     }, [store]);
 
     useEffect(() => {
         if (!presenting) return;
         // Refit whenever presentation starts, so the audience sees everything.
-        fitToScreen(store, stageSize);
-    }, [presenting, stageSize, store]);
+        frame(stageSize);
+    }, [presenting, stageSize, frame]);
 
     /** Step through pages like slides while presenting. */
     const stepPage = useCallback(
@@ -158,20 +238,26 @@ export function MindmapEditor(props: MindmapEditorProps) {
             if (!next) return;
             setActivePage(store, next.id);
             // The new page has its own content; frame it before it is shown.
-            requestAnimationFrame(() => fitToScreen(store, stageSize));
+            requestAnimationFrame(() => frame(stageSize));
         },
-        [stageSize, store]
+        [stageSize, frame, store]
     );
 
     useEffect(() => {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") stepPage(1);
-            if (e.key === "ArrowLeft" || e.key === "PageUp") stepPage(-1);
+            if (!isActive() || e.defaultPrevented) return;
+            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+                e.preventDefault();
+                stepPage(1);
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+                e.preventDefault();
+                stepPage(-1);
+            }
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [presenting, stepPage]);
+    }, [presenting, stepPage, isActive]);
 
     const editSelection = useCallback(() => {
         const state = store.getState();
@@ -185,6 +271,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
     }, [store]);
 
     useKeyboard(store, {
+        isActive,
         onSave: () => void autosave.saveNow({ snapshot: true }),
         onFind: () => setFindOpen(true),
         onCommandPalette: () => setPaletteOpen(true),
@@ -195,15 +282,37 @@ export function MindmapEditor(props: MindmapEditorProps) {
         getViewportSize: () => stageSize,
     });
 
+    // The canvas is one right-click target. Its own handler fixes the
+    // selection under the cursor first (React's delegated handler runs before
+    // the document-level one), so the menu built here always acts on what
+    // was clicked. Right-drags pan, and the handler swallows their event.
+    const onAskAboutNode = props.onAskAboutNode;
+    const canvasTarget = useContextTarget({
+        kind: "mindmap-canvas",
+        label: "Canvas actions",
+        items: () => buildCanvasMenuItems(store, { onAskAboutNode }),
+    });
+
     const canvasCallbacks = useMemo(
         () => ({
-            // Radix's context menu opens itself from the same event; the canvas
-            // handler's job is only to make sure the right thing is selected,
-            // which `useCanvasInteractions` already did before calling this.
+            // The shared context-menu layer opens from the same event; the
+            // canvas handler's job is only to make sure the right thing is
+            // selected, which `useCanvasInteractions` already did before this.
             onContextMenuAt: () => undefined,
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
             onOpenComments: () => setLeftTab("comments"),
+            // A shape placed by hand should stay where it was put, so a Move or
+            // Resize ends auto-arrange — with the way back one click away.
+            onGestureEnd: (label: string) => {
+                if (label !== "Move" && label !== "Resize") return;
+                const paused = pauseAutoArrangeAfterManualMove(store);
+                if (!paused) return;
+                toast("Auto-arrange paused", {
+                    description: "You placed something by hand, so the map stays as you left it.",
+                    action: { label: "Resume", onClick: () => setAutoLayout(store, paused) },
+                });
+            },
         }),
         [store]
     );
@@ -217,9 +326,9 @@ export function MindmapEditor(props: MindmapEditorProps) {
                 onPublish: () => setPublishOpen(true),
                 onPresent: togglePresent,
                 onShortcuts: () => setShortcutsOpen(true),
-                onFit: () => fitToScreen(store, stageSize),
+                onFit: () => frame(stageSize),
             }),
-        [autosave, stageSize, store, togglePresent]
+        [autosave, frame, stageSize, store, togglePresent]
     );
 
     /** Screen point → world, for drops. Falls back to the viewport centre. */
@@ -239,7 +348,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         [getSvgElement, stageSize, store]
     );
 
-    useClipboardPaste(store, () => worldPointAt());
+    useClipboardPaste(store, () => worldPointAt(), isActive);
 
     /**
      * Drops land at the pointer: a shape dragged from the palette, image files
@@ -275,7 +384,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
     );
 
     return (
-        <EditorProvider store={store}>
+        <EditorProvider store={store} isActive={isActive}>
             <TooltipProvider delayDuration={400}>
                 <div className="bg-surface flex h-full min-h-0 flex-col">
                     {!presenting && (
@@ -289,8 +398,31 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             onPresent={togglePresent}
                             onShortcuts={() => setShortcutsOpen(true)}
                             onCommandPalette={() => setPaletteOpen(true)}
-                            leftPanelOpen={leftOpen}
-                            rightPanelOpen={rightOpen}
+                            leftPanelOpen={leftShown}
+                            rightPanelOpen={rightShown}
+                            depth={chromeDepth}
+                            onToggleDepth={() => {
+                                const next = everything ? "focus" : "everything";
+                                store.setChromeDepth(next);
+                                writeChromeDepth(store.getState().doc.settings.kind, next);
+                            }}
+                            onHistory={() => {
+                                store.setChromeDepth("everything");
+                                setLeftOpen(true);
+                                setLeftTab("history");
+                            }}
+                            onCopyPresentLink={() => {
+                                const url = `${window.location.origin}/employer/documents?source=m${props.mindmapId}&present=1`;
+                                void navigator.clipboard.writeText(url).then(
+                                    () =>
+                                        toast("Presentation link copied", {
+                                            description:
+                                                "Opens the map straight into Present for anyone in the workspace.",
+                                        }),
+                                    () =>
+                                        toast.error("Couldn't copy the link", { description: url })
+                                );
+                            }}
                             onToggleLeft={() => setLeftOpen(v => !v)}
                             onToggleRight={() => setRightOpen(v => !v)}
                         />
@@ -299,6 +431,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                     <div className="flex min-h-0 flex-1">
                         {!presenting && (
                             <Toolbar
+                                depth={chromeDepth}
                                 onOpenShapes={() => {
                                     setLeftOpen(true);
                                     setLeftTab("shapes");
@@ -316,7 +449,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             autoSaveId="mindmap-editor-panels"
                             className="min-h-0 flex-1"
                         >
-                            {!presenting && leftOpen && (
+                            {!presenting && leftShown && (
                                 <>
                                     <ResizablePanel
                                         id="left"
@@ -398,19 +531,28 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                     }}
                                     onDrop={onDrop}
                                 >
-                                    <CanvasContextMenu>
-                                        <div className="flex min-h-0 min-w-0 flex-1">
-                                            <Canvas
-                                                callbacks={canvasCallbacks}
-                                                peers={presence.peers}
-                                                onCursorMove={presence.reportCursor}
-                                            >
-                                                <TextEditorOverlay />
-                                            </Canvas>
-                                        </div>
-                                    </CanvasContextMenu>
+                                    <div className="flex min-h-0 min-w-0 flex-1" {...canvasTarget}>
+                                        <Canvas
+                                            callbacks={canvasCallbacks}
+                                            peers={presence.peers}
+                                            onCursorMove={presence.reportCursor}
+                                        >
+                                            <TextEditorOverlay />
+                                        </Canvas>
+                                    </div>
 
                                     <ConnectedStaleBanner staleBy={presence.staleBy} />
+
+                                    <SelectionToolbar
+                                        onMore={() => {
+                                            store.setChromeDepth("everything");
+                                            setRightOpen(true);
+                                        }}
+                                    />
+                                    <EmptyCanvasHint
+                                        canvasSize={stageSize}
+                                        onPasteOutline={() => setImportOpen(true)}
+                                    />
 
                                     <FindBar
                                         open={findOpen}
@@ -418,16 +560,23 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                         canvasSize={stageSize}
                                     />
 
-                                    {presenting && (
-                                        <PresentationControls
-                                            onExit={togglePresent}
-                                            onStep={stepPage}
-                                        />
-                                    )}
+                                    {presenting &&
+                                        (chromeDepth === "focus" ? (
+                                            <Presenter
+                                                canvasSize={stageSize}
+                                                isActive={isActive}
+                                                onExit={togglePresent}
+                                            />
+                                        ) : (
+                                            <PresentationControls
+                                                onExit={togglePresent}
+                                                onStep={stepPage}
+                                            />
+                                        ))}
                                 </div>
                             </ResizablePanel>
 
-                            {!presenting && rightOpen && (
+                            {!presenting && rightShown && (
                                 <>
                                     <ResizableHandle />
                                     <ResizablePanel

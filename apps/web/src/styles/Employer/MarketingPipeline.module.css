@@ -1568,7 +1568,7 @@
 }
 
 .stepperDuration {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     font-variant-numeric: tabular-nums;
@@ -1585,7 +1585,7 @@
 .stepperParallelTag {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 9px;
     padding: 1px 6px;
     border-radius: 4px;
@@ -1597,7 +1597,7 @@
 }
 
 .stepperTime {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
@@ -1613,7 +1613,7 @@
     border-radius: 8px;
     background: var(--panel-2);
     border: 1px solid var(--line-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-2);
     line-height: 1.6;
@@ -1649,7 +1649,7 @@
 }
 
 .stepperProgress {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
     color: var(--ink-2);
@@ -1657,7 +1657,7 @@
 }
 
 .stepperElapsed {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     font-variant-numeric: tabular-nums;
@@ -1737,7 +1737,7 @@
     font-size: 0.78rem;
     line-height: 1.55;
     color: var(--ink-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     border-bottom: 1px solid color-mix(in oklch, var(--accent) 10%, transparent);
     white-space: pre-wrap;
     word-break: break-word;
@@ -2443,7 +2443,7 @@
 
 /* Mono eyebrow — uppercase 10–11px, 0.08em tracking (Drift voice) */
 .eyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -2458,7 +2458,7 @@
     gap: 5px;
     padding: 2px 8px;
     border-radius: 999px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     background: var(--panel);
     border: 1px solid var(--line-2);
@@ -2551,7 +2551,7 @@
 
 .variantTab {
     padding: 4px 11px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     border-radius: 999px;
     background: transparent;
@@ -2668,7 +2668,7 @@
 
 /* Output rail header eyebrow */
 .outputEyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -2694,7 +2694,7 @@
 }
 
 .claimsBlockTitle {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.06em;

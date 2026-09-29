@@ -163,6 +163,15 @@ describeDb("distribution persistence", () => {
             items: first.map(o => ({ orgId: o.id, kind: "importer" as const, territory: null })),
         });
         expect(again.map(r => r.id).sort()).toEqual(relationships.map(r => r.id).sort());
+        // A later run that picks another kind for a still-unengaged company moves
+        // that relationship instead of adding a second one for the same company.
+        const moved = await upsertCandidateRelationships({
+            companyId: companyA,
+            programId: program.id,
+            items: first.map(o => ({ orgId: o.id, kind: "distributor" as const, territory: null })),
+        });
+        expect(moved.map(r => r.id).sort()).toEqual(relationships.map(r => r.id).sort());
+        expect(moved.map(r => r.kind)).toEqual(["distributor", "distributor"]);
 
         // Company B sees nothing of company A.
         const forB = await listPartners(companyB, { programId: program.id });

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { ContextMenuProvider } from "~/components/context-menu";
 import { SourceRail } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -42,22 +43,24 @@ function RailHarness({
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     return (
-        <SourceRail
-            sources={[source]}
-            folders={folders}
-            selected={selected}
-            setSelected={setSelected}
-            onOpenAdd={onOpenAdd}
-            onOpenSource={onOpenSource}
-            onNewFolder={onNewFolder}
-            onMoveToFolder={onMoveToFolder}
-            onRenameSource={onRenameSource}
-            onDeleteSource={onDeleteSource}
-            activeFolder={activeFolder}
-            setActiveFolder={setActiveFolder}
-            activeTag={activeTag}
-            setActiveTag={setActiveTag}
-        />
+        <ContextMenuProvider>
+            <SourceRail
+                sources={[source]}
+                folders={folders}
+                selected={selected}
+                setSelected={setSelected}
+                onOpenAdd={onOpenAdd}
+                onOpenSource={onOpenSource}
+                onNewFolder={onNewFolder}
+                onMoveToFolder={onMoveToFolder}
+                onRenameSource={onRenameSource}
+                onDeleteSource={onDeleteSource}
+                activeFolder={activeFolder}
+                setActiveFolder={setActiveFolder}
+                activeTag={activeTag}
+                setActiveTag={setActiveTag}
+            />
+        </ContextMenuProvider>
     );
 }
 

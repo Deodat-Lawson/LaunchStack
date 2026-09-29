@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "preview": "next build && next start --port 3001",
     "start": "next start --port 3001",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "node --test scripts/smoke.test.mjs",
+    "test:unit": "node --import tsx --test scripts/behavior.test.ts"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

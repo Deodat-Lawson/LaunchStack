@@ -78,7 +78,6 @@ export function resolveNoteEmbeddingRuntime(): NoteEmbeddingRuntime | null {
         index: NOTE_EMBEDDING_INDEX,
     };
 }
-
 /**
  * The notes pipeline's one embeddings provider, generated through
  * @launchstack/llm's embedding service — no direct HTTP client here. Returns

@@ -106,7 +106,8 @@ describe("Launchstack logo", () => {
         // The diamond tile these files used to draw is what the mark replaced.
         const cssThatDrewItsOwnMark = [
             "apps/landing/src/styles/marketing.module.css",
-            "apps/landing/src/styles/deployment.module.css",
+            "apps/landing/src/styles/deploymentGuide.module.css",
+            "apps/landing/src/styles/startup.module.css",
             "apps/web/src/app/workspaces/workspace-select.module.css",
         ];
 

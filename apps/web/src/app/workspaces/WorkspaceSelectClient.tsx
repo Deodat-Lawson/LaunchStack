@@ -1,9 +1,12 @@
 "use client";
 
+import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
+import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -21,9 +24,18 @@ type Workspace = {
     /** Membership status: active, pending approval, or suspended. */
     status: string;
     memberCount: number;
+    /** You as this workspace sees you; null falls back to your profile. */
+    me: PileSeat | null;
+    /** A few real teammates, or none where you can't view the member list. */
+    teammates: PileSeat[];
     lastOpenedAt: string;
     isActive: boolean;
 };
+
+type PileSeat = { name: string; avatarUrl: string | null };
+
+/** Faces shown before the pile collapses to "+N". */
+const PILE_FACES = 4;
 
 type Account = {
     name: string;
@@ -101,41 +113,6 @@ function roleBadgeClass(role: string): string {
     return `${styles.roleBadge} ${styles.roleEditor}`;
 }
 
-const ALTPILE = [styles.avAlt1, styles.avAlt2, styles.avAlt3] as const;
-
-function syntheticMemberInitials(seed: string, index: number): string {
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-    let h = 0;
-    for (let i = 0; i < seed.length; i++) {
-        h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    }
-    h = (h + index * 17) >>> 0;
-    const a = alphabet[h % alphabet.length] ?? "A";
-    const b = alphabet[(h >>> 8) % alphabet.length] ?? "B";
-    return a + b;
-}
-
-function memberPileParts(
-    memberCount: number,
-    accountName: string,
-    seed: string
-): { label: string; extraClass?: string }[] {
-    const n = Math.max(1, memberCount);
-    const showPlus = n > 4;
-    const letterSlots = showPlus ? 4 : Math.min(4, n);
-    const out: { label: string; extraClass?: string }[] = [
-        { label: initialsOf(accountName), extraClass: undefined },
-    ];
-    for (let i = 1; i < letterSlots; i++) {
-        const alt = ALTPILE[(i - 1) % ALTPILE.length];
-        out.push({
-            label: syntheticMemberInitials(seed, i),
-            extraClass: alt,
-        });
-    }
-    return out;
-}
-
 const SWATCH_GRADIENTS: Record<number, string> = {
     1: "linear-gradient(135deg, var(--accent), var(--accent-deep))",
     2: "linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.20 220))",
@@ -153,6 +130,8 @@ export function WorkspaceSelectClient({
 }: Props) {
     const router = useRouter();
     const { signOut } = useAuth();
+    // Your profile photo (not a workspace's override): no workspace is open here.
+    const myPhoto = useMyProfile().data?.profile.avatarUrl ?? null;
     const { theme, setTheme, resolvedTheme } = useTheme();
     const isDark = (resolvedTheme ?? theme) === "dark";
     // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
@@ -182,7 +161,15 @@ export function WorkspaceSelectClient({
         const q = query.trim().toLowerCase();
         if (!q) return workspaces;
         return workspaces.filter(w => {
-            const haystack = [w.name, w.slug, w.role, w.description ?? ""].join(" ").toLowerCase();
+            const haystack = [
+                w.name,
+                w.slug,
+                w.role,
+                w.description ?? "",
+                ...w.teammates.map(t => t.name),
+            ]
+                .join(" ")
+                .toLowerCase();
             return haystack.includes(q);
         });
     }, [workspaces, query]);
@@ -283,6 +270,7 @@ export function WorkspaceSelectClient({
                 return;
             }
             const data = (await res.json()) as { redirectTo?: string };
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
         } catch (err) {
             console.error(err);
@@ -325,6 +313,7 @@ export function WorkspaceSelectClient({
                 setSubmitting(false);
                 return;
             }
+            resetMyProfile();
             router.push("/employer/documents");
             router.refresh();
         } catch (err) {
@@ -358,6 +347,7 @@ export function WorkspaceSelectClient({
                 setAcceptingId(null);
                 return;
             }
+            resetMyProfile();
             router.push(data.redirectTo ?? "/employer/documents");
             router.refresh();
         } catch (err) {
@@ -366,8 +356,6 @@ export function WorkspaceSelectClient({
             setAcceptingId(null);
         }
     }
-
-    const accountInitials = initialsOf(account.name);
 
     return (
         <div className={styles.body}>
@@ -385,23 +373,18 @@ export function WorkspaceSelectClient({
                 </div>
                 <div className={styles.spacer} />
                 <div className={styles.me} title="Switch account">
-                    <span className={styles.meAvatar}>{accountInitials}</span>
+                    <ProfileAvatar
+                        name={account.name}
+                        email={account.email}
+                        src={myPhoto}
+                        className="size-[22px]"
+                        fallbackClassName="text-[10px]"
+                    />
                     <span>{account.name}</span>
                     {account.email ? (
                         <span className={styles.meEmail}>· {account.email}</span>
                     ) : null}
-                    <svg
-                        className={styles.meChevron}
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        aria-hidden
-                    >
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
+                    <ChevronDown className={styles.meChevron} size={12} aria-hidden />
                 </div>
                 <button
                     className={styles.signout}
@@ -417,34 +400,7 @@ export function WorkspaceSelectClient({
                     aria-label="Toggle theme"
                     onClick={() => setTheme(isDark ? "light" : "dark")}
                 >
-                    {isDark ? (
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    ) : (
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="4" />
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-                        </svg>
-                    )}
+                    {isDark ? <Moon size={15} /> : <Sun size={15} />}
                 </button>
             </div>
 
@@ -453,18 +409,7 @@ export function WorkspaceSelectClient({
                     <div className={styles.stepperRow}>
                         <span className={`${styles.seg} ${styles.segDone}`}>
                             <span className={styles.dot}>
-                                <svg
-                                    width="9"
-                                    height="9"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="3.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
+                                <Check size={9} strokeWidth={3.5} />
                             </span>
                             Account
                         </span>
@@ -486,7 +431,7 @@ export function WorkspaceSelectClient({
                         </div>
                     ) : null}
                     <h1 className={styles.hTitle}>
-                        Pick a <span className={`${styles.serif} ${styles.accent}`}>workspace</span>
+                        Pick a <span className={styles.accent}>workspace</span>
                     </h1>
                     <p className={styles.hSub}>
                         A workspace is where your knowledge graph, sources, and workflows live. Open
@@ -497,20 +442,7 @@ export function WorkspaceSelectClient({
 
                 <div className={styles.searchRow}>
                     <div className={styles.search}>
-                        <svg
-                            className={styles.searchIcon}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
-                        </svg>
+                        <Search className={styles.searchIcon} size={14} />
                         <input
                             ref={searchRef}
                             type="text"
@@ -553,13 +485,12 @@ export function WorkspaceSelectClient({
                                 ws.memberCount === 1 ? "Just you" : `${ws.memberCount} members`;
                             const isSwitching = switchingId === ws.id;
                             const showPile = ws.memberCount > 1;
-                            const pile = showPile
-                                ? memberPileParts(
-                                      ws.memberCount,
-                                      account.name,
-                                      `${ws.id}:${ws.slug}`
-                                  )
-                                : [];
+                            // You first, then real teammates; the rest is a count.
+                            const pile: PileSeat[] = [
+                                ws.me ?? { name: account.name, avatarUrl: myPhoto },
+                                ...ws.teammates,
+                            ].slice(0, PILE_FACES);
+                            const hidden = Math.max(0, ws.memberCount - pile.length);
                             return (
                                 <button
                                     key={ws.id}
@@ -617,22 +548,22 @@ export function WorkspaceSelectClient({
                                         </div>
                                     </div>
                                     {showPile ? (
-                                        <div className={styles.pile} aria-label="Members">
+                                        <div
+                                            className={styles.pile}
+                                            aria-label={`Members: ${pile.map(p => p.name).join(", ")}${hidden > 0 ? ` and ${hidden} more` : ""}`}
+                                        >
                                             {pile.map((p, i) => (
-                                                <span
+                                                <ProfileAvatar
                                                     key={`${ws.id}-pile-${i}`}
-                                                    className={
-                                                        p.extraClass
-                                                            ? `${styles.av} ${p.extraClass}`
-                                                            : styles.av
-                                                    }
-                                                >
-                                                    {p.label}
-                                                </span>
+                                                    name={p.name}
+                                                    src={p.avatarUrl}
+                                                    className={`${styles.av} size-[22px]`}
+                                                    fallbackClassName="text-[9.5px]"
+                                                />
                                             ))}
-                                            {ws.memberCount > 4 ? (
+                                            {hidden > 0 ? (
                                                 <span className={`${styles.av} ${styles.avMore}`}>
-                                                    +{ws.memberCount - 4}
+                                                    +{hidden}
                                                 </span>
                                             ) : null}
                                         </div>
@@ -745,19 +676,7 @@ export function WorkspaceSelectClient({
                         onClick={() => setEditorOpen(true)}
                     >
                         <div className={styles.createIcon}>
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
+                            <Plus size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>Create a new workspace</div>
@@ -765,20 +684,7 @@ export function WorkspaceSelectClient({
                                 For a new company or product. Empty knowledge graph, ready to fill.
                             </div>
                         </div>
-                        <svg
-                            className={styles.ctArrow}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
                     <button
                         type="button"
@@ -786,20 +692,7 @@ export function WorkspaceSelectClient({
                         onClick={() => setError("Importing from another tool is coming soon.")}
                     >
                         <div className={`${styles.createIcon} ${styles.createIconAlt}`}>
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="17 8 12 3 7 8" />
-                                <line x1="12" y1="3" x2="12" y2="15" />
-                            </svg>
+                            <Upload size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>Import from another tool</div>
@@ -808,20 +701,7 @@ export function WorkspaceSelectClient({
                                 as a starting point.
                             </div>
                         </div>
-                        <svg
-                            className={styles.ctArrow}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
                 </div>
 
@@ -846,19 +726,7 @@ export function WorkspaceSelectClient({
                                 aria-label="Close"
                                 onClick={() => setEditorOpen(false)}
                             >
-                                <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <line x1="18" y1="6" x2="6" y2="18" />
-                                    <line x1="6" y1="6" x2="18" y2="18" />
-                                </svg>
+                                <X size={14} />
                             </button>
                         </div>
 
@@ -899,18 +767,7 @@ export function WorkspaceSelectClient({
                                     >
                                         {slugAvailable ? (
                                             <>
-                                                <svg
-                                                    width="11"
-                                                    height="11"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="3"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <polyline points="20 6 9 17 4 12" />
-                                                </svg>
+                                                <Check size={11} strokeWidth={3} />
                                                 <span>Available</span>
                                             </>
                                         ) : (
@@ -1016,19 +873,7 @@ export function WorkspaceSelectClient({
                                 }
                             >
                                 {submitting ? "Creating…" : "Create & continue"}
-                                <svg
-                                    width="13"
-                                    height="13"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                    <polyline points="12 5 19 12 12 19" />
-                                </svg>
+                                <ArrowRight size={13} strokeWidth={2.5} />
                             </button>
                         </div>
                     </div>

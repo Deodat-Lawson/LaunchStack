@@ -1,7 +1,7 @@
 // GET /api/prospects/people?segmentId=&q=&status=
 import type { NextRequest } from "next/server";
 
-import type { EmailStatusKind } from "~/app/employer/tools/prospects/api";
+import type { EmailStatusKind } from "~/app/employer/tools/growth/prospects/api";
 import { listPeople } from "~/server/prospects/service";
 
 import { error, handleProspectsError, json, prospectsContext } from "../_http";

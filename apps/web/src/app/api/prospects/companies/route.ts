@@ -1,7 +1,7 @@
 // GET /api/prospects/companies?segmentId=&view=&q=&sort=
 import type { NextRequest } from "next/server";
 
-import type { CompaniesSort, CompaniesView } from "~/app/employer/tools/prospects/api";
+import type { CompaniesSort, CompaniesView } from "~/app/employer/tools/growth/prospects/api";
 import { listCompanies } from "~/server/prospects/service";
 
 import { error, handleProspectsError, json, prospectsContext } from "../_http";

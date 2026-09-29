@@ -13,9 +13,13 @@ consume semantic tokens; only this file may reference primitives.
 
 ## API
 
-| Export | What it is |
-| --- | --- |
+| Export         | What it is                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------------- |
 | `./tokens.css` | primitives (hue, scales, fonts) feeding semantic tokens (surfaces, ink, lines, accent, status) |
+
+Type: `--font-sans` (Inter) and `--font-mono` (JetBrains Mono) resolve to
+the next/font variables each app's `src/app/fonts.ts` sets; `--font-serif`
+is the system serif and loads nothing. `--fw-display` is the heading weight.
 
 Two selectors only: `:root` (light) and `[data-theme="dark"]`. The ink
 ladder is a measured contrast contract — each tier carries its ratio in a

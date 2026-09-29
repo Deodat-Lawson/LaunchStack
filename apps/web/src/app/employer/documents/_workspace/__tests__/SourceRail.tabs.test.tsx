@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
+import { ContextMenuProvider } from "~/components/context-menu";
 import { SourceRail, type SourceRailProps } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -52,6 +53,7 @@ function history(over: Partial<NonNullable<SourceRailProps["history"]>> = {}) {
         onResumeSession: jest.fn(),
         onOpenRun: jest.fn(),
         onRenameSession: jest.fn(),
+        onDeleteRun: jest.fn(),
         onDeleteSession: jest.fn(),
         onRefresh: jest.fn(),
         ...over,
@@ -63,18 +65,20 @@ function Harness({ withHistory = true }: { withHistory?: boolean }) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     return (
-        <SourceRail
-            sources={SOURCES}
-            folders={FOLDERS}
-            selected={selected}
-            setSelected={setSelected}
-            onOpenAdd={jest.fn()}
-            activeFolder={activeFolder}
-            setActiveFolder={setActiveFolder}
-            activeTag={activeTag}
-            setActiveTag={setActiveTag}
-            history={withHistory ? history() : undefined}
-        />
+        <ContextMenuProvider>
+            <SourceRail
+                sources={SOURCES}
+                folders={FOLDERS}
+                selected={selected}
+                setSelected={setSelected}
+                onOpenAdd={jest.fn()}
+                activeFolder={activeFolder}
+                setActiveFolder={setActiveFolder}
+                activeTag={activeTag}
+                setActiveTag={setActiveTag}
+                history={withHistory ? history() : undefined}
+            />
+        </ContextMenuProvider>
     );
 }
 
@@ -96,9 +100,7 @@ describe("SourceRail tabs", () => {
 
         expect(screen.getByTestId("history-rail")).toBeInTheDocument();
         expect(screen.queryByTestId("source-rail-list")).not.toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Search history")).toBeInTheDocument();
-        // "New folder" belongs to the tree, not to history.
-        expect(screen.queryByTestId("source-rail-new-folder")).not.toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Filter history")).toBeInTheDocument();
     });
 
     it("filters history through the rail's one search box", () => {
@@ -106,7 +108,7 @@ describe("SourceRail tabs", () => {
         fireEvent.click(screen.getByTestId("rail-tab-history"));
         expect(screen.getByText("Indemnity cap")).toBeInTheDocument();
 
-        fireEvent.change(screen.getByPlaceholderText("Search history"), {
+        fireEvent.change(screen.getByPlaceholderText("Filter history"), {
             target: { value: "zzz" },
         });
         expect(screen.queryByText("Indemnity cap")).not.toBeInTheDocument();
@@ -125,7 +127,7 @@ describe("SourceRail tabs", () => {
         render(<Harness withHistory={false} />);
         expect(screen.queryByTestId("rail-tab-history")).not.toBeInTheDocument();
         expect(screen.getByTestId("source-rail-list")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Search your knowledge")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Filter sources")).toBeInTheDocument();
     });
 
     it("falls back to Sources when a remembered History tab has nothing to show it in", () => {

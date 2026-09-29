@@ -40,6 +40,8 @@ import {
     Users,
 } from "lucide-react";
 
+import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
+import { WorkspaceSwitchCard } from "~/app/employer/_chrome/WorkspaceSwitchCard";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import type { Permission } from "~/lib/authz/permissions";
@@ -124,13 +126,26 @@ export const SECTIONS: SectionDef[] = [
         id: "account",
         group: "you",
         label: "Account",
-        blurb: "Profile, password, sessions",
+        blurb: "Profile, photo, password, sessions",
         eyebrow: "Account",
         title: "Who you are, and where you are signed in",
         description:
-            "Your name and sign-in details, the accounts linked to yours, and every browser that currently holds a session.",
+            "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session.",
         Icon: User,
-        aliases: ["account", "profile", "password", "sessions", "devices", "me"],
+        aliases: [
+            "account",
+            "profile",
+            "photo",
+            "avatar",
+            "picture",
+            "display name",
+            "pronouns",
+            "time zone",
+            "password",
+            "sessions",
+            "devices",
+            "me",
+        ],
     },
     {
         id: "appearance",
@@ -378,6 +393,13 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 aria-label="Settings sections"
                 className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4"
             >
+                {/* Standalone, the way back leads the rail as it does in
+                    Documents. Embedded as a Studio tab there is nowhere to go
+                    back to — the tab strip is the navigation. */}
+                {!embedded && <RailBackLink className="mb-3" />}
+                {/* The workspace these settings belong to, and the one place
+                    to switch to another — not a back arrow in the Studio. */}
+                <WorkspaceSwitchCard className="mb-4" />
                 <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
                     Settings
                 </div>
@@ -479,7 +501,7 @@ function SectionHeader({
                             </Badge>
                         )}
                     </div>
-                    <h1 className="serif text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
+                    <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
                         {definition.title}
                     </h1>
                     <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">

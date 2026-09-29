@@ -210,7 +210,16 @@ export function TextEditorOverlay() {
                 e.stopPropagation();
                 if (e.key === "Escape") {
                     e.preventDefault();
-                    cancel();
+                    // Escape means "I'm done", not "throw that away": people
+                    // reach for it to finish, and losing the label they just
+                    // typed is the wrong surprise. A text shape left empty is
+                    // still removed, since an invisible box helps nobody.
+                    followUp.current = null;
+                    if (editing.kind === "node" && node?.shape === "text" && value.trim() === "") {
+                        cancel();
+                    } else {
+                        commit();
+                    }
                     return;
                 }
                 if (e.key === "Enter" && !e.shiftKey) {

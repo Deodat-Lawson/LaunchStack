@@ -21,7 +21,12 @@ function mountPanel() {
     const other = createNode({ shape: "rectangle", x: 400, y: 10, text: "Queue" });
     const doc = createDoc("Test map", [{ ...createPage(), nodes: [box, other], edges: [] }]);
     const store = new EditorStore(doc);
-    addComment(store, { nodeId: box.id, at: { x: 170, y: 10 }, author: "Ana", body: "Rename this?" });
+    addComment(store, {
+        nodeId: box.id,
+        at: { x: 170, y: 10 },
+        author: "Ana",
+        body: "Rename this?",
+    });
     addComment(store, { nodeId: null, at: { x: 50, y: 300 }, author: "Ben", body: "Page note" });
     const view = render(
         <EditorProvider store={store}>

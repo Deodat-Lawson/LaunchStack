@@ -7,11 +7,13 @@ import { and, desc, eq, gte, lt, lte } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users, workspaceAuditEvents } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { workspaceLooks } from "~/server/profile/store";
 
 export interface AuditEventView {
     id: number;
     action: string;
-    actor: { authUserId: string; name: string; email: string } | null;
+    /** `name` is the full name on purpose — an audit trail records who, not a nickname. */
+    actor: { authUserId: string; name: string; email: string; avatarUrl: string | null } | null;
     targetType: string;
     targetId: string | null;
     detail: Record<string, unknown> | null;
@@ -72,6 +74,7 @@ async function page(
             authUserId: row.actorUserId,
             name: row.actorName ?? "Unknown user",
             email: row.actorEmail ?? "",
+            avatarUrl: null,
         },
         targetType: row.targetType,
         targetId: row.targetId ?? null,
@@ -88,6 +91,14 @@ export async function listAuditEvents(
     const rows = await page(ctx.companyId, query, limit + 1);
     const hasMore = rows.length > limit;
     const events = hasMore ? rows.slice(0, limit) : rows;
+    const looks = await workspaceLooks(
+        ctx.companyId,
+        events.map(event => event.actor?.authUserId)
+    );
+    for (const event of events) {
+        if (event.actor)
+            event.actor.avatarUrl = looks.get(event.actor.authUserId)?.avatarUrl ?? null;
+    }
     const last = events[events.length - 1];
     return { events, nextCursor: hasMore && last ? String(last.id) : null };
 }

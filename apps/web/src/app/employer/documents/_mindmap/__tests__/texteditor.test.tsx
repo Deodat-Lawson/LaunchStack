@@ -86,13 +86,21 @@ describe("commit", () => {
         expect(pageNodes(store).find(n => n.id === node.id)!.text).toBe("new words");
     });
 
-    it("does not re-commit a session that Escape already settled", () => {
+    it("commits on Escape, and does not commit the settled session a second time", () => {
+        // Escape means "done", not "throw that away": people reach for it to
+        // finish, and losing a label they just typed is the wrong surprise.
         const node = createNode({ shape: "mind-branch", x: 10, y: 10, text: "old" });
         const { store, view } = mountWith([node]);
         act(() => store.setEditing({ kind: "node", id: node.id }));
-        fireEvent.change(field(view.container), { target: { value: "discarded" } });
+        fireEvent.change(field(view.container), { target: { value: "kept" } });
         fireEvent.keyDown(field(view.container), { key: "Escape" });
-        expect(pageNodes(store).find(n => n.id === node.id)!.text).toBe("old");
+        expect(pageNodes(store).find(n => n.id === node.id)!.text).toBe("kept");
+        expect(store.getState().editing).toBeNull();
+
+        // Ending the session from outside must not write it again.
+        const commits = store.getState().commitId;
+        act(() => store.setEditing(null));
+        expect(store.getState().commitId).toBe(commits);
     });
 });
 

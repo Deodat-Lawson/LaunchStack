@@ -30,9 +30,7 @@ function entry(id: string, at: string, over: Partial<HistoryEntry> = {}): Histor
 
 describe("deriveSessionTitle", () => {
     it("uses the opening question verbatim when it fits", () => {
-        expect(deriveSessionTitle("What is the indemnity cap?")).toBe(
-            "What is the indemnity cap?"
-        );
+        expect(deriveSessionTitle("What is the indemnity cap?")).toBe("What is the indemnity cap?");
     });
 
     it("collapses whitespace so a pasted multi-line question stays one line", () => {

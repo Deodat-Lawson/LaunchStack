@@ -204,6 +204,27 @@
       "when": 1789620306478,
       "tag": "20260917044506_settings_values_and_agent_autonomy",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1789701428387,
+      "tag": "20260918031708_brand_posts",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1790222016700,
+      "tag": "20260924035336_user_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1790305746313,
+      "tag": "20260925030906_agent_harness_and_meeting_workflows",
+      "breakpoints": true
     }
   ]
 }

@@ -610,10 +610,28 @@ export async function upsertCandidateRelationships(args: {
 }): Promise<RelationshipRecord[]> {
     if (args.items.length === 0) return [];
     const db = getDb();
-    await db
-        .insert(partnerRelationships)
-        .values(
-            args.items.map(item => ({
+    const orgIds = [...new Set(args.items.map(i => i.orgId))];
+    const scope = and(
+        eq(partnerRelationships.companyId, args.companyId),
+        eq(partnerRelationships.programId, args.programId),
+        inArray(partnerRelationships.orgId, orgIds)
+    );
+    // Discovery keeps one relationship per organisation per program. An existing
+    // one is reused rather than joined by a second kind; while it is still
+    // unengaged its kind follows the newest pick, since a directory tag or a
+    // read page beats last run's guess.
+    const existing = await db.select().from(partnerRelationships).where(scope);
+    const existingByOrg = new Map<string, typeof existing>();
+    for (const row of existing) {
+        const list = existingByOrg.get(row.orgId) ?? [];
+        list.push(row);
+        existingByOrg.set(row.orgId, list);
+    }
+    const inserts: Array<InferInsertModel<typeof partnerRelationships>> = [];
+    for (const item of args.items) {
+        const rows = existingByOrg.get(item.orgId);
+        if (!rows?.length) {
+            inserts.push({
                 id: randomUUID(),
                 companyId: args.companyId,
                 programId: args.programId,
@@ -621,10 +639,19 @@ export async function upsertCandidateRelationships(args: {
                 kind: item.kind,
                 territory: item.territory,
                 source: "discovery" as const,
-            }))
-        )
-        .onConflictDoNothing();
-    const orgIds = [...new Set(args.items.map(i => i.orgId))];
+            });
+            continue;
+        }
+        const unengaged = rows.find(r => r.stage === "candidate" || r.stage === "researched");
+        if (unengaged && unengaged.kind !== item.kind && !rows.some(r => r.kind === item.kind)) {
+            await db
+                .update(partnerRelationships)
+                .set({ kind: item.kind, territory: unengaged.territory ?? item.territory })
+                .where(eq(partnerRelationships.id, unengaged.id));
+        }
+    }
+    if (inserts.length > 0)
+        await db.insert(partnerRelationships).values(inserts).onConflictDoNothing();
     const rows = await db
         .select()
         .from(partnerRelationships)

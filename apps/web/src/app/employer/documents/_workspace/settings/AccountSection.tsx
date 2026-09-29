@@ -3,10 +3,11 @@
 /**
  * Account — who you are, and where you are signed in.
  *
- * Body only. Everything here is Better Auth's own data, reached through its
- * client: the profile, the credential and linked sign-in accounts, and every
- * session that currently holds a cookie for this person, with the device it
- * came from and a way to end it. None of it had a surface before.
+ * Body only. The profile (photo, names, title, the per-workspace look) is
+ * `ProfileEditor`. The rest is Better Auth's own data, reached through its
+ * client: the credential and linked sign-in accounts, and every session
+ * that currently holds a cookie for this person, with the device it came
+ * from and a way to end it.
  *
  * The password form is the person's own form for their own password; the
  * values go to `/api/auth/change-password` and nowhere else.
@@ -22,8 +23,9 @@ import { Field, TextInput } from "~/components/field";
 import { authClient, useUser } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 
-import { usePublishedActions, type SettingsSectionProps } from "./contract";
+import type { SettingsSectionProps } from "./contract";
 import { relativeTime } from "./people/format";
+import { ProfileEditor } from "./ProfileEditor";
 import { StatusNote } from "./ui";
 
 interface SessionRow {
@@ -89,16 +91,10 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     const session = authClient.useSession();
     const currentToken = session.data?.session.token ?? null;
 
-    const [name, setName] = useState("");
-    const [savingName, setSavingName] = useState(false);
     const [sessions, setSessions] = useState<SessionRow[] | null>(null);
     const [accounts, setAccounts] = useState<AccountRow[] | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (user?.name && !name) setName(user.name);
-    }, [user?.name, name]);
 
     const refresh = useCallback(async () => {
         try {
@@ -118,43 +114,6 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     useEffect(() => {
         void refresh();
     }, [refresh]);
-
-    const nameDirty =
-        Boolean(user) && name.trim() !== (user?.name ?? "").trim() && name.trim().length > 0;
-
-    const saveName = useCallback(async () => {
-        setSavingName(true);
-        try {
-            const result = await authClient.updateUser({ name: name.trim() });
-            if (result.error) throw new Error(result.error.message ?? "Could not save your name.");
-            const mirror = await fetch("/api/settings/account", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name.trim() }),
-            });
-            if (!mirror.ok)
-                throw new Error(
-                    "Saved your sign-in name, but the workspace profile did not update."
-                );
-            toast.success("Name saved");
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not save your name.");
-        } finally {
-            setSavingName(false);
-        }
-    }, [name]);
-
-    usePublishedActions(
-        onActions,
-        {
-            primaryLabel: "Save name",
-            primaryBusyLabel: "Saving…",
-            onPrimary: saveName,
-            busy: savingName,
-            disabled: !nameDirty,
-        },
-        [saveName, savingName, nameDirty]
-    );
 
     const revoke = async (token: string) => {
         setBusy(token);
@@ -193,30 +152,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         <>
             {error && <StatusNote tone="danger">{error}</StatusNote>}
 
-            <Section title="Profile" description="How you appear to the rest of the workspace.">
-                <Card>
-                    <Field label="Name">
-                        <TextInput
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            placeholder="Your name"
-                        />
-                    </Field>
-                    <Field
-                        label="Email"
-                        hint="Sign-in email. Ask an admin to re-invite you to change it."
-                    >
-                        <div className="flex items-center gap-2">
-                            <TextInput value={user?.email ?? ""} disabled readOnly />
-                            {user && (
-                                <Badge variant={user.emailVerified ? "success" : "warn"}>
-                                    {user.emailVerified ? "Verified" : "Unverified"}
-                                </Badge>
-                            )}
-                        </div>
-                    </Field>
-                </Card>
-            </Section>
+            <ProfileEditor onActions={onActions} emailVerified={user ? user.emailVerified : null} />
 
             <Section
                 title="Sign-in"

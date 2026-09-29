@@ -1,14 +1,14 @@
 "use client";
 
-import React, { type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { IconChevronRight } from "./icons";
 import LoadingPage from "~/app/_components/loading";
 import { CallsFeature } from "~/app/calls/_components/CallsFeature";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
 import type { StudioFeature } from "./types";
+import { ChevronRight as IconChevronRight } from "lucide-react";
 
 /**
  * Data the workspace shell owns but some panes need. Passed explicitly rather
@@ -21,6 +21,37 @@ export interface StudioPaneContext {
     onCallChanged?: () => void;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
+    /**
+     * Coding sessions opens transcripts and continues them in chat. Inside
+     * Studio both are moves between open tabs, so the shell does them; the
+     * standalone route omits these and the browser navigates instead.
+     */
+    sessions?: {
+        onImported?: () => Promise<void>;
+        onOpenDocument?: (documentId: number) => void;
+        onContinue?: (documentId: number) => void;
+    };
+    /**
+     * Agents and Meetings hand off to each other and to the chat: "use in
+     * chat" picks the agent in the composer, "put in a meeting" opens the
+     * new-meeting dialog. Both are moves between tabs the shell owns.
+     */
+    agents?: {
+        onUseInChat?: (agentKey: string) => void;
+        onStartMeeting?: (agentKey: string) => void;
+        onOpenAgents?: () => void;
+        newMeetingRequest?: { workflowKey?: string | null; seats?: string[]; nonce: number } | null;
+        /** A request to select one agent in the Agents app (from the palette). */
+        openAgentRequest?: { key: string; nonce: number } | null;
+    };
+    /**
+     * Investor relations drafts in the chat tab and saves a fund list as a
+     * source — both moves the shell owns.
+     */
+    investors?: {
+        onDraftInChat: (prompt: string) => void;
+        onSaveAsSource: (markdown: string) => void;
+    };
 }
 
 const DocumentGenerator = dynamic(
@@ -45,8 +76,8 @@ const LegalGeneratorTheme = dynamic(
     { loading: () => <LoadingPage /> }
 );
 
-const NotebookPane = dynamic(
-    () => import("~/components/notes/NotebookPane").then(m => m.NotebookPane),
+const InvestorsPane = dynamic(
+    () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
     { loading: () => <LoadingPage /> }
 );
 
@@ -59,6 +90,10 @@ const StatisticsView = dynamic(
     { loading: () => <LoadingPage /> }
 );
 
+const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
+    loading: () => <LoadingPage />,
+});
+
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
     loading: () => <LoadingPage />,
 });
@@ -67,11 +102,25 @@ const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.Knowle
     loading: () => <LoadingPage />,
 });
 
-const MarketingPipelineWorkspace = dynamic(
+const ArtifactGallery = dynamic(
     () =>
-        import(
-            "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace"
-        ).then(m => m.MarketingPipelineWorkspace),
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactGallery").then(
+            m => m.ArtifactGallery
+        ),
+    { loading: () => <LoadingPage /> }
+);
+
+const ArtifactViewer = dynamic(
+    () =>
+        import("~/app/employer/artifacts/_artifacts/ui/ArtifactViewer").then(m => m.ArtifactViewer),
+    { loading: () => <LoadingPage /> }
+);
+
+const SessionsBrowser = dynamic(
+    () =>
+        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
+            m => m.SessionsBrowser
+        ),
     { loading: () => <LoadingPage /> }
 );
 
@@ -109,7 +158,7 @@ function PaneShell({
                     {eyebrow}
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 28,
                         lineHeight: 1.15,
@@ -239,7 +288,7 @@ function InlineFeatureShell({
                     {eyebrow}
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 22,
                         lineHeight: 1.15,
@@ -376,69 +425,11 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
     );
 }
 
-export function VideoGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Video Generation"
-            body="Turn company knowledge into short explainer videos. Pick sources, set tone, and queue renders — narration and captions are grounded in your indexed documents."
-            bullets={[
-                "Source-grounded storyboards with citation overlays",
-                "Multiple aspect ratios (square, vertical, widescreen)",
-                "Optional voice cloning for a consistent brand voice",
-            ]}
-        />
-    );
-}
-
-export function ImageGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Image Generation"
-            body="Generate hero images, diagrams, and social assets from prompts that reference your sources — product names, audience, and voice pulled from your indexed docs."
-            bullets={[
-                "Brand-consistent palettes derived from your style guide",
-                "Prompt suggestions seeded from pinned sources",
-                "Direct export to the library as a new asset",
-            ]}
-        />
-    );
-}
-
-export function AudioGenPane({ onClose }: PaneProps) {
-    return (
-        <ComingSoonPane
-            onClose={onClose}
-            eyebrow="Generation"
-            title="Audio Generation"
-            body="Narrate summaries, brief updates, or full documents. Voices, pacing, and tone tuned to your company voice."
-            bullets={[
-                "Document-to-audio with chapter markers",
-                "Multiple voice profiles per workspace",
-                "Attach generated audio back to the source document",
-            ]}
-        />
-    );
-}
-
 export function RewritePane(_: PaneProps) {
     return (
         <LegalGeneratorTheme ambient={false}>
             <RewriteDiffView />
         </LegalGeneratorTheme>
-    );
-}
-
-export function NotesPane(_: PaneProps) {
-    return (
-        <InlineFeatureShell eyebrow="Notebook" title="Cross-document scratchpad">
-            <div style={{ padding: 0, height: "100%" }}>
-                <NotebookPane />
-            </div>
-        </InlineFeatureShell>
     );
 }
 
@@ -452,6 +443,43 @@ export function CompanySettingsPane({
     );
 }
 
+/**
+ * Artifacts keeps gallery and viewer in one tab: opening an artifact swaps the
+ * panel rather than navigating, so the tab you came back to is the one you
+ * left. The standalone route passes neither callback and keeps its own routing.
+ */
+export function ArtifactsStudioPane(_: PaneProps) {
+    const [viewerId, setViewerId] = useState<number | null>(null);
+
+    return (
+        <div
+            style={{
+                height: "100%",
+                minHeight: 0,
+                overflowY: viewerId === null ? "auto" : "hidden",
+            }}
+        >
+            {viewerId === null ? (
+                <ArtifactGallery onOpenArtifact={setViewerId} />
+            ) : (
+                <ArtifactViewer id={viewerId} onBack={() => setViewerId(null)} />
+            )}
+        </div>
+    );
+}
+
+export function AgentSessionsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return (
+        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+            <SessionsBrowser
+                onImported={context?.sessions?.onImported}
+                onOpenDocument={context?.sessions?.onOpenDocument}
+                onContinue={context?.sessions?.onContinue}
+            />
+        </div>
+    );
+}
+
 /** Analytics reads, never configures, so it lives here beside the other views. */
 export function AnalyticsPane(_: PaneProps) {
     return (
@@ -461,10 +489,26 @@ export function AnalyticsPane(_: PaneProps) {
     );
 }
 
-export function MeetingsStudioPane(_: PaneProps) {
+export function MeetingsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-            <MeetingsPane embedded />
+            <MeetingsPane
+                embedded
+                onOpenAgents={context?.agents?.onOpenAgents}
+                newMeetingRequest={context?.agents?.newMeetingRequest ?? null}
+            />
+        </div>
+    );
+}
+
+export function AgentsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return (
+        <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+            <AgentsPane
+                onUseInChat={context?.agents?.onUseInChat}
+                onStartMeeting={context?.agents?.onStartMeeting}
+                selectRequest={context?.agents?.openAgentRequest ?? null}
+            />
         </div>
     );
 }
@@ -604,18 +648,6 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
                     Back to workspace <IconChevronRight size={12} />
                 </button>
             </div>
-        </InlineFeatureShell>
-    );
-}
-
-export function MarketingPipelinePane(_: PaneProps) {
-    return (
-        <InlineFeatureShell
-            eyebrow="Marketing"
-            title="Marketing Pipeline"
-            subtitle="Pick a channel, describe the promotion — drafts use your indexed company knowledge. Progress and results stay in the bordered area below the form."
-        >
-            <MarketingPipelineWorkspace embedded />
         </InlineFeatureShell>
     );
 }
@@ -842,25 +874,28 @@ export function renderStudioPane(
         case "mindmap":
             return <MindmapStudioPane onClose={onClose} context={context} />;
         case "meetings":
-            return <MeetingsStudioPane onClose={onClose} />;
+            return <MeetingsStudioPane onClose={onClose} context={context} />;
         case "calls":
             return <CallsFeature onCallChanged={context?.onCallChanged} />;
+        case "agents":
+            return <AgentsStudioPane onClose={onClose} context={context} />;
         case "draft":
             return <DraftPane onClose={onClose} />;
         case "rewrite":
             return <RewritePane onClose={onClose} />;
-        case "notes":
-            return <NotesPane onClose={onClose} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "video-gen":
-            return <VideoGenPane onClose={onClose} />;
-        case "image-gen":
-            return <ImageGenPane onClose={onClose} />;
-        case "audio-gen":
-            return <AudioGenPane onClose={onClose} />;
-        case "marketing":
-            return <MarketingPipelinePane onClose={onClose} />;
+        case "artifacts":
+            return <ArtifactsStudioPane onClose={onClose} />;
+        case "agent-sessions":
+            return <AgentSessionsStudioPane onClose={onClose} context={context} />;
+        case "investors":
+            return (
+                <InvestorsPane
+                    onDraftInChat={context?.investors?.onDraftInChat}
+                    onSaveAsSource={context?.investors?.onSaveAsSource}
+                />
+            );
         // Company metadata and analytics are sections of Settings now. Their ids
         // survive so old deep links open the right section rather than 404ing.
         case "metadata":
@@ -869,38 +904,21 @@ export function renderStudioPane(
             return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
-        case "prospects":
+        case "growth":
             return (
                 <DefaultLinkPane
                     onClose={onClose}
-                    eyebrow="Prospects"
-                    title="Prospects"
-                    body="Say who you sell to and where. Prospects searches for companies that match, profiles each one with cited evidence and a fit score, finds the people to contact, and tracks every deal through to won."
+                    eyebrow="Growth"
+                    title="Growth"
+                    body="One app for making the company known and finding the companies that will buy. Brand composes once for every network, schedules it, shows the calendar and generates campaigns from your documents. Prospects finds buyers that match what you sell, profiles them with cited evidence, and runs every deal to won."
                     bullets={[
-                        "Segment: what you sell, the buyer type, industries and countries",
-                        "Companies: fit, why they match, where they were found; open one for the cited profile",
-                        "People and outreach: a campaign is drafted in Email for you to approve — nothing is sent automatically",
-                        "Deals: stages with rules, next steps and owners; Runs show what each source produced",
-                    ]}
-                    href={feature.href ?? "/employer/tools/prospects"}
-                    ctaLabel="Open Prospects"
-                />
-            );
-        case "distribution":
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Distribution"
-                    title="Distribution"
-                    body="Describe what you sell and where you want it sold. Discovery finds importers, distributors, wholesalers and retail accounts, researches each one with sourced evidence, and scores the fit. Then run every relationship through stages to a signed agreement."
-                    bullets={[
-                        "Programs: your offering, territories and the kinds of partner you want",
-                        "Discovery runs: evidence-backed dossiers published into Sources, with a fit score per candidate",
-                        "Pipeline: stages with rules, next actions, agreements, and a coverage map by territory",
+                        "Brand: Compose, Calendar, Campaigns, Accounts — LinkedIn, X, Bluesky and Reddit",
+                        "Prospects: Segment, Companies with cited profiles and fit, People, Deals, Runs, Sources",
                         "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
+                        "Everything is grounded in the same company knowledge",
                     ]}
-                    href={feature.href ?? "/employer/tools/distribution"}
-                    ctaLabel="Open Distribution"
+                    href={feature.href ?? "/employer/tools/growth"}
+                    ctaLabel="Open Growth"
                 />
             );
         default:

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history, including workspace sessions and Google Drive document origins; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables. Chat history persists the same filtered source context used for retrieval, keeping Call Notes out of the workspace's selected-source context.
 - **PR reconciliation and scope audit** — Merged current Gmail, settings, and Prospects changes without losing Call Notes; reconciled migration snapshots without rewriting applied SQL; preserved command-palette Settings deep links when leaving Calls. Removed incidental generated pipeline output changes, unused capture-worker settings/database credentials, its unused direct database dependency, and an unused fixture collection. CI now runs capture-worker tests on Node 24 while the web capture integration test remains compatible with the web application's Node 20 runtime.
+- **Studio tabs reconciliation** — Merged main's tabbed Studio, split columns, context-menu layer, and lucide icon set without losing Call Notes. Calls is a Studio tab whose `?feature=calls&call=` URL follows tab focus, tab close, and browser history; Call Notes open in Calls from the rail, the palette, `?source=` links, and "Open to the side", and never enter chat context. `?source=` deep links are no longer dropped while the session is still resolving. Calls styles use the font tokens. Main's three migrations follow the Call Notes migrations in the journal, and their snapshots carry the Call Notes tables so the next generate emits no drops.
 - **Calls redirect build compatibility** — The `/calls` page now uses the required Next.js page-props signature while retaining its workspace/deep-link redirect behavior.
 - **Call title renaming** — Removed the purple outline during inline title editing; text selection remains visible, and keyboard focus is still indicated before editing.
 - **AI proposal review notice** — Kept the subtle highlighted container with a uniform border; removed the thick left accent. Accepted notes do not show a review banner.
@@ -34,6 +35,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Tiptap Call Notes** — Owner-only rich-text note editing with double-click inline title renaming, a sticky formatting toolbar, JSON/Markdown autosave through the existing revisioned note command, stable polling, explicit conflict recovery, and idempotent retries. Read-only and private-note boundaries remain intact.
 - **Chronological AI enhancement** — Call summaries now use short, discussion-driven topic headings and concise Markdown bullets instead of paragraphs or fixed appendices. The prompt prioritizes key points and removes filler and repetition while preserving user-note ideas, paraphrased inline with Markdown bold as an intuitive citation cue. The editor preserves bold through review, editing, acceptance, and reload; structured evidence metadata and the existing acceptance flow remain intact.
 - **Live AI note previews** — Enhanced note Markdown now arrives during model generation through an authenticated, reconnectable SSE observer backed by bounded durable preview storage. Manual and automatic enrichment retain final schema/provenance validation and explicit acceptance; provisional text never changes the saved note.
+- **Split the workspace centre** - columns side by side, each its own strip of
+  tabs
+  - Chat beside a document, or chat beside a tool beside a document, up to
+    three columns with a draggable divider
+  - "Open to the side" on any source; "Split to the right" on a tab or from
+    the strip; drag a tab from one column into another
+  - A pane moved between columns keeps its draft, scroll and undo — it is the
+    same pane, not a rebuilt one
+  - New bindings in Settings → Shortcuts: split (⌘⌥\), focus the next or
+    previous column (⌘⌥] and ⌘⌥[), close the current app (⌘⌥W)
+  - The palette, Studio and avatar controls move into the tab strip, where
+    they are drawn once however the centre is split
+  - The document viewer folds its versions and notes rail into a Details
+    panel once its column is too narrow for both
+- **Studio apps open in centre tabs** - the workspace centre is a tab strip
+  rather than one pane at a time
+  - Open, close, middle-click close, drag to reorder, Alt+Arrow to reorder,
+    Delete or Backspace to close, overflow scroll, and an empty-workspace state
+  - Every open pane stays mounted, so switching apps keeps drafts, scroll
+    position and undo history
+  - Claude Artifacts and Coding sessions now open inside the workspace instead
+    of navigating away; both keep their standalone routes for direct links
+  - The Studio drawer is a picker: it no longer hosts panes, and the Expand
+    button is gone because there is nothing left to expand into
+  - A mindmap in a background tab, or behind a source preview, no longer
+    consumes keyboard and paste events
+  - `?feature=workflows`, `?feature=analytics` and `?feature=metadata` open
+    their panes again instead of showing "Unknown feature"
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing

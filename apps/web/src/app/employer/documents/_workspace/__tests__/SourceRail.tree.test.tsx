@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { ContextMenuProvider } from "~/components/context-menu";
 import { SourceRail } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -45,22 +46,24 @@ function Harness(props: HarnessProps) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
     return (
-        <SourceRail
-            sources={SOURCES}
-            folders={FOLDERS}
-            selected={selected}
-            setSelected={setSelected}
-            onOpenAdd={jest.fn()}
-            onNewFolder={props.onNewFolder ?? jest.fn()}
-            onRenameFolder={props.onRenameFolder ?? jest.fn()}
-            onMoveFolder={props.onMoveFolder ?? jest.fn()}
-            onDeleteFolder={props.onDeleteFolder ?? jest.fn()}
-            onMoveToFolder={props.onMoveToFolder ?? jest.fn()}
-            activeFolder={activeFolder}
-            setActiveFolder={setActiveFolder}
-            activeTag={activeTag}
-            setActiveTag={setActiveTag}
-        />
+        <ContextMenuProvider>
+            <SourceRail
+                sources={SOURCES}
+                folders={FOLDERS}
+                selected={selected}
+                setSelected={setSelected}
+                onOpenAdd={jest.fn()}
+                onNewFolder={props.onNewFolder ?? jest.fn()}
+                onRenameFolder={props.onRenameFolder ?? jest.fn()}
+                onMoveFolder={props.onMoveFolder ?? jest.fn()}
+                onDeleteFolder={props.onDeleteFolder ?? jest.fn()}
+                onMoveToFolder={props.onMoveToFolder ?? jest.fn()}
+                activeFolder={activeFolder}
+                setActiveFolder={setActiveFolder}
+                activeTag={activeTag}
+                setActiveTag={setActiveTag}
+            />
+        </ContextMenuProvider>
     );
 }
 
@@ -144,10 +147,9 @@ describe("SourceRail folder tree", () => {
         expect(onMoveToFolder).toHaveBeenCalledWith("d3", "Contracts/2026");
     });
 
-    it("scopes the rail to a folder and asks for subfolders inside it", async () => {
+    it("scopes the rail to a folder, showing only what lives inside it", async () => {
         const user = userEvent.setup();
-        const onNewFolder = jest.fn();
-        render(<Harness onNewFolder={onNewFolder} />);
+        render(<Harness />);
 
         await user.click(screen.getByTestId("folder-menu-Contracts"));
         await user.click(await screen.findByTestId("context-menu-item-open-folder"));
@@ -156,8 +158,5 @@ describe("SourceRail folder tree", () => {
         expect(screen.queryByTestId("source-row-d3")).not.toBeInTheDocument();
         expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
         expect(screen.getByTestId("folder-row-Contracts/2026")).toBeInTheDocument();
-
-        await user.click(screen.getByTestId("source-rail-new-folder"));
-        expect(onNewFolder).toHaveBeenCalledWith("Contracts");
     });
 });

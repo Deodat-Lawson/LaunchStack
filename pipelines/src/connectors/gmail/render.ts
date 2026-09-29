@@ -78,14 +78,20 @@ export function htmlToText(html: string): string {
         .replace(/<(script|style|head|title)[\s\S]*?<\/\1>/gi, "")
         .replace(/<blockquote[^>]*>[\s\S]*?<\/blockquote>/gi, "")
         .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<\/(p|div|tr|li|h[1-6]|blockquote|pre|table|section|article|header|footer)>/gi, "\n")
+        .replace(
+            /<\/(p|div|tr|li|h[1-6]|blockquote|pre|table|section|article|header|footer)>/gi,
+            "\n"
+        )
         .replace(/<(li)[^>]*>/gi, "- ")
-        .replace(/<a\s[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, (_m, href: string, label: string) => {
-            const plain = label.replace(/<[^>]+>/g, "").trim();
-            if (!plain) return "";
-            if (!href || href.startsWith("mailto:") || plain === href) return plain;
-            return `${plain} (${href})`;
-        })
+        .replace(
+            /<a\s[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi,
+            (_m, href: string, label: string) => {
+                const plain = label.replace(/<[^>]+>/g, "").trim();
+                if (!plain) return "";
+                if (!href || href.startsWith("mailto:") || plain === href) return plain;
+                return `${plain} (${href})`;
+            }
+        )
         .replace(/<[^>]+>/g, "");
     text = decodeEntities(text);
     return text
@@ -149,7 +155,10 @@ export function stripQuotedReply(text: string): string {
     if (lastContent < lines.length - 1) {
         cut = lastContent + 1;
         const introducer = lines[lastContent] ?? "";
-        if (/^On .+wrote:\s*$/i.test(introducer.trim()) || /^Le .+a écrit\s*:\s*$/i.test(introducer.trim())) {
+        if (
+            /^On .+wrote:\s*$/i.test(introducer.trim()) ||
+            /^Le .+a écrit\s*:\s*$/i.test(introducer.trim())
+        ) {
             cut = lastContent;
         }
     }
@@ -158,7 +167,10 @@ export function stripQuotedReply(text: string): string {
         /^-{2,}\s*(Original Message|Forwarded message|Mensaje original)\s*-{2,}$/i.test(line.trim())
     );
     if (separator > 0) kept = kept.slice(0, separator);
-    return kept.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    return kept
+        .join("\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
 }
 
 export function isDraft(message: GmailMessage): boolean {

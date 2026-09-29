@@ -13,6 +13,9 @@ import {
     Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildArtifactMenuItems } from "./artifactContextMenu";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -40,8 +43,16 @@ import { ArtifactPreview, SourceView } from "./ArtifactPreview";
  * header. The title renames inline (Enter or blur saves); everything else is a
  * PATCH with a toast.
  */
-export function ArtifactViewer({ id }: { id: number }) {
+export function ArtifactViewer({
+    id,
+    onBack,
+}: {
+    id: number;
+    /** Supplied by a host that owns the gallery — the Studio tab swaps back. */
+    onBack?: () => void;
+}) {
     const router = useRouter();
+    const backToGallery = () => (onBack ? onBack() : router.push("/employer/artifacts"));
     const [artifact, setArtifact] = useState<ArtifactDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [missing, setMissing] = useState(false);
@@ -117,11 +128,54 @@ export function ArtifactViewer({ id }: { id: number }) {
         try {
             await deleteArtifact(id);
             toast.success("Moved to trash");
-            router.push("/employer/artifacts");
+            backToGallery();
         } catch {
             toast.error("Couldn't delete the artifact");
         }
     };
+
+    /** The whole viewer is one target: the header's verbs, reachable from anywhere in it. */
+    const viewerTarget = useContextTarget(
+        artifact
+            ? {
+                  kind: "artifact",
+                  id: String(artifact.id),
+                  label: `Actions for ${artifact.title}`,
+                  data: artifact,
+                  items: () =>
+                      buildArtifactMenuItems(artifact, {
+                          onOpenInNewTab: () =>
+                              window.open(
+                                  `/employer/artifacts/${artifact.id}`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                              ),
+                          onToggleStar: () =>
+                              void patch(
+                                  { starred: !artifact.starred },
+                                  "Couldn't change the star"
+                              ),
+                          onDownload: () =>
+                              window.open(`/api/artifacts/${artifact.id}/raw`, "_blank"),
+                          onCopyLink: () => {
+                              void copyText(window.location.href).then(ok => {
+                                  if (ok) toast.success("Link copied");
+                              });
+                          },
+                          onCopySource: () => void copySource(),
+                          onOpenOriginal: () => {
+                              if (artifact.sourceUrl) {
+                                  window.open(artifact.sourceUrl, "_blank", "noopener,noreferrer");
+                              }
+                          },
+                          folders,
+                          onMoveToFolder: folder =>
+                              void patch({ folder }, "Couldn't move the artifact"),
+                          onTrash: () => void trash(),
+                      }),
+              }
+            : null
+    );
 
     if (loading) {
         return (
@@ -135,11 +189,7 @@ export function ArtifactViewer({ id }: { id: number }) {
         return (
             <div className="flex h-full flex-col items-center justify-center gap-3">
                 <p className="text-ink-2 text-[14px]">That artifact doesn&apos;t exist anymore.</p>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => router.push("/employer/artifacts")}
-                >
+                <Button variant="outline" size="sm" onClick={() => backToGallery()}>
                     <ArrowLeft className="size-3.5" />
                     Back to artifacts
                 </Button>
@@ -150,13 +200,13 @@ export function ArtifactViewer({ id }: { id: number }) {
     const meta = artifactTypeMeta(artifact.artifactType);
 
     return (
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col" {...viewerTarget}>
             <header className="border-line bg-panel flex flex-wrap items-center gap-2 border-b px-4 py-2.5">
                 <Button
                     variant="ghost"
                     size="sm"
                     className="h-8 gap-1.5"
-                    onClick={() => router.push("/employer/artifacts")}
+                    onClick={() => backToGallery()}
                 >
                     <ArrowLeft className="size-3.5" />
                     Artifacts

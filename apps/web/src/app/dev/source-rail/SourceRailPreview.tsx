@@ -267,6 +267,7 @@ export function SourceRailPreview() {
                         );
                         setOpened(`delete-session:${id}`);
                     },
+                    onDeleteRun: () => undefined,
                     onRefresh: () => setOpened("refresh-history"),
                 }}
             />

@@ -81,7 +81,7 @@ export function RewritePreviewPanel({
                         }}
                     >
                         Rewrite{" "}
-                        <em className={s.serif} style={{ fontSize: 20, fontWeight: 400 }}>
+                        <em className={s.accentWord} style={{ fontStyle: "normal" }}>
                             preview
                         </em>
                     </h1>

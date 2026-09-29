@@ -102,7 +102,10 @@ export interface AttachmentPolicy {
 }
 
 /** Why an attachment will not be ingested, or null when it will. */
-export function attachmentExclusion(ref: GmailAttachmentRef, policy: AttachmentPolicy): string | null {
+export function attachmentExclusion(
+    ref: GmailAttachmentRef,
+    policy: AttachmentPolicy
+): string | null {
     const allow = policy.mimeAllowlist ?? DEFAULT_ATTACHMENT_MIME_ALLOWLIST;
     const extension = attachmentExtension(ref);
     const mime = extension ? (MIME_BY_EXTENSION[extension] ?? ref.mimeType) : ref.mimeType;
@@ -140,7 +143,8 @@ export function toAttachmentDiscoveredItem(
 ): DiscoveredKnowledgeItem {
     const extension = attachmentExtension(ref) ?? "";
     const base = safeFilename(ref.filename);
-    const title = extension && !base.toLowerCase().endsWith(extension) ? `${base}${extension}` : base;
+    const title =
+        extension && !base.toLowerCase().endsWith(extension) ? `${base}${extension}` : base;
     return {
         sourceId: attachmentSourceId(threadId, ref),
         connectorId: GMAIL_CONNECTOR_ID,
@@ -302,7 +306,11 @@ export async function collectGmailAttachment(
         }
         return {
             kind: "skipped",
-            value: { sourceId: discovered.sourceId, reason: "unreadable", detail: describeError(error) },
+            value: {
+                sourceId: discovered.sourceId,
+                reason: "unreadable",
+                detail: describeError(error),
+            },
         };
     }
 

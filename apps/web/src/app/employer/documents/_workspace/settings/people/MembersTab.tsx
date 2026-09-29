@@ -3,7 +3,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { buildMemberMenuItems, type MemberMenuHandlers } from "./peopleContextMenu";
 
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -67,6 +71,45 @@ const FALLBACK_ROLES: RoleOption[] = INVITABLE_BUILTIN_ROLES.map(slug => ({
     name: ROLE_LABELS[slug],
     assignable: true,
 }));
+
+/** A member row: the role picker and the "⋯" menu, reachable by right-click. */
+function MemberRow({
+    member,
+    roles,
+    roleEditable,
+    canManage,
+    canTransfer,
+    busy,
+    handlers,
+    children,
+}: {
+    member: Member;
+    roles: RoleOption[];
+    roleEditable: boolean;
+    canManage: boolean;
+    canTransfer: boolean;
+    busy: boolean;
+    handlers: MemberMenuHandlers;
+    children: React.ReactNode;
+}) {
+    const ctxTarget = useContextTarget({
+        kind: "member",
+        id: String(member.id),
+        label: `Actions for ${member.name || member.email}`,
+        data: member,
+        items: () =>
+            buildMemberMenuItems(
+                member,
+                { roles, roleEditable, canManage, canTransfer, owner: isOwner(member), busy },
+                handlers
+            ),
+    });
+    return (
+        <TableRow {...ctxTarget} className="hover:bg-panel-2/30">
+            {children}
+        </TableRow>
+    );
+}
 
 function isOwner(member: Member): boolean {
     return normalizeRoleSlug(member.role) === "owner";
@@ -264,20 +307,76 @@ export function MembersTab({ can }: MembersTabProps) {
                                     const owner = isOwner(member);
                                     const roleEditable = canManage && !member.isSelf && !owner;
                                     return (
-                                        <TableRow key={member.id} className="hover:bg-panel-2/30">
+                                        <MemberRow
+                                            key={member.id}
+                                            member={member}
+                                            roles={roleOptionsFor(member)}
+                                            roleEditable={roleEditable}
+                                            canManage={canManage}
+                                            canTransfer={canTransfer}
+                                            busy={busy}
+                                            handlers={{
+                                                onChangeRole: role => changeRole(member, role),
+                                                onCopyEmail: () => {
+                                                    void copyText(member.email).then(ok => {
+                                                        if (ok) toast.success("Email copied");
+                                                    });
+                                                },
+                                                onApprove: () =>
+                                                    void patch(
+                                                        member,
+                                                        { status: "active" },
+                                                        `${member.name} can now open the workspace`
+                                                    ),
+                                                onReinstate: () =>
+                                                    void patch(
+                                                        member,
+                                                        { status: "active" },
+                                                        `${member.name}'s access is back`
+                                                    ),
+                                                onSuspend: () =>
+                                                    setPending({ kind: "suspend", member }),
+                                                onTransfer: () =>
+                                                    setPending({ kind: "transfer", member }),
+                                                onRemove: () =>
+                                                    setPending({ kind: "remove", member }),
+                                            }}
+                                        >
                                             <TableCell>
-                                                <div className="flex min-w-0 flex-col">
-                                                    <span className="text-ink flex items-center gap-2 font-medium">
-                                                        <span className="truncate">
-                                                            {member.name || member.email}
+                                                <div className="flex min-w-0 items-center gap-3">
+                                                    <ProfileAvatar
+                                                        name={member.displayName}
+                                                        email={member.email}
+                                                        src={member.avatarUrl}
+                                                    />
+                                                    <div className="flex min-w-0 flex-col">
+                                                        <span className="text-ink flex items-center gap-2 font-medium">
+                                                            <span
+                                                                className="truncate"
+                                                                title={
+                                                                    member.displayName !==
+                                                                    member.name
+                                                                        ? member.name
+                                                                        : undefined
+                                                                }
+                                                            >
+                                                                {member.displayName}
+                                                            </span>
+                                                            {member.pronouns && (
+                                                                <span className="text-ink-3 shrink-0 text-xs font-normal">
+                                                                    {member.pronouns}
+                                                                </span>
+                                                            )}
+                                                            {member.isSelf && (
+                                                                <Badge variant="outline">You</Badge>
+                                                            )}
                                                         </span>
-                                                        {member.isSelf && (
-                                                            <Badge variant="outline">You</Badge>
-                                                        )}
-                                                    </span>
-                                                    <span className="text-ink-3 truncate text-xs">
-                                                        {member.email}
-                                                    </span>
+                                                        <span className="text-ink-3 truncate text-xs">
+                                                            {member.title
+                                                                ? `${member.title} · ${member.email}`
+                                                                : member.email}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
@@ -366,7 +465,7 @@ export function MembersTab({ can }: MembersTabProps) {
                                                     />
                                                 )}
                                             </TableCell>
-                                        </TableRow>
+                                        </MemberRow>
                                     );
                                 })}
                             </TableBody>

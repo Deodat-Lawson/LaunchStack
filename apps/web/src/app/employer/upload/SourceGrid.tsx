@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Upload, Github, ClipboardPaste, Globe, Youtube, type LucideIcon } from "lucide-react";
+import { Upload, ClipboardPaste, Globe } from "lucide-react";
+import { IconGithub, IconYoutube } from "~/components/icons/brand";
+import type { IconComponent } from "~/components/icons/types";
 
 export type SourceType = "github" | "paste" | "website" | "youtube";
 
@@ -12,7 +14,7 @@ interface SourceGridProps {
 }
 
 interface CardProps {
-    Icon: LucideIcon;
+    Icon: IconComponent;
     iconColor?: string;
     title: string;
     subtitle: string;
@@ -50,7 +52,7 @@ function SourceCard({
                 fontFamily: "inherit",
             }}
         >
-            <Icon size={22} color={iconColor} />
+            <Icon size={22} style={{ color: iconColor }} />
             <span
                 style={{
                     fontSize: 13.5,
@@ -111,7 +113,7 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
             </SourceCard>
 
             <SourceCard
-                Icon={Github}
+                Icon={IconGithub}
                 iconColor="var(--ink)"
                 title="GitHub repo"
                 subtitle="Clone & index a repository"
@@ -134,7 +136,7 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
             />
 
             <SourceCard
-                Icon={Youtube}
+                Icon={IconYoutube}
                 iconColor="oklch(0.58 0.2 25)"
                 title="YouTube & video"
                 subtitle="Transcribe a video URL"

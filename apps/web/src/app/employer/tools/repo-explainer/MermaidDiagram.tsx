@@ -1,5 +1,8 @@
 "use client";
 
+import { useContextTarget } from "~/components/context-menu";
+import { copyText } from "~/lib/context-menu";
+import { resolveFontStack } from "~/lib/fonts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Image as ImageIcon } from "lucide-react";
 
@@ -37,6 +40,33 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
     const isDark = useDarkMode();
 
     const filePrefix = repoName ? sanitizeFilename(repoName) + "-diagram" : "diagram";
+    const ctxTarget = useContextTarget({
+        kind: "diagram",
+        label: "Diagram actions",
+        items: () => [
+            {
+                type: "item",
+                id: "copy-source",
+                label: "Copy the Mermaid source",
+                icon: "code",
+                onSelect: () => {
+                    void copyText(code);
+                },
+            },
+            {
+                type: "item",
+                id: "copy-svg",
+                label: "Copy as SVG",
+                icon: "image",
+                disabled: !containerRef.current?.querySelector("svg"),
+                disabledReason: "The diagram has not rendered yet.",
+                onSelect: () => {
+                    const svg = containerRef.current?.querySelector("svg");
+                    if (svg) void copyText(svg.outerHTML);
+                },
+            },
+        ],
+    });
 
     useEffect(() => {
         if (!code.trim()) {
@@ -64,7 +94,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                               lineColor: "#8b5cf6",
                               secondaryColor: "#4c1d95",
                               tertiaryColor: "#1e1b4b",
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: resolveFontStack("sans"),
                           }
                         : {
                               primaryColor: "#ede9fe",
@@ -73,7 +103,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                               lineColor: "#6d28d9",
                               secondaryColor: "#f5f3ff",
                               tertiaryColor: "#faf5ff",
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: resolveFontStack("sans"),
                           },
                 });
 
@@ -217,7 +247,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                 {loading && (
                     <p className="text-ink-3 py-12 text-center text-sm">Rendering diagram...</p>
                 )}
-                <div ref={containerRef} />
+                <div {...ctxTarget} ref={containerRef} />
             </div>
         </div>
     );

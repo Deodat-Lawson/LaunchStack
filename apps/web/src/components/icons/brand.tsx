@@ -1,15 +1,14 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import type { IconProps } from "./types";
 
 /**
  * Third-party brand marks (lucide-react deprecated its brand glyphs).
  * Everything else comes straight from lucide-react — do not add
- * general-purpose icons here.
+ * general-purpose icons here. Drawn at roughly lucide's stroke weight so the
+ * two sets sit together.
  */
-export interface BrandIconProps {
-    size?: number;
-    style?: CSSProperties;
-    className?: string;
-}
+export type BrandIconProps = IconProps;
 
 interface IcProps extends BrandIconProps {
     children: ReactNode;

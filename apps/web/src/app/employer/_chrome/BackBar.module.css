@@ -1,0 +1,49 @@
+/* Height lives in DriftShell.module.css as --drift-backbar-h: the immersive
+   shells subtract it from 100dvh, so the bar and the page cannot both claim
+   the viewport. Changing it here alone would push those shells off-screen. */
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--drift-backbar-h);
+    flex-shrink: 0;
+    padding-inline: 12px;
+    /* No strip of its own: on a page without a sidebar the way back is a
+       button at the page's top-left, like the preview's "‹ Library", not a
+       band across the screen. */
+    background: transparent;
+    font-size: 12.5px;
+    /* Above a tool's own sticky rail, which would otherwise scroll over it. */
+    position: relative;
+    z-index: 30;
+}
+
+.trail {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--ink-3);
+    /* The trail is context, not navigation — it yields before the control. */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sep {
+    color: var(--line-2);
+}
+
+@media (max-width: 560px) {
+    /* On a phone the destination is what matters; the trail is the first thing
+       that can go. */
+    .trail {
+        display: none;
+    }
+}

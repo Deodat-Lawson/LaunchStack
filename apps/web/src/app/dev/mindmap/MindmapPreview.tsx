@@ -18,6 +18,8 @@ import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_min
  * The full list is in `_mindmap/model/template-meta.ts`. `?view=preview` mounts
  * the read-only preview the workspace viewer uses instead of the editor — same
  * canvas, no chrome, so a layout bug in one shows up in the other.
+ * `?chrome=focus|everything` overrides the chrome depth the document's kind
+ * would pick (see the mindmap README, "Chrome depths").
  */
 
 /**
@@ -70,6 +72,11 @@ export function MindmapPreview() {
 
     const preview = query?.get("view") === "preview";
     const template = query ? (query.get("template") ?? "mindmap") : null;
+    // The document's kind picks the chrome depth (a mindmap opens in focus,
+    // a flowchart in everything); `?chrome=focus|everything` overrides it.
+    const chromeParam = query?.get("chrome");
+    const chrome =
+        chromeParam === "focus" || chromeParam === "everything" ? chromeParam : undefined;
 
     const doc = useMemo(
         () => (template ? buildTemplate(template, "Preview mindmap") : null),
@@ -91,6 +98,7 @@ export function MindmapPreview() {
                             folder="Preview"
                             publishedDocumentId={null}
                             author="Preview user"
+                            initialChrome={chrome}
                         />
                     )}
                 </ToolsStudioShell>

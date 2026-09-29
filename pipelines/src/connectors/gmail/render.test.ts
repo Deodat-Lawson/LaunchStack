@@ -66,7 +66,13 @@ describe("htmlToText", () => {
 
 describe("extractMessageBody", () => {
     it("prefers text/plain, falls back to html", () => {
-        const both = message({ id: "m", from: "a@x", date: "2026-09-01", text: "plain", html: "<b>html</b>" });
+        const both = message({
+            id: "m",
+            from: "a@x",
+            date: "2026-09-01",
+            text: "plain",
+            html: "<b>html</b>",
+        });
         expect(extractMessageBody(both.payload)).toEqual({ text: "plain", source: "text" });
         const only = message({ id: "m", from: "a@x", date: "2026-09-01", html: "<b>html</b>" });
         expect(extractMessageBody(only.payload)).toEqual({ text: "html", source: "html" });
@@ -87,9 +93,13 @@ describe("extractMessageBody", () => {
 
 describe("stripQuotedReply", () => {
     it("removes the trailing quote and its introducer, keeps the reply", () => {
-        const text = ["Thanks, sounds good.", "", "On Mon, Sep 1, 2026 Ada wrote:", "> original", "> more"].join(
-            "\n"
-        );
+        const text = [
+            "Thanks, sounds good.",
+            "",
+            "On Mon, Sep 1, 2026 Ada wrote:",
+            "> original",
+            "> more",
+        ].join("\n");
         expect(stripQuotedReply(text)).toBe("Thanks, sounds good.");
     });
 

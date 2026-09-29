@@ -103,8 +103,7 @@ export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
                         ...inputStyle,
                         minHeight: 260,
                         resize: "vertical",
-                        fontFamily:
-                            "ui-monospace, SFMono-Regular, Menlo, Consolas, 'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-mono)",
                         fontSize: 13,
                         lineHeight: 1.55,
                     }}

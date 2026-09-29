@@ -61,7 +61,7 @@ export function AuthBrandPanel({
                     {tagline}
                 </div>
                 <h2
-                    className="serif"
+                    className="display"
                     style={{
                         fontSize: 44,
                         lineHeight: 1.05,

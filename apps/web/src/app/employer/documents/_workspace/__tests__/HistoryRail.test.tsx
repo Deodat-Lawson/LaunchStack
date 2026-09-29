@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
+import { ContextMenuProvider } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "../HistoryRail";
 
 /**
@@ -64,11 +65,16 @@ function setup(over: Partial<HistoryRailProps> = {}) {
         onResumeSession: jest.fn(),
         onOpenRun: jest.fn(),
         onRenameSession: jest.fn(),
+        onDeleteRun: jest.fn(),
         onDeleteSession: jest.fn(),
         onRefresh: jest.fn(),
         ...over,
     };
-    render(<HistoryRail {...props} />);
+    render(
+        <ContextMenuProvider>
+            <HistoryRail {...props} />
+        </ContextMenuProvider>
+    );
     return props;
 }
 
@@ -99,6 +105,54 @@ describe("HistoryRail", () => {
         fireEvent.click(screen.getByTestId("history-row-distribution:r1"));
         expect(props.onOpenRun).toHaveBeenCalledWith(RUN);
         expect(props.onResumeSession).not.toHaveBeenCalled();
+    });
+
+    /**
+     * Runs used to offer only "Open", and a run with no surface offered
+     * nothing at all — so a partner discovery sat in the sidebar forever with
+     * no way to remove it.
+     */
+    describe("deleting a run", () => {
+        function openMenuOn(testId: string) {
+            fireEvent.contextMenu(screen.getByTestId(testId));
+        }
+
+        it("offers a delete on a run", async () => {
+            setup();
+            openMenuOn("history-row-distribution:r1");
+            expect(await screen.findByText("Delete…")).toBeInTheDocument();
+        });
+
+        it("offers a delete even when there is no surface to open", async () => {
+            setup();
+            openMenuOn("history-row-trend-search:t1");
+            expect(await screen.findByText("Delete…")).toBeInTheDocument();
+            expect(screen.queryByText("Open")).not.toBeInTheDocument();
+        });
+
+        it("asks in the app before deleting, and passes the whole entry", async () => {
+            const props = setup();
+            openMenuOn("history-row-distribution:r1");
+            fireEvent.click(await screen.findByText("Delete…"));
+
+            // An in-app dialog, not window.confirm: embedded web views
+            // suppress the native one, which made delete look broken.
+            expect(await screen.findByTestId("confirm-dialog")).toBeInTheDocument();
+            expect(props.onDeleteRun).not.toHaveBeenCalled();
+
+            fireEvent.click(screen.getByTestId("confirm-accept"));
+            // The whole entry: the caller needs the kind as well as the id.
+            expect(props.onDeleteRun).toHaveBeenCalledWith(RUN);
+        });
+
+        it("deletes nothing when the dialog is dismissed", async () => {
+            const props = setup();
+            openMenuOn("history-row-distribution:r1");
+            fireEvent.click(await screen.findByText("Delete…"));
+            fireEvent.click(await screen.findByTestId("confirm-cancel"));
+
+            expect(props.onDeleteRun).not.toHaveBeenCalled();
+        });
     });
 
     it("does nothing when a run has no surface to open", () => {

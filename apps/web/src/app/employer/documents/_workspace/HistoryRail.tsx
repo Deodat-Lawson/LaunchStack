@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState, type CSSProperties } from "react";
+import React, { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
     CalendarDays,
     GitBranch,
@@ -26,7 +26,9 @@ import {
     type HistoryKindMeta,
 } from "~/lib/workspace-history";
 
-import { ContextMenu, type SourceContextMenuItem } from "./ContextMenu";
+import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
+import { useActionMenu, useContextTarget } from "~/components/context-menu";
 
 /**
  * The History tab of the source rail: chats you can pick back up and pipeline
@@ -39,7 +41,7 @@ import { ContextMenu, type SourceContextMenuItem } from "./ContextMenu";
  * it, and a link that goes nowhere would be worse than no link.
  */
 
-const KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
+export const HISTORY_KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
     chat: MessageSquare,
     globe: Globe,
     "map-pin": MapPin,
@@ -64,6 +66,8 @@ export interface HistoryRailProps {
     onOpenRun: (entry: HistoryEntry) => void;
     onRenameSession: (sessionId: string, title: string) => void;
     onDeleteSession: (sessionId: string) => void;
+    /** Delete a pipeline run. Absent for kinds whose rows cannot be removed. */
+    onDeleteRun: (entry: HistoryEntry) => void;
     onRefresh: () => void;
 }
 
@@ -73,7 +77,8 @@ interface RowProps {
     renaming: boolean;
     now: Date;
     onOpen: () => void;
-    onOpenMenu: (point: { clientX: number; clientY: number }) => void;
+    /** The row's actions, built fresh when the menu opens. */
+    menuItems: () => ActionMenuItem[];
     onCommitRename: (title: string) => void;
     onCancelRename: () => void;
 }
@@ -84,14 +89,23 @@ function HistoryRow({
     renaming,
     now,
     onOpen,
-    onOpenMenu,
+    menuItems,
     onCommitRename,
     onCancelRename,
 }: RowProps) {
     const [hover, setHover] = useState(false);
     const [focused, setFocused] = useState(false);
+    const menu = useActionMenu();
+    const menuLabel = `Actions for ${entry.title}`;
+    const ctxTarget = useContextTarget({
+        kind: "history-entry",
+        id: entry.id,
+        label: menuLabel,
+        data: entry,
+        items: menuItems,
+    });
     const meta = HISTORY_KIND_META[entry.kind];
-    const Icon = KIND_ICONS[meta.icon];
+    const Icon = HISTORY_KIND_ICONS[meta.icon];
     // A row only opens something when there is something to open: a chat
     // always resumes, a run needs a surface.
     const openable = meta.resumable || Boolean(entry.href);
@@ -158,6 +172,7 @@ function HistoryRow({
             tabIndex={openable ? 0 : -1}
             aria-current={active ? "true" : undefined}
             data-testid={`history-row-${entry.id}`}
+            {...ctxTarget}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={() => {
@@ -168,10 +183,6 @@ function HistoryRow({
                     e.preventDefault();
                     onOpen();
                 }
-            }}
-            onContextMenu={e => {
-                e.preventDefault();
-                onOpenMenu(e);
             }}
             style={rowStyle}
         >
@@ -256,12 +267,19 @@ function HistoryRow({
                     <button
                         onClick={e => {
                             e.stopPropagation();
-                            onOpenMenu(e);
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            menu.open({
+                                x: rect.right,
+                                y: rect.bottom,
+                                items: menuItems(),
+                                ariaLabel: menuLabel,
+                                kind: "history-entry",
+                            });
                         }}
                         onFocus={() => setFocused(true)}
                         onBlur={() => setFocused(false)}
                         title="Chat actions"
-                        aria-label={`Actions for ${entry.title}`}
+                        aria-label={menuLabel}
                         style={{
                             position: "absolute",
                             right: 0,
@@ -297,10 +315,12 @@ export function HistoryRail({
     onOpenRun,
     onRenameSession,
     onDeleteSession,
+    onDeleteRun,
     onRefresh,
 }: HistoryRailProps) {
-    const [menu, setMenu] = useState<{ x: number; y: number; entry: HistoryEntry } | null>(null);
     const [renamingId, setRenamingId] = useState<string | null>(null);
+    /** The run a delete has been asked for, pending the confirm dialog. */
+    const [pendingDelete, setPendingDelete] = useState<HistoryEntry | null>(null);
     /**
      * One timestamp for the whole render, so every "2h" in the list is
      * measured from the same instant and rows can't disagree.
@@ -313,36 +333,72 @@ export function HistoryRail({
         [entries, query]
     );
 
-    const menuItems = useMemo<SourceContextMenuItem[]>(() => {
-        const entry = menu?.entry;
-        if (!entry) return [];
-        return [
-            { type: "label", id: "title", label: entry.title },
-            {
-                type: "item",
-                id: "open",
-                label: "Open",
-                icon: "open",
-                onSelect: () => onResumeSession(entry.refId),
-            },
-            {
-                type: "item",
-                id: "rename",
-                label: "Rename…",
-                icon: "rename",
-                onSelect: () => setRenamingId(entry.id),
-            },
-            { type: "separator", id: "sep" },
-            {
-                type: "item",
-                id: "delete",
-                label: "Delete chat",
-                icon: "delete",
-                danger: true,
-                onSelect: () => onDeleteSession(entry.refId),
-            },
-        ];
-    }, [menu, onResumeSession, onDeleteSession]);
+    /**
+     * A chat can be reopened, renamed and deleted; a run can only be opened,
+     * and only when it has a surface to open.
+     */
+    const itemsFor = useCallback(
+        (entry: HistoryEntry): ActionMenuItem[] => {
+            if (entry.kind !== "chat") {
+                const items: ActionMenuItem[] = [
+                    { type: "label", id: "title", label: entry.title },
+                ];
+                // A vertical with no surface yet still has a row worth
+                // removing, so the open is conditional and the delete is not.
+                if (entry.href) {
+                    items.push({
+                        type: "item",
+                        id: "open",
+                        label: "Open",
+                        icon: "open",
+                        onSelect: () => onOpenRun(entry),
+                    });
+                    items.push({ type: "separator", id: "sep" });
+                }
+                items.push({
+                    type: "item",
+                    id: "delete",
+                    // The ellipsis promises the confirm that follows, matching
+                    // how the source rail labels its own destructive items.
+                    label: "Delete…",
+                    icon: "delete",
+                    danger: true,
+                    // A run cannot be restored, so it is worth one question —
+                    // asked in the app, since `window.confirm` is suppressed
+                    // outright in embedded web views.
+                    onSelect: () => setPendingDelete(entry),
+                });
+                return items;
+            }
+            return [
+                { type: "label", id: "title", label: entry.title },
+                {
+                    type: "item",
+                    id: "open",
+                    label: "Open",
+                    icon: "open",
+                    onSelect: () => onResumeSession(entry.refId),
+                },
+                {
+                    type: "item",
+                    id: "rename",
+                    label: "Rename…",
+                    icon: "rename",
+                    onSelect: () => setRenamingId(entry.id),
+                },
+                { type: "separator", id: "sep" },
+                {
+                    type: "item",
+                    id: "delete",
+                    label: "Delete chat",
+                    icon: "delete",
+                    danger: true,
+                    onSelect: () => onDeleteSession(entry.refId),
+                },
+            ];
+        },
+        [onResumeSession, onOpenRun, onDeleteSession]
+    );
 
     const totalShown = groups.reduce((sum, group) => sum + group.entries.length, 0);
 
@@ -486,9 +542,7 @@ export function HistoryRail({
                                         ? onResumeSession(entry.refId)
                                         : onOpenRun(entry)
                                 }
-                                onOpenMenu={point =>
-                                    setMenu({ x: point.clientX, y: point.clientY, entry })
-                                }
+                                menuItems={() => itemsFor(entry)}
                                 onCommitRename={title => {
                                     setRenamingId(null);
                                     const trimmed = title.trim();
@@ -536,16 +590,23 @@ export function HistoryRail({
                 )}
             </div>
 
-            {menu && (
-                <ContextMenu
-                    open
-                    x={menu.x}
-                    y={menu.y}
-                    items={menuItems}
-                    ariaLabel={`Actions for ${menu.entry.title}`}
-                    onClose={() => setMenu(null)}
-                />
-            )}
+            <ConfirmDialog
+                open={pendingDelete !== null}
+                onOpenChange={next => {
+                    if (!next) setPendingDelete(null);
+                }}
+                title="Delete this run?"
+                description={
+                    pendingDelete
+                        ? `“${pendingDelete.title}” will be removed from history. This cannot be undone.`
+                        : undefined
+                }
+                onConfirm={() => {
+                    const target = pendingDelete;
+                    setPendingDelete(null);
+                    if (target) onDeleteRun(target);
+                }}
+            />
         </div>
     );
 }

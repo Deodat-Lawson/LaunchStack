@@ -1,0 +1,7 @@
+# Formatting-only commits, skipped by `git blame` so authorship survives.
+# GitHub's blame view reads this file automatically; locally, run once:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# Add a commit here only if it changes no behavior. Full SHAs only.
+
+# style: apply Prettier to source files that landed unformatted
+a2703c674e43dfc83e3661cfad765ea0bc0c5607

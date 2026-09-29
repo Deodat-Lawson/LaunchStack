@@ -2,46 +2,44 @@ import type { NoteVisibility } from "@launchstack/pipelines/call-notes";
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
-// New icons come from lucide-react; `./icons` below is the deprecated legacy
-// set kept for this file's existing entries (see apps/web/README.md).
+// Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
-    Compass as IconDistribution,
+    Bot as IconAgents,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
+    AudioLines as IconAudio,
+    Zap as IconBolt,
+    Building2 as IconBuilding,
+    ChartColumn as IconChart,
+    File as IconFile,
+    FileText as IconNote,
+    Folder as IconFolder,
+    Globe as IconGlobe,
+    HandCoins as IconInvestors,
+    Link as IconLink,
+    Megaphone as IconMegaphone,
+    ClipboardList as IconPaste,
+    Pen as IconPen,
+    Settings as IconSettings,
+    Shield as IconShield,
+    Sparkles as IconSparkle,
+    Users as IconUsers,
+    Video as IconVideo,
+    Workflow as IconWorkflow,
 } from "lucide-react";
-// Brand marks live in the shared icon home, not the legacy set below.
-import { IconGoogleDocs } from "~/components/icons/brand";
-import { IconProspects } from "~/components/icons/prospects";
 import {
-    IconAudio,
-    IconBolt,
-    IconBuilding,
-    IconChart,
+    IconGoogleDocs,
     IconDropbox,
     IconDrive,
-    IconFile,
-    IconFolder,
     IconGithub,
-    IconGlobe,
     IconGmail,
-    IconImage,
-    IconLink,
-    IconMegaphone,
-    IconNote,
     IconNotion,
-    IconPaste,
-    IconPen,
-    IconSettings,
-    IconShield,
     IconSlack,
-    IconSparkle,
-    IconUsers,
-    IconVideo,
-    IconWorkflow,
     IconYoutube,
-    type IconProps,
-} from "./icons";
+} from "~/components/icons/brand";
+import { IconGrowth, IconProspects } from "~/components/icons/prospects";
+import type { IconProps } from "~/components/icons/types";
 
 export type SourceTypeId =
     | "doc"
@@ -112,9 +110,17 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
 };
 
 export interface WorkspaceSource {
-    /** Unique within the UI — DB-backed rows prefix with "d", staged locals with "s", call notes with "call-note:", mindmaps with "m". */
+    /**
+     * Unique within the UI — DB-backed rows prefix with "d", staged locals
+     * with "s", call notes with "call-note:", mindmaps with "m". `sourceApi`
+     * is the one place that switches on the prefix.
+     */
     id: string;
-    /** DB primary key if this source came from the document table. */
+    /**
+     * DB primary key if this source came from the document table. For a
+     * mindmap this is the *published* document, when there is one — the row
+     * the retrieval layer cites — so citations resolve back to the map.
+     */
     documentId?: number;
     /** Call Note identity. Call files intentionally have no documentId and open in Calls. */
     callId?: string;
@@ -126,7 +132,10 @@ export interface WorkspaceSource {
     preview?: string;
     /** Mindmap primary key, for sources of type `mindmap`. */
     mindmapId?: number;
-    /** Extra text the search boxes should match on beyond the title. */
+    /**
+     * Extra text the search boxes should match on beyond the title: a
+     * mindmap's node labels, so "the map with the Postgres box" is findable.
+     */
     searchText?: string;
     /** Image URL for a card preview, when the source has one. */
     thumbnailUrl?: string;
@@ -203,10 +212,21 @@ export interface ThreadMessage {
     refs?: string[];
     citations?: ThreadReference[];
     model?: string;
+    /**
+     * Total LLM tokens for the turn. Named for what it is: this used to be set
+     * from `chunksAnalyzed`, so the UI reported a retrieval count as a token
+     * count and always read far too low.
+     */
     tokens?: number;
+    /** Prompt/completion split, when the endpoint reported one. */
+    tokenBreakdown?: { inputTokens: number; outputTokens: number };
+    /** Retrieved chunks the answer was grounded in — a different number. */
+    chunksAnalyzed?: number;
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];
+    /** The agent that answered (assistant) or was addressed (user). */
+    agent?: ThreadAgent;
 }
 
 /**
@@ -220,6 +240,19 @@ export interface ComposerSend {
     attachments: EphemeralAttachment[];
     webSearch: boolean;
     thinking: boolean;
+    /** The agent this turn is addressed to; null = the workspace's default assistant. */
+    agentKey: string | null;
+}
+
+/** How the transcript attributes an agent's answer. */
+export interface ThreadAgent {
+    key: string;
+    displayName: string;
+    role: string;
+    accent: string | null;
+    avatarUrl?: string | null;
+    /** What the agent's tool policy changed about the turn (web off, etc.). */
+    notes?: string[];
 }
 
 export interface DemotedFeature {
@@ -251,6 +284,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=meetings",
     },
     {
+        id: "agents",
+        label: "Agents",
+        Icon: IconAgents,
+        desc: "The roster: try an agent, edit its instructions, import one",
+        href: "/employer/documents?feature=agents",
+    },
+    {
         id: "draft",
         label: "Draft",
         Icon: IconPen,
@@ -275,14 +315,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=workflows",
     },
     {
-        id: "notes",
-        label: "Notebook",
-        Icon: IconNote,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.notes")!.defaultKeys),
-        desc: "Freeform notes that span every source",
-        href: "/employer/documents?feature=notes",
-    },
-    {
         id: "mindmap",
         label: "New mindmap",
         Icon: IconMindmap,
@@ -304,18 +336,32 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/agent-sessions",
     },
     {
+        id: "growth",
+        label: "Growth",
+        Icon: IconGrowth,
+        desc: "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals",
+        href: "/employer/tools/growth",
+    },
+    {
+        id: "brand",
+        label: "Brand",
+        Icon: IconMegaphone,
+        desc: "Compose once for every network, schedule it, see the calendar, generate campaigns from your documents",
+        href: "/employer/tools/growth/brand",
+    },
+    {
         id: "prospects",
         label: "Prospects",
         Icon: IconProspects,
         desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
-        href: "/employer/tools/prospects",
+        href: "/employer/tools/growth/prospects",
     },
     {
-        id: "distribution",
-        label: "Distribution",
-        Icon: IconDistribution,
-        desc: "Find importers, distributors and retail accounts; run each relationship to a deal",
-        href: "/employer/tools/distribution",
+        id: "investors",
+        label: "Investor relations",
+        Icon: IconInvestors,
+        desc: "Find venture funds raising now, and draft the pitch from your sources",
+        href: "/employer/documents?feature=investors",
     },
     {
         id: "audit",
@@ -375,11 +421,17 @@ export interface StudioFeature {
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
-    /** When true, only visible to employer/owner roles — retained for legacy callers. */
-    companyOnly?: boolean;
-    /** The feature is a separate app with its own route. */
+    /**
+     * The feature is a separate app with its own routes and chrome — Growth,
+     * for instance, whose rail and nested pages cannot be mounted in a tab.
+     * Picking it navigates instead of opening a Studio tab.
+     */
     external?: boolean;
-    /** Permission a person must hold to see this feature. */
+    /**
+     * Permission a person must hold to see this feature. Checked through
+     * `usePermissions().can(...)`, which answers false until loaded — so a
+     * gated tile never flashes for someone who may not open it.
+     */
     requires?: Permission;
 }
 
@@ -418,12 +470,39 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconAudio,
                 desc: "Capture human conversations as notes and channel-labelled transcript evidence",
             },
+            {
+                id: "agents",
+                label: "Agents",
+                Icon: IconAgents,
+                desc: "Who your agents are: try them, edit their instructions, import a definition file",
+            },
         ],
     },
     {
         id: "tools",
         label: "Tools",
         features: [
+            {
+                // One app with its own rail for the whole growth motion: Brand
+                // (compose, schedule, calendar, campaigns, accounts) and Prospects
+                // (segment, companies, people, deals, runs, sources).
+                id: "growth",
+                label: "Growth",
+                Icon: IconGrowth,
+                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
+                href: "/employer/tools/growth",
+                external: true,
+            },
+            {
+                // Second only to Growth: being known, then being funded. Not
+                // `external` — the search and the pitch starters are one pane,
+                // and "Draft in chat" is a move to the chat tab beside it.
+                id: "investors",
+                label: "Investor relations",
+                Icon: IconInvestors,
+                desc: "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources",
+                href: "/employer/documents?feature=investors",
+            },
             {
                 id: "draft",
                 label: "Templated Drafts",
@@ -437,89 +516,23 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Improve existing prose with a diff-first rewrite",
             },
             {
-                id: "notes",
-                label: "Notebook",
-                Icon: IconNote,
-                desc: "Freeform notes that span every source",
-            },
-            {
-                // Not `external`: maps live in the library beside every other
-                // source. Picking this opens the template picker.
-                id: "mindmap",
-                label: "Mindmap",
-                Icon: IconMindmap,
-                desc: "Diagrams, mindmaps and flowcharts — sources you draw",
-                href: "/employer/documents?add=1&tab=mindmap",
-            },
-            {
                 id: "artifacts",
                 label: "Claude Artifacts",
                 Icon: IconArtifact,
                 desc: "Import pages and diagrams built in Claude, and manage them here",
+                // Not `external`: the gallery and viewer are plain client
+                // components, so Studio mounts them in a tab. The route stays
+                // for direct links and for opening one in a browser tab.
                 href: "/employer/artifacts",
-                external: true,
             },
             {
                 id: "agent-sessions",
                 label: "Coding sessions",
                 Icon: IconSessions,
                 desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
+                // Not `external`, like Artifacts: continuing a session in chat
+                // is a move between two Studio tabs, not a page load.
                 href: "/employer/agent-sessions",
-                external: true,
-            },
-            {
-                id: "workflows",
-                label: "Workflow Generation",
-                Icon: IconWorkflow,
-                desc: "Chain source-aware steps across your sources",
-                comingSoon: true,
-            },
-            {
-                id: "video-gen",
-                label: "Video Generation",
-                Icon: IconVideo,
-                desc: "Generate videos grounded in your knowledge base",
-                comingSoon: true,
-            },
-            {
-                id: "image-gen",
-                label: "Image Generation",
-                Icon: IconImage,
-                desc: "Generate images from prompts grounded in your sources",
-                comingSoon: true,
-            },
-            {
-                id: "audio-gen",
-                label: "Audio Generation",
-                Icon: IconAudio,
-                desc: "Narrate, summarize, or voice-over your content",
-                comingSoon: true,
-            },
-            {
-                id: "marketing",
-                label: "Marketing Pipeline",
-                Icon: IconMegaphone,
-                desc: "Multi-channel campaigns from your company knowledge",
-            },
-            {
-                // A separate app with its own rail: segment, companies, company
-                // pages, people, deals, runs and sources.
-                id: "prospects",
-                label: "Prospects",
-                Icon: IconProspects,
-                desc: "Find the companies that would buy what you sell — cited profiles, fit scores, people to contact, and a deal board",
-                href: "/employer/tools/prospects",
-                external: true,
-            },
-            {
-                // A separate app with its own route (programs, discovery runs,
-                // a pipeline board and a dashboard), like Claude Artifacts.
-                id: "distribution",
-                label: "Distribution",
-                Icon: IconDistribution,
-                desc: "Find importers, distributors and retail accounts for what you sell — evidence-backed dossiers, fit scores, and a pipeline to a signed agreement",
-                href: "/employer/tools/distribution",
-                external: true,
             },
         ],
     },
@@ -536,7 +549,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Settings",
                 Icon: IconSettings,
                 desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
-                companyOnly: true,
                 requires: "settings.manage",
             },
         ],
@@ -552,6 +564,64 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
     });
     return acc;
 }, {});
+
+/**
+ * Panes that are no longer Studio entries but are still reachable by link:
+ * `?feature=metadata` from an old bookmark, `?feature=analytics`, which is where
+ * `SettingsHub` sends `#analytics`, and `workflows`, which keeps a pane, a
+ * palette row and the `feature.workflows` shortcut but no picker tile. Each
+ * renders a real pane; a tab needs a label and an icon, so
+ * `resolveStudioFeature` has to be able to name them.
+ */
+const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
+    // A map is a source, not a tool: it is made from Add knowledge (the
+    // Mindmap tab, or "New mindmap" in ⌘K) and lives in the library beside
+    // every other source. It was also a Studio tile, which made the thing you
+    // draw look like an app you run. The editor still opens as a tab, and a
+    // tab needs a name and an icon, so it is named here.
+    mindmap: {
+        id: "mindmap",
+        label: "Mindmap",
+        Icon: IconMindmap,
+        desc: "Diagrams, mindmaps and flowcharts — sources you draw",
+        href: "/employer/documents?add=1&tab=mindmap",
+    },
+    workflows: {
+        id: "workflows",
+        label: "Workflows",
+        Icon: IconWorkflow,
+        desc: "Automate recurring tasks across your sources",
+    },
+    metadata: {
+        id: "metadata",
+        label: "Company profile",
+        Icon: IconBuilding,
+        desc: "What the workspace knows about your company",
+    },
+    analytics: {
+        id: "analytics",
+        label: "Analytics",
+        Icon: IconChart,
+        desc: "Documents, queries, and activity",
+    },
+};
+
+/**
+ * The one lookup the workspace shell opens a tab from. Every id it accepts
+ * renders a real pane; anything else answers `undefined` and the caller
+ * navigates or does nothing rather than opening a tab with no name.
+ */
+export function resolveStudioFeature(id: string): StudioFeature | undefined {
+    return STUDIO_FEATURES_BY_ID[id] ?? LINK_ONLY_FEATURES[id];
+}
+
+/** Where a palette entry that is not a Studio app points. */
+export function demotedFeatureHref(id: string): string | undefined {
+    const href = DEMOTED_FEATURES.find(f => f.id === id)?.href;
+    // A `?feature=` href would come straight back here; those ids have no
+    // destination beyond this page and are left alone.
+    return href?.startsWith("/employer/documents?feature=") ? undefined : href;
+}
 
 /** Add-source modal tabs, grouped Upload / Connect. */
 export interface AddSourceTab {

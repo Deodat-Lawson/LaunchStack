@@ -130,6 +130,17 @@ export async function POST(
                 );
             }
 
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel({ streaming: true });
+            } catch (modelError) {
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status }
+                );
+            }
+
             const { callId } = await params;
             const companyId = workspace.data.companyId.toString();
             const parsedCall = CallQuerySchema.safeParse({
@@ -164,17 +175,6 @@ export async function POST(
                             "This call exceeds the assistant's current context limit. No note or transcript content was omitted.",
                     },
                     { status: 413 }
-                );
-            }
-
-            let resolved;
-            try {
-                resolved = resolveConfiguredChatModel({ streaming: true });
-            } catch (modelError) {
-                const failure = describeChatResolutionFailure(modelError);
-                return NextResponse.json(
-                    { success: false, message: failure.message },
-                    { status: failure.status }
                 );
             }
 

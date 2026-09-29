@@ -172,6 +172,32 @@ describe("authentication precedes chat resolution", () => {
     });
 });
 
+describe("error handlers do not re-enter chat configuration", () => {
+    /**
+     * A catch block that resolves again to name the model is fine right up until
+     * the thing it is catching *is* a configuration fault — then the second
+     * attempt throws the same error out of the handler meant to report it, and
+     * the caller gets an opaque 500 instead of the explanation.
+     */
+    const handlers = [...sourceFiles("apps/web/src/app/api")].filter(file =>
+        read(file).includes("describeChatError(")
+    );
+
+    it("finds the handlers that describe chat errors", () => {
+        expect(handlers.length).toBeGreaterThan(0);
+    });
+
+    it.each(handlers)("%s resolves the model id before the catch", file => {
+        const source = read(file);
+        for (const match of source.matchAll(/catch\s*\([^)]*\)\s*\{/g)) {
+            const block = source.slice(match.index, match.index + 1200);
+            const nextCatch = block.indexOf("} catch", 1);
+            const body = nextCatch === -1 ? block : block.slice(0, nextCatch);
+            expect(body).not.toMatch(/resolveConfiguredChatRoute\(|resolveConfiguredChatModel\(/);
+        }
+    });
+});
+
 describe("env.ts stays a light import", () => {
     /**
      * `~/env` is imported by nearly every server module and by next.config.ts at

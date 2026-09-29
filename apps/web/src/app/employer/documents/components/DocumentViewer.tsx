@@ -103,15 +103,27 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     unknown: FileText,
 };
 
+/**
+ * Every framed document but a PDF is untrusted: an uploaded web page, a
+ * crawled site, whatever an upload claimed to be. Without `allow-same-origin`
+ * it lands in an opaque origin, and without `allow-scripts` nothing in it
+ * runs, so it can be read but cannot act. `allow-downloads` keeps archives and
+ * CSVs, which the browser downloads rather than displays, working as before.
+ * PDFs are framed bare: Chrome will not open its PDF viewer in a sandbox.
+ */
+const UNTRUSTED_FRAME_SANDBOX = "allow-downloads";
+
 /** Wrapper that shows a loading spinner and error state around an iframe */
 function IframeWithState({
     src,
     title,
     iframeKey,
+    sandbox,
 }: {
     src: string;
     title: string;
     iframeKey?: string | number;
+    sandbox?: string;
 }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -156,6 +168,7 @@ function IframeWithState({
             <iframe
                 key={iframeKey}
                 src={src}
+                sandbox={sandbox}
                 className="h-full w-full border-0"
                 title={title}
                 onLoad={() => setLoading(false)}
@@ -283,16 +296,19 @@ export function DocumentViewer({
                         iframeKey={document.id}
                         src={document.url}
                         title={document.title}
+                        sandbox={UNTRUSTED_FRAME_SANDBOX}
                     />
                 );
             case "unknown":
             default:
-                // Graceful fallback: try iframe (browsers handle PDFs, images, text natively)
+                // Graceful fallback: let the browser try (it renders images and
+                // text natively), sandboxed like any other untrusted frame.
                 return (
                     <IframeWithState
                         iframeKey={document.id}
                         src={document.url}
                         title={document.title}
+                        sandbox={UNTRUSTED_FRAME_SANDBOX}
                     />
                 );
         }

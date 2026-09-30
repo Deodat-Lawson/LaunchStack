@@ -3,7 +3,6 @@ jest.mock("~/server/db", () => ({ db: {} }));
 import {
     embedNoteWithDependencies,
     evaluateEmbeddingFreshness,
-    type CallNoteEmbeddingState,
     type NoteEmbeddingProjection,
     type NoteEmbeddingCleanupResult,
     type NoteEmbeddingSnapshot,
@@ -14,23 +13,9 @@ import type { NoteEmbeddingRuntime } from "~/server/notes/embedding-config";
 
 const NOTE_ID = 77;
 
-function callState(overrides: Partial<CallNoteEmbeddingState> = {}): CallNoteEmbeddingState {
-    return {
-        id: "call-77",
-        companyId: 42n,
-        status: "completed",
-        documentNoteId: NOTE_ID,
-        noteOwnerUserId: "owner-77",
-        noteVisibility: "company",
-        knowledgeIncluded: true,
-        currentNoteRevision: 2,
-        ...overrides,
-    };
-}
-
 function snapshot(
     overrides: Partial<NoteEmbeddingSnapshot["note"]> = {},
-    call: CallNoteEmbeddingState | null = callState()
+    callLinked = false
 ): NoteEmbeddingSnapshot {
     return {
         note: {
@@ -39,7 +24,7 @@ function snapshot(
             companyId: "42",
             documentId: null,
             versionId: null,
-            title: "Canonical Call Note",
+            title: "Canonical note",
             content: null,
             contentMarkdown: "Current accepted note",
             anchor: null,
@@ -47,7 +32,7 @@ function snapshot(
             updatedAt: new Date("2026-08-21T00:02:00.000Z"),
             ...overrides,
         },
-        call,
+        callLinked,
     };
 }
 
@@ -103,11 +88,7 @@ class InMemoryEmbeddingStore implements NoteEmbeddingStore {
             result = evaluateEmbeddingFreshness(expected, this.current);
             if (result === "written") {
                 this.projections = [projection];
-            } else if (
-                result !== "stale" ||
-                expected.call !== null ||
-                this.current?.call !== null
-            ) {
+            } else if (result !== "stale") {
                 this.projections = [];
             }
             return result;
@@ -136,46 +117,32 @@ function runtime(onEmbed?: () => void): NoteEmbeddingRuntime {
     };
 }
 
-describe("Call Note embedding final revalidation", () => {
-    it("does not restore a projection after knowledge inclusion is turned off", async () => {
-        const store = new InMemoryEmbeddingStore(snapshot());
+describe("note embedding final revalidation", () => {
+    it("removes legacy Call Note projections without computing another vector", async () => {
+        const store = new InMemoryEmbeddingStore(snapshot({}, true));
+        const embedQuery = jest.fn();
 
         const result = await embedNoteWithDependencies(NOTE_ID, {
             store,
-            runtime: runtime(() => {
-                if (store.current?.call) store.current.call.knowledgeIncluded = false;
-            }),
+            runtime: { ...runtime(), embeddings: { embedQuery } },
         });
 
         expect(result).toBe("ineligible");
         expect(store.projections).toEqual([]);
+        expect(embedQuery).not.toHaveBeenCalled();
     });
 
-    it("does not restore a projection after visibility becomes private", async () => {
+    it("does not restore a projection if a note becomes Call-linked during embedding", async () => {
         const store = new InMemoryEmbeddingStore(snapshot());
 
         const result = await embedNoteWithDependencies(NOTE_ID, {
             store,
             runtime: runtime(() => {
-                if (store.current?.call) store.current.call.noteVisibility = "private";
+                if (store.current) store.current.callLinked = true;
             }),
         });
 
         expect(result).toBe("ineligible");
-        expect(store.projections).toEqual([]);
-    });
-
-    it("prevents an old Call Note revision from overwriting the current revision", async () => {
-        const store = new InMemoryEmbeddingStore(snapshot());
-
-        const result = await embedNoteWithDependencies(NOTE_ID, {
-            store,
-            runtime: runtime(() => {
-                if (store.current?.call) store.current.call.currentNoteRevision = 3;
-            }),
-        });
-
-        expect(result).toBe("stale");
         expect(store.projections).toEqual([]);
     });
 
@@ -193,76 +160,26 @@ describe("Call Note embedding final revalidation", () => {
         });
 
         expect(result).toBe("stale");
-        expect(store.projections).toEqual([]);
+        expect(store.projections[0]?.content).toBe("previous");
     });
 
     it("preserves ordinary non-Call note embedding behavior", async () => {
-        const store = new InMemoryEmbeddingStore(snapshot({}, null));
+        const store = new InMemoryEmbeddingStore(snapshot());
 
         const result = await embedNoteWithDependencies(NOTE_ID, { store, runtime: runtime() });
 
         expect(result).toBe("written");
         expect(store.projections).toHaveLength(1);
         expect(store.projections[0]).toMatchObject({
-            content: "Canonical Call Note\n\nCurrent accepted note",
+            content: "Canonical note\n\nCurrent accepted note",
             embedding: [1, 2, 3],
             embeddingShort: [1, 2],
             modelVersion: "test-note-model",
         });
     });
 
-    it("serializes concurrent replacements into one effective projection", async () => {
-        const store = new InMemoryEmbeddingStore(snapshot());
-
-        const results = await Promise.all([
-            embedNoteWithDependencies(NOTE_ID, { store, runtime: runtime() }),
-            embedNoteWithDependencies(NOTE_ID, { store, runtime: runtime() }),
-        ]);
-
-        expect(results).toEqual(["written", "written"]);
-        expect(store.projections).toHaveLength(1);
-    });
-
-    it("removes an already projected Call Note when the delayed job starts ineligible", async () => {
-        const store = new InMemoryEmbeddingStore(
-            snapshot({}, callState({ knowledgeIncluded: false }))
-        );
-
-        const result = await embedNoteWithDependencies(NOTE_ID, { store, runtime: runtime() });
-
-        expect(result).toBe("ineligible");
-        expect(store.removeCount).toBe(1);
-        expect(store.projections).toEqual([]);
-    });
-
-    it("does not let stale ineligible cleanup erase a newly eligible projection", async () => {
-        const store = new InMemoryEmbeddingStore(
-            snapshot({}, callState({ knowledgeIncluded: false }))
-        );
-        store.beforeGuardedRemove = () => {
-            if (store.current?.call) store.current.call.knowledgeIncluded = true;
-            store.projections = [
-                {
-                    content: "new eligible projection",
-                    tokenCount: 5,
-                    embedding: [3, 2, 1],
-                    embeddingShort: [3, 2],
-                    modelVersion: "new",
-                },
-            ];
-        };
-
-        const result = await embedNoteWithDependencies(NOTE_ID, { store, runtime: runtime() });
-
-        expect(result).toBe("stale");
-        expect(store.projections).toHaveLength(1);
-        expect(store.projections[0]?.content).toBe("new eligible projection");
-    });
-
     it("does not let stale empty-content cleanup erase a newer ordinary-note projection", async () => {
-        const store = new InMemoryEmbeddingStore(
-            snapshot({ title: null, contentMarkdown: "" }, null)
-        );
+        const store = new InMemoryEmbeddingStore(snapshot({ title: null, contentMarkdown: "" }));
         store.beforeGuardedRemove = () => {
             if (store.current) {
                 store.current.note.contentMarkdown = "new ordinary note content";

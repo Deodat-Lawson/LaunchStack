@@ -2,7 +2,6 @@ import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import {
     bigint,
-    boolean,
     index,
     integer,
     jsonb,
@@ -12,7 +11,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import { company } from "@launchstack/store/schema";
+import { company, document } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
 import type { EnrichedNoteProposal, ModelMetadata } from "./contracts";
@@ -59,7 +58,6 @@ export const callNotesWorkItemKindEnum = [
     "capture_event",
     "finalize",
     "enrich",
-    "reindex",
 ] as const;
 export const callNotesWorkItemStatusEnum = ["pending", "claimed", "completed", "failed"] as const;
 
@@ -110,7 +108,11 @@ export const callNotesCalls = pgTable(
         })
             .notNull()
             .default("company"),
-        knowledgeIncluded: boolean("knowledge_included").notNull().default(false),
+        indexedDocumentId: bigint("indexed_document_id", { mode: "bigint" }).references(
+            () => document.id,
+            { onDelete: "set null" }
+        ),
+        indexedRevision: integer("indexed_revision"),
         currentNoteRevision: integer("current_note_revision").notNull().default(0),
         failureCode: varchar("failure_code", { length: 128 }),
         failureMessage: varchar("failure_message", { length: 1024 }),
@@ -134,6 +136,10 @@ export const callNotesCalls = pgTable(
         companyStatusIdx: index("call_notes_calls_company_status_idx").on(
             table.companyId,
             table.status
+        ),
+        companyIndexedDocumentIdx: index("call_notes_calls_company_indexed_document_idx").on(
+            table.companyId,
+            table.indexedDocumentId
         ),
         documentNoteUnique: uniqueIndex("call_notes_calls_document_note_unique").on(
             table.documentNoteId
@@ -486,9 +492,6 @@ export type CallNotesCallRow = InferSelectModel<typeof callNotesCalls>;
 export type CallNotesCaptureRow = InferSelectModel<typeof callNotesCaptures>;
 export type CallNotesCaptureAttemptRow = InferSelectModel<typeof callNotesCaptureAttempts>;
 export type CallNotesParticipantRow = InferSelectModel<typeof callNotesParticipants>;
-export type CallNotesLocalCaptureWorkerRow = InferSelectModel<typeof callNotesLocalCaptureWorkers>;
 export type CallNotesTranscriptSegmentRow = InferSelectModel<typeof callNotesTranscriptSegments>;
 export type CallNotesGapRow = InferSelectModel<typeof callNotesGaps>;
-export type CallNotesEnrichmentRunRow = InferSelectModel<typeof callNotesEnrichmentRuns>;
-export type CallNotesNoteRevisionRow = InferSelectModel<typeof callNotesNoteRevisions>;
 export type CallNotesWorkItemRow = InferSelectModel<typeof callNotesWorkItems>;

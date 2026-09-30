@@ -17,14 +17,14 @@ import {
 import { getEngine } from "~/server/engine";
 import { documentNotes, userCompanyMemberships, users } from "~/server/db/schema";
 import { LocalDetectedCallSource } from "./detected-calls";
-import { createKnowledgeNoteSink } from "./knowledge-note-sink";
+import { createWebCallNoteIndex } from "./document-index";
 
 export type { CallNotesApplication } from "@launchstack/pipelines/call-notes";
 export { CallNotesApplicationError } from "@launchstack/pipelines/call-notes";
 
 /**
  * The web host owns identity/membership and document-note storage. The
- * knowledge and detected-call boundaries belong to their respective lanes and
+ * indexing and detected-call seams belong to their respective lanes and
  * are deliberately required here rather than silently defaulted.
  */
 export type WebCallNotesApplicationOptions = Omit<
@@ -193,7 +193,7 @@ export function createWebCallNotesDocumentNoteStore(
 export function createWebCallNotesApplication(
     options: WebCallNotesApplicationOptions
 ): CallNotesApplication {
-    if (!options.knowledgeSink || !options.detectedCalls) {
+    if (!options.callNoteIndex || !options.detectedCalls) {
         throw new CallNotesApplicationError(
             "unavailable",
             "Call Notes external dependencies are not configured"
@@ -235,7 +235,7 @@ export function getWebCallNotesApplication(): CallNotesApplication {
     if (configuredApplication) return configuredApplication;
 
     const application = createWebCallNotesApplication({
-        knowledgeSink: createKnowledgeNoteSink(),
+        callNoteIndex: createWebCallNoteIndex(),
         detectedCalls: new LocalDetectedCallSource(),
     });
     configuredApplication = application;

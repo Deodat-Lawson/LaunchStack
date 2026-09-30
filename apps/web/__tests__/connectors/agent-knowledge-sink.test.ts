@@ -21,13 +21,15 @@ jest.mock("~/server/services/document-creation", () => ({
 
 const mockUpdateWhere = jest.fn();
 const mockUpdateSet = jest.fn(() => ({ where: mockUpdateWhere }));
-const mockDbUpdate = jest.fn((_table: unknown) => ({ set: mockUpdateSet }));
+const mockDbUpdate = jest.fn();
 jest.mock("~/server/db", () => ({
     db: { update: (table: unknown) => mockDbUpdate(table) },
 }));
 
 import type { KnowledgeItem } from "@launchstack/pipelines/connectors";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
+import { eq } from "drizzle-orm";
+import { company, document } from "@launchstack/store/schema";
 
 import { uploadFile } from "~/lib/storage";
 import {
@@ -39,6 +41,17 @@ import {
     AGENT_KNOWLEDGE_CATEGORY,
     createAgentKnowledgeSink,
 } from "~/server/services/agent-knowledge-connector";
+import { createAgentSessionsSink } from "~/server/services/agent-sessions-connector";
+import {
+    createGmailSink,
+    markMissingDocuments as markMissingGmailDocuments,
+} from "~/server/services/connectors/gmail/sink";
+import {
+    createGoogleDriveSink,
+    markMissingDocuments as markMissingDriveDocuments,
+} from "~/server/services/connectors/google-drive/sink";
+import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
+import type { FounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
 
 const mockUploadFile = uploadFile as jest.Mock;
 const mockResolveIndex = resolveIngestIndexKey as jest.Mock;
@@ -96,6 +109,7 @@ const context = { companyId: 7n, userId: "user_abc" };
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockDbUpdate.mockImplementation(() => ({ set: mockUpdateSet }));
     mockEnv.server.APP_PUBLIC_URL = undefined;
     mockResolveIndex.mockResolvedValue("openai-small");
     mockUploadFile.mockResolvedValue({ url: "https://blob.test/doc.md" });
@@ -277,18 +291,6 @@ describe("createAgentKnowledgeSink — re-sync", () => {
         expect(result.versionId).toBe(22);
     });
 
-    it("writes the new hash back to the document after a revision", async () => {
-        mockFind.mockResolvedValue({ id: 11, ocrMetadata: { contentHash: "b".repeat(64) } });
-
-        const sink = await createAgentKnowledgeSink(context);
-        await sink.store(knowledgeItem());
-
-        expect(mockDbUpdate).toHaveBeenCalledTimes(1);
-        const patch = firstCallArg<{ ocrMetadata: Record<string, unknown> }>(mockUpdateSet);
-        expect(patch.ocrMetadata.contentHash).toBe("a".repeat(64));
-        expect(patch.ocrMetadata.sourceId).toBe(SOURCE_ID);
-    });
-
     it("reports the last synced hash from the stored document", async () => {
         mockFind.mockResolvedValue({ id: 11, ocrMetadata: { contentHash: "c".repeat(64) } });
 
@@ -307,4 +309,176 @@ describe("createAgentKnowledgeSink — re-sync", () => {
         mockFind.mockResolvedValue({ id: 11, ocrMetadata: null });
         expect(await sink.lastSyncedHash?.(knowledgeItem())).toBeNull();
     });
+});
+
+const describeDb =
+    process.env.LAUNCHSTACK_TEST_DATABASE_URL || process.env.DATABASE_URL
+        ? describe
+        : describe.skip;
+
+describeDb("connector revision metadata (Postgres integration)", () => {
+    jest.setTimeout(120_000);
+
+    let test: FounderWeeklyReviewTestDatabase;
+    let companyId: bigint;
+
+    beforeAll(async () => {
+        test = await createFounderWeeklyReviewTestDatabase();
+        const [co] = await test.db
+            .insert(company)
+            .values({ name: "Connector provenance fixture", numberOfEmployees: "1" })
+            .returning({ id: company.id });
+        companyId = BigInt(co!.id);
+    });
+
+    afterAll(async () => {
+        await test?.close();
+    });
+
+    beforeEach(() => {
+        mockDbUpdate.mockImplementation((table: typeof document) => test.db.update(table));
+    });
+
+    describe.each([
+        { connectorId: "agent-knowledge", createSink: createAgentKnowledgeSink },
+        { connectorId: "agent-sessions", createSink: createAgentSessionsSink },
+        { connectorId: "gmail", createSink: createGmailSink },
+        { connectorId: "google-drive", createSink: createGoogleDriveSink },
+    ])("$connectorId", ({ connectorId, createSink }) => {
+        it.each([
+            {
+                name: "Call Note",
+                metadata: {
+                    callNote: { callId: "connector-preservation" },
+                    customProvenance: "retained",
+                    contentHash: "b".repeat(64),
+                },
+            },
+            { name: "ordinary", metadata: null },
+        ])("merges a revision's metadata on a $name document", async ({ metadata }) => {
+            const [existing] = await test.db
+                .insert(document)
+                .values({
+                    companyId,
+                    title: "Imported source",
+                    category: "Imported",
+                    url: "local://imported-source.md",
+                    ocrMetadata: metadata,
+                })
+                .returning();
+            mockFind.mockResolvedValue(existing);
+            mockCreateVersion.mockResolvedValue({
+                documentId: existing!.id,
+                versionId: 22,
+                jobId: "job-2",
+            });
+            const sink = await createSink({
+                companyId,
+                userId: "user_abc",
+                connectionId: 1,
+                category: "Imported",
+            });
+            const item = knowledgeItem({ connectorId });
+
+            await sink.store(item);
+
+            const [stored] = await test.db
+                .select()
+                .from(document)
+                .where(eq(document.id, existing!.id));
+            expect(stored!.ocrMetadata).toEqual(
+                expect.objectContaining({
+                    ...metadata,
+                    connector: connectorId,
+                    sourceId: item.sourceId,
+                    contentHash: item.contentHash,
+                    syncedAt: expect.any(String),
+                })
+            );
+        });
+    });
+
+    describe.each([
+        {
+            connectorId: "gmail",
+            createSink: createGmailSink,
+            markMissing: markMissingGmailDocuments,
+            deletedFlag: "gmailDeleted",
+            otherDeletedFlag: "driveDeleted",
+        },
+        {
+            connectorId: "google-drive",
+            createSink: createGoogleDriveSink,
+            markMissing: markMissingDriveDocuments,
+            deletedFlag: "driveDeleted",
+            otherDeletedFlag: "gmailDeleted",
+        },
+    ])(
+        "$connectorId restoration",
+        ({ connectorId, createSink, markMissing, deletedFlag, otherDeletedFlag }) => {
+            it.each([
+                { name: "changed revision", contentHash: "a".repeat(64) },
+                { name: "forced unchanged revision", contentHash: "b".repeat(64) },
+            ])("clears only its deletion flag on a $name", async ({ contentHash }) => {
+                const metadata = {
+                    connector: connectorId,
+                    connectionId: "1",
+                    sourceId: `${connectorId}://restored-source/${contentHash}`,
+                    contentHash: "b".repeat(64),
+                    callNote: { callId: "connector-restoration" },
+                    customProvenance: "retained",
+                    [otherDeletedFlag]: true,
+                };
+                const [existing] = await test.db
+                    .insert(document)
+                    .values({
+                        companyId,
+                        title: "Restored source",
+                        category: "Imported",
+                        url: "local://restored-source.md",
+                        ocrMetadata: metadata,
+                    })
+                    .returning();
+
+                await markMissing(companyId, 1, [metadata.sourceId]);
+                const [marked] = await test.db
+                    .select()
+                    .from(document)
+                    .where(eq(document.id, existing!.id));
+                expect(marked!.ocrMetadata).toHaveProperty(deletedFlag, true);
+                mockFind.mockResolvedValue(marked);
+                mockCreateVersion.mockResolvedValue({
+                    documentId: existing!.id,
+                    versionId: 22,
+                    jobId: "job-2",
+                });
+                const sink = await createSink({
+                    companyId,
+                    userId: "user_abc",
+                    connectionId: 1,
+                    category: "Imported",
+                });
+                const item = knowledgeItem({
+                    connectorId,
+                    sourceId: metadata.sourceId,
+                    contentHash,
+                });
+
+                await sink.store(item);
+
+                const [restored] = await test.db
+                    .select()
+                    .from(document)
+                    .where(eq(document.id, existing!.id));
+                expect(restored!.ocrMetadata).not.toHaveProperty(deletedFlag);
+                expect(restored!.ocrMetadata).toEqual(
+                    expect.objectContaining({
+                        ...metadata,
+                        contentHash,
+                        syncedAt: expect.any(String),
+                    })
+                );
+            });
+        }
+    );
 });

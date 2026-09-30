@@ -5,7 +5,7 @@
  * an eternal "processing". Parity with the retired Inngest
  * `handleProcessDocumentFailure`, which wrote both records.
  */
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
@@ -56,11 +56,13 @@ export function createDeadEventHandler(logger: LoggerPort) {
                     .update(document)
                     .set({
                         ocrProcessed: false,
-                        ocrMetadata: {
-                            error: "processing_failed",
-                            errorMessage,
-                            failedAt: new Date().toISOString(),
-                        },
+                        ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(
+                            {
+                                error: "processing_failed",
+                                errorMessage,
+                                failedAt: new Date().toISOString(),
+                            }
+                        )}::jsonb`,
                     })
                     .where(
                         and(

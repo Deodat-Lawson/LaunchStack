@@ -47,9 +47,6 @@ export function createAppRagPort(): RagPort {
 function mapResult(r: AppSearchResult): RagSearchResult {
     const metadata = r.metadata as AppSearchResult["metadata"] & {
         noteId?: number;
-        callId?: string;
-        revision?: number;
-        deepLink?: string;
     };
     const source = r.source ?? metadata.source;
     return {
@@ -72,9 +69,6 @@ function mapResult(r: AppSearchResult): RagSearchResult {
             rerankScore: metadata.rerankScore,
             timestamp: metadata.timestamp,
             ...(metadata.noteId === undefined ? {} : { noteId: metadata.noteId }),
-            ...(metadata.callId === undefined ? {} : { callId: metadata.callId }),
-            ...(metadata.revision === undefined ? {} : { revision: metadata.revision }),
-            ...(metadata.deepLink === undefined ? {} : { deepLink: metadata.deepLink }),
         },
     };
 }

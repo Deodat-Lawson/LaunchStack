@@ -132,6 +132,17 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
     brand: "/employer/tools/growth/brand",
 };
 
+/** Published document references resolve to their canonical workspace source. */
+function resolveSourceReference(
+    sources: WorkspaceSource[],
+    id: string
+): WorkspaceSource | undefined {
+    const source = sources.find(item => item.id === id);
+    if (source || !/^d[1-9]\d*$/.test(id)) return source;
+    const documentId = Number(id.slice(1));
+    return sources.find(item => item.documentId === documentId);
+}
+
 /**
  * A stored turn becomes a thread turn. `citations` and `attachments` are
  * replayed as they were written — the rail's own render payload, round-tripped
@@ -214,7 +225,32 @@ export function WorkspaceShell() {
     } = useWorkspaceData(userId ?? null);
 
     const [selected, setSelected] = useState<string[]>([]);
-    const [thread, setThread] = useState<ThreadMessage[]>([]);
+    const [threadTurns, setThread] = useState<ThreadMessage[]>([]);
+    // Stored citations can name a document now hidden behind a Call Note or
+    // mindmap. Keep the saved evidence, but render its canonical source.
+    const thread = useMemo(
+        () =>
+            threadTurns.map(message => {
+                const citations = message.citations;
+                if (
+                    !citations?.some(cite => {
+                        const source = resolveSourceReference(sources, cite.sourceId);
+                        return source && source.id !== cite.sourceId;
+                    })
+                ) {
+                    return message;
+                }
+                return {
+                    ...message,
+                    citations: citations.map(cite => ({
+                        ...cite,
+                        sourceId:
+                            resolveSourceReference(sources, cite.sourceId)?.id ?? cite.sourceId,
+                    })),
+                };
+            }),
+        [threadTurns, sources]
+    );
     /**
      * Set when this chat continues an imported agent session (`?continue=<docId>`):
      * the transcript's tail travels as conversationHistory on every send, and
@@ -334,17 +370,19 @@ export function WorkspaceShell() {
     const activeCallId = searchParams.get("call");
     const activeSourceId =
         sourceParam ?? sources.find(s => s.type === "call-note" && s.callId === activeCallId)?.id;
-    // Call Notes are never chat context; drop any that a restored chat or a
-    // stale selection still carries.
+    // Private, unavailable, or unindexed Call Notes are not chat context.
+    // Indexed Call Notes keep their pins, including those restored from history.
     useEffect(() => {
-        const selectable = new Set(
-            sources.filter(source => source.type !== "call-note").map(source => source.id)
+        const unavailableCallNotes = new Set(
+            sources
+                .filter(source => source.type === "call-note" && !source.documentId)
+                .map(source => source.id)
         );
         setSelected(prev => {
-            const next = prev.filter(id => selectable.has(id));
+            const next = prev.filter(id => !unavailableCallNotes.has(id));
             return next.length === prev.length ? prev : next;
         });
-    }, [sources]);
+    }, [sources, selected]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     /** What the delete dialog is about: one source from its row, or a multi-selection. */
@@ -787,9 +825,13 @@ export function WorkspaceShell() {
             const askedAgent = send.agentKey
                 ? chatAgents.find(a => a.id === send.agentKey)
                 : undefined;
-            const chatRefs = send.refs.filter(
-                ref => sources.find(source => source.id === ref)?.type !== "call-note"
-            );
+            const chatSources = send.refs
+                .map(ref => resolveSourceReference(sources, ref))
+                .filter(
+                    (source): source is WorkspaceSource & { documentId: number } =>
+                        typeof source?.documentId === "number"
+                );
+            const chatRefs = chatSources.map(source => source.id);
             const userTurn: ThreadMessage = {
                 role: "user",
                 text: send.text,
@@ -807,9 +849,7 @@ export function WorkspaceShell() {
             };
             setThread(prev => [...prev, userTurn]);
 
-            const numericIds = chatRefs
-                .map(r => sources.find(s => s.id === r)?.documentId)
-                .filter((n): n is number => typeof n === "number");
+            const numericIds = chatSources.map(source => source.documentId);
 
             const scope =
                 numericIds.length >= 2
@@ -990,11 +1030,16 @@ export function WorkspaceShell() {
         [openSource, openCall, layout, setActiveFeatureId]
     );
 
-    /** A citation click opens the cited document with the passage highlighted. */
+    /** Citations open Call Notes in Calls; other sources highlight the cited passage. */
     const handleOpenCitation = useCallback(
         (cite: ThreadReference) => {
-            const src = sources.find(s => s.id === cite.sourceId);
+            const src = resolveSourceReference(sources, cite.sourceId);
             if (!src) return;
+            if (src.type === "call-note" && src.callId) {
+                setViewerHighlight(null);
+                openCall(src.callId);
+                return;
+            }
             citationNonce.current += 1;
             setViewerHighlight({
                 text: cite.snippet,
@@ -1004,7 +1049,7 @@ export function WorkspaceShell() {
             });
             openSource(src.id);
         },
-        [sources, openSource]
+        [sources, openSource, openCall]
     );
 
     const handleRenameSource = useCallback(
@@ -1207,6 +1252,10 @@ export function WorkspaceShell() {
     }, []);
 
     const openDocumentAccess = useCallback((source: WorkspaceSource) => {
+        if (source.type === "call-note") {
+            toast.info("Call Note access is managed in Calls.");
+            return;
+        }
         if (!source.documentId) {
             toast.info("This source is still being indexed.");
             return;
@@ -1480,7 +1529,7 @@ export function WorkspaceShell() {
     /** Put a source in a column of its own, beside whatever is open. */
     const openSourceBeside = useCallback(
         (source: WorkspaceSource) => {
-            // A Call Note has no document to lay beside the chat.
+            // Call Notes are managed in Calls, not the document viewer.
             if (source.type === "call-note" && source.callId) {
                 openCall(source.callId);
                 return;
@@ -2274,11 +2323,14 @@ export function WorkspaceShell() {
                                     onOpenAdd: openAdd,
                                     onAskAbout: ids => {
                                         setSelected(
-                                            ids.filter(
-                                                id =>
-                                                    sources.find(source => source.id === id)
-                                                        ?.type !== "call-note"
-                                            )
+                                            ids.filter(id => {
+                                                const source = sources.find(item => item.id === id);
+                                                return (
+                                                    source &&
+                                                    (source.type !== "call-note" ||
+                                                        Boolean(source.documentId))
+                                                );
+                                            })
                                         );
                                         setActiveFeatureId("chat");
                                     },

@@ -39,14 +39,12 @@ import {
     configureEnsemble,
 } from "@launchstack/retrieval/algorithms/ensemble";
 
-function callNoteDocument(): Document {
+function ordinaryNoteDocument(): Document {
     return new Document({
-        pageContent: "Accepted Call Note",
+        pageContent: "Ordinary note evidence",
         metadata: {
-            source: "call_note",
+            source: "note",
             noteId: 20,
-            callId: "call-20",
-            revision: 4,
         },
     });
 }
@@ -65,7 +63,7 @@ describe("companyEnsembleSearch notes-only behavior", () => {
         });
     });
 
-    it("returns [] with zero document chunks and no eligible notes", async () => {
+    it("returns [] with zero document chunks and no ordinary notes", async () => {
         const results = await companyEnsembleSearch(
             "customer",
             { companyId: 42, topK: 5 },
@@ -75,8 +73,8 @@ describe("companyEnsembleSearch notes-only behavior", () => {
         expect(results).toEqual([]);
     });
 
-    it("returns eligible Call Notes when the company has zero document chunks", async () => {
-        mockNotesGetRelevantDocuments.mockResolvedValue([callNoteDocument()]);
+    it("returns ordinary notes when the company has zero document chunks", async () => {
+        mockNotesGetRelevantDocuments.mockResolvedValue([ordinaryNoteDocument()]);
 
         const [result] = await companyEnsembleSearch(
             "customer",
@@ -85,14 +83,12 @@ describe("companyEnsembleSearch notes-only behavior", () => {
         );
 
         expect(result).toMatchObject({
-            pageContent: "Accepted Call Note",
+            pageContent: "Ordinary note evidence",
             metadata: {
                 retrievalMethod: "vector_ann",
                 searchScope: "company",
-                source: "call_note",
+                source: "note",
                 noteId: 20,
-                callId: "call-20",
-                revision: 4,
             },
         });
     });

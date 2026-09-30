@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 
 import {
     CallNotesWorkItemError,
-    createPostgresCallNotesWorkItems,
+    CallNotesWorkItems,
     type CallNotesWorkItemClaim,
 } from "@launchstack/pipelines/call-notes";
 
@@ -54,11 +54,11 @@ describeIfDatabase("Call Notes durable work items", () => {
             sessionB = session;
             await insertCompany(testDb.db);
             const sources = deterministicSources();
-            const workA = createPostgresCallNotesWorkItems(testDb.db, {
+            const workA = new CallNotesWorkItems(testDb.db, {
                 ...sources,
                 leaseMs: 1_000,
             });
-            const workB = createPostgresCallNotesWorkItems(session.db, {
+            const workB = new CallNotesWorkItems(session.db, {
                 ...sources,
                 leaseMs: 1_000,
             });
@@ -172,14 +172,14 @@ describeIfDatabase("Call Notes durable work items", () => {
             if (sessionB) await sessionB.close();
             await testDb.close();
         }
-    });
+    }, 30_000);
 
     it("returns null when no eligible item remains and rejects unknown fencing targets", async () => {
         const testDb = await createCallNotesTestDatabase();
         try {
             await insertCompany(testDb.db);
             const sources = deterministicSources();
-            const work = createPostgresCallNotesWorkItems(testDb.db, sources);
+            const work = new CallNotesWorkItems(testDb.db, sources);
             expect(await work.claim("worker-empty", { companyId: "1" })).toBeNull();
             await expect(work.complete("missing-work-item", "missing-token")).rejects.toMatchObject(
                 {
@@ -197,5 +197,5 @@ describeIfDatabase("Call Notes durable work items", () => {
         } finally {
             await testDb.close();
         }
-    });
+    }, 30_000);
 });

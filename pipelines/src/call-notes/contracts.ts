@@ -11,7 +11,6 @@ const MarkdownSchema = z.string().max(120_000);
 const RichTextSchema = z.record(z.unknown());
 
 export const CallNotesSourceSchema = z.literal("local_audio");
-export type CallNotesSource = z.infer<typeof CallNotesSourceSchema>;
 
 export const AudioChannelSchema = z.enum(["microphone", "system"]);
 export type AudioChannel = z.infer<typeof AudioChannelSchema>;
@@ -20,7 +19,6 @@ export const CallStatusSchema = z.enum(["active", "finalizing", "completed", "fa
 export type CallStatus = z.infer<typeof CallStatusSchema>;
 
 export const CaptureDesiredModeSchema = z.enum(["running", "paused", "stopped"]);
-export type CaptureDesiredMode = z.infer<typeof CaptureDesiredModeSchema>;
 
 export const CaptureLifecycleSchema = z.enum([
     "connecting",
@@ -30,19 +28,8 @@ export const CaptureLifecycleSchema = z.enum([
     "completed",
     "failed",
 ]);
-export type CaptureLifecycle = z.infer<typeof CaptureLifecycleSchema>;
 
 export const CaptureOutcomeSchema = z.enum(["complete", "partial", "failed"]);
-export type CaptureOutcome = z.infer<typeof CaptureOutcomeSchema>;
-
-export const CaptureAttemptLifecycleSchema = z.enum([
-    "connecting",
-    "live",
-    "reconnecting",
-    "ended",
-    "failed",
-]);
-export type CaptureAttemptLifecycle = z.infer<typeof CaptureAttemptLifecycleSchema>;
 
 export const GapKindSchema = z.enum([
     "user_paused",
@@ -195,7 +182,6 @@ export const CallNoteSchema = z.object({
     documentNoteId: z.number().int().positive().nullable(),
     ownerUserId: z.string().min(1).max(256).nullable(),
     visibility: NoteVisibilitySchema,
-    knowledgeIncluded: z.boolean(),
     revision: z.number().int().nonnegative(),
     title: z.string().max(512),
     contentMarkdown: MarkdownSchema,
@@ -316,7 +302,6 @@ export const EnrichmentRunSchema = z
             });
         }
     });
-export type EnrichmentRun = z.infer<typeof EnrichmentRunSchema>;
 
 export const ViewerCapabilitiesSchema = z.object({
     canEditNote: z.boolean(),
@@ -324,10 +309,8 @@ export const ViewerCapabilitiesSchema = z.object({
     canRequestEnrichment: z.boolean(),
     canResolveEnrichment: z.boolean(),
     canChangeVisibility: z.boolean(),
-    canChangeKnowledgeInclusion: z.boolean(),
     canDelete: z.boolean(),
 });
-export type ViewerCapabilities = z.infer<typeof ViewerCapabilitiesSchema>;
 
 export const CaptureSnapshotSchema = z.object({
     id: IdSchema,
@@ -337,7 +320,6 @@ export const CaptureSnapshotSchema = z.object({
     activeAttemptId: IdSchema.nullable(),
     attemptCount: z.number().int().nonnegative(),
 });
-export type CaptureSnapshot = z.infer<typeof CaptureSnapshotSchema>;
 
 /** Private worker control plane; never returned as a user-facing device credential. */
 export const LocalCapturePollInputSchema = z
@@ -462,11 +444,6 @@ export const CallNotesCommandSchema = z.discriminatedUnion("kind", [
         contentMarkdown: MarkdownSchema,
         contentRich: RichTextSchema,
     }),
-    UserCommandBaseSchema.extend({
-        kind: z.literal("set_knowledge_inclusion"),
-        callId: IdSchema,
-        included: z.boolean(),
-    }),
     UserCommandBaseSchema.extend({ kind: z.literal("delete_call"), callId: IdSchema }),
 ]);
 export type CallNotesCommand = z.infer<typeof CallNotesCommandSchema>;
@@ -505,18 +482,6 @@ export const EnrichmentResultSchema = z.object({
     modelMetadata: ModelMetadataSchema,
 });
 export type EnrichmentResult = z.infer<typeof EnrichmentResultSchema>;
-
-export const KnowledgeNoteSchema = z.object({
-    companyId: CompanyIdSchema,
-    callId: IdSchema,
-    documentNoteId: z.number().int().positive(),
-    ownerUserId: z.string().min(1).max(256),
-    revision: z.number().int().positive(),
-    title: z.string().max(512),
-    contentMarkdown: MarkdownSchema,
-    deepLink: z.string().min(1).max(2048),
-});
-export type KnowledgeNote = z.infer<typeof KnowledgeNoteSchema>;
 
 export const CompleteEnrichmentInputSchema = z.object({
     companyId: CompanyIdSchema,

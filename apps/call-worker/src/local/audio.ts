@@ -284,13 +284,6 @@ export type SystemAudioReadinessCode =
     | "status_failed"
     | "cancelled";
 
-export interface SystemAudioStatus {
-    supported: boolean;
-    authorized: boolean;
-    reason: SystemAudioStatusReason;
-    message: string;
-}
-
 export interface SystemAudioReadiness {
     ready: boolean;
     code: SystemAudioReadinessCode;

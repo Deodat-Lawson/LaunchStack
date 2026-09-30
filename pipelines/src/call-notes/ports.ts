@@ -10,7 +10,6 @@ import type {
     DetectedCallCandidate,
     EnrichmentInput,
     EnrichmentResult,
-    KnowledgeNote,
     LocalCaptureWorkerStatus,
     LocalCapturePollInput,
     LocalCapturePollResult,
@@ -56,9 +55,16 @@ export interface EnrichmentModel {
     generate(input: EnrichmentInput): Promise<EnrichmentResult>;
 }
 
-export interface KnowledgeNoteSink {
-    upsert(note: KnowledgeNote): Promise<void>;
-    remove(companyId: string, callId: string): Promise<void>;
+/** Keeps a Call's indexed document in line with its canonical Call Note. */
+export interface CallNoteIndex {
+    /**
+     * Idempotent. Called after the owning transaction commits whenever the
+     * canonical note revision, title, note visibility, or Call lifecycle
+     * (completion, deletion) changes. Must tolerate a Call that no longer
+     * exists (deleted): it then removes the indexed document, found by the
+     * stable creation key `call-note:<callId>`.
+     */
+    sync(input: { companyId: string; callId: string }): Promise<void>;
 }
 
 export interface CallNotesClock {

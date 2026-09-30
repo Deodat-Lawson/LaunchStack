@@ -6,7 +6,6 @@ const ownerCapabilities = {
     canRequestEnrichment: true,
     canResolveEnrichment: true,
     canChangeVisibility: true,
-    canChangeKnowledgeInclusion: true,
     canDelete: false,
 } as const;
 
@@ -16,7 +15,6 @@ const readOnlyCapabilities = {
     canRequestEnrichment: false,
     canResolveEnrichment: false,
     canChangeVisibility: false,
-    canChangeKnowledgeInclusion: false,
     canDelete: false,
 } as const;
 
@@ -71,7 +69,6 @@ const baseCallInput = {
         documentNoteId: 101,
         ownerUserId: "user-hank",
         visibility: "company",
-        knowledgeIncluded: false,
         revision: 1,
         title: "Northstar pricing review",
         contentMarkdown: "- Finalize pricing tiers by Friday\n- Enterprise tier draft in progress",

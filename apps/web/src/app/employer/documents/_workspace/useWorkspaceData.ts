@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
+import { isCallNoteDocument } from "~/lib/call-note-document";
 import {
     compareFolderPaths,
     expandFolderPaths,
@@ -86,6 +87,7 @@ function mapCallNoteFile(file: WorkspaceCallNoteFile): WorkspaceSource {
     return {
         id: `call-note:${file.callId}`,
         callId: file.callId,
+        documentId: file.documentId ?? undefined,
         noteId: file.noteId,
         visibility: file.visibility,
         revision: file.revision,
@@ -203,8 +205,8 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 // Mindmaps are sources too. A failure here must not take the
                 // documents down with it — the list degrades to uploads only.
                 fetch("/api/mindmaps?scope=active").catch(() => null),
-                // Call Notes are a navigable source projection. A deployment
-                // without the endpoint simply renders the regular workspace.
+                // Call Notes keep their own actions. If this endpoint fails,
+                // their marker-tagged retrieval copies still stay out of uploads.
                 fetch("/api/call-notes/files", { cache: "no-store" }).catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
@@ -244,15 +246,18 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     }, [refresh]);
 
     const sources = useMemo<WorkspaceSource[]>(() => {
-        // A published map's Markdown copy is the map, not a second source: it
-        // is hidden here and reached through the map's `documentId`.
+        // A published map or indexed Call Note is one source, not a second
+        // Markdown document. Retrieval reaches it through its `documentId`.
         const claimed = new Set<number>();
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
+        for (const file of callNoteFiles) {
+            if (file.documentId !== null) claimed.add(file.documentId);
+        }
         return [
             ...optimistic,
-            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...documents.filter(d => !claimed.has(d.id) && !isCallNoteDocument(d)).map(mapDocument),
             ...mindmaps.map(mapMindmap),
             ...callNoteFiles.map(mapCallNoteFile),
         ];

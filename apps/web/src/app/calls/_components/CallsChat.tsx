@@ -15,6 +15,8 @@ import {
 import type { CallSnapshot } from "@launchstack/pipelines/call-notes";
 
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
+import { Button } from "~/components/ui/button";
+import { Textarea } from "~/components/ui/textarea";
 import type { CallChatStreamEvent } from "~/lib/call-chat-stream";
 
 import styles from "./CallsChat.module.css";
@@ -318,23 +320,27 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
                 }}
             >
                 <header className={styles.conversationHeader}>
-                    <button
+                    <Button
                         type="button"
+                        variant="ghost"
+                        size="icon"
                         className={styles.conversationClose}
                         aria-label="Show transcript"
                         onClick={onShowTranscript}
                     >
                         <AudioLines size={18} />
-                    </button>
+                    </Button>
                     <span className={styles.conversationTitle}>AI chat</span>
-                    <button
+                    <Button
                         type="button"
+                        variant="ghost"
+                        size="icon"
                         className={styles.conversationClose}
                         aria-label="Close conversation"
                         onClick={onClose}
                     >
                         <Minus size={18} />
-                    </button>
+                    </Button>
                 </header>
                 <div
                     ref={conversationBodyRef}
@@ -413,10 +419,16 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
                             <div className={styles.error} role="alert">
                                 <span>{error}</span>
                                 {lastQuestionRef.current ? (
-                                    <button type="button" className={styles.retry} onClick={retry}>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className={styles.retry}
+                                        onClick={retry}
+                                    >
                                         <RotateCcw size={12} />
                                         Try again
-                                    </button>
+                                    </Button>
                                 ) : null}
                             </div>
                         ) : null}
@@ -425,8 +437,9 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
             </section>
 
             <div className={styles.composer}>
-                <button
+                <Button
                     type="button"
+                    variant="ghost"
                     data-chat-trigger
                     className={styles.chatTrigger}
                     aria-label="Open AI chat"
@@ -435,7 +448,7 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
                     onClick={onOpen}
                 >
                     {messages.length ? "Continue chat" : draft || "Ask about this call"}
-                </button>
+                </Button>
                 <form
                     className={styles.composerForm}
                     onSubmit={handleSubmit}
@@ -444,7 +457,7 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
                         if (element) element.inert = !open;
                     }}
                 >
-                    <textarea
+                    <Textarea
                         ref={textareaRef}
                         className={styles.input}
                         rows={1}
@@ -456,15 +469,16 @@ function CallChat({ snapshot, open, onOpen, onClose, onShowTranscript }: CallCha
                         disabled={isSending}
                     />
                     <div className={styles.composerActions}>
-                        <button
+                        <Button
                             type="submit"
+                            size="icon"
                             className={`${styles.send} ${!draft.trim() ? styles.sendHidden : ""}`}
                             aria-label="Send message"
                             title="Send message"
                             disabled={!draft.trim() || isSending}
                         >
                             <ArrowUp size={16} />
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

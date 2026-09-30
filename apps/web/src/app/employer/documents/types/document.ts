@@ -1,6 +1,7 @@
 // Document-related types
 
 import { isMindmapDocument } from "~/lib/mindmap-document";
+import type { CallNoteDocumentMarker } from "~/lib/call-note-document";
 
 /** Display category for document preview (PDF, image, docx, xlsx, pptx, text, code, etc.) */
 export type DocumentDisplayType =
@@ -38,6 +39,8 @@ export interface DocumentType {
         language?: string;
         confidence?: number;
         segments?: { start: number; end: number; text: string }[];
+        /** The index-owned retrieval copy of a Call Note, managed from Calls. */
+        callNote?: CallNoteDocumentMarker["callNote"];
         [key: string]: unknown;
     } | null;
     /** When set, this document was extracted from a ZIP archive with this name */

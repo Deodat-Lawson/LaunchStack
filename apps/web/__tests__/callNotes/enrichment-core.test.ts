@@ -67,7 +67,6 @@ const INPUT = EnrichmentInputSchema.parse({
         documentNoteId: 41,
         ownerUserId: "user-owner",
         visibility: "private",
-        knowledgeIncluded: false,
         revision: 3,
         title: "Owner's onboarding notes",
         contentMarkdown: "Onboarding takes too long.",

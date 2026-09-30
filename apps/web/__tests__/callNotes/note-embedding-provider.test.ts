@@ -64,7 +64,7 @@ describe("legacy note embedding provider consistency", () => {
                 createdAt: new Date("2026-08-21T00:00:00.000Z"),
                 updatedAt: null,
             },
-            call: null,
+            callLinked: false,
         };
         let written: NoteEmbeddingProjection | null = null;
         const store: NoteEmbeddingStore = {

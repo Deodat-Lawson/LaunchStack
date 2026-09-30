@@ -33,6 +33,7 @@ export async function listWorkspaceCallNoteFiles(
         .select({
             callId: callNotesCalls.id,
             noteId: documentNotes.id,
+            indexedDocumentId: callNotesCalls.indexedDocumentId,
             visibility: callNotesCalls.noteVisibility,
             revision: callNotesCalls.currentNoteRevision,
             updatedAt:
@@ -67,6 +68,10 @@ export async function listWorkspaceCallNoteFiles(
         type: "call-note",
         callId: row.callId,
         noteId: row.noteId,
+        documentId:
+            row.visibility === "company" && row.indexedDocumentId !== null
+                ? Number(row.indexedDocumentId)
+                : null,
         title: row.title ?? "Untitled Call Note",
         visibility: row.visibility,
         revision: row.revision,

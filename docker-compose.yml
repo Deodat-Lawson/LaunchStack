@@ -284,7 +284,11 @@ services:
     ports:
       - "8003:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -443,63 +447,10 @@ services:
       # Internal capture ingress; never expose this token to the browser.
       CALL_NOTES_INTERNAL_TOKEN: ${CALL_NOTES_INTERNAL_TOKEN:-}
       CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
-    ports:
-      - "3000:3000"
-
-  call-worker:
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: apps/call-worker/Dockerfile
-    container_name: pdr_ai_v2-call-worker
-    restart: unless-stopped
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-      db:
-        condition: service_healthy
-    # This Linux service is an explicit microphone-only development fallback.
-    # Docker Desktop runs it in a Linux VM and cannot expose macOS Screen &
-    # System Audio Recording or the host's combined system output. On macOS,
-    # run the configured worker on the host instead of this service.
-    # Linux deployments must map /dev/snd in an override and set the ALSA
-    # device; this service must not be used as complete meeting capture.
-    environment:
-      CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
-      CALL_NOTES_WEB_ORIGIN: ${CALL_NOTES_WEB_ORIGIN:-http://app:3000}
-      CALL_NOTES_INTERNAL_TOKEN: ${CALL_NOTES_INTERNAL_TOKEN:-}
       CALL_NOTES_LOCAL_COMPANY_ID: ${CALL_NOTES_LOCAL_COMPANY_ID:-}
       CALL_NOTES_LOCAL_USER_ID: ${CALL_NOTES_LOCAL_USER_ID:-}
-      # Deliberately fixed for this Linux fallback: the macOS helper is not
-      # present in the image and Docker Desktop cannot provide system audio.
-      CALL_NOTES_SYSTEM_AUDIO_HELPER_PATH: ""
-      CALL_NOTES_SYSTEM_AUDIO_ENABLED: "false"
-      CALL_NOTES_UTTERANCE_MAX_MS: ${CALL_NOTES_UTTERANCE_MAX_MS:-3000}
-      CALL_NOTES_FFMPEG_PATH: ${CALL_NOTES_FFMPEG_PATH:-ffmpeg}
-      CALL_NOTES_AUDIO_INPUT_FORMAT: ${CALL_NOTES_AUDIO_INPUT_FORMAT:-alsa}
-      CALL_NOTES_AUDIO_INPUT_DEVICE: ${CALL_NOTES_AUDIO_INPUT_DEVICE:-}
-      CALL_NOTES_AUDIO_SAMPLE_RATE: ${CALL_NOTES_AUDIO_SAMPLE_RATE:-16000}
-      CALL_NOTES_AUDIO_FRAME_MS: ${CALL_NOTES_AUDIO_FRAME_MS:-20}
-      CALL_NOTES_VAD_THRESHOLD: ${CALL_NOTES_VAD_THRESHOLD:-0.015}
-      CALL_NOTES_VAD_ACTIVATION_FRAMES: ${CALL_NOTES_VAD_ACTIVATION_FRAMES:-3}
-      CALL_NOTES_VAD_RELEASE_FRAMES: ${CALL_NOTES_VAD_RELEASE_FRAMES:-15}
-      CALL_NOTES_AUDIO_PRE_ROLL_MS: ${CALL_NOTES_AUDIO_PRE_ROLL_MS:-200}
-      CALL_NOTES_AUDIO_READY_TIMEOUT_MS: ${CALL_NOTES_AUDIO_READY_TIMEOUT_MS:-10000}
-      CALL_NOTES_STOP_DRAIN_TIMEOUT_MS: ${CALL_NOTES_STOP_DRAIN_TIMEOUT_MS:-30000}
-      CALL_NOTES_TRANSCRIPTION_TIMEOUT_MS: ${CALL_NOTES_TRANSCRIPTION_TIMEOUT_MS:-20000}
-      CALL_NOTES_TRANSCRIPTION_PROVIDER: ${CALL_NOTES_TRANSCRIPTION_PROVIDER:-openai}
-      CALL_NOTES_TRANSCRIPTION_BASE_URL: ${CALL_NOTES_TRANSCRIPTION_BASE_URL:-}
-      CALL_NOTES_TRANSCRIPTION_MODEL: ${CALL_NOTES_TRANSCRIPTION_MODEL:-whisper-1}
-      CALL_NOTES_TRANSCRIPTION_API_KEY: ${CALL_NOTES_TRANSCRIPTION_API_KEY:-}
-      CALL_NOTES_TRANSCRIPTION_LANGUAGE: ${CALL_NOTES_TRANSCRIPTION_LANGUAGE:-en}
-      # Enrichment is opt-in to avoid implicit model costs.
-      CALL_NOTES_AUTO_ENRICH: ${CALL_NOTES_AUTO_ENRICH:-false}
-    healthcheck:
-      test: ["CMD", "node", "-e", "process.kill(1, 0)"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+    ports:
+      - "3000:3000"
 
   inngest-dev:
     image: inngest/inngest:latest

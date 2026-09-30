@@ -1,25 +1,38 @@
 /**
  * Resolves a person's `DocumentScope` and turns it into SQL.
  *
- * Three small indexed reads, only when a route reads documents, and only when
- * the workspace has at least one restricted folder or document:
+ * One indexed read denies published Call Notes that are no longer eligible,
+ * independently of asynchronous index cleanup. Folder and document grants
+ * then need three small indexed reads only when the workspace has restrictions:
  *
  *   1. the restricted folders and restricted documents of the workspace;
  *   2. the caller's group ids;
  *   3. the grants on those folders and documents whose principal is the
  *      caller, one of their groups, or their role.
  *
- * Anyone holding `folders.manage` sees everything — they could grant
- * themselves anything anyway, and pretending otherwise would only hide
- * folders from the people who administer them.
+ * Anyone holding `folders.manage` bypasses grant restrictions, but not the
+ * live eligibility policy for Call Notes.
  */
 
-import { and, eq, inArray, notInArray, or, sql, type SQL } from "drizzle-orm";
+import {
+    and,
+    eq,
+    gt,
+    inArray,
+    isNotNull,
+    isNull,
+    notInArray,
+    or,
+    sql,
+    type SQL,
+} from "drizzle-orm";
 
+import { callNotesCalls } from "@launchstack/pipelines/schema";
 import { category, document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import {
     documentGrants,
+    documentNotes,
     documentSettings,
     folderGrants,
     folderSettings,
@@ -69,7 +82,62 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
 
     const role = normalizeRoleSlug(subject.role);
     const isGuest = role === "guest";
-    if (!isGuest && subject.permissions.has("folders.manage")) return SCOPE_EVERYTHING;
+    const callNoteCandidates = db
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, subject.companyId),
+                sql`${document.ocrMetadata} ? 'callNote'`
+            )
+        )
+        .union(
+            db
+                .select({
+                    id: sql<number>`${callNotesCalls.indexedDocumentId}`.mapWith(Number).as("id"),
+                })
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.companyId, subject.companyId),
+                        isNotNull(callNotesCalls.indexedDocumentId)
+                    )
+                )
+        )
+        .as("call_note_candidates");
+    const ineligibleCallNotes = await db
+        .select({ id: callNoteCandidates.id })
+        .from(callNoteCandidates)
+        .leftJoin(
+            callNotesCalls,
+            and(
+                eq(callNotesCalls.companyId, subject.companyId),
+                eq(callNotesCalls.indexedDocumentId, callNoteCandidates.id),
+                eq(callNotesCalls.status, "completed"),
+                eq(callNotesCalls.noteVisibility, "company"),
+                gt(callNotesCalls.currentNoteRevision, 0)
+            )
+        )
+        .leftJoin(
+            documentNotes,
+            and(
+                eq(callNotesCalls.documentNoteId, documentNotes.id),
+                eq(documentNotes.userId, callNotesCalls.noteOwnerUserId),
+                eq(documentNotes.companyId, sql`${callNotesCalls.companyId}::text`)
+            )
+        )
+        .where(or(isNull(callNotesCalls.id), isNull(documentNotes.id)));
+    const ineligibleDocumentIds = new Set(ineligibleCallNotes.map(doc => Number(doc.id)));
+    const unrestrictedScope: DocumentScope =
+        ineligibleDocumentIds.size === 0
+            ? SCOPE_EVERYTHING
+            : {
+                  kind: "except",
+                  deniedCategories: [],
+                  deniedDocumentIds: [...ineligibleDocumentIds],
+                  allowedDocumentIds: [],
+              };
+    if (!isGuest && subject.permissions.has("folders.manage")) return unrestrictedScope;
 
     // 1. What is restricted in this workspace?
     const [restrictedFolders, restrictedDocuments] = await Promise.all([
@@ -96,7 +164,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     ]);
 
     if (!isGuest && restrictedFolders.length === 0 && restrictedDocuments.length === 0) {
-        return SCOPE_EVERYTHING;
+        return unrestrictedScope;
     }
 
     // 2. Which principals is the caller?
@@ -166,8 +234,11 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     }
 
     const allowedDocumentIds: number[] = [];
-    const deniedDocumentIds: number[] = [];
+    const deniedDocumentIds: number[] = [...ineligibleDocumentIds];
     for (const d of restrictedDocuments) {
+        // Keep live-policy denials out of the explicit allow-list so no grant
+        // can re-allow them in SQL, the RAG gate, or retrieval's scope predicate.
+        if (ineligibleDocumentIds.has(Number(d.documentId))) continue;
         (grantedDocumentIds.has(d.documentId.toString())
             ? allowedDocumentIds
             : deniedDocumentIds

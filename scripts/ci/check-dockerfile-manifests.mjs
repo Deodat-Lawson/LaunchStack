@@ -34,7 +34,6 @@ const DOCKERFILES = [
     "apps/web/Dockerfile.prebuilt",
     "apps/worker/Dockerfile",
     "apps/landing/Dockerfile",
-    "apps/call-worker/Dockerfile",
 ];
 
 /** Workspace dirs that ship a package.json, as the Dockerfiles address them. */

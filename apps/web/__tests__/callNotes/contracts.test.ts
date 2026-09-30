@@ -90,7 +90,6 @@ describe("Call Notes contract baseline", () => {
             canRequestEnrichment: false,
             canResolveEnrichment: false,
             canChangeVisibility: false,
-            canChangeKnowledgeInclusion: false,
             canDelete: false,
         };
         const snapshot = {

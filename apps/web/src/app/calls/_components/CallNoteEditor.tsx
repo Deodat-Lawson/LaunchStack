@@ -20,6 +20,14 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { CallNote } from "@launchstack/pipelines/call-notes";
+import { Button } from "~/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 import styles from "./CallNoteEditor.module.css";
 
 type NoteContent = Pick<CallNote, "contentRich" | "contentMarkdown">;
@@ -308,6 +316,7 @@ export function CallNoteEditor({ content, editable, onChange, onSave }: CallNote
 }
 
 function FormattingToolbar({ editor }: { editor: Editor }) {
+    const restoreEditorFocus = useRef(false);
     const activeHeading = editor.isActive("heading")
         ? String(editor.getAttributes("heading").level ?? "")
         : "paragraph";
@@ -343,52 +352,61 @@ function FormattingToolbar({ editor }: { editor: Editor }) {
 
             <span className={styles.separator} role="separator" aria-orientation="vertical" />
 
-            <label className={styles.headingControl}>
-                <span className={styles.visuallyHidden}>Block style</span>
-                <span aria-hidden="true" className={styles.headingIcon}>
-                    {activeHeading === "1" ? (
-                        <Heading1 size={15} />
-                    ) : activeHeading === "2" ? (
-                        <Heading2 size={15} />
-                    ) : activeHeading === "3" ? (
-                        <Heading3 size={15} />
-                    ) : (
-                        <span className={styles.headingText}>Text</span>
-                    )}
-                </span>
-                <select
-                    aria-label="Block style"
-                    value={activeHeading}
-                    onChange={event => {
-                        const value = event.currentTarget.value;
-                        if (value === "paragraph") {
-                            editor.chain().focus().setParagraph().run();
-                            return;
+            <Select
+                value={activeHeading}
+                onValueChange={value => {
+                    restoreEditorFocus.current = true;
+                    if (value === "paragraph") {
+                        editor.chain().focus().setParagraph().run();
+                        return;
+                    }
+                    const level = Number(value);
+                    if (
+                        level === 1 ||
+                        level === 2 ||
+                        level === 3 ||
+                        level === 4 ||
+                        level === 5 ||
+                        level === 6
+                    ) {
+                        if (!editor.isActive("heading", { level })) {
+                            editor.chain().focus().toggleHeading({ level }).run();
                         }
-                        const level = Number(value);
-                        if (
-                            level === 1 ||
-                            level === 2 ||
-                            level === 3 ||
-                            level === 4 ||
-                            level === 5 ||
-                            level === 6
-                        ) {
-                            if (!editor.isActive("heading", { level })) {
-                                editor.chain().focus().toggleHeading({ level }).run();
-                            }
-                        }
+                    }
+                }}
+            >
+                <SelectTrigger size="sm" className={styles.headingControl} aria-label="Block style">
+                    <span className={styles.visuallyHidden}>Block style</span>
+                    <span aria-hidden="true" className={styles.headingIcon}>
+                        {activeHeading === "1" ? (
+                            <Heading1 size={15} />
+                        ) : activeHeading === "2" ? (
+                            <Heading2 size={15} />
+                        ) : activeHeading === "3" ? (
+                            <Heading3 size={15} />
+                        ) : (
+                            <span className={styles.headingText}>Text</span>
+                        )}
+                    </span>
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent
+                    onCloseAutoFocus={event => {
+                        if (!restoreEditorFocus.current) return;
+                        event.preventDefault();
+                        restoreEditorFocus.current = false;
+                        editor.commands.focus();
                     }}
                 >
-                    <option value="paragraph">Paragraph</option>
-                    <option value="1">Heading 1</option>
-                    <option value="2">Heading 2</option>
-                    <option value="3">Heading 3</option>
-                    <option value="4">Heading 4</option>
-                    <option value="5">Heading 5</option>
-                    <option value="6">Heading 6</option>
-                </select>
-            </label>
+                    <SelectItem value="paragraph">Paragraph</SelectItem>
+                    <SelectItem value="1">Heading 1</SelectItem>
+                    <SelectItem value="2">Heading 2</SelectItem>
+                    <SelectItem value="3">Heading 3</SelectItem>
+                    <SelectItem value="4">Heading 4</SelectItem>
+                    <SelectItem value="5">Heading 5</SelectItem>
+                    <SelectItem value="6">Heading 6</SelectItem>
+                </SelectContent>
+            </Select>
 
             <span className={styles.separator} role="separator" aria-orientation="vertical" />
 
@@ -454,8 +472,10 @@ function ToolbarButton({
     children: ReactNode;
 }) {
     return (
-        <button
+        <Button
             type="button"
+            variant="ghost"
+            size="icon"
             className={styles.toolbarButton}
             aria-label={label}
             aria-pressed={pressed}
@@ -465,7 +485,7 @@ function ToolbarButton({
             onClick={onClick}
         >
             {children}
-        </button>
+        </Button>
     );
 }
 

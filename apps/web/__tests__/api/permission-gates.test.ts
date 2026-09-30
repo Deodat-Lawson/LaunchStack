@@ -160,7 +160,10 @@ jest.mock("~/server/services/document-upload", () => ({
     processDocumentUpload: jest.fn(),
     processVideoUrlUpload: jest.fn(),
 }));
-jest.mock("~/server/services/document-delete", () => ({ deleteDocumentCore: jest.fn() }));
+jest.mock("~/server/services/document-delete", () => ({
+    deleteDocumentCore: jest.fn(),
+    deleteDocumentBlobs: jest.fn(),
+}));
 jest.mock("~/server/services/folder-access", () => ({
     FOLDER_EDIT_DENIED: "denied",
     canEditFolder: jest.fn().mockResolvedValue(true),

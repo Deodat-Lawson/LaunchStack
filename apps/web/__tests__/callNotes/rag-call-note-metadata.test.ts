@@ -84,33 +84,4 @@ describe("RagPort note metadata propagation", () => {
         expect(result?.metadata).toMatchObject({ source: "note", noteId: 10 });
         expect(result?.metadata).not.toHaveProperty("callId");
     });
-
-    it("preserves Call Note source, identity, revision, and deep link", async () => {
-        mockCompanyEnsembleSearch.mockResolvedValueOnce([
-            {
-                pageContent: "Accepted Call Note",
-                metadata: {
-                    source: "call_note",
-                    noteId: 20,
-                    callId: "call-20",
-                    revision: 4,
-                    deepLink: "/employer/documents?feature=calls&call=call-20",
-                    searchScope: "company",
-                },
-            },
-        ]);
-
-        const [result] = await createAppRagPort().companyEnsembleSearch("customer", {
-            companyId: 42,
-        });
-
-        expect(result?.source).toBe("call_note");
-        expect(result?.metadata).toMatchObject({
-            source: "call_note",
-            noteId: 20,
-            callId: "call-20",
-            revision: 4,
-            deepLink: "/employer/documents?feature=calls&call=call-20",
-        });
-    });
 });

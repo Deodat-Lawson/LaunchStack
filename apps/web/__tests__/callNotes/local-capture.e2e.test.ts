@@ -19,6 +19,7 @@ import {
 
 const mockWorkspacePermission = jest.fn();
 const mockInvokeStructured = jest.fn<Promise<unknown>, unknown[]>();
+const mockCallNoteSync = jest.fn<Promise<void>, [{ companyId: string; callId: string }]>();
 const mockAfterTasks: Promise<void>[] = [];
 jest.mock("next/server", () => ({
     ...jest.requireActual<typeof NextServerModule>("next/server"),
@@ -298,20 +299,14 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             data: { authUserId: OWNER, companyId: 1n },
         });
         mockInvokeStructured.mockReset().mockResolvedValue(proposal);
+        mockCallNoteSync.mockReset().mockResolvedValue(undefined);
         configureWebCallNotesApplication(
             createPostgresCallNotesApplication({
                 db: mockTestDb.db,
                 memberships: createWebCallNotesMembershipStore(mockTestDb.db),
                 documentNotes: createWebCallNotesDocumentNoteStore(mockTestDb.db),
                 detectedCalls: new LocalDetectedCallSource(),
-                knowledgeSink: {
-                    async upsert() {
-                        throw new Error("Capture must not implicitly index a note");
-                    },
-                    async remove() {
-                        throw new Error("Capture must not implicitly remove indexed notes");
-                    },
-                },
+                callNoteIndex: { sync: mockCallNoteSync },
             })
         );
         host = await startHttpHost();
@@ -334,6 +329,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
     });
 
     it("stays idle until Start, drains final words on Stop, finalizes and creates a reviewable AI proposal", async () => {
+        mockCallNoteSync.mockRejectedValueOnce(new Error("fixture Call Note indexing failure"));
         const microphone = new ControlledAudioSource();
         const system = new ControlledAudioSource();
         const modelGate = deferred();
@@ -497,7 +493,11 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         ]);
         expect(ready.transcript.every(segment => segment.participantId === null)).toBe(true);
         expect(ready.note?.contentMarkdown).toBe("");
-        expect(ready.note?.knowledgeIncluded).toBe(false);
+        expect(mockCallNoteSync).toHaveBeenCalledTimes(1);
+        expect(mockCallNoteSync).toHaveBeenCalledWith({
+            companyId: "1",
+            callId: ready.id,
+        });
         expect(mockInvokeStructured).toHaveBeenCalledTimes(1);
 
         const rendered = renderEnrichedNoteProposal(proposal);
@@ -509,7 +509,11 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         });
         expect(accepted.note?.contentMarkdown).toBe(rendered.contentMarkdown);
         expect(accepted.note?.revision).toBe(1);
-        expect(accepted.note?.knowledgeIncluded).toBe(false);
+        expect(mockCallNoteSync).toHaveBeenCalledTimes(2);
+        expect(mockCallNoteSync).toHaveBeenLastCalledWith({
+            companyId: "1",
+            callId: accepted.id,
+        });
         const filesResponse = await fetch(`${host!.origin}/api/call-notes/files`);
         expect(filesResponse.status).toBe(200);
         expect(await filesResponse.json()).toEqual([

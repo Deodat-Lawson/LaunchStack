@@ -40,7 +40,7 @@ import type {
     CallNotesApplication,
     CallNotesClock,
     CallNotesIdSource,
-    KnowledgeNoteSink,
+    CallNoteIndex,
 } from "./ports";
 import {
     callNotesCalls,
@@ -137,11 +137,10 @@ export interface CallNotesApplicationOptions {
     db: DbClient;
     memberships: CallNotesMembershipStore;
     documentNotes: CallNotesDocumentNoteStore;
-    knowledgeSink: KnowledgeNoteSink;
+    callNoteIndex: CallNoteIndex;
     detectedCalls: DetectedCallSource;
     clock?: CallNotesClock;
     ids?: CallNotesIdSource;
-    callDeepLink?: (companyId: string, callId: string) => string;
 }
 type ParticipantCaptureEvent = Exclude<
     Extract<CaptureEvent, { participant: ParticipantIdentity }>,
@@ -265,11 +264,7 @@ function toGaps(rows: readonly CallNotesGapRow[]): Gap[] {
 function toCallNote(
     call: Pick<
         CallNotesCallRow,
-        | "documentNoteId"
-        | "noteOwnerUserId"
-        | "noteVisibility"
-        | "knowledgeIncluded"
-        | "currentNoteRevision"
+        "documentNoteId" | "noteOwnerUserId" | "noteVisibility" | "currentNoteRevision"
     >,
     record: CallNotesDocumentNoteRecord
 ): NonNullable<CallSnapshot["note"]> {
@@ -278,7 +273,6 @@ function toCallNote(
         documentNoteId: normalized.id,
         ownerUserId: call.noteOwnerUserId,
         visibility: call.noteVisibility,
-        knowledgeIncluded: call.knowledgeIncluded,
         revision: call.currentNoteRevision,
         title: normalized.title,
         contentMarkdown: normalized.contentMarkdown,
@@ -306,8 +300,6 @@ function commandWorkKind(command: CallNotesCommand): CallNotesWorkItemKind {
         case "reject_enrichment":
         case "accept_enrichment":
             return "enrich";
-        case "set_knowledge_inclusion":
-            return "reindex";
         default:
             return "finalize";
     }
@@ -333,7 +325,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
     private readonly clock: CallNotesClock;
     private readonly ids: CallNotesIdSource;
     private readonly workItems: CallNotesWorkItems;
-    private readonly deepLink: (companyId: string, callId: string) => string;
 
     constructor(private readonly options: CallNotesApplicationOptions) {
         this.clock = options.clock ?? defaultClock;
@@ -342,10 +333,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             clock: this.clock,
             ids: this.ids,
         });
-        this.deepLink =
-            options.callDeepLink ??
-            ((_companyId, callId) =>
-                `/employer/documents?feature=calls&call=${encodeURIComponent(callId)}`);
     }
 
     async execute(command: CallNotesCommand): Promise<CallSnapshot | null> {
@@ -391,58 +378,62 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
 
         try {
             let result: CallSnapshot | null;
-            const retried = await this.retryCommittedReindex(parsed);
-            if (retried !== undefined) {
-                result = retried;
-            } else {
-                switch (parsed.kind) {
-                    case "start_capture":
-                        result = await this.startCapture(parsed);
-                        break;
-                    case "dismiss_detected_occurrence":
-                        result = null;
-                        break;
-                    case "pause_capture":
-                        result = await this.controlCapture(parsed, "paused");
-                        break;
-                    case "resume_capture":
-                        result = await this.controlCapture(parsed, "running");
-                        break;
-                    case "stop_capture":
-                        result = await this.stopCapture(parsed);
-                        break;
-                    case "update_note":
+            let recoveredNoteCallId: string | null = null;
+            switch (parsed.kind) {
+                case "start_capture":
+                    result = await this.startCapture(parsed);
+                    break;
+                case "dismiss_detected_occurrence":
+                    result = null;
+                    break;
+                case "pause_capture":
+                    result = await this.controlCapture(parsed, "paused");
+                    break;
+                case "resume_capture":
+                    result = await this.controlCapture(parsed, "running");
+                    break;
+                case "stop_capture":
+                    result = await this.stopCapture(parsed);
+                    break;
+                case "update_note":
+                    if (
+                        receipt.status === "failed" &&
+                        (await this.hasLegacyCommittedNoteUpdate(parsed))
+                    ) {
+                        recoveredNoteCallId = parsed.callId;
+                        result = await this.snapshot(parsed.callId, parsed.actorUserId);
+                    } else {
                         result = await this.updateNote(parsed);
-                        break;
-                    case "set_note_visibility":
-                        result = await this.setNoteVisibility(parsed);
-                        break;
-                    case "request_enrichment":
-                        result = await this.requestEnrichment(parsed);
-                        break;
-                    case "reject_enrichment":
-                        result = await this.rejectEnrichment(parsed);
-                        break;
-                    case "accept_enrichment":
-                        result = await this.acceptEnrichment(parsed);
-                        break;
-                    case "set_knowledge_inclusion":
-                        result = await this.setKnowledgeInclusion(parsed);
-                        break;
-                    case "delete_call":
-                        result = await this.deleteCall(parsed);
-                        break;
-                    default:
-                        throw new CallNotesApplicationError(
-                            "invalid_transition",
-                            "Unsupported Call Notes command"
-                        );
-                }
+                    }
+                    break;
+                case "set_note_visibility":
+                    result = await this.setNoteVisibility(parsed);
+                    break;
+                case "request_enrichment":
+                    result = await this.requestEnrichment(parsed);
+                    break;
+                case "reject_enrichment":
+                    result = await this.rejectEnrichment(parsed);
+                    break;
+                case "accept_enrichment":
+                    result = await this.acceptEnrichment(parsed);
+                    break;
+                case "delete_call":
+                    result = await this.deleteCall(parsed);
+                    break;
+                default:
+                    throw new CallNotesApplicationError(
+                        "invalid_transition",
+                        "Unsupported Call Notes command"
+                    );
             }
             await this.workItems.completeReceipt(receipt.id, {
                 resultCallId: result?.id ?? null,
                 resultActorUserId: parsed.actorUserId,
             });
+            if (recoveredNoteCallId) {
+                await this.syncCallNoteIndex(parsed.companyId, recoveredNoteCallId);
+            }
             return result;
         } catch (error) {
             await this.markReceiptFailed(receipt.id, error);
@@ -483,7 +474,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         company: bigint,
         captureUserId: string,
         now: Date
-    ): Promise<void> {
+    ): Promise<string[]> {
         const captures = await executor
             .select()
             .from(callNotesCaptures)
@@ -495,6 +486,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 )
             )
             .for("update");
+        const finalizedCallIds: string[] = [];
         for (const capture of captures) {
             const [call] = await executor
                 .select()
@@ -695,7 +687,9 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                           }),
                 })
                 .where(and(eq(callNotesCalls.id, call.id), eq(callNotesCalls.companyId, company)));
+            finalizedCallIds.push(call.id);
         }
+        return finalizedCallIds;
     }
 
     private async reconcileStaleCaptureForCall(companyId: string, callId: string): Promise<void> {
@@ -709,17 +703,20 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .limit(1);
         if (!capture) return;
         const now = this.clock.now();
-        await this.options.db.transaction(async tx => {
+        const finalizedCallIds = await this.options.db.transaction(async tx => {
             await tx.execute(
                 sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${companyId}:${capture.captureUserId}`}))`
             );
-            await this.reconcileStaleCaptures(
+            return this.reconcileStaleCaptures(
                 tx as unknown as CallNotesExecutor,
                 company,
                 capture.captureUserId,
                 now
             );
         });
+        for (const finalizedCallId of finalizedCallIds) {
+            await this.syncCallNoteIndex(companyId, finalizedCallId);
+        }
     }
 
     async getLocalCaptureWorkerStatus(input: {
@@ -754,6 +751,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         await this.requireMutationMembership(parsed.companyId, parsed.userId);
         const company = companyNumber(parsed.companyId);
         const now = this.clock.now();
+        let finalizedCallIds: string[] = [];
         const capture = await this.options.db.transaction(async tx => {
             // A worker may only claim one active capture for its configured user.
             // The advisory lock serializes starts, polls, and stale-capture recovery
@@ -769,7 +767,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 parsed.workerId,
                 now
             );
-            await this.reconcileStaleCaptures(executor, company, parsed.userId, now);
+            finalizedCallIds = await this.reconcileStaleCaptures(
+                executor,
+                company,
+                parsed.userId,
+                now
+            );
             const captures = await tx
                 .select()
                 .from(callNotesCaptures)
@@ -907,6 +910,9 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             }
             return null;
         });
+        for (const callId of finalizedCallIds) {
+            await this.syncCallNoteIndex(parsed.companyId, callId);
+        }
         return LocalCapturePollResultSchema.parse({ capture });
     }
 
@@ -1270,161 +1276,59 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             // Preserve the domain error; the durable receipt can be retried by a worker.
         }
     }
-    private async retryCommittedReindex(
-        command: CallNotesCommand
-    ): Promise<CallSnapshot | null | undefined> {
-        if (command.kind !== "update_note" && command.kind !== "accept_enrichment") {
-            return undefined;
-        }
-        const callId: string = command.callId;
-        let revision: number | null = null;
-        if (command.kind === "update_note") {
-            revision = command.baseRevision + 1;
-        } else {
-            const [run] = await this.options.db
-                .select({ baseNoteRevision: callNotesEnrichmentRuns.baseNoteRevision })
-                .from(callNotesEnrichmentRuns)
-                .where(
-                    and(
-                        eq(callNotesEnrichmentRuns.id, command.enrichmentRunId),
-                        eq(callNotesEnrichmentRuns.callId, command.callId),
-                        eq(callNotesEnrichmentRuns.companyId, companyNumber(command.companyId))
-                    )
-                )
-                .limit(1);
-            revision = run ? run.baseNoteRevision + 1 : null;
-        }
-        if (revision === null) return undefined;
+
+    private async hasLegacyCommittedNoteUpdate(
+        command: Extract<CallNotesCommand, { kind: "update_note" }>
+    ): Promise<boolean> {
         const company = companyNumber(command.companyId);
+        const revision = command.baseRevision + 1;
         const [revisionRow] = await this.options.db
             .select()
             .from(callNotesNoteRevisions)
             .where(
                 and(
-                    eq(callNotesNoteRevisions.callId, callId),
+                    eq(callNotesNoteRevisions.callId, command.callId),
                     eq(callNotesNoteRevisions.companyId, company),
                     eq(callNotesNoteRevisions.revision, revision)
                 )
             )
             .limit(1);
-        if (!revisionRow) return undefined;
-        const sameContent =
-            revisionRow.contentMarkdown === command.contentMarkdown &&
-            JSON.stringify(revisionRow.contentRich) === JSON.stringify(command.contentRich);
-        const matchesCommand =
-            revisionRow.createdByUserId === command.actorUserId &&
-            sameContent &&
-            (command.kind === "update_note"
-                ? revisionRow.origin === "manual" && revisionRow.title === command.title
-                : revisionRow.origin === "enrichment" &&
-                  revisionRow.enrichmentRunId === command.enrichmentRunId);
-        if (!matchesCommand) return undefined;
-        const [work] = await this.options.db
-            .select()
+        if (
+            !revisionRow ||
+            revisionRow.createdByUserId !== command.actorUserId ||
+            revisionRow.origin !== "manual" ||
+            revisionRow.title !== command.title ||
+            revisionRow.contentMarkdown !== command.contentMarkdown ||
+            JSON.stringify(revisionRow.contentRich) !== JSON.stringify(command.contentRich)
+        ) {
+            return false;
+        }
+
+        // Pre-cutover edits committed a reindex receipt in the same transaction.
+        // Matching content alone is not enough to recover a stale Note edit.
+        const [legacyReindex] = await this.options.db
+            .select({ id: callNotesWorkItems.id })
             .from(callNotesWorkItems)
             .where(
                 and(
-                    eq(callNotesWorkItems.companyId, companyNumber(command.companyId)),
-                    eq(callNotesWorkItems.kind, "reindex"),
-                    eq(callNotesWorkItems.idempotencyKey, `reindex:${callId}:${revision}`)
+                    eq(callNotesWorkItems.companyId, company),
+                    sql`${callNotesWorkItems.kind} = ${"reindex"}`,
+                    eq(callNotesWorkItems.idempotencyKey, `reindex:${command.callId}:${revision}`)
                 )
             )
             .limit(1);
-        if (!work) return undefined;
-        await this.processReindexWorkItem(work.id);
-        return this.snapshot(callId, command.actorUserId);
+        return legacyReindex !== undefined;
     }
 
-    private async processReindexWorkItem(id: string): Promise<void> {
-        let work = await this.workItems.get(id);
-        if (!work || work.status === "completed") return;
-        if (work.status === "failed") work = await this.workItems.reopenReceipt(id);
-        const claim = await this.workItems.claimById(id, this.ids.next("reindex_worker"), {
-            kind: "reindex",
-            leaseMs: 5 * 60_000,
-        });
-        if (!claim) {
-            const current = await this.workItems.get(id);
-            if (current?.status === "completed") return;
-            throw new CallNotesApplicationError(
-                "unavailable",
-                "Knowledge reindex is already being processed"
-            );
-        }
+    private async syncCallNoteIndex(companyId: string, callId: string): Promise<void> {
         try {
-            const callId =
-                typeof claim.payload.callId === "string" ? claim.payload.callId : claim.callId;
-            const revision =
-                typeof claim.payload.revision === "number" ? claim.payload.revision : null;
-            if (!callId || revision === null) {
-                throw new CallNotesApplicationError(
-                    "invalid_transition",
-                    "Reindex work item is missing its Call revision"
-                );
-            }
-            const [call] = await this.options.db
-                .select()
-                .from(callNotesCalls)
-                .where(eq(callNotesCalls.id, callId))
-                .limit(1);
-            if (!call) {
-                await this.workItems.complete(claim.id, claim.leaseToken);
-                return;
-            }
-            if (call.currentNoteRevision > revision) {
-                await this.workItems.complete(claim.id, claim.leaseToken);
-                return;
-            }
-            if (call.noteVisibility === "private" || !call.knowledgeIncluded) {
-                try {
-                    await this.options.knowledgeSink.remove(call.companyId.toString(), callId);
-                } catch (error) {
-                    throw new CallNotesApplicationError(
-                        "unavailable",
-                        `Unable to remove knowledge Note: ${errorMessage(error)}`
-                    );
-                }
-            } else {
-                const [revisionRow] = await this.options.db
-                    .select()
-                    .from(callNotesNoteRevisions)
-                    .where(
-                        and(
-                            eq(callNotesNoteRevisions.callId, callId),
-                            eq(callNotesNoteRevisions.revision, revision)
-                        )
-                    )
-                    .limit(1);
-                if (!revisionRow) {
-                    throw new CallNotesApplicationError(
-                        "unavailable",
-                        "Committed Call Note revision is missing"
-                    );
-                }
-                await this.upsertKnowledge(
-                    call.companyId.toString(),
-                    callId,
-                    call,
-                    normalizeNote({
-                        id: revisionRow.documentNoteId,
-                        title: revisionRow.title ?? call.title,
-                        contentMarkdown: revisionRow.contentMarkdown,
-                        contentRich: revisionRow.contentRich,
-                    }),
-                    revision
-                );
-            }
-            await this.workItems.complete(claim.id, claim.leaseToken);
+            await this.options.callNoteIndex.sync({ companyId, callId });
         } catch (error) {
-            try {
-                await this.workItems.fail(claim.id, claim.leaseToken, {
-                    code: isApplicationError(error) ? error.code : "unavailable",
-                    message: errorMessage(error).slice(0, 1024),
-                });
-            } catch {
-                // Preserve the operation error if this lease was fenced.
-            }
-            throw error;
+            console.error(
+                "[call-notes] Failed to sync Call Note document",
+                { companyId, callId },
+                error
+            );
         }
     }
 
@@ -1433,7 +1337,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
     ): Promise<CallSnapshot> {
         const company = companyNumber(command.companyId);
         let createdDocumentNoteId: number | null = null;
-        const callId = await this.options.db
+        const committed = await this.options.db
             .transaction(async tx => {
                 await tx.execute(
                     sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
@@ -1443,7 +1347,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 );
                 const now = this.clock.now();
                 const executor = tx as unknown as CallNotesExecutor;
-                await this.reconcileStaleCaptures(executor, company, command.actorUserId, now);
+                const finalizedCallIds = await this.reconcileStaleCaptures(
+                    executor,
+                    company,
+                    command.actorUserId,
+                    now
+                );
                 const [existing] = await tx
                     .select()
                     .from(callNotesCalls)
@@ -1463,7 +1372,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                             "Only the Call Note owner may replay this occurrence"
                         );
                     }
-                    return existing.id;
+                    return { callId: existing.id, finalizedCallIds };
                 }
 
                 const [worker] = await tx
@@ -1559,7 +1468,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     documentNoteId: documentNote.id,
                     noteOwnerUserId: command.actorUserId,
                     noteVisibility: "company",
-                    knowledgeIncluded: false,
                     currentNoteRevision: 0,
                     startedAt: now,
                     createdAt: now,
@@ -1589,7 +1497,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     createdByUserId: command.actorUserId,
                     createdAt: now,
                 });
-                return newCallId;
+                return { callId: newCallId, finalizedCallIds };
             })
             .catch(async error => {
                 if (createdDocumentNoteId !== null) {
@@ -1612,14 +1520,17 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     )
                     .limit(1);
                 if (converged && converged.noteOwnerUserId === command.actorUserId) {
-                    return converged.id;
+                    return { callId: converged.id, finalizedCallIds: [] };
                 }
                 throw new CallNotesApplicationError(
                     "unavailable",
                     `Unable to persist Call: ${errorMessage(error)}`
                 );
             });
-        return this.snapshot(callId, command.actorUserId);
+        for (const callId of committed.finalizedCallIds) {
+            await this.syncCallNoteIndex(command.companyId, callId);
+        }
+        return this.snapshot(committed.callId, command.actorUserId);
     }
 
     private async stopCapture(
@@ -1627,11 +1538,11 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
     ): Promise<CallSnapshot> {
         const company = companyNumber(command.companyId);
         const now = this.clock.now();
-        await this.options.db.transaction(async tx => {
+        const finalizedCallIds = await this.options.db.transaction(async tx => {
             await tx.execute(
                 sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
             );
-            await this.reconcileStaleCaptures(
+            const finalized = await this.reconcileStaleCaptures(
                 tx as unknown as CallNotesExecutor,
                 company,
                 command.actorUserId,
@@ -1673,7 +1584,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 capture.lifecycle === "completed" ||
                 capture.lifecycle === "failed"
             ) {
-                return;
+                return finalized;
             }
 
             if (capture.activeAttemptId === null) {
@@ -1698,7 +1609,8 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                         updatedAt: now,
                     })
                     .where(eq(callNotesCalls.id, call.id));
-                return;
+                finalized.push(call.id);
+                return finalized;
             }
 
             await tx
@@ -1713,7 +1625,11 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .update(callNotesCalls)
                 .set({ status: "finalizing", updatedAt: now })
                 .where(eq(callNotesCalls.id, call.id));
+            return finalized;
         });
+        for (const callId of finalizedCallIds) {
+            await this.syncCallNoteIndex(command.companyId, callId);
+        }
         return this.snapshot(command.callId, command.actorUserId);
     }
 
@@ -1753,7 +1669,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         command: Extract<CallNotesCommand, { kind: "update_note" }>
     ): Promise<CallSnapshot> {
         const company = companyNumber(command.companyId);
-        const committed = await this.options.db.transaction(async tx => {
+        await this.options.db.transaction(async tx => {
             const executor = tx as unknown as CallNotesDocumentNoteExecutor;
             const [call] = await tx
                 .select()
@@ -1778,7 +1694,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             if (call.currentNoteRevision !== command.baseRevision) {
                 throw new CallNotesApplicationError("conflict", "Call Note revision is stale");
             }
-            let updatedNote: CallNotesDocumentNoteRecord;
             try {
                 const existing = await this.options.documentNotes.get(
                     call.documentNoteId,
@@ -1786,16 +1701,14 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 );
                 if (!existing)
                     throw new CallNotesApplicationError("not_found", "Document Note not found");
-                updatedNote = normalizeNote(
-                    await this.options.documentNotes.update(
-                        call.documentNoteId,
-                        {
-                            title: command.title,
-                            contentMarkdown: command.contentMarkdown,
-                            contentRich: command.contentRich,
-                        },
-                        executor
-                    )
+                await this.options.documentNotes.update(
+                    call.documentNoteId,
+                    {
+                        title: command.title,
+                        contentMarkdown: command.contentMarkdown,
+                        contentRich: command.contentRich,
+                    },
+                    executor
                 );
             } catch (error) {
                 if (isApplicationError(error)) throw error;
@@ -1833,25 +1746,8 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 createdByUserId: command.actorUserId,
                 createdAt: now,
             });
-            const reindex =
-                call.knowledgeIncluded && call.noteVisibility === "company"
-                    ? await this.workItems.enqueue(
-                          {
-                              companyId: command.companyId,
-                              callId: command.callId,
-                              kind: "reindex",
-                              idempotencyKey: `reindex:${command.callId}:${revision}`,
-                              payload: {
-                                  callId: command.callId,
-                                  revision,
-                              },
-                          },
-                          tx as unknown as DbClient
-                      )
-                    : null;
-            return { call: updated, note: updatedNote, revision, reindexId: reindex?.id ?? null };
         });
-        if (committed.reindexId) await this.processReindexWorkItem(committed.reindexId);
+        await this.syncCallNoteIndex(command.companyId, command.callId);
         return this.snapshot(command.callId, command.actorUserId);
     }
 
@@ -1877,23 +1773,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .update(callNotesCalls)
             .set({
                 noteVisibility: command.visibility,
-                knowledgeIncluded:
-                    command.visibility === "private" ? false : call.knowledgeIncluded,
                 updatedAt: this.clock.now(),
             })
             .where(
                 and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
             );
-        if (command.visibility === "private") {
-            try {
-                await this.options.knowledgeSink.remove(command.companyId, command.callId);
-            } catch (error) {
-                throw new CallNotesApplicationError(
-                    "unavailable",
-                    `Unable to remove knowledge Note: ${errorMessage(error)}`
-                );
-            }
-        }
+        await this.syncCallNoteIndex(command.companyId, command.callId);
         return this.snapshot(command.callId, command.actorUserId);
     }
 
@@ -2041,7 +1926,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         command: Extract<CallNotesCommand, { kind: "accept_enrichment" }>
     ): Promise<CallSnapshot> {
         const company = companyNumber(command.companyId);
-        const committed = await this.options.db.transaction(async tx => {
+        await this.options.db.transaction(async tx => {
             const executor = tx as unknown as CallNotesDocumentNoteExecutor;
             const [call] = await tx
                 .select()
@@ -2095,23 +1980,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                         "Accepted enrichment content does not match the committed revision"
                     );
                 }
-                const reindex =
-                    call.knowledgeIncluded && call.noteVisibility === "company"
-                        ? await this.workItems.enqueue(
-                              {
-                                  companyId: command.companyId,
-                                  callId: command.callId,
-                                  kind: "reindex",
-                                  idempotencyKey: `reindex:${command.callId}:${acceptedRevision.revision}`,
-                                  payload: {
-                                      callId: command.callId,
-                                      revision: acceptedRevision.revision,
-                                  },
-                              },
-                              tx as unknown as DbClient
-                          )
-                        : null;
-                return { reindexId: reindex?.id ?? null };
+                return;
             }
             if (run.status !== "ready") {
                 throw new CallNotesApplicationError(
@@ -2201,115 +2070,9 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     "conflict",
                     "Enrichment was resolved by another request"
                 );
-            const reindex =
-                call.knowledgeIncluded && call.noteVisibility === "company"
-                    ? await this.workItems.enqueue(
-                          {
-                              companyId: command.companyId,
-                              callId: command.callId,
-                              kind: "reindex",
-                              idempotencyKey: `reindex:${command.callId}:${revision}`,
-                              payload: {
-                                  callId: command.callId,
-                                  revision,
-                              },
-                          },
-                          tx as unknown as DbClient
-                      )
-                    : null;
-            return { reindexId: reindex?.id ?? null };
         });
-        if (committed.reindexId) await this.processReindexWorkItem(committed.reindexId);
+        await this.syncCallNoteIndex(command.companyId, command.callId);
         return this.snapshot(command.callId, command.actorUserId);
-    }
-
-    private async setKnowledgeInclusion(
-        command: Extract<CallNotesCommand, { kind: "set_knowledge_inclusion" }>
-    ): Promise<CallSnapshot> {
-        const company = companyNumber(command.companyId);
-        const [call] = await this.options.db
-            .select()
-            .from(callNotesCalls)
-            .where(
-                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
-            )
-            .limit(1);
-        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
-        if (call.noteOwnerUserId !== command.actorUserId) {
-            throw new CallNotesApplicationError(
-                "forbidden",
-                "Only the Call Note owner may change knowledge inclusion"
-            );
-        }
-        if (command.included && call.noteVisibility === "private") {
-            throw new CallNotesApplicationError(
-                "forbidden",
-                "Private Call Notes cannot enter company knowledge"
-            );
-        }
-        if (call.documentNoteId === null || !call.noteOwnerUserId) {
-            throw new CallNotesApplicationError("invalid_transition", "Call has no indexable Note");
-        }
-        const note = await this.options.documentNotes.get(call.documentNoteId);
-        if (!note) throw new CallNotesApplicationError("not_found", "Document Note not found");
-        if (command.included && call.currentNoteRevision <= 0) {
-            throw new CallNotesApplicationError(
-                "invalid_transition",
-                "A saved Note revision is required before indexing"
-            );
-        }
-        await this.options.db
-            .update(callNotesCalls)
-            .set({ knowledgeIncluded: command.included, updatedAt: this.clock.now() })
-            .where(eq(callNotesCalls.id, command.callId));
-        if (command.included) {
-            await this.upsertKnowledge(
-                command.companyId,
-                command.callId,
-                call,
-                normalizeNote(note),
-                call.currentNoteRevision
-            );
-        } else {
-            try {
-                await this.options.knowledgeSink.remove(command.companyId, command.callId);
-            } catch (error) {
-                throw new CallNotesApplicationError(
-                    "unavailable",
-                    `Unable to remove knowledge Note: ${errorMessage(error)}`
-                );
-            }
-        }
-        return this.snapshot(command.callId, command.actorUserId);
-    }
-
-    private async upsertKnowledge(
-        companyId: string,
-        callId: string,
-        call: CallNotesCallRow,
-        note: CallNotesDocumentNoteRecord,
-        revision: number
-    ): Promise<void> {
-        if (call.documentNoteId === null || !call.noteOwnerUserId) {
-            throw new CallNotesApplicationError("invalid_transition", "Call has no indexable Note");
-        }
-        try {
-            await this.options.knowledgeSink.upsert({
-                companyId,
-                callId,
-                documentNoteId: call.documentNoteId,
-                ownerUserId: call.noteOwnerUserId,
-                revision,
-                title: note.title,
-                contentMarkdown: note.contentMarkdown,
-                deepLink: this.deepLink(companyId, callId),
-            });
-        } catch (error) {
-            throw new CallNotesApplicationError(
-                "unavailable",
-                `Unable to update knowledge Note: ${errorMessage(error)}`
-            );
-        }
     }
 
     private async deleteCall(
@@ -2325,14 +2088,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             )
             .limit(1);
         if (!call) {
-            try {
-                await this.options.knowledgeSink.remove(command.companyId, command.callId);
-            } catch (error) {
-                throw new CallNotesApplicationError(
-                    "unavailable",
-                    `Unable to remove knowledge Note: ${errorMessage(error)}`
-                );
-            }
+            await this.syncCallNoteIndex(command.companyId, command.callId);
             return null;
         }
         const transcript = await this.options.db
@@ -2349,14 +2105,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         ) {
             throw new CallNotesApplicationError("forbidden", "Only admins may delete this Call");
         }
-        try {
-            await this.options.knowledgeSink.remove(command.companyId, command.callId);
-        } catch (error) {
-            throw new CallNotesApplicationError(
-                "unavailable",
-                `Unable to remove knowledge Note: ${errorMessage(error)}`
-            );
-        }
         if (call.documentNoteId !== null) {
             try {
                 await this.options.documentNotes.delete(call.documentNoteId);
@@ -2372,6 +2120,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .where(
                 and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
             );
+        await this.syncCallNoteIndex(command.companyId, command.callId);
         return null;
     }
 
@@ -2559,6 +2308,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .where(
                         and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company))
                     );
+                await this.syncCallNoteIndex(company.toString(), callId);
                 return;
             }
             case "participant_joined":
@@ -3016,6 +2766,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .set({ lifecycle: "failed", outcome: "failed" })
                 .where(eq(callNotesCaptures.id, capture.id));
         }
+        await this.syncCallNoteIndex(company.toString(), callId);
     }
 
     private async transcriptRows(callId: string, company: bigint) {
@@ -3127,7 +2878,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     isNoteOwner && (call.status === "completed" || call.status === "failed"),
                 canResolveEnrichment: isNoteOwner,
                 canChangeVisibility: isNoteOwner,
-                canChangeKnowledgeInclusion: isNoteOwner,
                 canDelete,
             },
             transcript,

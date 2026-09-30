@@ -1,8 +1,8 @@
 /**
  * Embed a note's content into `documentNoteEmbeddings` so the hybrid
  * retriever can union notes with regular document chunks. Embedding is
- * computed outside the final transaction, then the canonical note and any
- * associated Call are locked and revalidated before atomic replacement.
+ * computed outside the final transaction, then the canonical note is locked
+ * and revalidated before atomic replacement. Call Notes use document ingestion.
  */
 
 import { eq } from "drizzle-orm";
@@ -46,20 +46,9 @@ export interface NoteEmbeddingSource {
     updatedAt: Date | null;
 }
 
-export interface CallNoteEmbeddingState {
-    id: string;
-    companyId: bigint;
-    status: "active" | "finalizing" | "completed" | "failed";
-    documentNoteId: number | null;
-    noteOwnerUserId: string | null;
-    noteVisibility: "company" | "private";
-    knowledgeIncluded: boolean;
-    currentNoteRevision: number;
-}
-
 export interface NoteEmbeddingSnapshot {
     note: NoteEmbeddingSource;
-    call: CallNoteEmbeddingState | null;
+    callLinked: boolean;
 }
 
 export interface NoteEmbeddingProjection {
@@ -99,19 +88,6 @@ function noteSelection() {
     };
 }
 
-function callSelection() {
-    return {
-        id: callNotesCalls.id,
-        companyId: callNotesCalls.companyId,
-        status: callNotesCalls.status,
-        documentNoteId: callNotesCalls.documentNoteId,
-        noteOwnerUserId: callNotesCalls.noteOwnerUserId,
-        noteVisibility: callNotesCalls.noteVisibility,
-        knowledgeIncluded: callNotesCalls.knowledgeIncluded,
-        currentNoteRevision: callNotesCalls.currentNoteRevision,
-    };
-}
-
 function sourceIdentity(note: NoteEmbeddingSource): string {
     return JSON.stringify({
         userId: note.userId,
@@ -127,44 +103,13 @@ function sourceIdentity(note: NoteEmbeddingSource): string {
     });
 }
 
-function callIdentity(call: CallNoteEmbeddingState | null): string | null {
-    if (!call) return null;
-    return JSON.stringify({
-        id: call.id,
-        companyId: call.companyId.toString(),
-        status: call.status,
-        documentNoteId: call.documentNoteId,
-        noteOwnerUserId: call.noteOwnerUserId,
-        noteVisibility: call.noteVisibility,
-        knowledgeIncluded: call.knowledgeIncluded,
-        currentNoteRevision: call.currentNoteRevision,
-    });
-}
-
-export function isEligibleCallNote(snapshot: NoteEmbeddingSnapshot): boolean {
-    const { note, call } = snapshot;
-    if (!call) return true;
-    return (
-        call.status === "completed" &&
-        call.knowledgeIncluded &&
-        call.noteVisibility === "company" &&
-        call.documentNoteId === note.id &&
-        call.noteOwnerUserId === note.userId &&
-        call.companyId.toString() === note.companyId &&
-        call.currentNoteRevision > 0
-    );
-}
-
 export function evaluateEmbeddingFreshness(
     expected: NoteEmbeddingSnapshot,
     current: NoteEmbeddingSnapshot | null
 ): NoteEmbeddingWriteResult {
     if (!current) return "missing";
-    if (current.call && !isEligibleCallNote(current)) return "ineligible";
-    if (
-        sourceIdentity(expected.note) !== sourceIdentity(current.note) ||
-        callIdentity(expected.call) !== callIdentity(current.call)
-    ) {
+    if (current.callLinked) return "ineligible";
+    if (sourceIdentity(expected.note) !== sourceIdentity(current.note)) {
         return "stale";
     }
     return "written";
@@ -180,11 +125,11 @@ class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
         if (!note) return null;
 
         const [call] = await db
-            .select(callSelection())
+            .select({ id: callNotesCalls.id })
             .from(callNotesCalls)
             .where(eq(callNotesCalls.documentNoteId, noteId))
             .limit(1);
-        return { note, call: call ?? null };
+        return { note, callLinked: call !== undefined };
     }
 
     async removeProjection(noteId: number): Promise<void> {
@@ -208,15 +153,13 @@ class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
             }
 
             const [call] = await tx
-                .select(callSelection())
+                .select({ id: callNotesCalls.id })
                 .from(callNotesCalls)
                 .where(eq(callNotesCalls.documentNoteId, snapshot.note.id))
-                .limit(1)
-                .for("update");
-            const current: NoteEmbeddingSnapshot = { note, call: call ?? null };
+                .limit(1);
+            const current: NoteEmbeddingSnapshot = { note, callLinked: call !== undefined };
 
-            // A newer source or eligibility transition owns the projection now.
-            // The stale cleanup must not erase what that newer event wrote.
+            // A newer ordinary note owns the projection now.
             if (evaluateEmbeddingFreshness(snapshot, current) === "stale") return "stale";
 
             await tx
@@ -231,8 +174,7 @@ class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
         projection: NoteEmbeddingProjection
     ): Promise<NoteEmbeddingWriteResult> {
         return db.transaction(async tx => {
-            // All compliant workers lock the canonical note first and its Call
-            // second. The note row is the serialization mutex for per-note replace.
+            // The canonical note is the serialization mutex for per-note replace.
             const [note] = await tx
                 .select(noteSelection())
                 .from(documentNotes)
@@ -248,12 +190,11 @@ class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
             }
 
             const [call] = await tx
-                .select(callSelection())
+                .select({ id: callNotesCalls.id })
                 .from(callNotesCalls)
                 .where(eq(callNotesCalls.documentNoteId, snapshot.note.id))
-                .limit(1)
-                .for("update");
-            const current: NoteEmbeddingSnapshot = { note, call: call ?? null };
+                .limit(1);
+            const current: NoteEmbeddingSnapshot = { note, callLinked: call !== undefined };
             const freshness = evaluateEmbeddingFreshness(snapshot, current);
 
             if (freshness === "stale") {
@@ -313,9 +254,9 @@ export async function embedNoteWithDependencies(
         await store.removeProjection(noteId);
         return "missing";
     }
-    if (snapshot.call && !isEligibleCallNote(snapshot)) {
-        const cleanup = await store.removeIfCurrent(snapshot);
-        return cleanup === "stale" ? "stale" : "ineligible";
+    if (snapshot.callLinked) {
+        await store.removeProjection(noteId);
+        return "ineligible";
     }
 
     const embeddingText = buildEmbeddingText({

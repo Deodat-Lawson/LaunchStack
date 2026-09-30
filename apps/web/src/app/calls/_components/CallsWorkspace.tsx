@@ -33,6 +33,27 @@ import type {
     TranscriptSegment,
 } from "@launchstack/pipelines/call-notes";
 import { renderEnrichedNoteProposal } from "@launchstack/pipelines/call-notes/enrichment";
+import { Button } from "~/components/ui/button";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
+import { cn } from "~/lib/utils";
 import type { EnrichmentPreviewState } from "~/lib/call-notes-enrichment-stream";
 import { CallsChat } from "./CallsChat";
 import { CallNoteEditor } from "./CallNoteEditor";
@@ -180,55 +201,63 @@ export function CallsWorkspace({
     const selectedMutation = selected ? mutationStatus?.[selected.id] : undefined;
 
     return (
-        <div className={`lsw-root ${styles.root}`}>
-            {selected ? (
-                <CallPanel
-                    key={selected.id}
-                    snapshot={selected}
-                    onHome={() => select(null)}
-                    onInfo={() => setInfoOpen(value => !value)}
-                    onStartCapture={onStartCapture}
-                    onStopCapture={onStopCapture}
-                    captureActive={captureActive}
-                    pendingCommand={pendingCommand}
-                    captureUnavailableReason={captureUnavailableReason}
-                    noteDraft={noteDrafts?.[selected.id]}
-                    enrichmentPreview={
-                        enrichmentPreview?.callId === selected.id ? enrichmentPreview : undefined
-                    }
-                    mutationStatus={mutationStatus?.[selected.id]}
-                    onNoteChange={onNoteChange}
-                    onNoteTitleChange={onNoteTitleChange}
-                    onSaveNote={onSaveNote}
-                    onDiscardNote={onDiscardNote}
-                    onSetVisibility={onSetVisibility}
-                    onRequestEnrichment={onRequestEnrichment}
-                    onRejectEnrichment={onRejectEnrichment}
-                    onAcceptEnrichment={onAcceptEnrichment}
-                    onDeleteCall={onDeleteCall}
-                />
-            ) : (
-                <CallsHome
-                    calls={calls}
-                    onSelect={select}
-                    onInfo={() => setInfoOpen(value => !value)}
-                    onStartCapture={onStartCapture}
-                    captureActive={captureActive}
-                    pendingCommand={pendingCommand}
-                    captureUnavailableReason={captureUnavailableReason}
-                />
-            )}
-            {infoOpen && (
-                <aside className={styles.infoPopover} aria-label="Local capture">
+        <Popover open={infoOpen} onOpenChange={setInfoOpen}>
+            <div className={cn("lsw-root", styles.root)}>
+                {selected ? (
+                    <CallPanel
+                        key={selected.id}
+                        snapshot={selected}
+                        onHome={() => select(null)}
+                        onStartCapture={onStartCapture}
+                        onStopCapture={onStopCapture}
+                        captureActive={captureActive}
+                        pendingCommand={pendingCommand}
+                        captureUnavailableReason={captureUnavailableReason}
+                        noteDraft={noteDrafts?.[selected.id]}
+                        enrichmentPreview={
+                            enrichmentPreview?.callId === selected.id
+                                ? enrichmentPreview
+                                : undefined
+                        }
+                        mutationStatus={mutationStatus?.[selected.id]}
+                        onNoteChange={onNoteChange}
+                        onNoteTitleChange={onNoteTitleChange}
+                        onSaveNote={onSaveNote}
+                        onDiscardNote={onDiscardNote}
+                        onSetVisibility={onSetVisibility}
+                        onRequestEnrichment={onRequestEnrichment}
+                        onRejectEnrichment={onRejectEnrichment}
+                        onAcceptEnrichment={onAcceptEnrichment}
+                        onDeleteCall={onDeleteCall}
+                    />
+                ) : (
+                    <CallsHome
+                        calls={calls}
+                        onSelect={select}
+                        onStartCapture={onStartCapture}
+                        captureActive={captureActive}
+                        pendingCommand={pendingCommand}
+                        captureUnavailableReason={captureUnavailableReason}
+                    />
+                )}
+                <PopoverContent
+                    className={styles.infoPopover}
+                    align="end"
+                    sideOffset={12}
+                    aria-label="Local capture"
+                    onOpenAutoFocus={event => event.preventDefault()}
+                >
                     <div className={styles.popoverHeading}>
                         <strong>Local capture</strong>
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             className={styles.iconButton}
                             aria-label="Close capture information"
                             onClick={() => setInfoOpen(false)}
                         >
-                            <X size={16} />
-                        </button>
+                            <X size={16} className="size-4" />
+                        </Button>
                     </div>
                     <p>
                         Start a capture when you are ready. A worker on your configured Mac records
@@ -239,18 +268,22 @@ export function CallsWorkspace({
                         transcript evidence to Call Notes. This page never requests browser
                         microphone access.
                     </p>
-                </aside>
-            )}
-            {refreshError && <CommandFeedback message={refreshError} onRetry={onRetryRefresh} />}
-            {selected && selectedMutation?.error && (
-                <CommandFeedback
-                    message={selectedMutation.error}
-                    onRetry={() => onRetryMutation?.(selected.id)}
-                />
-            )}
-            {commandError && <CommandFeedback message={commandError} onRetry={onRetryCommand} />}
-            {!selected && <CallsChat snapshot={null} />}
-        </div>
+                </PopoverContent>
+                {refreshError && (
+                    <CommandFeedback message={refreshError} onRetry={onRetryRefresh} />
+                )}
+                {selected && selectedMutation?.error && (
+                    <CommandFeedback
+                        message={selectedMutation.error}
+                        onRetry={() => onRetryMutation?.(selected.id)}
+                    />
+                )}
+                {commandError && (
+                    <CommandFeedback message={commandError} onRetry={onRetryCommand} />
+                )}
+                {!selected && <CallsChat snapshot={null} />}
+            </div>
+        </Popover>
     );
 }
 
@@ -259,9 +292,9 @@ function CommandFeedback({ message, onRetry }: { message: string; onRetry?: () =
         <div className={styles.commandError} role="alert">
             <span>{message}</span>
             {onRetry && (
-                <button type="button" onClick={onRetry}>
+                <Button variant="outline" size="sm" type="button" onClick={onRetry}>
                     Retry
-                </button>
+                </Button>
             )}
         </div>
     );
@@ -277,7 +310,6 @@ function isCaptureActive(call: CallSnapshot): boolean {
 function CallsHome({
     calls,
     onSelect,
-    onInfo,
     onStartCapture,
     captureActive,
     pendingCommand,
@@ -285,7 +317,6 @@ function CallsHome({
 }: {
     calls: CallSnapshot[];
     onSelect: (id: string) => void;
-    onInfo: () => void;
     onStartCapture?: () => void;
     captureActive: boolean;
     pendingCommand: CaptureCommand | null;
@@ -316,7 +347,9 @@ function CallsHome({
         <main className={styles.panel} aria-label="Calls library">
             <header className={styles.chrome}>
                 <div className={styles.chromeGroup}>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         className={styles.iconButton}
                         aria-label="Search notes"
                         aria-expanded={searchOpen}
@@ -325,29 +358,45 @@ function CallsHome({
                             setQuery("");
                         }}
                     >
-                        <Search size={17} />
-                    </button>
+                        <Search size={17} className="size-[17px]" />
+                    </Button>
                 </div>
                 <div className={styles.chromeGroup}>
-                    <button
-                        className={`${styles.pill} ${styles.captureButton}`}
-                        type="button"
-                        aria-label="Start capture"
-                        onClick={onStartCapture}
-                        disabled={startDisabled}
-                        title={captureUnavailableReason ?? undefined}
-                    >
-                        <Mic size={14} />{" "}
-                        {pendingCommand === "start" ? "Starting…" : "Start capture"}
-                    </button>
-                    <button className={styles.pill} type="button" onClick={onInfo}>
-                        <Info size={14} /> Capture info
-                    </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span className="inline-flex">
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className={cn(styles.pill, styles.captureButton)}
+                                    type="button"
+                                    aria-label="Start capture"
+                                    onClick={onStartCapture}
+                                    disabled={startDisabled}
+                                    title={captureUnavailableReason ?? undefined}
+                                >
+                                    <Mic size={14} className="size-3.5" />{" "}
+                                    {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                                </Button>
+                            </span>
+                        </TooltipTrigger>
+                        {captureUnavailableReason && (
+                            <TooltipContent>{captureUnavailableReason}</TooltipContent>
+                        )}
+                    </Tooltip>
+                    <PopoverTrigger asChild>
+                        <Button variant="outline" size="sm" className={styles.pill} type="button">
+                            <Info size={14} className="size-3.5" /> Capture info
+                        </Button>
+                    </PopoverTrigger>
                 </div>
             </header>
             <div className={styles.scroll}>
                 <div
-                    className={`${styles.homeContent} ${query && !groups.size ? styles.noSearchResults : ""}`}
+                    className={cn(
+                        styles.homeContent,
+                        query && !groups.size && styles.noSearchResults
+                    )}
                 >
                     {captureUnavailableReason && (
                         <p className={styles.workerNotice} role="status">
@@ -357,20 +406,24 @@ function CallsHome({
                     <div className={styles.sectionHeading}>
                         <h1>Coming up</h1>
                         <div className={styles.chromeGroup}>
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="icon"
                                 className={styles.iconButton}
                                 aria-label="Previous day"
                                 onClick={() => setDayOffset(value => value - 1)}
                             >
-                                <ChevronLeft size={17} />
-                            </button>
-                            <button
+                                <ChevronLeft size={17} className="size-[17px]" />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="icon"
                                 className={styles.iconButton}
                                 aria-label="Next day"
                                 onClick={() => setDayOffset(value => value + 1)}
                             >
-                                <ChevronRight size={17} />
-                            </button>
+                                <ChevronRight size={17} className="size-[17px]" />
+                            </Button>
                         </div>
                     </div>
                     <section className={styles.agenda} aria-label="Call activity">
@@ -387,14 +440,16 @@ function CallsHome({
                         <div className={styles.agendaEvents}>
                             {activeCalls.length ? (
                                 activeCalls.map(call => (
-                                    <button
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
                                         key={call.id}
                                         className={styles.agendaEvent}
                                         onClick={() => onSelect(call.id)}
                                     >
                                         <strong>{noteTitle(call)}</strong>
                                         <span>{captureLabel(call)} · Open note</span>
-                                    </button>
+                                    </Button>
                                 ))
                             ) : (
                                 <div className={styles.agendaEmpty}>
@@ -410,15 +465,17 @@ function CallsHome({
                     </section>
                     {searchOpen && (
                         <label className={styles.search}>
-                            <Search size={15} />
-                            <input
+                            <Search size={15} className="size-[15px]" />
+                            <Input
                                 autoFocus
                                 aria-label="Search calls"
                                 placeholder="Search your notes"
                                 value={query}
                                 onChange={event => setQuery(event.target.value)}
                             />
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="icon"
                                 className={styles.iconButton}
                                 aria-label="Close search"
                                 onClick={() => {
@@ -426,8 +483,8 @@ function CallsHome({
                                     setSearchOpen(false);
                                 }}
                             >
-                                <X size={15} />
-                            </button>
+                                <X size={15} className="size-[15px]" />
+                            </Button>
                         </label>
                     )}
                     <div className={styles.notesList}>
@@ -435,18 +492,23 @@ function CallsHome({
                             <section key={label} className={styles.dateGroup} aria-label={label}>
                                 <h2>{label}</h2>
                                 {group.map(call => (
-                                    <button
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
                                         key={call.id}
                                         className={styles.noteRow}
                                         onClick={() => onSelect(call.id)}
                                     >
                                         <span
-                                            className={`${styles.noteIcon} ${isCaptureActive(call) ? styles.activeIcon : ""}`}
+                                            className={cn(
+                                                styles.noteIcon,
+                                                isCaptureActive(call) && styles.activeIcon
+                                            )}
                                         >
                                             {isCaptureActive(call) ? (
-                                                <AudioLines size={18} />
+                                                <AudioLines size={18} className="size-[18px]" />
                                             ) : (
-                                                <FileText size={17} />
+                                                <FileText size={17} className="size-[17px]" />
                                             )}
                                         </span>
                                         <span className={styles.noteRowText}>
@@ -460,7 +522,10 @@ function CallsHome({
                                             </small>
                                         </span>
                                         {call.note?.visibility === "private" && (
-                                            <LockKeyhole size={12} className={styles.rowLock} />
+                                            <LockKeyhole
+                                                size={12}
+                                                className={cn(styles.rowLock, "size-3")}
+                                            />
                                         )}
                                         <time dateTime={call.createdAt}>
                                             {new Date(call.createdAt).toLocaleTimeString("en-US", {
@@ -468,7 +533,7 @@ function CallsHome({
                                                 minute: "2-digit",
                                             })}
                                         </time>
-                                    </button>
+                                    </Button>
                                 ))}
                             </section>
                         ))}
@@ -497,7 +562,6 @@ function CallsHome({
 function CallPanel({
     snapshot,
     onHome,
-    onInfo,
     onStartCapture,
     onStopCapture,
     captureActive,
@@ -518,7 +582,6 @@ function CallPanel({
 }: {
     snapshot: CallSnapshot;
     onHome: () => void;
-    onInfo: () => void;
     onStartCapture?: () => void;
     onStopCapture?: (callId: string) => void;
     captureActive: boolean;
@@ -538,6 +601,7 @@ function CallPanel({
     onDeleteCall?: CallsWorkspaceProps["onDeleteCall"];
 }) {
     const [noteView, setNoteView] = useState<"notes" | "enhanced">("notes");
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [dockMode, setDockMode] = useState<"collapsed" | "transcript" | "chat">("collapsed");
     const dockRef = useRef<HTMLDivElement>(null);
     const previousDockMode = useRef(dockMode);
@@ -632,94 +696,145 @@ function CallPanel({
     return (
         <main className={styles.panel}>
             <header className={styles.chrome}>
-                <button
+                <Button
+                    variant="outline"
+                    size="sm"
                     className={styles.homeButton}
                     aria-label="Back to all notes"
                     onClick={onHome}
                 >
-                    <ChevronLeft size={13} />
-                    <Home size={16} />
-                </button>
+                    <ChevronLeft size={13} className="size-[13px]" />
+                    <Home size={16} className="size-4" />
+                </Button>
                 <div className={styles.chromeGroup}>
                     {showStop && (
-                        <button
-                            className={`${styles.pill} ${styles.stopButton}`}
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className={cn(styles.pill, styles.stopButton)}
                             type="button"
                             onClick={() => onStopCapture?.(snapshot.id)}
                             disabled={stopping || pendingCommand !== null}
                         >
-                            <Square size={13} /> {stopping ? "Stopping…" : "Stop capture"}
-                        </button>
+                            <Square size={13} className="size-[13px]" />{" "}
+                            {stopping ? "Stopping…" : "Stop capture"}
+                        </Button>
                     )}
-                    <button
-                        className={`${styles.pill} ${styles.captureButton}`}
-                        type="button"
-                        onClick={onStartCapture}
-                        disabled={startDisabled}
-                        title={captureUnavailableReason ?? undefined}
-                    >
-                        <Mic size={14} />{" "}
-                        {pendingCommand === "start" ? "Starting…" : "Start capture"}
-                    </button>
-                    <button
-                        className={styles.iconButton}
-                        aria-label="Capture information"
-                        onClick={onInfo}
-                    >
-                        <Info size={16} />
-                    </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span className="inline-flex">
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className={cn(styles.pill, styles.captureButton)}
+                                    type="button"
+                                    onClick={onStartCapture}
+                                    disabled={startDisabled}
+                                    title={captureUnavailableReason ?? undefined}
+                                >
+                                    <Mic size={14} className="size-3.5" />{" "}
+                                    {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                                </Button>
+                            </span>
+                        </TooltipTrigger>
+                        {captureUnavailableReason && (
+                            <TooltipContent>{captureUnavailableReason}</TooltipContent>
+                        )}
+                    </Tooltip>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={styles.iconButton}
+                            aria-label="Capture information"
+                        >
+                            <Info size={16} className="size-4" />
+                        </Button>
+                    </PopoverTrigger>
                     {snapshot.note &&
                     snapshot.viewerCapabilities.canChangeVisibility &&
                     onSetVisibility ? (
-                        <label className={styles.visibilityControl}>
-                            <span className={styles.visuallyHidden}>Note visibility</span>
-                            <select
+                        <Select
+                            value={snapshot.note.visibility}
+                            disabled={mutationPending}
+                            onValueChange={visibility =>
+                                onSetVisibility(snapshot.id, visibility as NoteVisibility)
+                            }
+                        >
+                            <SelectTrigger
+                                size="sm"
+                                className={styles.visibilityControl}
                                 aria-label="Note visibility"
-                                value={snapshot.note.visibility}
-                                disabled={mutationPending}
-                                onChange={event =>
-                                    onSetVisibility(
-                                        snapshot.id,
-                                        event.currentTarget.value as NoteVisibility
-                                    )
-                                }
                             >
-                                <option value="company">Shared</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </label>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="company">Shared</SelectItem>
+                                <SelectItem value="private">Private</SelectItem>
+                            </SelectContent>
+                        </Select>
                     ) : (
                         <span className={styles.pill} title="Note visibility">
                             {snapshot.note?.visibility === "company" ? (
-                                <Users size={13} />
+                                <Users size={13} className="size-[13px]" />
                             ) : (
-                                <LockKeyhole size={13} />
+                                <LockKeyhole size={13} className="size-[13px]" />
                             )}
                             {snapshot.note?.visibility === "company" ? "Shared" : "Private"}
                         </span>
                     )}
                     {snapshot.viewerCapabilities.canDelete && onDeleteCall && (
-                        <button
-                            className={styles.iconButton}
-                            type="button"
-                            aria-label="Delete call"
-                            disabled={mutationPending}
-                            onClick={() => {
-                                if (window.confirm("Delete this call and its note?")) {
-                                    onDeleteCall(snapshot.id);
-                                }
-                            }}
-                        >
-                            <Trash2 size={15} />
-                        </button>
+                        <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={styles.iconButton}
+                                    type="button"
+                                    aria-label="Delete call"
+                                    disabled={mutationPending}
+                                >
+                                    <Trash2 size={15} className="size-[15px]" />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent aria-describedby={undefined}>
+                                <DialogHeader>
+                                    <DialogTitle>Delete this call and its note?</DialogTitle>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline" type="button">
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+                                    <Button
+                                        variant="destructive"
+                                        type="button"
+                                        disabled={mutationPending}
+                                        onClick={() => {
+                                            setDeleteOpen(false);
+                                            onDeleteCall(snapshot.id);
+                                        }}
+                                    >
+                                        Delete
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     )}
-                    <button
+                    <Button
+                        variant="outline"
+                        size="sm"
                         className={styles.pill}
                         aria-label="Copy note link"
                         onClick={() => void copyLink()}
                     >
-                        {copyState === "copied" ? <Check size={15} /> : <LinkIcon size={15} />}
-                    </button>
+                        {copyState === "copied" ? (
+                            <Check size={15} className="size-[15px]" />
+                        ) : (
+                            <LinkIcon size={15} className="size-[15px]" />
+                        )}
+                    </Button>
                     {copyState !== "idle" && (
                         <span role="status" className={styles.copyStatus}>
                             {copyState === "copied" ? "Link copied" : "Could not copy link"}
@@ -763,27 +878,31 @@ function CallPanel({
                     />
                     <div className={styles.noteMeta}>
                         <div className={styles.noteSwitcher} role="tablist" aria-label="Note views">
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="sm"
                                 role="tab"
                                 aria-selected={noteView === "notes"}
                                 className={noteView === "notes" ? styles.selectedTab : ""}
                                 onClick={() => setNoteView("notes")}
                             >
-                                <FileText size={13} /> My notes
-                            </button>
-                            <button
+                                <FileText size={13} className="size-[13px]" /> My notes
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
                                 role="tab"
                                 aria-selected={noteView === "enhanced"}
                                 className={noteView === "enhanced" ? styles.selectedTab : ""}
                                 onClick={() => setNoteView("enhanced")}
                             >
-                                <Sparkles size={14} /> AI enhanced
+                                <Sparkles size={14} className="size-3.5" /> AI enhanced
                                 {(snapshot.enrichment?.status === "ready" ||
                                     snapshot.enrichment?.status === "accepted") && <i />}
-                            </button>
+                            </Button>
                         </div>
                         <span className={styles.pill}>
-                            <CalendarDays size={13} />
+                            <CalendarDays size={13} className="size-[13px]" />
                             {dateLabel(snapshot.createdAt)}
                         </span>
                         <span
@@ -889,7 +1008,9 @@ function CallPanel({
                         onShowChat={() => setDockMode("chat")}
                     />
                 </div>
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className={styles.dockWaveform}
                     aria-label={
                         dockMode === "transcript" ? "Collapse transcript" : "Show transcript"
@@ -902,9 +1023,9 @@ function CallPanel({
                         dockMode === "transcript" ? closeDock() : setDockMode("transcript")
                     }
                 >
-                    <AudioLines size={25} />
-                    <ChevronDown size={12} className={styles.transcriptChevron} />
-                </button>
+                    <AudioLines size={25} className="size-[25px]" />
+                    <ChevronDown size={12} className={cn(styles.transcriptChevron, "size-3")} />
+                </Button>
             </div>
         </main>
     );
@@ -996,6 +1117,7 @@ function NoteSaveStatus({
     onDiscard?: CallsWorkspaceProps["onDiscardNote"];
 }) {
     const [copyFailed, setCopyFailed] = useState(false);
+    const [discardOpen, setDiscardOpen] = useState(false);
     if (!snapshot.viewerCapabilities.canEditNote || !onSave) {
         return <footer className={styles.noteFooter}>Read-only note</footer>;
     }
@@ -1007,12 +1129,19 @@ function NoteSaveStatus({
                     (draft?.status === "saving" ? "Saving…" : draft ? "Unsaved changes" : "Saved")}
             </span>
             {draft && draft.status !== "saving" && draft.status !== "conflict" && (
-                <button type="button" onClick={() => onSave(snapshot.id)}>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                    onClick={() => onSave(snapshot.id)}
+                >
                     {failed ? "Retry save" : "Save now"}
-                </button>
+                </Button>
             )}
             {failed && (
-                <button
+                <Button
+                    variant="outline"
+                    size="sm"
                     type="button"
                     onClick={async () => {
                         try {
@@ -1024,25 +1153,47 @@ function NoteSaveStatus({
                     }}
                 >
                     Copy my draft
-                </button>
+                </Button>
             )}
             {failed && onDiscard && (
-                <button
-                    type="button"
-                    disabled={
-                        draft.status === "conflict" &&
-                        (snapshot.note?.revision ?? 0) <= draft.baseRevision
-                    }
-                    onClick={() => {
-                        if (
-                            window.confirm("Discard your unsaved changes and use the saved note?")
-                        ) {
-                            onDiscard(snapshot.id);
-                        }
-                    }}
-                >
-                    Use saved version
-                </button>
+                <Dialog open={discardOpen} onOpenChange={setDiscardOpen}>
+                    <DialogTrigger asChild>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            type="button"
+                            disabled={
+                                draft.status === "conflict" &&
+                                (snapshot.note?.revision ?? 0) <= draft.baseRevision
+                            }
+                        >
+                            Use saved version
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent aria-describedby={undefined}>
+                        <DialogHeader>
+                            <DialogTitle>
+                                Discard your unsaved changes and use the saved note?
+                            </DialogTitle>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant="outline" type="button">
+                                    Cancel
+                                </Button>
+                            </DialogClose>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    setDiscardOpen(false);
+                                    onDiscard(snapshot.id);
+                                }}
+                            >
+                                Use saved version
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             )}
             {copyFailed && (
                 <span role="alert">Could not copy. Select and copy your text in the editor.</span>
@@ -1088,6 +1239,7 @@ function EnhancedBody({
     onSaveNote?: CallsWorkspaceProps["onSaveNote"];
     onDiscardNote?: CallsWorkspaceProps["onDiscardNote"];
 }) {
+    const [discardOpen, setDiscardOpen] = useState(false);
     if (!snapshot.note) return <PrivateNote />;
 
     const run = snapshot.enrichment;
@@ -1123,15 +1275,17 @@ function EnhancedBody({
                 <strong>No enhanced note yet</strong>
                 <p>Summarize the call by topic, with ideas from your notes woven in and bolded.</p>
                 {canRequest && (
-                    <button
+                    <Button
+                        variant="secondary"
+                        size="sm"
                         type="button"
                         className={styles.actionButton}
                         disabled={mutationPending || noteDirty}
                         onClick={() => onRequestEnrichment?.(snapshot.id)}
                     >
-                        <Sparkles size={14} />{" "}
+                        <Sparkles size={14} className="size-3.5" />{" "}
                         {noteDirty ? "Save note before enhancing" : requestLabel}
-                    </button>
+                    </Button>
                 )}
             </div>
         );
@@ -1149,15 +1303,17 @@ function EnhancedBody({
                     proposal.
                 </p>
                 {canRequest && (
-                    <button
+                    <Button
+                        variant="secondary"
+                        size="sm"
                         type="button"
                         className={styles.actionButton}
                         disabled={mutationPending || noteDirty}
                         onClick={() => onRequestEnrichment?.(snapshot.id)}
                     >
-                        <RefreshCw size={14} />{" "}
+                        <RefreshCw size={14} className="size-3.5" />{" "}
                         {noteDirty ? "Save note before retrying" : requestLabel}
-                    </button>
+                    </Button>
                 )}
             </div>
         );
@@ -1183,21 +1339,46 @@ function EnhancedBody({
                     </span>
                     <div className={styles.enrichmentActions}>
                         {onSaveNote && noteDraft.status !== "conflict" && (
-                            <button type="button" onClick={() => onSaveNote(snapshot.id)}>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                type="button"
+                                onClick={() => onSaveNote(snapshot.id)}
+                            >
                                 Save note
-                            </button>
+                            </Button>
                         )}
                         {onDiscardNote && (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    if (window.confirm("Discard your unsaved note changes?")) {
-                                        onDiscardNote(snapshot.id);
-                                    }
-                                }}
-                            >
-                                Use saved note
-                            </button>
+                            <Dialog open={discardOpen} onOpenChange={setDiscardOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="secondary" size="sm" type="button">
+                                        Use saved note
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent aria-describedby={undefined}>
+                                    <DialogHeader>
+                                        <DialogTitle>
+                                            Discard your unsaved note changes?
+                                        </DialogTitle>
+                                    </DialogHeader>
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="outline" type="button">
+                                                Cancel
+                                            </Button>
+                                        </DialogClose>
+                                        <Button
+                                            type="button"
+                                            onClick={() => {
+                                                setDiscardOpen(false);
+                                                onDiscardNote(snapshot.id);
+                                            }}
+                                        >
+                                            Use saved note
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                         )}
                     </div>
                 </div>
@@ -1209,7 +1390,9 @@ function EnhancedBody({
             />
             {status === "ready" && canResolve && (
                 <div className={styles.enrichmentActions}>
-                    <button
+                    <Button
+                        variant="secondary"
+                        size="sm"
                         type="button"
                         className={styles.actionButton}
                         disabled={mutationPending || noteDirty || proposalStale}
@@ -1220,28 +1403,32 @@ function EnhancedBody({
                             })
                         }
                     >
-                        <Check size={14} /> Accept enhancement
-                    </button>
-                    <button
+                        <Check size={14} className="size-3.5" /> Accept enhancement
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
                         type="button"
                         className={styles.secondaryAction}
                         disabled={mutationPending}
                         onClick={() => onRejectEnrichment?.(snapshot.id, run.id)}
                     >
                         Reject
-                    </button>
+                    </Button>
                 </div>
             )}
             {(status === "rejected" || status === "accepted") && canRequest && (
-                <button
+                <Button
+                    variant="secondary"
+                    size="sm"
                     type="button"
                     className={styles.actionButton}
                     disabled={mutationPending || noteDirty}
                     onClick={() => onRequestEnrichment?.(snapshot.id)}
                 >
-                    <RefreshCw size={14} />{" "}
+                    <RefreshCw size={14} className="size-3.5" />{" "}
                     {noteDirty ? "Save note before regenerating" : requestLabel}
-                </button>
+                </Button>
             )}
         </div>
     );
@@ -1315,8 +1502,8 @@ function TranscriptSection({
         >
             <header className={styles.transcriptHeader}>
                 <label className={styles.transcriptSearch}>
-                    <Search size={16} />
-                    <input
+                    <Search size={16} className="size-4" />
+                    <Input
                         aria-label="Search transcript"
                         placeholder="Search transcript"
                         value={query}
@@ -1331,28 +1518,38 @@ function TranscriptSection({
                         ? `${timeline.length} matches`
                         : `${snapshot.transcript.length} segments`}
                 </span>
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className={styles.iconButton}
                     aria-label="Open AI chat"
                     onClick={onShowChat}
                 >
-                    <Sparkles size={16} />
-                </button>
-                <button
+                    <Sparkles size={16} className="size-4" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className={styles.iconButton}
                     aria-label={normalized ? "Copy search results" : "Copy transcript"}
                     disabled={!timeline.length}
                     onClick={() => void copyTranscript()}
                 >
-                    {copyStatus === "Copied" ? <Check size={16} /> : <Copy size={16} />}
-                </button>
-                <button
+                    {copyStatus === "Copied" ? (
+                        <Check size={16} className="size-4" />
+                    ) : (
+                        <Copy size={16} className="size-4" />
+                    )}
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className={styles.iconButton}
                     aria-label="Close transcript"
                     onClick={onClose}
                 >
-                    <Minus size={18} />
-                </button>
+                    <Minus size={18} className="size-[18px]" />
+                </Button>
             </header>
             <div
                 ref={bodyRef}
@@ -1369,7 +1566,7 @@ function TranscriptSection({
                     if (entry.type === "gap")
                         return (
                             <div className={styles.gap} key={`gap-${entry.gap.id}`}>
-                                <Pause size={13} />
+                                <Pause size={13} className="size-[13px]" />
                                 <strong>{GAP_LABELS[entry.gap.kind]}</strong>
                                 <span>{gapDuration(entry.gap)} not transcribed</span>
                             </div>
@@ -1404,12 +1601,20 @@ function TranscriptSection({
                 <span className={styles.transcriptFeedback} role="status">
                     {copyStatus}
                 </span>
-                <span
-                    className={styles.transcriptProvenance}
-                    title="Channel labels show the audio source, not speaker identity. Local capture may be incomplete."
-                >
-                    <Users size={13} /> Company transcript
-                </span>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span
+                            className={styles.transcriptProvenance}
+                            title="Channel labels show the audio source, not speaker identity. Local capture may be incomplete."
+                        >
+                            <Users size={13} className="size-[13px]" /> Company transcript
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        Channel labels show the audio source, not speaker identity. Local capture
+                        may be incomplete.
+                    </TooltipContent>
+                </Tooltip>
             </footer>
         </aside>
     );

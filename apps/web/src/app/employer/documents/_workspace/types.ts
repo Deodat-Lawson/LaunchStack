@@ -117,12 +117,12 @@ export interface WorkspaceSource {
      */
     id: string;
     /**
-     * DB primary key if this source came from the document table. For a
-     * mindmap this is the *published* document, when there is one — the row
-     * the retrieval layer cites — so citations resolve back to the map.
+     * DB primary key of the retrievable document. For a mindmap this is its
+     * published copy; for a Call Note, its indexed canonical note. Citations
+     * resolve back to the source rather than a separate Markdown document.
      */
     documentId?: number;
-    /** Call Note identity. Call files intentionally have no documentId and open in Calls. */
+    /** Call Note identity. Call Note sources always open in Calls. */
     callId?: string;
     noteId?: number;
     visibility?: NoteVisibility;

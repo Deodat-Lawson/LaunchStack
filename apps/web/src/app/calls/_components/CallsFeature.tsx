@@ -10,23 +10,16 @@ import {
     type CallSnapshot,
 } from "@launchstack/pipelines/call-notes/contracts";
 
+import { Button } from "~/components/ui/button";
+
 import { CallsWorkspace, type CallMutationStatus, type CaptureCommand } from "./CallsWorkspace";
 import { useCallNoteDrafts } from "./useCallNoteDrafts";
 import { useEnrichmentStream } from "./useEnrichmentStream";
 
 type EditableContent = Pick<CallNote, "contentRich" | "contentMarkdown">;
 
-const CENTERED_STATE_STYLE = {
-    display: "grid",
-    placeItems: "center",
-    flex: 1,
-    width: "100%",
-    minHeight: "100%",
-    boxSizing: "border-box",
-    padding: "48px 24px",
-    background: "var(--bg)",
-    color: "var(--ink)",
-} as const;
+const CENTERED_STATE_CLASS_NAME =
+    "box-border grid min-h-full w-full flex-1 place-items-center bg-surface px-6 py-12 font-sans text-ink";
 
 type CaptureCommandRequest =
     | {
@@ -549,10 +542,10 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
 
     if (status === "loading") {
         return (
-            <div role="status" aria-live="polite" style={CENTERED_STATE_STYLE}>
-                <div style={{ maxWidth: 520, textAlign: "center" }}>
-                    <p style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>Loading Calls…</p>
-                    <p style={{ margin: "10px 0 0", color: "var(--ink-3)", lineHeight: 1.6 }}>
+            <div role="status" aria-live="polite" className={CENTERED_STATE_CLASS_NAME}>
+                <div className="max-w-[520px] text-center">
+                    <p className="m-0 text-base font-semibold">Loading Calls…</p>
+                    <p className="text-ink-3 m-0 mt-2.5 leading-[1.6]">
                         Start a capture when you are ready. Audio is handled by the configured local
                         worker; this page does not request browser microphone access.
                     </p>
@@ -562,32 +555,25 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
     }
     if (status === "failed") {
         return (
-            <section aria-label="Calls unavailable" style={CENTERED_STATE_STYLE}>
-                <div style={{ maxWidth: 560 }}>
-                    <h2 style={{ margin: 0, fontSize: 18 }}>Calls are unavailable</h2>
-                    <p style={{ margin: "12px 0 0", color: "var(--ink-3)", lineHeight: 1.6 }}>
+            <section aria-label="Calls unavailable" className={CENTERED_STATE_CLASS_NAME}>
+                <div className="max-w-[560px]">
+                    <h2 className="m-0 text-lg">Calls are unavailable</h2>
+                    <p className="text-ink-3 m-0 mt-3 leading-[1.6]">
                         Start and stop commands are sent to the configured local capture worker; no
                         browser microphone access is requested.
                     </p>
-                    <p style={{ margin: "10px 0 0", color: "var(--ink-3)", lineHeight: 1.6 }}>
+                    <p className="text-ink-3 m-0 mt-2.5 leading-[1.6]">
                         The Call Notes service could not be reached. Confirm the app, worker, and
                         CALL_NOTES_INTERNAL_TOKEN are configured, then retry.
                     </p>
-                    <button
+                    <Button
                         type="button"
+                        variant="outline"
+                        className="bg-panel text-ink hover:bg-panel-2 dark:bg-panel mt-[18px] h-auto rounded-lg px-3.5 py-2"
                         onClick={retryRefresh}
-                        style={{
-                            marginTop: 18,
-                            border: "1px solid var(--line)",
-                            borderRadius: 8,
-                            background: "var(--panel)",
-                            color: "var(--ink)",
-                            padding: "8px 14px",
-                            cursor: "pointer",
-                        }}
                     >
                         Retry
-                    </button>
+                    </Button>
                 </div>
             </section>
         );

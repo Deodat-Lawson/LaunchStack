@@ -17,6 +17,13 @@ export const WorkspaceCallNoteFileSchema = z
         revision: z.number().int().nonnegative(),
         updatedAt: z.string().datetime({ offset: true }),
         preview: z.string().max(512),
+        /**
+         * The indexed document that carries this Call Note's canonical Markdown
+         * into ingestion and retrieval; null until the first index completes
+         * and for Call Notes the viewer may not retrieve. Chat context and
+         * citations use it; opening the file still routes to Calls.
+         */
+        documentId: z.number().int().positive().nullable(),
     })
     .strict();
 

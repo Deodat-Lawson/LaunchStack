@@ -21,7 +21,7 @@ import {
     type CallNotesIdSource,
     type CaptureEvent,
     type DetectedCallCandidate,
-    type KnowledgeNote,
+    type CallNoteIndex,
 } from "@launchstack/pipelines/call-notes";
 
 // Keep the integration test focused on the injected migrated database. The
@@ -83,21 +83,9 @@ interface FixtureIds {
     outsiderPk: bigint;
 }
 
-interface RecordingKnowledgeSink {
-    notes: KnowledgeNote[];
-    removed: Array<{ companyId: string; callId: string }>;
-    upsertAttempts: number;
-    removeAttempts: number;
-    failNextUpsert(): void;
-    failNextRemove(): void;
-    get(companyId: string, callId: string): Promise<KnowledgeNote | null>;
-    upsert(note: KnowledgeNote): Promise<void>;
-    remove(companyId: string, callId: string): Promise<void>;
-}
-
-interface KnowledgeSinkOptions {
-    failUpserts?: number;
-    failRemoves?: number;
+interface RecordingCallNoteIndex extends CallNoteIndex {
+    syncs: Array<{ companyId: string; callId: string }>;
+    failNextSync(): void;
 }
 
 function returnedId(row: unknown, description: string): bigint {
@@ -187,56 +175,27 @@ async function insertFixtures(testDb: CallNotesTestDatabase): Promise<FixtureIds
     };
 }
 
-function createKnowledgeSink(options: KnowledgeSinkOptions = {}): RecordingKnowledgeSink {
-    const byCall = new Map<string, KnowledgeNote>();
-    const notes: KnowledgeNote[] = [];
-    const removed: Array<{ companyId: string; callId: string }> = [];
-    let failuresBeforeUpsert = options.failUpserts ?? 0;
-    let failuresBeforeRemove = options.failRemoves ?? 0;
-    let upsertAttempts = 0;
-    let removeAttempts = 0;
-
+function createCallNoteIndex(onSync?: CallNoteIndex["sync"]): RecordingCallNoteIndex {
+    const syncs: Array<{ companyId: string; callId: string }> = [];
+    let failuresBeforeSync = 0;
     return {
-        notes,
-        removed,
-        get upsertAttempts() {
-            return upsertAttempts;
+        syncs,
+        failNextSync() {
+            failuresBeforeSync += 1;
         },
-        get removeAttempts() {
-            return removeAttempts;
-        },
-        failNextUpsert() {
-            failuresBeforeUpsert += 1;
-        },
-        failNextRemove() {
-            failuresBeforeRemove += 1;
-        },
-        async get(companyId, callId) {
-            return byCall.get(`${companyId}:${callId}`) ?? null;
-        },
-        async upsert(note) {
-            upsertAttempts += 1;
-            if (failuresBeforeUpsert > 0) {
-                failuresBeforeUpsert -= 1;
-                throw new Error("fixture knowledge upsert transient failure");
+        async sync(input) {
+            syncs.push(input);
+            await onSync?.(input);
+            if (failuresBeforeSync > 0) {
+                failuresBeforeSync -= 1;
+                throw new Error("fixture Call Note indexing failure");
             }
-            byCall.set(`${note.companyId}:${note.callId}`, note);
-            notes.push(note);
-        },
-        async remove(companyId, callId) {
-            removeAttempts += 1;
-            if (failuresBeforeRemove > 0) {
-                failuresBeforeRemove -= 1;
-                throw new Error("fixture knowledge remove transient failure");
-            }
-            byCall.delete(`${companyId}:${callId}`);
-            removed.push({ companyId, callId });
         },
     };
 }
 
 interface ApplicationTestOptions {
-    knowledge?: RecordingKnowledgeSink;
+    callNoteIndex?: RecordingCallNoteIndex;
     ids?: CallNotesIdSource;
     documentNotes?: CallNotesDocumentNoteStore;
     clock?: { now(): Date };
@@ -247,10 +206,10 @@ function createApplication(
     options: ApplicationTestOptions = {}
 ): {
     application: CallNotesApplication;
-    knowledge: RecordingKnowledgeSink;
+    callNoteIndex: RecordingCallNoteIndex;
     detectedQueries: CallListQuery[];
 } {
-    const knowledge = options.knowledge ?? createKnowledgeSink();
+    const callNoteIndex = options.callNoteIndex ?? createCallNoteIndex();
     const detectedQueries: CallListQuery[] = [];
     const otherCandidate = DetectedCallCandidateSchema.parse({
         ...CALL_NOTES_DETECTED_CANDIDATE,
@@ -271,7 +230,7 @@ function createApplication(
 
     const application = createWebCallNotesApplication({
         db: testDb.db,
-        knowledgeSink: knowledge,
+        callNoteIndex,
         documentNotes: options.documentNotes,
         detectedCalls: {
             async list(query) {
@@ -283,7 +242,7 @@ function createApplication(
         ids,
     });
 
-    return { application, knowledge, detectedQueries };
+    return { application, callNoteIndex, detectedQueries };
 }
 
 async function heartbeatWorker(
@@ -337,7 +296,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         expect(fixtures.alphaCompanyId).toBe(1n);
         expect(fixtures.betaCompanyId).toBe(2n);
 
-        const { application, knowledge, detectedQueries } = createApplication(testDb);
+        const { application, callNoteIndex, detectedQueries } = createApplication(testDb);
         const detectedBefore = await application.listDetectedCalls({
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
@@ -384,7 +343,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             expect.objectContaining({ capture_user_id: CALL_NOTES_FIXTURE_IDS.ownerUserId }),
         ]);
 
-        const finalSnapshot = await runCallNotesVerticalTracer(application, knowledge);
+        const finalSnapshot = await runCallNotesVerticalTracer(application);
         expect(finalSnapshot.status).toBe("completed");
         expect(finalSnapshot.capture.outcome).toBe("partial");
         expect(finalSnapshot.capture.attemptCount).toBe(2);
@@ -395,11 +354,9 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             "That checklist and a short walkthrough should unblock our team.",
         ]);
         expect(finalSnapshot.gaps.length).toBeGreaterThanOrEqual(2);
-        expect(finalSnapshot.note?.knowledgeIncluded).toBe(true);
-        expect(knowledge.notes.at(-1)).toMatchObject({
+        expect(callNoteIndex.syncs.at(-1)).toEqual({
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             callId: finalSnapshot.id,
-            revision: finalSnapshot.note?.revision,
         });
 
         const segmentCount = await countTranscriptSegments(testDb);
@@ -514,19 +471,26 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             }),
             "not_found"
         );
-        expect(knowledge.removed).toContainEqual({
+        expect(callNoteIndex.syncs.at(-1)).toEqual({
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             callId: finalSnapshot.id,
         });
         expect(await countTranscriptSegments(testDb)).toBe(0);
     });
 
-    it("redacts private enrichment and retries deletion through a surviving receipt", async () => {
+    it("redacts private enrichment and completes deletion even when document indexing fails", async () => {
         await insertFixtures(testDb);
-        const knowledge = createKnowledgeSink();
-        const { application } = createApplication(testDb, { knowledge });
+        const indexedCallStates: unknown[] = [];
+        const callNoteIndex = createCallNoteIndex(async input => {
+            const rows = await testDb.db.execute(sql`
+                SELECT "id" FROM "pdr_ai_v2_call_notes_calls"
+                WHERE "company_id" = ${BigInt(input.companyId)} AND "id" = ${input.callId}
+            `);
+            indexedCallStates.push(rows[0]?.id ?? null);
+        });
+        const { application } = createApplication(testDb, { callNoteIndex });
         await heartbeatWorker(application);
-        const finalSnapshot = await runCallNotesVerticalTracer(application, knowledge);
+        const finalSnapshot = await runCallNotesVerticalTracer(application);
 
         await application.execute(
             CallNotesCommandSchema.parse({
@@ -552,33 +516,24 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         expect(owner.note?.visibility).toBe("private");
         expect(owner.enrichment?.proposal).toEqual(CALL_NOTES_ENRICHMENT_PROPOSAL);
 
-        const removeAttemptsBeforeDelete = knowledge.removeAttempts;
-        knowledge.failNextRemove();
+        const syncCountBeforeDelete = callNoteIndex.syncs.length;
+        callNoteIndex.failNextSync();
         const deleteCommand = CallNotesCommandSchema.parse({
             ...CALL_NOTES_START_COMMAND,
-            requestId: "delete-retry-after-sink-failure",
+            requestId: "delete-with-index-failure",
             kind: "delete_call",
             actorUserId: "user_admin",
             callId: finalSnapshot.id,
         });
-        await expectApplicationCode(application.execute(deleteCommand), "unavailable");
-        expect(knowledge.removeAttempts).toBe(removeAttemptsBeforeDelete + 1);
-
-        const failedDeleteReceipt = await testDb.db.execute(sql`
-            SELECT "status", "call_id"
-            FROM "pdr_ai_v2_call_notes_work_items"
-            WHERE "company_id" = ${BigInt(CALL_NOTES_FIXTURE_IDS.companyId)}
-              AND "kind" = 'finalize'
-              AND "idempotency_key" = ${deleteCommand.requestId}
-        `);
-        expect(failedDeleteReceipt).toHaveLength(1);
-        expect(failedDeleteReceipt[0]?.status).toBe("failed");
-        expect(failedDeleteReceipt[0]?.call_id).toBeNull();
-
-        const retriedDelete = await application.execute(deleteCommand);
-        expect(retriedDelete).toBeNull();
-        expect(knowledge.removeAttempts).toBe(removeAttemptsBeforeDelete + 2);
-        expect(await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, finalSnapshot.id)).toBeNull();
+        await expect(application.execute(deleteCommand)).resolves.toBeNull();
+        expect(callNoteIndex.syncs).toHaveLength(syncCountBeforeDelete + 1);
+        expect(callNoteIndex.syncs.at(-1)).toEqual({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            callId: finalSnapshot.id,
+        });
+        expect(indexedCallStates.at(-1)).toBeNull();
+        await expect(application.execute(deleteCommand)).resolves.toBeNull();
+        expect(callNoteIndex.syncs).toHaveLength(syncCountBeforeDelete + 1);
         await expectApplicationCode(
             application.getCall({
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
@@ -588,48 +543,44 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             "not_found"
         );
 
-        const completedDeleteReceipt = await testDb.db.execute(sql`
+        const deleteReceipt = await testDb.db.execute(sql`
             SELECT "status", "call_id"
             FROM "pdr_ai_v2_call_notes_work_items"
             WHERE "company_id" = ${BigInt(CALL_NOTES_FIXTURE_IDS.companyId)}
               AND "kind" = 'finalize'
               AND "idempotency_key" = ${deleteCommand.requestId}
         `);
-        expect(completedDeleteReceipt[0]?.status).toBe("completed");
-        expect(completedDeleteReceipt[0]?.call_id).toBeNull();
+        expect(deleteReceipt[0]?.status).toBe("completed");
+        expect(deleteReceipt[0]?.call_id).toBeNull();
     });
 
-    it("retries a private-note sink removal after the persisted flag is cleared", async () => {
+    it("persists private visibility and redacts the note even when document indexing fails", async () => {
         await insertFixtures(testDb);
-        const knowledge = createKnowledgeSink();
-        const { application } = createApplication(testDb, { knowledge });
+        const { application, callNoteIndex } = createApplication(testDb);
         await heartbeatWorker(application);
-        const finalSnapshot = await runCallNotesVerticalTracer(application, knowledge);
-        const removeAttemptsBeforeRetry = knowledge.removeAttempts;
-        knowledge.failNextRemove();
+        const finalSnapshot = await runCallNotesVerticalTracer(application);
+        callNoteIndex.failNextSync();
 
         const command = CallNotesCommandSchema.parse({
             ...CALL_NOTES_START_COMMAND,
-            requestId: "private-removal-retry",
+            requestId: "private-with-index-failure",
             kind: "set_note_visibility",
             callId: finalSnapshot.id,
             visibility: "private",
         });
-        await expectApplicationCode(application.execute(command), "unavailable");
-        const persistedAfterFailure = await testDb.db.execute(sql`
-            SELECT "note_visibility", "knowledge_included"
-            FROM "pdr_ai_v2_call_notes_calls"
-            WHERE "id" = ${finalSnapshot.id}
-        `);
-        expect(persistedAfterFailure[0]).toMatchObject({
-            note_visibility: "private",
-            knowledge_included: false,
+        const changed = await application.execute(command);
+        expect(changed?.note?.visibility).toBe("private");
+        expect(callNoteIndex.syncs.at(-1)).toEqual({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            callId: finalSnapshot.id,
         });
-
-        const replay = await application.execute(command);
-        expect(replay?.note?.visibility).toBe("private");
-        expect(await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, finalSnapshot.id)).toBeNull();
-        expect(knowledge.removeAttempts).toBe(removeAttemptsBeforeRetry + 2);
+        const teammate = await application.getCall({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            actorUserId: CALL_NOTES_FIXTURE_IDS.otherUserId,
+            callId: finalSnapshot.id,
+        });
+        expect(teammate.note).toBeNull();
+        expect(teammate.enrichment).toBeNull();
     });
     it("validates membership before converging an already-live occurrence", async () => {
         await insertFixtures(testDb);
@@ -824,79 +775,199 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         }
     });
 
-    it("replays an included Note edit after a transient knowledge upsert failure", async () => {
+    it("commits a Note's content and title before indexing and succeeds when indexing fails", async () => {
         await insertFixtures(testDb);
-        const knowledge = createKnowledgeSink();
-        const { application } = createApplication(testDb, { knowledge });
+        const indexedNotes: unknown[] = [];
+        const callNoteIndex = createCallNoteIndex(async input => {
+            const rows = await testDb.db.execute(sql`
+                SELECT c."current_note_revision", n."title", n."content_markdown"
+                FROM "pdr_ai_v2_call_notes_calls" c
+                JOIN ${DOCUMENT_NOTES_TABLE} n ON n."id" = c."document_note_id"
+                WHERE c."company_id" = ${BigInt(input.companyId)} AND c."id" = ${input.callId}
+            `);
+            indexedNotes.push(rows[0]);
+        });
+        const { application } = createApplication(testDb, { callNoteIndex });
         const started = await startWithWorker(application);
         if (!started?.note) throw new Error("expected started Note");
+        callNoteIndex.failNextSync();
 
-        const firstEdit = parseUpdateNoteCommand({
+        const edit = parseUpdateNoteCommand({
             ...CALL_NOTES_START_COMMAND,
-            requestId: "included-edit-v1",
+            requestId: "edit-with-index-failure",
             kind: "update_note",
             callId: started.id,
             baseRevision: started.note.revision,
-            title: started.note.title,
-            contentMarkdown: "indexed revision one",
+            title: "Owner-renamed canonical note",
+            contentMarkdown: "Owner-authored indexed content",
             contentRich: { type: "doc", content: [] },
         });
-        const firstRevision = await application.execute(firstEdit);
-        expect(firstRevision?.note?.revision).toBe(1);
-        await application.execute(
-            CallNotesCommandSchema.parse({
-                ...CALL_NOTES_START_COMMAND,
-                requestId: "include-note-v1",
-                kind: "set_knowledge_inclusion",
-                callId: started.id,
-                included: true,
-            })
-        );
-        expect((await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id))?.revision).toBe(
-            1
-        );
-
-        knowledge.failNextUpsert();
-        const secondEdit = parseUpdateNoteCommand({
-            ...CALL_NOTES_START_COMMAND,
-            requestId: "included-edit-v2",
-            kind: "update_note",
-            callId: started.id,
-            baseRevision: 1,
-            title: started.note.title,
-            contentMarkdown: "indexed revision two",
-            contentRich: { type: "doc", content: [] },
+        const edited = await application.execute(edit);
+        expect(edited?.note).toMatchObject({
+            revision: 1,
+            title: edit.title,
+            contentMarkdown: edit.contentMarkdown,
         });
-        await expectApplicationCode(application.execute(secondEdit), "unavailable");
-        const committed = await application.getCall({
-            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
-            actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
-            callId: started.id,
-        });
-        expect(committed.note?.revision).toBe(2);
-        expect(committed.note?.contentMarkdown).toBe("indexed revision two");
-        expect((await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id))?.revision).toBe(
-            1
-        );
-
-        const replay = await application.execute(secondEdit);
-        expect(replay?.note?.revision).toBe(2);
-        expect(replay?.note?.contentMarkdown).toBe("indexed revision two");
-        expect((await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id))?.revision).toBe(
-            2
-        );
+        expect(callNoteIndex.syncs).toEqual([
+            { companyId: CALL_NOTES_FIXTURE_IDS.companyId, callId: started.id },
+        ]);
+        expect(indexedNotes).toEqual([
+            expect.objectContaining({
+                current_note_revision: 1,
+                title: edit.title,
+                content_markdown: edit.contentMarkdown,
+            }),
+        ]);
+        const replay = await application.execute(edit);
+        expect(replay?.note?.revision).toBe(1);
+        expect(replay?.note?.contentMarkdown).toBe(edit.contentMarkdown);
+        expect(callNoteIndex.syncs).toHaveLength(1);
     });
 
-    it("replays an included enrichment acceptance after a transient knowledge upsert failure", async () => {
+    it.each([{ legacyReindex: true }, { legacyReindex: false }])(
+        "replays a failed Note edit only with legacy reindex evidence ($legacyReindex)",
+        async ({ legacyReindex }) => {
+            await insertFixtures(testDb);
+            const requestId = "legacy-failed-note-edit";
+            const receiptStatusesAtSync: unknown[] = [];
+            const callNoteIndex = createCallNoteIndex(async input => {
+                const rows = await testDb.db.execute(sql`
+                    SELECT "status"
+                    FROM "pdr_ai_v2_call_notes_work_items"
+                    WHERE "company_id" = ${BigInt(input.companyId)}
+                      AND "kind" = 'finalize'
+                      AND "idempotency_key" = ${requestId}
+                `);
+                receiptStatusesAtSync.push(rows[0]?.status);
+            });
+            const { application } = createApplication(testDb, { callNoteIndex });
+            const started = await startWithWorker(application);
+            if (!started?.note) throw new Error("expected started Note");
+            const edit = parseUpdateNoteCommand({
+                ...CALL_NOTES_START_COMMAND,
+                requestId,
+                kind: "update_note",
+                callId: started.id,
+                baseRevision: started.note.revision,
+                title: "Committed legacy Call Note",
+                contentMarkdown: "This edit committed before legacy reindexing failed.",
+                contentRich: { type: "doc", content: [] },
+            });
+            await application.execute(edit);
+            const committedRevisions = await testDb.db.execute(sql`
+                SELECT "id", "revision", "title", "content_markdown", "content_rich", "created_at"
+                FROM "pdr_ai_v2_call_notes_note_revisions"
+                WHERE "call_id" = ${started.id}
+                ORDER BY "revision"
+            `);
+
+            // Recreate the pre-cutover failure: the Note committed, but indexing
+            // left its command receipt failed with the original command payload.
+            await testDb.db.execute(sql`
+                UPDATE "pdr_ai_v2_call_notes_work_items"
+                SET "status" = 'failed',
+                    "payload" = ${JSON.stringify({ command: edit })}::jsonb,
+                    "completed_at" = NULL,
+                    "error_code" = 'unavailable',
+                    "error_message" = 'Legacy knowledge reindex failed'
+                WHERE "company_id" = ${BigInt(edit.companyId)}
+                  AND "kind" = 'finalize'
+                  AND "idempotency_key" = ${edit.requestId}
+            `);
+            if (legacyReindex) {
+                await testDb.db.execute(sql`
+                    INSERT INTO "pdr_ai_v2_call_notes_work_items"
+                        ("id", "company_id", "call_id", "kind", "idempotency_key",
+                         "payload", "status")
+                    VALUES (
+                        'legacy-note-reindex',
+                        ${BigInt(edit.companyId)},
+                        ${edit.callId},
+                        'reindex',
+                        ${`reindex:${edit.callId}:${edit.baseRevision + 1}`},
+                        ${JSON.stringify({
+                            callId: edit.callId,
+                            revision: edit.baseRevision + 1,
+                        })}::jsonb,
+                        'failed'
+                    )
+                `);
+            }
+            callNoteIndex.syncs.length = 0;
+            receiptStatusesAtSync.length = 0;
+
+            if (legacyReindex) {
+                await expect(application.execute(edit)).resolves.toMatchObject({
+                    note: {
+                        revision: edit.baseRevision + 1,
+                        title: edit.title,
+                        contentMarkdown: edit.contentMarkdown,
+                        contentRich: edit.contentRich,
+                    },
+                });
+            } else {
+                await expectApplicationCode(application.execute(edit), "conflict");
+            }
+            expect(callNoteIndex.syncs).toEqual(
+                legacyReindex ? [{ companyId: edit.companyId, callId: edit.callId }] : []
+            );
+            expect(receiptStatusesAtSync).toEqual(legacyReindex ? ["completed"] : []);
+            const receiptRows = await testDb.db.execute(sql`
+                SELECT "status", "payload"
+                FROM "pdr_ai_v2_call_notes_work_items"
+                WHERE "company_id" = ${BigInt(edit.companyId)}
+                  AND "kind" = 'finalize'
+                  AND "idempotency_key" = ${edit.requestId}
+            `);
+            expect(receiptRows[0]?.status).toBe(legacyReindex ? "completed" : "failed");
+            if (legacyReindex) {
+                expect(receiptRows[0]?.payload).toMatchObject({
+                    resultCallId: edit.callId,
+                    resultActorUserId: edit.actorUserId,
+                });
+                await expect(application.execute(edit)).resolves.toMatchObject({
+                    note: { revision: edit.baseRevision + 1 },
+                });
+                expect(callNoteIndex.syncs).toHaveLength(1);
+            }
+
+            const otherEdit = parseUpdateNoteCommand({
+                ...edit,
+                requestId: "different-stale-note-edit",
+                contentMarkdown: "A different command must not overwrite the committed edit.",
+            });
+            await expectApplicationCode(application.execute(otherEdit), "conflict");
+            await expectApplicationCode(application.execute(otherEdit), "conflict");
+            const revisionsAfterReplay = await testDb.db.execute(sql`
+                SELECT "id", "revision", "title", "content_markdown", "content_rich", "created_at"
+                FROM "pdr_ai_v2_call_notes_note_revisions"
+                WHERE "call_id" = ${started.id}
+                ORDER BY "revision"
+            `);
+            expect(revisionsAfterReplay).toEqual(committedRevisions);
+            const current = await application.getCall({
+                companyId: edit.companyId,
+                actorUserId: edit.actorUserId,
+                callId: edit.callId,
+            });
+            expect(current.note).toMatchObject({
+                revision: edit.baseRevision + 1,
+                title: edit.title,
+                contentMarkdown: edit.contentMarkdown,
+                contentRich: edit.contentRich,
+            });
+        }
+    );
+
+    it("indexes only accepted enrichment and preserves acceptance when indexing fails", async () => {
         await insertFixtures(testDb);
-        const knowledge = createKnowledgeSink();
-        const { application } = createApplication(testDb, { knowledge });
+        const { application, callNoteIndex } = createApplication(testDb);
         const started = await startWithWorker(application);
         if (!started?.note) throw new Error("expected started Note");
 
         const firstEdit = parseUpdateNoteCommand({
             ...CALL_NOTES_START_COMMAND,
-            requestId: "included-acceptance-base",
+            requestId: "acceptance-base",
             kind: "update_note",
             callId: started.id,
             baseRevision: started.note.revision,
@@ -905,15 +976,6 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             contentRich: { type: "doc", content: [] },
         });
         await application.execute(firstEdit);
-        await application.execute(
-            CallNotesCommandSchema.parse({
-                ...CALL_NOTES_START_COMMAND,
-                requestId: "include-before-acceptance",
-                kind: "set_knowledge_inclusion",
-                callId: started.id,
-                included: true,
-            })
-        );
 
         await application.ingestCaptureEvent(
             CALL_NOTES_FIXTURE_IDS.companyId,
@@ -927,6 +989,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             CALL_NOTES_FIXTURE_IDS.companyId,
             CALL_NOTES_CAPTURE_EVENTS[12]!
         );
+        const syncCountBeforeProposal = callNoteIndex.syncs.length;
         const requested = await application.execute(
             CallNotesCommandSchema.parse({
                 ...CALL_NOTES_START_COMMAND,
@@ -959,7 +1022,8 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         });
         if (!ready.enrichment) throw new Error("expected ready enrichment run");
 
-        knowledge.failNextUpsert();
+        expect(callNoteIndex.syncs).toHaveLength(syncCountBeforeProposal);
+        callNoteIndex.failNextSync();
         const acceptance = parseAcceptEnrichmentCommand({
             ...CALL_NOTES_START_COMMAND,
             requestId: "acceptance-with-transient-index-failure",
@@ -969,24 +1033,26 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             contentMarkdown: RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown,
             contentRich: RENDERED_ENRICHMENT_PROPOSAL.contentRich,
         });
-        await expectApplicationCode(application.execute(acceptance), "unavailable");
+        const accepted = await application.execute(acceptance);
+        expect(accepted?.enrichment?.status).toBe("accepted");
         const committed = await application.getCall({
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             callId: started.id,
         });
         expect(committed.note?.revision).toBe(2);
+        expect(committed.note?.contentMarkdown).toBe(RENDERED_ENRICHMENT_PROPOSAL.contentMarkdown);
         expect(committed.enrichment?.status).toBe("accepted");
-        expect((await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id))?.revision).toBe(
-            1
-        );
+        expect(callNoteIndex.syncs.at(-1)).toEqual({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            callId: started.id,
+        });
+        expect(callNoteIndex.syncs).toHaveLength(syncCountBeforeProposal + 1);
 
         const replay = await application.execute(acceptance);
         expect(replay?.note?.revision).toBe(2);
         expect(replay?.enrichment?.status).toBe("accepted");
-        expect((await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id))?.revision).toBe(
-            2
-        );
+        expect(callNoteIndex.syncs).toHaveLength(syncCountBeforeProposal + 1);
     });
 
     it("resolves concurrent enrichment acceptance and rejection with one winner", async () => {
@@ -1379,7 +1445,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
 
     it("does not let a capture replay replace immutable evidence or cross company boundaries", async () => {
         const fixtures = await insertFixtures(testDb);
-        const { application, knowledge } = createApplication(testDb);
+        const { application, callNoteIndex } = createApplication(testDb);
         const started = await startWithWorker(application);
         if (!started) throw new Error("expected start snapshot");
 
@@ -1411,7 +1477,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             application.ingestCaptureEvent(fixtures.betaCompanyId.toString(), otherCompanyEvent),
             "not_found"
         );
-        expect(await knowledge.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id)).toBeNull();
+        expect(callNoteIndex.syncs).toEqual([]);
     });
 
     it("requires a fresh worker heartbeat before creating a Call", async () => {
@@ -1454,7 +1520,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
     it("reconciles a stale worker lease to a partial terminal outcome and rejects stale events", async () => {
         await insertFixtures(testDb);
         let now = new Date(FIXED_NOW);
-        const { application } = createApplication(testDb, {
+        const { application, callNoteIndex } = createApplication(testDb, {
             clock: { now: () => new Date(now) },
         });
         const workerId = "stale-worker";
@@ -1500,6 +1566,9 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 activeAttemptId: null,
             },
         });
+        expect(callNoteIndex.syncs).toEqual([
+            { companyId: CALL_NOTES_FIXTURE_IDS.companyId, callId: started.id },
+        ]);
         expect(recovered.gaps).toEqual([
             expect.objectContaining({ kind: "worker_unavailable", endedAt: now.toISOString() }),
         ]);
@@ -1827,10 +1896,6 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 testDb.db
             )
         ).resolves.toEqual([]);
-        expect(
-            (await application.getCall({ ...ownerQuery, callId: started.id })).note
-                ?.knowledgeIncluded
-        ).toBe(false);
         const deleting = await application.getCall({ ...ownerQuery, callId: started.id });
         expect(deleting.viewerCapabilities.canDelete).toBe(true);
         await application.execute(

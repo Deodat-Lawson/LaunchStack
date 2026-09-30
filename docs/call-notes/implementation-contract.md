@@ -6,27 +6,30 @@
 
 This is the shared handoff for the Call Notes implementation lanes. Exported TypeScript, Zod, and Drizzle artifacts are the executable source for wire and persistence shape; this document records the boundaries those artifacts must preserve.
 
-## Product direction and remaining PR gap — 2026-09-17
+## Call Notes indexed as documents — 2026-09-29
 
-Call Notes are canonical files, not a separate opt-in knowledge product. The target is the same indexing and permission-scoped agent retrieval behavior as normal files, while retaining the specialized Calls editor. Saved canonical note content belongs in that index; immutable Transcript evidence and unaccepted AI proposals are separate.
+Call Notes are canonical application-managed files, indexed through the normal document ingestion and permission-scoped retrieval path while retaining the specialized Calls editor. This supersedes the earlier file-only and opt-in publication boundaries; there is no separate knowledge-inclusion toggle or command.
 
-The current implementation does **not** yet meet that target:
+- **Indexing mechanism:** `CallNoteIndex` in `pipelines/src/call-notes/ports.ts` exposes idempotent `sync({ companyId, callId })`. The application invokes it after the owning write commits when the canonical note revision/title, visibility, or Call lifecycle changes. `apps/web/src/server/call-notes/document-index.ts` publishes the saved title and canonical Markdown through the same document ingestion path used by mindmap publishing, creating a regular `document` in the `Calls` folder with creation key `call-note:<callId>` and an `ocr_metadata.callNote` marker.
+- **Eligibility and revisions:** only completed Calls with a saved canonical note, revision greater than zero, and company visibility are indexable. Later revisions add document versions under the same document ID, using revision keys `call-note:<callId>:r<revision>`. Index publication is serialized per Call by a row lock and rechecks the current revision before ingestion. Sync removes ineligible documents, including after privacy changes or Call deletion; restoring company visibility republishes an eligible note.
+- **Upload lifecycle:** Markdown is uploaded only when the pre-check permits publication. After each upload, a `finally` cleanup discards its upload row and blob unless a document/version references it, including removed, stale or unchanged exits, errors and retries. Uploads retained by independently committed ingestion are kept.
+- **Private-note decision:** private Call Notes are ineligible for indexing. Ordinary document permissions give non-guest `folders.manage` holders with document-read access a grant-restriction bypass, so folder or document grants alone would otherwise expose an owner-only note. `apps/web/src/lib/authz/scope.ts` denies Call Note document reads for every subject unless a live same-company Call points to that document, remains completed and company-visible, has revision greater than zero, and has a canonical note matching its note ID, owner and company. This denial does not wait for index cleanup or depend on its success. Owners can still open private notes in Calls, but private notes are unavailable to document retrieval and cannot be pinned as workspace chat context.
+- **Durable provenance:** ingestion, edit and connector updates merge `document.ocr_metadata`, preserving `callNote` through failures and revisions. Index sync merge-stamps the marker on publication, versioning and unchanged paths. Call Note documents are recognized by that marker **or** a same-company `call_notes_calls` row referencing them via `indexed_document_id`. Both the scope denial and the mutation guards use this marker-or-reference boundary; `apps/web/src/lib/call-note-document.ts` supplies the guards' classification. Successful Google Drive/Gmail re-syncs merge metadata while clearing `driveDeleted` / `gmailDeleted`, respectively.
+- **Managed-document guards:** visible Call Note documents return 409 for generic document PATCH, versions POST/DELETE/revert, `deleteDocument`, `batchDelete`, google-docs open/sync/unlink, adeu apply, and document-access changes. Generic PUT/DELETE at `/api/notes/[noteId]` also refuse a Call's canonical note with 409 `Call Notes are managed from Calls`. Calls-folder rename/move/delete through the Categories and folders APIs also return 409. Canonical mutations remain Calls operations.
+- **File-read boundary:** session requests to `/api/files/[id]` apply the caller's document scope to uploads mapped to a document's current or historical versions, using either internal file URLs or external storage URLs.
+- **Deletion boundary:** `deleteDocumentCore` deletes document/dependent rows and unshared upload rows in the caller's transaction and returns blob-deletion requests. `deleteDocument`, `batchDelete` and the Call Note index delete blobs only after commit; failures are logged. Uploads still referenced by another document/version are kept, including `/api/files/<id>` aliases with query strings, fragments or trailing slashes.
+- **Canonical content only:** Call Notes are no longer note-embedded; `embed-note.ts` removes their legacy note vectors, and every `NotesRetriever` scope excludes Call-linked notes. Transcripts and unaccepted Enriched Note proposals never enter the document index. Explicit acceptance creates a canonical revision that is indexed when eligible.
+- **Workspace context and citations:** `WorkspaceCallNoteFile.documentId` identifies the indexed document. Indexed Call Notes appear once in the source rail, can be selected as workspace chat context, and retain that context in chat history. Document-ID citations resolve to the Call Note and open `feature=calls&call=<id>`, not a second Markdown editor. Private or unindexed notes remain openable in Calls but expose no context checkbox. The Call Note context menu keeps opening and title/link copying separate from generic document mutation controls.
+- **Migration and backfill:** product migration `20260930011158_call_note_document_index` adds `indexed_document_id` / `indexed_revision`, drops `knowledge_included`, and indexes `call_notes_calls(company_id, indexed_document_id)`. Engine migration `20260930011049_call_note_document_scope_index` adds the partial index `document(company_id, id) WHERE ocr_metadata ? 'callNote'`. Each step of the resumable, idempotent backfill `2026-09-call-note-documents` first merge-stamps every same-company document referenced by a Call's `indexed_document_id`, regardless of eligibility, then removes legacy Call Note vectors and syncs completed Calls through the same index. Run `pnpm --filter @launchstack/web db:backfill --only=2026-09-call-note-documents` after applying migrations.
 
-- Call Note file entries lack a normal document ID and are explicitly excluded from workspace chat selection and saved chat context.
-- The older `set_knowledge_inclusion` command, knowledge sink, and note-embedding retrieval path still exist. They are retained in this reconciliation, not evidence that normal file indexing has been delivered.
-- Company-scoped note retrieval applies opt-in/visibility checks, but user-scoped Ask My Notes does not apply those same Call Note checks. The current behavior is neither the earlier blanket retrieval exclusion nor a complete normal-file permission contract.
-- Follow-up integration must use the existing document ingestion/retrieval path, remove the separate publication gate, connect source selection and citations, and verify update, deletion, private-note access, and existing-note migration behavior.
-
-This PR preparation is limited to merging main, fixing merge interactions, and pruning proven-unused artifacts. The normal-file/RAG integration is explicitly deferred by the user; do not describe this branch as completing that product direction. The 2026-09-05 file-only direction below records the prior implementation boundary and is superseded by this section.
-
-## Approved product direction — 2026-09-05
+## Approved capture and workspace behavior
 
 - **Explicit Start:** the initial Calls UI requires an authenticated user to explicitly start capture. Speech detection alone must not create a new Call. Voice Activity detection remains responsible for utterance boundaries within a user-started capture.
 - **Backend capture controls implemented:** authenticated Start creates a pending Capture; a private outbound-polling worker claims it before opening audio. Stop closes the sources and drains transcription before finalization. Startup and silence do not create Calls, and silence does not finish them. Backend-only HTTP/PostgreSQL E2E coverage uses controlled PCM and deterministic model responses; it requires no frontend and is not installed-macOS or live-device capture proof.
 - **Frontend integrated:** the authenticated Calls workspace starts/stops capture, polls durable transcript and lifecycle state, autosaves title and rich notes, manages visibility, and generates, edits, accepts, rejects, or regenerates AI proposals. Confirmed mutations invalidate older in-flight reads; audio timestamps are not treated as monotonic snapshot revisions.
-- **Workspace files, not host files:** Call Notes are application-managed file entries under `Calls`, with each entry opening the specialized Calls UI. Call history and the workspace file tree refer to the same underlying Call and canonical note; this does not introduce physical Markdown files or a second writable copy.
-- **Search without assistant retrieval:** the initial file-oriented release includes permission-scoped note discovery, including embedding-backed search, but excludes Call Notes from assistant retrieval. Search indexing and retrieval eligibility must be separate policies. Existing knowledge-inclusion and retrieval implementation below describes the prior v2 path; it must not be enabled implicitly by file visibility or search indexing.
-- **File integration delivered:** permission-scoped metadata listing, canonical title/preview refresh, workspace title/preview filtering, command-palette discovery, and specialized file-open routing. File entries cannot be pinned as assistant context or mutated through generic document controls. Embedding-backed discovery remains separate from this metadata/file integration; neither listing nor acceptance enables knowledge inclusion.
+- **Workspace files, not host files:** Call Notes are application-managed file entries under `Calls`, with each entry opening the specialized Calls UI. Call history and the workspace file tree refer to the same underlying Call and canonical note; stored Markdown is a derived indexing projection, not a host-managed file or a second writable copy.
+- **Permission-scoped assistant retrieval:** completed, company-visible canonical Call Notes with a saved revision use normal document retrieval. Private Call Notes are denied document retrieval even if index cleanup fails; Transcripts and unaccepted proposals never enter that index. There is no separate publication opt-in.
+- **File integration delivered:** permission-scoped metadata listing, canonical title/preview refresh, workspace title/preview filtering, command-palette discovery, and specialized file-open routing. Indexed Call Notes can be pinned as assistant context and cited back to Calls. Note edits, visibility, and deletion remain Calls operations, not generic document controls.
 - **Transcript bookmarks retired — 2026-09-06:** no transcript marker controls, bookmark commands, guidance, capability, or bookmark citation metadata remain. Migration `20260906060000_sunset_transcript_bookmarks` drops the marker table, removes `bookmarkPassages` from stored original/editable enrichment proposals, and deletes pending/failed bookmark-command receipts. Saved note prose, immutable transcript evidence, and other enrichment metadata are preserved. Apply migrations and deploy the web application and rebuilt worker together; restart old worker processes so they consume the current snapshot contract. Earlier issue documents are historical records, not authorization to restore bookmarking.
 
 ## Deferred local application lifecycle todos
@@ -42,7 +45,7 @@ The shared application/worker process launcher is deferred. The current Capture 
 
 ## Deferred macOS deployment work
 
-The current development path runs the Node worker, ffmpeg microphone source, and locally built ScreenCaptureKit helper on a logged-in Mac. It is not an installable, release-verified macOS product. Docker remains a Linux microphone-only fallback and is not the macOS capture deployment path.
+The supported deployment is a server-hosted web application and one macOS-only Local Capture Worker running directly on the configured Capture User's Mac. The Node worker uses ffmpeg and a locally built ScreenCaptureKit helper in the logged-in session; see `apps/call-worker/README.md` for setup. There is no Docker/Linux Capture fallback. This manual development deployment is not an installable, release-verified macOS product.
 
 Reliable Mac distribution remains deferred after explicit capture controls and frontend integration. The deployment work must cover:
 
@@ -61,14 +64,14 @@ The previously observed system-audio backpressure and capture-target failures re
 - A **Call** is one company-scoped conversation occurrence.
 - A Call owns one logical **Capture**. Start, Pause, and Resume intent lives on the Capture, not on a worker process or audio stream.
 - Each continuous local-audio interval is a **Capture Attempt** anchored to one authenticated same-company **Capture User**. A later interval is a new attempt; cross-user handoff and overlapping attempts are not supported.
-- A Capture's source is `local_audio`. In full host mode it combines independent microphone and computer/system-output streams; Docker/Linux development mode may provide only the microphone stream. The source preserves channel provenance but does not guarantee complete coverage, diarization, or speaker attribution.
+- A Capture's source is `local_audio`. The supported dual-channel macOS path combines independent microphone and Computer Audio streams. The source preserves Audio Channel provenance but does not guarantee complete coverage, diarization, or speaker attribution.
 - **Transcript Segment** evidence is immutable. Every derived segment carries required `audioChannel` provenance (`microphone` or `system`); this is a capture path, not speaker attribution. Source timestamps order it when available; `receivedAt` plus `receiveOrder` is the fallback.
 - Known missing intervals are durable **Gaps**. Any retained Transcript with a known gap finalizes as `partial`, never silently `complete`.
 - Every Call has at most one canonical editable **Call Note**, backed by existing `document_notes` and owned by the first user whose Capture start succeeds.
 - Derived transcript evidence is company-visible. It may have no participant or speaker identity; local ingest requires `participant: null`. The owner may make the Call Note private, and non-owners then receive `note: null` while transcript evidence remains visible.
 - Transcript presentation may use `Me` for microphone evidence and `Meeting` for system-output evidence as fallback labels. These labels never populate `participantId` and must not be presented as diarization.
 - **Enriched Note** is a proposal and immutable run record until the owner explicitly accepts or rejects it. Accept creates a new canonical-note revision.
-- Company knowledge contains only the current canonical Call Note when its owner explicitly enables inclusion. Transcript segments never enter company RAG in this release.
+- Company knowledge indexes the current canonical Call Note as a document when the Call is completed, its saved revision is greater than zero, and its visibility is company-wide. Private Call Notes are ineligible for document retrieval; Transcripts and unaccepted Enriched Note proposals are never indexed.
 
 ## Local source and transcription contract
 
@@ -97,10 +100,10 @@ The previously observed system-audio backpressure and capture-target failures re
 | `CaptureEventSchema`                               | The only source-to-domain event language                                                                                                                           |
 | `CallSnapshotSchema`                               | Read model consumed by APIs and the Calls UI, with private-note redaction                                                                                          |
 | `EnrichmentInputSchema` / `EnrichmentResultSchema` | Model boundary with provenance-ready structured output                                                                                                             |
-| `KnowledgeNoteSchema`                              | The one downstream knowledge record                                                                                                                                |
+| `CallNoteIndex`                                    | Post-commit synchronization of the canonical Call Note's document index                                                                                            |
 | `CaptureSource`                                    | Local capture-source seam consumed by the application                                                                                                              |
 | `CallNotesApplication`                             | Domain/application seam consumed by API handlers and conformance checks                                                                                            |
-| `EnrichmentModel` / `KnowledgeNoteSink`            | AI and retrieval boundaries                                                                                                                                        |
+| `EnrichmentModel`                                  | AI proposal-generation boundary                                                                                                                                    |
 | `CALL_NOTES_CAPTURE_EVENTS`                        | Deterministic v2 application timeline with dual-channel derived transcription and finalization; the worker HTTP ingress accepts only the strict local subset above |
 | `assertCaptureSourceContract`                      | Reusable local capture-source conformance check                                                                                                                    |
 | `runCallNotesVerticalTracer`                       | Shared simulated end-to-end acceptance contract                                                                                                                    |
@@ -167,7 +170,7 @@ Successful chat requests return an SSE stream (`text/event-stream`) with JSON `d
 
 Call chat resolves its model with `{ streaming: true }` before calling `.stream()`. The installed ChatOpenAI adapter otherwise disables streaming at construction and silently falls back to a buffered completion, even through `.stream()`. Regression coverage exercises the real resolver and SDK against a held-open HTTP response, not only mocked model chunks.
 
-Questions are limited to 8,000 characters. History is limited to 20 messages, 4,000 characters per message, and 40,000 characters total. Call context exceeding 60,000 characters returns 413 without silently dropping evidence. Chat is session-local, does not alter the canonical note, and drafts email without sending it. The home composer opens the workspace assistant rather than implying cross-call retrieval.
+Questions are limited to 8,000 characters. History is limited to 20 messages, 4,000 characters per message, and 40,000 characters total. Call context exceeding 60,000 characters returns 413 without silently dropping evidence. Call-scoped chat is session-local, does not alter the canonical note, and drafts email without sending it. The home composer opens the separate workspace assistant, whose permission-scoped document retrieval can include indexed Call Notes.
 
 ## Local worker HTTP wire
 
@@ -194,16 +197,14 @@ Polling and application reads reconcile abandoned claimed-local attempts instead
 The implemented v2 path is:
 
 1. An authenticated configured user issues Start. At most one nonterminal Capture may exist for that user; repeated starts for the same occurrence converge. The worker atomically claims the pending session before opening sources.
-2. In full host mode, the worker opens microphone and system-output streams concurrently and waits for valid PCM from both before emitting `attempt_connected` and showing Live. Readiness has a 10-second deadline; silence represented by zero PCM is valid. Required-source failure never emits connected. After readiness, either channel may contribute evidence independently.
+2. On the supported dual-channel macOS path, the worker opens microphone and Computer Audio streams concurrently and waits for valid PCM from both before emitting `attempt_connected` and showing Live. Readiness has a 10-second deadline; silence represented by zero PCM is valid. Required-source failure never emits connected. After readiness, either Audio Channel may contribute evidence independently.
 3. Each channel has independent Voice Activity detection, a 200ms pre-roll buffer preserving speech onset and VAD activation frames, and Audio Utterance buffering. Defaults send at 300ms of silence or a 3-second utterance limit. Speech and silence determine utterance boundaries only; neither creates nor ends a Call.
 4. The configured Transcription Model returns text for each channel-specific utterance. For non-empty text the worker emits a strict local `transcript_segment` with `sourceKind: "derived_asr"`, the utterance's `audioChannel`, and `participant: null`, plus source timing when available. A single Call/attempt has one global receive order across both channels.
 5. Each utterance's short PCM buffer remains in memory until transcription succeeds and the transcript event is durably accepted. The worker then zeroes the PCM bytes before releasing the buffer; an empty transcription result has no transcript event and may be zeroed after the model call succeeds. Raw audio is never written to a recording or persisted.
 6. A required stream error or unexpected EOF is capture loss. The worker must best-effort emit `attempt_failed`, never a successful finish or auto-enrichment. Cancellation, timeout, abort, and unsupported pause are also failed paths.
 7. Stop sets `desiredMode: "stopped"` and exposes finalizing state. The worker closes audio, drains outstanding utterances and transcript writes, then emits `attempt_ended` with `reason: "user_stopped"` followed by `occurrence_ended`. Stopping an unclaimed Capture terminates it without opening audio. Repeated Stop is harmless; pause/resume cannot resurrect a stopped Capture.
-8. Only after successful evidence persistence does the worker send `finish` using the assigned `callId` and configured user. Auto-enrichment is durably queued before the response, while model generation runs separately through Next.js `after`; it is not part of audio shutdown or the Stop drain deadline. The proposal does not replace the canonical note or enable knowledge inclusion.
+8. Only after successful evidence persistence does the worker send `finish` using the assigned `callId` and configured user. Auto-enrichment is durably queued before the response, while model generation runs separately through Next.js `after`; it is not part of audio shutdown or the Stop drain deadline. The unaccepted proposal neither replaces the canonical Call Note nor enters the document index.
 9. Shutdown cancels both source streams and all in-flight transcription/backend work. It must not convert cancellation or incomplete evidence into successful finalization or enrichment.
-
-Docker/Linux development mode deliberately supplies only the microphone stream. It is not a dual-channel or complete meeting-capture path.
 
 An unexpected capture loss, abort, fatal transcription failure, or transcript-event persistence failure is a failed path. It must not emit a successful `attempt_ended`, `occurrence_ended`, or `finish`, and must not request or run auto-enrichment. The worker may best-effort emit `attempt_failed` when the backend is reachable.
 
@@ -231,13 +232,13 @@ A capture event may be delivered more than once or after a newer event. Consumer
 
 ## Authorization and privacy contract
 
-| Capability                                          | Call Note owner | Same-company user | Company admin |
-| --------------------------------------------------- | --------------: | ----------------: | ------------: |
-| Read Transcript and company-visible note            |             yes |               yes |           yes |
-| Read private note                                   |             yes |                no |            no |
-| Edit note, privacy, enrichment, knowledge inclusion |             yes |                no |            no |
-| Delete an empty failed Call                         |             yes |                no |           yes |
-| Delete a completed or non-empty Call                | no unless admin |                no |           yes |
+| Capability                               | Call Note owner | Same-company user | Company admin |
+| ---------------------------------------- | --------------: | ----------------: | ------------: |
+| Read Transcript and company-visible note |             yes |               yes |           yes |
+| Read private note                        |             yes |                no |            no |
+| Edit note, privacy, enrichment           |             yes |                no |            no |
+| Delete an empty failed Call              |             yes |                no |           yes |
+| Delete a completed or non-empty Call     | no unless admin |                no |           yes |
 
 Company-admin deletion authority includes both `owner` and `admin` membership roles. Note ownership alone only permits deletion of an empty failed Call; advertised capabilities and command authorization use the same distinction.
 
@@ -251,8 +252,8 @@ The worker sends short Audio Utterances to the deployment's configured cloud Tra
 
 - The Local Capture Worker targets Node 24 or newer and uses native `fetch` and `FormData`; no new HTTP dependency is required.
 - Azure Speech Fast Transcription uses the synchronous `2025-10-15` API with short WAV utterances, `Ocp-Apim-Subscription-Key`, and the configured locale. It reads `combinedPhrases` as one channel-local transcript and does not infer participant identity.
-- Full dual-channel local capture runs the worker on a macOS 14 or newer host. The native `launchstack-system-audio` helper uses public ScreenCaptureKit APIs, captures the combined system mix (not per-app audio), excludes the helper's own audio, and supports headphones.
-- macOS requires Microphone and Screen & System Audio Recording permission. During onboarding, run the helper's permission request first, approve both permissions in System Settings, run the non-prompting status check, then restart the worker and web app after access changes.
+- Supported Capture runs the Local Capture Worker directly on one configured Capture User's Mac with macOS 14 or newer; setup is documented in `apps/call-worker/README.md`. The native `launchstack-system-audio` helper uses public ScreenCaptureKit APIs, captures the combined system mix (not per-app audio), excludes the helper's own audio, and supports headphones.
+- macOS requires Microphone and Screen & System Audio Recording permission for the worker's actual launch context. Follow the permission and microphone-selection steps in `apps/call-worker/README.md`; manual setup does not constitute installed-artifact verification.
 - Configure `CALL_NOTES_SYSTEM_AUDIO_ENABLED=true` and `CALL_NOTES_SYSTEM_AUDIO_HELPER_PATH` to the absolute release binary path `apps/call-worker/native/system-audio-capture/.build/release/launchstack-system-audio`. Keep the flag false when the helper is unavailable.
 - The helper operator commands, run from `apps/call-worker`, are:
   - `pnpm run build:system-audio`
@@ -260,13 +261,13 @@ The worker sends short Audio Utterances to the deployment's configured cloud Tra
   - `pnpm run system-audio:status`
     `--status` prints one JSON object and exits 0 only when macOS support and authorization are ready; it never prompts. Capture mode is `launchstack-system-audio --sample-rate 16000`, which writes mono signed-16-bit little-endian PCM to stdout and diagnostics only to stderr.
 - The worker has no public listener. It calls the protected internal route over the deployment's normal HTTPS origin, using `CALL_NOTES_INTERNAL_TOKEN`.
-- Self-hosted Docker runs the web application, PostgreSQL, and one private Local Capture Worker. Docker/Linux Compose is an explicit microphone-only development fallback: map `/dev/snd` and configure ALSA on a Linux host. Docker Desktop cannot expose macOS microphone or combined system audio to the Linux VM, so this mode is not complete meeting capture and is not feature parity with host macOS.
-- A Vercel web deployment may use the same protected route with the dual-channel worker hosted privately on a supported macOS host; no conferencing account, bot, Zoom runtime, or signed-callback configuration is part of v2.
+- The web application is server-hosted using container images and Compose. The Docker `call-worker` service and capture Dockerfile are removed; no Linux/containerized Capture fallback is supported.
+- Run one Local Capture Worker directly on the configured Capture User's Mac, following `apps/call-worker/README.md`. It polls the protected web route and needs no database credentials. Installer, background-agent supervision, and device enrollment remain deferred.
 - Local backend HTTP calls have a finite default timeout combined with the pipeline's `AbortSignal`; timeout or cancellation is surfaced as a failed operation and cannot be converted into successful finalization or enrichment.
 
 ## Conformance and evidence boundary
 
-The shared tracer drives Start through final knowledge inclusion. Its subject must be the real `CallNotesApplication` backed by the production state machine, repositories, authorization, and PostgreSQL. Deterministic microphone and system-channel audio fixtures and a deterministic `TranscriptionModel` may stand in for host capture and cloud model output; a recording `KnowledgeNoteProbe` may observe the production sink boundary.
+The shared tracer drives Start through canonical-note editing, private-note redaction, explicit enrichment acceptance, and Transcript search. Its subject must be the real `CallNotesApplication` backed by the production state machine, repositories, authorization, and PostgreSQL. Deterministic microphone and system-channel audio fixtures and a deterministic `TranscriptionModel` may stand in for host capture and cloud model output. There is no separate knowledge sink or publication command in the tracer.
 The tracer requires a fresh worker heartbeat before invocation; it checks availability without claiming a fixture-created Capture.
 
 ```ts
@@ -276,7 +277,7 @@ import {
 } from "@launchstack/pipelines/call-notes";
 
 await assertCaptureSourceContract(localCaptureSource);
-await runCallNotesVerticalTracer(callNotesApplication, recordingKnowledgeSink);
+await runCallNotesVerticalTracer(callNotesApplication);
 ```
 
 `CALL_NOTES_CAPTURE_EVENTS` and the deterministic dual-channel audio/model fixtures are the correctness oracle for ordering, gaps, replay, channel provenance, and persistence. A configured cloud Transcription Model smoke verifies request/response and output-schema compatibility only; it cannot prove complete remote-party or system-audio coverage, complete conversation capture, diarization, or speaker attribution. Lane-local checks should reuse the fixture and conformance functions, then add only behavior owned by that lane. The final integration suite exercises PostgreSQL, API handlers, and production UI rather than creating a second mocked Call Notes state machine.
@@ -299,4 +300,4 @@ No lane duplicates or widens these types locally. A mismatch is reported with th
 
 ## Non-goals and deferred seams
 
-Conferencing-service capture, meeting bots, browser capture, per-app system-audio capture, guaranteed remote-party audio, diarization or speaker attribution, raw-media retention, custom streaming ASR, transcript revisions, cross-user Capture handoff, overlapping Attempts, automatic knowledge inclusion, centralized hosted/SaaS operation, a public queue, and a second knowledge system are deliberately absent. The local microphone/system-output source and cloud transcription boundary are the complete v2 capture surface; add another source only after an explicit contract revision.
+Conferencing-service capture, conversation bots, browser capture, per-app system-audio capture, guaranteed remote-party audio, diarization or speaker attribution, raw-media retention, custom streaming ASR, transcript revisions, cross-user Capture handoff, overlapping Attempts, indexing Transcripts or unaccepted Enriched Note proposals, centralized hosted/SaaS operation, a public queue, and a second knowledge system are deliberately absent. The local microphone/Computer Audio source and cloud transcription boundary are the complete v2 capture surface; add another source only after an explicit contract revision.

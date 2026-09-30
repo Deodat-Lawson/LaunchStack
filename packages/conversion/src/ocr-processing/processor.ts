@@ -864,24 +864,9 @@ export async function finalizeStorage(
                 },
             });
 
-        // Merge, never replace: the row's metadata carries provenance written
-        // at creation — a connector's marker, a published mindmap's id — and
-        // the viewer picks a renderer by it. Overwriting it here turned every
-        // imported session back into a plain Markdown file the moment it
-        // finished indexing.
-        const [existing] = await getDb()
-            .select({ ocrMetadata: documentTable.ocrMetadata })
-            .from(documentTable)
-            .where(eq(documentTable.id, documentId))
-            .limit(1);
-        const preserved =
-            existing?.ocrMetadata &&
-            typeof existing.ocrMetadata === "object" &&
-            !Array.isArray(existing.ocrMetadata)
-                ? (existing.ocrMetadata as Record<string, unknown>)
-                : {};
+        // Merge atomically: ingestion must not erase provenance stamped by a
+        // connector, published mindmap, or indexed Call Note during processing.
         const ocrMetadataPayload = {
-            ...preserved,
             totalPages: meta.totalPages,
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
@@ -896,7 +881,7 @@ export async function finalizeStorage(
                 ocrJobId: jobId,
                 ocrProvider: meta.provider,
                 ocrConfidenceScore: toStoredConfidencePercent(meta.confidenceScore),
-                ocrMetadata: ocrMetadataPayload,
+                ocrMetadata: sql`COALESCE(${documentTable.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(ocrMetadataPayload)}::jsonb`,
             })
             .where(
                 and(
@@ -914,7 +899,7 @@ export async function finalizeStorage(
                 ocrProcessed: true,
                 ocrJobId: jobId,
                 ocrProvider: meta.provider,
-                ocrMetadata: ocrMetadataPayload,
+                ocrMetadata: sql`COALESCE(${documentVersions.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(ocrMetadataPayload)}::jsonb`,
             })
             .where(
                 and(
@@ -1103,12 +1088,14 @@ export async function storeDocument(
             ocrJobId: jobId,
             ocrProvider: normalizationResult.provider,
             ocrConfidenceScore: toStoredConfidencePercent(normalizationResult.confidenceScore),
-            ocrMetadata: {
-                totalPages: normalizationResult.pages.length,
-                totalChunks: vectorizedChunks.length,
-                processingTimeMs: normalizationResult.processingTimeMs,
-                processedAt: new Date().toISOString(),
-            },
+            ocrMetadata: sql`COALESCE(${documentTable.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(
+                {
+                    totalPages: normalizationResult.pages.length,
+                    totalChunks: vectorizedChunks.length,
+                    processingTimeMs: normalizationResult.processingTimeMs,
+                    processedAt: new Date().toISOString(),
+                }
+            )}::jsonb`,
         })
         .where(
             and(

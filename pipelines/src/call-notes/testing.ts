@@ -12,7 +12,6 @@ import {
     type CallNotesCommand,
     type CallSnapshot,
     type CaptureEvent,
-    type KnowledgeNote,
 } from "./contracts";
 import { renderEnrichedNoteProposal } from "./enrichment";
 import type {
@@ -270,10 +269,6 @@ export const CALL_NOTES_DISMISS_COMMAND: Extract<
     sourceOccurrenceKey: CALL_NOTES_FIXTURE_IDS.sourceOccurrenceKey,
 }) as Extract<CallNotesCommand, { kind: "dismiss_detected_occurrence" }>;
 
-export interface KnowledgeNoteProbe {
-    get(companyId: string, callId: string): Promise<KnowledgeNote | null>;
-}
-
 export async function assertCaptureSourceContract(source: CaptureSource): Promise<void> {
     const events: CaptureEvent[] = [];
     const sink: CaptureEventSink = {
@@ -368,12 +363,11 @@ function ownerCommand(
 
 /**
  * Shared end-to-end contract. The subject must use its real state machine,
- * persistence, authorization, API-facing application boundary, and knowledge sink.
+ * persistence, authorization, and API-facing application boundary.
  * Only local audio capture and model output may be deterministic fakes.
  */
 export async function runCallNotesVerticalTracer(
-    application: CallNotesApplication,
-    knowledgeProbe?: KnowledgeNoteProbe
+    application: CallNotesApplication
 ): Promise<CallSnapshot> {
     const worker = await application.getLocalCaptureWorkerStatus({
         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
@@ -471,15 +465,6 @@ export async function runCallNotesVerticalTracer(
     });
     invariant(teammateView.transcript.length === 3, "company transcript must remain visible");
     invariant(teammateView.note === null, "private Call Note leaked to another company user");
-    await invariantRejects(
-        application.execute(
-            ownerCommand(started.id, {
-                kind: "set_knowledge_inclusion",
-                included: true,
-            })
-        ),
-        "private Call Note entered company knowledge"
-    );
 
     await application.execute(
         ownerCommand(started.id, {
@@ -527,12 +512,6 @@ export async function runCallNotesVerticalTracer(
             contentRich: renderedProposal.contentRich,
         })
     );
-    await application.execute(
-        ownerCommand(started.id, {
-            kind: "set_knowledge_inclusion",
-            included: true,
-        })
-    );
 
     const searchResults = await application.searchTranscript({
         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
@@ -550,22 +529,9 @@ export async function runCallNotesVerticalTracer(
         })
     );
     invariant(
-        finalSnapshot.note?.knowledgeIncluded,
-        "accepted Call Note was not included in knowledge"
-    );
-    invariant(
         finalSnapshot.enrichment?.status === "accepted",
         "accepted proposal was not immutable history"
     );
-
-    if (knowledgeProbe) {
-        const indexed = await knowledgeProbe.get(CALL_NOTES_FIXTURE_IDS.companyId, started.id);
-        invariant(indexed, "knowledge sink did not receive the canonical Call Note");
-        invariant(
-            indexed.revision === finalSnapshot.note.revision,
-            "knowledge sink indexed a stale Call Note revision"
-        );
-    }
 
     return finalSnapshot;
 }

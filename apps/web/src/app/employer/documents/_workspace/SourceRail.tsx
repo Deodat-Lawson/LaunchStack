@@ -18,7 +18,6 @@ import {
     FolderOpen,
     Lock,
     Plus,
-    Check as IconCheck,
     ChevronLeft as IconChevronLeft,
     ChevronRight as IconChevronRight,
     Ellipsis as IconMore,
@@ -39,6 +38,7 @@ import {
     type FolderTreeNode,
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Checkbox as KitCheckbox } from "~/components/ui/checkbox";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import {
@@ -123,42 +123,16 @@ interface CheckboxProps {
 
 function Checkbox({ state, onClick, title }: CheckboxProps) {
     return (
-        <button
+        <KitCheckbox
+            checked={state === "some" ? "indeterminate" : state === "all"}
             onClick={e => {
                 e.stopPropagation();
                 onClick?.(e);
             }}
             title={title}
-            style={{
-                width: 15,
-                height: 15,
-                borderRadius: 3,
-                border: `1.5px solid ${state !== "none" ? "var(--accent)" : "var(--ink-4)"}`,
-                background:
-                    state === "all"
-                        ? "var(--accent)"
-                        : state === "some"
-                          ? "var(--accent-soft)"
-                          : "var(--panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                transition: "all 100ms",
-                cursor: "pointer",
-            }}
-            onMouseEnter={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--accent)";
-            }}
-            onMouseLeave={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--ink-4)";
-            }}
-        >
-            {state === "all" && <IconCheck size={10} style={{ color: "white" }} />}
-            {state === "some" && (
-                <div style={{ width: 7, height: 1.5, background: "var(--accent)" }} />
-            )}
-        </button>
+            aria-label={title}
+            className="data-[state=indeterminate]:border-brand data-[state=indeterminate]:bg-brand/10 size-[15px]"
+        />
     );
 }
 
@@ -224,11 +198,11 @@ function SourceRow({
                 transition: "background 100ms",
             }}
         >
-            {source.type === "call-note" ? (
+            {source.type === "call-note" && !source.documentId ? (
                 <span
-                    title="Call Notes open in Calls and cannot be added to chat context"
+                    title="This Call Note is private, not indexed yet, or not available to you for chat context"
                     aria-label="Call Note — open in Calls"
-                    style={{ width: 15, height: 15, flexShrink: 0 }}
+                    className="size-[15px] shrink-0"
                 />
             ) : (
                 <Checkbox
@@ -393,9 +367,14 @@ function SourceRow({
 
 type SourceNode = FolderTreeNode<WorkspaceSource>;
 
-/** Every source id in a folder and the folders beneath it. */
+/** Every chat-selectable source id in a folder and the folders beneath it. */
 function collectItemIds(node: SourceNode): string[] {
-    return [...node.items.map(item => item.id), ...node.children.flatMap(collectItemIds)];
+    return [
+        ...node.items
+            .filter(item => item.type !== "call-note" || Boolean(item.documentId))
+            .map(item => item.id),
+        ...node.children.flatMap(collectItemIds),
+    ];
 }
 
 interface FolderHeaderProps {
@@ -860,7 +839,7 @@ export function SourceRail({
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
-                    if (s.type === "call-note") return;
+                    if (s.type === "call-note" && !s.documentId) return;
                     setSelected(prev =>
                         prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
                     );
@@ -966,16 +945,13 @@ export function SourceRail({
                 onShare:
                     onShareFolder && !isUnfiled ? () => onShareFolder(folderFor(path)) : undefined,
                 onSelectAll: add => {
-                    const selectable = itemIds.filter(
-                        id => sources.find(source => source.id === id)?.type !== "call-note"
-                    );
                     setSelected(prev => {
                         if (add) {
                             const set = new Set(prev);
-                            selectable.forEach(id => set.add(id));
+                            itemIds.forEach(id => set.add(id));
                             return [...set];
                         }
-                        return prev.filter(id => !selectable.includes(id));
+                        return prev.filter(id => !itemIds.includes(id));
                     });
                 },
                 selectState,
@@ -983,7 +959,6 @@ export function SourceRail({
             });
         },
         [
-            sources,
             selected,
             setSelected,
             activeFolder,
@@ -1091,21 +1066,18 @@ export function SourceRail({
 
     const toggle = (id: string) => {
         const source = sources.find(item => item.id === id);
-        if (!source || source.type === "call-note") return;
+        if (!source || (source.type === "call-note" && !source.documentId)) return;
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
     };
 
     const selectMany = (ids: string[], add: boolean) => {
-        const selectable = ids.filter(
-            id => sources.find(source => source.id === id)?.type !== "call-note"
-        );
         setSelected(prev => {
             if (add) {
                 const set = new Set(prev);
-                selectable.forEach(id => set.add(id));
+                ids.forEach(id => set.add(id));
                 return [...set];
             }
-            return prev.filter(id => !selectable.includes(id));
+            return prev.filter(id => !ids.includes(id));
         });
     };
 

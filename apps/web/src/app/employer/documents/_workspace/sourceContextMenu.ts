@@ -38,10 +38,13 @@ export interface SourceMenuHandlers {
 }
 
 export function isPersistedSource(source: WorkspaceSource): boolean {
-    // A mindmap is persisted by its own row, published or not; everything
-    // else is persisted by a document row.
+    // Mindmaps and Call Notes are persisted by their own rows, independently
+    // of whether they have a retrievable document.
     if (source.type === "mindmap") {
         return typeof source.mindmapId === "number" && source.mindmapId > 0;
+    }
+    if (source.type === "call-note") {
+        return Boolean(source.callId);
     }
     return typeof source.documentId === "number" && source.documentId > 0;
 }
@@ -66,6 +69,36 @@ export function buildSourceMenuItems(
             icon: "open",
             onSelect: () => handlers.onOpen?.(source),
         });
+    }
+    if (source.type === "call-note") {
+        if (handlers.onToggleContext && source.documentId) {
+            items.push({
+                type: "item",
+                id: "context",
+                label: inContext ? "Remove from context" : "Add to context",
+                icon: "ask",
+                onSelect: () => handlers.onToggleContext?.(source),
+            });
+        }
+        if (handlers.onCopyTitle) {
+            items.push({
+                type: "item",
+                id: "copy",
+                label: "Copy title",
+                icon: "copy",
+                onSelect: () => handlers.onCopyTitle?.(source),
+            });
+        }
+        if (handlers.onCopyLink) {
+            items.push({
+                type: "item",
+                id: "copy-link",
+                label: "Copy link",
+                icon: "link",
+                onSelect: () => handlers.onCopyLink?.(source),
+            });
+        }
+        return items;
     }
 
     if (handlers.onOpenBeside) {
@@ -418,9 +451,9 @@ export interface SelectionMenuHandlers {
 
 /**
  * The menu for a right-click inside a multi-selection: every verb acts on
- * the whole selection, and says so. Sources still being indexed cannot be
- * moved or deleted yet, so those verbs act on the persisted subset and say
- * how many that is.
+ * the whole selection, and says so. Call Notes are managed in Calls; sources
+ * still being indexed cannot be moved or deleted yet. Those verbs act only
+ * on the persisted, workspace-managed subset and say how many that is.
  */
 export function buildSelectionMenuItems(
     sources: WorkspaceSource[],
@@ -429,16 +462,17 @@ export function buildSelectionMenuItems(
 ): SourceContextMenuItem[] {
     const count = sources.length;
     const noun = count === 1 ? "source" : "sources";
-    const persisted = sources.filter(isPersistedSource);
-    const pending = count - persisted.length;
+    const editable = sources.filter(source => source.type !== "call-note");
+    const persisted = editable.filter(isPersistedSource);
     const pendingReason =
-        pending === count
+        editable.length === count
             ? "These sources are still being indexed."
-            : `${pending} of these ${pending === 1 ? "is" : "are"} still being indexed and will be skipped.`;
+            : "Call Notes are managed in Calls. The other sources are not ready to move or delete.";
     const folderOf = (source: WorkspaceSource) => source.folder?.trim() || "Unfiled";
-    const sharedFolder = sources.every(s => folderOf(s) === folderOf(sources[0]!))
-        ? folderOf(sources[0]!)
-        : null;
+    const sharedFolder =
+        persisted.length > 0 && persisted.every(s => folderOf(s) === folderOf(persisted[0]!))
+            ? folderOf(persisted[0]!)
+            : null;
 
     const items: SourceContextMenuItem[] = [
         { type: "label", id: "title", label: `${count} ${noun} selected` },
@@ -454,7 +488,7 @@ export function buildSelectionMenuItems(
         });
     }
 
-    if (handlers.onMoveToFolder) {
+    if (handlers.onMoveToFolder && editable.length > 0) {
         const folderNames = uniqueFolderNames(folders, sharedFolder ?? "Unfiled");
         items.push({
             type: "submenu",
@@ -479,7 +513,7 @@ export function buildSelectionMenuItems(
         });
     }
 
-    if (handlers.onDelete) {
+    if (handlers.onDelete && editable.length > 0) {
         items.push({ type: "separator", id: "sep-danger" });
         items.push({
             type: "item",

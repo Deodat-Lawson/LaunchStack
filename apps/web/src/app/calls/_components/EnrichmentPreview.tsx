@@ -2,6 +2,7 @@
 
 import { LoaderCircle } from "lucide-react";
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
+import { cn } from "~/lib/utils";
 import noteStyles from "../calls.module.css";
 import styles from "./EnrichmentPreview.module.css";
 
@@ -55,7 +56,7 @@ export function EnrichmentPreview({ markdown, status, error }: EnrichmentPreview
 export function ProposalReviewNotice({ rejected = false }: ProposalReviewNoticeProps) {
     return (
         <aside
-            className={`${styles.reviewNotice} ${rejected ? styles.reviewNoticeRejected : ""}`}
+            className={cn(styles.reviewNotice, rejected && styles.reviewNoticeRejected)}
             aria-label={rejected ? "AI proposal rejected" : "Review AI proposal"}
         >
             <div className={styles.noticeCopy}>

@@ -441,23 +441,3 @@ export class CallNotesWorkItems {
         }
     }
 }
-
-export const PostgresCallNotesWorkItems = CallNotesWorkItems;
-
-export function createPostgresCallNotesWorkItems(
-    db: DbClient,
-    options?: CallNotesWorkItemsOptions
-): CallNotesWorkItems;
-export function createPostgresCallNotesWorkItems(
-    options: CallNotesWorkItemsOptions & { db: DbClient }
-): CallNotesWorkItems;
-export function createPostgresCallNotesWorkItems(
-    dbOrOptions: DbClient | (CallNotesWorkItemsOptions & { db: DbClient }),
-    options: CallNotesWorkItemsOptions = {}
-): CallNotesWorkItems {
-    if ("db" in dbOrOptions) {
-        const { db, ...workOptions } = dbOrOptions;
-        return new CallNotesWorkItems(db, workOptions);
-    }
-    return new CallNotesWorkItems(dbOrOptions, options);
-}

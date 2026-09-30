@@ -1,12 +1,4 @@
 .dock {
-    --chat-surface: var(--call-paper, var(--panel, #ffffff));
-    --chat-surface-raised: var(--panel-2, var(--chat-surface));
-    --chat-ink: var(--ink, var(--call-ink, #252421));
-    --chat-muted: var(--ink-3, var(--call-muted, #77746d));
-    --chat-line: var(--line, var(--call-line, #e8e6e0));
-    --chat-accent: var(--accent, var(--call-accent, #6555d8));
-    --chat-accent-soft: var(--accent-soft, var(--call-accent-soft, #f0edff));
-    --chat-danger: var(--danger, var(--call-danger, #b5443c));
     position: absolute;
     z-index: 30;
     bottom: 28px;
@@ -17,7 +9,8 @@
     flex-direction: column;
     gap: 8px;
     min-width: 0;
-    color: var(--chat-ink);
+    color: var(--ink);
+    font-family: var(--font-sans);
     transform: translateX(-50%);
     pointer-events: none;
 }
@@ -65,13 +58,13 @@
     min-width: 0;
     min-height: 48px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--chat-line);
+    border-bottom: 1px solid var(--line);
 }
 
 .conversationTitle {
     flex: 1;
     margin-left: 8px;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     font-size: 12px;
     font-weight: 500;
 }
@@ -83,7 +76,7 @@
     height: 28px;
     padding: 0;
     place-items: center;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     background: transparent;
     border: 0;
     border-radius: 7px;
@@ -91,14 +84,14 @@
 }
 
 .conversationClose:hover {
-    color: var(--chat-ink);
-    background: rgb(0 0 0 / 0.055);
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 5.5%, transparent);
 }
 
 .conversationClose:focus-visible,
 .retry:focus-visible,
 .send:focus-visible {
-    outline: 2px solid var(--chat-accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
 
@@ -128,13 +121,13 @@
     align-items: flex-start;
     gap: 5px;
     padding: 2px 1px;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     font-size: 12px;
     line-height: 1.5;
 }
 
 .emptyState strong {
-    color: var(--chat-ink);
+    color: var(--ink);
     font-size: 13px;
 }
 
@@ -142,12 +135,13 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    height: auto;
     padding: 5px 9px;
-    color: var(--chat-accent);
+    color: var(--accent);
     font-size: 11px;
     font-weight: 650;
-    background: var(--chat-accent-soft);
-    border: 1px solid rgb(101 85 216 / 0.2);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
     border-radius: 7px;
     cursor: pointer;
 }
@@ -175,7 +169,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     font-size: 10px;
     font-weight: 650;
     letter-spacing: 0.02em;
@@ -187,16 +181,16 @@
     height: 21px;
     padding: 0 4px;
     place-items: center;
-    color: var(--chat-accent);
-    background: var(--chat-accent-soft);
+    color: var(--accent);
+    background: var(--accent-soft);
     border-radius: 999px;
     font-size: 8px;
     letter-spacing: -0.02em;
 }
 
 .messageUser .messageIcon {
-    color: var(--chat-surface);
-    background: var(--chat-ink);
+    color: var(--panel);
+    background: var(--ink);
 }
 
 .messageText,
@@ -207,15 +201,15 @@
 
 .messageText {
     padding: 9px 11px;
-    color: var(--chat-ink);
+    color: var(--ink);
     white-space: pre-wrap;
-    background: var(--chat-accent-soft);
+    background: var(--accent-soft);
     border-radius: 12px 4px 12px 12px;
 }
 
 .markdown {
     width: 100%;
-    color: var(--chat-ink);
+    color: var(--ink);
 }
 
 .markdown :global(p) {
@@ -236,18 +230,19 @@
     max-width: 100%;
     padding: 9px;
     overflow-x: auto;
-    color: var(--chat-ink);
-    background: var(--chat-surface-raised);
-    border: 1px solid var(--chat-line);
+    color: var(--ink);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
     border-radius: 8px;
 }
 
 .markdown :global(code) {
     overflow-wrap: anywhere;
+    font-family: var(--font-mono);
 }
 
 .markdown :global(a) {
-    color: var(--chat-accent);
+    color: var(--accent);
 }
 
 .pending {
@@ -255,7 +250,7 @@
     align-items: center;
     align-self: flex-start;
     gap: 7px;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     font-size: 12px;
 }
 
@@ -275,11 +270,11 @@
     justify-content: space-between;
     gap: 10px;
     padding: 9px 10px;
-    color: var(--chat-danger);
+    color: var(--danger);
     font-size: 11px;
     line-height: 1.45;
-    background: color-mix(in srgb, var(--chat-danger) 8%, var(--chat-surface));
-    border: 1px solid color-mix(in srgb, var(--chat-danger) 22%, var(--chat-line));
+    background: color-mix(in srgb, var(--danger) 8%, var(--panel));
+    border: 1px solid color-mix(in srgb, var(--danger) 22%, var(--line));
     border-radius: 9px;
 }
 
@@ -290,7 +285,7 @@
 .retry {
     flex: 0 0 auto;
     padding: 3px 7px;
-    color: var(--chat-danger);
+    color: var(--danger);
     background: transparent;
     border-color: currentColor;
 }
@@ -303,12 +298,12 @@
     justify-content: center;
     gap: 0;
     padding: 14px 14px 10px;
-    background: var(--call-paper, var(--chat-surface));
-    border: 1px solid rgb(101 85 216 / 0.26);
+    background: var(--panel);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
     border-radius: 28px;
     box-shadow:
-        0 14px 35px rgb(20 18 31 / 0.14),
-        0 0 0 3px rgb(101 85 216 / 0.055);
+        0 14px 35px var(--scrim-shadow),
+        0 0 0 3px color-mix(in srgb, var(--accent) 5.5%, transparent);
 }
 
 .noteDock .composer {
@@ -328,22 +323,24 @@
 .noteDock[data-open="true"] .composer {
     width: calc(100% - 8px);
     margin: 4px;
-    border-color: var(--chat-line);
+    border-color: var(--line);
 }
 .noteDock .composer:focus-within {
-    border-color: var(--chat-accent);
-    box-shadow: inset 0 0 0 1px var(--chat-accent-soft);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent-soft);
 }
 .chatTrigger {
     position: absolute;
     inset: 0;
+    display: block;
     width: 100%;
+    height: 100%;
     padding: 0 20px;
     overflow: hidden;
     border: 0;
     border-radius: inherit;
     background: transparent;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     font-size: 14px;
     text-align: left;
     text-overflow: ellipsis;
@@ -366,7 +363,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 9px 10px 9px 20px;
-    color: var(--chat-muted);
+    color: var(--ink-3);
     text-decoration: none;
 }
 
@@ -375,17 +372,17 @@
     align-items: center;
     gap: 7px;
     padding: 7px 12px;
-    border: 1px solid var(--chat-line);
+    border: 1px solid var(--line);
     border-radius: 999px;
-    color: var(--chat-ink);
+    color: var(--ink);
     font-size: 13px;
 }
 
 .composer:focus-within {
-    border-color: var(--chat-accent);
+    border-color: var(--accent);
     box-shadow:
-        0 14px 35px rgb(20 18 31 / 0.14),
-        0 0 0 3px rgb(101 85 216 / 0.14);
+        0 14px 35px var(--scrim-shadow),
+        0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .retry:hover {
@@ -433,19 +430,22 @@
     min-width: 0;
     min-height: 32px;
     max-height: min(180px, 30cqh);
+    field-sizing: fixed;
     padding: 5px 6px;
     overflow-y: auto;
-    color: var(--chat-ink);
+    color: var(--ink);
+    font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.45;
     resize: none;
     background: transparent;
     border: 0;
     outline: 0;
+    box-shadow: none;
 }
 
 .input::placeholder {
-    color: var(--chat-muted);
+    color: var(--ink-3);
     opacity: 0.85;
 }
 
@@ -456,8 +456,8 @@
     height: 30px;
     padding: 0;
     place-items: center;
-    color: #ffffff;
-    background: var(--chat-accent);
+    color: var(--accent-fg);
+    background: var(--accent);
     border: 0;
     border-radius: 999px;
     cursor: pointer;

@@ -2,6 +2,7 @@ import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-wo
 
 import { GET } from "~/app/api/files/[id]/route";
 import { signFileAccessToken } from "@launchstack/store/crypto";
+import { fetchFile } from "~/lib/storage";
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
 
 import {
@@ -227,5 +228,112 @@ describe("GET /api/files/[id]", () => {
         const response = await GET(request("/api/files/123"), params("123"));
 
         expect(response.status).toBe(404);
+    });
+});
+
+describe("GET /api/files/[id] response headers", () => {
+    const fetchFileMock = jest.mocked(fetchFile);
+    const SCRIPT = "<script>fetch('/api/me', { credentials: 'include' })</script>";
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockAuthenticated();
+    });
+
+    function serve(file: Record<string, unknown>) {
+        setupFileQuery([{ ...DB_FILE, fileData: Buffer.from(SCRIPT).toString("base64"), ...file }]);
+        return GET(request("/api/files/123"), params("123"));
+    }
+
+    it.each([
+        ["HTML", "page.html", "text/html"],
+        ["SVG", "logo.svg", "image/svg+xml"],
+    ])(
+        "sandboxes stored %s so its scripts cannot run on this origin",
+        async (_, filename, type) => {
+            const response = await serve({ filename, mimeType: type });
+
+            expect(response.status).toBe(200);
+            expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
+            expect(response.headers.get("X-Content-Type-Options")).toBe("nosniff");
+            expect(response.headers.get("Content-Type")).toBe(type);
+            // Still inline: it renders (inert) rather than turning into a download.
+            expect(response.headers.get("Content-Disposition")).toMatch(/^inline;/);
+            expect(await response.text()).toBe(SCRIPT);
+        }
+    );
+
+    it("judges the stored type, not the file name", async () => {
+        // /api/upload-local accepts a file on its extension alone.
+        const response = await serve({ filename: "report.pdf", mimeType: "text/html" });
+
+        expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
+    });
+
+    it("sandboxes HTML whose type is inferred from its name", async () => {
+        const response = await serve({ filename: "page.html", mimeType: null });
+
+        expect(response.headers.get("Content-Type")).toBe("text/html");
+        expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
+    });
+
+    it.each([
+        ["PDF", "report.pdf", "application/pdf"],
+        ["PNG", "chart.png", "image/png"],
+        ["JPEG", "photo.jpg", "image/jpeg"],
+    ])(
+        "serves a %s outside the sandbox, for the browser's own viewer",
+        async (_, filename, type) => {
+            const response = await serve({ filename, mimeType: type });
+
+            expect(response.status).toBe(200);
+            expect(response.headers.get("Content-Security-Policy")).toBeNull();
+            expect(response.headers.get("X-Content-Type-Options")).toBe("nosniff");
+            expect(response.headers.get("Content-Type")).toBe(type);
+        }
+    );
+
+    describe("proxied from object storage", () => {
+        const S3_FILE = {
+            storageProvider: "s3",
+            storageUrl: "https://s3.example.test/documents/abc",
+            fileData: null,
+        };
+
+        it("sandboxes by the type storage reports", async () => {
+            fetchFileMock.mockResolvedValue(
+                new Response(SCRIPT, { headers: { "content-type": "text/html" } })
+            );
+
+            const response = await serve({ ...S3_FILE, filename: "page.html" });
+
+            expect(fetchFileMock).toHaveBeenCalledWith(S3_FILE.storageUrl);
+            expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
+            expect(response.headers.get("Content-Type")).toBe("text/html");
+            expect(await response.text()).toBe(SCRIPT);
+        });
+
+        it("rebuilds a reported type rather than echoing it", async () => {
+            // A browser reads a Content-Type list as its last entry.
+            fetchFileMock.mockResolvedValue(
+                new Response(SCRIPT, { headers: { "content-type": "image/png, text/html" } })
+            );
+
+            const response = await serve({ ...S3_FILE, filename: "chart.png" });
+
+            expect(response.headers.get("Content-Type")).toBe("application/octet-stream");
+            expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
+        });
+
+        it("serves a PDF outside the sandbox", async () => {
+            fetchFileMock.mockResolvedValue(
+                new Response("%PDF-1.7", { headers: { "content-type": "application/pdf" } })
+            );
+
+            const response = await serve({ ...S3_FILE, filename: "report.pdf" });
+
+            expect(response.headers.get("Content-Security-Policy")).toBeNull();
+            expect(response.headers.get("Content-Type")).toBe("application/pdf");
+        });
     });
 });

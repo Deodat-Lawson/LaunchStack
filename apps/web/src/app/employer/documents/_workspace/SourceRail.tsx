@@ -2,7 +2,6 @@
 
 import React, {
     Fragment,
-    type CSSProperties,
     type Dispatch,
     type MouseEvent,
     type ReactNode,
@@ -41,6 +40,7 @@ import {
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
+import { SOURCE_DRAG_MIME } from "./dragData";
 import {
     buildBlankRailMenuItems,
     buildSelectionMenuItems,
@@ -167,11 +167,20 @@ interface SourceRowProps {
     selected: boolean;
     toggleSelected: (id: string) => void;
     onOpen?: (source: WorkspaceSource) => void;
+    /** ⌘/Ctrl-click: open it in a pane beside what is showing, as an editor would. */
+    onOpenBeside?: (source: WorkspaceSource) => void;
     /** The row's actions; absent when the rail is read-only. */
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }
 
-function SourceRow({ source, selected, toggleSelected, onOpen, menuItems }: SourceRowProps) {
+function SourceRow({
+    source,
+    selected,
+    toggleSelected,
+    onOpen,
+    onOpenBeside,
+    menuItems,
+}: SourceRowProps) {
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const [hover, setHover] = useState(false);
@@ -220,16 +229,12 @@ function SourceRow({ source, selected, toggleSelected, onOpen, menuItems }: Sour
                 title={selected ? "Remove from context" : "Add to context"}
             />
             <div
-                onClick={() => onOpen?.(source)}
-                title="Open"
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    minWidth: 0,
-                    cursor: "pointer",
+                onClick={event => {
+                    if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
+                    else onOpen?.(source);
                 }}
+                title={onOpenBeside ? "Open · ⌘-click to open beside" : "Open"}
+                className="flex min-w-0 flex-1 cursor-pointer items-center gap-2"
             >
                 <Icon size={14} style={{ color: meta.color, flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -596,6 +601,8 @@ export interface SourceRailProps {
      */
     onOpenPalette?: () => void;
     accountSlot?: ReactNode;
+    /** Its width in pixels. The docked sidebar's is the member's, dragged from its edge. */
+    width?: number;
     /** The member's own keys for the sidebar's commands, formatted for show. */
     shortcuts?: ShortcutHints;
     /**
@@ -647,6 +654,14 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
                     onDragStart={e => {
                         e.stopPropagation();
                         ctx.setDrag({ kind: "source", id: s.id });
+                        // Also a drag the workspace's panes can take: drop it
+                        // on a pane to open it there, or on an edge to split.
+                        // jsdom fires drag events without a dataTransfer.
+                        if (e.dataTransfer) {
+                            e.dataTransfer.effectAllowed = "copyMove";
+                            e.dataTransfer.setData(SOURCE_DRAG_MIME, s.id);
+                            e.dataTransfer.setData("text/plain", s.title);
+                        }
                     }}
                     onDragEnd={() => {
                         ctx.setDrag(null);
@@ -658,6 +673,7 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
                         selected={ctx.selected.includes(s.id)}
                         toggleSelected={ctx.toggleSelected}
                         onOpen={ctx.onOpenSource}
+                        onOpenBeside={ctx.onOpenSourceBeside}
                         menuItems={ctx.sourceMenuItems}
                     />
                 </div>
@@ -758,6 +774,7 @@ export function SourceRail({
     onOpenKnowledge,
     onOpenPalette,
     accountSlot,
+    width = 280,
     shortcuts,
     history,
 }: SourceRailProps) {
@@ -1092,23 +1109,18 @@ export function SourceRail({
         canDragFolders: Boolean(onMoveFolder),
         dropOnFolder,
         onOpenSource,
+        onOpenSourceBeside,
         sourceMenuItems,
         folderMenuItems,
     };
 
-    const asideStyle: CSSProperties = {
-        width: 280,
-        flexShrink: 0,
-        height: "100%",
-        borderRight: "1px solid var(--line)",
-        background: "var(--panel)",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-    };
-
     return (
-        <aside style={asideStyle}>
+        // The width is the one inline style: it is the member's, dragged
+        // from the edge (see RailResizeHandle), not a design value.
+        <aside
+            className="border-line bg-panel flex h-full shrink-0 flex-col overflow-hidden border-r"
+            style={{ width }}
+        >
             <div
                 style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
             >

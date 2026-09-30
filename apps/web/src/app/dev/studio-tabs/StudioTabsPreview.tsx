@@ -5,24 +5,39 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { StudioSplitView } from "~/app/employer/documents/_workspace/StudioSplitView";
 import type { PaneTab } from "~/app/employer/documents/_workspace/StudioTabs";
-import { useStudioLayout } from "~/app/employer/documents/_workspace/paneLayout";
+import { isTabVisible, useStudioLayout } from "~/app/employer/documents/_workspace/paneLayout";
 import { STUDIO_FEATURES_BY_ID } from "~/app/employer/documents/_workspace/types";
 
 /**
  * The workspace centre with fabricated panes.
  *
  * The real thing needs a session and a library. This renders the same layout
- * against stubs so columns, drag between columns, keyboard reordering and
- * both themes can be looked at without signing in. Each pane keeps a counter
- * and a draft: neither may reset when the pane is switched away from, nor
- * when it is handed to another column, which is the whole point of the
- * feature and the easiest thing to break.
+ * against stubs so splits right and down, dividers, zoom, dragging a tab
+ * onto a pane's edge, keyboard reordering and both themes can be looked at
+ * without signing in. Each pane keeps a counter and a draft: neither may
+ * reset when the pane is switched away from, handed to another pane, or
+ * re-split, which is the whole point of the feature and the easiest thing
+ * to break.
  */
-const PREVIEW_IDS = ["chat", "knowledge", "draft", "rewrite", "meetings", "artifacts"];
+const PREVIEW_IDS = ["chat", "knowledge", "draft", "rewrite", "meetings", "agents"];
 
 export function StudioTabsPreview() {
-    const { layout, open, openBeside, close, closeOthers, closeToRight, move, split, focusGroup } =
-        useStudioLayout();
+    const {
+        layout,
+        open,
+        openBeside,
+        close,
+        closeOthers,
+        closeToRight,
+        move,
+        split,
+        splitAtRoot,
+        splitPane,
+        closeGroup,
+        toggleZoom,
+        resize,
+        focusGroup,
+    } = useStudioLayout();
 
     const tabFor = (id: string): PaneTab | undefined => STUDIO_FEATURES_BY_ID[id];
 
@@ -55,18 +70,26 @@ export function StudioTabsPreview() {
                 onCloseOthers={closeOthers}
                 onCloseToRight={closeToRight}
                 onSplit={split}
+                onSplitRoot={splitAtRoot}
+                onSplitPane={(groupId, side) => splitPane(side, groupId)}
+                onCloseGroup={closeGroup}
+                onToggleZoom={toggleZoom}
+                onResize={resize}
                 onMove={move}
                 onFocusGroup={focusGroup}
                 onOpenStudio={() => open("chat")}
-                emptyState={
-                    <div className="text-ink-3 flex flex-1 items-center justify-center text-sm">
+                renderEmpty={groupId => (
+                    <div className="text-ink-3 flex flex-1 flex-col items-center justify-center gap-2 text-sm">
                         Nothing open.
+                        <Button size="sm" variant="outline" onClick={() => open("chat", groupId)}>
+                            Open Chat here
+                        </Button>
                     </div>
-                }
+                )}
                 renderPane={id => (
                     <StubPane
                         id={id}
-                        visible={layout.groups.some(group => group.activeId === id)}
+                        visible={isTabVisible(layout, id)}
                         focused={
                             layout.groups.find(group => group.id === layout.activeGroupId)
                                 ?.activeId === id
@@ -90,8 +113,8 @@ function StubPane({ id, visible, focused }: { id: string; visible: boolean; focu
             <p className="text-ink-2 text-sm">
                 This pane is{" "}
                 <strong>{visible ? (focused ? "focused" : "on screen") : "hidden"}</strong>. Mounted
-                panes stay mounted, so the count and the draft below survive a switch and a move to
-                another column.
+                panes stay mounted, so the count and the draft below survive a switch, a move to
+                another pane and a split.
             </p>
             <div className="flex items-center gap-3">
                 <Button size="sm" onClick={() => setClicks(c => c + 1)}>

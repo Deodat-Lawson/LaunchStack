@@ -1,5 +1,6 @@
 // Document-related types
 
+import { isArtifactDocument } from "~/lib/artifact-document";
 import { isMindmapDocument } from "~/lib/mindmap-document";
 
 /** Display category for document preview (PDF, image, docx, xlsx, pptx, text, code, etc.) */
@@ -13,6 +14,7 @@ export type DocumentDisplayType =
     | "markdown" // Markdown documents (.md, .markdown) — rendered, not shown as source
     | "conversation" // Imported agent-session transcripts — rendered as a chat, not a document
     | "mindmap" // The citable copy of a mindmap — rendered as the map, not as its outline
+    | "artifact" // An imported Claude artifact — rendered in a sandbox, not as its source
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
     | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
@@ -79,6 +81,9 @@ export function getDocumentDisplayType(doc: {
     // Likewise a published mindmap: a Markdown outline on disk, a diagram to
     // the reader.
     if (isMindmapDocument(doc.ocrMetadata)) return "mindmap";
+    // And an imported Claude artifact: stored as plain text so it can never
+    // run on this origin, rendered from its marker in a sandboxed frame.
+    if (isArtifactDocument(doc.ocrMetadata)) return "artifact";
 
     // Check title first — transcription documents are stored as text/plain but should render as audio
     if (doc.title.toLowerCase().includes("(transcription)")) return "audio";

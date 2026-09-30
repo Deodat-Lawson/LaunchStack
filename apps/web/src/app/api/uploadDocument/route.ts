@@ -21,6 +21,8 @@ import {
 } from "~/lib/require-workspace-context";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { ARTIFACT_TYPES } from "~/lib/artifact-content";
+import { artifactDocumentMarker } from "~/lib/artifact-document";
 
 const UploadDocumentSchema = z.object({
     documentUrl: z.string().min(1, "Document URL or path is required"),
@@ -33,6 +35,24 @@ const UploadDocumentSchema = z.object({
     storageProvider: z.string().optional(),
     storagePathname: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
+    /**
+     * Set by Add a source → Claude artifact. The file is an ordinary upload;
+     * this only records what it is, so the viewer renders it in a sandbox
+     * rather than as text (see ~/lib/artifact-document).
+     */
+    artifact: z
+        .object({
+            artifactType: z.enum(ARTIFACT_TYPES),
+            // http(s) only: the viewer turns this into a link, and a
+            // `javascript:` URL is a valid URL too.
+            sourceUrl: z
+                .string()
+                .url()
+                .max(2048)
+                .refine(url => /^https?:\/\//i.test(url), "The link must be an http(s) address")
+                .nullish(),
+        })
+        .optional(),
 });
 
 export async function POST(request: Request) {
@@ -55,6 +75,7 @@ export async function POST(request: Request) {
                 mimeType,
                 originalFilename,
                 embeddingIndexKey,
+                artifact,
             } = validation.data;
 
             // A restricted folder takes edit access to it, not just the
@@ -78,6 +99,14 @@ export async function POST(request: Request) {
                 originalFilename,
                 embeddingIndexKey,
                 requestUrl: request.url,
+                ocrMetadata: artifact
+                    ? {
+                          ...artifactDocumentMarker({
+                              artifactType: artifact.artifactType,
+                              sourceUrl: artifact.sourceUrl,
+                          }),
+                      }
+                    : undefined,
             });
 
             return NextResponse.json(

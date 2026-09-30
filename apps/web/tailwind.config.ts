@@ -1,4 +1,5 @@
 import { type Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 // Every color resolves through the design tokens
 // (@launchstack/design-tokens/tokens.css). The relative-color wrapper
@@ -109,5 +110,18 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        // Widths of the pane an app sits in, not of the window. Every
+        // workspace pane is a size container (StudioSplitView's pane hosts),
+        // so `@max-sm:hidden` reads "hide when this pane is under 520px" —
+        // a chat in a third of the screen gets the compact toolbar even on a
+        // wide monitor. Max-width only, on purpose: outside any container
+        // nothing matches, so an app on a page of its own keeps its full
+        // layout rather than its narrowest.
+        plugin(api => {
+            api.addVariant("@max-xs", "@container (max-width: 379px)");
+            api.addVariant("@max-sm", "@container (max-width: 519px)");
+            api.addVariant("@max-md", "@container (max-width: 639px)");
+        }),
+    ],
 } satisfies Config;

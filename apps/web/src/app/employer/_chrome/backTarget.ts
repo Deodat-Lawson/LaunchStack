@@ -49,7 +49,6 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/prospects",
         target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
     },
-    { prefix: "/employer/artifacts/", target: { href: "/employer/artifacts", label: "Artifacts" } },
     { prefix: "/employer/documents/", target: STUDIO },
     { prefix: "/employer/mindmap/", target: STUDIO },
 ];

@@ -1,4 +1,5 @@
 import {
+    AUTO_SPLIT_LIMIT,
     MAX_GROUPS,
     groupOf,
     initialLayout,
@@ -6,6 +7,7 @@ import {
     newGroup,
     openTabIds,
     reduceLayout,
+    rowLayout,
     type PaneLayout,
 } from "../paneLayout";
 
@@ -23,11 +25,11 @@ function shape(layout: PaneLayout): string {
 }
 
 function layoutOf(columns: string[][], activeIndex = 0): PaneLayout {
-    return {
-        groups: columns.map((tabIds, i) => newGroup(`g${i}`, tabIds)),
-        activeGroupId: `g${activeIndex}`,
-        seq: columns.length,
-    };
+    return rowLayout(
+        columns.map((tabIds, i) => newGroup(`g${i}`, tabIds)),
+        `g${activeIndex}`,
+        columns.length
+    );
 }
 
 describe("paneLayout", () => {
@@ -86,7 +88,7 @@ describe("paneLayout", () => {
         it("falls back to the focused column once there is no room for another", () => {
             const full = layoutOf([["chat"], ["knowledge"], ["draft"]], 2);
             const after = reduceLayout(full, { type: "openBeside", id: "notes" });
-            expect(after.groups).toHaveLength(MAX_GROUPS);
+            expect(after.groups).toHaveLength(AUTO_SPLIT_LIMIT);
             expect(shape(after)).toBe("[chat] | [knowledge] | draft,[notes]");
         });
     });
@@ -104,8 +106,14 @@ describe("paneLayout", () => {
             expect(reduceLayout(before, { type: "split", id: "chat" })).toBe(before);
         });
 
-        it("does nothing once every column is taken", () => {
-            const full = layoutOf([["chat", "notes"], ["knowledge"], ["draft"]], 0);
+        it("does nothing once every pane is taken", () => {
+            const full = layoutOf(
+                [
+                    ["chat", "notes"],
+                    ...Array.from({ length: MAX_GROUPS - 1 }, (_, i) => [`app${i}`]),
+                ],
+                0
+            );
             expect(reduceLayout(full, { type: "split", id: "notes" })).toBe(full);
         });
     });
@@ -312,7 +320,7 @@ describe("paneLayout", () => {
 
         it("goes left of the chat when the chat is last and there is no room", () => {
             const full = layoutOf([["a"], ["b"], ["chat"]], 2);
-            expect(full.groups).toHaveLength(MAX_GROUPS);
+            expect(full.groups).toHaveLength(AUTO_SPLIT_LIMIT);
             const next = pair(full);
             expect(shape(next)).toBe("[a] | b,[source:d1] | [chat]");
             expect(groupOf(next, "source:d1")?.id).not.toBe(groupOf(next, "chat")?.id);

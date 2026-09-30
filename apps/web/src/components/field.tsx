@@ -20,16 +20,20 @@ export function Field({
     error,
     children,
     inline,
+    htmlFor,
 }: {
     label: string;
     hint?: string;
     error?: string;
     children: ReactNode;
     inline?: boolean;
+    /** The control's id, so the label names it and clicking it focuses it. */
+    htmlFor?: string;
 }) {
     return (
         <div className={cn("mb-4", inline && "flex items-center gap-3.5")}>
             <label
+                htmlFor={htmlFor}
                 className={cn(
                     "text-ink-2 block text-xs font-semibold",
                     inline ? "min-w-[160px]" : "mb-1.5"

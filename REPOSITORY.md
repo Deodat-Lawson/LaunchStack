@@ -44,7 +44,7 @@ outright, since nothing was ever published under the old names.
 | `packages/schema-generator`           | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                                                    |
 | `packages/tools`                      | TS library             | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
 | `packages/design-tokens`              | CSS (published)        | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
-| `pipelines/`                          | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
+| `pipelines/`                          | TS library (published) | **The compositions tier** — the verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer, repo-workspace, distribution, proposals) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
 | `services/document-converter`         | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
 | `services/transcription`              | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
 | `services/adeu-ai-docs-editing`       | Python/FastAPI         | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor.                                                                                                                               |
@@ -153,6 +153,8 @@ Two different things share that list, and their scopes differ on purpose:
   `distribution_runs`, `email_campaigns`, `founder_weekly_review_runs`). Nothing
   is copied into a second table: history is a *read* over the rows the verticals
   already own, so it can never drift from them.
+
+Grants runs (`proposal_runs`) join the same feed through their own loader.
 
 `apps/web/src/lib/workspace-history.ts` is the shared contract — the entry
 shape, four normalized statuses, date grouping, all pure and both-sides.

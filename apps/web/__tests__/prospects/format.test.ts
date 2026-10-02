@@ -1,9 +1,4 @@
-import {
-    duration,
-    joinNatural,
-    plural,
-    relativeTime,
-} from "~/app/employer/tools/growth/_lib/format";
+import { duration, joinNatural, plural, relativeTime } from "~/lib/tools/format";
 
 describe("relativeTime", () => {
     const now = new Date("2026-09-17T03:10:00").getTime();

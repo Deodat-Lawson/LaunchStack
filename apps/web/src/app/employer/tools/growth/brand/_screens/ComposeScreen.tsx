@@ -11,11 +11,11 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader, SectionHeading } from "../../_components/PageHeader";
-import { plural } from "../../_lib/format";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { plural } from "~/lib/tools/format";
 import { useGrowthPaths } from "../../_lib/paths";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { NETWORK_LABEL, NETWORK_LIMIT, NetworkMark } from "../_components/NetworkMark";
 import { nextSlot, toLocalInput } from "../_lib/time";
 import {

@@ -32,6 +32,8 @@ export const TOKEN_COSTS = {
     llm_chat: 1,
     /** Per completed distribution-pipeline candidate dossier (flat, debited after the work) */
     distribution_research: 2_000,
+    /** Per proposal-writing stage (profile, funder search, extraction, a draft or rewrite, a review) */
+    proposal_writing: 1_500,
 } as const satisfies Record<TokenService, number>;
 
 /** Calculate embedding token cost from actual token count */

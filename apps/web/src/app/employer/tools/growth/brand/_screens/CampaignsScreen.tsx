@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { MarketingPipelineWorkspace } from "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace";
 import { toPlatformText } from "~/app/employer/documents/components/marketing-pipeline/useMarketingPipelineController";
 
-import { PageHeader } from "../../_components/PageHeader";
+import { PageHeader } from "~/components/tools/PageHeader";
 import { useGrowthPaths } from "../../_lib/paths";
 import { COMPOSE_HANDOFF_KEY, type ComposeHandoff } from "../api";
 

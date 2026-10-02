@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Proposals** - a writing app of its own in Tools, with a Studio tile: find
+  the funders that fit, then write the proposal from what your sources prove
+  - Profile: what the workspace's sources can prove, fact by fact with
+    citations; edit a fact by hand, rebuild after new reports land
+  - Funders: a search planned from the profile over Grants.gov (public API,
+    no key) and the web (with an EXA/SERPER key), each call scored for fit
+    with why and concerns; save, dismiss, or apply from the row; a link to
+    Investor relations for equity
+  - Write: paste a call, give its link, or pick a Source; it becomes a
+    checklist (eligibility, every question with its word limit, attachments,
+    format, deadline) and an outline of sections to write
+  - An editor per section: draft from the sources with numbered evidence and
+    the gaps named, rewrite (tighten to the limit, more specific, plainer,
+    stronger, or your own instruction), approve, save to the Library; the
+    evidence rail shows what the answer cites; "Ask in chat" hands a question
+    about the sources to the Studio chat (`?ask=` on the workspace)
+  - A review that reads the drafts like a programme officer, readiness on
+    every row, a whole-document preview, export into Sources as markdown
+  - Runs execute in the web process after the response, or on the worker
+    with `PROPOSALS_EXECUTOR=worker`; every run lists in History
+  - `@launchstack/tools/grant-search` (Grants.gov + web listings) and
+    `@launchstack/pipelines/proposals` (six tables, six stages, the run
+    orchestrator); preview at `/dev/proposals`
+
 - **Split the workspace centre** - columns side by side, each its own strip of
   tabs
   - Chat beside a document, or chat beside a tool beside a document, up to

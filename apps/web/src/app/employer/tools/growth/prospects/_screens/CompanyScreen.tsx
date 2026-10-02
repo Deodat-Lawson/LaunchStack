@@ -30,13 +30,13 @@ import {
 } from "../api";
 import { useProspects } from "../_lib/context";
 import { neighbours } from "../_lib/listOrder";
-import { relativeTime, shortDate } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
+import { relativeTime, shortDate } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
 import { ClaimText, evidenceAnchorId } from "../_components/Citation";
 import { EmailStatus, canOutreach } from "../_components/EmailStatus";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
-import { SkeletonBlock } from "../../_components/SkeletonRows";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
+import { SkeletonBlock } from "~/components/tools/SkeletonRows";
 import { SourceChip } from "../_components/SourceChip";
 import { StageMenu, StagePill } from "../_components/StagePill";
 

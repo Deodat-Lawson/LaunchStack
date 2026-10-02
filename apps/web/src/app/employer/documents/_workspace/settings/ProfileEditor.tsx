@@ -502,6 +502,8 @@ export function ProfileEditor({
                                     <Button
                                         size="sm"
                                         variant="outline"
+                                        // Wraps rather than spilling out of a narrow Studio split.
+                                        className="h-auto min-h-8 max-w-full whitespace-normal py-1.5 text-left"
                                         onClick={() => choosePhoto("workspace")}
                                     >
                                         <Camera aria-hidden />

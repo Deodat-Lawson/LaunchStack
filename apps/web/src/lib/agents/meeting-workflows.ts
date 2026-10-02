@@ -661,6 +661,19 @@ export const WORKFLOW_CATEGORY_META: Record<MeetingWorkflow["category"], { label
     run: { label: "Run a routine" },
 };
 
+/** Workflows under their category headings, categories and workflows in list order. */
+export function workflowsByCategory(
+    workflows: readonly MeetingWorkflow[] = MEETING_WORKFLOWS
+): [MeetingWorkflow["category"], MeetingWorkflow[]][] {
+    const groups = new Map<MeetingWorkflow["category"], MeetingWorkflow[]>();
+    for (const workflow of workflows) {
+        const list = groups.get(workflow.category) ?? [];
+        list.push(workflow);
+        groups.set(workflow.category, list);
+    }
+    return [...groups.entries()];
+}
+
 export function meetingWorkflow(key: string | null | undefined): MeetingWorkflow | undefined {
     if (!key) return undefined;
     return MEETING_WORKFLOWS.find(workflow => workflow.key === key);

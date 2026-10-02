@@ -17,6 +17,7 @@ import {
     BookOpen,
     MessagesSquare,
     Network,
+    AppWindow,
 } from "lucide-react";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -44,6 +45,12 @@ const ConversationViewer = dynamic(
 // A published mindmap renders as the map; the canvas bundle loads on demand.
 const MindmapDocumentViewer = dynamic(
     () => import("./MindmapDocumentViewer").then(m => m.MindmapDocumentViewer),
+    { ssr: false }
+);
+
+// An imported Claude artifact renders in a sandbox; Mermaid loads on demand.
+const ArtifactDocumentViewer = dynamic(
+    () => import("./ArtifactDocumentViewer").then(m => m.ArtifactDocumentViewer),
     { ssr: false }
 );
 import { XlsxViewer } from "./XlsxViewer";
@@ -81,6 +88,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     markdown: "Markdown",
     conversation: "Agent Session",
     mindmap: "Mindmap",
+    artifact: "Claude artifact",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
@@ -97,6 +105,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     markdown: BookOpen,
     conversation: MessagesSquare,
     mindmap: Network,
+    artifact: AppWindow,
     code: FileCode,
     zip: Archive,
     audio: Music,
@@ -278,6 +287,8 @@ export function DocumentViewer({
                 return <ConversationViewer document={document} />;
             case "mindmap":
                 return <MindmapDocumentViewer document={document} highlight={highlight} />;
+            case "artifact":
+                return <ArtifactDocumentViewer document={document} />;
             case "code":
                 return (
                     <CodeViewer

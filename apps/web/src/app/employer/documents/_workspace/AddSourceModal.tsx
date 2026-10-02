@@ -12,7 +12,6 @@ import {
 import { useRouter } from "next/navigation";
 import {
     Lock,
-    MessagesSquare,
     Zap as IconBolt,
     Check as IconCheck,
     ChevronDown as IconChevronDown,
@@ -25,6 +24,8 @@ import { Button } from "~/components/ui/button";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 import { GmailConnectPanel } from "./GmailConnectPanel";
+import { registerDocument, uploadFileToStorage } from "./sourceUpload";
+import { ArtifactImportPanel } from "./ArtifactImportPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
 import dynamic from "next/dynamic";
@@ -39,6 +40,15 @@ const TemplateThumbnail = dynamic(
     () =>
         import("~/app/employer/documents/_mindmap/ui/TemplateThumbnail").then(
             m => m.TemplateThumbnail
+        ),
+    { ssr: false, loading: () => null }
+);
+
+// Only the Coding sessions tab needs it, and it is a list app of its own.
+const SessionsBrowser = dynamic(
+    () =>
+        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
+            m => m.SessionsBrowser
         ),
     { ssr: false, loading: () => null }
 );
@@ -101,11 +111,16 @@ export interface AddSourceModalProps {
      * handler the panel navigates to the workspace itself.
      */
     onMindmapCreated?: (mindmapId: number) => void;
-}
-
-interface UploadResult {
-    url: string;
-    provider: "s3" | "database";
+    /**
+     * What the Coding sessions tab does with a session once it is a source:
+     * refresh the library after an import, open one, or continue it in chat.
+     * Without these the browser falls back to navigating.
+     */
+    sessions?: {
+        onImported: () => Promise<void>;
+        onOpenDocument: (documentId: number) => void;
+        onContinue: (documentId: number) => void;
+    };
 }
 
 /** Shape of GET /api/connectors/google — gates the Create → Google Doc tab. */
@@ -114,52 +129,6 @@ interface GoogleConnectionStatus {
     connected: boolean;
     accountEmail?: string | null;
     connectUrl?: string;
-}
-
-// Uses the provider-agnostic /api/upload-local route so uploads work whether the
-// app is configured for S3 or database storage (NEXT_PUBLIC_STORAGE_PROVIDER).
-// The old /api/storage/upload path 400s whenever storage isn't S3.
-async function uploadFileToStorage(file: File): Promise<UploadResult> {
-    const form = new FormData();
-    form.append("file", file);
-    const res = await fetch("/api/upload-local", { method: "POST", body: form });
-    if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? `Upload failed (HTTP ${res.status})`);
-    }
-    const data = (await res.json()) as {
-        url: string;
-        provider?: "s3" | "database";
-    };
-    return {
-        url: data.url,
-        provider: data.provider === "s3" ? "s3" : "database",
-    };
-}
-
-async function registerDocument(params: {
-    file: File;
-    url: string;
-    provider: "s3" | "database";
-    category: string;
-}): Promise<void> {
-    const body: Record<string, unknown> = {
-        documentName: params.file.name,
-        category: params.category,
-        documentUrl: params.url,
-        storageType: params.provider,
-        mimeType: params.file.type || "application/octet-stream",
-        originalFilename: params.file.name,
-    };
-    const res = await fetch("/api/uploadDocument", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(`Document registration failed (HTTP ${res.status}) ${text}`);
-    }
 }
 
 async function uploadAndRegisterAll(params: {
@@ -233,6 +202,7 @@ export function AddSourceModal({
     initialUrl,
     initialText,
     onMindmapCreated,
+    sessions,
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
@@ -345,8 +315,35 @@ export function AddSourceModal({
         panel = <DriveConnectPanel tab={active} />;
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} />;
+    } else if (tab === "artifact") {
+        panel = (
+            <ArtifactImportPanel userId={userId} category={folder} onUploaded={handleUploaded} />
+        );
     } else if (tab === "agent-sessions") {
-        panel = <AgentSessionsLinkPanel />;
+        // The whole browser, here: import, rescan, open, continue in chat.
+        // Opening or continuing one leaves this dialog for the workspace.
+        panel = (
+            <SessionsBrowser
+                embedded
+                onImported={sessions?.onImported}
+                onOpenDocument={
+                    sessions
+                        ? id => {
+                              onClose();
+                              sessions.onOpenDocument(id);
+                          }
+                        : undefined
+                }
+                onContinue={
+                    sessions
+                        ? id => {
+                              onClose();
+                              sessions.onContinue(id);
+                          }
+                        : undefined
+                }
+            />
+        );
     } else {
         panel = <ConnectPanel tab={active} />;
     }
@@ -370,7 +367,9 @@ export function AddSourceModal({
             <div
                 onClick={e => e.stopPropagation()}
                 style={{
-                    width: 780,
+                    // The sessions browser is a list with filters, not a form;
+                    // at the form width its rows truncated to nothing.
+                    width: tab === "agent-sessions" ? 1040 : 780,
                     maxWidth: "92vw",
                     maxHeight: "86vh",
                     background: "var(--panel)",
@@ -496,58 +495,66 @@ export function AddSourceModal({
                     <div style={{ flex: 1, overflowY: "auto" }}>{panel}</div>
 
                     {/* Save-to strip. Tags picker omitted for now — tags aren't yet
-              persisted on ingest, and the design is purely informational. */}
-                    <div
-                        style={{
-                            marginTop: 14,
-                            paddingTop: 14,
-                            borderTop: "1px solid var(--line)",
-                            display: "flex",
-                            gap: 10,
-                            alignItems: "center",
-                            flexWrap: "wrap",
-                        }}
-                    >
+              persisted on ingest, and the design is purely informational.
+              Not on Coding sessions: the connector files every session in
+              its own "Agent Sessions" folder. */}
+                    {tab === "agent-sessions" ? (
+                        <p className="border-line text-ink-3 mt-3.5 border-t pt-3.5 text-xs">
+                            Imported sessions go to the &ldquo;Agent Sessions&rdquo; folder.
+                        </p>
+                    ) : (
                         <div
-                            className="mono"
                             style={{
-                                fontSize: 10,
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                color: "var(--ink-3)",
-                                textTransform: "uppercase",
-                            }}
-                        >
-                            Save to
-                        </div>
-                        <FolderPicker
-                            value={folder}
-                            onChange={setFolder}
-                            folders={folders}
-                            onCreate={onCreateFolder}
-                        />
-                        <span
-                            role="note"
-                            style={{
-                                display: "inline-flex",
+                                marginTop: 14,
+                                paddingTop: 14,
+                                borderTop: "1px solid var(--line)",
+                                display: "flex",
+                                gap: 10,
                                 alignItems: "center",
-                                gap: 5,
-                                fontSize: 11.5,
-                                color: restrictedFolders.includes(folder)
-                                    ? "var(--ink-2)"
-                                    : "var(--ink-3)",
+                                flexWrap: "wrap",
                             }}
                         >
-                            {restrictedFolders.includes(folder) ? (
-                                <>
-                                    <Lock size={11} />
-                                    Restricted folder — visible only to people with access
-                                </>
-                            ) : (
-                                "Visible to everyone in the workspace"
-                            )}
-                        </span>
-                    </div>
+                            <div
+                                className="mono"
+                                style={{
+                                    fontSize: 10,
+                                    fontWeight: 600,
+                                    letterSpacing: "0.08em",
+                                    color: "var(--ink-3)",
+                                    textTransform: "uppercase",
+                                }}
+                            >
+                                Save to
+                            </div>
+                            <FolderPicker
+                                value={folder}
+                                onChange={setFolder}
+                                folders={folders}
+                                onCreate={onCreateFolder}
+                            />
+                            <span
+                                role="note"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 5,
+                                    fontSize: 11.5,
+                                    color: restrictedFolders.includes(folder)
+                                        ? "var(--ink-2)"
+                                        : "var(--ink-3)",
+                                }}
+                            >
+                                {restrictedFolders.includes(folder) ? (
+                                    <>
+                                        <Lock size={11} />
+                                        Restricted folder — visible only to people with access
+                                    </>
+                                ) : (
+                                    "Visible to everyone in the workspace"
+                                )}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -2077,58 +2084,6 @@ const PROVIDER_PERKS: Record<string, string[]> = {
     github: ["Code, issues, PRs, and READMEs", "Private repos supported", "Updates on each push"],
     dropbox: ["Pick folders — kept in sync", "All file types indexed", "Shared folders supported"],
 };
-
-/**
- * Coding sessions have a real browser page rather than a modal flow — this
- * panel is the signpost to it.
- */
-function AgentSessionsLinkPanel() {
-    const router = useRouter();
-    return (
-        <div style={{ display: "grid", placeItems: "center", height: "100%", padding: 24 }}>
-            <div style={{ maxWidth: 420, textAlign: "center" }}>
-                <div
-                    style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 14,
-                        display: "grid",
-                        placeItems: "center",
-                        margin: "0 auto 14px",
-                        background: "var(--brand-soft)",
-                        color: "var(--brand-ink)",
-                    }}
-                >
-                    <MessagesSquare style={{ width: 22, height: 22 }} />
-                </div>
-                <div style={{ fontWeight: 650, fontSize: 15, color: "var(--ink)" }}>
-                    Coding sessions
-                </div>
-                <p style={{ fontSize: 13, color: "var(--ink-3)", margin: "8px 0 16px" }}>
-                    Browse every Claude Code and Codex conversation on this machine, import the ones
-                    worth keeping, and continue them in chat. Imported sessions land here in the
-                    “Agent Sessions” folder.
-                </p>
-                <button
-                    type="button"
-                    onClick={() => router.push("/employer/agent-sessions")}
-                    style={{
-                        border: "none",
-                        borderRadius: 10,
-                        padding: "9px 16px",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        background: "var(--brand)",
-                        color: "var(--brand-fg)",
-                    }}
-                >
-                    Open the sessions browser
-                </button>
-            </div>
-        </div>
-    );
-}
 
 function ConnectPanel({ tab }: ConnectPanelProps) {
     const meta = SOURCE_META[tab.id as keyof typeof SOURCE_META];

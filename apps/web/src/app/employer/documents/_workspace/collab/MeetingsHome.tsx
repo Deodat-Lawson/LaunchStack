@@ -27,9 +27,9 @@ import {
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
-    MEETING_WORKFLOWS,
     WORKFLOW_CATEGORY_META,
     workflowTurnCount,
+    workflowsByCategory,
     type MeetingWorkflow,
 } from "~/lib/agents/meeting-workflows";
 import { cn } from "~/lib/utils";
@@ -80,25 +80,20 @@ export function MeetingsHome({
     const live = meetings.filter(m => m.status === "running" || m.status === "human_control");
     const recent = meetings.filter(m => !live.includes(m)).slice(0, 6);
     const byKey = useMemo(() => new Map(agents.map(agent => [agent.id, agent])), [agents]);
-    const grouped = useMemo(() => {
-        const groups = new Map<MeetingWorkflow["category"], MeetingWorkflow[]>();
-        for (const workflow of MEETING_WORKFLOWS) {
-            const list = groups.get(workflow.category) ?? [];
-            list.push(workflow);
-            groups.set(workflow.category, list);
-        }
-        return [...groups.entries()];
-    }, []);
+    const grouped = useMemo(() => workflowsByCategory(), []);
 
     return (
-        <div className="bg-surface h-full min-h-0 overflow-y-auto">
-            <div className="mx-auto max-w-[1080px] px-7 pb-16 pt-8">
-                <header className="mb-8 flex items-start gap-6">
-                    <div className="min-w-0 flex-1">
+        <div className="bg-surface min-h-0 min-w-0 flex-1 overflow-y-auto">
+            <div className="@max-sm:px-4 @max-sm:pt-5 mx-auto max-w-[1080px] px-7 pb-16 pt-8">
+                {/* Wraps rather than squeezing: in a half-width pane the
+                    button drops below the heading instead of leaving it
+                    one word to a line. */}
+                <header className="mb-8 flex flex-wrap items-start gap-x-6 gap-y-4">
+                    <div className="min-w-[min(100%,280px)] flex-1">
                         <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
                             Meetings
                         </div>
-                        <h1 className="display text-ink m-0 text-[30px] leading-[1.1] tracking-tight">
+                        <h1 className="display text-ink @max-sm:text-[23px] m-0 text-[30px] leading-[1.1] tracking-tight">
                             Put your agents in a room and give them a job
                         </h1>
                         <p className="text-ink-3 mt-2 max-w-[640px] text-[13.5px] leading-relaxed">
@@ -113,7 +108,7 @@ export function MeetingsHome({
                     </Button>
                 </header>
 
-                <section className="mb-9 grid grid-cols-3 gap-3">
+                <section className="mb-9 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
                     {STEPS.map((step, index) => (
                         <div
                             key={step.title}

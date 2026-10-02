@@ -1,6 +1,6 @@
 /**
- * Display metadata per artifact type — one place for the gallery, the viewer,
- * and the import dialog to agree on icons and labels.
+ * Display metadata per artifact type — one place for the document viewer and
+ * Add a source → Claude artifact to agree on icons and labels.
  */
 
 import type { ComponentType } from "react";

@@ -67,14 +67,25 @@ describe("studio registry", () => {
         }
     });
 
-    it("opens Artifacts and Coding sessions in a tab, keeping their routes for direct links", () => {
-        for (const id of ["artifacts", "agent-sessions"]) {
-            const feature = STUDIO_FEATURES_BY_ID[id];
-            expect(feature).toBeDefined();
-            // Not external: the shell mounts these rather than navigating.
-            expect(feature!.external).toBeUndefined();
-            expect(pageExists(feature!.href!)).toBe(true);
+    it("treats Claude artifacts and coding sessions as sources you add, not Studio apps", () => {
+        const addTabs = ADD_TABS.flatMap(g => g.items).map(tab => tab.id);
+        for (const [id, tab] of [
+            ["artifacts", "artifact"],
+            ["agent-sessions", "agent-sessions"],
+        ] as const) {
+            // Not a tile, and nothing a saved layout could reopen as a tab.
+            expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
+            expect(resolveStudioFeature(id)).toBeUndefined();
+            // Their way in is a tab of Add a source, which ⌘K opens.
+            expect(addTabs).toContain(tab);
+            expect(DEMOTED_FEATURES.find(f => f.id === id)?.href).toBe(
+                `/employer/documents?add=1&tab=${tab}`
+            );
         }
+        // An artifact is uploaded; sessions come from a connector.
+        const group = (name: string) => ADD_TABS.find(g => g.group === name)!.items.map(t => t.id);
+        expect(group("Upload")).toContain("artifact");
+        expect(group("Connect")).toContain("agent-sessions");
     });
 
     it("treats a mindmap as a source you make, not a Studio app", () => {

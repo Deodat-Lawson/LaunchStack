@@ -87,6 +87,12 @@ export default {
                 },
             },
             keyframes: {
+                // Loading states hold back for a beat, then fade in, so a load
+                // that finishes quickly never flashes one (see _components/loading).
+                "loader-in": {
+                    from: { opacity: "0" },
+                    to: { opacity: "1" },
+                },
                 "accordion-down": {
                     from: {
                         height: "0",
@@ -105,6 +111,7 @@ export default {
                 },
             },
             animation: {
+                "loader-in": "loader-in 200ms ease-out 150ms both",
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
             },

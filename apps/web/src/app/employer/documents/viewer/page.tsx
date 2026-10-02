@@ -10,7 +10,11 @@ import type { DocumentType } from "../types";
 
 const DocumentViewer = dynamic(
     () => import("~/app/employer/documents/components/DocumentViewer").then(m => m.DocumentViewer),
-    { loading: () => <LoadingPage /> }
+    {
+        loading: () => (
+            <LoadingPage variant="pane" label="Loading document…" className="min-h-[60vh]" />
+        ),
+    }
 );
 
 function ViewerInner() {
@@ -53,7 +57,8 @@ function ViewerInner() {
         void fetchDocument();
     }, [fetchDocument]);
 
-    if (loading) return <LoadingPage />;
+    if (loading)
+        return <LoadingPage variant="pane" label="Loading document…" className="min-h-[60vh]" />;
 
     if (!document) {
         return (
@@ -100,7 +105,15 @@ export default function DocumentViewerPage() {
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--ink)" }}>
             <EmployerChrome pageLabel="Launchstack" pageTitle="Document" />
-            <Suspense fallback={<LoadingPage />}>
+            <Suspense
+                fallback={
+                    <LoadingPage
+                        variant="pane"
+                        label="Loading document…"
+                        className="min-h-[60vh]"
+                    />
+                }
+            >
                 <ViewerInner />
             </Suspense>
         </div>

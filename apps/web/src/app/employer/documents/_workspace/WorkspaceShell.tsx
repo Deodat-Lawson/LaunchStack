@@ -1916,11 +1916,11 @@ export function WorkspaceShell() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
-    if (!isLoaded) return <LoadingPage />;
-    if (!isSignedIn) return <LoadingPage />;
+    if (!isLoaded) return <LoadingPage label="Opening your workspace…" />;
+    if (!isSignedIn) return <LoadingPage label="Opening your workspace…" />;
 
     // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
-    if (legacyRedirect) return <LoadingPage />;
+    if (legacyRedirect) return <LoadingPage label="Opening your workspace…" />;
 
     // How this workspace sees you; the session's name until the profile loads.
     const me = myProfile?.effective;

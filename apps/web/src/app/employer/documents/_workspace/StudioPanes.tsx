@@ -46,13 +46,13 @@ const DocumentGenerator = dynamic(
         import("~/app/employer/documents/components/DocumentGenerator").then(
             m => m.DocumentGenerator
         ),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const RewriteDiffView = dynamic(
     () =>
         import("~/app/employer/documents/components/RewriteDiffView").then(m => m.RewriteDiffView),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const LegalGeneratorTheme = dynamic(
@@ -60,33 +60,33 @@ const LegalGeneratorTheme = dynamic(
         import("~/app/employer/documents/components/LegalGeneratorTheme").then(
             m => m.LegalGeneratorTheme
         ),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const StatisticsView = dynamic(
     () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.KnowledgePane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 interface PaneProps {

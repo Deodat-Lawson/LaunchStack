@@ -818,8 +818,8 @@ export function renderStudioPane(
                     onSaveAsSource={context?.investors?.onSaveAsSource}
                 />
             );
-        // Company metadata and analytics are sections of Settings now. Their ids
-        // survive so old deep links open the right section rather than 404ing.
+        // Company metadata is a section of Settings now. Its id survives so old
+        // deep links open the right section rather than 404ing.
         case "metadata":
             return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":

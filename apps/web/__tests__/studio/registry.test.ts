@@ -118,16 +118,24 @@ describe("studio registry", () => {
     });
 
     it("can name every app the workspace is able to open in a tab", () => {
-        // A tab needs a label and an icon. These three have a working pane and
+        // A tab needs a label and an icon. These two have a working pane and
         // a live way in — a shortcut, a palette row, an old bookmark — but no
         // tile in the picker, so the registry has to be able to name them.
-        for (const id of ["workflows", "analytics", "metadata"]) {
+        for (const id of ["workflows", "metadata"]) {
             expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
             const feature = resolveStudioFeature(id);
             expect(feature).toBeDefined();
             expect(feature!.label).toBeTruthy();
             expect(feature!.Icon).toBeTruthy();
         }
+    });
+
+    it("lists Analytics as its own Management app, gated like its API", () => {
+        const management = STUDIO_GROUPS.find(g => g.id === "management");
+        const analytics = management?.features.find(f => f.id === "analytics");
+        expect(analytics?.requires).toBe("analytics.view");
+        // Settings does not hold analytics; its #analytics hash forwards here.
+        expect(STUDIO_FEATURES_BY_ID.settings?.desc).not.toMatch(/analytics/i);
     });
 
     it("sends a palette row with nowhere of its own to its real destination", () => {

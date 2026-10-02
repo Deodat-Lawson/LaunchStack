@@ -200,9 +200,13 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL("/signin", req.url));
         }
 
-        // Protect routes that require authentication
+        // Protect routes that require authentication. The page they asked for
+        // rides along as ?next=, so a link opened from an email or a bookmark
+        // lands there after sign-in instead of on the default dashboard.
         if (!userId && isProtectedRoute(req) && !isPublicRoute(req)) {
-            return NextResponse.redirect(new URL("/signin", req.url));
+            const signin = new URL("/signin", req.url);
+            signin.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
+            return NextResponse.redirect(signin);
         }
 
         // Route authenticated users based on their DB role + status

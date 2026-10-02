@@ -28,6 +28,7 @@ import {
 import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
+import { LandingLogoLink } from "~/components/LandingLogoLink";
 import {
     UNFILED_FOLDER,
     buildFolderTree,
@@ -1121,27 +1122,17 @@ export function SourceRail({
             className="border-line bg-panel flex h-full shrink-0 flex-col overflow-hidden border-r"
             style={{ width }}
         >
-            <div
-                style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 4 }}
-            >
-                <LaunchstackMark size={22} title={logoLabel} />
-                {/* The name yields before the hide control is pushed past
-                    the sidebar's edge. */}
-                <div
-                    style={{
-                        fontSize: 13,
-                        fontWeight: 700,
-                        letterSpacing: "-0.01em",
-                        flex: 1,
-                        minWidth: 0,
-                        marginLeft: 5,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                    }}
-                >
-                    {logoLabel}
-                </div>
+            <div className="flex items-center gap-1 px-3.5 pb-2.5 pt-3.5">
+                {/* mr-auto parks the hide control at the edge without making
+                    the empty space between them part of the link. The name
+                    yields before that control is pushed past the sidebar's
+                    edge. */}
+                <LandingLogoLink className="mr-auto flex min-w-0 items-center gap-[9px]">
+                    <LaunchstackMark size={22} title={logoLabel} />
+                    <span className="min-w-0 truncate text-[13px] font-bold tracking-[-0.01em]">
+                        {logoLabel}
+                    </span>
+                </LandingLogoLink>
                 {onClose && (
                     <button
                         onClick={onClose}

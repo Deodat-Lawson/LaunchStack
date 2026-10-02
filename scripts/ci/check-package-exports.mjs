@@ -10,6 +10,10 @@
  * contents; it does not follow every relative specifier inside the emitted
  * JS. So the shape looked correct while the package was unusable.
  *
+ * It can only load what publishConfig.exports lists. A subpath present in
+ * `exports` but missing from publishConfig.exports is never tried here;
+ * check-export-parity.mjs catches that, before the build.
+ *
  * Run after building the publishable packages (pnpm -r build), then:
  *   node scripts/ci/check-package-exports.mjs
  *

@@ -69,6 +69,12 @@ jobs:
       - name: Route files export only handlers and segment config
         run: node scripts/ci/check-route-exports.mjs
 
+      # Dependency-free too. The workspace resolves only `exports`, so a
+      # subpath missing from `publishConfig.exports` passes every other check
+      # and breaks only the published package, found at release, after merge.
+      - name: Workspace and published export maps list the same subpaths
+        run: node scripts/ci/check-export-parity.mjs
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

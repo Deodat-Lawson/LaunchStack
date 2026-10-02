@@ -81,6 +81,10 @@
             "./embeddings": {
                 "types": "./dist/embeddings/index.d.ts",
                 "default": "./dist/embeddings/index.js"
+            },
+            "./images": {
+                "types": "./dist/images/index.d.ts",
+                "default": "./dist/images/index.js"
             }
         }
     },

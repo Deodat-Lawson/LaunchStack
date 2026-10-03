@@ -227,9 +227,9 @@ function mount(at: string, extra: Partial<ToolHost> = {}) {
     return render(<DraftsTool host={host} />);
 }
 
-const rail = () => screen.getByRole("complementary", { name: "Templated Drafts screens" });
+const rail = () => screen.getByRole("navigation", { name: "Templated Drafts screens" });
 const railLink = (name: RegExp) => within(rail()).getByRole("link", { name });
-const goBack = () => fireEvent.click(within(rail()).getByRole("button", { name: "Back" }));
+const goBack = () => fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
 
 describe("the Templated Drafts tab", () => {
     it("opens on New document with a rail instead of the library's own tabs", async () => {

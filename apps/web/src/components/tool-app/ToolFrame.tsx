@@ -10,7 +10,15 @@ import {
     MoreHorizontal,
     type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import {
+    Fragment,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+    type ReactNode,
+} from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -24,13 +32,14 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { SheetContainerProvider } from "~/components/ui/sheet";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
 import { useToolNav } from "./nav";
 import { ToolLink } from "./ToolLink";
 
-/** One screen in a tool's rail. */
+/** One screen of a tool: a tab in its bar. */
 export interface ToolNavItem {
     /** App-relative: "/prospects/companies". */
     to: string;
@@ -42,14 +51,20 @@ export interface ToolNavItem {
     exact?: boolean;
 }
 
-/** A labelled run of screens, with optional controls above and below them. */
+/**
+ * A labelled run of screens. A tool with many screens in labelled groups
+ * (Growth: Brand and Prospects) gets a switch between its groups and the
+ * active group's screens as tabs; otherwise every screen is a tab in one row,
+ * groups divided by a hairline.
+ */
 export interface ToolNavGroup {
     id: string;
     label?: string;
     items: ToolNavItem[];
-    /** Above the items: Growth's segment switcher. */
+    /** Compact controls shown in the bar while this group is active: Growth's segment switcher, a run in progress. */
+    toolbar?: ReactNode;
+    /** On a phone the bar folds into a screen menu; these sit under it, full width. */
     header?: ReactNode;
-    /** Below the items: a run in progress. */
     footer?: ReactNode;
 }
 
@@ -58,10 +73,10 @@ export interface ToolFrameProps {
     title: string;
     /** The tool's mark, drawn on its tile (21px). */
     mark: ReactNode;
-    /** The tool's screens. Leave out for a one-screen tool: the frame then has no rail. */
+    /** The tool's screens. Leave out for a one-screen tool: the frame then has no bar. */
     groups?: ToolNavGroup[];
-    /** A quiet note at the foot of the rail. */
-    railFooter?: ReactNode;
+    /** One or two sentences on what the tool is for, at the top of its ⋯ menu. */
+    about?: ReactNode;
     /**
      * Sheets the tool owns (a run in progress). Every kit sheet inside the
      * frame — these, and any a screen opens — covers this tab only, never
@@ -88,10 +103,13 @@ function isActive(item: ToolNavItem, path: string): boolean {
  * The one frame every Studio tool sits in, so a tool feels like a tab of the
  * workspace and not like a different app.
  *
- * - A rail of the tool's screens inside the tab, the way Settings has one.
- *   It sizes by the tab, not the window: below 720px of its own width it
- *   folds into a bar with a screen menu, so a tool in a third of the screen
- *   is as usable as one in all of it.
+ * - A bar across the top of the tab: back and forward, the tool's name, its
+ *   screens as tabs, its controls and a ⋯ menu. The workspace sidebar
+ *   (Sources, History) stays the only sidebar — a tool used to bring a rail
+ *   of its own, which put two sidebars side by side.
+ * - The bar sizes by the tab, not the window: under 720px of its own width
+ *   the screens drop to a row of their own (scrolling sideways), and under
+ *   520px — a phone — the bar folds into a screen menu.
  * - Back and forward walk the tab's own history; the page never navigates.
  * - Each screen keeps its scroll position when you come back to it.
  * - Sheets open over this tab only.
@@ -103,7 +121,7 @@ export function ToolFrame({
     title,
     mark,
     groups,
-    railFooter,
+    about,
     overlay,
     contentClassName,
     fill = false,
@@ -158,9 +176,16 @@ export function ToolFrame({
         return stop;
     }, [nav.entryKey]);
 
-    const hasRail = Boolean(groups?.length);
+    const hasBar = Boolean(groups?.length);
     const activeGroup = groups?.find(group => group.items.some(item => isActive(item, nav.path)));
     const activeItem = activeGroup?.items.find(item => isActive(item, nav.path));
+    // Many screens in labelled groups (Growth's 12) do not fit one row: switch
+    // groups, and show the active group's screens.
+    const totalItems = groups?.reduce((n, g) => n + g.items.length, 0) ?? 0;
+    const twoLevel = Boolean(
+        groups && groups.length > 1 && totalItems > 8 && groups.every(g => g.label)
+    );
+    const tabGroups = twoLevel ? (activeGroup ? [activeGroup] : groups!.slice(0, 1)) : groups;
 
     return (
         <SheetContainerProvider container={root}>
@@ -170,46 +195,47 @@ export function ToolFrame({
                 // `contain: layout` makes this element the containing block for
                 // the fixed-position sheets mounted inside it — that is what
                 // keeps them inside the tab.
-                className="bg-surface text-ink relative flex h-full min-h-0 w-full [contain:layout] [container-type:inline-size]"
+                className="bg-surface text-ink relative flex h-full min-h-0 w-full flex-col [contain:layout] [container-type:inline-size]"
             >
-                {hasRail && (
-                    // The element that hides by width carries no display class of
-                    // its own: `@uploadthing/react/styles.css` loads after the
-                    // app's CSS and redefines `.flex`, `.block` and `.hidden`, so
-                    // `flex …:hidden` on one element would never hide. The layout
-                    // lives on the inner div.
-                    <aside
-                        aria-label={`${title} screens`}
-                        className="border-line bg-panel w-[220px] shrink-0 overflow-y-auto border-r [@container(max-width:719px)]:hidden"
-                    >
-                        <div className="flex min-h-full flex-col gap-4 px-2.5 pb-6 pt-3">
-                            <div className="flex items-center gap-1 pl-1.5">
-                                <span className="flex min-w-0 flex-1 items-center gap-2">
-                                    {mark}
-                                    {/* Wraps rather than truncates: "Investor relations"
-                                        beside the history buttons is wider than the rail. */}
-                                    <span className="text-ink min-w-0 text-balance text-[13.5px] font-semibold leading-tight tracking-[-0.02em]">
-                                        {title}
+                {hasBar && (
+                    <header className="border-line bg-panel shrink-0 border-b">
+                        {/* Each wrapper that hides by width carries no display
+                            class of its own: `@uploadthing/react/styles.css`
+                            loads after the app's CSS and redefines `.flex` and
+                            `.hidden`, so `flex …:hidden` on one element would
+                            never hide. The layout lives on the inner div. */}
+                        <div className="[@container(max-width:519px)]:hidden">
+                            <div className="flex flex-wrap items-center gap-x-2 px-3">
+                                <div className="flex h-11 min-w-0 shrink-0 items-center gap-1">
+                                    <HistoryButtons />
+                                    <span className="ml-1 flex min-w-0 items-center gap-2">
+                                        {mark}
+                                        <span className="text-ink truncate text-[13.5px] font-semibold tracking-[-0.02em]">
+                                            {title}
+                                        </span>
                                     </span>
-                                </span>
-                                <HistoryButtons />
-                                <FrameMenu title={title} />
-                            </div>
-                            {groups!.map(group => (
-                                <RailGroup key={group.id} group={group} path={nav.path} />
-                            ))}
-                            {railFooter && (
-                                <div className="text-ink-3 mt-auto px-2 text-[11.5px] leading-relaxed">
-                                    {railFooter}
+                                    {twoLevel && (
+                                        <GroupSwitch
+                                            groups={groups!}
+                                            activeGroup={activeGroup}
+                                            path={nav.path}
+                                        />
+                                    )}
                                 </div>
-                            )}
+                                <ScreenTabs
+                                    title={title}
+                                    groups={tabGroups ?? []}
+                                    path={nav.path}
+                                    ownRow={twoLevel}
+                                />
+                                <div className="ml-auto flex h-11 shrink-0 items-center gap-2">
+                                    {activeGroup?.toolbar}
+                                    <FrameMenu title={title} about={about} />
+                                </div>
+                            </div>
                         </div>
-                    </aside>
-                )}
-
-                <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-                    {hasRail && (
-                        <div className="border-line bg-panel shrink-0 border-b [@container(min-width:720px)]:hidden">
+                        {/* A phone: the screens fold into a menu. */}
+                        <div className="[@container(min-width:520px)]:hidden">
                             <div className="flex flex-col gap-2 px-3 py-2">
                                 <div className="flex items-center gap-1">
                                     <HistoryButtons />
@@ -221,7 +247,7 @@ export function ToolFrame({
                                         activeItem={activeItem}
                                         path={nav.path}
                                     />
-                                    <FrameMenu title={title} />
+                                    <FrameMenu title={title} about={about} />
                                 </div>
                                 {(activeGroup?.header ?? activeGroup?.footer) && (
                                     // `empty:hidden`: a footer that renders nothing
@@ -233,23 +259,24 @@ export function ToolFrame({
                                 )}
                             </div>
                         </div>
-                    )}
+                    </header>
+                )}
+
+                <div
+                    ref={scroller}
+                    onScroll={onScroll}
+                    data-tool-scroller
+                    className="min-h-0 flex-1 overflow-y-auto [container-type:inline-size]"
+                >
                     <div
-                        ref={scroller}
-                        onScroll={onScroll}
-                        data-tool-scroller
-                        className="min-h-0 flex-1 overflow-y-auto [container-type:inline-size]"
+                        className={cn(
+                            fill
+                                ? "h-full w-full"
+                                : "@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6",
+                            contentClassName
+                        )}
                     >
-                        <div
-                            className={cn(
-                                fill
-                                    ? "h-full w-full"
-                                    : "@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6",
-                                contentClassName
-                            )}
-                        >
-                            {children}
-                        </div>
+                        {children}
                     </div>
                 </div>
 
@@ -259,51 +286,124 @@ export function ToolFrame({
     );
 }
 
-function RailGroup({ group, path }: { group: ToolNavGroup; path: string }) {
+/**
+ * The tool's screens as tabs. In one row with the title while there is room;
+ * under 720px of tab width (and always for a two-level tool) on a row of
+ * their own, scrolling sideways rather than wrapping.
+ */
+function ScreenTabs({
+    title,
+    groups,
+    path,
+    ownRow,
+}: {
+    title: string;
+    groups: ToolNavGroup[];
+    path: string;
+    ownRow: boolean;
+}) {
+    const list = useRef<HTMLUListElement | null>(null);
+    // Keep the current screen's tab in view when the row scrolls.
+    useEffect(() => {
+        const current = list.current?.querySelector<HTMLElement>('[aria-current="page"]');
+        current?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+    }, [path]);
     return (
-        <nav aria-label={group.label ?? "Screens"} className="flex flex-col gap-2">
-            {group.label && (
-                <div className="text-ink-3 px-2 text-[11.5px] font-medium">{group.label}</div>
+        <nav
+            aria-label={`${title} screens`}
+            className={cn(
+                "-mb-px min-w-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+                ownRow
+                    ? "order-last basis-full"
+                    : "flex-1 [@container(max-width:719px)]:order-last [@container(max-width:719px)]:basis-full"
             )}
-            {group.header}
-            <ul className="flex flex-col gap-0.5">
-                {group.items.map(item => (
-                    <RailItem key={item.to} item={item} active={isActive(item, path)} />
+        >
+            <ul ref={list} className="flex items-stretch gap-0.5">
+                {groups.map((group, index) => (
+                    <Fragment key={group.id}>
+                        {index > 0 && (
+                            <li aria-hidden className="bg-line mx-1.5 my-3 w-px shrink-0" />
+                        )}
+                        {group.items.map(item => (
+                            <ScreenTab key={item.to} item={item} active={isActive(item, path)} />
+                        ))}
+                    </Fragment>
                 ))}
             </ul>
-            {group.footer}
         </nav>
     );
 }
 
-function RailItem({ item, active }: { item: ToolNavItem; active: boolean }) {
+function ScreenTab({ item, active }: { item: ToolNavItem; active: boolean }) {
     const Icon = item.icon;
     return (
-        <li>
+        <li className="shrink-0">
             <ToolLink
                 href={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                    "focus-visible:ring-brand/50 flex h-8 items-center gap-2 rounded-md px-2 text-[13px] outline-none transition-colors focus-visible:ring-[3px]",
+                    // The underline sits on the bar's bottom border, so the
+                    // current screen reads as part of the page below.
+                    "focus-visible:ring-brand/50 relative inline-flex h-10 items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 text-[13px] outline-none transition-colors after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full focus-visible:ring-[3px]",
                     active
-                        ? "bg-brand-soft text-brand-ink font-medium"
-                        : "text-ink-2 hover:bg-line-2 hover:text-ink"
+                        ? "text-ink after:bg-brand font-medium"
+                        : "text-ink-3 hover:text-ink after:bg-transparent"
                 )}
             >
-                {Icon && <Icon className="size-[15px] shrink-0 opacity-85" aria-hidden />}
-                <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                {Icon && <Icon className="size-[14px] shrink-0 opacity-85" aria-hidden />}
+                {item.label}
                 {item.count !== undefined && item.count !== null && (
-                    <span
-                        className={cn(
-                            "font-mono text-[11px] tabular-nums",
-                            active ? "text-brand-ink/80" : "text-ink-3"
-                        )}
-                    >
+                    <span className="text-ink-3 font-mono text-[11px] tabular-nums">
                         {item.count}
                     </span>
                 )}
             </ToolLink>
         </li>
+    );
+}
+
+/**
+ * Between the halves of a two-level tool (Growth: Brand | Prospects). Each
+ * half remembers the screen it was last on, so switching back returns there.
+ */
+function GroupSwitch({
+    groups,
+    activeGroup,
+    path,
+}: {
+    groups: ToolNavGroup[];
+    activeGroup: ToolNavGroup | undefined;
+    path: string;
+}) {
+    const { navigate, search } = useToolNav();
+    const lastIn = useRef(new Map<string, string>());
+    useEffect(() => {
+        if (activeGroup) lastIn.current.set(activeGroup.id, `${path}${search}`);
+    }, [activeGroup, path, search]);
+    return (
+        <ToggleGroup
+            type="single"
+            value={activeGroup?.id ?? ""}
+            onValueChange={id => {
+                const group = groups.find(g => g.id === id);
+                if (!group || group === activeGroup) return;
+                navigate(lastIn.current.get(group.id) ?? group.items[0]!.to);
+            }}
+            aria-label="Area"
+            className="border-line bg-surface ml-2 shrink-0 gap-0.5 rounded-md border p-0.5"
+        >
+            {groups.map(group => (
+                <ToggleGroupItem
+                    key={group.id}
+                    value={group.id}
+                    // The app's "this one" idiom (tabs, Settings): a raised
+                    // panel on the surface reads as nothing — ~1.05:1.
+                    className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink h-7 shrink-0 rounded-[5px] px-2.5 text-[12.5px] data-[state=on]:font-medium"
+                >
+                    {group.label}
+                </ToggleGroupItem>
+            ))}
+        </ToggleGroup>
     );
 }
 
@@ -356,8 +456,8 @@ function HistoryButton({
     );
 }
 
-/** The tab's own "⋯": a link to this screen, or this screen in a browser tab. */
-function FrameMenu({ title }: { title: string }) {
+/** The tab's own "⋯": what the tool is for, a link to this screen, or this screen in a browser tab. */
+function FrameMenu({ title, about }: { title: string; about?: ReactNode }) {
     const { linkFor, path, search } = useToolNav();
     const here = `${path}${search}`;
     const copy = async () => {
@@ -382,7 +482,15 @@ function FrameMenu({ title }: { title: string }) {
                     <MoreHorizontal className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-64">
+                {about && (
+                    <>
+                        <DropdownMenuLabel className="text-ink-3 text-[12px] font-normal leading-relaxed">
+                            {about}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                    </>
+                )}
                 <DropdownMenuItem onSelect={() => void copy()}>
                     <Link2 />
                     Copy link to this screen
@@ -398,7 +506,7 @@ function FrameMenu({ title }: { title: string }) {
     );
 }
 
-/** The rail, folded: the tool's name and the current screen, opening every screen. */
+/** The bar, folded for a phone: the tool's name and the current screen, opening every screen. */
 function ScreenMenu({
     title,
     mark,
@@ -477,7 +585,7 @@ function ScreenMenu({
 
 /**
  * A tool's mark on its tile, for tools whose mark is a lucide glyph. Same
- * size and shape as the drawn marks (Growth's, Vantage's) so every rail
+ * size and shape as the drawn marks (Growth's, Vantage's) so every bar
  * starts the same way.
  */
 export function ToolMark({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {

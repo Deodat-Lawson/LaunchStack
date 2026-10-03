@@ -158,7 +158,7 @@ function mount(host: ToolHost = {}) {
 
 /** The rail, not the folded screen bar: its links are what a wide tab shows. */
 function rail() {
-    return within(screen.getByRole("complementary", { name: "Rewrite screens" }));
+    return within(screen.getByRole("navigation", { name: "Rewrite screens" }));
 }
 
 function remembered() {

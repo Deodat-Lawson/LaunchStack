@@ -190,7 +190,7 @@ describe("GrowthTool", () => {
         await mount("/");
         expect(currentScreen()).toBe("brand-overview");
 
-        const rail = screen.getByRole("complementary", { name: "Growth screens" });
+        const rail = screen.getByRole("navigation", { name: "Growth screens" });
         const calendar = within(rail).getByRole("link", { name: "Calendar" });
         // A real link to share or ⌘-click, pointing at the tab, not an old page.
         expect(calendar).toHaveAttribute(
@@ -203,7 +203,7 @@ describe("GrowthTool", () => {
         expect(window.location.href).toBe(startUrl);
 
         // The tab's own history.
-        fireEvent.click(within(rail).getByRole("button", { name: "Back" }));
+        fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
         expect(currentScreen()).toBe("brand-overview");
     });
 
@@ -212,8 +212,7 @@ describe("GrowthTool", () => {
         fireEvent.click(screen.getByRole("link", { name: "Open company 42" }));
         expect(currentScreen()).toBe("prospects-company:42");
 
-        const rail = screen.getByRole("complementary", { name: "Growth screens" });
-        fireEvent.click(within(rail).getByRole("button", { name: "Back" }));
+        fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
         expect(currentScreen()).toBe("brand-overview");
         fireEvent.click(screen.getByRole("link", { name: "Ask about it" }));
         expect(openHref).toHaveBeenCalledWith("/employer/documents?ask=hello");
@@ -223,12 +222,13 @@ describe("GrowthTool", () => {
     it("shows the segment's counts in the Prospects rail", async () => {
         await mount("/prospects");
         expect(currentScreen()).toBe("prospects-home");
-        const rail = screen.getByRole("complementary", { name: "Growth screens" });
+        const rail = screen.getByRole("navigation", { name: "Growth screens" });
         expect(within(rail).getByRole("link", { name: /Companies/ })).toHaveTextContent("12");
         expect(within(rail).getByRole("link", { name: /Sources/ })).toHaveTextContent("9");
-        expect(within(rail).getByRole("button", { name: "Switch segment" })).toHaveTextContent(
-            "Fulfilment operators"
-        );
+        // The segment switcher sits in the bar while Prospects is showing.
+        expect(
+            screen.getByRole("button", { name: "Segment: Fulfilment operators. Switch segment" })
+        ).toHaveTextContent("Fulfilment operators");
     });
 
     it("says so for a path it has no screen for", async () => {

@@ -72,7 +72,7 @@ function mount(at: string) {
     return { openHref, openTool };
 }
 
-const rail = () => screen.getByRole("complementary", { name: "Proposals screens" });
+const rail = () => screen.getByRole("navigation", { name: "Proposals screens" });
 
 describe("the Proposals tab", () => {
     it("opens on Home and moves to a screen from the rail without leaving the page", async () => {
@@ -113,7 +113,7 @@ describe("the Proposals tab", () => {
         );
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Meyer Memorial");
 
-        fireEvent.click(within(rail()).getByRole("button", { name: "Back" }));
+        fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
         expect(await screen.findByRole("heading", { name: /your proposals/i })).toBeVisible();
     });
 

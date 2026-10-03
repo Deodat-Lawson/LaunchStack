@@ -107,6 +107,12 @@ function useGrowthGroups(): ToolNavGroup[] {
         {
             id: "prospects",
             label: "Prospects",
+            toolbar: (
+                <>
+                    <RunIndicator compact />
+                    <SegmentSwitcher compact />
+                </>
+            ),
             header: <SegmentSwitcher />,
             footer: <RunIndicator />,
             items: [

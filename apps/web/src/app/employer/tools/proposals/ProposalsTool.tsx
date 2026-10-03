@@ -3,6 +3,7 @@
 import { BookMarked, Building2, FileText, Home, Landmark, Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 import { ToolFrame, ToolNotFound, type ToolNavGroup } from "~/components/tool-app/ToolFrame";
 import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/tool-app/nav";
@@ -41,7 +42,7 @@ export function ProposalsTool({ host }: { host?: ToolHost }) {
 }
 
 /** The rail's one line about a run: what it is doing, with the current step. */
-function RunIndicator() {
+function RunIndicator({ compact = false }: { compact?: boolean }) {
     const { activeRun, openRunSheet } = useProposals();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
@@ -50,7 +51,10 @@ function RunIndicator() {
             type="button"
             variant="ghost"
             onClick={() => openRunSheet()}
-            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-auto w-full justify-start gap-2 px-2.5 py-2 text-left text-xs font-normal"
+            className={cn(
+                "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
+                compact ? "h-7 max-w-[260px] px-2.5" : "h-auto w-full px-2.5 py-2"
+            )}
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
             <span className="min-w-0 flex-1 truncate">
@@ -62,7 +66,7 @@ function RunIndicator() {
 }
 
 /**
- * One rail for the writing app. Write is the work; Funders is where it
+ * One bar for the writing app. Write is the work; Funders is where it
  * starts; Profile and Library are what every draft draws on. The run sheet
  * is the frame's overlay, so any screen's Draft or Find funders opens it
  * over this tab only.
@@ -80,7 +84,8 @@ function ProposalsFrame() {
                 { to: "/profile", label: "Profile", icon: Building2 },
                 { to: "/library", label: "Library", icon: BookMarked, count: counts?.library },
             ],
-            // Only while a run is live: the folded bar makes room for any
+            toolbar: <RunIndicator compact />,
+            // Only while a run is live: the phone menu makes room for any
             // footer it is given, even one that renders nothing.
             footer: runIsLive(activeRun) ? <RunIndicator /> : undefined,
         },
@@ -90,7 +95,7 @@ function ProposalsFrame() {
             title="Proposals"
             mark={<ProposalsMark />}
             groups={groups}
-            railFooter="Drafts cite your Sources. Approved answers go to the Library. A finished proposal can be exported back into Sources."
+            about="Drafts cite your Sources. Approved answers go to the Library. A finished proposal can be exported back into Sources."
             overlay={<ProposalRunSheet />}
         >
             <Screen screen={proposalsScreenFor(path)} />

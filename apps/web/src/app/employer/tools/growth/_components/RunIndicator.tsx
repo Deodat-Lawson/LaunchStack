@@ -3,6 +3,7 @@
 import { Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 import { runIsLive } from "../prospects/_components/RunSheet";
 import { useProspects } from "../prospects/_lib/context";
@@ -20,7 +21,7 @@ const RUNNING_VERB: Record<string, string> = {
  * sheet leaves the run going; this is how you get back to it from any
  * screen. Nothing shows when no run is live.
  */
-export function RunIndicator() {
+export function RunIndicator({ compact = false }: { compact?: boolean }) {
     const { activeRun, openRunSheet } = useProspects();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
@@ -32,7 +33,11 @@ export function RunIndicator() {
             type="button"
             variant="ghost"
             onClick={() => openRunSheet()}
-            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-auto w-full justify-start gap-2 px-2.5 py-2 text-left text-xs font-normal"
+            className={cn(
+                "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
+                // In the bar: one short pill. Under the phone menu: full width.
+                compact ? "h-7 max-w-[260px] px-2.5" : "h-auto w-full px-2.5 py-2"
+            )}
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
             <span className="min-w-0 flex-1 truncate">

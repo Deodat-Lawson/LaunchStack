@@ -32,7 +32,7 @@ export function SegmentSwitcher() {
                 <Button
                     type="button"
                     variant="outline"
-                    className="border-line bg-panel hover:bg-panel-2 hover:text-ink h-auto w-full justify-start gap-2 rounded-lg px-2.5 py-2 text-left font-normal"
+                    className="border-line bg-panel hover:bg-panel-2 hover:text-ink dark:bg-panel dark:hover:bg-panel-2 h-auto w-full justify-start gap-2 rounded-lg px-2.5 py-2 text-left font-normal has-[>svg]:px-2.5"
                     aria-label="Switch segment"
                 >
                     <span className="min-w-0 flex-1">
@@ -54,7 +54,7 @@ export function SegmentSwitcher() {
                         type="button"
                         variant="ghost"
                         onClick={() => setSegmentId(s.id)}
-                        className="hover:bg-panel-2 hover:text-ink h-auto w-full justify-start gap-2 px-2 py-1.5 text-left font-normal"
+                        className="hover:bg-panel-2 hover:text-ink dark:hover:bg-panel-2 h-auto w-full justify-start gap-2 px-2 py-1.5 text-left font-normal has-[>svg]:px-2"
                     >
                         <span className="min-w-0 flex-1">
                             <span className="text-ink block truncate text-[13px] font-medium">
@@ -72,7 +72,7 @@ export function SegmentSwitcher() {
                         type="button"
                         variant="ghost"
                         onClick={() => setCreating(true)}
-                        className="text-brand-ink hover:bg-panel-2 hover:text-brand-ink h-auto w-full justify-start px-2 py-1.5 text-left text-[13px] font-normal"
+                        className="text-brand-ink hover:bg-panel-2 hover:text-brand-ink dark:hover:bg-panel-2 h-auto w-full justify-start px-2 py-1.5 text-left text-[13px] font-normal"
                     >
                         New segment
                     </Button>

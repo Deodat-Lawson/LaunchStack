@@ -257,7 +257,20 @@ export function ToolNavProvider({
         const key = currentKeyRef.current;
         unremembered.current.add(key);
         const last = written.current;
-        if (!last || last.key !== key || !storageKeyRef.current) return;
+        if (!storageKeyRef.current) return;
+        if (!last || last.key !== key) {
+            // Nothing was written for this visit (the screen said so on its
+            // first paint), but the tab was reopened on it: a remembered path
+            // that matches no screen any more. Let it go.
+            try {
+                if (window.localStorage.getItem(storageKeyRef.current) === currentHrefRef.current) {
+                    window.localStorage.removeItem(storageKeyRef.current);
+                }
+            } catch {
+                // Storage blocked: nothing to forget.
+            }
+            return;
+        }
         // Reopened on a remembered record that has since gone (deleted on
         // another device): what was remembered before is this same dead
         // path, so forget it outright and let the next visit start at home.

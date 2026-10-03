@@ -1306,10 +1306,12 @@ export function DocumentGeneratorEditor({
                     {isRewriteMode ? (
                         sidePanel
                     ) : (
-                        <div className="flex h-full min-h-0 flex-col">
+                        <div className="flex h-full min-h-0 flex-col pt-10">
                             {/* Starts below the sheet's own close button, which
-                                the palette's collapse control sat under. */}
-                            <div className="border-line max-h-[45%] shrink-0 overflow-y-auto border-b pt-10">
+                                the palette's collapse control sat under — the
+                                offset is outside the palette's scroll, so
+                                scrolling it cannot slide the control back. */}
+                            <div className="border-line max-h-[45%] shrink-0 overflow-y-auto border-b">
                                 <ToolPalette
                                     activeTool={activeTool}
                                     onToolSelect={handleToolSelect}

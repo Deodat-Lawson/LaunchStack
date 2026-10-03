@@ -284,4 +284,26 @@ describe("ToolNavProvider", () => {
         fireEvent.click(screen.getByText("Nothing here"));
         expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBeNull();
     });
+
+    it("lets go of a remembered path that no longer matches any screen", () => {
+        window.localStorage.setItem("tool.location.v1:u1:c1:example", "/things/old-screen");
+        function NotFoundOnFirstPaint() {
+            const { forgetCurrent } = useToolNav();
+            React.useEffect(() => forgetCurrent(), [forgetCurrent]);
+            return null;
+        }
+        render(
+            <ToolNavProvider
+                toolId="example"
+                roots={["things", "settings"]}
+                home="/things"
+                host={{ storageScope: "u1:c1" }}
+            >
+                <Probe />
+                <NotFoundOnFirstPaint />
+            </ToolNavProvider>
+        );
+        expect(here()).toBe("/things/old-screen");
+        expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBeNull();
+    });
 });

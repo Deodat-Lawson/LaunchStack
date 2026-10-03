@@ -34,6 +34,7 @@ import {
     repoExplainerJobs,
     repoWorkspaces,
     trendSearchJobs,
+    vantageAgendas,
 } from "~/server/db/schema";
 
 export interface HistoryLoaderContext {
@@ -347,6 +348,49 @@ const weeklyReviewLoader: HistoryLoader = {
     },
 };
 
+const vantageLoader: HistoryLoader = {
+    kind: "vantage",
+    async load({ companyId, limit }) {
+        const rows = await db
+            .select({
+                id: vantageAgendas.id,
+                status: vantageAgendas.status,
+                weekStart: vantageAgendas.weekStart,
+                summary: vantageAgendas.summary,
+                createdAt: vantageAgendas.createdAt,
+                generatedAt: vantageAgendas.generatedAt,
+                heldAt: vantageAgendas.heldAt,
+                updatedAt: vantageAgendas.updatedAt,
+            })
+            .from(vantageAgendas)
+            .where(eq(vantageAgendas.companyId, companyId))
+            .orderBy(desc(vantageAgendas.weekStart))
+            .limit(limit);
+
+        return rows.map(row => ({
+            id: `vantage:${row.id}`,
+            kind: "vantage" as const,
+            refId: row.id,
+            title: `Agenda for the week of ${row.weekStart}`,
+            subtitle: oneLine(row.summary) ?? "Vantage",
+            // A draft is a prepared agenda someone can open and edit; every
+            // status here is finished work rather than a run in flight.
+            status: normalizeStatus(row.status, {
+                done: ["draft", "ready", "held", "closed"],
+            }),
+            at: activityAt(row.heldAt, row.generatedAt, row.updatedAt, row.createdAt),
+            href: `/employer/tools/vantage/agenda?week=${encodeURIComponent(row.weekStart)}`,
+        }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(vantageAgendas)
+            .where(and(eq(vantageAgendas.id, refId), eq(vantageAgendas.companyId, companyId)))
+            .returning({ id: vantageAgendas.id });
+        return deleted.length > 0;
+    },
+};
+
 /** Every non-chat loader. Chat lives in `~/server/sessions` and joins at merge time. */
 export const PIPELINE_LOADERS: readonly HistoryLoader[] = [
     trendSearchLoader,
@@ -355,4 +399,5 @@ export const PIPELINE_LOADERS: readonly HistoryLoader[] = [
     distributionLoader,
     emailLoader,
     weeklyReviewLoader,
+    vantageLoader,
 ];

@@ -916,6 +916,23 @@ export function renderStudioPane(
                     ctaLabel="Open Growth"
                 />
             );
+        case "vantage":
+            return (
+                <DefaultLinkPane
+                    onClose={onClose}
+                    eyebrow="Vantage"
+                    title="Vantage"
+                    body="The evidence-backed operating system for founder meetings. Log conversations, numbers and promises through the week; on Thursday, Vantage drafts next week's agenda with every claim tied to its source; after the meeting, decisions become commitments that next week's agenda checks."
+                    bullets={[
+                        "Evidence inbox: notes, interviews, links, claims — with a date and a source",
+                        "Metric definitions: signups, activated, active, paying — every number carries its period and source",
+                        "Agenda: three to five topics, each with what happened, why it matters, the decision and a next step",
+                        "Commitments checked the following week; a program triage view over what you chose to share",
+                    ]}
+                    href={feature.href ?? "/employer/tools/vantage"}
+                    ctaLabel="Open Vantage"
+                />
+            );
         default:
             if (feature.comingSoon) {
                 return (

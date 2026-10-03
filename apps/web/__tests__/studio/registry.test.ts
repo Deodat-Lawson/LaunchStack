@@ -101,9 +101,20 @@ describe("studio registry", () => {
         expect(demotedFeatureHref("investors")).toBeUndefined();
     });
 
-    it("names Growth as the one app a tab cannot hold", () => {
+    it("names Growth and Vantage as the apps a tab cannot hold", () => {
         const external = STUDIO_GROUPS.flatMap(g => g.features).filter(f => f.external);
-        expect(external.map(f => f.id)).toEqual(["growth"]);
+        expect(external.map(f => f.id)).toEqual(["growth", "vantage"]);
+    });
+
+    it("lists Vantage in Tools as a separate app, reachable from the palette too", () => {
+        const feature = STUDIO_FEATURES_BY_ID.vantage;
+        expect(feature).toBeDefined();
+        expect(feature!.external).toBe(true);
+        expect(feature!.href).toBe("/employer/tools/vantage");
+        expect(feature!.requires).toBeUndefined();
+        expect(DEMOTED_FEATURES.find(f => f.id === "vantage")?.href).toBe(
+            "/employer/tools/vantage"
+        );
     });
 
     it("can name every app the workspace is able to open in a tab", () => {

@@ -37,6 +37,7 @@ import {
     IconYoutube,
 } from "~/components/icons/brand";
 import { IconGrowth, IconProspects } from "~/components/icons/prospects";
+import { IconVantage } from "~/components/icons/vantage";
 import type { IconProps } from "~/components/icons/types";
 
 export type SourceTypeId =
@@ -343,6 +344,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/tools/growth/prospects",
     },
     {
+        id: "vantage",
+        label: "Vantage",
+        Icon: IconVantage,
+        desc: "Prepare next week's meeting from evidence: cited agenda, decisions, commitments checked the week after",
+        href: "/employer/tools/vantage",
+    },
+    {
         id: "investors",
         label: "Investor relations",
         Icon: IconInvestors,
@@ -482,6 +490,17 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconInvestors,
                 desc: "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources",
                 href: "/employer/documents?feature=investors",
+            },
+            {
+                // The weekly loop: evidence in, a cited agenda out, decisions
+                // that become commitments checked the week after. Its own
+                // rail and screens, so it navigates like Growth.
+                id: "vantage",
+                label: "Vantage",
+                Icon: IconVantage,
+                desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
+                href: "/employer/tools/vantage",
+                external: true,
             },
             {
                 id: "draft",

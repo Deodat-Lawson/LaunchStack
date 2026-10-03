@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
     CalendarDays,
+    Compass,
     GitBranch,
     Globe,
     Mail,
@@ -49,6 +50,7 @@ export const HISTORY_KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageS
     share: Share2,
     mail: Mail,
     calendar: CalendarDays,
+    compass: Compass,
 };
 
 export interface HistoryRailProps {

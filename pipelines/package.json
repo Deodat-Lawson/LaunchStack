@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/pipelines",
     "version": "0.1.0",
-    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Eleven verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, and the distribution pipeline.",
+    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Twelve verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and Vantage (the weekly founder-meeting loop).",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,
@@ -51,7 +51,9 @@
         "./distribution/db": "./src/distribution/db.ts",
         "./distribution/schema": "./src/distribution/schema.ts",
         "./distribution/types": "./src/distribution/types.ts",
-        "./distribution/stages": "./src/distribution/stages.ts"
+        "./distribution/stages": "./src/distribution/stages.ts",
+        "./vantage": "./src/vantage/index.ts",
+        "./vantage/schema": "./src/vantage/schema.ts"
     },
     "files": [
         "dist",
@@ -223,6 +225,14 @@
             "./distribution/types": {
                 "types": "./dist/distribution/types.d.ts",
                 "default": "./dist/distribution/types.js"
+            },
+            "./vantage": {
+                "types": "./dist/vantage/index.d.ts",
+                "default": "./dist/vantage/index.js"
+            },
+            "./vantage/schema": {
+                "types": "./dist/vantage/schema.d.ts",
+                "default": "./dist/vantage/schema.js"
             }
         }
     },

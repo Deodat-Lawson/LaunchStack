@@ -162,6 +162,13 @@
       "when": 1790305746313,
       "tag": "20260925030906_agent_harness_and_meeting_workflows",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790724665292,
+      "tag": "20260929233105_vantage",
+      "breakpoints": true
     }
   ]
 }

@@ -23,6 +23,7 @@ describe("backTargetFor", () => {
             "/employer/tools/distribution",
             "/employer/tools/email-pipeline",
             "/employer/tools/repo-explainer",
+            "/employer/tools/vantage",
         ]) {
             expect(backTargetFor(path)).toEqual(STUDIO);
         }
@@ -55,6 +56,10 @@ describe("backTargetFor", () => {
         expect(backTargetFor("/employer/tools/growth/brand/calendar")).toEqual({
             href: "/employer/tools/growth/brand",
             label: "Brand",
+        });
+        expect(backTargetFor("/employer/tools/vantage/agenda")).toEqual({
+            href: "/employer/tools/vantage",
+            label: "Vantage",
         });
         // Prospects moved under Growth; the old path is a redirect shim and
         // must not send anyone back to where it no longer lives.

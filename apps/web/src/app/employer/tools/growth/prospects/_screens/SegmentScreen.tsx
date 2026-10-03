@@ -11,11 +11,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SegmentField } from "../api";
 import { useProspects } from "../_lib/context";
-import { plural, shortDate } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { plural, shortDate } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function FieldRow({
     field,
@@ -49,7 +49,7 @@ function FieldRow({
     };
 
     return (
-        <div className="border-line-2 grid grid-cols-1 gap-2 border-t py-3.5 first:border-t-0 md:grid-cols-[150px_1fr_auto] md:gap-x-5">
+        <div className="border-line-2 @max-md:grid-cols-1 grid grid-cols-[150px_1fr_auto] gap-x-5 gap-y-2 border-t py-3.5 first:border-t-0">
             <div className="text-ink-2 pt-0.5 text-[13px]">{field.label}</div>
             <div className="min-w-0">
                 {editing ? (
@@ -117,7 +117,7 @@ function FieldRow({
                     </div>
                 )}
             </div>
-            <div className="md:pt-0.5">
+            <div className="@max-md:pt-0 pt-0.5">
                 {field.editable && !editing && (
                     <button
                         type="button"

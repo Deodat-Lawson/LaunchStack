@@ -1,11 +1,12 @@
-import { redirect } from "next/navigation";
+import { redirectToToolTab } from "~/lib/tool-app/redirect";
 
-/** Prospects lives inside Growth now; old links and bookmarks follow. */
-export default async function LegacyProspectsPage({
-    params,
-}: {
+/**
+ * Prospects' first home, before it moved inside Growth. Old links and
+ * bookmarks open the Growth tab on the same Prospects screen.
+ */
+export default async function Page(props: {
     params: Promise<{ slug?: string[] }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-    const { slug = [] } = await params;
-    redirect(`/employer/tools/growth/prospects${slug.length ? `/${slug.join("/")}` : ""}`);
+    return redirectToToolTab({ prefix: "/employer/tools/prospects", ...props });
 }

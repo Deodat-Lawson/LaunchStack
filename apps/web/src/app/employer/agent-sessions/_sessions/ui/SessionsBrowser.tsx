@@ -300,12 +300,18 @@ export interface SessionsBrowserProps {
     onImported?: () => Promise<void>;
     onOpenDocument?: (documentId: number) => void;
     onContinue?: (documentId: number) => void;
+    /**
+     * Inside Add a source, which already says what this is: no page title of
+     * its own, and no page margins — the dialog has its own.
+     */
+    embedded?: boolean;
 }
 
 export function SessionsBrowser({
     onImported,
     onOpenDocument,
     onContinue,
+    embedded = false,
 }: SessionsBrowserProps = {}) {
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
@@ -537,19 +543,32 @@ export function SessionsBrowser({
     }
 
     return (
-        <div className="mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-6">
+        <div
+            className={
+                embedded
+                    ? "flex h-full flex-col gap-4"
+                    : "mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-6"
+            }
+        >
             {/* Header */}
             <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                    <h1 className="text-ink flex items-center gap-2 text-lg font-semibold">
-                        <MessagesSquare className="text-brand-ink h-5 w-5" />
-                        Coding sessions
-                    </h1>
-                    <p className="text-ink-3 mt-0.5 text-[13px]">
+                {embedded ? (
+                    <p className="text-ink-3 min-w-[min(100%,240px)] flex-1 text-[13px]">
                         Claude Code and Codex conversations on this machine. Import one to make it
                         searchable workspace knowledge — then continue it in chat.
                     </p>
-                </div>
+                ) : (
+                    <div>
+                        <h1 className="text-ink flex items-center gap-2 text-lg font-semibold">
+                            <MessagesSquare className="text-brand-ink h-5 w-5" />
+                            Coding sessions
+                        </h1>
+                        <p className="text-ink-3 mt-0.5 text-[13px]">
+                            Claude Code and Codex conversations on this machine. Import one to make
+                            it searchable workspace knowledge — then continue it in chat.
+                        </p>
+                    </div>
+                )}
                 <div className="flex items-center gap-2">
                     <Button
                         size="sm"

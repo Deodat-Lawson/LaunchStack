@@ -2,20 +2,33 @@ import * as React from "react";
 
 import { cn } from "~/lib/utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-    return (
-        <input
-            type={type}
-            data-slot="input"
-            className={cn(
-                "file:text-ink placeholder:text-ink-3 selection:bg-brand selection:text-brand-fg dark:bg-line/30 border-line bg-line-background flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base outline-none transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-                "focus-visible:border-brand focus-visible:ring-brand/50 focus-visible:ring-[3px]",
-                "aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
-                className
-            )}
-            {...props}
-        />
-    );
-}
+// forwardRef because this is React 18: a plain function component drops
+// `ref`, so callers (TextInput in ~/components/field, the auth forms) could
+// never focus the field they rendered.
+//
+// No font size here: the default (16px on phones, 14px from md) is the
+// [data-slot="input"] rule in src/styles/globals.css, so any text-* size a
+// caller passes wins at every width. Re-adding shadcn's `text-base
+// md:text-sm` brings back the bug where md:text-sm beat the caller's size.
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
+    ({ className, type, ...props }, ref) => {
+        return (
+            <input
+                ref={ref}
+                type={type}
+                data-slot="input"
+                className={cn(
+                    "file:text-ink placeholder:text-ink-3 selection:bg-brand selection:text-brand-fg dark:bg-line/30 border-line bg-line-background flex h-9 w-full min-w-0 rounded-md border px-3 py-1 outline-none transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+                    "focus-visible:border-brand focus-visible:ring-brand/50 focus-visible:ring-[3px]",
+                    "aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
+                    className
+                )}
+                {...props}
+            />
+        );
+    }
+);
+
+Input.displayName = "Input";
 
 export { Input };

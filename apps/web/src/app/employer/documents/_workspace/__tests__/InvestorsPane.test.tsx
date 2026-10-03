@@ -183,7 +183,8 @@ describe("InvestorsPane", () => {
         const onDraftInChat = jest.fn();
         render(<InvestorsPane onDraftInChat={onDraftInChat} />);
         await screen.findAllByTestId("investor-fund");
-        await userEvent.click(screen.getByRole("tab", { name: "Pitch" }));
+        // Pitch starters is the tool's second screen, in the rail of its tab.
+        await userEvent.click(screen.getByRole("link", { name: "Pitch starters" }));
         expect(await screen.findByText("Investor one-pager")).toBeInTheDocument();
         await userEvent.click(screen.getAllByRole("button", { name: "Draft in chat" })[0]!);
         expect(onDraftInChat.mock.calls[0]![0]).toMatch(/one-page investor memo/);

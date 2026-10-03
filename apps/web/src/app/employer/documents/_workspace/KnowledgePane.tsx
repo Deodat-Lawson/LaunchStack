@@ -199,8 +199,10 @@ export function KnowledgePane({
                     flexShrink: 0,
                 }}
             >
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                {/* Wraps in a narrow pane: the controls go under the
+                    heading rather than crushing it. */}
+                <div className="flex flex-wrap items-start gap-x-4 gap-y-3">
+                    <div className="min-w-[min(100%,240px)] flex-1">
                         <div
                             className="mono"
                             style={{

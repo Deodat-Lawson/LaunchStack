@@ -24,6 +24,7 @@ jest.mock("~/server/history/loaders", () => {
         "distribution",
         "email",
         "weekly-review",
+        "vantage",
     ];
     return {
         PIPELINE_LOADERS: kinds.map(kind => ({

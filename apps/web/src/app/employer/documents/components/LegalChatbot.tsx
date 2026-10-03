@@ -51,7 +51,11 @@ interface ChatMessage {
 }
 
 interface LegalChatbotProps {
-    onBack: () => void;
+    /**
+     * Leave the assistant. Omitted where the assistant is a screen of its own
+     * (Templated Drafts' rail and Back already lead out of it): no button.
+     */
+    onBack?: () => void;
     onContinueToTemplateForm: (templateId: string, prefilled: Record<string, string>) => void;
     initialMessage?: string;
 }
@@ -292,8 +296,13 @@ export function LegalChatbot({
         currentResponseRef.current = currentResponse;
     }, [currentResponse]);
 
+    // Follow the conversation to its newest turn — but not before there is
+    // one: the welcome reads from the top, and in a short (stacked) chat
+    // column scrolling it to the bottom hid its heading.
     useEffect(() => {
-        if (feedRef.current) feedRef.current.scrollTop = feedRef.current.scrollHeight;
+        if (!feedRef.current) return;
+        if (messages.length === 0 && !pendingConfirm && !isLoading) return;
+        feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }, [messages, pendingConfirm, isLoading]);
 
     const activeTemplateId = confirmedTemplateId ?? currentResponse?.selectedTemplateId ?? null;
@@ -532,15 +541,19 @@ export function LegalChatbot({
         <div className="flex h-full flex-col" style={{ minHeight: 0 }}>
             {/* Top bar — replaces the drift sidebar with a slim breadcrumb header */}
             <div className={s.assistTopBar}>
-                <button
-                    className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
-                    onClick={onBack}
-                    style={{ paddingLeft: 6, paddingRight: 10 }}
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back
-                </button>
-                <span className={s.dividerVert} />
+                {onBack && (
+                    <>
+                        <button
+                            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+                            onClick={onBack}
+                            style={{ paddingLeft: 6, paddingRight: 10 }}
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            Back
+                        </button>
+                        <span className={s.dividerVert} />
+                    </>
+                )}
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
                     <span className={s.assistTopBarMeta}>Drift Assist · Legal</span>
@@ -805,8 +818,8 @@ export function LegalChatbot({
                                     Pick a template to begin
                                 </div>
                                 <p className={s.assistPreviewEmptySub}>
-                                    Tell the assistant what you need on the left. As you answer
-                                    questions, the document fills in here in real time.
+                                    Tell the assistant what you need. As you answer questions, the
+                                    document fills in here in real time.
                                 </p>
                             </div>
                         )}
@@ -1004,7 +1017,7 @@ function WelcomeMessage({ onSuggest }: { onSuggest: (q: string) => void }) {
             </h2>
             <p className={s.assistWelcomeSub}>
                 Describe your situation — I&apos;ll recommend the right template and help you fill
-                it out, with the document filling in live on the right.
+                it out, with the document filling in live as you answer.
             </p>
             <div className={s.assistWelcomeChips}>
                 {suggestions.map(q => (

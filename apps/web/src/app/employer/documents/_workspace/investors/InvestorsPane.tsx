@@ -27,8 +27,10 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Skeleton } from "~/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { ToolFrame, ToolMark, ToolNotFound } from "~/components/tool-app/ToolFrame";
+import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/tool-app/nav";
+import { PageHeader } from "~/components/tools/PageHeader";
 import { copyText } from "~/lib/context-menu";
 
 import {
@@ -47,6 +49,8 @@ import {
 } from "./investors";
 
 export interface InvestorsPaneProps {
+    /** What the workspace hands a tool's tab: focus, a location, memory. */
+    host?: ToolHost;
     /**
      * Put a prompt in the chat composer and switch to the chat tab. Omitted
      * where there is no chat beside the pane; the prompt is copied instead.
@@ -79,8 +83,24 @@ type SearchState =
  * files one, and a fund that has just raised is about to invest. Pitching is
  * the chat's work: each starter drafts from the workspace's own sources and
  * says what is missing, so this pane holds prompts, not a second editor.
+ *
+ * Two screens in the same frame as every other tool: Find investors ("/")
+ * and Pitch starters ("/pitch").
  */
-export function InvestorsPane({ onDraftInChat, onSaveAsSource }: InvestorsPaneProps) {
+export function InvestorsPane({ host, ...props }: InvestorsPaneProps) {
+    return (
+        <ToolNavProvider toolId="investors" roots={INVESTOR_ROOTS} host={host}>
+            <InvestorsFrame {...props} />
+        </ToolNavProvider>
+    );
+}
+
+const INVESTOR_ROOTS = ["pitch"] as const;
+
+function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPaneProps, "host">) {
+    const path = useToolPathname();
+    // The search lives above the screens, so a trip to the pitch starters
+    // and back finds the results where they were.
     const [form, setForm] = useState<SearchForm>(DEFAULT_FORM);
     const [search, setSearch] = useState<SearchState>({ status: "loading" });
     const [sortBy, setSortBy] = useState<"newest" | "largest">("newest");
@@ -136,181 +156,163 @@ export function InvestorsPane({ onDraftInChat, onSaveAsSource }: InvestorsPanePr
         [onDraftInChat]
     );
 
-    return (
-        <div className="h-full overflow-y-auto" data-testid="investors-pane">
-            <div className="mx-auto flex max-w-4xl flex-col gap-5 px-6 py-6">
-                <header>
-                    <h1 className="text-ink flex items-center gap-2 text-lg font-semibold">
-                        <HandCoins className="text-brand-ink size-5" />
-                        Investor relations
-                    </h1>
-                    <p className="text-ink-3 mt-0.5 text-[13px]">
-                        Find the venture funds raising now, then pitch them with what your sources
-                        can prove.
-                    </p>
-                </header>
-
-                <Tabs defaultValue="find" className="gap-4">
-                    <TabsList>
-                        <TabsTrigger value="find">Find investors</TabsTrigger>
-                        <TabsTrigger value="pitch">Pitch</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="find" className="flex flex-col gap-4">
-                        <form
-                            className="flex flex-col gap-2.5"
-                            onSubmit={e => {
-                                e.preventDefault();
-                                void run(form);
-                            }}
-                        >
-                            <div className="flex flex-wrap items-center gap-2">
-                                <div className="relative min-w-52 flex-1">
-                                    <Search className="text-ink-4 absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
-                                    <Input
-                                        value={form.q}
-                                        onChange={e => setForm(f => ({ ...f, q: e.target.value }))}
-                                        placeholder="Focus — climate, health, fintech…"
-                                        aria-label="Focus: words in the fund's name"
-                                        className="h-8 pl-8 text-[13px]"
-                                    />
-                                </div>
-                                <Select
-                                    value={form.state || ALL_STATES}
-                                    onValueChange={v =>
-                                        setForm(f => ({ ...f, state: v === ALL_STATES ? "" : v }))
-                                    }
-                                >
-                                    <SelectTrigger
-                                        className="h-8 w-40 text-xs"
-                                        aria-label="Fund's state"
-                                    >
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value={ALL_STATES}>Anywhere</SelectItem>
-                                        {US_STATES.map(([code, name]) => (
-                                            <SelectItem key={code} value={code}>
-                                                {name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <Select
-                                    value={String(form.withinDays)}
-                                    onValueChange={v =>
-                                        setForm(f => ({ ...f, withinDays: Number(v) }))
-                                    }
-                                >
-                                    <SelectTrigger
-                                        className="h-8 w-36 text-xs"
-                                        aria-label="Filed within"
-                                    >
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {WITHIN_OPTIONS.map(o => (
-                                            <SelectItem key={o.days} value={String(o.days)}>
-                                                {o.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <Button
-                                    type="submit"
-                                    size="sm"
-                                    disabled={search.status === "loading"}
-                                >
-                                    {search.status === "loading" ? (
-                                        <Loader2 className="animate-spin" />
-                                    ) : (
-                                        <Search />
-                                    )}
-                                    Search
-                                </Button>
-                            </div>
-                            <div className="text-ink-3 flex flex-wrap items-center justify-between gap-2 text-[12px]">
-                                <div className="flex items-center gap-2">
-                                    <Checkbox
-                                        id="investors-spvs"
-                                        checked={form.spvs}
-                                        onCheckedChange={v =>
-                                            setForm(f => ({ ...f, spvs: v === true }))
-                                        }
-                                    />
-                                    <Label
-                                        htmlFor="investors-spvs"
-                                        className="text-ink-3 text-[12px] font-normal"
-                                    >
-                                        Include single-deal SPVs and syndicates
-                                    </Label>
-                                </div>
-                                <span>
-                                    From SEC Form D filings — public, no account. A fund raising now
-                                    is about to invest.
-                                </span>
-                            </div>
-                        </form>
-
-                        <Results
-                            search={search}
-                            sortBy={sortBy}
-                            onSortBy={setSortBy}
-                            onRetry={() => void run(form)}
-                            onDraftIntro={fund =>
-                                void draft(introPrompt(fund), `Intro to ${fund.name}`)
-                            }
-                            onSaveAsSource={
-                                onSaveAsSource && search.status === "done"
-                                    ? () =>
-                                          onSaveAsSource(
-                                              fundsMarkdown(
-                                                  sortFunds(search.result.funds, sortBy),
-                                                  search.form
-                                              )
-                                          )
-                                    : undefined
-                            }
-                            draftLabel={onDraftInChat ? "Draft intro" : "Copy intro prompt"}
-                        />
-                    </TabsContent>
-
-                    <TabsContent value="pitch" className="flex flex-col gap-3">
-                        <p className="text-ink-3 text-[13px]">
-                            Each of these drafts in chat from your workspace sources, cites them,
-                            and lists what is missing. Add your deck, financials and metrics as
-                            sources first and the drafts get specific.
-                        </p>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                            {PITCH_STARTERS.map(starter => (
-                                <article
-                                    key={starter.id}
-                                    className="border-line bg-panel flex flex-col gap-3 rounded-xl border p-4"
-                                >
-                                    <div>
-                                        <h3 className="text-ink text-[13.5px] font-semibold">
-                                            {starter.title}
-                                        </h3>
-                                        <p className="text-ink-3 mt-0.5 text-[12.5px]">
-                                            {starter.desc}
-                                        </p>
-                                    </div>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="self-start"
-                                        onClick={() => void draft(starter.prompt, starter.title)}
-                                    >
-                                        <Sparkles />
-                                        {onDraftInChat ? "Draft in chat" : "Copy prompt"}
-                                    </Button>
-                                </article>
-                            ))}
+    const screen =
+        path === "/" ? (
+            <div className="flex flex-col gap-4">
+                <PageHeader
+                    title="Find investors"
+                    sub="The venture funds raising a new fund right now — a fund that has just raised is about to invest."
+                />
+                <form
+                    className="flex flex-col gap-2.5"
+                    onSubmit={e => {
+                        e.preventDefault();
+                        void run(form);
+                    }}
+                >
+                    <div className="flex flex-wrap items-center gap-2">
+                        <div className="relative min-w-52 flex-1">
+                            <Search className="text-ink-4 absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
+                            <Input
+                                value={form.q}
+                                onChange={e => setForm(f => ({ ...f, q: e.target.value }))}
+                                placeholder="Focus — climate, health, fintech…"
+                                aria-label="Focus: words in the fund's name"
+                                className="h-8 pl-8 text-[13px]"
+                            />
                         </div>
-                    </TabsContent>
-                </Tabs>
+                        <Select
+                            value={form.state || ALL_STATES}
+                            onValueChange={v =>
+                                setForm(f => ({ ...f, state: v === ALL_STATES ? "" : v }))
+                            }
+                        >
+                            <SelectTrigger className="h-8 w-40 text-xs" aria-label="Fund's state">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={ALL_STATES}>Anywhere</SelectItem>
+                                {US_STATES.map(([code, name]) => (
+                                    <SelectItem key={code} value={code}>
+                                        {name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Select
+                            value={String(form.withinDays)}
+                            onValueChange={v => setForm(f => ({ ...f, withinDays: Number(v) }))}
+                        >
+                            <SelectTrigger className="h-8 w-36 text-xs" aria-label="Filed within">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {WITHIN_OPTIONS.map(o => (
+                                    <SelectItem key={o.days} value={String(o.days)}>
+                                        {o.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Button type="submit" size="sm" disabled={search.status === "loading"}>
+                            {search.status === "loading" ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                <Search />
+                            )}
+                            Search
+                        </Button>
+                    </div>
+                    <div className="text-ink-3 flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                        <div className="flex items-center gap-2">
+                            <Checkbox
+                                id="investors-spvs"
+                                checked={form.spvs}
+                                onCheckedChange={v => setForm(f => ({ ...f, spvs: v === true }))}
+                            />
+                            <Label
+                                htmlFor="investors-spvs"
+                                className="text-ink-3 text-[12px] font-normal"
+                            >
+                                Include single-deal SPVs and syndicates
+                            </Label>
+                        </div>
+                        <span>From SEC Form D filings — public, no account.</span>
+                    </div>
+                </form>
+
+                <Results
+                    search={search}
+                    sortBy={sortBy}
+                    onSortBy={setSortBy}
+                    onRetry={() => void run(form)}
+                    onDraftIntro={fund => void draft(introPrompt(fund), `Intro to ${fund.name}`)}
+                    onSaveAsSource={
+                        onSaveAsSource && search.status === "done"
+                            ? () =>
+                                  onSaveAsSource(
+                                      fundsMarkdown(
+                                          sortFunds(search.result.funds, sortBy),
+                                          search.form
+                                      )
+                                  )
+                            : undefined
+                    }
+                    draftLabel={onDraftInChat ? "Draft intro" : "Copy intro prompt"}
+                />
             </div>
-        </div>
+        ) : path === "/pitch" ? (
+            <div className="flex flex-col gap-4">
+                <PageHeader
+                    title="Pitch starters"
+                    sub="Each one drafts in chat from your sources, cites them, and lists what is missing. Add your deck, financials and metrics as sources first and the drafts get specific."
+                />
+                <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-3">
+                    {PITCH_STARTERS.map(starter => (
+                        <article
+                            key={starter.id}
+                            className="border-line bg-panel flex flex-col gap-3 rounded-xl border p-4"
+                        >
+                            <div>
+                                <h3 className="text-ink text-[13.5px] font-semibold">
+                                    {starter.title}
+                                </h3>
+                                <p className="text-ink-3 mt-0.5 text-[12.5px]">{starter.desc}</p>
+                            </div>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="self-start"
+                                onClick={() => void draft(starter.prompt, starter.title)}
+                            >
+                                <Sparkles />
+                                {onDraftInChat ? "Draft in chat" : "Copy prompt"}
+                            </Button>
+                        </article>
+                    ))}
+                </div>
+            </div>
+        ) : (
+            <ToolNotFound home="/" homeLabel="Find investors" />
+        );
+
+    return (
+        <ToolFrame
+            title="Investor relations"
+            mark={<ToolMark icon={HandCoins} />}
+            contentClassName="max-w-[960px]"
+            groups={[
+                {
+                    id: "investors",
+                    items: [
+                        { to: "/", label: "Find investors", icon: Search, exact: true },
+                        { to: "/pitch", label: "Pitch starters", icon: Sparkles },
+                    ],
+                },
+            ]}
+        >
+            <div data-testid="investors-pane">{screen}</div>
+        </ToolFrame>
     );
 }
 

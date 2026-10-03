@@ -15,14 +15,13 @@ describe("backTargetFor", () => {
             "/employer/metadata",
             "/employer/upload",
             "/employer/contact",
-            "/employer/agent-sessions",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/marketing-pipeline",
             "/employer/tools/knowledge-graph",
             "/employer/tools/distribution",
             "/employer/tools/email-pipeline",
             "/employer/tools/repo-explainer",
+            "/employer/tools/vantage",
         ]) {
             expect(backTargetFor(path)).toEqual(STUDIO);
         }
@@ -39,35 +38,28 @@ describe("backTargetFor", () => {
         expect(backTargetFor("/employer")).toBeNull();
     });
 
-    it("prefers the nearest section over the Studio", () => {
-        expect(backTargetFor("/employer/artifacts/abc123")).toEqual({
-            href: "/employer/artifacts",
-            label: "Artifacts",
-        });
-        expect(backTargetFor("/employer/tools/growth/prospects/deals")).toEqual({
-            href: "/employer/tools/growth/prospects",
-            label: "Prospects",
-        });
-        expect(backTargetFor("/employer/tools/growth/prospects/companies/42")).toEqual({
-            href: "/employer/tools/growth/prospects/companies",
-            label: "Companies",
-        });
-        expect(backTargetFor("/employer/tools/growth/brand/calendar")).toEqual({
-            href: "/employer/tools/growth/brand",
-            label: "Brand",
-        });
-        // Prospects moved under Growth; the old path is a redirect shim and
-        // must not send anyone back to where it no longer lives.
-        expect(backTargetFor("/employer/tools/prospects/deals")).toEqual({
-            href: "/employer/tools/growth/prospects",
-            label: "Prospects",
-        });
+    /**
+     * Growth, Proposals and Vantage are tabs of the workspace now. Their old
+     * pages only redirect into the tab, and back inside a tool is the tab's
+     * own history — so none of their paths has a parent but the Studio.
+     */
+    it("sends every old tool page up to the Studio, where the tool is a tab", () => {
+        for (const path of [
+            "/employer/tools/growth/prospects/deals",
+            "/employer/tools/growth/prospects/companies/42",
+            "/employer/tools/growth/brand/calendar",
+            "/employer/tools/proposals",
+            "/employer/tools/proposals/write/abc",
+            "/employer/tools/vantage/agenda",
+            "/employer/tools/prospects/deals",
+        ]) {
+            expect(backTargetFor(path)).toEqual(STUDIO);
+        }
     });
 
     it("never points a page at itself", () => {
         for (const path of [
             "/employer/documents",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/growth/prospects",
             "/employer/tools/growth/prospects/companies",
@@ -75,17 +67,6 @@ describe("backTargetFor", () => {
         ]) {
             expect(backTargetFor(path)?.href).not.toBe(path);
         }
-    });
-
-    /**
-     * `/employer/tools/growth` redirects to Brand, so "never points at itself"
-     * was true on paper and false in the browser: Brand's back went to Growth,
-     * which came straight back to Brand. A page that only redirects is not a
-     * place to go back to.
-     */
-    it("sends Growth's two halves out to the Studio, not to a redirect back into them", () => {
-        expect(backTargetFor("/employer/tools/growth/brand")).toEqual(STUDIO);
-        expect(backTargetFor("/employer/tools/growth/prospects")).toEqual(STUDIO);
     });
 
     it("ignores a trailing slash", () => {

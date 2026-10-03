@@ -55,4 +55,5 @@ export type TokenService =
     | "ocr_datalab"
     | "ocr_native"
     | "llm_chat"
-    | "distribution_research";
+    | "distribution_research"
+    | "proposal_writing";

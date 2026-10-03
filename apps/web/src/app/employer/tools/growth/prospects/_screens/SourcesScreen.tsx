@@ -7,11 +7,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SourceKind, type SourceRow } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { relativeTime } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 const KIND_LABEL: Record<SourceKind, string> = {
     api: "Directory or API",
@@ -59,7 +59,7 @@ export function SourcesScreen() {
                     {sources.map(s => (
                         <div
                             key={s.id}
-                            className="border-line-2 grid grid-cols-[1fr_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0 md:grid-cols-[1fr_200px_auto]"
+                            className="border-line-2 @max-md:grid-cols-[1fr_auto] grid grid-cols-[1fr_200px_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0"
                         >
                             <div className="min-w-0">
                                 <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export function SourcesScreen() {
                                     </div>
                                 )}
                             </div>
-                            <div className="text-ink-3 hidden text-xs tabular-nums md:block">
+                            <div className="text-ink-3 @max-md:hidden text-xs tabular-nums">
                                 {s.lastYield ? (
                                     <>
                                         <span className="text-ink-2">

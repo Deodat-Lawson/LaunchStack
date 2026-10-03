@@ -1,21 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 
 import { ProspectsApiError, prospectsApi, type DealRow, type SalesStage } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../../_lib/format";
+import { relativeTime } from "~/lib/tools/format";
 import { EXIT_STAGES, FUNNEL_STAGES, STAGE_LABELS } from "../_lib/stages";
-import { useResource } from "../../_lib/useResource";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { StageMenu } from "../_components/StagePill";
 
 const BOARD: SalesStage[] = FUNNEL_STAGES.filter(s => s !== "lead");
@@ -63,12 +64,12 @@ export function DealsScreen() {
                     res.data ? (
                         <>
                             {deals.length - leads} in motion ·{" "}
-                            <Link
+                            <ToolLink
                                 href={href("/companies?view=uncontacted")}
                                 className="hover:text-ink"
                             >
                                 {leads} leads not yet qualified
-                            </Link>
+                            </ToolLink>
                             {exits.some(e => e.count > 0) && (
                                 <>
                                     {" "}
@@ -122,12 +123,12 @@ export function DealsScreen() {
                                                     "border-l-warn border-l-2"
                                             )}
                                         >
-                                            <Link
+                                            <ToolLink
                                                 href={href(`/companies/${d.companyId}`)}
                                                 className="text-ink block truncate font-medium hover:underline"
                                             >
                                                 {d.companyName}
-                                            </Link>
+                                            </ToolLink>
                                             <div className="text-ink-3 mt-1 truncate text-xs">
                                                 {d.nextStep ??
                                                     (d.staleDays && d.staleDays > 0

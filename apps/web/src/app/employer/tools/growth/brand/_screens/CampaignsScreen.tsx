@@ -1,19 +1,17 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
-
+import { useToolRouter, useToolSearchParams } from "~/components/tool-app/nav";
 import { MarketingPipelineWorkspace } from "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace";
 import { toPlatformText } from "~/app/employer/documents/components/marketing-pipeline/useMarketingPipelineController";
 
-import { PageHeader } from "../../_components/PageHeader";
+import { PageHeader } from "~/components/tools/PageHeader";
 import { useGrowthPaths } from "../../_lib/paths";
 import { COMPOSE_HANDOFF_KEY, type ComposeHandoff } from "../api";
 
 function Workspace() {
-    const router = useRouter();
+    const router = useToolRouter();
     const paths = useGrowthPaths();
-    const params = useSearchParams();
+    const params = useToolSearchParams();
     const debug = params.get("debug") === "true";
     return (
         <MarketingPipelineWorkspace
@@ -50,10 +48,8 @@ export function CampaignsScreen() {
                 title="Campaigns"
                 sub="Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
             />
-            <div className="border-line bg-panel rounded-lg border p-2 md:p-4">
-                <Suspense fallback={null}>
-                    <Workspace />
-                </Suspense>
+            <div className="border-line bg-panel @max-md:p-2 rounded-lg border p-4">
+                <Workspace />
             </div>
         </div>
     );

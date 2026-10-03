@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -20,12 +21,12 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 import { prospectsApi, type EmailStatusKind } from "../api";
 import { useProspects } from "../_lib/context";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
 import { EMAIL_STATUS_LABEL, EmailStatus, canOutreach } from "../_components/EmailStatus";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 const STATUSES: Array<{ id: "all" | EmailStatusKind; label: string }> = [
     { id: "all", label: "All" },
@@ -88,14 +89,14 @@ export function PeopleScreen() {
                     value={status}
                     onValueChange={v => v && setStatus(v as typeof status)}
                     size="sm"
-                    className="border-line bg-panel gap-0.5 rounded-md border p-0.5"
+                    className="border-line bg-panel max-w-full justify-start gap-0.5 overflow-x-auto rounded-md border p-0.5"
                     aria-label="Email status"
                 >
                     {STATUSES.map(s => (
                         <ToggleGroupItem
                             key={s.id}
                             value={s.id}
-                            className="h-7 rounded-[5px] px-2.5 text-xs"
+                            className="h-7 shrink-0 rounded-[5px] px-2.5 text-xs"
                         >
                             {s.label}
                         </ToggleGroupItem>
@@ -120,7 +121,7 @@ export function PeopleScreen() {
                     body="People are looked up for the top companies after each run. Run Find companies, or open a company to see who was found."
                     action={
                         <Button variant="outline" size="sm" asChild>
-                            <Link href={href("/companies")}>Open companies</Link>
+                            <ToolLink href={href("/companies")}>Open companies</ToolLink>
                         </Button>
                     }
                 />
@@ -198,12 +199,12 @@ export function PeopleScreen() {
                                             </span>
                                         </TableCell>
                                         <TableCell>
-                                            <Link
+                                            <ToolLink
                                                 href={href(`/companies/${p.companyId}`)}
                                                 className="text-ink hover:underline"
                                             >
                                                 {p.companyName}
-                                            </Link>
+                                            </ToolLink>
                                             {p.blockedReason && (
                                                 <span className="text-ink-3 block text-xs">
                                                     {p.blockedReason}

@@ -3,11 +3,16 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { prospectsApi, type RunDto, type SegmentSummary } from "../api";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 
 export interface ProspectsContextValue {
-    /** "/employer/tools/prospects" in the app, "/dev/prospects" in the harness. */
+    /**
+     * Where Prospects sits inside the Growth tab: "/prospects". Paths are
+     * app-relative to the tab (see components/tool-app), so the same value
+     * serves the workspace and the /dev harness.
+     */
     basePath: string;
+    /** `href("/companies")` → "/prospects/companies", for `ToolLink` and `useToolRouter`. */
     href: (path?: string) => string;
     segments: SegmentSummary[];
     segmentsLoading: boolean;
@@ -77,7 +82,7 @@ export function ProspectsProvider({
 
     const segment = segments.find(s => s.id === segmentId) ?? null;
 
-    // Active run: polled while running so the rail indicator and any open
+    // Active run: polled while running so the bar's run indicator and any open
     // sheet stay live. The sheet reads the same object.
     const [activeRunId, setActiveRunId] = useState<string | null>(null);
     const [runSheetOpen, setRunSheetOpen] = useState(false);

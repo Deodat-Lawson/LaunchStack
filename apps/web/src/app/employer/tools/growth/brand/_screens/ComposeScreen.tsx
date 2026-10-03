@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { useToolRouter } from "~/components/tool-app/nav";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
@@ -11,11 +11,11 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader, SectionHeading } from "../../_components/PageHeader";
-import { plural } from "../../_lib/format";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { plural } from "~/lib/tools/format";
 import { useGrowthPaths } from "../../_lib/paths";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { NETWORK_LABEL, NETWORK_LIMIT, NetworkMark } from "../_components/NetworkMark";
 import { nextSlot, toLocalInput } from "../_lib/time";
 import {
@@ -60,7 +60,7 @@ function readHandoff(): ComposeHandoff | null {
  * scheduled.
  */
 export function ComposeScreen() {
-    const router = useRouter();
+    const router = useToolRouter();
     const paths = useGrowthPaths();
     const accounts = useResource("brand:accounts", () => brandApi.accounts());
 
@@ -158,7 +158,7 @@ export function ComposeScreen() {
                 <InlineError message={accounts.error} onRetry={() => void accounts.reload()} />
             )}
 
-            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_340px]">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_340px] gap-6">
                 <div className="flex flex-col gap-5">
                     <div>
                         <Label htmlFor="brand-body" className="text-ink-3 text-xs font-normal">

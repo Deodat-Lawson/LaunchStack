@@ -31,9 +31,12 @@ import {
     distributionRuns,
     emailCampaigns,
     founderWeeklyReviewRuns,
+    proposalApplications,
+    proposalRuns,
     repoExplainerJobs,
     repoWorkspaces,
     trendSearchJobs,
+    vantageAgendas,
 } from "~/server/db/schema";
 
 export interface HistoryLoaderContext {
@@ -347,6 +350,107 @@ const weeklyReviewLoader: HistoryLoader = {
     },
 };
 
+const vantageLoader: HistoryLoader = {
+    kind: "vantage",
+    async load({ companyId, limit }) {
+        const rows = await db
+            .select({
+                id: vantageAgendas.id,
+                status: vantageAgendas.status,
+                weekStart: vantageAgendas.weekStart,
+                summary: vantageAgendas.summary,
+                createdAt: vantageAgendas.createdAt,
+                generatedAt: vantageAgendas.generatedAt,
+                heldAt: vantageAgendas.heldAt,
+                updatedAt: vantageAgendas.updatedAt,
+            })
+            .from(vantageAgendas)
+            .where(eq(vantageAgendas.companyId, companyId))
+            .orderBy(desc(vantageAgendas.weekStart))
+            .limit(limit);
+
+        return rows.map(row => ({
+            id: `vantage:${row.id}`,
+            kind: "vantage" as const,
+            refId: row.id,
+            title: `Agenda for the week of ${row.weekStart}`,
+            subtitle: oneLine(row.summary) ?? "Vantage",
+            // A draft is a prepared agenda someone can open and edit; every
+            // status here is finished work rather than a run in flight.
+            status: normalizeStatus(row.status, {
+                done: ["draft", "ready", "held", "closed"],
+            }),
+            at: activityAt(row.heldAt, row.generatedAt, row.updatedAt, row.createdAt),
+            href: `/employer/tools/vantage/agenda?week=${encodeURIComponent(row.weekStart)}`,
+        }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(vantageAgendas)
+            .where(and(eq(vantageAgendas.id, refId), eq(vantageAgendas.companyId, companyId)))
+            .returning({ id: vantageAgendas.id });
+        return deleted.length > 0;
+    },
+};
+
+const PROPOSAL_RUN_TITLE: Record<string, string> = {
+    profile: "Organisation profile",
+    funders: "Funder search",
+    extract: "Requirements",
+    draft: "Drafts",
+    rewrite: "Rewrite",
+    review: "Review",
+};
+
+const proposalsLoader: HistoryLoader = {
+    kind: "proposals",
+    async load({ companyId, limit }) {
+        const rows = await db
+            .select({
+                id: proposalRuns.id,
+                kind: proposalRuns.kind,
+                status: proposalRuns.status,
+                applicationId: proposalRuns.applicationId,
+                applicationTitle: proposalApplications.title,
+                summary: proposalRuns.summary,
+                createdAt: proposalRuns.createdAt,
+                completedAt: proposalRuns.completedAt,
+                updatedAt: proposalRuns.updatedAt,
+            })
+            .from(proposalRuns)
+            .leftJoin(proposalApplications, eq(proposalRuns.applicationId, proposalApplications.id))
+            .where(eq(proposalRuns.companyId, companyId))
+            .orderBy(desc(proposalRuns.createdAt))
+            .limit(limit);
+
+        return rows.map(row => ({
+            id: `proposals:${row.id}`,
+            kind: "proposals" as const,
+            refId: row.id,
+            title: row.applicationTitle
+                ? `${PROPOSAL_RUN_TITLE[row.kind] ?? row.kind} — ${row.applicationTitle}`
+                : (PROPOSAL_RUN_TITLE[row.kind] ?? row.kind),
+            subtitle: oneLine(row.summary?.headline) ?? "Proposals",
+            status: normalizeStatus(row.status, { done: ["completed"] }),
+            at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
+            href: row.applicationId
+                ? `/employer/tools/proposals/write/${row.applicationId}`
+                : row.kind === "funders"
+                  ? "/employer/tools/proposals/funders"
+                  : row.kind === "profile"
+                    ? "/employer/tools/proposals/profile"
+                    : "/employer/tools/proposals",
+        }));
+    },
+    async remove({ companyId }, refId) {
+        const deleted = await db
+            .delete(proposalRuns)
+            .where(and(eq(proposalRuns.id, refId), eq(proposalRuns.companyId, companyId)))
+            .returning({ id: proposalRuns.id });
+        return deleted.length > 0;
+    },
+};
+
 /** Every non-chat loader. Chat lives in `~/server/sessions` and joins at merge time. */
 export const PIPELINE_LOADERS: readonly HistoryLoader[] = [
     trendSearchLoader,
@@ -355,4 +459,6 @@ export const PIPELINE_LOADERS: readonly HistoryLoader[] = [
     distributionLoader,
     emailLoader,
     weeklyReviewLoader,
+    vantageLoader,
+    proposalsLoader,
 ];

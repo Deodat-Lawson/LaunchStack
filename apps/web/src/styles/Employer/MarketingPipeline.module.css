@@ -1120,13 +1120,20 @@
 
 /* ---------------- Responsive ---------------- */
 
-@media (max-width: 1200px) {
+/* These fold by the width of the tab the workspace sits in (Growth ›
+   Campaigns is a Studio tab), not the window's: in a split column the
+   window is wide and the tab is not. The thresholds are the old window
+   breakpoints minus the rail and padding that used to surround the page,
+   so a full-width tab lays out as the page did. Outside any container
+   (no Studio tab) none of them match. */
+
+@container (max-width: 920px) {
     .workspaceMain {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
-@media (max-width: 960px) {
+@container (max-width: 700px) {
     .workspaceShell {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -1145,7 +1152,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 640px) {
     .pageHeaderRow {
         flex-direction: column;
         align-items: center;
@@ -1212,13 +1219,13 @@
     }
 }
 
-@media (max-width: 720px) {
+@container (max-width: 600px) {
     .platformGrid {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
-@media (max-width: 480px) {
+@container (max-width: 400px) {
     .main {
         padding: 1rem 0.75rem;
     }

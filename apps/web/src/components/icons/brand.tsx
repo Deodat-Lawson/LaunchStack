@@ -83,6 +83,13 @@ export const IconGithub = (p: BrandIconProps) => (
     </Ic>
 );
 
+/** Google's "G": an open ring closed by its crossbar. */
+export const IconGoogle = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <path d="M14.95 5.05A7 7 0 1 0 17 10h-7" />
+    </Ic>
+);
+
 export const IconDropbox = (p: BrandIconProps) => (
     <Ic {...p}>
         <path d="m5 4 5 3-5 3-3.5-3Zm10 0 3.5 3L15 10l-5-3Zm-10 9 5 3 5-3-5-3ZM5 10l5 3" />

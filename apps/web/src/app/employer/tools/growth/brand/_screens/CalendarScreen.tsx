@@ -1,19 +1,19 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
-import { plural } from "../../_lib/format";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { plural } from "~/lib/tools/format";
 import { useGrowthPaths } from "../../_lib/paths";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { NetworkMark } from "../_components/NetworkMark";
 import { PostActions, PostStatus } from "../_components/PostRow";
 import {
@@ -130,7 +130,7 @@ export function CalendarScreen() {
                             </Button>
                         )}
                         <Button asChild size="sm">
-                            <Link href={paths.brand("/compose")}>Compose</Link>
+                            <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
                         </Button>
                     </>
                 }
@@ -174,7 +174,7 @@ export function CalendarScreen() {
             {res.loading ? (
                 <SkeletonRows rows={3} height={90} />
             ) : (
-                <div className="border-line bg-panel grid grid-cols-1 overflow-hidden rounded-lg border md:grid-cols-7">
+                <div className="border-line bg-panel @max-md:grid-cols-1 grid grid-cols-7 overflow-hidden rounded-lg border">
                     {days.map((day, i) => {
                         const isToday = sameDay(day, today);
                         const dayPosts = posts
@@ -185,7 +185,7 @@ export function CalendarScreen() {
                                 key={day.toISOString()}
                                 className={cn(
                                     "border-line-2 flex min-h-[132px] flex-col gap-1.5 p-2",
-                                    i > 0 && "border-t md:border-l md:border-t-0",
+                                    i > 0 && "@max-md:border-l-0 @max-md:border-t border-l",
                                     isToday && "bg-surface-2/60"
                                 )}
                                 aria-label={day.toDateString()}
@@ -223,9 +223,12 @@ export function CalendarScreen() {
             {!res.loading && posts.length === 0 && (
                 <p className="text-ink-3 text-[13px]">
                     Nothing on this week.{" "}
-                    <Link href={paths.brand("/compose")} className="text-brand-ink hover:underline">
+                    <ToolLink
+                        href={paths.brand("/compose")}
+                        className="text-brand-ink hover:underline"
+                    >
                         Compose a post
-                    </Link>{" "}
+                    </ToolLink>{" "}
                     or generate a campaign and schedule its drafts.
                 </p>
             )}

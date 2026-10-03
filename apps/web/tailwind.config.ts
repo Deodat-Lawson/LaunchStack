@@ -1,4 +1,5 @@
 import { type Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 // Every color resolves through the design tokens
 // (@launchstack/design-tokens/tokens.css). The relative-color wrapper
@@ -86,6 +87,12 @@ export default {
                 },
             },
             keyframes: {
+                // Loading states hold back for a beat, then fade in, so a load
+                // that finishes quickly never flashes one (see _components/loading).
+                "loader-in": {
+                    from: { opacity: "0" },
+                    to: { opacity: "1" },
+                },
                 "accordion-down": {
                     from: {
                         height: "0",
@@ -104,10 +111,33 @@ export default {
                 },
             },
             animation: {
+                "loader-in": "loader-in 200ms ease-out 150ms both",
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
             },
         },
     },
-    plugins: [],
+    plugins: [
+        // Widths of the pane an app sits in, not of the window. Every
+        // workspace pane is a size container (StudioSplitView's pane hosts),
+        // so `@max-sm:hidden` reads "hide when this pane is under 520px" —
+        // a chat in a third of the screen gets the compact toolbar even on a
+        // wide monitor. Max-width only, on purpose: outside any container
+        // nothing matches, so an app on a page of its own keeps its full
+        // layout rather than its narrowest.
+        //
+        // Registered widest first, because Tailwind emits variants in the
+        // order they are added and the later rule wins: `@max-md:text-[34px]
+        // @max-sm:text-[28px]` must give 28px under 520px, which ascending
+        // order got backwards. `@max-lg` and `@max-xl` are for the Studio
+        // tools, whose screens are laid out for a full-width tab and fold
+        // as the tab narrows (see components/tool-app).
+        plugin(api => {
+            api.addVariant("@max-xl", "@container (max-width: 1119px)");
+            api.addVariant("@max-lg", "@container (max-width: 879px)");
+            api.addVariant("@max-md", "@container (max-width: 639px)");
+            api.addVariant("@max-sm", "@container (max-width: 519px)");
+            api.addVariant("@max-xs", "@container (max-width: 379px)");
+        }),
+    ],
 } satisfies Config;

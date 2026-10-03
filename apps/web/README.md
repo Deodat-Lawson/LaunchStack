@@ -68,6 +68,11 @@ One typeface system across apps/web and apps/landing:
 - Renderers that cannot take `var()` (canvas, mermaid) call
   `resolveFontStack("sans" | "mono" | "serif")` from `~/lib/fonts` —
   next/font serves hashed family names, so a literal `"Inter"` never matches.
+- Kit `Input` / `Textarea` take their size from `className` alone: pass
+  `text-xs`, `text-lg` or `text-[13px]` and it holds at every width. The
+  default (16px on phones so iOS doesn't zoom on focus, 14px from `md`) is a
+  components-layer rule in `src/styles/globals.css`, not a kit class
+  (`__tests__/brand/field-font-size.test.tsx`).
 
 ## Icons
 
@@ -102,24 +107,71 @@ OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
 changes theme and silently alter someone else's diagram. Its editor chrome uses
 the tokens like everything else.
 
-## The workspace centre: columns and tabs
+## The workspace centre: panes and tabs
 
-The centre is one or more columns side by side, each its own strip of tabs.
-Chat beside a document, or chat beside a tool beside a document. **Every open
-pane stays mounted** — switching tabs, and moving a tab between columns, keeps
-drafts, scroll and undo.
+The centre is a tree of splits, cmux-style: panes side by side or stacked,
+nested as deep as people split them, each pane its own strip of tabs. Chat
+beside a document, a tool under both. **Every open pane stays mounted** —
+switching tabs, moving a tab to another pane, splitting, resizing and
+zooming all keep drafts, scroll, undo and a document's place.
 
-Three files: `paneLayout.ts` is the state and every verb; `StudioTabs.tsx` is
-one column's strip; `StudioSplitView.tsx` puts the columns in a
-`ResizablePanelGroup` and hosts the panes.
+Files: `paneLayout.ts` is the state and every verb; `paneFrames.ts` turns the
+tree into rectangles; `StudioTabs.tsx` is one pane's strip;
+`StudioSplitView.tsx` places the panes, draws the dividers and drop zones, and
+hosts the panes' content. `useLayoutPersistence.ts` brings the layout back on
+the next visit.
 
+- **Splitting is a gesture, not a button.** Drag a tab, or a source from the
+  sidebar, onto a pane: its outer quarter on each side splits that way, its
+  middle opens it there, and a narrow band along the workspace's own edges
+  makes a pane the whole height or width. ⌘/Ctrl-click a source or a Studio
+  app to open it beside what is showing; double-click a tab to maximize its
+  pane. Each strip keeps one "⋯" pane menu as the fallback, with the keys
+  written in it — not a row of split buttons in every pane.
+- **A drag says what it carries.** `dragData.ts` holds one MIME type per
+  kind — a tab, a sidebar source — so panes can show their zones while the
+  drag is in the air (only the types are readable then) and read the id on
+  drop. The sidebar knows nothing of panes; its drags are noticed on the
+  document. Showing the zones waits a tick: changing the page inside
+  `dragstart` can make Chrome cancel the drag. Clearing them waits a tick
+  too: for a real drag the browser applies React's updates between
+  listeners, so zones cleared from a capture-phase `drop` listener were gone
+  before their own `onDrop` ran. A script-dispatched test event hides this —
+  the regression test forces the flush with `flushSync`.
+- **A split that would leave a pane unusable is refused, up front.** A pane
+  too narrow (or short) to halve above `MIN_PANE_PX` offers no side zones and
+  greys that item in its menu, with the reason; dividers stop at the same
+  sizes.
+- **The tree lives in the reducer; the DOM is flat.** Each pane is an
+  absolutely placed sibling keyed by its id, positioned from `layoutFrames`.
+  Nesting the DOM like the tree looks simpler and is not: splitting a pane
+  wraps it in a new container, React rebuilds what it wraps, and the pane's
+  node is detached for a moment — reloading any iframe in it and resetting
+  every scroller. There is a test that splits a pane and checks its content
+  is the same element.
+- **`groups` is the tree's leaves in reading order.** Anything that walks "the
+  panes" — focus next/previous, merge, persistence — walks that list; only the
+  renderer and the split verbs read `root`. A split holds any number of
+  children and never one of its own axis (they are flattened), so three
+  columns are one split of three.
+- **A pane goes with its last tab, except on purpose.** Closing or moving the
+  last tab out of a pane removes it and its space goes to the neighbour it
+  shared a divider with. A pane made by Split right/down starts empty and
+  stays until something opens in it or it is closed. The final pane is never
+  removed.
+- **Automatic splits stop at three; people can make six.** "Open to the side"
+  and "Ask about" reuse a pane past `AUTO_SPLIT_LIMIT`; the split buttons,
+  shortcuts and dropping a tab on a pane's edge go to `MAX_GROUPS`.
+- **Zoom follows focus.** A maximized pane is always the focused one; focusing
+  any other pane, or changing the layout, lets the rest back. The panes behind
+  a zoom are `invisible`, not unmounted.
 - **A move names a neighbour, not a position.** A strip renders a list filtered
   by permission while the reducer holds the unfiltered one, so
   `move(id, toGroupId, beforeId)` is the only form that cannot address the
   wrong slot.
-- **Panes are not rendered inside their column.** Each gets a host element the
-  split view creates once and then moves with `appendChild`. Portalling into
-  the column's own slot looks equivalent and is not: React compares a portal's
+- **Panes are not rendered inside their pane's slot.** Each gets a host element
+  the split view creates once and then moves with `appendChild`. Portalling
+  into the slot looks equivalent and is not: React compares a portal's
   container when it reconciles, so changing it destroys the pane and builds a
   new one — the exact thing tabs exist to prevent. There is a mount-counter
   test for this; the regression is invisible on a pane with no state.
@@ -127,9 +179,14 @@ one column's strip; `StudioSplitView.tsx` puts the columns in a
   inline callback is a new function each render, so React calls it with `null`
   and then the element every pass, which never settles when the host keeps
   slots in state.
-- **Visible is not focused.** With columns, one pane per column is visible but
-  only one is focused. Anything that owns the keyboard — the mindmap editor,
-  above all — gates on focus, or it eats keys meant for the pane next to it.
+- **Dragging a divider does not re-render the apps.** Shares in flight are the
+  split view's own state and commit to the reducer on release; the portalled
+  content is a memoised component. Anything that takes the pointer during a
+  drag (an iframe) is covered by a transparent overlay until it ends.
+- **Visible is not focused.** With several panes, one tab per pane is visible
+  but only one is focused. Anything that owns the keyboard — the mindmap
+  editor, above all — gates on focus, or it eats keys meant for the pane next
+  to it.
 - **An app is a tab unless it is a route tree.** Growth has its own layout and
   nested pages, so it keeps `external: true` and Studio navigates to it.
 - **Every id the shell can open must resolve** through `resolveStudioFeature`,
@@ -137,18 +194,38 @@ one column's strip; `StudioSplitView.tsx` puts the columns in a
   Workflows, Analytics, Company profile — are named there rather than in
   `STUDIO_GROUPS`, which keeps them out of the picker but able to open. A
   source opened to the side is a tab too, under the `source:` prefix.
-- **Chrome lives in the leftmost strip, not in a pane.** The palette, Studio
-  and avatar controls are the workspace's. Asking each pane to draw them when
-  it happens to be leftmost gave three avatar menus in three columns, and none
-  at all when the leftmost column held a document.
+- **Chrome lives in the first pane's strip, not in a pane.** The first pane in
+  reading order is always the top-left one. The workspace's controls go there
+  once, rather than in whichever pane happens to be leftmost.
 - **Do not key anything off `[role="tablist"]`** — the source rail has one.
   The strip marks itself `data-studio-tab-strip`.
 - **`moveBefore` only works on a connected node.** It is how a pane changes
-  column without losing focus or scroll, but it throws on a detached one, so
-  it is guarded by `isConnected` with a snapshot-and-restore fallback.
-- **The strip survives an empty column.** It carries the sidebar control, the
-  chrome and the only way to open anything, so the empty state goes inside it
-  rather than in place of it.
+  pane without losing focus or scroll, but it throws on a detached one, so it
+  is guarded by `isConnected` with a snapshot-and-restore fallback.
+- **The strip survives an empty pane.** It carries the sidebar control, the
+  pane menu and a way to open anything, so the empty state (`PaneLauncher`)
+  goes inside it rather than in place of it.
+- **An app fits the pane it is in, not the window.** Every pane host is a size
+  container, and `tailwind.config.ts` adds `@max-xs:` / `@max-sm:` /
+  `@max-md:` (under 380 / 520 / 640px of _pane_). Viewport breakpoints
+  (`sm:`, `md:`) are the wrong tool inside a pane: a chat in a third of a wide
+  monitor is narrow. The variants are max-width only, so outside a container
+  nothing matches and a page of its own keeps its full layout. Prefer
+  intrinsic layouts first — `flex-wrap`, `grid-cols-[repeat(auto-fill,…)]` —
+  and a variant where something must change: the composer's toggles drop to
+  icons, Meetings stacks its channel list above the channel.
+- **An app does not draw its own title bar.** The tab names it and carries
+  its description; a header bar per pane repeated the name a third time in
+  half the width.
+- **A window too narrow for panes folds them, and the fold is never saved.**
+  Below the phone breakpoint every pane merges into one; persistence pauses
+  while it does, and widening brings the saved arrangement back — without
+  tabs closed in between, with tabs opened in between.
+- **The layout is saved per member and workspace, on this device.** A saved
+  layout is untrusted input: `sanitizeLayout` checks the tree names exactly the
+  saved panes, drops tabs that cannot come back (a retired app, the mindmap
+  editor without its map) and the panes they leave empty, and keeps anything
+  opened before it arrived — a `?feature=` link, say.
 
 ## Right-click menus
 

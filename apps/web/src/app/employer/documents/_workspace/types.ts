@@ -17,6 +17,7 @@ import {
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
+    PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
     ClipboardList as IconPaste,
@@ -39,6 +40,7 @@ import {
     IconYoutube,
 } from "~/components/icons/brand";
 import { IconGrowth, IconProspects } from "~/components/icons/prospects";
+import { IconVantage } from "~/components/icons/vantage";
 import type { IconProps } from "~/components/icons/types";
 
 export type SourceTypeId =
@@ -55,7 +57,8 @@ export type SourceTypeId =
     | "youtube"
     | "paste"
     | "call-note"
-    | "mindmap";
+    | "mindmap"
+    | "artifact";
 
 export interface SourceMeta {
     label: string;
@@ -78,6 +81,7 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
     "call-note": { label: "Call Note", Icon: IconNote, color: "oklch(0.52 0.16 185)" },
     mindmap: { label: "Mindmap", Icon: IconMindmap, color: "oklch(0.55 0.2 290)" },
+    artifact: { label: "Claude artifact", Icon: IconArtifact, color: "var(--accent)" },
 };
 
 /**
@@ -322,39 +326,55 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?add=1&tab=mindmap",
     },
     {
+        // Both are ways of adding a source now, not tools of their own: the
+        // palette opens Add a source on their tabs.
         id: "artifacts",
-        label: "Claude Artifacts",
+        label: "Import a Claude artifact",
         Icon: IconArtifact,
-        desc: "Pages and diagrams imported from Claude",
-        href: "/employer/artifacts",
+        desc: "Pages, diagrams and components built in Claude, as sources",
+        href: "/employer/documents?add=1&tab=artifact",
     },
     {
         id: "agent-sessions",
-        label: "Coding sessions",
+        label: "Import coding sessions",
         Icon: IconSessions,
-        desc: "Import Claude Code and Codex conversations",
-        href: "/employer/agent-sessions",
+        desc: "Claude Code and Codex conversations, as sources",
+        href: "/employer/documents?add=1&tab=agent-sessions",
     },
     {
         id: "growth",
         label: "Growth",
         Icon: IconGrowth,
         desc: "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals",
-        href: "/employer/tools/growth",
+        href: "/employer/documents?feature=growth",
     },
     {
         id: "brand",
         label: "Brand",
         Icon: IconMegaphone,
         desc: "Compose once for every network, schedule it, see the calendar, generate campaigns from your documents",
-        href: "/employer/tools/growth/brand",
+        href: "/employer/documents?feature=growth&at=%2Fbrand",
     },
     {
         id: "prospects",
         label: "Prospects",
         Icon: IconProspects,
         desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
-        href: "/employer/tools/growth/prospects",
+        href: "/employer/documents?feature=growth&at=%2Fprospects",
+    },
+    {
+        id: "vantage",
+        label: "Vantage",
+        Icon: IconVantage,
+        desc: "Prepare next week's meeting from evidence: cited agenda, decisions, commitments checked the week after",
+        href: "/employer/documents?feature=vantage",
+    },
+    {
+        id: "proposals",
+        label: "Proposals",
+        Icon: IconProposals,
+        desc: "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations",
+        href: "/employer/documents?feature=proposals",
     },
     {
         id: "investors",
@@ -392,7 +412,9 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/settings#company",
     },
     {
-        id: "agents",
+        // Not `agents`: that is the Agents app above, and the palette keys
+        // and routes its rows by id.
+        id: "agents-nodes",
         label: "Agents & nodes",
         Icon: IconUsers,
         desc: "The meeting roster, and the machines that run it",
@@ -408,25 +430,24 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
 ] as const;
 
 /**
- * Studio drawer features grouped by purpose. Tools render interactive panes
- * (or a "coming soon" placeholder if `comingSoon` is true); Management entries
- * link out to their dedicated employer routes.
+ * Studio apps grouped by purpose. Every one of them opens as a tab of the
+ * workspace — there is no such thing as a Studio app that is a page of its
+ * own. A tool with screens of its own (Growth, Proposals, Vantage) keeps them
+ * inside its tab; see `components/tool-app/README.md`.
  */
 export interface StudioFeature {
     id: string;
     label: string;
     Icon: ComponentType<IconProps>;
     desc: string;
-    /** Destination for link-out features. Required when no interactive pane exists. */
+    /**
+     * The link that opens this app's tab — "Open in a new browser tab" uses
+     * it. Always `/employer/documents?feature=<id>` (or a deep link into the
+     * tab); `registry.test.ts` fails on anything that would leave the page.
+     */
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
-    /**
-     * The feature is a separate app with its own routes and chrome — Growth,
-     * for instance, whose rail and nested pages cannot be mounted in a tab.
-     * Picking it navigates instead of opening a Studio tab.
-     */
-    external?: boolean;
     /**
      * Permission a person must hold to see this feature. Checked through
      * `usePermissions().can(...)`, which answers false until loaded — so a
@@ -483,25 +504,44 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         label: "Tools",
         features: [
             {
-                // One app with its own rail for the whole growth motion: Brand
-                // (compose, schedule, calendar, campaigns, accounts) and Prospects
-                // (segment, companies, people, deals, runs, sources).
+                // The whole growth motion in one tab, with its screens in a
+                // rail inside it: Brand (compose, schedule, calendar,
+                // campaigns, accounts) and Prospects (segment, companies,
+                // people, deals, runs, sources).
                 id: "growth",
                 label: "Growth",
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
-                href: "/employer/tools/growth",
-                external: true,
+                href: "/employer/documents?feature=growth",
             },
             {
-                // Second only to Growth: being known, then being funded. Not
-                // `external` — the search and the pitch starters are one pane,
-                // and "Draft in chat" is a move to the chat tab beside it.
+                // A writing app: the proposal is the unit of work, and every
+                // sentence in it points at a source — which is one tab away.
+                id: "proposals",
+                label: "Proposals",
+                Icon: IconProposals,
+                desc: "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit",
+                href: "/employer/documents?feature=proposals",
+            },
+            {
+                // Second only to Growth: being known, then being funded. The
+                // search and the pitch starters are its two screens, and
+                // "Draft in chat" is a move to the chat tab beside it.
                 id: "investors",
                 label: "Investor relations",
                 Icon: IconInvestors,
                 desc: "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources",
                 href: "/employer/documents?feature=investors",
+            },
+            {
+                // The weekly loop: evidence in, a cited agenda out, decisions
+                // that become commitments checked the week after. Screens of
+                // its own inside its tab, like Growth.
+                id: "vantage",
+                label: "Vantage",
+                Icon: IconVantage,
+                desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
+                href: "/employer/documents?feature=vantage",
             },
             {
                 id: "draft",
@@ -515,41 +555,30 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconSparkle,
                 desc: "Improve existing prose with a diff-first rewrite",
             },
-            {
-                id: "artifacts",
-                label: "Claude Artifacts",
-                Icon: IconArtifact,
-                desc: "Import pages and diagrams built in Claude, and manage them here",
-                // Not `external`: the gallery and viewer are plain client
-                // components, so Studio mounts them in a tab. The route stays
-                // for direct links and for opening one in a browser tab.
-                href: "/employer/artifacts",
-            },
-            {
-                id: "agent-sessions",
-                label: "Coding sessions",
-                Icon: IconSessions,
-                desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
-                // Not `external`, like Artifacts: continuing a session in chat
-                // is a move between two Studio tabs, not a page load.
-                href: "/employer/agent-sessions",
-            },
         ],
     },
     {
         id: "management",
         label: "Management",
         features: [
-            // Processing, agents and nodes, integrations, company profile, and
-            // analytics are all sections of one Settings surface — see `SettingsHub`.
-            // `metadata` and `analytics` remain as ids so existing deep links open
-            // the right section instead of 404ing.
+            // Processing, agents and nodes, integrations and the company profile
+            // are sections of one Settings surface — see `SettingsHub`; `metadata`
+            // survives as an id so old deep links open the right section.
+            // Analytics is not one of them: it has its own pane and its own
+            // permission, and Settings' `#analytics` only forwards to this tab.
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
+                desc: "People and access, processing, agents and nodes, integrations, company profile",
                 requires: "settings.manage",
+            },
+            {
+                id: "analytics",
+                label: "Analytics",
+                Icon: IconChart,
+                desc: "Documents, queries, and activity across the workspace",
+                requires: "analytics.view",
             },
         ],
     },
@@ -567,9 +596,8 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
 
 /**
  * Panes that are no longer Studio entries but are still reachable by link:
- * `?feature=metadata` from an old bookmark, `?feature=analytics`, which is where
- * `SettingsHub` sends `#analytics`, and `workflows`, which keeps a pane, a
- * palette row and the `feature.workflows` shortcut but no picker tile. Each
+ * `?feature=metadata` from an old bookmark, and `workflows`, which keeps a
+ * pane, a palette row and the `feature.workflows` shortcut but no picker tile. Each
  * renders a real pane; a tab needs a label and an icon, so
  * `resolveStudioFeature` has to be able to name them.
  */
@@ -598,12 +626,6 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         Icon: IconBuilding,
         desc: "What the workspace knows about your company",
     },
-    analytics: {
-        id: "analytics",
-        label: "Analytics",
-        Icon: IconChart,
-        desc: "Documents, queries, and activity",
-    },
 };
 
 /**
@@ -623,7 +645,18 @@ export function demotedFeatureHref(id: string): string | undefined {
     return href?.startsWith("/employer/documents?feature=") ? undefined : href;
 }
 
-/** Add-source modal tabs, grouped Upload / Connect. */
+/**
+ * Settings is a Studio app, so a link into it opens the tab rather than
+ * leaving the workspace. Answers the section a `/employer/settings#…` link
+ * names ("" when it names none), or undefined for a link anywhere else.
+ */
+export function settingsSectionOf(href: string): string | undefined {
+    const url = new URL(href, "http://workspace.invalid");
+    if (url.pathname !== "/employer/settings") return undefined;
+    return url.hash.replace(/^#/, "");
+}
+
+/** Add-source modal tabs, grouped Create / Upload / Connect. */
 export interface AddSourceTab {
     id: string;
     label: string;
@@ -668,6 +701,14 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
+            {
+                // Was the Claude Artifacts tool. An artifact is a source now:
+                // listed, searchable, citable, opened in a sandboxed preview.
+                id: "artifact",
+                label: "Claude artifact",
+                Icon: IconArtifact,
+                desc: "A page, diagram or component built in Claude",
+            },
         ],
     },
     {

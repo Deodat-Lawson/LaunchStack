@@ -12,6 +12,13 @@ packages:
 
 patchedDependencies:
   drizzle-kit@0.31.10: patches/drizzle-kit@0.31.10.patch
+  # Backports facebook/react#35494 and #35518 into the React that Next 15.5
+  # vendors: when hydration suspends on a client chunk and replays an element,
+  # React skipped a DOM node and lost its useId path (the intermittent
+  # hydration mismatch on /employer/settings). React 19.3 ships both; drop
+  # this once Next vendors them. Guarded by
+  # apps/web/__tests__/hydration/replay-hydration-cursor.test.ts.
+  next@15.5.7: patches/next@15.5.7.patch
 
 # eslint-plugin-drizzle 0.2.3 imports this package at runtime but only declares
 # it as a devDependency. Supply it explicitly so strict pnpm installs can load

@@ -1,10 +1,16 @@
 "use client";
 
 import { Search } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import {
+    useToolActive,
+    useToolPathname,
+    useToolRouter,
+    useToolSearchParams,
+} from "~/components/tool-app/nav";
 
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -29,14 +35,14 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type CompaniesSort, type CompaniesView, type CompanyRow } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../../_lib/format";
+import { relativeTime } from "~/lib/tools/format";
 import { rememberListOrder } from "../_lib/listOrder";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { FoundViaChips } from "../_components/SourceChip";
 import { StagePill } from "../_components/StagePill";
 
@@ -57,9 +63,10 @@ function isSort(v: string | null): v is CompaniesSort {
 
 export function CompaniesScreen() {
     const { segmentId, href, startRun, activeRun } = useProspects();
-    const router = useRouter();
-    const pathname = usePathname();
-    const params = useSearchParams();
+    const router = useToolRouter();
+    const pathname = useToolPathname();
+    const params = useToolSearchParams();
+    const active = useToolActive();
     const view: CompaniesView = isView(params.get("view"))
         ? (params.get("view") as CompaniesView)
         : "all";
@@ -84,7 +91,7 @@ export function CompaniesScreen() {
                 else next.set(k, v);
             }
             const s = next.toString();
-            router.replace(s ? `${pathname}?${s}` : pathname, { scroll: false });
+            router.replace(s ? `${pathname}?${s}` : pathname);
         },
         [params, pathname, router]
     );
@@ -115,6 +122,7 @@ export function CompaniesScreen() {
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [cursor, setCursor] = useState<number>(-1);
     const searchRef = useRef<HTMLInputElement>(null);
+    const tableRef = useRef<HTMLDivElement>(null);
     useEffect(() => setSelected(new Set()), [view, query, segmentId]);
     useEffect(() => {
         if (cursor >= companies.length) setCursor(companies.length - 1);
@@ -143,7 +151,10 @@ export function CompaniesScreen() {
         }
     }, []);
 
+    // Tabs are hidden, not unmounted: only listen while this tab is the one
+    // being used, or j/k would move this list from inside another tab.
     useEffect(() => {
+        if (!active) return;
         const onKey = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
             const typing =
@@ -186,12 +197,14 @@ export function CompaniesScreen() {
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [companies, cursor, open, outreach, selected, toggle]);
+    }, [active, companies, cursor, open, outreach, selected, toggle]);
 
+    // Looked up inside this table, not the document: other tabs stay mounted
+    // and may have rows of their own.
     useEffect(() => {
         if (cursor < 0) return;
-        document
-            .querySelector<HTMLElement>(`[data-row-index="${cursor}"]`)
+        tableRef.current
+            ?.querySelector<HTMLElement>(`[data-row-index="${cursor}"]`)
             ?.scrollIntoView({ block: "nearest" });
     }, [cursor]);
 
@@ -267,14 +280,14 @@ export function CompaniesScreen() {
                     value={view}
                     onValueChange={v => v && setParam({ view: v })}
                     size="sm"
-                    className="border-line bg-panel gap-0.5 rounded-md border p-0.5"
+                    className="border-line bg-panel max-w-full justify-start gap-0.5 overflow-x-auto rounded-md border p-0.5"
                     aria-label="View"
                 >
                     {VIEWS.map(v => (
                         <ToggleGroupItem
                             key={v.id}
                             value={v.id}
-                            className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2.5 text-xs"
+                            className="data-[state=on]:shadow-1 h-7 shrink-0 rounded-[5px] px-2.5 text-xs"
                         >
                             {v.label}
                             {counts && (
@@ -353,7 +366,10 @@ export function CompaniesScreen() {
                     }
                 />
             ) : (
-                <div className="border-line bg-panel overflow-x-auto rounded-lg border">
+                <div
+                    ref={tableRef}
+                    className="border-line bg-panel overflow-x-auto rounded-lg border"
+                >
                     <Table className="text-[13px]">
                         <TableHeader>
                             <TableRow className="hover:bg-transparent">
@@ -475,7 +491,7 @@ function CompanyTableRow({
                 />
             </TableCell>
             <TableCell className="min-w-[240px] max-w-[300px] whitespace-normal">
-                <Link
+                <ToolLink
                     href={href}
                     className="text-ink block truncate font-medium hover:underline"
                     onClick={e => e.stopPropagation()}
@@ -486,7 +502,7 @@ function CompanyTableRow({
                             new
                         </span>
                     )}
-                </Link>
+                </ToolLink>
                 <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1" data-no-open>
                     {c.domain && (
                         <span className="text-ink-3 font-mono text-[11px]">{c.domain}</span>

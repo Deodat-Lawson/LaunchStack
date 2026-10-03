@@ -6,8 +6,34 @@ import { XIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
+/**
+ * Where sheets mount. A Studio tool's tab provides its own element, so a
+ * sheet opened from a tool in half the screen covers that tool — not the
+ * chat in the column beside it. Unset, sheets mount on the body as usual.
+ *
+ * A sheet scoped to a tab is not modal for the page: the chat beside it
+ * keeps working, and clicking or typing there leaves the sheet open. Inside
+ * the tab it behaves as before — a dimmed backdrop that closes it on click.
+ */
+const SheetContainerContext = React.createContext<HTMLElement | null>(null);
+
+function SheetContainerProvider({
+    container,
+    children,
+}: {
+    container: HTMLElement | null;
+    children: React.ReactNode;
+}) {
+    return (
+        <SheetContainerContext.Provider value={container}>
+            {children}
+        </SheetContainerContext.Provider>
+    );
+}
+
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-    return <SheetPrimitive.Root data-slot="sheet" {...props} />;
+    const container = React.useContext(SheetContainerContext);
+    return <SheetPrimitive.Root data-slot="sheet" {...props} modal={props.modal ?? !container} />;
 }
 
 function SheetTrigger({ ...props }: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
@@ -19,7 +45,14 @@ function SheetClose({ ...props }: React.ComponentProps<typeof SheetPrimitive.Clo
 }
 
 function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-    return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
+    const container = React.useContext(SheetContainerContext);
+    return (
+        <SheetPrimitive.Portal
+            data-slot="sheet-portal"
+            container={container ?? undefined}
+            {...props}
+        />
+    );
 }
 
 function SheetOverlay({
@@ -42,14 +75,41 @@ function SheetContent({
     className,
     children,
     side = "right",
+    onInteractOutside,
+    onEscapeKeyDown,
     ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
     side?: "top" | "right" | "bottom" | "left";
 }) {
+    const container = React.useContext(SheetContainerContext);
     return (
         <SheetPortal>
-            <SheetOverlay />
+            {container ? (
+                // Not modal, so Radix draws no overlay; this one dims the tab
+                // only, and a click on it is a click outside the sheet.
+                <div
+                    data-slot="sheet-overlay"
+                    aria-hidden
+                    className="absolute inset-0 z-50 bg-black/50"
+                />
+            ) : (
+                <SheetOverlay />
+            )}
             <SheetPrimitive.Content
+                onInteractOutside={event => {
+                    // Clicks and focus in another column belong to that column.
+                    if (container && !container.contains(event.target as Node)) {
+                        event.preventDefault();
+                    }
+                    onInteractOutside?.(event);
+                }}
+                onEscapeKeyDown={event => {
+                    // Escape pressed in the chat beside the tab is the chat's.
+                    if (container && !container.contains(document.activeElement)) {
+                        event.preventDefault();
+                    }
+                    onEscapeKeyDown?.(event);
+                }}
                 data-slot="sheet-content"
                 className={cn(
                     "bg-surface data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
@@ -120,6 +180,7 @@ function SheetDescription({
 
 export {
     Sheet,
+    SheetContainerProvider,
     SheetTrigger,
     SheetClose,
     SheetContent,

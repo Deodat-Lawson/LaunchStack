@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import LoadingPage from "~/app/_components/loading";
 import { CallsFeature } from "~/app/calls/_components/CallsFeature";
+import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
+import { isStudioPaneId } from "./studioPaneIds";
 import type { StudioFeature } from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
@@ -21,16 +23,6 @@ export interface StudioPaneContext {
     onCallChanged?: () => void;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
-    /**
-     * Coding sessions opens transcripts and continues them in chat. Inside
-     * Studio both are moves between open tabs, so the shell does them; the
-     * standalone route omits these and the browser navigates instead.
-     */
-    sessions?: {
-        onImported?: () => Promise<void>;
-        onOpenDocument?: (documentId: number) => void;
-        onContinue?: (documentId: number) => void;
-    };
     /**
      * Agents and Meetings hand off to each other and to the chat: "use in
      * chat" picks the agent in the composer, "put in a meeting" opens the
@@ -52,77 +44,66 @@ export interface StudioPaneContext {
         onDraftInChat: (prompt: string) => void;
         onSaveAsSource: (markdown: string) => void;
     };
+    /**
+     * For tools with screens of their own: whether this tab is the focused
+     * one, a location to show, where to remember the last one, and how to
+     * reach other tabs. See `components/tool-app`.
+     */
+    tool?: ToolHost;
 }
 
-const DocumentGenerator = dynamic(
-    () =>
-        import("~/app/employer/documents/components/DocumentGenerator").then(
-            m => m.DocumentGenerator
-        ),
-    { loading: () => <LoadingPage /> }
+const DraftsTool = dynamic(
+    () => import("~/app/employer/documents/components/DraftsTool").then(m => m.DraftsTool),
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
-const RewriteDiffView = dynamic(
-    () =>
-        import("~/app/employer/documents/components/RewriteDiffView").then(m => m.RewriteDiffView),
-    { loading: () => <LoadingPage /> }
-);
-
-const LegalGeneratorTheme = dynamic(
-    () =>
-        import("~/app/employer/documents/components/LegalGeneratorTheme").then(
-            m => m.LegalGeneratorTheme
-        ),
-    { loading: () => <LoadingPage /> }
+const RewriteTool = dynamic(
+    () => import("~/app/employer/documents/components/RewriteTool").then(m => m.RewriteTool),
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+// Tools with screens of their own. Each is a tab with a rail inside it and
+// its own history; none of them is a page you navigate to any more.
+const GrowthTool = dynamic(
+    () => import("~/app/employer/tools/growth/GrowthTool").then(m => m.GrowthTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+const ProposalsTool = dynamic(
+    () => import("~/app/employer/tools/proposals/ProposalsTool").then(m => m.ProposalsTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+const VantageTool = dynamic(
+    () => import("~/app/employer/tools/vantage/VantageTool").then(m => m.VantageTool),
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const StatisticsView = dynamic(
     () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.KnowledgePane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
-
-const ArtifactGallery = dynamic(
-    () =>
-        import("~/app/employer/artifacts/_artifacts/ui/ArtifactGallery").then(
-            m => m.ArtifactGallery
-        ),
-    { loading: () => <LoadingPage /> }
-);
-
-const ArtifactViewer = dynamic(
-    () =>
-        import("~/app/employer/artifacts/_artifacts/ui/ArtifactViewer").then(m => m.ArtifactViewer),
-    { loading: () => <LoadingPage /> }
-);
-
-const SessionsBrowser = dynamic(
-    () =>
-        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
-            m => m.SessionsBrowser
-        ),
-    { loading: () => <LoadingPage /> }
-);
 
 interface PaneProps {
     onClose: () => void;
@@ -342,12 +323,13 @@ export function ChatPane(_: PaneProps) {
     );
 }
 
-export function DraftPane(_: PaneProps) {
-    return (
-        <InlineFeatureShell eyebrow="Templated Drafts" title="Draft from a template">
-            <DocumentGenerator />
-        </InlineFeatureShell>
-    );
+/**
+ * Templated Drafts in the shared tool frame: New document, My documents and
+ * the Assistant are screens in its rail, and an open draft is a page under
+ * My documents.
+ */
+export function DraftPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return <DraftsTool host={context?.tool} />;
 }
 
 interface ComingSoonPaneProps extends PaneProps {
@@ -425,12 +407,9 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
     );
 }
 
-export function RewritePane(_: PaneProps) {
-    return (
-        <LegalGeneratorTheme ambient={false}>
-            <RewriteDiffView />
-        </LegalGeneratorTheme>
-    );
+/** Rewrite in the shared tool frame: New rewrite and My rewrites in its rail. */
+export function RewritePane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return <RewriteTool host={context?.tool} />;
 }
 
 export function CompanySettingsPane({
@@ -439,43 +418,6 @@ export function CompanySettingsPane({
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
-        </div>
-    );
-}
-
-/**
- * Artifacts keeps gallery and viewer in one tab: opening an artifact swaps the
- * panel rather than navigating, so the tab you came back to is the one you
- * left. The standalone route passes neither callback and keeps its own routing.
- */
-export function ArtifactsStudioPane(_: PaneProps) {
-    const [viewerId, setViewerId] = useState<number | null>(null);
-
-    return (
-        <div
-            style={{
-                height: "100%",
-                minHeight: 0,
-                overflowY: viewerId === null ? "auto" : "hidden",
-            }}
-        >
-            {viewerId === null ? (
-                <ArtifactGallery onOpenArtifact={setViewerId} />
-            ) : (
-                <ArtifactViewer id={viewerId} onBack={() => setViewerId(null)} />
-            )}
-        </div>
-    );
-}
-
-export function AgentSessionsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return (
-        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
-            <SessionsBrowser
-                onImported={context?.sessions?.onImported}
-                onOpenDocument={context?.sessions?.onOpenDocument}
-                onContinue={context?.sessions?.onContinue}
-            />
         </div>
     );
 }
@@ -860,13 +802,29 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
  * workspace area when a non-chat feature is expanded. `onClose` is the pane's
  * exit path — the drawer passes its own close handler; the main area passes
  * return-to-chat after removing the chrome back control (Studio sidebar Chat handles that too).
+ *
+ * Every Studio app is drawn here, in its tab. The switch is exhaustive over
+ * `STUDIO_PANE_IDS`, so adding an app without a pane fails to compile.
  */
 export function renderStudioPane(
     feature: StudioFeature,
     onClose: () => void,
     context?: StudioPaneContext
 ): React.ReactNode {
-    switch (feature.id) {
+    if (feature.comingSoon) {
+        return (
+            <ComingSoonPane
+                onClose={onClose}
+                eyebrow="Studio"
+                title={feature.label}
+                body={feature.desc}
+                bullets={[]}
+            />
+        );
+    }
+    const id = feature.id;
+    if (!isStudioPaneId(id)) return <UnknownPane label={feature.label} />;
+    switch (id) {
         case "chat":
             return <ChatPane onClose={onClose} />;
         case "knowledge":
@@ -880,69 +838,45 @@ export function renderStudioPane(
         case "agents":
             return <AgentsStudioPane onClose={onClose} context={context} />;
         case "draft":
-            return <DraftPane onClose={onClose} />;
+            return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":
-            return <RewritePane onClose={onClose} />;
+            return <RewritePane onClose={onClose} context={context} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "artifacts":
-            return <ArtifactsStudioPane onClose={onClose} />;
-        case "agent-sessions":
-            return <AgentSessionsStudioPane onClose={onClose} context={context} />;
         case "investors":
             return (
                 <InvestorsPane
+                    host={context?.tool}
                     onDraftInChat={context?.investors?.onDraftInChat}
                     onSaveAsSource={context?.investors?.onSaveAsSource}
                 />
             );
-        // Company metadata and analytics are sections of Settings now. Their ids
-        // survive so old deep links open the right section rather than 404ing.
+        case "growth":
+            return <GrowthTool host={context?.tool} />;
+        case "proposals":
+            return <ProposalsTool host={context?.tool} />;
+        case "vantage":
+            return <VantageTool host={context?.tool} />;
+        // Company metadata is a section of Settings now. Its id survives so old
+        // deep links open the right section rather than 404ing.
         case "metadata":
             return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":
             return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
-        case "growth":
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Growth"
-                    title="Growth"
-                    body="One app for making the company known and finding the companies that will buy. Brand composes once for every network, schedules it, shows the calendar and generates campaigns from your documents. Prospects finds buyers that match what you sell, profiles them with cited evidence, and runs every deal to won."
-                    bullets={[
-                        "Brand: Compose, Calendar, Campaigns, Accounts — LinkedIn, X, Bluesky and Reddit",
-                        "Prospects: Segment, Companies with cited profiles and fit, People, Deals, Runs, Sources",
-                        "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
-                        "Everything is grounded in the same company knowledge",
-                    ]}
-                    href={feature.href ?? "/employer/tools/growth"}
-                    ctaLabel="Open Growth"
-                />
-            );
-        default:
-            if (feature.comingSoon) {
-                return (
-                    <ComingSoonPane
-                        onClose={onClose}
-                        eyebrow="Studio"
-                        title={feature.label}
-                        body={feature.desc}
-                        bullets={[]}
-                    />
-                );
-            }
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Studio"
-                    title={feature.label}
-                    body={feature.desc}
-                    bullets={[]}
-                    href={feature.href ?? "/employer/documents"}
-                    ctaLabel="Open full page"
-                />
-            );
+        default: {
+            const unhandled: never = id;
+            return <UnknownPane label={String(unhandled)} />;
+        }
     }
+}
+
+/** A tab whose app this build does not have — a layout saved by a newer version, say. */
+function UnknownPane({ label }: { label: string }) {
+    return (
+        <div className="text-ink-3 flex h-full items-center justify-center px-6 text-center text-[13px]">
+            {label} is not available in this version of the app.
+        </div>
+    );
 }

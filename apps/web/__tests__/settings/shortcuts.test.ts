@@ -85,4 +85,38 @@ describe("shortcut registry", () => {
         const conflicts = findConflicts(resolveBindings({ "source.add": "Mod+K" }));
         expect(conflicts.get("Mod+K")).toEqual(["palette.toggle", "source.add"]);
     });
+
+    it("matches Option combinations by the key pressed, not the character it types", () => {
+        const bindings = resolveBindings(null);
+        // On a Mac, ⌥\ types « and ⌥W types ∑; the binding names the key.
+        const splitRight = { ...press("«", { metaKey: true, altKey: true }), code: "Backslash" };
+        expect(commandForEvent(splitRight, bindings, { inInput: false, platform: "mac" })?.id).toBe(
+            "pane.split"
+        );
+        const splitDown = {
+            ...press("»", { metaKey: true, altKey: true, shiftKey: true }),
+            code: "Backslash",
+        };
+        expect(commandForEvent(splitDown, bindings, { inInput: false, platform: "mac" })?.id).toBe(
+            "pane.splitDown"
+        );
+        const close = { ...press("∑", { metaKey: true, altKey: true }), code: "KeyW" };
+        expect(commandForEvent(close, bindings, { inInput: false, platform: "mac" })?.id).toBe(
+            "pane.close"
+        );
+        // Without Alt the typed character is the key, as before.
+        expect(keysFromEvent({ ...press("k", { metaKey: true }), code: "KeyK" }, "mac")).toBe(
+            "Mod+K"
+        );
+    });
+
+    it("binds the pane zoom", () => {
+        const bindings = resolveBindings(null);
+        expect(
+            commandForEvent(press("Enter", { ctrlKey: true, shiftKey: true }), bindings, {
+                inInput: false,
+                platform: "other",
+            })?.id
+        ).toBe("pane.zoom");
+    });
 });

@@ -329,7 +329,7 @@ const SignupPage: React.FC = () => {
                             One account covers your solo workspace — and any team you might create
                             down the road.
                         </SubHeadline>
-                        <SignUpForm />
+                        <SignUpForm signInHref={withNext("/signin", next)} />
                         <div style={bottomLinkStyle}>
                             Already have an account?{" "}
                             <Link href={withNext("/signin", next)} style={linkStyle}>

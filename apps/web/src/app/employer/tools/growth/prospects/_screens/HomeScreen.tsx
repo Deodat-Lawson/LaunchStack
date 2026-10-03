@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
 
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -10,14 +11,14 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SourceYield } from "../api";
 import { useProspects } from "../_lib/context";
-import { plural, relativeTime } from "../../_lib/format";
+import { plural, relativeTime } from "~/lib/tools/format";
 import { STAGE_LABELS } from "../_lib/stages";
-import { useResource } from "../../_lib/useResource";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
+import { useResource } from "~/lib/tools/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
 import { FunnelBar } from "../_components/FunnelBar";
-import { PageHeader, SectionHeading } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function YieldRow({ y, max }: { y: SourceYield; max: number }) {
     const off = y.status === "off" || y.status === "skipped";
@@ -93,7 +94,7 @@ export function HomeScreen() {
                 actions={
                     <>
                         <Button variant="ghost" size="sm" asChild>
-                            <Link href={href("/segment")}>Segment</Link>
+                            <ToolLink href={href("/segment")}>Segment</ToolLink>
                         </Button>
                         <Button size="sm" onClick={() => void find()} disabled={!segmentId}>
                             Find companies
@@ -141,7 +142,9 @@ export function HomeScreen() {
                                     <div className="text-ink-3 truncate text-xs">{item.detail}</div>
                                 </div>
                                 <Button variant="outline" size="sm" asChild>
-                                    <Link href={href(item.action.href)}>{item.action.label}</Link>
+                                    <ToolLink href={href(item.action.href)}>
+                                        {item.action.label}
+                                    </ToolLink>
                                 </Button>
                             </div>
                         ))}
@@ -165,7 +168,7 @@ export function HomeScreen() {
                 )}
             </section>
 
-            <div className="grid grid-cols-1 gap-7 lg:grid-cols-2">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-7">
                 <section className="min-w-0">
                     <SectionHeading title="Where companies come from" aside="found · in a deal" />
                     {home.loading || !d ? (
@@ -198,7 +201,7 @@ export function HomeScreen() {
                     ) : (
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {d.fresh.map(c => (
-                                <Link
+                                <ToolLink
                                     key={c.id}
                                     href={href(`/companies/${c.id}`)}
                                     className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[1fr_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0"
@@ -212,7 +215,7 @@ export function HomeScreen() {
                                         </span>
                                     </span>
                                     <FitMeter value={c.fit} threshold={c.fitThreshold} />
-                                </Link>
+                                </ToolLink>
                             ))}
                         </div>
                     )}

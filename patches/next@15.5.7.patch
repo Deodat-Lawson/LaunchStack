@@ -1,0 +1,732 @@
+diff --git a/dist/compiled/react-dom/cjs/react-dom-client.development.js b/dist/compiled/react-dom/cjs/react-dom-client.development.js
+index 4376913076151ad78dcc4059ad4152fad25478da..51341644d3ea87bcb15cde41d6e64b11002a92f5 100644
+--- a/dist/compiled/react-dom/cjs/react-dom-client.development.js
++++ b/dist/compiled/react-dom/cjs/react-dom-client.development.js
+@@ -4095,7 +4095,7 @@
+           (workInProgress.deletions = null),
+           (workInProgress.actualDuration = -0),
+           (workInProgress.actualStartTime = -1.1));
+-      workInProgress.flags = current.flags & 65011712;
++      workInProgress.flags = current.flags & 66060288;
+       workInProgress.childLanes = current.childLanes;
+       workInProgress.lanes = current.lanes;
+       workInProgress.child = current.child;
+@@ -4132,8 +4132,10 @@
+       }
+       return workInProgress;
+     }
++    // Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++    // static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+     function resetWorkInProgress(workInProgress, renderLanes) {
+-      workInProgress.flags &= 65011714;
++      workInProgress.flags &= 66060290;
+       var current = workInProgress.alternate;
+       null === current
+         ? ((workInProgress.childLanes = 0),
+@@ -6836,7 +6838,7 @@
+           null;
+       hookTypesUpdateIndexDev = -1;
+       null !== current &&
+-        (current.flags & 65011712) !== (workInProgress.flags & 65011712) &&
++        (current.flags & 66060288) !== (workInProgress.flags & 66060288) &&
+         console.error(
+           "Internal React error: Expected static flag was missing. Please notify the React team."
+         );
+@@ -10187,7 +10189,7 @@
+             }
+           )),
+           (JSCompiler_object_inline_stack_2533.subtreeFlags =
+-            componentStack.subtreeFlags & 65011712),
++            componentStack.subtreeFlags & 66060288),
+           null !== JSCompiler_object_inline_componentStack_2534
+             ? (nextPrimaryChildren = createWorkInProgress(
+                 JSCompiler_object_inline_componentStack_2534,
+@@ -11463,8 +11465,8 @@
+ 
+           )
+             (newChildLanes |= _child2.lanes | _child2.childLanes),
+-              (subtreeFlags |= _child2.subtreeFlags & 65011712),
+-              (subtreeFlags |= _child2.flags & 65011712),
++              (subtreeFlags |= _child2.subtreeFlags & 66060288),
++              (subtreeFlags |= _child2.flags & 66060288),
+               (_treeBaseDuration += _child2.treeBaseDuration),
+               (_child2 = _child2.sibling);
+           completedWork.treeBaseDuration = _treeBaseDuration;
+@@ -11476,8 +11478,8 @@
+           )
+             (newChildLanes |=
+               _treeBaseDuration.lanes | _treeBaseDuration.childLanes),
+-              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 65011712),
+-              (subtreeFlags |= _treeBaseDuration.flags & 65011712),
++              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 66060288),
++              (subtreeFlags |= _treeBaseDuration.flags & 66060288),
+               (_treeBaseDuration.return = completedWork),
+               (_treeBaseDuration = _treeBaseDuration.sibling);
+       else if ((completedWork.mode & ProfileMode) !== NoMode) {
+@@ -15776,6 +15778,15 @@
+           break;
+         case 5:
+           resetHooksOnUnwind(unitOfWork);
++          // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++          // cursor to this fiber's own node before beginWork claims it again.
++          unitOfWork === hydrationParentFiber &&
++            (isHydrating
++              ? (popToNextHostParent(unitOfWork),
++                5 === unitOfWork.tag &&
++                  null != unitOfWork.stateNode &&
++                  (nextHydratableInstance = unitOfWork.stateNode))
++              : (popToNextHostParent(unitOfWork), (isHydrating = !0)));
+         default:
+           unwindInterruptedWork(current, unitOfWork),
+             (unitOfWork = workInProgress =
+diff --git a/dist/compiled/react-dom/cjs/react-dom-client.production.js b/dist/compiled/react-dom/cjs/react-dom-client.production.js
+index 755076a5cf15273f024c18fdc6a8805f1e36860b..13568d5e7cd008833ae9072a25c8267e00c462fd 100644
+--- a/dist/compiled/react-dom/cjs/react-dom-client.production.js
++++ b/dist/compiled/react-dom/cjs/react-dom-client.production.js
+@@ -2472,7 +2472,7 @@ function createWorkInProgress(current, pendingProps) {
+       (workInProgress.flags = 0),
+       (workInProgress.subtreeFlags = 0),
+       (workInProgress.deletions = null));
+-  workInProgress.flags = current.flags & 65011712;
++  workInProgress.flags = current.flags & 66060288;
+   workInProgress.childLanes = current.childLanes;
+   workInProgress.lanes = current.lanes;
+   workInProgress.child = current.child;
+@@ -2490,8 +2490,10 @@ function createWorkInProgress(current, pendingProps) {
+   workInProgress.refCleanup = current.refCleanup;
+   return workInProgress;
+ }
++// Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++// static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+ function resetWorkInProgress(workInProgress, renderLanes) {
+-  workInProgress.flags &= 65011714;
++  workInProgress.flags &= 66060290;
+   var current = workInProgress.alternate;
+   null === current
+     ? ((workInProgress.childLanes = 0),
+@@ -6995,7 +6997,7 @@ function updateSuspenseComponent(current, workInProgress, renderLanes) {
+         mode: "hidden",
+         children: nextProps.children
+       })),
+-      (nextProps.subtreeFlags = prevState.subtreeFlags & 65011712),
++      (nextProps.subtreeFlags = prevState.subtreeFlags & 66060288),
+       null !== digest
+         ? (nextPrimaryChildren = createWorkInProgress(
+             digest,
+@@ -7893,8 +7895,8 @@ function bubbleProperties(completedWork) {
+   if (didBailout)
+     for (var child$106 = completedWork.child; null !== child$106; )
+       (newChildLanes |= child$106.lanes | child$106.childLanes),
+-        (subtreeFlags |= child$106.subtreeFlags & 65011712),
+-        (subtreeFlags |= child$106.flags & 65011712),
++        (subtreeFlags |= child$106.subtreeFlags & 66060288),
++        (subtreeFlags |= child$106.flags & 66060288),
+         (child$106.return = completedWork),
+         (child$106 = child$106.sibling);
+   else
+@@ -11210,6 +11212,15 @@ function replaySuspendedUnitOfWork(unitOfWork) {
+       break;
+     case 5:
+       resetHooksOnUnwind(next);
++      // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++      // cursor to this fiber's own node before beginWork claims it again.
++      next === hydrationParentFiber &&
++        (isHydrating
++          ? (popToNextHostParent(next),
++            5 === next.tag &&
++              null != next.stateNode &&
++              (nextHydratableInstance = next.stateNode))
++          : (popToNextHostParent(next), (isHydrating = !0)));
+     default:
+       unwindInterruptedWork(current, next),
+         (next = workInProgress =
+diff --git a/dist/compiled/react-dom/cjs/react-dom-profiling.development.js b/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
+index 43d0363849598f796873fffaf33117d54b76de19..05c850ea866ecb886f22ccb4eb2dac168b84cf23 100644
+--- a/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
++++ b/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
+@@ -4103,7 +4103,7 @@
+           (workInProgress.deletions = null),
+           (workInProgress.actualDuration = -0),
+           (workInProgress.actualStartTime = -1.1));
+-      workInProgress.flags = current.flags & 65011712;
++      workInProgress.flags = current.flags & 66060288;
+       workInProgress.childLanes = current.childLanes;
+       workInProgress.lanes = current.lanes;
+       workInProgress.child = current.child;
+@@ -4140,8 +4140,10 @@
+       }
+       return workInProgress;
+     }
++    // Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++    // static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+     function resetWorkInProgress(workInProgress, renderLanes) {
+-      workInProgress.flags &= 65011714;
++      workInProgress.flags &= 66060290;
+       var current = workInProgress.alternate;
+       null === current
+         ? ((workInProgress.childLanes = 0),
+@@ -6844,7 +6846,7 @@
+           null;
+       hookTypesUpdateIndexDev = -1;
+       null !== current &&
+-        (current.flags & 65011712) !== (workInProgress.flags & 65011712) &&
++        (current.flags & 66060288) !== (workInProgress.flags & 66060288) &&
+         console.error(
+           "Internal React error: Expected static flag was missing. Please notify the React team."
+         );
+@@ -10195,7 +10197,7 @@
+             }
+           )),
+           (JSCompiler_object_inline_stack_2538.subtreeFlags =
+-            componentStack.subtreeFlags & 65011712),
++            componentStack.subtreeFlags & 66060288),
+           null !== JSCompiler_object_inline_componentStack_2539
+             ? (nextPrimaryChildren = createWorkInProgress(
+                 JSCompiler_object_inline_componentStack_2539,
+@@ -11471,8 +11473,8 @@
+ 
+           )
+             (newChildLanes |= _child2.lanes | _child2.childLanes),
+-              (subtreeFlags |= _child2.subtreeFlags & 65011712),
+-              (subtreeFlags |= _child2.flags & 65011712),
++              (subtreeFlags |= _child2.subtreeFlags & 66060288),
++              (subtreeFlags |= _child2.flags & 66060288),
+               (_treeBaseDuration += _child2.treeBaseDuration),
+               (_child2 = _child2.sibling);
+           completedWork.treeBaseDuration = _treeBaseDuration;
+@@ -11484,8 +11486,8 @@
+           )
+             (newChildLanes |=
+               _treeBaseDuration.lanes | _treeBaseDuration.childLanes),
+-              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 65011712),
+-              (subtreeFlags |= _treeBaseDuration.flags & 65011712),
++              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 66060288),
++              (subtreeFlags |= _treeBaseDuration.flags & 66060288),
+               (_treeBaseDuration.return = completedWork),
+               (_treeBaseDuration = _treeBaseDuration.sibling);
+       else if ((completedWork.mode & ProfileMode) !== NoMode) {
+@@ -15784,6 +15786,15 @@
+           break;
+         case 5:
+           resetHooksOnUnwind(unitOfWork);
++          // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++          // cursor to this fiber's own node before beginWork claims it again.
++          unitOfWork === hydrationParentFiber &&
++            (isHydrating
++              ? (popToNextHostParent(unitOfWork),
++                5 === unitOfWork.tag &&
++                  null != unitOfWork.stateNode &&
++                  (nextHydratableInstance = unitOfWork.stateNode))
++              : (popToNextHostParent(unitOfWork), (isHydrating = !0)));
+         default:
+           unwindInterruptedWork(current, unitOfWork),
+             (unitOfWork = workInProgress =
+diff --git a/dist/compiled/react-dom/cjs/react-dom-profiling.profiling.js b/dist/compiled/react-dom/cjs/react-dom-profiling.profiling.js
+index 85185b07d38d122ada8ed308523b181da102ccad..642546651ae7db3f541fad23e2065cae0d48e331 100644
+--- a/dist/compiled/react-dom/cjs/react-dom-profiling.profiling.js
++++ b/dist/compiled/react-dom/cjs/react-dom-profiling.profiling.js
+@@ -2559,7 +2559,7 @@ function createWorkInProgress(current, pendingProps) {
+       (workInProgress.deletions = null),
+       (workInProgress.actualDuration = -0),
+       (workInProgress.actualStartTime = -1.1));
+-  workInProgress.flags = current.flags & 65011712;
++  workInProgress.flags = current.flags & 66060288;
+   workInProgress.childLanes = current.childLanes;
+   workInProgress.lanes = current.lanes;
+   workInProgress.child = current.child;
+@@ -2579,8 +2579,10 @@ function createWorkInProgress(current, pendingProps) {
+   workInProgress.treeBaseDuration = current.treeBaseDuration;
+   return workInProgress;
+ }
++// Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++// static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+ function resetWorkInProgress(workInProgress, renderLanes) {
+-  workInProgress.flags &= 65011714;
++  workInProgress.flags &= 66060290;
+   var current = workInProgress.alternate;
+   null === current
+     ? ((workInProgress.childLanes = 0),
+@@ -7170,7 +7172,7 @@ function updateSuspenseComponent(current, workInProgress, renderLanes) {
+         mode: "hidden",
+         children: nextProps.children
+       })),
+-      (nextProps.subtreeFlags = prevState.subtreeFlags & 65011712),
++      (nextProps.subtreeFlags = prevState.subtreeFlags & 66060288),
+       null !== digest
+         ? (nextPrimaryChildren = createWorkInProgress(
+             digest,
+@@ -8090,8 +8092,8 @@ function bubbleProperties(completedWork) {
+ 
+       )
+         (newChildLanes |= child$111.lanes | child$111.childLanes),
+-          (subtreeFlags |= child$111.subtreeFlags & 65011712),
+-          (subtreeFlags |= child$111.flags & 65011712),
++          (subtreeFlags |= child$111.subtreeFlags & 66060288),
++          (subtreeFlags |= child$111.flags & 66060288),
+           (treeBaseDuration$110 += child$111.treeBaseDuration),
+           (child$111 = child$111.sibling);
+       completedWork.treeBaseDuration = treeBaseDuration$110;
+@@ -8103,8 +8105,8 @@ function bubbleProperties(completedWork) {
+       )
+         (newChildLanes |=
+           treeBaseDuration$110.lanes | treeBaseDuration$110.childLanes),
+-          (subtreeFlags |= treeBaseDuration$110.subtreeFlags & 65011712),
+-          (subtreeFlags |= treeBaseDuration$110.flags & 65011712),
++          (subtreeFlags |= treeBaseDuration$110.subtreeFlags & 66060288),
++          (subtreeFlags |= treeBaseDuration$110.flags & 66060288),
+           (treeBaseDuration$110.return = completedWork),
+           (treeBaseDuration$110 = treeBaseDuration$110.sibling);
+   else if (0 !== (completedWork.mode & 2)) {
+@@ -11814,6 +11816,15 @@ function replaySuspendedUnitOfWork(unitOfWork) {
+       break;
+     case 5:
+       resetHooksOnUnwind(next);
++      // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++      // cursor to this fiber's own node before beginWork claims it again.
++      next === hydrationParentFiber &&
++        (isHydrating
++          ? (popToNextHostParent(next),
++            5 === next.tag &&
++              null != next.stateNode &&
++              (nextHydratableInstance = next.stateNode))
++          : (popToNextHostParent(next), (isHydrating = !0)));
+     default:
+       unwindInterruptedWork(current, next),
+         (next = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-client.development.js b/dist/compiled/react-dom-experimental/cjs/react-dom-client.development.js
+index 00530847f2c96e18ef96e2b172ab1f0c5955e029..8bfa552751141bf8becdfcb8f3f5e7766c9b63a8 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-client.development.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-client.development.js
+@@ -4921,7 +4921,7 @@
+           (workInProgress.deletions = null),
+           (workInProgress.actualDuration = -0),
+           (workInProgress.actualStartTime = -1.1));
+-      workInProgress.flags = current.flags & 65011712;
++      workInProgress.flags = current.flags & 66060288;
+       workInProgress.childLanes = current.childLanes;
+       workInProgress.lanes = current.lanes;
+       workInProgress.child = current.child;
+@@ -4958,8 +4958,10 @@
+       }
+       return workInProgress;
+     }
++    // Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++    // static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+     function resetWorkInProgress(workInProgress, renderLanes) {
+-      workInProgress.flags &= 65011714;
++      workInProgress.flags &= 66060290;
+       var current = workInProgress.alternate;
+       null === current
+         ? ((workInProgress.childLanes = 0),
+@@ -7952,7 +7954,7 @@
+           null;
+       hookTypesUpdateIndexDev = -1;
+       null !== current &&
+-        (current.flags & 65011712) !== (workInProgress.flags & 65011712) &&
++        (current.flags & 66060288) !== (workInProgress.flags & 66060288) &&
+         console.error(
+           "Internal React error: Expected static flag was missing. Please notify the React team."
+         );
+@@ -11443,7 +11445,7 @@
+             }
+           )),
+           (JSCompiler_object_inline_stack_3160.subtreeFlags =
+-            componentStack.subtreeFlags & 65011712),
++            componentStack.subtreeFlags & 66060288),
+           null !== JSCompiler_object_inline_message_3158
+             ? (nextPrimaryChildren = createWorkInProgress(
+                 JSCompiler_object_inline_message_3158,
+@@ -12796,8 +12798,8 @@
+ 
+           )
+             (newChildLanes |= _child2.lanes | _child2.childLanes),
+-              (subtreeFlags |= _child2.subtreeFlags & 65011712),
+-              (subtreeFlags |= _child2.flags & 65011712),
++              (subtreeFlags |= _child2.subtreeFlags & 66060288),
++              (subtreeFlags |= _child2.flags & 66060288),
+               (_treeBaseDuration += _child2.treeBaseDuration),
+               (_child2 = _child2.sibling);
+           completedWork.treeBaseDuration = _treeBaseDuration;
+@@ -12809,8 +12811,8 @@
+           )
+             (newChildLanes |=
+               _treeBaseDuration.lanes | _treeBaseDuration.childLanes),
+-              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 65011712),
+-              (subtreeFlags |= _treeBaseDuration.flags & 65011712),
++              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 66060288),
++              (subtreeFlags |= _treeBaseDuration.flags & 66060288),
+               (_treeBaseDuration.return = completedWork),
+               (_treeBaseDuration = _treeBaseDuration.sibling);
+       else if ((completedWork.mode & ProfileMode) !== NoMode) {
+@@ -19477,6 +19479,15 @@
+           break;
+         case 5:
+           resetHooksOnUnwind(unitOfWork);
++          // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++          // cursor to this fiber's own node before beginWork claims it again.
++          unitOfWork === hydrationParentFiber &&
++            (isHydrating
++              ? (popToNextHostParent(unitOfWork),
++                5 === unitOfWork.tag &&
++                  null != unitOfWork.stateNode &&
++                  (nextHydratableInstance = unitOfWork.stateNode))
++              : (popToNextHostParent(unitOfWork), (isHydrating = !0)));
+         default:
+           unwindInterruptedWork(current, unitOfWork),
+             (unitOfWork = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-client.production.js b/dist/compiled/react-dom-experimental/cjs/react-dom-client.production.js
+index 1f7a79567a3e6ff140709894f70c266498e5110d..e3ceef2bebfd2eadef6336f2f8bed816de6bd961 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-client.production.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-client.production.js
+@@ -2560,7 +2560,7 @@ function createWorkInProgress(current, pendingProps) {
+       (workInProgress.flags = 0),
+       (workInProgress.subtreeFlags = 0),
+       (workInProgress.deletions = null));
+-  workInProgress.flags = current.flags & 65011712;
++  workInProgress.flags = current.flags & 66060288;
+   workInProgress.childLanes = current.childLanes;
+   workInProgress.lanes = current.lanes;
+   workInProgress.child = current.child;
+@@ -2578,8 +2578,10 @@ function createWorkInProgress(current, pendingProps) {
+   workInProgress.refCleanup = current.refCleanup;
+   return workInProgress;
+ }
++// Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++// static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+ function resetWorkInProgress(workInProgress, renderLanes) {
+-  workInProgress.flags &= 65011714;
++  workInProgress.flags &= 66060290;
+   var current = workInProgress.alternate;
+   null === current
+     ? ((workInProgress.childLanes = 0),
+@@ -7447,7 +7449,7 @@ function updateSuspenseComponent(current, workInProgress, renderLanes) {
+         mode: "hidden",
+         children: nextProps.children
+       })),
+-      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 65011712),
++      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 66060288),
+       null !== digest
+         ? (nextPrimaryChildren = createWorkInProgress(
+             digest,
+@@ -8384,8 +8386,8 @@ function bubbleProperties(completedWork) {
+   if (didBailout)
+     for (var child$115 = completedWork.child; null !== child$115; )
+       (newChildLanes |= child$115.lanes | child$115.childLanes),
+-        (subtreeFlags |= child$115.subtreeFlags & 65011712),
+-        (subtreeFlags |= child$115.flags & 65011712),
++        (subtreeFlags |= child$115.subtreeFlags & 66060288),
++        (subtreeFlags |= child$115.flags & 66060288),
+         (child$115.return = completedWork),
+         (child$115 = child$115.sibling);
+   else
+@@ -13180,6 +13182,15 @@ function replaySuspendedUnitOfWork(unitOfWork) {
+       break;
+     case 5:
+       resetHooksOnUnwind(next);
++      // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++      // cursor to this fiber's own node before beginWork claims it again.
++      next === hydrationParentFiber &&
++        (isHydrating
++          ? (popToNextHostParent(next),
++            5 === next.tag &&
++              null != next.stateNode &&
++              (nextHydratableInstance = next.stateNode))
++          : (popToNextHostParent(next), (isHydrating = !0)));
+     default:
+       unwindInterruptedWork(current, next),
+         (next = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.development.js b/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.development.js
+index ba87af29890227eeff25a3eb7ce8b3d604822227..adc2dce7bf48036078604faf5db60ac68f6d73f0 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.development.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.development.js
+@@ -4929,7 +4929,7 @@
+           (workInProgress.deletions = null),
+           (workInProgress.actualDuration = -0),
+           (workInProgress.actualStartTime = -1.1));
+-      workInProgress.flags = current.flags & 65011712;
++      workInProgress.flags = current.flags & 66060288;
+       workInProgress.childLanes = current.childLanes;
+       workInProgress.lanes = current.lanes;
+       workInProgress.child = current.child;
+@@ -4966,8 +4966,10 @@
+       }
+       return workInProgress;
+     }
++    // Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++    // static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+     function resetWorkInProgress(workInProgress, renderLanes) {
+-      workInProgress.flags &= 65011714;
++      workInProgress.flags &= 66060290;
+       var current = workInProgress.alternate;
+       null === current
+         ? ((workInProgress.childLanes = 0),
+@@ -7960,7 +7962,7 @@
+           null;
+       hookTypesUpdateIndexDev = -1;
+       null !== current &&
+-        (current.flags & 65011712) !== (workInProgress.flags & 65011712) &&
++        (current.flags & 66060288) !== (workInProgress.flags & 66060288) &&
+         console.error(
+           "Internal React error: Expected static flag was missing. Please notify the React team."
+         );
+@@ -11451,7 +11453,7 @@
+             }
+           )),
+           (JSCompiler_object_inline_stack_3165.subtreeFlags =
+-            componentStack.subtreeFlags & 65011712),
++            componentStack.subtreeFlags & 66060288),
+           null !== JSCompiler_object_inline_message_3163
+             ? (nextPrimaryChildren = createWorkInProgress(
+                 JSCompiler_object_inline_message_3163,
+@@ -12804,8 +12806,8 @@
+ 
+           )
+             (newChildLanes |= _child2.lanes | _child2.childLanes),
+-              (subtreeFlags |= _child2.subtreeFlags & 65011712),
+-              (subtreeFlags |= _child2.flags & 65011712),
++              (subtreeFlags |= _child2.subtreeFlags & 66060288),
++              (subtreeFlags |= _child2.flags & 66060288),
+               (_treeBaseDuration += _child2.treeBaseDuration),
+               (_child2 = _child2.sibling);
+           completedWork.treeBaseDuration = _treeBaseDuration;
+@@ -12817,8 +12819,8 @@
+           )
+             (newChildLanes |=
+               _treeBaseDuration.lanes | _treeBaseDuration.childLanes),
+-              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 65011712),
+-              (subtreeFlags |= _treeBaseDuration.flags & 65011712),
++              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 66060288),
++              (subtreeFlags |= _treeBaseDuration.flags & 66060288),
+               (_treeBaseDuration.return = completedWork),
+               (_treeBaseDuration = _treeBaseDuration.sibling);
+       else if ((completedWork.mode & ProfileMode) !== NoMode) {
+@@ -19485,6 +19487,15 @@
+           break;
+         case 5:
+           resetHooksOnUnwind(unitOfWork);
++          // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++          // cursor to this fiber's own node before beginWork claims it again.
++          unitOfWork === hydrationParentFiber &&
++            (isHydrating
++              ? (popToNextHostParent(unitOfWork),
++                5 === unitOfWork.tag &&
++                  null != unitOfWork.stateNode &&
++                  (nextHydratableInstance = unitOfWork.stateNode))
++              : (popToNextHostParent(unitOfWork), (isHydrating = !0)));
+         default:
+           unwindInterruptedWork(current, unitOfWork),
+             (unitOfWork = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.profiling.js b/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.profiling.js
+index 8c82c27064dcd3538105e677d375b8f43ff70bc7..3ca2c17cdcec347be2f807fad1795a47b543804d 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.profiling.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-profiling.profiling.js
+@@ -2822,7 +2822,7 @@ function createWorkInProgress(current, pendingProps) {
+       (workInProgress.deletions = null),
+       (workInProgress.actualDuration = -0),
+       (workInProgress.actualStartTime = -1.1));
+-  workInProgress.flags = current.flags & 65011712;
++  workInProgress.flags = current.flags & 66060288;
+   workInProgress.childLanes = current.childLanes;
+   workInProgress.lanes = current.lanes;
+   workInProgress.child = current.child;
+@@ -2842,8 +2842,10 @@ function createWorkInProgress(current, pendingProps) {
+   workInProgress.treeBaseDuration = current.treeBaseDuration;
+   return workInProgress;
+ }
++// Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++// static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+ function resetWorkInProgress(workInProgress, renderLanes) {
+-  workInProgress.flags &= 65011714;
++  workInProgress.flags &= 66060290;
+   var current = workInProgress.alternate;
+   null === current
+     ? ((workInProgress.childLanes = 0),
+@@ -7910,7 +7912,7 @@ function updateSuspenseComponent(current, workInProgress, renderLanes) {
+         mode: "hidden",
+         children: nextProps.children
+       })),
+-      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 65011712),
++      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 66060288),
+       null !== digest
+         ? (nextPrimaryChildren = createWorkInProgress(
+             digest,
+@@ -8867,8 +8869,8 @@ function bubbleProperties(completedWork) {
+ 
+       )
+         (newChildLanes |= child$125.lanes | child$125.childLanes),
+-          (subtreeFlags |= child$125.subtreeFlags & 65011712),
+-          (subtreeFlags |= child$125.flags & 65011712),
++          (subtreeFlags |= child$125.subtreeFlags & 66060288),
++          (subtreeFlags |= child$125.flags & 66060288),
+           (treeBaseDuration$124 += child$125.treeBaseDuration),
+           (child$125 = child$125.sibling);
+       completedWork.treeBaseDuration = treeBaseDuration$124;
+@@ -8880,8 +8882,8 @@ function bubbleProperties(completedWork) {
+       )
+         (newChildLanes |=
+           treeBaseDuration$124.lanes | treeBaseDuration$124.childLanes),
+-          (subtreeFlags |= treeBaseDuration$124.subtreeFlags & 65011712),
+-          (subtreeFlags |= treeBaseDuration$124.flags & 65011712),
++          (subtreeFlags |= treeBaseDuration$124.subtreeFlags & 66060288),
++          (subtreeFlags |= treeBaseDuration$124.flags & 66060288),
+           (treeBaseDuration$124.return = completedWork),
+           (treeBaseDuration$124 = treeBaseDuration$124.sibling);
+   else if (0 !== (completedWork.mode & 2)) {
+@@ -14705,6 +14707,15 @@ function replaySuspendedUnitOfWork(unitOfWork) {
+       break;
+     case 5:
+       resetHooksOnUnwind(next);
++      // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++      // cursor to this fiber's own node before beginWork claims it again.
++      next === hydrationParentFiber &&
++        (isHydrating
++          ? (popToNextHostParent(next),
++            5 === next.tag &&
++              null != next.stateNode &&
++              (nextHydratableInstance = next.stateNode))
++          : (popToNextHostParent(next), (isHydrating = !0)));
+     default:
+       unwindInterruptedWork(current, next),
+         (next = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.development.js b/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.development.js
+index 38e4149c03dd00476195c7f9d886953551907ba3..45bcd4865860a133d654b2742a574d46909239f0 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.development.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.development.js
+@@ -4962,7 +4962,7 @@
+           (workInProgress.deletions = null),
+           (workInProgress.actualDuration = -0),
+           (workInProgress.actualStartTime = -1.1));
+-      workInProgress.flags = current.flags & 65011712;
++      workInProgress.flags = current.flags & 66060288;
+       workInProgress.childLanes = current.childLanes;
+       workInProgress.lanes = current.lanes;
+       workInProgress.child = current.child;
+@@ -4999,8 +4999,10 @@
+       }
+       return workInProgress;
+     }
++    // Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++    // static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+     function resetWorkInProgress(workInProgress, renderLanes) {
+-      workInProgress.flags &= 65011714;
++      workInProgress.flags &= 66060290;
+       var current = workInProgress.alternate;
+       null === current
+         ? ((workInProgress.childLanes = 0),
+@@ -7993,7 +7995,7 @@
+           null;
+       hookTypesUpdateIndexDev = -1;
+       null !== current &&
+-        (current.flags & 65011712) !== (workInProgress.flags & 65011712) &&
++        (current.flags & 66060288) !== (workInProgress.flags & 66060288) &&
+         console.error(
+           "Internal React error: Expected static flag was missing. Please notify the React team."
+         );
+@@ -11484,7 +11486,7 @@
+             }
+           )),
+           (JSCompiler_object_inline_stack_3194.subtreeFlags =
+-            componentStack.subtreeFlags & 65011712),
++            componentStack.subtreeFlags & 66060288),
+           null !== JSCompiler_object_inline_message_3192
+             ? (nextPrimaryChildren = createWorkInProgress(
+                 JSCompiler_object_inline_message_3192,
+@@ -12837,8 +12839,8 @@
+ 
+           )
+             (newChildLanes |= _child2.lanes | _child2.childLanes),
+-              (subtreeFlags |= _child2.subtreeFlags & 65011712),
+-              (subtreeFlags |= _child2.flags & 65011712),
++              (subtreeFlags |= _child2.subtreeFlags & 66060288),
++              (subtreeFlags |= _child2.flags & 66060288),
+               (_treeBaseDuration += _child2.treeBaseDuration),
+               (_child2 = _child2.sibling);
+           completedWork.treeBaseDuration = _treeBaseDuration;
+@@ -12850,8 +12852,8 @@
+           )
+             (newChildLanes |=
+               _treeBaseDuration.lanes | _treeBaseDuration.childLanes),
+-              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 65011712),
+-              (subtreeFlags |= _treeBaseDuration.flags & 65011712),
++              (subtreeFlags |= _treeBaseDuration.subtreeFlags & 66060288),
++              (subtreeFlags |= _treeBaseDuration.flags & 66060288),
+               (_treeBaseDuration.return = completedWork),
+               (_treeBaseDuration = _treeBaseDuration.sibling);
+       else if ((completedWork.mode & ProfileMode) !== NoMode) {
+@@ -19700,6 +19702,15 @@
+           break;
+         case 5:
+           resetHooksOnUnwind(unitOfWork);
++          // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++          // cursor to this fiber's own node before beginWork claims it again.
++          unitOfWork === hydrationParentFiber &&
++            (isHydrating
++              ? (popToNextHostParent(unitOfWork),
++                5 === unitOfWork.tag &&
++                  null != unitOfWork.stateNode &&
++                  (nextHydratableInstance = unitOfWork.stateNode))
++              : (popToNextHostParent(unitOfWork), (isHydrating = !0)));
+         default:
+           unwindInterruptedWork(current, unitOfWork),
+             (unitOfWork = workInProgress =
+diff --git a/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.production.js b/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.production.js
+index 424eff78c13ddf87dca5ca385afdd6575519cd65..75be40d32a22fd9cc241351aee9de2a8d177223e 100644
+--- a/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.production.js
++++ b/dist/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.production.js
+@@ -2646,7 +2646,7 @@ function createWorkInProgress(current, pendingProps) {
+       (workInProgress.flags = 0),
+       (workInProgress.subtreeFlags = 0),
+       (workInProgress.deletions = null));
+-  workInProgress.flags = current.flags & 65011712;
++  workInProgress.flags = current.flags & 66060288;
+   workInProgress.childLanes = current.childLanes;
+   workInProgress.lanes = current.lanes;
+   workInProgress.child = current.child;
+@@ -2664,8 +2664,10 @@ function createWorkInProgress(current, pendingProps) {
+   workInProgress.refCleanup = current.refCleanup;
+   return workInProgress;
+ }
++// Backport of facebook/react#35518 (React 19.3.0): Forked (1048576) is a
++// static flag, so a fiber replayed mid-hydration keeps its useId tree path.
+ function resetWorkInProgress(workInProgress, renderLanes) {
+-  workInProgress.flags &= 65011714;
++  workInProgress.flags &= 66060290;
+   var current = workInProgress.alternate;
+   null === current
+     ? ((workInProgress.childLanes = 0),
+@@ -7533,7 +7535,7 @@ function updateSuspenseComponent(current, workInProgress, renderLanes) {
+         mode: "hidden",
+         children: nextProps.children
+       })),
+-      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 65011712),
++      (nextProps.subtreeFlags = nextFallbackChildren.subtreeFlags & 66060288),
+       null !== digest
+         ? (nextPrimaryChildren = createWorkInProgress(
+             digest,
+@@ -8470,8 +8472,8 @@ function bubbleProperties(completedWork) {
+   if (didBailout)
+     for (var child$115 = completedWork.child; null !== child$115; )
+       (newChildLanes |= child$115.lanes | child$115.childLanes),
+-        (subtreeFlags |= child$115.subtreeFlags & 65011712),
+-        (subtreeFlags |= child$115.flags & 65011712),
++        (subtreeFlags |= child$115.subtreeFlags & 66060288),
++        (subtreeFlags |= child$115.flags & 66060288),
+         (child$115.return = completedWork),
+         (child$115 = child$115.sibling);
+   else
+@@ -13452,6 +13454,15 @@ function replaySuspendedUnitOfWork(unitOfWork) {
+       break;
+     case 5:
+       resetHooksOnUnwind(next);
++      // Backport of facebook/react#35494 (React 19.3.0): rewind the hydration
++      // cursor to this fiber's own node before beginWork claims it again.
++      next === hydrationParentFiber &&
++        (isHydrating
++          ? (popToNextHostParent(next),
++            5 === next.tag &&
++              null != next.stateNode &&
++              (nextHydratableInstance = next.stateNode))
++          : (popToNextHostParent(next), (isHydrating = !0)));
+     default:
+       unwindInterruptedWork(current, next),
+         (next = workInProgress =

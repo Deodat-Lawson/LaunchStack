@@ -43,6 +43,7 @@ function folderColor(name: string): string {
 function mapDocType(doc: DocumentType): SourceTypeId {
     const t = getDocumentDisplayType(doc);
     if (t === "audio") return "audio";
+    if (t === "artifact") return "artifact";
     return "doc";
 }
 

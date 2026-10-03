@@ -79,6 +79,7 @@ import {
 } from "./paneLayout";
 import * as sourceApi from "./sourceApi";
 import { SOURCE_META, demotedFeatureHref, resolveStudioFeature, settingsSectionOf } from "./types";
+import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
     CitationHighlight,
@@ -114,12 +115,13 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     employees: "/employer/settings#people",
     settings: "/employer/settings",
     metadata: "/employer/documents?feature=metadata",
-    "marketing-pipeline": "/employer/tools/growth/brand/campaigns",
+    "marketing-pipeline": "/employer/documents?feature=growth&at=%2Fbrand%2Fcampaigns",
     "repo-explainer": "/employer/tools/repo-explainer",
-    distribution: "/employer/tools/growth/prospects",
-    prospects: "/employer/tools/growth/prospects",
-    growth: "/employer/tools/growth",
-    vantage: "/employer/tools/vantage",
+    distribution: "/employer/documents?feature=growth&at=%2Fprospects",
+    prospects: "/employer/documents?feature=growth&at=%2Fprospects",
+    growth: "/employer/documents?feature=growth",
+    vantage: "/employer/documents?feature=vantage",
+    proposals: "/employer/documents?feature=proposals",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
     meetings: "/employer/documents?feature=meetings",
@@ -127,6 +129,21 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
 
 /** What an empty pane offers first, before "All apps". */
 const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
+
+/**
+ * Tools mount the first time their tab is shown. A restored layout can bring
+ * back Growth, Proposals and Vantage behind the tab in front, and each would
+ * otherwise load its data on every visit to the workspace for a screen
+ * nobody is looking at. Once shown, a tool stays mounted like any tab.
+ */
+const MOUNT_ON_FIRST_SHOW = new Set([
+    "growth",
+    "proposals",
+    "vantage",
+    "investors",
+    "draft",
+    "rewrite",
+]);
 
 /**
  * Tabs a saved layout may bring back. The mindmap editor is left behind: it
@@ -138,15 +155,12 @@ function isRestorableTab(id: string): boolean {
 }
 
 /**
- * Feature ids that used to be Studio entries of their own. Old `?feature=`
- * links land where the thing lives now: Growth's areas, and — for the two
- * imports that were tools — their tabs in Add a source.
+ * Feature ids that used to be Studio entries of their own and now live
+ * outside the Studio: the two imports that were tools are tabs of Add a
+ * source. (Ids that became a place inside a tool — Brand, Prospects — are
+ * `TOOL_ALIASES` and open that tool's tab there.)
  */
 const RETIRED_FEATURE_HREFS: Record<string, string> = {
-    marketing: "/employer/tools/growth/brand/campaigns",
-    distribution: "/employer/tools/growth/prospects",
-    prospects: "/employer/tools/growth/prospects",
-    brand: "/employer/tools/growth/brand",
     artifacts: "/employer/documents?add=1&tab=artifact",
     "agent-sessions": "/employer/documents?add=1&tab=agent-sessions",
 };
@@ -514,6 +528,28 @@ export function WorkspaceShell() {
     const [openAgentRequest, setOpenAgentRequest] = useState<{ key: string; nonce: number } | null>(
         null
     );
+    // Where a tool's tab should go next — `?feature=growth&at=…`, the
+    // palette's Brand row, a history row, a link from another tool. Keyed by
+    // tool; the tab consumes its request, so reopening the tab later starts
+    // where the person left it rather than replaying an old request.
+    const [toolRequests, setToolRequests] = useState<
+        Partial<Record<string, { at: string; nonce: number }>>
+    >({});
+    const toolRequestNonce = useRef(0);
+    const shownTools = useRef(new Set<string>());
+    const requestToolLocation = useCallback((toolId: string, at: string) => {
+        toolRequestNonce.current += 1;
+        const nonce = toolRequestNonce.current;
+        setToolRequests(prev => ({ ...prev, [toolId]: { at, nonce } }));
+    }, []);
+    const consumeToolRequest = useCallback((toolId: string, nonce: number) => {
+        setToolRequests(prev => {
+            if (prev[toolId]?.nonce !== nonce) return prev;
+            const next = { ...prev };
+            delete next[toolId];
+            return next;
+        });
+    }, []);
 
     // The roster: one fetch, shared by the picker, `@` completion and the
     // transcript's attribution of stored turns.
@@ -1316,21 +1352,18 @@ export function WorkspaceShell() {
 
     /**
      * Every way of picking an app ends here: the picker, the Studio menu, the
-     * command palette, a keyboard shortcut and `?feature=`. One of three
-     * things happens, and never nothing: the app opens in a tab, a separate
-     * app is navigated to, or — for the palette rows that are shortcuts to
-     * somewhere else entirely — we follow that destination.
+     * command palette, a keyboard shortcut and `?feature=`. The app opens in
+     * a tab — every Studio app does, tools with screens of their own
+     * included. Ids that name a place inside a tool (Brand, Prospects) open
+     * that tool there; the palette rows that are shortcuts to somewhere else
+     * entirely follow that destination.
      */
     const expandFeature = useCallback(
-        (featureId: string, groupId?: string) => {
+        (requestedId: string, groupId?: string) => {
+            const alias = TOOL_ALIASES[requestedId];
+            if (alias) requestToolLocation(alias.toolId, alias.at);
+            const featureId = alias?.toolId ?? requestedId;
             const feature = resolveStudioFeature(featureId);
-            // A separate app with its own routes and chrome. Navigate; a tab
-            // cannot hold a route tree.
-            if (feature?.external && feature.href) {
-                setStudioOpen(false);
-                router.push(feature.href);
-                return;
-            }
             if (!feature) {
                 // Retired ids and palette rows that point outside Studio.
                 const href = RETIRED_FEATURE_HREFS[featureId] ?? demotedFeatureHref(featureId);
@@ -1353,9 +1386,18 @@ export function WorkspaceShell() {
             setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
         },
-        [can, router, setActiveFeatureId]
+        [can, router, setActiveFeatureId, requestToolLocation]
     );
     expandFeatureRef.current = expandFeature;
+
+    /** A tool's tab, at a place inside it: "/prospects/companies/12". */
+    const openTool = useCallback(
+        (toolId: string, at: string) => {
+            requestToolLocation(toolId, at);
+            expandFeature(toolId);
+        },
+        [expandFeature, requestToolLocation]
+    );
 
     /**
      * An app in a pane beside what is showing — ⌘-click in Studio, or its
@@ -1365,7 +1407,7 @@ export function WorkspaceShell() {
     const openFeatureBeside = useCallback(
         (featureId: string) => {
             const feature = resolveStudioFeature(featureId);
-            if (compactViewport || !feature || feature.external || !can(feature.requires)) {
+            if (compactViewport || !feature || !can(feature.requires)) {
                 expandFeature(featureId);
                 return;
             }
@@ -1406,9 +1448,16 @@ export function WorkspaceShell() {
                 expandFeature("settings");
                 return;
             }
+            // A tool's screen — its old `/employer/tools/…` URL included —
+            // is its tab here, not a page to leave for.
+            const target = toolTargetFromHref(href);
+            if (target && resolveStudioFeature(target.toolId)) {
+                openTool(target.toolId, target.at);
+                return;
+            }
             router.push(href);
         },
-        [expandFeature, router]
+        [expandFeature, openTool, router]
     );
 
     /**
@@ -1451,7 +1500,7 @@ export function WorkspaceShell() {
 
     /**
      * Show a tab. Studio apps go through `expandFeature`, which knows about
-     * permissions, external apps and retired ids; a source is not in that
+     * permissions, places inside tools and retired ids; a source is not in that
      * registry and simply becomes the visible tab of its column.
      */
     const selectTab = useCallback(
@@ -1527,6 +1576,8 @@ export function WorkspaceShell() {
     // another app (Proposals, for one) hands a question about the sources to
     // the workspace without owning a chat of its own.
     const askParam = searchParams.get("ask");
+    // `?feature=<tool>&at=<path>` — a tool's tab at one of its screens.
+    const atParam = searchParams.get("at");
     useEffect(() => {
         if (!featureParam && !addParam && !connectorParam && !continueParam && !askParam) return;
         if (legacyRedirect) return;
@@ -1536,17 +1587,11 @@ export function WorkspaceShell() {
         }
         if (featureParam) {
             const feature = resolveStudioFeature(featureParam);
-            if (feature?.external && feature.href) {
-                // A separate app: hand over to its route and stop here. Falling
-                // through would strip the param with a second navigation to this
-                // page, which cancels the first.
-                router.replace(feature.href);
-                return;
-            }
             // A gated app must not be dropped just because permissions have
             // not landed. Wait for them — the effect re-runs — but only for
             // the feature param, so a connector return still toasts on time.
             if (feature?.requires && !permissionsLoaded) return;
+            if (feature && atParam) requestToolLocation(featureParam, atParam);
             expandFeature(featureParam);
         }
         if (addParam) {
@@ -1587,6 +1632,7 @@ export function WorkspaceShell() {
         }
         const params = new URLSearchParams(searchParams.toString());
         params.delete("feature");
+        params.delete("at");
         params.delete("add");
         params.delete("tab");
         params.delete("connector");
@@ -1603,9 +1649,11 @@ export function WorkspaceShell() {
         connectorResultParam,
         continueParam,
         askParam,
+        atParam,
         legacyRedirect,
         permissionsLoaded,
         expandFeature,
+        requestToolLocation,
         startContinuation,
         seedComposer,
         router,
@@ -2069,7 +2117,7 @@ export function WorkspaceShell() {
                                 onNewChat: startNewChat,
                                 onResumeSession: resumeSession,
                                 onOpenRun: entry => {
-                                    if (entry.href) router.push(entry.href);
+                                    if (entry.href) navigateStudio(entry.href);
                                 },
                                 onRenameSession: handleRenameSession,
                                 onDeleteSession: handleDeleteSession,
@@ -2155,7 +2203,7 @@ export function WorkspaceShell() {
                             onNewChat: startNewChat,
                             onResumeSession: resumeSession,
                             onOpenRun: entry => {
-                                if (entry.href) router.push(entry.href);
+                                if (entry.href) navigateStudio(entry.href);
                             },
                             onRenameSession: handleRenameSession,
                             onDeleteSession: handleDeleteSession,
@@ -2254,6 +2302,10 @@ export function WorkspaceShell() {
                     const paneGroup = groupOf(layout, paneId);
                     const paneFocused =
                         paneGroup?.id === layout.activeGroupId && paneGroup.activeId === paneId;
+                    if (paneGroup?.activeId === paneId) shownTools.current.add(paneId);
+                    if (MOUNT_ON_FIRST_SHOW.has(paneId) && !shownTools.current.has(paneId)) {
+                        return null;
+                    }
                     return paneId === "chat" ? (
                         <AskPanel
                             leadingChromeInsetPx={0}
@@ -2367,6 +2419,16 @@ export function WorkspaceShell() {
                                         openAdd("paste");
                                     },
                                 },
+                                tool: {
+                                    // Hidden tabs stay mounted; only the
+                                    // focused one may own the keyboard.
+                                    active: paneFocused,
+                                    request: toolRequests[paneId] ?? null,
+                                    storageScope: layoutScope,
+                                    openTool,
+                                    openHref: navigateStudio,
+                                    consumeRequest: nonce => consumeToolRequest(paneId, nonce),
+                                },
                             }}
                         />
                     );
@@ -2433,7 +2495,7 @@ export function WorkspaceShell() {
                     // As the History tab does: a chat reopens, a run opens
                     // its own surface.
                     if (HISTORY_KIND_META[entry.kind].resumable) resumeSession(entry.refId);
-                    else if (entry.href) router.push(entry.href);
+                    else if (entry.href) navigateStudio(entry.href);
                 }}
                 onPickSource={id => {
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));

@@ -27,41 +27,10 @@ export const STUDIO: BackTarget = { href: "/employer/documents", label: "Studio"
  * page goes to the company list rather than to the tool's home.
  */
 const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
-    {
-        prefix: "/employer/tools/growth/prospects/companies/",
-        target: { href: "/employer/tools/growth/prospects/companies", label: "Companies" },
-    },
-    {
-        prefix: "/employer/tools/growth/prospects/",
-        target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
-    },
-    {
-        prefix: "/employer/tools/growth/brand/",
-        target: { href: "/employer/tools/growth/brand", label: "Brand" },
-    },
-    // Vantage's screens all hang off its overview, which is a real page.
-    {
-        prefix: "/employer/tools/vantage/",
-        target: { href: "/employer/tools/vantage", label: "Vantage" },
-    },
-    {
-        prefix: "/employer/tools/proposals/write/",
-        target: { href: "/employer/tools/proposals/write", label: "Proposals" },
-    },
-    {
-        prefix: "/employer/tools/proposals/",
-        target: { href: "/employer/tools/proposals", label: "Proposals" },
-    },
-    // Growth has no home of its own: `/employer/tools/growth` redirects to
-    // Brand. Pointing its halves at it sent Brand back to Brand and Prospects
-    // sideways into Brand, so above Brand and Prospects is the Studio.
-    { prefix: "/employer/tools/growth/", target: STUDIO },
-    // `/employer/tools/prospects/*` is the old location, kept as a redirect
-    // shim. Send it to where Prospects actually lives now.
-    {
-        prefix: "/employer/tools/prospects",
-        target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
-    },
+    // No tool is here. Growth, Proposals and Vantage were pages with their
+    // own sections once; they are tabs of the workspace now, their old URLs
+    // only redirect into the tab, and "back" inside a tool is the tab's own
+    // history (components/tool-app).
     { prefix: "/employer/documents/", target: STUDIO },
     { prefix: "/employer/mindmap/", target: STUDIO },
 ];
@@ -94,11 +63,12 @@ export function backTargetFor(pathname: string): BackTarget | null {
 
     for (const { prefix, target } of SECTION_PARENTS) {
         // `!==` guards the section's own landing page, which must not point at
-        // itself — /employer/tools/prospects falls through to the Studio.
+        // itself.
         if (path.startsWith(prefix) && path !== target.href) return target;
     }
 
     // Anything else is one level below the Studio: settings, employees,
-    // statistics, a tool's landing page. Up is the Studio.
+    // statistics, an old tool page on its way into the Studio. Up is the
+    // Studio.
     return STUDIO;
 }

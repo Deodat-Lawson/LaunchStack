@@ -89,7 +89,7 @@ export function runIsLive(run: RunDto | null): boolean {
 /**
  * A run is visible work: one row per source as it finishes, then the later
  * stages. The same rows become the run's yield table afterwards. Closing the
- * sheet leaves the run going; the rail keeps a count ticking.
+ * sheet leaves the run going; the bar keeps a count ticking.
  */
 export function RunSheet() {
     const { activeRun, runSheetOpen, closeRunSheet, noteRunFinished, segment } = useProspects();

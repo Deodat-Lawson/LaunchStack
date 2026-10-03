@@ -1047,16 +1047,14 @@ function PipelineEmpty({ hasText, isProcessing, selectedCount }: PipelineEmptyPr
     } else if (!hasText) {
         title = "Paste a ";
         accent = "source";
-        sub =
-            "Drop in the text you want to rewrite using the source field on the left, then run the rewrite.";
+        sub = "Drop the text you want to rewrite into the source field, then run the rewrite.";
     } else if (selectedCount === 0) {
         title = "Pick a ";
         accent = "section";
-        sub =
-            "Select at least one section in the left rail. Drift only rewrites the parts you ask for.";
+        sub = "Select at least one section. Drift only rewrites the parts you ask for.";
     } else {
         sub =
-            "Adjust the instruction and presets on the left, then click Run rewrite. Drift will lay the proposal out side-by-side with the source.";
+            "Adjust the instruction and presets, then click Run rewrite. Drift will lay the proposal out side-by-side with the source.";
     }
 
     return (
@@ -1138,7 +1136,7 @@ function ReviewRail({
                             lineHeight: 1.5,
                         }}
                     >
-                        No sections yet — paste source text on the left to get started.
+                        No sections yet — paste source text to get started.
                     </p>
                 ) : (
                     sections.map(sec => {

@@ -37,7 +37,7 @@ export function AccountsScreen() {
                     {accounts.map(a => (
                         <div
                             key={a.platform}
-                            className="border-line-2 grid gap-3 border-t px-4 py-4 first:border-t-0 md:grid-cols-[200px_minmax(0,1fr)]"
+                            className="border-line-2 @max-md:grid-cols-1 grid grid-cols-[200px_minmax(0,1fr)] gap-3 border-t px-4 py-4 first:border-t-0"
                         >
                             <div className="flex items-start gap-3">
                                 <NetworkMark

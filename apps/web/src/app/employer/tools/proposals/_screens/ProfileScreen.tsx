@@ -57,8 +57,8 @@ function FactRow({
         }
     };
     return (
-        <div className="border-line-2 grid gap-1 border-t px-4 py-3 first:border-t-0 md:grid-cols-[180px_minmax(0,1fr)_auto] md:gap-4">
-            <div className="text-ink-3 text-xs md:pt-0.5">
+        <div className="border-line-2 @max-md:grid-cols-1 @max-md:gap-y-1 grid grid-cols-[180px_minmax(0,1fr)_auto] gap-x-4 gap-y-4 border-t px-4 py-3 first:border-t-0">
+            <div className="text-ink-3 @max-md:pt-0 pt-0.5 text-xs">
                 {fact.label}
                 {fact.source === "manual" && <span className="ml-1">· edited</span>}
             </div>
@@ -249,7 +249,7 @@ export function ProfileScreen() {
                                         );
                                     }}
                                 >
-                                    <div className="grid gap-1.5 md:grid-cols-[180px_minmax(0,1fr)]">
+                                    <div className="@max-md:grid-cols-1 grid grid-cols-[180px_minmax(0,1fr)] gap-1.5">
                                         <div className="grid gap-1">
                                             <Label htmlFor="fact-label" className="text-xs">
                                                 Label

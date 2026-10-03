@@ -100,7 +100,7 @@ export function TopicCard({
                 ) : (
                     <StatusWord tone="neutral">Kept</StatusWord>
                 )}
-                <label className="text-ink-3 hidden items-center gap-1.5 text-[11.5px] sm:inline-flex">
+                <label className="text-ink-3 @max-sm:hidden inline-flex items-center gap-1.5 text-[11.5px]">
                     <Switch
                         checked={topic.shared}
                         onCheckedChange={onShare}

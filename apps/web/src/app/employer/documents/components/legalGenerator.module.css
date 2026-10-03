@@ -141,6 +141,24 @@
     flex-direction: column;
 }
 
+/* Templated Drafts' library screens (New document, My documents) inside the
+   tool frame: the theme grows with the page instead of clipping to the tab,
+   so the frame's scroller scrolls it — and puts the scroll back on Back and
+   Forward, as it does for every tool. Still at least the tab's height, so
+   the background reaches the bottom of a short page. */
+.rootFlow {
+    height: auto;
+    min-height: 100%;
+}
+.rootFlow > .content {
+    height: auto;
+    min-height: 100%;
+}
+.rootFlow .libContent {
+    flex: 1 0 auto;
+    overflow: visible;
+}
+
 /* ---------------- Reusable surface + controls ---------------- */
 .panel {
     background: var(--panel);
@@ -225,6 +243,12 @@
     color: var(--ink-2);
     line-height: 1.55;
     margin: 0;
+}
+/* Rewrite's hero title sits in a tab, so it scales with the tab's width
+   (the tool frame's scroller is the container), not the window's: a Rewrite
+   tab in a third of a wide screen gets the small end of the clamp. */
+.rewriteTitle {
+    font-size: clamp(28px, 4cqi, 40px);
 }
 
 /* Hero header — vertical title stack with consistent rhythm */
@@ -321,12 +345,20 @@
     gap: 14px;
     width: 100%;
 }
-@media (max-width: 1100px) {
+/* By the width of the tab the library sits in (the tool frame's scroller is
+   the container), not the window's: a tab in a third of the screen gets the
+   narrow layout. Same steps as the frame's @max-lg / @max-md / @max-sm. */
+@container (max-width: 879px) {
     .libGrid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-@media (max-width: 640px) {
+@container (max-width: 639px) {
+    .libContent {
+        padding: 16px 16px 48px;
+    }
+}
+@container (max-width: 519px) {
     .libGrid {
         grid-template-columns: 1fr;
     }
@@ -2139,13 +2171,21 @@
     color: oklch(0.85 0.12 25);
 }
 
-/* Responsive — collapse rails on narrow viewports */
-@media (max-width: 1180px) {
+/* Responsive — collapse rails when the workflow itself is narrow. These are
+   container queries, not media queries: the workflow runs in a Rewrite tab
+   and in Growth's refine sheet, and either can be narrow on a wide screen.
+   The query container is the theme wrapper's `.content` around the
+   workflow (matched by `:has`, so no other user of `.content` becomes one),
+   so the rails fold by the workflow's own width wherever it is drawn. */
+.content:has(> * > .rwsWorkspace) {
+    container-type: inline-size;
+}
+@container (max-width: 1180px) {
     .rwsWorkspace {
         grid-template-columns: 320px 1fr 320px;
     }
 }
-@media (max-width: 980px) {
+@container (max-width: 980px) {
     .rwsWorkspace {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr auto;
@@ -2203,6 +2243,8 @@
     font-size: 13px;
     color: var(--ink-2);
     min-width: 0;
+    /* One line however narrow the tab: the last crumb ellipsises instead. */
+    white-space: nowrap;
 }
 .rdCrumbsSep {
     color: var(--ink-4);
@@ -2402,19 +2444,30 @@
     overflow: hidden;
     background: color-mix(in oklch, var(--bg) 30%, transparent);
 }
+/* The title and the actions share a row while they fit and wrap onto two
+   when they do not — a document column beside the Fields pane in a tool tab
+   is narrower than the window suggests, and a grid row clipped the actions
+   off the edge of the tab. */
 .rdDocHead {
     padding: 14px 24px 10px;
     border-bottom: 1px solid var(--line-2);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
     align-items: center;
     flex-shrink: 0;
 }
+/* The title block (title row + meta) takes the row the actions share; the
+   status badge drops under the title before the title is cut short. */
+.rdDocHead > :first-child {
+    flex: 1 1 240px;
+    min-width: 0;
+}
 .rdDocTitleRow {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 4px 10px;
     min-width: 0;
 }
 .rdDocTitle {
@@ -2427,7 +2480,7 @@
     color: var(--ink);
     padding: 2px 0;
     min-width: 0;
-    flex: 1;
+    flex: 1 1 240px;
     font-family: inherit;
 }
 .rdDocTitle:focus {
@@ -2497,8 +2550,10 @@
 }
 .rdDocActions {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 8px;
-    flex-shrink: 0;
+    margin-left: auto;
 }
 
 /* Format toolbar */
@@ -2657,7 +2712,8 @@
     flex-shrink: 0;
 }
 .rdPaneTab {
-    padding: 12px 12px;
+    padding: 12px 10px;
+    white-space: nowrap;
     background: transparent;
     border: 0;
     cursor: pointer;
@@ -3208,13 +3264,14 @@ textarea.rdFieldInput {
     margin-top: 1px;
 }
 
-/* Responsive — collapse rails */
-@media (max-width: 1180px) {
+/* Responsive — collapse rails, by the width of the tab the editor sits in
+   (the tool frame's scroller is the container), not the window's. */
+@container (max-width: 1119px) {
     .rdLegal {
         grid-template-columns: 1fr 320px;
     }
 }
-@media (max-width: 980px) {
+@container (max-width: 879px) {
     .rdLegal {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr auto;
@@ -3224,6 +3281,20 @@ textarea.rdFieldInput {
         border-right: 0;
         border-left: 0;
         border-bottom: 1px solid var(--line-2);
+    }
+    .rdDocHead {
+        padding: 12px 16px 10px;
+    }
+    .rdDocPage {
+        padding: 40px 32px;
+    }
+}
+@container (max-width: 519px) {
+    .rdDocScroll {
+        padding: 16px 12px 48px;
+    }
+    .rdDocPage {
+        padding: 32px 20px;
     }
 }
 
@@ -3557,5 +3628,695 @@ textarea.rdFieldInput {
     }
     .rdFieldGrid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ====================================================================
+   Legal Assist — the assistant screen (LegalChatbot): chat on the left,
+   a live preview of the draft on the right. Mirrors `redesign-flows.css`
+   rd-assist primitives.
+
+   These rules were dropped with the April 2026 redesign of this file while
+   LegalChatbot kept using them, which left the assistant unstyled. Restored
+   from that earlier version, on the current tokens: one typeface (emphasis
+   by colour), `--font-mono` for the mono labels, theme tokens in place of
+   light/dark literal pairs.
+   ==================================================================== */
+
+.assist {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    /* Side by side from about 760px of tab width: a full-width tab beside
+       the workspace sidebar and the tool's rail is ~900px, and the copy
+       promises the document "filling in live on the right". */
+    grid-template-columns: minmax(340px, 1fr) minmax(400px, 1.2fr);
+    background: var(--bg);
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Chat column */
+.assistChat {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border-right: 1px solid var(--line-2);
+    min-width: 0;
+    min-height: 0;
+}
+.assistChatHead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--line-2);
+    background: var(--panel);
+    flex-shrink: 0;
+}
+.assistChatAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-fg);
+    position: relative;
+    flex-shrink: 0;
+}
+.assistChatAvatar::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--success);
+    border: 2px solid var(--panel);
+}
+.assistChatAvatar svg {
+    width: 16px;
+    height: 16px;
+}
+.assistChatTitleBlock {
+    min-width: 0;
+    flex: 1;
+}
+.assistChatName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.assistChatSub {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+}
+.assistChatMenu {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.assistChatFeed {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 24px 22px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+}
+
+.assistMsg {
+    display: flex;
+    gap: 10px;
+    max-width: 92%;
+}
+.assistMsgBot {
+    align-self: flex-start;
+}
+.assistMsgUser {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.assistMsgAvatar {
+    flex: 0 0 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-fg);
+    margin-top: 2px;
+}
+.assistMsgUser .assistMsgAvatar {
+    background: var(--ink-2);
+    color: var(--bg);
+}
+.assistMsgAvatar svg {
+    width: 13px;
+    height: 13px;
+}
+
+.assistMsgBody {
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.assistBubble {
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+}
+.assistMsgUser .assistBubble {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: transparent;
+    border-bottom-right-radius: 4px;
+}
+:global([data-theme="dark"]) .assistMsgUser .assistBubble {
+    background: var(--panel-2);
+    color: var(--ink);
+}
+.assistMsgBot .assistBubble {
+    border-bottom-left-radius: 4px;
+}
+.assistBubble strong {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.assistTyping {
+    display: inline-flex;
+    gap: 4px;
+    padding: 6px 0;
+}
+.assistTyping span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink-3);
+    animation: assistTyping 1.2s infinite ease-in-out;
+}
+.assistTyping span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+.assistTyping span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+@keyframes assistTyping {
+    0%,
+    60%,
+    100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+/* Progress strip above composer */
+.assistProgress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 22px;
+    border-top: 1px solid var(--line-2);
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.assistProgressTrack {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line-2);
+    overflow: hidden;
+}
+.assistProgressFill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 240ms ease;
+}
+
+/* Composer */
+.assistComposer {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 12px 18px 12px;
+    background: var(--panel);
+    border-top: 1px solid var(--line-2);
+    flex-shrink: 0;
+}
+.assistInput {
+    flex: 1;
+    min-height: 38px;
+    max-height: 140px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line-2);
+    background: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    resize: none;
+    line-height: 1.5;
+    transition:
+        border-color 140ms ease,
+        box-shadow 140ms ease;
+}
+.assistInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+    outline: none;
+}
+.assistSend {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-fg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 140ms ease;
+}
+.assistSend:hover:not(:disabled) {
+    background: var(--accent-2);
+}
+.assistSend:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.assistSend svg {
+    width: 14px;
+    height: 14px;
+}
+.assistHint {
+    padding: 0 22px 12px;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-4);
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+}
+
+/* Live preview column */
+.assistPreview {
+    background: var(--bg-sunk);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.assistPreviewHead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--line-2);
+    background: var(--panel);
+    font-size: 12px;
+    color: var(--ink-3);
+    flex-shrink: 0;
+}
+/* The head's leading document glyph. */
+.assistPreviewHead > svg:first-child {
+    width: 14px;
+    height: 14px;
+    color: var(--ink-2);
+    flex-shrink: 0;
+}
+.assistPreviewTitle {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+}
+.assistPreviewLive {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+}
+.assistPreviewPills {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+    align-items: center;
+}
+
+.assistStatusPill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.assistPreviewBody {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 36px 36px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.assistDoc {
+    width: 100%;
+    max-width: 620px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    padding: 56px 64px;
+    color: var(--ink);
+    box-shadow: var(--shadow-2);
+    line-height: 1.6;
+}
+.assistDoc h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+}
+.assistDocSub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+}
+.assistDoc h2 {
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: -0.005em;
+    margin: 22px 0 10px;
+    color: var(--ink);
+}
+.assistDoc p {
+    font-size: 14px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+    color: var(--ink-2);
+}
+
+/* Slot — placeholder pill that pulses when current, fills when answered */
+.assistSlot {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 8px;
+    border-radius: 4px;
+    background: var(--warn-soft);
+    border: 1px dashed color-mix(in oklch, var(--warn) 55%, transparent);
+    color: var(--warn);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-style: normal;
+    letter-spacing: 0;
+    margin: 0 1px;
+    vertical-align: baseline;
+    transition:
+        background 200ms ease,
+        color 200ms ease,
+        border-color 200ms ease;
+}
+.assistSlotFilled {
+    background: color-mix(in oklch, var(--accent) 9%, transparent);
+    border: 1px solid color-mix(in oklch, var(--accent) 30%, transparent);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: inherit;
+    animation: assistSlotFill 360ms ease-out;
+}
+.assistSlotCurrent {
+    border-color: var(--warn);
+    animation: assistSlotPulse 1.6s ease-in-out infinite;
+}
+@keyframes assistSlotPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 color-mix(in oklch, var(--warn) 50%, transparent);
+    }
+    50% {
+        box-shadow: 0 0 0 4px transparent;
+    }
+}
+@keyframes assistSlotFill {
+    0% {
+        background: var(--warn-soft);
+        transform: scale(1.04);
+    }
+    100% {
+        background: color-mix(in oklch, var(--accent) 9%, transparent);
+        transform: scale(1);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .assistSlotFilled,
+    .assistSlotCurrent,
+    .assistTyping span {
+        animation: none;
+    }
+}
+
+/* Field summary card under the doc */
+.assistFields {
+    width: 100%;
+    max-width: 620px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+}
+.assistFieldsHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--line-2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.assistField {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 9px 18px;
+    border-bottom: 1px solid var(--line-2);
+    font-size: 12px;
+}
+.assistField:last-child {
+    border-bottom: none;
+}
+.assistFieldLabel {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.assistFieldValue {
+    color: var(--ink);
+    font-weight: 500;
+}
+.assistFieldValueEmpty {
+    color: var(--ink-4);
+    font-weight: 400;
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+.assistFieldSrc {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+.assistFieldSrc svg {
+    width: 10px;
+    height: 10px;
+}
+.assistFieldSrcAi {
+    color: var(--accent);
+}
+
+/* Welcome screen — when no messages yet */
+.assistWelcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* `safe`: when the welcome is taller than a short chat column, start at
+       the top instead of centring its heading out of reach. */
+    justify-content: center;
+    justify-content: safe center;
+    padding: 48px 24px;
+    text-align: center;
+    flex: 1;
+}
+.assistWelcomeTitle {
+    margin: 18px 0 6px;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+}
+.assistWelcomeTitle em {
+    font-style: normal;
+    color: var(--accent);
+}
+.assistWelcomeSub {
+    margin: 0;
+    max-width: 420px;
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.55;
+}
+.assistWelcomeChips {
+    margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Empty preview state — before any field filled */
+.assistPreviewEmpty {
+    width: 100%;
+    max-width: 620px;
+    background: var(--panel);
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    padding: 60px 32px;
+    text-align: center;
+    color: var(--ink-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.assistPreviewEmptyMark {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.assistPreviewEmptyMark svg {
+    width: 22px;
+    height: 22px;
+}
+.assistPreviewEmptyTitle {
+    font-size: 16px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+.assistPreviewEmptySub {
+    margin: 0;
+    font-size: 13px;
+    max-width: 36ch;
+    line-height: 1.55;
+}
+
+/* Header — the assist top bar */
+.assistTopBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    min-height: 49px;
+    border-bottom: 1px solid var(--line-2);
+    background: color-mix(in oklch, var(--bg) 70%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+}
+.assistTopBarSpacer {
+    flex: 1;
+}
+.assistTopBarMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+}
+
+/* Narrow tab: one column, the chat above a shorter preview, each scrolling
+   on its own. By the width of the tab (the tool frame's scroller is the
+   container), not the window's — the two columns need about 740px. */
+@container (max-width: 759px) {
+    .assist {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1.3fr) minmax(0, 1fr);
+    }
+    /* A compact welcome, so its heading fits the shorter chat row instead of
+       starting above it (the feed keeps itself scrolled to the newest turn). */
+    .assistWelcome {
+        padding: 12px 16px;
+    }
+    .assistWelcome > .brandMark {
+        display: none;
+    }
+    .assistWelcomeTitle {
+        margin-top: 0;
+        font-size: 21px;
+    }
+    .assistWelcomeChips {
+        margin-top: 14px;
+    }
+    .assistChat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line-2);
+    }
+    .assistPreviewBody {
+        padding: 24px 16px 40px;
+    }
+    .assistDoc {
+        padding: 32px 28px;
+    }
+}
+@container (max-width: 519px) {
+    .assistChatHead,
+    .assistPreviewHead {
+        padding: 12px 16px;
+    }
+    .assistChatFeed {
+        padding: 16px 14px 12px;
+    }
+    .assistField {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .assistFieldLabel {
+        grid-column: 1 / -1;
     }
 }

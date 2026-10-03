@@ -5,8 +5,6 @@ import {
     Search,
     Plus,
     FileText,
-    Clock,
-    Scale,
     Sparkles,
     ArrowRight,
     Briefcase,
@@ -36,9 +34,17 @@ interface GeneratedDocument {
 }
 
 interface DocumentGeneratorHomeProps {
+    /**
+     * Which library the screen shows: the templates (New document) or the
+     * person's drafts (My documents). The tool's rail switches between them,
+     * so the screen has no tabs of its own.
+     */
+    mode: "new" | "existing";
     onNewDocument: (template: DocumentTemplate) => void;
     onOpenDocument: (document: GeneratedDocument) => void;
     onStartChat: (initialMessage?: string) => void;
+    /** My documents is empty: go to New document. */
+    onShowNew: () => void;
     generatedDocuments: GeneratedDocument[];
 }
 
@@ -92,14 +98,15 @@ const templates: DocumentTemplate[] = Object.values(TEMPLATE_REGISTRY).map(t => 
 }));
 
 export function DocumentGeneratorHome({
+    mode: viewMode,
     onNewDocument,
     onOpenDocument,
     onStartChat,
+    onShowNew,
     generatedDocuments,
 }: DocumentGeneratorHomeProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
-    const [viewMode, setViewMode] = useState<"new" | "existing">("new");
     const [chatInput, setChatInput] = useState("");
 
     const categories = ["all", ...STAGE_ORDER];
@@ -134,32 +141,12 @@ export function DocumentGeneratorHome({
     return (
         <div className={s.libContent}>
             <div className={s.libContentInner}>
-                {/* Title row + view tabs (matches `rd-content__h` spacing exactly) */}
+                {/* Title row (matches `rd-content__h` spacing exactly). New document
+                    and My documents are the tool rail's screens, not tabs here. */}
                 <div className={s.libContentHead}>
                     <h1 className={s.libHeroHeading}>
                         Generate a <em>legal</em> document
                     </h1>
-                    <div className={s.tabs} role="tablist" aria-label="Document view">
-                        <button
-                            role="tab"
-                            aria-selected={viewMode === "new"}
-                            className={`${s.tab} ${viewMode === "new" ? s.tabActive : ""}`}
-                            onClick={() => setViewMode("new")}
-                        >
-                            <Plus className="h-4 w-4" />
-                            <span>New document</span>
-                        </button>
-                        <button
-                            role="tab"
-                            aria-selected={viewMode === "existing"}
-                            className={`${s.tab} ${viewMode === "existing" ? s.tabActive : ""}`}
-                            onClick={() => setViewMode("existing")}
-                        >
-                            <Clock className="h-4 w-4" />
-                            <span>My documents</span>
-                            <span className={s.tabCount}>{generatedDocuments.length}</span>
-                        </button>
-                    </div>
                 </div>
                 <p className={s.libHeroSub}>
                     Pick a template — Drift fills it from your company knowledge and the
@@ -225,7 +212,7 @@ export function DocumentGeneratorHome({
                         {/* Assistant banner */}
                         <div className={s.libSection}>
                             <div className={s.banner}>
-                                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                                <div className="@max-md:flex-col @max-md:[align-items:stretch] flex flex-row gap-4 [align-items:center]">
                                     <div className="flex items-start gap-3">
                                         <div className={s.brandMark}>
                                             <Sparkles className="h-[18px] w-[18px]" />
@@ -255,8 +242,8 @@ export function DocumentGeneratorHome({
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex flex-1 items-center gap-2 md:justify-end">
-                                        <div className="relative flex-1 md:min-w-[300px]">
+                                    <div className="@max-md:justify-start flex flex-1 items-center justify-end gap-2">
+                                        <div className="@max-md:min-w-0 relative min-w-[300px] flex-1">
                                             <input
                                                 type="text"
                                                 value={chatInput}
@@ -350,7 +337,7 @@ export function DocumentGeneratorHome({
                         </div>
                     </section>
                 ) : (
-                    <EmptyDocuments onSwitch={() => setViewMode("new")} />
+                    <EmptyDocuments onSwitch={onShowNew} />
                 )}
             </div>
         </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useToolRouter } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
@@ -43,11 +43,12 @@ function isIsoWeek(v: string | null): v is string {
  * topics, chooses what to share, and after the meeting records the
  * decision that opens a commitment. Regenerating replaces only untouched
  * suggestions.
+ *
+ * `week` is the tab's `?week=` (null for the default week by the Thursday
+ * rule); the week arrows and past weeks move the tab to another `?week=`.
  */
-export function AgendaScreen() {
-    const router = useRouter();
-    const params = useSearchParams();
-    const weekParam = params.get("week");
+export function AgendaScreen({ week: weekParam = null }: { week?: string | null }) {
+    const router = useToolRouter();
     const key = isIsoWeek(weekParam) ? weekParam : "default";
     const res = useResource(`vantage:agenda:${key}`, () =>
         vantageApi.agendas(isIsoWeek(weekParam) ? weekParam : undefined)
@@ -332,7 +333,9 @@ export function AgendaScreen() {
                                 Prepare the draft
                             </Button>
                             <Button size="sm" variant="outline" asChild>
-                                <Link href={vantagePath("/evidence")}>Add evidence first</Link>
+                                <ToolLink href={vantagePath("/evidence")}>
+                                    Add evidence first
+                                </ToolLink>
                             </Button>
                         </>
                     }
@@ -477,7 +480,7 @@ export function AgendaScreen() {
                     <SectionHeading title="Past weeks" />
                     <div className="border-line bg-panel rounded-lg border">
                         {history.map(h => (
-                            <Link
+                            <ToolLink
                                 key={h.id}
                                 href={vantagePath(`/agenda?week=${h.weekStart}`)}
                                 aria-current={h.weekStart === week ? "true" : undefined}
@@ -501,7 +504,7 @@ export function AgendaScreen() {
                                 >
                                     {STATUS_WORD[h.status]}
                                 </StatusWord>
-                            </Link>
+                            </ToolLink>
                         ))}
                     </div>
                 </section>

@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import type { SalesStage } from "../api";
@@ -60,9 +59,9 @@ export function FunnelBar({
                             title={`${STAGE_LABELS[stage]}: ${count}`}
                         >
                             {hrefFor ? (
-                                <Link href={hrefFor(stage)} className="block h-full">
+                                <ToolLink href={hrefFor(stage)} className="block h-full">
                                     {inner}
-                                </Link>
+                                </ToolLink>
                             ) : (
                                 inner
                             )}

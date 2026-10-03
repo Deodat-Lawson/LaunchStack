@@ -12,8 +12,8 @@ import {
 import { cn } from "~/lib/utils";
 
 import type { CompanyRow } from "../api";
-import { relativeTime } from "../../_lib/format";
-import { FitMeter } from "./FitMeter";
+import { relativeTime } from "~/lib/tools/format";
+import { FitMeter } from "~/components/tools/FitMeter";
 import { FoundViaChips } from "./SourceChip";
 import { StagePill } from "./StagePill";
 

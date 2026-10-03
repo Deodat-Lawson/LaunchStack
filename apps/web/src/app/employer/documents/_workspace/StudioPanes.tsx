@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import LoadingPage from "~/app/_components/loading";
@@ -18,16 +18,6 @@ export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
-    /**
-     * Coding sessions opens transcripts and continues them in chat. Inside
-     * Studio both are moves between open tabs, so the shell does them; the
-     * standalone route omits these and the browser navigates instead.
-     */
-    sessions?: {
-        onImported?: () => Promise<void>;
-        onOpenDocument?: (documentId: number) => void;
-        onContinue?: (documentId: number) => void;
-    };
     /**
      * Agents and Meetings hand off to each other and to the chat: "use in
      * chat" picks the agent in the composer, "put in a meeting" opens the
@@ -56,13 +46,13 @@ const DocumentGenerator = dynamic(
         import("~/app/employer/documents/components/DocumentGenerator").then(
             m => m.DocumentGenerator
         ),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const RewriteDiffView = dynamic(
     () =>
         import("~/app/employer/documents/components/RewriteDiffView").then(m => m.RewriteDiffView),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const LegalGeneratorTheme = dynamic(
@@ -70,56 +60,34 @@ const LegalGeneratorTheme = dynamic(
         import("~/app/employer/documents/components/LegalGeneratorTheme").then(
             m => m.LegalGeneratorTheme
         ),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const StatisticsView = dynamic(
     () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
-    { loading: () => <LoadingPage /> }
+    { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.MeetingsPane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
 
 const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.KnowledgePane), {
-    loading: () => <LoadingPage />,
+    loading: () => <LoadingPage variant="pane" />,
 });
-
-const ArtifactGallery = dynamic(
-    () =>
-        import("~/app/employer/artifacts/_artifacts/ui/ArtifactGallery").then(
-            m => m.ArtifactGallery
-        ),
-    { loading: () => <LoadingPage /> }
-);
-
-const ArtifactViewer = dynamic(
-    () =>
-        import("~/app/employer/artifacts/_artifacts/ui/ArtifactViewer").then(m => m.ArtifactViewer),
-    { loading: () => <LoadingPage /> }
-);
-
-const SessionsBrowser = dynamic(
-    () =>
-        import("~/app/employer/agent-sessions/_sessions/ui/SessionsBrowser").then(
-            m => m.SessionsBrowser
-        ),
-    { loading: () => <LoadingPage /> }
-);
 
 interface PaneProps {
     onClose: () => void;
@@ -436,43 +404,6 @@ export function CompanySettingsPane({
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
-        </div>
-    );
-}
-
-/**
- * Artifacts keeps gallery and viewer in one tab: opening an artifact swaps the
- * panel rather than navigating, so the tab you came back to is the one you
- * left. The standalone route passes neither callback and keeps its own routing.
- */
-export function ArtifactsStudioPane(_: PaneProps) {
-    const [viewerId, setViewerId] = useState<number | null>(null);
-
-    return (
-        <div
-            style={{
-                height: "100%",
-                minHeight: 0,
-                overflowY: viewerId === null ? "auto" : "hidden",
-            }}
-        >
-            {viewerId === null ? (
-                <ArtifactGallery onOpenArtifact={setViewerId} />
-            ) : (
-                <ArtifactViewer id={viewerId} onBack={() => setViewerId(null)} />
-            )}
-        </div>
-    );
-}
-
-export function AgentSessionsStudioPane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return (
-        <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
-            <SessionsBrowser
-                onImported={context?.sessions?.onImported}
-                onOpenDocument={context?.sessions?.onOpenDocument}
-                onContinue={context?.sessions?.onContinue}
-            />
         </div>
     );
 }
@@ -880,10 +811,6 @@ export function renderStudioPane(
             return <RewritePane onClose={onClose} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
-        case "artifacts":
-            return <ArtifactsStudioPane onClose={onClose} />;
-        case "agent-sessions":
-            return <AgentSessionsStudioPane onClose={onClose} context={context} />;
         case "investors":
             return (
                 <InvestorsPane
@@ -891,8 +818,8 @@ export function renderStudioPane(
                     onSaveAsSource={context?.investors?.onSaveAsSource}
                 />
             );
-        // Company metadata and analytics are sections of Settings now. Their ids
-        // survive so old deep links open the right section rather than 404ing.
+        // Company metadata is a section of Settings now. Its id survives so old
+        // deep links open the right section rather than 404ing.
         case "metadata":
             return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":
@@ -914,6 +841,23 @@ export function renderStudioPane(
                     ]}
                     href={feature.href ?? "/employer/tools/growth"}
                     ctaLabel="Open Growth"
+                />
+            );
+        case "vantage":
+            return (
+                <DefaultLinkPane
+                    onClose={onClose}
+                    eyebrow="Vantage"
+                    title="Vantage"
+                    body="The evidence-backed operating system for founder meetings. Log conversations, numbers and promises through the week; on Thursday, Vantage drafts next week's agenda with every claim tied to its source; after the meeting, decisions become commitments that next week's agenda checks."
+                    bullets={[
+                        "Evidence inbox: notes, interviews, links, claims — with a date and a source",
+                        "Metric definitions: signups, activated, active, paying — every number carries its period and source",
+                        "Agenda: three to five topics, each with what happened, why it matters, the decision and a next step",
+                        "Commitments checked the following week; a program triage view over what you chose to share",
+                    ]}
+                    href={feature.href ?? "/employer/tools/vantage"}
+                    ctaLabel="Open Vantage"
                 />
             );
         default:

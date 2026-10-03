@@ -15,14 +15,13 @@ describe("backTargetFor", () => {
             "/employer/metadata",
             "/employer/upload",
             "/employer/contact",
-            "/employer/agent-sessions",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/marketing-pipeline",
             "/employer/tools/knowledge-graph",
             "/employer/tools/distribution",
             "/employer/tools/email-pipeline",
             "/employer/tools/repo-explainer",
+            "/employer/tools/vantage",
         ]) {
             expect(backTargetFor(path)).toEqual(STUDIO);
         }
@@ -40,14 +39,19 @@ describe("backTargetFor", () => {
     });
 
     it("prefers the nearest section over the Studio", () => {
-        expect(backTargetFor("/employer/artifacts/abc123")).toEqual({
-            href: "/employer/artifacts",
-            label: "Artifacts",
-        });
         expect(backTargetFor("/employer/tools/growth/prospects/deals")).toEqual({
             href: "/employer/tools/growth/prospects",
             label: "Prospects",
         });
+        expect(backTargetFor("/employer/tools/proposals/funders")).toEqual({
+            href: "/employer/tools/proposals",
+            label: "Proposals",
+        });
+        expect(backTargetFor("/employer/tools/proposals/write/abc")).toEqual({
+            href: "/employer/tools/proposals/write",
+            label: "Proposals",
+        });
+        expect(backTargetFor("/employer/tools/proposals")).toEqual(STUDIO);
         // Old deep links into a company redirect into the workspace; while
         // they resolve, up is the workspace.
         expect(backTargetFor("/employer/tools/growth/prospects/companies/42")).toEqual({
@@ -57,6 +61,10 @@ describe("backTargetFor", () => {
         expect(backTargetFor("/employer/tools/growth/brand/calendar")).toEqual({
             href: "/employer/tools/growth/brand",
             label: "Brand",
+        });
+        expect(backTargetFor("/employer/tools/vantage/agenda")).toEqual({
+            href: "/employer/tools/vantage",
+            label: "Vantage",
         });
         // Prospects moved under Growth; the old path is a redirect shim and
         // must not send anyone back to where it no longer lives.
@@ -69,7 +77,6 @@ describe("backTargetFor", () => {
     it("never points a page at itself", () => {
         for (const path of [
             "/employer/documents",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/growth/prospects",
             "/employer/tools/growth/prospects/companies",

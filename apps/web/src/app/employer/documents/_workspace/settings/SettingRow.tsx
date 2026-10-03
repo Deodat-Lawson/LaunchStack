@@ -120,8 +120,14 @@ export function SettingRow({
                 "data-[highlight=true]:ring-brand-glow data-[highlight=true]:ring-2"
             )}
         >
+            {/* Sized by the space the row actually has, not the viewport: a
+                Studio split can be far narrower than the window, and an `md:`
+                width pinned the control at 380px inside a 300px pane. Side by
+                side while both fit (220 + 24 + 280); stacked below that. The
+                control's large grow factor takes it to 380px first, and the
+                label keeps the rest. */}
             <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
-                <div className="min-w-[220px] flex-1">
+                <div className="min-w-0 flex-[1_1_220px]">
                     <Label
                         htmlFor={`control-${definition.key}`}
                         className="text-ink text-[13px] font-semibold"
@@ -141,7 +147,7 @@ export function SettingRow({
                         </p>
                     )}
                 </div>
-                <div className="w-full max-w-[380px] shrink-0 md:w-[380px]">
+                <div className="min-w-0 max-w-[380px] flex-[999_1_280px]">
                     <Control
                         definition={definition}
                         value={value}

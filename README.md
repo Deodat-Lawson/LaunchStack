@@ -53,6 +53,7 @@ pnpm --filter @launchstack/web    db:migrate   # apply BOTH migration sets (engi
 pnpm --filter @launchstack/core   db:seed      # optional: one company/user/document
 pnpm --filter @launchstack/web    dev          # Next.js on :3000
 pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — ingestion runs here, not in web
+pnpm --filter @launchstack/landing dev         # optional: the public site on :3001 — where the logo and sign-out lead in dev
 pnpm --filter @launchstack/web    inngest:dev  # optional: Inngest dev UI on :8288, pointed at the worker's :8020/api/inngest
 ```
 

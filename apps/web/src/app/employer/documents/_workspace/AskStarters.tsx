@@ -145,7 +145,7 @@ export function AskStarters({
 
     return (
         <section aria-label="Starter questions" className="mb-6">
-            <div className="mb-3 flex items-center justify-between gap-3">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <p className="text-ink-3 min-w-0 truncate text-xs" aria-live="polite">
                     {basisLine(data, error)}
                 </p>
@@ -160,7 +160,7 @@ export function AskStarters({
                             title="Extract a company profile from your documents to sharpen these"
                         >
                             <Building2 className="size-3.5" aria-hidden />
-                            Add company profile
+                            <span className="@max-sm:sr-only">Add company profile</span>
                         </Button>
                     )}
                     <Button
@@ -181,7 +181,10 @@ export function AskStarters({
                 </div>
             </div>
 
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            {/* Two columns when the pane has room for them, by the pane's
+                width rather than the window's: a chat in a third of a wide
+                screen is still narrow. */}
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5">
                 {starters === null
                     ? Array.from({ length: ASK_STARTER_COUNT }, (_, i) => (
                           <StarterSkeleton key={i} />

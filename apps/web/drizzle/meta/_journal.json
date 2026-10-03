@@ -166,15 +166,22 @@
     {
       "idx": 23,
       "version": "7",
-      "when": 1790723055009,
-      "tag": "20260929230415_growth_run_progress_and_post_retries",
+      "when": 1790726558390,
+      "tag": "20260930000238_proposals",
       "breakpoints": true
     },
     {
       "idx": 24,
       "version": "7",
-      "when": 1790723150231,
-      "tag": "20260929230550_brand_accounts",
+      "when": 1790994077492,
+      "tag": "20261003022117_vantage",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1790995165576,
+      "tag": "20261003023925_growth_runs_and_brand_accounts",
       "breakpoints": true
     }
   ]

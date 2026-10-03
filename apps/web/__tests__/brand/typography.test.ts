@@ -33,8 +33,6 @@ const TOKEN_VALUES = new Set([
 const EXEMPT: Record<string, string> = {
     // Standalone HTML handed to the user as a download: no web fonts, no tokens.
     "apps/web/src/app/api/document-generator/export/route.ts": "exported document HTML",
-    // Fixture HTML rendered inside a sandboxed iframe on a dev-only page.
-    "apps/web/src/app/dev/artifacts/ArtifactsPreview.tsx": "sandboxed artifact fixture",
     // Satori renders these; it takes font data, not CSS (see og-fonts.ts).
     "apps/landing/src/app/opengraph-image.tsx": "next/og card",
     "apps/landing/src/app/deployment/opengraph-image.tsx": "next/og card",

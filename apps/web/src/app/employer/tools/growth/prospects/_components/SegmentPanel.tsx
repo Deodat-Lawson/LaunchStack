@@ -12,11 +12,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SegmentField, type SourceKind, type SourceRow } from "../api";
 import { useProspects } from "../_lib/context";
-import { plural, relativeTime, shortDate } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
-import { InlineError } from "../../_components/EmptyState";
+import { plural, relativeTime, shortDate } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
+import { InlineError } from "~/components/tools/EmptyState";
 import { Panel } from "../../_components/Panel";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { NewSegmentDialog } from "./NewSegmentDialog";
 
 function FieldRow({

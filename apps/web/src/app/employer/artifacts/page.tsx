@@ -1,17 +1,10 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { Suspense } from "react";
-
-import { useSetBreadcrumbs } from "../_chrome/BreadcrumbContext";
-import { ArtifactGallery } from "./_artifacts/ui/ArtifactGallery";
-
-const ARTIFACT_CRUMBS = ["Drift", "Artifacts"];
-
-export default function ArtifactsHomePage() {
-    useSetBreadcrumbs(ARTIFACT_CRUMBS);
-    return (
-        <Suspense>
-            <ArtifactGallery />
-        </Suspense>
-    );
+/**
+ * Claude artifacts are sources now, imported from Add a source → Claude
+ * artifact. The gallery that lived here is gone; an old link lands on that
+ * tab, which also offers to bring over artifacts imported before.
+ */
+export default function ArtifactsRedirect() {
+    redirect("/employer/documents?add=1&tab=artifact");
 }

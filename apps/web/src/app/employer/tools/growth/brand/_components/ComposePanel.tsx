@@ -12,8 +12,8 @@ import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
 import { Panel } from "../../_components/Panel";
-import { SectionHeading } from "../../_components/PageHeader";
-import { plural } from "../../_lib/format";
+import { SectionHeading } from "~/components/tools/PageHeader";
+import { plural } from "~/lib/tools/format";
 import { NETWORK_LABEL, NETWORK_LIMIT, NetworkMark } from "./NetworkMark";
 import { nextSlot, toLocalInput } from "../_lib/time";
 import {

@@ -189,6 +189,26 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "The one API over the Distribution data (the old /api/distribution routes are gone): a program is a segment, a partner organisation a company, its relationship the deal. Every list is paged and counted in SQL. Runs are queued to the worker on distribution/run.requested in every mode but sample, one per segment at a time, stoppable.",
     },
     {
+        id: "proposals",
+        tier: "tool",
+        summary:
+            "Write grant and funding proposals from what the workspace's sources prove: an organisation profile, funders that fit, the call turned into a checklist, each answer drafted from evidence, a review pass, and reusable answers.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/proposals",
+        routes: ["proposals"],
+        notes: "Runs are the unit of background work (profile, funders, extract, draft, rewrite, review) and list in the History feed. Claimed here when Vantage landed beside it; the Proposals PR had left its routes unclaimed.",
+    },
+    {
+        id: "vantage",
+        tier: "tool",
+        summary:
+            "Run the weekly founder meeting on evidence: an inbox of conversations, links and claims, metric definitions with dated observations, a drafted agenda whose facts cite their sources, decisions that open commitments, and a program triage view over what the founder shares.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/vantage",
+        routes: ["vantage"],
+        notes: "The draft comes from the deployment's default chat model when one is configured and from deterministic rules otherwise; the agenda records which (model_metadata). Sharing is per topic, commitment and evidence item; triage and the weekly update read only shared rows. Program deadlines need settings.manage.",
+    },
+    {
         id: "investors",
         tier: "tool",
         summary:
@@ -211,13 +231,17 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
     {
         id: "artifacts",
         tier: "tool",
-        summary: "Import pages, diagrams, and snippets built in Claude; view them sandboxed.",
+        summary:
+            "Claude artifacts from before they were sources: listed, read and archived as " +
+            "Add a source → Claude artifact moves them into the library.",
         scope: "workspace",
         routes: ["artifacts"],
         notes:
-            "Bodies are stored inline and rendered in an iframe sandboxed without " +
-            "allow-same-origin — the app's one untrusted-HTML surface. The raw route serves " +
-            "attachment-only for the same reason.",
+            "New imports are ordinary documents, registered through uploadDocument with an " +
+            "artifact marker (~/lib/artifact-document) and stored as text/plain; the viewer " +
+            "renders them in an iframe sandboxed without allow-same-origin. These routes " +
+            "remain for the old rows until every workspace has moved them. The raw route " +
+            "serves attachment-only for the same reason.",
     },
     {
         id: "notes",

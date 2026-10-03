@@ -5,10 +5,10 @@ import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
 
-import { EmptyState } from "../../_components/EmptyState";
-import { SectionHeading } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
-import { plural } from "../../_lib/format";
+import { EmptyState } from "~/components/tools/EmptyState";
+import { SectionHeading } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { plural } from "~/lib/tools/format";
 import { PostRow } from "./PostRow";
 import { DAY, postMoment } from "../_lib/time";
 import type { BrandPost } from "../api";

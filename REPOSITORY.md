@@ -44,7 +44,7 @@ outright, since nothing was ever published under the old names.
 | `packages/schema-generator`           | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                                                    |
 | `packages/tools`                      | TS library             | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
 | `packages/design-tokens`              | CSS (published)        | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
-| `pipelines/`                          | TS library (published) | **The compositions tier** — nine verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
+| `pipelines/`                          | TS library (published) | **The compositions tier** — the verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer, repo-workspace, distribution, proposals, vantage) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
 | `services/document-converter`         | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
 | `services/transcription`              | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
 | `services/adeu-ai-docs-editing`       | Python/FastAPI         | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor.                                                                                                                               |
@@ -134,6 +134,20 @@ an optimistic-concurrency `revision`; see
 `apps/web/src/app/employer/documents/_mindmap/README.md` for why, and for the
 one place the editor deliberately does not use design tokens.
 
+## Vantage — the weekly founder-meeting loop
+
+`pipelines/src/vantage` is the tenth vertical and
+`apps/web/src/app/employer/tools/vantage` its app (`/employer/tools/vantage`, a
+Studio tool beside Growth). Evidence and metric observations go in through the
+week; on Thursday a draft agenda comes out — three to five topics, each with
+cited facts, why it matters, the decision to make and a proposed next step —
+from the deployment's chat model when one is configured and from deterministic
+rules otherwise; a recorded decision opens a commitment that next week's agenda
+checks. Sharing is per topic, commitment and evidence item; the program triage
+view and the weekly update read only shared rows.
+`pipelines/src/vantage/README.md` has the tables and the honesty rules (what
+"verified" means, unsupported facts, private notes).
+
 ## History — one sidebar feed over chats and pipeline runs
 
 The workspace rail has two tabs. **Sources** is the knowledge tree; **History**
@@ -150,9 +164,12 @@ Two different things share that list, and their scopes differ on purpose:
   sources, and its imported-transcript continuation.
 - **Pipeline runs** are **workspace-wide**, read out of the verticals' own
   tables (`trend_search_jobs`, `client_prospector_jobs`, `repo_explainer_jobs`,
-  `distribution_runs`, `email_campaigns`, `founder_weekly_review_runs`). Nothing
+  `distribution_runs`, `email_campaigns`, `founder_weekly_review_runs`,
+  `vantage_agendas`). Nothing
   is copied into a second table: history is a *read* over the rows the verticals
   already own, so it can never drift from them.
+
+Grants runs (`proposal_runs`) join the same feed through their own loader.
 
 `apps/web/src/lib/workspace-history.ts` is the shared contract — the entry
 shape, four normalized statuses, date grouping, all pure and both-sides.

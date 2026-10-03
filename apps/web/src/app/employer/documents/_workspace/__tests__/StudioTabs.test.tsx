@@ -1,15 +1,16 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import { ContextMenuProvider } from "~/components/context-menu";
 import { StudioTabs } from "../StudioTabs";
 import type { PaneTab } from "../StudioTabs";
+import { SOURCE_DRAG_MIME } from "../dragData";
 
 /**
- * One column's strip. What matters here is that it reports what a person did
+ * One pane's strip. What matters here is that it reports what a person did
  * — selected, closed, reordered, split — and that the reporting is expressed
  * in terms the layout can act on without guessing.
  */
@@ -166,15 +167,130 @@ describe("StudioTabs", () => {
         expect(screen.getByRole("status")).toHaveTextContent("Knowledge moved to position 1 of 3");
     });
 
-    it("splits the tab on screen, and offers nothing to split when there is no room", () => {
-        const { props } = renderStrip();
-        const split = screen.getByRole("button", { name: "Split to the right" });
-        expect(split).toBeEnabled();
-        fireEvent.click(split);
-        expect(props.onSplit).toHaveBeenCalledWith("chat");
+    /** The pane's own verbs live behind one "⋯" button, not a row of them. */
+    const openPaneMenu = (name = "Pane actions") => {
+        fireEvent.click(screen.getByRole("button", { name }));
+        return screen.getByRole("menu");
+    };
+    const menuItem = (menu: HTMLElement, id: string) =>
+        within(menu).getByTestId(`context-menu-item-${id}`);
 
-        renderStrip({ canSplit: false });
-        expect(screen.getAllByRole("button", { name: "Split to the right" })[1]).toBeDisabled();
+    it("keeps the strip to one pane menu instead of a row of split buttons", () => {
+        renderStrip({ onSplitPane: jest.fn(), onToggleZoom: jest.fn(), groupCount: 2 });
+        expect(screen.queryByRole("button", { name: /^Split right/ })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /^Maximize/ })).not.toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Pane actions, pane 1 of 2" })
+        ).toBeInTheDocument();
+    });
+
+    it("splits right or down from the pane menu, and says why when it cannot", () => {
+        const onSplitPane = jest.fn();
+        renderStrip({ onSplitPane, paneKeys: { splitRight: "⌘⌥\\" } });
+        let menu = openPaneMenu();
+        expect(menuItem(menu, "split-right")).toHaveTextContent("⌘⌥\\");
+        fireEvent.click(menuItem(menu, "split-right"));
+        expect(onSplitPane).toHaveBeenCalledWith("right");
+
+        menu = openPaneMenu();
+        fireEvent.click(menuItem(menu, "split-down"));
+        expect(onSplitPane).toHaveBeenCalledWith("down");
+        onSplitPane.mockClear();
+
+        cleanup();
+        renderStrip({
+            onSplitPane,
+            splitRefusal: { right: "Too narrow to split side by side.", down: null },
+        });
+        menu = openPaneMenu();
+        const right = menuItem(menu, "split-right");
+        expect(right).toHaveAttribute("aria-disabled", "true");
+        expect(right).toHaveAttribute("title", "Too narrow to split side by side.");
+        fireEvent.click(right);
+        expect(onSplitPane).not.toHaveBeenCalled();
+
+        cleanup();
+        renderStrip({ onSplitPane, canSplit: false });
+        menu = openPaneMenu();
+        expect(menuItem(menu, "split-down")).toHaveAttribute("title", "Every pane is taken.");
+    });
+
+    it("maximizes from the menu or by double-clicking a tab, and shows the way back", () => {
+        const onToggleZoom = jest.fn();
+        renderStrip({ onToggleZoom });
+        // One pane: nothing to maximize over.
+        fireEvent.doubleClick(screen.getByRole("tab", { name: /Chat/ }).parentElement!);
+        expect(onToggleZoom).not.toHaveBeenCalled();
+        // Nothing to maximize over and nothing to split here: no menu of
+        // greyed-out items, just no menu.
+        expect(screen.queryByRole("button", { name: "Pane actions" })).not.toBeInTheDocument();
+
+        cleanup();
+        renderStrip({ onToggleZoom, onSplitPane: jest.fn() });
+        expect(menuItem(openPaneMenu(), "zoom")).toHaveAttribute("aria-disabled", "true");
+
+        cleanup();
+        // A phone: no splits, one pane.
+        renderStrip({ onToggleZoom, onSplitPane: jest.fn(), splittable: false });
+        expect(screen.queryByRole("button", { name: "Pane actions" })).not.toBeInTheDocument();
+
+        cleanup();
+        renderStrip({ onToggleZoom, groupCount: 2 });
+        fireEvent.doubleClick(screen.getByRole("tab", { name: /Chat/ }).parentElement!);
+        expect(onToggleZoom).toHaveBeenCalledTimes(1);
+
+        cleanup();
+        renderStrip({ onToggleZoom, groupCount: 2, zoomed: true });
+        const restore = screen.getByRole("button", {
+            name: "Restore the other panes, pane 1 of 2",
+        });
+        expect(restore).toHaveAttribute("aria-pressed", "true");
+        fireEvent.click(restore);
+        expect(onToggleZoom).toHaveBeenCalledTimes(2);
+    });
+
+    it("closes a pane from its menu, and an empty one from its strip, but never the only one", () => {
+        const onClosePane = jest.fn();
+        renderStrip({ onClosePane, groupCount: 2 });
+        fireEvent.click(menuItem(openPaneMenu("Pane actions, pane 1 of 2"), "close-pane"));
+        expect(onClosePane).toHaveBeenCalledTimes(1);
+
+        cleanup();
+        renderStrip({ tabs: [], activeId: "", onClosePane, groupCount: 2 });
+        fireEvent.click(screen.getByRole("button", { name: "Close this pane, pane 1 of 2" }));
+        expect(onClosePane).toHaveBeenCalledTimes(2);
+
+        cleanup();
+        renderStrip({ tabs: [], activeId: "", onClosePane, groupCount: 1 });
+        expect(screen.queryByRole("button", { name: "Close this pane" })).not.toBeInTheDocument();
+        expect(screen.queryByTestId("context-menu-item-close-pane")).not.toBeInTheDocument();
+    });
+
+    it("takes a source dropped from the sidebar, where it was dropped", () => {
+        const { props } = renderStrip();
+        const knowledge = screen.getByRole("tab", { name: /Knowledge/ }).parentElement!;
+        knowledge.getBoundingClientRect = () =>
+            ({ left: 0, top: 0, width: 100, height: 28 }) as DOMRect;
+        const dataTransfer = {
+            types: [SOURCE_DRAG_MIME],
+            getData: (type: string) => (type === SOURCE_DRAG_MIME ? "d7" : ""),
+            dropEffect: "",
+        };
+        const event = new MouseEvent("drop", { bubbles: true, cancelable: true, clientX: 10 });
+        Object.defineProperty(event, "dataTransfer", { value: dataTransfer });
+        fireEvent(knowledge, event);
+        expect(props.onMove).toHaveBeenCalledWith("source:d7", "g0", "knowledge");
+    });
+
+    it("reports a tab drag starting and ending, for the panes' drop zones", () => {
+        const onDragTab = jest.fn();
+        renderStrip({ onDragTab });
+        const chat = screen.getByRole("tab", { name: /Chat/ }).parentElement!;
+        const dataTransfer = { setData: jest.fn(), effectAllowed: "" };
+        fireEvent.dragStart(chat, { dataTransfer });
+        expect(onDragTab).toHaveBeenLastCalledWith("chat");
+        fireEvent.dragEnd(chat);
+        expect(onDragTab).toHaveBeenLastCalledWith(null);
     });
 
     it("counts the tabs for a screen reader and keeps the close buttons out of the tab order", () => {
@@ -187,7 +303,7 @@ describe("StudioTabs", () => {
         expect(close).toHaveAttribute("aria-hidden", "true");
     });
 
-    it("marks which column is the current one", () => {
+    it("marks which pane is the current one", () => {
         const { container } = render(
             <ContextMenuProvider>
                 <StudioTabs

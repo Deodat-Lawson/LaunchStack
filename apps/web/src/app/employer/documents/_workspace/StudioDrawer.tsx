@@ -19,8 +19,12 @@ import { STUDIO_GROUPS } from "./types";
 export interface StudioDrawerProps {
     open: boolean;
     onClose: () => void;
-    /** Open the app, in a tab or by navigating — the shell decides which. */
-    onPickFeature: (featureId: string) => void;
+    /**
+     * Open the app, in a tab or by navigating — the shell decides which.
+     * `beside` (⌘/Ctrl-click, or "Open beside") asks for a pane of its own
+     * next to what is showing.
+     */
+    onPickFeature: (featureId: string, options?: { beside?: boolean }) => void;
     /** The app showing right now, marked in the picker. */
     activeFeatureId?: string;
 }
@@ -44,8 +48,8 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
         [can]
     );
 
-    const pickFeature = (featureId: string) => {
-        onPickFeature(featureId);
+    const pickFeature = (featureId: string, beside = false) => {
+        onPickFeature(featureId, beside ? { beside } : undefined);
         onClose();
     };
 
@@ -65,7 +69,8 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                         Studio apps
                     </DialogTitle>
                     <DialogDescription>
-                        Open a workspace app. Your access decides which apps are listed.
+                        Open a workspace app — ⌘-click to open it beside what is showing. Your
+                        access decides which apps are listed.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -101,6 +106,18 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                             : undefined,
                                                         onSelect: () => pickFeature(feature.id),
                                                     },
+                                                    {
+                                                        type: "item",
+                                                        id: "open-beside",
+                                                        label: "Open beside",
+                                                        icon: "split",
+                                                        disabled: isComing || feature.external,
+                                                        disabledReason: isComing
+                                                            ? "Coming soon."
+                                                            : "It opens as a page of its own.",
+                                                        onSelect: () =>
+                                                            pickFeature(feature.id, true),
+                                                    },
                                                     ...(feature.href
                                                         ? [
                                                               {
@@ -124,7 +141,12 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                 type="button"
                                                 variant="outline"
                                                 aria-current={isActive ? "page" : undefined}
-                                                onClick={() => pickFeature(feature.id)}
+                                                onClick={event =>
+                                                    pickFeature(
+                                                        feature.id,
+                                                        event.metaKey || event.ctrlKey
+                                                    )
+                                                }
                                                 className={cn(
                                                     "border-line bg-panel hover:border-brand hover:bg-brand-soft h-auto min-h-[76px] w-full items-start gap-3 rounded-lg px-3 py-3 text-left font-normal shadow-none transition-colors",
                                                     isActive && "border-brand bg-brand-soft"

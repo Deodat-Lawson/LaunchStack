@@ -11,10 +11,10 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
+import { InlineError } from "~/components/tools/EmptyState";
 import { Panel } from "../../_components/Panel";
-import { SkeletonRows } from "../../_components/SkeletonRows";
-import { shortDate } from "../../_lib/format";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { shortDate } from "~/lib/tools/format";
 import { NetworkMark } from "./NetworkMark";
 import { brandApi, type BrandAccount } from "../api";
 

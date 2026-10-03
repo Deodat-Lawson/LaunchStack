@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 
 import type { DealRow, SalesStage } from "../api";
-import { relativeTime } from "../../_lib/format";
+import { relativeTime } from "~/lib/tools/format";
 import { FUNNEL_STAGES, STAGE_LABELS } from "../_lib/stages";
-import { FitMeter } from "./FitMeter";
+import { FitMeter } from "~/components/tools/FitMeter";
 import { StageMenu } from "./StagePill";
 
 /** Leads stay in the Companies view; the board is what is in motion. */

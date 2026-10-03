@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { NetworkMark } from "./NetworkMark";
 import { PostActions, PostStatus } from "./PostRow";
 import {

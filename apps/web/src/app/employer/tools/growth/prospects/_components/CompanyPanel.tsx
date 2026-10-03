@@ -26,14 +26,14 @@ import {
     type PersonRow,
     type SalesStage,
 } from "../api";
-import { relativeTime, shortDate } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
+import { relativeTime, shortDate } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { Panel } from "../../_components/Panel";
-import { SkeletonBlock } from "../../_components/SkeletonRows";
+import { SkeletonBlock } from "~/components/tools/SkeletonRows";
 import { ClaimText, evidenceAnchorId } from "./Citation";
 import { EmailStatus, canOutreach } from "./EmailStatus";
-import { FitMeter } from "./FitMeter";
+import { FitMeter } from "~/components/tools/FitMeter";
 import { SourceChip } from "./SourceChip";
 import { StageMenu, StagePill } from "./StagePill";
 

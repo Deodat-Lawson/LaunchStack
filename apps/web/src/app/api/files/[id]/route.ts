@@ -10,6 +10,9 @@
  * denied. Legacy rows get `company_id` from the
  * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
  * attribute authoritatively.
+ *
+ * The stored type is the uploader's claim, so responses go out through
+ * `storedFileHeaders`: anything a browser could execute is sandboxed.
  */
 
 import { NextResponse } from "next/server";
@@ -18,6 +21,7 @@ import { db } from "~/server/db";
 import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
 import { env } from "~/env";
+import { storedFileHeaders } from "~/server/security/stored-file-headers";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -144,7 +148,7 @@ export async function GET(request: Request, { params }: RouteParams) {
                 return new NextResponse(blobRes.body, {
                     status: 200,
                     headers: {
-                        "Content-Type": mimeType,
+                        ...storedFileHeaders(mimeType),
                         ...(blobRes.headers.get("content-length")
                             ? { "Content-Length": blobRes.headers.get("content-length")! }
                             : {}),
@@ -174,7 +178,7 @@ export async function GET(request: Request, { params }: RouteParams) {
         return new NextResponse(binaryData, {
             status: 200,
             headers: {
-                "Content-Type": mimeType,
+                ...storedFileHeaders(mimeType),
                 "Content-Length": binaryData.length.toString(),
                 "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
                 "Cache-Control": "private, max-age=31536000", // Cache for 1 year (immutable content)

@@ -9,11 +9,11 @@ import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../_components/EmptyState";
+import { InlineError } from "~/components/tools/EmptyState";
 import { ToolHeader, ToolPage } from "../_components/ToolHeader";
-import { plural, relativeTime } from "../_lib/format";
+import { plural, relativeTime } from "~/lib/tools/format";
 import { useGrowthUrls } from "../_lib/paths";
-import { useResource } from "../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { brandApi } from "../brand/api";
 import { DAY, addDays, isDue } from "../brand/_lib/time";
 import { prospectsApi } from "../prospects/api";

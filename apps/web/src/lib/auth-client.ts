@@ -6,8 +6,13 @@
  * shape the app depends on stays defined in one place.
  */
 import { createAuthClient } from "better-auth/react";
+import { lastLoginMethodClient } from "better-auth/client/plugins";
 
-export const authClient = createAuthClient();
+export const authClient = createAuthClient({
+    // Reads the cookie the server's lastLoginMethod plugin sets, for the
+    // sign-in page's "Last used" marker.
+    plugins: [lastLoginMethodClient()],
+});
 
 /**
  * Session identity for client components. The four fields are the complete

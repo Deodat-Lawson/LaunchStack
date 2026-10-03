@@ -11,11 +11,11 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type RunStep, type SourceYield } from "../api";
 import { isRunLive, useProspects } from "../_lib/context";
-import { duration, relativeTime } from "../../_lib/format";
-import { useResource } from "../../_lib/useResource";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
+import { duration, relativeTime } from "~/lib/tools/format";
+import { useResource } from "~/lib/tools/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { Panel } from "../../_components/Panel";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function StepIcon({ status }: { status: RunStep["status"] }) {
     const base = "size-3.5 shrink-0";

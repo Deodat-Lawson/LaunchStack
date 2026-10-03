@@ -39,6 +39,19 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/growth/brand/",
         target: { href: "/employer/tools/growth/brand", label: "Brand" },
     },
+    // Vantage's screens all hang off its overview, which is a real page.
+    {
+        prefix: "/employer/tools/vantage/",
+        target: { href: "/employer/tools/vantage", label: "Vantage" },
+    },
+    {
+        prefix: "/employer/tools/proposals/write/",
+        target: { href: "/employer/tools/proposals/write", label: "Proposals" },
+    },
+    {
+        prefix: "/employer/tools/proposals/",
+        target: { href: "/employer/tools/proposals", label: "Proposals" },
+    },
     // Growth has a front door of its own, so its two workspaces go back to it.
     { prefix: "/employer/tools/growth/", target: GROWTH },
     // `/employer/tools/prospects/*` is the old location, kept as a redirect
@@ -47,7 +60,6 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/prospects",
         target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
     },
-    { prefix: "/employer/artifacts/", target: { href: "/employer/artifacts", label: "Artifacts" } },
     { prefix: "/employer/documents/", target: STUDIO },
     { prefix: "/employer/mindmap/", target: STUDIO },
 ];

@@ -8,11 +8,11 @@ import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 
-import { InlineError } from "../../_components/EmptyState";
+import { InlineError } from "~/components/tools/EmptyState";
 import { ToolHeader, ToolPage } from "../../_components/ToolHeader";
-import { plural } from "../../_lib/format";
+import { plural } from "~/lib/tools/format";
 import { useGrowthUrls } from "../../_lib/paths";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { AccountsPanel } from "../_components/AccountsPanel";
 import { ComposePanel } from "../_components/ComposePanel";
 import { NetworkMark } from "../_components/NetworkMark";

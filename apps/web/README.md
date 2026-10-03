@@ -68,6 +68,11 @@ One typeface system across apps/web and apps/landing:
 - Renderers that cannot take `var()` (canvas, mermaid) call
   `resolveFontStack("sans" | "mono" | "serif")` from `~/lib/fonts` —
   next/font serves hashed family names, so a literal `"Inter"` never matches.
+- Kit `Input` / `Textarea` take their size from `className` alone: pass
+  `text-xs`, `text-lg` or `text-[13px]` and it holds at every width. The
+  default (16px on phones so iOS doesn't zoom on focus, 14px from `md`) is a
+  components-layer rule in `src/styles/globals.css`, not a kit class
+  (`__tests__/brand/field-font-size.test.tsx`).
 
 ## Icons
 

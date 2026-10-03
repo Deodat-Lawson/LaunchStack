@@ -228,4 +228,34 @@ describe("ToolNavProvider", () => {
         mount({ storageScope: "u1:c1", request: { at: "/settings", nonce: 5 } });
         expect(here()).toBe("/settings");
     });
+
+    it("does not remember a dead link, even when it finds out after the visit was saved", () => {
+        window.localStorage.setItem("tool.location.v1:u1:c1:example", "/things/3");
+        function LateNotFound() {
+            const nav = useToolNav();
+            return (
+                <button type="button" onClick={nav.forgetCurrent}>
+                    Nothing here
+                </button>
+            );
+        }
+        render(
+            <ToolNavProvider
+                toolId="example"
+                roots={["things", "settings"]}
+                home="/things"
+                host={{ storageScope: "u1:c1", request: { at: "/things/404", nonce: 1 } }}
+            >
+                <Probe />
+                <LateNotFound />
+            </ToolNavProvider>
+        );
+        expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBe("/things/404");
+        // The screen's data answers: no such thing. The visit is forgotten.
+        fireEvent.click(screen.getByText("Nothing here"));
+        expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBe("/things/3");
+        // Moving on is remembered as usual.
+        fireEvent.click(screen.getByText("Thing 7"));
+        expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBe("/things/7");
+    });
 });

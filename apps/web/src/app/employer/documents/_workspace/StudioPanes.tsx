@@ -49,25 +49,13 @@ export interface StudioPaneContext {
     tool?: ToolHost;
 }
 
-const DocumentGenerator = dynamic(
-    () =>
-        import("~/app/employer/documents/components/DocumentGenerator").then(
-            m => m.DocumentGenerator
-        ),
+const DraftsTool = dynamic(
+    () => import("~/app/employer/documents/components/DraftsTool").then(m => m.DraftsTool),
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
-const RewriteDiffView = dynamic(
-    () =>
-        import("~/app/employer/documents/components/RewriteDiffView").then(m => m.RewriteDiffView),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-
-const LegalGeneratorTheme = dynamic(
-    () =>
-        import("~/app/employer/documents/components/LegalGeneratorTheme").then(
-            m => m.LegalGeneratorTheme
-        ),
+const RewriteTool = dynamic(
+    () => import("~/app/employer/documents/components/RewriteTool").then(m => m.RewriteTool),
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
@@ -333,17 +321,12 @@ export function ChatPane(_: PaneProps) {
 }
 
 /**
- * No title strip: the tab names the tool and the generator opens with its
- * own heading, the way every other tool's screens do. The strip made three
- * stacked titles ("Templated Drafts" tab, "TEMPLATED DRAFTS / Draft from a
- * template", "Generate a legal document").
+ * Templated Drafts in the shared tool frame: New document, My documents and
+ * the Assistant are screens in its rail, and an open draft is a page under
+ * My documents.
  */
-export function DraftPane(_: PaneProps) {
-    return (
-        <div className="h-full min-h-0 overflow-y-auto">
-            <DocumentGenerator />
-        </div>
-    );
+export function DraftPane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return <DraftsTool host={context?.tool} />;
 }
 
 interface ComingSoonPaneProps extends PaneProps {
@@ -421,12 +404,9 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
     );
 }
 
-export function RewritePane(_: PaneProps) {
-    return (
-        <LegalGeneratorTheme ambient={false}>
-            <RewriteDiffView />
-        </LegalGeneratorTheme>
-    );
+/** Rewrite in the shared tool frame: New rewrite and My rewrites in its rail. */
+export function RewritePane({ context }: PaneProps & { context?: StudioPaneContext }) {
+    return <RewriteTool host={context?.tool} />;
 }
 
 export function CompanySettingsPane({
@@ -853,9 +833,9 @@ export function renderStudioPane(
         case "agents":
             return <AgentsStudioPane onClose={onClose} context={context} />;
         case "draft":
-            return <DraftPane onClose={onClose} />;
+            return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":
-            return <RewritePane onClose={onClose} />;
+            return <RewritePane onClose={onClose} context={context} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
         case "investors":

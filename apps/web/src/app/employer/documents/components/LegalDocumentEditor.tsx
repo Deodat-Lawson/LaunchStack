@@ -1523,9 +1523,9 @@ export function LegalDocumentEditor({
                         onClick={onBack}
                         className={lt.rdBtnGhost}
                         style={{ padding: "4px 8px" }}
-                        aria-label="Back to documents"
+                        aria-label="Back to My documents"
                     >
-                        Drift
+                        My documents
                     </button>
                     <span className={lt.rdCrumbsSep}>/</span>
                     <span style={{ color: "var(--ink-2)" }}>Legal</span>

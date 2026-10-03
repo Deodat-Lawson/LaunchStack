@@ -23,6 +23,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { useToolActive } from "~/components/tool-app/nav";
 
 // Import tool components
 import {
@@ -98,6 +99,8 @@ interface DocumentGeneratorEditorProps {
     initialCitations?: Citation[];
     documentId?: number;
     onBack: () => void;
+    /** The back button's label: where `onBack` goes ("My documents"). Default "Back". */
+    backLabel?: string;
     onSave: (title: string, content: string, citations?: Citation[]) => void;
     mode?: "full" | "rewrite";
     docxBase64?: string;
@@ -109,11 +112,15 @@ export function DocumentGeneratorEditor({
     initialCitations = [],
     documentId,
     onBack,
+    backLabel = "Back",
     onSave,
     mode = "full",
     docxBase64,
 }: DocumentGeneratorEditorProps) {
     const isRewriteMode = mode === "rewrite";
+    // Tool tabs are hidden, not unmounted: the shortcuts below must not fire
+    // (or swallow ⌘K) while the person is typing in another tab.
+    const toolActive = useToolActive();
     const componentId = useId();
     const [citationCounter, setCitationCounter] = useState(0);
     // Core state
@@ -299,6 +306,7 @@ export function DocumentGeneratorEditor({
 
     // Keyboard shortcuts (including undo, format)
     useEffect(() => {
+        if (!toolActive) return;
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
                 const editorFocused = document.activeElement?.closest(".ProseMirror");
@@ -339,7 +347,7 @@ export function DocumentGeneratorEditor({
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [handleSave, applyFormat]);
+    }, [handleSave, applyFormat, toolActive]);
 
     // Handle AI content generation
     const handleAIAction = async (action: AIAction, customPrompt?: string) => {
@@ -793,7 +801,7 @@ export function DocumentGeneratorEditor({
                                         className="text-ink-3 hover:text-ink"
                                     >
                                         <ArrowLeft className="mr-2 h-4 w-4" />
-                                        Back
+                                        {backLabel}
                                     </Button>
                                     <div className="bg-line h-6 w-px" />
                                     <Input

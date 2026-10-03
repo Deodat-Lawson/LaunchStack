@@ -238,27 +238,49 @@ export function ToolNavProvider({
         moved.current = true;
     }, [scope, toolId, go, resolve]);
 
-    // Visits that must not become the remembered screen. Children's effects
-    // run before this provider's, so a not-found screen marks its visit in
-    // time for the write below to skip it.
+    // Visits that must not become the remembered screen. A screen that finds
+    // nothing to show (a dead link) says so with `forgetCurrent`: usually from
+    // its first render — children's effects run before this provider's, so the
+    // write below skips it — and sometimes later, once its data has answered,
+    // after the visit was already written. Then the screen remembered before
+    // it is put back.
     const unremembered = useRef(new Set<number>());
     const currentKeyRef = useRef(current.key);
     currentKeyRef.current = current.key;
+    const written = useRef<{ key: number; previous: string | null } | null>(null);
+    const storageKey = scope ? `${STORAGE_PREFIX}${scope}:${toolId}` : null;
+    const storageKeyRef = useRef(storageKey);
+    storageKeyRef.current = storageKey;
     const forgetCurrent = useCallback(() => {
-        unremembered.current.add(currentKeyRef.current);
+        const key = currentKeyRef.current;
+        unremembered.current.add(key);
+        const last = written.current;
+        if (!last || last.key !== key || !storageKeyRef.current) return;
+        try {
+            if (last.previous === null) window.localStorage.removeItem(storageKeyRef.current);
+            else window.localStorage.setItem(storageKeyRef.current, last.previous);
+        } catch {
+            // Storage blocked: nothing was remembered to undo.
+        }
+        written.current = null;
     }, []);
 
     useEffect(() => {
-        if (!scope || unremembered.current.has(current.key)) return;
+        if (!storageKey || unremembered.current.has(current.key)) return;
         try {
-            window.localStorage.setItem(
-                `${STORAGE_PREFIX}${scope}:${toolId}`,
-                formatToolHref(current)
-            );
+            const previous = window.localStorage.getItem(storageKey);
+            const next = formatToolHref(current);
+            window.localStorage.setItem(storageKey, next);
+            // What to put back if this visit turns out to be a dead end.
+            written.current = {
+                key: current.key,
+                previous:
+                    written.current?.key === current.key ? written.current.previous : previous,
+            };
         } catch {
             // Storage full or blocked: the tab still works, it just will not remember.
         }
-    }, [scope, toolId, current]);
+    }, [storageKey, current]);
 
     const searchParams = useMemo(() => new URLSearchParams(current.search), [current.search]);
     const active = host?.active ?? true;

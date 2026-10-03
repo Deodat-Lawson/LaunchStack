@@ -7,6 +7,7 @@ import {
     finalizeStorage,
     markJobFailed,
     normalizeDocument,
+    resetVersionIndex,
     routeDocument,
     storeBatch,
     withDbRetry,
@@ -513,7 +514,9 @@ export interface IndexingStageCounts {
  * Stage 2 of the pipeline (ADR-003): chunk the persisted pages, embed,
  * store, finalize metadata, and run optional graph extraction/sync.
  * Requires `runExtractionStage` to have persisted pipeline state for the
- * job. Idempotent via content-hash dedup and per-version upserts.
+ * job. Idempotent: the version's structure and chunk rows are reset before
+ * they are rewritten, and metadata and per-dimension vectors are upserts,
+ * so a retried or replayed stage converges on one copy of every chunk.
  */
 export async function runIndexingStage(input: DocIngestionToolInput): Promise<IndexingStageCounts> {
     const {
@@ -583,6 +586,13 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
     // -----------------------------------------------------------------------
     let storedSections: StoredSection[] = [];
     let totalStored = 0;
+
+    // The stage re-runs whole on outbox retry and operator replay (ADR-003),
+    // and the writes below append. Clearing the version first makes a second
+    // run converge on one copy of every chunk instead of adding another.
+    // Unconditional: a re-run that now yields no chunks must still drop the
+    // ones a previous attempt stored.
+    await runStep("step-d-reset", async () => resetVersionIndex(documentId, versionId));
 
     if (chunks.length > 0) {
         // The document's real hierarchy, one node per distinct section, so a

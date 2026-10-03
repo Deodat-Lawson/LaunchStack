@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { getDb } from "@launchstack/store/client";
+import { getDb, type DbClient } from "@launchstack/store/client";
 import { documentEmbeddings768, documentEmbeddings1024 } from "@launchstack/store/schema";
 import type { EmbeddingIndexConfig } from "./index-registry";
 
@@ -9,6 +9,12 @@ interface StoreDimensionTableEmbeddingsInput {
     retrievalChunkIds: number[];
     vectors: number[][];
     index: EmbeddingIndexConfig;
+    /**
+     * The connection to write through. Pass the caller's transaction so the
+     * vectors commit with the retrieval chunks they belong to; defaults to
+     * the shared client.
+     */
+    db?: Pick<DbClient, "insert">;
 }
 
 function getDimensionTable(index: EmbeddingIndexConfig) {
@@ -26,7 +32,7 @@ function getDimensionTable(index: EmbeddingIndexConfig) {
 export async function storeDimensionTableEmbeddings(
     input: StoreDimensionTableEmbeddingsInput
 ): Promise<void> {
-    const { documentId, retrievalChunkIds, vectors, index } = input;
+    const { documentId, retrievalChunkIds, vectors, index, db = getDb() } = input;
     if (retrievalChunkIds.length !== vectors.length) {
         throw new Error("Retrieval chunk ids and embedding vector count mismatch");
     }
@@ -49,7 +55,7 @@ export async function storeDimensionTableEmbeddings(
         embedding: vectors[idx]!,
     }));
 
-    await getDb()
+    await db
         .insert(table)
         .values(rows)
         .onConflictDoUpdate({

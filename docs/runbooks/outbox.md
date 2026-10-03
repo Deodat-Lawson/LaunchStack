@@ -31,8 +31,10 @@ FROM pdr_ai_v2_event_outbox WHERE trace_id = '<traceId>' ORDER BY id;
 
 ## Replaying an event
 
-Handlers are idempotent (content-hash dedup, upserts, deterministic event
-ids), so replay converges rather than duplicating work:
+Handlers are idempotent: the indexing stage deletes the version's structure
+and chunk rows before rewriting them (`resetVersionIndex`), metadata and
+per-dimension vectors are upserts, and event ids are deterministic. Replay
+therefore converges rather than duplicating work:
 
 ```sql
 UPDATE pdr_ai_v2_event_outbox
@@ -50,6 +52,24 @@ untouched), so replaying stage N always re-runs stages N+1..end.
 
 Re-uploading the same file (same creation key) does the same thing through
 the product: the lifecycle revives a dead event automatically.
+
+## Cancelled rows
+
+Deleting a document cancels its in-flight pipeline events inside the same
+transaction that removes the rows (`deleteSourceCascade`): every `pending`
+or `processing` event whose payload names that source becomes `cancelled`
+with `last_error = 'cancelled: source deleted'`. Cancelled rows are never
+claimed, never counted as dead, and cannot be replayed — the source they
+belong to no longer exists. A worker that was mid-handler when the cancel
+landed finds its row no longer `processing` and discards its outcome; a
+stage that then reads the deleted rows throws `SourceGoneError`, which the
+tick dead-letters on the first attempt instead of retrying eight times.
+
+```sql
+-- Events cancelled by deletes, most recent first
+SELECT event_id, event_type, company_id, updated_at
+FROM pdr_ai_v2_event_outbox WHERE status = 'cancelled' ORDER BY updated_at DESC;
+```
 
 ## Stuck `processing` rows
 
@@ -94,7 +114,7 @@ delays recovery after a genuine worker death — never data loss.
 
 1. Read `last_error`. Converter/transcription unreachable → fix the service,
    then replay. Contract-validation failures (`payload failed protocol
-   validation`) mean a producer bug — fix code first; replay will not help.
+validation`) mean a producer bug — fix code first; replay will not help.
 2. The matching `pdr_ai_v2_ocr_jobs` row was marked `failed` with the same
    error (failure visibility) — the product UI shows the document as failed.
 3. After fixing the cause, replay (above). The job returns to `processing`

@@ -30,7 +30,7 @@ function acceptPreferredProvider(provider?: string): OCRProvider | undefined {
     }
     return undefined;
 }
-import { getStoragePort } from "@launchstack/runtime";
+import { getStoragePort, SourceGoneError } from "@launchstack/runtime";
 import type {
     ExtractionJob,
     ExtractionOutcome,
@@ -140,8 +140,12 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
     async index(job: IndexingJob): Promise<IndexOutcome> {
         const row = await loadJobRow(job.ocrJobId);
         if (!row) {
-            throw new Error(
-                `OCR job ${job.ocrJobId} not found — cannot index source version ${job.sourceVersionId}`
+            // The cascade delete removes the job row with the document; the
+            // event that raced it is dead-lettered on this attempt, not
+            // retried eight times against nothing.
+            throw new SourceGoneError(
+                `OCR job ${job.ocrJobId} not found — cannot index source version ${job.sourceVersionId}; the source was deleted`,
+                { sourceId: job.sourceId }
             );
         }
         const options = (row.dispatchOptions as StoredDispatchOptions | null) ?? {};

@@ -2,3 +2,4 @@
 export * from "./lifecycle";
 export * from "./events";
 export * from "./port-impl";
+export * from "./delete";

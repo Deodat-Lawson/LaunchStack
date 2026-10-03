@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +24,7 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import { FitMeter } from "~/components/tools/FitMeter";
@@ -69,7 +69,7 @@ function FunderItem({
     const amount = amountWords(f.amountMin, f.amountMax);
     return (
         <div className="border-line-2 border-t first:border-t-0">
-            <div className="grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 md:grid-cols-[20px_minmax(0,1fr)_120px_110px_auto]">
+            <div className="@max-lg:grid-cols-[20px_minmax(0,1fr)_110px_auto] @max-md:grid-cols-[20px_minmax(0,1fr)_auto] grid grid-cols-[20px_minmax(0,1fr)_120px_110px_auto] items-center gap-3 px-3 py-2.5">
                 <button
                     type="button"
                     onClick={() => setOpen(o => !o)}
@@ -92,7 +92,7 @@ function FunderItem({
                 </span>
                 <span
                     className={cn(
-                        "hidden text-xs md:block",
+                        "@max-lg:hidden text-xs",
                         f.daysLeft !== null && f.daysLeft >= 0 && f.daysLeft <= 14
                             ? "text-warn"
                             : "text-ink-3"
@@ -100,13 +100,15 @@ function FunderItem({
                 >
                     {closeWords(f.closesOn, f.daysLeft)}
                 </span>
-                <span className="hidden md:block">
+                <span className="@max-md:hidden">
                     <FitMeter value={f.fit} threshold={70} />
                 </span>
                 <span className="flex items-center gap-1.5">
                     {f.status === "applied" && f.applicationId ? (
                         <Button size="sm" variant="outline" asChild>
-                            <Link href={href(`/write/${f.applicationId}`)}>Open application</Link>
+                            <ToolLink href={href(`/write/${f.applicationId}`)}>
+                                Open application
+                            </ToolLink>
                         </Button>
                     ) : (
                         <>
@@ -140,7 +142,7 @@ function FunderItem({
                 </span>
             </div>
             {open && (
-                <div className="text-ink-2 grid gap-3 px-3 pb-4 pl-[44px] text-[13px] md:grid-cols-2">
+                <div className="text-ink-2 @max-md:grid-cols-1 grid grid-cols-2 gap-3 px-3 pb-4 pl-[44px] text-[13px]">
                     <div className="grid gap-2">
                         {f.why.length > 0 && (
                             <div>
@@ -430,7 +432,7 @@ export function FundersScreen() {
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
 
             <form
-                className="border-line bg-panel grid gap-3 rounded-lg border px-4 py-4 md:grid-cols-[minmax(0,1fr)_180px_170px_auto] md:items-end"
+                className="border-line bg-panel @max-lg:grid-cols-2 @max-sm:grid-cols-1 grid grid-cols-[minmax(0,1fr)_180px_170px_auto] items-end gap-3 rounded-lg border px-4 py-4"
                 onSubmit={e => {
                     e.preventDefault();
                     void find();
@@ -554,12 +556,12 @@ export function FundersScreen() {
 
             <p className="text-ink-3 max-w-[70ch] text-[13px]">
                 Raising equity instead of grants?{" "}
-                <Link
+                <ToolLink
                     href="/employer/documents?feature=investors"
                     className="text-brand-ink hover:underline"
                 >
                     Investor relations
-                </Link>{" "}
+                </ToolLink>{" "}
                 finds the venture funds raising now and drafts the pitch from the same sources.
             </p>
 

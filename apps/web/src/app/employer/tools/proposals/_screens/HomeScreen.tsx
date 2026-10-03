@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -32,11 +32,13 @@ function ApplicationLine({
     const tone = deadlineTone(app.daysLeft);
     const deadline = deadlineWords(app.deadline, app.daysLeft);
     return (
-        <Link
+        <ToolLink
             href={href}
             className={cn(
-                "border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0",
-                !compact && "md:grid-cols-[minmax(0,1fr)_140px_120px_auto]"
+                "border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0",
+                compact
+                    ? "grid-cols-[minmax(0,1fr)_auto]"
+                    : "@max-md:grid-cols-[minmax(0,1fr)_auto] grid-cols-[minmax(0,1fr)_140px_120px_auto]"
             )}
         >
             <span className="min-w-0">
@@ -61,7 +63,7 @@ function ApplicationLine({
             {!compact && (
                 <span
                     className={cn(
-                        "hidden text-xs md:block",
+                        "@max-md:hidden text-xs",
                         tone === "warn" && "text-warn",
                         tone === "lost" && "text-danger",
                         tone === "quiet" && "text-ink-3"
@@ -71,12 +73,12 @@ function ApplicationLine({
                 </span>
             )}
             {!compact && (
-                <span className="hidden md:block">
+                <span className="@max-md:hidden">
                     <ApplicationStatusPill status={app.status} />
                 </span>
             )}
             <ReadinessMeter value={app.readiness} />
-        </Link>
+        </ToolLink>
     );
 }
 
@@ -123,7 +125,7 @@ export function HomeScreen() {
                 actions={
                     <>
                         <Button variant="outline" size="sm" asChild>
-                            <Link href={href("/funders")}>Find funders</Link>
+                            <ToolLink href={href("/funders")}>Find funders</ToolLink>
                         </Button>
                         <Button size="sm" onClick={() => setCreating(true)}>
                             New application
@@ -161,8 +163,13 @@ export function HomeScreen() {
                                         Build profile
                                     </Button>
                                 ) : (
+                                    // The server still builds the old page URLs
+                                    // (/employer/tools/proposals/write/12); ToolLink
+                                    // resolves them to the screen in this tab.
                                     <Button variant="outline" size="sm" asChild>
-                                        <Link href={item.action.href}>{item.action.label}</Link>
+                                        <ToolLink href={item.action.href}>
+                                            {item.action.label}
+                                        </ToolLink>
                                     </Button>
                                 )}
                             </div>
@@ -201,7 +208,7 @@ export function HomeScreen() {
                 )}
             </section>
 
-            <div className="grid grid-cols-1 gap-7 lg:grid-cols-2">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-7">
                 <section className="min-w-0">
                     <SectionHeading title="In progress" aside="no deadline this week" />
                     {home.loading ? (
@@ -242,14 +249,14 @@ export function HomeScreen() {
                             }
                             action={
                                 <Button size="sm" variant="outline" asChild>
-                                    <Link href={href("/funders")}>Find funders</Link>
+                                    <ToolLink href={href("/funders")}>Find funders</ToolLink>
                                 </Button>
                             }
                         />
                     ) : (
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {d?.funders.top.map(f => (
-                                <Link
+                                <ToolLink
                                     key={f.id}
                                     href={href("/funders")}
                                     className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0"
@@ -268,7 +275,7 @@ export function HomeScreen() {
                                     <span className="text-ink text-xs font-medium tabular-nums">
                                         {f.fit === null ? "—" : `fit ${f.fit}`}
                                     </span>
-                                </Link>
+                                </ToolLink>
                             ))}
                         </div>
                     )}
@@ -280,9 +287,9 @@ export function HomeScreen() {
                     Every draft starts from your profile: {plural(d.profile.facts, "fact")} from{" "}
                     {plural(d.profile.documents, "source")}, built {relativeTime(d.profile.builtAt)}
                     .{" "}
-                    <Link href={href("/profile")} className="text-brand-ink hover:underline">
+                    <ToolLink href={href("/profile")} className="text-brand-ink hover:underline">
                         Review it
-                    </Link>{" "}
+                    </ToolLink>{" "}
                     after you add reports or proposals.
                 </p>
             )}

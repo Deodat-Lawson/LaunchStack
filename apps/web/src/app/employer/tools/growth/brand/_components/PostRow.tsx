@@ -202,10 +202,10 @@ export function PostRow({ post, onChange }: { post: BrandPost; onChange: () => v
         <PostActions post={post} onChange={onChange}>
             <button
                 type="button"
-                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 grid w-full grid-cols-[92px_20px_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px] md:grid-cols-[150px_20px_minmax(0,1fr)_auto]"
+                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[92px_20px_minmax(0,1fr)_auto] grid w-full grid-cols-[150px_20px_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
             >
                 <span className="text-ink-2 text-[13px] tabular-nums">
-                    <span className="hidden md:inline">{dayAndMonth(at)} · </span>
+                    <span className="@max-md:hidden">{dayAndMonth(at)} · </span>
                     {timeOfDay(at)}
                 </span>
                 <NetworkMark

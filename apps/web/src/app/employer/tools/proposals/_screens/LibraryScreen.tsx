@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronDown, ChevronRight, Search } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +17,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
@@ -199,12 +199,12 @@ function ItemRow({
                     <div className="mt-2 flex items-center gap-3">
                         <CiteList cites={item.evidence.map(e => e.n)} evidence={item.evidence} />
                         {item.sourceApplicationId && (
-                            <Link
+                            <ToolLink
                                 href={href(`/write/${item.sourceApplicationId}`)}
                                 className="text-brand-ink text-xs hover:underline"
                             >
                                 Open the application it came from
-                            </Link>
+                            </ToolLink>
                         )}
                     </div>
                 </div>

@@ -5,6 +5,12 @@ import { cn } from "~/lib/utils";
 /**
  * Floats up from the bottom when something is selected. The only element on
  * the Companies screen with a shadow, because it is the only thing floating.
+ *
+ * Sticky, not fixed: the screen sits in a tab whose content column is the
+ * scroller, beside the tool's rail. Pinned to the foot of that column it
+ * stays centred on the list, where `fixed` would centre it on the whole tab
+ * and slide it under the rail in a narrow one. Render it as the last child
+ * of the screen's column.
  */
 export function BulkBar({
     count,
@@ -23,7 +29,7 @@ export function BulkBar({
             role="toolbar"
             aria-label={`${count} selected`}
             className={cn(
-                "bg-panel border-line shadow-3 animate-in fade-in-0 slide-in-from-bottom-2 fixed bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-lg border px-3 py-2 text-sm duration-200 motion-reduce:animate-none",
+                "bg-panel border-line shadow-3 animate-in fade-in-0 slide-in-from-bottom-2 sticky bottom-5 z-30 flex max-w-full flex-wrap items-center gap-2 self-center rounded-lg border px-3 py-2 text-sm duration-200 motion-reduce:animate-none",
                 className
             )}
         >

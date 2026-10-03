@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
@@ -117,12 +117,12 @@ export function TriageScreen() {
                                 className="border-line-2 flex flex-col gap-1 border-t px-4 py-2.5 first:border-t-0"
                             >
                                 <div className="flex items-center gap-3">
-                                    <Link
+                                    <ToolLink
                                         href={vantagePath(`/agenda?week=${weekStart}`)}
                                         className="text-ink hover:text-brand-ink min-w-0 flex-1 truncate text-[13px] font-medium"
                                     >
                                         {topic.title}
-                                    </Link>
+                                    </ToolLink>
                                     <span className="text-ink-3 shrink-0 text-[11.5px]">
                                         {weekLabel(weekStart)}
                                     </span>
@@ -222,7 +222,7 @@ export function TriageScreen() {
                                     {d.title}
                                 </span>
                                 {d.note && (
-                                    <span className="text-ink-3 hidden max-w-[260px] truncate text-[12px] sm:inline">
+                                    <span className="text-ink-3 @max-sm:hidden inline max-w-[260px] truncate text-[12px]">
                                         {d.note}
                                     </span>
                                 )}

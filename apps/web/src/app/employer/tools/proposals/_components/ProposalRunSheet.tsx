@@ -1,7 +1,6 @@
 "use client";
 
 import { Check, CircleDashed, Loader2, X } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -11,6 +10,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "~/components/ui/sheet";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import { duration } from "~/lib/tools/format";
@@ -77,6 +77,10 @@ export function ProposalRunSheet() {
         : null;
     return (
         <Sheet open={runSheetOpen} onOpenChange={open => !open && closeRunSheet()}>
+            {/* Mounted in the tab (the frame's overlay), so `w-full` is the
+                tab's width. The cap stays an `sm:` variant on purpose: it
+                has to replace the kit's own `sm:max-w-sm`, which a container
+                variant would not. */}
             <SheetContent className="flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-[440px]">
                 <SheetHeader className="px-6 pb-2 pt-6">
                     <SheetTitle className="text-ink text-lg font-semibold tracking-[-0.02em]">
@@ -131,19 +135,19 @@ export function ProposalRunSheet() {
                             </span>
                             {!live && run.applicationId && (
                                 <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
-                                    <Link href={href(`/write/${run.applicationId}`)}>
+                                    <ToolLink href={href(`/write/${run.applicationId}`)}>
                                         Open the application
-                                    </Link>
+                                    </ToolLink>
                                 </Button>
                             )}
                             {!live && !run.applicationId && run.kind === "funders" && (
                                 <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
-                                    <Link href={href("/funders")}>See funders</Link>
+                                    <ToolLink href={href("/funders")}>See funders</ToolLink>
                                 </Button>
                             )}
                             {!live && !run.applicationId && run.kind === "profile" && (
                                 <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
-                                    <Link href={href("/profile")}>See the profile</Link>
+                                    <ToolLink href={href("/profile")}>See the profile</ToolLink>
                                 </Button>
                             )}
                         </div>

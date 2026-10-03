@@ -4,8 +4,10 @@ import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import LoadingPage from "~/app/_components/loading";
+import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
+import { isStudioPaneId } from "./studioPaneIds";
 import type { StudioFeature } from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
@@ -39,6 +41,12 @@ export interface StudioPaneContext {
         onDraftInChat: (prompt: string) => void;
         onSaveAsSource: (markdown: string) => void;
     };
+    /**
+     * For tools with screens of their own: whether this tab is the focused
+     * one, a location to show, where to remember the last one, and how to
+     * reach other tabs. See `components/tool-app`.
+     */
+    tool?: ToolHost;
 }
 
 const DocumentGenerator = dynamic(
@@ -65,6 +73,23 @@ const LegalGeneratorTheme = dynamic(
 
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+// Tools with screens of their own. Each is a tab with a rail inside it and
+// its own history; none of them is a page you navigate to any more.
+const GrowthTool = dynamic(
+    () => import("~/app/employer/tools/growth/GrowthTool").then(m => m.GrowthTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+const ProposalsTool = dynamic(
+    () => import("~/app/employer/tools/proposals/ProposalsTool").then(m => m.ProposalsTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+const VantageTool = dynamic(
+    () => import("~/app/employer/tools/vantage/VantageTool").then(m => m.VantageTool),
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
@@ -307,11 +332,17 @@ export function ChatPane(_: PaneProps) {
     );
 }
 
+/**
+ * No title strip: the tab names the tool and the generator opens with its
+ * own heading, the way every other tool's screens do. The strip made three
+ * stacked titles ("Templated Drafts" tab, "TEMPLATED DRAFTS / Draft from a
+ * template", "Generate a legal document").
+ */
 export function DraftPane(_: PaneProps) {
     return (
-        <InlineFeatureShell eyebrow="Templated Drafts" title="Draft from a template">
+        <div className="h-full min-h-0 overflow-y-auto">
             <DocumentGenerator />
-        </InlineFeatureShell>
+        </div>
     );
 }
 
@@ -788,13 +819,29 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
  * workspace area when a non-chat feature is expanded. `onClose` is the pane's
  * exit path — the drawer passes its own close handler; the main area passes
  * return-to-chat after removing the chrome back control (Studio sidebar Chat handles that too).
+ *
+ * Every Studio app is drawn here, in its tab. The switch is exhaustive over
+ * `STUDIO_PANE_IDS`, so adding an app without a pane fails to compile.
  */
 export function renderStudioPane(
     feature: StudioFeature,
     onClose: () => void,
     context?: StudioPaneContext
 ): React.ReactNode {
-    switch (feature.id) {
+    if (feature.comingSoon) {
+        return (
+            <ComingSoonPane
+                onClose={onClose}
+                eyebrow="Studio"
+                title={feature.label}
+                body={feature.desc}
+                bullets={[]}
+            />
+        );
+    }
+    const id = feature.id;
+    if (!isStudioPaneId(id)) return <UnknownPane label={feature.label} />;
+    switch (id) {
         case "chat":
             return <ChatPane onClose={onClose} />;
         case "knowledge":
@@ -814,10 +861,17 @@ export function renderStudioPane(
         case "investors":
             return (
                 <InvestorsPane
+                    host={context?.tool}
                     onDraftInChat={context?.investors?.onDraftInChat}
                     onSaveAsSource={context?.investors?.onSaveAsSource}
                 />
             );
+        case "growth":
+            return <GrowthTool host={context?.tool} />;
+        case "proposals":
+            return <ProposalsTool host={context?.tool} />;
+        case "vantage":
+            return <VantageTool host={context?.tool} />;
         // Company metadata is a section of Settings now. Its id survives so old
         // deep links open the right section rather than 404ing.
         case "metadata":
@@ -826,62 +880,18 @@ export function renderStudioPane(
             return <AnalyticsPane onClose={onClose} />;
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
-        case "growth":
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Growth"
-                    title="Growth"
-                    body="One app for making the company known and finding the companies that will buy. Brand composes once for every network, schedules it, shows the calendar and generates campaigns from your documents. Prospects finds buyers that match what you sell, profiles them with cited evidence, and runs every deal to won."
-                    bullets={[
-                        "Brand: Compose, Calendar, Campaigns, Accounts — LinkedIn, X, Bluesky and Reddit",
-                        "Prospects: Segment, Companies with cited profiles and fit, People, Deals, Runs, Sources",
-                        "Outreach drafts a campaign in Email for you to approve — nothing is sent automatically",
-                        "Everything is grounded in the same company knowledge",
-                    ]}
-                    href={feature.href ?? "/employer/tools/growth"}
-                    ctaLabel="Open Growth"
-                />
-            );
-        case "vantage":
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Vantage"
-                    title="Vantage"
-                    body="The evidence-backed operating system for founder meetings. Log conversations, numbers and promises through the week; on Thursday, Vantage drafts next week's agenda with every claim tied to its source; after the meeting, decisions become commitments that next week's agenda checks."
-                    bullets={[
-                        "Evidence inbox: notes, interviews, links, claims — with a date and a source",
-                        "Metric definitions: signups, activated, active, paying — every number carries its period and source",
-                        "Agenda: three to five topics, each with what happened, why it matters, the decision and a next step",
-                        "Commitments checked the following week; a program triage view over what you chose to share",
-                    ]}
-                    href={feature.href ?? "/employer/tools/vantage"}
-                    ctaLabel="Open Vantage"
-                />
-            );
-        default:
-            if (feature.comingSoon) {
-                return (
-                    <ComingSoonPane
-                        onClose={onClose}
-                        eyebrow="Studio"
-                        title={feature.label}
-                        body={feature.desc}
-                        bullets={[]}
-                    />
-                );
-            }
-            return (
-                <DefaultLinkPane
-                    onClose={onClose}
-                    eyebrow="Studio"
-                    title={feature.label}
-                    body={feature.desc}
-                    bullets={[]}
-                    href={feature.href ?? "/employer/documents"}
-                    ctaLabel="Open full page"
-                />
-            );
+        default: {
+            const unhandled: never = id;
+            return <UnknownPane label={String(unhandled)} />;
+        }
     }
+}
+
+/** A tab whose app this build does not have — a layout saved by a newer version, say. */
+function UnknownPane({ label }: { label: string }) {
+    return (
+        <div className="text-ink-3 flex h-full items-center justify-center px-6 text-center text-[13px]">
+            {label} is not available in this version of the app.
+        </div>
+    );
 }

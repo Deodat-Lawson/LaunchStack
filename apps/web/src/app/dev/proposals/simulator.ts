@@ -1069,12 +1069,15 @@ export async function simulateProposals(
         const candidates = world.funders.filter(f => f.status === "candidate");
         const strong = candidates.filter(f => (f.fit ?? 0) >= 70);
         const todo: HomeDto["todo"] = [];
+        // The real service builds these as the old page URLs; the tab's
+        // ToolLink resolves them to its own screens, and so must the harness.
+        const page = (path: string) => `/employer/tools/proposals${path}`;
         if (world.profile.status !== "ready")
             todo.push({
                 id: "profile",
                 title: "Build your organisation profile",
                 detail: "Reads your 14 sources once; every draft starts from it.",
-                action: { label: "Profile", href: "/dev/proposals/profile" },
+                action: { label: "Profile", href: page("/profile") },
             });
         for (const a of open)
             if (a.daysLeft !== null && a.daysLeft <= 7 && a.readiness < 100)
@@ -1082,7 +1085,7 @@ export async function simulateProposals(
                     id: `deadline:${a.id}`,
                     title: `${a.title} is due in ${a.daysLeft} days`,
                     detail: `${a.readiness}% ready`,
-                    action: { label: "Open", href: `/dev/proposals/write/${a.id}` },
+                    action: { label: "Open", href: page(`/write/${a.id}`) },
                 });
         if (strong.length)
             todo.push({
@@ -1092,7 +1095,7 @@ export async function simulateProposals(
                     .slice(0, 3)
                     .map(f => f.funder)
                     .join(", "),
-                action: { label: "Funders", href: "/dev/proposals/funders" },
+                action: { label: "Funders", href: page("/funders") },
             });
         for (const a of open)
             if (a.status === "in_progress" && a.sections.total > a.sections.written)
@@ -1100,7 +1103,7 @@ export async function simulateProposals(
                     id: `sections:${a.id}`,
                     title: `${a.sections.total - a.sections.written} sections to write for ${a.title}`,
                     detail: a.funder ?? "",
-                    action: { label: "Draft", href: `/dev/proposals/write/${a.id}` },
+                    action: { label: "Draft", href: page(`/write/${a.id}`) },
                 });
         const body: HomeDto = {
             profile: {

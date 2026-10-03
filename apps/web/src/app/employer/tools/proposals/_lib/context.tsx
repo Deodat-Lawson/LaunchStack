@@ -6,8 +6,13 @@ import { useResource } from "~/lib/tools/useResource";
 import { proposalsApi, type CountsDto, type RunDto } from "../api";
 
 export interface ProposalsContextValue {
-    /** "/employer/tools/proposals" in the app, "/dev/proposals" in the harness. */
+    /**
+     * "" inside the workspace tab: Proposals' screens are app-relative paths
+     * ("/write/12") that `ToolLink` and `useToolRouter` resolve inside the
+     * tab. Kept as a prop so a screen could still be mounted under a prefix.
+     */
     basePath: string;
+    /** `href("/write/12")`; `href()` is Home ("/"), never "", so it reads as a path. */
     href: (path?: string) => string;
     counts: CountsDto | null;
     reloadCounts: () => Promise<void>;
@@ -90,7 +95,7 @@ export function ProposalsProvider({
     const value = useMemo<ProposalsContextValue>(
         () => ({
             basePath,
-            href: (path = "") => `${basePath}${path}`,
+            href: (path = "") => `${basePath}${path}` || "/",
             counts: countsRes.data,
             reloadCounts,
             activeRun,

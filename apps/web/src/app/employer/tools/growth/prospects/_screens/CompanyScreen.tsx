@@ -1,10 +1,11 @@
 "use client";
 
 import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useToolActive, useToolRouter } from "~/components/tool-app/nav";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -82,7 +83,8 @@ function Side({
 
 export function CompanyScreen({ id }: { id: string }) {
     const { href } = useProspects();
-    const router = useRouter();
+    const router = useToolRouter();
+    const active = useToolActive();
     const res = useResource(`company:${id}`, () => prospectsApi.company(id));
     const c = res.data?.company ?? null;
     const [outreachOpen, setOutreachOpen] = useState(false);
@@ -91,7 +93,9 @@ export function CompanyScreen({ id }: { id: string }) {
     const [editingNext, setEditingNext] = useState(false);
 
     const nav = useMemo(() => neighbours(id), [id]);
+    // Only while this tab is the one being used; hidden tabs stay mounted.
     useEffect(() => {
+        if (!active) return;
         const onKey = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
             if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
@@ -106,7 +110,7 @@ export function CompanyScreen({ id }: { id: string }) {
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [nav, href, router]);
+    }, [active, nav, href, router]);
 
     useEffect(() => {
         if (!c) return;
@@ -161,9 +165,9 @@ export function CompanyScreen({ id }: { id: string }) {
     return (
         <div className="mx-auto max-w-[1100px]">
             <div className="text-ink-3 mb-3 flex items-center gap-3 text-xs">
-                <Link href={href("/companies")} className="hover:text-ink">
+                <ToolLink href={href("/companies")} className="hover:text-ink">
                     Companies
-                </Link>
+                </ToolLink>
                 <span aria-hidden>/</span>
                 <span className="text-ink font-medium">
                     {c?.name ?? <Skeleton className="inline-block h-3 w-40 align-middle" />}
@@ -194,7 +198,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 )}
             </div>
 
-            <header className="border-line mb-6 grid gap-4 border-b pb-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+            <header className="border-line @max-md:grid-cols-1 mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5">
                 <div className="min-w-0">
                     <h1 className="text-ink text-[22px] font-semibold tracking-[-0.02em]">
                         {c ? c.name : <Skeleton className="h-6 w-72" />}
@@ -220,7 +224,7 @@ export function CompanyScreen({ id }: { id: string }) {
                     )}
                 </div>
                 {c && (
-                    <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                    <div className="@max-md:justify-start flex flex-wrap items-center justify-end gap-2">
                         <StageMenu
                             stage={c.deal.stage}
                             moves={c.deal.allowedMoves}
@@ -249,7 +253,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 </p>
             )}
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-[1fr_340px] gap-8">
                 <div className="min-w-0">
                     {!c ? (
                         <>

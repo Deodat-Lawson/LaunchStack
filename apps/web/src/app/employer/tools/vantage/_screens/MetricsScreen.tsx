@@ -183,7 +183,7 @@ export function MetricsScreen() {
                                         </div>
                                     </div>
                                     {l ? (
-                                        <div className="hidden text-right sm:block">
+                                        <div className="@max-sm:hidden text-right">
                                             <div className="text-ink font-mono text-[13px] tabular-nums">
                                                 {fmtNumber(l.latest.value, d.unit)}
                                             </div>
@@ -198,7 +198,7 @@ export function MetricsScreen() {
                                             </div>
                                         </div>
                                     ) : (
-                                        <span className="text-ink-3 hidden text-[12px] sm:inline">
+                                        <span className="text-ink-3 @max-sm:hidden text-[12px]">
                                             no numbers yet
                                         </span>
                                     )}

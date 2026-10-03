@@ -1,9 +1,9 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
-import Link from "next/link";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import type { EvidenceDto } from "../api";
@@ -29,13 +29,13 @@ export function Cite({ n, evidence }: { n: number; evidence: EvidenceDto[] }) {
             <HoverCardTrigger asChild>{sup}</HoverCardTrigger>
             <HoverCardContent align="start" className="w-80 p-3">
                 {item.href ? (
-                    <Link
+                    <ToolLink
                         href={item.href}
                         className="text-ink hover:text-brand-ink inline-flex items-center gap-1 text-[13px] font-medium"
                     >
                         {item.title}
                         <ExternalLink className="size-3" />
-                    </Link>
+                    </ToolLink>
                 ) : item.url ? (
                     <a
                         href={item.url}
@@ -90,12 +90,12 @@ export function EvidenceRows({ evidence }: { evidence: EvidenceDto[] }) {
                     <span className="text-ink-3 font-mono text-[11px] tabular-nums">{e.n}</span>
                     <span className="min-w-0">
                         {e.href ? (
-                            <Link
+                            <ToolLink
                                 href={e.href}
                                 className="text-ink hover:text-brand-ink font-medium"
                             >
                                 {e.title}
-                            </Link>
+                            </ToolLink>
                         ) : (
                             <span className="text-ink font-medium">{e.title}</span>
                         )}

@@ -59,7 +59,7 @@ export function SourcesScreen() {
                     {sources.map(s => (
                         <div
                             key={s.id}
-                            className="border-line-2 grid grid-cols-[1fr_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0 md:grid-cols-[1fr_200px_auto]"
+                            className="border-line-2 @max-md:grid-cols-[1fr_auto] grid grid-cols-[1fr_200px_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0"
                         >
                             <div className="min-w-0">
                                 <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export function SourcesScreen() {
                                     </div>
                                 )}
                             </div>
-                            <div className="text-ink-3 hidden text-xs tabular-nums md:block">
+                            <div className="text-ink-3 @max-md:hidden text-xs tabular-nums">
                                 {s.lastYield ? (
                                     <>
                                         <span className="text-ink-2">

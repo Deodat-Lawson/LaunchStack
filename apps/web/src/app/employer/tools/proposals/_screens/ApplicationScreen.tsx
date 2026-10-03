@@ -11,8 +11,6 @@ import {
     Plus,
     Sparkles,
 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -42,6 +40,8 @@ import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
+import { useToolRouter } from "~/components/tool-app/nav";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -120,7 +120,7 @@ function Outline({
     children?: React.ReactNode;
 }) {
     return (
-        <aside className="flex flex-col gap-3 lg:sticky lg:top-6 lg:self-start">
+        <aside className="@max-xl:row-span-2 @max-lg:static @max-lg:row-auto @max-lg:self-auto sticky top-6 flex flex-col gap-3 self-start">
             <div className="flex items-center justify-between px-1">
                 <span className="text-ink-3 text-xs">
                     {sections.filter(s => s.status !== "empty").length} of {sections.length} written
@@ -565,7 +565,7 @@ function SectionEditor({
                                 Save to the library
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link href={askHref(section, app)}>Ask in chat</Link>
+                                <ToolLink href={askHref(section, app)}>Ask in chat</ToolLink>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={onRemove}>Remove section</DropdownMenuItem>
@@ -600,7 +600,7 @@ function EvidenceRail({
     const other = section.evidence.filter(e => !section.cites.includes(e.n));
     const [showOther, setShowOther] = useState(false);
     return (
-        <aside className="flex flex-col gap-4 lg:sticky lg:top-6 lg:self-start">
+        <aside className="@max-xl:static @max-xl:self-auto sticky top-6 flex flex-col gap-4 self-start">
             <section>
                 <h3 className="text-ink mb-1.5 text-[13px] font-semibold">
                     Evidence
@@ -649,13 +649,13 @@ function EvidenceRail({
                     {section.libraryItemIds.length === 0
                         ? "No saved answer matched this question."
                         : `${plural(section.libraryItemIds.length, "saved answer")} from the library shaped this draft.`}{" "}
-                    <Link href={libraryHref} className="text-brand-ink hover:underline">
+                    <ToolLink href={libraryHref} className="text-brand-ink hover:underline">
                         Library
-                    </Link>
+                    </ToolLink>
                 </p>
             </section>
             <section>
-                <Link
+                <ToolLink
                     href={askHref(section, app)}
                     className="border-line bg-panel hover:bg-panel-2 text-ink flex items-start gap-2 rounded-lg border px-3 py-2.5 text-xs"
                 >
@@ -666,7 +666,7 @@ function EvidenceRail({
                             Open the Studio with this question about your sources in the composer.
                         </span>
                     </span>
-                </Link>
+                </ToolLink>
             </section>
         </aside>
     );
@@ -866,7 +866,7 @@ function PreviewTab({
  */
 export function ApplicationScreen({ id }: { id: string }) {
     const { href, trackRun, activeRun, finishedTick } = useProposals();
-    const router = useRouter();
+    const router = useToolRouter();
     const res = useResource(`proposals:application:${id}`, () => proposalsApi.application(id));
     const reload = res.reload;
     useEffect(() => {
@@ -945,7 +945,9 @@ export function ApplicationScreen({ id }: { id: string }) {
         try {
             await proposalsApi.deleteApplication(id);
             toast("Proposal deleted");
-            router.push(href("/write"));
+            // Replace, not push: the tab's Back would otherwise return to a
+            // proposal that no longer exists.
+            router.replace(href("/write"));
         } catch (e) {
             toast.error(e instanceof Error ? e.message : "Could not delete");
         } finally {
@@ -994,16 +996,16 @@ export function ApplicationScreen({ id }: { id: string }) {
     return (
         <div className="mx-auto max-w-[1200px]">
             <div className="text-ink-3 mb-3 flex items-center gap-3 text-xs">
-                <Link href={href("/write")} className="hover:text-ink">
+                <ToolLink href={href("/write")} className="hover:text-ink">
                     Proposals
-                </Link>
+                </ToolLink>
                 <span aria-hidden>/</span>
                 <span className="text-ink truncate font-medium">
                     {app?.title ?? <Skeleton className="inline-block h-3 w-40 align-middle" />}
                 </span>
             </div>
 
-            <header className="border-line mb-5 grid gap-4 border-b pb-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+            <header className="border-line @max-md:grid-cols-1 mb-5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5">
                 <div className="min-w-0">
                     <h1 className="text-ink text-[22px] font-semibold tracking-[-0.02em]">
                         {app ? app.title : <Skeleton className="h-6 w-72" />}
@@ -1047,19 +1049,19 @@ export function ApplicationScreen({ id }: { id: string }) {
                                 </span>
                             )}
                             {app.exportedHref && (
-                                <Link
+                                <ToolLink
                                     href={app.exportedHref}
                                     className="text-brand-ink inline-flex items-center gap-1 text-xs hover:underline"
                                 >
                                     In Sources
                                     <ExternalLink className="size-3" />
-                                </Link>
+                                </ToolLink>
                             )}
                         </div>
                     )}
                 </div>
                 {app && (
-                    <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                    <div className="@max-md:justify-start flex flex-wrap items-center justify-end gap-2">
                         <Button
                             size="sm"
                             variant="outline"
@@ -1110,7 +1112,9 @@ export function ApplicationScreen({ id }: { id: string }) {
                 <SkeletonBlock lines={6} />
             ) : (
                 <Tabs value={tab} onValueChange={setTab} className="gap-5">
-                    <TabsList>
+                    {/* Five tabs outgrow a narrow tab: the list scrolls sideways
+                        instead of pushing the page wider. */}
+                    <TabsList className="max-w-full justify-start overflow-x-auto [scrollbar-width:none]">
                         <TabsTrigger value="write">Write · {sections.length}</TabsTrigger>
                         <TabsTrigger value="checklist">
                             Checklist · {app.requirements.filter(r => r.done).length}/
@@ -1160,7 +1164,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                 }
                             />
                         ) : (
-                            <div className="grid gap-5 lg:grid-cols-[240px_minmax(0,1fr)_260px]">
+                            <div className="@max-xl:grid-cols-[220px_minmax(0,1fr)] @max-lg:grid-cols-1 grid grid-cols-[240px_minmax(0,1fr)_260px] gap-5">
                                 <Outline
                                     sections={sections}
                                     selectedId={selected?.id ?? null}
@@ -1362,7 +1366,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                         {app.review.findings.map(f => (
                                             <div
                                                 key={f.id}
-                                                className="border-line-2 grid gap-1 border-t px-4 py-3 first:border-t-0 md:grid-cols-[96px_minmax(0,1fr)_auto] md:gap-4"
+                                                className="border-line-2 @max-md:grid-cols-1 @max-md:gap-y-1 grid grid-cols-[96px_minmax(0,1fr)_auto] gap-x-4 gap-y-4 border-t px-4 py-3 first:border-t-0"
                                             >
                                                 <SeverityWord severity={f.severity} />
                                                 <div className="min-w-0">

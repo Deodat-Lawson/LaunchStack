@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* Design tokens come from @launchstack/design-tokens/tokens.css, imported
-   by the root layout ahead of this file. This file holds base styles only. */
+   by the root layout ahead of this file. This file holds base styles and
+   the kit defaults a consumer's utility classes must be able to override. */
 
 @layer base {
     * {
@@ -14,6 +15,20 @@
         color: var(--ink);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
+    }
+}
+
+/* Kit text fields (~/components/ui/input, textarea): 16px on phones, since
+   iOS zooms into a focused field under 16px, and 14px from md. Tailwind
+   emits the components layer before every utility, so this is a fallback:
+   a size the caller passes (text-xs, text-lg, text-[13px]) wins at every
+   width. As kit classes, md:text-sm survived tailwind-merge beside the
+   caller's size and beat it from 768px. leading-normal is unitless, so a
+   size-only class like text-[13px] keeps a proportional line height. */
+@layer components {
+    [data-slot="input"],
+    [data-slot="textarea"] {
+        @apply text-base leading-normal md:text-sm;
     }
 }
 

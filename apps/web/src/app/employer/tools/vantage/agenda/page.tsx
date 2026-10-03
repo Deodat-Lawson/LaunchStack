@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { SkeletonRows } from "~/components/tool-kit/SkeletonRows";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 import { AgendaScreen } from "../_screens/AgendaScreen";
 

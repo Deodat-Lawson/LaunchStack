@@ -6,11 +6,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { VantageMark } from "~/components/icons/vantage";
-import { EmptyState, InlineError } from "~/components/tool-kit/EmptyState";
-import { PageHeader, SectionHeading } from "~/components/tool-kit/PageHeader";
-import { SkeletonBlock, SkeletonRows } from "~/components/tool-kit/SkeletonRows";
-import { useResource } from "~/components/tool-kit/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { SkeletonBlock, SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
@@ -174,7 +173,6 @@ export function OverviewScreen() {
                     </Link>
                 ) : (
                     <EmptyState
-                        mark={<VantageMark size={22} />}
                         title={
                             data &&
                             data.counts.evidenceThisWindow === 0 &&

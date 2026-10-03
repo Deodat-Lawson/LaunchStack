@@ -4,10 +4,10 @@ import { MoreHorizontal } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { EmptyState, InlineError } from "~/components/tool-kit/EmptyState";
-import { PageHeader, SectionHeading } from "~/components/tool-kit/PageHeader";
-import { SkeletonRows } from "~/components/tool-kit/SkeletonRows";
-import { useResource } from "~/components/tool-kit/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,

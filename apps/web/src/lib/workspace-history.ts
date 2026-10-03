@@ -14,6 +14,8 @@
  * what keeps the wire shape from drifting between them.
  */
 
+import { QUOTE_MARKER, withoutQuotedContext } from "~/lib/chat-passages";
+
 export const HISTORY_KINDS = [
     "chat",
     "trend-search",
@@ -55,6 +57,22 @@ export interface HistoryEntry {
     href?: string;
     /** Chat only: how many turns are stored, shown as a count on the row. */
     messageCount?: number;
+    /*
+     * Chat only, and per person (ADR-014 §5) — the reader's own organisation,
+     * never the owner's.
+     */
+    /** Pinned to the top of this person's list. */
+    pinned?: boolean;
+    /** Manual order among pinned chats, ascending. Null when not pinned. */
+    pinRank?: number | null;
+    /** Hidden from the list; shown in the Archived view. */
+    archived?: boolean;
+    /** Own chat that someone else can read. */
+    shared?: boolean;
+    /** Someone else's chat shared with me: the owner's auth subject id. */
+    sharedBy?: string;
+    /** Shared with me, with turns I haven't opened since they landed. */
+    unread?: boolean;
 }
 
 export interface HistoryKindMeta {
@@ -126,8 +144,28 @@ export const SESSION_TITLE_MAX = 72;
  * title that costs a request is a title that sometimes never arrives, and the
  * first thing you asked is what you will scan the list for anyway.
  */
-export function deriveSessionTitle(firstMessage: string): string {
-    const flat = firstMessage.replace(/\s+/g, " ").trim();
+export function deriveSessionTitle(
+    firstMessage: string,
+    passages: readonly { text: string }[] = []
+): string {
+    // A question about a selected passage that says little on its own
+    // ("Explain this passage.") is named with the passage's opening words,
+    // or every such chat would share one title.
+    const passage = passages[0]?.text.replace(/\s+/g, " ").trim();
+    if (passage && firstMessage.trim().split(/\s+/).length <= 4)
+        return deriveSessionTitle(`${firstMessage.trim().replace(/[.:!?]+$/, "")}: “${passage}”`);
+    // A quoted passage is context, not the question: name the chat after what
+    // was asked. Only when nothing but the quote was sent does it name it.
+    const unquoted = withoutQuotedContext(firstMessage);
+    const flat = (unquoted.trim() ? unquoted : firstMessage.replace(/^[ \t]*>[ \t]?/gm, ""))
+        .replace(QUOTE_MARKER, "")
+        // Rich-editor context chips arrive as machine links; keep their names.
+        .replace(
+            /\[(?:Source|Conversation|Folder): ((?:\\.|[^\]\\\n]){1,300})\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\)/g,
+            (_link, name: string) => name.replace(/\\(.)/g, "$1")
+        )
+        .replace(/\s+/g, " ")
+        .trim();
     if (flat.length === 0) return "New chat";
     if (flat.length <= SESSION_TITLE_MAX) return flat;
     const cut = flat.slice(0, SESSION_TITLE_MAX);
@@ -136,6 +174,23 @@ export function deriveSessionTitle(firstMessage: string): string {
     // otherwise a long unbroken token would be truncated to almost nothing.
     const body = lastSpace > SESSION_TITLE_MAX * 0.6 ? cut.slice(0, lastSpace) : cut;
     return `${body.replace(/[\s,.;:!?-]+$/, "")}…`;
+}
+
+/**
+ * A title stored before passages travelled beside the question can start with
+ * the pasted quote's `>` markers ("> sentence. We discover … > choice …").
+ * It reads as the quoted words, without the markers; renaming replaces it.
+ */
+export function tidySessionTitle(title: string): string {
+    // "> quote…" (Ask AI) or "Explain this passage from “x”: > quote…" (the
+    // old right-click actions); a chevron mid-question is left alone.
+    if (!/^\s*>|:\s+>\s/.test(title)) return title;
+    return (
+        title
+            .replace(/(^|\s)>(?=\s|$)/g, "$1")
+            .replace(/\s+/g, " ")
+            .trim() || title
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -211,6 +266,81 @@ export function relativeTime(iso: string, now: Date = new Date()): string {
     if (days === 0) return `${Math.floor(delta / (60 * 60_000))}h`;
     if (days < 7) return `${days}d`;
     return new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+}
+
+// ---------------------------------------------------------------------------
+// Sections (ADR-014 §5)
+// ---------------------------------------------------------------------------
+
+export interface HistorySections {
+    /** Pinned chats — mine or shared with me — in this person's manual order. */
+    pinned: HistoryEntry[];
+    /** Other people's chats shared with me, not pinned, newest activity first. */
+    shared: HistoryEntry[];
+    /** Everything else — my chats and the workspace's runs — under date headings. */
+    recent: HistoryGroup[];
+}
+
+const newestFirst = (a: HistoryEntry, b: HistoryEntry) => Date.parse(b.at) - Date.parse(a.at);
+
+/** Manual order; a pin with no rank yet sorts after the ranked ones, newest first. */
+export function byPinOrder(a: HistoryEntry, b: HistoryEntry): number {
+    const ra = a.pinRank ?? Number.POSITIVE_INFINITY;
+    const rb = b.pinRank ?? Number.POSITIVE_INFINITY;
+    if (ra !== rb) return ra < rb ? -1 : 1;
+    return newestFirst(a, b);
+}
+
+/**
+ * The History rail as Codex lays it out: Pinned on top in manual order, then
+ * Shared with you, then recents by date. Each entry lands in exactly one
+ * section; a pinned shared chat is Pinned.
+ */
+export function sectionHistory(entries: HistoryEntry[], now: Date = new Date()): HistorySections {
+    const pinned = entries.filter(entry => entry.pinned).sort(byPinOrder);
+    const shared = entries.filter(entry => !entry.pinned && entry.sharedBy).sort(newestFirst);
+    const rest = entries.filter(entry => !entry.pinned && !entry.sharedBy);
+    return { pinned, shared, recent: groupHistoryByRecency(rest, now) };
+}
+
+/**
+ * Move `id` to `toIndex` in a pinned order (clamped). Returns a new array, or
+ * the same one when nothing moves, so callers can skip a pointless save.
+ */
+export function movePin(order: readonly string[], id: string, toIndex: number): readonly string[] {
+    const from = order.indexOf(id);
+    if (from < 0) return order;
+    const to = Math.max(0, Math.min(order.length - 1, toIndex));
+    if (to === from) return order;
+    const next = order.filter(other => other !== id);
+    next.splice(to, 0, id);
+    return next;
+}
+
+/**
+ * Drop `id` just before (or after) `targetId` — what a drag onto a pinned row
+ * means. Same array back when the drop changes nothing.
+ */
+export function placePin(
+    order: readonly string[],
+    id: string,
+    targetId: string,
+    after: boolean
+): readonly string[] {
+    if (id === targetId || !order.includes(id) || !order.includes(targetId)) return order;
+    const next = order.filter(other => other !== id);
+    next.splice(next.indexOf(targetId) + (after ? 1 : 0), 0, id);
+    return next.every((other, index) => other === order[index]) ? order : next;
+}
+
+/** Restate a pinned order as ranks 0..n-1 on the entries it names. */
+export function applyPinOrder(entries: HistoryEntry[], order: readonly string[]): HistoryEntry[] {
+    const rank = new Map(order.map((refId, index) => [refId, index]));
+    return entries.map(entry =>
+        entry.kind === "chat" && entry.pinned && rank.has(entry.refId)
+            ? { ...entry, pinRank: rank.get(entry.refId)! }
+            : entry
+    );
 }
 
 // ---------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 import { z } from "zod";
 
 import { getOcrConfig } from "./config";
+import { toConverterReachableUrl } from "./converter-url";
 import type { OCRProvider } from "./types";
 
 /** Wire schemaVersion of the frozen converter contract (packages/protocol). */
@@ -220,7 +221,10 @@ export async function determineDocumentRouting(
             },
             body: JSON.stringify({
                 schemaVersion: SCHEMA_VERSION,
-                documentUrl,
+                // Signed like /convert's: the converter fetches it with no
+                // session, so a bare /api/files/ URL was a 401 and routing
+                // silently fell back to the default provider.
+                documentUrl: toConverterReachableUrl(documentUrl),
                 ...(options?.mimeType ? { mimeType: options.mimeType } : {}),
                 ...(options?.filename ? { filename: options.filename } : {}),
                 ...(options?.forceOCR !== undefined ? { forceOCR: options.forceOCR } : {}),

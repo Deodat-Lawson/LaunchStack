@@ -34,6 +34,35 @@ const localCaptureBoolean = (defaultValue: boolean) =>
         return normalized;
     }, z.boolean().default(defaultValue));
 
+/** The literal `.env.example` once shipped; it is public, so it never signs anything. */
+const AUTH_SECRET_PLACEHOLDER = "BETTER_AUTH_SECRET";
+const AUTH_SECRET_MIN_LENGTH = 32;
+const AUTH_SECRET_HINT = "Generate one with: openssl rand -base64 32";
+
+/**
+ * BETTER_AUTH_SECRET signs session cookies and reset tokens. better-auth only
+ * warns on a short or low-entropy secret, so refuse at boot instead: a copied
+ * placeholder would sign every session with a value from the public repo.
+ */
+export const betterAuthSecretSchema = z.preprocess(
+    normalize,
+    z
+        .string({ required_error: `BETTER_AUTH_SECRET is required. ${AUTH_SECRET_HINT}` })
+        .superRefine((value, ctx) => {
+            if (value === AUTH_SECRET_PLACEHOLDER) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: `BETTER_AUTH_SECRET is still the .env.example placeholder. ${AUTH_SECRET_HINT}`,
+                });
+            } else if (value.length < AUTH_SECRET_MIN_LENGTH) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: `BETTER_AUTH_SECRET must be at least ${AUTH_SECRET_MIN_LENGTH} characters. ${AUTH_SECRET_HINT}`,
+                });
+            }
+        })
+);
+
 const serverSchema = z.object({
     // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
     DATABASE_URL: requiredString(),
@@ -70,14 +99,13 @@ const serverSchema = z.object({
     HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
     HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
     HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
-    // Signs session cookies and verification tokens. Generate with:
-    //   openssl rand -base64 32
+    // Signs session cookies and verification tokens (see betterAuthSecretSchema).
     // Rotating it invalidates every live session (users just sign in again).
-    BETTER_AUTH_SECRET: requiredString(),
-    // Public origin of the app (e.g. https://app.example.com). Optional in
-    // dev — better-auth infers http://localhost from the request — but set it
-    // in any deployment behind a proxy so callback URLs and trusted origins
-    // resolve to the outside hostname.
+    BETTER_AUTH_SECRET: betterAuthSecretSchema,
+    // Public origin of the app (e.g. https://app.example.com). Browser sign-up
+    // is refused with "Invalid origin" without it, locally too
+    // (http://localhost:3000); behind a proxy it is the outside hostname, so
+    // callback URLs and trusted origins resolve there.
     BETTER_AUTH_URL: optionalString(),
     // Optional social sign-in. Auth works credentials-only without these;
     // a provider appears on the sign-in page only when both halves are set.
@@ -156,7 +184,7 @@ const serverSchema = z.object({
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
     // that provider; the redirect URI to register is
-    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github).
     // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
     // is nowhere safe to put a token, so the connector declines to exist.
     // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
@@ -169,6 +197,23 @@ const serverSchema = z.object({
     // the deployment-global PAT fallback used by the repo explainer.
     GITHUB_OAUTH_CLIENT_ID: optionalString(),
     GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
+    // LinkedIn app client pair for Growth › Brand: a workspace signs in and
+    // posts as its members and the Pages they administer. Redirect URI to
+    // register: <BETTER_AUTH_URL>/api/connectors/linkedin/oauth/callback.
+    // LINKEDIN_OAUTH_SCOPES must list exactly the scopes the app's Auth tab
+    // shows (space-separated); unset means the self-serve set
+    // "openid profile email w_member_social" (profiles only, no Pages).
+    LINKEDIN_CLIENT_ID: optionalString(),
+    LINKEDIN_CLIENT_SECRET: optionalString(),
+    LINKEDIN_OAUTH_SCOPES: optionalString(),
+    // Overrides for LinkedIn's endpoints and API version. Only a dev
+    // stand-in (/dev/stand-ins/linkedin) or a version rotation needs them.
+    LINKEDIN_OAUTH_BASE_URL: optionalString(),
+    LINKEDIN_API_BASE_URL: optionalString(),
+    LINKEDIN_API_VERSION: optionalString(),
+    // Bluesky PDS and public AppView; default bsky.social / public.api.bsky.app.
+    BLUESKY_SERVICE_URL: optionalString(),
+    BLUESKY_APPVIEW_URL: optionalString(),
     // services/transcription (ADR-004) — Whisper transcription + yt-dlp
     // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
     // or when transcribing video-platform URLs.
@@ -219,7 +264,7 @@ const serverSchema = z.object({
     // Legacy (deprecated by ADR-004): the ocr-worker service was removed;
     // this variable is ignored with a startup warning.
     OCR_WORKER_URL: optionalString(),
-    // Model for OCR vision classification (default: gemini-2.5-flash). Any OpenAI-compatible vision model.
+    // Model for OCR vision classification (default: gemini-3.8-flash). Any OpenAI-compatible vision model.
     OCR_VISION_MODEL: optionalString(),
     // The Marker provider was removed by ADR-004 (it always aliased Docling),
     // so it is deliberately absent here and rejected with an actionable error.
@@ -233,10 +278,15 @@ const serverSchema = z.object({
             }),
         })
         .optional(),
-    // Publicly-reachable origin of this Next.js app. Required when the
-    // document-converter is configured and documents live behind relative
-    // /api/files URLs — the converter needs an absolute URL to fetch them
-    // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
+    // Where this app's other services (document converter, Word editor,
+    // worker) reach it to fetch /api/files URLs; it must be in their
+    // ALLOWED_FETCH_ORIGINS. Unset, the converter and file reads use the
+    // Compose service http://app:3000 and upload processing uses the request
+    // origin, while what the worker runs without a request (Drive and Gmail
+    // connector imports, Drive reconcile) fails on database-backed files — so
+    // set it whenever storage is database-backed. It may be an internal
+    // address, so nothing a person or OAuth provider opens is built on it:
+    // those use BETTER_AUTH_URL (server/public-origin.ts).
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
     // without a session. Required alongside OCR_WORKER_URL when documents
@@ -244,6 +294,13 @@ const serverSchema = z.object({
     // Generate with:
     //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
     FILE_ACCESS_TOKEN_SECRET: optionalString(),
+    // The MCP server (/api/mcp) that lets Claude, ChatGPT and Gemini search
+    // this workspace and save conversations to it. On unless set to "false".
+    // Also off, with a warning, when BETTER_AUTH_URL is neither HTTPS nor a
+    // loopback address: OAuth for assistants needs one of the two. Read
+    // directly from process.env by ~/server/mcp/config (the auth module is in
+    // the middleware bundle).
+    MCP_SERVER_ENABLED: optionalString(),
     // Bearer token required by GET /api/metrics (Prometheus scrapers).
     // In production the endpoint returns 503 if this is unset.
     METRICS_SCRAPE_TOKEN: optionalString(),
@@ -312,13 +369,13 @@ const serverSchema = z.object({
     EMBEDDING_MODEL: optionalString(),
     RERANK_API_BASE_URL: optionalString(),
     RERANK_API_KEY: optionalString(),
-    RERANK_MODEL: optionalString(), // required when RERANK_API_BASE_URL is set; else defaults to gemini-2.5-flash-lite
+    RERANK_MODEL: optionalString(), // required when RERANK_API_BASE_URL is set; else defaults to gemini-3.8-flash
     NER_API_BASE_URL: optionalString(), // e.g. https://api.siliconflow.cn/v1 (Qwen3.5-4B free)
     NER_API_KEY: optionalString(),
-    NER_MODEL: optionalString(), // default gemini-2.5-flash-lite; e.g. Qwen/Qwen3.5-4B
+    NER_MODEL: optionalString(), // default gemini-3.8-flash; e.g. Qwen/Qwen3.5-4B
     TRANSCRIPTION_API_BASE_URL: optionalString(), // defaults to the Gemini endpoint
     TRANSCRIPTION_API_KEY: optionalString(),
-    TRANSCRIPTION_MODEL: optionalString(), // defaults to gemini-2.5-flash
+    TRANSCRIPTION_MODEL: optionalString(), // defaults to gemini-3.8-flash
     GEMINI_TTS_VOICE: optionalString(), // Chirp 3: HD voice; defaults to en-US-Chirp3-HD-Kore
     // Transcription mode: "sidecar" routes uploads to the self-hosted
     // services/transcription deployment (TRANSCRIPTION_SERVICE_URL). It is the
@@ -354,7 +411,7 @@ const serverSchema = z.object({
     GOOGLE_OAUTH_CLIENT_ID: optionalString(),
     GOOGLE_OAUTH_CLIENT_SECRET: optionalString(),
     // Absolute callback URL registered on the GCP OAuth client. Defaults to
-    // `${APP_PUBLIC_URL}/api/connectors/google/oauth/callback`, falling back
+    // `${BETTER_AUTH_URL}/api/connectors/google/oauth/callback`, falling back
     // to the request origin in dev.
     GOOGLE_OAUTH_REDIRECT_URL: optionalString(),
     // Quiet period before the reconciler pulls a Drive revision (minutes,
@@ -366,6 +423,15 @@ const serverSchema = z.object({
     // scope the consent screen must carry (and Google must verify unless the
     // app is Internal), so it stays dark until the operator flips this on.
     GMAIL_CONNECTOR_ENABLED: optionalString(),
+    // Google Drive folder import. drive.file (the default) only reaches files
+    // picked one by one, so a picked folder arrives empty; this flag adds
+    // drive.readonly, a restricted scope the consent screen must carry (and
+    // Google must verify unless the app is Internal), so it ships off.
+    GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: optionalString(),
+    // Development only: answer for Google (OAuth, Drive, Picker) from the
+    // stand-in `next dev` serves under /dev/stand-ins/google. Ignored when
+    // the /dev routes are off.
+    GOOGLE_STAND_IN_URL: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -513,6 +579,14 @@ function parseServerEnv() {
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
         GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+        LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
+        LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
+        LINKEDIN_OAUTH_SCOPES: process.env.LINKEDIN_OAUTH_SCOPES,
+        LINKEDIN_OAUTH_BASE_URL: process.env.LINKEDIN_OAUTH_BASE_URL,
+        LINKEDIN_API_BASE_URL: process.env.LINKEDIN_API_BASE_URL,
+        LINKEDIN_API_VERSION: process.env.LINKEDIN_API_VERSION,
+        BLUESKY_SERVICE_URL: process.env.BLUESKY_SERVICE_URL,
+        BLUESKY_APPVIEW_URL: process.env.BLUESKY_APPVIEW_URL,
         SIDECAR_URL: process.env.SIDECAR_URL,
         SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
         ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,
@@ -533,6 +607,7 @@ function parseServerEnv() {
             | undefined,
         APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
         FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
+        MCP_SERVER_ENABLED: process.env.MCP_SERVER_ENABLED,
         METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
         EMAIL_UNSUBSCRIBE_SECRET: process.env.EMAIL_UNSUBSCRIBE_SECRET,
         EMAIL_SENDING_ENABLED: process.env.EMAIL_SENDING_ENABLED,
@@ -572,6 +647,8 @@ function parseServerEnv() {
         GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
         GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
         GMAIL_CONNECTOR_ENABLED: process.env.GMAIL_CONNECTOR_ENABLED,
+        GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: process.env.GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED,
+        GOOGLE_STAND_IN_URL: process.env.GOOGLE_STAND_IN_URL,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
@@ -628,6 +705,23 @@ function parseServerEnv() {
                 "predictive analysis, website crawl, document modify, reindex — will " +
                 "not run. Set INNGEST_EVENT_KEY, or INNGEST_DEV=1 with the bundled " +
                 "dev server, to enable them."
+        );
+    }
+
+    // The half-configured state production ran in until 2026-10-17: the key
+    // lets events be sent, but with no signing key no Inngest server can call
+    // the worker's /api/inngest, so every event is accepted and none runs.
+    const inngestSigningKeyMissing =
+        !inngestKeyMissing &&
+        !process.env.INNGEST_DEV &&
+        (server.INNGEST_SIGNING_KEY == null || server.INNGEST_SIGNING_KEY.length === 0);
+
+    if (!skipValidation && inngestSigningKeyMissing) {
+        console.warn(
+            "[env] INNGEST_EVENT_KEY is set but INNGEST_SIGNING_KEY is not. Events will " +
+                "be accepted and never run — Google Drive and Gmail sync, crons and the " +
+                "other background verticals stay idle. Set INNGEST_SIGNING_KEY to the " +
+                "signing key of the Inngest server that calls this worker."
         );
     }
     return server;

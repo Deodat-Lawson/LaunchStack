@@ -2,7 +2,12 @@ import type { PageContent, DocumentChunk, ExtractedTable, VectorizedChunk } from
 import type { ChunkMetadata } from "./types";
 import { buildDocumentTree, joinPages, renderSubtree, type DocumentNode } from "../document-tree";
 import { estimateCounter, type TokenCounter } from "./tokenizer";
-import { getOpenAIClient } from "@launchstack/llm";
+import {
+    auxiliaryRequestFields,
+    getOpenAIClient,
+    resolveAuxiliaryModel,
+    type AuxiliaryModel,
+} from "@launchstack/llm";
 import { GEMINI_FAST_MODEL } from "@launchstack/llm/types";
 
 /**
@@ -29,8 +34,21 @@ import { GEMINI_FAST_MODEL } from "@launchstack/llm/types";
  *   mechanism.
  */
 
-function getOpenAI() {
-    return getOpenAIClient();
+/**
+ * The model that summarises tables: the workspace's fast model when the
+ * ingestion runs in a workspace that brought its own, else the deployment's
+ * auxiliary endpoint. Null means no summary (the plain description is used).
+ */
+function tableSummaryModel(): AuxiliaryModel | null {
+    const resolution = resolveAuxiliaryModel("fast");
+    if (resolution.owner === "workspace") {
+        if (!resolution.model) {
+            console.warn(`[Chunker] Table summaries skipped: ${resolution.reason}`);
+        }
+        return resolution.model;
+    }
+    const client = getOpenAIClient();
+    return client ? { owner: "deployment", client, modelId: GEMINI_FAST_MODEL } : null;
 }
 
 export interface ChunkingConfig {
@@ -443,15 +461,15 @@ async function generateTableDescription(
     const fallbackDesc = `Table from Page ${pageNumber} (Table ${tableIndex + 1}) containing ${contentDescription}. Size: ${sizeDescription}.`;
 
     // Try LLM summary if available
-    const openai = getOpenAI();
-    if (!openai) {
+    const model = tableSummaryModel();
+    if (!model) {
         return fallbackDesc;
     }
 
     try {
         const tablePreview = table.markdown.substring(0, 1000); // Limit context
-        const response = await openai.chat.completions.create({
-            model: GEMINI_FAST_MODEL,
+        const response = await model.client.chat.completions.create({
+            model: model.modelId,
             messages: [
                 {
                     role: "system",
@@ -463,7 +481,7 @@ async function generateTableDescription(
                     content: `Table headers: ${headers?.join(", ") ?? "None"}\n\nTable content snippet:\n${tablePreview}`,
                 },
             ],
-            max_tokens: 60,
+            ...auxiliaryRequestFields(model, { maxTokens: 60 }),
         });
 
         const summary = response.choices[0]?.message?.content?.trim();

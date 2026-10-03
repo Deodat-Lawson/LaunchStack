@@ -8,15 +8,15 @@ This file covers the core path: data → template generation, the review call, t
 DB schema/contract, and the send adapter + safety. `member.md` covers recipients,
 validation, UI, and docs.
 
-Feature lives in `packages/features/src/email-pipeline/` (mirror
-`packages/features/src/marketing-pipeline/`). Reuse company context from
-[`marketing-pipeline/context.ts`](../marketing-pipeline/context.ts)
+Feature lives in `pipelines/src/email/` (mirror
+`pipelines/src/marketing/`). Reuse company context from
+[`marketing/index.ts`](../marketing/index.ts)
 (`buildCompanyKnowledgeContext`, `extractCompanyDNA`) and the LLM pattern
 (`getChatModelByType` + `withStructuredOutput`, per-stage models in a `models.ts`).
 
 ## Phase 0 — Frozen contract (do first; unblocks member.md)
 
-- [ ] DB schema in `packages/core/src/db/schema/` (`pgTable`, `pdr_ai_v2_` prefix) + a Drizzle migration:
+- [ ] DB schema in `pipelines/src/email/schema.ts` (`pgTable`, `pdr_ai_v2_` prefix) + a Drizzle migration:
   - `email_campaigns` — id, companyId, name, status, templateVersion, model, promptVersion, createdAt
   - `email_recipients` — id, campaignId, email, name, company, contextNotes, status
   - `email_sends` — id, campaignId, recipientId, subject, body, status (`dry_run|queued|sent|failed`), providerMessageId, error, sentAt
@@ -51,7 +51,7 @@ Feature lives in `packages/features/src/email-pipeline/` (mirror
 ## Phase 4 — Orchestration + API + audit
 
 - [ ] Runner ties generate → review → (approve) → merge → send.
-- [ ] API routes under `apps/web/src/app/api/email-pipeline/` (auth + `resolveActiveCompanyForUser`, mirroring [`marketing-pipeline/route.ts`](../../../../apps/web/src/app/api/marketing-pipeline/route.ts)): `generate`, `review`, `dry-run`, `send`, `status`.
+- [ ] API routes under `apps/web/src/app/api/email-pipeline/` (auth + `resolveActiveCompanyForUser`, mirroring [`marketing-pipeline/route.ts`](../../../apps/web/src/app/api/marketing-pipeline/route.ts)): `generate`, `review`, `dry-run`, `send`, `status`.
 - [ ] Record model / prompt / template versions per campaign for reproducibility.
 - **DoD:** end-to-end from `companyId` to a dry-run batch through one API flow.
 

@@ -43,21 +43,26 @@ describe("describeChatResolutionFailure", () => {
         ).toBe(400);
     });
 
-    it("reports a broken configuration as the operator's 500", () => {
+    // The configuration error quotes the file path, model ids and preset names,
+    // and this message reaches every user; the detail goes to the server log.
+    const FIXED =
+        "Chat models are not configured correctly. An administrator needs to check the server's chat model file.";
+    const quietly = () => jest.spyOn(console, "error").mockImplementation(() => {});
+    afterEach(() => jest.restoreAllMocks());
+
+    it("reports a broken configuration as the operator's 500 without its detail", () => {
+        quietly();
         expect(
             describeChatResolutionFailure(
-                new ChatConfigurationError('CHAT_MODELS_CONFIG points at "/nope.yaml"')
+                new ChatConfigurationError(
+                    'Model "vendor/secret-9" in /srv/config/chat-models.prod.yaml has unknown preset'
+                )
             )
-        ).toEqual({
-            status: 500,
-            message: 'CHAT_MODELS_CONFIG points at "/nope.yaml"',
-        });
+        ).toEqual({ status: 500, message: FIXED });
     });
 
     it("still answers when something that is not an Error is thrown", () => {
-        expect(describeChatResolutionFailure("kaboom")).toEqual({
-            status: 500,
-            message: "The configured chat models cannot serve this request",
-        });
+        quietly();
+        expect(describeChatResolutionFailure("kaboom")).toEqual({ status: 500, message: FIXED });
     });
 });

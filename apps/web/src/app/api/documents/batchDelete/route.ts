@@ -6,9 +6,10 @@
  *
  * Deletes N documents and all their related data in a single transaction.
  * Atomic across the entire batch — if any doc fails to delete, nothing is
- * removed. Enforces the same `documents.delete` permission and read scope as
- * the single-doc delete, and rejects the request if any docId isn't a
- * document the caller can see in their workspace.
+ * removed. Enforces the same `documents.delete` permission, read scope and
+ * per-file edit level (ADR-014) as the single-doc delete, and rejects the
+ * request if any docId isn't a document the caller can see, or can see but
+ * not change.
  */
 
 import { NextResponse } from "next/server";
@@ -34,6 +35,15 @@ import {
     callNoteDocumentReference,
     isCallNoteDocument,
 } from "~/lib/call-note-document";
+import { reassembleAfterDelete } from "~/server/company-profile/service";
+import { DOCUMENT_DELETE_DENIED } from "~/server/services/folder-access";
+import { recordActivity } from "~/server/workspace/activity";
+import {
+    accessSubject,
+    documentAccess,
+    canDeleteAtLevel,
+    type ItemAccess,
+} from "~/server/workspace/item-access";
 
 const BatchDeleteSchema = z.object({
     docIds: z
@@ -48,7 +58,7 @@ export async function DELETE(request: Request) {
             const validation = await validateRequestBody(request, BatchDeleteSchema);
             if (!validation.success) return validation.response;
 
-            const ctx = await requireWorkspacePermission("documents.delete");
+            const ctx = await requireWorkspacePermission("documents.read");
             if (!ctx.success) return ctx.response;
 
             const { docIds } = validation.data;
@@ -95,6 +105,25 @@ export async function DELETE(request: Request) {
                 );
             }
 
+            // Every one must be a file the caller may change; one view-only
+            // file refuses the batch rather than deleting the rest.
+            const subject = await accessSubject(ctx.data);
+            const access = new Map<number, ItemAccess>();
+            for (const row of rows) {
+                const item = await documentAccess(
+                    ctx.data,
+                    { id: Number(row.id), category: row.category },
+                    subject
+                );
+                if (!canDeleteAtLevel(item.level, ctx.data.permissions)) {
+                    return NextResponse.json(
+                        { success: false, error: DOCUMENT_DELETE_DENIED },
+                        { status: 403 }
+                    );
+                }
+                access.set(Number(row.id), item);
+            }
+
             const blobDeletions = await db.transaction(async tx => {
                 const pendingBlobs: DocumentBlobDeletion[] = [];
                 for (const row of rows) {
@@ -107,10 +136,24 @@ export async function DELETE(request: Request) {
                         targetId: row.id,
                         detail: { title: row.title, category: row.category },
                     });
+                    await recordActivity(tx, {
+                        companyId: ctx.data.companyId,
+                        actorUserId: ctx.data.authUserId,
+                        verb: "deleted",
+                        targetType: "document",
+                        targetId: row.id,
+                        targetLabel: row.title,
+                        targetPath: row.category,
+                        detail: {
+                            wasWorkspace: access.get(Number(row.id))?.audience === "workspace",
+                        },
+                    });
                 }
                 return pendingBlobs;
             });
             await deleteDocumentBlobs(blobDeletions);
+            // The company profile drops what the deleted documents said.
+            reassembleAfterDelete(ctx.data.companyId, ctx.data.authUserId);
 
             return NextResponse.json({
                 success: true,

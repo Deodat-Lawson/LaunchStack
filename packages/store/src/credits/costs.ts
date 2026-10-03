@@ -34,6 +34,8 @@ export const TOKEN_COSTS = {
     distribution_research: 2_000,
     /** Per proposal-writing stage (profile, funder search, extraction, a draft or rewrite, a review) */
     proposal_writing: 1_500,
+    /** Per actual LLM token a scenario simulation spends (prompt + completion, 1:1) */
+    scenario_simulation: 1,
 } as const satisfies Record<TokenService, number>;
 
 /** Calculate embedding token cost from actual token count */

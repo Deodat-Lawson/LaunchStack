@@ -95,7 +95,20 @@ describe("tool list", () => {
             thinking: false,
             hasAttachments: false,
         });
-        expect(turn).toMatchObject({ webSearch: true, thinking: false, notes: [] });
+        expect(turn).toMatchObject({ sources: true, webSearch: true, thinking: false, notes: [] });
+    });
+
+    it("lets the model look through the sources only when the agent has workspace retrieval", () => {
+        const request = { webSearch: false, thinking: false, hasAttachments: false };
+        const agent = (tools: string[] | null) => ({
+            tools,
+            route: null,
+            style: null,
+            temperature: null,
+        });
+        expect(resolveChatTurn(agent(["retrieval"]), request).sources).toBe(true);
+        expect(resolveChatTurn(agent(null), request).sources).toBe(true);
+        expect(resolveChatTurn(agent(["web", "reasoning"]), request).sources).toBe(false);
     });
 });
 

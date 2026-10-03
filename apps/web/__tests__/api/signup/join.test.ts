@@ -41,10 +41,12 @@ describe("POST /api/signup/join (alias of join-links/accept)", () => {
                 expiresAt: null,
                 maxUses: null,
                 useCount: 4,
+                requiresApproval: true,
             },
         ]);
         fakeDb.onSelect(users, [{ id: 12 }]);
         fakeDb.onSelect(userCompanyMemberships, []);
+        fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
         const res = await POST(
             request({ name: "Amy", email: "amy@example.com", inviteCode: "abcd1234" })
@@ -62,7 +64,8 @@ describe("POST /api/signup/join (alias of join-links/accept)", () => {
         expect(fakeDb.insertedInto(userCompanyMemberships)).toEqual([
             { userId: 12n, companyId: 9n, role: "member", status: "pending" },
         ]);
-        expect(res.cookies.get("pdr_active_company")?.value).toBe("9");
+        // Still waiting on approval there, so their active workspace stays put.
+        expect(res.cookies.get("pdr_active_company")).toBeUndefined();
     });
 
     it("answers 401 without a session", async () => {

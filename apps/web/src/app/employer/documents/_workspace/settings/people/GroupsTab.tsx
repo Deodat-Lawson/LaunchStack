@@ -25,7 +25,9 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import type { Permission } from "~/lib/authz/permissions";
+import { usePermissions } from "~/lib/use-permissions";
 
+import { mayCreateGroups } from "../../team/rules";
 import { errorMessage, peopleApi, type Group, type Member } from "./api";
 import { plural } from "./format";
 import { ConfirmDialog, EmptyState, ErrorNote, LoadingNote, Panel, TabIntro } from "./ui";
@@ -35,7 +37,11 @@ interface GroupsTabProps {
 }
 
 export function GroupsTab({ can }: GroupsTabProps) {
-    const canManage = can("groups.manage");
+    // Members create groups and manage the ones they made; `groups.manage`
+    // manages all of them (ADR-014). The server says per group (`canManage`).
+    const canManageAll = can("groups.manage");
+    const { role } = usePermissions();
+    const canCreate = mayCreateGroups(can, role);
 
     const [groups, setGroups] = useState<Group[]>([]);
     const [members, setMembers] = useState<Member[]>([]);
@@ -104,7 +110,7 @@ export function GroupsTab({ can }: GroupsTabProps) {
                 title="Groups"
                 description="A group is a named set of people you can share a folder with in one step. Membership here changes what those folders show; it never changes anyone's role."
                 actions={
-                    canManage ? (
+                    canCreate ? (
                         <Button size="sm" onClick={() => setEditing("new")}>
                             <Plus /> New group
                         </Button>
@@ -125,12 +131,12 @@ export function GroupsTab({ can }: GroupsTabProps) {
                     <EmptyState
                         title="No groups yet"
                         body={
-                            canManage
+                            canCreate
                                 ? "Create one when several people need access to the same restricted folders."
                                 : "An admin can create groups to share folders with several people at once."
                         }
                         action={
-                            canManage ? (
+                            canCreate ? (
                                 <Button
                                     size="sm"
                                     variant="outline"
@@ -148,7 +154,7 @@ export function GroupsTab({ can }: GroupsTabProps) {
                                 key={group.id}
                                 group={group}
                                 members={members}
-                                canManage={canManage}
+                                canManage={group.canManage ?? canManageAll}
                                 expanded={expanded.has(group.id)}
                                 onToggle={() => toggle(group.id)}
                                 onRename={() => setEditing(group)}
@@ -360,7 +366,8 @@ function GroupRow({
     );
 }
 
-function GroupDialog({
+/** New group, or rename one. Shared with the Team tab's Groups view. */
+export function GroupDialog({
     group,
     onClose,
     onSaved,

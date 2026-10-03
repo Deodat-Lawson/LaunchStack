@@ -229,6 +229,48 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 }
 
 // ---------------------------------------------------------------------------
+// resolveMemberContext
+// ---------------------------------------------------------------------------
+
+/**
+ * The same context for a caller who arrives with a credential instead of a
+ * browser session — an MCP access token or access key names the person and
+ * the workspace outright, so there is no cookie to pick the workspace from.
+ * Null unless the person holds an **active** membership there; a removed or
+ * suspended member's credential stops working on the next request.
+ */
+export async function resolveMemberContext(
+    authUserId: string,
+    companyId: bigint
+): Promise<WorkspaceContext | null> {
+    const [row] = await db
+        .select({
+            userPk: users.id,
+            role: userCompanyMemberships.role,
+            status: userCompanyMemberships.status,
+        })
+        .from(users)
+        .innerJoin(
+            userCompanyMemberships,
+            and(
+                eq(userCompanyMemberships.userId, users.id),
+                eq(userCompanyMemberships.companyId, companyId)
+            )
+        )
+        .where(eq(users.userId, authUserId));
+    if (!row || row.status !== "active") return null;
+    const permissions = await resolvePermissionsForRole(companyId, row.role);
+    return buildWorkspaceContext({
+        authUserId,
+        userPk: BigInt(row.userPk),
+        companyId,
+        role: row.role,
+        status: "active",
+        permissions,
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Permission gates
 // ---------------------------------------------------------------------------
 

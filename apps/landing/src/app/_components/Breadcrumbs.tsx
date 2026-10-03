@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Home } from "lucide-react";
+import { SITE_URL } from "~/config/site";
 
 const LABELS: Record<string, string> = {
     pricing: "Pricing",
     about: "About",
     contact: "Contact",
     deployment: "Deployment Guide",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
     signin: "Sign In",
     signup: "Get Started",
 };
@@ -34,13 +37,13 @@ export function Breadcrumbs() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app",
+                item: SITE_URL,
             },
             ...crumbs.map((c, i) => ({
                 "@type": "ListItem",
                 position: i + 2,
                 name: c.label,
-                item: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app"}${c.href}`,
+                item: `${SITE_URL}${c.href}`,
             })),
         ],
     };

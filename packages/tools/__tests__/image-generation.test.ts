@@ -37,7 +37,7 @@ function imageResponse(n = 1) {
 function configWith(fetchImpl: typeof globalThis.fetch): ImageToolConfig {
     return {
         source: "chat",
-        modelId: "google/gemini-2.5-flash-image",
+        modelId: "google/gemini-3.1-flash-image",
         endpoint: { baseUrl: "https://openrouter.ai/api/v1", apiKey: "k", fetch: fetchImpl },
     };
 }
@@ -55,6 +55,31 @@ function store(): ImageAssetStore & { uploads: Array<{ filename: string; size: n
         },
     };
 }
+
+describe("OpenRouter attribution", () => {
+    const openRouter = { CHAT_BASE_URL: "https://openrouter.ai/api/v1", CHAT_API_KEY: "chat" };
+
+    it("names the public origin, BETTER_AUTH_URL", () => {
+        const config = resolveImageToolConfig({
+            ...openRouter,
+            BETTER_AUTH_URL: "https://app.example.com",
+            APP_PUBLIC_URL: "http://app:3000",
+        } as NodeJS.ProcessEnv);
+
+        expect(config.endpoint.headers).toMatchObject({
+            "HTTP-Referer": "https://app.example.com",
+        });
+    });
+
+    it("never sends APP_PUBLIC_URL, which may be an internal address", () => {
+        const config = resolveImageToolConfig({
+            ...openRouter,
+            APP_PUBLIC_URL: "http://app:3000",
+        } as NodeJS.ProcessEnv);
+
+        expect(config.endpoint.headers).toBeUndefined();
+    });
+});
 
 describe("endpoint resolution", () => {
     it("prefers explicit image config over chat", () => {
@@ -130,7 +155,7 @@ describe("generate and persist", () => {
 
         expect(result.provenance).toMatchObject({
             tool: "image-generation.generate",
-            modelId: "google/gemini-2.5-flash-image",
+            modelId: "google/gemini-3.1-flash-image",
         });
         expect(result.provenance.durationMs).toBeGreaterThanOrEqual(0);
     });

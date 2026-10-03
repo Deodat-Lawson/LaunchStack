@@ -74,10 +74,6 @@ function renderPanel(onOpenCitation: (c: ThreadReference) => void) {
             onNewChat={jest.fn()}
             openPalette={jest.fn()}
             onStudioNavigate={jest.fn()}
-            webSearch={false}
-            onToggleWebSearch={jest.fn()}
-            thinking={false}
-            onToggleThinking={jest.fn()}
         />
     );
 }

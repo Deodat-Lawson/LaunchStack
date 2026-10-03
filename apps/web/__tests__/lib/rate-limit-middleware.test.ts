@@ -7,6 +7,13 @@ import {
 import { RateLimitPresets, clearRateLimitStore } from "~/lib/rate-limiter";
 import type { RateLimitInfo } from "~/lib/rate-limiter";
 
+// The session behind a cookie: `better-auth.session_token=<user>` belongs to
+// <user>; anything else is not a session.
+const mockGetSession = jest.fn();
+jest.mock("~/server/auth", () => ({
+    getSessionFromHeaders: (headers: Headers) => mockGetSession(headers),
+}));
+
 describe("Rate Limit Middleware", () => {
     const createMockRequest = (ip = "192.168.1.1"): Request => {
         return {
@@ -242,6 +249,81 @@ describe("Rate Limit Middleware", () => {
             }
 
             expect(lightHandler).toHaveBeenCalledTimes(50);
+        });
+    });
+
+    describe("who a request counts against", () => {
+        const ok = () => Promise.resolve(NextResponse.json({ success: true }));
+        const config = { maxRequests: 1, windowMs: 60_000 };
+
+        /** A request from `ip`, signed in as `user` when given. */
+        const fromUser = (ip: string, user?: string) =>
+            new Request("http://localhost/api/folders", {
+                method: "POST",
+                headers: {
+                    "x-forwarded-for": ip,
+                    ...(user ? { cookie: `better-auth.session_token=${user}` } : {}),
+                },
+            });
+
+        beforeEach(() => {
+            mockGetSession.mockReset();
+            mockGetSession.mockImplementation((headers: Headers) => {
+                const token = /better-auth\.session_token=([^;]+)/.exec(
+                    headers.get("cookie") ?? ""
+                )?.[1];
+                return Promise.resolve(token?.startsWith("user_") ? { user: { id: token } } : null);
+            });
+        });
+
+        it("gives each signed-in person their own budget behind one office IP", async () => {
+            expect(
+                (await withRateLimit(fromUser("198.51.100.1", "user_a"), config, ok)).status
+            ).toBe(200);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.1", "user_a"), config, ok)).status
+            ).toBe(429);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.1", "user_b"), config, ok)).status
+            ).toBe(200);
+        });
+
+        it("follows a signed-in person across IPs", async () => {
+            await withRateLimit(fromUser("198.51.100.1", "user_a"), config, ok);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.2", "user_a"), config, ok)).status
+            ).toBe(429);
+        });
+
+        it("falls back to the IP without a session cookie, and skips the lookup", async () => {
+            await withRateLimit(fromUser("198.51.100.1"), config, ok);
+            expect((await withRateLimit(fromUser("198.51.100.1"), config, ok)).status).toBe(429);
+            expect((await withRateLimit(fromUser("198.51.100.2"), config, ok)).status).toBe(200);
+            expect(mockGetSession).not.toHaveBeenCalled();
+        });
+
+        it("does not let a forged session cookie buy a fresh bucket", async () => {
+            await withRateLimit(fromUser("198.51.100.1", "forged-1"), config, ok);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.1", "forged-2"), config, ok)).status
+            ).toBe(429);
+        });
+
+        it("falls back to the IP when the session cannot be read", async () => {
+            mockGetSession.mockRejectedValue(new Error("database unavailable"));
+            await withRateLimit(fromUser("198.51.100.1", "user_a"), config, ok);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.1", "user_b"), config, ok)).status
+            ).toBe(429);
+        });
+
+        it("keeps a route's own caller key", async () => {
+            const keyed = { ...config, keyGenerator: () => "prospects-run:user_a" };
+            await withRateLimit(fromUser("198.51.100.1", "user_a"), keyed, ok);
+            expect(
+                (await withRateLimit(fromUser("198.51.100.9", "user_z"), keyed, ok)).status
+            ).toBe(429);
+            expect(mockGetSession).not.toHaveBeenCalled();
         });
     });
 });

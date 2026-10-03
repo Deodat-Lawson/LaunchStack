@@ -818,7 +818,7 @@ export function DocumentGeneratorEditor({
                         <Input
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            className="text-ink min-w-0 max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0"
+                            className="text-ink min-w-0 max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0 dark:bg-transparent"
                             placeholder={
                                 isRewriteMode ? "Add a title (optional)" : "Untitled Document"
                             }

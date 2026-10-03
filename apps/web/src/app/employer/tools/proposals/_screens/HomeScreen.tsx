@@ -5,7 +5,9 @@ import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useToolRouter } from "~/components/tool-app/nav";
 import { ToolLink } from "~/components/tool-app/ToolLink";
+import { companyProfileApi } from "~/lib/company-profile/api";
 import { cn } from "~/lib/utils";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -88,7 +90,8 @@ function ApplicationLine({
  * things to do next.
  */
 export function HomeScreen() {
-    const { href, finishedTick, trackRun } = useProposals();
+    const { href, finishedTick } = useProposals();
+    const router = useToolRouter();
     const home = useResource("proposals:home", () => proposalsApi.home());
     const [creating, setCreating] = useState(false);
     const reload = home.reload;
@@ -97,10 +100,12 @@ export function HomeScreen() {
     }, [finishedTick, reload]);
 
     const d = home.data;
+    // The profile is the shared company profile now: start it reading, then
+    // show it, where the build's progress and what it sets aside are visible.
     const buildProfile = async () => {
         try {
-            const { run } = await proposalsApi.buildProfile();
-            trackRun(run);
+            await companyProfileApi.rebuild();
+            router.push(href("/profile"));
         } catch (e) {
             toast.error(e instanceof Error ? e.message : "Could not start building the profile");
         }

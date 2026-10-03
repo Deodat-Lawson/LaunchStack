@@ -14,6 +14,8 @@ from app.config import DEFAULT_ALLOWED_HOSTS, load_config
 from app.main import app
 from app.url_policy import validate_download_url
 
+from .conftest import FAKE_RESULT
+
 ALLOWED = ("youtube.com", "youtu.be")
 
 
@@ -142,6 +144,8 @@ class TestDownloadRoutePolicy:
         body = resp.json()
         assert body["title"] == "A Video"
         assert body["source_url"] == "https://www.youtube.com/watch?v=abc"
+        # The timestamps the app's viewer plays the video from.
+        assert body["segments"] == FAKE_RESULT["segments"]
         assert calls == ["https://www.youtube.com/watch?v=abc"]
 
     def test_disallowed_host_is_403_and_downloader_never_runs(

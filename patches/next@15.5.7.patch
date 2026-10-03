@@ -730,3 +730,29 @@ index 424eff78c13ddf87dca5ca385afdd6575519cd65..75be40d32a22fd9cc241351aee9de2a8
      default:
        unwindInterruptedWork(current, next),
          (next = workInProgress =
+diff --git a/dist/esm/server/next-server.js b/dist/esm/server/next-server.js
+index 4fdb93ddae455e0344e9c3f034ff274d544bdb6c..89f7a59788d4c9b9442e88b0795a89fbdf6ed546 100644
+--- a/dist/esm/server/next-server.js
++++ b/dist/esm/server/next-server.js
+@@ -1184,7 +1184,7 @@ export default class NextNodeServer extends BaseServer {
+                 });
+             } finally{
+                 if (hasRequestBody) {
+-                    requestData.body.finalize();
++                    await requestData.body.finalize();
+                 }
+             }
+         } else {
+diff --git a/dist/server/next-server.js b/dist/server/next-server.js
+index fc2d54da676003b227327fb2ffe88177a933383b..32ce898829e5304eeca1ffdcc02da124efca4373 100644
+--- a/dist/server/next-server.js
++++ b/dist/server/next-server.js
+@@ -1253,7 +1253,7 @@ class NextNodeServer extends _baseserver.default {
+                 });
+             } finally{
+                 if (hasRequestBody) {
+-                    requestData.body.finalize();
++                    await requestData.body.finalize();
+                 }
+             }
+         } else {

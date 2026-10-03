@@ -37,11 +37,13 @@ const config: NextConfig = {
         "@launchstack/retrieval",
         "@launchstack/orchestration",
         "@launchstack/collab",
+        "@launchstack/simulation",
         "@launchstack/editing",
         "@launchstack/google-drive",
         "@launchstack/evidence",
         "@launchstack/pipelines",
         "@launchstack/tools",
+        "@launchstack/design-tokens",
     ],
 
     // Production builds fail on type errors (ADR-006). Lint runs as its own

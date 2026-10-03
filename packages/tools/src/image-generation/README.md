@@ -19,7 +19,7 @@ registry's rule):
    has already configured images and need do nothing.
 3. `AI_BASE_URL` + `AI_API_KEY` — the global fallback.
 
-`IMAGE_MODEL` overrides the default (`google/gemini-2.5-flash-image`, Nano
+`IMAGE_MODEL` overrides the default (`google/gemini-3.1-flash-image`, Nano
 Banana). Nano Banana rather than Imagen because this tool exists to be called by
 an agent that will be asked to change what it just made, and only the natively
 multimodal line can edit. `IMAGE_API_SHAPE` (`openrouter` | `openai-compatible` |

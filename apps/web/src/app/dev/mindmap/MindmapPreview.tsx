@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DriftShell } from "~/app/employer/_chrome/DriftShell";
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { buildTemplate } from "~/app/employer/documents/_mindmap/model/templates";
+import { applyThemeToDoc } from "~/app/employer/documents/_mindmap/model/theme";
 import { MindmapEditor } from "~/app/employer/documents/_mindmap/ui/MindmapEditor";
 import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_mindmap/ui/MindmapPreview";
 
@@ -19,7 +20,8 @@ import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_min
  * the read-only preview the workspace viewer uses instead of the editor — same
  * canvas, no chrome, so a layout bug in one shows up in the other.
  * `?chrome=focus|everything` overrides the chrome depth the document's kind
- * would pick (see the mindmap README, "Chrome depths").
+ * would pick (see the mindmap README, "Chrome depths"). `?board=dark` and
+ * `?theme=<id>` pick the board's lighting and theme.
  */
 
 /**
@@ -78,10 +80,16 @@ export function MindmapPreview() {
     const chrome =
         chromeParam === "focus" || chromeParam === "everything" ? chromeParam : undefined;
 
-    const doc = useMemo(
-        () => (template ? buildTemplate(template, "Preview mindmap") : null),
-        [template]
-    );
+    // `?board=dark` seeds the document the way a dark-mode creator gets it;
+    // `?theme=<id>` repaints it in any named theme (ids in `model/palette.ts`).
+    const board = query?.get("board") === "dark" ? "dark" : "light";
+    const themeId = query?.get("theme");
+
+    const doc = useMemo(() => {
+        if (!template) return null;
+        const built = buildTemplate(template, "Preview mindmap", board);
+        return themeId ? applyThemeToDoc(built, themeId) : built;
+    }, [template, board, themeId]);
 
     return (
         <div style={{ minHeight: "100vh", width: "100%" }}>

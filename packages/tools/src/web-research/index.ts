@@ -26,6 +26,7 @@ export { providerRegistry } from "./providers/registry";
 export { callExa } from "./providers/exa";
 export { callSerper } from "./providers/serper";
 export * from "./fetch";
+export * from "./web-search";
 
 const MAX_RETRIES = 2;
 

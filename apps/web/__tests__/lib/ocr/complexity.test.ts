@@ -10,6 +10,7 @@ import {
     selectSamplePages,
 } from "@launchstack/conversion/ocr/complexity";
 import { configureOcr } from "@launchstack/conversion/ocr/config";
+import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
 
 describe("OCR Complexity Module", () => {
     describe("selectSamplePages", () => {
@@ -319,6 +320,39 @@ describe("OCR Complexity Module", () => {
             configureOcr({});
             global.fetch = originalFetch;
             warnSpy.mockRestore();
+        });
+
+        it("signs an internal /api/files/ URL, as /convert does", async () => {
+            // Unsigned, the converter's fetch was a 401 and routing quietly fell
+            // back to the default provider for every database-backed upload.
+            configureOcr({
+                converter: { url: CONVERTER_URL, apiKey: API_KEY },
+                appPublicUrl: "http://app:3000",
+                fileAccessTokenSecret: "worker-secret",
+            });
+            (global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                status: 200,
+                json: async () => ({
+                    schemaVersion: 1,
+                    provider: "NATIVE_PDF",
+                    reason: "native-text-layer",
+                    pageCount: 1,
+                    signals: {},
+                }),
+                text: async () => "",
+            } as Response);
+
+            await determineDocumentRouting("/api/files/42");
+
+            const [, init] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit];
+            const sent = new URL(
+                (JSON.parse(init.body as string) as { documentUrl: string }).documentUrl
+            );
+            expect(sent.origin).toBe("http://app:3000");
+            expect(sent.pathname).toBe("/api/files/42");
+            const token = sent.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+            expect(verifyFileAccessToken(token, "42", "worker-secret")).toBe(true);
         });
 
         it("POSTs the RouteRequest wire shape with schemaVersion and X-API-Key", async () => {

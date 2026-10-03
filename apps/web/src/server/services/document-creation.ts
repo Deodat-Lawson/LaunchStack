@@ -6,7 +6,10 @@
  *
  * Kept as a re-export so the existing `~/server/services/document-creation`
  * consumers and tests keep working. New code should import from
- * `@launchstack/adapters` directly.
+ * `@launchstack/orchestration` directly. (Not from the `@launchstack/engine`
+ * aggregate: it also re-exports the ingestion pipeline, so importing it here
+ * would tie every upload route to ingestion's model calls in the
+ * workspace-model scope guard.)
  */
 export {
     createDocumentLifecycle,
@@ -18,4 +21,4 @@ export {
     type CreatedDocumentVersionLifecycle,
     type DocumentCreationProcessing,
     type DocumentLifecycleJob,
-} from "@launchstack/engine";
+} from "@launchstack/orchestration";

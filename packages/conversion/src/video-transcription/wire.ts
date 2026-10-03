@@ -5,6 +5,7 @@
  * contract is split here so each folder owns its own conversation.
  */
 import { z } from "zod";
+import { transcriptSegmentSchema } from "../audio-transcription/wire";
 
 /** `POST /download-and-transcribe` request. */
 export const videoTranscribeRequestSchema = z.object({
@@ -22,5 +23,7 @@ export const videoTranscribeResponseSchema = z.object({
     title: z.string(),
     duration: z.number().nullable(),
     source_url: z.string(),
+    /** Timestamped spans — the same unit as an uploaded file's transcript. */
+    segments: z.array(transcriptSegmentSchema),
 });
 export type VideoTranscribeResponse = z.infer<typeof videoTranscribeResponseSchema>;

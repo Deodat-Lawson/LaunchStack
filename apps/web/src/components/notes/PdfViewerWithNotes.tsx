@@ -66,15 +66,15 @@ interface Props {
      */
     onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
     /**
-     * When set, the selection popup offers "Ask AI": the passage goes to the
-     * chat as a quote, with the document kept in view beside it.
+     * When set, the selection popup offers "Ask AI": the passage and the page
+     * it sits on go to the chat, with the document kept in view beside it.
      *
      * This replaced three buttons — Summarize, Action, Decision — that each
      * wrote an AI-generated note. They answered a question the reader had not
      * asked, in a fixed shape, and filed the answer as a note; asking lets the
      * reader say what they actually want to know about the passage.
      */
-    onAskAi?: (quote: string) => void;
+    onAskAi?: (selection: { text: string; page: number }) => void;
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
     /**
@@ -453,7 +453,7 @@ export function PdfViewerWithNotes({
 
     const handleAskAi = () => {
         if (!selectionDraft || !onAskAi) return;
-        onAskAi(selectionDraft.quote);
+        onAskAi({ text: selectionDraft.quote, page: selectionDraft.page });
         window.getSelection()?.removeAllRanges();
         setSelectionDraft(null);
     };

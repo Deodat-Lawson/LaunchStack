@@ -20,6 +20,8 @@ export type GrowthScreen =
     | { key: "brand-overview" }
     | { key: "brand-compose" }
     | { key: "brand-calendar" }
+    | { key: "brand-analytics" }
+    | { key: "brand-engagement" }
     | { key: "brand-campaigns" }
     | { key: "brand-accounts" }
     | { key: "prospects-home" }
@@ -38,6 +40,8 @@ const BRAND = new Map<string, GrowthScreen>([
     ["", { key: "brand-overview" }],
     ["compose", { key: "brand-compose" }],
     ["calendar", { key: "brand-calendar" }],
+    ["analytics", { key: "brand-analytics" }],
+    ["engagement", { key: "brand-engagement" }],
     ["campaigns", { key: "brand-campaigns" }],
     ["accounts", { key: "brand-accounts" }],
 ]);

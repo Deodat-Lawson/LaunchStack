@@ -603,7 +603,6 @@ export class CollabSimulator {
                 references: [],
                 chunksAnalyzed: 4,
                 tokenUsage: { inputTokens: 900, outputTokens: 160, totalTokens: 1060 },
-                aiModel: "preview-model",
                 agent: persona
                     ? {
                           key: persona.id,

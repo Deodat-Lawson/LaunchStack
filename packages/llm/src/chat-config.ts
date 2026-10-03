@@ -26,6 +26,9 @@ import {
     type ChatRoute,
 } from "./types";
 
+/** Deprecated presets already reported by this process, so a reload stays quiet. */
+const reportedDeprecatedPresets = new Set<string>();
+
 /** Schema versions this build understands. */
 export const SUPPORTED_CHAT_CONFIG_VERSIONS = [1] as const;
 
@@ -302,6 +305,13 @@ function resolveModelBehavior(
                     `Available presets: ${listChatModelPresetNames().join(", ")}.`
             );
         }
+        if (preset.deprecated && !reportedDeprecatedPresets.has(preset.name)) {
+            reportedDeprecatedPresets.add(preset.name);
+            console.warn(
+                `${file}: model "${name}" uses preset "${preset.name}", deprecated since ` +
+                    `${preset.deprecated.since}. Move it to "${preset.deprecated.replacement}".`
+            );
+        }
         const override = behaviorOverrideSchema.safeParse(model.behavior ?? {});
         if (!override.success) {
             throw new ChatConfigurationError(
@@ -369,7 +379,9 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
 
     if (!input.endpoint.baseUrl || input.endpoint.baseUrl.trim().length === 0) {
         throw new ChatConfigurationError(
-            "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
+            input.endpoint.owner === "workspace"
+                ? "The workspace's model endpoint has no address."
+                : "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
         );
     }
 
@@ -416,6 +428,10 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
             ...(input.endpoint.apiKey && input.endpoint.apiKey.trim().length > 0
                 ? { apiKey: input.endpoint.apiKey.trim() }
                 : {}),
+            ...(input.endpoint.systemInstructions?.trim()
+                ? { systemInstructions: input.endpoint.systemInstructions.trim() }
+                : {}),
+            ...(input.endpoint.owner ? { owner: input.endpoint.owner } : {}),
         },
         models,
         routes: {

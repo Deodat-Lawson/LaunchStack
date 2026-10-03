@@ -11,7 +11,8 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { BUILTIN_ROLES, roleLabel } from "~/lib/authz/permissions";
 
 export interface PrincipalSearch {
-    users: { id: number; name: string; email: string }[];
+    /** `authUserId` lets the client draw the person with `usePeople` / `ProfileAvatar`. */
+    users: { id: number; authUserId: string; name: string; email: string }[];
     groups: { id: number; name: string }[];
     roles: { slug: string; name: string }[];
 }
@@ -29,7 +30,12 @@ export async function searchPrincipals(ctx: WorkspaceContext, q: string): Promis
 
     const [userRows, groupRows, customRows] = await Promise.all([
         db
-            .select({ id: users.id, name: users.name, email: users.email })
+            .select({
+                id: users.id,
+                authUserId: users.userId,
+                name: users.name,
+                email: users.email,
+            })
             .from(userCompanyMemberships)
             .innerJoin(users, eq(users.id, userCompanyMemberships.userId))
             .where(
@@ -72,7 +78,12 @@ export async function searchPrincipals(ctx: WorkspaceContext, q: string): Promis
     );
 
     return {
-        users: userRows.map(u => ({ id: Number(u.id), name: u.name, email: u.email })),
+        users: userRows.map(u => ({
+            id: Number(u.id),
+            authUserId: u.authUserId,
+            name: u.name,
+            email: u.email,
+        })),
         groups: groupRows.map(g => ({ id: Number(g.id), name: g.name })),
         roles: [...builtins, ...customRows].slice(0, LIMIT),
     };

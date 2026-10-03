@@ -2,6 +2,7 @@ import type { NoteVisibility } from "@launchstack/pipelines/call-notes";
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
+import type { ChatPassage } from "~/lib/chat-passages";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -26,7 +27,9 @@ import {
     Shield as IconShield,
     Sparkles as IconSparkle,
     Users as IconUsers,
+    UsersRound as IconTeam,
     Video as IconVideo,
+    Waypoints as IconScenarios,
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
@@ -92,6 +95,9 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
  */
 export type SourceCitability = "citable" | "stale" | "none";
 
+/** Indexing state from the document row, including a mindmap's published copy. */
+export type SourceIndexStatus = "ready" | "processing" | "failed";
+
 export type DocDomain =
     | "Contract"
     | "Financial"
@@ -112,6 +118,36 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
     Research: { color: "oklch(0.55 0.14 270)", desc: "Papers, datasets, sources" },
     General: { color: "oklch(0.5 0.02 280)", desc: "Cross-references and attachments" },
 };
+
+/**
+ * Who can see an item, from the signed-in person's point of view (ADR-014):
+ * everyone in the workspace, specific people, or only them. The Sources rail
+ * files every top-level folder and loose file under the section this names.
+ */
+export type SourceAudience = "workspace" | "shared" | "private";
+
+/** The caller's access to one folder or file, as `/api/folders` and the documents list report it. */
+export interface ItemAccessView {
+    audience: SourceAudience;
+    /** True when the item sets its own audience; false when it inherits its folder's. */
+    ownAudience: boolean;
+    /** People, groups and roles the governing grants name — "Shared with 3". */
+    principalCount: number;
+    /** May add to it (a folder), or rename, move, replace or delete it (a file). */
+    canEdit: boolean;
+    /** May change who has access; for a folder also rename, move or delete it. */
+    canManage: boolean;
+    /** Files only: may delete it (manages it, or can edit it and holds `documents.delete`). */
+    canDelete?: boolean;
+    /** Folders only: the restricted folder that governs it, or null. */
+    governingPath?: string | null;
+}
+
+/** Who added a file — draw with `usePeople` for their current name in this workspace. */
+export interface SourceAddedBy {
+    authUserId: string;
+    name: string;
+}
 
 export interface WorkspaceSource {
     /**
@@ -145,6 +181,10 @@ export interface WorkspaceSource {
     thumbnailUrl?: string;
     /** Defaults to `citable` when absent — uploads become citable as they index. */
     citability?: SourceCitability;
+    /** Unset for local sources and mindmaps without a published document. */
+    indexStatus?: SourceIndexStatus;
+    /** The processing failure reported by the worker, for the status tooltip. */
+    errorMessage?: string;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -158,6 +198,10 @@ export interface WorkspaceSource {
     pending?: boolean;
     /** Limited to people with an explicit grant, not the whole workspace. */
     restricted?: boolean;
+    /** The caller's access; absent for rows the server has not described (staged uploads, older servers). */
+    access?: ItemAccessView;
+    /** Who added it, when a person did. */
+    addedBy?: SourceAddedBy | null;
 }
 
 export interface WorkspaceFolder {
@@ -170,6 +214,8 @@ export interface WorkspaceFolder {
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while only implied by its contents. */
     categoryId?: number | null;
+    /** The caller's access; absent for a folder only implied by what is in it. */
+    access?: ItemAccessView;
 }
 
 export interface ThreadReference {
@@ -210,12 +256,27 @@ export interface EphemeralAttachment {
 }
 
 export interface ThreadMessage {
+    forkedFromSessionId?: string;
+    /** Someone else's question, carried over by "Continue in a new chat" (auth subject id). */
+    askedBy?: string;
+    intent?: "queued" | "interrupt";
+    id?: string;
+    createdAt?: string;
+    status?: "streaming" | "complete" | "stopped" | "error";
+    stage?: string;
+    reasoning?: string;
+    elapsedMs?: number;
+    send?: ComposerSend;
     role: "user" | "assistant";
     text: string;
     /** Source IDs the user pinned for a user turn, or cited documents for an assistant turn. */
     refs?: string[];
     citations?: ThreadReference[];
-    model?: string;
+    /**
+     * Reading someone else's chat (ADR-014): citations the server removed
+     * because you can't open their source. Never stored.
+     */
+    hiddenCitations?: number;
     /**
      * Total LLM tokens for the turn. Named for what it is: this used to be set
      * from `chunksAnalyzed`, so the UI reported a retrieval count as a token
@@ -226,6 +287,8 @@ export interface ThreadMessage {
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     /** Retrieved chunks the answer was grounded in — a different number. */
     chunksAnalyzed?: number;
+    /** Web pages the model read, in the [Source N] order its answer cites. */
+    webSources?: { title: string; url: string }[];
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];
@@ -239,6 +302,8 @@ export interface ThreadMessage {
  * argument list to sendMessage further.
  */
 export interface ComposerSend {
+    recallText?: string;
+    origin?: "user" | "attachment" | "plan-implementation";
     text: string;
     refs: string[];
     attachments: EphemeralAttachment[];
@@ -246,6 +311,26 @@ export interface ComposerSend {
     thinking: boolean;
     /** The agent this turn is addressed to; null = the workspace's default assistant. */
     agentKey: string | null;
+    modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    reasoningEffort?: string;
+    chatMode?: "default" | "plan";
+    followUp?: "queue" | "interrupt";
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    threadRefs?: string[];
+    /** Passages selected in a document and asked about; never pasted into `text`. */
+    passages?: ChatPassage[];
+}
+
+/** What a document viewer hands over when the reader asks about a selection. */
+export interface PassageSelection {
+    text: string;
+    /** 1-based page, when the viewer knows it (PDFs do). */
+    page?: number;
+}
+
+export interface QueuedChatMessage {
+    id: string;
+    send: ComposerSend;
 }
 
 /** How the transcript attributes an agent's answer. */
@@ -293,6 +378,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconAgents,
         desc: "The roster: try an agent, edit its instructions, import one",
         href: "/employer/documents?feature=agents",
+    },
+    {
+        id: "team",
+        label: "Team",
+        Icon: IconTeam,
+        desc: "People, groups, and who did what across the workspace",
+        href: "/employer/documents?feature=team",
     },
     {
         id: "draft",
@@ -370,6 +462,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=vantage",
     },
     {
+        id: "scenarios",
+        label: "Scenarios",
+        Icon: IconScenarios,
+        desc: "Simulate how people built from your records react to a situation",
+        href: "/employer/documents?feature=scenarios",
+    },
+    {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
@@ -398,10 +497,12 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/settings#analytics",
     },
     {
-        id: "team",
-        label: "Workspace",
+        // Not `team`: that is the Team app above, and the palette keys and
+        // routes its rows by id.
+        id: "people-access",
+        label: "People and access",
         Icon: IconUsers,
-        desc: "People, roles, invitations, audit",
+        desc: "Roles, invitations, join links, audit",
         href: "/employer/settings#people",
     },
     {
@@ -454,6 +555,13 @@ export interface StudioFeature {
      * gated tile never flashes for someone who may not open it.
      */
     requires?: Permission;
+    /**
+     * What to tell someone who follows a link to this app (a teammate's
+     * link, a shortcut) without its permission. The app does not open for
+     * them; this sentence says why instead of leaving them where they were.
+     * Unset, nothing is said.
+     */
+    deniedNote?: string;
 }
 
 export interface StudioGroup {
@@ -496,6 +604,19 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Agents",
                 Icon: IconAgents,
                 desc: "Who your agents are: try them, edit their instructions, import a definition file",
+            },
+            {
+                // Who is here and what they have been doing. It was a tab of
+                // the sidebar; the sidebar is for making, filing and sharing
+                // sources, so the team is a tab of its own like every app.
+                id: "team",
+                label: "Team",
+                Icon: IconTeam,
+                desc: "People and what you share with each, groups to share with in one step, and who added, shared or moved what",
+                href: "/employer/documents?feature=team",
+                requires: "members.view",
+                deniedNote:
+                    "Your role sees only what is shared with you, so there is no team list. New shares arrive in the bell at the top of the sidebar.",
             },
         ],
     },
@@ -544,6 +665,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 href: "/employer/documents?feature=vantage",
             },
             {
+                // A simulated social network: people built from the
+                // workspace's records react to a situation over several
+                // rounds. List, form and runs are screens inside its tab.
+                id: "scenarios",
+                label: "Scenarios",
+                Icon: IconScenarios,
+                desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
+                href: "/employer/documents?feature=scenarios",
+            },
+            {
                 id: "draft",
                 label: "Templated Drafts",
                 Icon: IconPen,
@@ -566,12 +697,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             // survives as an id so old deep links open the right section.
             // Analytics is not one of them: it has its own pane and its own
             // permission, and Settings' `#analytics` only forwards to this tab.
+            //
+            // Ungated: everyone has an account, a theme and shortcuts to set,
+            // and the account menu offers Settings to everyone. Each section
+            // carries its own gate (`SETTINGS_SECTION_ACCESS`).
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile",
-                requires: "settings.manage",
+                desc: "Your account, appearance and shortcuts; the workspace's people, processing, agents and integrations",
             },
             {
                 id: "analytics",
@@ -666,10 +800,10 @@ export interface AddSourceTab {
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
-        // Authoring, not ingesting: these hand the user an editor rather than
-        // asking for a file. A mindmap becomes citable once it is published
-        // back here; a Google Doc is citable from the moment it is created and
-        // re-syncs as it is edited.
+        // Authoring, not ingesting: these hand the user somewhere to write
+        // rather than asking for a file. A mindmap becomes citable once it is
+        // published back here; a Google Doc is citable from the moment it is
+        // created and re-syncs as it is edited; pasted text is a note.
         group: "Create",
         items: [
             {
@@ -684,6 +818,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 Icon: IconGoogleDocs,
                 desc: "Write it in Google Docs",
             },
+            {
+                id: "paste",
+                label: "Paste text",
+                Icon: IconPaste,
+                desc: "Drop in notes or excerpts",
+            },
         ],
     },
     {
@@ -691,14 +831,13 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "files", label: "Files", Icon: IconFile, desc: "PDF, DOCX, XLSX, images" },
             { id: "folder", label: "Folder", Icon: IconFolder, desc: "Bulk — keeps structure" },
-            { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, WAV, M4A — transcribed" },
-            { id: "video", label: "Video", Icon: IconVideo, desc: "MP4, MOV — transcribed" },
             {
-                id: "paste",
-                label: "Paste text",
-                Icon: IconPaste,
-                desc: "Drop in notes or excerpts",
+                id: "audio",
+                label: "Audio",
+                Icon: IconAudio,
+                desc: "MP3, M4A, WAV and more — transcribed",
             },
+            { id: "video", label: "Video", Icon: IconVideo, desc: "MP4 — transcribed" },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
             {
@@ -716,9 +855,24 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
-            { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
-            { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
-            { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "drive",
+                label: "Google Drive",
+                Icon: IconDrive,
+                desc: "Docs, Sheets, PDFs — kept in sync",
+            },
+            {
+                id: "slack",
+                label: "Slack",
+                Icon: IconSlack,
+                desc: "Mirror agent meetings to a channel",
+            },
+            {
+                id: "github",
+                label: "GitHub",
+                Icon: IconGithub,
+                desc: "Private repos for the Repo Explainer",
+            },
             {
                 id: "agent-sessions",
                 label: "Coding sessions",

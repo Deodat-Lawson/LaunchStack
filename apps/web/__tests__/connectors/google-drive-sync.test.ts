@@ -36,12 +36,15 @@ interface FakeDriveOptions {
 interface FakeDrive extends DriveClient {
     readonly downloads: string[];
     readonly exports: string[];
+    /** Every listChildren call's folder and driveId. */
+    readonly listings: { folderId: string; driveId?: string }[];
 }
 
 function createFakeDrive(options: FakeDriveOptions): FakeDrive {
     const byId = new Map(options.files.map(file => [file.id, file]));
     const downloads: string[] = [];
     const exports: string[] = [];
+    const listings: { folderId: string; driveId?: string }[] = [];
     const inaccessible = new Set(options.inaccessible ?? []);
 
     function requireAccess(fileId: string): DriveFile {
@@ -54,10 +57,12 @@ function createFakeDrive(options: FakeDriveOptions): FakeDrive {
     return {
         downloads,
         exports,
+        listings,
         async getFile(fileId) {
             return requireAccess(fileId);
         },
-        async listChildren(folderId) {
+        async listChildren(folderId, _pageToken, driveId) {
+            listings.push({ folderId, driveId });
             requireAccess(folderId);
             return {
                 files: options.files.filter(
@@ -397,5 +402,108 @@ describe("syncGoogleDrive", () => {
         });
 
         expect(report.stored.map(entry => entry.sourceId)).toEqual(["a"]);
+    });
+
+    it("records which picked folder each file came through, and the subfolders on the way", async () => {
+        const client = createFakeDrive({
+            files: [
+                { id: "room", name: "Data Room", mimeType: FOLDER_MIME },
+                { id: "fin", name: "Financials", mimeType: FOLDER_MIME, parents: ["room"] },
+                { id: "arch", name: "Archive", mimeType: FOLDER_MIME, parents: ["fin"] },
+                pdf("top", ["room"]),
+                pdf("plan", ["fin"]),
+                pdf("old", ["arch"]),
+                pdf("solo"),
+            ],
+        });
+        const sink = createRecordingSink();
+
+        await syncGoogleDrive({
+            client,
+            sink,
+            pickedItems: [
+                { fileId: "room", kind: "folder" },
+                { fileId: "solo", kind: "file" },
+            ],
+        });
+
+        const placed = Object.fromEntries(
+            sink.stored.map(item => [
+                item.sourceId,
+                [item.metadata.pickedRootId, item.metadata.folderPath],
+            ])
+        );
+        expect(placed).toEqual({
+            top: ["room", []],
+            plan: ["room", ["Financials"]],
+            old: ["room", ["Financials", "Archive"]],
+            solo: ["solo", []],
+        });
+    });
+
+    it("reports a picked folder that lists empty instead of passing for nothing to sync", async () => {
+        // What drive.file looks like: the picked folder itself opens, but its
+        // children were never granted, so the listing is empty.
+        const client = createFakeDrive({
+            files: [{ id: "shared", name: "Shared room", mimeType: FOLDER_MIME }],
+        });
+        const report = await syncGoogleDrive({
+            client,
+            sink: createRecordingSink(),
+            pickedItems: [{ fileId: "shared", kind: "folder" }],
+        });
+
+        expect(report.emptyFolders).toEqual(["shared"]);
+        expect(report.discovered).toBe(0);
+        expect(report.failed).toHaveLength(0);
+    });
+
+    it("does not report a folder that had something in it, even when nothing was importable", async () => {
+        const client = createFakeDrive({
+            files: [
+                { id: "room", name: "Room", mimeType: FOLDER_MIME },
+                {
+                    id: "sketch",
+                    name: "a.fig",
+                    mimeType: "application/octet-stream",
+                    parents: ["room"],
+                },
+            ],
+        });
+        const report = await syncGoogleDrive({
+            client,
+            sink: createRecordingSink(),
+            pickedItems: [{ fileId: "room", kind: "folder" }],
+        });
+        expect(report.emptyFolders).toEqual([]);
+        expect(report.skipped.map(skip => skip.sourceId)).toEqual(["sketch"]);
+    });
+
+    it("lists folders in a shared drive with that drive's id", async () => {
+        const client = createFakeDrive({
+            files: [
+                { id: "drive-1", name: "Team", mimeType: FOLDER_MIME, driveId: "drive-1" },
+                {
+                    id: "research",
+                    name: "Research",
+                    mimeType: FOLDER_MIME,
+                    parents: ["drive-1"],
+                    driveId: "drive-1",
+                },
+                pdf("notes", ["research"], { driveId: "drive-1" }),
+            ],
+        });
+        const sink = createRecordingSink();
+        await syncGoogleDrive({
+            client,
+            sink,
+            pickedItems: [{ fileId: "drive-1", kind: "folder" }],
+        });
+
+        expect(client.listings).toEqual([
+            { folderId: "drive-1", driveId: "drive-1" },
+            { folderId: "research", driveId: "drive-1" },
+        ]);
+        expect(sink.stored.map(item => item.metadata.folderPath)).toEqual([["Research"]]);
     });
 });

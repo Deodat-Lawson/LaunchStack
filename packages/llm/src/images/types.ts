@@ -66,7 +66,7 @@ export interface ImageInput {
 
 export interface ImageGenerationRequest {
     prompt: string;
-    /** Model id as the *endpoint* spells it, e.g. "google/gemini-2.5-flash-image". */
+    /** Model id as the *endpoint* spells it, e.g. "google/gemini-3.1-flash-image". */
     modelId: string;
     /** Default 1. A backend that cannot batch loops and says so in a warning. */
     count?: number;

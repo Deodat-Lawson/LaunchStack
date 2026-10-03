@@ -7,6 +7,8 @@ import { fetchFile, isS3Storage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { storedFileHeaders } from "~/server/security/stored-file-headers";
+import { forwardRangeInit, relayedRangeResponse } from "~/server/storage/byte-range";
+import { mediaMimeFromName } from "~/lib/media-document";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
     ".pdf": "application/pdf",
@@ -29,14 +31,18 @@ const EXTENSION_TO_MIME: Record<string, string> = {
 
 function inferMime(name: string): string {
     const match = /(\.[a-z0-9]+)(?:\?|#|$)/i.exec(name);
-    return (match?.[1] && EXTENSION_TO_MIME[match[1].toLowerCase()]) ?? "application/octet-stream";
+    return (
+        (match?.[1] && EXTENSION_TO_MIME[match[1].toLowerCase()]) ??
+        mediaMimeFromName(name) ??
+        "application/octet-stream"
+    );
 }
 
 interface RouteParams {
     params: Promise<{ id: string }>;
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+export async function GET(request: Request, { params }: RouteParams) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -64,10 +70,22 @@ export async function GET(_request: Request, { params }: RouteParams) {
         }
 
         if (!isS3Storage() && !isPrivateBlobUrl(doc.url)) {
-            return NextResponse.redirect(doc.url, { status: 307 });
+            // Database storage records the same-origin path `/api/files/{id}`,
+            // which NextResponse.redirect rejects as malformed. A relative
+            // Location is valid HTTP and resolves against this request. A
+            // media element re-sends its Range to wherever this points.
+            // (`//host` is not a path: it would leave the origin.)
+            return doc.url.startsWith("/") && !doc.url.startsWith("//")
+                ? new NextResponse(null, { status: 307, headers: { Location: doc.url } })
+                : NextResponse.redirect(doc.url, { status: 307 });
         }
 
-        const blobRes = await fetchFile(doc.url);
+        // A media element's Range goes on to storage, which slices.
+        const blobRes = await fetchFile(doc.url, forwardRangeInit(request));
+        const relayed = relayedRangeResponse(blobRes);
+        if (relayed.status === 416) {
+            return new NextResponse(null, relayed);
+        }
         if (!blobRes.ok) {
             return NextResponse.json(
                 { error: "Failed to retrieve document from storage" },
@@ -78,13 +96,11 @@ export async function GET(_request: Request, { params }: RouteParams) {
         const mimeType = blobRes.headers.get("content-type") ?? inferMime(doc.title);
 
         return new NextResponse(blobRes.body, {
-            status: 200,
+            status: relayed.status,
             headers: {
                 // The storage type is the uploader's claim, same as /api/files.
                 ...storedFileHeaders(mimeType),
-                ...(blobRes.headers.get("content-length")
-                    ? { "Content-Length": blobRes.headers.get("content-length")! }
-                    : {}),
+                ...relayed.headers,
                 "Content-Disposition": `inline; filename="${encodeURIComponent(doc.title)}"; filename*=UTF-8''${encodeURIComponent(doc.title)}`,
                 "Cache-Control": "private, max-age=3600",
             },

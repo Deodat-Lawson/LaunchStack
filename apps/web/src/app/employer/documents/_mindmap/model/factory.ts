@@ -13,6 +13,7 @@ import {
     readableInkOn,
     stickyInk,
     swatchFor,
+    themeFor,
     type ThemeMode,
 } from "./palette";
 import { shapeDef } from "./shapes";
@@ -149,8 +150,11 @@ function presetFor(
                 style: { fill: "none", stroke: "none", strokeWidth: 0, shadow: false },
                 text: { align: "left", valign: "top", size: 16 },
             };
+        // The default board's centre and first branch. Only a starting point:
+        // every path that adds a topic repaints it for the document's theme
+        // and its place in the tree (`paintTopics` in theme.ts).
         case "mind-root": {
-            const sw = branchSwatch(0, mode);
+            const sw = swatchFor(themeFor(null, mode).root, mode);
             return {
                 style: {
                     fill: sw.stroke,
@@ -163,7 +167,7 @@ function presetFor(
             };
         }
         case "mind-branch": {
-            const sw = branchSwatch(1, mode);
+            const sw = swatchFor(themeFor(null, mode).cycle[0]!, mode);
             return {
                 style: { fill: sw.fill, stroke: sw.stroke, strokeWidth: 1.5, radius: 10 },
                 text: { color: sw.ink, size: 14, bold: false },

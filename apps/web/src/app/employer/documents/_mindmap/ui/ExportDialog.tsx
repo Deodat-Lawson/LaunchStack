@@ -251,9 +251,10 @@ export function ImportDialog({
         const { fromEdgeList, fromMarkdownOutline, fromMermaid, parseDoc } = await import(
             "../model/serialize"
         );
-        const title = store.getState().doc.title;
+        const { applyThemeToDoc } = await import("../model/theme");
+        const { title, settings } = store.getState().doc;
         try {
-            const next =
+            const parsed =
                 mode === "json"
                     ? parseDoc(JSON.parse(text) as unknown, title)
                     : mode === "mermaid"
@@ -261,6 +262,11 @@ export function ImportDialog({
                       : mode === "csv"
                         ? fromEdgeList(text, title)
                         : fromMarkdownOutline(text, title);
+            // A text format carries no colours of its own, so it lands in
+            // this board's theme — pasting an outline onto a dark board must
+            // not hand back a white one. A JSON document brings its own.
+            const next =
+                mode === "json" ? parsed : applyThemeToDoc(parsed, settings.paletteId ?? "default");
             // Keep the current title: the user named this document already.
             store.replaceDoc({ ...next, title }, { label: "Import" });
             toast.success("Imported");

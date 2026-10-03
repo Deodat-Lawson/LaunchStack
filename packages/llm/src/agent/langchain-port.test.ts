@@ -103,6 +103,14 @@ describe("createLangchainAgentPort", () => {
         expect(result.modelId).toBe("fake-model");
     });
 
+    it("returns the turn text verbatim, without rewriting math", async () => {
+        const text = String.raw`Calling lookup with {"q": "( \frac{1}{2} )"} for \( x \).`;
+        const { resolved } = fakeResolved(new AIMessage({ content: text }));
+        const port = createLangchainAgentPort(resolved);
+        const result = await port.respond({ system: "s", transcript: [], tools: TOOLS });
+        expect(result.text).toBe(text);
+    });
+
     it("returns empty tool calls when the response has none", async () => {
         const { resolved } = fakeResolved(new AIMessage({ content: "prose only" }));
         const port = createLangchainAgentPort(resolved);

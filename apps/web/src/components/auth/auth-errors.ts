@@ -53,9 +53,13 @@ export function oauthErrorMessage(code: string | null, provider?: string | null)
     switch (code) {
         case "access_denied":
             return "Sign-in was cancelled. Try again, or pick another way to sign in.";
+        // A provider sign-in on an existing address links to it whenever the
+        // provider confirms the address (~/server/auth/account-linking), so
+        // this is the one that has not.
         case "account_not_linked":
+            return `${name ?? "That provider"} hasn't confirmed you own this email address, so it can't sign you in to the Launchstack account that uses it. Confirm the address with ${name ?? "the provider"}, or sign in another way.`;
         case "unable_to_link_account":
-            return "That email already has a Launchstack password. Sign in with your email and password instead.";
+            return `We couldn't connect ${name ?? "that account"} to your Launchstack account. Try again, or sign in another way.`;
         case "email_not_found":
             return `${name ?? "The provider"} didn't share an email address with us, so we couldn't sign you in.`;
         case "signup_disabled":
@@ -68,5 +72,32 @@ export function oauthErrorMessage(code: string | null, provider?: string | null)
             return "That sign-in attempt expired. Please try again.";
         default:
             return "We couldn't complete that sign-in. Try again, or use your email and password.";
+    }
+}
+
+/**
+ * The `?error=<code>` a failed "Connect Google" in Settings › Account comes
+ * back with, as a sentence. `email` is the signed-in account's address.
+ */
+export function connectErrorMessage(code: string, provider: string, email?: string | null): string {
+    const name = PROVIDER_NAMES[provider] ?? "That provider";
+    switch (code) {
+        case "access_denied":
+            return `Connecting ${name} was cancelled.`;
+        case "email_does_not_match":
+            return email
+                ? `That ${name} account uses a different email address. Connect the ${name} account for ${email}.`
+                : `That ${name} account uses a different email address from this one.`;
+        case "account_already_linked_to_different_user":
+            return `That ${name} account already signs in to a different Launchstack account.`;
+        case "unable_to_link_account":
+            return `${name} hasn't confirmed you own that email address, so it can't be connected.`;
+        case "state_not_found":
+        case "state_mismatch":
+        case "invalid_code":
+        case "please_restart_the_process":
+            return `That attempt to connect ${name} expired. Please try again.`;
+        default:
+            return `We couldn't connect ${name}. Try again in a moment.`;
     }
 }

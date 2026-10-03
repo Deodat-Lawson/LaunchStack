@@ -11,6 +11,7 @@
  * Boot order matters: the engine (shared composition root from apps/web)
  * must be configured before any port touches the DB or providers.
  */
+import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,8 +20,8 @@ import {
     createPipelineProcessor,
     runOutboxTick,
     DEFAULT_RETRY_POLICY,
+    DrizzleOutboxStore,
 } from "@launchstack/orchestration";
-import { DocIngestionPipeline, DrizzleOutboxStore } from "@launchstack/engine";
 
 import { parseWorkerEnv, resolveChatModelsConfig } from "./env";
 import { createLogger } from "./logger";
@@ -42,6 +43,11 @@ async function main(): Promise<void> {
     // Startup-time resolution only — never mutated after boot.
     {
         const workerDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+        // The root .env is otherwise loaded only when ~/env is imported below —
+        // after this block — so a CHAT_MODELS_CONFIG set there lost to the
+        // default. Same precedence as dotenv: variables already set win.
+        const rootEnv = path.resolve(workerDir, "../../.env");
+        if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
         const resolved = resolveChatModelsConfig({
             configured: process.env.CHAT_MODELS_CONFIG,
             workerDir,
@@ -66,11 +72,13 @@ async function main(): Promise<void> {
 
     const [
         { createInngestHandler },
+        { createIngestionPipelinePort },
         { createCompanyProjectionPort },
         { createNoteEmbeddingPort, createNoteRehydrationPort },
         { createDeadEventHandler, createValidationDeadHandler },
     ] = await Promise.all([
         import("./inngest"),
+        import("./ports/ingestion"),
         import("./ports/projection"),
         import("./ports/notes"),
         import("./ports/failure"),
@@ -84,7 +92,7 @@ async function main(): Promise<void> {
         onValidationDead: createValidationDeadHandler(logger),
     });
     const processor = createPipelineProcessor({
-        pipeline: new DocIngestionPipeline(logger),
+        pipeline: createIngestionPipelinePort(logger),
         projection: createCompanyProjectionPort(logger),
         noteRehydration: createNoteRehydrationPort(logger),
         noteEmbedding: createNoteEmbeddingPort(logger),
@@ -207,7 +215,8 @@ async function main(): Promise<void> {
         void outbox
             .reclaimStale(
                 new Date(Date.now() - workerEnv.OUTBOX_STALE_CLAIM_MS),
-                DEFAULT_RETRY_POLICY.maxAttempts
+                DEFAULT_RETRY_POLICY.maxAttempts,
+                onDead
             )
             .catch(error => logger.error({ error: String(error) }, "stale-claim reclaim failed"));
     }, workerEnv.OUTBOX_RECLAIM_INTERVAL_MS);

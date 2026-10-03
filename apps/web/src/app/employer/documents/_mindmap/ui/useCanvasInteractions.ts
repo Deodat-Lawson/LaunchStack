@@ -10,6 +10,7 @@ import type {
 
 import {
     activePage,
+    isTopicShape,
     mapEdges,
     mapNodes,
     nodeById,
@@ -17,6 +18,7 @@ import {
     withDescendants,
 } from "../model/doc";
 import { docMode, insertShape, scaleNodesToBounds } from "../model/commands";
+import { paintNewTopics } from "../model/topicStyle";
 import { createEdge, createNode, createNodeAt } from "../model/factory";
 import {
     MAX_ZOOM,
@@ -1061,6 +1063,7 @@ export function useCanvasInteractions(
                         });
                         store.selectNodes([node.id]);
                         store.endInteraction();
+                        paintNewTopics(store, isTopicShape(shape) ? [node.id] : []);
                         insertedId = node.id;
                     } else {
                         store.cancelInteraction();
@@ -1178,6 +1181,7 @@ export function useCanvasInteractions(
             const world = toWorld(e.clientX, e.clientY);
             const node = createNodeAt("mind-branch", world, { mode: docMode(store) });
             store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), { label: "Add topic" });
+            paintNewTopics(store, [node.id]);
             store.selectNodes([node.id]);
             cb.current.onEditText({ kind: "node", id: node.id });
         },
@@ -1367,6 +1371,9 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
         { transient: true }
     );
     store.endInteraction();
+    // A topic pulled out of a topic joins that branch: its colour and its
+    // connector's come from where it now sits, like one added with Tab.
+    if (created) paintNewTopics(store, [created.id]);
     if (created) store.selectNodes([created.id]);
     return null;
 }
@@ -1415,6 +1422,7 @@ function spawnFromPortClick(store: EditorStore, g: Gesture): DiagramNode | null 
         transient: true,
     });
     store.endInteraction();
+    if (isMind) paintNewTopics(store, [spawned.id]);
     store.selectNodes([spawned.id]);
     return spawned;
 }

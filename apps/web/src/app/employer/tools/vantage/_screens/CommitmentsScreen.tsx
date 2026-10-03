@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -20,22 +20,39 @@ import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
 
-import { vantageApi, type CommitmentDto } from "../api";
+import { vantageApi, type CommitmentDto, type TopicDto } from "../api";
 import { CheckInRow } from "../_components/CheckInRow";
 import { Field, FormError } from "../_components/Primitives";
+import { DecisionDialog } from "../_components/TopicDialogs";
+import { WeekSuggestions } from "../_components/WeekSuggestions";
+import { useOneClick } from "../_lib/actions";
 import { addDaysIso, plural, todayIso } from "../_lib/format";
+import { useHiddenSuggestions } from "../_lib/hidden";
+import { weekSuggestions } from "../_lib/suggestions";
 
 type View = "open" | "resolved" | "all";
 
 /**
  * The promise ledger: every commitment a meeting produced, with its owner,
  * due date and the test that settles it. Open ones first, late ones on top.
- * Checking in is the same control as on the overview.
+ * Above it, the same follow-through suggestions This week shows — promises
+ * due, as Done / Missed / Not yet, and a held meeting's next steps to
+ * commit to — answered with one click.
  */
 export function CommitmentsScreen() {
     const res = useResource("vantage:commitments", () => vantageApi.commitments());
+    const overview = useResource("vantage:overview", () => vantageApi.overview());
+    const hidden = useHiddenSuggestions();
+    const reloadLedger = res.reload;
+    const reloadOverview = overview.reload;
+    const refresh = useCallback(
+        () => Promise.all([reloadLedger(), reloadOverview()]),
+        [reloadLedger, reloadOverview]
+    );
+    const { act, gone } = useOneClick(refresh);
     const [view, setView] = useState<View>("open");
     const [adding, setAdding] = useState(false);
+    const [deciding, setDeciding] = useState<TopicDto | null>(null);
 
     const all = useMemo(() => res.data?.commitments ?? [], [res.data]);
     const today = todayIso();
@@ -54,6 +71,15 @@ export function CommitmentsScreen() {
         [all]
     );
     const late = open.filter(c => c.dueOn < today).length;
+    const followThrough = useMemo(
+        () =>
+            overview.data
+                ? weekSuggestions(overview.data, { today, hidden }).filter(
+                      g => g.id === "follow-through"
+                  )
+                : [],
+        [overview.data, today, hidden]
+    );
     const shown = view === "open" ? open : view === "resolved" ? resolved : [...open, ...resolved];
 
     return (
@@ -74,6 +100,15 @@ export function CommitmentsScreen() {
             />
 
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
+
+            {followThrough.length > 0 && (
+                <WeekSuggestions
+                    groups={followThrough}
+                    act={act}
+                    gone={gone}
+                    onDecide={setDeciding}
+                />
+            )}
 
             <div className="flex flex-wrap gap-1" role="tablist" aria-label="View">
                 {(
@@ -129,11 +164,7 @@ export function CommitmentsScreen() {
                 ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {shown.map(c => (
-                            <CheckInRow
-                                key={c.id}
-                                commitment={c}
-                                onChange={() => void res.reload()}
-                            />
+                            <CheckInRow key={c.id} commitment={c} onChange={() => void refresh()} />
                         ))}
                     </div>
                 )}
@@ -142,7 +173,13 @@ export function CommitmentsScreen() {
             <AddCommitmentDialog
                 open={adding}
                 onOpenChange={setAdding}
-                onSaved={() => void res.reload()}
+                onSaved={() => void refresh()}
+            />
+            <DecisionDialog
+                open={deciding !== null}
+                onOpenChange={o => !o && setDeciding(null)}
+                topic={deciding}
+                onSaved={() => void refresh()}
             />
         </div>
     );

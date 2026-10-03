@@ -23,6 +23,7 @@ import {
     notConfiguredResponse,
     requireConnectorAdmin,
 } from "~/server/services/connectors/workspace-guard";
+import { publicOrigin } from "~/server/public-origin";
 
 export const runtime = "nodejs";
 
@@ -42,7 +43,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         const guard = await requireConnectorAdmin();
         if (!guard.ok) return guard.response;
 
-        const config = getConnectorConfig(provider, new URL(request.url).origin);
+        const config = getConnectorConfig(provider, publicOrigin(request));
         if (!config) return notConfiguredResponse(provider);
 
         const nonce = createNonce();

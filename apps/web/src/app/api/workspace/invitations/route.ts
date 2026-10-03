@@ -4,12 +4,17 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { CreateInvitationSchema } from "~/lib/validation";
 import { parseJsonBody, requestOrigin, workspaceErrorResponse } from "~/server/workspace/http";
 import { createInvitation, listInvitations } from "~/server/workspace/invitations";
+import { authEmailDelivers } from "~/server/auth/email";
 
 export async function GET() {
     const ctx = await requireWorkspacePermission("members.invite");
     if (!ctx.success) return ctx.response;
     try {
-        return NextResponse.json({ invitations: await listInvitations(ctx.data) });
+        return NextResponse.json({
+            invitations: await listInvitations(ctx.data),
+            // Whether invitations are emailed, or only made into links to copy.
+            emailDelivery: authEmailDelivers(),
+        });
     } catch (error) {
         return workspaceErrorResponse(error, "[workspace/invitations GET]");
     }

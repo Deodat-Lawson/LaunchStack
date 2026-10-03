@@ -1,8 +1,14 @@
 import {
+    applyPinOrder,
+    byPinOrder,
     deriveSessionTitle,
+    tidySessionTitle,
     filterHistory,
     groupHistoryByRecency,
+    movePin,
+    placePin,
     relativeTime,
+    sectionHistory,
     SESSION_TITLE_MAX,
     type HistoryEntry,
 } from "~/lib/workspace-history";
@@ -28,6 +34,24 @@ function entry(id: string, at: string, over: Partial<HistoryEntry> = {}): Histor
     };
 }
 
+describe("tidySessionTitle", () => {
+    it("drops the quote markers a pasted passage left in an old title", () => {
+        expect(
+            tidySessionTitle("> sentence. We discover that the retrieval unit > choice signifi…")
+        ).toBe("sentence. We discover that the retrieval unit choice signifi…");
+    });
+
+    it("tidies an old right-click title with the quote after a colon", () => {
+        expect(
+            tidySessionTitle("Explain this passage from “Report.pdf”: > Revenue rose > in Q3…")
+        ).toBe("Explain this passage from “Report.pdf”: Revenue rose in Q3…");
+    });
+
+    it("leaves an ordinary title alone, chevrons included", () => {
+        expect(tidySessionTitle("Is revenue > cost?")).toBe("Is revenue > cost?");
+    });
+});
+
 describe("deriveSessionTitle", () => {
     it("uses the opening question verbatim when it fits", () => {
         expect(deriveSessionTitle("What is the indemnity cap?")).toBe("What is the indemnity cap?");
@@ -50,6 +74,46 @@ describe("deriveSessionTitle", () => {
         // The boundary cut must not slice a word in half.
         expect(title.slice(0, -1).trim()).toBe(title.slice(0, -1));
         expect(title.startsWith("Summarise every indemnity")).toBe(true);
+    });
+
+    it("names a chat after the question, not a passage pasted above it", () => {
+        expect(
+            deriveSessionTitle(
+                "> sentence. We discover that the retrieval unit\n> choice significantly impacts\n\n[Quoted context](#launchstack-quoted-context)\n\nWhat is the novel retrieval unit?"
+            )
+        ).toBe("What is the novel retrieval unit?");
+    });
+
+    it("names a short question about a passage with the passage's opening words", () => {
+        expect(
+            deriveSessionTitle("Explain this passage.", [
+                { text: "Propositions are atomic expressions within text." },
+            ])
+        ).toBe("Explain this passage: “Propositions are atomic expressions within text.”");
+        expect(
+            deriveSessionTitle("What is the novel retrieval unit they propose?", [
+                { text: "ignored when the question says enough" },
+            ])
+        ).toBe("What is the novel retrieval unit they propose?");
+    });
+
+    it("names rich-editor context chips by their names, not their links", () => {
+        expect(
+            deriveSessionTitle(
+                "[Source: 2312.06648v3.pdf](#launchstack-source-d17) How large are the recall gains?"
+            )
+        ).toBe("2312.06648v3.pdf How large are the recall gains?");
+        expect(
+            deriveSessionTitle("[Source: Q3 \\[draft\\].pdf](#launchstack-source-d9) Totals?")
+        ).toBe("Q3 [draft].pdf Totals?");
+    });
+
+    it("falls back to the quoted words when nothing else was sent", () => {
+        expect(
+            deriveSessionTitle(
+                "> Propositions are atomic expressions\n\n[Quoted context](#launchstack-quoted-context)"
+            )
+        ).toBe("Propositions are atomic expressions");
     });
 
     it("still truncates when there is no word boundary to break on", () => {
@@ -143,5 +207,74 @@ describe("filterHistory", () => {
 
     it("ignores case", () => {
         expect(filterHistory(entries, "INDEMNITY").map(e => e.id)).toEqual(["a"]);
+    });
+});
+
+/**
+ * ADR-014 §5: the rail's three sections and the pin order. Each entry lands in
+ * one section; the order of Pinned is the person's own, not recency.
+ */
+describe("sectionHistory", () => {
+    const pinnedOld = entry("p-old", "2020-01-01T00:00:00.000Z", { pinned: true, pinRank: 0 });
+    const pinnedNew = entry("p-new", NOW.toISOString(), { pinned: true, pinRank: 1 });
+    const unranked = entry("p-unranked", NOW.toISOString(), { pinned: true, pinRank: null });
+    const sharedPinned = entry("s-pin", NOW.toISOString(), {
+        pinned: true,
+        pinRank: -1,
+        sharedBy: "user-b",
+    });
+    const sharedOld = entry("s-old", "2026-09-04T10:00:00.000Z", { sharedBy: "user-b" });
+    const sharedNew = entry("s-new", "2026-09-05T13:00:00.000Z", { sharedBy: "user-c" });
+    const mine = entry("mine", "2026-09-05T12:00:00.000Z");
+    const run = entry("run", "2026-09-05T13:30:00.000Z", { kind: "email" });
+
+    it("puts pins first in manual order, then shared with you, then the rest by date", () => {
+        const sections = sectionHistory(
+            [mine, sharedOld, pinnedNew, run, unranked, sharedNew, pinnedOld, sharedPinned],
+            NOW
+        );
+        expect(sections.pinned.map(e => e.id)).toEqual(["s-pin", "p-old", "p-new", "p-unranked"]);
+        expect(sections.shared.map(e => e.id)).toEqual(["s-new", "s-old"]);
+        expect(sections.recent.map(g => [g.id, g.entries.map(e => e.id)])).toEqual([
+            ["today", ["run", "mine"]],
+        ]);
+    });
+});
+
+describe("pin order helpers", () => {
+    const order = ["a", "b", "c", "d"] as const;
+
+    it("moves one pin by index, clamped, and returns the same array when nothing moves", () => {
+        expect(movePin(order, "c", 0)).toEqual(["c", "a", "b", "d"]);
+        expect(movePin(order, "a", 99)).toEqual(["b", "c", "d", "a"]);
+        expect(movePin(order, "a", -1)).toBe(order);
+        expect(movePin(order, "zz", 1)).toBe(order);
+    });
+
+    it("drops a pin before or after another", () => {
+        expect(placePin(order, "d", "b", false)).toEqual(["a", "d", "b", "c"]);
+        expect(placePin(order, "a", "c", true)).toEqual(["b", "c", "a", "d"]);
+        expect(placePin(order, "b", "c", false)).toBe(order);
+        expect(placePin(order, "b", "b", true)).toBe(order);
+    });
+
+    it("restates an order as ranks on the pinned chats it names", () => {
+        const entries = [
+            entry("x", NOW.toISOString(), { pinned: true, pinRank: 5 }),
+            entry("y", NOW.toISOString(), { pinned: true, pinRank: 9 }),
+            entry("z", NOW.toISOString()),
+        ];
+        const next = applyPinOrder(entries, ["y", "x", "z"]);
+        expect(next.map(e => [e.id, e.pinRank])).toEqual([
+            ["x", 1],
+            ["y", 0],
+            ["z", undefined],
+        ]);
+        expect(
+            [...next]
+                .filter(e => e.pinned)
+                .sort(byPinOrder)
+                .map(e => e.id)
+        ).toEqual(["y", "x"]);
     });
 });

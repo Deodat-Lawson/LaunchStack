@@ -12,7 +12,7 @@ import { AIMessage, HumanMessage, SystemMessage, ToolMessage } from "@langchain/
 import type { BaseMessage } from "@langchain/core/messages";
 
 import type { ResolvedChatModel } from "../chat-model-factory";
-import { normalizeModelContent } from "../normalize-content";
+import { modelContentToText } from "../normalize-content";
 import { normalizeTokenUsage } from "../usage";
 import type { AgentModelPort, AgentToolCall, AgentToolSpec, AgentTranscriptItem } from "./types";
 
@@ -90,7 +90,7 @@ export function createLangchainAgentPort(resolved: ResolvedChatModel): AgentMode
             const bound = chat.bindTools!(toLangchainTools(tools));
             const response = await bound.invoke(toMessages(system, transcript));
             return {
-                text: normalizeModelContent((response as { content?: unknown }).content ?? ""),
+                text: modelContentToText((response as { content?: unknown }).content ?? ""),
                 toolCalls: readToolCalls(response),
                 usage: normalizeTokenUsage(response),
                 modelId: resolved.modelId,

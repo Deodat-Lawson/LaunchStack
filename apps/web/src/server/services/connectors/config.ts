@@ -13,13 +13,16 @@
 
 import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import { configuredPublicOrigin } from "~/server/public-origin";
+import { googleStandInUrl } from "../google-drive/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
+import * as linkedin from "./providers/linkedin";
 import * as slack from "./providers/slack";
 import type { ProviderGrant, ProviderOAuthConfig, RefreshedProviderToken } from "./providers/types";
 
 /** The providers whose OAuth handshake this generic layer performs. */
-export const OAUTH_PROVIDERS = ["slack", "github"] as const;
+export const OAUTH_PROVIDERS = ["slack", "github", "linkedin"] as const;
 export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
 export function isOAuthProvider(value: string): value is OAuthProvider {
@@ -43,12 +46,14 @@ interface ProviderModule {
 export const PROVIDER_MODULES: Record<OAuthProvider, ProviderModule> = {
     slack: slack,
     github: github,
+    linkedin: linkedin,
 };
 
 function clientPair(provider: OAuthProvider): { clientId: string; clientSecret: string } | null {
     const pairs: Record<OAuthProvider, [string | undefined, string | undefined]> = {
         slack: [env.server.SLACK_CLIENT_ID, env.server.SLACK_CLIENT_SECRET],
         github: [env.server.GITHUB_OAUTH_CLIENT_ID, env.server.GITHUB_OAUTH_CLIENT_SECRET],
+        linkedin: [env.server.LINKEDIN_CLIENT_ID, env.server.LINKEDIN_CLIENT_SECRET],
     };
     const [clientId, clientSecret] = pairs[provider];
     return clientId && clientSecret ? { clientId, clientSecret } : null;
@@ -70,34 +75,78 @@ export function isConnectorConfigured(provider: ConnectorProvider): boolean {
                 env.server.GOOGLE_OAUTH_CLIENT_SECRET
         );
     }
+    // Bluesky has no OAuth app to register: a workspace pastes an app
+    // password, which only needs somewhere safe to be stored.
+    if (provider === "bluesky") return true;
     return Boolean(clientPair(provider));
 }
 
 /**
- * @param requestOrigin Origin of the current request (e.g. `http://localhost:3000`),
- * used only when APP_PUBLIC_URL is not set.
+ * @param origin The public origin of the current request, `publicOrigin(request)`.
+ * Without one (a refresh in the worker) BETTER_AUTH_URL's origin is used.
  */
 export function getConnectorConfig(
     provider: OAuthProvider,
-    requestOrigin?: string
+    origin?: string
 ): ProviderOAuthConfig | null {
     const pair = clientPair(provider);
     if (!pair || !env.server.EMBEDDING_SECRETS_KEY) return null;
 
-    const base = env.server.APP_PUBLIC_URL ?? requestOrigin;
-    if (!base) return null;
+    const base = origin ?? configuredPublicOrigin();
 
     return {
         ...pair,
-        redirectUri: new URL(connectorCallbackPath(provider), base).toString(),
+        // Without a request (a refresh in the worker) there is nothing to
+        // redirect to, and refresh and revoke send no redirect URI.
+        redirectUri: base ? new URL(connectorCallbackPath(provider), base).toString() : "",
+        ...(provider === "linkedin" ? linkedInOverrides() : {}),
     };
 }
 
-/** Browser-side Google Picker config; both values are public by design. */
-export function getPickerPublicConfig(): { apiKey: string | null; appId: string | null } {
+/**
+ * The deployment's LinkedIn app decides the scopes (see providers/linkedin);
+ * the two base URLs exist so a dev stand-in can answer for LinkedIn.
+ */
+function linkedInOverrides(): Pick<ProviderOAuthConfig, "authBaseUrl" | "apiBaseUrl" | "scopes"> {
+    const scopes = (env.server.LINKEDIN_OAUTH_SCOPES ?? "")
+        .split(/[\s,]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+    return {
+        authBaseUrl: env.server.LINKEDIN_OAUTH_BASE_URL,
+        apiBaseUrl: env.server.LINKEDIN_API_BASE_URL,
+        scopes: scopes.length > 0 ? scopes : linkedin.LINKEDIN_DEFAULT_SCOPES,
+    };
+}
+
+/** The scopes this deployment asks LinkedIn for. */
+export function linkedInRequestedScopes(): readonly string[] {
+    return linkedInOverrides().scopes ?? linkedin.LINKEDIN_DEFAULT_SCOPES;
+}
+
+export const GOOGLE_PICKER_SCRIPT = "https://apis.google.com/js/api.js";
+
+export interface PickerPublicConfig {
+    readonly apiKey: string | null;
+    readonly appId: string | null;
+    /** Where the Picker's script loads from: Google, or the dev stand-in's copy. */
+    readonly scriptUrl: string;
+}
+
+/** Browser-side Google Picker config; every value is public by design. */
+export function getPickerPublicConfig(): PickerPublicConfig {
+    const standIn = googleStandInUrl();
+    if (standIn) {
+        return {
+            apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? "stand-in-api-key",
+            appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? "stand-in-app",
+            scriptUrl: `${standIn}/picker/api.js`,
+        };
+    }
     return {
         apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? null,
         appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? null,
+        scriptUrl: GOOGLE_PICKER_SCRIPT,
     };
 }
 
@@ -109,5 +158,7 @@ export function getConnectorProvidersStatus(): ConnectorProvidersStatus {
         slack: { configured: isConnectorConfigured("slack") },
         github: { configured: isConnectorConfigured("github") },
         gmail: { configured: isConnectorConfigured("gmail") },
+        linkedin: { configured: isConnectorConfigured("linkedin") },
+        bluesky: { configured: isConnectorConfigured("bluesky") },
     };
 }

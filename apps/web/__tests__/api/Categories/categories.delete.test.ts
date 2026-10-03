@@ -1,13 +1,17 @@
+/**
+ * The legacy, id-addressed folder delete runs through ADR-014's folder rules
+ * (`deleteFolderAs`): a folder the caller can't see reads as missing, and
+ * deleting needs manage on it — no role gets past either.
+ */
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
 import { DELETE } from "~/app/api/Categories/DeleteCategories/route";
-import { validateRequestBody } from "~/lib/validation";
-import { recordAuditEvent } from "~/lib/authz/audit";
+import { FolderError } from "~/server/folders";
+import { deleteFolderAs } from "~/server/workspace/folder-actions";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
-
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<
@@ -16,127 +20,52 @@ jest.mock("~/lib/require-workspace-context", () =>
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
 
-jest.mock("~/lib/validation", () => ({
-    validateRequestBody: jest.fn(),
-}));
+jest.mock("~/server/workspace/folder-actions", () => ({ deleteFolderAs: jest.fn() }));
 
-jest.mock("~/lib/authz/audit", () => ({
-    recordAuditEvent: jest.fn().mockResolvedValue(undefined),
-}));
-
-const mockSelect = jest.fn();
-const mockDelete = jest.fn();
-const mockTx = {
-    select: (...args: unknown[]) => mockSelect(...args),
-    delete: (...args: unknown[]) => mockDelete(...args),
-};
-
+/** The id → path lookup; each test sets what it finds. */
+let mockRows: { name: string }[] = [];
 jest.mock("~/server/db/index", () => ({
-    db: {
-        transaction: (fn: (tx: unknown) => Promise<unknown>) => fn(mockTx),
-    },
+    db: { select: () => ({ from: () => ({ where: () => ({ limit: async () => mockRows }) }) }) },
 }));
 
-function mockCtx(role: string, companyId = BigInt(1)) {
+function mockCtx(role: string) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: makeWorkspaceContext({ role, companyId, authUserId: "user-123" }),
+        data: makeWorkspaceContext({ role, companyId: BigInt(1), authUserId: "user-123" }),
     });
-}
-
-function mockDeleteReturning(rows: { id: number; name: string }[]) {
-    mockSelect.mockReturnValue({
-        from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({ for: jest.fn().mockResolvedValue(rows) }),
-        }),
-    });
-    const returning = jest.fn().mockResolvedValue(rows);
-    const where = jest.fn().mockReturnValue({ returning });
-    mockDelete.mockReturnValue({ where });
-    return { where, returning };
 }
 
 function request(body: unknown) {
-    return new Request("http://localhost/api/Categories/DeleteCategory", {
+    return new Request("http://localhost/api/Categories/DeleteCategories", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
 }
 
-describe("DELETE /api/Categories/DeleteCategory", () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-        mockSelect.mockReturnValue({
-            from: jest.fn().mockReturnValue({
-                where: jest.fn().mockReturnValue({
-                    for: jest.fn().mockResolvedValue([{ id: 123, name: "Legal" }]),
-                }),
-            }),
+beforeEach(() => {
+    jest.clearAllMocks();
+    mockRows = [];
+});
+
+describe("DELETE /api/Categories/DeleteCategories", () => {
+    it("deletes the folder the id names, through the shared folder rules", async () => {
+        mockCtx("member");
+        mockRows = [{ name: "Plans" }];
+        jest.mocked(deleteFolderAs).mockResolvedValue({
+            path: "Plans",
+            destination: "Unfiled",
+            movedDocuments: 0,
+            deletedFolders: 1,
         });
+
+        const res = await DELETE(request({ id: 7 }));
+
+        expect(res.status).toBe(200);
+        expect(deleteFolderAs).toHaveBeenCalledWith(expect.anything(), "Plans");
     });
 
-    it("should allow an authenticated owner to delete a category", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 123 },
-        });
-        mockCtx("owner");
-        const { where } = mockDeleteReturning([{ id: 123, name: "Legal" }]);
-
-        const response = await DELETE(request({ id: 123 }));
-        const json = await response.json();
-
-        expect(response.status).toBe(200);
-        expect(json.success).toBe(true);
-        expect(where).toHaveBeenCalled();
-        expect(recordAuditEvent).toHaveBeenCalledWith(
-            mockTx,
-            expect.objectContaining({
-                action: "folder.deleted",
-                targetType: "folder",
-                targetId: 123,
-                detail: { name: "Legal" },
-            })
-        );
-    });
-
-    it("should allow an authenticated admin to delete a category", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 456 },
-        });
-        mockCtx("admin", BigInt(2));
-        mockDeleteReturning([{ id: 456, name: "HR" }]);
-
-        const response = await DELETE(request({ id: 456 }));
-        const json = await response.json();
-
-        expect(response.status).toBe(200);
-        expect(json.success).toBe(true);
-    });
-
-    it("refuses to delete the Calls collection before deleting any category", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 123 },
-        });
-        mockCtx("owner");
-        mockDeleteReturning([{ id: 123, name: "Calls" }]);
-
-        const response = await DELETE(request({ id: 123 }));
-
-        expect(response.status).toBe(409);
-        expect(await response.json()).toEqual({ error: "Calls is managed by Call Notes" });
-        expect(mockDelete).not.toHaveBeenCalled();
-        expect(recordAuditEvent).not.toHaveBeenCalled();
-    });
-
-    it("returns 401 when workspace context fails", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 123 },
-        });
+    it("returns the authentication failure without deleting a folder", async () => {
         mockRequireWorkspaceContext.mockResolvedValue({
             success: false,
             response: new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -145,77 +74,63 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
             }),
         });
 
-        const response = await DELETE(request({ id: 123 }));
-        const json = await response.json();
+        const res = await DELETE(request({ id: 123 }));
 
-        expect(response.status).toBe(401);
-        expect(json.error).toBe("Unauthorized");
+        expect(res.status).toBe(401);
+        await expect(res.json()).resolves.toEqual({ error: "Unauthorized" });
+        expect(deleteFolderAs).not.toHaveBeenCalled();
     });
 
-    it("should return 403 for a member (no folders.manage)", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 123 },
-        });
-        mockCtx("member");
-
-        const response = await DELETE(request({ id: 123 }));
-        const json = await response.json();
-
-        expect(response.status).toBe(403);
-        expect(json.permission).toBe("folders.manage");
-        expect(mockDelete).not.toHaveBeenCalled();
-    });
-
-    it("returns 404 when category is missing or outside company", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { id: 999 },
-        });
+    it("answers 404 for an id outside the workspace", async () => {
         mockCtx("owner");
-        mockDeleteReturning([]);
-
-        const response = await DELETE(request({ id: 999 }));
-        const json = await response.json();
-
-        expect(response.status).toBe(404);
-        expect(json.error).toBe("Category not found.");
-        expect(recordAuditEvent).not.toHaveBeenCalled();
+        const res = await DELETE(request({ id: 9 }));
+        expect(res.status).toBe(404);
+        expect(deleteFolderAs).not.toHaveBeenCalled();
     });
 
-    it("should return validation error if id is missing", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: false,
-            response: new Response(JSON.stringify({ error: "Category ID is required" }), {
-                status: 400,
-            }),
-        });
+    it("answers 404, not 403, for a folder the caller can't see — even an admin", async () => {
+        mockCtx("admin");
+        mockRows = [{ name: "Someone's private folder" }];
+        jest.mocked(deleteFolderAs).mockRejectedValue(
+            new FolderError("folder_not_found", 404, "Folder not found.")
+        );
 
-        const response = await DELETE(request({ id: "" }));
-        const json = await response.json();
+        const res = await DELETE(request({ id: 28 }));
 
-        expect(response.status).toBe(400);
-        expect(json.error).toBe("Category ID is required");
+        expect(res.status).toBe(404);
+        await expect(res.json()).resolves.toEqual({ error: "Category not found." });
     });
 
-    it("should return 500 on delete operation error", async () => {
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    it("refuses someone who doesn't manage the folder", async () => {
+        mockCtx("member");
+        mockRows = [{ name: "Sales" }];
+        jest.mocked(deleteFolderAs).mockRejectedValue(
+            new FolderError("forbidden", 403, "You do not manage this folder.")
+        );
 
-        try {
-            (validateRequestBody as jest.Mock).mockResolvedValue({
-                success: true,
-                data: { id: 123 },
-            });
-            mockCtx("owner");
+        const res = await DELETE(request({ id: 3 }));
 
-            const returning = jest.fn().mockRejectedValue(new Error("Delete failed"));
-            const where = jest.fn().mockReturnValue({ returning });
-            mockDelete.mockReturnValue({ where });
+        expect(res.status).toBe(403);
+    });
 
-            const response = await DELETE(request({ id: 123 }));
-            expect(response.status).toBe(500);
-        } finally {
-            consoleErrorSpy.mockRestore();
-        }
+    it("refuses to delete the Calls collection through the shared folder rules", async () => {
+        mockCtx("owner");
+        mockRows = [{ name: "Calls" }];
+        jest.mocked(deleteFolderAs).mockRejectedValue(
+            new FolderError("call_notes_managed", 409, "Calls is managed by Call Notes")
+        );
+
+        const res = await DELETE(request({ id: 123 }));
+
+        expect(res.status).toBe(409);
+        await expect(res.json()).resolves.toEqual({ error: "Calls is managed by Call Notes" });
+        expect(deleteFolderAs).toHaveBeenCalledWith(expect.anything(), "Calls");
+    });
+
+    it("refuses a viewer outright", async () => {
+        mockCtx("viewer");
+        const res = await DELETE(request({ id: 3 }));
+        expect(res.status).toBe(403);
+        expect(deleteFolderAs).not.toHaveBeenCalled();
     });
 });

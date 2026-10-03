@@ -1,10 +1,12 @@
 import {
+    connectErrorMessage,
     NETWORK_ERROR,
     oauthErrorMessage,
     parseRetryAfter,
     rateLimitMessage,
     signInFailureMessage,
 } from "~/components/auth/auth-errors";
+import { formatTakeoverNotice, parseTakeoverNotice } from "~/lib/auth/takeover-notice";
 
 describe("signInFailureMessage", () => {
     it("reads a wrong password and an unknown email the same", () => {
@@ -59,9 +61,15 @@ describe("oauthErrorMessage", () => {
         expect(oauthErrorMessage("access_denied", "google")).toMatch(/cancelled/);
     });
 
-    it("points a password account back at its password", () => {
-        expect(oauthErrorMessage("account_not_linked", "github")).toMatch(
-            /email and password instead/
+    it("blames an unconfirmed address, not an existing password", () => {
+        // A provider that confirms the address now links to the account (see
+        // ~/server/auth/account-linking); only one that hasn't is refused.
+        const message = oauthErrorMessage("account_not_linked", "github");
+        expect(message).toMatch(/^GitHub hasn't confirmed you own this email address/);
+        expect(message).not.toMatch(/password/);
+        expect(oauthErrorMessage("account_not_linked")).toMatch(/^That provider hasn't confirmed/);
+        expect(oauthErrorMessage("unable_to_link_account", "google")).toMatch(
+            /^We couldn't connect Google/
         );
     });
 
@@ -80,5 +88,67 @@ describe("oauthErrorMessage", () => {
         const message = oauthErrorMessage("some_new_internal_code");
         expect(message).not.toContain("some_new_internal_code");
         expect(message).toMatch(/couldn't complete that sign-in/);
+    });
+});
+
+describe("connectErrorMessage", () => {
+    it("names the address a mismatched account should have", () => {
+        expect(connectErrorMessage("email_does_not_match", "google", "ana@example.com")).toBe(
+            "That Google account uses a different email address. Connect the Google account for ana@example.com."
+        );
+        expect(connectErrorMessage("email_does_not_match", "google")).toMatch(
+            /different email address from this one/
+        );
+    });
+
+    it("explains an account that already belongs to someone else", () => {
+        expect(connectErrorMessage("account_already_linked_to_different_user", "github")).toBe(
+            "That GitHub account already signs in to a different Launchstack account."
+        );
+    });
+
+    it("never shows a raw code it doesn't know", () => {
+        const message = connectErrorMessage("some_new_internal_code", "google");
+        expect(message).not.toContain("some_new_internal_code");
+        expect(message).toBe("We couldn't connect Google. Try again in a moment.");
+    });
+});
+
+describe("parseTakeoverNotice", () => {
+    it("reads the provider and what it replaced", () => {
+        expect(parseTakeoverNotice("google:credential")).toEqual({
+            provider: "Google",
+            removed: "the password",
+            plural: false,
+            passwordRemoved: true,
+        });
+        expect(parseTakeoverNotice("google%3Acredential%2Bgithub")).toEqual({
+            provider: "Google",
+            removed: "the password and GitHub sign-in",
+            plural: true,
+            passwordRemoved: true,
+        });
+        expect(parseTakeoverNotice("google:github")).toMatchObject({ passwordRemoved: false });
+    });
+
+    it("reads back what the server writes", () => {
+        expect(parseTakeoverNotice(formatTakeoverNotice("github", ["credential"]))).toMatchObject({
+            provider: "GitHub",
+            removed: "the password",
+        });
+    });
+
+    it("shows nothing for a missing, malformed or unknown value", () => {
+        for (const raw of [
+            null,
+            "",
+            "google",
+            "google:",
+            "nope:credential",
+            "google:nope",
+            "%E0",
+        ]) {
+            expect(parseTakeoverNotice(raw)).toBeNull();
+        }
     });
 });

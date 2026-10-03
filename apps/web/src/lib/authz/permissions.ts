@@ -26,6 +26,7 @@ export const PERMISSIONS = [
     "analytics.view",
     "audit.view",
     "campaigns.send",
+    "social.publish",
     "billing.manage",
     "workspace.transfer",
 ] as const;
@@ -36,7 +37,8 @@ export type Permission = (typeof PERMISSIONS)[number];
 export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "documents.read": "Open, search, ask about, and download documents in folders they can see",
     "documents.upload": "Add documents and new versions into folders they can edit",
-    "documents.edit": "Rename, move, edit, and revert documents in folders they can edit",
+    "documents.edit":
+        "Rename, move, edit, and revert documents in folders they can edit; change what an agent says",
     "documents.delete": "Delete documents and versions",
     "folders.manage": "Create, rename, and delete folders; change who can see any folder",
     "members.view": "See who is in the workspace",
@@ -44,11 +46,14 @@ export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "members.manage": "Approve, change roles, suspend, and remove members",
     "groups.manage": "Create groups and change their membership",
     "roles.manage": "Create and edit custom roles",
-    "settings.manage": "Workspace settings, processing, company profile, agents and nodes",
+    "settings.manage":
+        "Workspace settings, processing, company profile, and the agent roster (adding, retiring, autonomy, tools, nodes)",
     "connectors.manage": "Connect and disconnect Google Drive, Slack, GitHub, and agent connectors",
     "analytics.view": "The statistics dashboard and per-document stats",
     "audit.view": "Read the audit log",
     "campaigns.send": "Approve and send email campaigns",
+    "social.publish":
+        "Publish, schedule and reply as the workspace's connected social accounts (LinkedIn Pages, Bluesky)",
     "billing.manage": "Credits, plan, and keys that cost money",
     "workspace.transfer": "Transfer ownership or delete the workspace",
 };
@@ -77,7 +82,7 @@ export const ROLE_LABELS: Record<BuiltinRole, string> = {
 export const ROLE_DESCRIPTIONS: Record<BuiltinRole, string> = {
     owner: "Everything, including billing and ownership.",
     admin: "Runs the workspace: people, folders, settings, connectors.",
-    member: "Works on documents: upload, edit, search, ask.",
+    member: "Works on documents (upload, edit, search, ask) and posts as the social accounts.",
     viewer: "Reads and searches, never changes.",
     guest: "Sees only the folders they have been added to.",
 };
@@ -91,6 +96,9 @@ const MEMBER_PERMISSIONS: ReadonlySet<Permission> = new Set<Permission>([
     "documents.upload",
     "documents.edit",
     "members.view",
+    // Speaking as the company on social networks: anyone who works here,
+    // never someone who only reads (no approval step, by decision).
+    "social.publish",
 ]);
 const VIEWER_PERMISSIONS: ReadonlySet<Permission> = new Set<Permission>([
     "documents.read",
@@ -209,13 +217,6 @@ export type PrincipalType = (typeof PRINCIPAL_TYPES)[number];
 
 export function isPrincipalType(value: unknown): value is PrincipalType {
     return typeof value === "string" && (PRINCIPAL_TYPES as readonly string[]).includes(value);
-}
-
-export const JOIN_POLICIES = ["approval", "open"] as const;
-export type JoinPolicy = (typeof JOIN_POLICIES)[number];
-
-export function isJoinPolicy(value: unknown): value is JoinPolicy {
-    return typeof value === "string" && (JOIN_POLICIES as readonly string[]).includes(value);
 }
 
 export const FOLDER_VISIBILITIES = ["workspace", "restricted"] as const;

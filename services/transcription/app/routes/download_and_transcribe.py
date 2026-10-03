@@ -19,6 +19,7 @@ from pydantic import BaseModel
 from starlette.concurrency import run_in_threadpool
 
 from app.auth import verify_api_key
+from app.routes.transcribe import TranscriptSegment
 from app.url_policy import validate_download_url
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,8 @@ class VideoTranscribeResponse(BaseModel):
     title: str
     duration: float | None
     source_url: str
+    # Timestamped spans, so the app's viewer can play the video from a line.
+    segments: list[TranscriptSegment] = []
 
 
 def _download_audio(url: str, output_dir: str, max_duration: int) -> dict:
@@ -169,4 +172,8 @@ async def download_and_transcribe(
         title=dl_result["title"],
         duration=dl_result["duration"],
         source_url=url,
+        segments=[
+            TranscriptSegment(start=s["start"], end=s["end"], text=s["text"])
+            for s in result.get("segments", [])
+        ],
     )

@@ -7,8 +7,14 @@ import { validateRequestBody, UpdateCompanySchema } from "~/lib/validation";
 import {
     getCompanyCredentialsPlaintext,
     upsertCompanyCredentials,
+    type CompanyCredentialsPlaintext,
+    type CredentialUpsertInput,
 } from "@launchstack/llm/embeddings";
 import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
+import {
+    WorkspaceEndpointUrlError,
+    assertEndpointUrlAllowed,
+} from "~/server/workspace-models/endpoint-url";
 import { beginReindex, getCompanyReindexState } from "@launchstack/llm/embeddings";
 import { inngest } from "~/server/inngest/client";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -21,6 +27,48 @@ async function readCurrentIndexKey(companyId: number): Promise<string | null> {
         .where(eq(company.id, companyId))
         .limit(1);
     return row?.embeddingIndexKey ?? null;
+}
+
+/**
+ * Why the OpenAI-compatible key and its endpoint can't be saved as asked, or
+ * null when they can. The key is only ever sent to the address it was saved
+ * with (`resolveEffectiveEmbeddingConfig` never borrows the deployment's), so:
+ *   - a new key needs an address, from this request or already stored;
+ *   - moving a stored key to a different address needs the key re-entered;
+ *   - an address can't be removed out from under a stored key.
+ */
+function openAIPairProblem(
+    requestedKey: string | null | undefined,
+    requestedUrl: string | null | undefined,
+    existing: CompanyCredentialsPlaintext | null
+): { code: string; message: string } | null {
+    const storedUrl = existing?.openAIBaseUrl ?? null;
+    const nextUrl = requestedUrl !== undefined ? requestedUrl : storedUrl;
+
+    if (requestedKey) {
+        if (nextUrl) return null;
+        return {
+            code: "EMBEDDING_ENDPOINT_REQUIRED",
+            message:
+                "Enter the embeddings endpoint URL this key belongs to, such as https://api.openai.com/v1. A key is only ever sent to the address it was saved with.",
+        };
+    }
+
+    const keyStaysStored = requestedKey === undefined && Boolean(existing?.openAIApiKey);
+    if (!keyStaysStored || requestedUrl === undefined || requestedUrl === storedUrl) return null;
+
+    if (requestedUrl === null) {
+        return {
+            code: "EMBEDDING_ENDPOINT_REQUIRED",
+            message:
+                "The saved embeddings key needs its endpoint URL. Keep the address, or enter a new key together with a new address.",
+        };
+    }
+    return {
+        code: "EMBEDDING_KEY_REQUIRED",
+        message:
+            "The embeddings endpoint changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+    };
 }
 
 export async function POST(request: Request) {
@@ -38,6 +86,7 @@ export async function POST(request: Request) {
             industry,
             embeddingIndexKey,
             embeddingOpenAIApiKey,
+            embeddingOpenAIBaseUrl,
             embeddingHuggingFaceApiKey,
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
@@ -48,6 +97,102 @@ export async function POST(request: Request) {
         } = validation.data;
 
         const companyIdNum = Number(ctx.data.companyId);
+
+        // Credentials live in a separate encrypted table. Only write the fields
+        // the caller actually included — `undefined` means "leave alone".
+        // Settled before the reindex below is scheduled, so a refusal here
+        // leaves nothing half-done.
+        let openAIBaseUrl: string | null | undefined = embeddingOpenAIBaseUrl;
+        if (embeddingOpenAIBaseUrl) {
+            try {
+                openAIBaseUrl = await assertEndpointUrlAllowed(embeddingOpenAIBaseUrl);
+            } catch (urlErr) {
+                if (urlErr instanceof WorkspaceEndpointUrlError) {
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            code: "INVALID_EMBEDDING_ENDPOINT",
+                            message: urlErr.message,
+                        },
+                        { status: 400 }
+                    );
+                }
+                throw urlErr;
+            }
+        }
+
+        const credentialsInput: CredentialUpsertInput = {};
+        if (embeddingOpenAIApiKey !== undefined) {
+            credentialsInput.openAIApiKey = embeddingOpenAIApiKey;
+        }
+        if (openAIBaseUrl !== undefined) {
+            credentialsInput.openAIBaseUrl = openAIBaseUrl;
+        }
+        if (embeddingHuggingFaceApiKey !== undefined) {
+            credentialsInput.huggingFaceApiKey = embeddingHuggingFaceApiKey;
+        }
+        if (embeddingOllamaBaseUrl !== undefined) {
+            credentialsInput.ollamaBaseUrl = embeddingOllamaBaseUrl;
+        }
+        if (embeddingOllamaModel !== undefined) {
+            credentialsInput.ollamaModel = embeddingOllamaModel;
+        }
+
+        // Opt-in pre-save validation. When the UI passes ?validate=true, run a
+        // 1-token test embed with the proposed credentials before persisting so
+        // bad keys fail fast here instead of during document ingestion.
+        const requestUrl = new URL(request.url);
+        const shouldValidateCredentials =
+            requestUrl.searchParams.get("validate") === "true" &&
+            Object.keys(credentialsInput).length > 0;
+        const touchesOpenAIPair =
+            credentialsInput.openAIApiKey !== undefined ||
+            credentialsInput.openAIBaseUrl !== undefined;
+
+        const existing =
+            touchesOpenAIPair || shouldValidateCredentials
+                ? await getCompanyCredentialsPlaintext(companyIdNum)
+                : null;
+
+        if (touchesOpenAIPair) {
+            const problem = openAIPairProblem(
+                credentialsInput.openAIApiKey,
+                credentialsInput.openAIBaseUrl,
+                existing
+            );
+            if (problem) {
+                return NextResponse.json({ success: false, ...problem }, { status: 400 });
+            }
+        }
+
+        if (shouldValidateCredentials) {
+            const pick = <K extends keyof CompanyCredentialsPlaintext>(key: K) =>
+                credentialsInput[key] !== undefined
+                    ? (credentialsInput[key] ?? null)
+                    : (existing?.[key] ?? null);
+            const candidateConfig = {
+                embeddingIndexKey: embeddingIndexKey ?? (await readCurrentIndexKey(companyIdNum)),
+                openAIApiKey: pick("openAIApiKey"),
+                openAIBaseUrl: pick("openAIBaseUrl"),
+                huggingFaceApiKey: pick("huggingFaceApiKey"),
+                ollamaBaseUrl: pick("ollamaBaseUrl"),
+                ollamaModel: pick("ollamaModel"),
+            };
+            const result = await validateEmbeddingCredentials(
+                candidateConfig.embeddingIndexKey ?? undefined,
+                candidateConfig
+            );
+            if (!result.ok) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        code: "CREDENTIAL_VALIDATION_FAILED",
+                        message: result.error ?? "Embedding credentials failed validation.",
+                    },
+                    { status: 400 }
+                );
+            }
+        }
 
         // Embedding index key change handling. Three outcomes:
         //   1. No change (current === requested) → apply normally.
@@ -187,72 +332,6 @@ export async function POST(request: Request) {
 
         if (useUploadThing !== undefined) {
             updateData.useUploadThing = useUploadThing;
-        }
-
-        // Credentials live in a separate encrypted table. Only write the fields
-        // the caller actually included — `undefined` means "leave alone".
-        const credentialsInput: {
-            openAIApiKey?: string | null;
-            huggingFaceApiKey?: string | null;
-            ollamaBaseUrl?: string | null;
-            ollamaModel?: string | null;
-        } = {};
-        if (embeddingOpenAIApiKey !== undefined) {
-            credentialsInput.openAIApiKey = embeddingOpenAIApiKey;
-        }
-        if (embeddingHuggingFaceApiKey !== undefined) {
-            credentialsInput.huggingFaceApiKey = embeddingHuggingFaceApiKey;
-        }
-        if (embeddingOllamaBaseUrl !== undefined) {
-            credentialsInput.ollamaBaseUrl = embeddingOllamaBaseUrl;
-        }
-        if (embeddingOllamaModel !== undefined) {
-            credentialsInput.ollamaModel = embeddingOllamaModel;
-        }
-
-        // Opt-in pre-save validation. When the UI passes ?validate=true, run a
-        // 1-token test embed with the proposed credentials before persisting so
-        // bad keys fail fast here instead of during document ingestion.
-        const requestUrl = new URL(request.url);
-        const shouldValidateCredentials =
-            requestUrl.searchParams.get("validate") === "true" &&
-            Object.keys(credentialsInput).length > 0;
-
-        if (shouldValidateCredentials) {
-            const existing = await getCompanyCredentialsPlaintext(companyIdNum);
-            const candidateConfig = {
-                embeddingIndexKey: embeddingIndexKey ?? (await readCurrentIndexKey(companyIdNum)),
-                openAIApiKey:
-                    credentialsInput.openAIApiKey !== undefined
-                        ? credentialsInput.openAIApiKey
-                        : (existing?.openAIApiKey ?? null),
-                huggingFaceApiKey:
-                    credentialsInput.huggingFaceApiKey !== undefined
-                        ? credentialsInput.huggingFaceApiKey
-                        : (existing?.huggingFaceApiKey ?? null),
-                ollamaBaseUrl:
-                    credentialsInput.ollamaBaseUrl !== undefined
-                        ? credentialsInput.ollamaBaseUrl
-                        : (existing?.ollamaBaseUrl ?? null),
-                ollamaModel:
-                    credentialsInput.ollamaModel !== undefined
-                        ? credentialsInput.ollamaModel
-                        : (existing?.ollamaModel ?? null),
-            };
-            const result = await validateEmbeddingCredentials(
-                candidateConfig.embeddingIndexKey ?? undefined,
-                candidateConfig
-            );
-            if (!result.ok) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        code: "CREDENTIAL_VALIDATION_FAILED",
-                        message: result.error ?? "Embedding credentials failed validation.",
-                    },
-                    { status: 400 }
-                );
-            }
         }
 
         if (Object.keys(credentialsInput).length > 0) {

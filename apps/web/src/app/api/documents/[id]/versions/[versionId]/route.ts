@@ -38,6 +38,8 @@ import {
     callNoteDocumentReference,
     isCallNoteDocument,
 } from "~/lib/call-note-document";
+import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { canEditDocument } from "~/server/workspace/item-access";
 
 export async function DELETE(
     request: Request,
@@ -83,6 +85,11 @@ export async function DELETE(
                     { error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE },
                     { status: 409 }
                 );
+            }
+
+            // Throwing a version away is changing the file (ADR-014).
+            if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
+                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
             }
 
             // Must belong to this document — prevents cross-document row deletion.

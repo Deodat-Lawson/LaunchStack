@@ -3,6 +3,7 @@ export {
     GoogleAuthError,
     OAUTH_AUTHORIZE_URL,
     buildAuthorizationUrl,
+    configureGoogleEndpoints,
     createFileMultipart,
     decodeIdTokenClaims,
     downloadFileContent,
@@ -12,7 +13,9 @@ export {
     getFileMetadata,
     refreshAccessToken,
     trashFile,
+    googleEndpoints,
     updateFileMedia,
+    type GoogleEndpoints,
     type GoogleOAuthApp,
 } from "./client";
 

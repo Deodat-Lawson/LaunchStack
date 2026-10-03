@@ -242,6 +242,12 @@ export const vantageApi = {
         call<{ ok: true }>(`/api/vantage/topics/${id}`, { method: "DELETE" }),
     decide: (topicId: string, input: DecisionInput) =>
         post<{ topic: TopicDto }>(`/api/vantage/topics/${topicId}/decide`, input),
+    /** The Undo after a one-click commit: undecided again, that commitment removed. */
+    undoDecision: (topicId: string, commitmentId: string | null) =>
+        call<{ topic: TopicDto }>(
+            `/api/vantage/topics/${topicId}/decide${q({ commitment: commitmentId ?? undefined })}`,
+            { method: "DELETE" }
+        ),
 
     commitments: (status?: string) =>
         call<{ commitments: CommitmentDto[] }>(`/api/vantage/commitments${q({ status })}`),

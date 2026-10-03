@@ -14,6 +14,11 @@ jest.mock("~/lib/require-workspace-context", () =>
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
 
+// ADR-014 creation defaults for what the route inserted; tested with ownership.
+jest.mock("~/server/workspace/added-documents", () => ({
+    recordUpload: jest.fn().mockResolvedValue(undefined),
+}));
+
 jest.mock("~/server/services/folder-access", () => ({
     FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
     canEditFolder: jest.fn().mockResolvedValue(true),

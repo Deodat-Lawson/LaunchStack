@@ -44,7 +44,7 @@ dotenv.config({ path: join(HERE, "..", "..", "..", ".env") });
  * ledger and lock — so a product migration can never be applied before the
  * engine tables it references exist.
  *
- *   --set=engine   packages/core/drizzle      (default)
+ *   --set=engine   packages/store/drizzle      (default)
  *   --set=product  apps/web/drizzle
  */
 const SETS = {
@@ -107,7 +107,7 @@ async function loadPlan() {
   } catch (e) {
     throw new Error(
       `could not read ${JOURNAL}: ${e.message}\n` +
-        `Run \`pnpm --filter @launchstack/core db:generate\` to create it.`,
+        `Run \`pnpm --filter ${SET.label === "product" ? "@launchstack/web" : "@launchstack/store"} db:generate\` to create it.`,
     );
   }
 

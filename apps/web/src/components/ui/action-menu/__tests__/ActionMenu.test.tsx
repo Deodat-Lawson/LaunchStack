@@ -145,3 +145,44 @@ describe("ActionMenu submenus", () => {
         expect(onClose).toHaveBeenCalledTimes(1);
     });
 });
+
+describe("ActionMenu submenu placement", () => {
+    it("keeps a long submenu on screen, placed by its real height", async () => {
+        const user = userEvent.setup();
+        // jsdom lays nothing out: give the submenu the height the CSS caps it at.
+        const height = jest
+            .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+            .mockImplementation(function (this: HTMLElement) {
+                return this.dataset.testid === "context-submenu" ? 420 : 120;
+            });
+        try {
+            render(
+                <ActionMenu
+                    open
+                    x={10}
+                    y={600}
+                    onClose={jest.fn()}
+                    items={[
+                        {
+                            type: "submenu",
+                            id: "move",
+                            label: "Move to…",
+                            items: Array.from({ length: 14 }, (_, i) => ({
+                                type: "item" as const,
+                                id: `folder-${i}`,
+                                label: `Folder ${i}`,
+                                onSelect: jest.fn(),
+                            })),
+                        },
+                    ]}
+                />
+            );
+            await user.click(screen.getByTestId("context-menu-item-move"));
+            const submenu = await screen.findByTestId("context-submenu");
+            const top = parseFloat(submenu.style.top);
+            expect(top + 420).toBeLessThanOrEqual(window.innerHeight - 8);
+        } finally {
+            height.mockRestore();
+        }
+    });
+});

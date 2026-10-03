@@ -17,11 +17,11 @@ and writers of the same log, with nothing to keep in sync.
 
 | Path | What it is |
 | --- | --- |
-| `packages/core/src/collab/` | The engine. No Next, no auth, no database, no `process.env`. |
-| `packages/core/src/collab/net/` | The signed HTTP protocol, the hub, the worker, the `node:http` adapter. |
-| `packages/core/src/collab/slack/` | Slack Web API port, signature verification, the two-way bridge. |
-| `packages/core/src/collab/evals.ts` | Deterministic meeting scoring. |
-| `packages/core/src/db/schema/collab.ts` | Channels, messages, personas, meetings, nodes. |
+| `packages/collab/src/` | The engine. No Next, no auth, no database, no `process.env`. |
+| `packages/collab/src/net/` | The signed HTTP protocol, the hub, the worker, the `node:http` adapter. |
+| `packages/collab/src/slack/` | Slack Web API port, signature verification, the two-way bridge. |
+| `packages/collab/src/evals.ts` | Deterministic meeting scoring. |
+| `apps/web/src/server/db/schema/collab.ts` | Channels, messages, personas, meetings, nodes. |
 | `apps/web/src/server/collab/` | Postgres-backed store, the process-wide hub, the model adapter. |
 | `apps/web/src/app/api/collab/` | Meeting routes, the hub mount, the Slack events receiver. |
 | `apps/web/src/app/employer/documents/_workspace/collab/` | The Meetings surface and the agent roster. |

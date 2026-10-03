@@ -30,6 +30,19 @@ export interface MindmapSummary {
     searchText: string | null;
     createdByUserId: string;
     updatedByUserId: string | null;
+    /**
+     * The caller's access to the draft (ADR-014): who can see it — its
+     * folder's audience, or only its maker when Unfiled — and what they may
+     * do with it. Absent from older servers.
+     */
+    access?: {
+        audience: "workspace" | "shared" | "private";
+        ownAudience: boolean;
+        principalCount: number;
+        canEdit: boolean;
+        canManage: boolean;
+        canDelete: boolean;
+    };
     deletedAt: string | null;
     openedAt: string | null;
     createdAt: string;

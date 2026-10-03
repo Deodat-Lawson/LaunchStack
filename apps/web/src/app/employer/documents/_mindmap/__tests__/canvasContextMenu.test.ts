@@ -1,6 +1,6 @@
 import { EditorStore } from "../model/store";
 import { buildTemplate } from "../model/templates";
-import { activePage } from "../model/doc";
+import { activePage, graphIndex } from "../model/doc";
 import { buildCanvasMenuItems } from "../ui/canvasContextMenu";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 
@@ -51,9 +51,10 @@ describe("canvas context menu", () => {
         store.setChromeDepth("focus");
         const menu = buildCanvasMenuItems(store);
 
+        // The centre has no siblings: Enter on it adds a child, so the menu
+        // does not offer a sibling it would not make.
         expect(ids(menu)).toEqual([
             "add-child",
-            "add-sibling",
             "colour",
             "collapse",
             "duplicate",
@@ -76,6 +77,44 @@ describe("canvas context menu", () => {
         for (const promoted of ["add-child", "colour", "collapse", "duplicate", "delete"]) {
             expect(more).not.toContain(promoted);
         }
+        // "Delete and reconnect" would split the map into one centre per
+        // branch, so the centre does not offer it anywhere.
+        expect([...ids(menu), ...more]).not.toContain("delete-reconnect");
+    });
+
+    test("a branch topic offers a sibling, and every hint names the key that does it", () => {
+        const store = new EditorStore(buildTemplate("mindmap", "Menu"));
+        const page = activePage(store.getState().doc);
+        const branch = graphIndex(page).out.get(page.nodes[0]!.id)![0]!;
+        store.selectNodes([branch]);
+        store.setChromeDepth("focus");
+        const menu = buildCanvasMenuItems(store);
+        expect(ids(menu).slice(0, 2)).toEqual(["add-child", "add-sibling"]);
+
+        const shortcut = (items: ActionMenuItem[], id: string) => {
+            const item = items.find(i => i.id === id);
+            return item?.type === "item" ? item.shortcut : undefined;
+        };
+        expect(shortcut(menu, "add-child")).toBe("⇥");
+        expect(shortcut(menu, "add-sibling")).toBe("↩");
+        expect(shortcut(menu, "delete")).toBe("⌫");
+        expect(shortcut(menu, "collapse")).toBe("⌘/");
+        expect(shortcut(submenu(menu, "more"), "delete-reconnect")).toBe("⌥⌫");
+        // Delete on a topic already takes its branch; no second item for it.
+        expect(ids(submenu(menu, "more"))).not.toContain("delete-branch");
+    });
+
+    test("the menu's Delete is the Delete key: a topic goes with its branch", () => {
+        const store = new EditorStore(buildTemplate("mindmap", "Menu"));
+        const page = activePage(store.getState().doc);
+        const idx = graphIndex(page);
+        const branch = idx.out.get(page.nodes[0]!.id)!.find(id => (idx.out.get(id) ?? []).length)!;
+        const below = idx.out.get(branch)!;
+        store.selectNodes([branch]);
+        const del = buildCanvasMenuItems(store).find(i => i.id === "delete");
+        if (del?.type === "item") del.onSelect();
+        const after = activePage(store.getState().doc);
+        for (const id of [branch, ...below]) expect(after.nodes.some(n => n.id === id)).toBe(false);
     });
 
     test("focus depth on a flowchart leads with shape, not topic", () => {

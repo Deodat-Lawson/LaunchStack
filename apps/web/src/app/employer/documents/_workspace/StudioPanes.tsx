@@ -9,6 +9,7 @@ import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
+import type { TeamToolProps } from "./team/TeamTool";
 import type { StudioFeature } from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
@@ -45,6 +46,11 @@ export interface StudioPaneContext {
         onSaveAsSource: (markdown: string) => void;
     };
     /**
+     * The Team tab opens what a row points at (a source tab, a folder in the
+     * sidebar, a chat) and the Share dialog — both the shell's.
+     */
+    team?: Pick<TeamToolProps, "onOpenTarget" | "onShare">;
+    /**
      * For tools with screens of their own: whether this tab is the focused
      * one, a location to show, where to remember the last one, and how to
      * reach other tabs. See `components/tool-app`.
@@ -67,6 +73,10 @@ const InvestorsPane = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
+
 // Tools with screens of their own. Each is a tab with a rail inside it and
 // its own history; none of them is a page you navigate to any more.
 const GrowthTool = dynamic(
@@ -81,6 +91,11 @@ const ProposalsTool = dynamic(
 
 const VantageTool = dynamic(
     () => import("~/app/employer/tools/vantage/VantageTool").then(m => m.VantageTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
+const ScenariosTool = dynamic(
+    () => import("~/app/employer/tools/scenarios/ScenariosTool").then(m => m.ScenariosTool),
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
@@ -837,6 +852,14 @@ export function renderStudioPane(
             return <CallsFeature onCallChanged={context?.onCallChanged} />;
         case "agents":
             return <AgentsStudioPane onClose={onClose} context={context} />;
+        case "team":
+            return (
+                <TeamTool
+                    host={context?.tool}
+                    onOpenTarget={context?.team?.onOpenTarget}
+                    onShare={context?.team?.onShare}
+                />
+            );
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":
@@ -857,6 +880,8 @@ export function renderStudioPane(
             return <ProposalsTool host={context?.tool} />;
         case "vantage":
             return <VantageTool host={context?.tool} />;
+        case "scenarios":
+            return <ScenariosTool host={context?.tool} />;
         // Company metadata is a section of Settings now. Its id survives so old
         // deep links open the right section rather than 404ing.
         case "metadata":

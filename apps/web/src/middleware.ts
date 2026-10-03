@@ -66,6 +66,11 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/workspace/join-links/preview",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     "/api/ocr/benchmark",
+    // The MCP server for assistants (Claude, ChatGPT, Gemini). They call it
+    // with an OAuth access token or an access key, never a session cookie;
+    // the route authenticates every request itself and answers 401 with the
+    // RFC 9728 challenge that tells an assistant how to sign in.
+    "/api/mcp",
     // Prometheus scrapes without a session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     "/api/metrics",
@@ -156,9 +161,9 @@ export default async function middleware(req: NextRequest) {
     const requestStart = Date.now();
     let dbQueryMs: number | null = null;
     // Fast-path: no session cookie at all means anonymous — skip the session
-    // lookup entirely. With a cookie present, getSession answers from the
-    // signed cookie cache most of the time and hits Postgres only when the
-    // cache has expired.
+    // lookup entirely. With a cookie present, getSession reads the session
+    // row (there is no cookie cache; see ~/server/auth), so an ended session
+    // is refused on its very next request.
     let userId: string | null = null;
     if (getSessionCookie(req)) {
         try {
@@ -190,6 +195,19 @@ export default async function middleware(req: NextRequest) {
             return;
         }
 
+        // Join links used to be `/signup?code=…`; links already shared still
+        // say that. The join page is where a code is handled now, for anyone,
+        // signed in or not — it keeps the code across sign-in and sign-up,
+        // which the old route lost the moment someone clicked "Sign in".
+        if (pathname === "/signup") {
+            const code = req.nextUrl.searchParams.get("code")?.trim();
+            if (code) {
+                return NextResponse.redirect(
+                    new URL(`/join/${encodeURIComponent(code.toLowerCase())}`, req.url)
+                );
+            }
+        }
+
         // Anonymous visitor at the root. This origin is the product — the
         // public site lives in apps/landing — so the front door is sign-in.
         //
@@ -213,8 +231,6 @@ export default async function middleware(req: NextRequest) {
 
         // Route authenticated users based on their DB role + status
         if (userId && (isAuthRedirectRoute(req) || isProtectedRoute(req))) {
-            const hasCodeParam = pathname === "/signup" && req.nextUrl.searchParams.has("code");
-
             try {
                 const cachedUser = getCachedMiddlewareUser(userId);
                 let existingUser = cachedUser;
@@ -263,9 +279,6 @@ export default async function middleware(req: NextRequest) {
                     if (pathname !== "/signup") {
                         return NextResponse.redirect(new URL("/signup?from=signin", req.url));
                     }
-                } else if (hasCodeParam) {
-                    // Let the signup page handle the "already registered" error
-                    return;
                 } else if (existingUser.activeCount === 0) {
                     // No workspace this person may act in. Awaiting approval
                     // somewhere → the pending page; otherwise the workspace
@@ -285,6 +298,14 @@ export default async function middleware(req: NextRequest) {
                         return NextResponse.redirect(new URL("/employer/documents", req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
+                    // An assistant's OAuth request can ask for a fresh sign-in
+                    // (prompt=login) even with a session; better-auth then
+                    // sends the browser to /signin with the request signed in
+                    // the query. Bouncing that to the dashboard would strand
+                    // the assistant, so leave it on the page.
+                    if (pathname === "/signin" && req.nextUrl.searchParams.has("sig")) {
+                        return;
+                    }
                     // Signed-in member on / or /signup – send to their dashboard.
                     // Users with 2+ memberships pick a workspace first.
                     if (existingUser.membershipCount >= 2) {
@@ -314,7 +335,10 @@ export default async function middleware(req: NextRequest) {
 //
 // Note that the upload-local / files exclusion below is a no-op in practice:
 // the first pattern already matches any path without one of those static file
-// extensions, so both routes do run through this middleware.
+// extensions, so both routes do run through this middleware. Upload bodies
+// survive it because patches/next@15.5.7.patch makes Next await its body
+// hand-off before the route handler reads the request (the "body stream
+// conflicts" below); see __tests__/middleware/request-body-after-middleware.test.ts.
 export const config = {
     runtime: "nodejs",
     matcher: [

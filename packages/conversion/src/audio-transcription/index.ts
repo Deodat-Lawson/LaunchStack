@@ -6,4 +6,10 @@
 export * from "./wire";
 export * from "./transcribe";
 export { HttpTranscriptionClient, type TranscriptionClientConfig } from "./client";
-export { getTranscriptionProvider, type TranscriptionProvider } from "./providers";
+export {
+    getTranscriptionProvider,
+    type TranscriptionProvider,
+    type TranscribeOptions,
+} from "./providers";
+export { TranscriptionError, isTranscriptionError } from "./errors";
+export * from "./providers/translate";

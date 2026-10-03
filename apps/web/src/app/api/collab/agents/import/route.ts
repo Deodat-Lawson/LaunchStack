@@ -5,19 +5,23 @@
  * what the preview showed are the same parse. A handle that already exists
  * is a 409 unless `replace` is set, in which case the existing agent is
  * updated in place and keeps its id — past transcripts still resolve.
+ *
+ * An import adds to the roster or overwrites a whole agent, policy fields and
+ * all, so it is the roster managers' (see `lib/agents/roster-access.ts`).
  */
 
 import { NextResponse } from "next/server";
 
 import { AgentFileError, parseAgentFile } from "~/lib/agents/agent-file";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { AGENT_ROSTER_PERMISSION } from "~/lib/agents/roster-access";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { ImportPersonaSchema, PersonaFieldsSchema } from "~/server/collab/agent-schemas";
 import { createPersona, getPersonaByKey, updatePersona } from "~/server/collab/personas";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission(AGENT_ROSTER_PERMISSION);
     if (!ctx.success) return ctx.response;
 
     const parsed = ImportPersonaSchema.safeParse(await request.json().catch(() => null));

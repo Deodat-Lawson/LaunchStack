@@ -3,6 +3,7 @@
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { searchSettings } from "~/lib/settings/registry";
+import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -10,7 +11,14 @@ import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { usableAsPrimary } from "~/lib/agents/definition";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
-import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
+import { usePermissions } from "~/lib/use-permissions";
+import {
+    DEMOTED_FEATURES,
+    SOURCE_META,
+    resolveStudioFeature,
+    settingsSectionOf,
+    type WorkspaceSource,
+} from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
     HISTORY_KIND_META,
@@ -19,6 +27,7 @@ import {
     relativeTime,
 } from "~/lib/workspace-history";
 import type { IconProps } from "~/components/icons/types";
+import { usePeople } from "~/lib/profile/use-people";
 
 /** An agent's picture as a palette icon — the same avatar the chat shows. */
 function AgentPaletteIcon(agent: ChatAgentOption): ComponentType<IconProps> {
@@ -124,6 +133,7 @@ export function CommandPalette({
     const [q, setQ] = useState("");
     // The one lab that only surfaces a palette entry: hidden until it is on.
     const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
+    const { can } = usePermissions();
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -142,23 +152,44 @@ export function CommandPalette({
         [router]
     );
 
+    // Chats shared with you say whose they are (ADR-014); names resolve lazily.
+    const sharerIds = useMemo(
+        () =>
+            (history ?? []).map(entry => entry.sharedBy).filter((id): id is string => Boolean(id)),
+        [history]
+    );
+    const people = usePeople(sharerIds);
+
     const items = useMemo<PaletteItem[]>(() => {
         // The registry is read when the palette opens, so it reflects what is
         // mounted right now; `open` is in the deps for that reason.
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
-        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps).forEach(f =>
-            base.push({
-                kind: "feature",
-                id: f.id,
-                label: f.label,
-                sub: f.desc,
-                Icon: f.Icon,
-                onRun: () => {
-                    if (onPickFeature) onPickFeature(f.id);
-                    else navigate(f.href);
-                },
+        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
+            // A row for an app the person may not open (Team, for a Guest)
+            // would do nothing when picked. Anyone may open Settings, so a
+            // row for one of its sections ("Self-host / BYOK") carries that
+            // section's gate instead: picked without it, the row would land
+            // on a section that only says it isn't theirs.
+            .filter(f => {
+                const app = resolveStudioFeature(f.id);
+                if (app) return can(app.requires);
+                const hash = settingsSectionOf(f.href);
+                const section = hash ? settingsSectionFromHash(hash) : null;
+                return section ? canSeeSettingsSection(section, can) : true;
             })
-        );
+            .forEach(f =>
+                base.push({
+                    kind: "feature",
+                    id: f.id,
+                    label: f.label,
+                    sub: f.desc,
+                    Icon: f.Icon,
+                    onRun: () => {
+                        if (onPickFeature) onPickFeature(f.id);
+                        else navigate(f.href);
+                    },
+                })
+            );
         // Agents are searched by name, handle, role and what they are for, so
         // "margin" finds Dana and "pushback" finds Vera.
         agents.forEach(agent => {
@@ -200,11 +231,14 @@ export function CommandPalette({
         });
         const historyItem = (entry: HistoryEntry): PaletteItem => {
             const meta = HISTORY_KIND_META[entry.kind];
+            const sharer = entry.sharedBy ? people[entry.sharedBy]?.displayName : undefined;
             return {
                 kind: "history",
                 id: entry.id,
                 label: entry.title,
-                sub: `${meta.label} · ${relativeTime(entry.at)}`,
+                sub: entry.sharedBy
+                    ? `Shared by ${sharer ?? "a teammate"} · ${relativeTime(entry.at)}`
+                    : `${meta.label} · ${relativeTime(entry.at)}`,
                 Icon: HISTORY_KIND_ICONS[meta.icon],
                 onRun: () => onPickHistory?.(entry),
             };
@@ -230,8 +264,14 @@ export function CommandPalette({
                 .map(historyItem)
         );
         // Settings are searched by what people call them, so "dark mode"
-        // finds the theme row even though no label says it.
-        for (const definition of searchSettings(qq, 6)) {
+        // finds the theme row even though no label says it. Only rows in a
+        // section the person may see: one they may only read still answers
+        // "where is that set, and to what?". Every match is ranked before
+        // any is dropped, so a Member's six are their best six.
+        const visibleSettings = searchSettings(qq, Infinity)
+            .filter(definition => canSeeSettingsSection(definition.section, can))
+            .slice(0, 6);
+        for (const definition of visibleSettings) {
             matched.push({
                 kind: "setting",
                 id: definition.key,
@@ -260,6 +300,8 @@ export function CommandPalette({
         onPickHistory,
         navigate,
         predictiveGaps,
+        people,
+        can,
     ]);
 
     useEffect(() => {

@@ -112,15 +112,19 @@ Kubernetes) alongside managed PostgreSQL with pgvector:
 3. Set the environment variables in the [summary table](#environment-variables-summary).
 4. **Deploy the worker image too.** The web app only accepts commands; without a
    worker, uploads are stored but never processed (ADR-003).
-5. Register the **worker's** public `/api/inngest` URL in Inngest Cloud — the
-   Next.js app no longer serves an Inngest endpoint.
+5. Give the worker an Inngest server: either self-host `inngest start` beside
+   it (what `docker-compose.prod.yml` does; set `INNGEST_BASE_URL` on app and
+   worker and `INNGEST_SERVE_HOST` on the worker), or register the **worker's**
+   public `/api/inngest` URL in Inngest Cloud. Either way set
+   `INNGEST_EVENT_KEY` **and** `INNGEST_SIGNING_KEY`; with only the event key,
+   jobs are accepted and never run. The Next.js app serves no Inngest endpoint.
 
 `apps/landing` is a separate app and has no deploy pipeline in this repo; it is
 not part of a self-hosted deployment.
 
 Optional integrations:
 
-- Inngest Cloud for background jobs (required in production)
+- Inngest for background jobs, self-hosted or Inngest Cloud (Drive/Gmail sync, crons and the other verticals need it)
 - LangSmith for LLM tracing
 - Compute services (`services/transcription`, `services/adeu-ai-docs-editing`,
   `services/document-converter`) deployed separately to Fly.io / Railway /
@@ -169,10 +173,10 @@ modes, and migration from the pre-PR variables.
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
+| `BETTER_AUTH_URL` | Yes | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin" |
 | `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
-| `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
+| `CHAT_MODELS_CONFIG` | Optional | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI |
 | `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
 | `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
 | `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
@@ -194,7 +198,8 @@ being picked up.
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |
 | `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Origin the public site (`apps/landing`) is served from |
+| `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
+| `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
 | `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
 | `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |

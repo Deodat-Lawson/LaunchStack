@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
 import { isCallNoteDocument } from "~/lib/call-note-document";
@@ -17,7 +17,23 @@ import {
 import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
-import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import {
+    hasTranscriptTitle,
+    mediaKindOfMime,
+    mediaKindOfName,
+    transcriptMarkerOf,
+} from "~/lib/media-document";
+import { mediaEmbedFor } from "~/lib/media-embed";
+import { nextSourcePollDelay } from "./sourcePolling";
+import type {
+    ItemAccessView,
+    SourceAddedBy,
+    SourceCitability,
+    SourceIndexStatus,
+    SourceTypeId,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -43,7 +59,13 @@ function folderColor(name: string): string {
 function mapDocType(doc: DocumentType): SourceTypeId {
     const t = getDocumentDisplayType(doc);
     if (t === "audio") return "audio";
+    if (t === "video") {
+        // A YouTube import is labelled as one; any other video is just video.
+        const marker = transcriptMarkerOf(doc.ocrMetadata);
+        return mediaEmbedFor(marker?.videoUrl)?.provider === "youtube" ? "youtube" : "video";
+    }
     if (t === "artifact") return "artifact";
+    if (t === "website") return "web";
     return "doc";
 }
 
@@ -69,22 +91,80 @@ function humanDate(raw: unknown): string {
     return d.toLocaleDateString();
 }
 
-function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSource {
+/** Additional fields returned by /api/fetchDocument without changing document previews. */
+type IndexedDocument = DocumentType & {
+    createdAt?: string;
+    creationKey?: string | null;
+    ocrEnabled?: boolean | null;
+    currentVersionId?: number | null;
+    currentVersionOcrProcessed?: boolean | null;
+    currentVersionOcrMetadata?: DocumentType["ocrMetadata"];
+};
+
+/** A row of the documents list: the document, plus what ADR-014 says about it for the caller. */
+type DocumentRow = IndexedDocument & {
+    access?: ItemAccessView | null;
+    addedBy?: SourceAddedBy | null;
+};
+
+function documentOcrState(doc: IndexedDocument) {
+    // Only unversioned legacy rows use document-level processing state. A
+    // missing/queued current version must not inherit an older success or failure.
+    return doc.currentVersionId == null
+        ? { processed: doc.ocrProcessed, metadata: doc.ocrMetadata }
+        : {
+              processed: doc.currentVersionOcrProcessed,
+              metadata: doc.currentVersionOcrMetadata,
+          };
+}
+
+function documentIndexStatus(doc: IndexedDocument): SourceIndexStatus {
+    const { processed, metadata } = documentOcrState(doc);
+    if (processed === true) return "ready";
+    return metadata?.error === "processing_failed" ? "failed" : "processing";
+}
+
+function documentIndexError(doc: IndexedDocument): string | undefined {
+    return documentIndexStatus(doc) === "failed"
+        ? documentOcrState(doc).metadata?.errorMessage
+        : undefined;
+}
+
+export function mapDocument(doc: DocumentRow): WorkspaceSource {
+    const type = mapDocType(doc);
+    // The recording is stored for playback, never embedded. Its separate
+    // transcript is the searchable source, with its own current-version status.
+    const mediaOriginal =
+        doc.creationKey?.endsWith(":audio-source") === true ||
+        (doc.ocrEnabled === false &&
+            (mediaKindOfMime(doc.mimeType) ??
+                mediaKindOfName(doc.title) ??
+                mediaKindOfName(doc.url)) !== null &&
+            !transcriptMarkerOf(doc.ocrMetadata) &&
+            !hasTranscriptTitle(doc.title));
     return {
         id: `d${doc.id}`,
         documentId: doc.id,
         title: doc.title,
-        type: mapDocType(doc),
+        type,
         size: doc.aiSummary ? "" : "",
         added: humanDate(doc.createdAt) || "",
         folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        access: doc.access ?? undefined,
+        addedBy: doc.addedBy ?? null,
+        citability: mediaOriginal ? "none" : undefined,
+        indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
+        errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
     };
 }
 
-function mapCallNoteFile(file: WorkspaceCallNoteFile): WorkspaceSource {
+function mapCallNoteFile(
+    file: WorkspaceCallNoteFile,
+    indexedDocument?: DocumentRow
+): WorkspaceSource {
     return {
         id: `call-note:${file.callId}`,
         callId: file.callId,
@@ -101,6 +181,17 @@ function mapCallNoteFile(file: WorkspaceCallNoteFile): WorkspaceSource {
         folder: "Calls",
         tags: [],
         domain: "General",
+        citability: file.documentId === null ? "none" : "citable",
+        indexStatus: indexedDocument ? documentIndexStatus(indexedDocument) : undefined,
+        errorMessage: indexedDocument ? documentIndexError(indexedDocument) : undefined,
+        access: {
+            audience: file.visibility === "private" ? "private" : "workspace",
+            ownAudience: true,
+            principalCount: 0,
+            canEdit: false,
+            canManage: false,
+            canDelete: false,
+        },
     };
 }
 
@@ -121,7 +212,16 @@ export function mindmapCitability(
  * there is one, so the retrieval layer's citations — which name document ids —
  * resolve to the map rather than to a Markdown copy of it.
  */
-export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+export function mapMindmap(
+    map: MindmapSummary,
+    /**
+     * The published copy, when the caller can see it: the map is searchable
+     * once that file is indexed. Who can see the map itself is the draft's
+     * own `access` (its folder's audience); the copy's stands in only for a
+     * server that did not describe the draft.
+     */
+    publishedDocument?: DocumentRow
+): WorkspaceSource {
     const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
     return {
         id: `m${map.id}`,
@@ -138,6 +238,13 @@ export function mapMindmap(map: MindmapSummary): WorkspaceSource {
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
+        // The draft's own access: it sits in the rail where its folder puts
+        // it, and its verbs act on the draft. The published copy's is the
+        // fallback for an older server that did not describe the draft.
+        access: map.access ?? publishedDocument?.access ?? undefined,
+        addedBy: publishedDocument?.addedBy ?? null,
+        indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
+        errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
     };
 }
 
@@ -147,6 +254,8 @@ export interface UseWorkspaceDataResult {
     loading: boolean;
     error: string | null;
     companyId: number | null;
+    /** The active workspace's name — "Everyone at <name>". */
+    workspaceName: string | null;
     /**
      * What the signed-in person may do here. `can` answers false until the
      * permissions have loaded, so anything gated on it fails closed.
@@ -155,6 +264,8 @@ export interface UseWorkspaceDataResult {
     can: (permission: Permission | undefined) => boolean;
     /** True once the permission answer has arrived (even if it was "nothing"). */
     permissionsLoaded: boolean;
+    /** Set when that answer was a failure: an empty set then means "unknown", not "none". */
+    permissionsError: string | null;
     refresh: () => Promise<void>;
     /** Optimistically insert a row before the backend confirms it. */
     addOptimistic: (source: WorkspaceSource) => void;
@@ -168,25 +279,35 @@ interface FolderRow {
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while the folder is only implied. */
     categoryId?: number | null;
+    /** The caller's access (ADR-014); absent from servers that predate it. */
+    access?: ItemAccessView;
 }
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
-    const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
+    const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
     const [callNoteFiles, setCallNoteFiles] = useState<WorkspaceCallNoteFile[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const refreshInFlight = useRef<Promise<void> | null>(null);
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
-    const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
+    const {
+        companyId,
+        workspaceName,
+        permissions,
+        can,
+        loaded: permissionsLoaded,
+        error: permissionsError,
+    } = usePermissions();
 
-    const refresh = useCallback(async () => {
+    const fetchSources = useCallback(async () => {
         if (!userId) {
-            // Signed out, or the session has not resolved yet. Clear the last
-            // user's rows, but stay "loading": the URL sync reads a finished,
-            // empty list as "that source is gone" and drops `?source=`.
+            // Keep unresolved sessions loading so URL sync does not discard a
+            // deep link before its source list can be requested.
+            setLoading(true);
             setDocuments([]);
             setMindmaps([]);
             setFolderRows([]);
@@ -211,7 +332,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 fetch("/api/call-notes/files", { cache: "no-store" }).catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
-            const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
+            const docs = (await docsRes.json()) as DocumentRow[];
             setDocuments(docs);
 
             if (foldersRes.ok) {
@@ -242,6 +363,19 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         }
     }, [userId]);
 
+    // Queue explicit refreshes rather than losing a post-upload refresh to an
+    // earlier poll. Poll ticks skip the entire queue while a request is pending.
+    const refresh = useCallback(async () => {
+        const pending = refreshInFlight.current;
+        const request = pending ? pending.then(fetchSources) : fetchSources();
+        refreshInFlight.current = request;
+        try {
+            await request;
+        } finally {
+            if (refreshInFlight.current === request) refreshInFlight.current = null;
+        }
+    }, [fetchSources]);
+
     useEffect(() => {
         void refresh();
     }, [refresh]);
@@ -250,6 +384,8 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         // A published map or indexed Call Note is one source, not a second
         // Markdown document. Retrieval reaches it through its `documentId`.
         const claimed = new Set<number>();
+        const documentsById = new Map<number, DocumentRow>();
+        for (const doc of documents) documentsById.set(doc.id, doc);
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
@@ -259,10 +395,75 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         return [
             ...optimistic,
             ...documents.filter(d => !claimed.has(d.id) && !isCallNoteDocument(d)).map(mapDocument),
-            ...mindmaps.map(mapMindmap),
-            ...callNoteFiles.map(mapCallNoteFile),
+            ...mindmaps.map(map =>
+                mapMindmap(
+                    map,
+                    map.publishedDocumentId === null
+                        ? undefined
+                        : documentsById.get(map.publishedDocumentId)
+                )
+            ),
+            ...callNoteFiles.map(file =>
+                mapCallNoteFile(
+                    file,
+                    file.documentId === null ? undefined : documentsById.get(file.documentId)
+                )
+            ),
         ];
     }, [documents, mindmaps, callNoteFiles, optimistic]);
+
+    // Which sources are still processing. The poll schedule restarts whenever
+    // this changes — something finished or started — and backs off otherwise.
+    const processingKey = useMemo(
+        () =>
+            sources
+                .filter(source => source.indexStatus === "processing")
+                .map(source => source.id)
+                .sort()
+                .join("\n"),
+        [sources]
+    );
+
+    useEffect(() => {
+        if (!userId || !processingKey) return;
+        let timer: number | undefined;
+        let tick = 0;
+        let cancelled = false;
+
+        const stopPolling = () => {
+            window.clearTimeout(timer);
+            timer = undefined;
+        };
+        // A poll that lands while another refresh is in flight rides on that
+        // one instead of queueing a second round of requests behind it.
+        const poll = () => refreshInFlight.current ?? refresh();
+        const schedule = () => {
+            stopPolling();
+            if (cancelled || document.visibilityState !== "visible") return;
+            const delay = nextSourcePollDelay(tick);
+            if (delay === null) return;
+            timer = window.setTimeout(() => {
+                timer = undefined;
+                tick += 1;
+                void poll().finally(schedule);
+            }, delay);
+        };
+        // Hidden: no polling at all. Visible again: catch up once now, then
+        // carry on with the backoff where it left off (or stay stopped).
+        const onVisibilityChange = () => {
+            stopPolling();
+            if (document.visibilityState !== "visible") return;
+            void poll().finally(schedule);
+        };
+
+        schedule();
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        return () => {
+            cancelled = true;
+            stopPolling();
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+        };
+    }, [userId, processingKey, refresh]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         // Every folder a source sits in, every folder that exists while empty,
@@ -274,12 +475,23 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         ]);
         return paths.sort(compareFolderPaths).map(path => {
             const row = byPath.get(path);
+            const system = path === "Calls";
             return {
                 id: `f-${path}`,
                 name: path,
                 color: folderColor(folderLeafName(path)),
+                system,
                 restricted: row?.restricted === true,
                 categoryId: row?.categoryId ?? null,
+                access: system
+                    ? {
+                          audience: "workspace",
+                          ownAudience: false,
+                          principalCount: 0,
+                          canEdit: false,
+                          canManage: false,
+                      }
+                    : row?.access,
             };
         });
     }, [sources, folderRows]);
@@ -294,9 +506,11 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         loading,
         error,
         companyId,
+        workspaceName,
         permissions,
         can,
         permissionsLoaded,
+        permissionsError,
         refresh,
         addOptimistic,
     };

@@ -1,12 +1,21 @@
 /** @jest-environment jsdom */
 
 import React, { useState } from "react";
+import type * as ReactModule from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
 import { ContextMenuProvider } from "~/components/context-menu";
+
+// The bell polls its own route; here it only needs to be there.
+jest.mock("../team/InboxBell", () => ({
+    InboxBell: () => {
+        const { createElement } = jest.requireActual<typeof ReactModule>("react");
+        return createElement("button", { type: "button", "aria-label": "Inbox" });
+    },
+}));
 import { SourceRail, type SourceRailProps } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 
@@ -14,7 +23,9 @@ import type { WorkspaceFolder, WorkspaceSource } from "../types";
  * The rail holds two lists behind one search box. What matters here is that
  * they stay separate — the tab decides which list the field filters and which
  * controls belong on screen — and that a rail given no history props is
- * exactly the sources-only rail it was before.
+ * exactly the sources-only rail it was before. The rail is for making, filing
+ * and sharing sources: the team (people, groups, activity) is a Studio tab of
+ * its own, so the rail has exactly two halves.
  */
 
 const SOURCES: WorkspaceSource[] = [
@@ -60,7 +71,15 @@ function history(over: Partial<NonNullable<SourceRailProps["history"]>> = {}) {
     };
 }
 
-function Harness({ withHistory = true }: { withHistory?: boolean }) {
+function Harness({
+    withHistory = true,
+    revealTab,
+    onRevealed,
+}: {
+    withHistory?: boolean;
+    revealTab?: SourceRailProps["revealTab"];
+    onRevealed?: SourceRailProps["onRevealed"];
+}) {
     const [selected, setSelected] = useState<string[]>([]);
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -77,6 +96,9 @@ function Harness({ withHistory = true }: { withHistory?: boolean }) {
                 activeTag={activeTag}
                 setActiveTag={setActiveTag}
                 history={withHistory ? history() : undefined}
+                inbox={{ onOpenTarget: jest.fn() }}
+                revealTab={revealTab}
+                onRevealed={onRevealed}
             />
         </ContextMenuProvider>
     );
@@ -134,5 +156,38 @@ describe("SourceRail tabs", () => {
         localStorage.setItem("workspace.railTab.v1", "history");
         render(<Harness withHistory={false} />);
         expect(screen.getByTestId("source-rail-list")).toBeInTheDocument();
+    });
+
+    it("has Sources and History only — the team is a tab of its own, not a half of the sidebar", () => {
+        render(<Harness />);
+        const strip = screen.getByRole("tablist", { name: "Sidebar section" });
+        expect(
+            Array.from(strip.querySelectorAll('[role="tab"]')).map(tab => tab.textContent)
+        ).toEqual(["Sources", "History"]);
+        expect(screen.queryByTestId("rail-tab-team")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("team-people")).not.toBeInTheDocument();
+        // The shared-with-you bell stays: it announces files shared with you.
+        expect(screen.getByRole("button", { name: /inbox/i })).toBeInTheDocument();
+    });
+
+    it("reads a remembered Team tab from before as Sources", () => {
+        localStorage.setItem("workspace.railTab.v1", "team");
+        render(<Harness />);
+        expect(screen.getByTestId("rail-tab-sources")).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByTestId("source-rail-list")).toBeInTheDocument();
+    });
+
+    it("shows the half something opened from the Team tab lives in, once", () => {
+        localStorage.setItem("workspace.railTab.v1", "sources");
+        const onRevealed = jest.fn();
+        const { rerender } = render(
+            <Harness revealTab={{ tab: "history", nonce: 7 }} onRevealed={onRevealed} />
+        );
+        expect(screen.getByTestId("rail-tab-history")).toHaveAttribute("aria-selected", "true");
+        expect(onRevealed).toHaveBeenCalledWith(7);
+
+        rerender(<Harness revealTab={{ tab: "sources", nonce: 8 }} onRevealed={onRevealed} />);
+        expect(screen.getByTestId("rail-tab-sources")).toHaveAttribute("aria-selected", "true");
+        expect(onRevealed).toHaveBeenLastCalledWith(8);
     });
 });

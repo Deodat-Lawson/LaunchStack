@@ -14,6 +14,7 @@ import { NonRetriableError } from "inngest";
 
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
+import { hasReadableText, websiteDocumentMarker } from "~/lib/website-document";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
@@ -309,6 +310,12 @@ export const crawlWebsite = inngest.createFunction(
             const failures: { url: string; error: string; retriable: boolean }[] = [];
 
             for (const page of crawlResult.pages) {
+                // An empty shell (a page built with JavaScript) has nothing to
+                // quote; skipped, not failed, so the rest of the crawl stands.
+                if (!hasReadableText(page.html)) {
+                    console.log(`[CrawlWebsite] Skipped ${page.url}: no readable text`);
+                    continue;
+                }
                 try {
                     const parsedUrl = new URL(page.url);
                     const filename = `${sanitizeForFilename(page.title) || "webpage"}.html`;
@@ -339,6 +346,7 @@ export const crawlWebsite = inngest.createFunction(
                         mimeType: "text/html",
                         originalFilename: filename,
                         isWebsite: true,
+                        ocrMetadata: { ...websiteDocumentMarker({ url: page.url }) },
                         crawlGroupId,
                     });
 

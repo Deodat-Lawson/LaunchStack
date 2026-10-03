@@ -24,6 +24,10 @@ const compat = new FlatCompat({
 // warn-level hex ratchet on no-restricted-syntax) goes on its own rule id
 // instead of sharing one.
 
+const nativeConfirmMessage =
+    "window.confirm is suppressed in embedded web views and returns false unseen. " +
+    "Mount ConfirmDialog from ~/components/ui/confirm-dialog with the pending action in state.";
+
 // Deleted packages and renamed bricks (ADR-008), banned everywhere — so every
 // scoped no-restricted-imports below must include it.
 const legacyBan = {
@@ -53,7 +57,8 @@ const chatClientImportBans = [
         name: "@langchain/openai",
         importNames: ["ChatOpenAI"],
         message:
-            "Resolve a route with @launchstack/core/llm instead. " +
+            "Resolve a route with `resolveChatModel` from " +
+            "`@launchstack/llm/chat-model-factory` instead. " +
             "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
             "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
     },
@@ -388,6 +393,7 @@ const eslintConfig = [
                 "document-conversion-engine",
                 "google-drive",
                 "collab",
+                "simulation",
                 "schema-generator",
                 "pipelines",
                 "design-tokens",
@@ -531,6 +537,20 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            // @launchstack/simulation — the OASIS-style social simulation.
+            // Zero dependencies like collab: the host injects the model.
+            {
+                files: ["packages/simulation/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/simulation"),
                     ]),
                     ...noEnv,
                 },
@@ -726,7 +746,22 @@ const eslintConfig = [
                     message:
                         "users.role / users.status are legacy and unread (ADR-010). Use the membership row: user_company_memberships.role + status.",
                 })),
+                ...["window", "globalThis"].map(object => ({
+                    object,
+                    property: "confirm",
+                    message: nativeConfirmMessage,
+                })),
             ],
+        },
+    },
+    // window.confirm returns false unseen in embedded web views (the desktop
+    // shell, in-app browser panes), so the action it guards silently does
+    // nothing. Error-level: the count is zero and stays zero. A local
+    // function named `confirm` is not the global and is not flagged.
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-globals": ["error", { name: "confirm", message: nativeConfirmMessage }],
         },
     },
     // Colors come from tokens (var(--…) / semantic Tailwind classes), not

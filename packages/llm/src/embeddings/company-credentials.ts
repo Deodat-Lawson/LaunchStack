@@ -10,7 +10,8 @@ import { CiphertextDecodeError, decryptSecret, encryptSecret } from "@launchstac
  * and (b) stored encrypted.
  *
  * API keys (OpenAI, Hugging Face) are AES-256-GCM ciphertext. Non-secret
- * config (Ollama base URL / model) is plaintext.
+ * config (the OpenAI-compatible endpoint URL, Ollama base URL / model) is
+ * plaintext.
  *
  * This table is the only source of credentials. The legacy plaintext columns
  * that used to live on `company` are gone.
@@ -18,6 +19,8 @@ import { CiphertextDecodeError, decryptSecret, encryptSecret } from "@launchstac
 
 export interface CompanyCredentialsPlaintext {
     openAIApiKey: string | null;
+    /** The OpenAI-compatible embeddings endpoint `openAIApiKey` belongs to. */
+    openAIBaseUrl: string | null;
     huggingFaceApiKey: string | null;
     ollamaBaseUrl: string | null;
     ollamaModel: string | null;
@@ -25,6 +28,8 @@ export interface CompanyCredentialsPlaintext {
 
 export interface RedactedCredentials {
     openAI: { hasKey: boolean; last4: string | null };
+    /** Not a secret — returned in full so the settings form can show it. */
+    openAIBaseUrl: string | null;
     huggingFace: { hasKey: boolean; last4: string | null };
     ollamaBaseUrl: string | null;
     ollamaModel: string | null;
@@ -33,6 +38,7 @@ export interface RedactedCredentials {
 export interface CredentialUpsertInput {
     /** `undefined` = leave unchanged. `null` or `""` = clear the stored value. */
     openAIApiKey?: string | null;
+    openAIBaseUrl?: string | null;
     huggingFaceApiKey?: string | null;
     ollamaBaseUrl?: string | null;
     ollamaModel?: string | null;
@@ -87,6 +93,7 @@ export async function getCompanyCredentialsPlaintext(
 
     return {
         openAIApiKey: decryptOrNull(encrypted.openAIApiKeyCiphertext),
+        openAIBaseUrl: encrypted.openAIBaseUrl ?? null,
         huggingFaceApiKey: decryptOrNull(encrypted.huggingFaceApiKeyCiphertext),
         ollamaBaseUrl: encrypted.ollamaBaseUrl ?? null,
         ollamaModel: encrypted.ollamaModel ?? null,
@@ -104,6 +111,7 @@ export async function getRedactedCredentials(
     if (id === null) {
         return {
             openAI: { hasKey: false, last4: null },
+            openAIBaseUrl: null,
             huggingFace: { hasKey: false, last4: null },
             ollamaBaseUrl: null,
             ollamaModel: null,
@@ -114,6 +122,7 @@ export async function getRedactedCredentials(
         .select({
             openAIApiKeyCiphertext: companyEmbeddingCredentials.openAIApiKeyCiphertext,
             openAIApiKeyLast4: companyEmbeddingCredentials.openAIApiKeyLast4,
+            openAIBaseUrl: companyEmbeddingCredentials.openAIBaseUrl,
             huggingFaceApiKeyCiphertext: companyEmbeddingCredentials.huggingFaceApiKeyCiphertext,
             huggingFaceApiKeyLast4: companyEmbeddingCredentials.huggingFaceApiKeyLast4,
             ollamaBaseUrl: companyEmbeddingCredentials.ollamaBaseUrl,
@@ -128,6 +137,7 @@ export async function getRedactedCredentials(
             hasKey: Boolean(encrypted?.openAIApiKeyCiphertext),
             last4: encrypted?.openAIApiKeyLast4 ?? null,
         },
+        openAIBaseUrl: encrypted?.openAIBaseUrl ?? null,
         huggingFace: {
             hasKey: Boolean(encrypted?.huggingFaceApiKeyCiphertext),
             last4: encrypted?.huggingFaceApiKeyLast4 ?? null,
@@ -163,6 +173,13 @@ export async function upsertCompanyCredentials(
             patch.openAIApiKeyLast4 = last4(input.openAIApiKey);
             hasEncryptedChange = true;
         }
+    }
+
+    if (input.openAIBaseUrl !== undefined) {
+        patch.openAIBaseUrl =
+            input.openAIBaseUrl && input.openAIBaseUrl.trim().length > 0
+                ? input.openAIBaseUrl.trim()
+                : null;
     }
 
     if (input.huggingFaceApiKey !== undefined) {

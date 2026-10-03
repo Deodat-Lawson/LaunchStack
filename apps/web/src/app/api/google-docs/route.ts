@@ -19,6 +19,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { createGoogleDocDocument } from "~/server/services/google-drive/create";
+import { recordUpload } from "~/server/workspace/added-documents";
 
 import { driveErrorResponse } from "../documents/[id]/google-docs/_shared";
 
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
         }
 
         try {
-            const result = await createGoogleDocDocument({
+            const { upload, ...result } = await createGoogleDocDocument({
                 companyId: BigInt(ctx.data.companyId),
                 authUserId: ctx.data.authUserId,
                 userPk: ctx.data.userPk,
@@ -69,6 +70,8 @@ export async function POST(request: Request) {
                 category,
                 requestUrl: request.url,
             });
+            // Unfiled means private to its creator until they share it.
+            await recordUpload(ctx.data, upload);
 
             return NextResponse.json({ success: true, ...result }, { status: 201 });
         } catch (err) {

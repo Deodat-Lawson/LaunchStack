@@ -27,17 +27,35 @@ import {
 } from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
 import { KindPill, SharedMark } from "../_components/Primitives";
-import { plural } from "../_lib/format";
+import { WeekSuggestions } from "../_components/WeekSuggestions";
+import { useOneClick } from "../_lib/actions";
+import { plural, todayIso } from "../_lib/format";
+import { useHiddenSuggestions } from "../_lib/hidden";
+import { weekSuggestions } from "../_lib/suggestions";
 
 type Filter = "all" | VantageEvidenceKind;
 
 /**
  * The evidence inbox: everything the week's agenda can cite, newest first.
  * One list, a kind filter, a search box, and the add dialog. Rows expand
- * in place; nothing here is a card.
+ * in place; nothing here is a card — except Vantage's nudge when nothing
+ * has been logged for over a week.
  */
 export function EvidenceScreen() {
     const list = useResource("vantage:evidence", () => vantageApi.evidence());
+    const overview = useResource("vantage:overview", () => vantageApi.overview());
+    const hidden = useHiddenSuggestions();
+    const { act, gone } = useOneClick(overview.reload);
+    const nudges = useMemo(
+        () =>
+            overview.data
+                ? weekSuggestions(overview.data, { today: todayIso(), hidden })
+                      .filter(g => g.id === "record")
+                      .map(g => ({ ...g, items: g.items.filter(x => x.kind === "log-evidence") }))
+                      .filter(g => g.items.length > 0)
+                : [],
+        [overview.data, hidden]
+    );
     const [filter, setFilter] = useState<Filter>("all");
     const [q, setQ] = useState("");
     const [adding, setAdding] = useState(false);
@@ -100,6 +118,16 @@ export function EvidenceScreen() {
             />
 
             {list.error && <InlineError message={list.error} onRetry={() => void list.reload()} />}
+
+            {nudges.length > 0 && (
+                <WeekSuggestions
+                    groups={nudges}
+                    act={act}
+                    gone={gone}
+                    onDecide={() => undefined}
+                    onLogEvidence={() => setAdding(true)}
+                />
+            )}
 
             <div className="flex flex-wrap items-center gap-2">
                 <div className="flex flex-wrap gap-1" role="tablist" aria-label="Kind">
@@ -179,7 +207,9 @@ export function EvidenceScreen() {
                                         shared={e.visibility === "shared"}
                                         className="@max-sm:hidden"
                                     />
-                                    <DropdownMenu>
+                                    {/* Not modal: its items open dialogs, and a modal menu that hands off to a
+                                        dialog leaves the page unclickable once the dialog closes. */}
+                                    <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
                                             <Button
                                                 variant="ghost"
@@ -252,7 +282,10 @@ export function EvidenceScreen() {
             <EvidenceDialog
                 open={adding}
                 onOpenChange={setAdding}
-                onSaved={() => void list.reload()}
+                onSaved={() => {
+                    void list.reload();
+                    void overview.reload();
+                }}
             />
             <EvidenceDialog
                 open={editing !== null}

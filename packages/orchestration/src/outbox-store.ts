@@ -17,6 +17,8 @@ import type { ClaimedEvent, LoggerPort, OutboxStorePort } from "./ports";
 
 type OutboxTx = Pick<DbClient, "insert" | "execute">;
 
+const RECLAIM_EXHAUSTED_ERROR = "reclaimed after stale claim; attempts exhausted";
+
 /**
  * Insert-or-revive: THE enqueue semantics of the outbox. A live
  * `pending`/`processing` row absorbs the request (the handler reads current
@@ -221,9 +223,14 @@ export class DrizzleOutboxStore implements OutboxStorePort {
      * Every reclaim counts as one consumed attempt — a crash-poison event
      * (one that kills its worker before markFailed can run) must not loop
      * forever. Rows whose incremented count reaches `maxAttempts` go `dead`
-     * with an explanatory last_error instead.
+     * with an explanatory last_error instead. The optional onDead hook exposes
+     * those terminal failures; hook errors are logged, never thrown.
      */
-    async reclaimStale(claimedBefore: Date, maxAttempts: number): Promise<number> {
+    async reclaimStale(
+        claimedBefore: Date,
+        maxAttempts: number,
+        onDead?: (claimed: ClaimedEvent, error: string) => Promise<void>
+    ): Promise<number> {
         const rows = await this.db.execute(sql`
       UPDATE ${eventOutbox}
       SET attempt_count = attempt_count + 1,
@@ -233,16 +240,21 @@ export class DrizzleOutboxStore implements OutboxStorePort {
           END,
           last_error = CASE
             WHEN attempt_count + 1 >= ${maxAttempts}
-            THEN 'reclaimed after stale claim; attempts exhausted'
+            THEN ${RECLAIM_EXHAUSTED_ERROR}
             ELSE last_error
           END,
           claimed_at = NULL,
           updated_at = CURRENT_TIMESTAMP
       WHERE status = 'processing'
         AND claimed_at < ${claimedBefore.toISOString()}
-      RETURNING id, status
+      RETURNING id, status, payload, attempt_count
     `);
-        const reclaimed = rows as unknown as Array<{ id: number; status: string }>;
+        const reclaimed = rows as unknown as Array<{
+            id: number;
+            status: string;
+            payload: unknown;
+            attempt_count: number;
+        }>;
         const count = reclaimed.length;
         if (count > 0) {
             const dead = reclaimed.filter(r => r.status === "dead").length;
@@ -250,6 +262,33 @@ export class DrizzleOutboxStore implements OutboxStorePort {
                 { count, dead, claimedBefore: claimedBefore.toISOString() },
                 "reclaimed stale outbox claims (worker died mid-handler?)"
             );
+        }
+        for (const row of reclaimed) {
+            if (row.status !== "dead" || !onDead) continue;
+            const parsed = pipelineEventSchema.safeParse(row.payload);
+            if (!parsed.success) {
+                this.logger.error(
+                    { outboxId: row.id, error: parsed.error.message },
+                    "reclaimed dead outbox payload failed protocol validation"
+                );
+                continue;
+            }
+            try {
+                await onDead(
+                    {
+                        outboxId: Number(row.id),
+                        event: parsed.data,
+                        // ClaimedEvent counts attempts before the one that just failed.
+                        attemptCount: Number(row.attempt_count) - 1,
+                    },
+                    RECLAIM_EXHAUSTED_ERROR
+                );
+            } catch (hookError) {
+                this.logger.error(
+                    { outboxId: row.id, error: String(hookError) },
+                    "onDead hook failed for reclaimed event"
+                );
+            }
         }
         return count;
     }

@@ -5,6 +5,7 @@ import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/types";
 
 /**
@@ -45,16 +46,26 @@ export const predictiveAnalysisJob = inngest.createFunction(
                 .where(eq(document.id, documentId))
                 .limit(1);
 
-            return results[0] ?? null;
+            const row = results[0];
+            // Step output is JSON: a bigint does not survive it (it came back
+            // undefined, slipped past the null check, and broke load-chunks).
+            return row
+                ? {
+                      ...row,
+                      companyId: row.companyId.toString(),
+                      currentVersionId: row.currentVersionId?.toString() ?? null,
+                  }
+                : null;
         });
         if (!docDetails) {
             throw new Error(`Document ${documentId} not found`);
         }
 
-        const currentVersionId = docDetails.currentVersionId;
-        if (currentVersionId === null) {
+        if (docDetails.currentVersionId == null) {
             throw new Error(`Document ${documentId} has no current version`);
         }
+        const currentVersionId = BigInt(docDetails.currentVersionId);
+        const companyId = BigInt(docDetails.companyId);
         const chunks = await step.run("load-chunks", async () => {
             const rlmChunks = await db
                 .select({
@@ -95,35 +106,34 @@ export const predictiveAnalysisJob = inngest.createFunction(
                 const existingDocs = await db
                     .selectDistinct({ title: document.title, url: document.url })
                     .from(document)
-                    .where(
-                        and(
-                            eq(document.companyId, docDetails.companyId),
-                            ne(document.id, documentId)
-                        )
-                    );
+                    .where(and(eq(document.companyId, companyId), ne(document.id, documentId)));
                 return existingDocs.map(row => `${row.title || row.url}`);
             });
         }
 
+        // A step body runs outside the handler's async context, so the
+        // workspace's models are entered inside the step, not around the handler.
         const { result: analysisResult, stats } = await step.run("run-analysis", async () => {
-            return analyzeDocumentChunks(
-                chunks as PdfChunk[],
-                {
-                    type: analysisType as
-                        | "contract"
-                        | "financial"
-                        | "technical"
-                        | "compliance"
-                        | "general",
-                    includeRelatedDocs,
-                    existingDocuments,
-                    title: docDetails.title,
-                    category: docDetails.category,
-                    companyId: Number(docDetails.companyId),
-                    documentId,
-                },
-                timeoutMs ?? 60000,
-                ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
+            return withWorkspaceChatModels(companyId, () =>
+                analyzeDocumentChunks(
+                    chunks as PdfChunk[],
+                    {
+                        type: analysisType as
+                            | "contract"
+                            | "financial"
+                            | "technical"
+                            | "compliance"
+                            | "general",
+                        includeRelatedDocs,
+                        existingDocuments,
+                        title: docDetails.title,
+                        category: docDetails.category,
+                        companyId: Number(companyId),
+                        documentId,
+                    },
+                    timeoutMs ?? 60000,
+                    ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
+                )
             );
         });
 

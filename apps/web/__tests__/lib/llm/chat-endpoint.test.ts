@@ -33,6 +33,7 @@ let respondWith: (body: Record<string, unknown>) => {
     status: number;
     payload?: unknown;
     stream?: (response: ServerResponse) => void;
+    contentType?: string;
 } = () => ({ status: 200, payload: completion("ok") });
 
 function completion(content: string, extra: Record<string, unknown> = {}) {
@@ -70,13 +71,15 @@ beforeAll(async () => {
                 authorization: req.headers.authorization,
                 body,
             });
-            const { status, payload, stream } = respondWith(body);
+            const { status, payload, stream, contentType } = respondWith(body);
             if (stream) {
                 res.writeHead(status, { "Content-Type": "text/event-stream" });
                 stream(res);
             } else {
-                res.writeHead(status, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(payload));
+                res.writeHead(status, { "Content-Type": contentType ?? "application/json" });
+                res.end(
+                    contentType === "text/event-stream" ? String(payload) : JSON.stringify(payload)
+                );
             }
         });
     });
@@ -261,6 +264,58 @@ describe("request parameters follow declared behavior", () => {
         // The mock returns a non-streaming body; we only assert the request flag,
         // which is what the behavior contract governs.
         await resolved.chat.invoke([new HumanMessage("hi")]).catch(() => undefined);
+        expect(captured[0]!.body.stream).toBe(true);
+    });
+});
+
+describe("real provider streaming", () => {
+    it("preserves actual reasoning deltas and measured usage without putting the internal capture option on the wire", async () => {
+        const chunks = [
+            {
+                id: "chatcmpl-stream",
+                choices: [
+                    {
+                        index: 0,
+                        delta: { role: "assistant", reasoning_content: "Checking the source" },
+                    },
+                ],
+            },
+            {
+                id: "chatcmpl-stream",
+                choices: [
+                    { index: 0, delta: { content: "Verified answer" }, finish_reason: "stop" },
+                ],
+            },
+            {
+                id: "chatcmpl-stream",
+                choices: [],
+                usage: { prompt_tokens: 11, completion_tokens: 7, total_tokens: 18 },
+            },
+        ];
+        respondWith = () => ({
+            status: 200,
+            contentType: "text/event-stream",
+            payload:
+                chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join("") +
+                "data: [DONE]\n\n",
+        });
+        const resolved = resolveChatModel({ config: deployment(FULL_SUPPORT), streaming: true });
+        const stream = await resolved.chat.stream([new HumanMessage("hi")]);
+        const received = [];
+        for await (const chunk of stream) received.push(chunk);
+        const raw = received[0]?.additional_kwargs.__raw_response as
+            | { choices?: { delta?: { reasoning_content?: string } }[] }
+            | undefined;
+        expect(raw?.choices?.[0]?.delta?.reasoning_content).toBe("Checking the source");
+        expect(
+            received.map(chunk => (typeof chunk.content === "string" ? chunk.content : "")).join("")
+        ).toBe("Verified answer");
+        expect(normalizeTokenUsage(received.at(-1))).toMatchObject({
+            inputTokens: 11,
+            outputTokens: 7,
+            totalTokens: 18,
+        });
+        expect(captured[0]!.body).not.toHaveProperty("__includeRawResponse");
         expect(captured[0]!.body.stream).toBe(true);
     });
 });
@@ -488,19 +543,23 @@ describe("structured output", () => {
         expect(result).toEqual({ answer: "partial", score: 1 });
     });
 
-    it("keeps native schema enforcement for streamed objects with defaulted nested fields", async () => {
+    it("keeps strict optional-null and default semantics for native streamed objects", async () => {
         const NoteSchema = z.object({
             sections: z.array(
                 z.object({
                     text: z.string(),
                     labels: z.array(z.string()).default([]),
+                    rationale: z.string().optional(),
                 })
             ),
         });
         respondWith = () => ({
             status: 200,
             stream: response => {
-                streamChunk(response, '{"sections":[{"text":"Meeting note","labels":[]}]}');
+                streamChunk(
+                    response,
+                    '{"sections":[{"text":"Meeting note","labels":null,"rationale":null}]}'
+                );
                 response.end("data: [DONE]\n\n");
             },
         });
@@ -517,7 +576,9 @@ describe("structured output", () => {
             name: "note",
             onPartial: () => undefined,
         });
-        expect(result).toEqual({ sections: [{ text: "Meeting note", labels: [] }] });
+        expect(result).toEqual({
+            sections: [{ text: "Meeting note", labels: [], rationale: undefined }],
+        });
         expect(captured[0]!.body.response_format).toMatchObject({
             type: "json_schema",
             json_schema: {
@@ -526,9 +587,12 @@ describe("structured output", () => {
                     properties: {
                         sections: {
                             items: {
-                                required: ["text", "labels"],
+                                required: ["text", "labels", "rationale"],
                                 additionalProperties: false,
-                                properties: { labels: { type: "array" } },
+                                properties: {
+                                    labels: { anyOf: [{ type: "array" }, { type: "null" }] },
+                                    rationale: { anyOf: [{ type: "string" }, { type: "null" }] },
+                                },
                             },
                         },
                     },
@@ -536,6 +600,72 @@ describe("structured output", () => {
             },
         });
     });
+
+    it.each([
+        { name: "relaxed schema", refuseAllSchemas: false, requestCount: 2 },
+        { name: "prompt JSON", refuseAllSchemas: true, requestCount: 3 },
+    ])(
+        "keeps incremental output through the $name schema-refusal path",
+        async ({ refuseAllSchemas, requestCount }) => {
+            const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+            const logged = jest.spyOn(console, "error").mockImplementation(() => undefined);
+            try {
+                let nativeRequests = 0;
+                respondWith = body => {
+                    if (body.response_format && (++nativeRequests === 1 || refuseAllSchemas)) {
+                        return {
+                            status: 400,
+                            payload: { error: { message: "JSON schema is too complex" } },
+                        };
+                    }
+                    return {
+                        status: 200,
+                        stream: response => {
+                            streamChunk(response, '{"items":["ok"]}');
+                            response.end("data: [DONE]\n\n");
+                        },
+                    };
+                };
+                const resolved = resolveChatModel({
+                    config: deployment(
+                        FULL_SUPPORT.replace(
+                            "nativeStructuredOutput: []",
+                            "nativeStructuredOutput: [json-schema]"
+                        )
+                    ),
+                    streaming: true,
+                });
+                const previews: unknown[] = [];
+                const result = await invokeStructured(
+                    resolved,
+                    z.object({ items: z.array(z.string().max(80)).max(1) }),
+                    [new HumanMessage("q")],
+                    {
+                        name: "bounded_stream",
+                        onPartial: partial => {
+                            previews.push(partial);
+                        },
+                    }
+                );
+                expect(result).toEqual({ items: ["ok"] });
+                expect(previews.at(-1)).toEqual(result);
+                expect(captured).toHaveLength(requestCount);
+                expect(JSON.stringify(captured[0]!.body.response_format)).toContain("maxItems");
+                expect(JSON.stringify(captured[1]!.body.response_format)).not.toMatch(
+                    /maxItems|maxLength/
+                );
+                if (refuseAllSchemas) {
+                    expect(captured.at(-1)!.body).not.toHaveProperty("response_format");
+                    expect(JSON.stringify(captured.at(-1)!.body.messages)).toContain(
+                        "Return only valid JSON"
+                    );
+                }
+            } finally {
+                warn.mockRestore();
+                logged.mockRestore();
+            }
+        }
+    );
 
     it("clears an invalid streamed preview before its single repair produces a valid result", async () => {
         let request = 0;
@@ -685,24 +815,58 @@ describe("error normalization", () => {
         expect(described!.message).toMatch(/requires a credential/);
     });
 
-    it("maps an unreachable endpoint to 502 naming the base URL", () => {
+    // These messages reach whoever asked, so they name the variable to fix but
+    // never the endpoint host or the model id; those go to the server log.
+    const quietly = () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        jest.spyOn(console, "warn").mockImplementation(() => {});
+    };
+    afterEach(() => jest.restoreAllMocks());
+
+    it("maps an unreachable endpoint to 502 naming CHAT_BASE_URL, not the host", () => {
+        quietly();
         const described = describeChatEndpointError(
             new Error("fetch failed: ECONNREFUSED"),
             endpoint,
             "m"
         );
         expect(described).toMatchObject({ status: 502 });
-        expect(described!.message).toContain(endpoint.baseUrl);
+        expect(described!.message).toContain("CHAT_BASE_URL");
+        expect(described!.message).not.toContain("endpoint.example");
     });
 
-    it("maps an unknown model to 400 naming the model id", () => {
+    it("maps an unknown model to 400 without naming the model id", () => {
+        quietly();
         const described = describeChatEndpointError(
             new Error("model_not_found"),
             endpoint,
             "vendor/typo"
         );
         expect(described).toMatchObject({ status: 400 });
-        expect(described!.message).toContain("vendor/typo");
+        expect(described!.message).toContain("chat model configuration");
+        expect(described!.message).not.toContain("vendor/typo");
+    });
+
+    it("maps an exhausted balance to 503 without the provider's billing text", () => {
+        quietly();
+        const described = describeChatEndpointError(
+            new Error("402 Insufficient credits. Add more using https://vendor.example/credits"),
+            endpoint,
+            "vendor/model"
+        );
+        expect(described).toMatchObject({ status: 503 });
+        expect(described!.message).toMatch(/usage limit/);
+        expect(described!.message).not.toMatch(/vendor/);
+    });
+
+    it("maps a rate limit to 429", () => {
+        quietly();
+        const described = describeChatEndpointError(
+            new Error("429 Rate limit exceeded"),
+            endpoint,
+            "m"
+        );
+        expect(described).toMatchObject({ status: 429 });
     });
 
     it("returns null for an error it cannot classify", () => {
@@ -716,5 +880,131 @@ describe("error normalization", () => {
         });
         const resolved = resolveChatModel({ config: deployment(FULL_SUPPORT) });
         await expect(resolved.chat.invoke([new HumanMessage("hi")])).rejects.toThrow();
+    });
+});
+
+/**
+ * The two rules applied on the wire (endpoint-fetch.ts): the deployment's
+ * system instructions ride on every chat request, and a provider's error text
+ * never reaches the caller. Asserted here against the real HTTP exchange,
+ * because every helper — app routes, pipelines, agent loops — ends up here.
+ */
+describe("endpoint rules on the wire", () => {
+    const RULE = "Identity: never name the model.";
+
+    function withInstructions(behavior = FULL_SUPPORT): ChatModelsConfig {
+        return createChatModelsConfig({
+            yaml: `
+version: 1
+models:
+  primary:
+    id: test-model
+    behavior:
+${behavior}
+routes:
+  default: primary
+`,
+            endpoint: { baseUrl, apiKey: "endpoint-key", systemInstructions: RULE },
+            sourceLabel: "test.yaml",
+        });
+    }
+
+    const messagesSent = () =>
+        captured.at(-1)!.body.messages as Array<{ role: string; content: unknown }>;
+
+    it("folds the instructions into the caller's own system message", async () => {
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await resolved.chat.invoke(
+            resolved.prepareMessages([new SystemMessage("Answer briefly."), new HumanMessage("hi")])
+        );
+        const sent = messagesSent();
+        expect(sent.map(m => m.role)).toEqual(["system", "user"]);
+        expect(sent[0]!.content).toBe(`Answer briefly.\n\n${RULE}`);
+    });
+
+    it("sends them as a system message when the caller wrote none", async () => {
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await resolved.chat.invoke([new HumanMessage("hi")]);
+        expect(messagesSent()[0]).toEqual({ role: "system", content: RULE });
+    });
+
+    it("folds them into the first user turn for a model with no system role", async () => {
+        const resolved = resolveChatModel({
+            config: withInstructions(
+                FULL_SUPPORT.replace("systemMessages: supported", "systemMessages: unsupported")
+            ),
+        });
+        await resolved.chat.invoke(resolved.prepareMessages([new HumanMessage("hi")]));
+        const sent = messagesSent();
+        expect(sent.every(m => m.role !== "system")).toBe(true);
+        expect(sent[0]).toEqual({ role: "user", content: `${RULE}\n\nhi` });
+    });
+
+    it("carries them on structured-output calls too", async () => {
+        respondWith = () => ({ status: 200, payload: completion('{"answer":"yes"}') });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await invokeStructured(
+            resolved,
+            z.object({ answer: z.string() }),
+            [new HumanMessage("ok?")],
+            {
+                name: "answer",
+            }
+        );
+        const system = messagesSent().find(m => m.role === "system");
+        expect(String(system?.content)).toContain(RULE);
+    });
+
+    it("replaces a provider's error text before any caller sees it", async () => {
+        const logged = jest.spyOn(console, "error").mockImplementation(() => {});
+        respondWith = () => ({
+            status: 402,
+            payload: {
+                error: {
+                    message:
+                        "Insufficient credits for vendor/secret-model-9. Add more at https://vendor.example/billing",
+                },
+            },
+        });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        const error = (await resolved.chat.invoke([new HumanMessage("hi")]).catch(e => e)) as Error;
+        expect(error.message).not.toMatch(/vendor|secret-model/);
+        expect(describeChatEndpointError(error, { baseUrl }, "test-model")).toMatchObject({
+            status: 503,
+        });
+        // The raw body is for operators: it goes to the server log.
+        expect(logged.mock.calls.flat().join(" ")).toContain("vendor.example/billing");
+        logged.mockRestore();
+    });
+
+    it("keeps a model-not-found error classifiable without echoing the id", async () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        respondWith = () => ({
+            status: 400,
+            payload: {
+                error: {
+                    message: "reasoning_effort 'none' is not supported for model 'secret-model-9'",
+                },
+            },
+        });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        const error = (await resolved.chat.invoke([new HumanMessage("hi")]).catch(e => e)) as Error;
+        expect(error.message).not.toContain("secret-model-9");
+        expect(describeChatEndpointError(error, { baseUrl }, "test-model")).toMatchObject({
+            status: 400,
+        });
+        jest.restoreAllMocks();
+    });
+
+    it("does not read a token count as a billing status", () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        expect(
+            describeChatEndpointError(
+                new Error("This request has 140291 tokens, over the context window"),
+                { baseUrl },
+                "m"
+            )
+        ).toBeNull();
+        jest.restoreAllMocks();
     });
 });

@@ -1,6 +1,7 @@
 import {
     citationWithSource,
     parseQuotedMessage,
+    passagesMarkdown,
     plainTextOfAnswer,
     transcriptFilename,
     transcriptMarkdown,
@@ -44,14 +45,15 @@ describe("transcript helpers", () => {
             {
                 role: "assistant",
                 text: "**12 months** of fees.",
-                model: "sonnet",
                 citations: [{ sourceId: "d1", snippet: "capped at twelve months", page: 4 }],
             },
         ];
         const md = transcriptMarkdown(thread, [source]);
         expect(md).toContain("# Chat transcript");
         expect(md).toContain("## You\n\nWhat is the liability cap?\n\n_Asked over: Vendor MSA_");
-        expect(md).toContain("## Launchstack (sonnet)\n\n**12 months** of fees.");
+        // The heading never names a model: the transcript can become a source
+        // anyone in the workspace reads.
+        expect(md).toContain("## Launchstack\n\n**12 months** of fees.");
         expect(md).toContain("- “capped at twelve months” — Vendor MSA");
         expect(transcriptFilename(thread)).toBe("what-is-the-liability-cap.md");
         expect(transcriptFilename([])).toBe("chat.md");
@@ -104,5 +106,43 @@ describe("parseQuotedMessage", () => {
 
     it("ignores an empty blockquote", () => {
         expect(parseQuotedMessage(">\n>").quote).toBeNull();
+    });
+});
+
+describe("passages in copies and exports", () => {
+    const asked: ThreadMessage = {
+        role: "user",
+        text: "What is the cap?",
+        refs: ["d1"],
+        send: {
+            text: "What is the cap?",
+            refs: ["d1"],
+            attachments: [],
+            webSearch: true,
+            thinking: true,
+            agentKey: null,
+            passages: [
+                {
+                    sourceId: "d1",
+                    documentId: 1,
+                    title: "Vendor MSA",
+                    page: 3,
+                    text: "Liability is capped at twelve months of fees.",
+                },
+            ],
+        },
+    };
+
+    it("puts a turn's passages above its question, attributed", () => {
+        expect(passagesMarkdown(asked)).toBe(
+            "> Liability is capped at twelve months of fees.\n\n— Vendor MSA · p. 3\n\n"
+        );
+        expect(passagesMarkdown({ role: "assistant", send: asked.send })).toBe("");
+    });
+
+    it("keeps the passage in an exported transcript", () => {
+        expect(transcriptMarkdown([asked], [source])).toContain(
+            "## You\n\n> Liability is capped at twelve months of fees.\n\n— Vendor MSA · p. 3\n\nWhat is the cap?"
+        );
     });
 });

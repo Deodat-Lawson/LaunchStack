@@ -66,18 +66,20 @@
      (body, labels, headings — its optical-size axis switches to the
      Display cut at heading sizes, so no second sans is needed) and
      JetBrains Mono for code, IDs, keys and tabular data. Both are
-     loaded once per app by next/font in src/app/fonts.ts, which sets
-     --font-inter / --font-jetbrains-mono; nothing else may name a
-     family. Every var() carries a fallback — an unresolvable var would
-     invalidate the declaration and drop to the browser default font.
+     self-hosted in ./fonts and loaded once per app by next/font/local
+     in src/app/fonts.ts, which sets --font-inter /
+     --font-jetbrains-mono; nothing else may name a family. Every var()
+     carries a fallback — an unresolvable var would invalidate the
+     declaration and drop to the browser default font.
 
      --font-serif loads no web font: it is the system serif, kept for
      user content that asks for one (a mindmap label's "serif" style, a
      document page preview). UI chrome never uses it.
 
-     No font-feature-settings: Google's Inter build ships only calt,
-     ccmp, frac, tnum and friends — not the cv11/ss01/ss03 alternates
-     both apps used to request, which therefore never rendered. */
+     No font-feature-settings: ./fonts/Inter.woff2 is cut like Google's
+     Inter build and keeps only calt, ccmp, frac, tnum and friends — not
+     the cv11/ss01/ss03 alternates both apps used to request, which
+     therefore never rendered. */
     --font-sans:
         var(--font-inter, ui-sans-serif), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
         Roboto, sans-serif;

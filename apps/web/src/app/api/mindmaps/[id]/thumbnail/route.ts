@@ -11,6 +11,7 @@
 import { NextResponse } from "next/server";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { draftReader } from "~/server/mindmap/access";
 import { getMindmap } from "~/server/mindmap/repository";
 
 const DATA_URI = /^data:(image\/[a-z0-9.+-]+);base64,([A-Za-z0-9+/=\s]+)$/i;
@@ -24,7 +25,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    const row = await getMindmap(id, ctx.data.companyId);
+    const row = await getMindmap(id, await draftReader(ctx.data));
     if (!row?.thumbnail) return new NextResponse(null, { status: 404 });
 
     const match = DATA_URI.exec(row.thumbnail);

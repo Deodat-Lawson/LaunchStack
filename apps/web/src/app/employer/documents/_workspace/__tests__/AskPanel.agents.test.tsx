@@ -92,10 +92,6 @@ function mount(overrides: Partial<React.ComponentProps<typeof AskPanel>> = {}) {
         onNewChat: jest.fn(),
         openPalette: jest.fn(),
         onStudioNavigate: jest.fn(),
-        webSearch: true,
-        onToggleWebSearch: jest.fn(),
-        thinking: false,
-        onToggleThinking: jest.fn(),
         agents: AGENTS,
         agentKey: null,
         onChangeAgent,
@@ -115,7 +111,7 @@ describe("AskPanel agents", () => {
     });
 
     it("shows what the agent's tool policy changes before sending", () => {
-        mount({ agentKey: "finance", webSearch: true });
+        mount({ agentKey: "finance" });
         expect(screen.getByRole("status")).toHaveTextContent(/web search is off for this agent/i);
     });
 
@@ -151,6 +147,7 @@ describe("AskPanel agents", () => {
     it("changes the chat's agent from the picker, without subagents", async () => {
         const user = userEvent.setup();
         const { onChangeAgent } = mount();
+        await user.click(screen.getByRole("button", { name: "More message options" }));
         await user.click(screen.getByRole("button", { name: "Agent" }));
         const options = await screen.findAllByRole("option");
         const labels = options.map(o => o.textContent ?? "");

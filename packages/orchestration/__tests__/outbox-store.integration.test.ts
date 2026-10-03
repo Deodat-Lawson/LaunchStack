@@ -223,6 +223,96 @@ describe.skipIf(!url)("DrizzleOutboxStore (integration)", () => {
         expect(rows[0]!.attempt_count).toBe(3);
     });
 
+    it("notifies onDead once when reclaiming a stale claim exhausts its attempts", async () => {
+        const event = noteEvent(24, companyId);
+        await store.enqueue([event]);
+        const [claimed] = (await store.claimBatch(10)).filter(c => c.event.companyId === companyId);
+        expect(claimed).toBeDefined();
+        await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET attempt_count = 7,
+          claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${claimed!.outboxId}
+    `;
+        const onDead = vi.fn().mockResolvedValue(undefined);
+
+        const reclaimed = await store.reclaimStale(new Date(Date.now() - 60 * 60_000), 8, onDead);
+
+        expect(reclaimed).toBeGreaterThanOrEqual(1);
+        const rows = await handle.client`
+      SELECT status, attempt_count, claimed_at, last_error
+      FROM pdr_ai_v2_event_outbox WHERE id = ${claimed!.outboxId}
+    `;
+        expect(rows[0]!.status).toBe("dead");
+        expect(rows[0]!.attempt_count).toBe(8);
+        expect(rows[0]!.claimed_at).toBeNull();
+        expect(rows[0]!.last_error).toBe("reclaimed after stale claim; attempts exhausted");
+        expect(onDead).toHaveBeenCalledTimes(1);
+        expect(onDead).toHaveBeenCalledWith(
+            { outboxId: claimed!.outboxId, event, attemptCount: 7 },
+            "reclaimed after stale claim; attempts exhausted"
+        );
+    });
+
+    it("does not notify onDead when a stale claim still has attempts remaining", async () => {
+        await store.enqueue([noteEvent(25, companyId)]);
+        const [claimed] = (await store.claimBatch(10)).filter(c => c.event.companyId === companyId);
+        expect(claimed).toBeDefined();
+        await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET attempt_count = 2,
+          claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${claimed!.outboxId}
+    `;
+        const onDead = vi.fn().mockResolvedValue(undefined);
+
+        await store.reclaimStale(new Date(Date.now() - 60 * 60_000), 8, onDead);
+
+        const rows = await handle.client`
+      SELECT status, attempt_count, claimed_at
+      FROM pdr_ai_v2_event_outbox WHERE id = ${claimed!.outboxId}
+    `;
+        expect(rows[0]!.status).toBe("pending");
+        expect(rows[0]!.attempt_count).toBe(3);
+        expect(rows[0]!.claimed_at).toBeNull();
+        expect(onDead).not.toHaveBeenCalled();
+    });
+
+    it("notifies onDead once across concurrent reclaims of an exhausted stale claim", async () => {
+        const event = noteEvent(26, companyId);
+        await store.enqueue([event]);
+        const [claimed] = (await store.claimBatch(10)).filter(c => c.event.companyId === companyId);
+        expect(claimed).toBeDefined();
+        await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET attempt_count = 7,
+          claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${claimed!.outboxId}
+    `;
+        const onDead = vi.fn().mockResolvedValue(undefined);
+        const claimedBefore = new Date(Date.now() - 60 * 60_000);
+
+        const [firstReclaimed, secondReclaimed] = await Promise.all([
+            store.reclaimStale(claimedBefore, 8, onDead),
+            store.reclaimStale(claimedBefore, 8, onDead),
+        ]);
+
+        expect(firstReclaimed + secondReclaimed).toBe(1);
+        expect(onDead).toHaveBeenCalledTimes(1);
+        expect(onDead).toHaveBeenCalledWith(
+            { outboxId: claimed!.outboxId, event, attemptCount: 7 },
+            "reclaimed after stale claim; attempts exhausted"
+        );
+        const rows = await handle.client`
+      SELECT status, attempt_count, claimed_at, last_error
+      FROM pdr_ai_v2_event_outbox WHERE id = ${claimed!.outboxId}
+    `;
+        expect(rows[0]!.status).toBe("dead");
+        expect(rows[0]!.attempt_count).toBe(8);
+        expect(rows[0]!.claimed_at).toBeNull();
+        expect(rows[0]!.last_error).toBe("reclaimed after stale claim; attempts exhausted");
+    });
+
     it("discards a stale claimant's late outcome after its claim was reclaimed", async () => {
         await store.enqueue([noteEvent(22, companyId)]);
         const [firstClaim] = (await store.claimBatch(10)).filter(

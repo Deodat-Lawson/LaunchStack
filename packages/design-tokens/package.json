@@ -2,12 +2,19 @@
   "name": "@launchstack/design-tokens",
   "version": "0.1.0",
   "private": true,
-  "description": "Launchstack design tokens — the single source of truth for color, type, spacing, radius, shadow, and z-index. Pure CSS, no build step, no React; consumed by every app via `@import`.",
-  "license": "Apache-2.0",
+  "description": "Launchstack design tokens — the single source of truth for color, type, spacing, radius, shadow, and z-index, the self-hosted Inter and JetBrains Mono files, and the theme-choice cookie both apps share. No build step, no React; the CSS is consumed via `@import`, the TypeScript via transpilePackages.",
+  "license": "Apache-2.0 AND OFL-1.1",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
   "exports": {
-    "./tokens.css": "./tokens.css"
+    "./tokens.css": "./tokens.css",
+    "./theme": "./theme.ts"
   },
   "files": [
-    "tokens.css"
+    "tokens.css",
+    "theme.ts",
+    "fonts/*.woff2",
+    "fonts/OFL-*.txt"
   ]
 }

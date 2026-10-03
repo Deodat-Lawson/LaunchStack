@@ -1,125 +1,75 @@
 import { getLinkedInAccessToken, getLinkedInApiVersion } from "../config";
-import type { PublishAdapter, PublishResult } from "../types";
+import { createLinkedInPost, getLinkedInMember, LinkedInApiError } from "../linkedin";
+import type { PublishAdapter, PublishRequest, PublishResult } from "../types";
+
+function failure(error: string, extra: Partial<PublishResult> = {}): PublishResult {
+    return { success: false, platform: "linkedin", error, ...extra };
+}
+
+/** A LinkedInApiError (or anything else thrown) as a PublishResult the scheduler can act on. */
+function fromError(err: unknown, context?: string): PublishResult {
+    if (!(err instanceof LinkedInApiError)) {
+        return failure(err instanceof Error ? err.message : "Unknown error");
+    }
+    // 426 (or an explicit version complaint) means the requested
+    // `LinkedIn-Version` fell out of LinkedIn's ~12-month support window —
+    // point operators at the env override.
+    if (!err.authFailed && !err.retryable && (err.status === 426 || /version/i.test(err.body))) {
+        const version = getLinkedInApiVersion();
+        return failure(
+            `LinkedIn rejected API version ${version} (HTTP ${err.status}). Set LINKEDIN_API_VERSION to a currently supported YYYYMM version (LinkedIn supports each version for ~12 months). Details: ${err.body || err.message}`
+        );
+    }
+    return failure(context ? `${context}: ${err.message}` : err.message, {
+        authFailed: err.authFailed || undefined,
+        retryable: err.retryable || undefined,
+    });
+}
 
 /**
- * Resolve the authenticated member's person id (for the author URN).
- * Prefers the modern OpenID Connect `userinfo` endpoint (tokens with
- * `openid profile` scopes, which return the id as `sub`), and falls back to
- * the legacy `/v2/me` endpoint for older `r_liteprofile` tokens.
+ * Who to post as. A workspace target carries its own token and author
+ * (a member or a Page), so no lookup is needed; without one, the
+ * deployment's env token posts as the member it belongs to.
  */
-async function resolveLinkedInPersonId(token: string): Promise<string | null> {
-    try {
-        const res = await fetch("https://api.linkedin.com/v2/userinfo", {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-            const data = (await res.json()) as { sub?: string };
-            if (data.sub) return data.sub;
+async function resolveAuthor(
+    request: PublishRequest
+): Promise<{ accessToken: string; authorUrn: string } | PublishResult> {
+    const { target } = request;
+    if (target) {
+        if (target.kind !== "linkedin") {
+            return failure(`A ${target.kind} account cannot publish to LinkedIn.`);
         }
-    } catch {
-        // fall through to the legacy endpoint
+        return { accessToken: target.accessToken, authorUrn: target.authorUrn };
     }
 
+    const accessToken = getLinkedInAccessToken();
+    if (!accessToken) return failure("LinkedIn credentials not configured");
     try {
-        const res = await fetch("https://api.linkedin.com/v2/me", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "X-Restli-Protocol-Version": "2.0.0",
-            },
-        });
-        if (res.ok) {
-            const data = (await res.json()) as { id?: string };
-            if (data.id) return data.id;
-        }
-    } catch {
-        // ignore — handled by the null return below
+        const member = await getLinkedInMember({ accessToken });
+        return { accessToken, authorUrn: member.urn };
+    } catch (err) {
+        return fromError(err, "LinkedIn author lookup failed (check token scopes)");
     }
-
-    return null;
 }
 
 export const linkedinAdapter: PublishAdapter = {
     platform: "linkedin",
-    async publish({ message }): Promise<PublishResult> {
-        const token = getLinkedInAccessToken();
-        if (!token) {
-            return {
-                success: false,
-                platform: "linkedin",
-                error: "LinkedIn credentials not configured",
-            };
-        }
-
-        const apiVersion = getLinkedInApiVersion();
+    async publish(request): Promise<PublishResult> {
+        const author = await resolveAuthor(request);
+        if ("success" in author) return author;
 
         try {
-            const personId = await resolveLinkedInPersonId(token);
-            if (!personId) {
-                return {
-                    success: false,
-                    platform: "linkedin",
-                    error: "LinkedIn author lookup failed (check token scopes)",
-                };
-            }
-
-            // Modern versioned Posts API (`/rest/posts`) — replaces the
-            // deprecated `/v2/ugcPosts` endpoint.
-            const postRes = await fetch("https://api.linkedin.com/rest/posts", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "X-Restli-Protocol-Version": "2.0.0",
-                    "LinkedIn-Version": apiVersion,
-                },
-                body: JSON.stringify({
-                    author: `urn:li:person:${personId}`,
-                    commentary: message,
-                    visibility: "PUBLIC",
-                    distribution: {
-                        feedDistribution: "MAIN_FEED",
-                        targetEntities: [],
-                        thirdPartyDistributionChannels: [],
-                    },
-                    lifecycleState: "PUBLISHED",
-                    isReshareDisabledByAuthor: false,
-                }),
+            // Images are uploaded first (owned by the author), then the post
+            // goes out through the versioned Posts API (`/rest/posts`).
+            const { postUrn, postUrl } = await createLinkedInPost({
+                accessToken: author.accessToken,
+                authorUrn: author.authorUrn,
+                text: request.message,
+                media: request.media,
             });
-
-            if (!postRes.ok) {
-                const errText = await postRes.text();
-                // 426 (or an explicit version complaint) means the requested
-                // `LinkedIn-Version` fell out of LinkedIn's ~12-month support
-                // window — point operators at the env override.
-                if (postRes.status === 426 || /version/i.test(errText)) {
-                    return {
-                        success: false,
-                        platform: "linkedin",
-                        error: `LinkedIn rejected API version ${apiVersion} (HTTP ${postRes.status}). Set LINKEDIN_API_VERSION to a currently supported YYYYMM version (LinkedIn supports each version for ~12 months). Details: ${errText}`,
-                    };
-                }
-                return {
-                    success: false,
-                    platform: "linkedin",
-                    error: `LinkedIn post failed: ${postRes.status} ${errText}`,
-                };
-            }
-
-            // The created post's URN is returned in the `x-restli-id` response
-            // header; build a public feed URL from it for the "View post" link.
-            const postUrn = postRes.headers.get("x-restli-id") ?? undefined;
-            return {
-                success: true,
-                platform: "linkedin",
-                postId: postUrn,
-                postUrl: postUrn ? `https://www.linkedin.com/feed/update/${postUrn}` : undefined,
-            };
+            return { success: true, platform: "linkedin", postId: postUrn, postUrl };
         } catch (err) {
-            return {
-                success: false,
-                platform: "linkedin",
-                error: err instanceof Error ? err.message : "Unknown error",
-            };
+            return fromError(err);
         }
     },
 };

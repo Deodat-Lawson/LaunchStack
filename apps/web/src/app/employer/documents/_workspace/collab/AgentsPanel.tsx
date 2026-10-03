@@ -7,6 +7,10 @@
  * chrome, and everything here is built from the shared kit and layout components
  * so it reads as the same screen as Processing and Integrations rather than as
  * a bolted-on panel.
+ *
+ * The section is the roster managers' screen, but its buttons follow the same
+ * rule as the Agents app (`lib/agents/roster-access.ts`) rather than assuming
+ * who reached it.
  */
 
 import React, { useCallback, useState } from "react";
@@ -24,6 +28,9 @@ import {
     type AgentAutonomy,
 } from "~/lib/agents/autonomy";
 import { AGENT_MODE_META, agentTool, disabledTools } from "~/lib/agents/definition";
+import { agentRosterAccess } from "~/lib/agents/roster-access";
+import { usePermissions } from "~/lib/use-permissions";
+import { WorkspaceAnswerStyleRow } from "../settings/AnswerStyle";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
@@ -35,6 +42,8 @@ import { type AgentPersonaRecord, type WorkerNode } from "./types";
 
 export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
     const { data, loading, error, refresh } = useAgents();
+    const { can } = usePermissions();
+    const access = agentRosterAccess(can);
     const [editing, setEditing] = useState<AgentPersonaRecord | "new" | null>(null);
     const [notice, setNotice] = useState<string | null>(null);
 
@@ -45,12 +54,14 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
     usePublishedActions(
         onActions,
-        {
-            primaryLabel: "New agent",
-            onPrimary: () => setEditing("new"),
-            disabled: loading && !data,
-        },
-        [loading, data]
+        access.manageRoster
+            ? {
+                  primaryLabel: "New agent",
+                  onPrimary: () => setEditing("new"),
+                  disabled: loading && !data,
+              }
+            : {},
+        [loading, data, access.manageRoster]
     );
 
     const archive = useCallback(
@@ -101,10 +112,10 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
             <Section
                 title="The default assistant"
-                description="How Launchstack answers in chat when no agent is picked. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
+                description="How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
             >
                 <Card>
-                    <SettingRow settingKey="chat.responseStyle" />
+                    <WorkspaceAnswerStyleRow />
                 </Card>
             </Section>
 
@@ -135,9 +146,15 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
                                 persona={persona}
                                 defaultAutonomy={defaultAutonomy}
                                 node={data?.nodes.find(n => n.nodeId === persona.nodeId) ?? null}
-                                onEdit={() => setEditing(persona)}
-                                onArchive={() => void archive(persona)}
-                                onReset={persona.builtin ? () => void reset(persona) : undefined}
+                                onEdit={access.editContent ? () => setEditing(persona) : undefined}
+                                onArchive={
+                                    access.manageRoster ? () => void archive(persona) : undefined
+                                }
+                                onReset={
+                                    access.manageRoster && persona.builtin
+                                        ? () => void reset(persona)
+                                        : undefined
+                                }
                             />
                         ))}
                     </div>
@@ -155,6 +172,7 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             <AgentEditor
                 open={editing !== null}
                 persona={editing === "new" || editing === null ? null : editing}
+                contentOnly={!access.manageRoster}
                 nodeIds={(data?.nodes ?? []).map(node => node.nodeId)}
                 onClose={() => setEditing(null)}
                 onSaved={async () => {
@@ -181,8 +199,8 @@ function AgentCard({
     persona: AgentPersonaRecord;
     defaultAutonomy: AgentAutonomy;
     node: WorkerNode | null;
-    onEdit: () => void;
-    onArchive: () => void;
+    onEdit?: () => void;
+    onArchive?: () => void;
     onReset?: () => void;
 }) {
     const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
@@ -259,33 +277,37 @@ function AgentCard({
                     <Badge variant="secondary">runs here</Badge>
                 )}
                 <div style={{ flex: 1 }} />
-                <Button
-                    variant="ghost"
-                    onClick={onEdit}
-                    style={{ padding: "5px 10px", fontSize: 12 }}
-                >
-                    Edit
-                </Button>
+                {onEdit && (
+                    <Button
+                        variant="ghost"
+                        onClick={onEdit}
+                        className="px-2.5 py-[5px] text-[12px]"
+                    >
+                        Edit
+                    </Button>
+                )}
                 {onReset && (
                     <Button
                         variant="ghost"
                         onClick={onReset}
                         title="Restore the shipped definition"
                         aria-label={`Restore ${persona.displayName}`}
-                        style={{ padding: "5px 8px" }}
+                        className="px-2 py-[5px]"
                     >
                         <RotateCcw size={13} />
                     </Button>
                 )}
-                <Button
-                    variant="ghost"
-                    onClick={onArchive}
-                    title="Retire agent"
-                    aria-label={`Retire ${persona.displayName}`}
-                    style={{ padding: "5px 8px" }}
-                >
-                    <IconTrash size={13} />
-                </Button>
+                {onArchive && (
+                    <Button
+                        variant="ghost"
+                        onClick={onArchive}
+                        title="Retire agent"
+                        aria-label={`Retire ${persona.displayName}`}
+                        className="px-2 py-[5px]"
+                    >
+                        <IconTrash size={13} />
+                    </Button>
+                )}
             </div>
         </Card>
     );

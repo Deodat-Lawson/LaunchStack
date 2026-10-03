@@ -50,6 +50,8 @@ export interface GrantView {
     principalId: string;
     principalName: string;
     level: GrantLevel;
+    /** For a person: their auth subject id, so the client can draw their photo. */
+    authUserId: string | null;
 }
 
 type PrincipalRef = { principalType: string; principalId: string };
@@ -152,7 +154,10 @@ export async function validatePrincipals(
     return desired;
 }
 
-/** `type:id` → display name for every principal in `grants`. */
+/**
+ * `type:id` → display name for every principal in `grants`; people also get
+ * `auth:user:<id>` → their auth subject id (read by `toGrantViews`).
+ */
 export async function principalNames(
     companyId: bigint,
     grants: readonly PrincipalRef[]
@@ -166,7 +171,7 @@ export async function principalNames(
         userIds.length === 0
             ? Promise.resolve([])
             : db
-                  .select({ id: users.id, name: users.name })
+                  .select({ id: users.id, name: users.name, authUserId: users.userId })
                   .from(users)
                   .where(inArray(users.id, userIds)),
         groupIds.length === 0
@@ -184,7 +189,10 @@ export async function principalNames(
     ]);
 
     const names = new Map<string, string>();
-    for (const u of userRows) names.set(`user:${u.id}`, u.name);
+    for (const u of userRows) {
+        names.set(`user:${u.id}`, u.name);
+        names.set(`auth:user:${u.id}`, u.authUserId);
+    }
     for (const g of groupRows) names.set(`group:${g.id}`, g.name);
     for (const g of grants) {
         const key = grantKey(g);
@@ -212,6 +220,7 @@ export function toGrantViews(
             principalId: row.principalId,
             principalName: names.get(grantKey(row)) ?? row.principalId,
             level: row.level,
+            authUserId: names.get(`auth:${grantKey(row)}`) ?? null,
         });
     }
     return views.sort(
@@ -336,7 +345,7 @@ export async function activeMemberPrincipals(companyId: bigint): Promise<MemberP
     });
 }
 
-/** Same rules as `resolveDocumentScope`: managers see all, guests only what they were added to. */
+/** Same rules as `resolveDocumentScope`: grants decide, no role reads past a restriction; guests only what they were added to. */
 export function canSeeFolder(
     member: MemberPrincipal,
     restricted: boolean,
@@ -344,7 +353,6 @@ export function canSeeFolder(
 ): boolean {
     if (!member.permissions.has("documents.read")) return false;
     const guest = member.role === "guest";
-    if (!guest && member.permissions.has("folders.manage")) return true;
     if (!restricted) return !guest;
     return grants.some(g => principalMatches(g, member));
 }
@@ -354,7 +362,6 @@ export function canSeeRestrictedDocument(
     grants: readonly PrincipalRef[]
 ): boolean {
     if (!member.permissions.has("documents.read")) return false;
-    if (member.role !== "guest" && member.permissions.has("folders.manage")) return true;
     return grants.some(g => principalMatches(g, member));
 }
 

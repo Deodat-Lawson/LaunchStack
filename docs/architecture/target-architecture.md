@@ -1,30 +1,52 @@
 # Target Architecture — Cited Company Memory
 
-**Status:** Implemented (ADR-002 … ADR-006)
-**Updated:** 2026-08-09
+**Status:** Implemented; layering reorganized by feature (ADR-008, recorded in the [feature-reorganization changeset](../../.changeset/feature-reorganization.md))
+**Updated:** 2026-10-12
 
 Launchstack is a cited company-memory system: sources go in, immutable
 evidence comes out, answers cite that evidence with stable anchors. This
-document is the reference for the layered architecture that implements it.
+document is the reference for the feature-based architecture that implements it.
 
 ## Layers
 
 ```
-packages/protocol      contracts only (zod + generated JSON Schema)
+packages/runtime       host ports, actor context, errors, injected slots
    ↑
-packages/evidence      pure company-state logic (no IO, no env)
+packages/store         Postgres/Drizzle, credentials, credits, engine migrations
    ↑
-packages/application   use cases + ports (commands, queries, outbox tick)
+packages/llm           model calls, behavior, structured output, embeddings
+packages/orchestration source lifecycle, outbox commands, worker tick
    ↑
-packages/adapters      Postgres, storage, service clients, pipeline stages
+packages/conversion    sources → EvidenceDocument, OCR, transcription, archives
    ↑
-packages/core          published compatibility facade (re-exports)
+packages/indexing      chunking, embedding, entity extraction, graph sync
    ↑
-apps/web  apps/worker  services/*        composition roots + runtimes
+packages/retrieval     scoped hybrid retrieval, reranking, citations
+                       → packages/evidence (pure company-state logic, no IO/env)
+   ↑
+packages/tools         shared capabilities composed by verticals
+packages/engine        createEngine(CoreConfig), engine-subsystem assembly
+   ↑
+pipelines              13 vertical compositions; imports bricks
+   ↑
+apps/web  apps/worker   composition root, UI/API, durable execution
+
+Beside the engine spine:
+packages/editing                    Adeu wire contracts + client (→ runtime)
+packages/collab                     channels, meetings, signed HTTP protocol
+packages/document-conversion-engine Gotenberg PDF client
+packages/google-drive              Drive + OAuth client; injected credentials
+packages/schema-generator          feature wire contracts → JSON Schema
+packages/design-tokens             private CSS tokens for web + landing
+apps/landing                       public site; no engine, auth, or database
+services/*                         compute runtimes with independent dependencies
 ```
 
-Imports only point downward. ESLint enforces every edge (eslint.config.js);
-`scripts/ci/check-core-facade.mjs` enforces that core stays re-exports only.
+The arrows show dependency tiers, not every individual import. Bricks live
+in `packages/*`; compositions live in `pipelines/`. Pipelines may import
+bricks, never the reverse. `eslint.config.js` defines the tier, framework,
+and per-package import restrictions. Pipelines stay independent of Next.js,
+Clerk, React, and the web app's `~/*` aliases.
 
 ## The one ingestion path (ADR-003)
 
@@ -58,7 +80,7 @@ names because migrations are forward-only and renames buy nothing:
 |---|---|
 | Source | `pdr_ai_v2_document` |
 | Source version (immutable) | `pdr_ai_v2_document_versions` |
-| Evidence chunks | `pdr_ai_v2_document_context_chunks`, `_retrieval_chunks` (version-scoped) |
+| Evidence chunks | `pdr_ai_v2_document_context_chunks`, `pdr_ai_v2_document_retrieval_chunks` (version-scoped) |
 | Evidence metadata | `pdr_ai_v2_document_metadata` |
 | Extraction job | `pdr_ai_v2_ocr_jobs` |
 | Event outbox | `pdr_ai_v2_event_outbox` |
@@ -76,37 +98,70 @@ Citation anchors (`@launchstack/evidence`) are stable strings —
 | `services/document-converter` | 8002 | routing, vision classification, page rendering, docling-backed parsing → typed `EvidenceDocument` | product-DB access, env mutation, fabricated confidence |
 | `services/transcription` | 8000 | Whisper + yt-dlp → timestamped transcripts | product-DB access |
 | `services/adeu-ai-docs-editing` | 8003 (host) | Adeu DOCX redlining (authoritative) | product-DB access |
-| `api/adeu` | — | DEPRECATED compatibility path, tested, pending owner removal decision | new callers |
+| Gotenberg (off-the-shelf container) | 8004 (host) | Office → PDF via LibreOffice; HTML/Markdown → PDF via Chromium | product-DB access |
 
-All services: fail-closed `X-API-Key` auth, `/health`, structured logs with
-trace ids, request timeouts, and startup-validated typed config. The
-converter additionally enforces an origin allow-list on every fetched URL.
+The three repository-owned services authenticate compute requests with
+fail-closed `X-API-Key` checks and expose `/health`. They load typed config
+at startup and propagate trace ids through structured logs. The converter
+and editing service restrict fetched object references to allowed origins.
+Gotenberg uses Basic auth, bounded API calls, and a Chromium fetch deny-list.
 Confidence values are provider-reported or absent — never invented.
 
 ## Deployment topology
 
 Local (Docker Compose): `db`, `migrate`, `seaweedfs`, `transcription`,
-`adeu-docs-editing`, `document-converter`, `worker`, `app`, `inngest-dev`;
-profiles `ocr` (docling-serve) and `backfill`. The worker hosts the Inngest
-serve endpoint (`:8020/api/inngest`) for the non-ingestion background
-verticals; the web app only sends events.
+`adeu-docs-editing`, `document-converter`, `gotenberg`, `worker`, `app`,
+`inngest-dev`; profiles `ocr` (Docling serve), `backfill`, and `seed`.
+The worker hosts the Inngest serve endpoint (`:8020/api/inngest`) for the
+non-ingestion background verticals; the web app only sends events.
 
-Cloud (e.g. Vercel + containers): the web app deploys serverless; the
-worker and compute services deploy as containers. **A deployment without a
-worker accepts uploads but never processes them** — the outbox depth makes
-that visible immediately (`/readyz`, runbook).
+Production uses container images and Compose, not a Vercel pipeline.
+`.github/workflows/docker.yml` publishes web and worker images to GHCR;
+`docker-compose.prod.yml` adds the public landing site and Caddy, and makes
+local Whisper and Inngest dev opt-in. **A deployment without a worker accepts
+uploads but never processes them** — inspect the outbox depth and the
+worker's `/readyz` (see `docs/runbooks/outbox.md`).
 
 ## What lives where after the refactor
 
-- `apps/web` — UI, auth, API/BFF, command acceptance, synchronous reads.
+- `apps/web` — UI, auth, API/BFF, command acceptance, synchronous reads,
+  and the shared `src/server/engine.ts` composition root.
   No durable ingestion orchestration; no Inngest serve endpoint.
-- `apps/worker` — outbox consumer + Inngest functions (trend search,
-  prospector, founder review, predictive analysis, website crawl, document
-  modify, reindex).
-- `packages/core` — compatibility facade for the published API surface
-  (`createEngine`, schema, ports). No new business logic (CI-enforced).
-- Deleted: `services/ocr-router`, `services/ocr-worker`, `sidecar/`
-  (split/absorbed per ADR-004), the phantom `/embed`, `/rerank`,
-  `/extract-entities` provider surface, the web `document/process.requested`
-  Inngest pipeline, the request-scoped env mutation in OCR routing, and the
-  fire-and-forget note embedding.
+- `apps/worker` — outbox consumer + Inngest functions for background
+  verticals; dynamically imports the web host's `getEngine`.
+- `apps/landing` — public site; depends on design tokens, not the engine.
+- `pipelines/` (`@launchstack/pipelines`) — 13 vertical compositions:
+  client prospector, company metadata, connectors, distribution, email,
+  founder weekly review, legal templates, marketing, proposals, repository
+  explainer, repository workspace, trend search, and Vantage.
+- `packages/runtime` — clock/logger, actor context, errors, storage/job
+  ports, and singleton slots.
+- `packages/evidence` — immutable evidence records, citation anchors,
+  version diffing, supersession, conflicts, reconciliation, and freshness.
+- `packages/store` — engine schema, PostgreSQL client, credentials,
+  file-access tokens, credits, backfills, and engine migrations.
+- `packages/llm` — chat routes and behavior, model/provider wiring,
+  structured output, guardrails, embeddings, and NER.
+- `packages/orchestration` — transactional source acceptance, pipeline
+  events, outbox storage, worker processing, and stage ports.
+- `packages/conversion` — source converters and their wire contracts,
+  `EvidenceDocument`, OCR, transcription, and archive expansion.
+- `packages/indexing` — chunking, embedding, entity extraction, graph
+  synchronization, and the extraction/indexing pipeline driven by the worker.
+- `packages/retrieval` — scoped hybrid retrieval, reranking, and stable
+  anchored citations.
+- `packages/tools` — shared capabilities, including company context,
+  grounded retrieval, web research, social publishing, and the stage runner.
+- `packages/engine` — `createEngine(CoreConfig)` assembles the engine
+  subsystems and exposes the aggregate API; it is not a facade-only package.
+- `packages/editing` — typed tracked-changes Word client and Adeu wire
+  contracts (ADR-007).
+- `packages/collab` — channels, multi-agent meetings, and the signed HTTP
+  protocol; hosts supply storage and the model registry.
+- `packages/document-conversion-engine` — typed Gotenberg PDF client
+  (ADR-009).
+- `packages/google-drive` — typed Drive v3 and OAuth token client with
+  injected credentials.
+- `packages/schema-generator` — emits versioned JSON Schema from
+  conversion, orchestration, and editing wire contracts.
+- `packages/design-tokens` — private CSS design tokens for the two UI apps.

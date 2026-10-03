@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
-import { document, fileUploads } from "@launchstack/store/schema";
+import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { documentSettings } from "~/server/db/schema";
-import { eq, getTableColumns, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { mediaMimeFromName } from "~/lib/media-document";
+import { accessSubject } from "~/server/workspace/item-access";
+import { describeDocumentAccess } from "~/server/workspace/source-access";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -82,7 +85,7 @@ const EXTENSION_REGEX = /(\.[a-z0-9]+)(?:\?|#|$)/i;
 function inferMimeFromName(name: string): string | undefined {
     const match = EXTENSION_REGEX.exec(name);
     if (!match?.[1]) return undefined;
-    return EXTENSION_TO_MIME[match[1].toLowerCase()];
+    return EXTENSION_TO_MIME[match[1].toLowerCase()] ?? mediaMimeFromName(name);
 }
 
 export async function POST(_request: Request) {
@@ -97,9 +100,23 @@ export async function POST(_request: Request) {
         // join says which of the visible documents are individually restricted
         // (the caller sees those only because a grant reaches them).
         const docs = await db
-            .select({ ...getTableColumns(document), restricted: documentSettings.restricted })
+            .select({
+                ...getTableColumns(document),
+                restricted: documentSettings.restricted,
+                currentVersionOcrProcessed: documentVersions.ocrProcessed,
+                currentVersionOcrMetadata: documentVersions.ocrMetadata,
+            })
             .from(document)
             .leftJoin(documentSettings, eq(documentSettings.documentId, document.id))
+            // Document-level OCR fields can still describe an older version.
+            // Keep them for existing consumers; readiness follows only the pointer.
+            .leftJoin(
+                documentVersions,
+                and(
+                    eq(documentVersions.id, document.currentVersionId),
+                    eq(documentVersions.documentId, document.id)
+                )
+            )
             .where(scopedDocumentWhere(companyId, await ctx.data.documentScope()));
 
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}
@@ -120,6 +137,15 @@ export async function POST(_request: Request) {
                 .where(inArray(fileUploads.id, uniqueFileIds));
             mimeByFileId = Object.fromEntries(rows.map(r => [r.id, r.mimeType]));
         }
+
+        // Who else can see each one, what the caller may do with it, and who
+        // added it — for the rail's Workspace / Shared / Private sections
+        // (ADR-014). Read once for the whole list.
+        const described = await describeDocumentAccess(
+            companyId,
+            await accessSubject(ctx.data),
+            docs.map(doc => ({ id: Number(doc.id), category: doc.category }))
+        );
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
         const serializedDocs = docs.map(doc => {
@@ -145,6 +171,8 @@ export async function POST(_request: Request) {
                 currentVersionId:
                     doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
                 restricted: doc.restricted === true,
+                access: described.access.get(Number(doc.id)) ?? null,
+                addedBy: described.addedBy.get(Number(doc.id)) ?? null,
                 ...(mimeType && { mimeType }),
             };
         });

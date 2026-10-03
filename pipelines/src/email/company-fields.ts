@@ -4,7 +4,6 @@ import { getDb } from "@launchstack/store/client";
 import { company } from "@launchstack/store/schema";
 import { readFact } from "@launchstack/tools/company-context";
 import { companyMetadata } from "../schema";
-import type { CompanyMetadataJSON } from "../company-metadata";
 
 /**
  * Owner-company data → template merge variables (member.md Phase 2).
@@ -97,7 +96,7 @@ export async function buildCompanyMergeFields(companyId: number): Promise<Compan
         .where(eq(companyMetadata.companyId, BigInt(companyId)))
         .limit(1);
 
-    const md = metaRow?.metadata as CompanyMetadataJSON | undefined;
+    const md = metaRow?.metadata;
     if (md) {
         set("ownerCompany", clean(readFact(md.company?.name)), "company_metadata");
         set("valueProp", clean(readFact(md.company?.description)), "company_metadata");

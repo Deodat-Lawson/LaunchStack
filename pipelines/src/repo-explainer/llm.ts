@@ -1,5 +1,5 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { normalizeModelContent, resolveChatModel } from "@launchstack/llm";
+import { modelContentToText, resolveChatModel } from "@launchstack/llm";
 import type { DiagramType, RepoInfo } from "./types";
 import {
     FILES_TO_EXPLORE_SYSTEM,
@@ -43,7 +43,7 @@ export async function getFilesToExplore(
         const response = await resolved.chat.invoke(
             resolved.prepareMessages([new SystemMessage(systemPrompt), new HumanMessage(user)])
         );
-        const text = normalizeModelContent(response.content);
+        const text = modelContentToText(response.content);
         const rawPaths = parsePathsFromResponse(text);
 
         const cleaned: string[] = [];
@@ -74,7 +74,7 @@ export async function explainRepoWithLlm(
         const response = await resolved.chat.invoke(
             resolved.prepareMessages([new SystemMessage(systemPrompt), new HumanMessage(prompt)])
         );
-        const text = normalizeModelContent(response.content);
+        const text = modelContentToText(response.content);
         return { explanation: text, success: true };
     } catch (error) {
         const message =

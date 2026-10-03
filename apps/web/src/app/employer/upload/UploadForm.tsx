@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, AlertCircle, Loader2, ExternalLink } from "lucide-react";
-import { LANDING_DEPLOYMENT_URL } from "~/config/landing";
+import { LANDING_DEPLOYMENT_HREF } from "~/config/landing";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -704,7 +704,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 files they have already queued.
               */}
                             <a
-                                href={`${LANDING_DEPLOYMENT_URL}?section=uploadthing`}
+                                href={`${LANDING_DEPLOYMENT_HREF}?section=uploadthing`}
                                 target="_blank"
                                 rel="noopener"
                                 style={{

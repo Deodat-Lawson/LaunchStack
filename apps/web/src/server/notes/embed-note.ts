@@ -273,7 +273,7 @@ export async function embedNoteWithDependencies(
         dependencies.runtime === undefined ? resolveNoteEmbeddingRuntime() : dependencies.runtime;
     if (!runtime) {
         console.warn(
-            "[embedNote] no legacy note embedding endpoint configured (EMBEDDING_API_BASE_URL + " +
+            "[embedNote] no note embedding endpoint configured (EMBEDDING_API_BASE_URL + " +
                 "EMBEDDING_API_KEY, or AI_BASE_URL + AI_API_KEY) — skipping"
         );
         return "skipped";
@@ -379,7 +379,7 @@ export async function requestNoteEmbedding(
         return;
     }
 
-    const { DrizzleOutboxStore } = await import("@launchstack/engine");
+    const { DrizzleOutboxStore } = await import("@launchstack/orchestration");
     const { eventIds, PROTOCOL_VERSION } = await import(
         "@launchstack/orchestration/pipeline-events"
     );

@@ -45,11 +45,11 @@ import { ToolNotFound } from "~/components/tool-app/ToolFrame";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
+import { EvidenceRows } from "~/components/tools/Cite";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { SkeletonBlock } from "~/components/tools/SkeletonRows";
 import { plural, relativeTime } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
-import { EvidenceRows } from "../_components/Cite";
 import {
     ApplicationStatusMenu,
     ReadinessMeter,

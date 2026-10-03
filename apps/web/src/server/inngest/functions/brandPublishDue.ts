@@ -5,6 +5,8 @@
  */
 import { publishDueBrandPosts } from "@launchstack/pipelines/marketing/posts";
 
+import { publishForWorkspace } from "~/server/brand/publish";
+
 import { inngest } from "../client";
 
 export const brandPublishDueCron = inngest.createFunction(
@@ -12,7 +14,11 @@ export const brandPublishDueCron = inngest.createFunction(
     { cron: "* * * * *" },
     async ({ step }) => {
         const result = await step.run("publish-due", async () => {
-            const out = await publishDueBrandPosts({ now: new Date(), limit: 50 });
+            const out = await publishDueBrandPosts({
+                now: new Date(),
+                limit: 50,
+                publish: publishForWorkspace,
+            });
             return {
                 published: out.published.map(p => p.id),
                 failed: out.failed.map(p => p.id),

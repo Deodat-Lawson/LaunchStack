@@ -72,8 +72,8 @@ export interface OutboxTickDeps {
     batchSize?: number;
     /**
      * Failure-visibility hook, called once when an event exhausts its attempts
-     * and goes dead — e.g. to mark the underlying OCR job failed so the UI
-     * shows the terminal state. Hook errors are logged, never thrown.
+     * or fails with a non-retryable error and goes dead — e.g. to mark the
+     * underlying OCR job failed. Hook errors are logged, never thrown.
      */
     onDead?: (claimed: ClaimedEvent, error: string) => Promise<void>;
 }
@@ -122,16 +122,24 @@ export async function runOutboxTick(deps: OutboxTickDeps): Promise<OutboxTickRes
         } catch (error) {
             const message = describeError(error);
             const attempt = claimed.attemptCount + 1;
-            const exhausted = attempt >= policy.maxAttempts;
-            const retryAt = exhausted
+            const nonRetryable =
+                error !== null &&
+                (typeof error === "object" || typeof error === "function") &&
+                "retryable" in error &&
+                Object.prototype.hasOwnProperty.call(error, "retryable") &&
+                error.retryable === false;
+            const terminal = nonRetryable || attempt >= policy.maxAttempts;
+            const retryAt = terminal
                 ? null
                 : new Date(clock.now().getTime() + retryDelayMs(attempt, policy));
             await outbox.markFailed(claimed.outboxId, message, { retryAt });
-            if (exhausted) {
+            if (terminal) {
                 result.dead += 1;
                 logger.error(
-                    { ...fields, error: message },
-                    "outbox event dead after max attempts — see docs/runbooks/outbox.md"
+                    { ...fields, error: message, nonRetryable },
+                    nonRetryable
+                        ? "outbox event dead after non-retryable error — see docs/runbooks/outbox.md"
+                        : "outbox event dead after max attempts — see docs/runbooks/outbox.md"
                 );
                 if (deps.onDead) {
                     try {

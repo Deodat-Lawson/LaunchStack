@@ -5,7 +5,11 @@ import { eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
-import { upsertCompanyCredentials } from "@launchstack/llm/embeddings";
+import { upsertCompanyCredentials, type CredentialUpsertInput } from "@launchstack/llm/embeddings";
+import {
+    WorkspaceEndpointUrlError,
+    assertEndpointUrlAllowed,
+} from "~/server/workspace-models/endpoint-url";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
 
@@ -23,6 +27,7 @@ export async function POST(request: Request) {
             numberOfEmployees,
             embeddingIndexKey,
             embeddingOpenAIApiKey,
+            embeddingOpenAIBaseUrl,
             embeddingHuggingFaceApiKey,
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
@@ -42,6 +47,28 @@ export async function POST(request: Request) {
             return createValidationError(
                 "Company already exists. Please use a different company name."
             );
+        }
+
+        // A key is only ever sent to the address it was entered with, so one
+        // without an address could never be used.
+        if (embeddingOpenAIApiKey?.trim() && !embeddingOpenAIBaseUrl?.trim()) {
+            return createValidationError(
+                "Add the embeddings endpoint URL that goes with the API key."
+            );
+        }
+
+        // Same address policy as Settings › Processing, checked before the
+        // company row exists so a bad address doesn't leave one behind.
+        let openAIBaseUrl: string | undefined;
+        if (embeddingOpenAIBaseUrl?.trim()) {
+            try {
+                openAIBaseUrl = await assertEndpointUrlAllowed(embeddingOpenAIBaseUrl);
+            } catch (urlErr) {
+                if (urlErr instanceof WorkspaceEndpointUrlError) {
+                    return createValidationError(urlErr.message);
+                }
+                throw urlErr;
+            }
         }
 
         const slug = await generateUniqueSlug(companyName);
@@ -67,14 +94,12 @@ export async function POST(request: Request) {
 
         // Persist embedding provider credentials into the encrypted table.
         // Empty/null values are skipped so we never write empty ciphertext.
-        const credentialsInput: {
-            openAIApiKey?: string | null;
-            huggingFaceApiKey?: string | null;
-            ollamaBaseUrl?: string | null;
-            ollamaModel?: string | null;
-        } = {};
+        const credentialsInput: CredentialUpsertInput = {};
         if (embeddingOpenAIApiKey?.trim()) {
             credentialsInput.openAIApiKey = embeddingOpenAIApiKey.trim();
+        }
+        if (openAIBaseUrl) {
+            credentialsInput.openAIBaseUrl = openAIBaseUrl;
         }
         if (embeddingHuggingFaceApiKey?.trim()) {
             credentialsInput.huggingFaceApiKey = embeddingHuggingFaceApiKey.trim();

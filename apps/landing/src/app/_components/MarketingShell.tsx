@@ -190,6 +190,12 @@ function MarketingFooter() {
                     <li>
                         <Link href="/contact">Contact</Link>
                     </li>
+                    <li>
+                        <Link href="/privacy">Privacy Policy</Link>
+                    </li>
+                    <li>
+                        <Link href="/terms">Terms of Service</Link>
+                    </li>
                 </ul>
             </div>
             <div className={styles.footBottom}>

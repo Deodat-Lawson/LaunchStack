@@ -9,8 +9,15 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 export interface ProviderOAuthConfig {
     readonly clientId: string;
     readonly clientSecret: string;
+    /** Empty outside a request (a background refresh or revoke sends none). */
     readonly redirectUri: string;
     readonly fetch?: FetchLike;
+    /** Override for the provider's OAuth endpoints (a dev stand-in); providers that allow it say so. */
+    readonly authBaseUrl?: string;
+    /** Override for the provider's API base, for the identity lookup during exchange. */
+    readonly apiBaseUrl?: string;
+    /** Scopes to request, when the deployment chooses them (LinkedIn). */
+    readonly scopes?: readonly string[];
 }
 
 /** What a code exchange must resolve to, regardless of provider. */

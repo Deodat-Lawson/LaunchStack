@@ -1,5 +1,6 @@
 import type { ProviderResult } from "@launchstack/llm/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
+import type { TranscribeResponse } from "../wire";
 import {
     getTranscriptionServiceApiKey,
     getTranscriptionServiceUrl,
@@ -34,18 +35,18 @@ export class SidecarTranscriptionProvider implements TranscriptionProvider {
             throw new Error(`Transcription service request failed (${resp.status}): ${text}`);
         }
 
-        const data = (await resp.json()) as {
-            text: string;
-            language: string;
-            confidence: number;
-            filename: string;
-        };
+        const data = (await resp.json()) as TranscribeResponse;
 
         return {
             data: {
                 text: data.text,
                 language: data.language,
                 confidence: data.confidence,
+                // The viewer's click-to-seek transcript; an older service
+                // build that omits them just gets the plain transcript.
+                ...(Array.isArray(data.segments) && data.segments.length > 0
+                    ? { segments: data.segments }
+                    : {}),
             },
             usage: {
                 tokensUsed: 0, // Self-hosted = free

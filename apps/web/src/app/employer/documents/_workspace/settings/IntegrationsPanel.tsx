@@ -15,8 +15,10 @@ import { toast } from "sonner";
 import { ContextTarget } from "~/components/context-menu";
 
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
+import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { Code, StatusNote, StatusRow } from "./ui";
 
@@ -25,6 +27,8 @@ const PROVIDER_LABELS: Record<string, string> = {
     slack: "Slack",
     github: "GitHub",
     gmail: "Gmail",
+    linkedin: "LinkedIn",
+    bluesky: "Bluesky",
 };
 
 interface ConnectorsOverview {
@@ -77,6 +81,8 @@ interface GoogleConnectionStatus {
 function GoogleDriveSection() {
     const [status, setStatus] = useState<GoogleConnectionStatus | null>(null);
     const [busy, setBusy] = useState(false);
+    /** Whether a Disconnect from the menu is waiting on the confirm dialog. */
+    const [confirmingDisconnect, setConfirmingDisconnect] = useState(false);
 
     const refresh = useCallback(async () => {
         try {
@@ -137,15 +143,7 @@ function GoogleDriveSection() {
                                                 icon: "disconnect" as const,
                                                 danger: true,
                                                 disabled: busy,
-                                                onSelect: () => {
-                                                    if (
-                                                        confirm(
-                                                            "Disconnect Google Drive from this workspace?"
-                                                        )
-                                                    ) {
-                                                        void disconnect();
-                                                    }
-                                                },
+                                                onSelect: () => setConfirmingDisconnect(true),
                                             },
                                         ]
                                       : []),
@@ -215,6 +213,14 @@ function GoogleDriveSection() {
                     )}
                 </Card>
             </ContextTarget>
+            <ConfirmDialog
+                open={confirmingDisconnect}
+                onOpenChange={setConfirmingDisconnect}
+                title="Disconnect Google Drive from this workspace?"
+                description="Its Google account is unlinked. You can connect it again from this page."
+                confirmLabel="Disconnect"
+                onConfirm={() => void disconnect()}
+            />
         </Section>
     );
 }
@@ -235,12 +241,27 @@ const RECONNECT_TAB: Record<string, string> = {
     github: "github",
 };
 
+/** Social accounts are connected from Growth › Brand › Accounts, not Add source. */
+const BRAND_ACCOUNTS_HREF = "/employer/documents?feature=growth&at=/brand/accounts";
+
+function reconnectHref(provider: string): string | null {
+    if (provider === "linkedin" || provider === "bluesky") return BRAND_ACCOUNTS_HREF;
+    const tab = RECONNECT_TAB[provider];
+    return tab ? `/employer/documents?add=1&tab=${tab}` : null;
+}
+
 export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const router = useRouter();
     const { data, loading, refresh } = useAgents();
     const connectors = useConnectorsOverview();
     const refreshConnectors = connectors.refresh;
     const [disconnecting, setDisconnecting] = useState<string | null>(null);
+    /** The connection a Disconnect from its menu has been asked for, pending the confirm dialog. */
+    const [pendingDisconnect, setPendingDisconnect] = useState<{
+        id: string;
+        label: string;
+        personal: boolean;
+    } | null>(null);
     const origin = typeof window === "undefined" ? "https://your-app" : window.location.origin;
 
     const refreshAll = useCallback(() => {
@@ -320,7 +341,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     ) : (
                         connectors.data?.connections.map(row => {
                             const label = PROVIDER_LABELS[row.provider] ?? row.provider;
-                            const reconnectTab = RECONNECT_TAB[row.provider];
+                            const reconnectTo = reconnectHref(row.provider);
                             return (
                                 <ContextTarget
                                     key={row.id}
@@ -330,17 +351,14 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                         label: `Actions for ${label}`,
                                         data: row,
                                         items: () => [
-                                            ...(reconnectTab
+                                            ...(reconnectTo
                                                 ? [
                                                       {
                                                           type: "item" as const,
                                                           id: "reconnect",
                                                           label: "Reconnect…",
                                                           icon: "refresh" as const,
-                                                          onSelect: () =>
-                                                              router.push(
-                                                                  `/employer/documents?add=1&tab=${reconnectTab}`
-                                                              ),
+                                                          onSelect: () => router.push(reconnectTo),
                                                       },
                                                   ]
                                                 : []),
@@ -352,19 +370,12 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                                 icon: "disconnect" as const,
                                                 danger: true,
                                                 disabled: disconnecting === row.id,
-                                                onSelect: () => {
-                                                    if (
-                                                        confirm(
-                                                            `Disconnect ${label} from this workspace?`
-                                                        )
-                                                    ) {
-                                                        void disconnect(
-                                                            row.id,
-                                                            label,
-                                                            row.personal
-                                                        );
-                                                    }
-                                                },
+                                                onSelect: () =>
+                                                    setPendingDisconnect({
+                                                        id: row.id,
+                                                        label,
+                                                        personal: Boolean(row.personal),
+                                                    }),
                                             },
                                         ],
                                     }}
@@ -413,7 +424,23 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                         })
                     )}
                 </Card>
+                <ConfirmDialog
+                    open={pendingDisconnect !== null}
+                    onOpenChange={next => {
+                        if (!next) setPendingDisconnect(null);
+                    }}
+                    title={`Disconnect ${pendingDisconnect?.label ?? ""} from this workspace?`}
+                    description="The connection is removed and its access revoked. To connect again, use Add source → Connect."
+                    confirmLabel="Disconnect"
+                    onConfirm={() => {
+                        const target = pendingDisconnect;
+                        setPendingDisconnect(null);
+                        if (target) void disconnect(target.id, target.label, target.personal);
+                    }}
+                />
             </Section>
+
+            <AssistantOAuthClients />
 
             <Section
                 title="Slack"

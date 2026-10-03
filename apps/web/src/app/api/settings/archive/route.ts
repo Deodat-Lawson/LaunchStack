@@ -34,7 +34,7 @@ export async function GET() {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
     try {
-        return NextResponse.json(await archiveOverview(ctx.data.companyId));
+        return NextResponse.json(await archiveOverview(ctx.data));
     } catch (error) {
         return workspaceErrorResponse(error, "[settings/archive GET]");
     }

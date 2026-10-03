@@ -9,15 +9,18 @@
  *
  * States: loading → not-configured → not-connected → connected (chosen
  * labels and searches, label picker, search input, sync now, disconnect) →
- * syncing (polls status) → revoked (reconnect). All data comes from
+ * syncing (polls status; a sync that never starts says so, see
+ * useConnectorSync) → revoked (reconnect). All data comes from
  * /api/connectors/gmail.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { X as IconX } from "lucide-react";
 
+import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
+import { syncStatusLabel, useConnectorSync } from "./useConnectorSync";
 
 interface ScopeRow {
     readonly id: string;
@@ -101,7 +104,6 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const [pickingLabels, setPickingLabels] = useState(false);
     const [selectedLabelIds, setSelectedLabelIds] = useState<Set<string>>(new Set());
     const [query, setQuery] = useState("");
-    const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const refresh = useCallback(async () => {
         const next = await fetchStatus();
@@ -114,31 +116,9 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
         void refresh();
     }, [refresh]);
 
-    // Poll while a sync is running so the counts land without a manual refresh.
-    useEffect(() => {
-        if (status?.lastSyncStatus === "running" && !pollRef.current) {
-            pollRef.current = setInterval(() => void refresh(), 3000);
-        }
-        if (status?.lastSyncStatus !== "running" && pollRef.current) {
-            clearInterval(pollRef.current);
-            pollRef.current = null;
-        }
-        return () => {
-            if (pollRef.current) {
-                clearInterval(pollRef.current);
-                pollRef.current = null;
-            }
-        };
-    }, [status?.lastSyncStatus, refresh]);
-
-    const startSync = useCallback(async (): Promise<boolean> => {
-        const res = await postJson(`${BASE}/sync`, "POST", {});
-        if (res.ok) {
-            setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
-            return true;
-        }
-        return false;
-    }, []);
+    // Polls while a sync is starting or running, so the counts land without
+    // a manual refresh.
+    const { phase, requestSync: startSync } = useConnectorSync(status, refresh, `${BASE}/sync`);
 
     const openLabelPicker = useCallback(async () => {
         setPickingLabels(true);
@@ -165,11 +145,11 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 toast.error("Could not save the selection");
                 return;
             }
-            toast.success(`${items.length} label(s) added — syncing`);
             setSelectedLabelIds(new Set());
             setPickingLabels(false);
             await refresh();
-            await startSync();
+            if (await startSync()) toast.success(`${items.length} label(s) added — syncing`);
+            else toast.error(`${items.length} label(s) added, but the sync could not start`);
         } finally {
             setBusy(false);
         }
@@ -187,10 +167,10 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 toast.error("Could not save the search");
                 return;
             }
-            toast.success("Search added — syncing");
             setQuery("");
             await refresh();
-            await startSync();
+            if (await startSync()) toast.success("Search added — syncing");
+            else toast.error("Search added, but the sync could not start");
         } finally {
             setBusy(false);
         }
@@ -207,7 +187,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await startSync()) toast.success("Sync started");
+            if (await startSync()) toast.success("Sync requested");
             else toast.error("Could not start the sync");
         } finally {
             setBusy(false);
@@ -317,7 +297,8 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     }
 
     const scope = status.scope ?? [];
-    const syncing = status.lastSyncStatus === "running";
+    const syncing = phase === "running";
+    const starting = phase === "starting";
     const report = status.lastSyncReport;
     const historyExpired = report?.historyExpired === true;
 
@@ -339,14 +320,12 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     <Icon size={16} />
                 </span>
                 <span style={{ fontWeight: 600 }}>{status.accountEmail ?? "Connected"}</span>
-                <span style={{ marginLeft: "auto", color: "var(--ink-3)", fontSize: 12 }}>
-                    {syncing
-                        ? "Syncing…"
-                        : status.lastSyncAt
-                          ? `Last sync ${new Date(status.lastSyncAt).toLocaleString()}`
-                          : "Not synced yet"}
+                <span className="text-ink-3 ml-auto text-xs">
+                    {syncStatusLabel(phase, status.lastSyncAt)}
                 </span>
             </div>
+
+            {phase === "stalled" ? <SyncStalledNotice /> : null}
 
             <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 12 }}>
                 Synced threads go to{" "}
@@ -597,11 +576,11 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     Choose labels
                 </button>
                 <button
-                    disabled={busy || syncing || scope.length === 0}
+                    disabled={busy || syncing || starting || scope.length === 0}
                     onClick={() => void syncNow()}
-                    style={buttonStyle("quiet", busy || syncing || scope.length === 0)}
+                    style={buttonStyle("quiet", busy || syncing || starting || scope.length === 0)}
                 >
-                    {syncing ? "Syncing…" : "Sync now"}
+                    {syncing ? "Syncing…" : starting ? "Starting…" : "Sync now"}
                 </button>
                 {confirmingDisconnect ? (
                     <span style={{ display: "flex", gap: 8, alignItems: "center" }}>

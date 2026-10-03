@@ -156,9 +156,18 @@ export function auditSentence(
             const role = roleWords(detail, "role");
             return `${actor} created a join link${role ? ` for ${role}s` : ""}`;
         }
+        case "join_link.updated": {
+            const role = roleWords(detail, "role");
+            const approval = detail.requiresApproval;
+            if (approval === true) return `${actor} made a join link require approval`;
+            if (approval === false) return `${actor} let a join link admit people straight in`;
+            return `${actor} changed a join link${role ? ` to ${role}s` : ""}`;
+        }
         case "join_link.revoked":
         case "join-link.revoked":
-            return `${actor} revoked a join link`;
+            return detail.reset === true
+                ? `${actor} reset a join link`
+                : `${actor} revoked a join link`;
         case "join_link.used":
         case "join-link.used":
             return `${actor} joined with a link`;
@@ -290,6 +299,7 @@ export function auditSentence(
                           : "a new value";
                 return `${actor} set “${label}”${where} to ${shown}`;
             }
+            // A retired setting; its events stay readable in the log.
             const policy = pick(detail, "joinPolicy");
             if (policy === "open") return `${actor} let anyone with a link join immediately`;
             if (policy === "approval") return `${actor} required approval for new members`;

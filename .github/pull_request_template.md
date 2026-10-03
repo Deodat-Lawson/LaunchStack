@@ -10,7 +10,7 @@
 
 - [ ] `pnpm check` passes (lint + typecheck)
 - [ ] `pnpm --filter @launchstack/web test` passes
-- [ ] Changeset added (if `packages/core/` changed — `pnpm changeset`)
+- [ ] Changeset added (if a publishable package under `packages/*` or `pipelines/` changed — `pnpm changeset`)
 - [ ] New env vars documented in `.env.example` and `apps/web/src/env.ts`
 - [ ] UI changes exercised in a browser (not just a green build)
 - [ ] Docs updated if behavior changed

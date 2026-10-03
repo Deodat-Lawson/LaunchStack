@@ -10,7 +10,7 @@
  * 4. Enables hierarchical navigation of document structure
  *
  * Use this for large documents or complex analysis requiring cost-aware retrieval.
- * For simple queries, use the standard ensemble search (AIQuery).
+ * For simple queries, use the standard ensemble search (as Ask's AIChat route does).
  */
 
 import { eq } from "drizzle-orm";

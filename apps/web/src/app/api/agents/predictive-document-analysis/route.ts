@@ -26,7 +26,12 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
-import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    forbiddenForPermission,
+    requireWorkspaceContext,
+    type WorkspaceContext,
+} from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 
@@ -140,6 +145,11 @@ export async function POST(request: Request) {
     if (!ctx.success) return ctx.response;
     if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
 
+    // The analysis resolves its models against the workspace's own, if it brought them.
+    return withWorkspaceChatModels(ctx.data.companyId, () => analyze(request, ctx));
+}
+
+function analyze(request: Request, ctx: { data: WorkspaceContext }) {
     // Apply rate limiting: 20 requests per 15 minutes for predictive analysis
     // This is a compute-intensive AI operation
     return withRateLimit(request, RateLimitPresets.strict, async () => {

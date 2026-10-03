@@ -33,6 +33,7 @@ import {
 } from "~/lib/authz/permissions";
 
 import type { Executor } from "./db-types";
+import { deleteUserSessionGrants, handOverSoleManaged, workspaceOwnerHeir } from "./ownership";
 import { badRequest, conflict, forbidden, notFound } from "./errors";
 import { customRoleNames, displayRoleName, requireKnownRole } from "./roles";
 
@@ -373,6 +374,7 @@ async function deleteMembershipEverywhere(
     }
 
     const principalId = userId.toString();
+    await deleteUserSessionGrants(tx, companyId, userId);
     await tx
         .delete(folderGrants)
         .where(
@@ -430,6 +432,12 @@ export async function removeMember(
     await assertNotLastOwner(ctx.companyId, target);
 
     await db.transaction(async tx => {
+        // Their sole-managed files and folders pass to whoever removed them (ADR-014).
+        await handOverSoleManaged(tx, ctx.companyId, userId, {
+            companyId: ctx.companyId,
+            userPk: ctx.userPk,
+            authUserId: ctx.authUserId,
+        });
         await deleteMembershipEverywhere(tx, ctx.companyId, userId);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
@@ -459,6 +467,22 @@ export async function leaveWorkspace(
     }
 
     await db.transaction(async tx => {
+        // Someone leaving on their own hands their sole-managed items to the owner.
+        const heir = await workspaceOwnerHeir(tx, ctx.companyId);
+        if (heir !== null && heir !== ctx.userPk) {
+            const [heirUser] = await tx
+                .select({ authUserId: users.userId })
+                .from(users)
+                .where(eq(users.id, Number(heir)))
+                .limit(1);
+            if (heirUser) {
+                await handOverSoleManaged(tx, ctx.companyId, ctx.userPk, {
+                    companyId: ctx.companyId,
+                    userPk: heir,
+                    authUserId: heirUser.authUserId,
+                });
+            }
+        }
         await deleteMembershipEverywhere(tx, ctx.companyId, ctx.userPk);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,

@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
+import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/store/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
@@ -21,6 +22,7 @@ import {
 } from "~/lib/require-workspace-context";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { recordUpload } from "~/server/workspace/added-documents";
 import { ARTIFACT_TYPES } from "~/lib/artifact-content";
 import { artifactDocumentMarker } from "~/lib/artifact-document";
 
@@ -108,6 +110,9 @@ export async function POST(request: Request) {
                       }
                     : undefined,
             });
+            // A loose file starts private to whoever added it; a filed one
+            // takes its folder's audience (ADR-014).
+            await recordUpload(ctx.data, uploadResult);
 
             return NextResponse.json(
                 {
@@ -123,6 +128,15 @@ export async function POST(request: Request) {
         } catch (error) {
             if (error instanceof UploadAuthorizationError) {
                 return NextResponse.json({ error: error.message }, { status: error.status });
+            }
+            // A recording that could not be transcribed: say why, in words the
+            // uploader can act on, rather than "failed to start processing".
+            if (isTranscriptionError(error)) {
+                console.error(`[UploadDocument] Transcription failed: ${error.message}`);
+                return NextResponse.json(
+                    { error: error.userMessage, code: "transcription_failed" },
+                    { status: error.status }
+                );
             }
             console.error("[UploadDocument] Error triggering document processing:", error);
             return NextResponse.json(

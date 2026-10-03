@@ -11,6 +11,13 @@
  * stable creation key; every later publish adds a *version* to that document,
  * which re-indexes it under the same id — citations and notes keep pointing
  * at the map, and the library does not fill up with stale outlines.
+ *
+ * Publishing adds a file to the library, so it takes what any upload takes
+ * (ADR-014): `documents.upload`, edit access to the folder it lands in, and —
+ * for a later publish — edit access to the copy it replaces. A first publish
+ * into Unfiled is private to the publisher until they share it. It also writes
+ * the draft's published marker, so it takes edit access to the draft itself
+ * (`~/server/mindmap/access`); a draft the caller cannot see is a 404.
  */
 
 import { NextResponse } from "next/server";
@@ -24,7 +31,7 @@ import { mindmaps } from "~/server/db/schema";
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
 import { mindmapDocumentMarker } from "~/lib/mindmap-document";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { PublishMindmapSchema, serverError, validateRequestBody } from "~/lib/validation";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import { processDocumentUpload, toAbsoluteUrl } from "~/server/services/document-upload";
@@ -32,7 +39,20 @@ import {
     authorizeInternalFileRef,
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
+import {
+    DOCUMENT_EDIT_DENIED,
+    FOLDER_EDIT_DENIED,
+    canEditFolder,
+} from "~/server/services/folder-access";
+import {
+    DRAFT_EDIT_DENIED,
+    canEditDraftAt,
+    draftAccess,
+    draftReader,
+} from "~/server/mindmap/access";
 import { getMindmap, toDetail } from "~/server/mindmap/repository";
+import { recordUpload } from "~/server/workspace/added-documents";
+import { canEditDocument } from "~/server/workspace/item-access";
 import { parseDoc, toMarkdownOutline } from "~/app/employer/documents/_mindmap/model/serialize";
 
 export const runtime = "nodejs";
@@ -54,7 +74,7 @@ function creationKeyFor(mindmapId: number): string {
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
 
         const id = Number.parseInt((await params).id, 10);
@@ -70,8 +90,39 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const requestedCategory =
             trimmedCategory === undefined || trimmedCategory === "" ? undefined : trimmedCategory;
 
-        const map = await getMindmap(id, ctx.data.companyId);
+        const map = await getMindmap(id, await draftReader(ctx.data));
         if (!map) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!canEditDraftAt((await draftAccess(ctx.data, map)).level)) {
+            return NextResponse.json({ error: DRAFT_EDIT_DENIED }, { status: 403 });
+        }
+
+        const documentCategory = requestedCategory ?? map.folder;
+        if (!(await canEditFolder(ctx.data, documentCategory))) {
+            return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+        }
+        if (map.publishedDocumentId !== null) {
+            // A later publish replaces the citable copy's content: a new
+            // version, which takes edit access to that document.
+            const [published] = await db
+                .select({ category: documentTable.category })
+                .from(documentTable)
+                .where(
+                    and(
+                        eq(documentTable.id, Number(map.publishedDocumentId)),
+                        eq(documentTable.companyId, ctx.data.companyId)
+                    )
+                )
+                .limit(1);
+            if (
+                published &&
+                !(await canEditDocument(ctx.data, {
+                    id: Number(map.publishedDocumentId),
+                    category: published.category,
+                }))
+            ) {
+                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+            }
+        }
 
         // One heading per branch: the chunker stamps each chunk with its
         // heading path, so a chunk cut out of a large map still says which
@@ -87,7 +138,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         });
 
         const marker = mindmapDocumentMarker({ mindmapId: id, revision: map.revision });
-        const documentCategory = requestedCategory ?? map.folder;
 
         let documentId: number;
         let jobId: string;
@@ -105,6 +155,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
                 requestUrl: request.url,
                 ocrMetadata: { ...marker },
             });
+            await recordUpload(ctx.data, upload);
             documentId = upload.document.id;
             jobId = upload.jobId;
         } else {

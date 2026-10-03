@@ -22,6 +22,11 @@
 import * as fc from "fast-check";
 
 // Mock the database so we never hit PostgreSQL.
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+}));
+
 jest.mock("~/server/db", () => ({
     db: {},
 }));

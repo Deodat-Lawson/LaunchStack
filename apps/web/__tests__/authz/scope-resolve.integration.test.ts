@@ -6,7 +6,10 @@
  * Gated like the founder-weekly-review suites: runs only when
  * LAUNCHSTACK_TEST_DATABASE_URL (or DATABASE_URL) points at a local server.
  */
-import { and, eq } from "drizzle-orm";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { and, eq, sql } from "drizzle-orm";
 
 import { callNotesCalls } from "@launchstack/pipelines/schema";
 import {
@@ -23,6 +26,7 @@ import {
     documentNotes,
     documentSettings,
     documentGrants,
+    folderSettings,
     userCompanyMemberships,
 } from "~/server/db/schema";
 import { listVisibleFolders } from "~/server/folders";
@@ -256,9 +260,23 @@ describeDb("resolveDocumentScope (integration)", () => {
         return rows.map(r => r.title).sort();
     }
 
-    it("gives an owner everything without touching the grant tables", async () => {
-        const scope = await scopeFor(ids.owner, "owner");
-        expect(scope.kind).toBe("everything");
+    it("gives an owner no way past a restriction until the ADR-014 carry-over grants exist", async () => {
+        // Private means private (ADR-014): with no grant, an owner sees what a member sees.
+        expect((await scopeFor(ids.owner, "owner")).kind).toBe("except");
+        expect(await visibleTitles(ids.owner, "owner")).toEqual(["Handbook"]);
+
+        // The migration's data statements give owners and admins back what was
+        // restricted before ADR-014, through explicit role grants.
+        const migration = readFileSync(
+            join(__dirname, "../../drizzle/20261014005705_private_by_default_sharing.sql"),
+            "utf8"
+        );
+        const carryOver = migration
+            .split("--> statement-breakpoint")
+            .filter(stmt => stmt.includes("system:adr-014"));
+        expect(carryOver).toHaveLength(2);
+        for (const stmt of carryOver) await test.db.execute(sql.raw(stmt));
+
         expect(await visibleTitles(ids.owner, "owner")).toEqual([
             "Board deck",
             "Budget",
@@ -266,6 +284,8 @@ describeDb("resolveDocumentScope (integration)", () => {
             "Ledger",
             "Plan",
         ]);
+        // A plain member is unaffected.
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Handbook"]);
     });
 
     it("hides the restricted folder, its subfolders, and the restricted document from a plain member", async () => {
@@ -337,6 +357,59 @@ describeDb("resolveDocumentScope (integration)", () => {
         expect(rows).toEqual([]);
     });
 
+    it("opens a folder or file to someone added to it, though it only inherits a restriction they're not on", async () => {
+        const { folderGrants, documentGrants } = await import("~/server/db/schema");
+        // Reports only inherits Finance's restriction; the member is added to it.
+        const [reports] = await test.db
+            .insert(category)
+            .values({ name: "Finance/Reports", companyId: ids.companyId })
+            .returning();
+        await test.db.insert(folderGrants).values({
+            companyId: ids.companyId,
+            categoryId: BigInt(reports!.id),
+            principalType: "user",
+            principalId: ids.member.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+        // The Ledger has no restriction of its own; the viewer is added to it.
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docFinance),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Budget", "Handbook"]);
+        expect(await visibleTitles(ids.viewer, "viewer")).toEqual([
+            "Board deck",
+            "Handbook",
+            "Ledger",
+        ]);
+        // Nobody else gains anything from either.
+        expect(await visibleTitles(ids.groupMember, "member")).toEqual([
+            "Budget",
+            "Handbook",
+            "Ledger",
+        ]);
+
+        await test.db.delete(folderGrants).where(eq(folderGrants.categoryId, BigInt(reports!.id)));
+        await test.db.delete(category).where(eq(category.id, reports!.id));
+        await test.db
+            .delete(documentGrants)
+            .where(eq(documentGrants.principalId, ids.viewer.toString()));
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docBoardDeck),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+    });
+
     it("collapses to everything once the workspace has nothing restricted", async () => {
         const { folderSettings, documentSettings } = await import("~/server/db/schema");
         await test.db.delete(folderSettings).where(eq(folderSettings.companyId, ids.companyId));
@@ -385,6 +458,16 @@ describeDb("resolveDocumentScope (integration)", () => {
                 }))
             );
             await test.db.insert(category).values({ companyId, name: "Calls" });
+            const [privateFolder] = await test.db
+                .insert(category)
+                .values({ companyId, name: "Calls/Private" })
+                .returning({ id: category.id });
+            await test.db.insert(folderSettings).values({
+                categoryId: BigInt(privateFolder!.id),
+                companyId,
+                visibility: "restricted",
+                updatedBy: "auth_owner",
+            });
 
             const documentIds: [CallNoteKind, number][] = [];
             for (const kind of kinds) {
@@ -395,7 +478,7 @@ describeDb("resolveDocumentScope (integration)", () => {
                         companyId,
                         title: `Call Note ${kind}`,
                         url: `local://call-note-${kind}.md`,
-                        category: "Calls",
+                        category: kind === "private" ? "Calls/Private" : "Calls",
                         ocrMetadata:
                             kind === "deleted"
                                 ? { callNote: { callId } }
@@ -436,18 +519,21 @@ describeDb("resolveDocumentScope (integration)", () => {
             }
             callNoteDocuments = Object.fromEntries(documentIds) as Record<CallNoteKind, number>;
 
-            // Even an explicit document grant cannot restore an ineligible Call Note.
+            // No grant restores an ineligible Call Note. The private copy only
+            // inherits a restriction, so its grants exercise ADR-014's reach-in path.
             await test.db.insert(documentSettings).values(
-                kinds.map(kind => ({
-                    documentId: BigInt(callNoteDocuments[kind]),
-                    companyId,
-                    restricted: true,
-                    updatedBy: "auth_owner",
-                }))
+                kinds
+                    .filter(kind => kind !== "private")
+                    .map(kind => ({
+                        documentId: BigInt(callNoteDocuments[kind]),
+                        companyId,
+                        restricted: true,
+                        updatedBy: "auth_owner",
+                    }))
             );
             await test.db.insert(documentGrants).values(
                 kinds.flatMap(kind =>
-                    ["member", "guest"].map(role => ({
+                    ["owner", "member", "guest"].map(role => ({
                         documentId: BigInt(callNoteDocuments[kind]),
                         companyId,
                         principalType: "role" as const,
@@ -484,7 +570,7 @@ describeDb("resolveDocumentScope (integration)", () => {
         });
 
         it.each(["owner", "member", "guest"] as const)(
-            "denies ineligible Call Notes for %s even after metadata is lost, despite explicit grants",
+            "denies ineligible Call Notes for %s after metadata loss, despite direct or reach-in grants",
             async role => {
                 const scope = await callNoteScope(role);
                 expect(scope.kind).toBe(role === "guest" ? "only" : "except");

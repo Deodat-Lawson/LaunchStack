@@ -19,6 +19,9 @@ const mockResolveModel = jest.fn<unknown, [ResolveChatModelOptions]>();
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspacePermission: (permission: string) => mockRequireWorkspacePermission(permission),
 }));
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: bigint, run: () => unknown) => run(),
+}));
 jest.mock("~/lib/active-workspace", () => ({ getActiveCompanyId: async () => 42n }));
 jest.mock("~/lib/rate-limiter", () => ({ RateLimitPresets: { strict: {} } }));
 jest.mock("~/lib/rate-limit-middleware", () => ({

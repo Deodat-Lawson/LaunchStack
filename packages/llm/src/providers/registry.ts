@@ -165,8 +165,15 @@ export function resolveEndpoint(
     return { baseUrl: GEMINI_BASE_URL, apiKey: c.googleApiKey ?? "" };
 }
 
+/**
+ * A capability's model, or the default. Blank counts as unset: Compose passes
+ * every allowlisted variable through as `${VAR:-}`, so an unset
+ * TRANSCRIPTION_MODEL arrives as "" — and `??` sent that empty name to Gemini.
+ */
 export function resolveModel(capabilityEnv: string | undefined, defaultModel: string): string {
-    return capabilityEnv ?? defaultModel;
+    const model = capabilityEnv?.trim();
+    if (!model) return defaultModel;
+    return model;
 }
 
 // ── Provider type resolution ────────────────────────────────────────

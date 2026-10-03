@@ -15,18 +15,23 @@ import {
     PLATFORM_PROFILES,
     type MarketingPlatform,
 } from "@launchstack/tools/platform-profiles";
-import { publishContent, type PublishResult } from "@launchstack/tools/social-publish";
+import { publishToPlatform, type PublishResult } from "@launchstack/tools/social-publish";
 
 import {
     BRAND_POST_STATUSES,
     brandPosts,
+    type BrandPostMediaRef,
+    type BrandPostMetrics,
     type BrandPostRow,
     type BrandPostSource,
     type BrandPostStatus,
 } from "./schema";
 
 export { BRAND_POST_STATUSES, MarketingPlatformEnum };
-export type { BrandPostSource, BrandPostStatus };
+export type { BrandPostMediaRef, BrandPostMetrics, BrandPostSource, BrandPostStatus };
+
+/** Tries before a post that keeps hitting rate limits or outages is marked failed. */
+export const MAX_PUBLISH_ATTEMPTS = 4;
 
 export interface BrandPostRecord {
     id: string;
@@ -44,6 +49,12 @@ export interface BrandPostRecord {
     source: BrandPostSource | null;
     createdAt: Date;
     updatedAt: Date | null;
+    /** The workspace channel it goes out as; null = the deployment's account for the network. */
+    channelId: string | null;
+    media: BrandPostMediaRef[];
+    metrics: BrandPostMetrics | null;
+    metricsAt: Date | null;
+    attempts: number;
 }
 
 /** Expected outcomes carry their own status; routes pass them through. */
@@ -122,6 +133,11 @@ function toRecord(row: BrandPostRow): BrandPostRecord {
         source: row.source ?? null,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
+        channelId: row.channelId ?? null,
+        media: row.media ?? [],
+        metrics: row.metrics ?? null,
+        metricsAt: row.metricsAt ?? null,
+        attempts: row.attempts,
     };
 }
 
@@ -160,11 +176,23 @@ export async function getBrandPost(id: string, companyId: bigint): Promise<Brand
     return row ? toRecord(row) : null;
 }
 
+/** Where one copy of a composed post goes: a network, and the workspace channel on it. */
+export interface BrandPostTarget {
+    platform: MarketingPlatform;
+    /** Null posts on the deployment's own account for the network. */
+    channelId: string | null;
+}
+
 export interface CreateBrandPostsArgs {
     companyId: bigint;
     userId: string;
-    platforms: readonly MarketingPlatform[];
+    /** One copy per target. */
+    targets?: readonly BrandPostTarget[];
+    /** Legacy form: one copy per network on the deployment's account. */
+    platforms?: readonly MarketingPlatform[];
     body: string;
+    /** Images every copy carries (networks without media ignore them). */
+    media?: readonly BrandPostMediaRef[];
     title?: string | null;
     /** Null or absent leaves the posts as drafts. */
     scheduledAt?: Date | null;
@@ -172,18 +200,34 @@ export interface CreateBrandPostsArgs {
     now?: Date;
 }
 
+function uniqueTargets(args: CreateBrandPostsArgs): BrandPostTarget[] {
+    const all: BrandPostTarget[] = [
+        ...(args.targets ?? []),
+        ...(args.platforms ?? []).map(platform => ({ platform, channelId: null })),
+    ];
+    const seen = new Set<string>();
+    return all.filter(t => {
+        const key = `${t.platform}|${t.channelId ?? ""}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
+
 /**
- * One row per network. Every body is checked against its network's limit
- * before anything is written, so a message to three networks is all-or-nothing.
+ * One row per channel. Every body is checked against its network's limit
+ * before anything is written, so a message to three channels is all-or-nothing.
  */
 export async function createBrandPosts(args: CreateBrandPostsArgs): Promise<BrandPostRecord[]> {
-    const platforms = [...new Set(args.platforms)];
-    if (platforms.length === 0)
-        throw new BrandPostError("Pick at least one network.", 400, "no_platform");
-    for (const platform of platforms) {
+    const targets = uniqueTargets(args);
+    if (targets.length === 0)
+        throw new BrandPostError("Pick at least one channel.", 400, "no_platform");
+    for (const platform of new Set(targets.map(t => t.platform))) {
         const problem = bodyProblem(platform, args.body);
         if (problem) throw new BrandPostError(problem, 400, "body_invalid");
     }
+    if ((args.media?.length ?? 0) > 4)
+        throw new BrandPostError("A post carries at most four images.", 400, "media_invalid");
     const now = args.now ?? new Date();
     const scheduledAt = args.scheduledAt ?? null;
     if (scheduledAt && scheduledAt.getTime() < now.getTime() - 60_000)
@@ -192,15 +236,17 @@ export async function createBrandPosts(args: CreateBrandPostsArgs): Promise<Bran
     const rows = await db
         .insert(brandPosts)
         .values(
-            platforms.map(platform => ({
+            targets.map(({ platform, channelId }) => ({
                 id: randomUUID(),
                 companyId: args.companyId,
                 createdByUserId: args.userId,
                 platform,
+                channelId,
                 body: args.body.trim(),
                 title: platform === "reddit" ? cleanTitle(args.title) : null,
                 status: (scheduledAt ? "scheduled" : "draft") as BrandPostStatus,
                 scheduledAt,
+                media: args.media && args.media.length > 0 ? [...args.media] : null,
                 source: args.source ?? { kind: "compose" },
             }))
         )
@@ -298,6 +344,8 @@ export async function updateBrandPost(
             scheduledAt: status === "draft" ? null : scheduledAt,
             status,
             error: status === "failed" ? existing.error : null,
+            // A re-armed post starts its retry count over.
+            ...(status === "failed" ? {} : { attempts: 0 }),
         })
         .where(and(eq(brandPosts.id, id), eq(brandPosts.companyId, companyId)))
         .returning();
@@ -316,11 +364,24 @@ export async function deleteBrandPost(id: string, companyId: bigint): Promise<vo
         .where(and(eq(brandPosts.id, id), eq(brandPosts.companyId, companyId)));
 }
 
-export type PublishFn = (
-    platform: MarketingPlatform,
-    message: string,
-    title?: string
-) => Promise<PublishResult>;
+/**
+ * How a claimed post reaches its network. The host passes one that knows
+ * workspaces (channels, sealed credentials, stored images); without it a
+ * post goes out on the deployment's env credentials, text only.
+ */
+export type PublishFn = (post: BrandPostRecord) => Promise<PublishResult>;
+
+const publishWithDeploymentKeys: PublishFn = post =>
+    publishToPlatform({
+        platform: post.platform,
+        message: post.body,
+        title: post.title ?? undefined,
+    });
+
+/** Minutes to wait before retry n (1-based): 2, 8, 32. */
+export function retryDelayMinutes(attempt: number): number {
+    return 2 * 4 ** Math.max(0, attempt - 1);
+}
 
 export interface PublishDeps {
     publish?: PublishFn;
@@ -362,10 +423,10 @@ export async function publishBrandPost(
         );
     }
     const post = toRecord(claimed);
-    const publish = deps.publish ?? publishContent;
+    const publish = deps.publish ?? publishWithDeploymentKeys;
     let result: PublishResult;
     try {
-        result = await publish(post.platform, post.body, post.title ?? undefined);
+        result = await publish(post);
     } catch (error) {
         result = {
             success: false,
@@ -373,24 +434,39 @@ export async function publishBrandPost(
             error: error instanceof Error ? error.message : String(error),
         };
     }
+    const now = deps.now ?? new Date();
+    const message = (result.error ?? "The network did not accept the post.").slice(0, 2000);
+    const attempts = post.attempts + 1;
+    // A rate limit or an outage is not the post's fault: put it back on the
+    // calendar a little later, a few times, before calling it failed.
+    const retry = !result.success && result.retryable === true && attempts < MAX_PUBLISH_ATTEMPTS;
     const [row] = await db
         .update(brandPosts)
         .set(
             result.success
                 ? {
                       status: "published" as const,
-                      publishedAt: deps.now ?? new Date(),
+                      publishedAt: now,
                       postId: result.postId ?? null,
                       postUrl: result.postUrl ?? null,
                       error: null,
+                      attempts,
                   }
-                : {
-                      status: "failed" as const,
-                      error: (result.error ?? "The network did not accept the post.").slice(
-                          0,
-                          2000
-                      ),
-                  }
+                : retry
+                  ? {
+                        status: "scheduled" as const,
+                        scheduledAt: new Date(now.getTime() + retryDelayMinutes(attempts) * 60_000),
+                        error: `Attempt ${attempts} of ${MAX_PUBLISH_ATTEMPTS} did not go through; trying again in ${retryDelayMinutes(attempts)} minutes. ${message}`.slice(
+                            0,
+                            2000
+                        ),
+                        attempts,
+                    }
+                  : {
+                        status: "failed" as const,
+                        error: message,
+                        attempts,
+                    }
         )
         .where(eq(brandPosts.id, id))
         .returning();

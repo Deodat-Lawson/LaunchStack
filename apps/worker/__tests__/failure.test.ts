@@ -1,14 +1,15 @@
 /**
  * Behavioral pins for the dead-event failure hook (ADR-003 failure
  * visibility), successor to the retired web `processDocumentFailure` suite:
- * when a pipeline event exhausts its retries, the underlying OCR job is
- * marked failed (never clobbering a terminal success), and the document is
+ * when a pipeline event goes dead, the underlying OCR job is marked failed
+ * (never clobbering a terminal success), and the document and version are
  * stamped with failure metadata — but only when the dead version is still
- * the document's current version.
+ * the document's current version. Each metadata write is best-effort.
  */
 import { randomUUID } from "node:crypto";
 
-import { Column, Param, SQL, eq, is } from "drizzle-orm";
+import { Column, Param, SQL, eq, is, sql } from "drizzle-orm";
+import { PgDialect } from "drizzle-orm/pg-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
@@ -16,7 +17,7 @@ import type { LoggerPort } from "@launchstack/runtime";
 import { createDb } from "@launchstack/store/client";
 import type { DbClient } from "@launchstack/store/client";
 import type * as StoreClient from "@launchstack/store/client";
-import { company, document, ocrJobs } from "@launchstack/store/schema";
+import { company, document, documentVersions, ocrJobs } from "@launchstack/store/schema";
 
 type Predicate = { columns: string[]; params: unknown[] };
 
@@ -45,9 +46,8 @@ function inspectPredicate(value: unknown, acc: Predicate = { columns: [], params
         acc.params.push(value.value);
         return acc;
     }
-    const chunks = (value as { queryChunks?: unknown[] }).queryChunks;
-    if (Array.isArray(chunks)) {
-        for (const chunk of chunks) inspectPredicate(chunk, acc);
+    if ("queryChunks" in value && Array.isArray(value.queryChunks)) {
+        for (const chunk of value.queryChunks) inspectPredicate(chunk, acc);
     }
     return acc;
 }
@@ -59,12 +59,18 @@ const integrationDatabase = { current: null as DbClient | null };
 /**
  * Stateful fake: an update "applies" only when the captured WHERE params
  * match the row state, mirroring the real guards (job-status filter,
- * document current-version pointer).
+ * document current-version pointer, and version ownership).
  */
 const state = {
     document: {
         id: 42,
         currentVersionId: 2n,
+        ocrProcessed: true,
+        ocrMetadata: { version: 2 } as unknown,
+    },
+    version: {
+        id: 2,
+        documentId: 42n,
         ocrProcessed: true,
         ocrMetadata: { version: 2 } as unknown,
     },
@@ -75,9 +81,34 @@ const state = {
         completedAt: null as Date | null,
     },
     documentUpdateError: null as Error | null,
+    versionUpdateError: null as Error | null,
 };
 
+const dialect = new PgDialect();
+
+function applyMetadataPatch(row: { ocrMetadata: unknown }, patch: Record<string, unknown>) {
+    const current = row.ocrMetadata;
+    Object.assign(row, patch);
+    if (!is(patch.ocrMetadata, SQL)) return;
+
+    // Model the JSONB merge for state assertions; Postgres exercises it below.
+    const { sql: expression, params } = dialect.sqlToQuery(patch.ocrMetadata);
+    expect(expression).toContain("COALESCE(");
+    expect(expression).toContain(" || ");
+    expect(params).toHaveLength(1);
+    row.ocrMetadata = {
+        ...(current as Record<string, unknown> | null),
+        ...JSON.parse(params[0] as string),
+    };
+}
+
 const fakeDb = {
+    select: (fields: Record<string, unknown>) => ({
+        from: (table: unknown) => ({
+            where: (condition: unknown) =>
+                sql`SELECT ${fields.id} FROM ${table} WHERE ${condition}`,
+        }),
+    }),
     update: (table: unknown) => ({
         set: (patch: Record<string, unknown>) => ({
             where: async (condition: unknown) => {
@@ -85,17 +116,24 @@ const fakeDb = {
                 if (table === document && state.documentUpdateError) {
                     throw state.documentUpdateError;
                 }
+                if (table === documentVersions && state.versionUpdateError) {
+                    throw state.versionUpdateError;
+                }
                 let applied = false;
                 if (table === document) {
                     applied =
                         predicate.params.includes(state.document.id) &&
                         predicate.params.includes(state.document.currentVersionId);
-                    if (applied) {
-                        const { ocrMetadata, ...fields } = patch;
-                        Object.assign(state.document, fields);
-                        // SQL expressions are exercised against Postgres below.
-                        if (!is(ocrMetadata, SQL)) state.document.ocrMetadata = ocrMetadata;
-                    }
+                    if (applied) applyMetadataPatch(state.document, patch);
+                } else if (table === documentVersions) {
+                    applied =
+                        predicate.params.includes(state.version.id) &&
+                        predicate.params.includes(state.version.documentId) &&
+                        predicate.params.includes(state.document.id) &&
+                        predicate.columns.includes("current_version_id") &&
+                        state.version.documentId === BigInt(state.document.id) &&
+                        BigInt(state.version.id) === state.document.currentVersionId;
+                    if (applied) applyMetadataPatch(state.version, patch);
                 } else if (table === ocrJobs) {
                     applied =
                         predicate.params.includes(state.job.id) &&
@@ -158,12 +196,22 @@ function documentUpdates(): UpdateRecord[] {
     return updates.filter(u => u.table === document);
 }
 
+function versionUpdates(): UpdateRecord[] {
+    return updates.filter(u => u.table === documentVersions);
+}
+
 beforeEach(() => {
     updates.length = 0;
     getDbCalls.count = 0;
     state.document = {
         id: 42,
         currentVersionId: 2n,
+        ocrProcessed: true,
+        ocrMetadata: { version: 2 },
+    };
+    state.version = {
+        id: 2,
+        documentId: 42n,
         ocrProcessed: true,
         ocrMetadata: { version: 2 },
     };
@@ -174,6 +222,7 @@ beforeEach(() => {
         completedAt: null,
     };
     state.documentUpdateError = null;
+    state.versionUpdateError = null;
     vi.clearAllMocks();
 });
 
@@ -201,7 +250,7 @@ describe("createDeadEventHandler", () => {
             expect(jobUpdate!.applied).toBe(true);
             expect(state.job.status).toBe("failed");
             expect(state.job.completedAt).toBeInstanceOf(Date);
-            expect(state.job.errorMessage).toMatch(/^pipeline dead after max attempts: x/);
+            expect(state.job.errorMessage).toContain(longError.slice(0, 100));
             // The message is truncated so a giant stack can never blow the column.
             expect(state.job.errorMessage).toHaveLength(2000);
             expect(logger.error).toHaveBeenCalledWith(
@@ -210,7 +259,7 @@ describe("createDeadEventHandler", () => {
                     eventType,
                     traceId: "trace-dead",
                 }),
-                "marked OCR job failed after pipeline exhausted retries"
+                expect.any(String)
             );
         }
     });
@@ -275,6 +324,8 @@ describe("createDeadEventHandler", () => {
         const logger = makeLogger();
 
         // Version 1 died, but the document has moved on to version 2.
+        state.version.id = 1;
+        state.version.ocrMetadata = { version: 1 };
         await createDeadEventHandler(logger)(
             makeClaimed("source.version.created", {
                 ocrJobId: "job-1",
@@ -293,11 +344,17 @@ describe("createDeadEventHandler", () => {
         expect(docUpdate!.applied).toBe(false);
         expect(state.document.ocrProcessed).toBe(true);
         expect(state.document.ocrMetadata).toEqual({ version: 2 });
+        const [versionUpdate] = versionUpdates();
+        expect(versionUpdate).toBeDefined();
+        expect(versionUpdate!.predicate.columns).toContain("current_version_id");
+        expect(versionUpdate!.applied).toBe(false);
+        expect(state.version.ocrProcessed).toBe(true);
+        expect(state.version.ocrMetadata).toEqual({ version: 1 });
         // The job itself is still marked failed.
         expect(state.job.status).toBe("failed");
     });
 
-    it("marks the document unprocessed when the dead version is current", async () => {
+    it("stamps failure metadata on the document and version when the dead version is current", async () => {
         const logger = makeLogger();
 
         await createDeadEventHandler(logger)(
@@ -313,6 +370,18 @@ describe("createDeadEventHandler", () => {
         expect(docUpdate).toBeDefined();
         expect(docUpdate!.applied).toBe(true);
         expect(state.document.ocrProcessed).toBe(false);
+        expect(state.document.ocrMetadata).toEqual(
+            expect.objectContaining({
+                error: "processing_failed",
+                errorMessage: expect.stringContaining("v2 died"),
+                failedAt: expect.any(String),
+            })
+        );
+        const [versionUpdate] = versionUpdates();
+        expect(versionUpdate).toBeDefined();
+        expect(versionUpdate!.applied).toBe(true);
+        expect(state.version.ocrProcessed).toBe(false);
+        expect(state.version.ocrMetadata).toEqual(state.document.ocrMetadata);
         expect(state.job.status).toBe("failed");
     });
 
@@ -325,6 +394,7 @@ describe("createDeadEventHandler", () => {
         );
 
         expect(documentUpdates()).toHaveLength(0);
+        expect(versionUpdates()).toHaveLength(0);
         expect(jobUpdates()).toHaveLength(1);
         expect(state.document.ocrProcessed).toBe(true);
     });
@@ -346,15 +416,65 @@ describe("createDeadEventHandler", () => {
 
         // The job was still marked failed before the document write blew up…
         expect(state.job.status).toBe("failed");
+        expect(state.document.ocrProcessed).toBe(true);
+        // The independent version stamp still succeeds.
+        expect(state.version.ocrProcessed).toBe(false);
+        expect(state.version.ocrMetadata).toEqual(
+            expect.objectContaining({ error: "processing_failed" })
+        );
         // …the failure was logged…
         expect(logger.error).toHaveBeenCalledWith(
-            expect.objectContaining({ sourceId: 42, traceId: "trace-dead" }),
-            "could not stamp document failure metadata"
+            expect.objectContaining({
+                sourceId: 42,
+                traceId: "trace-dead",
+                error: "Error: connection lost",
+            }),
+            expect.stringContaining("document")
         );
         // …and the terminal log still fired.
         expect(logger.error).toHaveBeenCalledWith(
             expect.objectContaining({ ocrJobId: "job-1" }),
-            "marked OCR job failed after pipeline exhausted retries"
+            expect.any(String)
+        );
+    });
+
+    it("logs a version-write failure without losing the document stamp or throwing", async () => {
+        state.versionUpdateError = new Error("version write unavailable");
+        const logger = makeLogger();
+
+        await expect(
+            createDeadEventHandler(logger)(
+                makeClaimed("evidence.version.extracted", {
+                    ocrJobId: "job-1",
+                    sourceId: 42,
+                    sourceVersionId: 2,
+                }),
+                "v2 died"
+            )
+        ).resolves.toBeUndefined();
+
+        expect(state.job.status).toBe("failed");
+        expect(state.document.ocrProcessed).toBe(false);
+        expect(state.document.ocrMetadata).toEqual(
+            expect.objectContaining({
+                error: "processing_failed",
+                errorMessage: expect.stringContaining("v2 died"),
+            })
+        );
+        expect(state.version.ocrProcessed).toBe(true);
+        expect(state.version.ocrMetadata).toEqual({ version: 2 });
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.objectContaining({
+                sourceId: 42,
+                sourceVersionId: 2,
+                traceId: "trace-dead",
+                error: "Error: version write unavailable",
+            }),
+            expect.stringContaining("version")
+        );
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.objectContaining({ ocrJobId: "job-1" }),
+            expect.any(String)
         );
     });
 });
@@ -390,17 +510,31 @@ describe.skipIf(!integrationUrl)("dead-event failure metadata (Postgres integrat
                             title: "Failed source",
                             category: "Calls",
                             url: "local://failed-source.md",
-                            currentVersionId: 2n,
                             ocrProcessed: true,
                             ocrMetadata: metadata,
                         })
                         .returning({ id: document.id });
+                    const [version] = await tx
+                        .insert(documentVersions)
+                        .values({
+                            documentId: BigInt(doc!.id),
+                            versionNumber: 1,
+                            url: "local://failed-source.md",
+                            mimeType: "text/markdown",
+                            ocrProcessed: true,
+                            ocrMetadata: metadata,
+                        })
+                        .returning({ id: documentVersions.id });
+                    await tx
+                        .update(document)
+                        .set({ currentVersionId: BigInt(version!.id) })
+                        .where(eq(document.id, doc!.id));
 
                     await createDeadEventHandler(makeLogger())(
                         makeClaimed("evidence.version.extracted", {
                             ocrJobId: randomUUID(),
                             sourceId: doc!.id,
-                            sourceVersionId: 2,
+                            sourceVersionId: version!.id,
                         }),
                         "provider unavailable"
                     );
@@ -413,9 +547,15 @@ describe.skipIf(!integrationUrl)("dead-event failure metadata (Postgres integrat
                     expect(failed!.ocrMetadata).toEqual({
                         ...metadata,
                         error: "processing_failed",
-                        errorMessage: "pipeline dead after max attempts: provider unavailable",
+                        errorMessage: "pipeline event dead: provider unavailable",
                         failedAt: expect.any(String),
                     });
+                    const [failedVersion] = await tx
+                        .select()
+                        .from(documentVersions)
+                        .where(eq(documentVersions.id, version!.id));
+                    expect(failedVersion!.ocrProcessed).toBe(false);
+                    expect(failedVersion!.ocrMetadata).toEqual(failed!.ocrMetadata);
                     throw rollback;
                 })
                 .catch(error => {

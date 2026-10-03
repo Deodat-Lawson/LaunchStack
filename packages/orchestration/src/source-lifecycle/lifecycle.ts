@@ -145,6 +145,12 @@ export interface CreatedDocumentLifecycle {
     versionId: number;
     jobId: string | null;
     eventIds: string[];
+    /**
+     * True when this call inserted the document; false when the creation key
+     * converged on one an earlier call made. Callers that apply first-time
+     * defaults (an owner, an audience) do so only when this is true.
+     */
+    created: boolean;
 }
 
 export interface CreateDocumentVersionLifecycleParams {
@@ -175,7 +181,10 @@ export interface CreateDocumentVersionLifecycleParams {
     traceId?: string;
 }
 
-export type CreatedDocumentVersionLifecycle = Omit<CreatedDocumentLifecycle, "job" | "jobId"> & {
+export type CreatedDocumentVersionLifecycle = Omit<
+    CreatedDocumentLifecycle,
+    "job" | "jobId" | "created"
+> & {
     job: DocumentLifecycleJob;
     jobId: string;
 };
@@ -287,6 +296,7 @@ type TransactionLifecycle = {
     document: Document;
     version: DocumentVersion;
     job: OcrJob | null;
+    inserted: boolean;
 };
 
 /**
@@ -591,6 +601,7 @@ export async function createDocumentLifecycle(
             document: lifecycleDocument,
             version: lifecycleVersion,
             job: lifecycleJob ?? null,
+            inserted,
         };
     });
 
@@ -603,6 +614,7 @@ export async function createDocumentLifecycle(
         versionId: lifecycle.version.id,
         jobId: job?.id ?? null,
         eventIds: [],
+        created: lifecycle.inserted,
     };
 }
 

@@ -9,10 +9,12 @@
 
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
+import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 import {
     deriveSessionTitle,
+    tidySessionTitle,
     MAX_SESSION_APPEND,
     MAX_SESSION_MESSAGE_CHARS,
 } from "~/lib/workspace-history";
@@ -23,6 +25,7 @@ import {
     type WorkspaceSessionMessageRow,
     type WorkspaceSessionRow,
 } from "~/server/db/schema";
+import type { Executor } from "~/server/workspace/db-types";
 
 export interface SessionOwner {
     companyId: bigint;
@@ -31,12 +34,12 @@ export interface SessionOwner {
 }
 
 export interface SessionMessageInput {
+    metadata?: ChatTurnMetadata;
     role: "user" | "assistant";
     text: string;
     refs?: string[];
     citations?: unknown[];
     attachments?: unknown[];
-    model?: string | null;
     tokens?: number | null;
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
     agentKey?: string | null;
@@ -46,7 +49,6 @@ export interface SessionSummary {
     id: string;
     title: string;
     messageCount: number;
-    pinned: boolean;
     contextSourceIds: string[];
     /** The agent the chat is held with; null = the default assistant. */
     agentKey: string | null;
@@ -60,6 +62,8 @@ export interface SessionMessage extends SessionMessageInput {
 }
 
 export interface SessionDetail extends SessionSummary {
+    queuedMessages: ChatQueueItem[];
+    queueRevision: number;
     continuation: { title: string; context: string } | null;
     messages: SessionMessage[];
 }
@@ -71,9 +75,8 @@ function iso(value: Date | string): string {
 function toSummary(row: WorkspaceSessionRow): SessionSummary {
     return {
         id: row.id,
-        title: row.title,
+        title: tidySessionTitle(row.title),
         messageCount: row.messageCount,
-        pinned: row.pinned,
         contextSourceIds: row.contextSourceIds ?? [],
         agentKey: row.agentKey ?? null,
         lastMessageAt: iso(row.lastMessageAt),
@@ -83,17 +86,76 @@ function toSummary(row: WorkspaceSessionRow): SessionSummary {
 
 function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
     return {
+        metadata: row.metadata ?? undefined,
         seq: row.seq,
         role: row.role,
         text: row.text,
         refs: row.refs ?? undefined,
         citations: row.citations ?? undefined,
+        // `row.model` stays in the table for operators; the browser never
+        // gets it, so turns saved before models were unnamed stay unnamed.
         attachments: row.attachments ?? undefined,
-        model: row.model,
         tokens: row.tokens,
         agentKey: row.agentKey ?? null,
         createdAt: iso(row.createdAt),
     };
+}
+
+const askerKey = (askedBy: string, text: string) => `${askedBy}\u0000${text}`;
+
+/**
+ * What a client may store about each turn. `askedBy` names who asked a
+ * question, and the server's fork is what records it (ADR-014): taken from a
+ * client as-is it would let a chat's owner put words in a teammate's mouth for
+ * everyone reading. A client write keeps it only when it copies a question the
+ * caller already holds in one of their own chats, word for word and under the
+ * same asker — "Fork new chat from here" on a chat continued from a teammate's.
+ */
+async function clientMetadata(
+    executor: Executor,
+    owner: SessionOwner,
+    messages: readonly SessionMessageInput[]
+): Promise<(ChatTurnMetadata | null)[]> {
+    const claimed = messages.filter(
+        m => m.role === "user" && typeof m.metadata?.askedBy === "string"
+    );
+    const proven = new Set<string>();
+    if (claimed.length > 0) {
+        const rows = await executor
+            .select({
+                text: workspaceSessionMessages.text,
+                askedBy: sql<string>`${workspaceSessionMessages.metadata}->>'askedBy'`,
+            })
+            .from(workspaceSessionMessages)
+            .innerJoin(
+                workspaceSessions,
+                eq(workspaceSessions.id, workspaceSessionMessages.sessionId)
+            )
+            .where(
+                and(
+                    ownedBy(owner),
+                    eq(workspaceSessionMessages.role, "user"),
+                    inArray(workspaceSessionMessages.text, [
+                        ...new Set(claimed.map(m => clampText(m.text))),
+                    ]),
+                    isNotNull(sql`${workspaceSessionMessages.metadata}->>'askedBy'`)
+                )
+            );
+        for (const row of rows) proven.add(askerKey(row.askedBy, row.text));
+    }
+    return messages.map(message => {
+        if (!message.metadata) return null;
+        const metadata = { ...message.metadata };
+        const askedBy = metadata.askedBy;
+        if (
+            message.role !== "user" ||
+            typeof askedBy !== "string" ||
+            !proven.has(askerKey(askedBy, clampText(message.text)))
+        ) {
+            delete metadata.askedBy;
+        }
+        return metadata;
+    });
 }
 
 /** Trim to the storage cap. Truncating beats refusing to save the turn at all. */
@@ -118,7 +180,9 @@ export async function listSessions(
         .select()
         .from(workspaceSessions)
         .where(ownedBy(owner))
-        .orderBy(desc(workspaceSessions.pinned), desc(workspaceSessions.lastMessageAt))
+        // Pins are per person now (`workspace_session_user_state`); the old
+        // column is kept by the migration but never read.
+        .orderBy(desc(workspaceSessions.lastMessageAt))
         .limit(limit);
     return rows.map(toSummary);
 }
@@ -145,6 +209,7 @@ export async function createSession(
     const now = new Date();
 
     return db.transaction(async tx => {
+        const metadata = await clientMetadata(tx, owner, messages);
         const [row] = await tx
             .insert(workspaceSessions)
             .values({
@@ -172,18 +237,21 @@ export async function createSession(
                     refs: message.refs ?? null,
                     citations: message.citations ?? null,
                     attachments: message.attachments ?? null,
-                    model: message.model ?? null,
                     tokens: message.tokens ?? null,
                     agentKey: message.agentKey ?? null,
+                    metadata: metadata[index] ?? null,
                 }))
             );
         }
 
         return {
             ...toSummary(row!),
+            queuedMessages: [],
+            queueRevision: 0,
             continuation: input.continuation ?? null,
             messages: messages.map((message, index) => ({
                 ...message,
+                metadata: metadata[index] ?? undefined,
                 seq: index,
                 createdAt: iso(now),
             })),
@@ -199,16 +267,25 @@ export async function getSession(
         .select()
         .from(workspaceSessions)
         .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
-    if (!row) return null;
+    return row ? sessionDetail(row) : null;
+}
 
+/**
+ * The transcript behind a row the caller already resolved — through
+ * `ownedBy` above, or through `resolveSessionAccess` for a reader. Never call
+ * it with a row looked up by id alone.
+ */
+export async function sessionDetail(row: WorkspaceSessionRow): Promise<SessionDetail> {
     const messages = await db
         .select()
         .from(workspaceSessionMessages)
-        .where(eq(workspaceSessionMessages.sessionId, sessionId))
+        .where(eq(workspaceSessionMessages.sessionId, row.id))
         .orderBy(asc(workspaceSessionMessages.seq));
 
     return {
         ...toSummary(row),
+        queuedMessages: row.queuedMessages ?? [],
+        queueRevision: row.queueRevision ?? 0,
         continuation: row.continuation ?? null,
         messages: messages.map(toMessage),
     };
@@ -244,6 +321,7 @@ export async function appendMessages(
             .for("update");
         if (!existing) return null;
 
+        const metadata = await clientMetadata(tx, owner, messages);
         await tx.insert(workspaceSessionMessages).values(
             messages.map((message, index) => ({
                 sessionId,
@@ -253,9 +331,9 @@ export async function appendMessages(
                 refs: message.refs ?? null,
                 citations: message.citations ?? null,
                 attachments: message.attachments ?? null,
-                model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
+                metadata: metadata[index] ?? null,
             }))
         );
 
@@ -279,11 +357,10 @@ export async function appendMessages(
 export async function updateSession(
     owner: SessionOwner,
     sessionId: string,
-    patch: { title?: string; pinned?: boolean; agentKey?: string | null }
+    patch: { title?: string; agentKey?: string | null }
 ): Promise<SessionSummary | null> {
     const values: Record<string, unknown> = { updatedAt: new Date() };
     if (patch.title !== undefined) values.title = patch.title.trim().slice(0, 300);
-    if (patch.pinned !== undefined) values.pinned = patch.pinned;
     if (patch.agentKey !== undefined) values.agentKey = patch.agentKey;
 
     const [row] = await db
@@ -292,6 +369,112 @@ export async function updateSession(
         .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
         .returning();
     return row ? toSummary(row) : null;
+}
+
+/** A row lock and revision protect queue edits/claims across browser tabs. */
+export async function changeQueue(
+    owner: SessionOwner,
+    sessionId: string,
+    revision: number,
+    change: { items: ChatQueueItem[] } | { claimId: string }
+): Promise<{
+    items: ChatQueueItem[];
+    revision: number;
+    claimed?: ChatQueueItem;
+    claimedMessage?: SessionMessage;
+    conflict?: boolean;
+} | null> {
+    return db.transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(workspaceSessions)
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
+            .for("update");
+        if (!row) return null;
+        const current = { items: row.queuedMessages ?? [], revision: row.queueRevision ?? 0 };
+        if (current.revision !== revision) return { ...current, conflict: true };
+        const claimed =
+            "claimId" in change
+                ? current.items.find(item => item.id === change.claimId)
+                : undefined;
+        if ("claimId" in change && !claimed) return { ...current, conflict: true };
+        const items =
+            "items" in change
+                ? change.items
+                : current.items.filter(item => item.id !== change.claimId);
+        const now = new Date();
+        let claimedMessage: SessionMessage | undefined;
+        if (claimed) {
+            const [message] = await tx
+                .insert(workspaceSessionMessages)
+                .values({
+                    sessionId,
+                    seq: row.messageCount,
+                    role: "user",
+                    text: clampText(claimed.send.text),
+                    refs: claimed.send.refs,
+                    attachments: claimed.send.attachments,
+                    agentKey: claimed.send.agentKey,
+                    metadata: {
+                        id: randomUUID(),
+                        send: claimed.send,
+                        intent: claimed.send.followUp === "interrupt" ? "interrupt" : "queued",
+                    },
+                    createdAt: now,
+                })
+                .returning();
+            if (!message) throw new Error("Couldn't persist the queued turn");
+            claimedMessage = toMessage(message);
+        }
+        await tx
+            .update(workspaceSessions)
+            .set({
+                queuedMessages: items,
+                queueRevision: revision + 1,
+                updatedAt: now,
+                ...(claimed
+                    ? {
+                          messageCount: row.messageCount + 1,
+                          lastMessageAt: now,
+                          contextSourceIds: claimed.send.refs,
+                          agentKey: claimed.send.agentKey,
+                      }
+                    : {}),
+            })
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
+        return { items, revision: revision + 1, ...(claimed ? { claimed, claimedMessage } : {}) };
+    });
+}
+
+/** Rewind only this owner's transcript; refuse stale edits instead of deleting new turns. */
+export async function truncateMessages(
+    owner: SessionOwner,
+    sessionId: string,
+    keepCount: number,
+    expectedCount: number
+): Promise<"missing" | "conflict" | "ok"> {
+    return db.transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(workspaceSessions)
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
+            .for("update");
+        if (!row) return "missing";
+        if (row.messageCount !== expectedCount || keepCount > row.messageCount) return "conflict";
+        await tx
+            .delete(workspaceSessionMessages)
+            .where(
+                and(
+                    eq(workspaceSessionMessages.sessionId, sessionId),
+                    gte(workspaceSessionMessages.seq, keepCount)
+                )
+            );
+        await tx
+            .update(workspaceSessions)
+            .set({ messageCount: keepCount, updatedAt: new Date() })
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
+        return "ok";
+    });
 }
 
 /** Hard delete — the messages go with it via the cascade. There is no trash here. */

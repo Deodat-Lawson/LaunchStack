@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
         if (type === "transactions") {
             const transactions = await getTransactionHistory(companyId, 50);
-            return NextResponse.json({ transactions });
+            return NextResponse.json({ transactions: transactions.map(withStringCompanyId) });
         }
 
         const [balanceTokens, usage] = await Promise.all([
@@ -28,9 +28,14 @@ export async function GET(request: Request) {
             }),
         ]);
 
-        return NextResponse.json({ balanceTokens, usage });
+        return NextResponse.json({ balanceTokens, usage: usage.map(withStringCompanyId) });
     } catch (error) {
         console.error("[Tokens] Error fetching usage:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
+}
+
+/** JSON has no bigint; company_id is a bigint column on both tables. */
+function withStringCompanyId<T extends { companyId: bigint }>(row: T) {
+    return { ...row, companyId: row.companyId.toString() };
 }

@@ -1,10 +1,33 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
+
 import {
     createRateLimiter,
     RateLimitPresets,
     clearRateLimitStore,
     destroyRateLimitStore,
+    rateLimitRoute,
     type RateLimitConfig,
 } from "~/lib/rate-limiter";
+
+/** A real request to an API route, from one client IP. */
+function apiRequest(method: string, pathname: string, ip = "203.0.113.7"): Request {
+    return new Request(`http://localhost${pathname}`, {
+        method,
+        headers: { "x-forwarded-for": ip },
+    });
+}
+
+/** Spend `count` requests and return the last answer. */
+async function spend(
+    limiter: ReturnType<typeof createRateLimiter>,
+    request: Request,
+    count: number
+) {
+    let last = await limiter(request);
+    for (let i = 1; i < count; i++) last = await limiter(request);
+    return last;
+}
 
 describe("Rate Limiter", () => {
     // Helper to create mock requests
@@ -118,7 +141,7 @@ describe("Rate Limiter", () => {
             const config: RateLimitConfig = {
                 maxRequests: 2,
                 windowMs: 60000,
-                keyGenerator: async (request: Request) => {
+                keyGenerator: async (_request: Request) => {
                     // Simulate async operation (e.g., looking up user ID)
                     return Promise.resolve("async-user-456");
                 },
@@ -358,6 +381,170 @@ describe("Rate Limiter", () => {
             // Should be allowed again
             const allowed = await rateLimiter(request);
             expect(allowed.allowed).toBe(true);
+        });
+    });
+
+    // Every preset used to draw from one per-IP bucket, so a page polling a
+    // read spent the budget a write elsewhere needed (2026-10-15: a 3s poll of
+    // GET /api/folders made "New folder" answer 429).
+    describe("Bucket isolation", () => {
+        it("never lets two presets share a bucket, even on the same route and IP", async () => {
+            const poll = createRateLimiter(RateLimitPresets.permissive);
+            const write = createRateLimiter(RateLimitPresets.standard);
+            const request = apiRequest("GET", "/api/folders");
+
+            const lastAllowed = await spend(poll, request, 300);
+            expect(lastAllowed.allowed).toBe(true);
+            expect((await poll(request)).allowed).toBe(false);
+
+            const other = await write(request);
+            expect(other.allowed).toBe(true);
+            expect(other.remaining).toBe(99);
+        });
+
+        it("keeps a stricter preset from draining a looser one", async () => {
+            const strict = createRateLimiter(RateLimitPresets.strict);
+            const permissive = createRateLimiter(RateLimitPresets.permissive);
+            const request = apiRequest("POST", "/api/agents/documentQ&A/AIChat/query");
+
+            await spend(strict, request, 20);
+            expect((await strict(request)).allowed).toBe(false);
+            expect((await permissive(request)).remaining).toBe(299);
+        });
+
+        it("gives the read and the write on one route separate budgets", async () => {
+            const burst = createRateLimiter(RateLimitPresets.burst);
+            await spend(burst, apiRequest("GET", "/api/folders"), 10);
+            expect((await burst(apiRequest("GET", "/api/folders"))).allowed).toBe(false);
+
+            const write = await burst(apiRequest("POST", "/api/folders"));
+            expect(write.allowed).toBe(true);
+            expect(write.remaining).toBe(9);
+        });
+
+        it("gives each route its own budget under the same preset", async () => {
+            const strict = createRateLimiter(RateLimitPresets.strict);
+            await spend(strict, apiRequest("POST", "/api/uploadDocument"), 20);
+            expect((await strict(apiRequest("POST", "/api/uploadDocument"))).allowed).toBe(false);
+            expect((await strict(apiRequest("POST", "/api/google-docs"))).allowed).toBe(true);
+        });
+
+        it("treats ids in the path as one route, so walking ids buys nothing", async () => {
+            const limiter = createRateLimiter({ maxRequests: 2, windowMs: 60_000 });
+            await limiter(apiRequest("DELETE", "/api/documents/101"));
+            await limiter(apiRequest("DELETE", "/api/documents/102"));
+            expect((await limiter(apiRequest("DELETE", "/api/documents/103"))).allowed).toBe(false);
+            expect(
+                (
+                    await limiter(
+                        apiRequest("DELETE", "/api/documents/7f1c2a9e-0b4d-4c55-9a51-2f0e8c1d3b6a")
+                    )
+                ).allowed
+            ).toBe(false);
+        });
+
+        it("scopes a custom caller key to its route", async () => {
+            const limiter = createRateLimiter({
+                maxRequests: 1,
+                windowMs: 60_000,
+                keyGenerator: () => "user-1",
+            });
+            expect((await limiter(apiRequest("POST", "/api/prospects/runs"))).allowed).toBe(true);
+            expect((await limiter(apiRequest("POST", "/api/prospects/runs"))).allowed).toBe(false);
+            expect((await limiter(apiRequest("POST", "/api/prospects/outreach"))).allowed).toBe(
+                true
+            );
+        });
+    });
+
+    describe("rateLimitRoute", () => {
+        it("names a route by method and path with its ids collapsed", () => {
+            expect(rateLimitRoute(apiRequest("GET", "/api/folders"))).toBe("GET /api/folders");
+            expect(
+                rateLimitRoute(apiRequest("POST", "/api/documents/12/versions/34/revert?x=1"))
+            ).toBe("POST /api/documents/:id/versions/:id/revert");
+            // A provider is a name, not an id: each provider keeps its own budget.
+            expect(rateLimitRoute(apiRequest("POST", "/api/connectors/google-drive/sync"))).toBe(
+                "POST /api/connectors/google-drive/sync"
+            );
+        });
+
+        it("relies on no static API path segment containing a digit", () => {
+            // rateLimitRoute reads any segment with a digit as an id. A static
+            // segment with one (say /api/v2/...) would merge with its siblings'
+            // budgets — rename it, or teach rateLimitRoute about it.
+            const apiRoot = path.join(__dirname, "../../src/app/api");
+            const offenders: string[] = [];
+            const walk = (dir: string) => {
+                for (const entry of readdirSync(dir, { withFileTypes: true })) {
+                    if (!entry.isDirectory()) continue;
+                    const dynamic = entry.name.startsWith("[") || entry.name.startsWith("(");
+                    if (!dynamic && /\d/.test(entry.name)) {
+                        offenders.push(path.relative(apiRoot, path.join(dir, entry.name)));
+                    }
+                    walk(path.join(dir, entry.name));
+                }
+            };
+            walk(apiRoot);
+            expect(offenders).toEqual([]);
+        });
+    });
+
+    describe("Refill and Retry-After", () => {
+        beforeEach(() => {
+            jest.useFakeTimers({ now: new Date("2026-10-15T09:00:00Z") });
+        });
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        it("keeps the partial token between requests", async () => {
+            // One token per second.
+            const limiter = createRateLimiter({ maxRequests: 2, windowMs: 2_000 });
+            const request = apiRequest("GET", "/api/folders");
+            await spend(limiter, request, 2);
+
+            jest.advanceTimersByTime(600);
+            expect((await limiter(request)).allowed).toBe(false);
+            jest.advanceTimersByTime(600); // 1.2s: one token, 0.2s toward the next
+            expect((await limiter(request)).allowed).toBe(true);
+            jest.advanceTimersByTime(800); // 2.0s: the second token, thanks to the 0.2s kept
+            expect((await limiter(request)).allowed).toBe(true);
+            expect((await limiter(request)).allowed).toBe(false);
+        });
+
+        it("credits exactly one token per interval to a client polling faster than that", async () => {
+            const limiter = createRateLimiter(RateLimitPresets.permissive); // a token every 3s
+            const request = apiRequest("GET", "/api/folders");
+            await spend(limiter, request, 300);
+            // Requests every 2s earn a token every 3s — exactly 2 in 3 succeed.
+            let allowed = 0;
+            for (let i = 0; i < 90; i++) {
+                jest.advanceTimersByTime(2_000);
+                if ((await limiter(request)).allowed) allowed++;
+            }
+            expect(allowed).toBe(60);
+        });
+
+        it("tells a blocked caller when the next request will work, not when the window ends", async () => {
+            const limiter = createRateLimiter(RateLimitPresets.permissive);
+            const request = apiRequest("GET", "/api/folders");
+            await spend(limiter, request, 300);
+
+            const blocked = await limiter(request);
+            expect(blocked.allowed).toBe(false);
+            expect(blocked.retryAfter).toBe(3);
+
+            jest.advanceTimersByTime(3_000);
+            expect((await limiter(request)).allowed).toBe(true);
+        });
+
+        it("reports when the bucket is full again", async () => {
+            const limiter = createRateLimiter({ maxRequests: 10, windowMs: 10_000 });
+            const request = apiRequest("GET", "/api/folders");
+            const info = await spend(limiter, request, 4);
+            expect(info.remaining).toBe(6);
+            expect(info.resetTime).toBe(Date.now() + 4_000);
         });
     });
 });

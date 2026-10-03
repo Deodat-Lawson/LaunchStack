@@ -105,7 +105,8 @@ export async function generateImages(
         if (images.length === 0) {
             throw new ImageGenerationError({
                 code: "no_image_returned",
-                message: `Model "${request.modelId}" returned no image. Check that it supports image output — a text-only model answers this request with prose.`,
+                message:
+                    "The image model returned no image. Check that it supports image output — a text-only model answers this request with prose.",
                 status: 502,
                 retryable: false,
             });
@@ -163,7 +164,8 @@ function toImageGenerationError(error: unknown, modelId: string, signal?: AbortS
     if (NoImageGeneratedError.isInstance(error)) {
         return new ImageGenerationError({
             code: "no_image_returned",
-            message: `Model "${modelId}" returned no image. Check that it supports image output — a text-only model answers this request with prose.`,
+            message:
+                "The image model returned no image. Check that it supports image output — a text-only model answers this request with prose.",
             status: 502,
             retryable: false,
         });
@@ -171,9 +173,11 @@ function toImageGenerationError(error: unknown, modelId: string, signal?: AbortS
 
     if (APICallError.isInstance(error)) {
         const status = error.statusCode ?? 502;
+        // The provider's text can name the vendor or model; it goes to the log.
+        console.error(`[images] ${modelId} answered ${status}: ${error.message}`);
         return new ImageGenerationError({
             code: status === 401 || status === 403 ? "unauthorized" : "provider_error",
-            message: `Image endpoint returned ${status}: ${error.message}`,
+            message: `Image endpoint returned ${status}.`,
             status,
             // The SDK's own judgement wins when it made one; otherwise fall back
             // to the status, so one rule governs retryability either way.

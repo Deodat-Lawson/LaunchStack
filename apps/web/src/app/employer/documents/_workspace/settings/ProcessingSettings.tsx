@@ -28,6 +28,7 @@ interface Company {
     name: string;
     embeddingIndexKey: string | null;
     embeddingOpenAIApiKey: RedactedKey;
+    embeddingOpenAIBaseUrl: string | null;
     embeddingHuggingFaceApiKey: RedactedKey;
     embeddingOllamaBaseUrl: string | null;
     embeddingOllamaModel: string | null;
@@ -61,11 +62,13 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
 
     const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
     const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
+    const [embeddingOpenAIBaseUrl, setEmbeddingOpenAIBaseUrl] = useState("");
     const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
     const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
     const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
 
     const [openAIKeyStored, setOpenAIKeyStored] = useState<RedactedKey | null>(null);
+    const [openAIBaseUrlStored, setOpenAIBaseUrlStored] = useState<string | null>(null);
     const [huggingFaceKeyStored, setHuggingFaceKeyStored] = useState<RedactedKey | null>(null);
 
     const [status, setStatus] = useState<{ message: string; tone: StatusTone } | null>(null);
@@ -81,6 +84,8 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
 
                 setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
                 setOpenAIKeyStored(data.embeddingOpenAIApiKey);
+                setOpenAIBaseUrlStored(data.embeddingOpenAIBaseUrl ?? null);
+                setEmbeddingOpenAIBaseUrl(data.embeddingOpenAIBaseUrl ?? "");
                 setHuggingFaceKeyStored(data.embeddingHuggingFaceApiKey);
                 setEmbeddingOpenAIApiKey("");
                 setEmbeddingHuggingFaceApiKey("");
@@ -115,8 +120,16 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                 embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
                 embeddingOllamaModel: embeddingOllamaModel || null,
             };
-            if (embeddingOpenAIApiKey.trim().length > 0) {
-                body.embeddingOpenAIApiKey = embeddingOpenAIApiKey.trim();
+            const newOpenAIKey = embeddingOpenAIApiKey.trim();
+            const openAIBaseUrl = embeddingOpenAIBaseUrl.trim();
+            if (newOpenAIKey.length > 0) {
+                body.embeddingOpenAIApiKey = newOpenAIKey;
+            }
+            // The address travels with a new key, and on its own only when it
+            // changed: the server asks for the key again before moving a saved
+            // key to a different address.
+            if (newOpenAIKey.length > 0 || openAIBaseUrl !== (openAIBaseUrlStored ?? "")) {
+                body.embeddingOpenAIBaseUrl = openAIBaseUrl || null;
             }
             if (embeddingHuggingFaceApiKey.trim().length > 0) {
                 body.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
@@ -143,6 +156,13 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
             }
 
             setDirty(false);
+            // Credentials are saved on both the 200 and the 202 path.
+            if (newOpenAIKey.length > 0) {
+                setOpenAIKeyStored({ hasKey: true, last4: newOpenAIKey.slice(-4) });
+            }
+            if (body.embeddingOpenAIBaseUrl !== undefined) {
+                setOpenAIBaseUrlStored(openAIBaseUrl || null);
+            }
             if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
                 setStatus({
                     tone: "warn",
@@ -171,6 +191,8 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
         embeddingOllamaBaseUrl,
         embeddingOllamaModel,
         embeddingOpenAIApiKey,
+        embeddingOpenAIBaseUrl,
+        openAIBaseUrlStored,
         embeddingHuggingFaceApiKey,
     ]);
 
@@ -223,31 +245,51 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                                 </option>
                             ))}
                         </SelectInput>
-                        <div
-                            style={{
-                                fontSize: 11,
-                                color: "var(--ink-3)",
-                                marginTop: 4,
-                                lineHeight: 1.5,
-                            }}
-                        >
+                        <div className="text-ink-3 mt-1 text-[11px] leading-normal">
                             {INDEX_OPTIONS.find(o => o.value === embeddingIndexKey)?.desc}
                         </div>
                     </Field>
 
                     {embeddingIndexKey === "legacy-openai-1536" && (
-                        <Field
-                            label="OpenAI API key"
-                            hint={`Leave blank to keep the existing key. ${storedLabel(openAIKeyStored)}.`}
-                        >
-                            <TextInput
-                                type="password"
-                                value={embeddingOpenAIApiKey}
-                                onChange={e => edit(setEmbeddingOpenAIApiKey)(e.target.value)}
-                                placeholder="<your-api-key>"
-                                autoComplete="off"
-                            />
-                        </Field>
+                        <>
+                            {openAIKeyStored?.hasKey && !openAIBaseUrlStored && (
+                                <StatusNote tone="warn">
+                                    The saved embeddings key has no endpoint URL, so embedding with
+                                    it will fail until one is set. Enter the endpoint URL and the
+                                    key together, then save.
+                                </StatusNote>
+                            )}
+                            <Field
+                                label="OpenAI-compatible API key"
+                                htmlFor="embedding-openai-key"
+                                hint={`Leave blank to keep the existing key. ${storedLabel(openAIKeyStored)}.`}
+                            >
+                                <TextInput
+                                    id="embedding-openai-key"
+                                    type="password"
+                                    value={embeddingOpenAIApiKey}
+                                    onChange={e => edit(setEmbeddingOpenAIApiKey)(e.target.value)}
+                                    placeholder="<your-api-key>"
+                                    autoComplete="off"
+                                />
+                            </Field>
+                            <Field
+                                label="Embeddings endpoint URL"
+                                htmlFor="embedding-openai-base-url"
+                                hint="The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again."
+                            >
+                                <TextInput
+                                    id="embedding-openai-base-url"
+                                    type="url"
+                                    inputMode="url"
+                                    value={embeddingOpenAIBaseUrl}
+                                    onChange={e => edit(setEmbeddingOpenAIBaseUrl)(e.target.value)}
+                                    placeholder="https://api.openai.com/v1"
+                                    autoComplete="off"
+                                    spellCheck={false}
+                                />
+                            </Field>
+                        </>
                     )}
 
                     {embeddingIndexKey === "huggingface-minilm-384" && (
@@ -291,14 +333,16 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                 description="What this workspace has stored. Update the fields above to change them."
             >
                 <Card>
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                            gap: 14,
-                        }}
-                    >
-                        <KeyStatus label="OpenAI" stored={openAIKeyStored} />
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5">
+                        <KeyStatus
+                            label="OpenAI-compatible"
+                            stored={openAIKeyStored}
+                            detail={
+                                openAIKeyStored?.hasKey
+                                    ? `ending ${openAIKeyStored.last4 ?? "****"} · ${openAIBaseUrlStored ?? "no endpoint URL"}`
+                                    : undefined
+                            }
+                        />
                         <KeyStatus label="HuggingFace" stored={huggingFaceKeyStored} />
                         <KeyStatus
                             label="Ollama"
@@ -323,28 +367,14 @@ function KeyStatus({
 }) {
     const has = Boolean(stored?.hasKey);
     return (
-        <div
-            style={{
-                padding: "12px 14px",
-                border: "1px solid var(--line)",
-                borderRadius: 10,
-                background: "var(--panel-2)",
-            }}
-        >
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 6,
-                }}
-            >
-                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{label}</span>
+        <div className="border-line bg-panel-2 rounded-[10px] border px-3.5 py-3">
+            <div className="mb-1.5 flex items-center justify-between">
+                <span className="text-ink text-xs font-semibold">{label}</span>
                 <Badge variant={has ? "success" : "secondary"}>
                     {has ? "Configured" : "Not set"}
                 </Badge>
             </div>
-            <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+            <div className="mono text-ink-3 break-all text-[11px]">
                 {detail ?? (stored?.last4 ? `ending ${stored.last4}` : "—")}
             </div>
         </div>

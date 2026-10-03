@@ -28,7 +28,8 @@ export type FactSection =
     | "markets"
     | "projects"
     | "policies"
-    | "legal";
+    | "legal"
+    | "profile";
 
 export interface CompanyFactRow {
     /** Stable path into the projection, e.g. "people[2]" or "policies.refund". */
@@ -61,6 +62,7 @@ const SECTION_LABEL: Record<FactSection, string> = {
     projects: "Project",
     policies: "Policy",
     legal: "Legal",
+    profile: "Company",
 };
 
 // ============================================================================
@@ -290,6 +292,18 @@ export function flattenCompanyFacts(metadata: CompanyMetadataJSON): CompanyFactR
                         "status",
                     ]),
                 ],
+            })
+        )
+    );
+
+    // Profile facts (mission, outcomes, budget…): one row each, labelled as people read them.
+    Object.entries(metadata.profile?.facts ?? {}).forEach(([key, fact]) =>
+        rows.push(
+            buildRow({
+                path: `profile.facts.${key}`,
+                section: "profile",
+                subjectFallback: fact.label || humanize(key),
+                fields: [[fact.label || key, fact]],
             })
         )
     );

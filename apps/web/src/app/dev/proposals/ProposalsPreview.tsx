@@ -7,12 +7,14 @@ import { ProposalsTool } from "~/app/employer/tools/proposals/ProposalsTool";
 import type { ToolHost } from "~/components/tool-app/nav";
 import { Toaster } from "~/components/ui/sonner";
 
+import { simulateCompanyProfile } from "../company-profile/simulator";
 import { resetProposalsSim, simulateProposals } from "./simulator";
 
 /**
- * Mounts the real Proposals tab with `/api/proposals/*` answered by the
- * in-memory simulator. Installed at module scope so the first fetch the
- * tab makes is already intercepted. `?reset=1` clears it.
+ * Mounts the real Proposals tab with `/api/proposals/*` and
+ * `/api/company/profile*` answered by in-memory simulators. Installed at
+ * module scope so the first fetch the tab makes is already intercepted.
+ * `?reset=1` clears it.
  */
 let stubbed = false;
 function stubApi() {
@@ -22,11 +24,12 @@ function stubApi() {
     window.fetch = async (input, init) => {
         const url =
             typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-        const simulated = await simulateProposals(
-            new URL(url, "http://proposals.local"),
-            init,
-            Date.now()
-        );
+        const target = new URL(url, "http://proposals.local");
+        // Proposals › Profile is the shared company profile; its routes have
+        // their own simulator (see /dev/company-profile for every state).
+        const simulated =
+            (await simulateCompanyProfile(target, init, "ready")) ??
+            (await simulateProposals(target, init, Date.now()));
         return simulated ?? real(input, init);
     };
 }

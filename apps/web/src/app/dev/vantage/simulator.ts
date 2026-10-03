@@ -32,6 +32,11 @@ import type {
 import { addDaysIso, todayIso } from "~/app/employer/tools/vantage/_lib/format";
 
 interface World {
+    /**
+     * `?fresh=1`: the coming week's draft is held back until something asks
+     * for it, so the preview shows Vantage drafting the week on arrival.
+     */
+    pendingDraft: AgendaDto | null;
     evidence: EvidenceDto[];
     definitions: MetricDefinitionDto[];
     observations: MetricObservationDto[];
@@ -359,6 +364,24 @@ function seed(): World {
             decision: "Not before the seed closes",
             decidedAt: held.heldAt,
         }),
+        // Talked about, not decided: Vantage offers its next step as a commit.
+        makeTopic(held.id, 3, {
+            title: "Duplicate invoices from the CSV import",
+            status: "kept",
+            origin: "ai",
+            facts: [
+                {
+                    text: "Two pilot teams reported duplicate invoices after a CSV import.",
+                    refs: [],
+                },
+            ],
+            whyItMatters: "A duplicate invoice reaches the customer's customer.",
+            decisionQuestion: "Fix the import now, or pull CSV import until it is fixed?",
+            proposedNextStep: "Add a duplicate check on invoice number before import",
+            proposedOwner: "Ravi",
+            proposedDue: addDaysIso(week, 2),
+            rationale: "A repeated bug report from pilot teams.",
+        }),
     ];
     [beta, calls].forEach((c, i) =>
         Object.assign(c, { topicId: held.topics[i]!.id, topicTitle: held.topics[i]!.title })
@@ -381,9 +404,13 @@ function seed(): World {
     const draft = makeAgenda(week, {
         summary:
             "More teams arrive and fewer reach a first invoice. Acme's rollout hinges on SSO, and the deck's growth number is ahead of the data.",
+        modelMetadata: { mode: "ai", model: "preview" },
+        generatedAt: stamp(ago(1)),
     });
+    // Drafted by the model, as on a deployment with a chat model configured;
+    // the signups conflict below is the rules' kind of topic and says so.
     const t = (position: number, fields: Partial<TopicDto> & Pick<TopicDto, "title">) =>
-        makeTopic(draft.id, position, fields);
+        makeTopic(draft.id, position, { origin: "ai", ...fields });
     draft.topics = [
         t(0, {
             title: "Signups up 29%, activation down",
@@ -412,6 +439,7 @@ function seed(): World {
         }),
         t(1, {
             title: "Two numbers for last week's signups",
+            origin: "rules",
             facts: [
                 {
                     text: "Stripe and PostHog disagree about signups for one week.",
@@ -541,11 +569,15 @@ function seed(): World {
         deadline("Demo day rehearsal", addDaysIso(today, 12), "Ten minutes with the partners"),
     ];
 
+    const fresh =
+        typeof window !== "undefined" &&
+        new URLSearchParams(window.location.search).get("fresh") === "1";
     return {
+        pendingDraft: fresh ? draft : null,
         evidence,
         definitions,
         observations,
-        agendas: [draft, held, older],
+        agendas: fresh ? [held, older] : [draft, held, older],
         commitments,
         deadlines,
     };
@@ -660,6 +692,7 @@ function overview(): OverviewDto {
         agendaWeek,
         agendaWeekEnd: addDaysIso(agendaWeek, 6),
         agenda: w().agendas.find(a => a.weekStart === agendaWeek) ?? null,
+        previousAgenda: w().agendas.find(a => a.weekStart === addDaysIso(agendaWeek, -7)) ?? null,
         signals,
         checkIns: open.filter(c => check.has(c.id)),
         recentEvidence: w()
@@ -720,6 +753,13 @@ const summary = (a: AgendaDto): AgendaSummaryDto => ({
  * any gets new topics. Kept and edited topics always stay.
  */
 function prepare(weekStart: string): AgendaDto {
+    const held = w().pendingDraft;
+    if (held && held.weekStart === weekStart && !w().agendas.some(a => a.weekStart === weekStart)) {
+        w().pendingDraft = null;
+        held.generatedAt = new Date().toISOString();
+        w().agendas.push(held);
+        return held;
+    }
     const existing = w().agendas.find(a => a.weekStart === weekStart);
     const agenda =
         existing ??
@@ -969,6 +1009,8 @@ export async function simulateVantage(
             const week = ISO_DATE.test(str("weekStart"))
                 ? mondayOf(str("weekStart"))
                 : agendaWeekFor(todayIso());
+            // A model call takes a few seconds; let the drafting state show.
+            await new Promise(resolve => setTimeout(resolve, 2400));
             return json({ agenda: prepare(week) }, 201);
         }
         case "GET agendas/:id":
@@ -1031,6 +1073,18 @@ export async function simulateVantage(
                 W.commitments.push(c);
                 topic.commitmentId = c.id;
             }
+            return json({ topic });
+        }
+
+        case "DELETE topics/:id/decide": {
+            if (!owner || !topic) return missing();
+            const commitment = url.searchParams.get("commitment");
+            Object.assign(topic, { decision: null, decidedAt: null });
+            if (commitment)
+                W.commitments = W.commitments.filter(
+                    c => !(c.id === commitment && c.topicId === topic.id)
+                );
+            topic.commitmentId = W.commitments.find(c => c.topicId === topic.id)?.id ?? null;
             return json({ topic });
         }
 

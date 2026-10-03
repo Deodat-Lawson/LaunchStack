@@ -10,8 +10,10 @@
  *   3. the grants on those folders and documents whose principal is the
  *      caller, one of their groups, or their role.
  *
- * Anyone holding `folders.manage` bypasses grant restrictions, but not the
- * live eligibility policy for Call Notes.
+ * Nobody reads past a restriction by role (ADR-014): private means private,
+ * Owners and Admins included. `folders.manage` governs workspace-wide folders;
+ * a restricted folder is reached only through a grant — to the person, one of
+ * their groups, or their role. No grant bypasses live Call Note eligibility.
  */
 
 import {
@@ -24,6 +26,7 @@ import {
     notInArray,
     or,
     sql,
+    type AnyColumn,
     type SQL,
 } from "drizzle-orm";
 
@@ -43,6 +46,7 @@ import { normalizeRoleSlug, type Permission } from "./permissions";
 import {
     SCOPE_EVERYTHING,
     SCOPE_NOTHING,
+    scopeAllowsCategory,
     scopeAllowsDocument,
     scopeDefaultAllow,
     scopeFolderRules,
@@ -137,7 +141,6 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
                   deniedDocumentIds: [...ineligibleDocumentIds],
                   allowedDocumentIds: [],
               };
-    if (!isGuest && subject.permissions.has("folders.manage")) return unrestrictedScope;
 
     // 1. What is restricted in this workspace?
     const [restrictedFolders, restrictedDocuments] = await Promise.all([
@@ -245,6 +248,38 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
         ).push(Number(d.documentId));
     }
 
+    // 4. Reach-in grants (ADR-014): a person added to a folder or file that
+    //    only *inherits* a restriction — "Same as Q4 planning", plus Ada — sees
+    //    it although they are not on the restricted folder's list. Only grants
+    //    that change the answer are kept, so the scope grows with what was
+    //    shared into closed places, not with everything someone uploaded.
+    const interim: DocumentScope = isGuest
+        ? {
+              kind: "only",
+              allowedCategories: grantedCategories,
+              deniedCategories,
+              deniedDocumentIds,
+              allowedDocumentIds,
+          }
+        : {
+              kind: "except",
+              deniedCategories,
+              allowedCategories: grantedCategories,
+              deniedDocumentIds,
+              allowedDocumentIds,
+          };
+    const reach = await reachInGrants(subject.companyId, principal, {
+        restrictedFolderIds: new Set(folderIds.map(String)),
+        restrictedDocumentIds: new Set(documentIds.map(String)),
+    });
+    for (const path of reach.folders) {
+        if (!scopeAllowsCategory(interim, path)) grantedCategories.push(path);
+    }
+    for (const doc of reach.documents) {
+        if (ineligibleDocumentIds.has(doc.id)) continue;
+        if (!scopeAllowsCategory(interim, doc.category ?? "")) allowedDocumentIds.push(doc.id);
+    }
+
     if (isGuest) {
         return {
             kind: "only",
@@ -274,6 +309,65 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     };
 }
 
+/**
+ * Grants reaching the caller on folders and documents that are not
+ * themselves restricted — the candidates for a reach-in exception.
+ */
+async function reachInGrants(
+    companyId: bigint,
+    principal: { userPk: string; groupIds: ReadonlySet<string>; role: string },
+    restricted: {
+        restrictedFolderIds: ReadonlySet<string>;
+        restrictedDocumentIds: ReadonlySet<string>;
+    }
+): Promise<{ folders: string[]; documents: { id: number; category: string | null }[] }> {
+    const groupIds = [...principal.groupIds];
+    const reaches = (table: typeof folderGrants | typeof documentGrants) =>
+        or(
+            and(eq(table.principalType, "user"), eq(table.principalId, principal.userPk)),
+            groupIds.length > 0
+                ? and(eq(table.principalType, "group"), inArray(table.principalId, groupIds))
+                : undefined,
+            eq(table.principalType, "role")
+        );
+    const [folderRows, documentRows] = await Promise.all([
+        db
+            .select({
+                categoryId: folderGrants.categoryId,
+                name: category.name,
+                principalType: folderGrants.principalType,
+                principalId: folderGrants.principalId,
+            })
+            .from(folderGrants)
+            .innerJoin(category, eq(category.id, folderGrants.categoryId))
+            .where(and(eq(folderGrants.companyId, companyId), reaches(folderGrants))),
+        db
+            .select({
+                documentId: documentGrants.documentId,
+                category: document.category,
+                principalType: documentGrants.principalType,
+                principalId: documentGrants.principalId,
+            })
+            .from(documentGrants)
+            .innerJoin(document, eq(document.id, documentGrants.documentId))
+            .where(and(eq(documentGrants.companyId, companyId), reaches(documentGrants))),
+    ]);
+    const folders = new Set<string>();
+    for (const row of folderRows) {
+        if (restricted.restrictedFolderIds.has(row.categoryId.toString())) continue;
+        if (principalMatches(row, principal)) folders.add(row.name);
+    }
+    const documents = new Map<number, string | null>();
+    for (const row of documentRows) {
+        if (restricted.restrictedDocumentIds.has(row.documentId.toString())) continue;
+        if (principalMatches(row, principal)) documents.set(Number(row.documentId), row.category);
+    }
+    return {
+        folders: [...folders],
+        documents: [...documents].map(([id, cat]) => ({ id, category: cat })),
+    };
+}
+
 // ---------------------------------------------------------------------------
 // SQL
 // ---------------------------------------------------------------------------
@@ -289,17 +383,22 @@ function descendantPattern(path: string): string {
 }
 
 /**
- * The folder half of the scope as one CASE over `document.category`, rules
- * deepest first, so the nearest restricted ancestor decides. `undefined`
- * means the folders impose no filter.
+ * The folder half of the scope as one CASE over a folder-path column
+ * (`document.category` unless told otherwise), rules deepest first, so the
+ * nearest restricted ancestor decides. `undefined` means the folders impose
+ * no filter. Exported for other rows filed in folders — mindmap drafts — so
+ * they are listed by exactly the rule documents are.
  */
-function folderPredicate(scope: DocumentScope): SQL | undefined {
+export function folderScopePredicate(
+    scope: DocumentScope,
+    column: AnyColumn = document.category
+): SQL | undefined {
     const rules = scopeFolderRules(scope);
     const otherwise = scopeDefaultAllow(scope);
     if (rules.length === 0) return otherwise ? undefined : sql`false`;
     const whens = rules.map(
         rule =>
-            sql`WHEN (${document.category} = ${rule.path} OR ${document.category} LIKE ${descendantPattern(rule.path)}) THEN ${rule.allow ? sql`true` : sql`false`}`
+            sql`WHEN (${column} = ${rule.path} OR ${column} LIKE ${descendantPattern(rule.path)}) THEN ${rule.allow ? sql`true` : sql`false`}`
     );
     return sql`(CASE ${sql.join(whens, sql` `)} ELSE ${otherwise ? sql`true` : sql`false`} END)`;
 }
@@ -315,7 +414,7 @@ export function documentScopePredicate(scope: DocumentScope): SQL | undefined {
     const allowedIds = [...scope.allowedDocumentIds];
     const deniedIds = [...scope.deniedDocumentIds];
 
-    let base = folderPredicate(scope);
+    let base = folderScopePredicate(scope);
     if (deniedIds.length > 0) {
         const notDenied = notInArray(document.id, deniedIds);
         base = base ? and(base, notDenied) : notDenied;

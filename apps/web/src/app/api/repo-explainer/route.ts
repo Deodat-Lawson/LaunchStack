@@ -11,6 +11,7 @@ import {
 } from "@launchstack/pipelines/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 
@@ -73,82 +74,84 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
-        const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
-        if (!validation.success) {
-            return validation.response;
-        }
+        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
+            if (!validation.success) {
+                return validation.response;
+            }
 
-        const { url, instructions, diagramType } = validation.data as RepoExplanationRequest;
+            const { url, instructions, diagramType } = validation.data as RepoExplanationRequest;
 
-        const parsedUrl = parseGitHubUrl(url);
-        if (!parsedUrl) {
-            return createValidationError(
-                "Invalid GitHub URL format. Please use: https://github.com/owner/repo or owner/repo"
+            const parsedUrl = parseGitHubUrl(url);
+            if (!parsedUrl) {
+                return createValidationError(
+                    "Invalid GitHub URL format. Please use: https://github.com/owner/repo or owner/repo"
+                );
+            }
+
+            const { owner, repo } = parsedUrl;
+            // `?? ""` first so the `||` fallthrough (which must also skip empty
+            // strings, e.g. an empty header or env var) operates on plain strings.
+            // Precedence: a token the user typed for this request, then the
+            // workspace's GitHub connection, then the deployment-global PAT.
+            const githubToken =
+                (request.headers.get("X-GitHub-Token") ?? "") ||
+                ((await getCompanyAccessToken(ctx.data.companyId, "github")) ?? "") ||
+                (env.server.GITHUB_TOKEN ?? "") ||
+                null;
+
+            const validationError = await validateRepoAccess(owner, repo, githubToken);
+            if (validationError) {
+                return createValidationError(validationError);
+            }
+
+            const repoInfo: RepoInfo = { owner, repoName: repo };
+
+            const contextResult = await getRepoContext(
+                repoInfo,
+                null,
+                githubToken,
+                undefined,
+                diagramType
             );
-        }
+            if (!contextResult.success) {
+                return handleApiError(
+                    new Error(contextResult.error ?? "Failed to fetch repository context")
+                );
+            }
 
-        const { owner, repo } = parsedUrl;
-        // `?? ""` first so the `||` fallthrough (which must also skip empty
-        // strings, e.g. an empty header or env var) operates on plain strings.
-        // Precedence: a token the user typed for this request, then the
-        // workspace's GitHub connection, then the deployment-global PAT.
-        const githubToken =
-            (request.headers.get("X-GitHub-Token") ?? "") ||
-            ((await getCompanyAccessToken(ctx.data.companyId, "github")) ?? "") ||
-            (env.server.GITHUB_TOKEN ?? "") ||
-            null;
-
-        const validationError = await validateRepoAccess(owner, repo, githubToken);
-        if (validationError) {
-            return createValidationError(validationError);
-        }
-
-        const repoInfo: RepoInfo = { owner, repoName: repo };
-
-        const contextResult = await getRepoContext(
-            repoInfo,
-            null,
-            githubToken,
-            undefined,
-            diagramType
-        );
-        if (!contextResult.success) {
-            return handleApiError(
-                new Error(contextResult.error ?? "Failed to fetch repository context")
+            const explanationResult = await explainRepoWithLlm(
+                repoInfo,
+                contextResult.context,
+                instructions,
+                diagramType
             );
-        }
 
-        const explanationResult = await explainRepoWithLlm(
-            repoInfo,
-            contextResult.context,
-            instructions,
-            diagramType
-        );
+            if (!explanationResult.success) {
+                return handleApiError(
+                    new Error(explanationResult.error ?? "Failed to generate explanation")
+                );
+            }
 
-        if (!explanationResult.success) {
-            return handleApiError(
-                new Error(explanationResult.error ?? "Failed to generate explanation")
-            );
-        }
+            const timestamp = new Date().toISOString();
+            const repoFullName = `${owner}/${repo}`;
+            const summary = extractSummary(explanationResult.explanation);
+            const mermaidCode = extractMermaidCode(explanationResult.explanation);
 
-        const timestamp = new Date().toISOString();
-        const repoFullName = `${owner}/${repo}`;
-        const summary = extractSummary(explanationResult.explanation);
-        const mermaidCode = extractMermaidCode(explanationResult.explanation);
-
-        return createSuccessResponse({
-            explanation: explanationResult.explanation,
-            repo: repoFullName,
-            summary,
-            mermaidCode,
-            umlJson: {
-                format: "mermaid",
+            return createSuccessResponse({
+                explanation: explanationResult.explanation,
                 repo: repoFullName,
                 summary,
-                diagram: mermaidCode,
-                generatedAt: timestamp,
-            },
-            timestamp,
+                mermaidCode,
+                umlJson: {
+                    format: "mermaid",
+                    repo: repoFullName,
+                    summary,
+                    diagram: mermaidCode,
+                    generatedAt: timestamp,
+                },
+                timestamp,
+            });
         });
     } catch (error) {
         console.error("[repo-explainer] POST error:", error);

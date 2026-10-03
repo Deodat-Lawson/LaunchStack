@@ -9,6 +9,7 @@ import {
 import { getWebCallNotesApplication } from "./application";
 import { ConfiguredCallNotesEnrichmentModel } from "./enrichment-model";
 import { getEngine } from "~/server/engine";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 const PREVIEW_MAX_LENGTH = 120_000;
 const PREVIEW_FLUSH_INTERVAL_MS = 250;
@@ -130,9 +131,8 @@ export async function processQueuedCallNotesEnrichment(
             gaps: snapshot.gaps,
             note: snapshot.note,
         });
-        const result = await new ConfiguredCallNotesEnrichmentModel().generate(
-            input,
-            rememberPreview
+        const result = await withWorkspaceChatModels(company, () =>
+            new ConfiguredCallNotesEnrichmentModel().generate(input, rememberPreview)
         );
         await flushFinalPreview();
         await application.completeEnrichment({

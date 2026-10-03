@@ -2,10 +2,10 @@
  * The concrete font stack behind a type token, for renderers that cannot
  * take a CSS `var()`: canvas `ctx.font`, mermaid's theme config.
  *
- * next/font serves Inter and JetBrains Mono under hashed family names, so
- * a literal "Inter" in such a renderer silently falls back to a system
- * face. Reading the token's computed value yields the real names
- * (`'__Inter_…', '__Inter_Fallback_…', ui-sans-serif, …`).
+ * next/font names each face after its export in src/app/fonts.ts, not after
+ * the typeface, so a literal "JetBrains Mono" in such a renderer silently
+ * falls back to a system face. Reading the token's computed value yields the
+ * real names (`'inter', 'inter Fallback', ui-sans-serif, …`).
  */
 export type FontRole = "sans" | "serif" | "mono";
 

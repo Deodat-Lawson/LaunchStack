@@ -49,6 +49,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Tiptap Call Notes** — Owner-only rich-text note editing with double-click inline title renaming, a sticky formatting toolbar, JSON/Markdown autosave through the existing revisioned note command, stable polling, explicit conflict recovery, and idempotent retries. Read-only and private-note boundaries remain intact.
 - **Chronological AI enhancement** — Call summaries now use short, discussion-driven topic headings and concise Markdown bullets instead of paragraphs or fixed appendices. The prompt prioritizes key points and removes filler and repetition while preserving user-note ideas, paraphrased inline with Markdown bold as an intuitive citation cue. The editor preserves bold through review, editing, acceptance, and reload; structured evidence metadata and the existing acceptance flow remain intact.
 - **Live AI note previews** — Enhanced note Markdown now arrives during model generation through an authenticated, reconnectable SSE observer backed by bounded durable preview storage. Manual and automatic enrichment retain final schema/provenance validation and explicit acceptance; provisional text never changes the saved note.
+- **Watch and listen to media sources** - audio and video play in the source
+  viewer, opened from the recording or from its transcript
+  - Video plays in the browser's player; audio in a themed deck (play, skip
+    10s, scrub, speed, mute, download). An MP4 with no picture is shown as
+    audio. YouTube, Vimeo, Dailymotion and SoundCloud imports play in the
+    platform's own embed; other platforms link out
+  - The transcript sits under the player: with timestamps, each line plays
+    from its moment and the playing line is marked and kept in view (for
+    YouTube and Vimeo embeds too, over postMessage); a citation into a
+    transcript cues the player to the cited line
+  - Stored files are served with HTTP byte ranges (206), so players seek
+    without downloading the whole file; ranges pass through to object storage
+  - `GET /api/documents/[id]/media` resolves either half of the pair: the
+    recording to play and the transcript made from it
+  - Whisper's timestamps are kept for uploads and for URL imports
+    (`/download-and-transcribe` now returns `segments`); the source list shows
+    Video and YouTube sources as such
 - **Proposals** - a writing app of its own in Tools, with a Studio tile: find
   the funders that fit, then write the proposal from what your sources prove
   - Profile: what the workspace's sources can prove, fact by fact with
@@ -178,6 +195,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation and code maintainability
 
 ### Fixed
+
+- A fresh checkout's `next dev --turbo` answered 500 on every route,
+  `/api/auth/*` included, whenever Google Fonts served its extensionless
+  `l/font?kit=…&skey=…` URLs, which Next 15.5 rejects; the same response failed
+  `next build` under webpack and quietly swapped webpack dev to Arial. Inter
+  and JetBrains Mono are now self-hosted in `packages/design-tokens/fonts`
+  (same glyphs and features as Google's files) and loaded with
+  `next/font/local`, so no build contacts Google
+- `/api/documents/[id]/content` answered 500 for every database-stored file
+  (a relative `/api/files/{id}` URL passed to `NextResponse.redirect`); it now
+  redirects with a relative `Location`
+- An `.m4a` upload (sent as `audio/x-m4a`) skipped transcription and went to
+  document extraction; the self-hosted transcription service now accepts
+  `.m4a` too. The audio picker no longer offers WAV and FLAC, which upload
+  refused
 
 - The New meeting dialog was 512px wide whatever it asked for (the kit's
   `sm:max-w-lg` outranked its `max-w-none`), and the New meeting button

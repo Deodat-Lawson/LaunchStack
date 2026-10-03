@@ -1,6 +1,6 @@
 /**
- * The merge: personal chat sessions plus workspace pipeline runs, in one
- * reverse-chronological feed.
+ * The merge: chat sessions (your own and those shared with you) plus
+ * workspace pipeline runs, in one reverse-chronological feed.
  *
  * Loaders run concurrently and are *settled*, not awaited as a group — a
  * vertical whose table is mid-migration, or whose query throws, contributes
@@ -16,7 +16,8 @@ import {
     type HistoryKind,
 } from "~/lib/workspace-history";
 import { PIPELINE_LOADERS, type HistoryLoaderContext } from "~/server/history/loaders";
-import { listSessions } from "~/server/sessions/repository";
+import type { SessionActor } from "~/server/sessions/access";
+import { listChatFeed, type ChatFeedRow } from "~/server/sessions/feed";
 
 export const DEFAULT_HISTORY_LIMIT = 60;
 export const MAX_HISTORY_LIMIT = 200;
@@ -25,34 +26,40 @@ export interface LoadHistoryInput {
     companyId: bigint;
     /** Auth subject id — chat sessions are this person's; runs are the workspace's. */
     userId: string;
+    /** Who is asking, for the chats shared with them (ADR-014). */
+    actor: SessionActor;
     limit?: number;
     /** Restrict to these kinds. Omit for everything. */
     kinds?: readonly HistoryKind[];
+    /** Only this person's archived chats. Runs have no archive, so none come back. */
+    archived?: boolean;
 }
 
 export interface HistoryPage {
     entries: HistoryEntry[];
     /** Kinds whose loader failed this request, so the UI can say so honestly. */
     degraded: HistoryKind[];
+    /** Chats this person has archived; null when not counted (the archived view, or no chats loaded). */
+    archivedCount: number | null;
 }
 
-/** Chat sessions as history rows. Kept here, not in the repository, so the
- * repository stays about storage and this module owns the wire shape. */
-async function loadChatEntries(ctx: HistoryLoaderContext): Promise<HistoryEntry[]> {
-    const sessions = await listSessions(
-        { companyId: ctx.companyId, userId: ctx.userId },
-        { limit: ctx.limit }
-    );
-    return sessions.map(session => ({
-        id: `chat:${session.id}`,
-        kind: "chat" as const,
-        refId: session.id,
-        title: session.title,
-        status: "done" as const,
-        at: session.lastMessageAt,
-        href: `/employer/documents?session=${encodeURIComponent(session.id)}`,
-        messageCount: session.messageCount,
-    }));
+/** A chat as a history row. Kept here, not in the feed, so this module owns the wire shape. */
+export function chatEntry(row: ChatFeedRow): HistoryEntry {
+    return {
+        id: `chat:${row.id}`,
+        kind: "chat",
+        refId: row.id,
+        title: row.title,
+        status: "done",
+        at: row.lastMessageAt,
+        href: `/employer/documents?session=${encodeURIComponent(row.id)}`,
+        messageCount: row.messageCount,
+        pinned: row.pinned,
+        pinRank: row.pinRank,
+        archived: row.archived,
+        shared: row.shared,
+        ...(row.mine ? {} : { sharedBy: row.ownerAuthUserId, unread: row.unread }),
+    };
 }
 
 export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<HistoryPage> {
@@ -61,10 +68,23 @@ export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<His
 
     const jobs: { kind: HistoryKind; run: () => Promise<HistoryEntry[]> }[] = [];
     const ctx: HistoryLoaderContext = { companyId: input.companyId, userId: input.userId, limit };
+    let archivedCount: number | null = null;
 
-    if (wanted.has("chat")) jobs.push({ kind: "chat", run: () => loadChatEntries(ctx) });
-    for (const loader of PIPELINE_LOADERS) {
-        if (wanted.has(loader.kind)) jobs.push({ kind: loader.kind, run: () => loader.load(ctx) });
+    if (wanted.has("chat")) {
+        jobs.push({
+            kind: "chat",
+            run: async () => {
+                const feed = await listChatFeed(input.actor, { limit, archived: input.archived });
+                archivedCount = feed.archivedCount;
+                return feed.rows.map(chatEntry);
+            },
+        });
+    }
+    if (!input.archived) {
+        for (const loader of PIPELINE_LOADERS) {
+            if (wanted.has(loader.kind))
+                jobs.push({ kind: loader.kind, run: () => loader.load(ctx) });
+        }
     }
 
     const settled = await Promise.allSettled(jobs.map(job => job.run()));
@@ -81,8 +101,12 @@ export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<His
         }
     });
 
-    entries.sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
-    return { entries: entries.slice(0, limit), degraded };
+    const newestFirst = (a: HistoryEntry, b: HistoryEntry) => Date.parse(b.at) - Date.parse(a.at);
+    entries.sort(newestFirst);
+    // Pins are drawn on top whatever their age, so the cap never drops one.
+    const pinned = entries.filter(entry => entry.pinned);
+    const rest = entries.filter(entry => !entry.pinned).slice(0, limit);
+    return { entries: [...pinned, ...rest].sort(newestFirst), degraded, archivedCount };
 }
 
 /** Parse a repeated or comma-separated `kind` query param; empty means "all". */

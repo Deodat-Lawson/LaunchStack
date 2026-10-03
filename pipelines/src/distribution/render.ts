@@ -158,7 +158,8 @@ export function renderDossierMarkdown(input: RenderDossierInput): string {
             `Generated: ${input.generatedAt.toISOString()}`,
             `Playbook: ${input.provenance.playbookHash.slice(0, 12)}`,
             `Prompt: ${input.provenance.promptVersion}`,
-            input.provenance.modelId ? `Model: ${input.provenance.modelId}` : undefined,
+            // No model line: the dossier is a workspace source people read, and
+            // the product never names the model (provenance keeps the id).
         ]
             .filter(Boolean)
             .map(l => `> ${l}`)

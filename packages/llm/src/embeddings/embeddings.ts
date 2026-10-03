@@ -25,6 +25,12 @@ export interface EmbeddingConfig {
     concurrency?: number;
 }
 
+/** Missing embedding credentials or endpoint cannot be fixed by retrying. */
+export class EmbeddingConfigurationError extends Error {
+    override readonly name = "EmbeddingConfigurationError";
+    readonly retryable = false;
+}
+
 /**
  * Library defaults. The caller is expected to pass apiKey and baseUrl (and
  * optionally override model / dimensions) on every call; the default apiKey
@@ -57,11 +63,13 @@ interface OpenAIEmbeddingResponse {
     object: string;
     data: Array<{
         object: string;
-        index: number;
+        /** Gemini omits a zero index (protobuf drops default values). */
+        index?: number;
         embedding: number[];
     }>;
     model: string;
-    usage: {
+    /** Absent from Gemini's OpenAI-compatible endpoint. */
+    usage?: {
         prompt_tokens: number;
         total_tokens: number;
     };
@@ -90,12 +98,12 @@ export async function generateEmbeddings(
     const startTime = Date.now();
 
     if (!merged.apiKey) {
-        throw new Error("API key not configured for embeddings");
+        throw new EmbeddingConfigurationError("API key not configured for embeddings");
     }
 
     const { baseUrl } = merged;
     if (!baseUrl) {
-        throw new Error(
+        throw new EmbeddingConfigurationError(
             "Embeddings base URL not configured. Set EMBEDDING_API_BASE_URL (with " +
                 "EMBEDDING_API_KEY) or AI_BASE_URL, or pass EmbeddingConfig.baseUrl. " +
                 "Embeddings deliberately have no default endpoint, unlike chat and " +
@@ -248,7 +256,7 @@ async function callEmbeddingAPI(
 
     const data = (await response.json()) as OpenAIEmbeddingResponse;
 
-    const sortedData = [...data.data].sort((a, b) => a.index - b.index);
+    const sortedData = [...data.data].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     const dim = config.dimensions;
     const embeddings = sortedData.map(item =>
         item.embedding.length > dim ? item.embedding.slice(0, dim) : item.embedding
@@ -256,7 +264,7 @@ async function callEmbeddingAPI(
 
     return {
         embeddings,
-        tokensUsed: data.usage.total_tokens,
+        tokensUsed: data.usage?.total_tokens ?? 0,
     };
 }
 

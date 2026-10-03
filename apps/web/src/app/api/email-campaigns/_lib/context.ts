@@ -19,6 +19,7 @@ import {
     type ActorResult,
     type ApiActor,
 } from "~/server/api/context";
+import { publicOrigin } from "~/server/public-origin";
 
 export { fail, handleRouteError, idempotencyKeyFrom, ok, readJson } from "~/server/api/context";
 
@@ -62,5 +63,5 @@ export const parseCampaignId = parseNumericId;
  * token the feature layer appends, never as guessable path segments.
  */
 export function unsubscribeBaseUrl(request: Request) {
-    return `${new URL(request.url).origin}/api/email-pipeline/unsubscribe`;
+    return `${publicOrigin(request)}/api/email-pipeline/unsubscribe`;
 }

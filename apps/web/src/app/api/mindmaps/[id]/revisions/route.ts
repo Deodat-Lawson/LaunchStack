@@ -2,7 +2,8 @@
  * Version history: list the snapshots for a mindmap, or restore one.
  *
  * Restoring is itself a save — it bumps the revision and writes a new snapshot
- * — so "undo the restore" is just restoring the entry before it.
+ * — so "undo the restore" is just restoring the entry before it. Listing takes
+ * what opening the draft takes; restoring takes edit access (ADR-014).
  */
 
 import { NextResponse } from "next/server";
@@ -12,6 +13,12 @@ import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
+import {
+    DRAFT_EDIT_DENIED,
+    canEditDraftAt,
+    draftAccess,
+    draftReader,
+} from "~/server/mindmap/access";
 import {
     getMindmap,
     getRevision,
@@ -34,7 +41,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         const id = parseId((await params).id);
         if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
-        const row = await getMindmap(id, ctx.data.companyId);
+        const row = await getMindmap(id, await draftReader(ctx.data));
         if (!row) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
 
         return NextResponse.json({ revisions: await listRevisions(id) }, { status: 200 });
@@ -59,8 +66,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             return NextResponse.json({ error: "revisionId is required" }, { status: 400 });
         }
 
-        const current = await getMindmap(id, ctx.data.companyId);
+        const current = await getMindmap(id, await draftReader(ctx.data));
         if (!current) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!canEditDraftAt((await draftAccess(ctx.data, current)).level)) {
+            return NextResponse.json({ error: DRAFT_EDIT_DENIED }, { status: 403 });
+        }
 
         const snapshot = await getRevision(id, revisionId);
         if (!snapshot) return NextResponse.json({ error: "Revision not found" }, { status: 404 });

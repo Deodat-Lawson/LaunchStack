@@ -1,30 +1,29 @@
 "use client";
 
 import { useSettingValue } from "~/lib/settings/useSettings";
-import React, { type ComponentType, useEffect, useRef, useState } from "react";
-import {
-    displayFolderPath,
-    folderDepth,
-    folderLeafName,
-    normalizeFolderPath,
-    validateFolderPath,
-} from "~/lib/folders/path";
+import React, { type ComponentType, useEffect, useMemo, useRef, useState } from "react";
+import { folderLeafName, isUnfiledFolder } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
 import {
-    Lock,
     Zap as IconBolt,
     Check as IconCheck,
-    ChevronDown as IconChevronDown,
     Folder as IconFolder,
-    Plus as IconPlus,
+    Loader2,
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
+import { Input } from "~/components/ui/input";
+import { cn } from "~/lib/utils";
+import { AddDestinationBar } from "./AddDestinationBar";
+import { destinationLabel, planFolderUpload, type AudienceSummary } from "./addDestination";
+import { ADD_TABS, SOURCE_META, type AddSourceTab, type ItemAccessView } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
+import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 import { registerDocument, uploadFileToStorage } from "./sourceUpload";
+import { DOCUMENT_LIMITS } from "~/lib/constants";
+import { detectSourceType } from "@launchstack/conversion/types";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
@@ -59,8 +58,11 @@ import type { IconProps } from "~/components/icons/types";
 /**
  * AddSourceModal — tabbed create/upload/connect modal matching the Launstack
  * design handoff (`modal.jsx`). Sidebar lists Create + Upload + Connect tabs;
- * the right panel hosts the active tab; a footer strip carries the "Save to"
- * folder picker so destination stays visible across tabs.
+ * the right panel hosts the active tab. Above every tab's content sits the
+ * destination bar (`AddDestinationBar`): the folder it goes to and who will
+ * be able to open it, so neither is a surprise after the upload. Tabs that
+ * always file in one place (Drive, Coding sessions, Gmail) show that place;
+ * connectors that add nothing to a folder show no bar.
  *
  * Backend integration is kept unchanged:
  *   - Files / Audio / Video: `/api/storage/upload` → `/api/uploadDocument`
@@ -86,16 +88,28 @@ export interface AddSourceModalProps {
     open: boolean;
     onClose: () => void;
     userId: string | null;
-    /** Folder name to pre-select in the Save-to picker (e.g. the rail's active folder). */
+    /** Folder to pre-select as the destination (e.g. the rail's active folder). */
     defaultCategory: string;
-    /** Existing folder names for the Save-to picker. */
+    /** Folders the caller can add to — the destination picker's list. */
     folders: string[];
-    /** Folders whose audience is limited to people with access — the picker says so. */
-    restrictedFolders?: string[];
+    /**
+     * Every folder the caller can see, to tell an existing folder from one an
+     * upload would create (a new top-level folder is private to its creator).
+     * Defaults to `folders`.
+     */
+    knownFolders?: string[];
+    /** The caller's access to each folder, keyed by normalized path — who will see what lands there. */
+    folderAccess?: Readonly<Record<string, ItemAccessView>>;
+    /** "Everyone at <name>" — until the folder's own answer arrives. */
+    workspaceName?: string | null;
+    /** Open the Share dialog for a folder; offered to people who manage it. */
+    onShareFolder?: (path: string) => void;
+    /** Bump after sharing changes so the destination bar reads the audience again. */
+    accessVersion?: number;
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
-    /** Optional: persist a new folder name the user typed in the picker. */
-    onCreateFolder?: (name: string) => void;
+    /** Create a folder; may resolve to the path it really got ("Name (2)"). */
+    onCreateFolder?: (name: string) => void | Promise<string | null | void>;
     /**
      * Tab to open on. Set when the caller already knows what the user picked —
      * the Knowledge pane's connector strip opens straight onto Slack or Drive
@@ -131,17 +145,23 @@ interface GoogleConnectionStatus {
     connectUrl?: string;
 }
 
+/** Which half of a file's trip is running: the bytes, or registering it (which transcribes a recording). */
+type UploadPhase = "uploading" | "processing";
+
 async function uploadAndRegisterAll(params: {
     files: File[];
     category: string;
     onProgress?: (completed: number, total: number) => void;
+    onPhase?: (file: File, phase: UploadPhase) => void;
 }): Promise<{ successes: number; errors: string[] }> {
     let successes = 0;
     const errors: string[] = [];
     for (let i = 0; i < params.files.length; i++) {
         const file = params.files[i]!;
         try {
+            params.onPhase?.(file, "uploading");
             const up = await uploadFileToStorage(file);
+            params.onPhase?.(file, "processing");
             await registerDocument({
                 file,
                 url: up.url,
@@ -162,6 +182,11 @@ function formatSize(bytes: number): string {
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
     if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+}
+
+/** " to Q4 planning / Pricing", or " (no folder)" — the end of a "done" toast. */
+function whereTo(category: string): string {
+    return isUnfiledFolder(category) ? " (no folder)" : ` to ${destinationLabel(category)}`;
 }
 
 function extOf(filename: string): string {
@@ -189,13 +214,53 @@ function extColor(ext: string): string {
 // Modal shell
 // ---------------------------------------------------------------------------
 
+/** Tabs that add to the folder the person picks — the destination bar offers the picker. */
+const PICKS_FOLDER = new Set([
+    "mindmap",
+    "google-doc",
+    "paste",
+    "files",
+    "folder",
+    "audio",
+    "video",
+    "url",
+    "youtube",
+    "artifact",
+]);
+
+/** Connectors that file everything in one folder of their own. */
+const FIXED_DESTINATIONS: Record<string, string> = {
+    drive: "Google Drive",
+    // The connector files every session here (AGENT_SESSIONS_CATEGORY).
+    "agent-sessions": "Agent Sessions",
+};
+
+/**
+ * A picked Drive folder doesn't land in "Google Drive" (server/…/google-drive/
+ * destinations.ts) — shown only while folder import actually works, since a
+ * drive.file-only connection imports nothing from a folder.
+ */
+const DRIVE_FOLDER_NOTE =
+    "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.";
+
+/** Gmail's folder is per mailbox and its owner's alone (ADR-014). */
+const GMAIL_AUDIENCE: AudienceSummary = {
+    tone: "private",
+    headline: "Only you",
+    detail: "Mail lands in your own Gmail folder. Nobody else in the workspace can open it.",
+};
+
 export function AddSourceModal({
     open,
     onClose,
     userId,
     defaultCategory,
     folders,
-    restrictedFolders = [],
+    knownFolders,
+    folderAccess = NO_ACCESS,
+    workspaceName = null,
+    onShareFolder,
+    accessVersion = 0,
     onUploaded,
     onCreateFolder,
     initialTab,
@@ -206,7 +271,12 @@ export function AddSourceModal({
 }: AddSourceModalProps) {
     const [tab, setTab] = useState<string>(initialTab ?? "files");
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
+    /** The Folder tab's new folder, made inside `folder`; null until one is picked. */
+    const [folderChild, setFolderChild] = useState<string | null>(null);
     const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
+    const [driveFolderAccess, setDriveFolderAccess] = useState<FolderAccessState | null>(null);
+    const shellRef = useRef<HTMLDivElement>(null);
+    const known = useMemo(() => knownFolders ?? folders, [knownFolders, folders]);
     // Settings → Document defaults: open on Google Doc when Drive linking is
     // on and the workspace asked for it — only when the caller named no tab.
     const preferGoogleDoc = useSettingValue<boolean>("documents.createNativeGoogleDoc");
@@ -224,7 +294,14 @@ export function AddSourceModal({
     useEffect(() => {
         if (!open) return;
         const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key !== "Escape" || e.defaultPrevented) return;
+            // Escape in something layered over this dialog — the folder
+            // picker, the Share dialog — closes that, not this.
+            const focused = document.activeElement;
+            if (focused && focused !== document.body && !shellRef.current?.contains(focused)) {
+                return;
+            }
+            onClose();
         };
         window.addEventListener("keydown", onEsc);
         return () => window.removeEventListener("keydown", onEsc);
@@ -282,8 +359,8 @@ export function AddSourceModal({
         panel = (
             <FolderPanel
                 userId={userId}
-                category={folder}
-                onFolderRename={setFolder}
+                destination={folder}
+                onNameChange={setFolderChild}
                 onUploaded={handleUploaded}
             />
         );
@@ -312,7 +389,7 @@ export function AddSourceModal({
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
-        panel = <DriveConnectPanel tab={active} />;
+        panel = <DriveConnectPanel tab={active} onFolderAccess={setDriveFolderAccess} />;
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} />;
     } else if (tab === "artifact") {
@@ -348,100 +425,111 @@ export function AddSourceModal({
         panel = <ConnectPanel tab={active} />;
     }
 
+    // Where it goes and who will see it, before anything is added. Slack,
+    // GitHub, Notion and Dropbox add nothing to a folder here, so no bar.
+    const barProps = {
+        folders,
+        knownFolders: known,
+        folderAccess,
+        workspaceName,
+        selfAuthId: userId,
+        onShareFolder,
+        accessVersion,
+    };
+    let destination: React.ReactNode = null;
+    if (PICKS_FOLDER.has(active.id)) {
+        destination = (
+            <AddDestinationBar
+                mode="pick"
+                value={folder}
+                onChange={setFolder}
+                onCreate={onCreateFolder}
+                pendingChild={active.id === "folder" ? folderChild : null}
+                audienceNote={
+                    active.id === "mindmap"
+                        ? "This applies to the published copy, the one the workspace can cite."
+                        : undefined
+                }
+                {...barProps}
+            />
+        );
+    } else if (FIXED_DESTINATIONS[active.id]) {
+        destination = (
+            <AddDestinationBar
+                mode="fixed"
+                value={FIXED_DESTINATIONS[active.id]!}
+                audienceNote={
+                    active.id === "drive" && driveFolderAccess === "ready"
+                        ? DRIVE_FOLDER_NOTE
+                        : undefined
+                }
+                {...barProps}
+            />
+        );
+    } else if (active.id === "gmail") {
+        destination = (
+            <AddDestinationBar
+                mode="fixed"
+                value="Gmail/your mailbox"
+                fixedAudience={GMAIL_AUDIENCE}
+                {...barProps}
+            />
+        );
+    }
+
     return (
+        // Not the kit Dialog on purpose: Drive's tab opens Google's Picker, an
+        // iframe Google appends to <body>, and a Radix modal would make it
+        // unclickable (pointer-events: none outside the content) and pull
+        // focus back out of it.
         <div
             onClick={onClose}
-            style={{
-                position: "fixed",
-                inset: 0,
-                zIndex: 100,
-                background: "var(--scrim)",
-                backdropFilter: "blur(6px)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 24,
-                animation: "lsw-fadeIn 160ms ease-out",
-            }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--scrim)] p-6 backdrop-blur-[6px] [animation:lsw-fadeIn_160ms_ease-out] max-sm:p-2"
         >
             <div
+                ref={shellRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="add-source-title"
+                aria-describedby="add-source-desc"
                 onClick={e => e.stopPropagation()}
-                style={{
+                className={cn(
+                    "bg-panel flex max-h-[86vh] max-w-[92vw] overflow-hidden rounded-2xl shadow-[0_30px_80px_var(--scrim-shadow),0_0_0_1px_var(--line)] [animation:lsw-modalIn_180ms_ease-out] max-sm:max-w-full",
                     // The sessions browser is a list with filters, not a form;
                     // at the form width its rows truncated to nothing.
-                    width: tab === "agent-sessions" ? 1040 : 780,
-                    maxWidth: "92vw",
-                    maxHeight: "86vh",
-                    background: "var(--panel)",
-                    borderRadius: 16,
-                    boxShadow: "0 30px 80px var(--scrim-shadow), 0 0 0 1px var(--line)",
-                    display: "flex",
-                    overflow: "hidden",
-                    animation: "lsw-modalIn 180ms ease-out",
-                }}
+                    active.id === "agent-sessions" ? "w-[1040px]" : "w-[780px]"
+                )}
+                data-testid="add-source-dialog"
             >
                 {/* Sidebar */}
-                <div
-                    style={{
-                        width: 220,
-                        background: "var(--line-2)",
-                        borderRight: "1px solid var(--line)",
-                        padding: "18px 12px",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 16,
-                        overflowY: "auto",
-                    }}
+                <nav
+                    aria-label="Ways to add"
+                    className="border-line bg-line-2 flex w-[220px] shrink-0 flex-col gap-4 overflow-y-auto border-r px-3 py-[18px] max-sm:w-[132px] max-sm:px-1.5"
                 >
-                    <div
-                        style={{
-                            padding: "0 8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <div style={{ fontSize: 15, fontWeight: 700 }}>Add a source</div>
-                    </div>
+                    <h2 id="add-source-title" className="text-ink px-2 text-[15px] font-bold">
+                        Add a source
+                    </h2>
                     {groups.map(g => (
                         <div key={g.group}>
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.08em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                    padding: "0 8px 6px",
-                                }}
-                            >
+                            <div className="mono text-ink-3 px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em]">
                                 {g.group}
                             </div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                            <div className="flex flex-col gap-px">
                                 {g.items.map(item => {
-                                    const isActive = tab === item.id;
+                                    const isActive = active.id === item.id;
                                     const Icon = item.Icon;
                                     return (
                                         <button
                                             key={item.id}
+                                            type="button"
                                             onClick={() => setTab(item.id)}
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 10,
-                                                padding: "7px 8px",
-                                                borderRadius: 7,
-                                                textAlign: "left",
-                                                fontSize: 13,
-                                                fontWeight: isActive ? 600 : 500,
-                                                color: isActive
-                                                    ? "var(--accent-ink)"
-                                                    : "var(--ink-2)",
-                                                background: isActive
-                                                    ? "var(--accent-soft)"
-                                                    : "transparent",
-                                            }}
+                                            aria-current={isActive ? "page" : undefined}
+                                            className={cn(
+                                                "flex items-center gap-2.5 rounded-[7px] px-2 py-[7px] text-left text-[13px]",
+                                                isActive
+                                                    ? "bg-brand-soft text-brand-ink font-semibold"
+                                                    : "text-ink-2 hover:bg-panel font-medium"
+                                            )}
                                         >
                                             <Icon size={14} />
                                             {item.label}
@@ -451,280 +539,37 @@ export function AddSourceModal({
                             </div>
                         </div>
                     ))}
-                </div>
+                </nav>
                 {/* Panel */}
-                <div
-                    style={{
-                        flex: 1,
-                        padding: "22px 26px",
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden",
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            marginBottom: 18,
-                        }}
-                    >
-                        <div>
-                            <div style={{ fontSize: 18, fontWeight: 700 }}>{active.label}</div>
-                            <div style={{ fontSize: 13, color: "var(--ink-3)", marginTop: 2 }}>
+                <div className="flex min-w-0 flex-1 flex-col overflow-hidden px-[26px] py-[22px] max-sm:px-3 max-sm:py-4">
+                    <div className="mb-3.5 flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                            <div className="text-ink text-lg font-bold">{active.label}</div>
+                            <p id="add-source-desc" className="text-ink-3 mt-0.5 text-[13px]">
                                 {active.desc}
-                            </div>
+                            </p>
                         </div>
-                        <button
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
                             onClick={onClose}
-                            style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 8,
-                                color: "var(--ink-3)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
+                            className="text-ink-3 size-8 shrink-0"
+                            aria-label="Close"
                             title="Close"
                         >
                             <IconX size={16} />
-                        </button>
+                        </Button>
                     </div>
-                    <div style={{ flex: 1, overflowY: "auto" }}>{panel}</div>
-
-                    {/* Save-to strip. Tags picker omitted for now — tags aren't yet
-              persisted on ingest, and the design is purely informational.
-              Not on Coding sessions: the connector files every session in
-              its own "Agent Sessions" folder. */}
-                    {tab === "agent-sessions" ? (
-                        <p className="border-line text-ink-3 mt-3.5 border-t pt-3.5 text-xs">
-                            Imported sessions go to the &ldquo;Agent Sessions&rdquo; folder.
-                        </p>
-                    ) : (
-                        <div
-                            style={{
-                                marginTop: 14,
-                                paddingTop: 14,
-                                borderTop: "1px solid var(--line)",
-                                display: "flex",
-                                gap: 10,
-                                alignItems: "center",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.08em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                }}
-                            >
-                                Save to
-                            </div>
-                            <FolderPicker
-                                value={folder}
-                                onChange={setFolder}
-                                folders={folders}
-                                onCreate={onCreateFolder}
-                            />
-                            <span
-                                role="note"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 5,
-                                    fontSize: 11.5,
-                                    color: restrictedFolders.includes(folder)
-                                        ? "var(--ink-2)"
-                                        : "var(--ink-3)",
-                                }}
-                            >
-                                {restrictedFolders.includes(folder) ? (
-                                    <>
-                                        <Lock size={11} />
-                                        Restricted folder — visible only to people with access
-                                    </>
-                                ) : (
-                                    "Visible to everyone in the workspace"
-                                )}
-                            </span>
-                        </div>
-                    )}
+                    {destination && <div className="mb-4 shrink-0">{destination}</div>}
+                    <div className="min-h-0 flex-1 overflow-y-auto">{panel}</div>
                 </div>
             </div>
         </div>
     );
 }
 
-// ---------------------------------------------------------------------------
-// Folder picker
-// ---------------------------------------------------------------------------
-
-interface FolderPickerProps {
-    value: string;
-    onChange: (next: string) => void;
-    folders: string[];
-    onCreate?: (name: string) => void;
-}
-
-function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps) {
-    const [open, setOpen] = useState(false);
-    const [q, setQ] = useState("");
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const onClick = (e: globalThis.MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-        };
-        if (open) {
-            document.addEventListener("mousedown", onClick);
-            return () => document.removeEventListener("mousedown", onClick);
-        }
-    }, [open]);
-
-    const filtered = folders.filter(f => f.toLowerCase().includes(q.toLowerCase()));
-    // Typing "Contracts/2026" creates a nested folder; the path is validated
-    // the same way the folder dialog validates it.
-    const candidate = normalizeFolderPath(q);
-    const candidateProblem = q.trim().length > 0 ? validateFolderPath(candidate) : null;
-    const canCreate =
-        q.trim().length > 0 &&
-        !candidateProblem &&
-        !folders.some(f => f.toLowerCase() === candidate.toLowerCase());
-
-    return (
-        <div ref={ref} style={{ position: "relative" }}>
-            <button
-                onClick={() => setOpen(v => !v)}
-                style={{
-                    fontSize: 12,
-                    padding: "5px 9px",
-                    borderRadius: 6,
-                    color: "var(--ink-2)",
-                    border: "1px solid var(--line)",
-                    background: "var(--line-2)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 5,
-                }}
-            >
-                <IconFolder size={11} />
-                {displayFolderPath(value)}
-                <IconChevronDown size={10} />
-            </button>
-            {open && (
-                <div
-                    style={{
-                        position: "absolute",
-                        bottom: "calc(100% + 6px)",
-                        left: 0,
-                        width: 220,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        borderRadius: 10,
-                        boxShadow: "0 -10px 30px var(--scrim-shadow)",
-                        zIndex: 10,
-                        overflow: "hidden",
-                    }}
-                >
-                    <input
-                        value={q}
-                        onChange={e => setQ(e.target.value)}
-                        autoFocus
-                        placeholder="Find or create folder…"
-                        style={{
-                            width: "100%",
-                            padding: "9px 12px",
-                            border: "none",
-                            outline: "none",
-                            background: "transparent",
-                            fontSize: 12,
-                            borderBottom: "1px solid var(--line)",
-                            color: "var(--ink)",
-                        }}
-                    />
-                    <div style={{ maxHeight: 200, overflowY: "auto", padding: "4px 0" }}>
-                        {filtered.map(f => (
-                            <button
-                                key={f}
-                                onClick={() => {
-                                    onChange(f);
-                                    setOpen(false);
-                                }}
-                                style={{
-                                    width: "100%",
-                                    textAlign: "left",
-                                    padding: "6px 12px",
-                                    fontSize: 12,
-                                    color: "var(--ink)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                                onMouseEnter={e =>
-                                    (e.currentTarget.style.background = "var(--line-2)")
-                                }
-                                onMouseLeave={e =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
-                            >
-                                <span style={{ width: folderDepth(f) * 10 }} aria-hidden />
-                                <IconFolder size={12} /> {folderLeafName(f)}
-                                {value === f && (
-                                    <span style={{ marginLeft: "auto", color: "var(--accent)" }}>
-                                        <IconCheck size={12} />
-                                    </span>
-                                )}
-                            </button>
-                        ))}
-                        {canCreate && (
-                            <button
-                                onClick={() => {
-                                    onCreate?.(candidate);
-                                    onChange(candidate);
-                                    setOpen(false);
-                                    setQ("");
-                                }}
-                                style={{
-                                    width: "100%",
-                                    textAlign: "left",
-                                    padding: "6px 12px",
-                                    fontSize: 12,
-                                    color: "var(--accent)",
-                                    fontWeight: 600,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    borderTop:
-                                        filtered.length > 0 ? "1px solid var(--line)" : "none",
-                                }}
-                            >
-                                <IconPlus size={12} /> Create folder &quot;
-                                {displayFolderPath(candidate)}&quot;
-                            </button>
-                        )}
-                        {candidateProblem && (
-                            <div
-                                style={{
-                                    padding: "6px 12px",
-                                    fontSize: 11,
-                                    color: "var(--danger)",
-                                }}
-                            >
-                                {candidateProblem}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-}
+const NO_ACCESS: Readonly<Record<string, ItemAccessView>> = {};
 
 // ---------------------------------------------------------------------------
 // Create → Mindmap
@@ -770,8 +615,7 @@ function MindmapPanel({
     return (
         <div>
             <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
-                Draw it here, then make it citable when it is ready. It will be filed under{" "}
-                <strong style={{ color: "var(--ink-2)" }}>{folder}</strong>.
+                Draw it here, then make it citable when it is ready.
             </p>
 
             <div
@@ -926,9 +770,8 @@ function GoogleDocPanel({
         <div>
             <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
                 Write it in Google Docs
-                {status?.accountEmail ? ` as ${status.accountEmail}` : ""}. It is filed under{" "}
-                <strong style={{ color: "var(--ink-2)" }}>{folder}</strong> right away, and edits
-                sync back as new versions your workspace can cite.
+                {status?.accountEmail ? ` as ${status.accountEmail}` : ""}. It shows up here right
+                away, and edits sync back as new versions your workspace can cite.
             </p>
 
             <label
@@ -1023,9 +866,14 @@ interface FilesPanelProps {
     onUploaded: () => void;
 }
 
+/** The server's per-file cap (upload-local), checked before the bytes leave. */
+const MAX_UPLOAD_BYTES = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const FILE_ACCEPT: Record<FilesPanelProps["kind"], string> = {
     files: "",
-    audio: "audio/*",
+    // The formats ingestion transcribes (shouldTranscribeFile) — don't let the
+    // picker offer ones that fail.
+    audio: "audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/aac,audio/flac,audio/ogg,.mp3,.m4a,.wav,.aac,.flac,.ogg",
     // Ingestion only accepts MP4 — don't let the picker offer formats that fail.
     video: "video/mp4,.mp4",
 };
@@ -1036,19 +884,19 @@ const KIND_COPY: Record<
 > = {
     files: {
         title: "Drop files here",
-        hint: "PDF, DOCX, XLSX, PPTX, images, code files — up to 500 MB each",
+        hint: `PDF, DOCX, XLSX, PPTX, images, code files — up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB each`,
         browse: "Browse files",
         IconEl: SOURCE_META.doc.Icon,
     },
     audio: {
         title: "Drop audio files",
-        hint: "MP3, WAV, M4A, FLAC — transcribed automatically",
+        hint: `MP3, M4A, WAV, AAC, FLAC, OGG up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB — transcribed in the language spoken, playable in the viewer`,
         browse: "Browse audio",
         IconEl: SOURCE_META.audio.Icon,
     },
     video: {
         title: "Drop video files",
-        hint: "MP4 only — transcribed automatically",
+        hint: `MP4 up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB — transcribed in the language spoken, playable in the viewer`,
         browse: "Browse video",
         IconEl: SOURCE_META.video.Icon,
     },
@@ -1058,6 +906,7 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
     const [dragging, setDragging] = useState(false);
     const [staged, setStaged] = useState<File[]>([]);
     const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+    const [phase, setPhase] = useState<{ file: File; phase: UploadPhase } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const copy = KIND_COPY[kind];
     const IconEl = copy.IconEl;
@@ -1066,7 +915,22 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
         if (!incoming) return;
         const arr = Array.from(incoming);
         if (arr.length === 0) return;
-        setStaged(prev => [...prev, ...arr]);
+        // The server refuses anything over the limit only after the whole body
+        // has crossed the network; say so before the wait, not after it.
+        const tooBig = arr.filter(f => f.size > MAX_UPLOAD_BYTES);
+        if (tooBig.length > 0) {
+            toast.error(
+                `${tooBig.length === 1 ? tooBig[0]!.name : `${tooBig.length} files`} ${tooBig.length === 1 ? "is" : "are"} over the ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB limit`,
+                {
+                    description:
+                        tooBig.length === 1
+                            ? `It's ${formatSize(tooBig[0]!.size)}. Split it or export it at a lower quality.`
+                            : tooBig.map(f => `${f.name} (${formatSize(f.size)})`).join(" · "),
+                }
+            );
+        }
+        const ok = arr.filter(f => f.size <= MAX_UPLOAD_BYTES);
+        if (ok.length > 0) setStaged(prev => [...prev, ...ok]);
     };
 
     const removeStaged = (i: number) => setStaged(prev => prev.filter((_, idx) => idx !== i));
@@ -1083,6 +947,7 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                 files: staged,
                 category,
                 onProgress: (done, total) => setProgress({ done, total }),
+                onPhase: (file, next) => setPhase({ file, phase: next }),
             });
             if (result.errors.length > 0) {
                 toast.error(
@@ -1097,17 +962,21 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
             // can retry without re-picking.
             if (result.successes > 0) {
                 toast.success(
-                    `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${category}"`
+                    `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""}${whereTo(category)}`
                 );
                 setStaged([]);
                 onUploaded();
             }
         } finally {
             setProgress(null);
+            setPhase(null);
         }
     };
 
     const busy = progress !== null;
+    const transcribing =
+        phase?.phase === "processing" &&
+        detectSourceType(phase.file.type || undefined, phase.file.name) === "audio";
 
     return (
         <div>
@@ -1272,36 +1141,25 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                             );
                         })}
                     </div>
-                    <div
-                        style={{
-                            marginTop: 12,
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                    >
-                        <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                    <div className="mt-3 flex items-center justify-between gap-3">
+                        <div className="text-ink-3 min-w-0 flex-1 text-[11px]" aria-live="polite">
                             {busy && progress
-                                ? `Uploading ${progress.done} / ${progress.total}…`
+                                ? transcribing && phase
+                                    ? `Transcribing ${phase.file.name}… a long recording takes a few minutes; keep this open.`
+                                    : `Uploading ${Math.min(progress.done + 1, progress.total)} / ${progress.total}…`
                                 : `${staged.length} file${staged.length !== 1 ? "s" : ""} ready to upload`}
                         </div>
-                        <button
+                        <Button
+                            className="shrink-0"
                             onClick={() => {
                                 void submit();
                             }}
                             disabled={busy || staged.length === 0}
-                            style={{
-                                background: busy ? "var(--line)" : "var(--accent)",
-                                color: busy ? "var(--ink-3)" : "white",
-                                padding: "8px 16px",
-                                borderRadius: 8,
-                                fontSize: 13,
-                                fontWeight: 600,
-                                cursor: busy ? "not-allowed" : "pointer",
-                            }}
                         >
-                            Upload to &quot;{category}&quot;
-                        </button>
+                            {busy && <Loader2 className="animate-spin" aria-hidden />}
+                            Upload {staged.length} file{staged.length !== 1 ? "s" : ""}
+                            {isUnfiledFolder(category) ? "" : ` to ${folderLeafName(category)}`}
+                        </Button>
                     </div>
                 </div>
             )}
@@ -1315,10 +1173,10 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
 
 interface FolderPanelProps {
     userId: string | null;
-    category: string;
-    /** Rename the destination folder in the footer strip so the UX matches the
-     *  design's inline folder-name edit. Parent owns the value. */
-    onFolderRename: (next: string) => void;
+    /** Where the picked folder goes: it is created inside this one (or at the top for Unfiled). */
+    destination: string;
+    /** The new folder's name as it stands, or null — the destination bar shows it after `destination`. */
+    onNameChange: (name: string | null) => void;
     onUploaded: () => void;
 }
 
@@ -1328,37 +1186,38 @@ interface PickedFolder {
     files: File[];
 }
 
-function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPanelProps) {
+/** "Q3 data/raw/a.csv" for a picked folder's file; the bare name for anything else. */
+function relativePathOf(file: File): string {
+    return (file as File & { webkitRelativePath?: string }).webkitRelativePath || file.name;
+}
+
+function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPanelProps) {
     const [picked, setPicked] = useState<PickedFolder | null>(null);
-    const [destName, setDestName] = useState<string>(category);
+    const [name, setName] = useState("");
     const [excluded, setExcluded] = useState<Set<string>>(new Set());
     const [busy, setBusy] = useState(false);
     const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    // The bar above shows "<destination> › <name>  New folder" while a folder is picked.
     useEffect(() => {
-        setDestName(category);
-    }, [category]);
+        onNameChange(picked ? name : null);
+    }, [picked, name, onNameChange]);
+    useEffect(() => () => onNameChange(null), [onNameChange]);
 
     const onFolderPicked = (fl: FileList | null) => {
         if (!fl || fl.length === 0) return;
-        const files = Array.from(fl).filter(f => {
+        const files = Array.from(fl).filter(
             // Skip hidden / system files and anything under a .git/node_modules
-            const rel = (f as File & { webkitRelativePath?: string }).webkitRelativePath ?? f.name;
-            if (rel.split("/").some(seg => seg.startsWith(".") || seg === "node_modules")) {
-                return false;
-            }
-            return true;
-        });
+            f =>
+                !relativePathOf(f)
+                    .split("/")
+                    .some(seg => seg.startsWith(".") || seg === "node_modules")
+        );
         const first = files[0];
-        const root = first
-            ? ((
-                  (first as File & { webkitRelativePath?: string }).webkitRelativePath ?? first.name
-              ).split("/")[0] ?? "Folder")
-            : "Folder";
+        const root = first ? (relativePathOf(first).split("/")[0] ?? "Folder") : "Folder";
         setPicked({ rootName: root, files });
-        setDestName(root);
-        onFolderRename(root);
+        setName(root);
         setExcluded(new Set());
     };
 
@@ -1371,32 +1230,49 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
         });
 
     const included = picked ? picked.files.filter((f, i) => !excluded.has(`${i}-${f.name}`)) : [];
+    // Every file keeps the subfolder it had on disk, under the new folder.
+    const plan = planFolderUpload(destination, name, included.map(relativePathOf));
+    const blocked = plan.problems.length > 0;
 
     const submit = async () => {
         if (!userId) {
             toast.error("Sign in to upload files");
             return;
         }
-        if (included.length === 0 || !destName.trim()) return;
+        if (included.length === 0 || blocked) return;
         setBusy(true);
         setProgress({ done: 0, total: included.length });
+        let successes = 0;
+        const errors: string[] = [];
         try {
-            const result = await uploadAndRegisterAll({
-                files: included,
-                category: destName.trim(),
-                onProgress: (done, total) => setProgress({ done, total }),
-            });
-            if (result.errors.length > 0) {
-                toast.error(
-                    `${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`,
-                    { description: result.errors.slice(0, 2).join(" · ") }
-                );
+            for (let i = 0; i < included.length; i++) {
+                const file = included[i]!;
+                try {
+                    const up = await uploadFileToStorage(file);
+                    await registerDocument({
+                        file,
+                        url: up.url,
+                        provider: up.provider,
+                        category: plan.paths[i]!,
+                    });
+                    successes++;
+                } catch (err) {
+                    errors.push(
+                        err instanceof Error ? err.message : `Failed to upload ${file.name}`
+                    );
+                }
+                setProgress({ done: i + 1, total: included.length });
+            }
+            if (errors.length > 0) {
+                toast.error(`${errors.length} file${errors.length !== 1 ? "s" : ""} failed`, {
+                    description: errors.slice(0, 2).join(" · "),
+                });
             }
             // Same retry affordance as FilesPanel: keep the picked folder staged
             // when nothing uploaded so the user can retry.
-            if (result.successes > 0) {
+            if (successes > 0) {
                 toast.success(
-                    `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${destName.trim()}"`
+                    `Uploaded ${successes} file${successes !== 1 ? "s" : ""}${whereTo(plan.root)}`
                 );
                 setPicked(null);
                 onUploaded();
@@ -1409,58 +1285,18 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
 
     if (!picked) {
         return (
-            <div
-                style={{
-                    border: "1.5px dashed var(--line)",
-                    background: "var(--line-2)",
-                    borderRadius: 12,
-                    padding: "40px 24px",
-                    textAlign: "center",
-                }}
-            >
-                <div
-                    style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: 12,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "var(--accent)",
-                        marginBottom: 12,
-                    }}
-                >
+            <div className="border-line bg-line-2 rounded-xl border-[1.5px] border-dashed px-6 py-10 text-center">
+                <div className="border-line bg-panel text-brand mb-3 inline-flex size-11 items-center justify-center rounded-xl border">
                     <IconFolder size={20} />
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Pick a folder</div>
-                <div
-                    style={{
-                        fontSize: 13,
-                        color: "var(--ink-3)",
-                        marginBottom: 16,
-                        maxWidth: 340,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                    }}
-                >
-                    Each file becomes its own source. The folder itself becomes a library folder so
-                    they stay grouped.
-                </div>
-                <button
-                    onClick={() => inputRef.current?.click()}
-                    style={{
-                        background: "var(--accent)",
-                        color: "white",
-                        padding: "8px 16px",
-                        borderRadius: 8,
-                        fontSize: 13,
-                        fontWeight: 600,
-                    }}
-                >
+                <div className="text-ink mb-1 text-[15px] font-semibold">Pick a folder</div>
+                <p className="text-ink-3 mx-auto mb-4 max-w-[360px] text-[13px]">
+                    Each file becomes its own source. The folder is added inside the one above, with
+                    its subfolders kept as they are.
+                </p>
+                <Button type="button" onClick={() => inputRef.current?.click()}>
                     Choose folder
-                </button>
+                </Button>
                 <input
                     ref={inputRef}
                     type="file"
@@ -1468,7 +1304,7 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
                     webkitdirectory=""
                     directory=""
                     multiple
-                    style={{ display: "none" }}
+                    className="hidden"
                     onChange={e => onFolderPicked(e.target.files)}
                 />
             </div>
@@ -1477,76 +1313,41 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
 
     return (
         <div>
-            {/* Breadcrumb header */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 12px",
-                    background: "var(--line-2)",
-                    borderRadius: 8,
-                    marginBottom: 12,
-                }}
-            >
-                <IconFolder size={15} style={{ color: "var(--accent)" }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div className="mono" style={{ fontSize: 12, color: "var(--ink-3)" }}>
-                        {picked.rootName}
-                    </div>
-                    <div style={{ fontSize: 13, fontWeight: 600, marginTop: 2 }}>
-                        {included.length} file{included.length !== 1 ? "s" : ""} will be added
+            {/* What was picked, and how it will be filed */}
+            <div className="bg-line-2 mb-3 flex items-center gap-2.5 rounded-lg px-3 py-2.5">
+                <IconFolder size={15} className="text-brand shrink-0" />
+                <div className="min-w-0 flex-1">
+                    <div className="mono text-ink-3 truncate text-xs">{picked.rootName}</div>
+                    <div className="text-ink mt-0.5 text-[13px] font-semibold">
+                        {included.length} file{included.length !== 1 ? "s" : ""} into{" "}
+                        {plan.folderCount} folder{plan.folderCount !== 1 ? "s" : ""}
                     </div>
                 </div>
-                <button
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => setPicked(null)}
                     disabled={busy}
-                    style={{
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        padding: "4px 10px",
-                        borderRadius: 6,
-                        border: "1px solid var(--line)",
-                    }}
                 >
                     Change
-                </button>
+                </Button>
             </div>
 
-            {/* Destination folder name — editable */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                <div
-                    className="mono"
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 600,
-                        letterSpacing: "0.08em",
-                        color: "var(--ink-3)",
-                        textTransform: "uppercase",
-                    }}
-                >
-                    Create folder
-                </div>
-                <input
-                    value={destName}
-                    onChange={e => {
-                        setDestName(e.target.value);
-                        onFolderRename(e.target.value);
-                    }}
+            {/* The new folder's name — editable */}
+            <label className="mb-2.5 flex items-center gap-2.5">
+                <span className="mono text-ink-3 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em]">
+                    Folder name
+                </span>
+                <Input
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     disabled={busy}
-                    style={{
-                        flex: 1,
-                        padding: "7px 10px",
-                        borderRadius: 6,
-                        border: "1px solid var(--line)",
-                        background: "var(--panel)",
-                        fontSize: 13,
-                        outline: "none",
-                    }}
-                    onFocus={e => (e.target.style.borderColor = "var(--accent)")}
-                    onBlur={e => (e.target.style.borderColor = "var(--line)")}
+                    aria-invalid={blocked || undefined}
+                    className="h-8 flex-1 text-[13px]"
                 />
-            </div>
+            </label>
+            {blocked && <p className="text-danger mb-2.5 text-xs">{plan.problems[0]}</p>}
 
             {/* File list */}
             <div
@@ -1611,8 +1412,7 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
                                     textOverflow: "ellipsis",
                                 }}
                             >
-                                {(f as File & { webkitRelativePath?: string }).webkitRelativePath ??
-                                    f.name}
+                                {relativePathOf(f)}
                             </div>
                             <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
                                 {formatSize(f.size)}
@@ -1622,37 +1422,22 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
                 })}
             </div>
 
-            <div
-                style={{
-                    marginTop: 12,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+            <div className="mt-3 flex items-center justify-between gap-3">
+                <div className="text-ink-3 text-[11px]">
                     {busy && progress
                         ? `Uploading ${progress.done} / ${progress.total}…`
-                        : `Hidden & system files excluded`}
+                        : "Hidden & system files excluded"}
                 </div>
-                <button
-                    disabled={busy || included.length === 0 || !destName.trim()}
+                <Button
+                    type="button"
+                    disabled={busy || included.length === 0 || blocked}
                     onClick={() => {
                         void submit();
                     }}
-                    style={{
-                        background: busy || included.length === 0 ? "var(--line)" : "var(--accent)",
-                        color: busy || included.length === 0 ? "var(--ink-3)" : "white",
-                        padding: "8px 16px",
-                        borderRadius: 8,
-                        fontSize: 13,
-                        fontWeight: 600,
-                        cursor: busy || included.length === 0 ? "not-allowed" : "pointer",
-                    }}
                 >
-                    Add {included.length} file{included.length !== 1 ? "s" : ""} to{" "}
-                    {destName.trim() || "folder"}
-                </button>
+                    Add {included.length} file{included.length !== 1 ? "s" : ""}
+                    {name.trim() ? ` to ${name.trim()}` : ""}
+                </Button>
             </div>
         </div>
     );
@@ -1701,7 +1486,7 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
                 provider: up.provider,
                 category,
             });
-            toast.success(`"${safeTitle}" added to "${category}"`);
+            toast.success(`Added "${safeTitle}"${whereTo(category)}`);
             setTitle("");
             setText("");
             onUploaded();
@@ -2075,13 +1860,16 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "Updates stream in real-time",
         "Preserves block structure",
     ],
-    drive: [
-        "Pick folders — kept in sync",
-        "Handles Google Docs, Sheets, Slides",
-        "Shared drives supported",
+    slack: [
+        "Mirrors agent meetings into a Slack channel",
+        "Messages and files aren't added to your sources",
+        "To search Slack, upload an export's JSON files",
     ],
-    slack: ["Pick channels + DMs", "Threads stay together", "Files included"],
-    github: ["Code, issues, PRs, and READMEs", "Private repos supported", "Updates on each push"],
+    github: [
+        "Lets the Repo Explainer read your private repos",
+        "Code, issues and PRs aren't synced to your sources",
+        "To search a repo, upload it as a ZIP",
+    ],
     dropbox: ["Pick folders — kept in sync", "All file types indexed", "Shared folders supported"],
 };
 

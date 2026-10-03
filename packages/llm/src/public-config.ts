@@ -3,9 +3,10 @@
  *
  * The UI needs enough to render honest controls — is there a vision route,
  * can the user pick a reasoning effort, which levels are legal — and nothing
- * more. Endpoint URLs, credentials, reasoning request patches, and the
- * models' internal context/output limits stay on the server. Everything in
- * these types is safe to serialize to an unauthenticated client.
+ * more. Endpoint URLs, credentials, model ids, reasoning request patches, and
+ * the models' internal context/output limits stay on the server: which model
+ * answers is an operator's business, and the screen never names it.
+ * Everything in these types is safe to serialize to an unauthenticated client.
  */
 
 import {
@@ -45,8 +46,6 @@ export interface PublicReasoningInfo {
 
 export interface PublicChatRouteInfo {
     available: boolean;
-    /** Effective model id serving the route. Absent when unavailable. */
-    model?: string;
     /** True when the route has no explicit assignment and uses `default`. */
     inheritsDefault?: boolean;
     vision?: PublicVisionInfo;
@@ -102,7 +101,6 @@ function describeRoute(resolved: ResolvedChatRoute): PublicChatRouteInfo {
     const behavior = resolved.definition.behavior;
     return {
         available: true,
-        model: resolved.definition.id,
         inheritsDefault: resolved.inheritsDefault,
         vision: publicVision(behavior),
         reasoning: publicReasoning(behavior),

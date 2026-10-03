@@ -15,12 +15,11 @@
 import type { BaseMessageLike } from "@langchain/core/messages";
 import { HumanMessage } from "@langchain/core/messages";
 import { JsonOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
-import { zodResponseFormat } from "openai/helpers/zod";
-import type { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { z } from "zod";
+import { zodToJsonSchema, type JsonSchema7Type } from "zod-to-json-schema";
 import type { ResolvedChatModel } from "./chat-model-factory";
 import { applyMessageBehavior, systemMessageFor } from "./messages";
-import { normalizeModelContent } from "./normalize-content";
+import { modelContentToText } from "./normalize-content";
 import type { NativeStructuredOutputMode } from "./types";
 import type { ChatTokenUsage } from "./usage";
 import { addTokenUsage, normalizeTokenUsage } from "./usage";
@@ -47,8 +46,10 @@ export class StructuredOutputError extends Error {
     readonly modelId: string;
 
     constructor(modelId: string, cause: string) {
+        // The message travels to screens (run histories, answer bubbles), so it
+        // never names the model; `modelId` stays on the error for logs.
         super(
-            `Model "${modelId}" did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
+            `The model did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
         );
         this.modelId = modelId;
     }
@@ -80,7 +81,11 @@ function jsonInstruction(schema: z.ZodType<unknown>, name: string): string {
     ].join("\n");
 }
 
-function extractJson(text: string): unknown {
+/**
+ * Parse a model's JSON answer leniently: Markdown fences and a sentence
+ * before or after are tolerated. Throws when no JSON value can be recovered.
+ */
+export function extractJson(text: string): unknown {
     const withoutFence = text
         .trim()
         .replace(/^```(?:json)?\s*/i, "")
@@ -112,7 +117,10 @@ function extractJson(text: string): unknown {
                 // Try the next candidate.
             }
         }
-        throw new Error("the response contained no parsable JSON value");
+        const excerpt = withoutFence.slice(0, 160).replace(/\s+/g, " ");
+        throw new Error(
+            `the response contained no parsable JSON value (${withoutFence.length} chars, starting "${excerpt}")`
+        );
     }
 }
 
@@ -163,7 +171,7 @@ async function invokeJsonFallback<T>(
         const first = modelOptions
             ? await resolved.chat.invoke(instructed, modelOptions)
             : await resolved.chat.invoke(instructed);
-        const firstText = normalizeModelContent(first.content);
+        const firstText = modelContentToText(first.content);
         let usage = normalizeTokenUsage(first);
 
         try {
@@ -188,7 +196,7 @@ async function invokeJsonFallback<T>(
                     : await resolved.chat.invoke(repair);
                 usage = addTokenUsage(usage, normalizeTokenUsage(second));
                 return {
-                    result: schema.parse(extractJson(normalizeModelContent(second.content))),
+                    result: schema.parse(extractJson(modelContentToText(second.content))),
                     usage,
                     modelId: resolved.modelId,
                 };
@@ -235,39 +243,26 @@ async function invokeJsonFallback<T>(
     }
 }
 
-async function invokeNativeStreaming<T>(
+async function invokeNativeStreaming(
     resolved: ResolvedChatModel,
-    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
-    messages: readonly BaseMessageLike[],
+    endpointSchema: z.ZodType<unknown> | Record<string, unknown>,
+    messages: BaseMessageLike[],
     native: NativeStructuredOutputMode,
     options: StructuredOutputOptions
-): Promise<T> {
-    // Passing JSON Schema instead of Zod is important here: LangChain's Zod
-    // parser is a final parser and therefore buffers the whole stream, whereas
-    // its JSON-schema parser uses a cumulative partial JSON parser.
-    // Match the SDK's non-streaming Zod conversion: plain JSON Schema drops
-    // strict mode and leaves defaulted properties out of the required list.
+): Promise<unknown> {
+    // LangChain's Zod parser buffers the stream. A plain JSON Schema uses its
+    // cumulative partial parser instead; final Zod validation happens below.
     const outputSchema =
-        native === "json-schema"
-            ? zodResponseFormat(schema, options.name).json_schema.schema
-            : zodToJsonSchema(schema);
+        endpointSchema instanceof z.ZodType ? zodToJsonSchema(endpointSchema) : endpointSchema;
     const structured = resolved.chat.withStructuredOutput(outputSchema as Record<string, unknown>, {
         name: options.name,
         method: LANGCHAIN_METHOD[native],
         ...(native === "json-schema" ? { strict: true } : {}),
     });
-    const prompt =
-        native === "json-object"
-            ? [
-                  ...systemMessageFor(resolved.behavior, jsonInstruction(schema, options.name)),
-                  ...messages,
-              ]
-            : messages;
-    const prepared = applyMessageBehavior(resolved.behavior, prompt);
     const modelOptions = signalOptions(options.signal);
     const structuredStream = modelOptions
-        ? await structured.stream(prepared, modelOptions)
-        : await structured.stream(prepared);
+        ? await structured.stream(messages, modelOptions)
+        : await structured.stream(messages);
     let partial: unknown;
 
     for await (const next of structuredStream) {
@@ -276,7 +271,238 @@ async function invokeNativeStreaming<T>(
         await options.onPartial?.(next);
     }
 
-    return schema.parse(partial);
+    return partial;
+}
+
+/** JSON Schema keywords that bound a size; they drive an endpoint's complexity limit. */
+const SIZE_BOUND_KEYWORDS = new Set([
+    "minItems",
+    "maxItems",
+    "minLength",
+    "maxLength",
+    "minimum",
+    "maximum",
+    "exclusiveMinimum",
+    "exclusiveMaximum",
+]);
+
+/**
+ * `const: x` → `enum: [x]`, which means the same. Gemini honours `enum` but
+ * not `const`: it returned "founder-weekly-review/v1" for a v2 literal, and the
+ * Zod parse refused every weekly review.
+ */
+function constAsEnum<T>(node: T): T {
+    if (Array.isArray(node)) return node.map(constAsEnum) as T;
+    if (!node || typeof node !== "object") return node;
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+        if (key === "const" && !("enum" in (node as Record<string, unknown>))) {
+            out.enum = [value];
+            continue;
+        }
+        out[key] = constAsEnum(value);
+    }
+    return out as T;
+}
+
+/**
+ * Strict JSON Schema requires every fixed property, with null standing in for
+ * an omitted optional value. The converter visits nested objects, including
+ * union branches, before this postprocessor runs. Open records/catchalls stay
+ * open rather than losing their keys; unsupported schemas retain the 400 path.
+ */
+function strictObjectSchema(node: JsonSchema7Type | undefined): JsonSchema7Type | undefined {
+    if (
+        !node ||
+        !("type" in node) ||
+        node.type !== "object" ||
+        !("properties" in node) ||
+        node.additionalProperties !== false
+    ) {
+        return node;
+    }
+    const required = new Set(node.required ?? []);
+    for (const [key, property] of Object.entries(node.properties)) {
+        if (!required.has(key)) {
+            node.properties[key] = { anyOf: [property, { type: "null" }] };
+        }
+    }
+    node.required = Object.keys(node.properties);
+    node.additionalProperties = false;
+    return node;
+}
+
+/**
+ * Decode strict-mode null sentinels inside the original Zod validation tree.
+ * Preprocessing each optional property lets Zod choose union branches itself,
+ * without guessing a branch or running refinements/transforms twice. Required
+ * nullable fields, and optional fields that already accept null, keep null.
+ * Traverse every container the converter descends into, including catchalls;
+ * Map, Set and Promise still require their original non-JSON input types.
+ * Copies preserve the original checks, defaults, effects and unknown-key policy.
+ * Explicit class generics keep child-schema accessors typed after narrowing.
+ */
+function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
+    const seen = new Map<z.ZodTypeAny, z.ZodTypeAny>();
+    const visit = (node: z.ZodTypeAny): z.ZodTypeAny => {
+        const cached = seen.get(node);
+        if (cached) return cached;
+        let result: z.ZodTypeAny = node;
+        if (node instanceof z.ZodObject) {
+            const object = node as z.ZodObject<z.ZodRawShape, z.UnknownKeysParam, z.ZodTypeAny>;
+            const shape: z.ZodRawShape = {};
+            for (const [key, property] of Object.entries(object.shape)) {
+                const child = visit(property);
+                shape[key] =
+                    property.isOptional() && !property.isNullable()
+                        ? z.preprocess(value => (value === null ? undefined : value), child)
+                        : child;
+            }
+            result = new z.ZodObject({
+                ...object._def,
+                shape: () => shape,
+                catchall: visit(object._def.catchall),
+            });
+        } else if (node instanceof z.ZodArray) {
+            const array = node as z.ZodArray<z.ZodTypeAny, z.ArrayCardinality>;
+            result = new z.ZodArray({ ...array._def, type: visit(array.element) });
+        } else if (node instanceof z.ZodUnion) {
+            const union = node as z.ZodUnion<z.ZodUnionOptions>;
+            result = new z.ZodUnion({
+                ...union._def,
+                options: union.options.map(visit) as [
+                    z.ZodTypeAny,
+                    z.ZodTypeAny,
+                    ...z.ZodTypeAny[],
+                ],
+            });
+        } else if (node instanceof z.ZodDiscriminatedUnion) {
+            const union = node as z.ZodDiscriminatedUnion<
+                string,
+                z.ZodDiscriminatedUnionOption<string>[]
+            >;
+            // Rebuild the discriminator lookup as well as the option schemas.
+            result = z.discriminatedUnion(
+                union.discriminator,
+                union.options.map(visit) as [
+                    z.ZodDiscriminatedUnionOption<string>,
+                    ...z.ZodDiscriminatedUnionOption<string>[],
+                ],
+                union._def
+            );
+        } else if (node instanceof z.ZodIntersection) {
+            const intersection = node as z.ZodIntersection<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodIntersection({
+                ...intersection._def,
+                left: visit(intersection._def.left),
+                right: visit(intersection._def.right),
+            });
+        } else if (node instanceof z.ZodTuple) {
+            const tuple = node as z.ZodTuple<z.ZodTupleItems | [], z.ZodTypeAny | null>;
+            result = new z.ZodTuple({
+                ...tuple._def,
+                items: tuple.items.map(visit) as z.ZodTupleItems | [],
+                rest: tuple._def.rest ? visit(tuple._def.rest) : null,
+            });
+        } else if (node instanceof z.ZodPipeline) {
+            const pipeline = node as z.ZodPipeline<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodPipeline({
+                ...pipeline._def,
+                in: visit(pipeline._def.in),
+                out: visit(pipeline._def.out),
+            });
+        } else if (node instanceof z.ZodEffects) {
+            const effects = node as z.ZodEffects<z.ZodTypeAny>;
+            result = new z.ZodEffects({ ...effects._def, schema: visit(effects.innerType()) });
+        } else if (node instanceof z.ZodOptional) {
+            const optional = node as z.ZodOptional<z.ZodTypeAny>;
+            result = new z.ZodOptional({ ...optional._def, innerType: visit(optional.unwrap()) });
+        } else if (node instanceof z.ZodNullable) {
+            const nullable = node as z.ZodNullable<z.ZodTypeAny>;
+            result = new z.ZodNullable({ ...nullable._def, innerType: visit(nullable.unwrap()) });
+        } else if (node instanceof z.ZodDefault) {
+            const defaultSchema = node as z.ZodDefault<z.ZodTypeAny>;
+            result = new z.ZodDefault({
+                ...defaultSchema._def,
+                innerType: visit(defaultSchema.removeDefault()),
+            });
+        } else if (node instanceof z.ZodCatch) {
+            const catchSchema = node as z.ZodCatch<z.ZodTypeAny>;
+            result = new z.ZodCatch({
+                ...catchSchema._def,
+                innerType: visit(catchSchema.removeCatch()),
+            });
+        } else if (node instanceof z.ZodBranded) {
+            const branded = node as z.ZodBranded<z.ZodTypeAny, string | number | symbol>;
+            result = new z.ZodBranded({ ...branded._def, type: visit(branded.unwrap()) });
+        } else if (node instanceof z.ZodReadonly) {
+            const readonly = node as z.ZodReadonly<z.ZodTypeAny>;
+            result = new z.ZodReadonly({ ...readonly._def, innerType: visit(readonly.unwrap()) });
+        } else if (node instanceof z.ZodPromise) {
+            const promise = node as z.ZodPromise<z.ZodTypeAny>;
+            result = new z.ZodPromise({ ...promise._def, type: visit(promise.unwrap()) });
+        } else if (node instanceof z.ZodLazy) {
+            const lazy = node as z.ZodLazy<z.ZodTypeAny>;
+            result = new z.ZodLazy({ ...lazy._def, getter: () => visit(lazy.schema) });
+        } else if (node instanceof z.ZodRecord) {
+            const record = node as z.ZodRecord<z.KeySchema, z.ZodTypeAny>;
+            result = new z.ZodRecord({ ...record._def, valueType: visit(record.valueSchema) });
+        } else if (node instanceof z.ZodMap) {
+            const map = node as z.ZodMap<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodMap({
+                ...map._def,
+                keyType: visit(map.keySchema),
+                valueType: visit(map.valueSchema),
+            });
+        } else if (node instanceof z.ZodSet) {
+            const set = node as z.ZodSet<z.ZodTypeAny>;
+            result = new z.ZodSet({ ...set._def, valueType: visit(set._def.valueType) });
+        }
+        seen.set(node, result);
+        return result;
+    };
+    return visit(schema) as z.ZodType<T>;
+}
+
+function withoutSizeBounds(node: unknown): unknown {
+    if (Array.isArray(node)) return node.map(withoutSizeBounds);
+    if (!node || typeof node !== "object") return node;
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+        // A property may itself be named "maximum"; only strip keyword positions.
+        if (SIZE_BOUND_KEYWORDS.has(key) && typeof value === "number") continue;
+        out[key] = withoutSizeBounds(value);
+    }
+    return out;
+}
+
+function statusOf(error: unknown): number | undefined {
+    const status = (error as { status?: unknown } | null)?.status;
+    return typeof status === "number" ? status : undefined;
+}
+
+const refusedSchemas = new Set<string>();
+
+const warnedIgnoredStructure = new Set<string>();
+
+function warnStructureIgnoredOnce(modelId: string, name: string): void {
+    const key = `${modelId}:${name}`;
+    if (warnedIgnoredStructure.has(key)) return;
+    warnedIgnoredStructure.add(key);
+    console.warn(
+        `[structured-output] ${modelId} answered "${name}" without the requested structure; ` +
+            "using the prompt-based JSON path for it."
+    );
+}
+
+function warnSchemaRefusedOnce(modelId: string, name: string): void {
+    const key = `${modelId}:${name}`;
+    if (refusedSchemas.has(key)) return;
+    refusedSchemas.add(key);
+    console.warn(
+        `[structured-output] ${modelId} refused the "${name}" JSON schema (HTTP 400); ` +
+            "using the prompt-based JSON path for it."
+    );
 }
 
 /**
@@ -314,11 +540,6 @@ export async function invokeStructuredWithUsage<T>(
         return invokeJsonFallback(resolved, schema, messages, options);
     }
 
-    if (options.onPartial) {
-        const result = await invokeNativeStreaming(resolved, schema, messages, native, options);
-        return { result, usage: {}, modelId: resolved.modelId };
-    }
-
     // `jsonMode` guarantees syntactic JSON but not the schema, so it still needs
     // the schema in the prompt to have something to aim at.
     const prompt =
@@ -331,32 +552,83 @@ export async function invokeStructuredWithUsage<T>(
 
     // `includeRaw` keeps the AIMessage that carries `usage_metadata`; without
     // it LangChain hands back only the parsed object.
-    const structured = resolved.chat.withStructuredOutput(schema, {
-        name: options.name,
-        method: LANGCHAIN_METHOD[native],
-        includeRaw: true,
-    });
-    const modelOptions = signalOptions(options.signal);
+    // Only json-schema mode requests strict endpoint enforcement. It receives
+    // a plain schema so OpenAI's Zod helper cannot reject optional fields before
+    // we make them required/nullable; the Zod parse still enforces their contract.
     const prepared = applyMessageBehavior(resolved.behavior, prompt);
-    const response = modelOptions
-        ? await structured.invoke(prepared, modelOptions)
-        : await structured.invoke(prepared);
+    const modelOptions = signalOptions(options.signal);
+    const invokeNative = async (endpointSchema: z.ZodType<unknown> | Record<string, unknown>) => {
+        if (options.onPartial) {
+            return {
+                raw: undefined,
+                parsed: await invokeNativeStreaming(
+                    resolved,
+                    endpointSchema,
+                    prepared,
+                    native,
+                    options
+                ),
+            };
+        }
+        const structured = resolved.chat.withStructuredOutput(endpointSchema, {
+            name: options.name,
+            method: LANGCHAIN_METHOD[native],
+            includeRaw: true,
+            ...(native === "json-schema" ? { strict: true } : {}),
+        });
+        return modelOptions
+            ? structured.invoke(prepared, modelOptions)
+            : structured.invoke(prepared);
+    };
+
+    let response: { raw: unknown; parsed: unknown };
+    if (native !== "json-schema") {
+        response = await invokeNative(schema);
+    } else {
+        // Close fixed object shapes and encode optional values as required,
+        // nullable properties for strict endpoints. Keep constAsEnum for Gemini.
+        const jsonSchema = constAsEnum(
+            zodToJsonSchema(schema, {
+                $refStrategy: "none",
+                postProcess: strictObjectSchema,
+            })
+        );
+        try {
+            response = await invokeNative(jsonSchema);
+        } catch (error) {
+            if (statusOf(error) !== 400) throw error;
+            // Endpoints take a subset of JSON Schema and refuse one they judge
+            // too complex with a bare 400 — Gemini rejects the founder weekly
+            // review's anyOf + maxItems, and accepts it once the size bounds
+            // are gone. The bounds still hold: Zod checks them below. A 400
+            // that is not about the schema (a bad key) fails the prompt path
+            // too, so nothing is masked.
+            warnSchemaRefusedOnce(resolved.modelId, options.name);
+            try {
+                response = await invokeNative(
+                    withoutSizeBounds(jsonSchema) as Record<string, unknown>
+                );
+            } catch (relaxedError) {
+                if (statusOf(relaxedError) !== 400) throw relaxedError;
+                return invokeJsonFallback(resolved, schema, messages, options);
+            }
+        }
+    }
     const usage = normalizeTokenUsage(response.raw);
     if (response.parsed === undefined || response.parsed === null) {
-        const detail =
-            response.raw === undefined
-                ? "no raw response"
-                : normalizeModelContent(
-                      typeof response.raw === "object" &&
-                          response.raw !== null &&
-                          "content" in response.raw
-                          ? response.raw.content
-                          : ""
-                  ).slice(0, 300);
-        throw new StructuredOutputError(resolved.modelId, `no parsed value (raw: ${detail})`);
+        // The endpoint accepted the request but answered without the structure
+        // it was asked for: some compatible servers silently ignore
+        // `response_format`. The model never saw the schema then, so ask again
+        // the way models without native support are asked.
+        warnStructureIgnoredOnce(resolved.modelId, options.name);
+        const fallback = await invokeJsonFallback(resolved, schema, messages, options);
+        return { ...fallback, usage: addTokenUsage(usage, fallback.usage) };
     }
     return {
-        result: schema.parse(response.parsed),
+        result:
+            native === "json-schema"
+                ? withOptionalNullsAsMissing(schema).parse(response.parsed)
+                : schema.parse(response.parsed),
         usage,
         modelId: resolved.modelId,
     };

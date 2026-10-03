@@ -1,0 +1,18 @@
+@launchstack/simulation
+Copyright 2026 The LaunchStack authors
+
+This package is an independent TypeScript implementation of the design of
+OASIS (Open Agent Social Interaction Simulations), https://github.com/camel-ai/oasis,
+Copyright the CAMEL-AI.org authors, licensed under the Apache License 2.0.
+
+Borrowed from OASIS (design, not code): agents acting in time steps with an
+activation probability; a recommendation table rebuilt between steps that
+mixes interest similarity, a Reddit-style hot score and a time decay; a
+refresh that adds the most-liked posts of followed accounts; a share of
+recommendations swapped for random posts; the action space (create_post,
+create_comment, like_post, dislike_post, repost, quote_post, follow,
+do_nothing) and its constraints (one like per post, reposts and quotes
+resolve to the root post); and interviewing an agent after the run.
+
+No code from MiroFish (https://github.com/666ghj/MiroFish, AGPL-3.0) is
+included.

@@ -3,6 +3,15 @@
 import { isArtifactDocument } from "~/lib/artifact-document";
 import { isMindmapDocument } from "~/lib/mindmap-document";
 import type { CallNoteDocumentMarker } from "~/lib/call-note-document";
+import { websiteMarkerOf } from "~/lib/website-document";
+import { isConversationConnector } from "~/lib/session-transcript";
+import {
+    hasTranscriptTitle,
+    mediaKindOfMime,
+    mediaKindOfName,
+    transcriptMarkerOf,
+    transcriptMediaKind,
+} from "~/lib/media-document";
 
 /** Display category for document preview (PDF, image, docx, xlsx, pptx, text, code, etc.) */
 export type DocumentDisplayType =
@@ -16,9 +25,11 @@ export type DocumentDisplayType =
     | "conversation" // Imported agent-session transcripts — rendered as a chat, not a document
     | "mindmap" // The citable copy of a mindmap — rendered as the map, not as its outline
     | "artifact" // An imported Claude artifact — rendered in a sandbox, not as its source
+    | "website" // A saved web page — its address and the text read from it, not its HTML
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
-    | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
+    | "audio" // Audio files (.mp3, .m4a) and their transcripts — played, with the transcript beside
+    | "video" // Video files (.mp4) and their transcripts, including YouTube-style imports
     | "unknown";
 
 export interface DocumentType {
@@ -49,6 +60,8 @@ export interface DocumentType {
     sourceArchiveName?: string | null;
     /** Limited to people with an explicit grant rather than the folder's audience. */
     restricted?: boolean;
+    /** When it was added (ISO time from the API). */
+    createdAt?: string;
 }
 
 const CODE_MIME_PREFIXES = [
@@ -72,24 +85,33 @@ export function getDocumentDisplayType(doc: {
     title: string;
     mimeType?: string;
     /**
-     * When present, the agent-sessions connector marker inside it upgrades a
-     * markdown transcript to the conversation display. Callers that only have
-     * url/title/mime keep getting the plain classification.
+     * When present, a conversation connector marker inside it (an imported
+     * agent session, or a conversation an assistant saved over MCP) upgrades
+     * a markdown transcript to the conversation display. Callers that only
+     * have url/title/mime keep getting the plain classification.
      */
     ocrMetadata?: { connector?: unknown; [key: string]: unknown } | null;
 }): DocumentDisplayType {
-    // Imported agent sessions are stored as text/markdown, but they read as
-    // conversations — the sink's connector marker outranks the mime sniff.
-    if (doc.ocrMetadata?.connector === "agent-sessions") return "conversation";
+    // Imported agent sessions and saved assistant conversations are stored as
+    // text/markdown, but they read as conversations — the connector marker
+    // outranks the mime sniff.
+    if (isConversationConnector(doc.ocrMetadata?.connector)) return "conversation";
     // Likewise a published mindmap: a Markdown outline on disk, a diagram to
     // the reader.
     if (isMindmapDocument(doc.ocrMetadata)) return "mindmap";
     // And an imported Claude artifact: stored as plain text so it can never
     // run on this origin, rendered from its marker in a sandboxed frame.
     if (isArtifactDocument(doc.ocrMetadata)) return "artifact";
+    // And a saved web page: stored as the page's HTML for ingestion, which
+    // framed with scripts off is a white page for most sites.
+    if (websiteMarkerOf(doc.ocrMetadata)) return "website";
 
-    // Check title first — transcription documents are stored as text/plain but should render as audio
-    if (doc.title.toLowerCase().includes("(transcription)")) return "audio";
+    // A transcript is stored as text/plain but reads as the recording it was
+    // made from: played, with the transcript beside it. Transcripts from
+    // before the marker are known only by their title.
+    const transcript = transcriptMarkerOf(doc.ocrMetadata);
+    if (transcript) return transcriptMediaKind(transcript);
+    if (hasTranscriptTitle(doc.title)) return "audio";
 
     const mime = (doc.mimeType ?? "").toLowerCase();
     if (mime) {
@@ -109,7 +131,8 @@ export function getDocumentDisplayType(doc: {
             mime === "application/vnd.oasis.opendocument.spreadsheet"
         )
             return "xlsx";
-        if (mime.startsWith("audio/") || mime === "video/mp4") return "audio";
+        const mediaKind = mediaKindOfMime(mime);
+        if (mediaKind) return mediaKind;
         // Before the code prefixes: "text/x-" would otherwise claim text/x-markdown.
         if (mime === "text/markdown" || mime === "text/x-markdown") return "markdown";
         if (CODE_MIME_PREFIXES.some(p => mime.startsWith(p) || mime === p)) return "code";
@@ -119,7 +142,8 @@ export function getDocumentDisplayType(doc: {
     const src = `${doc.url} ${doc.title}`.toLowerCase();
     if (/\b\.pdf\b/.test(src)) return "pdf";
     if (/\.(png|jpg|jpeg|gif|webp|tiff|tif|bmp|svg)\b/.test(src)) return "image";
-    if (/\.(mp3|m4a)\b/.test(src)) return "audio";
+    const mediaKind = mediaKindOfName(doc.title) ?? mediaKindOfName(doc.url);
+    if (mediaKind) return mediaKind;
     if (/\.(docx?|odt)\b/.test(src)) return "docx";
     if (/\.(pptx?|odp)\b/.test(src)) return "pptx";
     if (/\.(xlsx?|ods)\b/.test(src)) return "xlsx";

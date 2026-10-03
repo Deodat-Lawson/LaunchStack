@@ -18,11 +18,18 @@
  * SITE_URL keeps its production default even in dev: it only feeds metadata
  * (canonical, Open Graph, JSON-LD, sitemap, robots), never a link anyone
  * clicks, and where a page canonically lives is the production origin.
+ *
+ * The Docker build passes both as build args, and an unset arg arrives as an
+ * empty string, which must still fall back to the default.
  */
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
+function nonEmpty(value: string | undefined): string | undefined {
+    return value === "" ? undefined : value;
+}
+
+export const SITE_URL = nonEmpty(process.env.NEXT_PUBLIC_SITE_URL) ?? "https://launchstack.app";
 
 export const APP_URL =
-    process.env.NEXT_PUBLIC_APP_URL ??
+    nonEmpty(process.env.NEXT_PUBLIC_APP_URL) ??
     (process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
         : "https://app.launchstack.app");
@@ -31,3 +38,12 @@ export const GITHUB_REPO = "https://github.com/Deodat-Lawson/LaunchStack";
 
 export const SIGN_IN_URL = `${APP_URL}/signin`;
 export const SIGN_UP_URL = `${APP_URL}/signup`;
+
+/** Where privacy, data and account-deletion requests go. Shown on /privacy and /terms. */
+export const PRIVACY_EMAIL = "privacy@launchstack-internal.com";
+
+/** The date the current Privacy Policy took effect. Bump it with every change to the policy. */
+export const PRIVACY_UPDATED = "October 17, 2026";
+
+/** The date the current Terms of Service took effect. */
+export const TERMS_UPDATED = "October 16, 2026";

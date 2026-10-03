@@ -222,13 +222,26 @@ export function formatMetadataContext(md: CompanyMetadataJSON): string {
     const founded = readFact(md.company.founded_year);
     const hq = readFact(md.company.headquarters);
 
+    const summary = readFact(md.profile?.summary);
+
     parts.push("=== Company ===");
     if (name) parts.push(`Name: ${name}`);
+    if (summary) parts.push(`Summary: ${summary}`);
     if (description) parts.push(`Description: ${description}`);
     if (industry) parts.push(`Industry: ${industry}`);
     if (size) parts.push(`Size: ${size}`);
     if (founded) parts.push(`Founded: ${founded}`);
     if (hq) parts.push(`Headquarters: ${hq}`);
+
+    const profileLines = Object.values(md.profile?.facts ?? {})
+        .map((fact): string | null => {
+            const val = readFact(fact);
+            return val ? `- ${fact.label}: ${val}` : null;
+        })
+        .filter((v): v is string => v != null);
+    if (profileLines.length > 0) {
+        parts.push("", "=== Profile ===", ...profileLines);
+    }
 
     if (md.services.length > 0) {
         const serviceLines = md.services

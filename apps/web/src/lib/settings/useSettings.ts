@@ -16,7 +16,14 @@
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import { getSetting, type SettingDefinition } from "./registry";
-import type { ResolvedSetting, SettingWriteRequest, SettingsPayload, StoredScope } from "./types";
+import {
+    SETTING_SCOPES,
+    type ResolvedSetting,
+    type SettingScope,
+    type SettingWriteRequest,
+    type SettingsPayload,
+    type StoredScope,
+} from "./types";
 
 export interface SettingsSnapshot {
     loaded: boolean;
@@ -190,6 +197,29 @@ export function defaultWriteScope(
     if (definition.scopes.includes("member")) return "member";
     if (folder && definition.scopes.includes("folder")) return "folder";
     return "workspace";
+}
+
+/**
+ * What a row that writes at `scope` shows: the value `scope` and the scopes
+ * under it resolve to, ignoring anything more specific. Without this the
+ * workspace row of a setting someone has also set for themselves shows their
+ * own choice and calls it the workspace's.
+ */
+export function settingAtScope<T>(
+    definition: SettingDefinition<T>,
+    resolved: ResolvedSetting<T> | null,
+    scope: StoredScope
+): { value: T; source: SettingScope } {
+    if (!resolved) return { value: definition.default, source: "default" };
+    const rank = (s: SettingScope) => SETTING_SCOPES.indexOf(s);
+    if (rank(resolved.source) <= rank(scope)) {
+        return { value: resolved.value, source: resolved.source };
+    }
+    for (const candidate of SETTING_SCOPES.slice(1, rank(scope) + 1).reverse()) {
+        const stored = resolved.stored[candidate as StoredScope];
+        if (stored !== undefined) return { value: stored, source: candidate };
+    }
+    return { value: definition.default, source: "default" };
 }
 
 export function useSetting<T = unknown>(

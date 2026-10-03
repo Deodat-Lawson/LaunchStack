@@ -20,7 +20,7 @@ import { errorMessage } from "./errors.js";
 import { log } from "./logger.js";
 
 const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
-const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
+const GEMINI_DEFAULT_MODEL = "gemini-3.8-flash";
 const SIGLIP_MODEL_ID = "google/siglip-base-patch16-224";
 
 /**

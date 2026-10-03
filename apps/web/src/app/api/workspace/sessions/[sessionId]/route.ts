@@ -1,16 +1,23 @@
 /**
- * One chat session — read it back, rename or pin it, delete it.
+ * One chat session — read it back, rename it, delete it.
  *
- * Every handler answers 404 for a session the caller does not own. That is
- * deliberate: a 403 would confirm the uuid exists and belongs to a colleague,
- * and there is nothing useful a caller can do with that fact.
+ * Reading is for anyone the chat reaches (ADR-014): its owner, or a person a
+ * `workspace_session_grants` row reaches. A reader gets the live transcript
+ * with citations outside their own scope removed (`hiddenCitations` counts
+ * them) and `access.level: "view"`. Renaming and deleting stay the owner's.
+ *
+ * Every handler answers 404 for a session the caller can neither read nor
+ * write — including a reader trying to rename or delete. A 403 would confirm
+ * the uuid exists to someone who guessed it, and a reader already knows they
+ * can't write: the UI never offers them the verb.
  */
 
 import { NextResponse } from "next/server";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, UpdateSessionSchema, validateRequestBody } from "~/lib/validation";
-import { deleteSession, getSession, updateSession } from "~/server/sessions/repository";
+import { readSession } from "~/server/sessions/reader";
+import { deleteSession, updateSession } from "~/server/sessions/repository";
 
 export const runtime = "nodejs";
 
@@ -23,10 +30,7 @@ export async function GET(_request: Request, { params }: Params) {
     if (!ctx.success) return ctx.response;
 
     try {
-        const session = await getSession(
-            { companyId: ctx.data.companyId, userId: ctx.data.authUserId },
-            (await params).sessionId
-        );
+        const session = await readSession(ctx.data, (await params).sessionId);
         return session ? NextResponse.json({ session }) : notFound();
     } catch (error) {
         console.error("[workspace/sessions] read failed:", error);

@@ -154,7 +154,7 @@ describe("renderExplanationMarkdown", () => {
         expect(markdown).toContain("> Prompt: repo-explainer-prompts/v2");
     });
 
-    it("includes the Model line only when a modelId is present", () => {
+    it("never names the model, even when provenance records one", () => {
         expect(render()).not.toContain("> Model:");
         const withModel = render({
             provenance: {
@@ -165,6 +165,6 @@ describe("renderExplanationMarkdown", () => {
                 modelId: "claude-fable-5",
             },
         });
-        expect(withModel).toContain("> Model: claude-fable-5");
+        expect(withModel).not.toContain("claude-fable-5");
     });
 });

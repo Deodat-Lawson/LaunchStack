@@ -26,6 +26,31 @@
         },
         "source_url": {
           "type": "string"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "number",
+                "minimum": 0
+              },
+              "end": {
+                "type": "number",
+                "minimum": 0
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "start",
+              "end",
+              "text"
+            ],
+            "additionalProperties": false
+          }
         }
       },
       "required": [
@@ -34,7 +59,8 @@
         "confidence",
         "title",
         "duration",
-        "source_url"
+        "source_url",
+        "segments"
       ],
       "additionalProperties": false
     }

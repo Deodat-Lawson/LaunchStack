@@ -2,11 +2,11 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
 import {
     FOLDER_VISIBILITIES,
     GRANT_LEVELS,
-    JOIN_POLICIES,
     PERMISSIONS,
     PRINCIPAL_TYPES,
 } from "~/lib/authz/permissions";
@@ -101,13 +101,24 @@ const AttachmentPayloadSchema = z.object({
     kind: z.enum(["image", "text"]),
 });
 
+/** A selected passage as the chat endpoint receives it (`ChatPassagePayload`). */
+const ChatPassagePayloadSchema = z.object({
+    documentId: z.number().int().positive().optional(),
+    title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+    page: z.number().int().positive().optional(),
+    text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+});
+
 export const QuestionSchema = z
     .object({
         documentId: z.number().int().positive().optional(),
         companyId: z.number().int().positive().optional(),
-        question: z.string().min(1, "Question is required"),
+        question: z
+            .string()
+            .min(1, "Question is required")
+            .max(120_000, "Question must be at most 120000 characters"),
         style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-        searchScope: z.enum(["document", "company", "archive", "selected"]).optional(),
+        searchScope: z.enum(["document", "company", "archive", "selected", "none"]).optional(),
         archiveName: z.string().optional(),
         // Document IDs for the "selected" scope — a user-picked subset of docs in
         // the sidebar. The route handler verifies every ID belongs to the caller's
@@ -117,13 +128,27 @@ export const QuestionSchema = z
         aiPersona: z.enum(aiPersonaOptions).optional(),
         aiModel: z.string().min(1).optional(),
         provider: z.string().min(1).optional(),
-        conversationHistory: z.string().optional(),
+        conversationHistory: z.string().max(120_000).optional(),
+        modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+        reasoningEffort: z.string().min(1).max(64).optional(),
+        chatMode: z.enum(["default", "plan"]).optional().default("default"),
+        stream: z.boolean().optional().default(false),
         embeddingIndexKey: z.string().min(1).optional(),
-        thinkingMode: z.boolean().optional().default(false),
+        thinkingMode: z
+            .union([z.boolean(), z.literal("auto")])
+            .optional()
+            .default(false),
         // Ephemeral per-turn attachments (NOT indexed as Sources). Images are sent
         // as multimodal content blocks on vision-capable models; text files are
-        // inlined into the prompt. Capped at 5 to bound context growth.
-        attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
+        // inlined into the prompt. Provider image and cumulative byte limits are
+        // enforced separately by the route.
+        attachments: z.array(AttachmentPayloadSchema).max(100).optional(),
+        /**
+         * Passages the reader selected in a document and is asking about.
+         * They travel beside the question (which holds only what was typed);
+         * the route authorizes each `documentId` against the caller's scope.
+         */
+        passages: z.array(ChatPassagePayloadSchema).max(MAX_PASSAGES).optional(),
         /**
          * Handle of the workspace agent answering this turn. Its standing
          * instructions, style, route and tool policy shape the answer; the
@@ -151,9 +176,14 @@ export const QuestionSchema = z
             aiModel: data.aiModel,
             provider: data.provider,
             conversationHistory: data.conversationHistory,
+            modelRoute: data.modelRoute,
+            reasoningEffort: data.reasoningEffort,
+            chatMode: data.chatMode,
+            stream: data.stream,
             embeddingIndexKey: data.embeddingIndexKey,
             thinkingMode: data.thinkingMode ?? false,
             attachments: data.attachments,
+            passages: data.passages,
             agentKey: data.agentKey ?? null,
         };
     });
@@ -226,6 +256,13 @@ export const UpdateCompanySchema = z
             .trim()
             .optional()
             .nullable(),
+        /** The OpenAI-compatible embeddings endpoint the key above belongs to. */
+        embeddingOpenAIBaseUrl: z
+            .string()
+            .max(1024, "Embeddings endpoint URL is too long")
+            .trim()
+            .optional()
+            .nullable(),
         embeddingHuggingFaceApiKey: z
             .string()
             .max(5000, "Hugging Face API key is too long")
@@ -270,6 +307,12 @@ export const UpdateCompanySchema = z
                 : data.embeddingOpenAIApiKey.trim()
                   ? data.embeddingOpenAIApiKey.trim()
                   : null,
+        embeddingOpenAIBaseUrl:
+            data.embeddingOpenAIBaseUrl == null
+                ? data.embeddingOpenAIBaseUrl
+                : data.embeddingOpenAIBaseUrl.trim()
+                  ? data.embeddingOpenAIBaseUrl.trim()
+                  : null,
         embeddingHuggingFaceApiKey:
             data.embeddingHuggingFaceApiKey == null
                 ? data.embeddingHuggingFaceApiKey
@@ -301,26 +344,6 @@ export const UpdateUploadPreferenceSchema = z.object({
 });
 
 // ============================================================================
-// RLM (Recursive Language Model) Query Schema
-// ============================================================================
-
-const semanticTypeOptions = [
-    "narrative",
-    "procedural",
-    "tabular",
-    "legal",
-    "financial",
-    "technical",
-    "reference",
-] as const;
-
-const prioritizeOptions = ["start", "end", "relevance"] as const;
-
-/**
- * Schema for RLM-style hierarchical document queries
- * Extends QuestionSchema with cost-aware retrieval options
- */
-// ============================================================================
 // Signup & Auth Schemas
 // ============================================================================
 
@@ -331,6 +354,7 @@ export const EmployerCompanySignupSchema = z.object({
     numberOfEmployees: z.string().max(9).optional().default("0"),
     embeddingIndexKey: z.string().trim().optional(),
     embeddingOpenAIApiKey: z.string().nullish(),
+    embeddingOpenAIBaseUrl: z.string().max(1024).nullish(),
     embeddingHuggingFaceApiKey: z.string().nullish(),
     embeddingOllamaBaseUrl: z.string().nullish(),
     embeddingOllamaModel: z.string().nullish(),
@@ -339,7 +363,7 @@ export const EmployerCompanySignupSchema = z.object({
 export const JoinWithInviteSchema = z.object({
     name: z.string().trim().min(1, "Name is required").max(256),
     email: z.string().trim().toLowerCase().email("Valid email is required"),
-    inviteCode: z.string().trim().min(1, "Invite code is required").max(12),
+    inviteCode: z.string().trim().min(1, "Invite code is required").max(64),
 });
 
 // ============================================================================
@@ -385,10 +409,20 @@ export const CreateJoinLinkSchema = z.object({
     role: RoleSlugSchema,
     expiresInDays: z.number().int().min(1).max(365).nullable().optional(),
     maxUses: z.number().int().min(1).max(10_000).nullable().optional(),
+    requiresApproval: z.boolean().optional(),
 });
 
+export const UpdateJoinLinkSchema = z
+    .object({
+        role: RoleSlugSchema.optional(),
+        requiresApproval: z.boolean().optional(),
+    })
+    .refine(v => v.role !== undefined || v.requiresApproval !== undefined, {
+        message: "Nothing to change",
+    });
+
 export const AcceptJoinLinkSchema = z.object({
-    code: z.string().trim().min(1, "Join code is required").max(12),
+    code: z.string().trim().min(1, "Join code is required").max(64),
     name: z.string().trim().min(1).max(256).optional(),
     email: EmailSchema.optional(),
 });
@@ -452,10 +486,9 @@ export const DocumentAccessSchema = z.object({
 
 export const WorkspaceSettingsPatchSchema = z
     .object({
-        joinPolicy: z.enum(JOIN_POLICIES).optional(),
         auditRetentionDays: z.number().int().min(1).max(3650).nullable().optional(),
     })
-    .refine(v => v.joinPolicy !== undefined || v.auditRetentionDays !== undefined, {
+    .refine(v => v.auditRetentionDays !== undefined, {
         message: "Nothing to change",
     });
 
@@ -539,13 +572,12 @@ export const TrackDocumentViewSchema = z.object({
 // ============================================================================
 
 export const CompanyOnboardingSchema = z.object({
+    /** "acme.com" or a full URL; anything that is not a web address is ignored. */
+    website: z.string().max(2048).trim().optional(),
     description: z.string().max(5000).trim().optional(),
+    /** What the company is building and for whom. */
+    idea: z.string().max(5000).trim().optional(),
     industry: z.string().max(256).trim().optional(),
-});
-
-export const CompanyMetadataExtractSchema = z.object({
-    debug: z.boolean().optional().default(false),
-    force: z.boolean().optional().default(false),
 });
 
 // ============================================================================
@@ -690,58 +722,6 @@ export const UpdateExecutionStepSchema = z.object({
 });
 
 // ============================================================================
-// RLM (Recursive Language Model) Query Schema
-// ============================================================================
-
-export const RLMQuestionSchema = z
-    .object({
-        documentId: z.number().int().positive("Document ID must be a positive integer"),
-        question: z.string().min(1, "Question is required"),
-        // Standard options
-        style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-        enableWebSearch: z.boolean().optional().default(false),
-        aiPersona: z.enum(aiPersonaOptions).optional(),
-        aiModel: z.string().min(1).optional(),
-        provider: z.string().min(1).optional(),
-        conversationHistory: z.string().optional(),
-        embeddingIndexKey: z.string().min(1).optional(),
-        // RLM-specific options
-        maxTokens: z.number().int().min(500).max(100000).optional(),
-        includeOverview: z.boolean().optional(),
-        includePreviews: z.boolean().optional(),
-        semanticTypes: z.array(z.enum(semanticTypeOptions)).optional(),
-        prioritize: z.enum(prioritizeOptions).optional(),
-        pageRange: z
-            .object({
-                start: z.number().int().min(0),
-                end: z.number().int().min(0),
-            })
-            .refine(data => data.end >= data.start, {
-                message: "pageRange.end must be >= pageRange.start",
-            })
-            .optional(),
-    })
-    .transform(data => {
-        return {
-            documentId: data.documentId,
-            question: data.question,
-            style: data.style ?? "concise",
-            enableWebSearch: data.enableWebSearch ?? false,
-            aiPersona: data.aiPersona ?? "general",
-            aiModel: data.aiModel,
-            provider: data.provider,
-            conversationHistory: data.conversationHistory,
-            embeddingIndexKey: data.embeddingIndexKey,
-            maxTokens: data.maxTokens ?? 4000,
-            includeOverview: data.includeOverview ?? true,
-            includePreviews: data.includePreviews ?? false,
-            semanticTypes: data.semanticTypes,
-            prioritize: data.prioritize ?? "relevance",
-            pageRange: data.pageRange,
-        };
-    });
-
-// ============================================================================
 // Mindmap (the diagramming app)
 // ============================================================================
 
@@ -845,16 +825,106 @@ export const UpdateArtifactSchema = z
  * bounded instead of parsed — an array cap plus the text cap is what keeps a
  * session row from becoming a dumping ground.
  */
+export const ChatSendPayloadSchema = z.object({
+    recallText: z.string().max(120_000).optional(),
+    origin: z.enum(["user", "attachment", "plan-implementation"]).optional(),
+    text: z.string().max(120_000),
+    refs: z.array(z.string().max(64)).max(200),
+    attachments: z
+        .array(
+            z.object({
+                id: z.string().max(128),
+                name: z.string().max(512),
+                mimeType: z.string().max(256),
+                size: z
+                    .number()
+                    .nonnegative()
+                    .max(50 * 1024 * 1024),
+                url: z.string().url().max(4096),
+                kind: z.enum(["image", "text"]),
+            })
+        )
+        .max(100),
+    webSearch: z.boolean(),
+    thinking: z.boolean(),
+    agentKey: z.string().max(64).nullable(),
+    modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+    reasoningEffort: z.string().max(64).optional(),
+    chatMode: z.enum(["default", "plan"]).optional(),
+    followUp: z.enum(["queue", "interrupt"]).optional(),
+    modelRoutes: z
+        .array(z.enum(["default", "fast", "reasoning", "vision"]))
+        .max(4)
+        .optional(),
+    threadRefs: z.array(z.string().min(1).max(64)).max(20).optional(),
+    /** Selected passages (`ChatPassage`), so a saved or queued turn keeps them. */
+    passages: z
+        .array(
+            z.object({
+                sourceId: z.string().min(1).max(64),
+                documentId: z.number().int().positive().optional(),
+                title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+                page: z.number().int().positive().optional(),
+                text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+            })
+        )
+        .max(MAX_PASSAGES)
+        .optional(),
+});
+
+export const ChatQueueSchema = z
+    .object({
+        revision: z.number().int().nonnegative(),
+        items: z
+            .array(z.object({ id: z.string().min(1).max(128), send: ChatSendPayloadSchema }))
+            .max(50),
+    })
+    .refine(data => new Set(data.items.map(item => item.id)).size === data.items.length, {
+        message: "Queue ids must be unique",
+    });
+export const ClaimChatQueueSchema = z.object({
+    revision: z.number().int().nonnegative(),
+    id: z.string().min(1).max(128),
+});
+export const TruncateSessionSchema = z.object({
+    keepCount: z.number().int().nonnegative(),
+    expectedCount: z.number().int().nonnegative(),
+});
+
 export const SessionMessageSchema = z.object({
     role: z.enum(["user", "assistant"]),
     text: z.string().max(MAX_SESSION_MESSAGE_CHARS),
     refs: z.array(z.string().max(64)).max(200).optional(),
     citations: z.array(z.unknown()).max(20).optional(),
-    attachments: z.array(z.unknown()).max(20).optional(),
+    attachments: z.array(z.unknown()).max(100).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
     agentKey: z.string().max(64).nullable().optional(),
+    metadata: z
+        .object({
+            forkedFromSessionId: z.string().max(128).optional(),
+            /** Kept only when it copies an asker the server already recorded. */
+            askedBy: z.string().max(256).optional(),
+            intent: z.enum(["queued", "interrupt"]).optional(),
+            id: z.string().max(128).optional(),
+            status: z.enum(["complete", "stopped", "error"]).optional(),
+            reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
+            elapsedMs: z.number().nonnegative().optional(),
+            send: ChatSendPayloadSchema.optional(),
+            tokenBreakdown: z
+                .object({
+                    inputTokens: z.number().nonnegative(),
+                    outputTokens: z.number().nonnegative(),
+                })
+                .optional(),
+            chunksAnalyzed: z.number().nonnegative().optional(),
+            webSources: z
+                .array(z.object({ title: z.string().max(500), url: z.string().url().max(2000) }))
+                .max(20)
+                .optional(),
+        })
+        .optional(),
 });
 
 const SessionAgentKeySchema = z.string().max(64).nullable().optional();
@@ -880,7 +950,39 @@ export const AppendSessionMessagesSchema = z.object({
 export const UpdateSessionSchema = z
     .object({
         title: z.string().min(1).max(300).optional(),
-        pinned: z.boolean().optional(),
         agentKey: SessionAgentKeySchema,
     })
     .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+
+/**
+ * Chat sharing (ADR-014): people, groups or roles at `view`, plus "Everyone at
+ * <workspace>" as `general`. Chats have no other level.
+ */
+export const ChatSharingSchema = z.object({
+    general: z.enum(["private", "workspace"]),
+    grants: z
+        .array(
+            z.object({
+                principalType: z.enum(PRINCIPAL_TYPES),
+                principalId: z.string().trim().min(1).max(64),
+                level: z.literal("view").default("view"),
+            })
+        )
+        .max(200),
+});
+
+/** One person's organisation of one chat: pin, archive, mark read. */
+export const SessionStateSchema = z
+    .object({
+        pinned: z.boolean().optional(),
+        archived: z.boolean().optional(),
+        seen: z.literal(true).optional(),
+    })
+    .refine(data => data.pinned !== undefined || data.archived !== undefined || data.seen, {
+        message: "No fields to update",
+    });
+
+/** The caller's pinned chats, top first. */
+export const PinOrderSchema = z.object({
+    ids: z.array(z.string().min(1).max(64)).max(500),
+});

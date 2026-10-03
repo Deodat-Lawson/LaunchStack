@@ -53,6 +53,12 @@ jest.mock("~/app/employer/tools/growth/brand/_screens/CalendarScreen", () => ({
 jest.mock("~/app/employer/tools/growth/brand/_screens/CampaignsScreen", () => ({
     CampaignsScreen: mockProbe("brand-campaigns"),
 }));
+jest.mock("~/app/employer/tools/growth/brand/_screens/AnalyticsScreen", () => ({
+    AnalyticsScreen: mockProbe("brand-analytics"),
+}));
+jest.mock("~/app/employer/tools/growth/brand/_screens/EngagementScreen", () => ({
+    EngagementScreen: mockProbe("brand-engagement"),
+}));
 jest.mock("~/app/employer/tools/growth/brand/_screens/AccountsScreen", () => ({
     AccountsScreen: mockProbe("brand-accounts"),
 }));
@@ -119,6 +125,10 @@ describe("growthScreenFor", () => {
         ["/brand/", { key: "brand-overview" }],
         ["/brand/compose", { key: "brand-compose" }],
         ["/brand/calendar", { key: "brand-calendar" }],
+        ["/brand/analytics", { key: "brand-analytics" }],
+        ["/brand/analytics?days=90", { key: "brand-analytics" }],
+        ["/brand/engagement", { key: "brand-engagement" }],
+        ["/brand/engagement?status=all", { key: "brand-engagement" }],
         ["/brand/campaigns", { key: "brand-campaigns" }],
         ["/brand/campaigns?debug=true", { key: "brand-campaigns" }],
         ["/brand/accounts", { key: "brand-accounts" }],
@@ -144,6 +154,7 @@ describe("growthScreenFor", () => {
         "/nope",
         "/brand/nope",
         "/brand/compose/extra",
+        "/brand/analytics/7",
         "/prospects/nope",
         "/prospects/people/42",
         "/prospects/companies/42/extra",

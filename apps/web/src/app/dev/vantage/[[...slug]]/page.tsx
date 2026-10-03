@@ -13,7 +13,9 @@ export const dynamic = "force-dynamic";
  * the weekly loop can be clicked through without a backend or a login. The
  * path and query pick the screen the tab opens on: `/dev/vantage/agenda?week=…`
  * is the agenda for that week. `?as=member` previews it for someone without
- * `settings.manage` (no Program group, Triage refuses). Development only.
+ * `settings.manage` (no Program group, Triage refuses). `?fresh=1` starts
+ * with no agenda for the coming week, so Vantage drafts it on arrival.
+ * Development only.
  */
 export default async function VantagePreviewPage({
     params,
@@ -26,8 +28,8 @@ export default async function VantagePreviewPage({
     const [{ slug = [] }, query] = await Promise.all([params, searchParams]);
     const search = new URLSearchParams();
     for (const [key, value] of Object.entries(query)) {
-        // `as` is the harness's own; the tab never sees it.
-        if (key === "as" || value === undefined) continue;
+        // `as` and `fresh` are the harness's own; the tab never sees them.
+        if (key === "as" || key === "fresh" || value === undefined) continue;
         if (Array.isArray(value)) value.forEach(v => search.append(key, v));
         else search.set(key, value);
     }

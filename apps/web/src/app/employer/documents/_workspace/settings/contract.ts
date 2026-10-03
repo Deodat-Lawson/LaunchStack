@@ -19,8 +19,12 @@ export interface SettingsSectionActions {
     /** Label while the primary action is running. Defaults to `${primaryLabel}…`. */
     primaryBusyLabel?: string;
     onPrimary?: () => void | Promise<void>;
+    /** The primary action is running: shows the busy label and disables the button. */
     busy?: boolean;
-    /** Disables the primary button — typically "nothing has changed". */
+    /**
+     * Disables the primary button — typically "nothing has changed". Applies
+     * whatever `busy` is; either one disables.
+     */
     disabled?: boolean;
     /** Secondary controls rendered to the left of the primary button. */
     secondary?: ReactNode;

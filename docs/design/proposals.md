@@ -12,7 +12,7 @@ rosters — as cited sources. Proposals puts that knowledge to work in the
 order the job happens, with the writing at the centre:
 
 ```
-sources ──► organisation profile (facts with citations)
+sources ──► company profile (facts with citations; shared with Settings › Company)
                 │
                 ├──► funders: plan a search from the profile
                 │        Grants.gov (keyless) + web (keyed) → scored for fit
@@ -56,8 +56,13 @@ difference from a "write my application" button.
 
 ## How it connects to the rest
 
-- **Sources** — the profile and every draft retrieve from the workspace's
-  indexed sources; a citation opens the source in the Studio; a request can
+- **Company profile** — Proposals does not build its own profile any more.
+  Proposals › Profile renders the company profile (Settings › Company): one
+  builder in `pipelines/src/company-metadata` reads only sources about the
+  company, drops reference lists, tables and other noise, and keeps a fact
+  only with a quote found verbatim in its source. The stages read it through
+  `loadOrgProfile` → `orgProfileFromView`, so excerpt numbers match the page.
+- **Sources** — every draft retrieves from the workspace's indexed sources; a citation opens the source in the Studio; a request can
   be read straight from a Source; a finished proposal is exported into
   Sources under "Proposals" and becomes citable.
 - **Chat** — "Ask in chat" on any section opens the Studio with a question
@@ -75,18 +80,17 @@ difference from a "write my application" button.
 Six product tables (migration `20260930000238_proposals`), all `pdr_ai_v2_`,
 all company-scoped with cascade delete:
 
-| Table | One row is | Notes |
-| --- | --- | --- |
-| `proposal_profiles` | the workspace's organisation profile | one per company; `profile` jsonb holds summary, facts (with `cites`), numbered evidence, provenance |
-| `proposal_opportunities` | one funder's call | unique on (company, source, external id); a person's `status` (saved/dismissed/applied) survives a re-search |
-| `proposal_applications` | one proposal | request text/url/source id, `extracted` request, `requirements` checklist, `review`, `readiness`, exported source id |
-| `proposal_sections` | one question to answer | ordered by `position`; `draft` + `draft_meta` (cites, gaps, evidence, library ids, model, prompt version) |
-| `proposal_library_items` | an answer worth reusing | question, answer, tags, cited evidence, where it came from, how often reused |
-| `proposal_runs` | one background job | kind, input, `steps` jsonb the sheet renders, summary headline, credits |
+| Table                    | One row is              | Notes                                                                                                                |
+| ------------------------ | ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `proposal_opportunities` | one funder's call       | unique on (company, source, external id); a person's `status` (saved/dismissed/applied) survives a re-search         |
+| `proposal_applications`  | one proposal            | request text/url/source id, `extracted` request, `requirements` checklist, `review`, `readiness`, exported source id |
+| `proposal_sections`      | one question to answer  | ordered by `position`; `draft` + `draft_meta` (cites, gaps, evidence, library ids, model, prompt version)            |
+| `proposal_library_items` | an answer worth reusing | question, answer, tags, cited evidence, where it came from, how often reused                                         |
+| `proposal_runs`          | one background job      | kind, input, `steps` jsonb the sheet renders, summary headline, credits                                              |
 
 ## Runs
 
-Every model-backed action is a run: `profile`, `funders`, `extract`, `draft`
+Every model-backed action is a run: `funders`, `extract`, `draft`
 (one or many sections), `rewrite` (one section under an instruction),
 `review`. The route creates the row and returns it with 202; the UI polls
 `/api/proposals/runs/[id]` at 1.5 s while it is live and reloads its screen
@@ -104,9 +108,10 @@ Credits: a pre-check when metering is enforced, a debit per completed run
 
 ## Stages, briefly
 
-- **Profile** — nine retrieval queries over the workspace's sources;
-  excerpts numbered; one structured call returns facts that must cite. A fact
-  with no valid citation is dropped, never kept as a guess.
+- **Profile** — not a Proposals stage: the company profile, built per
+  source (see "Company profile" above). `proposal_profiles` and the `profile`
+  run kind were retired in migration `20261003225135_company_profile_sources`,
+  which copied hand-added facts into the company profile as manual edits.
 - **Funders** — a structured plan (keywords, applicant type, geography) from
   the profile unless keywords are given; `findGrants`; one scoring call per
   batch of 20 returning score/why/concerns per external id.
@@ -121,7 +126,7 @@ Credits: a pre-check when metering is enforced, a debit per completed run
   cites, the profile, and an instruction (a preset or the person's words);
   the result may cite only that evidence, and anything the instruction
   needed that the evidence lacks is added to the gaps. The section drops
-  back to *drafted* so approval is a fresh decision.
+  back to _drafted_ so approval is a fresh decision.
 - **Review** — deterministic findings merged with the model's, blockers
   first; readiness = 70% required sections + 30% checklist.
 

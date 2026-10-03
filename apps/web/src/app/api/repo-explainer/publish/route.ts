@@ -4,6 +4,10 @@
  * hand it to `processDocumentUpload` with a convergent creation key, record
  * the back-link. Re-publishing the same (repo@sha, type) converges on the
  * existing source instead of duplicating it.
+ *
+ * Publishing is adding a file (ADR-014): it takes `documents.upload` and edit
+ * access to the folder it lands in, and a first publish into Unfiled is
+ * private to the publisher until they share it.
  */
 
 import { z } from "zod";
@@ -20,15 +24,18 @@ import {
 } from "@launchstack/pipelines/repo-workspace/db";
 
 import { uploadFile } from "~/lib/storage";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import {
+    createForbiddenError,
     createNotFoundError,
     createSuccessResponse,
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { recordUpload } from "~/server/workspace/added-documents";
 import { serializeExplainerJob } from "~/server/services/repo-explainer-jobs";
 
 export const runtime = "nodejs";
@@ -42,12 +49,16 @@ const PublishSchema = z.object({
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, PublishSchema);
         if (!validation.success) return validation.response;
         const { jobId, category } = validation.data;
+
+        if (!(await canEditFolder(ctx.data, category ?? ""))) {
+            return createForbiddenError(FOLDER_EDIT_DENIED);
+        }
 
         const companyId = BigInt(ctx.data.companyId);
         const job = await getExplainerJob(jobId, companyId);
@@ -93,6 +104,7 @@ export async function POST(request: Request) {
             originalFilename: filename,
             requestUrl: request.url,
         });
+        await recordUpload(ctx.data, upload);
 
         const updated = await markJobPublished(jobId, companyId, BigInt(upload.document.id));
 

@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Input } from "~/components/ui/input";
 import {
     Select,
@@ -318,6 +319,8 @@ export function SessionsBrowser({
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
     const [busyIds, setBusyIds] = useState<Set<string>>(new Set());
     const [importingAll, setImportingAll] = useState(false);
+    /** The session whose import a Remove has been asked for, pending the confirm dialog. */
+    const [removing, setRemoving] = useState<AgentSessionItem | null>(null);
 
     const [query, setQuery] = useState("");
     const [toolFilter, setToolFilter] = useState<"all" | SessionTool>("all");
@@ -415,11 +418,6 @@ export function SessionsBrowser({
     const removeImport = useCallback(async (item: AgentSessionItem) => {
         const documentId = item.imported?.documentId;
         if (!documentId) return;
-        if (
-            !confirm(`Remove the imported transcript of “${item.title}”? The local session stays.`)
-        ) {
-            return;
-        }
         try {
             const res = await fetch("/api/deleteDocument", {
                 method: "DELETE",
@@ -686,7 +684,7 @@ export function SessionsBrowser({
                                 item={item}
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
-                                onRemoveImport={i => void removeImport(i)}
+                                onRemoveImport={setRemoving}
                                 onOpenDocument={onOpenDocument}
                                 onContinue={onContinue}
                             />
@@ -694,6 +692,25 @@ export function SessionsBrowser({
                     </div>
                 )}
             </div>
+
+            <ConfirmDialog
+                open={removing !== null}
+                onOpenChange={next => {
+                    if (!next) setRemoving(null);
+                }}
+                title="Remove the imported transcript?"
+                description={
+                    removing
+                        ? `“${removing.title}” leaves the workspace and its search. The session on this machine stays, so you can import it again.`
+                        : undefined
+                }
+                confirmLabel="Remove import"
+                onConfirm={() => {
+                    const target = removing;
+                    setRemoving(null);
+                    if (target) void removeImport(target);
+                }}
+            />
         </div>
     );
 }

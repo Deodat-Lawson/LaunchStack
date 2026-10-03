@@ -18,6 +18,11 @@ patchedDependencies:
   # hydration mismatch on /employer/settings). React 19.3 ships both; drop
   # this once Next vendors them. Guarded by
   # apps/web/__tests__/hydration/replay-hydration-cursor.test.ts.
+  # Also awaits the request-body hand-off after Node.js middleware
+  # (next-server.js `await requestData.body.finalize()`, as Next 16 does):
+  # without it a route handler can read an upload that is still streaming,
+  # and file uploads fail with "Failed to parse body as FormData". Guarded by
+  # apps/web/__tests__/middleware/request-body-after-middleware.test.ts.
   next@15.5.7: patches/next@15.5.7.patch
 
 # eslint-plugin-drizzle 0.2.3 imports this package at runtime but only declares

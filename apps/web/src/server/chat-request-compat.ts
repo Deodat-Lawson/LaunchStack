@@ -1,5 +1,3 @@
-import type { ResolvedChatModel } from "@launchstack/llm";
-
 export interface DeprecatedChatSelection {
     /** Pre-PR per-request provider selector. No longer meaningful. */
     provider?: string;
@@ -14,15 +12,16 @@ export type DeprecatedChatSelectionResult =
 /**
  * Compatibility-window handling for legacy request selectors.
  *
- * Operators own model selection. An old client may still echo back the model
- * it was told about — that is harmless and accepted — but it cannot change it,
- * and `provider` has no meaning at all now that every route reaches the same
- * endpoint. Both are rejected loudly rather than ignored: silently discarding
- * a selector would let a client believe it picked a model it did not get.
+ * Operators own model selection, and no client is told which model serves a
+ * route, so a request naming one is refused whatever it names. Refusing a
+ * match and a mismatch alike matters: accepting the right id would let a
+ * caller confirm a guess. `provider` has no meaning at all now that every
+ * route reaches the same endpoint. Both are rejected loudly rather than
+ * ignored: silently discarding a selector would let a client believe it
+ * picked something it did not get.
  */
 export function validateDeprecatedChatSelection(
-    requested: DeprecatedChatSelection,
-    resolved: Pick<ResolvedChatModel, "modelId">
+    requested: DeprecatedChatSelection
 ): DeprecatedChatSelectionResult {
     if (requested.provider) {
         return {
@@ -32,7 +31,7 @@ export function validateDeprecatedChatSelection(
                 "Per-request provider selection is no longer supported; the deployment serves one chat endpoint configured by the operator",
         };
     }
-    if (requested.model && requested.model !== resolved.modelId) {
+    if (requested.model) {
         return {
             ok: false,
             status: 400,

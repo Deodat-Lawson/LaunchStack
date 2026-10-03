@@ -2,6 +2,11 @@
  * Groups: a named set of members that grants can name as one principal.
  * Deleting a group takes its grants with it, so nothing keeps pointing at an
  * id that no longer exists.
+ *
+ * Who may change a group (ADR-014): anyone who can see the member list and is
+ * not a Guest may create one, and becomes its manager. The creator manages
+ * their group — rename, delete, add and remove people; `groups.manage`
+ * manages every group.
  */
 
 import { and, asc, eq, inArray } from "drizzle-orm";
@@ -14,12 +19,15 @@ import {
     users,
     workspaceGroupMembers,
     workspaceGroups,
+    workspaceSessionGrants,
 } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import { slugifyName } from "~/lib/workspace-slug";
 
-import { badRequest, notFound } from "./errors";
+import { recordActivity } from "./activity";
+import { badRequest, forbidden, notFound } from "./errors";
 
 export interface GroupView {
     id: number;
@@ -28,6 +36,10 @@ export interface GroupView {
     description: string | null;
     memberCount: number;
     members: { id: number; name: string; email: string }[];
+    /** Auth subject id of whoever created it — its manager. */
+    createdBy: string;
+    /** May the caller rename, delete, or change who is in it. */
+    canManage: boolean;
 }
 
 interface GroupRow {
@@ -35,6 +47,31 @@ interface GroupRow {
     name: string;
     slug: string;
     description: string | null;
+    createdBy: string;
+}
+
+type GroupActor = Pick<WorkspaceContext, "authUserId" | "role" | "can">;
+
+// ---------------------------------------------------------------------------
+// Who may do what
+// ---------------------------------------------------------------------------
+
+/** Anyone who sees the member list and is not a Guest may start a group. */
+export function canCreateGroups(ctx: GroupActor): boolean {
+    if (ctx.can("groups.manage")) return true;
+    return ctx.can("members.view") && normalizeRoleSlug(ctx.role) !== "guest";
+}
+
+/** The creator manages their group (while they may still create groups); `groups.manage` manages all. */
+export function canManageGroup(ctx: GroupActor, group: { createdBy: string }): boolean {
+    if (ctx.can("groups.manage")) return true;
+    return group.createdBy === ctx.authUserId && canCreateGroups(ctx);
+}
+
+function assertCanManage(ctx: GroupActor, group: GroupRow): void {
+    if (!canManageGroup(ctx, group)) {
+        throw forbidden("Only the person who created this group, or an admin, can change it.");
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +108,7 @@ async function membersByGroup(
     return out;
 }
 
-async function toViews(rows: readonly GroupRow[]): Promise<GroupView[]> {
+async function toViews(ctx: GroupActor, rows: readonly GroupRow[]): Promise<GroupView[]> {
     const members = await membersByGroup(rows.map(r => Number(r.id)));
     return rows.map(row => {
         const list = members.get(Number(row.id)) ?? [];
@@ -82,32 +119,32 @@ async function toViews(rows: readonly GroupRow[]): Promise<GroupView[]> {
             description: row.description,
             memberCount: list.length,
             members: list,
+            createdBy: row.createdBy,
+            canManage: canManageGroup(ctx, row),
         };
     });
 }
 
+const GROUP_COLUMNS = {
+    id: workspaceGroups.id,
+    name: workspaceGroups.name,
+    slug: workspaceGroups.slug,
+    description: workspaceGroups.description,
+    createdBy: workspaceGroups.createdBy,
+};
+
 export async function listGroups(ctx: WorkspaceContext): Promise<GroupView[]> {
     const rows = await db
-        .select({
-            id: workspaceGroups.id,
-            name: workspaceGroups.name,
-            slug: workspaceGroups.slug,
-            description: workspaceGroups.description,
-        })
+        .select(GROUP_COLUMNS)
         .from(workspaceGroups)
         .where(eq(workspaceGroups.companyId, ctx.companyId))
         .orderBy(asc(workspaceGroups.name));
-    return toViews(rows);
+    return toViews(ctx, rows);
 }
 
 async function loadGroup(companyId: bigint, id: number): Promise<GroupRow> {
     const [row] = await db
-        .select({
-            id: workspaceGroups.id,
-            name: workspaceGroups.name,
-            slug: workspaceGroups.slug,
-            description: workspaceGroups.description,
-        })
+        .select(GROUP_COLUMNS)
         .from(workspaceGroups)
         .where(and(eq(workspaceGroups.companyId, companyId), eq(workspaceGroups.id, id)))
         .limit(1);
@@ -115,8 +152,15 @@ async function loadGroup(companyId: bigint, id: number): Promise<GroupRow> {
     return row;
 }
 
-async function getGroup(companyId: bigint, id: number): Promise<GroupView> {
-    const [view] = await toViews([await loadGroup(companyId, id)]);
+/** The group, if the caller may change it: 404 for another workspace's, 403 for someone else's. */
+async function loadManagedGroup(ctx: WorkspaceContext, id: number): Promise<GroupRow> {
+    const row = await loadGroup(ctx.companyId, id);
+    assertCanManage(ctx, row);
+    return row;
+}
+
+async function getGroup(ctx: WorkspaceContext, id: number): Promise<GroupView> {
+    const [view] = await toViews(ctx, [await loadGroup(ctx.companyId, id)]);
     if (!view) throw notFound("Group not found.");
     return view;
 }
@@ -144,6 +188,7 @@ export async function createGroup(
     ctx: WorkspaceContext,
     input: { name: string; description?: string | null }
 ): Promise<GroupView> {
+    if (!canCreateGroups(ctx)) throw forbidden("Your role can't create groups.");
     const slug = await uniqueGroupSlug(ctx.companyId, input.name);
     const id = await db.transaction(async tx => {
         const [row] = await tx
@@ -165,9 +210,17 @@ export async function createGroup(
             targetId: row.id,
             detail: { name: input.name, slug },
         });
+        await recordActivity(tx, {
+            companyId: ctx.companyId,
+            actorUserId: ctx.authUserId,
+            verb: "created_group",
+            targetType: "group",
+            targetId: row.id,
+            targetLabel: input.name,
+        });
         return row.id;
     });
-    return getGroup(ctx.companyId, id);
+    return getGroup(ctx, id);
 }
 
 export async function updateGroup(
@@ -175,7 +228,7 @@ export async function updateGroup(
     id: number,
     input: { name?: string; description?: string | null }
 ): Promise<GroupView> {
-    const row = await loadGroup(ctx.companyId, id);
+    const row = await loadManagedGroup(ctx, id);
     const changes: Record<string, { from: unknown; to: unknown }> = {};
     if (input.name !== undefined && input.name !== row.name) {
         changes.name = { from: row.name, to: input.name };
@@ -183,7 +236,7 @@ export async function updateGroup(
     if (input.description !== undefined && (input.description ?? null) !== row.description) {
         changes.description = { from: row.description, to: input.description ?? null };
     }
-    if (Object.keys(changes).length === 0) return getGroup(ctx.companyId, id);
+    if (Object.keys(changes).length === 0) return getGroup(ctx, id);
 
     await db.transaction(async tx => {
         await tx
@@ -204,14 +257,14 @@ export async function updateGroup(
             detail: { changes },
         });
     });
-    return getGroup(ctx.companyId, id);
+    return getGroup(ctx, id);
 }
 
 export async function deleteGroup(
     ctx: WorkspaceContext,
     id: number
 ): Promise<{ success: true; removedGrants: number }> {
-    const row = await loadGroup(ctx.companyId, id);
+    const row = await loadManagedGroup(ctx, id);
     const principalId = String(id);
 
     const removedGrants = await db.transaction(async tx => {
@@ -235,8 +288,18 @@ export async function deleteGroup(
                 )
             )
             .returning({ id: documentGrants.id });
+        const chats = await tx
+            .delete(workspaceSessionGrants)
+            .where(
+                and(
+                    eq(workspaceSessionGrants.companyId, ctx.companyId),
+                    eq(workspaceSessionGrants.principalType, "group"),
+                    eq(workspaceSessionGrants.principalId, principalId)
+                )
+            )
+            .returning({ id: workspaceSessionGrants.id });
         await tx.delete(workspaceGroups).where(eq(workspaceGroups.id, id));
-        const removed = folder.length + docs.length;
+        const removed = folder.length + docs.length + chats.length;
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -256,9 +319,9 @@ export async function addGroupMembers(
     id: number,
     userIds: readonly number[]
 ): Promise<GroupView> {
-    await loadGroup(ctx.companyId, id);
+    await loadManagedGroup(ctx, id);
     const unique = [...new Set(userIds)];
-    if (unique.length === 0) return getGroup(ctx.companyId, id);
+    if (unique.length === 0) return getGroup(ctx, id);
 
     const active = await db
         .select({ userId: userCompanyMemberships.userId })
@@ -318,7 +381,7 @@ export async function addGroupMembers(
             }
         });
     }
-    return getGroup(ctx.companyId, id);
+    return getGroup(ctx, id);
 }
 
 export async function removeGroupMembers(
@@ -326,7 +389,7 @@ export async function removeGroupMembers(
     id: number,
     userIds: readonly number[]
 ): Promise<GroupView> {
-    await loadGroup(ctx.companyId, id);
+    await loadManagedGroup(ctx, id);
     const unique = [...new Set(userIds)];
     if (unique.length > 0) {
         await db.transaction(async tx => {
@@ -354,5 +417,5 @@ export async function removeGroupMembers(
             }
         });
     }
-    return getGroup(ctx.companyId, id);
+    return getGroup(ctx, id);
 }

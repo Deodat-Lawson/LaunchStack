@@ -7,7 +7,7 @@ actually reads in production.
 
 Two layers, both real:
 
-**Table** — `pdr_ai_v2_company_metadata` (`packages/core/src/db/schema/company-metadata.ts`).
+**Table** — `pdr_ai_v2_company_metadata` (`packages/tools/src/company-context/schema.ts`).
 All Drizzle tables pass through `pgTableCreator(name => \`pdr_ai_v2_${name}\`)`, so the
 declared name `company_metadata` becomes `pdr_ai_v2_company_metadata` in Postgres.
 
@@ -20,7 +20,7 @@ declared name `company_metadata` becomes `pdr_ai_v2_company_metadata` in Postgre
 | `last_extraction_document_id` | bigint, FK → `document.id` | |
 | `created_at` / `updated_at` | timestamptz | |
 
-**JSON document** — `CompanyMetadataJSON` (`packages/features/src/company-metadata/types.ts`).
+**JSON document** — `CompanyMetadataJSON` (`pipelines/src/company-metadata/types.ts`).
 Every leaf value is wrapped in a `MetadataFact<T>`:
 
 ```ts

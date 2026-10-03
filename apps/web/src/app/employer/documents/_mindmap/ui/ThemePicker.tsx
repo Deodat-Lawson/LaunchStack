@@ -75,7 +75,10 @@ function ThemeTile({
     active: boolean;
     onPick: () => void;
 }) {
-    const swatches = theme.cycle.slice(0, 3).map(id => swatchFor(id, theme.mode));
+    // The tile is the theme in miniature: its solid centre, then the first
+    // two branch hues as the tinted boxes they become, on its own paper.
+    const root = swatchFor(theme.root, theme.mode);
+    const branches = theme.cycle.slice(0, 2).map(id => swatchFor(id, theme.mode));
 
     return (
         <button
@@ -94,21 +97,23 @@ function ThemeTile({
                 className="relative flex h-9 w-full items-center justify-center gap-1 overflow-hidden rounded-[4px]"
                 style={{ background: theme.background }}
             >
-                {/* A connector behind the nodes, exactly as the canvas paints it. */}
                 <span
-                    aria-hidden
-                    className="absolute left-2 right-2 top-1/2 h-px"
-                    style={{ background: theme.edgeStroke }}
+                    className="relative h-3.5 w-5 rounded-full"
+                    style={{ background: root.stroke }}
                 />
-                {swatches.map((sw, i) => (
-                    <span
-                        key={`${theme.id}-${i}`}
-                        className="relative h-3.5 w-5 rounded-[3px]"
-                        style={{
-                            background: i === 0 ? sw.stroke : sw.fill,
-                            border: `1px solid ${sw.stroke}`,
-                        }}
-                    />
+                {branches.map((sw, i) => (
+                    <span key={`${theme.id}-${i}`} className="relative flex items-center">
+                        {/* The branch's own connector, in its hue, as the canvas paints it. */}
+                        <span
+                            aria-hidden
+                            className="h-0.5 w-1.5"
+                            style={{ background: sw.stroke }}
+                        />
+                        <span
+                            className="h-3.5 w-5 rounded-[3px]"
+                            style={{ background: sw.fill, border: `1.5px solid ${sw.stroke}` }}
+                        />
+                    </span>
                 ))}
             </span>
             <span className="flex items-center gap-1 px-0.5">

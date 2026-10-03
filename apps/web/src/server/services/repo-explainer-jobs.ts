@@ -3,7 +3,18 @@
  * only export handlers, so this lives here).
  */
 
-import type { RepoExplainerJobRow } from "@launchstack/pipelines/repo-workspace/schema";
+import type {
+    RepoExplainerJobRow,
+    RepoExplanationJobResult,
+} from "@launchstack/pipelines/repo-workspace/schema";
+
+/** The result as the browser gets it: provenance without the model id. */
+function publicResult(result: RepoExplanationJobResult | null) {
+    if (!result) return result;
+    const provenance: Partial<RepoExplanationJobResult["provenance"]> = { ...result.provenance };
+    delete provenance.modelId;
+    return { ...result, provenance };
+}
 
 export function serializeExplainerJob(row: RepoExplainerJobRow) {
     return {
@@ -13,7 +24,7 @@ export function serializeExplainerJob(row: RepoExplainerJobRow) {
         diagramType: row.diagramType,
         instructions: row.instructions,
         sha: row.sha,
-        result: row.result,
+        result: publicResult(row.result),
         errorMessage: row.errorMessage,
         publishedDocumentId: row.publishedDocumentId?.toString() ?? null,
         staleAt: row.staleAt?.toISOString() ?? null,

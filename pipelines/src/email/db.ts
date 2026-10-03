@@ -238,7 +238,6 @@ function toVersion(row: VersionRow): TemplateVersion {
         },
         source: row.source as TemplateSource,
         goal: row.goal,
-        model: row.model,
         promptVersion: row.promptVersion,
         reviewVerdict: (row.reviewVerdict as "pass" | "revise" | null) ?? null,
         review: review?.success ? review.data : null,

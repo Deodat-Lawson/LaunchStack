@@ -77,7 +77,8 @@ export interface TemplateVersion {
     template: EmailTemplate;
     source: TemplateSource;
     goal: string | null;
-    model: string | null;
+    // No `model`: the row records which model drafted it, but this shape is
+    // what the API returns and the product never names the model.
     promptVersion: string | null;
     reviewVerdict: "pass" | "revise" | null;
     review: TemplateReview | null;

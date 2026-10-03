@@ -19,12 +19,12 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 
+import { CiteList } from "~/components/tools/Cite";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { plural, relativeTime } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
-import { CiteList } from "../_components/Cite";
 import { useProposals } from "../_lib/context";
 import { proposalsApi, type LibraryItemDto } from "../api";
 

@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import {
     ChatConfigurationError,
     buildChatModelsConfig,
@@ -226,6 +229,54 @@ routes:
         expect(model.preset).toBe("openai/gpt-4o");
         expect(model.behavior).toEqual(getChatModelPreset("openai/gpt-4o")!.behavior);
     });
+
+    it("names a live replacement for every deprecated entry", () => {
+        for (const preset of listChatModelPresets()) {
+            if (!preset.deprecated) continue;
+            const replacement = getChatModelPreset(preset.deprecated.replacement);
+            expect(replacement).toBeDefined();
+            expect(replacement!.deprecated).toBeUndefined();
+        }
+    });
+
+    it("still loads a deprecated preset, warning once per process", () => {
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        try {
+            const yaml = `
+version: 1
+models:
+  primary:
+    id: gemini-2.5-pro
+    preset: google/gemini-2.5-pro
+routes:
+  default: primary
+`;
+            const model = build(yaml).models.get("primary")!;
+            build(yaml);
+            expect(model.behavior).toEqual(getChatModelPreset("google/gemini-2.5-pro")!.behavior);
+            const deprecations = warn.mock.calls.filter(([message]) =>
+                String(message).includes('"google/gemini-2.5-pro", deprecated since')
+            );
+            expect(deprecations).toHaveLength(1);
+            expect(String(deprecations[0]![0])).toContain('"google/gemini-3.8-flash"');
+        } finally {
+            warn.mockRestore();
+        }
+    });
+
+    it.each(["config/chat-models.yaml", "config/chat-models.azure.yaml"])(
+        "ships every route in %s on a preset that is not deprecated",
+        file => {
+            const config = createChatModelsConfig({
+                yaml: readFileSync(join(process.cwd(), file), "utf8"),
+                endpoint,
+            });
+            for (const model of config.models.values()) {
+                expect(model.preset).toBeDefined();
+                expect(getChatModelPreset(model.preset!)!.deprecated).toBeUndefined();
+            }
+        }
+    );
 
     it("reports an unknown preset with the available names", () => {
         expect(() =>

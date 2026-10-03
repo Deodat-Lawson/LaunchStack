@@ -69,6 +69,23 @@ export interface BrandPostSource {
     historyId?: number;
 }
 
+/** An image a post carries: a `brand_media` id and its alt text. */
+export interface BrandPostMediaRef {
+    id: string;
+    alt: string | null;
+}
+
+/** What the network last reported for a published post. */
+export interface BrandPostMetrics {
+    impressions: number | null;
+    reactions: number;
+    comments: number;
+    shares: number;
+    clicks: number | null;
+    /** 0..1 when the network reports it. */
+    engagement: number | null;
+}
+
 /**
  * One row per network per composed message: a message sent to three networks
  * is three rows that succeed, fail and appear on the calendar independently.
@@ -97,11 +114,26 @@ export const brandPosts = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared last because ALTER TABLE ADD COLUMN appends them (see
+        // marketing_content_history above for why the order matters).
+        /**
+         * The workspace channel this post goes out as (`brand_channels.id`,
+         * owned by the app — no foreign key across the boundary). Null for
+         * posts written before channels existed: those use the deployment's
+         * own account for the network.
+         */
+        channelId: varchar("channel_id", { length: 64 }),
+        media: jsonb("media").$type<BrandPostMediaRef[]>(),
+        metrics: jsonb("metrics").$type<BrandPostMetrics>(),
+        metricsAt: timestamp("metrics_at", { withTimezone: true }),
+        /** Publish attempts that failed with a retryable error (rate limit, 5xx). */
+        attempts: integer("attempts").notNull().default(0),
     },
     table => [
         index("brand_posts_company_status_idx").on(table.companyId, table.status),
         index("brand_posts_company_scheduled_idx").on(table.companyId, table.scheduledAt),
         index("brand_posts_due_idx").on(table.status, table.scheduledAt),
+        index("brand_posts_channel_idx").on(table.channelId),
     ]
 );
 export type BrandPostRow = InferSelectModel<typeof brandPosts>;

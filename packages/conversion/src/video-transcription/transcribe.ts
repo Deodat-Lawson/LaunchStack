@@ -15,6 +15,8 @@ export interface VideoTranscriptionResult {
     title: string;
     duration: number | null;
     source_url: string;
+    /** Absent from transcription-service builds older than the field. */
+    segments?: { start: number; end: number; text: string }[];
 }
 
 /** Check if a string looks like a video platform URL that yt-dlp can handle. */

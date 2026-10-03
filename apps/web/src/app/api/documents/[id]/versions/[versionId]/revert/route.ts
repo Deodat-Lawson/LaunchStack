@@ -19,6 +19,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import { callNotesCalls } from "@launchstack/pipelines/call-notes";
 import {
@@ -71,6 +73,11 @@ export async function POST(
                     { error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE },
                     { status: 409 }
                 );
+            }
+
+            // Changing which version is live is changing the file (ADR-014).
+            if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
+                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
             }
 
             // Phase 1 of Drive-linked files: reverting a linked document

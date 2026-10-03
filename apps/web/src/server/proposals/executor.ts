@@ -21,6 +21,7 @@ import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { createProposalPorts } from "./ports";
 
 export type ProposalsExecutor = "inline" | "worker";
@@ -79,7 +80,10 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     }
     after(async () => {
         try {
-            await executeProposalRun(ctx, createProposalPorts(args.companyId));
+            // After the response, under the workspace's own models if it brought them.
+            await withWorkspaceChatModels(args.companyId, () =>
+                executeProposalRun(ctx, createProposalPorts(args.companyId))
+            );
         } catch (error) {
             console.error("[proposals] run failed:", error);
         }

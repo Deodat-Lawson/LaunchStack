@@ -5,15 +5,17 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
     Folder as IconFolder,
-    Lock,
     PanelRightClose,
     Pencil,
     Sparkles,
     Trash2,
     Upload,
+    Users,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
+import { usePeople } from "~/lib/profile/use-people";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { getMindmap } from "../_mindmap/lib/api";
@@ -21,6 +23,8 @@ import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
+import { canChangeSource, canDeleteSource, DELETE_RESERVED_REASON } from "./sourceContextMenu";
+import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
 import {
@@ -28,7 +32,12 @@ import {
     buildVersionMenuItems,
     type DocumentTargetData,
 } from "./documentContextMenu";
-import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
+import {
+    SOURCE_META,
+    type CitationHighlight,
+    type PassageSelection,
+    type WorkspaceSource,
+} from "./types";
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
@@ -82,20 +91,19 @@ export interface DocumentViewerProps {
     source: WorkspaceSource;
     /** When opened from a citation: the cited passage to locate + highlight. */
     highlight?: CitationHighlight | null;
-    onClose: () => void;
     // Source-shaped rather than id-shaped: a mindmap has no document id
     // until it is published, so the id could not identify one.
     onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
     onDelete: (source: WorkspaceSource) => void;
-    /** "Restrict access" — who can see this document. */
+    /** "Share" — the Share dialog: who can open this file, and at what level. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     /**
-     * "Ask AI" on a selected passage: the passage goes to the chat as a quote
-     * and the document stays in view beside it. Absent, the PDF selection
+     * "Ask AI" on a selected passage: the passage (with its page) goes to the
+     * chat as a card above the question, and the document stays in view. Absent, the PDF selection
      * popup offers only "+ Note".
      */
-    onAskAboutPassage?: (source: WorkspaceSource, quote: string) => void;
+    onAskAboutPassage?: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged?: () => void;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
@@ -104,12 +112,6 @@ export interface DocumentViewerProps {
     /** Mindmaps only: open straight into the branch-by-branch presenter. */
     present?: boolean;
     onExitPresent?: () => void;
-    /**
-     * Render in the flow of a Studio column instead of covering the workspace.
-     * The overlay is still how a preview opens; this is how a document sits
-     * beside the chat it is being discussed in.
-     */
-    embedded?: boolean;
 }
 
 /**
@@ -246,8 +248,6 @@ export function DocumentViewer({
     highlight,
     present = false,
     onExitPresent,
-    embedded = false,
-    onClose,
     onRename,
     onDelete,
     onRestrictAccess,
@@ -267,6 +267,21 @@ export function DocumentViewer({
     const persisted = isMindmap
         ? typeof source.mindmapId === "number" && source.mindmapId > 0
         : typeof source.documentId === "number" && source.documentId > 0;
+    // ADR-014: a file shared with you to view opens, but does not rename or delete.
+    const editable = canChangeSource(source);
+    const deletable = canDeleteSource(source);
+    // "Added by Ada · 2h ago", under the title — the name as they appear in
+    // this workspace now. A map's published copy was made by whoever
+    // published it, not whoever drew it, so maps say nothing here.
+    const adder = !isMindmap ? (source.addedBy ?? null) : null;
+    const adderLook = usePeople(adder && adder.authUserId !== userId ? [adder.authUserId] : []);
+    const addedLine = adder
+        ? `Added by ${
+              adder.authUserId === userId
+                  ? "you"
+                  : (adderLook[adder.authUserId]?.displayName ?? adder.name)
+          }${source.added ? ` · ${source.added}` : ""}`
+        : null;
     const [mindmapDoc, setMindmapDoc] = useState<{ doc: MindmapDoc; key: string } | null>(null);
     const [mindmapError, setMindmapError] = useState<string | null>(null);
     const [revisions, setRevisions] = useState<RevisionRow[]>([]);
@@ -279,6 +294,10 @@ export function DocumentViewer({
     const [activeVersionId, setActiveVersionId] = useState<number | null>(null);
     const [expectedMime, setExpectedMime] = useState<string | null>(null);
     const [reverting, setReverting] = useState(false);
+    /** A restore or delete that has been asked for, pending the confirm dialog. */
+    const [confirming, setConfirming] = useState<
+        { action: "restore"; versionId: number } | { action: "delete" } | null
+    >(null);
     const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
     const [fullDocError, setFullDocError] = useState<string | null>(null);
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
@@ -559,18 +578,6 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
-    // ESC dismisses the overlay. A column is not dismissed — it is closed
-    // from its tab — and this listener is on the window, so an embedded
-    // viewer would close every open document at once, from anywhere.
-    useEffect(() => {
-        if (embedded) return;
-        const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape" && !e.defaultPrevented) onClose();
-        };
-        window.addEventListener("keydown", onEsc);
-        return () => window.removeEventListener("keydown", onEsc);
-    }, [onClose, embedded]);
-
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
         router.push(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
@@ -686,9 +693,13 @@ export function DocumentViewer({
         if (file) uploadNewVersion(file);
     };
 
+    const requestRestore = (versionId: number) => {
+        if (!source.documentId) return;
+        setConfirming({ action: "restore", versionId });
+    };
+
     const restoreVersion = async (versionId: number) => {
         if (!source.documentId) return;
-        if (!confirm("Restore this version as the current one?")) return;
         setReverting(true);
         try {
             const res = await fetch(
@@ -702,7 +713,7 @@ export function DocumentViewer({
             await refreshVersions();
             onVersionChanged?.();
         } catch (err) {
-            alert(err instanceof Error ? err.message : "Failed to restore version");
+            toast.error(err instanceof Error ? err.message : "Failed to restore version");
         } finally {
             setReverting(false);
         }
@@ -710,16 +721,12 @@ export function DocumentViewer({
 
     const deleteDocument = () => {
         if (!persisted) return;
-        const prompt = isMindmap
-            ? `Move "${source.title}" to the trash? You can undo it right after.`
-            : `Delete "${source.title}"? This cannot be undone.`;
-        if (!confirm(prompt)) return;
-        onDelete(source);
+        setConfirming({ action: "delete" });
     };
 
     const openOriginal = () => {
         if (isMindmap) {
-            onEdit?.(source);
+            if (editable) onEdit?.(source);
             return;
         }
         if (!source.documentId) return;
@@ -759,6 +766,7 @@ export function DocumentViewer({
                     isMindmap,
                     askable: !isMindmap || source.citability !== "none",
                     persisted,
+                    editable,
                     originalUrl: fullDoc?.url ?? null,
                 },
                 {
@@ -811,7 +819,9 @@ export function DocumentViewer({
 
     /** The header's buttons, in the order they give way when room runs out. */
     const headerActions: HeaderAction[] = [
-        ...(isMindmap && onEdit
+        // A draft someone can only view opens here and nowhere else: its
+        // folder gives them no edit, so the editor would refuse every save.
+        ...(isMindmap && onEdit && editable
             ? [
                   {
                       id: "edit",
@@ -823,7 +833,7 @@ export function DocumentViewer({
                   },
               ]
             : []),
-        ...(isMindmap && source.citability !== "citable"
+        ...(isMindmap && editable && source.citability !== "citable"
             ? [
                   {
                       id: "publish",
@@ -856,12 +866,16 @@ export function DocumentViewer({
         ...(onRestrictAccess
             ? [
                   {
-                      id: "restrict",
-                      label: source.restricted ? "Change who can see this" : "Restrict access",
-                      icon: <Lock className="size-3.5" />,
+                      id: "share",
+                      label: "Share",
+                      icon: <Users className="size-3.5" />,
                       onSelect: () => onRestrictAccess(source),
-                      iconOnly: true,
-                      tone: source.restricted ? ("on" as const) : undefined,
+                      disabled: !persisted,
+                      // Who can open it now, on hover: "Only you", "Shared with 3"…
+                      hint: source.access
+                          ? `Share · ${audienceLabel(source.access, null)}`
+                          : "Share",
+                      testId: "viewer-share",
                   },
               ]
             : []),
@@ -872,35 +886,41 @@ export function DocumentViewer({
             onSelect: deleteDocument,
             iconOnly: true,
             tone: "danger",
+            disabled: !deletable,
+            hint: !editable
+                ? "You can view this file but not change it."
+                : deletable
+                  ? undefined
+                  : DELETE_RESERVED_REASON,
             testId: "viewer-delete",
         },
     ];
 
     const currentVersion = versions.find(v => v.id === activeVersionId);
     const viewingOld = activeVersionId !== null && currentVersion && !currentVersion.isCurrent;
+    const restoring = confirming?.action === "restore";
 
     return (
         <div
             {...documentTarget}
             ref={rootRef}
             data-testid="document-viewer"
-            data-embedded={embedded ? "true" : undefined}
             data-narrow={narrow ? "true" : undefined}
             onKeyDown={e => {
                 // An open overlay rail is the nearest thing to dismiss:
-                // Escape shuts it, and marking the event handled keeps the
-                // window listener from closing the whole preview as well.
-                if (e.key === "Escape" && narrow && overlayOpen) {
+                // Escape shuts it. A dialog over it (the confirm) has already
+                // handled it.
+                if (e.key === "Escape" && !e.defaultPrevented && narrow && overlayOpen) {
                     e.preventDefault();
                     setOverlayOpen(false);
                 }
             }}
             style={{
-                // Embedded, it is one column among several and must not
-                // escape its panel; as an overlay it owns the screen.
-                ...(embedded
-                    ? { position: "relative", flex: 1, minWidth: 0, minHeight: 0 }
-                    : { position: "fixed", inset: 0, zIndex: 80, animation: "lsw-fadeIn 180ms" }),
+                // A tab's panel: one column among several, which it must not escape.
+                position: "relative",
+                flex: 1,
+                minWidth: 0,
+                minHeight: 0,
                 background: "var(--bg)",
                 display: "flex",
                 flexDirection: "column",
@@ -908,9 +928,6 @@ export function DocumentViewer({
         >
             <DocumentViewerHeader
                 width={viewerWidth}
-                // In a column the tab's own close is the way out, and a
-                // "Library" button beside the chat would mean nothing.
-                onBack={embedded ? undefined : onClose}
                 kindIcon={<Icon size={13} />}
                 kindColor={meta.color}
                 title={
@@ -923,16 +940,24 @@ export function DocumentViewer({
                             setDirty(true);
                         }}
                         onBlur={() => void saveTitle()}
+                        readOnly={!editable}
+                        title={editable ? undefined : "You can view this file but not change it."}
                         // A class, not an imperative style: the old onFocus
                         // painted the field grey and nothing painted it back.
-                        className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none"
+                        className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none read-only:focus:bg-transparent"
                     />
                 }
                 meta={
                     <>
                         <span>{meta.label}</span>
                         <span>·</span>
-                        <span className="mono">{source.size || source.added || ""}</span>
+                        {addedLine ? (
+                            <span className="truncate" data-testid="viewer-added-by">
+                                {addedLine}
+                            </span>
+                        ) : (
+                            <span className="mono">{source.size || source.added || ""}</span>
+                        )}
                         <span>·</span>
                     </>
                 }
@@ -1064,7 +1089,7 @@ export function DocumentViewer({
                                     }}
                                     onAskAi={
                                         onAskAboutPassage
-                                            ? quote => onAskAboutPassage(source, quote)
+                                            ? selection => onAskAboutPassage(source, selection)
                                             : undefined
                                     }
                                     onNotePinClick={id => {
@@ -1404,7 +1429,7 @@ export function DocumentViewer({
                                                 setActiveVersionId(v.id);
                                                 if (!v.isCurrent) previewVersion(v.id);
                                             }}
-                                            onRestore={() => void restoreVersion(v.id)}
+                                            onRestore={() => requestRestore(v.id)}
                                         >
                                             <button
                                                 onClick={() => {
@@ -1513,7 +1538,7 @@ export function DocumentViewer({
                                         </div>
                                         <button
                                             disabled={reverting}
-                                            onClick={() => void restoreVersion(currentVersion.id)}
+                                            onClick={() => requestRestore(currentVersion.id)}
                                             style={{
                                                 width: "100%",
                                                 padding: "6px",
@@ -1577,6 +1602,37 @@ export function DocumentViewer({
                     )}
                 </aside>
             </div>
+
+            <ConfirmDialog
+                open={confirming !== null}
+                onOpenChange={next => {
+                    if (!next) setConfirming(null);
+                }}
+                // Above the full-screen preview (z-80), like the header's menu.
+                layerClassName="z-[90]"
+                title={
+                    restoring
+                        ? "Restore this version?"
+                        : isMindmap
+                          ? `Move “${source.title}” to the trash?`
+                          : `Delete “${source.title}”?`
+                }
+                description={
+                    restoring
+                        ? "It becomes the current version, and answers cite it from now on. The other versions stay in the history."
+                        : isMindmap
+                          ? "You can undo it right after."
+                          : "This cannot be undone."
+                }
+                confirmLabel={restoring ? "Restore" : isMindmap ? "Move to trash" : "Delete"}
+                destructive={!restoring}
+                onConfirm={() => {
+                    const asked = confirming;
+                    setConfirming(null);
+                    if (asked?.action === "restore") void restoreVersion(asked.versionId);
+                    else if (asked?.action === "delete") onDelete(source);
+                }}
+            />
         </div>
     );
 }

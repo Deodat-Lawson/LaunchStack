@@ -13,11 +13,13 @@ import {
     Presentation,
     Archive,
     Music,
+    Film,
     History,
     BookOpen,
     MessagesSquare,
     Network,
     AppWindow,
+    Globe,
 } from "lucide-react";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -53,11 +55,20 @@ const ArtifactDocumentViewer = dynamic(
     () => import("./ArtifactDocumentViewer").then(m => m.ArtifactDocumentViewer),
     { ssr: false }
 );
+// A saved web page shows its address and the text read from it.
+const WebsiteViewer = dynamic(() => import("./WebsiteViewer").then(m => m.WebsiteViewer), {
+    ssr: false,
+});
 import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
 import { CodeViewer } from "./CodeViewer";
-import { AudioViewer } from "./AudioViewer";
+
+// Audio and video play in the browser beside their transcript; only media
+// sources pay for the player.
+const MediaViewer = dynamic(() => import("./media/MediaViewer").then(m => m.MediaViewer), {
+    ssr: false,
+});
 
 interface DocumentViewerProps {
     document: DocumentType | null;
@@ -89,9 +100,11 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     conversation: "Agent Session",
     mindmap: "Mindmap",
     artifact: "Claude artifact",
+    website: "Website",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
+    video: "Video",
     unknown: "File",
 };
 
@@ -106,9 +119,11 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     conversation: MessagesSquare,
     mindmap: Network,
     artifact: AppWindow,
+    website: Globe,
     code: FileCode,
     zip: Archive,
     audio: Music,
+    video: Film,
     unknown: FileText,
 };
 
@@ -289,6 +304,8 @@ export function DocumentViewer({
                 return <MindmapDocumentViewer document={document} highlight={highlight} />;
             case "artifact":
                 return <ArtifactDocumentViewer document={document} />;
+            case "website":
+                return <WebsiteViewer document={document} highlight={highlight} />;
             case "code":
                 return (
                     <CodeViewer
@@ -299,7 +316,8 @@ export function DocumentViewer({
                     />
                 );
             case "audio":
-                return <AudioViewer document={document} />;
+            case "video":
+                return <MediaViewer document={document} highlight={highlight} />;
             case "zip":
             case "text":
                 return (

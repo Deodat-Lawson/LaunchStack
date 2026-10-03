@@ -7,6 +7,14 @@
  * - Automatic cleanup of expired entries
  * - Standard rate limit headers (X-RateLimit-*)
  * - Can be extended to use Redis for distributed rate limiting
+ *
+ * Every bucket belongs to one route, one limit and one caller
+ * (`rateLimitBucketKey`). A limit is a promise about that endpoint: a page
+ * polling a read must never spend the budget a write on another route — or
+ * the same route's write — depends on, and two limits must never drain one
+ * bucket. Before this, every preset drew from a single per-IP bucket, so a 3s
+ * poll of GET /api/folders alone used up the 300-request read budget and the
+ * next "New folder" answered 429.
  */
 
 export interface RateLimitConfig {
@@ -21,8 +29,9 @@ export interface RateLimitConfig {
     windowMs: number;
 
     /**
-     * Optional: Custom identifier for the rate limit bucket
-     * Defaults to IP address
+     * Optional: who is calling. Defaults to the client IP (`withRateLimit`
+     * prefers the signed-in user). The bucket is always also scoped to the
+     * route and the limit, so a custom key never shares a bucket across routes.
      */
     keyGenerator?: (request: Request) => string | Promise<string>;
 
@@ -49,20 +58,22 @@ export interface RateLimitInfo {
     remaining: number;
 
     /**
-     * Timestamp when the rate limit resets (milliseconds since epoch)
+     * When the bucket is full again (milliseconds since epoch)
      */
     resetTime: number;
 
     /**
-     * Milliseconds until the rate limit resets
+     * Seconds until the next request will be allowed (only when blocked)
      */
     retryAfter?: number;
 }
 
 interface TokenBucket {
     tokens: number;
+    /** When the most recent whole token was credited; the remainder carries over. */
     lastRefill: number;
-    resetTime: number;
+    /** When the bucket is full again — after that it is the same as no bucket. */
+    fullAt: number;
 }
 
 /**
@@ -89,7 +100,7 @@ class RateLimitStore {
     }
 
     /**
-     * Get or create a token bucket for the given key
+     * Get or create a token bucket for the given key, refilled to now
      */
     getBucket(key: string, maxTokens: number, windowMs: number): TokenBucket {
         if (!this.buckets) {
@@ -99,22 +110,22 @@ class RateLimitStore {
         const now = Date.now();
 
         if (!bucket) {
-            bucket = {
-                tokens: maxTokens,
-                lastRefill: now,
-                resetTime: now + windowMs,
-            };
+            bucket = { tokens: maxTokens, lastRefill: now, fullAt: now };
             this.buckets.set(key, bucket);
-        } else {
-            // Refill tokens based on elapsed time
-            const elapsed = now - bucket.lastRefill;
-            const tokensToAdd = Math.floor((elapsed / windowMs) * maxTokens);
+            return bucket;
+        }
 
-            if (tokensToAdd > 0) {
-                bucket.tokens = Math.min(bucket.tokens + tokensToAdd, maxTokens);
-                bucket.lastRefill = now;
-                bucket.resetTime = now + windowMs;
-            }
+        // One token every windowMs / maxTokens. Only whole tokens are credited,
+        // and lastRefill advances by exactly what was credited: resetting it to
+        // `now` threw the partial token away, so a client polling at the refill
+        // rate earned roughly half the tokens it was promised.
+        const msPerToken = windowMs / maxTokens;
+        const earned = Math.floor((now - bucket.lastRefill) / msPerToken);
+        if (earned > 0) {
+            bucket.tokens = Math.min(bucket.tokens + earned, maxTokens);
+            // A full bucket banks nothing; otherwise keep the partial token.
+            bucket.lastRefill =
+                bucket.tokens === maxTokens ? now : bucket.lastRefill + earned * msPerToken;
         }
 
         return bucket;
@@ -126,23 +137,28 @@ class RateLimitStore {
     consume(key: string, maxTokens: number, windowMs: number): RateLimitInfo {
         const bucket = this.getBucket(key, maxTokens, windowMs);
         const now = Date.now();
+        const msPerToken = windowMs / maxTokens;
 
         if (bucket.tokens > 0) {
             bucket.tokens--;
+            bucket.fullAt = bucket.lastRefill + (maxTokens - bucket.tokens) * msPerToken;
             return {
                 allowed: true,
                 limit: maxTokens,
-                remaining: Math.floor(bucket.tokens),
-                resetTime: bucket.resetTime,
+                remaining: bucket.tokens,
+                resetTime: bucket.fullAt,
             };
         }
 
+        // Empty: the caller may try again when the next token lands, not when
+        // the whole window has passed (that told people to wait 15 minutes).
+        const nextTokenAt = bucket.lastRefill + msPerToken;
         return {
             allowed: false,
             limit: maxTokens,
             remaining: 0,
-            resetTime: bucket.resetTime,
-            retryAfter: Math.ceil((bucket.resetTime - now) / 1000),
+            resetTime: bucket.fullAt,
+            retryAfter: Math.max(1, Math.ceil((nextTokenAt - now) / 1000)),
         };
     }
 
@@ -157,7 +173,7 @@ class RateLimitStore {
             throw new Error("Rate limit store not initialized");
         }
         for (const [key, bucket] of this.buckets.entries()) {
-            if (now > bucket.resetTime + 60000) {
+            if (now > bucket.fullAt + 60000) {
                 // 1 minute grace period
                 keysToDelete.push(key);
             }
@@ -191,32 +207,68 @@ class RateLimitStore {
 const store = new RateLimitStore();
 
 /**
- * Default key generator - uses IP address from request headers
+ * The caller's IP, from the proxy headers — the fallback identity when there
+ * is no signed-in user. Everyone behind one NAT shares it.
  */
-const defaultKeyGenerator = (request: Request): string => {
+export function clientIpKey(request: Request): string {
     // Try various headers for IP address
     const forwarded = request.headers.get("x-forwarded-for");
     const realIp = request.headers.get("x-real-ip");
     const cfConnectingIp = request.headers.get("cf-connecting-ip");
 
     if (forwarded) {
-        return forwarded.split(",")[0]?.trim() ?? "unknown";
+        return `ip:${forwarded.split(",")[0]?.trim() ?? "unknown"}`;
     }
     if (realIp) {
-        return realIp;
+        return `ip:${realIp}`;
     }
     if (cfConnectingIp) {
-        return cfConnectingIp;
+        return `ip:${cfConnectingIp}`;
     }
 
-    return "unknown";
-};
+    return "ip:unknown";
+}
+
+/**
+ * The route a request is for: its method and path, with every segment that
+ * holds a digit read as an id. `/api/documents/123` and `/api/documents/456`
+ * are one route, so stepping through ids buys no extra budget. No static
+ * segment under app/api contains a digit (a test holds that), so this never
+ * merges two real routes.
+ */
+export function rateLimitRoute(request: Request): string {
+    let pathname = "";
+    try {
+        pathname = new URL(request.url).pathname;
+    } catch {
+        // No absolute URL (a hand-built request): every such request is one route.
+    }
+    const route = pathname
+        .split("/")
+        .filter(Boolean)
+        .map(segment => (/\d/.test(segment) ? ":id" : segment))
+        .join("/");
+    return `${request.method ?? "*"} /${route}`;
+}
+
+/**
+ * The bucket a request draws from: route × limit × caller. Different limits
+ * (presets) never share a bucket — not even on the same route — and neither
+ * do different routes, whatever the caller key says.
+ */
+export function rateLimitBucketKey(
+    request: Request,
+    config: Pick<RateLimitConfig, "maxRequests" | "windowMs">,
+    caller: string
+): string {
+    return `${rateLimitRoute(request)}|${config.maxRequests}/${config.windowMs}ms|${caller}`;
+}
 
 /**
  * Create a rate limiter with the specified configuration
  */
 export function createRateLimiter(config: RateLimitConfig) {
-    const keyGenerator = config.keyGenerator ?? defaultKeyGenerator;
+    const keyGenerator = config.keyGenerator ?? clientIpKey;
     const skip = config.skip ?? (() => false);
 
     return async (request: Request): Promise<RateLimitInfo> => {
@@ -230,8 +282,7 @@ export function createRateLimiter(config: RateLimitConfig) {
             };
         }
 
-        // Generate key for this request
-        const key = await keyGenerator(request);
+        const key = rateLimitBucketKey(request, config, await keyGenerator(request));
 
         // Try to consume a token
         return store.consume(key, config.maxRequests, config.windowMs);
@@ -239,7 +290,9 @@ export function createRateLimiter(config: RateLimitConfig) {
 }
 
 /**
- * Predefined rate limit configurations
+ * Predefined rate limit configurations. Each is a per-route, per-caller
+ * budget: a route with `standard` allows each person 100 requests per 15
+ * minutes to that route and method, independent of every other route.
  */
 export const RateLimitPresets = {
     /**

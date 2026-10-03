@@ -633,6 +633,20 @@ export function toTopicDto(row: VantageAgendaTopicRow, commitmentId: string | nu
     };
 }
 
+/**
+ * The agenda's generation metadata as the browser gets it: how it was made
+ * (`mode`, `fallback`), never which model or provider made it. The row keeps
+ * the full record for operators.
+ */
+function publicModelMetadata(
+    metadata: Record<string, unknown> | null | undefined
+): Record<string, unknown> | null {
+    if (!metadata) return null;
+    return Object.fromEntries(
+        Object.entries(metadata).filter(([key]) => !["model", "modelId", "provider"].includes(key))
+    );
+}
+
 function toAgendaDto(row: VantageAgendaRow, topics: TopicDto[]): AgendaDto {
     return {
         id: row.id,
@@ -641,7 +655,7 @@ function toAgendaDto(row: VantageAgendaRow, topics: TopicDto[]): AgendaDto {
         status: row.status,
         summary: row.summary ?? null,
         signals: (row.signals as WeeklySignals | null) ?? null,
-        modelMetadata: row.modelMetadata ?? null,
+        modelMetadata: publicModelMetadata(row.modelMetadata),
         generatedAt: iso(row.generatedAt),
         heldAt: iso(row.heldAt),
         createdAt: row.createdAt.toISOString(),
@@ -1088,6 +1102,55 @@ export async function recordDecision(args: {
             commitmentId = existing?.id ?? null;
         }
         return toTopicDto(topic, commitmentId);
+    });
+}
+
+/**
+ * Take back a decision just recorded — the Undo after a one-click commit.
+ * The topic is undecided again and the commitment that decision opened, when
+ * named, is removed with it, in one transaction. Only a commitment opened
+ * from this topic can go this way; anything else linked to it stays.
+ */
+export async function undoDecision(args: {
+    companyId: bigint;
+    topicId: string;
+    commitmentId?: string | null;
+}): Promise<TopicDto> {
+    const db = getDb();
+    return db.transaction(async tx => {
+        const [topic] = await tx
+            .update(vantageAgendaTopics)
+            .set({ decision: null, decidedAt: null })
+            .where(
+                and(
+                    eq(vantageAgendaTopics.id, args.topicId),
+                    eq(vantageAgendaTopics.companyId, args.companyId)
+                )
+            )
+            .returning();
+        if (!topic) throw new VantageError("That topic is not here.", 404, "not_found");
+        if (args.commitmentId) {
+            await tx
+                .delete(vantageCommitments)
+                .where(
+                    and(
+                        eq(vantageCommitments.id, args.commitmentId),
+                        eq(vantageCommitments.topicId, topic.id),
+                        eq(vantageCommitments.companyId, args.companyId)
+                    )
+                );
+        }
+        const [link] = await tx
+            .select({ id: vantageCommitments.id })
+            .from(vantageCommitments)
+            .where(
+                and(
+                    eq(vantageCommitments.topicId, topic.id),
+                    eq(vantageCommitments.companyId, args.companyId)
+                )
+            )
+            .limit(1);
+        return toTopicDto(topic, link?.id ?? null);
     });
 }
 

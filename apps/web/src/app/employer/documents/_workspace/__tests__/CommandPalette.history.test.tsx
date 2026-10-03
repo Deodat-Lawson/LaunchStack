@@ -24,6 +24,10 @@ jest.mock("~/lib/context-menu", () => ({
     actionItems: () => [],
     listActions: () => [],
 }));
+jest.mock("~/lib/profile/use-people", () => ({
+    usePeople: (ids: readonly string[]) =>
+        Object.fromEntries(ids.map(id => [id, { authUserId: id, displayName: "Ada Lovelace" }])),
+}));
 
 import { CommandPalette } from "../CommandPalette";
 
@@ -89,6 +93,20 @@ describe("CommandPalette history", () => {
         const onPickHistory = setup();
         fireEvent.click(screen.getByText("Hiring budget"));
         expect(onPickHistory).toHaveBeenCalledWith(HISTORY[2]);
+    });
+
+    it("says who shared a chat that isn't yours (ADR-014)", () => {
+        render(
+            <CommandPalette
+                open
+                onClose={jest.fn()}
+                sources={[]}
+                onPickSource={jest.fn()}
+                history={[entry({ id: "chat:s", title: "Their memo", sharedBy: "user-a" })]}
+                onPickHistory={jest.fn()}
+            />
+        );
+        expect(screen.getByText(/^Shared by Ada Lovelace · /)).toBeInTheDocument();
     });
 
     it("picks the highlighted history row with Enter", () => {

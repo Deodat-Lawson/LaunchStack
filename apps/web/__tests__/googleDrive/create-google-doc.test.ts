@@ -116,7 +116,10 @@ function happyPath() {
     });
     mockExport.mockResolvedValue(Buffer.from("DOCXBYTES"));
     mockUpload.mockResolvedValue({ url: "/api/files/9", provider: "database" });
-    mockProcessUpload.mockResolvedValue({ document: { id: 51 } });
+    mockProcessUpload.mockResolvedValue({
+        document: { id: 51, title: "Q3 Planning", category: "Strategy" },
+        createdDocuments: [{ id: 51, title: "Q3 Planning", category: "Strategy" }],
+    });
     mockSelectResults.push([{ currentVersionId: BigInt(70) }]);
 }
 
@@ -137,6 +140,12 @@ describe("createGoogleDocDocument", () => {
             documentId: 51,
             driveFileId: "doc1",
             url: "https://docs.google.com/document/d/doc1/edit",
+            // What ingestion inserted, for the route to give its creator's
+            // defaults (ADR-014: private while Unfiled).
+            upload: {
+                document: { id: 51, title: "Q3 Planning", category: "Strategy" },
+                createdDocuments: [{ id: 51, title: "Q3 Planning", category: "Strategy" }],
+            },
         });
 
         const createArgs = mockCreateFile.mock.calls[0]![0] as Record<string, unknown>;

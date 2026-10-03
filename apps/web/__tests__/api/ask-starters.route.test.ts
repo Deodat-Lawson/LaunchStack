@@ -18,6 +18,15 @@ jest.mock("~/lib/require-workspace-context", () => ({ requireWorkspaceContext: j
 
 jest.mock("~/server/ask-starters", () => ({ getAskStarters: jest.fn() }));
 
+// Records whose models the starters were generated under; runs the work as-is.
+const scopes: unknown[] = [];
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+        scopes.push(companyId);
+        return fn();
+    },
+}));
+
 const limiterCalls: RateLimitConfig[] = [];
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (
@@ -52,6 +61,7 @@ const PAYLOAD = {
 
 beforeEach(() => {
     limiterCalls.length = 0;
+    scopes.length = 0;
     jest.mocked(requireWorkspaceContext).mockReset();
     jest.mocked(getAskStarters).mockReset();
 });
@@ -84,6 +94,7 @@ describe("GET /api/ask/starters", () => {
             refresh: false,
         });
         expect(limiterCalls).toEqual([RateLimitPresets.standard]);
+        expect(scopes).toEqual([BigInt(42)]);
     });
 
     it("treats refresh=1 as a guaranteed model call and applies the burst limiter", async () => {

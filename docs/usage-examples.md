@@ -43,18 +43,20 @@ const result = await response.json();
 
 ## Document Q&A
 
+Ask runs on one endpoint, from a signed-in workspace session. `searchScope` picks what it answers from: one `document`, the `selected` documents, or `none` for a general question. The model searches the web itself when the question needs it and a search key is configured.
+
 ```typescript
-const response = await fetch("/api/agents/documentQ&A/AIQueryRLM", {
+const response = await fetch("/api/agents/documentQ&A/AIChat/query", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    documentId: "123",
-    message: "What are the key compliance requirements?",
-    categoryId: "456",
+    question: "What are the key compliance requirements?",
+    searchScope: "document",
+    documentId: 123,
   }),
 });
 
-const answer = await response.json();
+const { summarizedAnswer, references, webSources } = await response.json();
 ```
 
 ## Predictive analysis

@@ -31,8 +31,9 @@ export interface UsageByService {
     operations: number;
 }
 
-export interface UsageByModel {
-    model: string;
+/** Chat usage by route (default, fast, reasoning, vision) — never by model id. */
+export interface UsageByRoute {
+    route: string;
     tokens: number;
     calls: number;
 }
@@ -44,7 +45,6 @@ export interface RecentTransaction {
     balanceAfter: number;
     service: string | null;
     description: string | null;
-    model: string | null;
     createdAt: string;
 }
 
@@ -54,7 +54,7 @@ export interface UsageOverview {
     lifetime: { purchased: number; granted: number; used: number };
     daily: UsageDay[];
     byService: UsageByService[];
-    byModel: UsageByModel[];
+    byRoute: UsageByRoute[];
     recent: RecentTransaction[];
     /** From `usage.pricePerMillionTokens`; 0 means unset. */
     pricePerMillionTokens: number;
@@ -68,11 +68,15 @@ function isoDate(value: Date | string): string {
     return value instanceof Date ? value.toISOString().slice(0, 10) : String(value).slice(0, 10);
 }
 
-/** The model a chat debit recorded, when it recorded one. */
-function modelOf(metadata: unknown): string | null {
-    if (!metadata || typeof metadata !== "object") return null;
-    const model = (metadata as { model?: unknown }).model;
-    return typeof model === "string" && model ? model : null;
+/**
+ * A ledger description as the page shows it. Older debits were written as
+ * "Chat query via <model id>" or "Transcribe x via transcription:<model id>";
+ * the screen never names a model, so the trailing "via …" is dropped on read.
+ * The stored row keeps it for operators.
+ */
+export function ledgerDescription(description: string | null): string | null {
+    if (!description) return description;
+    return description.replace(/\s+via\s+\S+$/, "");
 }
 
 /** OCR providers are one line item on this page; the ledger keeps them apart. */
@@ -133,11 +137,11 @@ export async function usageOverview(companyId: bigint, days = 30): Promise<Usage
         byService.set(service, agg);
     }
 
-    // Model attribution lives only in chat debits' metadata; aggregate what is there.
-    const byModel = new Map<string, UsageByModel>();
-    const modelRows = await db
+    // Route attribution lives only in chat debits' metadata; aggregate what is there.
+    const byRoute = new Map<string, UsageByRoute>();
+    const routeRows = await db
         .select({
-            model: sql<string | null>`${tokenTransactions.metadata} ->> 'model'`,
+            route: sql<string | null>`${tokenTransactions.metadata} ->> 'route'`,
             tokens: sql<number>`coalesce(sum(-${tokenTransactions.amount}), 0)`,
             calls: sql<number>`count(*)`,
         })
@@ -147,14 +151,14 @@ export async function usageOverview(companyId: bigint, days = 30): Promise<Usage
                 eq(tokenTransactions.companyId, companyId),
                 eq(tokenTransactions.type, "debit"),
                 gte(tokenTransactions.createdAt, since),
-                sql`${tokenTransactions.metadata} ->> 'model' is not null`
+                sql`${tokenTransactions.metadata} ->> 'route' is not null`
             )
         )
-        .groupBy(sql`${tokenTransactions.metadata} ->> 'model'`);
-    for (const row of modelRows) {
-        if (!row.model) continue;
-        byModel.set(row.model, {
-            model: row.model,
+        .groupBy(sql`${tokenTransactions.metadata} ->> 'route'`);
+    for (const row of routeRows) {
+        if (!row.route) continue;
+        byRoute.set(row.route, {
+            route: row.route,
             tokens: Number(row.tokens),
             calls: Number(row.calls),
         });
@@ -173,15 +177,14 @@ export async function usageOverview(companyId: bigint, days = 30): Promise<Usage
         },
         daily: [...byDay.values()],
         byService: [...byService.values()].sort((a, b) => b.tokens - a.tokens),
-        byModel: [...byModel.values()].sort((a, b) => b.tokens - a.tokens),
+        byRoute: [...byRoute.values()].sort((a, b) => b.tokens - a.tokens),
         recent: recentRows.map(row => ({
             id: row.id,
             type: row.type,
             amount: row.amount,
             balanceAfter: row.balanceAfter,
             service: row.service ? foldService(row.service) : null,
-            description: row.description,
-            model: modelOf(row.metadata),
+            description: ledgerDescription(row.description),
             createdAt: row.createdAt.toISOString(),
         })),
         pricePerMillionTokens,

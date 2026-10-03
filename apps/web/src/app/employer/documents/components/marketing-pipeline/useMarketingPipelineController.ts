@@ -86,6 +86,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     const [publishResult, setPublishResult] = useState<{
         success: boolean;
         postUrl?: string;
+        /** The Brand channel it went out as ("LaunchStack", a Page). */
+        channel?: string;
         error?: string;
     } | null>(null);
     const [evaluating, setEvaluating] = useState(false);
@@ -626,15 +628,20 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ platform: targetPlatform, message }),
             });
+            // The route answers `{ success, data: { postUrl, channel } }`.
             const payload = (await response.json()) as {
                 success: boolean;
-                postUrl?: string;
+                data?: { postUrl?: string | null; channel?: string };
                 message?: string;
                 error?: string;
             };
             if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
             if (response.ok && payload.success) {
-                setPublishResult({ success: true, postUrl: payload.postUrl });
+                setPublishResult({
+                    success: true,
+                    postUrl: payload.data?.postUrl ?? undefined,
+                    channel: payload.data?.channel,
+                });
             } else {
                 setPublishResult({
                     success: false,

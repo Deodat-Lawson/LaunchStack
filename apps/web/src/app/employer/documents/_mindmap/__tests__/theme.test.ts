@@ -11,7 +11,8 @@ import {
     THEMES,
     themeMode,
 } from "../model/palette";
-import { applyThemeToDoc } from "../model/theme";
+import { buildTemplate } from "../model/templates";
+import { applyThemeToDoc, topicPaint, topicPlaces } from "../model/theme";
 import type { MindmapDoc } from "../model/types";
 
 /**
@@ -23,9 +24,27 @@ import type { MindmapDoc } from "../model/types";
  * can read — which is exactly how the dark boards went wrong the first time.
  */
 
-/** WCAG AA: 4.5:1 for body text, 3:1 for large or bold display text. */
+/**
+ * WCAG AA: 4.5:1 for body text, 3:1 for large text (≥24px, or ≥18.66px bold)
+ * and for the outlines and lines that carry meaning (1.4.11). Every topic
+ * label is under the large threshold — the central topic is 18px bold — so
+ * every label is held to 4.5:1.
+ */
 const AA_BODY = 4.5;
 const AA_LARGE = 3;
+const NON_TEXT = 3;
+
+/** Perceptual distance (OKLab ΔE) between two `oklch()` colours. */
+function deltaE(a: string, b: string): number {
+    const lab = (css: string) => {
+        const [, l, c, h] = /oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)/.exec(css)!;
+        const rad = (Number(h) * Math.PI) / 180;
+        return [Number(l), Number(c) * Math.cos(rad), Number(c) * Math.sin(rad)];
+    };
+    const [l1, a1, b1] = lab(a);
+    const [l2, a2, b2] = lab(b);
+    return Math.hypot(l1! - l2!, a1! - a2!, b1! - b2!);
+}
 
 describe("relativeLuminance", () => {
     it("agrees with the WCAG anchors", () => {
@@ -176,7 +195,7 @@ describe("applyThemeToDoc", () => {
                 const behind = nd.style.fill === "none" ? page.background.color : nd.style.fill;
                 expect({
                     shape: nd.shape,
-                    readable: contrastRatio(nd.textStyle.color, behind) >= AA_LARGE,
+                    readable: contrastRatio(nd.textStyle.color, behind) >= AA_BODY,
                 }).toEqual({ shape: nd.shape, readable: true });
             }
         }
@@ -193,14 +212,14 @@ describe("applyThemeToDoc", () => {
         ).toBeGreaterThan(AA_BODY);
     });
 
-    it("colours a mindmap by depth so a branch and its details agree", () => {
+    it("shows depth by weight: root, branch and detail are three different surfaces", () => {
         const doc = applyThemeToDoc(sampleDoc(), "default");
         const page = doc.pages[0]!;
         const byText = (t: string) => page.nodes.find(n => n.text === t)!;
-        // Root, branch and detail are three different depths and so three
-        // different colours; cycling by array order instead produced confetti.
         const fills = [byText("Root"), byText("Branch"), byText("Detail")].map(n => n.style.fill);
         expect(new Set(fills).size).toBe(3);
+        // …while the branch and its detail share one hue: colour is the branch.
+        expect(byText("Detail").style.stroke).toBe(byText("Branch").style.stroke);
     });
 
     it("repaints every page, not only the active one", () => {
@@ -222,5 +241,132 @@ describe("applyThemeToDoc", () => {
     it("leaves the document alone for an unknown theme", () => {
         const doc = sampleDoc();
         expect(applyThemeToDoc(doc, "chartreuse")).toBe(doc);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Colour by branch, depth by weight
+// ---------------------------------------------------------------------------
+
+describe("the central topic", () => {
+    it.each(THEMES.map(t => [t.id] as const))("is legible and stands off the paper in %s", id => {
+        const theme = THEMES.find(t => t.id === id)!;
+        const root = topicPaint(theme, "mind-root", 0, theme.cycle[0]!);
+        // The label clears body-text AA on the solid fill…
+        expect(contrastRatio(root.ink, root.style.fill)).toBeGreaterThanOrEqual(AA_BODY);
+        // …and the fill, which is the root's only edge, clears 3:1 on the paper.
+        expect(contrastRatio(root.style.fill, theme.background)).toBeGreaterThanOrEqual(NON_TEXT);
+    });
+
+    it("wears a hue no branch can take, in every theme", () => {
+        for (const theme of THEMES) expect(theme.cycle).not.toContain(theme.root);
+    });
+});
+
+describe("branch hues", () => {
+    it("keep every depth readable and every outline and connector visible", () => {
+        for (const theme of THEMES) {
+            for (const hue of theme.cycle) {
+                for (const depth of [1, 2, 3]) {
+                    for (const shape of ["mind-branch", "mind-leaf"] as const) {
+                        const p = topicPaint(theme, shape, depth, hue);
+                        const behind = p.style.fill === "none" ? theme.background : p.style.fill;
+                        const where = `${theme.id}/${hue}/${shape}@${depth}`;
+                        expect({ where, ok: contrastRatio(p.ink, behind) >= AA_BODY }).toEqual({
+                            where,
+                            ok: true,
+                        });
+                        expect({
+                            where,
+                            ok: contrastRatio(p.style.stroke, theme.background) >= NON_TEXT,
+                        }).toEqual({ where, ok: true });
+                        expect({
+                            where,
+                            ok: contrastRatio(p.edge.stroke, theme.background) >= NON_TEXT,
+                        }).toEqual({ where, ok: true });
+                    }
+                }
+            }
+        }
+    });
+
+    it("put neighbouring branches far enough apart to tell at a glance", () => {
+        // 0.1 in OKLab is several times the just-noticeable difference; the
+        // ordering alternates warm and cool so lightness differs as well as hue.
+        for (const theme of THEMES) {
+            if (theme.cycle.length < 2) continue;
+            theme.cycle.forEach((hue, i) => {
+                const next = theme.cycle[(i + 1) % theme.cycle.length]!;
+                const d = deltaE(
+                    swatchFor(hue, theme.mode).stroke,
+                    swatchFor(next, theme.mode).stroke
+                );
+                expect({ pair: `${theme.id}:${hue}/${next}`, far: d >= 0.1 }).toEqual({
+                    pair: `${theme.id}:${hue}/${next}`,
+                    far: true,
+                });
+            });
+        }
+    });
+
+    it("give a typical four-branch map four different hues, in every coloured theme", () => {
+        // Neighbours in the cycle are not the only pairs on screen: a map with
+        // four branches shows all four at once, so a coloured theme needs four
+        // hues and every pair of them must differ. Monochrome is the one
+        // theme that is grey by design (a single hue; weight carries depth).
+        for (const theme of THEMES) {
+            if (theme.cycle.length === 1) {
+                expect(["mono", "carbon"]).toContain(theme.id);
+                continue;
+            }
+            expect({ id: theme.id, hues: theme.cycle.length >= 4 }).toEqual({
+                id: theme.id,
+                hues: true,
+            });
+            const first = theme.cycle.slice(0, 4).map(h => swatchFor(h, theme.mode).stroke);
+            for (let i = 0; i < first.length; i++) {
+                for (let j = i + 1; j < first.length; j++) {
+                    const pair = `${theme.id}:${theme.cycle[i]}/${theme.cycle[j]}`;
+                    expect({ pair, far: deltaE(first[i]!, first[j]!) >= 0.1 }).toEqual({
+                        pair,
+                        far: true,
+                    });
+                }
+            }
+        }
+    });
+
+    it("thin the connectors from the centre outward", () => {
+        const theme = THEMES[0]!;
+        const widths = [1, 2, 3].map(
+            d => topicPaint(theme, "mind-branch", d, "blue").edge.strokeWidth
+        );
+        expect(widths).toEqual([...widths].sort((a, b) => b - a));
+        expect(widths[0]).toBeGreaterThan(widths[2]!);
+    });
+});
+
+describe("a fresh mindmap", () => {
+    it.each([
+        ["light", "default"],
+        ["dark", "midnight"],
+    ] as const)("gives each main branch its own hue on a %s board", (mode, themeId) => {
+        const doc = buildTemplate("mindmap", "Map", mode);
+        expect(doc.settings.paletteId).toBe(themeId);
+        const page = doc.pages[0]!;
+        const places = topicPlaces(page);
+        const main = page.nodes.filter(n => places.get(n.id)?.depth === 1);
+        expect(main).toHaveLength(4);
+        expect(new Set(main.map(n => n.style.stroke)).size).toBe(4);
+
+        for (const nd of page.nodes) {
+            const place = places.get(nd.id)!;
+            if (place.depth < 2) continue;
+            const branch = page.nodes.find(n => n.id === place.branchId)!;
+            // A detail wears its branch's hue, and so does the line into it.
+            expect(nd.style.stroke).toBe(branch.style.stroke);
+            const into = page.edges.find(e => e.to.nodeId === nd.id)!;
+            expect(into.style.stroke).toBe(branch.style.stroke);
+        }
     });
 });

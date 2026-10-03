@@ -1,5 +1,5 @@
 import type { ActionMenuItem } from "~/components/ui/action-menu";
-import { citationOfReference, plainTextOfAnswer } from "./transcript";
+import { citationOfReference, passagesMarkdown, plainTextOfAnswer } from "./transcript";
 import type { EphemeralAttachment, ThreadMessage, ThreadReference, WorkspaceSource } from "./types";
 
 /**
@@ -68,7 +68,7 @@ export function buildQuestionMenuItems(
             id: "copy",
             label: "Copy",
             icon: "copy",
-            onSelect: () => handlers.onCopy(msg.text),
+            onSelect: () => handlers.onCopy(`${passagesMarkdown(msg)}${msg.text}`),
         },
         {
             type: "item",
@@ -202,10 +202,6 @@ export interface ComposerMenuState {
     hasContent: boolean;
     uploading: boolean;
     disabled: boolean;
-    webSearch: boolean;
-    thinking: boolean;
-    reasoningEnabled: boolean;
-    reasoningDisabledReason?: string;
 }
 
 export interface ComposerMenuHandlers {
@@ -213,8 +209,6 @@ export interface ComposerMenuHandlers {
     onCopy: () => void;
     onPaste: () => void;
     onAttach: () => void;
-    onToggleWebSearch: () => void;
-    onToggleThinking: () => void;
     onClear: () => void;
 }
 
@@ -257,27 +251,6 @@ export function buildComposerMenuItems(
             icon: "attach",
             disabled: state.uploading || state.disabled,
             onSelect: handlers.onAttach,
-        },
-        {
-            type: "item",
-            id: "web",
-            label: "Search the web for this turn",
-            icon: state.webSearch ? "check" : "globe",
-            checked: state.webSearch,
-            onSelect: handlers.onToggleWebSearch,
-        },
-        {
-            type: "item",
-            id: "think",
-            label: "Extended thinking",
-            icon: state.thinking && state.reasoningEnabled ? "check" : "brain",
-            checked: state.thinking && state.reasoningEnabled,
-            disabled: !state.reasoningEnabled,
-            disabledReason: state.reasoningEnabled
-                ? undefined
-                : (state.reasoningDisabledReason ??
-                  'Assign a reasoning-capable model to the "reasoning" route to enable this'),
-            onSelect: handlers.onToggleThinking,
         },
         { type: "separator", id: "sep-clear" },
         {

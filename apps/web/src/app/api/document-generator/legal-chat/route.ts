@@ -8,7 +8,9 @@ import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { readFact } from "@launchstack/tools/company-context/facts";
+import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -53,11 +55,13 @@ function buildFieldList(templateId: string): string {
 function extractCompanyDefaults(meta: CompanyMetadataJSON | null): Record<string, string> {
     if (!meta) return {};
     const defaults: Record<string, string> = {};
-    const c = meta.company;
-    if (c?.name?.value) defaults.company_name = c.name.value;
-    if (c?.headquarters?.value) {
-        defaults.company_address = c.headquarters.value;
-        defaults.governing_law_jurisdiction = c.headquarters.value;
+    // Through readFact: a removed or low-confidence fact must not pre-fill a contract.
+    const name = readFact(meta.company?.name);
+    const headquarters = readFact(meta.company?.headquarters);
+    if (name) defaults.company_name = name;
+    if (headquarters) {
+        defaults.company_address = headquarters;
+        defaults.governing_law_jurisdiction = headquarters;
     }
     return defaults;
 }
@@ -129,6 +133,14 @@ RULES:
 // ─── POST handler ──────────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+    // The reply and the wording of its failure both use the workspace's own
+    // models when it brought them, so the catch below runs in the scope too.
+    return withWorkspaceChatModels(ctx.data.companyId, () => legalChat(request, ctx));
+}
+
+async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
     // Recorded as soon as the model resolves, so the catch below can describe a
     // transport failure without resolving a second time. Resolving there would
     // re-read the configuration, and on a configuration fault that throws out of
@@ -137,9 +149,6 @@ export async function POST(request: Request) {
     let selectedModelId: string | undefined;
 
     try {
-        const ctx = await requireWorkspaceContext();
-        if (!ctx.success) return ctx.response;
-
         let body: unknown;
         try {
             body = (await request.json()) as unknown;
@@ -174,7 +183,7 @@ export async function POST(request: Request) {
                 .limit(1);
 
             if (metaRow?.metadata) {
-                companyDefaults = extractCompanyDefaults(metaRow.metadata as CompanyMetadataJSON);
+                companyDefaults = extractCompanyDefaults(metaRow.metadata);
             }
         }
 

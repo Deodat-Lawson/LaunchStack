@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreHorizontal } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -9,6 +9,7 @@ import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import {
     Dialog,
     DialogContent,
@@ -35,7 +36,10 @@ import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
 import { vantageApi, type MetricDefinitionDto, type MetricObservationDto } from "../api";
+import { MetricSuggestions } from "../_components/MetricSuggestions";
 import { Field, FormError } from "../_components/Primitives";
+import { useOneClick } from "../_lib/actions";
+import { useHiddenSuggestions } from "../_lib/hidden";
 import { addDaysIso, fmtChange, fmtDate, fmtNumber, plural, todayIso } from "../_lib/format";
 
 const UNITS = ["count", "percent", "usd", "eur", "minutes", "days"];
@@ -50,13 +54,26 @@ function lastMonday(today = todayIso()): string {
 /**
  * Metric definitions and the numbers against them. The definition is the
  * point: signups, activated, active and paying are four different things,
- * and a number without its period and source cannot be cited.
+ * and a number without its period and source cannot be cited. Vantage's
+ * suggestions sit on top: two sources disagreeing about one period (keep
+ * one, one click) and metrics with no number this week.
  */
 export function MetricsScreen() {
     const metrics = useResource("vantage:metrics", () => vantageApi.metrics());
+    const overview = useResource("vantage:overview", () => vantageApi.overview());
+    const hidden = useHiddenSuggestions();
+    const reloadMetrics = metrics.reload;
+    const reloadOverview = overview.reload;
+    const refresh = useCallback(
+        () => Promise.all([reloadMetrics(), reloadOverview()]),
+        [reloadMetrics, reloadOverview]
+    );
+    const { act, gone } = useOneClick(refresh);
     const [defining, setDefining] = useState<MetricDefinitionDto | null | "new">(null);
     const [recording, setRecording] = useState<string | null>(null);
     const [importing, setImporting] = useState(false);
+    /** The metric a Remove has been asked for, pending the confirm dialog. */
+    const [removing, setRemoving] = useState<MetricDefinitionDto | null>(null);
 
     const definitions = useMemo(() => metrics.data?.definitions ?? [], [metrics.data]);
     const observations = useMemo(() => metrics.data?.observations ?? [], [metrics.data]);
@@ -82,11 +99,10 @@ export function MetricsScreen() {
     }, [definitions, observations]);
 
     const removeDefinition = async (d: MetricDefinitionDto) => {
-        if (!window.confirm(`Remove "${d.name}" and every number recorded against it?`)) return;
         try {
             await vantageApi.deleteMetric(d.id);
             toast("Metric removed");
-            void metrics.reload();
+            void refresh();
         } catch (e) {
             toast.error(e instanceof Error ? e.message : "Could not remove it");
         }
@@ -99,6 +115,7 @@ export function MetricsScreen() {
                 ...c,
                 observations: c.observations.filter(x => x.id !== o.id),
             }));
+            void reloadOverview();
         } catch (e) {
             toast.error(e instanceof Error ? e.message : "Could not remove it");
         }
@@ -132,6 +149,18 @@ export function MetricsScreen() {
 
             {metrics.error && (
                 <InlineError message={metrics.error} onRetry={() => void metrics.reload()} />
+            )}
+
+            {overview.data && (
+                <MetricSuggestions
+                    signals={overview.data.signals}
+                    week={overview.data.agendaWeek}
+                    observations={observations}
+                    act={act}
+                    gone={gone}
+                    hidden={hidden}
+                    onRecord={setRecording}
+                />
             )}
 
             <section>
@@ -209,7 +238,9 @@ export function MetricsScreen() {
                                     >
                                         Record
                                     </Button>
-                                    <DropdownMenu>
+                                    {/* Not modal: its items open dialogs, and a modal menu that hands off to a
+                                        dialog leaves the page unclickable once the dialog closes. */}
+                                    <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
                                             <Button
                                                 variant="ghost"
@@ -226,9 +257,9 @@ export function MetricsScreen() {
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="text-danger"
-                                                onSelect={() => void removeDefinition(d)}
+                                                onSelect={() => setRemoving(d)}
                                             >
-                                                Remove metric
+                                                Remove metric…
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -327,19 +358,33 @@ export function MetricsScreen() {
                 open={defining !== null}
                 onOpenChange={o => !o && setDefining(null)}
                 initial={defining === "new" ? null : defining}
-                onSaved={() => void metrics.reload()}
+                onSaved={() => void refresh()}
             />
             <RecordDialog
                 open={recording !== null}
                 onOpenChange={o => !o && setRecording(null)}
                 definitions={definitions}
                 initialMetricId={recording}
-                onSaved={() => void metrics.reload()}
+                onSaved={() => void refresh()}
             />
             <ImportDialog
                 open={importing}
                 onOpenChange={setImporting}
-                onDone={() => void metrics.reload()}
+                onDone={() => void refresh()}
+            />
+            <ConfirmDialog
+                open={removing !== null}
+                onOpenChange={next => {
+                    if (!next) setRemoving(null);
+                }}
+                title={`Remove “${removing?.name ?? ""}”?`}
+                description="Every number recorded against it goes too. This cannot be undone."
+                confirmLabel="Remove metric"
+                onConfirm={() => {
+                    const target = removing;
+                    setRemoving(null);
+                    if (target) void removeDefinition(target);
+                }}
             />
         </div>
     );

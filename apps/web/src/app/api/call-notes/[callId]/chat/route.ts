@@ -11,6 +11,7 @@ import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     callNotesErrorResponse,
     getWebCallNotesApplication,
@@ -132,7 +133,9 @@ export async function POST(
 
             let resolved;
             try {
-                resolved = resolveConfiguredChatModel({ streaming: true });
+                resolved = await withWorkspaceChatModels(workspace.data.companyId, () =>
+                    resolveConfiguredChatModel({ streaming: true })
+                );
             } catch (modelError) {
                 const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(

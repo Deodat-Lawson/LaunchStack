@@ -1,7 +1,10 @@
 /**
- * The picked-items list — what the admin selected in the Google Picker.
- * POST upserts (re-picking is how a drive.file folder grant is refreshed, so
- * the same selection must converge); DELETE removes by file id. Drive-only.
+ * The picked-items list — what an admin selected in the Google Picker or
+ * pasted as a Drive link. POST upserts (the same selection must converge)
+ * and takes either `{ items }` from the Picker or `{ link }`, which is
+ * resolved against Drive here (it needs folder access); either way the
+ * changes-feed cursor is reset so the next sync walks the new pick. DELETE
+ * removes by file id. Drive-only.
  */
 
 import { z } from "zod";
@@ -17,10 +20,12 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isConnectorConfigured } from "~/server/services/connectors/config";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import { resolveDriveLink } from "~/server/services/connectors/google-drive/resolve-link";
 import {
     addPickedItems,
     listPickedItems,
     removePickedItems,
+    resetSyncCursor,
 } from "~/server/services/connectors/google-drive/store";
 import {
     notConfiguredResponse,
@@ -42,6 +47,12 @@ const AddItemsSchema = z.object({
         .min(1)
         .max(200),
 });
+
+const AddLinkSchema = z.object({
+    link: z.string().trim().min(1).max(2048),
+});
+
+const AddSchema = z.union([AddItemsSchema, AddLinkSchema]);
 
 const RemoveItemsSchema = z.object({
     fileIds: z.array(z.string().min(1).max(128)).min(1).max(200),
@@ -114,24 +125,39 @@ export async function POST(
                 return createValidationError("Google access was revoked — reconnect first.");
             }
 
-            const body = await validateRequestBody(request, AddItemsSchema);
+            const body = await validateRequestBody(request, AddSchema);
             if (!body.success) return body.response;
 
-            await addPickedItems(
-                connection.id,
-                body.data.items.map(item => ({
+            let added: {
+                fileId: string;
+                kind: "file" | "folder";
+                name: string;
+                mimeType: string | null;
+            }[];
+            if ("link" in body.data) {
+                const resolved = await resolveDriveLink(connection, body.data.link);
+                if (!resolved.ok) {
+                    return resolved.reason === "not-found"
+                        ? createNotFoundError(resolved.message)
+                        : createValidationError(resolved.message);
+                }
+                added = [resolved.item];
+            } else {
+                added = body.data.items.map(item => ({
                     fileId: item.fileId,
                     kind: item.kind,
                     name: item.name,
                     mimeType: item.mimeType ?? null,
-                })),
-                Number(guard.ctx.userPk)
-            );
+                }));
+            }
+
+            await addPickedItems(connection.id, added, Number(guard.ctx.userPk));
+            await resetSyncCursor(connection.id);
 
             const items = await listPickedItems(connection.id);
             return createSuccessResponse(
-                { count: items.length },
-                `${body.data.items.length} item(s) added.`
+                { count: items.length, added },
+                added.length === 1 ? `"${added[0]!.name}" added.` : `${added.length} items added.`
             );
         } catch (error) {
             return handleApiError(error);

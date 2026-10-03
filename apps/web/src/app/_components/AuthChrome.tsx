@@ -6,7 +6,7 @@ import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
-import { LANDING_URL } from "~/config/landing";
+import { LANDING_HREF } from "~/config/landing";
 
 /**
  * Top bar used on /signin and /signup.
@@ -46,17 +46,14 @@ export function AuthChrome() {
             <ThemeToggle />
             {isLoaded && isSignedIn && user && (
                 <>
-                    <span
-                        style={{
-                            fontSize: 12,
-                            color: "var(--ink-3)",
-                            marginLeft: 4,
-                        }}
-                    >
+                    {/* The avatar menu carries the account on a phone; the address
+                        would push it off-screen (the OAuth connect screens are
+                        reached signed in, unlike /signin). */}
+                    <span className="text-ink-3 ml-1 min-w-0 truncate text-xs max-sm:hidden">
                         {user.email || "Signed in"}
                     </span>
                     {/* A just-signed-out user is a public-site audience. */}
-                    <UserMenu afterSignOutUrl={LANDING_URL} />
+                    <UserMenu afterSignOutUrl={LANDING_HREF} />
                 </>
             )}
         </nav>

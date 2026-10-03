@@ -2,19 +2,28 @@
  * Folder mutations over the path model (see `~/lib/folders/path`).
  *
  * A folder exists when a `category` row carries its path or a document lives
- * in it. Renaming, moving and deleting are prefix rewrites over both tables
- * in one transaction, so a folder and everything beneath it move together and
- * a deleted folder cannot come back from the documents that were inside it —
- * they are re-homed first.
+ * in it. Renaming, moving and deleting are prefix rewrites over the folder,
+ * document and mindmap-draft tables in one transaction, so a folder and
+ * everything beneath it move together and a deleted folder cannot come back
+ * from what was inside it — it is re-homed first. A draft's access is its
+ * folder's (ADR-014), so a draft left behind under a dead path would be one
+ * nobody restricts.
  */
 
-import { folderSettings } from "~/server/db/schema";
+import { folderSettings, mindmaps } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { scopeAllowsCategory, type DocumentScope } from "~/lib/authz/scope-types";
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
+import type { AccessSubject } from "~/server/workspace/item-access";
+import {
+    accessViewOf,
+    classifyFolders,
+    loadFolderAccessFacts,
+    type AccessView,
+} from "~/server/workspace/source-access";
 import {
     FOLDER_SEPARATOR,
     UNFILED_FOLDER,
@@ -52,6 +61,11 @@ export interface FolderRecord {
     restricted: boolean;
 }
 
+/** A folder as one person's rail sees it: who else can, and what they may do with it. */
+export interface VisibleFolderRecord extends FolderRecord {
+    access: AccessView;
+}
+
 /** Escape a literal for a LIKE pattern (Postgres escapes with a backslash by default). */
 export function escapeLikeLiteral(value: string): string {
     return value.replace(/[\\%_]/g, match => `\\${match}`);
@@ -76,19 +90,24 @@ function categorySubtree(companyId: bigint, path: string) {
     );
 }
 
+function draftSubtree(companyId: bigint, path: string) {
+    return and(
+        eq(mindmaps.companyId, companyId),
+        or(eq(mindmaps.folder, path), like(mindmaps.folder, descendantPattern(path)))
+    );
+}
+
 /** `to || substr(column, len(from) + 1)` — the prefix rewrite, in SQL. */
 function rewritePrefix(
-    column: typeof document.category | typeof category.name,
+    column: typeof document.category | typeof category.name | typeof mindmaps.folder,
     from: string,
     to: string
 ) {
     return sql<string>`${to} || substr(${column}, ${from.length + 1})`;
 }
 
-export async function listFolders(
-    companyId: bigint,
-    scope?: DocumentScope
-): Promise<FolderRecord[]> {
+/** The rows behind the tree, counting only documents in the caller's scope when given. */
+async function loadFolderTable(companyId: bigint, scope?: DocumentScope) {
     const [rows, counts, restrictedRows] = await Promise.all([
         db
             .select({ id: category.id, name: category.name })
@@ -120,6 +139,18 @@ export async function listFolders(
         documentCounts.set(path, (documentCounts.get(path) ?? 0) + Number(row.count));
     }
     const restrictedIds = new Set(restrictedRows.map(row => Number(row.categoryId)));
+    // The id the access rules read for a path: the first row, as
+    // `loadFolderLineage` takes it (the table has no unique (company, name)).
+    const idByPath = new Map<string, number>();
+    for (const row of [...rows].sort((a, b) => Number(a.id) - Number(b.id))) {
+        const path = normalizeFolderPath(row.name);
+        if (!idByPath.has(path)) idByPath.set(path, Number(row.id));
+    }
+    return { persisted, documentCounts, restrictedIds, idByPath };
+}
+
+function toRecords(table: Awaited<ReturnType<typeof loadFolderTable>>): FolderRecord[] {
+    const { persisted, documentCounts, restrictedIds } = table;
     const restrictedPaths = [...persisted.entries()]
         .filter(([, id]) => restrictedIds.has(id))
         .map(([path]) => path);
@@ -134,25 +165,58 @@ export async function listFolders(
     }));
 }
 
+export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
+    return toRecords(await loadFolderTable(companyId));
+}
+
 /**
- * `listFolders`, minus every folder the caller may not see. Document counts
- * count what the caller can read, so a folder that is empty *for them* reads
- * as empty.
+ * `listFolders`, minus every folder the caller may not see. With `subject`,
+ * each folder also carries the caller's `access` (ADR-014): its audience
+ * (workspace, shared, private), whether it sets that itself or inherits it,
+ * and whether they may edit or manage it — worked out in memory from one
+ * read of the workspace's grants, not a lookup per folder.
  */
 export async function listVisibleFolders(
     companyId: bigint,
     scope: DocumentScope
-): Promise<FolderRecord[]> {
-    const all = await listFolders(companyId, scope);
-    if (scope.kind === "everything") return all;
-    return all.filter(folder => scopeAllowsCategory(scope, folder.path));
+): Promise<FolderRecord[]>;
+export async function listVisibleFolders(
+    companyId: bigint,
+    scope: DocumentScope,
+    subject: AccessSubject
+): Promise<VisibleFolderRecord[]>;
+export async function listVisibleFolders(
+    companyId: bigint,
+    scope: DocumentScope,
+    subject?: AccessSubject
+): Promise<FolderRecord[] | VisibleFolderRecord[]> {
+    const table = await loadFolderTable(companyId, scope);
+    const all = toRecords(table);
+    const visible =
+        scope.kind === "everything"
+            ? all
+            : all.filter(folder => scopeAllowsCategory(scope, folder.path));
+    if (!subject) return visible;
+    const facts = await loadFolderAccessFacts(companyId, {
+        idByPath: table.idByPath,
+        restrictedIds: table.restrictedIds,
+    });
+    const access = classifyFolders(
+        visible.map(folder => folder.path),
+        facts,
+        subject
+    );
+    return visible.map(folder => ({
+        ...folder,
+        access: accessViewOf(access.get(folder.path)!),
+    }));
 }
 
 async function existingPaths(companyId: bigint): Promise<Set<string>> {
     return new Set((await listFolders(companyId)).map(folder => folder.path));
 }
 
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /** Insert a `category` row for the path and each ancestor that lacks one. */
 async function ensureFolderRows(tx: Tx, companyId: bigint, path: string): Promise<string[]> {
@@ -179,11 +243,17 @@ function assertAcceptablePath(path: string): void {
 
 export async function createFolder(
     companyId: bigint,
-    rawPath: string
+    rawPath: string,
+    /** Runs in the same transaction with the paths that were new (ADR-014 defaults). */
+    onCreated?: (tx: Tx, created: string[]) => Promise<void>
 ): Promise<{ path: string; created: string[] }> {
     const path = normalizeFolderPath(rawPath);
     assertAcceptablePath(path);
-    const created = await db.transaction(tx => ensureFolderRows(tx, companyId, path));
+    const created = await db.transaction(async tx => {
+        const inserted = await ensureFolderRows(tx, companyId, path);
+        if (onCreated) await onCreated(tx, inserted);
+        return inserted;
+    });
     return { path, created };
 }
 
@@ -202,7 +272,13 @@ export interface RenameFolderResult {
 export async function renameFolder(
     companyId: bigint,
     rawFrom: string,
-    rawTo: string
+    rawTo: string,
+    /**
+     * Runs first in the same transaction, with the normalized paths — ADR-014
+     * uses it so a folder leaving the restricted folder it inherited from takes
+     * that audience with it instead of becoming visible to everyone.
+     */
+    beforeMove?: (tx: Tx, from: string, to: string) => Promise<void>
 ): Promise<RenameFolderResult> {
     const from = normalizeFolderPath(rawFrom);
     const to = normalizeFolderPath(rawTo);
@@ -235,6 +311,7 @@ export async function renameFolder(
     }
 
     return db.transaction(async tx => {
+        if (beforeMove) await beforeMove(tx, from, to);
         const parent = folderParentPath(to);
         if (parent) await ensureFolderRows(tx, companyId, parent);
 
@@ -254,6 +331,11 @@ export async function renameFolder(
             .where(documentSubtree(companyId, from))
             .returning({ id: document.id });
 
+        await tx
+            .update(mindmaps)
+            .set({ folder: rewritePrefix(mindmaps.folder, from, to) })
+            .where(draftSubtree(companyId, from));
+
         return { from, to, movedDocuments: moved.length, renamedFolders: renamed.length };
     });
 }
@@ -266,10 +348,15 @@ export interface DeleteFolderResult {
     deletedFolders: number;
 }
 
-/** Remove a folder and its subfolders; the sources inside move up one level. */
+/**
+ * Remove a folder and its subfolders; the sources inside move up one level.
+ * `beforeMove` runs first in the same transaction — ADR-014 uses it to carry a
+ * deleted folder's restriction onto the documents it re-homes.
+ */
 export async function deleteFolder(
     companyId: bigint,
-    rawPath: string
+    rawPath: string,
+    beforeMove?: (tx: Tx, path: string) => Promise<void>
 ): Promise<DeleteFolderResult> {
     const path = normalizeFolderPath(rawPath);
     if (path === "Calls") {
@@ -284,11 +371,15 @@ export async function deleteFolder(
     const destination = folderParentPath(path) ?? UNFILED_FOLDER;
 
     return db.transaction(async tx => {
+        if (beforeMove) await beforeMove(tx, path);
         const moved = await tx
             .update(document)
             .set({ category: destination })
             .where(documentSubtree(companyId, path))
             .returning({ id: document.id });
+        // Drafts whose access came from inside the subtree were sent to
+        // Unfiled by `beforeMove`; the rest move up with the documents.
+        await tx.update(mindmaps).set({ folder: destination }).where(draftSubtree(companyId, path));
         const deleted = await tx
             .delete(category)
             .where(categorySubtree(companyId, path))

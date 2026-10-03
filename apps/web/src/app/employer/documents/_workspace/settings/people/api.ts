@@ -7,12 +7,7 @@
  * sentence, which is what the UI shows.
  */
 
-import type {
-    GrantLevel,
-    JoinPolicy,
-    MembershipStatus,
-    PrincipalType,
-} from "~/lib/authz/permissions";
+import type { GrantLevel, MembershipStatus, PrincipalType } from "~/lib/authz/permissions";
 
 export interface Member {
     id: number;
@@ -62,6 +57,16 @@ export interface InvitationPreview {
     email: string;
     expiresAt: string;
     status: InvitationStatus;
+    /** Who sent it, as they appear in that workspace; null if unknown. */
+    invitedBy: string | null;
+}
+
+/** What creating or resending an invitation answers. */
+export interface InvitationSent {
+    invitation: Invitation;
+    acceptUrl: string;
+    /** False when no email provider is configured: the link must be sent by hand. */
+    emailSent: boolean;
 }
 
 export interface JoinLink {
@@ -70,6 +75,10 @@ export interface JoinLink {
     role: string;
     roleName: string;
     isActive: boolean;
+    /** People who use it wait on the pending list instead of joining at once. */
+    requiresApproval: boolean;
+    /** An old 8-character code: guessable, so it always needs approval. Reset to replace it. */
+    legacy: boolean;
     createdAt: string;
     expiresAt: string | null;
     maxUses: number | null;
@@ -84,6 +93,10 @@ export interface Group {
     description: string | null;
     memberCount: number;
     members: { id: number; name: string; email: string }[];
+    /** Auth subject id of whoever created it; they manage it (ADR-014). */
+    createdBy?: string;
+    /** May the viewer rename, delete, or change who is in it. */
+    canManage?: boolean;
 }
 
 export interface Role {
@@ -124,7 +137,6 @@ export interface AuditQuery {
 }
 
 export interface WorkspaceSettings {
-    joinPolicy: JoinPolicy;
     auditRetentionDays: number | null;
 }
 
@@ -134,6 +146,19 @@ export interface Grant {
     principalId: string;
     principalName: string;
     level: GrantLevel;
+    /** A person's auth subject id, for their photo. */
+    authUserId?: string | null;
+}
+
+/** What "not restricted" means for an item: the workspace, or the restricted folder above it. */
+export interface InheritedAudience {
+    path: string | null;
+    restricted: boolean;
+}
+
+export interface OwnerRef {
+    authUserId: string;
+    name: string;
 }
 
 export interface GrantInput {
@@ -148,6 +173,9 @@ export interface FolderAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience;
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface DocumentAccess {
@@ -156,10 +184,13 @@ export interface DocumentAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience & { folder: string | null };
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface Principals {
-    users: { id: number; name: string; email: string }[];
+    users: { id: number; authUserId?: string; name: string; email: string }[];
     groups: { id: number; name: string }[];
     roles: { slug: string; name: string }[];
 }
@@ -186,7 +217,8 @@ export function errorMessage(err: unknown, fallback = "Something went wrong."): 
     return fallback;
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+/** One call to a `/api/workspace/*` route: JSON in, JSON out, `ApiError` on failure. */
+export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     const headers: Record<string, string> = { ...(init.headers as Record<string, string>) };
     if (init.body !== undefined && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";
@@ -249,17 +281,20 @@ export const peopleApi = {
             }),
     },
     invitations: {
-        list: () => request<{ invitations: Invitation[] }>("/api/workspace/invitations"),
+        list: () =>
+            request<{ invitations: Invitation[]; emailDelivery?: boolean }>(
+                "/api/workspace/invitations"
+            ),
         create: (body: { email: string; role: string; groupIds?: number[] }) =>
-            request<{ invitation: Invitation; acceptUrl: string }>("/api/workspace/invitations", {
+            request<InvitationSent>("/api/workspace/invitations", {
                 method: "POST",
                 body: json(body),
             }),
         resend: (id: number) =>
-            request<{ invitation: Invitation; acceptUrl: string }>(
-                `/api/workspace/invitations/${id}/resend`,
-                { method: "POST", body: "{}" }
-            ),
+            request<InvitationSent>(`/api/workspace/invitations/${id}/resend`, {
+                method: "POST",
+                body: "{}",
+            }),
         revoke: (id: number) =>
             request<{ success: boolean }>(`/api/workspace/invitations/${id}`, {
                 method: "DELETE",
@@ -276,10 +311,25 @@ export const peopleApi = {
     },
     joinLinks: {
         list: () => request<{ links: JoinLink[] }>("/api/workspace/join-links"),
-        create: (body: { role: string; expiresInDays?: number | null; maxUses?: number | null }) =>
+        create: (body: {
+            role: string;
+            expiresInDays?: number | null;
+            maxUses?: number | null;
+            requiresApproval?: boolean;
+        }) =>
             request<{ link: JoinLink }>("/api/workspace/join-links", {
                 method: "POST",
                 body: json(body),
+            }),
+        update: (id: number, body: { role?: string; requiresApproval?: boolean }) =>
+            request<{ link: JoinLink }>(`/api/workspace/join-links/${id}`, {
+                method: "PATCH",
+                body: json(body),
+            }),
+        reset: (id: number) =>
+            request<{ link: JoinLink }>(`/api/workspace/join-links/${id}/reset`, {
+                method: "POST",
+                body: "{}",
             }),
         revoke: (id: number) =>
             request<{ success: boolean }>(`/api/workspace/join-links/${id}`, {

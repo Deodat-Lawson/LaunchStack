@@ -19,10 +19,37 @@ import {
     type TokenResponse,
 } from "./wire";
 
-const OAUTH_TOKEN_URL = "https://oauth2.googleapis.com/token";
 export const OAUTH_AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-const DRIVE_API_BASE = "https://www.googleapis.com/drive/v3";
-const DRIVE_UPLOAD_BASE = "https://www.googleapis.com/upload/drive/v3";
+
+/**
+ * Where Google answers. Real Google unless the host points the package at a
+ * stand-in (the `next dev` one under /dev/stand-ins/google) — the host reads
+ * that from its own env and calls `configureGoogleEndpoints` once.
+ */
+export interface GoogleEndpoints {
+    readonly authorizeUrl: string;
+    readonly tokenUrl: string;
+    readonly driveApiBase: string;
+    readonly driveUploadBase: string;
+}
+
+const GOOGLE_ENDPOINTS: GoogleEndpoints = {
+    authorizeUrl: OAUTH_AUTHORIZE_URL,
+    tokenUrl: "https://oauth2.googleapis.com/token",
+    driveApiBase: "https://www.googleapis.com/drive/v3",
+    driveUploadBase: "https://www.googleapis.com/upload/drive/v3",
+};
+
+let endpoints: GoogleEndpoints = GOOGLE_ENDPOINTS;
+
+/** `null` restores real Google. */
+export function configureGoogleEndpoints(next: Partial<GoogleEndpoints> | null): void {
+    endpoints = next ? { ...GOOGLE_ENDPOINTS, ...next } : GOOGLE_ENDPOINTS;
+}
+
+export function googleEndpoints(): GoogleEndpoints {
+    return endpoints;
+}
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 
@@ -97,7 +124,7 @@ async function throwDriveError(res: Response): Promise<never> {
 }
 
 async function requestToken(form: Record<string, string>): Promise<TokenResponse> {
-    const res = await fetchWithTimeout(OAUTH_TOKEN_URL, {
+    const res = await fetchWithTimeout(endpoints.tokenUrl, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(form).toString(),
@@ -181,7 +208,7 @@ export async function getFileMetadata(params: {
     accessToken: string;
     fileId: string;
 }): Promise<DriveFileMetadata> {
-    const url = `${DRIVE_API_BASE}/files/${encodeURIComponent(params.fileId)}?fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
+    const url = `${endpoints.driveApiBase}/files/${encodeURIComponent(params.fileId)}?fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
     const res = await fetchWithTimeout(url, { headers: authHeaders(params.accessToken) });
     if (!res.ok) return throwDriveError(res);
     return driveFileMetadataSchema.parse(await res.json());
@@ -192,7 +219,7 @@ export async function downloadFileContent(params: {
     accessToken: string;
     fileId: string;
 }): Promise<Buffer> {
-    const url = `${DRIVE_API_BASE}/files/${encodeURIComponent(params.fileId)}?alt=media&supportsAllDrives=true`;
+    const url = `${endpoints.driveApiBase}/files/${encodeURIComponent(params.fileId)}?alt=media&supportsAllDrives=true`;
     const res = await fetchWithTimeout(url, { headers: authHeaders(params.accessToken) });
     if (!res.ok) return throwDriveError(res);
     return Buffer.from(await res.arrayBuffer());
@@ -204,7 +231,7 @@ export async function exportFileContent(params: {
     fileId: string;
     mimeType: string;
 }): Promise<Buffer> {
-    const url = `${DRIVE_API_BASE}/files/${encodeURIComponent(params.fileId)}/export?mimeType=${encodeURIComponent(params.mimeType)}`;
+    const url = `${endpoints.driveApiBase}/files/${encodeURIComponent(params.fileId)}/export?mimeType=${encodeURIComponent(params.mimeType)}`;
     const res = await fetchWithTimeout(url, { headers: authHeaders(params.accessToken) });
     if (!res.ok) return throwDriveError(res);
     return Buffer.from(await res.arrayBuffer());
@@ -250,7 +277,7 @@ export async function createFileMultipart(params: {
         mimeType: params.targetMimeType ?? params.mimeType,
         ...(params.parents?.length ? { parents: params.parents } : {}),
     };
-    const url = `${DRIVE_UPLOAD_BASE}/files?uploadType=multipart&fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
+    const url = `${endpoints.driveUploadBase}/files?uploadType=multipart&fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
     const res = await fetchWithTimeout(url, {
         method: "POST",
         headers: {
@@ -270,7 +297,7 @@ export async function updateFileMedia(params: {
     mimeType: string;
     data: Buffer;
 }): Promise<DriveFileMetadata> {
-    const url = `${DRIVE_UPLOAD_BASE}/files/${encodeURIComponent(params.fileId)}?uploadType=media&fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
+    const url = `${endpoints.driveUploadBase}/files/${encodeURIComponent(params.fileId)}?uploadType=media&fields=${encodeURIComponent(DRIVE_METADATA_FIELDS)}&supportsAllDrives=true`;
     const res = await fetchWithTimeout(url, {
         method: "PATCH",
         headers: {
@@ -285,7 +312,7 @@ export async function updateFileMedia(params: {
 
 /** Move a file to the Drive trash (recoverable by the user for ~30 days). */
 export async function trashFile(params: { accessToken: string; fileId: string }): Promise<void> {
-    const url = `${DRIVE_API_BASE}/files/${encodeURIComponent(params.fileId)}?supportsAllDrives=true`;
+    const url = `${endpoints.driveApiBase}/files/${encodeURIComponent(params.fileId)}?supportsAllDrives=true`;
     const res = await fetchWithTimeout(url, {
         method: "PATCH",
         headers: { ...authHeaders(params.accessToken), "Content-Type": "application/json" },
@@ -304,14 +331,14 @@ export async function trashFile(params: { accessToken: string; fileId: string })
 export async function ensureFolder(params: { accessToken: string; name: string }): Promise<string> {
     const escaped = params.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
     const q = `name = '${escaped}' and mimeType = '${GOOGLE_FOLDER_MIME}' and trashed = false`;
-    const listUrl = `${DRIVE_API_BASE}/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent("files(id,name,mimeType)")}&pageSize=1`;
+    const listUrl = `${endpoints.driveApiBase}/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent("files(id,name,mimeType)")}&pageSize=1`;
     const listRes = await fetchWithTimeout(listUrl, { headers: authHeaders(params.accessToken) });
     if (!listRes.ok) return throwDriveError(listRes);
     const listed = driveFileListSchema.parse(await listRes.json());
     const existing = listed.files[0];
     if (existing) return existing.id;
 
-    const createRes = await fetchWithTimeout(`${DRIVE_API_BASE}/files?fields=id`, {
+    const createRes = await fetchWithTimeout(`${endpoints.driveApiBase}/files?fields=id`, {
         method: "POST",
         headers: { ...authHeaders(params.accessToken), "Content-Type": "application/json" },
         body: JSON.stringify({ name: params.name, mimeType: GOOGLE_FOLDER_MIME }),
@@ -340,5 +367,5 @@ export function buildAuthorizationUrl(params: {
         prompt: "consent",
         state: params.state,
     });
-    return `${OAUTH_AUTHORIZE_URL}?${search.toString()}`;
+    return `${endpoints.authorizeUrl}?${search.toString()}`;
 }

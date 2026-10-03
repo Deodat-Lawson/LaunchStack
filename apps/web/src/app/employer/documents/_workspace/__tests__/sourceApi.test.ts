@@ -133,6 +133,38 @@ describe("moveSource", () => {
         expect(calls()[1]?.url).toBe("/api/documents/12");
         expect(body<{ category: string }>(1).category).toBe("Archive");
     });
+
+    it("hands back what the move did to a document's or a draft's audience", async () => {
+        fetchMock.mockResolvedValue({
+            ok: true,
+            status: 200,
+            json: () =>
+                Promise.resolve({
+                    success: true,
+                    move: { from: "Unfiled", to: "Archive", access: "inherits_folder" },
+                }),
+        });
+        await expect(moveSource(doc(), "Archive")).resolves.toEqual({
+            access: "inherits_folder",
+        });
+        await expect(moveSource(map(), "Archive")).resolves.toEqual({
+            access: "inherits_folder",
+        });
+    });
+
+    it("reports a draft move the server refused in its own words", async () => {
+        fetchMock.mockResolvedValue({
+            ok: false,
+            status: 409,
+            json: () =>
+                Promise.resolve({
+                    error: "Moving this mindmap there would show it to people who can't see it now.",
+                }),
+        });
+        await expect(moveSource(map(), "Everyone")).rejects.toThrow(
+            "Moving this mindmap there would show it to people who can't see it now."
+        );
+    });
 });
 
 describe("deleteSource", () => {

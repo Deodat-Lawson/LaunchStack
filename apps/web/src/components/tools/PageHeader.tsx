@@ -3,7 +3,8 @@ import { cn } from "~/lib/utils";
 /**
  * The one display line per screen. `accent` is the phrase set in the brand
  * colour, the way the Studio's "What do you want to *ask* yourself?" does
- * it — same typeface, emphasis by colour.
+ * it — same typeface, emphasis by colour. It folds by the width of the tab
+ * it sits in (container variants), not the window's.
  */
 export function PageHeader({
     title,
@@ -22,13 +23,18 @@ export function PageHeader({
 }) {
     return (
         <header
-            className={cn("grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end", className)}
+            className={cn(
+                "@max-md:grid-cols-1 @max-md:items-start grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3",
+                className
+            )}
         >
             <div className="min-w-0">
                 <h1
                     className={cn(
                         "display text-ink text-balance leading-[1.1] tracking-[-0.02em]",
-                        size === "lg" ? "text-[28px] md:text-[30px]" : "text-[24px] md:text-[26px]"
+                        size === "lg"
+                            ? "@max-md:text-[28px] text-[30px]"
+                            : "@max-md:text-[24px] text-[26px]"
                     )}
                 >
                     {title}
@@ -42,7 +48,9 @@ export function PageHeader({
                 {sub && <div className="text-ink-3 mt-1.5 text-[13px]">{sub}</div>}
             </div>
             {actions && (
-                <div className="flex flex-wrap items-center gap-2 md:justify-end">{actions}</div>
+                <div className="@max-md:justify-start flex flex-wrap items-center justify-end gap-2">
+                    {actions}
+                </div>
             )}
         </header>
     );

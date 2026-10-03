@@ -18,8 +18,36 @@ function SheetClose({ ...props }: React.ComponentProps<typeof SheetPrimitive.Clo
     return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
+/**
+ * Where sheets mount. A Studio tool's tab provides its own element, so a
+ * sheet opened from a tool in half the screen covers that tool — not the
+ * chat in the column beside it. Unset, sheets mount on the body as usual.
+ */
+const SheetContainerContext = React.createContext<HTMLElement | null>(null);
+
+function SheetContainerProvider({
+    container,
+    children,
+}: {
+    container: HTMLElement | null;
+    children: React.ReactNode;
+}) {
+    return (
+        <SheetContainerContext.Provider value={container}>
+            {children}
+        </SheetContainerContext.Provider>
+    );
+}
+
 function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-    return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
+    const container = React.useContext(SheetContainerContext);
+    return (
+        <SheetPrimitive.Portal
+            data-slot="sheet-portal"
+            container={container ?? undefined}
+            {...props}
+        />
+    );
 }
 
 function SheetOverlay({
@@ -120,6 +148,7 @@ function SheetDescription({
 
 export {
     Sheet,
+    SheetContainerProvider,
     SheetTrigger,
     SheetClose,
     SheetContent,

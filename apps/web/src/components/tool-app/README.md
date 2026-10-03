@@ -1,0 +1,73 @@
+# Tool apps: every tool is a tab
+
+Every Studio tool opens as a tab of the workspace (`/employer/documents`),
+beside the chat, sources and other tools. There is no such thing as a tool
+with its own route tree, layout or page. Before October 2026, Growth, Proposals
+and Vantage were separate apps (`external: true`): picking one left the
+workspace and closed every open tab. The registry no longer has that flag,
+and `__tests__/studio/registry.test.ts` fails if a Studio entry points
+anywhere but a tab.
+
+## The pieces
+
+| Piece                                                     | File                          | What it does                                                                                                                                                                                    |
+| --------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ToolNavProvider`                                         | `nav.tsx`                     | The tab's own history: a stack of app-relative locations (`/prospects/companies?view=new`) and a cursor. Persists the last location per member and workspace.                                   |
+| `useToolRouter`, `useToolPathname`, `useToolSearchParams` | `nav.tsx`                     | Same shapes as `next/navigation`'s hooks, inside the tab.                                                                                                                                       |
+| `useToolActive`                                           | `nav.tsx`                     | True while this tab is focused. Tabs are hidden, not unmounted, so any `window` key listener must check it.                                                                                     |
+| `ToolLink`                                                | `ToolLink.tsx`                | `next/link` for tool screens: a real `<a>` whose href is the shareable URL, so ⌘-click opens a browser tab and a plain click stays in the tab.                                                  |
+| `ToolFrame`                                               | `ToolFrame.tsx`               | The one frame: a rail of the tool's screens inside the tab (it folds into a screen menu under 720px of tab width), back/forward, "Copy link", per-visit scroll restore, and pane-scoped sheets. |
+| `ToolNotFound`                                            | `ToolFrame.tsx`               | What a tool shows for a path it has no screen for.                                                                                                                                              |
+| locations                                                 | `~/lib/tool-app/locations.ts` | Plain data shared with the server: `toolTabHref`, `toolTargetFromHref` (old `/employer/tools/...` URLs → tool + location), `TOOL_ALIASES`.                                                      |
+| `redirectToToolTab`                                       | `~/lib/tool-app/redirect.ts`  | The whole body of an old tool page: redirects into the tab at the same screen.                                                                                                                  |
+
+## Adding a tool
+
+1. **Registry.** Add the entry to the Tools group in
+   `app/employer/documents/_workspace/types.ts`. Give it no `href`, or one of
+   the form `/employer/documents?feature=<id>`.
+2. **Pane.** Add a `case "<id>"` to `renderStudioPane` in `StudioPanes.tsx`
+   and to `STUDIO_PANE_IDS` in `studioPaneIds.ts`. Load the tool with
+   `next/dynamic`.
+3. **One screen?** Render it inside `<ToolFrame title mark>` with no
+   `groups`. You get the same surface, padding and pane-scoped sheets as
+   every other tool.
+4. **Several screens?** Mount the tool like this:
+
+   ```tsx
+   export function ExampleTool({ host }: { host?: ToolHost }) {
+       return (
+           <ToolNavProvider toolId="example" roots={["things", "settings"]} host={host}>
+               <ExampleFrame />
+           </ToolNavProvider>
+       );
+   }
+
+   function ExampleFrame() {
+       const path = useToolPathname();
+       return (
+           <ToolFrame title="Example" mark={<ExampleMark tile />} groups={[...]}>
+               {screenFor(path)}
+           </ToolFrame>
+       );
+   }
+   ```
+
+   `roots` are the first path segments of the tool's screens. "/" is always
+   the tool's own; `home` sets where it lands. `screenFor` is a plain switch
+   over the path that ends in `<ToolNotFound>`.
+
+5. **Links.** Screens use `ToolLink` and `useToolRouter()`. They never import
+   `next/link` or `next/navigation`. A site link (a source, `?ask=`,
+   Settings) goes through the same `ToolLink` and is handed to the workspace,
+   which opens it without leaving the page.
+6. **Layout.** Lay screens out for a full-width tab. Fold them with the
+   container variants `@max-xl` (1119px), `@max-lg` (879px), `@max-md`
+   (639px), `@max-sm` (519px) and `@max-xs` (379px). Those read the tab's
+   width, not the window's. Viewport breakpoints (`md:`, `lg:`) are wrong
+   inside a tab: a tool in a third of a wide screen would get its widest
+   layout.
+7. **Keys.** Gate every `window` key listener on `useToolActive()`.
+8. **Old URLs.** If the tool once had pages, keep a catch-all
+   `page.tsx` that calls `redirectToToolTab`, and add the prefix to
+   `LEGACY_TOOL_ROUTES` in `locations.ts`.

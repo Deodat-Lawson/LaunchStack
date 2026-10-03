@@ -273,10 +273,17 @@ export async function deleteFileByUrl(url: string): Promise<void> {
     const s3Endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
 
     if (s3Endpoint && url.startsWith(s3Endpoint)) {
-        // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
+        // Object URLs are `${endpoint}/${bucket}/${key}` (getObjectUrl). The
+        // S3 client adds the bucket itself, so the bucket segment must come
+        // off here — left on, DeleteObject targeted `bucket/bucket/key`,
+        // which S3 reports as a success for a key that never existed, and
+        // no object was ever removed.
         // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
-        //   -> "pdr-documents/documents/abc-file.pdf"
-        const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
+        //   -> "documents/abc-file.pdf"
+        const { getS3BucketName } = await import("~/server/storage/s3-client");
+        const bucket = getS3BucketName();
+        let key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
+        if (bucket && key.startsWith(`${bucket}/`)) key = key.slice(bucket.length + 1);
         return deleteFile(key, "s3");
     }
 

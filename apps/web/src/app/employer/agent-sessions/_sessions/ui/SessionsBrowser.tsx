@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Input } from "~/components/ui/input";
 import {
     Select,
@@ -406,14 +407,18 @@ export function SessionsBrowser({
      * Drop an imported transcript from the workspace. The local session file
      * is untouched, so the row goes back to "New" and can be imported again.
      */
-    const removeImport = useCallback(async (item: AgentSessionItem) => {
+    // The question is asked in the app, not with `window.confirm`: embedded
+    // web views suppress that outright and the delete would silently do
+    // nothing (see ~/components/ui/confirm-dialog).
+    const [removeTarget, setRemoveTarget] = useState<AgentSessionItem | null>(null);
+    const removeImport = useCallback((item: AgentSessionItem) => {
+        if (!item.imported?.documentId) return;
+        setRemoveTarget(item);
+    }, []);
+
+    const performRemoveImport = useCallback(async (item: AgentSessionItem) => {
         const documentId = item.imported?.documentId;
         if (!documentId) return;
-        if (
-            !confirm(`Remove the imported transcript of “${item.title}”? The local session stays.`)
-        ) {
-            return;
-        }
         try {
             const res = await fetch("/api/deleteDocument", {
                 method: "DELETE",
@@ -667,7 +672,7 @@ export function SessionsBrowser({
                                 item={item}
                                 busy={busyIds.has(item.sourceId)}
                                 onImport={i => void importOne(i)}
-                                onRemoveImport={i => void removeImport(i)}
+                                onRemoveImport={removeImport}
                                 onOpenDocument={onOpenDocument}
                                 onContinue={onContinue}
                             />
@@ -675,6 +680,25 @@ export function SessionsBrowser({
                     </div>
                 )}
             </div>
+
+            <ConfirmDialog
+                open={removeTarget !== null}
+                onOpenChange={open => {
+                    if (!open) setRemoveTarget(null);
+                }}
+                title="Remove this imported transcript?"
+                description={
+                    removeTarget
+                        ? `“${removeTarget.title}” leaves the workspace, along with every passage the assistant could cite from it. The local session file stays and can be imported again.`
+                        : undefined
+                }
+                confirmLabel="Remove"
+                onConfirm={() => {
+                    const target = removeTarget;
+                    setRemoveTarget(null);
+                    if (target) void performRemoveImport(target);
+                }}
+            />
         </div>
     );
 }

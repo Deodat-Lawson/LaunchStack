@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { SourceGoneError } from "@launchstack/runtime";
+
 import { DEFAULT_RETRY_POLICY, retryDelayMs, runOutboxTick } from "./outbox-tick";
 import type { ClaimedEvent, OutboxStorePort } from "../ports";
 import type { PipelineProcessor } from "./process-event";
@@ -120,6 +122,34 @@ describe("runOutboxTick", () => {
 
         expect(result).toEqual({ claimed: 1, processed: 0, failed: 0, dead: 1 });
         expect(outbox.failedCalls[0]?.retryAt).toBeNull();
+    });
+
+    it("dead-letters a non-retryable failure on the first attempt", async () => {
+        // A source deleted mid-pipeline: retrying can never succeed, so the
+        // event goes dead now, with the onDead hook told, instead of burning
+        // every attempt against a row that is gone.
+        const outbox = makeOutbox([claimedEvent({ attemptCount: 0 })]);
+        const processor = makeProcessor(async () => {
+            throw new Error("index stage failed", {
+                cause: new SourceGoneError("Document 10 does not exist", { sourceId: 10 }),
+            });
+        });
+        const deadCalls: string[] = [];
+
+        const result = await runOutboxTick({
+            outbox,
+            processor,
+            clock: { now: () => NOW },
+            logger: silentLogger,
+            onDead: async (_claimed, error) => {
+                deadCalls.push(error);
+            },
+        });
+
+        expect(result).toEqual({ claimed: 1, processed: 0, failed: 0, dead: 1 });
+        expect(outbox.failedCalls[0]?.retryAt).toBeNull();
+        expect(outbox.failedCalls[0]?.error).toContain("Document 10 does not exist");
+        expect(deadCalls).toHaveLength(1);
     });
 
     it("keeps processing the batch after one event fails", async () => {

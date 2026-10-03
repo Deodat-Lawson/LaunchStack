@@ -31,7 +31,7 @@ import {
 } from "@launchstack/store/schema";
 import { and, eq, sql } from "drizzle-orm";
 import crypto from "crypto";
-import { getStoragePort } from "@launchstack/runtime";
+import { getStoragePort, SourceGoneError } from "@launchstack/runtime";
 
 import type {
     ProcessDocumentEventData,
@@ -468,10 +468,92 @@ export async function ensureDocumentExists(documentId: number): Promise<void> {
             await new Promise(r => setTimeout(r, attempt * 500));
         }
     }
-    throw new Error(
+    // Non-retryable: the outbox dead-letters the event on this attempt
+    // instead of retrying against a document that was deleted mid-pipeline.
+    throw new SourceGoneError(
         `Document ${documentId} does not exist. Cannot store chunks. ` +
-            `The document may have been deleted before the job completed.`
+            `The document was deleted before the job completed.`,
+        { sourceId: documentId }
     );
+}
+
+/** Rows a previous attempt at indexing one (document, version) had left. */
+export interface VersionIndexResetCounts {
+    structureNodes: number;
+    contextChunks: number;
+    retrievalChunks: number;
+}
+
+/**
+ * Remove every index row written for one (document, version) so the stage
+ * that follows rewrites it from scratch.
+ *
+ * The outbox worker re-runs the whole indexing stage on retry and on
+ * operator replay (ADR-003), and `createStructureTree` / `storeBatch` append
+ * with plain INSERTs. Without this reset a second run doubled every
+ * structure node, context chunk and retrieval chunk of the version — the
+ * "same passage cited twice" failure. Per-dimension embeddings, previews,
+ * workspace results and KG mentions hang off these three tables by
+ * ON DELETE CASCADE, so clearing them clears the whole version.
+ *
+ * Scoped to the version, never the document: chunks of other versions stay
+ * for reverts and retrieval already hides them behind `current_version_id`.
+ */
+export async function resetVersionIndex(
+    documentId: number,
+    versionId: number
+): Promise<VersionIndexResetCounts> {
+    const docId = BigInt(documentId);
+    const verId = BigInt(versionId);
+
+    return withDbRetry(async () => {
+        const counts = await getDb().transaction(async tx => {
+            // Children before parents, so the FK cascades never race a
+            // parent delete: retrieval chunks → context chunks → structure.
+            const retrieval = await tx
+                .delete(documentRetrievalChunks)
+                .where(
+                    and(
+                        eq(documentRetrievalChunks.documentId, docId),
+                        eq(documentRetrievalChunks.versionId, verId)
+                    )
+                )
+                .returning({ id: documentRetrievalChunks.id });
+            const context = await tx
+                .delete(documentContextChunks)
+                .where(
+                    and(
+                        eq(documentContextChunks.documentId, docId),
+                        eq(documentContextChunks.versionId, verId)
+                    )
+                )
+                .returning({ id: documentContextChunks.id });
+            const structure = await tx
+                .delete(documentStructure)
+                .where(
+                    and(
+                        eq(documentStructure.documentId, docId),
+                        eq(documentStructure.versionId, verId)
+                    )
+                )
+                .returning({ id: documentStructure.id });
+
+            return {
+                structureNodes: structure.length,
+                contextChunks: context.length,
+                retrievalChunks: retrieval.length,
+            };
+        });
+
+        if (counts.structureNodes + counts.contextChunks + counts.retrievalChunks > 0) {
+            console.log(
+                `[Storage] Reset index rows for document ${documentId} version ${versionId} ` +
+                    `left by a previous attempt: ${counts.structureNodes} structure node(s), ` +
+                    `${counts.contextChunks} context chunk(s), ${counts.retrievalChunks} retrieval chunk(s)`
+            );
+        }
+        return counts;
+    });
 }
 
 /**
@@ -774,23 +856,24 @@ export async function storeBatch(
                 }
             }
 
-            return {
-                storedSections,
-                insertedDimensionTableChunkIds,
-                dimensionTableVectors,
-            };
+            // Same transaction as the chunk rows. Written after the commit,
+            // a crash between the two left retrieval chunks with no vector
+            // in the per-dimension table, and nothing came back to embed
+            // them — the retry rewrote the chunks under new ids instead.
+            if (!isLegacyEmbeddingIndex(embeddingIndex) && dimensionTableVectors.length > 0) {
+                await storeDimensionTableEmbeddings({
+                    documentId,
+                    retrievalChunkIds: insertedDimensionTableChunkIds,
+                    vectors: dimensionTableVectors,
+                    index: embeddingIndex,
+                    db: tx,
+                });
+            }
+
+            return storedSections;
         });
 
-        if (!isLegacyEmbeddingIndex(embeddingIndex) && result.dimensionTableVectors.length > 0) {
-            await storeDimensionTableEmbeddings({
-                documentId,
-                retrievalChunkIds: result.insertedDimensionTableChunkIds,
-                vectors: result.dimensionTableVectors,
-                index: embeddingIndex,
-            });
-        }
-
-        return result.storedSections;
+        return result;
     });
 }
 

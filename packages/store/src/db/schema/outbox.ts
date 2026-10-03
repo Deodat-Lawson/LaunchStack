@@ -31,10 +31,19 @@ import { company } from "./base";
  * `pending`    — awaiting a worker claim (respecting availableAt backoff).
  * `processing` — claimed by a worker; reclaimed if the claim goes stale.
  * `processed`  — handler completed; kept for audit/replay.
- * `dead`       — attempts exhausted; visible for operator replay
- *                (docs/runbooks/outbox.md).
+ * `dead`       — attempts exhausted (or a non-retryable failure); visible
+ *                for operator replay (docs/runbooks/outbox.md).
+ * `cancelled`  — the source was deleted while the event was pending or
+ *                processing; never claimed again, never replayable, and not
+ *                counted as dead (nothing is wrong, the work is moot).
  */
-export const eventOutboxStatusEnum = ["pending", "processing", "processed", "dead"] as const;
+export const eventOutboxStatusEnum = [
+    "pending",
+    "processing",
+    "processed",
+    "dead",
+    "cancelled",
+] as const;
 export type EventOutboxStatus = (typeof eventOutboxStatusEnum)[number];
 
 export const eventOutbox = pgTable(

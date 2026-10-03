@@ -351,7 +351,7 @@ export function AgendaTopicRow({
                                 Decided
                             </StatusWord>
                         ) : (
-                            <StatusWord tone="neutral" className="mt-0.5">
+                            <StatusWord tone="neutral" className="@max-sm:hidden mt-0.5">
                                 On the agenda
                             </StatusWord>
                         )}

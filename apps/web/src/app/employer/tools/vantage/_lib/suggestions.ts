@@ -10,14 +10,17 @@
  * following through comes first.
  */
 import type { AgendaDto, CommitmentDto, OverviewDto, TopicDto, VantageEvidenceRef } from "../api";
-import { agoWords } from "./format";
+import { agoWords, daysUntil } from "./format";
+
+/** A check-in is suggested when the promise is late or due within this many days. */
+export const CHECK_IN_DAYS = 2;
 
 export type WeekSuggestion =
     /** A drafted topic still waiting for Keep or Ignore. */
     | { kind: "topic"; id: string; topic: TopicDto; agenda: AgendaDto }
     /** Every suggestion handled and something kept: the agenda can go to the meeting. */
     | { kind: "mark-ready"; id: string; agenda: AgendaDto; kept: number }
-    /** A promise due or overdue: did it happen? */
+    /** A promise late or due within `CHECK_IN_DAYS`: did it happen? */
     | { kind: "check-in"; id: string; commitment: CommitmentDto; late: boolean }
     /** A topic discussed at a held meeting, undecided, with a proposed next step. */
     | { kind: "commit"; id: string; topic: TopicDto; agenda: AgendaDto }
@@ -85,7 +88,10 @@ export function weekSuggestions(
         for (const topic of ordered(a).filter(readyToCommit))
             commits.push({ kind: "commit", id: `commit:${topic.id}`, topic, agenda: a });
     }
+    // "Did it happen?" is worth asking once it is late or nearly due; a
+    // promise due at the end of the week (or made a minute ago) can wait.
     const checkIns = [...overview.checkIns]
+        .filter(c => daysUntil(c.dueOn, opts.today) <= CHECK_IN_DAYS)
         .sort((x, y) => (x.dueOn < y.dueOn ? -1 : x.dueOn > y.dueOn ? 1 : 0))
         .map(
             (commitment): WeekSuggestion => ({
@@ -117,8 +123,7 @@ export function weekSuggestions(
         { id: "record", items: record.filter(visible) },
     ];
     // Once the meeting is held, what it decided matters more than the next draft.
-    if (agenda?.status === "held" || (!agenda && previousAgenda?.status === "held"))
-        groups.unshift(groups.splice(1, 1)[0]!);
+    if (agenda?.status === "held") groups.unshift(groups.splice(1, 1)[0]!);
     return groups.filter(g => g.items.length > 0);
 }
 

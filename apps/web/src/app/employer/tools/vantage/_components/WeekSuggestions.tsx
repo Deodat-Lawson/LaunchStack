@@ -179,7 +179,7 @@ function Suggestion({
             const listed =
                 names.length <= 2
                     ? names.join(" and ")
-                    : `${names.slice(0, 2).join(", ")} and ${plural(names.length - 2, "more")}`;
+                    : `${names.slice(0, 2).join(", ")} and ${names.length - 2} more`;
             return (
                 <SuggestionNudge
                     label="Record this week's numbers"

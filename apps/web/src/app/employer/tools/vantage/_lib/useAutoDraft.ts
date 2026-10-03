@@ -44,7 +44,12 @@ export function useAutoDraft(args: {
     week: string | null;
     /** True when this week should be drafted without a click. */
     auto: boolean;
-    onDrafted: (agenda: AgendaDto) => void;
+    /**
+     * Take in the new agenda. When it returns a promise (a screen reloading
+     * its data), "drafting" lasts until it settles, so the screen never
+     * flashes its no-agenda state between the draft and the fresh data.
+     */
+    onDrafted: (agenda: AgendaDto) => unknown;
 }): AutoDraft {
     const { week, auto } = args;
     const [drafting, setDrafting] = useState(false);
@@ -56,16 +61,12 @@ export function useAutoDraft(args: {
         if (!week) return;
         setDrafting(true);
         setError(null);
-        draftWeekOnce(week).then(
-            agenda => {
-                setDrafting(false);
-                onDrafted.current(agenda);
-            },
-            (e: unknown) => {
-                setDrafting(false);
-                setError(e instanceof Error ? e.message : "Vantage could not draft the week");
-            }
-        );
+        void draftWeekOnce(week)
+            .then(agenda => onDrafted.current(agenda))
+            .catch((e: unknown) =>
+                setError(e instanceof Error ? e.message : "Vantage could not draft the week")
+            )
+            .finally(() => setDrafting(false));
     }, [week]);
 
     useEffect(() => {

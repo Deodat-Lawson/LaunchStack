@@ -89,7 +89,7 @@ export function SuggestionCard({
                 className="from-brand-soft pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b to-transparent"
             />
             <div className="relative flex flex-col gap-2 px-4 pb-3.5 pt-3">
-                <div className="flex min-h-5 items-center gap-2">
+                <div className="flex min-h-5 flex-wrap items-center gap-x-2 gap-y-0.5">
                     <SuggestionMark>{kicker}</SuggestionMark>
                     {meta && <span className="text-ink-3 ml-auto text-[11.5px]">{meta}</span>}
                     {menu && <div className={cn("-my-1 -mr-1.5", !meta && "ml-auto")}>{menu}</div>}

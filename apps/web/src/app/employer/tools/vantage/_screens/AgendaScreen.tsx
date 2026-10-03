@@ -81,7 +81,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
         auto: missing && nextMeeting && Boolean(ov.data && hasMaterial(ov.data)),
         onDrafted: next => {
             setAgenda(next);
-            void res.reload();
+            return res.reload();
         },
     });
 

@@ -80,7 +80,7 @@ export function OverviewScreen() {
     const auto = useAutoDraft({
         week: data?.agendaWeek ?? null,
         auto: Boolean(data && !agenda && material),
-        onDrafted: () => void overview.reload(),
+        onDrafted: () => overview.reload(),
     });
 
     const groups = useMemo(

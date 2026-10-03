@@ -18,6 +18,7 @@ import { hideSuggestion, unhideSuggestion } from "./hidden";
  * does the work and says what happened and how to undo it; `useOneClick`
  * takes the card off the screen at once, runs the builder, refreshes, and
  * offers the Undo — or puts the card back and says why when it failed.
+ * `gone` covers only the moment between the click and the refreshed data.
  */
 export interface Outcome {
     message: string;
@@ -66,7 +67,10 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
                 toast.error(e instanceof Error ? e.message : "That did not work");
                 return;
             }
+            // The card stays off the screen only until fresh data agrees; after
+            // that the data decides, so a topic restored later comes back.
             await refresh();
+            restore(id);
             const { message, description, undo } = outcome;
             if (!undo) {
                 toast(message, { description });

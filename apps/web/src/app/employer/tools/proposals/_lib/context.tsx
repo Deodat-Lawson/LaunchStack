@@ -44,7 +44,7 @@ export function ProposalsProvider({
     const runRes = useResource(
         activeRunId ? `proposals:run:${activeRunId}` : null,
         () => proposalsApi.run(activeRunId!),
-        { pollMs: activeRunId ? 1500 : null }
+        { pollMs: activeRunId ? 2000 : null }
     );
     // The row the caller handed over answers until the first poll lands.
     const activeRun = runRes.data?.run ?? (seed?.id === activeRunId ? seed : null);

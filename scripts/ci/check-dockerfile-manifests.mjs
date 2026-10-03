@@ -69,7 +69,10 @@ for (const dockerfile of DOCKERFILES) {
     for (const manifest of manifests) {
         // apps/* manifests are only required in the Dockerfile that builds
         // that app; a worker image has no reason to carry apps/web's.
-        if (manifest.startsWith("apps/") && !dockerfile.startsWith(manifest.slice(0, manifest.lastIndexOf("/")))) {
+        if (
+            manifest.startsWith("apps/") &&
+            !dockerfile.startsWith(manifest.slice(0, manifest.lastIndexOf("/")))
+        ) {
             continue;
         }
         if (!contents.includes(manifest)) {
@@ -99,7 +102,9 @@ if (failures.length > 0 || stale.length > 0) {
         );
     }
     for (const { dockerfile, manifest } of stale) {
-        console.error(`  ✗ ${dockerfile} — stale, no such path: COPY ${manifest} (renamed or removed?)`);
+        console.error(
+            `  ✗ ${dockerfile} — stale, no such path: COPY ${manifest} (renamed or removed?)`
+        );
     }
     if (failures.length > 0) {
         console.error(

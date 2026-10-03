@@ -3,12 +3,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
+import { isCallNoteDocument } from "~/lib/call-note-document";
 import {
     compareFolderPaths,
     expandFolderPaths,
     folderLeafName,
     normalizeFolderPath,
 } from "~/lib/folders/path";
+import {
+    WorkspaceCallNoteFilesSchema,
+    type WorkspaceCallNoteFile,
+} from "@launchstack/pipelines/call-notes/files";
 import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
@@ -76,6 +81,26 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+    };
+}
+
+function mapCallNoteFile(file: WorkspaceCallNoteFile): WorkspaceSource {
+    return {
+        id: `call-note:${file.callId}`,
+        callId: file.callId,
+        documentId: file.documentId ?? undefined,
+        noteId: file.noteId,
+        visibility: file.visibility,
+        revision: file.revision,
+        updatedAt: file.updatedAt,
+        preview: file.preview,
+        title: file.title,
+        type: "call-note",
+        size: "",
+        added: humanDate(file.updatedAt),
+        folder: "Calls",
+        tags: [],
+        domain: "General",
     };
 }
 
@@ -149,6 +174,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
+    const [callNoteFiles, setCallNoteFiles] = useState<WorkspaceCallNoteFile[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -157,10 +183,20 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
 
     const refresh = useCallback(async () => {
-        if (!userId) return;
+        if (!userId) {
+            // Signed out, or the session has not resolved yet. Clear the last
+            // user's rows, but stay "loading": the URL sync reads a finished,
+            // empty list as "that source is gone" and drops `?source=`.
+            setDocuments([]);
+            setMindmaps([]);
+            setFolderRows([]);
+            setCallNoteFiles([]);
+            setOptimistic([]);
+            return;
+        }
         setError(null);
         try {
-            const [docsRes, foldersRes, mapsRes] = await Promise.all([
+            const [docsRes, foldersRes, mapsRes, callFilesRes] = await Promise.all([
                 fetch("/api/fetchDocument", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -170,13 +206,14 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 // Mindmaps are sources too. A failure here must not take the
                 // documents down with it — the list degrades to uploads only.
                 fetch("/api/mindmaps?scope=active").catch(() => null),
+                // Call Notes keep their own actions. If this endpoint fails,
+                // their marker-tagged retrieval copies still stay out of uploads.
+                fetch("/api/call-notes/files", { cache: "no-store" }).catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
             const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
             setDocuments(docs);
 
-            // Folders that exist while empty only come from here; the rest are
-            // implied by the documents themselves, so a failure degrades to that.
             if (foldersRes.ok) {
                 const body = (await foldersRes.json()) as { data?: { folders?: FolderRow[] } };
                 setFolderRows(body.data?.folders ?? []);
@@ -187,6 +224,13 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 setMindmaps(body.mindmaps ?? []);
             } else if (mapsRes) {
                 console.warn(`[workspace] mindmaps list failed (${mapsRes.status})`);
+                setMindmaps([]);
+            }
+
+            if (callFilesRes?.ok) {
+                setCallNoteFiles(WorkspaceCallNoteFilesSchema.parse(await callFilesRes.json()));
+            } else {
+                setCallNoteFiles([]);
             }
 
             // Prune optimistic rows that now exist in the server response (by title).
@@ -199,23 +243,26 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     }, [userId]);
 
     useEffect(() => {
-        if (!userId) return;
         void refresh();
-    }, [userId, refresh]);
+    }, [refresh]);
 
     const sources = useMemo<WorkspaceSource[]>(() => {
-        // A published map's Markdown copy is the map, not a second source: it
-        // is hidden here and reached through the map's `documentId`.
+        // A published map or indexed Call Note is one source, not a second
+        // Markdown document. Retrieval reaches it through its `documentId`.
         const claimed = new Set<number>();
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
+        for (const file of callNoteFiles) {
+            if (file.documentId !== null) claimed.add(file.documentId);
+        }
         return [
             ...optimistic,
-            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...documents.filter(d => !claimed.has(d.id) && !isCallNoteDocument(d)).map(mapDocument),
             ...mindmaps.map(mapMindmap),
+            ...callNoteFiles.map(mapCallNoteFile),
         ];
-    }, [documents, mindmaps, optimistic]);
+    }, [documents, mindmaps, callNoteFiles, optimistic]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         // Every folder a source sits in, every folder that exists while empty,

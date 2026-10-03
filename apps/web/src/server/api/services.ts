@@ -64,6 +64,18 @@ export interface ServiceDefinition {
 
 export const TOOL_SERVICES: readonly ServiceDefinition[] = [
     {
+        id: "call-notes",
+        tier: "tool",
+        summary: "Capture local call audio, review transcripts, and enrich owner-controlled notes.",
+        scope: "mixed",
+        feature: "@launchstack/pipelines/call-notes",
+        routes: ["call-notes", "internal/call-notes/local"],
+        unscopedRoutes: {
+            "internal/call-notes/local":
+                "Private capture worker ingress, authenticated by bearer token and explicit tenant identity.",
+        },
+    },
+    {
         id: "investor-updates",
         tier: "tool",
         summary: "Generate a cited investor update for a reporting period.",

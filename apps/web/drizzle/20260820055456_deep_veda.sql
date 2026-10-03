@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX "call_notes_capture_attempts_one_active_unique" ON "pdr_ai_v2_call_notes_capture_attempts" USING btree ("capture_id") WHERE "pdr_ai_v2_call_notes_capture_attempts"."lifecycle" in ('connecting', 'live', 'reconnecting');--> statement-breakpoint
+CREATE UNIQUE INDEX "call_notes_enrichment_runs_one_active_unique" ON "pdr_ai_v2_call_notes_enrichment_runs" USING btree ("call_id") WHERE "pdr_ai_v2_call_notes_enrichment_runs"."status" in ('queued', 'generating', 'ready');

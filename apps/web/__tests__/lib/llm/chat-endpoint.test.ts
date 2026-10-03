@@ -6,7 +6,7 @@
  * not merely harmless, and a reasoning patch must arrive verbatim.
  */
 
-import { createServer, type Server } from "node:http";
+import { createServer, type Server, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
@@ -31,7 +31,8 @@ let baseUrl: string;
 let captured: Capture[] = [];
 let respondWith: (body: Record<string, unknown>) => {
     status: number;
-    payload: unknown;
+    payload?: unknown;
+    stream?: (response: ServerResponse) => void;
 } = () => ({ status: 200, payload: completion("ok") });
 
 function completion(content: string, extra: Record<string, unknown> = {}) {
@@ -46,6 +47,18 @@ function completion(content: string, extra: Record<string, unknown> = {}) {
     };
 }
 
+function streamChunk(response: ServerResponse, content: string) {
+    response.write(
+        `data: ${JSON.stringify({
+            id: "chatcmpl-stream",
+            object: "chat.completion.chunk",
+            created: 0,
+            model: "test-model",
+            choices: [{ index: 0, delta: { content }, finish_reason: null }],
+        })}\n\n`
+    );
+}
+
 beforeAll(async () => {
     server = createServer((req, res) => {
         let raw = "";
@@ -57,9 +70,14 @@ beforeAll(async () => {
                 authorization: req.headers.authorization,
                 body,
             });
-            const { status, payload } = respondWith(body);
-            res.writeHead(status, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(payload));
+            const { status, payload, stream } = respondWith(body);
+            if (stream) {
+                res.writeHead(status, { "Content-Type": "text/event-stream" });
+                stream(res);
+            } else {
+                res.writeHead(status, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(payload));
+            }
         });
     });
     await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
@@ -75,6 +93,12 @@ afterAll(async () => {
 beforeEach(() => {
     captured = [];
     respondWith = () => ({ status: 200, payload: completion("ok") });
+});
+
+let finishStreamingResponse: (() => void) | undefined;
+afterEach(() => {
+    finishStreamingResponse?.();
+    finishStreamingResponse = undefined;
 });
 
 function deployment(
@@ -419,6 +443,180 @@ describe("structured output", () => {
         ).rejects.toBeInstanceOf(StructuredOutputError);
 
         expect(captured).toHaveLength(2);
+    });
+
+    it("delivers native structured partials before the server releases the final JSON", async () => {
+        let serverFinished = false;
+        let observedBeforeEnd = false;
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                const finish = () => {
+                    if (serverFinished) return;
+                    serverFinished = true;
+                    streamChunk(response, 'tial","score":1}');
+                    response.end("data: [DONE]\n\n");
+                };
+                finishStreamingResponse = finish;
+                streamChunk(response, '{"answer":"par');
+            },
+        });
+        const resolved = resolveChatModel({
+            config: deployment(
+                FULL_SUPPORT.replace(
+                    "nativeStructuredOutput: []",
+                    "nativeStructuredOutput: [json-schema]"
+                )
+            ),
+            streaming: true,
+        });
+        const result = await invokeStructured(resolved, Schema, [new HumanMessage("q")], {
+            name: "answer",
+            onPartial: partial => {
+                if (
+                    partial &&
+                    typeof partial === "object" &&
+                    "answer" in partial &&
+                    partial.answer === "par"
+                ) {
+                    observedBeforeEnd = !serverFinished;
+                    finishStreamingResponse?.();
+                }
+            },
+        });
+        expect(observedBeforeEnd).toBe(true);
+        expect(result).toEqual({ answer: "partial", score: 1 });
+    });
+
+    it("keeps native schema enforcement for streamed objects with defaulted nested fields", async () => {
+        const NoteSchema = z.object({
+            sections: z.array(
+                z.object({
+                    text: z.string(),
+                    labels: z.array(z.string()).default([]),
+                })
+            ),
+        });
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                streamChunk(response, '{"sections":[{"text":"Meeting note","labels":[]}]}');
+                response.end("data: [DONE]\n\n");
+            },
+        });
+        const resolved = resolveChatModel({
+            config: deployment(
+                FULL_SUPPORT.replace(
+                    "nativeStructuredOutput: []",
+                    "nativeStructuredOutput: [json-schema]"
+                )
+            ),
+            streaming: true,
+        });
+        const result = await invokeStructured(resolved, NoteSchema, [new HumanMessage("q")], {
+            name: "note",
+            onPartial: () => undefined,
+        });
+        expect(result).toEqual({ sections: [{ text: "Meeting note", labels: [] }] });
+        expect(captured[0]!.body.response_format).toMatchObject({
+            type: "json_schema",
+            json_schema: {
+                strict: true,
+                schema: {
+                    properties: {
+                        sections: {
+                            items: {
+                                required: ["text", "labels"],
+                                additionalProperties: false,
+                                properties: { labels: { type: "array" } },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });
+
+    it("clears an invalid streamed preview before its single repair produces a valid result", async () => {
+        let request = 0;
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                streamChunk(
+                    response,
+                    ++request === 1
+                        ? '{"answer":"bad","score":"invalid"}'
+                        : '{"answer":"good (x)","score":2}'
+                );
+                response.end("data: [DONE]\n\n");
+            },
+        });
+        const previews: unknown[] = [];
+        const resolved = resolveChatModel({ config: deployment(FULL_SUPPORT), streaming: true });
+        const result = await invokeStructured(resolved, Schema, [new HumanMessage("q")], {
+            name: "answer",
+            onPartial: partial => {
+                previews.push(partial);
+            },
+        });
+        expect(previews).toEqual([
+            { answer: "bad", score: "invalid" },
+            {},
+            { answer: "good (x)", score: 2 },
+        ]);
+        expect(result).toEqual({ answer: "good (x)", score: 2 });
+        expect(captured).toHaveLength(2);
+    });
+
+    it("does not promote schema-invalid native streamed content into a final result", async () => {
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                streamChunk(response, '{"answer":"preview","score":"invalid"}');
+                response.end("data: [DONE]\n\n");
+            },
+        });
+        const previews: unknown[] = [];
+        const resolved = resolveChatModel({
+            config: deployment(
+                FULL_SUPPORT.replace(
+                    "nativeStructuredOutput: []",
+                    "nativeStructuredOutput: [json-schema]"
+                )
+            ),
+            streaming: true,
+        });
+        await expect(
+            invokeStructured(resolved, Schema, [new HumanMessage("q")], {
+                name: "answer",
+                onPartial: partial => {
+                    previews.push(partial);
+                },
+            })
+        ).rejects.toBeInstanceOf(z.ZodError);
+        expect(previews).toEqual([{ answer: "preview", score: "invalid" }]);
+        expect(captured).toHaveLength(1);
+    });
+
+    it("propagates a preview consumer failure without starting a repair", async () => {
+        respondWith = () => ({
+            status: 200,
+            stream: response => {
+                streamChunk(response, '{"answer":"preview","score":1}');
+                response.end("data: [DONE]\n\n");
+            },
+        });
+        const failure = new Error("Preview persistence failed");
+        const resolved = resolveChatModel({ config: deployment(FULL_SUPPORT), streaming: true });
+        await expect(
+            invokeStructured(resolved, Schema, [new HumanMessage("q")], {
+                name: "answer",
+                onPartial: () => {
+                    throw failure;
+                },
+            })
+        ).rejects.toBe(failure);
+        expect(captured).toHaveLength(1);
     });
 });
 

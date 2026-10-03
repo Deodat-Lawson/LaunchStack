@@ -19,7 +19,7 @@ import {
     chunksToDocuments,
 } from "../bm25";
 import { createNeo4jGraphRetriever, shouldUseNeo4jRetriever, createGraphRetriever } from "../graph";
-import { getEnsembleConfig } from "./config";
+import { getEnsembleConfig, type NotesLegProvider } from "./config";
 import type {
     SearchResult,
     DocumentSearchOptions,
@@ -51,6 +51,13 @@ const FACTS_MAX_CANDIDATES = 6;
 
 function isGraphRetrievalEnabled(): boolean {
     return getEnsembleConfig().graphRetrieval;
+}
+
+function resolveNotesEmbeddingProvider(
+    notesLegs: NotesLegProvider,
+    fallback: EmbeddingsProvider
+): EmbeddingsProvider | null {
+    return notesLegs.embeddingProvider === null ? null : (notesLegs.embeddingProvider ?? fallback);
 }
 
 /**
@@ -109,10 +116,11 @@ export async function createDocumentEnsembleRetriever(
     }
 
     const notesLegs = getEnsembleConfig().notesLegs;
-    if (notesLegs) {
+    const noteEmbeddings = notesLegs ? resolveNotesEmbeddingProvider(notesLegs, emb) : null;
+    if (notesLegs && noteEmbeddings) {
         const notesRetriever = notesLegs.createDocumentLeg(
             documentId,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES)
         );
         retrievers.push(notesRetriever);
@@ -169,17 +177,17 @@ export async function createCompanyEnsembleRetriever(
     }
 
     const notesLegs = getEnsembleConfig().notesLegs;
-    if (notesLegs) {
+    const noteEmbeddings = notesLegs ? resolveNotesEmbeddingProvider(notesLegs, emb) : null;
+    if (notesLegs && noteEmbeddings) {
         const notesRetriever = notesLegs.createCompanyLeg(
             companyId,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES),
             scope
         );
         retrievers.push(notesRetriever);
         weights = [...weights, NOTES_DEFAULT_WEIGHT];
     }
-
     const factsLegs = getEnsembleConfig().factsLegs;
     if (factsLegs) {
         retrievers.push(
@@ -223,10 +231,11 @@ export async function createMultiDocEnsembleRetriever(
     }
 
     const notesLegs = getEnsembleConfig().notesLegs;
-    if (notesLegs) {
+    const noteEmbeddings = notesLegs ? resolveNotesEmbeddingProvider(notesLegs, emb) : null;
+    if (notesLegs && noteEmbeddings) {
         const notesRetriever = notesLegs.createMultiDocLeg(
             documentIds,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES)
         );
         retrievers.push(notesRetriever);
@@ -322,11 +331,48 @@ export async function companyEnsembleSearch(
     embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
     const { companyId, topK = 10, scope } = options;
-
-    const chunks = await getCompanyChunks(companyId, scope);
-    if (chunks.length === 0) {
-        console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
+    let chunks;
+    try {
+        chunks = await getCompanyChunks(companyId, scope);
+    } catch (error) {
+        console.error("[EnsembleSearch] Failed to load company chunks:", error);
         return [];
+    }
+    if (chunks.length === 0) {
+        const notesLegs = getEnsembleConfig().notesLegs;
+        if (!notesLegs) {
+            console.log(`[EnsembleSearch] No chunks or configured notes for company ${companyId}`);
+            return [];
+        }
+
+        try {
+            const noteFallback = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
+            const noteEmbeddings = resolveNotesEmbeddingProvider(notesLegs, noteFallback);
+            if (!noteEmbeddings) return [];
+            const notesRetriever = notesLegs.createCompanyLeg(
+                companyId,
+                noteEmbeddings,
+                Math.min(topK * RERANK_CANDIDATE_MULTIPLIER, NOTES_MAX_CANDIDATES),
+                scope
+            );
+            const notes = await notesRetriever.getRelevantDocuments(query);
+            const mapped: SearchResult[] = notes.map(doc => ({
+                pageContent: doc.pageContent,
+                metadata: {
+                    ...doc.metadata,
+                    retrievalMethod: "vector_ann",
+                    timestamp: new Date().toISOString(),
+                    searchScope: "company" as const,
+                },
+            }));
+
+            logLegBreakdown("company notes-only", notes);
+            const reranked = await rerankResults(query, mapped);
+            return mergeSiblingChunks(reranked).slice(0, topK);
+        } catch (error) {
+            console.error("[EnsembleSearch] Notes-only company search error:", error);
+            return [];
+        }
     }
 
     const graphEnabled = isGraphRetrievalEnabled();

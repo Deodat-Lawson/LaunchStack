@@ -3,7 +3,7 @@ id: MN-WF-014
 title: Resolve the Human Calls and Agent Meetings Boundary
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by: []

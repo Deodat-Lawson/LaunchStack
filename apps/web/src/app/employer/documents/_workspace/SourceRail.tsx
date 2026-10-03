@@ -17,7 +17,6 @@ import {
     FolderOpen,
     Lock,
     Plus,
-    Check as IconCheck,
     ChevronLeft as IconChevronLeft,
     ChevronRight as IconChevronRight,
     Ellipsis as IconMore,
@@ -39,6 +38,7 @@ import {
     type FolderTreeNode,
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Checkbox as KitCheckbox } from "~/components/ui/checkbox";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { SOURCE_DRAG_MIME } from "./dragData";
@@ -124,48 +124,23 @@ interface CheckboxProps {
 
 function Checkbox({ state, onClick, title }: CheckboxProps) {
     return (
-        <button
+        <KitCheckbox
+            checked={state === "some" ? "indeterminate" : state === "all"}
             onClick={e => {
                 e.stopPropagation();
                 onClick?.(e);
             }}
             title={title}
-            style={{
-                width: 15,
-                height: 15,
-                borderRadius: 3,
-                border: `1.5px solid ${state !== "none" ? "var(--accent)" : "var(--ink-4)"}`,
-                background:
-                    state === "all"
-                        ? "var(--accent)"
-                        : state === "some"
-                          ? "var(--accent-soft)"
-                          : "var(--panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                transition: "all 100ms",
-                cursor: "pointer",
-            }}
-            onMouseEnter={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--accent)";
-            }}
-            onMouseLeave={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--ink-4)";
-            }}
-        >
-            {state === "all" && <IconCheck size={10} style={{ color: "white" }} />}
-            {state === "some" && (
-                <div style={{ width: 7, height: 1.5, background: "var(--accent)" }} />
-            )}
-        </button>
+            aria-label={title}
+            className="data-[state=indeterminate]:border-brand data-[state=indeterminate]:bg-brand/10 size-[15px]"
+        />
     );
 }
 
 interface SourceRowProps {
     source: WorkspaceSource;
     selected: boolean;
+    active?: boolean;
     toggleSelected: (id: string) => void;
     onOpen?: (source: WorkspaceSource) => void;
     /** ⌘/Ctrl-click: open it in a pane beside what is showing, as an editor would. */
@@ -177,6 +152,7 @@ interface SourceRowProps {
 function SourceRow({
     source,
     selected,
+    active = false,
     toggleSelected,
     onOpen,
     onOpenBeside,
@@ -207,6 +183,7 @@ function SourceRow({
     return (
         <div
             data-testid={`source-row-${source.id}`}
+            aria-current={active ? "page" : undefined}
             {...ctxTarget}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -216,19 +193,28 @@ function SourceRow({
                 gap: 8,
                 padding: "5px 10px",
                 borderRadius: 6,
-                background: selected
-                    ? "var(--accent-soft)"
-                    : hover
-                      ? "var(--line-2)"
-                      : "transparent",
+                background:
+                    active || selected
+                        ? "var(--accent-soft)"
+                        : hover
+                          ? "var(--line-2)"
+                          : "transparent",
                 transition: "background 100ms",
             }}
         >
-            <Checkbox
-                state={selected ? "all" : "none"}
-                onClick={() => toggleSelected(source.id)}
-                title={selected ? "Remove from context" : "Add to context"}
-            />
+            {source.type === "call-note" && !source.documentId ? (
+                <span
+                    title="This Call Note is private, not indexed yet, or not available to you for chat context"
+                    aria-label="Call Note — open in Calls"
+                    className="size-[15px] shrink-0"
+                />
+            ) : (
+                <Checkbox
+                    state={selected ? "all" : "none"}
+                    onClick={() => toggleSelected(source.id)}
+                    title={selected ? "Remove from context" : "Add to context"}
+                />
+            )}
             <div
                 onClick={event => {
                     if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
@@ -242,8 +228,8 @@ function SourceRow({
                     <div
                         style={{
                             fontSize: 13,
-                            fontWeight: selected ? 600 : 400,
-                            color: selected ? "var(--accent-ink)" : "var(--ink)",
+                            fontWeight: active || selected ? 600 : 400,
+                            color: active || selected ? "var(--accent-ink)" : "var(--ink)",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -266,7 +252,8 @@ function SourceRow({
                     </div>
                     {(visibleTags.length > 0 ||
                         (source.syncing ?? false) ||
-                        (source.gaps?.length ?? 0) > 0) && (
+                        (source.gaps?.length ?? 0) > 0 ||
+                        Boolean(source.preview)) && (
                         <div
                             style={{
                                 fontSize: 11,
@@ -297,6 +284,17 @@ function SourceRow({
                             ))}
                             {extra > 0 && (
                                 <span style={{ fontSize: 10, opacity: 0.6 }}>+{extra}</span>
+                            )}
+                            {source.preview && (
+                                <span
+                                    title={source.preview}
+                                    style={{
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                    }}
+                                >
+                                    {source.preview}
+                                </span>
                             )}
                             {(source.gaps?.length ?? 0) > 0 && (
                                 <span
@@ -369,9 +367,14 @@ function SourceRow({
 
 type SourceNode = FolderTreeNode<WorkspaceSource>;
 
-/** Every source id in a folder and the folders beneath it. */
+/** Every chat-selectable source id in a folder and the folders beneath it. */
 function collectItemIds(node: SourceNode): string[] {
-    return [...node.items.map(item => item.id), ...node.children.flatMap(collectItemIds)];
+    return [
+        ...node.items
+            .filter(item => item.type !== "call-note" || Boolean(item.documentId))
+            .map(item => item.id),
+        ...node.children.flatMap(collectItemIds),
+    ];
 }
 
 interface FolderHeaderProps {
@@ -562,6 +565,8 @@ export interface SourceRailProps {
     onOpenAdd: () => void;
     /** Straight to the mindmap template picker — creating, not uploading. */
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** The source open in the workspace, highlighted in the tree. */
+    activeSourceId?: string;
     /** Open it in a column beside the chat instead of over the workspace. */
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
     /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
@@ -620,6 +625,7 @@ const RAIL_TAB_KEY = "workspace.railTab.v1";
 
 /** Everything a branch of the tree needs from the rail, passed once per level. */
 interface BranchContext {
+    activeSourceId?: string;
     selected: string[];
     collapsed: Record<string, boolean>;
     toggleCollapsed: (path: string) => void;
@@ -651,8 +657,9 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
             {items.map(s => (
                 <div
                     key={s.id}
-                    draggable
+                    draggable={s.type !== "call-note"}
                     onDragStart={e => {
+                        if (s.type === "call-note") return;
                         e.stopPropagation();
                         ctx.setDrag({ kind: "source", id: s.id });
                         // Also a drag the workspace's panes can take: drop it
@@ -672,6 +679,7 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
                     <SourceRow
                         source={s}
                         selected={ctx.selected.includes(s.id)}
+                        active={s.id === ctx.activeSourceId}
                         toggleSelected={ctx.toggleSelected}
                         onOpen={ctx.onOpenSource}
                         onOpenBeside={ctx.onOpenSourceBeside}
@@ -752,6 +760,7 @@ export function SourceRail({
     folders,
     selected,
     setSelected,
+    activeSourceId,
     onOpenAdd,
     onOpenSource,
     onOpenSourceBeside,
@@ -842,6 +851,7 @@ export function SourceRail({
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
+                    if (s.type === "call-note" && !s.documentId) return;
                     setSelected(prev =>
                         prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
                     );
@@ -1046,7 +1056,7 @@ export function SourceRail({
             if (activeTag && !(s.tags ?? []).includes(activeTag)) return false;
             if (q) {
                 const hay =
-                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")} ${s.searchText ?? ""}`.toLowerCase();
+                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")} ${s.searchText ?? ""} ${s.preview ?? ""}`.toLowerCase();
                 if (!hay.includes(q)) return false;
             }
             return true;
@@ -1067,6 +1077,8 @@ export function SourceRail({
     );
 
     const toggle = (id: string) => {
+        const source = sources.find(item => item.id === id);
+        if (!source || (source.type === "call-note" && !source.documentId)) return;
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
     };
 
@@ -1082,7 +1094,10 @@ export function SourceRail({
     };
 
     const dropOnFolder = (target: string) => {
-        if (drag?.kind === "source") {
+        if (
+            drag?.kind === "source" &&
+            sources.find(source => source.id === drag.id)?.type !== "call-note"
+        ) {
             onMoveToFolder?.(drag.id, target);
         } else if (
             drag?.kind === "folder" &&
@@ -1098,6 +1113,7 @@ export function SourceRail({
 
     const branchCtx: BranchContext = {
         selected,
+        activeSourceId,
         collapsed,
         toggleCollapsed,
         isRestricted: path => folderFor(path).restricted === true,

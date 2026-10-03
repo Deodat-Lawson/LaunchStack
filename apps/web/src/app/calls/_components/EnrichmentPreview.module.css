@@ -1,0 +1,92 @@
+.preview {
+    min-width: 0;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    min-height: 24px;
+    margin-bottom: 12px;
+    color: var(--accent);
+}
+
+.spinner {
+    animation: spin 850ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.errorNotice {
+    display: grid;
+    gap: 4px;
+    margin: 12px 0;
+    padding: 10px 12px;
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--accent) 7%, var(--panel));
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.45;
+}
+.errorNotice strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+.errorNotice span:last-child {
+    color: var(--ink-3);
+}
+.reviewNotice {
+    width: 100%;
+    margin-top: 17px;
+    padding: 13px 15px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+    color: var(--ink-2);
+}
+.noticeCopy {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+.noticeTitle {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.35;
+}
+.noticeBody {
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.5;
+}
+.reviewNoticeRejected {
+    border-color: var(--line);
+    background: var(--panel-2);
+}
+.reviewNoticeRejected .noticeTitle,
+.reviewNoticeRejected .noticeBody {
+    color: var(--ink-2);
+}
+
+@container calls-workspace (max-width: 600px) {
+    .reviewNotice {
+        margin-top: 14px;
+        padding: 12px;
+    }
+}
+@container calls-workspace (max-width: 420px) {
+    .reviewNotice {
+        padding-inline: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spinner {
+        animation: none;
+    }
+}

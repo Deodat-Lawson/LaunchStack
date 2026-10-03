@@ -10,9 +10,9 @@ import { T } from "~/server/db/tables";
 
 import { db, toRows } from "~/server/db/index";
 import {
-    createNotesEmbeddingsProvider,
     EMBEDDING_DIM,
     EMBEDDING_SHORT_DIM,
+    resolveNoteEmbeddingRuntime,
 } from "./embedding-config";
 
 export type NoteSearchScope = "user" | "document" | "company";
@@ -65,11 +65,12 @@ export async function searchNotes(args: SearchArgs): Promise<NoteSearchHit[]> {
     const trimmed = query.trim();
     if (!trimmed) return [];
 
-    // Both halves or neither — see createNotesEmbeddingsProvider.
-    const provider = createNotesEmbeddingsProvider();
-    if (!provider) return [];
+    // Both halves or neither — an endpoint without a key, or a key without an
+    // endpoint, would let the SDK fall back to its own vendor default.
+    const runtime = resolveNoteEmbeddingRuntime();
+    if (!runtime) return [];
 
-    const embedding = await provider.embedQuery(trimmed);
+    const embedding = await runtime.embeddings.embedQuery(trimmed);
     if (!embedding || embedding.length !== EMBEDDING_DIM) return [];
     const short = embedding.slice(0, EMBEDDING_SHORT_DIM);
 

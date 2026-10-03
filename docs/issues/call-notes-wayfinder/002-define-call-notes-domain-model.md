@@ -3,7 +3,7 @@ id: MN-WF-002
 title: Define the Call Notes Domain Model
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by: []

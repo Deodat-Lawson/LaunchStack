@@ -16,6 +16,12 @@ import { db } from "~/server/db";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import {
+    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+    callNoteDocumentReference,
+    isCallNoteDocument,
+} from "~/lib/call-note-document";
 
 export const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -50,7 +56,7 @@ export function isDocx(fileType: string | null, mimeType: string | null, title: 
  */
 export async function loadDocument(
     documentId: number,
-    options?: { withBytes?: boolean }
+    options?: { withBytes?: boolean; forMutation?: boolean }
 ): Promise<LoadResult> {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return { ok: false, response: ctx.response };
@@ -65,6 +71,8 @@ export async function loadDocument(
             companyId: document.companyId,
             mimeType: document.mimeType,
             fileType: document.fileType,
+            ocrMetadata: document.ocrMetadata,
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
         })
         .from(document)
         .where(
@@ -79,6 +87,17 @@ export async function loadDocument(
         // or sits in a folder the caller cannot see — the distinction would
         // leak which ids are real.
         return { ok: false, response: fail(404, "not_found", "Document not found") };
+    }
+
+    if (options?.forMutation && isCallNoteDocument(row)) {
+        return {
+            ok: false,
+            response: fail(
+                409,
+                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE
+            ),
+        };
     }
 
     if (!isDocx(row.fileType, row.mimeType, row.title)) {

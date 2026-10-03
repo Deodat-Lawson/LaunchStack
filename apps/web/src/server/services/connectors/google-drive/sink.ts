@@ -191,10 +191,12 @@ export async function createGoogleDriveSink(
             });
 
             // The version lifecycle does not touch document-level metadata, so
-            // the fingerprint that drives change detection is written here.
+            // record the fingerprint and clear a prior deletion marker on restore.
             await db
                 .update(document)
-                .set({ ocrMetadata: { ...metadata } })
+                .set({
+                    ocrMetadata: sql`(COALESCE(${document.ocrMetadata}, '{}'::jsonb) - 'driveDeleted') || ${JSON.stringify(metadata)}::jsonb`,
+                })
                 .where(eq(document.id, existing.id));
 
             return {

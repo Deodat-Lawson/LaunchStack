@@ -7,7 +7,7 @@
  * OCR/embedding pipeline every other upload goes through.
  */
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import {
     syncAgentKnowledge,
@@ -249,7 +249,9 @@ export async function createAgentKnowledgeSink(
             // the hash that drives change detection is written here.
             await db
                 .update(document)
-                .set({ ocrMetadata: { ...metadata } })
+                .set({
+                    ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(metadata)}::jsonb`,
+                })
                 .where(eq(document.id, existing.id));
 
             return {

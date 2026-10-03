@@ -1,0 +1,284 @@
+.editor {
+    min-height: 220px;
+    font-family: var(--font-sans);
+}
+.toolbar {
+    position: sticky;
+    top: var(--call-chrome-height);
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 18px;
+    min-height: 38px;
+    padding: 4px 7px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--panel);
+}
+.toolbarGroup {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+.toolbarButton {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: transparent;
+}
+.toolbarButton:hover:not(:disabled) {
+    color: var(--ink);
+    background: var(--line);
+}
+.toolbarButton[aria-pressed="true"] {
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+}
+.toolbarButton:focus-visible,
+.headingControl:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+.separator {
+    width: 1px;
+    height: 19px;
+    margin: 0 4px;
+    background: var(--line);
+}
+.headingControl[data-slot="select-trigger"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    width: auto;
+    height: 28px;
+    padding: 0 4px 0 6px;
+    border: 0;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    cursor: pointer;
+}
+.headingControl:hover {
+    color: var(--ink);
+    background: var(--line);
+}
+.headingIcon {
+    display: inline-grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+}
+.headingText {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+.editorContent {
+    min-height: 220px;
+}
+.editorContent :global(.tiptap) {
+    min-height: 220px;
+    padding: 0 0 22px;
+    color: var(--ink-2);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+    outline: 0;
+}
+.readOnly .editorContent :global(.tiptap) {
+    padding: 0;
+}
+.editorContent :global(.tiptap) > :first-child {
+    margin-top: 0;
+}
+.editorContent :global(.tiptap) h1,
+.editorContent :global(.tiptap) h2,
+.editorContent :global(.tiptap) h3,
+.editorContent :global(.tiptap) h4,
+.editorContent :global(.tiptap) h5,
+.editorContent :global(.tiptap) h6 {
+    position: relative;
+    margin: 25px 0 3px;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.65;
+}
+.editorContent :global(.tiptap) h1,
+.editorContent :global(.tiptap) h2 {
+    font-size: 20px;
+}
+.editorContent :global(.tiptap) h3,
+.editorContent :global(.tiptap) h4,
+.editorContent :global(.tiptap) h5,
+.editorContent :global(.tiptap) h6 {
+    font-size: 16px;
+}
+.editorContent :global(.tiptap) ul,
+.editorContent :global(.tiptap) ol {
+    margin: 2px 0 12px;
+    padding-left: 22px;
+}
+.editorContent :global(.tiptap) ul {
+    list-style-type: disc;
+}
+.editorContent :global(.tiptap) ol {
+    list-style-type: decimal;
+}
+.editorContent :global(.tiptap) ul ul {
+    list-style-type: circle;
+}
+.editorContent :global(.tiptap) li {
+    margin: 3px 0;
+    padding-left: 0;
+}
+.editorContent :global(.tiptap) li::marker {
+    color: var(--ink-3);
+}
+.editorContent :global(.tiptap) li > ul,
+.editorContent :global(.tiptap) li > ol {
+    margin: 1px 0;
+}
+.editorContent :global(.tiptap) p {
+    margin: 0 0 12px;
+}
+.editorContent :global(.tiptap) li > p {
+    margin: 0;
+}
+.editorContent :global(.tiptap) strong {
+    color: var(--ink);
+    font-weight: 550;
+}
+.editorContent :global(.tiptap) a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.editorContent :global(.tiptap) blockquote {
+    margin: 15px 0;
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+    color: var(--ink-2);
+}
+.editorContent :global(.tiptap) blockquote > :last-child {
+    margin-bottom: 0;
+}
+.editorContent :global(.tiptap) pre {
+    margin: 13px 0;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--panel);
+    overflow-x: auto;
+    font-size: 13px;
+}
+.editorContent :global(.tiptap) code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+}
+.editorContent :global(.tiptap) hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+}
+.editorContent :global(.tiptap) :global(p.is-editor-empty):first-child::before {
+    float: left;
+    height: 0;
+    color: var(--ink-3);
+    content: attr(data-placeholder);
+    pointer-events: none;
+}
+.fallback {
+    min-height: 220px;
+    padding: 16px 17px 20px;
+    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--ink-2);
+}
+.fallbackTitle {
+    display: block;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+}
+.fallbackMessage,
+.fallbackReason {
+    margin: 7px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.fallbackReason {
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+.sourceDetails {
+    margin-top: 13px;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+}
+.sourceDetails summary {
+    color: var(--accent);
+    font-size: 12px;
+    cursor: pointer;
+}
+.sourceDetails summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+.source {
+    max-height: 260px;
+    margin: 9px 0 0;
+    padding: 10px;
+    border-radius: 7px;
+    color: var(--ink-2);
+    background: color-mix(in srgb, var(--ink) 5%, var(--panel));
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.sourceLabel {
+    display: block;
+    margin-top: 12px;
+    color: var(--ink-3);
+    font-size: 11px;
+}
+.editorLoading {
+    min-height: 220px;
+}
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+@container calls-workspace (max-width: 600px) {
+    .editorContent :global(.tiptap) {
+        font-size: 15px;
+    }
+    .toolbar {
+        padding-inline: 5px;
+    }
+    .separator {
+        margin-inline: 2px;
+    }
+}

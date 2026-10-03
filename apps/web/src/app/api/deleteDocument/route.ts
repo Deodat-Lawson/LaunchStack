@@ -4,10 +4,16 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
-import { deleteDocumentCore } from "~/server/services/document-delete";
+import { deleteDocumentBlobs, deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import {
+    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+    callNoteDocumentReference,
+    isCallNoteDocument,
+} from "~/lib/call-note-document";
 
 export async function DELETE(request: Request) {
     try {
@@ -32,7 +38,13 @@ export async function DELETE(request: Request) {
         // A document the caller cannot see is one they cannot delete, and it
         // reads exactly like one that does not exist.
         const [doc] = await db
-            .select({ id: document.id, title: document.title, category: document.category })
+            .select({
+                id: document.id,
+                title: document.title,
+                category: document.category,
+                ocrMetadata: document.ocrMetadata,
+                indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+            })
             .from(document)
             .where(
                 and(
@@ -48,8 +60,15 @@ export async function DELETE(request: Request) {
             );
         }
 
-        await db.transaction(async tx => {
-            await deleteDocumentCore(tx, documentId);
+        if (isCallNoteDocument(doc)) {
+            return NextResponse.json(
+                { success: false, error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE },
+                { status: 409 }
+            );
+        }
+
+        const blobDeletions = await db.transaction(async tx => {
+            const pendingBlobs = await deleteDocumentCore(tx, documentId);
             await recordAuditEvent(tx, {
                 companyId: ctx.data.companyId,
                 actorUserId: ctx.data.authUserId,
@@ -58,7 +77,9 @@ export async function DELETE(request: Request) {
                 targetId: documentId,
                 detail: { title: doc.title, category: doc.category },
             });
+            return pendingBlobs;
         });
+        await deleteDocumentBlobs(blobDeletions);
 
         return NextResponse.json(
             {

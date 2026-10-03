@@ -6,12 +6,17 @@
  * stamped with failure metadata — but only when the dead version is still
  * the document's current version.
  */
-import { Column, Param, is } from "drizzle-orm";
+import { randomUUID } from "node:crypto";
+
+import { Column, Param, SQL, eq, is } from "drizzle-orm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
-import { document, ocrJobs } from "@launchstack/store/schema";
+import { createDb } from "@launchstack/store/client";
+import type { DbClient } from "@launchstack/store/client";
+import type * as StoreClient from "@launchstack/store/client";
+import { company, document, ocrJobs } from "@launchstack/store/schema";
 
 type Predicate = { columns: string[]; params: unknown[] };
 
@@ -49,6 +54,7 @@ function inspectPredicate(value: unknown, acc: Predicate = { columns: [], params
 
 const updates: UpdateRecord[] = [];
 const getDbCalls = { count: 0 };
+const integrationDatabase = { current: null as DbClient | null };
 
 /**
  * Stateful fake: an update "applies" only when the captured WHERE params
@@ -84,7 +90,12 @@ const fakeDb = {
                     applied =
                         predicate.params.includes(state.document.id) &&
                         predicate.params.includes(state.document.currentVersionId);
-                    if (applied) Object.assign(state.document, patch);
+                    if (applied) {
+                        const { ocrMetadata, ...fields } = patch;
+                        Object.assign(state.document, fields);
+                        // SQL expressions are exercised against Postgres below.
+                        if (!is(ocrMetadata, SQL)) state.document.ocrMetadata = ocrMetadata;
+                    }
                 } else if (table === ocrJobs) {
                     applied =
                         predicate.params.includes(state.job.id) &&
@@ -98,10 +109,11 @@ const fakeDb = {
     }),
 };
 
-vi.mock("@launchstack/store/client", () => ({
+vi.mock("@launchstack/store/client", async importOriginal => ({
+    ...(await importOriginal<typeof StoreClient>()),
     getDb: () => {
         getDbCalls.count += 1;
-        return fakeDb;
+        return integrationDatabase.current ?? fakeDb;
     },
 }));
 
@@ -285,7 +297,7 @@ describe("createDeadEventHandler", () => {
         expect(state.job.status).toBe("failed");
     });
 
-    it("stamps failure metadata on the document when the dead version is current", async () => {
+    it("marks the document unprocessed when the dead version is current", async () => {
         const logger = makeLogger();
 
         await createDeadEventHandler(logger)(
@@ -301,13 +313,6 @@ describe("createDeadEventHandler", () => {
         expect(docUpdate).toBeDefined();
         expect(docUpdate!.applied).toBe(true);
         expect(state.document.ocrProcessed).toBe(false);
-        expect(state.document.ocrMetadata).toEqual(
-            expect.objectContaining({
-                error: "processing_failed",
-                errorMessage: expect.stringContaining("v2 died"),
-                failedAt: expect.any(String),
-            })
-        );
         expect(state.job.status).toBe("failed");
     });
 
@@ -351,5 +356,74 @@ describe("createDeadEventHandler", () => {
             expect.objectContaining({ ocrJobId: "job-1" }),
             "marked OCR job failed after pipeline exhausted retries"
         );
+    });
+});
+
+const integrationUrl = process.env.TEST_DATABASE_URL;
+
+describe.skipIf(!integrationUrl)("dead-event failure metadata (Postgres integration)", () => {
+    it.each([
+        {
+            name: "Call Note",
+            metadata: { callNote: { callId: "failed-call" }, totalPages: 3 },
+        },
+        { name: "ordinary", metadata: null },
+    ])("preserves provenance on $name documents", async ({ metadata }) => {
+        const host = new URL(integrationUrl!).hostname;
+        if (!["localhost", "127.0.0.1", "::1", "[::1]", "postgres", "db"].includes(host)) {
+            throw new Error("TEST_DATABASE_URL must point at a local disposable database");
+        }
+        const handle = createDb({ url: integrationUrl! });
+        const rollback = new Error("rollback failure metadata fixture");
+        try {
+            await handle.db
+                .transaction(async tx => {
+                    integrationDatabase.current = tx as unknown as DbClient;
+                    const [co] = await tx
+                        .insert(company)
+                        .values({ name: "Failure metadata fixture", numberOfEmployees: "1" })
+                        .returning({ id: company.id });
+                    const [doc] = await tx
+                        .insert(document)
+                        .values({
+                            companyId: BigInt(co!.id),
+                            title: "Failed source",
+                            category: "Calls",
+                            url: "local://failed-source.md",
+                            currentVersionId: 2n,
+                            ocrProcessed: true,
+                            ocrMetadata: metadata,
+                        })
+                        .returning({ id: document.id });
+
+                    await createDeadEventHandler(makeLogger())(
+                        makeClaimed("evidence.version.extracted", {
+                            ocrJobId: randomUUID(),
+                            sourceId: doc!.id,
+                            sourceVersionId: 2,
+                        }),
+                        "provider unavailable"
+                    );
+
+                    const [failed] = await tx
+                        .select()
+                        .from(document)
+                        .where(eq(document.id, doc!.id));
+                    expect(failed!.ocrProcessed).toBe(false);
+                    expect(failed!.ocrMetadata).toEqual({
+                        ...metadata,
+                        error: "processing_failed",
+                        errorMessage: "pipeline dead after max attempts: provider unavailable",
+                        failedAt: expect.any(String),
+                    });
+                    throw rollback;
+                })
+                .catch(error => {
+                    if (error !== rollback) throw error;
+                });
+        } finally {
+            integrationDatabase.current = null;
+            await handle.close();
+        }
     });
 });

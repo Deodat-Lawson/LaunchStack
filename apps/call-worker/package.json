@@ -1,0 +1,25 @@
+{
+  "name": "@launchstack/call-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --target=node24 --outfile=dist/main.js",
+    "build:system-audio": "swift build --package-path native/system-audio-capture -c release",
+    "system-audio:request-permission": "./native/system-audio-capture/.build/release/launchstack-system-audio --request-permission",
+    "system-audio:status": "./native/system-audio-capture/.build/release/launchstack-system-audio --status",
+    "dev": "tsx src/main.ts",
+    "start": "node dist/main.js",
+    "test": "tsx --test 'src/**/*.test.ts'",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@launchstack/pipelines": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "esbuild": "^0.25.9",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

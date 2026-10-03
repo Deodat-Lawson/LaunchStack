@@ -14,6 +14,8 @@
 
 import type { BaseMessageLike } from "@langchain/core/messages";
 import { HumanMessage } from "@langchain/core/messages";
+import { JsonOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
+import { zodResponseFormat } from "openai/helpers/zod";
 import type { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import type { ResolvedChatModel } from "./chat-model-factory";
@@ -26,6 +28,17 @@ import { addTokenUsage, normalizeTokenUsage } from "./usage";
 export interface StructuredOutputOptions {
     /** Schema/tool name; some endpoints surface it in logs. */
     name: string;
+    /** Receives cumulative, schema-shaped partial objects while the model streams. */
+    onPartial?: (partial: unknown) => void | Promise<void>;
+    /** Aborts the provider request and parser stream when signaled. */
+    signal?: AbortSignal;
+}
+
+/** A structured result plus what it cost — the meterable envelope. */
+export interface StructuredResultWithUsage<T> {
+    result: T;
+    usage: ChatTokenUsage;
+    modelId: string;
 }
 
 /** Raised when the model could not produce a schema-valid result. */
@@ -103,9 +116,40 @@ function extractJson(text: string): unknown {
     }
 }
 
+function signalOptions(signal: AbortSignal | undefined): { signal: AbortSignal } | undefined {
+    return signal === undefined ? undefined : { signal };
+}
+
+async function streamJsonOutput(
+    resolved: ResolvedChatModel,
+    messages: BaseMessageLike[],
+    options: StructuredOutputOptions
+): Promise<string> {
+    const textStream = await resolved.chat
+        .pipe(new StringOutputParser())
+        .stream(messages, signalOptions(options.signal));
+    const parser = new JsonOutputParser<Record<string, unknown>>();
+    const textChunks: string[] = [];
+
+    async function* recordedChunks(): AsyncGenerator<string> {
+        for await (const text of textStream) {
+            textChunks.push(text);
+            yield text;
+        }
+    }
+
+    const parsedStream = parser.transform(recordedChunks(), {});
+    for await (const next of parsedStream) {
+        if (next === undefined || next === null) continue;
+        await options.onPartial?.(next);
+    }
+
+    return textChunks.join("");
+}
+
 async function invokeJsonFallback<T>(
     resolved: ResolvedChatModel,
-    schema: z.ZodType<T>,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
     messages: readonly BaseMessageLike[],
     options: StructuredOutputOptions
 ): Promise<StructuredResultWithUsage<T>> {
@@ -114,28 +158,72 @@ async function invokeJsonFallback<T>(
         ...messages,
     ]);
 
-    const first = await resolved.chat.invoke(instructed);
-    const firstText = normalizeModelContent(first.content);
-    let usage = normalizeTokenUsage(first);
+    if (!options.onPartial) {
+        const modelOptions = signalOptions(options.signal);
+        const first = modelOptions
+            ? await resolved.chat.invoke(instructed, modelOptions)
+            : await resolved.chat.invoke(instructed);
+        const firstText = normalizeModelContent(first.content);
+        let usage = normalizeTokenUsage(first);
 
+        try {
+            return {
+                result: schema.parse(extractJson(firstText)),
+                usage,
+                modelId: resolved.modelId,
+            };
+        } catch (firstError) {
+            const issue = firstError instanceof Error ? firstError.message : String(firstError);
+            const repair = applyMessageBehavior(resolved.behavior, [
+                ...instructed,
+                new HumanMessage(
+                    `Your previous response was invalid. Validation error:\n${issue}\n\n` +
+                        `Previous response:\n${firstText}\n\nReturn a corrected JSON value only.`
+                ),
+            ]);
+
+            try {
+                const second = modelOptions
+                    ? await resolved.chat.invoke(repair, modelOptions)
+                    : await resolved.chat.invoke(repair);
+                usage = addTokenUsage(usage, normalizeTokenUsage(second));
+                return {
+                    result: schema.parse(extractJson(normalizeModelContent(second.content))),
+                    usage,
+                    modelId: resolved.modelId,
+                };
+            } catch (repairError) {
+                throw new StructuredOutputError(
+                    resolved.modelId,
+                    repairError instanceof Error ? repairError.message : String(repairError)
+                );
+            }
+        }
+    }
+
+    const first = await streamJsonOutput(resolved, instructed, options);
     try {
-        return { result: schema.parse(extractJson(firstText)), usage, modelId: resolved.modelId };
+        return {
+            result: schema.parse(extractJson(first)),
+            usage: {},
+            modelId: resolved.modelId,
+        };
     } catch (firstError) {
         const issue = firstError instanceof Error ? firstError.message : String(firstError);
+        await options.onPartial({});
         const repair = applyMessageBehavior(resolved.behavior, [
             ...instructed,
             new HumanMessage(
                 `Your previous response was invalid. Validation error:\n${issue}\n\n` +
-                    `Previous response:\n${firstText}\n\nReturn a corrected JSON value only.`
+                    `Previous response:\n${first}\n\nReturn a corrected JSON value only.`
             ),
         ]);
 
+        const second = await streamJsonOutput(resolved, repair, options);
         try {
-            const second = await resolved.chat.invoke(repair);
-            usage = addTokenUsage(usage, normalizeTokenUsage(second));
             return {
-                result: schema.parse(extractJson(normalizeModelContent(second.content))),
-                usage,
+                result: schema.parse(extractJson(second)),
+                usage: {},
                 modelId: resolved.modelId,
             };
         } catch (repairError) {
@@ -147,11 +235,48 @@ async function invokeJsonFallback<T>(
     }
 }
 
-/** A structured result plus what it cost — the meterable envelope. */
-export interface StructuredResultWithUsage<T> {
-    result: T;
-    usage: ChatTokenUsage;
-    modelId: string;
+async function invokeNativeStreaming<T>(
+    resolved: ResolvedChatModel,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+    messages: readonly BaseMessageLike[],
+    native: NativeStructuredOutputMode,
+    options: StructuredOutputOptions
+): Promise<T> {
+    // Passing JSON Schema instead of Zod is important here: LangChain's Zod
+    // parser is a final parser and therefore buffers the whole stream, whereas
+    // its JSON-schema parser uses a cumulative partial JSON parser.
+    // Match the SDK's non-streaming Zod conversion: plain JSON Schema drops
+    // strict mode and leaves defaulted properties out of the required list.
+    const outputSchema =
+        native === "json-schema"
+            ? zodResponseFormat(schema, options.name).json_schema.schema
+            : zodToJsonSchema(schema);
+    const structured = resolved.chat.withStructuredOutput(outputSchema as Record<string, unknown>, {
+        name: options.name,
+        method: LANGCHAIN_METHOD[native],
+        ...(native === "json-schema" ? { strict: true } : {}),
+    });
+    const prompt =
+        native === "json-object"
+            ? [
+                  ...systemMessageFor(resolved.behavior, jsonInstruction(schema, options.name)),
+                  ...messages,
+              ]
+            : messages;
+    const prepared = applyMessageBehavior(resolved.behavior, prompt);
+    const modelOptions = signalOptions(options.signal);
+    const structuredStream = modelOptions
+        ? await structured.stream(prepared, modelOptions)
+        : await structured.stream(prepared);
+    let partial: unknown;
+
+    for await (const next of structuredStream) {
+        if (next === undefined || next === null) continue;
+        partial = next;
+        await options.onPartial?.(next);
+    }
+
+    return schema.parse(partial);
 }
 
 /**
@@ -161,7 +286,7 @@ export interface StructuredResultWithUsage<T> {
  */
 export async function invokeStructured<T>(
     resolved: ResolvedChatModel,
-    schema: z.ZodType<T>,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
     messages: readonly BaseMessageLike[],
     options: StructuredOutputOptions
 ): Promise<T> {
@@ -173,16 +298,25 @@ export async function invokeStructured<T>(
  * across the repair attempt when one happens) and the serving model id.
  * Additive fix from the rebuild design (§3.8 P1 prerequisite) — before this,
  * the envelope was discarded and no tool's LLM call could be metered.
+ *
+ * Streaming structured calls still return the same envelope, but provider
+ * usage is unavailable from LangChain's parsed stream and therefore remains
+ * absent rather than being reported as zero.
  */
 export async function invokeStructuredWithUsage<T>(
     resolved: ResolvedChatModel,
-    schema: z.ZodType<T>,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
     messages: readonly BaseMessageLike[],
     options: StructuredOutputOptions
 ): Promise<StructuredResultWithUsage<T>> {
     const native = pickNativeStructuredMode(resolved.behavior.nativeStructuredOutput);
     if (!native) {
         return invokeJsonFallback(resolved, schema, messages, options);
+    }
+
+    if (options.onPartial) {
+        const result = await invokeNativeStreaming(resolved, schema, messages, native, options);
+        return { result, usage: {}, modelId: resolved.modelId };
     }
 
     // `jsonMode` guarantees syntactic JSON but not the schema, so it still needs
@@ -202,14 +336,22 @@ export async function invokeStructuredWithUsage<T>(
         method: LANGCHAIN_METHOD[native],
         includeRaw: true,
     });
-    const response = await structured.invoke(applyMessageBehavior(resolved.behavior, prompt));
+    const modelOptions = signalOptions(options.signal);
+    const prepared = applyMessageBehavior(resolved.behavior, prompt);
+    const response = modelOptions
+        ? await structured.invoke(prepared, modelOptions)
+        : await structured.invoke(prepared);
     const usage = normalizeTokenUsage(response.raw);
     if (response.parsed === undefined || response.parsed === null) {
         const detail =
             response.raw === undefined
                 ? "no raw response"
                 : normalizeModelContent(
-                      (response.raw as { content?: unknown }).content ?? ""
+                      typeof response.raw === "object" &&
+                          response.raw !== null &&
+                          "content" in response.raw
+                          ? response.raw.content
+                          : ""
                   ).slice(0, 300);
         throw new StructuredOutputError(resolved.modelId, `no parsed value (raw: ${detail})`);
     }

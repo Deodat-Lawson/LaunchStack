@@ -1,0 +1,11 @@
+version: 1
+
+models:
+  callNotesSummary:
+    id: callnotes-summary-54mini
+    preset: openai/gpt-5.4-mini
+
+routes:
+  default: callNotesSummary
+  fast: callNotesSummary
+  reasoning: callNotesSummary

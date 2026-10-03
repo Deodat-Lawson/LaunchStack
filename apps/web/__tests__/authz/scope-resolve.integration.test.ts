@@ -6,10 +6,26 @@
  * Gated like the founder-weekly-review suites: runs only when
  * LAUNCHSTACK_TEST_DATABASE_URL (or DATABASE_URL) points at a local server.
  */
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
+import { callNotesCalls } from "@launchstack/pipelines/schema";
+import {
+    documentScopeSql,
+    scopeAllowsDocument as retrievalAllowsDocument,
+} from "@launchstack/retrieval/algorithms/scope";
 import { category, company, document } from "@launchstack/store/schema";
 import type { DbClient } from "@launchstack/store/client";
+import { builtinRolePermissions } from "~/lib/authz/permissions";
+import { resolveDocumentScope, scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCOPE_EVERYTHING, scopeAllowsDocument } from "~/lib/authz/scope-types";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
+import {
+    documentNotes,
+    documentSettings,
+    documentGrants,
+    userCompanyMemberships,
+} from "~/server/db/schema";
+import { listVisibleFolders } from "~/server/folders";
 
 import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
 
@@ -335,5 +351,301 @@ describeDb("resolveDocumentScope (integration)", () => {
             "Ledger",
             "Plan",
         ]);
+    });
+
+    describe("Call Note document eligibility", () => {
+        const ineligibleKinds = [
+            "private",
+            "deleted",
+            "active",
+            "finalizing",
+            "failed",
+            "wrong-note-owner",
+            "wrong-note-company",
+            "unversioned",
+        ] as const;
+        const kinds = [...ineligibleKinds, "eligible"] as const;
+        type CallNoteKind = (typeof kinds)[number];
+        let companyId: bigint;
+        let callNoteDocuments: Record<CallNoteKind, number>;
+        let ordinaryDocumentId: number;
+
+        beforeAll(async () => {
+            const [co] = await test.db
+                .insert(company)
+                .values({ name: "Call Notes workspace", numberOfEmployees: "3" })
+                .returning();
+            companyId = BigInt(co!.id);
+            await test.db.insert(userCompanyMemberships).values(
+                (["owner", "member", "guest"] as const).map(role => ({
+                    userId: ids[role],
+                    companyId,
+                    role,
+                    status: "active" as const,
+                }))
+            );
+            await test.db.insert(category).values({ companyId, name: "Calls" });
+
+            const documentIds: [CallNoteKind, number][] = [];
+            for (const kind of kinds) {
+                const callId = `scope-${kind}-call`;
+                const [doc] = await test.db
+                    .insert(document)
+                    .values({
+                        companyId,
+                        title: `Call Note ${kind}`,
+                        url: `local://call-note-${kind}.md`,
+                        category: "Calls",
+                        ocrMetadata:
+                            kind === "deleted"
+                                ? { callNote: { callId } }
+                                : { error: "processing_failed" },
+                    })
+                    .returning({ id: document.id });
+                documentIds.push([kind, doc!.id]);
+                if (kind !== "deleted") {
+                    const [note] = await test.db
+                        .insert(documentNotes)
+                        .values({
+                            userId: kind === "wrong-note-owner" ? "auth_member" : "auth_owner",
+                            companyId:
+                                kind === "wrong-note-company"
+                                    ? ids.companyId.toString()
+                                    : companyId.toString(),
+                            title: `Call Note ${kind}`,
+                            contentMarkdown: `# Call ${kind}`,
+                        })
+                        .returning({ id: documentNotes.id });
+                    await test.db.insert(callNotesCalls).values({
+                        id: callId,
+                        companyId,
+                        source: "local_audio",
+                        sourceOccurrenceKey: callId,
+                        title: `Call ${kind}`,
+                        status:
+                            kind === "active" || kind === "finalizing" || kind === "failed"
+                                ? kind
+                                : "completed",
+                        documentNoteId: note!.id,
+                        noteOwnerUserId: "auth_owner",
+                        currentNoteRevision: kind === "unversioned" ? 0 : 1,
+                        noteVisibility: kind === "private" ? "private" : "company",
+                        indexedDocumentId: BigInt(doc!.id),
+                    });
+                }
+            }
+            callNoteDocuments = Object.fromEntries(documentIds) as Record<CallNoteKind, number>;
+
+            // Even an explicit document grant cannot restore an ineligible Call Note.
+            await test.db.insert(documentSettings).values(
+                kinds.map(kind => ({
+                    documentId: BigInt(callNoteDocuments[kind]),
+                    companyId,
+                    restricted: true,
+                    updatedBy: "auth_owner",
+                }))
+            );
+            await test.db.insert(documentGrants).values(
+                kinds.flatMap(kind =>
+                    ["member", "guest"].map(role => ({
+                        documentId: BigInt(callNoteDocuments[kind]),
+                        companyId,
+                        principalType: "role" as const,
+                        principalId: role,
+                        level: "view" as const,
+                        grantedBy: "auth_owner",
+                    }))
+                )
+            );
+            const [ordinary] = await test.db
+                .insert(document)
+                .values({
+                    companyId,
+                    title: "Ordinary document",
+                    url: "local://ordinary.md",
+                    category: "General",
+                    ocrMetadata: { confidence: 0.97 },
+                })
+                .returning({ id: document.id });
+            ordinaryDocumentId = ordinary!.id;
+        });
+
+        async function callNoteScope(role: "owner" | "member" | "guest") {
+            return resolveDocumentScope({
+                companyId,
+                userPk: ids[role],
+                role,
+                permissions: builtinRolePermissions(role)!,
+            });
+        }
+
+        it("keeps everything scope for a manager in a workspace without Call Note documents", async () => {
+            expect(await scopeFor(ids.owner, "owner")).toBe(SCOPE_EVERYTHING);
+        });
+
+        it.each(["owner", "member", "guest"] as const)(
+            "denies ineligible Call Notes for %s even after metadata is lost, despite explicit grants",
+            async role => {
+                const scope = await callNoteScope(role);
+                expect(scope.kind).toBe(role === "guest" ? "only" : "except");
+                if (scope.kind === "everything") throw new Error("Call Notes must be gated");
+                const deniedIds = ineligibleKinds.map(kind => callNoteDocuments[kind]);
+                expect([...scope.deniedDocumentIds].sort((a, b) => a - b)).toEqual(
+                    [...deniedIds].sort((a, b) => a - b)
+                );
+                for (const id of deniedIds) {
+                    expect(scope.allowedDocumentIds).not.toContain(id);
+                    expect(scopeAllowsDocument(scope, { id, category: "Calls" })).toBe(false);
+                    expect(retrievalAllowsDocument(scope, { id, category: "Calls" })).toBe(false);
+                }
+                expect(
+                    scopeAllowsDocument(scope, {
+                        id: callNoteDocuments.eligible,
+                        category: "Calls",
+                    })
+                ).toBe(true);
+                const expectedIds =
+                    role === "guest"
+                        ? [callNoteDocuments.eligible]
+                        : [callNoteDocuments.eligible, ordinaryDocumentId];
+                const visible = await test.db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(scopedDocumentWhere(companyId, scope))
+                    .orderBy(document.id);
+                expect(visible.map(row => row.id)).toEqual(expectedIds);
+                const retrievable = await test.db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(and(eq(document.companyId, companyId), documentScopeSql(scope)))
+                    .orderBy(document.id);
+                expect(retrievable.map(row => row.id)).toEqual(expectedIds);
+            }
+        );
+
+        it("classifies indexed Call copies without a marker and leaves ordinary documents alone", async () => {
+            const rows = await test.db
+                .select({
+                    id: document.id,
+                    ocrMetadata: document.ocrMetadata,
+                    indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+                })
+                .from(document)
+                .where(eq(document.companyId, companyId));
+            const classifiedIds = rows.filter(isCallNoteDocument).map(row => row.id);
+            expect(classifiedIds.sort((a, b) => a - b)).toEqual(
+                Object.values(callNoteDocuments).sort((a, b) => a - b)
+            );
+            expect(classifiedIds).not.toContain(ordinaryDocumentId);
+        });
+
+        it.each(["owner", "member"] as const)(
+            "excludes ineligible Call Notes from visible folder document counts for %s",
+            async role => {
+                const folders = await listVisibleFolders(companyId, await callNoteScope(role));
+                expect(folders.find(folder => folder.path === "Calls")?.documentCount).toBe(1);
+            }
+        );
+
+        it.each(["owner", "member"] as const)(
+            "denies a formerly eligible Call Note after its canonical note is deleted for %s",
+            async role => {
+                const [co] = await test.db
+                    .insert(company)
+                    .values({ name: `Deleted canonical note (${role})`, numberOfEmployees: "1" })
+                    .returning();
+                const deletedNoteCompanyId = BigInt(co!.id);
+                const [note] = await test.db
+                    .insert(documentNotes)
+                    .values({
+                        userId: "auth_owner",
+                        companyId: deletedNoteCompanyId.toString(),
+                        contentMarkdown: "# Completed call",
+                    })
+                    .returning({ id: documentNotes.id });
+                const [doc] = await test.db
+                    .insert(document)
+                    .values({
+                        companyId: deletedNoteCompanyId,
+                        title: "Published Call Note",
+                        url: `local://deleted-canonical-${role}.md`,
+                        category: "Calls",
+                    })
+                    .returning({ id: document.id });
+                await test.db.insert(callNotesCalls).values({
+                    id: `deleted-canonical-${role}`,
+                    companyId: deletedNoteCompanyId,
+                    source: "local_audio",
+                    sourceOccurrenceKey: `deleted-canonical-${role}`,
+                    title: "Completed call",
+                    status: "completed",
+                    documentNoteId: note!.id,
+                    noteOwnerUserId: "auth_owner",
+                    currentNoteRevision: 1,
+                    noteVisibility: "company",
+                    indexedDocumentId: BigInt(doc!.id),
+                });
+                const subject = {
+                    companyId: deletedNoteCompanyId,
+                    userPk: ids[role],
+                    role,
+                    permissions: builtinRolePermissions(role)!,
+                };
+                expect(
+                    scopeAllowsDocument(await resolveDocumentScope(subject), {
+                        id: doc!.id,
+                        category: "Calls",
+                    })
+                ).toBe(true);
+
+                await test.db.delete(documentNotes).where(eq(documentNotes.id, note!.id));
+
+                const scope = await resolveDocumentScope(subject);
+                expect(scopeAllowsDocument(scope, { id: doc!.id, category: "Calls" })).toBe(false);
+                expect(retrievalAllowsDocument(scope, { id: doc!.id, category: "Calls" })).toBe(
+                    false
+                );
+                const visible = await test.db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(scopedDocumentWhere(deletedNoteCompanyId, scope));
+                expect(visible).toEqual([]);
+            }
+        );
+
+        it("denies an orphaned Call Note when no folder or document restrictions exist", async () => {
+            const [co] = await test.db
+                .insert(company)
+                .values({ name: "Unrestricted Call Notes", numberOfEmployees: "1" })
+                .returning();
+            const unrestrictedCompanyId = BigInt(co!.id);
+            const [doc] = await test.db
+                .insert(document)
+                .values({
+                    companyId: unrestrictedCompanyId,
+                    title: "Deleted Call Note",
+                    url: "local://deleted-call-note.md",
+                    category: "Calls",
+                    ocrMetadata: { callNote: { callId: "no-longer-present" } },
+                })
+                .returning({ id: document.id });
+            const scope = await resolveDocumentScope({
+                companyId: unrestrictedCompanyId,
+                userPk: ids.member,
+                role: "member",
+                permissions: builtinRolePermissions("member")!,
+            });
+            expect(scope).toEqual({
+                kind: "except",
+                deniedCategories: [],
+                deniedDocumentIds: [doc!.id],
+                allowedDocumentIds: [],
+            });
+            const visible = await test.db
+                .select({ id: document.id })
+                .from(document)
+                .where(scopedDocumentWhere(unrestrictedCompanyId, scope));
+            expect(visible).toEqual([]);
+        });
     });
 });

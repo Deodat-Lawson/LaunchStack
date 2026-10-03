@@ -7,6 +7,7 @@ import { category, document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { normalizeFolderPath } from "~/lib/folders/path";
 
 const PatchCategorySchema = z.object({
     name: z
@@ -51,6 +52,10 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
         if (!existing) {
             return NextResponse.json({ error: "Category not found" }, { status: 404 });
+        }
+
+        if (normalizeFolderPath(existing.name) === "Calls") {
+            return NextResponse.json({ error: "Calls is managed by Call Notes" }, { status: 409 });
         }
 
         if (existing.name === name) {

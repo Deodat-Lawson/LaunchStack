@@ -556,7 +556,6 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
                 .md-doc h4,
                 .md-doc h5,
                 .md-doc h6 {
-                    font-family: var(--font-serif);
                     color: var(--ink);
                     font-weight: 600;
                     line-height: 1.3;

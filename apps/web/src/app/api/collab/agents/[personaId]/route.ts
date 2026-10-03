@@ -6,31 +6,25 @@
  */
 
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
-import { AGENT_AUTONOMY_LEVELS } from "~/lib/agents/autonomy";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { archivePersona, updatePersona } from "~/server/collab/personas";
+import { UpdatePersonaSchema } from "~/server/collab/agent-schemas";
+import { archivePersona, getPersonaById, updatePersona } from "~/server/collab/personas";
 
 export const dynamic = "force-dynamic";
 
-const UpdatePersonaSchema = z.object({
-    key: z
-        .string()
-        .min(2)
-        .max(48)
-        .regex(/^[a-z0-9][a-z0-9_-]*$/)
-        .optional(),
-    displayName: z.string().min(1).max(80).optional(),
-    role: z.string().min(1).max(80).optional(),
-    systemPrompt: z.string().min(1).max(6000).optional(),
-    nodeId: z.string().max(120).nullable().optional(),
-    route: z.enum(["default", "fast", "reasoning", "vision"]).nullable().optional(),
-    temperature: z.number().min(0).max(2).nullable().optional(),
-    maxTurnChars: z.number().int().min(120).max(8000).nullable().optional(),
-    accent: z.string().max(32).nullable().optional(),
-    autonomy: z.enum(AGENT_AUTONOMY_LEVELS).nullable().optional(),
-});
+export async function GET(
+    _request: Request,
+    { params }: { params: Promise<{ personaId: string }> }
+) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
+    const { personaId } = await params;
+    const persona = await getPersonaById(ctx.data.companyId, personaId);
+    if (!persona) return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+    return NextResponse.json({ persona });
+}
 
 export async function PATCH(
     request: Request,
@@ -48,9 +42,22 @@ export async function PATCH(
     }
 
     const { personaId } = await params;
-    const persona = await updatePersona(ctx.data.companyId, personaId, parsed.data);
-    if (!persona) return NextResponse.json({ error: "Agent not found" }, { status: 404 });
-    return NextResponse.json({ persona });
+    try {
+        const persona = await updatePersona(ctx.data.companyId, personaId, parsed.data);
+        if (!persona) return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+        return NextResponse.json({ persona });
+    } catch (err) {
+        const message = err instanceof Error ? err.message : "Could not save the agent";
+        const conflict = /duplicate key|unique/i.test(message);
+        return NextResponse.json(
+            {
+                error: conflict
+                    ? `An agent with the handle "${parsed.data.key ?? ""}" already exists`
+                    : message,
+            },
+            { status: conflict ? 409 : 500 }
+        );
+    }
 }
 
 export async function DELETE(

@@ -33,7 +33,7 @@ describe("untilTime", () => {
 });
 
 describe("auditSentence", () => {
-    const actor = { authUserId: "u1", name: "Ada", email: "ada@example.com" };
+    const actor = { authUserId: "u1", name: "Ada", email: "ada@example.com", avatarUrl: null };
 
     it("writes the role change the brief uses as its example", () => {
         expect(

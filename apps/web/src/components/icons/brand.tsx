@@ -1,15 +1,14 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import type { IconProps } from "./types";
 
 /**
  * Third-party brand marks (lucide-react deprecated its brand glyphs).
  * Everything else comes straight from lucide-react — do not add
- * general-purpose icons here.
+ * general-purpose icons here. Drawn at roughly lucide's stroke weight so the
+ * two sets sit together.
  */
-export interface BrandIconProps {
-    size?: number;
-    style?: CSSProperties;
-    className?: string;
-}
+export type BrandIconProps = IconProps;
 
 interface IcProps extends BrandIconProps {
     children: ReactNode;
@@ -81,6 +80,13 @@ export const IconSlack = (p: BrandIconProps) => (
 export const IconGithub = (p: BrandIconProps) => (
     <Ic {...p}>
         <path d="M10 2.5a7.5 7.5 0 0 0-2.4 14.6c.4.1.5-.2.5-.4v-1.4c-2.1.4-2.5-1-2.5-1-.3-.8-.8-1.1-.8-1.1-.6-.4.05-.4.05-.4.7 0 1.1.7 1.1.7.6 1.1 1.7.8 2.1.6.1-.5.3-.8.5-1-1.7-.2-3.5-.9-3.5-3.8 0-.8.3-1.5.8-2-.1-.2-.3-1 .1-2 0 0 .6-.2 2.1.8a7 7 0 0 1 3.8 0c1.5-1 2.1-.8 2.1-.8.4 1 .2 1.8.1 2 .5.5.8 1.2.8 2 0 2.9-1.8 3.5-3.5 3.7.3.3.5.7.5 1.4v2.1c0 .2.1.5.5.4A7.5 7.5 0 0 0 10 2.5Z" />
+    </Ic>
+);
+
+/** Google's "G": an open ring closed by its crossbar. */
+export const IconGoogle = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <path d="M14.95 5.05A7 7 0 1 0 17 10h-7" />
     </Ic>
 );
 

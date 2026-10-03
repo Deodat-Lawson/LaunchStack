@@ -1,6 +1,11 @@
 import { resolveMenu } from "../resolve";
 import { registerActions, listActions, resetActionsForTests } from "../registry";
-import { APP_TARGET_KIND, type ActionDefinition, type ContextTarget, type MenuOpenContext } from "../types";
+import {
+    APP_TARGET_KIND,
+    type ActionDefinition,
+    type ContextTarget,
+    type MenuOpenContext,
+} from "../types";
 
 function ctx(chain: ContextTarget[]): MenuOpenContext {
     return { x: 0, y: 0, via: "pointer", chain, selection: null, element: null };
@@ -34,11 +39,15 @@ describe("resolveMenu", () => {
     it("keeps ancestors out unless they opted in with inherit", () => {
         const row: ContextTarget = {
             kind: "row",
-            items: () => [{ type: "item", id: "row.open", label: "Open", onSelect: () => undefined }],
+            items: () => [
+                { type: "item", id: "row.open", label: "Open", onSelect: () => undefined },
+            ],
         };
         const pane: ContextTarget = {
             kind: "pane",
-            items: () => [{ type: "item", id: "pane.new", label: "New", onSelect: () => undefined }],
+            items: () => [
+                { type: "item", id: "pane.new", label: "New", onSelect: () => undefined },
+            ],
         };
         expect(ids(resolveMenu(ctx([row, pane, APP]), []).items)).toEqual(["row.open"]);
         expect(ids(resolveMenu(ctx([row, { ...pane, inherit: true }, APP]), []).items)).toEqual([
@@ -63,7 +72,9 @@ describe("resolveMenu", () => {
                 {
                     kind: "message",
                     label: "Message actions",
-                    items: () => [{ type: "item", id: "quote", label: "Quote", onSelect: () => undefined }],
+                    items: () => [
+                        { type: "item", id: "quote", label: "Quote", onSelect: () => undefined },
+                    ],
                 },
                 APP,
             ]),
@@ -83,16 +94,18 @@ describe("resolveMenu", () => {
             },
         ];
         expect(ids(resolveMenu(ctx([APP]), actions).items)).toEqual(["app.theme"]);
-        expect(ids(resolveMenu(ctx([{ kind: "empty", items: () => [] }, APP]), actions).items)).toEqual([
-            "app.theme",
-        ]);
+        expect(
+            ids(resolveMenu(ctx([{ kind: "empty", items: () => [] }, APP]), actions).items)
+        ).toEqual(["app.theme"]);
         expect(
             ids(
                 resolveMenu(
                     ctx([
                         {
                             kind: "row",
-                            items: () => [{ type: "item", id: "x", label: "X", onSelect: () => undefined }],
+                            items: () => [
+                                { type: "item", id: "x", label: "X", onSelect: () => undefined },
+                            ],
                         },
                         APP,
                     ]),
@@ -104,10 +117,33 @@ describe("resolveMenu", () => {
 
     it("sorts registered actions by order and parks danger last after a separator", () => {
         const actions: ActionDefinition[] = [
-            { id: "b", label: "B", order: 2, appliesTo: t => t.kind === "row", run: () => undefined },
-            { id: "del", label: "Delete", danger: true, appliesTo: t => t.kind === "row", run: () => undefined },
-            { id: "a", label: "A", order: 1, appliesTo: t => t.kind === "row", run: () => undefined },
-            { id: "other", label: "Other", appliesTo: t => t.kind === "folder", run: () => undefined },
+            {
+                id: "b",
+                label: "B",
+                order: 2,
+                appliesTo: t => t.kind === "row",
+                run: () => undefined,
+            },
+            {
+                id: "del",
+                label: "Delete",
+                danger: true,
+                appliesTo: t => t.kind === "row",
+                run: () => undefined,
+            },
+            {
+                id: "a",
+                label: "A",
+                order: 1,
+                appliesTo: t => t.kind === "row",
+                run: () => undefined,
+            },
+            {
+                id: "other",
+                label: "Other",
+                appliesTo: t => t.kind === "folder",
+                run: () => undefined,
+            },
         ];
         const { items } = resolveMenu(ctx([{ kind: "row" }, APP]), actions);
         expect(ids(items)).toEqual(["a", "b", "sep-row-danger", "del"]);
@@ -133,7 +169,9 @@ describe("resolveMenu", () => {
                 id: "move",
                 label: "Move to",
                 appliesTo: () => true,
-                children: () => [{ type: "item", id: "move.a", label: "A", onSelect: () => undefined }],
+                children: () => [
+                    { type: "item", id: "move.a", label: "A", onSelect: () => undefined },
+                ],
                 run: () => undefined,
             },
         ];
@@ -172,8 +210,18 @@ describe("action registry", () => {
     beforeEach(() => resetActionsForTests());
 
     it("lets a later registration shadow an earlier one until it unregisters", () => {
-        const base: ActionDefinition = { id: "x", label: "base", appliesTo: () => true, run: () => undefined };
-        const scoped: ActionDefinition = { id: "x", label: "scoped", appliesTo: () => true, run: () => undefined };
+        const base: ActionDefinition = {
+            id: "x",
+            label: "base",
+            appliesTo: () => true,
+            run: () => undefined,
+        };
+        const scoped: ActionDefinition = {
+            id: "x",
+            label: "scoped",
+            appliesTo: () => true,
+            run: () => undefined,
+        };
         const dropBase = registerActions([base]);
         const dropScoped = registerActions([scoped]);
         expect(listActions().map(a => a.label)).toEqual(["scoped"]);

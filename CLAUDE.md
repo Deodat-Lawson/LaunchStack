@@ -20,12 +20,15 @@ compositions — product verticals; may import bricks, never the reverse),
   deprecated compat layer (`apps/web/src/styles/compat.css`). Don't extend it.
 - Dark mode: `data-theme="dark"` on `<html>`. Use `dark:` variants or
   `[data-theme="dark"]` CSS; never branch on `resolvedTheme` in JS for colors.
-- Icons: `lucide-react`; brand marks from `~/components/icons/brand`.
-- Fonts: `var(--font-sans|serif|mono)` only; loaded once in `src/app/fonts.ts`.
+- Icons: `lucide-react` in both apps; brand marks from
+  `~/components/icons/brand` (lucide's brand glyphs and other icon libraries
+  are lint errors).
+- Fonts: Inter (`var(--font-sans)`) for all UI, headings included (`display`
+  class); JetBrains Mono (`var(--font-mono)`) for code. Loaded once per app in
+  `src/app/fonts.ts`; never name a family (enforced by
+  `apps/web/__tests__/brand/typography.test.ts`).
 - Never import across route areas (`app/employer/**` ↔ `app/employee/**`).
   Shared pieces go in `~/components` or `~/lib`.
-- `app/employer/_components/primitives.tsx` and
-  `documents/_workspace/icons.tsx` are deprecated — do not add imports.
 - Touch-it-migrate-it: when editing existing UI for feature work, convert the
   region you touch to kit + tokens; never launch a bulk rewrite.
 - Full conventions: `apps/web/README.md`.

@@ -1,43 +1,45 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
-// New icons come from lucide-react; `./icons` below is the deprecated legacy
-// set kept for this file's existing entries (see apps/web/README.md).
+// Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
+    Bot as IconAgents,
     MessagesSquare as IconSessions,
     Network as IconMindmap,
+    AudioLines as IconAudio,
+    Zap as IconBolt,
+    Building2 as IconBuilding,
+    ChartColumn as IconChart,
+    File as IconFile,
+    Folder as IconFolder,
+    Globe as IconGlobe,
+    HandCoins as IconInvestors,
+    PenLine as IconProposals,
+    Link as IconLink,
+    Megaphone as IconMegaphone,
+    ClipboardList as IconPaste,
+    Pen as IconPen,
+    Settings as IconSettings,
+    Shield as IconShield,
+    Sparkles as IconSparkle,
+    Users as IconUsers,
+    Video as IconVideo,
+    Workflow as IconWorkflow,
 } from "lucide-react";
-// Brand marks live in the shared icon home, not the legacy set below.
-import { IconGoogleDocs } from "~/components/icons/brand";
-import { IconGrowth, IconProspects } from "~/components/icons/prospects";
 import {
-    IconAudio,
-    IconBolt,
-    IconBuilding,
-    IconChart,
+    IconGoogleDocs,
     IconDropbox,
     IconDrive,
-    IconFile,
-    IconFolder,
     IconGithub,
-    IconGlobe,
     IconGmail,
-    IconLink,
-    IconMegaphone,
     IconNotion,
-    IconPaste,
-    IconPen,
-    IconSettings,
-    IconShield,
     IconSlack,
-    IconSparkle,
-    IconUsers,
-    IconVideo,
-    IconWorkflow,
     IconYoutube,
-    type IconProps,
-} from "./icons";
+} from "~/components/icons/brand";
+import { IconGrowth, IconProspects } from "~/components/icons/prospects";
+import { IconVantage } from "~/components/icons/vantage";
+import type { IconProps } from "~/components/icons/types";
 
 export type SourceTypeId =
     | "doc"
@@ -52,7 +54,8 @@ export type SourceTypeId =
     | "web"
     | "youtube"
     | "paste"
-    | "mindmap";
+    | "mindmap"
+    | "artifact";
 
 export interface SourceMeta {
     label: string;
@@ -74,6 +77,7 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     youtube: { label: "YouTube", Icon: IconYoutube, color: "oklch(0.55 0.18 25)" },
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
     mindmap: { label: "Mindmap", Icon: IconMindmap, color: "oklch(0.55 0.2 290)" },
+    artifact: { label: "Claude artifact", Icon: IconArtifact, color: "var(--accent)" },
 };
 
 /**
@@ -211,6 +215,8 @@ export interface ThreadMessage {
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];
+    /** The agent that answered (assistant) or was addressed (user). */
+    agent?: ThreadAgent;
 }
 
 /**
@@ -224,6 +230,19 @@ export interface ComposerSend {
     attachments: EphemeralAttachment[];
     webSearch: boolean;
     thinking: boolean;
+    /** The agent this turn is addressed to; null = the workspace's default assistant. */
+    agentKey: string | null;
+}
+
+/** How the transcript attributes an agent's answer. */
+export interface ThreadAgent {
+    key: string;
+    displayName: string;
+    role: string;
+    accent: string | null;
+    avatarUrl?: string | null;
+    /** What the agent's tool policy changed about the turn (web off, etc.). */
+    notes?: string[];
 }
 
 export interface DemotedFeature {
@@ -253,6 +272,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconUsers,
         desc: "Agents work an objective in a channel you can join",
         href: "/employer/documents?feature=meetings",
+    },
+    {
+        id: "agents",
+        label: "Agents",
+        Icon: IconAgents,
+        desc: "The roster: try an agent, edit its instructions, import one",
+        href: "/employer/documents?feature=agents",
     },
     {
         id: "draft",
@@ -286,18 +312,20 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?add=1&tab=mindmap",
     },
     {
+        // Both are ways of adding a source now, not tools of their own: the
+        // palette opens Add a source on their tabs.
         id: "artifacts",
-        label: "Claude Artifacts",
+        label: "Import a Claude artifact",
         Icon: IconArtifact,
-        desc: "Pages and diagrams imported from Claude",
-        href: "/employer/artifacts",
+        desc: "Pages, diagrams and components built in Claude, as sources",
+        href: "/employer/documents?add=1&tab=artifact",
     },
     {
         id: "agent-sessions",
-        label: "Coding sessions",
+        label: "Import coding sessions",
         Icon: IconSessions,
-        desc: "Import Claude Code and Codex conversations",
-        href: "/employer/agent-sessions",
+        desc: "Claude Code and Codex conversations, as sources",
+        href: "/employer/documents?add=1&tab=agent-sessions",
     },
     {
         id: "growth",
@@ -319,6 +347,27 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconProspects,
         desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
         href: "/employer/tools/growth/prospects",
+    },
+    {
+        id: "vantage",
+        label: "Vantage",
+        Icon: IconVantage,
+        desc: "Prepare next week's meeting from evidence: cited agenda, decisions, commitments checked the week after",
+        href: "/employer/tools/vantage",
+    },
+    {
+        id: "proposals",
+        label: "Proposals",
+        Icon: IconProposals,
+        desc: "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations",
+        href: "/employer/tools/proposals",
+    },
+    {
+        id: "investors",
+        label: "Investor relations",
+        Icon: IconInvestors,
+        desc: "Find venture funds raising now, and draft the pitch from your sources",
+        href: "/employer/documents?feature=investors",
     },
     {
         id: "audit",
@@ -421,12 +470,60 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconUsers,
                 desc: "Agents work an objective in a channel — step in whenever you want",
             },
+            {
+                id: "agents",
+                label: "Agents",
+                Icon: IconAgents,
+                desc: "Who your agents are: try them, edit their instructions, import a definition file",
+            },
         ],
     },
     {
         id: "tools",
         label: "Tools",
         features: [
+            {
+                // One app with its own rail for the whole growth motion: Brand
+                // (compose, schedule, calendar, campaigns, accounts) and Prospects
+                // (segment, companies, people, deals, runs, sources).
+                id: "growth",
+                label: "Growth",
+                Icon: IconGrowth,
+                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
+                href: "/employer/tools/growth",
+                external: true,
+            },
+            {
+                // A writing app with its own rail: the proposal is the unit of
+                // work, and every sentence in it points at a source.
+                id: "proposals",
+                label: "Proposals",
+                Icon: IconProposals,
+                desc: "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit",
+                href: "/employer/tools/proposals",
+                external: true,
+            },
+            {
+                // Second only to Growth: being known, then being funded. Not
+                // `external` — the search and the pitch starters are one pane,
+                // and "Draft in chat" is a move to the chat tab beside it.
+                id: "investors",
+                label: "Investor relations",
+                Icon: IconInvestors,
+                desc: "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources",
+                href: "/employer/documents?feature=investors",
+            },
+            {
+                // The weekly loop: evidence in, a cited agenda out, decisions
+                // that become commitments checked the week after. Its own
+                // rail and screens, so it navigates like Growth.
+                id: "vantage",
+                label: "Vantage",
+                Icon: IconVantage,
+                desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
+                href: "/employer/tools/vantage",
+                external: true,
+            },
             {
                 id: "draft",
                 label: "Templated Drafts",
@@ -439,61 +536,30 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconSparkle,
                 desc: "Improve existing prose with a diff-first rewrite",
             },
-            {
-                // Not `external`: maps live in the library beside every other
-                // source. Picking this opens the template picker.
-                id: "mindmap",
-                label: "Mindmap",
-                Icon: IconMindmap,
-                desc: "Diagrams, mindmaps and flowcharts — sources you draw",
-                href: "/employer/documents?add=1&tab=mindmap",
-            },
-            {
-                id: "artifacts",
-                label: "Claude Artifacts",
-                Icon: IconArtifact,
-                desc: "Import pages and diagrams built in Claude, and manage them here",
-                // Not `external`: the gallery and viewer are plain client
-                // components, so Studio mounts them in a tab. The route stays
-                // for direct links and for opening one in a browser tab.
-                href: "/employer/artifacts",
-            },
-            {
-                id: "agent-sessions",
-                label: "Coding sessions",
-                Icon: IconSessions,
-                desc: "Browse Claude Code / Codex sessions on this machine, import them, continue them in chat",
-                // Not `external`, like Artifacts: continuing a session in chat
-                // is a move between two Studio tabs, not a page load.
-                href: "/employer/agent-sessions",
-            },
-            {
-                // One app with its own rail for the whole growth motion: Brand
-                // (compose, schedule, calendar, campaigns, accounts) and Prospects
-                // (segment, companies, people, deals, runs, sources).
-                id: "growth",
-                label: "Growth",
-                Icon: IconGrowth,
-                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
-                href: "/employer/tools/growth",
-                external: true,
-            },
         ],
     },
     {
         id: "management",
         label: "Management",
         features: [
-            // Processing, agents and nodes, integrations, company profile, and
-            // analytics are all sections of one Settings surface — see `SettingsHub`.
-            // `metadata` and `analytics` remain as ids so existing deep links open
-            // the right section instead of 404ing.
+            // Processing, agents and nodes, integrations and the company profile
+            // are sections of one Settings surface — see `SettingsHub`; `metadata`
+            // survives as an id so old deep links open the right section.
+            // Analytics is not one of them: it has its own pane and its own
+            // permission, and Settings' `#analytics` only forwards to this tab.
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
+                desc: "People and access, processing, agents and nodes, integrations, company profile",
                 requires: "settings.manage",
+            },
+            {
+                id: "analytics",
+                label: "Analytics",
+                Icon: IconChart,
+                desc: "Documents, queries, and activity across the workspace",
+                requires: "analytics.view",
             },
         ],
     },
@@ -511,13 +577,24 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
 
 /**
  * Panes that are no longer Studio entries but are still reachable by link:
- * `?feature=metadata` from an old bookmark, `?feature=analytics`, which is where
- * `SettingsHub` sends `#analytics`, and `workflows`, which keeps a pane, a
- * palette row and the `feature.workflows` shortcut but no picker tile. Each
+ * `?feature=metadata` from an old bookmark, and `workflows`, which keeps a
+ * pane, a palette row and the `feature.workflows` shortcut but no picker tile. Each
  * renders a real pane; a tab needs a label and an icon, so
  * `resolveStudioFeature` has to be able to name them.
  */
 const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
+    // A map is a source, not a tool: it is made from Add knowledge (the
+    // Mindmap tab, or "New mindmap" in ⌘K) and lives in the library beside
+    // every other source. It was also a Studio tile, which made the thing you
+    // draw look like an app you run. The editor still opens as a tab, and a
+    // tab needs a name and an icon, so it is named here.
+    mindmap: {
+        id: "mindmap",
+        label: "Mindmap",
+        Icon: IconMindmap,
+        desc: "Diagrams, mindmaps and flowcharts — sources you draw",
+        href: "/employer/documents?add=1&tab=mindmap",
+    },
     workflows: {
         id: "workflows",
         label: "Workflows",
@@ -529,12 +606,6 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         label: "Company profile",
         Icon: IconBuilding,
         desc: "What the workspace knows about your company",
-    },
-    analytics: {
-        id: "analytics",
-        label: "Analytics",
-        Icon: IconChart,
-        desc: "Documents, queries, and activity",
     },
 };
 
@@ -555,7 +626,7 @@ export function demotedFeatureHref(id: string): string | undefined {
     return href?.startsWith("/employer/documents?feature=") ? undefined : href;
 }
 
-/** Add-source modal tabs, grouped Upload / Connect. */
+/** Add-source modal tabs, grouped Create / Upload / Connect. */
 export interface AddSourceTab {
     id: string;
     label: string;
@@ -600,6 +671,14 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
+            {
+                // Was the Claude Artifacts tool. An artifact is a source now:
+                // listed, searchable, citable, opened in a sandboxed preview.
+                id: "artifact",
+                label: "Claude artifact",
+                Icon: IconArtifact,
+                desc: "A page, diagram or component built in Claude",
+            },
         ],
     },
     {

@@ -89,7 +89,7 @@ export function ProvenanceCard({
                     {provenance.extraction_model && (
                         <>
                             {provenance.extraction_version ? " · " : ""}
-                            <span style={{ fontFamily: "JetBrains Mono, ui-monospace, monospace" }}>
+                            <span style={{ fontFamily: "var(--font-mono)" }}>
                                 {provenance.extraction_model}
                             </span>
                         </>

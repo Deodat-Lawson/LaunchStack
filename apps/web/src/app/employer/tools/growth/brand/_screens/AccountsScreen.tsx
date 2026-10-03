@@ -2,10 +2,10 @@
 
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
-import { useResource } from "../../_lib/useResource";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
 import { NetworkMark } from "../_components/NetworkMark";
 import { brandApi } from "../api";
 

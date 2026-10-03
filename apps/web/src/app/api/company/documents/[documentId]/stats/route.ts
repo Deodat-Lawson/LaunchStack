@@ -7,10 +7,13 @@ import { eq, and, sql, gte, desc, count } from "drizzle-orm";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { workspaceLooks } from "~/server/profile/store";
 
 interface Viewer {
+    /** As this workspace sees them: display name, else full name. */
     name: string;
     email: string;
+    avatarUrl: string | null;
     viewedAt: string;
     role: string;
 }
@@ -98,6 +101,7 @@ export async function GET(
         // workspace; a viewer who has since left has no membership row.
         const recentViewersData = await db
             .select({
+                authUserId: documentViews.userId,
                 name: users.name,
                 email: users.email,
                 viewedAt: documentViews.viewedAt,
@@ -120,6 +124,10 @@ export async function GET(
             )
             .orderBy(desc(documentViews.viewedAt))
             .limit(10);
+        const looks = await workspaceLooks(
+            ctx.data.companyId,
+            recentViewersData.map(v => v.authUserId)
+        );
 
         // Get 30-day trend
         const thirtyDaysAgo = new Date();
@@ -168,8 +176,9 @@ export async function GET(
                 totalViews: viewsCount?.count ?? 0,
                 uniqueViewers: uniqueViewers?.count ?? 0,
                 recentViewers: recentViewersData.map(v => ({
-                    name: v.name ?? "Unknown User",
+                    name: looks.get(v.authUserId)?.displayName ?? v.name ?? "Unknown User",
                     email: v.email ?? "No Email",
+                    avatarUrl: looks.get(v.authUserId)?.avatarUrl ?? null,
                     viewedAt: v.viewedAt.toISOString(),
                     role: v.role ? normalizeRoleSlug(v.role) : "unknown",
                 })),

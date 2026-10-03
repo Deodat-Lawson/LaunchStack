@@ -611,7 +611,7 @@ function PageHeader({
                 <h1 className={s.title} style={{ marginTop: 8 }}>
                     Company{" "}
                     <span className={s.highlight}>
-                        <span className={s.serif}>metadata</span>
+                        <span className={s.accentWord}>metadata</span>
                     </span>
                 </h1>
                 <p className={s.sub} style={{ marginTop: 8, maxWidth: 600 }}>

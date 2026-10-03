@@ -11,7 +11,6 @@
     color: var(--ink);
     background: var(--bg);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
     height: 100%;
     overflow: hidden;
@@ -22,10 +21,9 @@
     color: var(--ink);
 }
 
-.serif {
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
-    font-weight: 400;
-    font-style: italic;
+/* The accent word in a heading: same family and weight, accent colour —
+   emphasis by colour, not by a second typeface. */
+.accentWord {
     color: var(--accent);
 }
 
@@ -279,9 +277,7 @@
     color: var(--ink);
 }
 .libHeroHeading em {
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
-    font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
 }
 .libHeroSub {
@@ -313,7 +309,7 @@
     color: var(--ink);
 }
 .libSectionMono {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--ink-3);
@@ -408,7 +404,7 @@
     margin-top: 14px;
     padding-top: 12px;
     border-top: 1px dashed var(--line-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.04em;
     color: var(--ink-3);
@@ -1228,7 +1224,7 @@
 
 /* Mono eyebrow — uppercase 10–11px, 0.08em tracking */
 .monoEyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -1238,7 +1234,7 @@
 
 /* Mono usage tag — "142×" used by template rows */
 .monoTag {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.04em;
     color: var(--ink-3);
@@ -1258,7 +1254,7 @@
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     background: var(--panel-2);
@@ -1389,7 +1385,7 @@
     letter-spacing: -0.005em;
 }
 .tplRowCat {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
@@ -1447,7 +1443,7 @@
     border: 1px solid var(--line);
     font-size: 11px;
     color: var(--ink-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.02em;
 }
 .rwsTopPill svg {
@@ -1503,7 +1499,7 @@
 }
 .rwsCfgSectionH {
     margin: 0 0 10px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.06em;
@@ -1549,14 +1545,14 @@
     overflow: hidden;
 }
 .rwsSourceMeta {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
     margin-top: 1px;
 }
 .rwsSourceUsed {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
 }
@@ -1651,7 +1647,7 @@
     overflow: hidden;
 }
 .rwsSectionDelta {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
@@ -1750,7 +1746,7 @@
     justify-content: center;
     gap: 6px;
     margin-top: 8px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-3);
 }
@@ -1781,9 +1777,7 @@
     color: var(--ink);
 }
 .rwsPipeTitle em {
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
-    font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
 }
 .rwsPipeSub {
@@ -1800,7 +1794,7 @@
     gap: 10px;
 }
 .rwsNavCount {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-3);
 }
@@ -1829,7 +1823,7 @@
     background: color-mix(in oklch, oklch(0.78 0.1 145) 4%, transparent);
 }
 .rwsPaneEyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -1914,9 +1908,7 @@
     color: var(--ink);
 }
 .rwsPipeEmptyTitle em {
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
-    font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
 }
 .rwsPipeEmptySub {
@@ -1977,7 +1969,7 @@
     padding: 14px 18px 40px;
 }
 .rwsOutEyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -2032,7 +2024,7 @@
     overflow: hidden;
 }
 .rwsReviewMeta {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.04em;
     margin-top: 1px;
@@ -2087,7 +2079,7 @@
     color: var(--ink);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .rwsFinalScore {
     display: inline-flex;
@@ -2095,7 +2087,7 @@
     gap: 4px;
     padding: 2px 7px;
     border-radius: 999px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     background: var(--panel);
     border: 1px solid oklch(from var(--success) l c h / 0.5);
@@ -2284,7 +2276,7 @@
     flex-shrink: 0;
 }
 .rdSearch kbd {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     background: var(--panel-2);
@@ -2386,12 +2378,12 @@
 .rdTplItemCat {
     font-size: 10px;
     color: var(--ink-3);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.04em;
     margin-top: 1px;
 }
 .rdTplItemUsed {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
 }
@@ -2444,7 +2436,7 @@
     padding: 2px 6px;
 }
 .rdDocBadge {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     padding: 2px 7px;
     border-radius: 999px;
@@ -2475,7 +2467,7 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.02em;
 }
 .rdDocMetaItem svg {
@@ -2486,7 +2478,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-2);
 }
@@ -2574,7 +2566,7 @@
     gap: 6px;
     font-size: 11px;
     color: var(--ink-3);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .rdToolFieldChip {
     display: inline-flex;
@@ -2693,7 +2685,7 @@
     border-bottom-color: var(--accent);
 }
 .rdPaneTabCount {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     margin-left: 4px;
@@ -2727,10 +2719,10 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ink-3);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .rdFieldGroupCount {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
 }
@@ -2756,7 +2748,7 @@
     gap: 4px;
 }
 .rdFieldHint {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-4);
 }
@@ -3072,7 +3064,7 @@ textarea.rdFieldInput {
     text-align: center;
     margin: 0 0 6px;
     color: oklch(0.16 0.02 285);
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
+    font-family: var(--font-serif);
     font-style: italic;
 }
 :global([data-theme="dark"]) .rdDocPage h1 {
@@ -3105,7 +3097,7 @@ textarea.rdFieldInput {
 }
 .rdDocSubtitle {
     text-align: center;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     color: oklch(0.5 0.015 285);
     letter-spacing: 0.12em;
@@ -3263,7 +3255,7 @@ textarea.rdFieldInput {
     padding-bottom: 4px;
 }
 .rdCfgEyebrow {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -3279,9 +3271,7 @@ textarea.rdFieldInput {
     line-height: 1.15;
 }
 .rdCfgTitle em {
-    font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
-    font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
 }
 .rdCfgSub {
@@ -3336,7 +3326,7 @@ textarea.rdFieldInput {
     background: var(--panel-2);
     color: var(--ink-3);
     border: 1px solid var(--line-2);
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .rdStepItemDone .rdStepItemNum {
     background: var(--accent);
@@ -3395,7 +3385,7 @@ textarea.rdFieldInput {
     color: var(--ink);
 }
 .rdCardMeta {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
@@ -3409,7 +3399,7 @@ textarea.rdFieldInput {
     gap: 5px;
     padding: 2px 8px;
     border-radius: 999px;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -3479,7 +3469,7 @@ textarea.rdFieldInput {
     text-overflow: ellipsis;
 }
 .rdSourceRowMeta {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
     letter-spacing: 0.04em;
@@ -3489,7 +3479,7 @@ textarea.rdFieldInput {
     text-overflow: ellipsis;
 }
 .rdSourceRowCount {
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-3);
 }
@@ -3523,7 +3513,7 @@ textarea.rdFieldInput {
     color: var(--ink);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-family: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono);
 }
 .rdSummaryBody {
     font-size: 12px;

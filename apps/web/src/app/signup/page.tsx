@@ -329,7 +329,7 @@ const SignupPage: React.FC = () => {
                             One account covers your solo workspace — and any team you might create
                             down the road.
                         </SubHeadline>
-                        <SignUpForm />
+                        <SignUpForm signInHref={withNext("/signin", next)} />
                         <div style={bottomLinkStyle}>
                             Already have an account?{" "}
                             <Link href={withNext("/signin", next)} style={linkStyle}>
@@ -501,7 +501,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 function Headline({ children }: { children: React.ReactNode }) {
     return (
         <h1
-            className="serif"
+            className="display"
             style={{
                 fontSize: 32,
                 lineHeight: 1.1,
@@ -847,7 +847,7 @@ function InviteCard({
                 style={{
                     ...inputStyle,
                     letterSpacing: "0.08em",
-                    fontFamily: "var(--font-jetbrains-mono), ui-monospace, monospace",
+                    fontFamily: "var(--font-mono)",
                     textTransform: "uppercase",
                     marginBottom: 10,
                 }}

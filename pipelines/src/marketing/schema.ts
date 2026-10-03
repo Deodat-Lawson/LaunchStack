@@ -105,4 +105,3 @@ export const brandPosts = pgTable(
     ]
 );
 export type BrandPostRow = InferSelectModel<typeof brandPosts>;
-

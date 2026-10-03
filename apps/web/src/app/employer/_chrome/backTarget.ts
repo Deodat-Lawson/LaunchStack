@@ -21,9 +21,6 @@ export interface BackTarget {
 /** The workspace's home. Everything that is not a tool falls back to it. */
 export const STUDIO: BackTarget = { href: "/employer/documents", label: "Studio" };
 
-/** Above the Studio sits the workspace picker — so even home has somewhere up. */
-export const WORKSPACES: BackTarget = { href: "/workspaces", label: "Workspaces" };
-
 /**
  * Sections whose own landing page is the natural parent for everything under
  * it. Order matters: the longest matching prefix wins, so a company detail
@@ -42,24 +39,40 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/growth/brand/",
         target: { href: "/employer/tools/growth/brand", label: "Brand" },
     },
-    // Both halves of Growth sit under it, so anything else there goes to the
-    // app's own home rather than all the way out to the Studio.
+    // Vantage's screens all hang off its overview, which is a real page.
     {
-        prefix: "/employer/tools/growth/",
-        target: { href: "/employer/tools/growth", label: "Growth" },
+        prefix: "/employer/tools/vantage/",
+        target: { href: "/employer/tools/vantage", label: "Vantage" },
     },
+    {
+        prefix: "/employer/tools/proposals/write/",
+        target: { href: "/employer/tools/proposals/write", label: "Proposals" },
+    },
+    {
+        prefix: "/employer/tools/proposals/",
+        target: { href: "/employer/tools/proposals", label: "Proposals" },
+    },
+    // Growth has no home of its own: `/employer/tools/growth` redirects to
+    // Brand. Pointing its halves at it sent Brand back to Brand and Prospects
+    // sideways into Brand, so above Brand and Prospects is the Studio.
+    { prefix: "/employer/tools/growth/", target: STUDIO },
     // `/employer/tools/prospects/*` is the old location, kept as a redirect
     // shim. Send it to where Prospects actually lives now.
     {
         prefix: "/employer/tools/prospects",
         target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
     },
-    { prefix: "/employer/artifacts/", target: { href: "/employer/artifacts", label: "Artifacts" } },
     { prefix: "/employer/documents/", target: STUDIO },
     { prefix: "/employer/mindmap/", target: STUDIO },
 ];
 
-/** Routes that are their own top: going up leaves the workspace entirely. */
+/**
+ * Routes that are the top of the app, with nothing above them to go back to.
+ *
+ * The workspace picker is not their parent. A workspace is a whole separate
+ * environment — other people, other documents — so leaving one is switching,
+ * not going back, and it lives in Settings rather than behind a back arrow.
+ */
 const ROOTS = new Set(["/employer/documents", "/employer", "/employer/home"]);
 
 function normalise(pathname: string): string {
@@ -68,15 +81,16 @@ function normalise(pathname: string): string {
 }
 
 /**
- * The parent of `pathname`, or null when the page is not under /employer at
- * all (sign-in, the marketing shell) and the shell should stay out of the way.
+ * The parent of `pathname`, or null when there is none: the Studio itself,
+ * or a page outside /employer (sign-in, the marketing shell) where the shell
+ * should stay out of the way.
  */
 export function backTargetFor(pathname: string): BackTarget | null {
     const path = normalise(pathname);
     if (!path.startsWith("/employer")) return null;
 
-    // The Studio is the workspace's home; above it is the workspace picker.
-    if (ROOTS.has(path)) return WORKSPACES;
+    // The Studio is the top. Switching workspace is not "back".
+    if (ROOTS.has(path)) return null;
 
     for (const { prefix, target } of SECTION_PARENTS) {
         // `!==` guards the section's own landing page, which must not point at

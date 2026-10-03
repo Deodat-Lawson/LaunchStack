@@ -9,30 +9,8 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { useTheme } from "next-themes";
-import { writeSettingValue } from "~/lib/settings/useSettings";
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
-import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
 import { useChatRoutes } from "../hooks/useChatRoutes";
-import {
-    IconArrowUp,
-    IconBolt,
-    IconBrain,
-    IconChevronRight,
-    IconFile,
-    IconGlobe,
-    IconImage,
-    IconLogout,
-    IconMoon,
-    IconPaperclip,
-    IconPlus,
-    IconSearch,
-    IconSettings,
-    IconShield,
-    IconSun,
-    IconUser,
-    IconX,
-} from "./icons";
 import {
     SOURCE_META,
     type ComposerSend,
@@ -41,8 +19,34 @@ import {
     type ThreadReference,
     type WorkspaceSource,
 } from "./types";
-import { Plus } from "lucide-react";
+import {
+    Bot,
+    Check,
+    Plus,
+    ArrowUp as IconArrowUp,
+    Zap as IconBolt,
+    Brain as IconBrain,
+    ChevronRight as IconChevronRight,
+    Globe as IconGlobe,
+    Image as IconImage,
+    Paperclip as IconPaperclip,
+    Plus as IconPlus,
+    Shield as IconShield,
+    User as IconUser,
+    X as IconX,
+} from "lucide-react";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
+import {
+    mentionQueryAt,
+    mentionedAgentKeys,
+    resolveChatTurn,
+    usableAsPrimary,
+    usableAsSubagent,
+} from "~/lib/agents/definition";
+import { AgentAvatar } from "./collab/AgentAvatar";
+import { personaColor, type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
 import {
@@ -64,6 +68,7 @@ import {
 import { Button } from "~/components/ui/button";
 import type { AskStarter } from "~/lib/ask-starters/contract";
 import { AskStarters } from "./AskStarters";
+import { WORKSPACE_HEADER_HEIGHT_PX } from "./workspaceHeader";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -74,6 +79,9 @@ const CHAT_GUTTER_X_PX = 24;
 export function workspaceMainHeaderBarStyle(leadingChromeInsetPx = 0): React.CSSProperties {
     return {
         flexShrink: 0,
+        // Fixed, so the rule under it lines up with the next column's.
+        height: WORKSPACE_HEADER_HEIGHT_PX,
+        boxSizing: "border-box",
         borderBottom: "1px solid var(--line)",
         background: "var(--panel)",
         paddingTop: 10,
@@ -239,6 +247,8 @@ function CitationTarget({
 
 interface MessageProps {
     msg: ThreadMessage;
+    /** The live roster, so a stored handle renders with its current name. */
+    agents?: ChatAgentOption[];
     /** Position in the thread — what session-level verbs (branch, ask again) act on. */
     index: number;
     sources: WorkspaceSource[];
@@ -273,20 +283,12 @@ function QuestionBody({ text }: { text: string }) {
     };
 
     if (!quote) {
-        return (
-            <div className="serif" style={prose}>
-                {text}
-            </div>
-        );
+        return <div style={prose}>{text}</div>;
     }
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {lead && (
-                <div className="serif" style={prose}>
-                    {lead}
-                </div>
-            )}
+            {lead && <div style={prose}>{lead}</div>}
             <blockquote
                 data-testid="question-quote"
                 style={{
@@ -301,11 +303,7 @@ function QuestionBody({ text }: { text: string }) {
             >
                 {quote}
             </blockquote>
-            {trail && (
-                <div className="serif" style={prose}>
-                    {trail}
-                </div>
-            )}
+            {trail && <div style={prose}>{trail}</div>}
         </div>
     );
 }
@@ -320,8 +318,25 @@ function Message({
     onOpenSource,
     onQuote,
     onEdit,
+    agents,
 }: MessageProps) {
     const isUser = msg.role === "user";
+    // Stored turns carry only the handle; the live roster supplies the name
+    // and colour, and a retired agent still shows under its handle.
+    const agent = msg.agent
+        ? (() => {
+              const live = agents?.find(a => a.id === msg.agent!.key);
+              return live
+                  ? {
+                        ...msg.agent,
+                        displayName: live.displayName,
+                        role: live.role,
+                        accent: live.accent ?? null,
+                        avatarUrl: live.avatarUrl ?? null,
+                    }
+                  : { ...msg.agent, displayName: msg.agent.displayName || `@${msg.agent.key}` };
+          })()
+        : null;
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
@@ -379,6 +394,15 @@ function Message({
                         <IconUser size={12} />
                     </div>
                     <span style={{ fontSize: 13, fontWeight: 600 }}>You</span>
+                    {agent && (
+                        <span
+                            title={`Asked ${agent.displayName}${agent.role ? ` (${agent.role})` : ""}`}
+                            className="mono"
+                            style={{ fontSize: 10, color: "var(--ink-3)" }}
+                        >
+                            · to @{agent.key}
+                        </span>
+                    )}
                     {refs.length > 0 && (
                         <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
                             · asking over {refs.length} source{refs.length !== 1 ? "s" : ""}
@@ -412,21 +436,39 @@ function Message({
     return (
         <div {...ctxTarget} style={{ animation: "lsw-fadeIn 240ms ease-out", marginBottom: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <div
-                    style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: "50%",
-                        background: "var(--accent-soft)",
-                        color: "var(--accent)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <IconBolt size={12} />
-                </div>
-                <span style={{ fontSize: 13, fontWeight: 600 }}>Launchstack</span>
+                {agent ? (
+                    <AgentAvatar
+                        agent={{
+                            id: agent.key,
+                            displayName: agent.displayName,
+                            accent: agent.accent,
+                            avatarUrl: agent.avatarUrl ?? null,
+                        }}
+                        size={22}
+                        title={`${agent.displayName}${agent.role ? ` — ${agent.role}` : ""}`}
+                    />
+                ) : (
+                    <div
+                        style={{
+                            width: 22,
+                            height: 22,
+                            borderRadius: "50%",
+                            background: "var(--accent-soft)",
+                            color: "var(--accent)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <IconBolt size={12} />
+                    </div>
+                )}
+                <span style={{ fontSize: 13, fontWeight: 600 }}>
+                    {agent ? agent.displayName : "Launchstack"}
+                </span>
+                {agent?.role && (
+                    <span style={{ fontSize: 11, color: "var(--ink-3)" }}>{agent.role}</span>
+                )}
                 {msg.model && (
                     <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
                         · {msg.model}
@@ -663,6 +705,11 @@ interface ComposerProps {
     onOpenSource?: (source: WorkspaceSource) => void;
     /** Text handed in from outside: a quote to reply around, or a question to edit. */
     seed?: ComposerSeed | null;
+    /** The roster, for the agent picker and `@handle` completion. */
+    agents: ChatAgentOption[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey: string | null;
+    onChangeAgent: (key: string | null) => void;
 }
 
 const ATTACH_MAX_COUNT = 5;
@@ -729,6 +776,9 @@ function Composer({
     onToggleThinking,
     onOpenSource,
     seed,
+    agents,
+    agentKey,
+    onChangeAgent,
 }: ComposerProps) {
     const [text, setText] = useState("");
     const [focus, setFocus] = useState(false);
@@ -743,6 +793,54 @@ function Composer({
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
 
+    // The agent for the *next* send: an `@handle` in the box summons that agent
+    // for one turn (OpenCode's subagent mention); otherwise the picked agent.
+    const agent = agents.find(a => a.id === agentKey) ?? null;
+    const mentionable = useMemo(() => agents.filter(usableAsSubagent), [agents]);
+    const mentionedKey = mentionedAgentKeys(
+        text,
+        mentionable.map(a => a.id)
+    )[0];
+    const turnAgent = (mentionedKey ? agents.find(a => a.id === mentionedKey) : null) ?? agent;
+    const turnEffects = resolveChatTurn(
+        turnAgent ? { tools: turnAgent.tools, route: null, style: null, temperature: null } : null,
+        { webSearch, thinking, hasAttachments: attachments.length > 0 }
+    );
+
+    // `@` completion: the handle being typed at the caret, and the matches.
+    const [mention, setMention] = useState<{ query: string; start: number } | null>(null);
+    const [mentionIndex, setMentionIndex] = useState(0);
+    const mentionMatches = useMemo(() => {
+        if (!mention) return [];
+        return mentionable
+            .filter(
+                a =>
+                    a.id.startsWith(mention.query) ||
+                    a.displayName.toLowerCase().startsWith(mention.query)
+            )
+            .slice(0, 6);
+    }, [mention, mentionable]);
+
+    const syncMention = (value: string) => {
+        const el = ref.current;
+        setMention(el ? mentionQueryAt(value, el.selectionStart ?? value.length) : null);
+        setMentionIndex(0);
+    };
+
+    const insertMention = (option: ChatAgentOption) => {
+        if (!mention) return;
+        const el = ref.current;
+        const caret = el?.selectionStart ?? text.length;
+        const next = `${text.slice(0, mention.start)}@${option.id} ${text.slice(caret)}`;
+        setText(next);
+        setMention(null);
+        const position = mention.start + option.id.length + 2;
+        window.requestAnimationFrame(() => {
+            el?.focus();
+            el?.setSelectionRange(position, position);
+        });
+    };
+
     const handleSend = () => {
         if (!text.trim() || disabled || uploading) return;
         onSend({
@@ -751,8 +849,10 @@ function Composer({
             attachments,
             webSearch,
             thinking,
+            agentKey: mentionedKey ?? agentKey,
         });
         setText("");
+        setMention(null);
         setAttachments([]);
         setAttachError(null);
     };
@@ -1021,22 +1121,89 @@ function Composer({
                     {attachError}
                 </div>
             )}
+            {mentionMatches.length > 0 && (
+                <div
+                    role="listbox"
+                    aria-label="Agents"
+                    className="border-line bg-panel mb-2 overflow-hidden rounded-lg border shadow-md"
+                >
+                    {mentionMatches.map((option, index) => (
+                        <button
+                            key={option.id}
+                            type="button"
+                            role="option"
+                            aria-selected={index === mentionIndex}
+                            onMouseDown={e => {
+                                e.preventDefault();
+                                insertMention(option);
+                            }}
+                            onMouseEnter={() => setMentionIndex(index)}
+                            className={cn(
+                                "flex w-full items-center gap-2.5 px-3 py-1.5 text-left",
+                                index === mentionIndex
+                                    ? "bg-brand-soft text-brand-ink"
+                                    : "text-ink-2"
+                            )}
+                        >
+                            <AgentAvatar agent={option} size={20} />
+                            <span className="text-[12.5px] font-medium">{option.displayName}</span>
+                            <span className="mono text-[11px] opacity-70">@{option.id}</span>
+                            <span className="ml-auto truncate text-[11px] opacity-70">
+                                {option.description || option.role}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
             <textarea
                 ref={ref}
                 value={text}
-                onChange={e => setText(e.target.value)}
+                onChange={e => {
+                    setText(e.target.value);
+                    syncMention(e.target.value);
+                }}
+                onClick={() => syncMention(text)}
                 onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
+                onBlur={() => {
+                    setFocus(false);
+                    setMention(null);
+                }}
                 onKeyDown={e => {
+                    if (mentionMatches.length > 0) {
+                        if (e.key === "ArrowDown") {
+                            e.preventDefault();
+                            setMentionIndex(i => (i + 1) % mentionMatches.length);
+                            return;
+                        }
+                        if (e.key === "ArrowUp") {
+                            e.preventDefault();
+                            setMentionIndex(
+                                i => (i - 1 + mentionMatches.length) % mentionMatches.length
+                            );
+                            return;
+                        }
+                        if (e.key === "Enter" || e.key === "Tab") {
+                            e.preventDefault();
+                            insertMention(mentionMatches[mentionIndex] ?? mentionMatches[0]!);
+                            return;
+                        }
+                        if (e.key === "Escape") {
+                            e.preventDefault();
+                            setMention(null);
+                            return;
+                        }
+                    }
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         handleSend();
                     }
                 }}
                 placeholder={
-                    selSources.length > 0
-                        ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
-                        : "Ask anything. Pick sources on the left, or just type."
+                    agent
+                        ? `Ask ${agent.displayName}, your ${agent.role.toLowerCase()}… or @mention another agent`
+                        : selSources.length > 0
+                          ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
+                          : "Ask anything. Pick sources on the left, type @ to bring in an agent."
                 }
                 style={{
                     width: "100%",
@@ -1088,6 +1255,16 @@ function Composer({
                             flex: "1 1 auto",
                         }}
                     >
+                        <AgentPill
+                            agents={agents}
+                            agent={agent}
+                            mentioned={
+                                mentionedKey && mentionedKey !== agentKey
+                                    ? (agents.find(a => a.id === mentionedKey) ?? null)
+                                    : null
+                            }
+                            onChange={onChangeAgent}
+                        />
                         <ToolbarPill
                             label="Attach"
                             title={`Attach up to ${ATTACH_MAX_COUNT} files to this message only (PDFs, DOCX, images, text)`}
@@ -1124,6 +1301,12 @@ function Composer({
                             onClick={onToggleThinking}
                         />
                     </div>
+                    {turnEffects.notes.length > 0 && (
+                        <div className="text-ink-3 basis-full text-[11px]" role="status">
+                            {turnAgent?.displayName ?? "This agent"}: {turnEffects.notes.join("; ")}
+                            .
+                        </div>
+                    )}
                     <div
                         style={{
                             display: "flex",
@@ -1133,7 +1316,7 @@ function Composer({
                             flexShrink: 0,
                         }}
                     >
-                        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+                        <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
                             <kbd
                                 style={{
                                     padding: "1.5px 5px",
@@ -1189,41 +1372,172 @@ interface ToolbarPillProps {
     badge?: string;
 }
 
+/**
+ * The composer's agent picker — OpenCode's Tab-to-switch primary agent, as a
+ * pill. Shows who answers next: the picked agent, or the one an `@handle` in
+ * the box summons for this turn.
+ */
+function AgentPill({
+    agents,
+    agent,
+    mentioned,
+    onChange,
+}: {
+    agents: ChatAgentOption[];
+    agent: ChatAgentOption | null;
+    /** An agent an `@handle` in the draft summons for the next turn only. */
+    mentioned: ChatAgentOption | null;
+    onChange: (key: string | null) => void;
+}) {
+    const [open, setOpen] = useState(false);
+    const primaries = agents.filter(usableAsPrimary);
+    const shown = mentioned ?? agent;
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <button
+                    type="button"
+                    title={
+                        mentioned
+                            ? `@${mentioned.id} answers this turn (mentioned)`
+                            : agent
+                              ? `${agent.displayName} — ${agent.role}. Click to change.`
+                              : "Pick an agent to hold this chat with"
+                    }
+                    aria-label="Agent"
+                    style={{
+                        fontSize: 12,
+                        padding: shown ? "4px 10px 4px 4px" : "6px 10px",
+                        borderRadius: 8,
+                        color: shown ? "var(--ink)" : "var(--ink-2)",
+                        background: shown ? "var(--panel-2)" : "transparent",
+                        border: `1px solid ${shown ? (shown.accent ?? personaColor(shown)) : "var(--line)"}`,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        transition: "background 120ms, border-color 120ms, color 120ms",
+                    }}
+                >
+                    {shown ? (
+                        <>
+                            <AgentAvatar agent={shown} size={18} />
+                            <span style={{ fontWeight: 600 }}>{shown.displayName}</span>
+                            {mentioned && (
+                                <span style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
+                                    this turn
+                                </span>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <Bot size={12} />
+                            <span className="@max-sm:sr-only">Agent</span>
+                        </>
+                    )}
+                </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-[320px] p-1.5">
+                <div className="text-ink-3 px-2 pb-1.5 pt-1 text-[11px]">
+                    Who holds this chat. Type <span className="mono">@handle</span> in a message to
+                    bring another agent in for one turn.
+                </div>
+                <button
+                    type="button"
+                    role="option"
+                    aria-selected={agent === null}
+                    onClick={() => {
+                        onChange(null);
+                        setOpen(false);
+                    }}
+                    className={cn(
+                        "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left",
+                        agent === null
+                            ? "bg-brand-soft text-brand-ink"
+                            : "text-ink-2 hover:bg-line-2"
+                    )}
+                >
+                    <span className="bg-brand-soft text-brand inline-flex size-6 items-center justify-center rounded-full">
+                        <IconBolt size={11} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                        <span className="block text-[12.5px] font-medium">Launchstack</span>
+                        <span className="block text-[11px] opacity-70">
+                            The workspace assistant
+                        </span>
+                    </span>
+                    {agent === null && <Check className="size-3.5" />}
+                </button>
+                <div className="max-h-[320px] overflow-y-auto">
+                    {primaries.map(option => (
+                        <button
+                            key={option.id}
+                            type="button"
+                            role="option"
+                            aria-selected={agent?.id === option.id}
+                            onClick={() => {
+                                onChange(option.id);
+                                setOpen(false);
+                            }}
+                            className={cn(
+                                "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left",
+                                agent?.id === option.id
+                                    ? "bg-brand-soft text-brand-ink"
+                                    : "text-ink-2 hover:bg-line-2"
+                            )}
+                        >
+                            <AgentAvatar agent={option} size={24} />
+                            <span className="min-w-0 flex-1">
+                                <span className="flex items-baseline gap-1.5">
+                                    <span className="text-[12.5px] font-medium">
+                                        {option.displayName}
+                                    </span>
+                                    <span className="mono text-[10.5px] opacity-70">
+                                        @{option.id}
+                                    </span>
+                                </span>
+                                <span className="block truncate text-[11px] opacity-70">
+                                    {option.description || option.role}
+                                </span>
+                            </span>
+                            {agent?.id === option.id && <Check className="size-3.5 shrink-0" />}
+                        </button>
+                    ))}
+                    {primaries.length === 0 && (
+                        <div className="text-ink-3 px-2 py-2 text-[12px]">No agents yet.</div>
+                    )}
+                </div>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+/**
+ * One of the composer's toggles. In a narrow pane it drops to its icon — the
+ * label stays for screen readers and in the tooltip — rather than wrapping
+ * the row onto a second line.
+ */
 function ToolbarPill({ label, title, icon, active, disabled, onClick, badge }: ToolbarPillProps) {
     return (
         <button
+            type="button"
             onClick={onClick}
             title={title}
             disabled={disabled}
-            style={{
-                fontSize: 12,
-                padding: "6px 10px",
-                borderRadius: 8,
-                color: active ? "white" : "var(--ink-2)",
-                background: active ? "var(--accent)" : "transparent",
-                border: `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                opacity: disabled ? 0.5 : 1,
-                cursor: disabled ? "not-allowed" : "pointer",
-                transition: "background 120ms, border-color 120ms, color 120ms",
-            }}
+            className={cn(
+                "@max-sm:px-2 flex items-center gap-[5px] rounded-lg border px-2.5 py-1.5 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                active
+                    ? "border-brand bg-brand text-brand-fg"
+                    : "border-line text-ink-2 hover:bg-line-2 bg-transparent"
+            )}
         >
             {icon}
-            {label}
+            <span className="@max-sm:sr-only">{label}</span>
             {badge && (
                 <span
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        padding: "0 5px",
-                        borderRadius: 999,
-                        background: active ? "rgba(255,255,255,0.25)" : "var(--line-2)",
-                        color: active ? "white" : "var(--ink-3)",
-                        minWidth: 14,
-                        textAlign: "center",
-                    }}
+                    className={cn(
+                        "min-w-3.5 rounded-full px-[5px] text-center text-[10px] font-bold",
+                        active ? "bg-brand-fg/25 text-brand-fg" : "bg-line-2 text-ink-3"
+                    )}
                 >
                     {badge}
                 </span>
@@ -1330,7 +1644,7 @@ function EmptyState({
     return (
         <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
             <div className="mb-10 text-center">
-                <div className="serif text-ink mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
+                <div className="display text-ink @max-md:text-[34px] @max-sm:text-[28px] mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
                     What do you want to <em className="text-brand">ask</em> yourself?
                 </div>
                 <div className="text-ink-3 text-sm">
@@ -1362,270 +1676,6 @@ function EmptyState({
 
 /** Public README — same destination as the public site's footer "Documentation"
  *  link (apps/landing, MarketingShell). */
-const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
-
-export interface AvatarMenuProps {
-    userInitials: string;
-    userName?: string;
-    userEmail?: string;
-    onOpenSettings: () => void;
-    onSignOut?: () => void;
-}
-
-/** Matches the workspace header “jump” control (⌘K) — reused in ExpandedFeatureView. */
-export function JumpToPaletteButton({ onClick }: { onClick: () => void }) {
-    return (
-        <button
-            onClick={onClick}
-            title="Jump to anything  ⌘K"
-            type="button"
-            style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "5px 9px",
-                borderRadius: 7,
-                border: "1px solid var(--line)",
-                background: "var(--line-2)",
-                fontSize: 12,
-                color: "var(--ink-3)",
-            }}
-        >
-            <IconSearch size={12} />
-            <span
-                className="mono"
-                style={{
-                    fontSize: 10,
-                    padding: "1px 5px",
-                    border: "1px solid var(--line)",
-                    borderRadius: 4,
-                    background: "var(--panel)",
-                }}
-            >
-                ⌘K
-            </span>
-        </button>
-    );
-}
-
-export function AvatarMenu({
-    userInitials,
-    userName,
-    userEmail,
-    onOpenSettings,
-    onSignOut,
-}: AvatarMenuProps) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-    const { resolvedTheme, setTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
-    const workspaceSwitcher = useEmployerWorkspaceSwitcher();
-
-    useEffect(() => {
-        const onClick = (e: globalThis.MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-        };
-        document.addEventListener("mousedown", onClick);
-        return () => document.removeEventListener("mousedown", onClick);
-    }, []);
-
-    return (
-        <div ref={ref} style={{ position: "relative" }}>
-            <button
-                type="button"
-                onClick={() => setOpen(v => !v)}
-                style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: "50%",
-                    background:
-                        "linear-gradient(135deg, oklch(0.7 0.12 282), oklch(0.55 0.18 260))",
-                    color: "white",
-                    fontSize: 12,
-                    fontWeight: 700,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 0,
-                    border: "none",
-                    cursor: "pointer",
-                }}
-            >
-                {userInitials}
-            </button>
-            {open && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "calc(100% + 8px)",
-                        right: 0,
-                        width: 240,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        borderRadius: 12,
-                        boxShadow: "0 16px 40px var(--scrim-shadow)",
-                        padding: 6,
-                        zIndex: 50,
-                        animation: "lsw-fadeIn 120ms",
-                    }}
-                >
-                    <div
-                        style={{
-                            padding: "10px 10px 10px",
-                            borderBottom: workspaceSwitcher ? "none" : "1px solid var(--line)",
-                            marginBottom: workspaceSwitcher ? 0 : 6,
-                        }}
-                    >
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>
-                            {userName ?? "Your account"}
-                        </div>
-                        {userEmail && (
-                            <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{userEmail}</div>
-                        )}
-                    </div>
-                    {workspaceSwitcher && (
-                        <WorkspaceSwitcherDropdownRow
-                            payload={workspaceSwitcher}
-                            onNavigate={() => setOpen(false)}
-                        />
-                    )}
-                    <button
-                        type="button"
-                        onClick={() => {
-                            const next = isDark ? "light" : "dark";
-                            setTheme(next);
-                            // Remembered as a preference, so the choice follows
-                            // the person to their next browser. Best effort.
-                            void writeSettingValue({
-                                key: "appearance.theme",
-                                scope: "member",
-                                value: next,
-                            }).catch(() => undefined);
-                        }}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                            textAlign: "left",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        {isDark ? <IconSun size={14} /> : <IconMoon size={14} />}
-                        <span style={{ flex: 1 }}>Switch to {isDark ? "light" : "dark"} theme</span>
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setOpen(false);
-                            onOpenSettings();
-                        }}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                            textAlign: "left",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        <IconSettings size={14} />
-                        <span style={{ flex: 1 }}>Settings</span>
-                    </button>
-                    <a
-                        href={EMPLOYER_DOCS_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setOpen(false)}
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            padding: "7px 10px",
-                            borderRadius: 7,
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            cursor: "pointer",
-                            background: "transparent",
-                            textDecoration: "none",
-                            boxSizing: "border-box",
-                        }}
-                        onMouseEnter={e => {
-                            e.currentTarget.style.background = "var(--line-2)";
-                        }}
-                        onMouseLeave={e => {
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                    >
-                        <IconFile size={14} />
-                        <span style={{ flex: 1 }}>Documentation</span>
-                        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            ↗
-                        </span>
-                    </a>
-                    {onSignOut && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setOpen(false);
-                                onSignOut();
-                            }}
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                padding: "7px 10px",
-                                borderRadius: 7,
-                                fontSize: 13,
-                                color: "var(--ink-2)",
-                                cursor: "pointer",
-                                background: "transparent",
-                                border: "none",
-                                textAlign: "left",
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "var(--line-2)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "transparent";
-                            }}
-                        >
-                            <IconLogout size={14} />
-                            <span style={{ flex: 1 }}>Log out</span>
-                        </button>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-}
-
 export interface AskPanelProps {
     sources: WorkspaceSource[];
     selected: string[];
@@ -1648,6 +1698,11 @@ export interface AskPanelProps {
     onToggleWebSearch: () => void;
     thinking: boolean;
     onToggleThinking: () => void;
+    /** The roster, for the agent picker, `@handle` completion and attribution. */
+    agents?: ChatAgentOption[];
+    /** The agent the chat is held with; null = the default assistant. */
+    agentKey?: string | null;
+    onChangeAgent?: (key: string | null) => void;
     /** Extra pixels added to header `padding-left` when an overlay chrome control (e.g. show sidebar) sits at the viewport edge — see WorkspaceShell. */
     leadingChromeInsetPx?: number;
 }
@@ -1670,6 +1725,9 @@ export function AskPanel({
     onToggleWebSearch,
     thinking,
     onToggleThinking,
+    agents = [],
+    agentKey = null,
+    onChangeAgent,
     leadingChromeInsetPx = 0,
 }: AskPanelProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -1741,9 +1799,10 @@ export function AskPanel({
                 attachments: [],
                 webSearch,
                 thinking,
+                agentKey,
             });
         },
-        [selected, setSelected, sendMessage, webSearch, thinking]
+        [selected, setSelected, sendMessage, webSearch, thinking, agentKey]
     );
 
     return (
@@ -1759,9 +1818,16 @@ export function AskPanel({
             }}
         >
             <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
+                {/* One line each, cut short rather than wrapped: the bar is a
+                    fixed height so its rule meets the next column's, and a
+                    wrapped subtitle ran out of the top of it. */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{titleText}</div>
-                    <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{subText}</div>
+                    <div className="truncate" style={{ fontSize: 13, fontWeight: 600 }}>
+                        {titleText}
+                    </div>
+                    <div className="truncate" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                        {subText}
+                    </div>
                 </div>
 
                 <button
@@ -1833,6 +1899,7 @@ export function AskPanel({
                                     onOpenSource={onOpenSource}
                                     onQuote={quote}
                                     onEdit={edit}
+                                    agents={agents}
                                 />
                             ))}
                             {showTyping && <TypingIndicator />}
@@ -1862,6 +1929,9 @@ export function AskPanel({
                     onToggleThinking={onToggleThinking}
                     onOpenSource={onOpenSource}
                     seed={seed}
+                    agents={agents}
+                    agentKey={agentKey}
+                    onChangeAgent={onChangeAgent ?? (() => undefined)}
                 />
                 <div
                     style={{
@@ -1872,7 +1942,9 @@ export function AskPanel({
                         color: "var(--ink-3)",
                     }}
                 >
-                    Grounded answers only — cites every source it uses.
+                    {agentKey && agents.find(a => a.id === agentKey)
+                        ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
+                        : "Grounded answers only — cites every source it uses."}
                 </div>
             </div>
         </main>

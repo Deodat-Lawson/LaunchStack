@@ -5,10 +5,7 @@ import { publishBrandPost } from "@launchstack/pipelines/marketing/posts";
 
 import { brandContext, handleBrandError, json } from "../../../_http";
 
-export async function POST(
-    _request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const auth = await brandContext();
     if (!auth.ok) return auth.response;
     try {

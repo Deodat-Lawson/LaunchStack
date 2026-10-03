@@ -3,7 +3,8 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Github, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
+import { GithubMark } from "./GithubMark";
 import styles from "../../styles/marketing.module.css";
 import { LaunchstackMark } from "./LaunchstackLogo";
 import { GITHUB_REPO, SIGN_IN_URL, SIGN_UP_URL } from "~/config/site";
@@ -75,7 +76,7 @@ export function MarketingShell({
                         rel="noopener noreferrer"
                         title="Launchstack on GitHub"
                     >
-                        <Github size={16} />
+                        <GithubMark size={16} />
                         <span className={styles.label}>Open source</span>
                     </a>
                     <button

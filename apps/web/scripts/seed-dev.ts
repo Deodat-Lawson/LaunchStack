@@ -116,7 +116,10 @@ async function ensureAuthUser(
 
 /** The workspace, created if absent. Named rather than generated so re-runs find it. */
 async function ensureCompany(name: string): Promise<{ id: bigint; created: boolean }> {
-    const [existing] = await db.select({ id: company.id }).from(company).where(eq(company.name, name));
+    const [existing] = await db
+        .select({ id: company.id })
+        .from(company)
+        .where(eq(company.name, name));
     if (existing) return { id: BigInt(existing.id), created: false };
 
     const [inserted] = await db

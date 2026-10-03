@@ -169,7 +169,11 @@ async function processThread(
     try {
         // A thread the host already holds is confirmed unchanged without
         // bodies: minimal format carries message ids and labels only.
-        if (!context.force && context.sink.lastSyncedHash && context.known.has(discovered.threadId)) {
+        if (
+            !context.force &&
+            context.sink.lastSyncedHash &&
+            context.known.has(discovered.threadId)
+        ) {
             const previous = await context.sink.lastSyncedHash(threadItem);
             if (previous) {
                 let minimal;
@@ -182,7 +186,9 @@ async function processThread(
                     }
                     throw error;
                 }
-                const current = threadFingerprint(threadMessages(minimal).map(message => message.id));
+                const current = threadFingerprint(
+                    threadMessages(minimal).map(message => message.id)
+                );
                 if (current === previous) {
                     outcome.skipped.push({ sourceId: discovered.threadId, reason: "unchanged" });
                     return outcome;
@@ -229,7 +235,8 @@ async function processThread(
                     context.attachmentPolicy
                 );
                 if (attachment.kind === "skipped") outcome.skipped.push(attachment.value);
-                else if (attachment.kind === "not-found") outcome.notFound.push(attachment.sourceId);
+                else if (attachment.kind === "not-found")
+                    outcome.notFound.push(attachment.sourceId);
                 else outcome.stored.push(await context.sink.store(attachment.value));
             } catch (error) {
                 outcome.failed.push({ sourceId: item.sourceId, error: describeError(error) });

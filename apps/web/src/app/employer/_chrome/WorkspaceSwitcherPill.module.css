@@ -66,37 +66,3 @@
         display: none;
     }
 }
-
-/* Inside AvatarMenu — directly under name/email */
-.dropdownRow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 6px;
-    padding: 10px 10px 10px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    text-decoration: none;
-    color: var(--ink-2);
-    font-size: 13px;
-    font-weight: 500;
-    box-sizing: border-box;
-    transition:
-        background 0.12s,
-        color 0.12s;
-}
-.dropdownRow:hover {
-    background: var(--line-2);
-    color: var(--ink);
-}
-.dropdownRowName {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.dropdownRowChevron {
-    flex-shrink: 0;
-    color: var(--ink-3);
-}

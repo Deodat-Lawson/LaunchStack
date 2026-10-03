@@ -58,7 +58,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await page.goto("/employer/documents");
         // A dev server compiles the workspace on first visit; give the rail
         // the time that takes rather than failing on a cold start.
-        await expect(page.getByPlaceholder("Search your knowledge")).toBeVisible({
+        await expect(page.getByPlaceholder("Filter sources")).toBeVisible({
             timeout: 90_000,
         });
 
@@ -73,7 +73,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await page.waitForURL(/\/employer\/documents\?.*source=m\d+.*edit=1/);
         const sourceId = sourceIdFromUrl(page.url());
         await expect(page.getByLabel("Mindmap title")).toBeVisible();
-        await expect(page.getByPlaceholder("Search your knowledge")).toBeVisible();
+        await expect(page.getByPlaceholder("Filter sources")).toBeVisible();
 
         // Name it from the editor, then leave.
         const title = `Launch plan ${sourceId}`;

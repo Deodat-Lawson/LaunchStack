@@ -9,28 +9,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Split the workspace centre** - columns side by side, each its own strip of
-  tabs
-  - Chat beside a document, or chat beside a tool beside a document, up to
-    three columns with a draggable divider
-  - "Open to the side" on any source; "Split to the right" on a tab or from
-    the strip; drag a tab from one column into another
-  - A pane moved between columns keeps its draft, scroll and undo — it is the
-    same pane, not a rebuilt one
-  - New bindings in Settings → Shortcuts: split (⌘⌥\), focus the next or
-    previous column (⌘⌥] and ⌘⌥[), close the current app (⌘⌥W)
-  - The palette, Studio and avatar controls move into the tab strip, where
-    they are drawn once however the centre is split
-  - The document viewer folds its versions and notes rail into a Details
+- **Proposals** - a writing app of its own in Tools, with a Studio tile: find
+  the funders that fit, then write the proposal from what your sources prove
+  - Profile: what the workspace's sources can prove, fact by fact with
+    citations; edit a fact by hand, rebuild after new reports land
+  - Funders: a search planned from the profile over Grants.gov (public API,
+    no key) and the web (with an EXA/SERPER key), each call scored for fit
+    with why and concerns; save, dismiss, or apply from the row; a link to
+    Investor relations for equity
+  - Write: paste a call, give its link, or pick a Source; it becomes a
+    checklist (eligibility, every question with its word limit, attachments,
+    format, deadline) and an outline of sections to write
+  - An editor per section: draft from the sources with numbered evidence and
+    the gaps named, rewrite (tighten to the limit, more specific, plainer,
+    stronger, or your own instruction), approve, save to the Library; the
+    evidence rail shows what the answer cites; "Ask in chat" hands a question
+    about the sources to the Studio chat (`?ask=` on the workspace)
+  - A review that reads the drafts like a programme officer, readiness on
+    every row, a whole-document preview, export into Sources as markdown
+  - Runs execute in the web process after the response, or on the worker
+    with `PROPOSALS_EXECUTOR=worker`; every run lists in History
+  - `@launchstack/tools/grant-search` (Grants.gov + web listings) and
+    `@launchstack/pipelines/proposals` (six tables, six stages, the run
+    orchestrator); preview at `/dev/proposals`
+
+- **Split the workspace centre** - panes side by side and stacked, nested as
+  deep as you split them (up to six), each its own strip of tabs
+  - Drag a tab, or a source from the sidebar, onto a pane: its edges split
+    that way, its middle opens it there; the workspace's own edges make a pane
+    the full height or width
+  - ⌘/Ctrl-click a source or a Studio app to open it beside what is showing;
+    double-click a tab to maximize its pane
+  - One "⋯" menu per pane: split right, split down, maximize, close
+  - Dividers drag and take arrow keys; a split that would leave a pane too
+    small to use is refused
+  - A pane moved or split keeps its draft, scroll and undo — it is the same
+    pane, not a rebuilt one
+  - The arrangement is remembered per member and workspace, and survives a
+    window too narrow for panes
+  - New bindings in Settings → Shortcuts: split right (⌘⌥\), split down
+    (⌘⌥⇧\), maximize (⌘⇧↩), focus the next or previous pane (⌘⌥] and ⌘⌥[),
+    close the current app (⌘⌥W)
+  - Apps fit the pane they are in, not the window: the composer drops to icons
+    and Meetings stacks its channel list in a narrow pane  - The document viewer folds its versions and notes rail into a Details
     panel once its column is too narrow for both
+- **Resizable sidebar** - drag its edge (or use the arrow keys) between 220 and
+  520px; the width is remembered
 - **Studio apps open in centre tabs** - the workspace centre is a tab strip
   rather than one pane at a time
   - Open, close, middle-click close, drag to reorder, Alt+Arrow to reorder,
     Delete or Backspace to close, overflow scroll, and an empty-workspace state
   - Every open pane stays mounted, so switching apps keeps drafts, scroll
     position and undo history
-  - Claude Artifacts and Coding sessions now open inside the workspace instead
-    of navigating away; both keep their standalone routes for direct links
   - The Studio drawer is a picker: it no longer hosts panes, and the Expand
     button is gone because there is nothing left to expand into
   - A mindmap in a background tab, or behind a source preview, no longer
@@ -52,6 +82,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API utilities (`src/lib/api-utils.ts`) for standardized error handling and response patterns
 - Comprehensive TypeScript types (`src/types/api.ts`) for better type safety across the application
 - Missing environment variables in `.env.example` file with proper documentation
+
+### Changed
+
+- **Claude artifacts and coding sessions are sources you add**, not Studio
+  tools
+  - Add a source → Claude artifact: paste or upload an artifact's code and it
+    becomes a source — listed, searchable, citable — opened in a sandboxed
+    preview. Artifacts imported before can be added as sources in one click;
+    the old copies go to Settings → Archive
+  - Add a source → Coding sessions holds the whole sessions browser: import,
+    rescan, open, continue in chat
+  - `/employer/artifacts`, `/employer/agent-sessions`, their palette entries
+    and old `?feature=` links now open those tabs
+- **New meeting shows the whole plan at once** - workflows down the left
+  (grouped as on the Meetings home), the brief, room and phases in the
+  middle, and how it runs — who speaks next, chair, turn limit, agenda, Slack
+  — on the right, with nothing behind a "Show details" link
+  - Seats are cards that name the chair and the workflow's suggested agents
+  - Under a 1024px dialog the workflow list becomes a picker; on a phone the
+    columns stack
+  - Start says what is missing ("Add a title to start.") instead of just
+    greying out, and a failed start shows its error above the buttons
 
 ### Enhanced
 
@@ -85,6 +137,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The New meeting dialog was 512px wide whatever it asked for (the kit's
+  `sm:max-w-lg` outranked its `max-w-none`), and the New meeting button
+  opened on a blank room because its default workflow had been renamed
+- Unchecked switches were invisible in light mode: the kit Switch's track
+  and dark-mode thumb named colours that no longer exist
+- Picking the workflow that is already applied no longer throws away the
+  edits made to it, and unseating a moderated meeting's chair hands the chair
+  to someone still in the room
+- Outline buttons had no outline: the global button reset set
+  `border-style: none`, which Tailwind's `border` utility does not undo
+- ⌘⌥ shortcuts never fired on a Mac, where Option changes the character a key
+  types (⌥\ is «); combinations with Option now match the key pressed
 - **Document lifecycle correctness:** Uploads, new versions, ZIP children, and archive summaries now atomically persist their document/version/job state, converge retries through stable idempotency keys, dispatch only after job creation, and propagate strict version IDs. Users no longer get stranded or duplicate document trees when a request or dispatch is retried; dispatch remains non-outbox and ambiguous remote acceptance relies on stable event-ID dedupe/retry.
 - **TypeScript/ESLint Compliance**:
   - Replaced all `any` types with proper TypeScript types in `ocrService.ts`

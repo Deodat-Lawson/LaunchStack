@@ -66,7 +66,7 @@ describe("transcript helpers", () => {
 describe("parseQuotedMessage", () => {
     it("splits the question from the passage it quotes", () => {
         const result = parseQuotedMessage(
-            'Explain this passage from “Report”:\n\n> Revenue grew 14%,\n> driven by renewals.\n\n'
+            "Explain this passage from “Report”:\n\n> Revenue grew 14%,\n> driven by renewals.\n\n"
         );
         expect(result.lead).toBe("Explain this passage from “Report”:");
         expect(result.quote).toBe("Revenue grew 14%,\ndriven by renewals.");
@@ -83,7 +83,9 @@ describe("parseQuotedMessage", () => {
     });
 
     it("keeps what was typed after the passage", () => {
-        const result = parseQuotedMessage("Look at this:\n\n> the cap is 2x fees\n\nIs that normal?");
+        const result = parseQuotedMessage(
+            "Look at this:\n\n> the cap is 2x fees\n\nIs that normal?"
+        );
         expect(result.quote).toBe("the cap is 2x fees");
         expect(result.trail).toBe("Is that normal?");
     });

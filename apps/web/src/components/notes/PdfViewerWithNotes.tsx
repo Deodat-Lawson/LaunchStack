@@ -1,21 +1,10 @@
 "use client";
 
-import {
-    memo,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import {
-    citationNeedles,
-    findTextRange,
-    type ViewerHighlight,
-} from "~/lib/find-text-range";
+import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
 import { createSelectionCommitter } from "./_shared/selectionGesture";
 
 /**
@@ -32,8 +21,7 @@ import { createSelectionCommitter } from "./_shared/selectionGesture";
  * a NEXT_PUBLIC_ value it is baked in at build time — it is an option when you
  * build your own image, not something a prebuilt image can be pointed at.
  */
-const WORKER_URL =
-    process.env.NEXT_PUBLIC_PDF_WORKER_URL ?? "/pdf.worker.min.mjs";
+const WORKER_URL = process.env.NEXT_PUBLIC_PDF_WORKER_URL ?? "/pdf.worker.min.mjs";
 
 if (typeof window !== "undefined") {
     pdfjs.GlobalWorkerOptions.workerSrc = WORKER_URL;
@@ -78,14 +66,15 @@ interface Props {
      */
     onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
     /**
-     * When set, the selection popup also shows three AI-capture buttons.
-     * `intent` selects the prompt the server uses. Parent should call
-     * `/api/notes/ai-capture` with the selection + the requested intent.
+     * When set, the selection popup offers "Ask AI": the passage goes to the
+     * chat as a quote, with the document kept in view beside it.
+     *
+     * This replaced three buttons — Summarize, Action, Decision — that each
+     * wrote an AI-generated note. They answered a question the reader had not
+     * asked, in a fixed shape, and filed the answer as a note; asking lets the
+     * reader say what they actually want to know about the passage.
      */
-    onAiCapture?: (
-      anchor: PdfAnchorCapture,
-      intent: "summary" | "action" | "decision",
-    ) => void;
+    onAskAi?: (quote: string) => void;
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
     /**
@@ -125,18 +114,14 @@ export function PdfViewerWithNotes({
     notes,
     scrollToNoteId,
     onCreateAnchoredNote,
-    onAiCapture,
+    onAskAi,
     onNotePinClick,
     onSelectionDraft,
     citationHighlight,
 }: Props) {
     const [numPages, setNumPages] = useState<number | null>(null);
-    const [pageGeometry, setPageGeometry] = useState<Map<number, PageGeometry>>(
-        () => new Map(),
-    );
-    const [selectionDraft, setSelectionDraft] = useState<SelectionDraft | null>(
-        null,
-    );
+    const [pageGeometry, setPageGeometry] = useState<Map<number, PageGeometry>>(() => new Map());
+    const [selectionDraft, setSelectionDraft] = useState<SelectionDraft | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     /** Quads for the located citation passage, rendered as a distinct overlay. */
     const [citeOverlay, setCiteOverlay] = useState<{
@@ -157,13 +142,11 @@ export function PdfViewerWithNotes({
     // Everything a page receives is stable across the viewer's own renders,
     // so a change to the selection draft repaints the floating button and
     // nothing else — `PdfPage` is memoised on exactly these props.
-    const pageRefCallbacks = useRef<Map<number, (el: HTMLDivElement | null) => void>>(
-        new Map(),
-    );
+    const pageRefCallbacks = useRef<Map<number, (el: HTMLDivElement | null) => void>>(new Map());
     const pageRefFor = useCallback((pageNum: number) => {
         let cb = pageRefCallbacks.current.get(pageNum);
         if (!cb) {
-            cb = (el) => {
+            cb = el => {
                 if (el) pageRefs.current.set(pageNum, el);
                 else pageRefs.current.delete(pageNum);
             };
@@ -171,7 +154,7 @@ export function PdfViewerWithNotes({
         }
         return cb;
     }, []);
-    const onTextLayerReady = useCallback(() => setTextLayerVersion((v) => v + 1), []);
+    const onTextLayerReady = useCallback(() => setTextLayerVersion(v => v + 1), []);
     const notesByPage = useMemo(() => {
         const map = new Map<number, PdfNoteLite[]>();
         for (const note of notes) {
@@ -197,16 +180,60 @@ export function PdfViewerWithNotes({
                       quads: selectionDraft.quads,
                       quote: { exact: selectionDraft.quote },
                   }
-                : null,
+                : null
         );
     }, [selectionDraft]);
 
+    /**
+     * Pages fit the column they are in. They render at their natural size
+     * (1pt = 1px) when there is room, and shrink — never grow — when there is
+     * not: at scale 1 a Letter page is 612px wide, so any column narrower
+     * than that, which is most columns beside the chat, scrolled sideways
+     * and cut the right edge of every line off.
+     *
+     * The first page's width is read before any page renders, so pages come
+     * up at their fitted size instead of drawing wide and then shrinking.
+     * One scale for the whole document keeps mixed page sizes in proportion.
+     */
+    const [naturalWidth, setNaturalWidth] = useState<number | null>(null);
+    const [availableWidth, setAvailableWidth] = useState<number | null>(null);
+    useEffect(() => {
+        const element = containerRef.current;
+        if (!element || typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(([entry]) => {
+            const width = entry?.contentRect.width ?? 0;
+            if (width > 0) setAvailableWidth(Math.floor(width));
+        });
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
+    const pageScale =
+        naturalWidth && availableWidth
+            ? // Hundredths, so a resize drag does not re-render every page
+              // for every pixel.
+              Math.floor(
+                  Math.min(1, Math.max(0.2, (availableWidth - PAGE_GUTTER_PX * 2) / naturalWidth)) *
+                      100
+              ) / 100
+            : 1;
+
     const onDocumentLoadSuccess = useCallback(
-        ({ numPages: n }: { numPages: number }) => {
-            setNumPages(n);
+        (pdf: {
+            numPages: number;
+            getPage: (
+                n: number
+            ) => Promise<{ getViewport: (o: { scale: number }) => { width: number } }>;
+        }) => {
             setLoadError(null);
+            void pdf
+                .getPage(1)
+                .then(
+                    page => setNaturalWidth(page.getViewport({ scale: 1 }).width),
+                    () => setNaturalWidth(null)
+                )
+                .finally(() => setNumPages(pdf.numPages));
         },
-        [],
+        []
     );
     const onDocumentLoadError = useCallback((err: Error) => {
         setLoadError(err.message || "Failed to load PDF");
@@ -214,7 +241,7 @@ export function PdfViewerWithNotes({
 
     const onPageRenderSuccess = useCallback(
         (page: { pageNumber: number; width: number; height: number }) => {
-            setPageGeometry((prev) => {
+            setPageGeometry(prev => {
                 const next = new Map(prev);
                 next.set(page.pageNumber, {
                     width: page.width,
@@ -223,13 +250,13 @@ export function PdfViewerWithNotes({
                 return next;
             });
         },
-        [],
+        []
     );
 
     // Scroll to a pinned note when the parent requests it.
     useEffect(() => {
         if (!scrollToNoteId) return;
-        const n = notes.find((x) => x.id === scrollToNoteId);
+        const n = notes.find(x => x.id === scrollToNoteId);
         if (!n?.page) return;
         const el = pageRefs.current.get(n.page);
         if (el) {
@@ -260,26 +287,16 @@ export function PdfViewerWithNotes({
             }
         }
 
-        const needles = citationNeedles(
-            citationHighlight.text,
-            citationHighlight.matchText,
-        );
+        const needles = citationNeedles(citationHighlight.text, citationHighlight.matchText);
         const candidatePages: number[] = hintedPage
-            ? [
-                  hintedPage,
-                  ...Array.from(pageRefs.current.keys()).filter(
-                      (p) => p !== hintedPage,
-                  ),
-              ]
+            ? [hintedPage, ...Array.from(pageRefs.current.keys()).filter(p => p !== hintedPage)]
             : Array.from(pageRefs.current.keys()).sort((a, b) => a - b);
 
         for (const pageNumber of candidatePages) {
             const pageEl = pageRefs.current.get(pageNumber);
             const geom = pageGeometry.get(pageNumber);
             if (!pageEl || !geom) continue;
-            const textLayer = pageEl.querySelector(
-                ".react-pdf__Page__textContent",
-            );
+            const textLayer = pageEl.querySelector(".react-pdf__Page__textContent");
             if (!textLayer) continue;
 
             const range = findTextRange(textLayer, needles);
@@ -287,11 +304,11 @@ export function PdfViewerWithNotes({
 
             const pageRect = pageEl.getBoundingClientRect();
             const rects = Array.from(range.getClientRects()).filter(
-                (r) => r.width > 0 && r.height > 0,
+                r => r.width > 0 && r.height > 0
             );
             if (rects.length === 0) continue;
 
-            const quads: PdfQuad[] = rects.map((r) => [
+            const quads: PdfQuad[] = rects.map(r => [
                 (r.left - pageRect.left) / geom.width,
                 (r.top - pageRect.top) / geom.height,
                 (r.right - pageRect.left) / geom.width,
@@ -307,10 +324,7 @@ export function PdfViewerWithNotes({
             const firstQuad = quads[0];
             if (container && firstQuad) {
                 container.scrollTo({
-                    top:
-                        pageEl.offsetTop +
-                        firstQuad[1] * geom.height -
-                        container.clientHeight / 3,
+                    top: pageEl.offsetTop + firstQuad[1] * geom.height - container.clientHeight / 3,
                 });
             }
             return;
@@ -351,14 +365,14 @@ export function PdfViewerWithNotes({
             const pageRect = pageEl.getBoundingClientRect();
 
             const rects = Array.from(range.getClientRects()).filter(
-                (r) => r.width > 0 && r.height > 0,
+                r => r.width > 0 && r.height > 0
             );
             if (rects.length === 0) {
                 setSelectionDraft(null);
                 return;
             }
 
-            const quads: PdfQuad[] = rects.map((r) => [
+            const quads: PdfQuad[] = rects.map(r => [
                 (r.left - pageRect.left) / geom.width,
                 (r.top - pageRect.top) / geom.height,
                 (r.right - pageRect.left) / geom.width,
@@ -373,11 +387,8 @@ export function PdfViewerWithNotes({
             const lastRect = rects[rects.length - 1]!;
             const halfPopup = POPUP_WIDTH_PX / 2 + 8;
             const buttonX = Math.min(
-                Math.max(
-                    lastRect.right - containerRect.left + container.scrollLeft,
-                    halfPopup,
-                ),
-                container.clientWidth - halfPopup,
+                Math.max(lastRect.right - containerRect.left + container.scrollLeft, halfPopup),
+                container.clientWidth - halfPopup
             );
             const buttonY = lastRect.bottom - containerRect.top + container.scrollTop + 6;
 
@@ -440,16 +451,9 @@ export function PdfViewerWithNotes({
         setSelectionDraft(null);
     };
 
-    const handleAiCapture = (intent: "summary" | "action" | "decision") => {
-        if (!selectionDraft || !onAiCapture) return;
-        onAiCapture(
-            {
-                page: selectionDraft.page,
-                quads: selectionDraft.quads,
-                quote: { exact: selectionDraft.quote },
-            },
-            intent,
-        );
+    const handleAskAi = () => {
+        if (!selectionDraft || !onAskAi) return;
+        onAskAi(selectionDraft.quote);
         window.getSelection()?.removeAllRanges();
         setSelectionDraft(null);
     };
@@ -471,6 +475,10 @@ export function PdfViewerWithNotes({
                         textAlign: "center",
                         color: "var(--ink-3)",
                         padding: 40,
+                        // The message carries the file's URL, one unbroken
+                        // word that pushed a narrow column into scrolling
+                        // sideways.
+                        overflowWrap: "anywhere",
                     }}
                 >
                     Couldn&rsquo;t load PDF: {loadError}
@@ -484,25 +492,20 @@ export function PdfViewerWithNotes({
                     error={<LoadingPlaceholder text="Failed to load" />}
                 >
                     {numPages !== null &&
-                        Array.from({ length: numPages }, (_, i) => i + 1).map(
-                            (pageNum) => (
-                                <PdfPage
-                                    key={pageNum}
-                                    pageNum={pageNum}
-                                    pageRef={pageRefFor(pageNum)}
-                                    onRenderSuccess={onPageRenderSuccess}
-                                    onTextLayerReady={onTextLayerReady}
-                                    notesOnPage={notesByPage.get(pageNum) ?? EMPTY_NOTES}
-                                    highlightedNoteId={scrollToNoteId ?? null}
-                                    onNotePinClick={handlePinClick}
-                                    citeQuads={
-                                        citeOverlay?.page === pageNum
-                                            ? citeOverlay.quads
-                                            : null
-                                    }
-                                />
-                            ),
-                        )}
+                        Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
+                            <PdfPage
+                                key={pageNum}
+                                pageNum={pageNum}
+                                scale={pageScale}
+                                pageRef={pageRefFor(pageNum)}
+                                onRenderSuccess={onPageRenderSuccess}
+                                onTextLayerReady={onTextLayerReady}
+                                notesOnPage={notesByPage.get(pageNum) ?? EMPTY_NOTES}
+                                highlightedNoteId={scrollToNoteId ?? null}
+                                onNotePinClick={handlePinClick}
+                                citeQuads={citeOverlay?.page === pageNum ? citeOverlay.quads : null}
+                            />
+                        ))}
                 </Document>
             )}
 
@@ -540,33 +543,15 @@ export function PdfViewerWithNotes({
                     >
                         + Note
                     </button>
-                    {onAiCapture && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("summary")}
-                                title="Summarize as note"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Summarize
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("action")}
-                                title="Extract action item"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Action
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleAiCapture("decision")}
-                                title="Extract decision"
-                                style={aiBtnStyle}
-                            >
-                                ✦ Decision
-                            </button>
-                        </>
+                    {onAskAi && (
+                        <button
+                            type="button"
+                            onClick={handleAskAi}
+                            title="Ask about this passage in the chat"
+                            style={askBtnStyle}
+                        >
+                            ✦ Ask AI
+                        </button>
                     )}
                 </div>
             )}
@@ -574,7 +559,10 @@ export function PdfViewerWithNotes({
     );
 }
 
-const aiBtnStyle: React.CSSProperties = {
+/** Space kept either side of a page when it is fitted to a narrow column. */
+const PAGE_GUTTER_PX = 16;
+
+const askBtnStyle: React.CSSProperties = {
     padding: "5px 8px",
     borderRadius: 6,
     background: "var(--panel-2)",
@@ -602,12 +590,10 @@ function LoadingPlaceholder({ text = "Loading PDF…" }: { text?: string }) {
 
 interface PdfPageProps {
     pageNum: number;
+    /** Fit-to-column scale, at most 1. */
+    scale: number;
     pageRef: (el: HTMLDivElement | null) => void;
-    onRenderSuccess: (page: {
-        pageNumber: number;
-        width: number;
-        height: number;
-    }) => void;
+    onRenderSuccess: (page: { pageNumber: number; width: number; height: number }) => void;
     notesOnPage: PdfNoteLite[];
     highlightedNoteId: number | null;
     onNotePinClick?: (noteId: number) => void;
@@ -619,6 +605,7 @@ interface PdfPageProps {
 
 const PdfPage = memo(function PdfPage({
     pageNum,
+    scale,
     pageRef,
     onRenderSuccess,
     notesOnPage,
@@ -637,17 +624,17 @@ const PdfPage = memo(function PdfPage({
                 position: "relative",
                 margin: "0 auto 16px",
                 width: "fit-content",
-                boxShadow:
-                    "0 4px 18px oklch(0 0 0 / 0.08), 0 1px 3px oklch(0 0 0 / 0.06)",
+                boxShadow: "0 4px 18px oklch(0 0 0 / 0.08), 0 1px 3px oklch(0 0 0 / 0.06)",
                 background: "#fff",
                 borderRadius: 4,
             }}
         >
             <Page
                 pageNumber={pageNum}
+                scale={scale}
                 renderTextLayer
                 renderAnnotationLayer={false}
-                onRenderSuccess={(page) => {
+                onRenderSuccess={page => {
                     setSize({ w: page.width, h: page.height });
                     onRenderSuccess({
                         pageNumber: pageNum,
@@ -744,9 +731,7 @@ function NoteOverlay({
                             width: (qx2 - qx1) * pageW,
                             height: (qy2 - qy1) * pageH,
                             background: fillColor,
-                            border: highlighted
-                                ? `1.5px solid ${borderColor}`
-                                : "none",
+                            border: highlighted ? `1.5px solid ${borderColor}` : "none",
                             borderRadius: 2,
                             pointerEvents: "none",
                             mixBlendMode: "multiply",
@@ -794,7 +779,7 @@ function NoteOverlay({
 
 function findContainingPage(
     range: Range,
-    pageRefs: Map<number, HTMLDivElement>,
+    pageRefs: Map<number, HTMLDivElement>
 ): { pageNumber: number; pageEl: HTMLDivElement } | null {
     const container =
         range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE

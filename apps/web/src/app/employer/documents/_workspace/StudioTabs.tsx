@@ -8,15 +8,18 @@ import {
     type ComponentType,
     type ReactNode,
 } from "react";
-import { Columns2, Plus, X } from "lucide-react";
+import { Minimize2, MoreHorizontal, Plus, X } from "lucide-react";
 
-import { ContextTarget } from "~/components/context-menu";
+import { ContextTarget, useOptionalActionMenu } from "~/components/context-menu";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { cn } from "~/lib/utils";
-import type { IconProps } from "./icons";
+import type { IconProps } from "~/components/icons/types";
+import { STUDIO_TAB_DRAG_MIME, droppedTabId, isPaneDrag } from "./dragData";
+import type { SplitSide } from "./paneLayout";
 
 /** What a tab needs to draw itself. Studio features and sources both satisfy it. */
+
 export interface PaneTab {
     id: string;
     label: string;
@@ -25,24 +28,48 @@ export interface PaneTab {
 }
 
 export interface StudioTabsProps {
-    /** The column this strip belongs to; drops from other columns land here. */
+    /** The pane this strip belongs to; drops from other panes land here. */
     groupId: string;
-    /** Which column this is, and how many there are, for naming the controls. */
+    /** Which pane this is, and how many there are, for naming the controls. */
     index: number;
     groupCount: number;
     tabs: PaneTab[];
     activeId: string;
-    /** The column the workspace considers current. Only one is, at a time. */
+    /** The pane the workspace considers current. Only one is, at a time. */
     focused: boolean;
-    /** False when every column is taken, which greys the split control. */
+    /**
+     * False when every pane is taken, which greys the split controls. The
+     * sides narrow it further: a pane too small to halve that way refuses.
+     */
     canSplit: boolean;
+    /** Why this pane cannot split right, or down — null where it can. */
+    splitRefusal?: { right: string | null; down: string | null };
+    /** False on a phone: no split control at all, in the strip or the tab's menu. */
+    splittable?: boolean;
+    /** This pane fills the centre, the others hidden behind it. */
+    zoomed?: boolean;
+    /** The key that opens the same picker as "+", shown in its tooltip. */
+    studioKeys?: string | null;
+    /** The member's keys for the pane verbs, shown in the pane menu. */
+    paneKeys?: { splitRight?: string | null; splitDown?: string | null; zoom?: string | null };
     onSelect: (id: string) => void;
     onClose: (id: string) => void;
     onCloseOthers: (id: string) => void;
     onCloseToRight: (id: string) => void;
-    onSplit: (id: string) => void;
-    /** A drop, from this strip or another: put `id` in front of `beforeId`. */
+    /** Give this tab a pane of its own, on `side` of this one. */
+    onSplit: (id: string, side: SplitSide) => void;
+    /** A new, empty pane on `side` of this one, to open something in. */
+    onSplitPane?: (side: SplitSide) => void;
+    /** Close this pane, tabs and all. */
+    onClosePane?: () => void;
+    onToggleZoom?: () => void;
+    /**
+     * A drop, from this strip or another — or a source from the sidebar, not
+     * yet open: put `id` in front of `beforeId`.
+     */
     onMove: (id: string, toGroupId: string, beforeId: string | null) => void;
+    /** A tab of this strip started (id) or stopped (null) being dragged. */
+    onDragTab?: (id: string | null) => void;
     onOpenStudio: () => void;
     onFocus: () => void;
     /** The show-sidebar control, in the leftmost column only. */
@@ -60,15 +87,16 @@ export interface StudioTabsProps {
      * tab to another column does not tear its pane down and build it again.
      */
     registerSlot: (tabId: string, element: HTMLElement | null) => void;
-    /** Shown in place of the panels when this column holds nothing. */
+    /** Shown in place of the panels when this pane holds nothing. */
     emptyState?: ReactNode;
 }
 
+export { STUDIO_TAB_DRAG_MIME };
 /** The id being dragged, shared across strips so a drop knows what it caught. */
-const DRAG_MIME = "application/x-studio-tab";
+const DRAG_MIME = STUDIO_TAB_DRAG_MIME;
 
 /**
- * One column of the workspace centre: a strip of tabs over a panel.
+ * One pane of the workspace centre: a strip of tabs over a panel.
  *
  * The strip is the segmented control the rest of the workspace uses — a
  * recessed bar with the current tab raised out of it — rather than the
@@ -82,12 +110,21 @@ export function StudioTabs({
     activeId,
     focused,
     canSplit,
+    splitRefusal,
+    splittable = true,
+    zoomed = false,
+    studioKeys,
+    paneKeys,
     onSelect,
     onClose,
     onCloseOthers,
     onCloseToRight,
     onSplit,
+    onSplitPane,
+    onClosePane,
+    onToggleZoom,
     onMove,
+    onDragTab,
     onOpenStudio,
     onFocus,
     leadingSlot,
@@ -139,12 +176,87 @@ export function StudioTabs({
         setAnnouncement(`${tab.label} moved to position ${to + 1} of ${tabs.length}`);
     };
 
-    /** "Split to the right" reads the same in every column; the column has to say which. */
+    /** "Split right" reads the same in every pane; the pane has to say which. */
     const inColumn = (label: string) =>
-        groupCount > 1 ? `${label}, column ${groupIndex + 1} of ${groupCount}` : label;
+        groupCount > 1 ? `${label}, pane ${groupIndex + 1} of ${groupCount}` : label;
 
-    const readDragId = (event: React.DragEvent) =>
-        event.dataTransfer.getData(DRAG_MIME) || event.dataTransfer.getData("text/plain");
+    const iconButton =
+        "text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md";
+
+    const readDragId = (event: React.DragEvent) => droppedTabId(event.dataTransfer);
+    const acceptsDrag = (event: React.DragEvent) => isPaneDrag([...event.dataTransfer.types]);
+
+    const menu = useOptionalActionMenu();
+    const canZoom = Boolean(onToggleZoom) && (groupCount > 1 || zoomed);
+    /**
+     * Whether the pane menu would hold anything that works. On a phone, with
+     * the one pane there is, it would not: splits are off and there is
+     * nothing to maximize over, and a button that opens a menu of greyed
+     * items is worse than none.
+     */
+    const hasPaneActions =
+        (splittable && Boolean(onSplitPane)) || canZoom || (Boolean(onClosePane) && groupCount > 1);
+    /** Why a side is refused: the pane count first, then the pane's own size. */
+    const refusal = (side: "right" | "down") =>
+        !canSplit ? "Every pane is taken." : (splitRefusal?.[side] ?? null);
+
+    /**
+     * The pane's own verbs, behind one button rather than a row of them. Most
+     * splits happen by dragging something to where it should go, or by
+     * ⌘-clicking it; this is the fallback, and where the keys are written down.
+     */
+    const openPaneMenu = (anchor: HTMLElement) => {
+        if (!menu) return;
+        const rect = anchor.getBoundingClientRect();
+        const splitItem = (side: "right" | "down") => {
+            const refused = tabs.length === 0 ? "Open something here first." : refusal(side);
+            return {
+                type: "item" as const,
+                id: `split-${side}`,
+                label: side === "right" ? "Split right" : "Split down",
+                icon: side === "right" ? ("split" as const) : ("splitDown" as const),
+                shortcut:
+                    (side === "right" ? paneKeys?.splitRight : paneKeys?.splitDown) ?? undefined,
+                disabled: refused !== null,
+                disabledReason: refused ?? undefined,
+                onSelect: () => onSplitPane?.(side),
+            };
+        };
+        menu.open({
+            x: rect.right,
+            y: rect.bottom,
+            ariaLabel: inColumn("Pane actions"),
+            kind: "studio-pane",
+            items: [
+                ...(splittable && onSplitPane ? [splitItem("right"), splitItem("down")] : []),
+                { type: "separator", id: "sep-zoom" },
+                {
+                    type: "item",
+                    id: "zoom",
+                    label: zoomed ? "Restore the other panes" : "Maximize this pane",
+                    icon: "expand",
+                    shortcut: paneKeys?.zoom ?? undefined,
+                    disabled: !canZoom,
+                    disabledReason: "The workspace is not split.",
+                    onSelect: () => onToggleZoom?.(),
+                },
+                ...(onClosePane && groupCount > 1
+                    ? [
+                          {
+                              type: "item" as const,
+                              id: "close-pane",
+                              label:
+                                  tabs.length > 1
+                                      ? `Close this pane and its ${tabs.length} tabs`
+                                      : "Close this pane",
+                              icon: "close" as const,
+                              onSelect: onClosePane,
+                          },
+                      ]
+                    : []),
+            ],
+        });
+    };
 
     return (
         <Tabs
@@ -163,7 +275,13 @@ export function StudioTabs({
                 className="border-line bg-panel-2 flex h-10 shrink-0 items-center gap-1 border-b pl-1.5 pr-1"
             >
                 {leadingSlot}
-                <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1">
+                {/* The last few pixels fade: when the tabs overflow, the one cut
+                    off at the edge reads as "more this way" rather than as a
+                    tab jammed against the buttons. When they fit, those pixels
+                    are the empty drop space after the last tab. The scrollbar
+                    is hidden — a grey bar under the tabs — while the strip
+                    still scrolls, and the active tab scrolls itself in. */}
+                <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1 [mask-image:linear-gradient(to_right,black_calc(100%-20px),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     <TabsList
                         aria-label={inColumn("Open apps")}
                         className="h-10 w-max min-w-full items-center justify-start gap-1 rounded-none bg-transparent p-0"
@@ -180,18 +298,25 @@ export function StudioTabs({
                                         label: `Actions for ${tab.label}`,
                                         data: tab,
                                         items: () => [
-                                            {
-                                                type: "item",
-                                                id: "split",
-                                                label: "Split to the right",
-                                                icon: "split",
-                                                disabled: !canSplit || tabs.length < 2,
-                                                disabledReason: !canSplit
-                                                    ? "Every column is taken."
-                                                    : "It is already the only tab here.",
-                                                onSelect: () => onSplit(tab.id),
-                                            },
-                                            { type: "separator", id: "sep" },
+                                            ...(splittable
+                                                ? (["right", "down"] as const).map(side => ({
+                                                      type: "item" as const,
+                                                      id: `split-${side}`,
+                                                      label: `Split ${side}`,
+                                                      icon:
+                                                          side === "right"
+                                                              ? ("split" as const)
+                                                              : ("splitDown" as const),
+                                                      disabled: !canSplit || tabs.length < 2,
+                                                      disabledReason: !canSplit
+                                                          ? "Every pane is taken."
+                                                          : "It is already the only tab here.",
+                                                      onSelect: () => onSplit(tab.id, side),
+                                                  }))
+                                                : []),
+                                            ...(splittable
+                                                ? [{ type: "separator" as const, id: "sep" }]
+                                                : []),
                                             {
                                                 type: "item",
                                                 id: "close",
@@ -239,10 +364,15 @@ export function StudioTabs({
                                             event.dataTransfer.effectAllowed = "move";
                                             event.dataTransfer.setData(DRAG_MIME, tab.id);
                                             event.dataTransfer.setData("text/plain", tab.label);
+                                            onDragTab?.(tab.id);
+                                        }}
+                                        onDoubleClick={() => {
+                                            // As in an editor: a tab's pane
+                                            // fills the workspace, and back.
+                                            if (canZoom) onToggleZoom?.();
                                         }}
                                         onDragOver={event => {
-                                            if (!event.dataTransfer.types.includes(DRAG_MIME))
-                                                return;
+                                            if (!acceptsDrag(event)) return;
                                             event.preventDefault();
                                             event.dataTransfer.dropEffect = "move";
                                             const rect =
@@ -283,6 +413,7 @@ export function StudioTabs({
                                         onDragEnd={() => {
                                             setDropTarget(null);
                                             setDropAtEnd(false);
+                                            onDragTab?.(null);
                                         }}
                                         onAuxClick={event => {
                                             if (event.button === 1) {
@@ -377,7 +508,7 @@ export function StudioTabs({
                                 dropAtEnd && "border-brand bg-brand-soft"
                             )}
                             onDragOver={event => {
-                                if (!event.dataTransfer.types.includes(DRAG_MIME)) return;
+                                if (!acceptsDrag(event)) return;
                                 event.preventDefault();
                                 event.dataTransfer.dropEffect = "move";
                                 setDropTarget(null);
@@ -393,28 +524,59 @@ export function StudioTabs({
                         />
                     </TabsList>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
-                    aria-label={inColumn("Split to the right")}
-                    title="Split to the right"
-                    disabled={!canSplit || tabs.length < 2}
-                    onClick={() => activeId && onSplit(activeId)}
-                >
-                    <Columns2 className="size-4" />
-                </Button>
+                {zoomed && onToggleZoom && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className={cn(iconButton, "text-brand-ink")}
+                        aria-label={inColumn("Restore the other panes")}
+                        aria-pressed
+                        title={
+                            paneKeys?.zoom
+                                ? `Restore the other panes  ${paneKeys.zoom}`
+                                : "Restore the other panes"
+                        }
+                        onClick={onToggleZoom}
+                    >
+                        <Minimize2 className="size-4" />
+                    </Button>
+                )}
+                {onClosePane && tabs.length === 0 && groupCount > 1 && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className={iconButton}
+                        aria-label={inColumn("Close this pane")}
+                        title="Close this pane"
+                        onClick={onClosePane}
+                    >
+                        <X className="size-4" />
+                    </Button>
+                )}
                 <Button
                     variant="ghost"
                     size="icon"
                     data-studio-add
-                    className="text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md"
+                    className={iconButton}
                     aria-label={inColumn("Open a Studio app")}
-                    title="Open a Studio app"
+                    title={studioKeys ? `Open a Studio app  ${studioKeys}` : "Open a Studio app"}
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />
                 </Button>
+                {menu && hasPaneActions && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className={iconButton}
+                        aria-label={inColumn("Pane actions")}
+                        aria-haspopup="menu"
+                        title="Split, maximize or close this pane"
+                        onClick={event => openPaneMenu(event.currentTarget)}
+                    >
+                        <MoreHorizontal className="size-4" />
+                    </Button>
+                )}
                 {trailingSlot}
             </div>
             <span role="status" aria-live="polite" className="sr-only">

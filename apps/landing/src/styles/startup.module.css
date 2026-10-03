@@ -2,7 +2,6 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
     font-size: 15px;
     -webkit-font-smoothing: antialiased;
     line-height: 1.6;

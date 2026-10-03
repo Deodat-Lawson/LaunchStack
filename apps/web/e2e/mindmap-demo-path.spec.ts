@@ -71,7 +71,7 @@ test.describe("the demo path", () => {
         const m = new Meter(page);
 
         await page.goto("/employer/documents");
-        await expect(page.getByPlaceholder("Search your knowledge")).toBeVisible({
+        await expect(page.getByPlaceholder("Filter sources")).toBeVisible({
             timeout: 90_000,
         });
 

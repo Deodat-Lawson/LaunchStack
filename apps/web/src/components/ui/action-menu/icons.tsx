@@ -54,6 +54,7 @@ import {
     Quote,
     RefreshCw,
     RotateCcw,
+    Rows2,
     Scissors,
     ScrollText,
     Search,
@@ -108,6 +109,7 @@ export const ACTION_MENU_ICONS = {
     command: Command,
     expand: Maximize2,
     split: Columns2,
+    splitDown: Rows2,
     // Files and data.
     download: Download,
     upload: Upload,

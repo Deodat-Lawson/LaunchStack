@@ -6,13 +6,13 @@ import { renderToString } from "react-dom/server";
 import { ContextMenuProvider } from "~/components/context-menu";
 import { StudioSplitView } from "../StudioSplitView";
 import type { PaneTab } from "../StudioTabs";
-import { newGroup, type PaneLayout } from "../paneLayout";
+import { newGroup, rowLayout } from "../paneLayout";
 
 /**
  * The split view on the server, where there is no `document`.
  *
- * Its panes live in nodes it creates itself and moves between columns, and
- * the server has nothing to create them with. It once reached for
+ * Its panes' content lives in nodes it creates itself and moves between
+ * panes, and the server has nothing to create them with. It once reached for
  * `document.createElement` during render and took down every page that
  * server-rendered it. This file runs in node, not jsdom, because jsdom
  * supplies a `document` and would let exactly that through.
@@ -28,11 +28,7 @@ const TABS: Record<string, PaneTab> = {
     knowledge: tab("knowledge", "Knowledge"),
 };
 
-const layout: PaneLayout = {
-    groups: [newGroup("g0", ["chat"]), newGroup("g1", ["knowledge"])],
-    activeGroupId: "g0",
-    seq: 2,
-};
+const layout = rowLayout([newGroup("g0", ["chat"]), newGroup("g1", ["knowledge"])], "g0", 2);
 
 const noop = () => undefined;
 
@@ -47,10 +43,15 @@ const view = (
             onCloseOthers={noop}
             onCloseToRight={noop}
             onSplit={noop}
+            onSplitRoot={noop}
+            onSplitPane={noop}
+            onCloseGroup={noop}
+            onToggleZoom={noop}
+            onResize={noop}
             onMove={noop}
             onFocusGroup={noop}
             onOpenStudio={noop}
-            emptyState={<div>Nothing open</div>}
+            renderEmpty={() => <div>Nothing open</div>}
         />
     </ContextMenuProvider>
 );
@@ -80,12 +81,12 @@ describe("StudioSplitView on the server", () => {
         expect(serverRender().complaints).toEqual([]);
     });
 
-    it("draws the columns and leaves the panes to the client", () => {
+    it("draws the panes' strips and leaves their content to the client", () => {
         const { html } = serverRender();
-        expect(html).toContain("Open apps, column 1 of 2");
-        expect(html).toContain("Open apps, column 2 of 2");
-        // The panes arrive with the first client render, in hosts the
-        // browser makes; nothing of them is in the server's markup.
+        expect(html).toContain("Open apps, pane 1 of 2");
+        expect(html).toContain("Open apps, pane 2 of 2");
+        // The content arrives with the first client commit, in hosts the
+        // browser makes; nothing of it is in the server's markup.
         expect(html).not.toContain("pane:");
     });
 });

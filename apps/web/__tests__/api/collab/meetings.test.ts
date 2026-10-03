@@ -123,6 +123,18 @@ jest.mock("~/server/collab/store", () => ({
 jest.mock("~/server/collab/personas", () => ({
     ensureStarterPersonas: () => Promise.resolve(mockCtx.personas),
     listPersonas: () => Promise.resolve(mockCtx.personas),
+    // The frozen copy a meeting seats — mirrors the real module's projection.
+    personaToParticipant: (persona: AgentPersona) => ({
+        id: persona.id,
+        displayName: persona.displayName,
+        role: persona.role,
+        systemPrompt: persona.systemPrompt,
+        nodeId: persona.nodeId,
+        route: persona.route,
+        temperature: persona.temperature,
+        maxTurnChars: persona.maxTurnChars,
+        accent: persona.accent,
+    }),
 }));
 
 jest.mock("~/server/collab/runtime", () => {

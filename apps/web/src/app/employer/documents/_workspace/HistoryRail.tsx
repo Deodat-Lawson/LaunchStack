@@ -3,12 +3,14 @@
 import React, { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
     CalendarDays,
+    Compass,
     GitBranch,
     Globe,
     Mail,
     MapPin,
     MessageSquare,
     MoreHorizontal,
+    PenLine,
     Plus,
     RotateCw,
     Share2,
@@ -27,6 +29,7 @@ import {
 } from "~/lib/workspace-history";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 
 /**
@@ -40,7 +43,7 @@ import { useActionMenu, useContextTarget } from "~/components/context-menu";
  * it, and a link that goes nowhere would be worse than no link.
  */
 
-const KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
+export const HISTORY_KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
     chat: MessageSquare,
     globe: Globe,
     "map-pin": MapPin,
@@ -48,6 +51,8 @@ const KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageSquare> = {
     share: Share2,
     mail: Mail,
     calendar: CalendarDays,
+    compass: Compass,
+    "pen-line": PenLine,
 };
 
 export interface HistoryRailProps {
@@ -104,7 +109,7 @@ function HistoryRow({
         items: menuItems,
     });
     const meta = HISTORY_KIND_META[entry.kind];
-    const Icon = KIND_ICONS[meta.icon];
+    const Icon = HISTORY_KIND_ICONS[meta.icon];
     // A row only opens something when there is something to open: a chat
     // always resumes, a run needs a surface.
     const openable = meta.resumable || Boolean(entry.href);
@@ -318,6 +323,8 @@ export function HistoryRail({
     onRefresh,
 }: HistoryRailProps) {
     const [renamingId, setRenamingId] = useState<string | null>(null);
+    /** The run a delete has been asked for, pending the confirm dialog. */
+    const [pendingDelete, setPendingDelete] = useState<HistoryEntry | null>(null);
     /**
      * One timestamp for the whole render, so every "2h" in the list is
      * measured from the same instant and rows can't disagree.
@@ -360,12 +367,10 @@ export function HistoryRail({
                     label: "Delete…",
                     icon: "delete",
                     danger: true,
-                    onSelect: () => {
-                        // A run cannot be restored, so it is worth one question.
-                        if (window.confirm(`Delete “${entry.title}”? This cannot be undone.`)) {
-                            onDeleteRun(entry);
-                        }
-                    },
+                    // A run cannot be restored, so it is worth one question —
+                    // asked in the app, since `window.confirm` is suppressed
+                    // outright in embedded web views.
+                    onSelect: () => setPendingDelete(entry),
                 });
                 return items;
             }
@@ -396,7 +401,7 @@ export function HistoryRail({
                 },
             ];
         },
-        [onResumeSession, onOpenRun, onDeleteSession, onDeleteRun]
+        [onResumeSession, onOpenRun, onDeleteSession]
     );
 
     const totalShown = groups.reduce((sum, group) => sum + group.entries.length, 0);
@@ -588,6 +593,24 @@ export function HistoryRail({
                     </div>
                 )}
             </div>
+
+            <ConfirmDialog
+                open={pendingDelete !== null}
+                onOpenChange={next => {
+                    if (!next) setPendingDelete(null);
+                }}
+                title="Delete this run?"
+                description={
+                    pendingDelete
+                        ? `“${pendingDelete.title}” will be removed from history. This cannot be undone.`
+                        : undefined
+                }
+                onConfirm={() => {
+                    const target = pendingDelete;
+                    setPendingDelete(null);
+                    if (target) onDeleteRun(target);
+                }}
+            />
         </div>
     );
 }

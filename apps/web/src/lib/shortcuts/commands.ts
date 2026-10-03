@@ -56,8 +56,8 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
     },
     {
         id: "search.focus",
-        label: "Focus search",
-        description: "Put the cursor in the knowledge search box.",
+        label: "Filter the sidebar",
+        description: "Put the cursor in the sidebar's filter, on Sources or History.",
         defaultKeys: "/",
         when: "outside-input",
     },
@@ -98,23 +98,37 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
     },
     {
         id: "pane.split",
-        label: "Split to the right",
-        description: "Give the app you are looking at a column of its own.",
+        label: "Split right",
+        description: "Open a new pane to the right of the focused one.",
         // Mod+\\ alone is the sidebar toggle.
         defaultKeys: "Mod+Alt+\\",
         when: "always",
     },
     {
+        id: "pane.splitDown",
+        label: "Split down",
+        description: "Open a new pane below the focused one.",
+        defaultKeys: "Mod+Alt+Shift+\\",
+        when: "always",
+    },
+    {
+        id: "pane.zoom",
+        label: "Maximize the focused pane",
+        description: "Fill the workspace with it; again to bring the other panes back.",
+        defaultKeys: "Mod+Shift+Enter",
+        when: "always",
+    },
+    {
         id: "pane.focusNext",
-        label: "Focus the next column",
-        description: "Move between the columns of a split workspace.",
+        label: "Focus the next pane",
+        description: "Move between the panes of a split workspace.",
         defaultKeys: "Mod+Alt+]",
         when: "always",
     },
     {
         id: "pane.focusPrevious",
-        label: "Focus the previous column",
-        description: "Move between the columns of a split workspace.",
+        label: "Focus the previous pane",
+        description: "Move between the panes of a split workspace.",
         defaultKeys: "Mod+Alt+[",
         when: "always",
     },
@@ -123,7 +137,7 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         label: "Close this app",
         // Not Mod+Shift+W: that closes the browser window, and the page
         // never sees it.
-        description: "Close the tab the focused column is showing.",
+        description: "Close the tab the focused pane is showing.",
         defaultKeys: "Mod+Alt+W",
         when: "always",
     },
@@ -180,12 +194,42 @@ export function canonicalKeys(keys: string): string | null {
     return [...mods, parsed.key].join("+");
 }
 
+/**
+ * The unmodified key at a physical position, for the keys a binding can name.
+ * With Option held a Mac types a different character — ⌥\ is «, ⌥W is ∑ —
+ * so `key` alone would never match a binding like Mod+Alt+\.
+ */
+const KEY_FOR_CODE: Record<string, string> = {
+    Backslash: "\\",
+    BracketLeft: "[",
+    BracketRight: "]",
+    Minus: "-",
+    Equal: "=",
+    Comma: ",",
+    Period: ".",
+    Slash: "/",
+    Semicolon: ";",
+    Quote: "'",
+    Backquote: "`",
+};
+
+function keyForCode(code: string | undefined): string | null {
+    if (!code) return null;
+    if (/^Key[A-Z]$/.test(code)) return code.slice(3);
+    if (/^Digit[0-9]$/.test(code)) return code.slice(5);
+    return KEY_FOR_CODE[code] ?? null;
+}
+
 /** The binding a keydown event represents, or null for a bare modifier press. */
 export function keysFromEvent(
-    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey">,
+    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey"> & {
+        code?: string;
+    },
     platform: "mac" | "other" = detectPlatform()
 ): string | null {
-    const key = event.key;
+    // Alt (and Shift with it) changes the character typed, not the key
+    // pressed; a binding names the key, so read it from where it sits.
+    const key = (event.altKey ? keyForCode(event.code) : null) ?? event.key;
     if (key === "Meta" || key === "Control" || key === "Alt" || key === "Shift") return null;
     const mods: Modifier[] = [];
     const modPressed = platform === "mac" ? event.metaKey : event.ctrlKey;
@@ -198,7 +242,9 @@ export function keysFromEvent(
 }
 
 export function eventMatches(
-    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey">,
+    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey"> & {
+        code?: string;
+    },
     keys: string,
     platform: "mac" | "other" = detectPlatform()
 ): boolean {
@@ -282,7 +328,9 @@ export function findConflicts(bindings: Map<string, string | null>): Map<string,
  * the event started inside a text field. Returns null when nothing matches.
  */
 export function commandForEvent(
-    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey">,
+    event: Pick<KeyboardEvent, "key" | "metaKey" | "ctrlKey" | "altKey" | "shiftKey"> & {
+        code?: string;
+    },
     bindings: Map<string, string | null>,
     options: { inInput: boolean; platform?: "mac" | "other" }
 ): ShortcutCommand | null {

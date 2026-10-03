@@ -6,7 +6,7 @@ import { CloudAnalytics } from "./_components/CloudAnalytics";
 import { ContextMenuProvider } from "~/components/context-menu";
 
 import { type Metadata } from "next";
-import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
+import { inter, jetbrainsMono } from "./fonts";
 
 // The marketing metadata that used to live here — keywords, OG card, Twitter
 // card, canonical, index:true — moved to apps/landing with the public site.
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html
             lang="en"
-            className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+            className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
             <body suppressHydrationWarning>

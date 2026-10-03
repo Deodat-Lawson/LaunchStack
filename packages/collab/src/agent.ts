@@ -24,6 +24,18 @@ export interface TurnContext {
     turnIndex: number;
     maxTurns: number;
     completionMarker: string;
+    /** The phase in force, when the meeting follows a workflow. */
+    phase?: {
+        index: number;
+        count: number;
+        title: string;
+        goal: string;
+        /** Zero-based turn offset within the phase, and the phase's length. */
+        offset: number;
+        turns: number;
+        /** True on the last phase — the one that has to land the objective. */
+        last: boolean;
+    };
 }
 
 export interface AgentTurnRequest {
@@ -92,6 +104,21 @@ export function buildSystemPrompt(persona: AgentPersona, ctx: TurnContext): stri
 
     if (ctx.agenda.length > 0) {
         lines.push("Agenda:", ...ctx.agenda.map((a, i) => `${i + 1}. ${a}`));
+    }
+
+    if (ctx.phase) {
+        lines.push(
+            "",
+            `## Current phase: ${ctx.phase.title} (${ctx.phase.index + 1} of ${ctx.phase.count})`,
+            ctx.phase.goal.trim(),
+            `This phase has ${ctx.phase.turns} turn${ctx.phase.turns === 1 ? "" : "s"}; this is turn ${
+                ctx.phase.offset + 1
+            } of it.${
+                ctx.phase.last
+                    ? " It is the closing phase — bring the room to a decision."
+                    : " Stay inside the phase's goal; the next phase has its own."
+            }`
+        );
     }
 
     if (roster) {

@@ -100,7 +100,7 @@ describe("SourceRail tabs", () => {
 
         expect(screen.getByTestId("history-rail")).toBeInTheDocument();
         expect(screen.queryByTestId("source-rail-list")).not.toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Search history")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Filter history")).toBeInTheDocument();
     });
 
     it("filters history through the rail's one search box", () => {
@@ -108,7 +108,7 @@ describe("SourceRail tabs", () => {
         fireEvent.click(screen.getByTestId("rail-tab-history"));
         expect(screen.getByText("Indemnity cap")).toBeInTheDocument();
 
-        fireEvent.change(screen.getByPlaceholderText("Search history"), {
+        fireEvent.change(screen.getByPlaceholderText("Filter history"), {
             target: { value: "zzz" },
         });
         expect(screen.queryByText("Indemnity cap")).not.toBeInTheDocument();
@@ -127,7 +127,7 @@ describe("SourceRail tabs", () => {
         render(<Harness withHistory={false} />);
         expect(screen.queryByTestId("rail-tab-history")).not.toBeInTheDocument();
         expect(screen.getByTestId("source-rail-list")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Search your knowledge")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Filter sources")).toBeInTheDocument();
     });
 
     it("falls back to Sources when a remembered History tab has nothing to show it in", () => {

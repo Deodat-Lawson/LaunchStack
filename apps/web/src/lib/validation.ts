@@ -124,6 +124,18 @@ export const QuestionSchema = z
         // as multimodal content blocks on vision-capable models; text files are
         // inlined into the prompt. Capped at 5 to bound context growth.
         attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
+        /**
+         * Handle of the workspace agent answering this turn. Its standing
+         * instructions, style, route and tool policy shape the answer; the
+         * route resolves it against the caller's roster.
+         */
+        agentKey: z
+            .string()
+            .min(2)
+            .max(48)
+            .regex(/^[a-z0-9][a-z0-9_-]*$/)
+            .nullable()
+            .optional(),
     })
     .transform(data => {
         return {
@@ -142,6 +154,7 @@ export const QuestionSchema = z
             embeddingIndexKey: data.embeddingIndexKey,
             thinkingMode: data.thinkingMode ?? false,
             attachments: data.attachments,
+            agentKey: data.agentKey ?? null,
         };
     });
 
@@ -840,7 +853,11 @@ export const SessionMessageSchema = z.object({
     attachments: z.array(z.unknown()).max(20).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),
+    /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
+    agentKey: z.string().max(64).nullable().optional(),
 });
+
+const SessionAgentKeySchema = z.string().max(64).nullable().optional();
 
 export const CreateSessionSchema = z.object({
     title: z.string().min(1).max(300).optional(),
@@ -850,16 +867,20 @@ export const CreateSessionSchema = z.object({
         .object({ title: z.string().max(300), context: z.string().max(20_000) })
         .nullable()
         .optional(),
+    /** The agent the chat is held with. Null = the default assistant. */
+    agentKey: SessionAgentKeySchema,
 });
 
 export const AppendSessionMessagesSchema = z.object({
     messages: z.array(SessionMessageSchema).min(1).max(MAX_SESSION_APPEND),
     contextSourceIds: z.array(z.string().max(64)).max(200).optional(),
+    agentKey: SessionAgentKeySchema,
 });
 
 export const UpdateSessionSchema = z
     .object({
         title: z.string().min(1).max(300).optional(),
         pinned: z.boolean().optional(),
+        agentKey: SessionAgentKeySchema,
     })
     .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });

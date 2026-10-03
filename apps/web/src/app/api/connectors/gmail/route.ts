@@ -13,7 +13,10 @@ import { recordAuditEvent } from "~/lib/authz/audit";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { db } from "~/server/db";
-import { gmailFolderFor, isGmailConnectorConfigured } from "~/server/services/connectors/gmail/config";
+import {
+    gmailFolderFor,
+    isGmailConnectorConfigured,
+} from "~/server/services/connectors/gmail/config";
 import {
     deleteGmailConnection,
     getGmailConnectionForUser,
@@ -88,10 +91,13 @@ export async function DELETE(request: Request) {
             const { ctx } = guard;
 
             const connection = await getGmailConnectionForUser(ctx.companyId, ctx.userPk);
-            if (!connection) return createSuccessResponse({ deleted: false, providerRevoked: false });
+            if (!connection)
+                return createSuccessResponse({ deleted: false, providerRevoked: false });
 
             const tokens = await deleteGmailConnection(connection.id);
-            const revoked = tokens?.refreshToken ? await revokeGoogleToken(tokens.refreshToken) : false;
+            const revoked = tokens?.refreshToken
+                ? await revokeGoogleToken(tokens.refreshToken)
+                : false;
 
             await recordAuditEvent(db, {
                 companyId: ctx.companyId,

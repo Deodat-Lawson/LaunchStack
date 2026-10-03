@@ -62,16 +62,30 @@
     --z-toast: 1100;
     --z-tooltip: 1200;
 
-    /* Font stacks. The next/font variables are optional per app (landing
-     does not load Inter Tight), so every var() carries a fallback —
-     an unresolvable var would invalidate the whole declaration and
-     drop the page to the browser default font. */
+    /* Type. One product typeface, everywhere: Inter for every word of UI
+     (body, labels, headings — its optical-size axis switches to the
+     Display cut at heading sizes, so no second sans is needed) and
+     JetBrains Mono for code, IDs, keys and tabular data. Both are
+     loaded once per app by next/font in src/app/fonts.ts, which sets
+     --font-inter / --font-jetbrains-mono; nothing else may name a
+     family. Every var() carries a fallback — an unresolvable var would
+     invalidate the declaration and drop to the browser default font.
+
+     --font-serif loads no web font: it is the system serif, kept for
+     user content that asks for one (a mindmap label's "serif" style, a
+     document page preview). UI chrome never uses it.
+
+     No font-feature-settings: Google's Inter build ships only calt,
+     ccmp, frac, tnum and friends — not the cv11/ss01/ss03 alternates
+     both apps used to request, which therefore never rendered. */
     --font-sans:
-        var(--font-inter-tight, var(--font-inter, ui-sans-serif)), var(--font-inter, ui-sans-serif),
-        ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    --font-serif: var(--font-instrument-serif, Georgia), "Iowan Old Style", Georgia, serif;
+        var(--font-inter, ui-sans-serif), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+        Roboto, sans-serif;
     --font-mono:
-        var(--font-jetbrains-mono, ui-monospace), ui-monospace, "SFMono-Regular", Menlo, monospace;
+        var(--font-jetbrains-mono, ui-monospace), ui-monospace, "SFMono-Regular", Menlo, Consolas,
+        monospace;
+    --font-serif: ui-serif, "Iowan Old Style", Charter, Georgia, Cambria, "Times New Roman", serif;
+    --fw-display: 600;
 
     /* ── Semantic: accent ───────────────────────────────────────── */
     --accent: oklch(0.54 0.24 var(--accent-h));

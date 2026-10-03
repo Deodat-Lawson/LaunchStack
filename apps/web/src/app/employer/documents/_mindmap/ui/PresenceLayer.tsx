@@ -3,9 +3,10 @@
 import React from "react";
 import { RefreshCw, Users } from "lucide-react";
 
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 
-import { peerColor, peerInitials, type PresencePeer } from "./usePresence";
+import { peerColor, type PresencePeer } from "./usePresence";
 
 /**
  * Collaborator awareness: remote cursors on the canvas, avatars in the top bar,
@@ -124,12 +125,19 @@ export function PresenceAvatars({ peers }: { peers: PresencePeer[] }) {
             <TooltipTrigger asChild>
                 <div className="flex items-center -space-x-1.5" aria-label="People in this mindmap">
                     {shown.map(peer => (
+                        // The ring is the peer's cursor colour, so a face can
+                        // be matched to a cursor on the canvas.
                         <span
                             key={peer.userId}
-                            className="border-panel flex size-6 items-center justify-center rounded-full border-2 text-[10px] font-semibold text-[color:var(--accent-fg)]"
-                            style={{ background: peerColor(peer.userId) }}
+                            className="border-panel rounded-full border-2"
+                            style={{ boxShadow: `0 0 0 1.5px ${peerColor(peer.userId)}` }}
                         >
-                            {peerInitials(peer)}
+                            <ProfileAvatar
+                                name={peer.displayName ?? "?"}
+                                src={peer.avatarUrl}
+                                className="size-5"
+                                fallbackClassName="text-[9px]"
+                            />
                         </span>
                     ))}
                     {extra > 0 && (

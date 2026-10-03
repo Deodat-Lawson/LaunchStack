@@ -5,7 +5,11 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { ContextMenuProvider, useActionMenu, useContextTarget, useRegisterActions } from "..";
-import { resetActionsForTests, resetTargetsForTests, type ContextMenuEvent } from "~/lib/context-menu";
+import {
+    resetActionsForTests,
+    resetTargetsForTests,
+    type ContextMenuEvent,
+} from "~/lib/context-menu";
 
 function Row({ onOpen, inherit }: { onOpen?: () => void; inherit?: boolean }) {
     const ctx = useContextTarget({
@@ -50,7 +54,14 @@ function DotsButton() {
                 menu.open({
                     x: 10,
                     y: 10,
-                    items: [{ type: "item", id: "dots.hello", label: "Hello", onSelect: () => undefined }],
+                    items: [
+                        {
+                            type: "item",
+                            id: "dots.hello",
+                            label: "Hello",
+                            onSelect: () => undefined,
+                        },
+                    ],
                 })
             }
         >
@@ -109,7 +120,9 @@ describe("ContextMenuProvider", () => {
             const ctx = useContextTarget({
                 kind: "composer",
                 editable,
-                items: () => [{ type: "item", id: "paste", label: "Paste", onSelect: () => undefined }],
+                items: () => [
+                    { type: "item", id: "paste", label: "Paste", onSelect: () => undefined },
+                ],
             });
             return (
                 <div {...ctx}>

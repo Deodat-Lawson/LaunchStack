@@ -199,6 +199,36 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
     },
     {
+        id: "proposals",
+        tier: "tool",
+        summary:
+            "Write grant and funding proposals from what the workspace's sources prove: an organisation profile, funders that fit, the call turned into a checklist, each answer drafted from evidence, a review pass, and reusable answers.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/proposals",
+        routes: ["proposals"],
+        notes: "Runs are the unit of background work (profile, funders, extract, draft, rewrite, review) and list in the History feed. Claimed here when Vantage landed beside it; the Proposals PR had left its routes unclaimed.",
+    },
+    {
+        id: "vantage",
+        tier: "tool",
+        summary:
+            "Run the weekly founder meeting on evidence: an inbox of conversations, links and claims, metric definitions with dated observations, a drafted agenda whose facts cite their sources, decisions that open commitments, and a program triage view over what the founder shares.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/vantage",
+        routes: ["vantage"],
+        notes: "The draft comes from the deployment's default chat model when one is configured and from deterministic rules otherwise; the agenda records which (model_metadata). Sharing is per topic, commitment and evidence item; triage and the weekly update read only shared rows. Program deadlines need settings.manage.",
+    },
+    {
+        id: "investors",
+        tier: "tool",
+        summary:
+            "Find the venture funds raising now and pitch them: SEC Form D search with the people, size and amount closed, plus pitch drafts from the workspace's sources.",
+        scope: "workspace",
+        feature: "@launchstack/tools/investor-search",
+        routes: ["investors"],
+        notes: "Stateless: every search reads SEC EDGAR live (keyless, paced under SEC's 10 req/s). Pitch drafting is the chat, seeded from the Studio pane.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -211,13 +241,17 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
     {
         id: "artifacts",
         tier: "tool",
-        summary: "Import pages, diagrams, and snippets built in Claude; view them sandboxed.",
+        summary:
+            "Claude artifacts from before they were sources: listed, read and archived as " +
+            "Add a source → Claude artifact moves them into the library.",
         scope: "workspace",
         routes: ["artifacts"],
         notes:
-            "Bodies are stored inline and rendered in an iframe sandboxed without " +
-            "allow-same-origin — the app's one untrusted-HTML surface. The raw route serves " +
-            "attachment-only for the same reason.",
+            "New imports are ordinary documents, registered through uploadDocument with an " +
+            "artifact marker (~/lib/artifact-document) and stored as text/plain; the viewer " +
+            "renders them in an iframe sandboxed without allow-same-origin. These routes " +
+            "remain for the old rows until every workspace has moved them. The raw route " +
+            "serves attachment-only for the same reason.",
     },
     {
         id: "notes",
@@ -329,9 +363,17 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         id: "workspace",
         tier: "system",
         summary:
-            "Accounts, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
+            "Accounts, profiles, workspaces, membership, roles, groups, invitations, folder access, audit (ADR-010).",
         scope: "mixed",
-        routes: ["auth", "workspaces", "signup", "workspace", "fetchUserInfo"],
+        routes: [
+            "auth",
+            "workspaces",
+            "signup",
+            "workspace",
+            "fetchUserInfo",
+            "profile",
+            "profile-images",
+        ],
         unscopedRoutes: {
             "auth/*": "better-auth's own surface — sign-in/out/up, sessions, password reset.",
             "signup/*": "Runs before a user row or membership exists.",
@@ -346,20 +388,25 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
                 "Session only: creates the membership it would otherwise require.",
             "workspace/members/leave": "Removes the caller's own membership.",
             fetchUserInfo: "User-level identity, not workspace-scoped.",
+            profile:
+                "A profile belongs to the person; the workspace half is added when one is active.",
+            "profile/photo": "Same: `scope=global` works without a workspace.",
+            "profile-images/[id]":
+                "One person's photo shows in every workspace they share with the viewer; visibility is checked per image.",
         },
     },
     {
         id: "settings",
         tier: "system",
         summary:
-            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive — and the profile mirror.",
+            "The config panel: scoped settings (workspace → folder → member) over one registry, plus the read-only overviews it shows — models, usage, privacy, archive.",
         scope: "workspace",
         routes: ["settings"],
         notes:
             "`settings` is the one write path (registry-validated, permission-gated, audited). " +
             "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
-            "overviews computed for the panel; `settings/account` mirrors a Better Auth name " +
-            "change into the product `users` row.",
+            "overviews computed for the panel. The Account section's profile is the `workspace` " +
+            "service's `profile` routes.",
     },
     {
         id: "platform-ops",

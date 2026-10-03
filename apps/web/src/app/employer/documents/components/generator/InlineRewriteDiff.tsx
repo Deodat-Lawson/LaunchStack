@@ -19,7 +19,7 @@ const REMOVAL_BG = "oklch(0.94 0.06 25 / 0.45)";
 const REMOVAL_INK = "oklch(0.45 0.18 25)";
 const REMOVAL_DECO = "oklch(0.55 0.16 25 / 0.7)";
 
-const monoFont = 'var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace';
+const monoFont = "var(--font-mono)";
 
 /**
  * Inline before/after diff shown directly in the document at the selection.

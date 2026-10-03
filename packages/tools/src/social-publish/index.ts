@@ -71,4 +71,3 @@ export function describePublishConfig(): Record<MarketingPlatform, PublishConfig
         reddit: { configured: getRedditCredentials() !== null, identity: null },
     };
 }
-

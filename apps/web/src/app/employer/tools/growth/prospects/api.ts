@@ -35,7 +35,7 @@ export interface SegmentSummary {
     id: string;
     name: string;
     subtitle: string;
-    /** "Fulfilment operators in NL, DE and the UK" — the serif line on Home. */
+    /** "Fulfilment operators in NL, DE and the UK" — the headline on Home. */
     headline: string;
     status: "draft" | "confirmed";
     counts: SegmentCounts;

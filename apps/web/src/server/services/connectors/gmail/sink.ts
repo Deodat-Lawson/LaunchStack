@@ -71,9 +71,14 @@ function creationKeyFor(connectionId: number, item: DiscoveredKnowledgeItem): st
  * attachments carry their own.
  */
 function blobFilenameFor(item: KnowledgeItem): string {
-    const flattened = item.title.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "item";
+    const flattened =
+        item.title.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "item";
     const extension = item.metadata.extension;
-    if (typeof extension === "string" && extension && !flattened.toLowerCase().endsWith(extension)) {
+    if (
+        typeof extension === "string" &&
+        extension &&
+        !flattened.toLowerCase().endsWith(extension)
+    ) {
         return `${flattened}${extension}`;
     }
     return flattened;
@@ -216,7 +221,10 @@ export async function createGmailSink(context: GmailSinkContext): Promise<Knowle
 }
 
 /** Source ids (thread ids and `thread:message:part` attachment ids) this connection has ingested. */
-export async function listKnownSourceIds(companyId: bigint, connectionId: number): Promise<string[]> {
+export async function listKnownSourceIds(
+    companyId: bigint,
+    connectionId: number
+): Promise<string[]> {
     const rows = await db
         .select({ sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'` })
         .from(document)

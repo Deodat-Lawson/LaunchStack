@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";
 import { type Metadata } from "next";
 
-import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
+import { inter, jetbrainsMono } from "./fonts";
 import { SITE_URL } from "~/config/site";
 
 export const metadata: Metadata = {
@@ -69,7 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html
             lang="en"
-            className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+            className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
             <body suppressHydrationWarning>

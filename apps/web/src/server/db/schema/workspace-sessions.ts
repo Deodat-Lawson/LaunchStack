@@ -72,6 +72,12 @@ export const workspaceSessions = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        /**
+         * Handle of the agent this chat is held with, so reopening it restores
+         * the same voice. Null = the workspace's default assistant. Appended
+         * after the table shipped; declared last on purpose.
+         */
+        agentKey: varchar("agent_key", { length: 64 }),
     },
     table => ({
         // The sidebar's one query: this person's sessions in this workspace,
@@ -112,6 +118,8 @@ export const workspaceSessionMessages = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        /** Which agent produced an assistant turn (or was addressed by a user turn). */
+        agentKey: varchar("agent_key", { length: 64 }),
     },
     table => ({
         sessionSeqUnique: uniqueIndex("workspace_session_messages_session_seq_uq").on(

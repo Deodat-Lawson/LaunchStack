@@ -16,10 +16,10 @@ const RUNNING_VERB: Record<string, string> = {
 };
 
 /**
- * A run in progress. Closing the run sheet leaves the run going; this is how
- * you get back to it from any screen, Brand's included — `compact` is its
- * place in the tool's bar (a short pill, just the spinner in a narrow tab).
- * Nothing shows when no run is live.
+ * A run in progress, as a short pill in the tool's bar. Closing the run sheet
+ * leaves the run going; this is how you get back to it from any screen,
+ * Brand's included. In a narrow tab it is just the spinner. Nothing shows
+ * when no run is live.
  */
 export function RunIndicator() {
     const { activeRun, openRunSheet } = useProspects();

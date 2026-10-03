@@ -103,6 +103,16 @@ function isActive(item: ToolNavItem, path: string): boolean {
     return path === item.to || path.startsWith(`${item.to}/`);
 }
 
+/** Focus the browser would ring: from the keyboard, not a click. */
+function focusVisible(el: Element): boolean {
+    try {
+        return el.matches(":focus-visible");
+    } catch {
+        // A browser without the selector: treat focus as from the keyboard.
+        return true;
+    }
+}
+
 /**
  * The one frame every Studio tool sits in, so a tool feels like a tab of the
  * workspace and not like a different app.
@@ -357,10 +367,13 @@ function ScreenTabs({
 
     // A tab reached with the keyboard comes clear of the edge fade (the
     // browser only scrolls when less of it than the fade covers is showing).
+    // Keyboard focus only: a click focuses the tab on mouse-down, and
+    // scrolling then would slide another tab under the pointer before the
+    // mouse-up, so the click would open nothing.
     const onFocus = (event: React.FocusEvent<HTMLElement>) => {
         const el = row.current;
         const tab = event.target as HTMLElement;
-        if (!el?.contains(tab)) return;
+        if (!el?.contains(tab) || !focusVisible(tab)) return;
         const rowBox = el.getBoundingClientRect();
         const tabBox = tab.getBoundingClientRect();
         const margin = 32;

@@ -22,6 +22,7 @@ export const HISTORY_KINDS = [
     "distribution",
     "email",
     "weekly-review",
+    "vantage",
     "proposals",
 ] as const;
 
@@ -59,7 +60,16 @@ export interface HistoryEntry {
 export interface HistoryKindMeta {
     label: string;
     /** Icon id the rail maps to a lucide component; keeps this module React-free. */
-    icon: "chat" | "globe" | "map-pin" | "git-branch" | "share" | "mail" | "calendar" | "pen-line";
+    icon:
+        | "chat"
+        | "globe"
+        | "map-pin"
+        | "git-branch"
+        | "share"
+        | "mail"
+        | "calendar"
+        | "compass"
+        | "pen-line";
     /** True when a row of this kind reopens a conversation rather than a report. */
     resumable: boolean;
 }
@@ -72,6 +82,7 @@ export const HISTORY_KIND_META: Record<HistoryKind, HistoryKindMeta> = {
     distribution: { label: "Distribution", icon: "share", resumable: false },
     email: { label: "Email campaign", icon: "mail", resumable: false },
     "weekly-review": { label: "Weekly review", icon: "calendar", resumable: false },
+    vantage: { label: "Vantage agenda", icon: "compass", resumable: false },
     proposals: { label: "Proposals", icon: "pen-line", resumable: false },
 };
 

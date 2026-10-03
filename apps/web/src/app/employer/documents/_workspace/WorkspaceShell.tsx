@@ -119,6 +119,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     distribution: "/employer/tools/growth/prospects",
     prospects: "/employer/tools/growth/prospects",
     growth: "/employer/tools/growth",
+    vantage: "/employer/tools/vantage",
     workflows: "/employer/documents?feature=workflows",
     knowledge: "/employer/documents?feature=knowledge",
     meetings: "/employer/documents?feature=meetings",

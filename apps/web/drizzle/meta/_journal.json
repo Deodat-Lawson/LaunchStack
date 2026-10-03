@@ -169,6 +169,13 @@
       "when": 1790726558390,
       "tag": "20260930000238_proposals",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790994077492,
+      "tag": "20261003022117_vantage",
+      "breakpoints": true
     }
   ]
 }

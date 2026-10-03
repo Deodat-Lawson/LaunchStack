@@ -100,9 +100,9 @@ describe("studio registry", () => {
         expect(editor?.Icon).toBeTruthy();
     });
 
-    it("puts Growth first in Tools and Investor relations second, opening in a tab", () => {
+    it("puts Growth first in Tools, Proposals second and Investor relations third, opening in a tab", () => {
         const tools = STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id);
-        expect(tools.slice(0, 2)).toEqual(["growth", "investors"]);
+        expect(tools.slice(0, 3)).toEqual(["growth", "proposals", "investors"]);
         const investors = STUDIO_FEATURES_BY_ID.investors!;
         expect(investors.label).toBe("Investor relations");
         expect(investors.external).toBeUndefined();
@@ -112,9 +112,20 @@ describe("studio registry", () => {
         expect(demotedFeatureHref("investors")).toBeUndefined();
     });
 
-    it("names Growth as the one app a tab cannot hold", () => {
+    it("names Growth, Proposals and Vantage as the apps a tab cannot hold", () => {
         const external = STUDIO_GROUPS.flatMap(g => g.features).filter(f => f.external);
-        expect(external.map(f => f.id)).toEqual(["growth"]);
+        expect(external.map(f => f.id)).toEqual(["growth", "proposals", "vantage"]);
+    });
+
+    it("lists Vantage in Tools as a separate app, reachable from the palette too", () => {
+        const feature = STUDIO_FEATURES_BY_ID.vantage;
+        expect(feature).toBeDefined();
+        expect(feature!.external).toBe(true);
+        expect(feature!.href).toBe("/employer/tools/vantage");
+        expect(feature!.requires).toBeUndefined();
+        expect(DEMOTED_FEATURES.find(f => f.id === "vantage")?.href).toBe(
+            "/employer/tools/vantage"
+        );
     });
 
     it("can name every app the workspace is able to open in a tab", () => {

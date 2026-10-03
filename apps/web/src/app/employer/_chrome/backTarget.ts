@@ -39,6 +39,11 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/growth/brand/",
         target: { href: "/employer/tools/growth/brand", label: "Brand" },
     },
+    // Vantage's screens all hang off its overview, which is a real page.
+    {
+        prefix: "/employer/tools/vantage/",
+        target: { href: "/employer/tools/vantage", label: "Vantage" },
+    },
     {
         prefix: "/employer/tools/proposals/write/",
         target: { href: "/employer/tools/proposals/write", label: "Proposals" },

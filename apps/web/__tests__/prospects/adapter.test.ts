@@ -211,6 +211,10 @@ describe("runs", () => {
         createdAt: new Date("2026-09-17T09:00:00Z"),
         startedAt: new Date("2026-09-17T09:00:00Z"),
         completedAt: null,
+        shortlistedCount: 0,
+        enrichedCount: 0,
+        cancelRequestedAt: null,
+        heartbeatAt: null,
         ...over,
     });
 
@@ -224,17 +228,60 @@ describe("runs", () => {
         expect(by.people).toBe("skipped");
     });
 
-    it("shows the shortlist and profiling progress while a run is still enriching", () => {
-        const dto = toRunDto(run({ status: "enriching", candidateOrgIds: ["o1", "o2", "o3"] }), {
-            profiled: 1,
-            shortlisted: 3,
-        });
+    it("shows the shortlist and profiling progress from the counters the worker writes", () => {
+        const dto = toRunDto(
+            run({
+                status: "enriching",
+                candidateOrgIds: ["o1", "o2", "o3"],
+                shortlistedCount: 3,
+                enrichedCount: 1,
+            })
+        );
         const detail = Object.fromEntries(dto.steps.map(s => [s.id, s.detail]));
         expect(detail.shortlist).toBe("3 companies");
         expect(detail.profiles).toBe("1 of 3");
+        expect(dto.progress).toEqual({ shortlisted: 3, profiled: 1 });
+        expect(dto.stopRequested).toBe(false);
+        expect(dto.mode).toBe("live");
         expect(dto.summary).toBeNull();
         const early = toRunDto(run({ status: "gathering" }));
         expect(early.steps.find(s => s.id === "profiles")!.detail).toBe("0 of 25");
+        expect(early.progress).toBeNull();
+    });
+
+    it("reports a stopped run as stopped, with what it got through", () => {
+        const dto = toRunDto(
+            run({
+                status: "stopped",
+                cancelRequestedAt: new Date("2026-09-17T09:02:00Z"),
+                completedAt: new Date("2026-09-17T09:02:30Z"),
+                shortlistedCount: 6,
+                enrichedCount: 2,
+                summary: {
+                    sources: [{ source: "web", queries: 2, results: 9, status: "ok" }],
+                    mentions: 9,
+                    resolved: 6,
+                    excluded: 0,
+                    shortlisted: 6,
+                    enriched: 2,
+                    gateRejections: 0,
+                    budgetExhausted: 0,
+                    screened: 0,
+                    flagged: 0,
+                    published: 2,
+                    degraded: false,
+                    warnings: ["Stopped before every shortlisted company was researched."],
+                    tokens: { input: 0, output: 0, total: 0 },
+                    wallMs: 150_000,
+                },
+            })
+        );
+        expect(dto.status).toBe("stopped");
+        expect(dto.stopRequested).toBe(true);
+        const by = Object.fromEntries(dto.steps.map(s => [s.id, s.status]));
+        expect(by.sources).toBe("done");
+        expect(by.profiles).toBe("skipped");
+        expect(dto.summary?.profiled).toBe(2);
     });
 
     it("turns a completed run's source counts into yield rows", () => {

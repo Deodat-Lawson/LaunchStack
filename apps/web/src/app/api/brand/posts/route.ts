@@ -1,10 +1,9 @@
 // GET  /api/brand/posts?from=&to=&status= — the calendar's rows
 // POST /api/brand/posts — compose: { platforms, body, title?, scheduledAt?, publishNow? }
 //
-// A dev environment has no worker to run the scheduler, so after answering a
-// list request that shows something due, the web process runs the same
-// claim-and-publish the worker's cron does. The claim keeps both safe.
-import { after } from "next/server";
+// Scheduled posts go out from the worker's scheduler, the one place that
+// publishes on a timer (ADR-003). This route only stores and, on request,
+// publishes now with the workspace's own credentials.
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -12,11 +11,11 @@ import {
     BRAND_POST_STATUSES,
     MarketingPlatformEnum,
     createBrandPosts,
-    hasDueBrandPosts,
     listBrandPosts,
     publishBrandPost,
-    publishDueBrandPosts,
 } from "@launchstack/pipelines/marketing/posts";
+
+import { publishForWorkspace } from "~/server/brand/publish";
 
 import { brandContext, error, handleBrandError, json, readBody } from "../_http";
 
@@ -56,16 +55,6 @@ export async function GET(request: NextRequest) {
                   )
             : undefined;
         const posts = await listBrandPosts({ companyId: auth.ctx.companyId, from, to, statuses });
-        if (await hasDueBrandPosts(auth.ctx.companyId, now)) {
-            const companyId = auth.ctx.companyId;
-            after(async () => {
-                try {
-                    await publishDueBrandPosts({ companyId, now: new Date() });
-                } catch (dueError) {
-                    console.error("[brand] due-check failed:", dueError);
-                }
-            });
-        }
         return json({ posts, now: now.toISOString() });
     } catch (err) {
         return handleBrandError("GET posts", err);
@@ -93,7 +82,12 @@ export async function POST(request: NextRequest) {
         });
         if (!input.publishNow) return json({ posts: created }, 201);
         const posts = [];
-        for (const post of created) posts.push(await publishBrandPost(post.id, auth.ctx.companyId));
+        for (const post of created)
+            posts.push(
+                await publishBrandPost(post.id, auth.ctx.companyId, {
+                    publish: publishForWorkspace,
+                })
+            );
         return json({ posts }, 201);
     } catch (err) {
         return handleBrandError("POST posts", err);

@@ -1,12 +1,15 @@
 import type { SalesStage } from "../api";
 
-/** Forward order of the funnel; lost and nurture are side exits. */
+/**
+ * Forward order of the funnel; lost and nurture are side exits. Proposal is
+ * in the vocabulary but not a stage this workspace has (the backend's
+ * machine goes meeting → negotiating), so it is not a column or a segment.
+ */
 export const FUNNEL_STAGES: SalesStage[] = [
     "lead",
     "qualified",
     "contacted",
     "meeting",
-    "proposal",
     "negotiating",
     "won",
 ];

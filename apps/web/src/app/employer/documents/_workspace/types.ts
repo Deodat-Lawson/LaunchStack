@@ -430,9 +430,9 @@ export interface StudioFeature {
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
     /**
-     * The feature is a separate app with its own routes and chrome — Growth,
-     * for instance, whose rail and nested pages cannot be mounted in a tab.
-     * Picking it navigates instead of opening a Studio tab.
+     * The feature is a separate tool with its own routes — Growth, for
+     * instance, whose workspace pages and side panels are not mounted in a
+     * tab. Picking it navigates instead of opening a Studio tab.
      */
     external?: boolean;
     /**
@@ -485,9 +485,10 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         label: "Tools",
         features: [
             {
-                // One app with its own rail for the whole growth motion: Brand
-                // (compose, schedule, calendar, campaigns, accounts) and Prospects
-                // (segment, companies, people, deals, runs, sources).
+                // Two tool pages behind one front door for the whole growth
+                // motion: Brand (compose, schedule, the week, campaigns,
+                // accounts) and Prospects (segment, companies, people, deals,
+                // runs, sources), each laid out like the other tools.
                 id: "growth",
                 label: "Growth",
                 Icon: IconGrowth,

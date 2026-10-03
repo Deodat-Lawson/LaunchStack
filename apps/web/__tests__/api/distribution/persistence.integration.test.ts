@@ -12,6 +12,7 @@ import { company } from "@launchstack/store/schema";
 import { configureDatabase } from "@launchstack/store/client";
 import { resolveOrganizations } from "@launchstack/tools/org-resolver";
 import {
+    RunInProgressError,
     addEvent,
     createAgreement,
     createProgram,
@@ -136,6 +137,18 @@ describeDb("distribution persistence", () => {
             "distributor",
             "importer",
         ]);
+
+        // One run per program at a time: the partial unique index refuses a
+        // second one while the first is not yet terminal.
+        await expect(
+            createRun({
+                companyId: companyA,
+                programId: program.id,
+                userId: "user-1",
+                options: { maxCandidates: 10, mode: "live" },
+            })
+        ).rejects.toBeInstanceOf(RunInProgressError);
+        await updateRun(run1.id, companyA, { status: "completed" });
 
         const run2 = await createRun({
             companyId: companyA,

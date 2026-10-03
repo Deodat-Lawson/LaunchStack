@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, inArray, isNotNull, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, lt, not, or, sql } from "drizzle-orm";
 import type { InferInsertModel } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
@@ -55,6 +55,26 @@ import type {
     ScreeningState,
     Territory,
 } from "./types";
+import { isTerminalRunStatus } from "./types";
+
+/** Thrown when a second run is started for a program that already has one in flight. */
+export class RunInProgressError extends Error {
+    readonly code = "run_in_progress";
+    readonly status = 409;
+    constructor(programId: string) {
+        super("A run is already in progress for this segment");
+        this.name = "RunInProgressError";
+        this.programId = programId;
+    }
+    readonly programId: string;
+}
+
+function isUniqueViolation(error: unknown): boolean {
+    if (typeof error !== "object" || error === null) return false;
+    const code = (error as { code?: unknown; cause?: { code?: unknown } }).code;
+    const causeCode = (error as { cause?: { code?: unknown } }).cause?.code;
+    return code === "23505" || causeCode === "23505";
+}
 
 // ─── Mappers ─────────────────────────────────────────────────────────────────
 
@@ -93,6 +113,10 @@ function toRun(row: DistributionRunRow): RunRecord {
         createdAt: row.createdAt,
         startedAt: row.startedAt ?? null,
         completedAt: row.completedAt ?? null,
+        shortlistedCount: row.shortlistedCount ?? 0,
+        enrichedCount: row.enrichedCount ?? 0,
+        cancelRequestedAt: row.cancelRequestedAt ?? null,
+        heartbeatAt: row.heartbeatAt ?? null,
     };
 }
 
@@ -282,18 +306,45 @@ export async function createRun(args: {
     options: RunOptions;
 }): Promise<RunRecord> {
     const db = getDb();
-    const [row] = await db
-        .insert(distributionRuns)
-        .values({
-            id: args.id ?? randomUUID(),
-            companyId: args.companyId,
-            programId: args.programId,
-            userId: args.userId,
-            options: args.options,
-        })
-        .returning();
+    let rows: DistributionRunRow[];
+    try {
+        rows = await db
+            .insert(distributionRuns)
+            .values({
+                id: args.id ?? randomUUID(),
+                companyId: args.companyId,
+                programId: args.programId,
+                userId: args.userId,
+                options: args.options,
+            })
+            .returning();
+    } catch (error) {
+        // The partial unique index on (program_id) for non-terminal runs is
+        // the single-flight rule; a second POST lands here.
+        if (isUniqueViolation(error)) throw new RunInProgressError(args.programId);
+        throw error;
+    }
+    const row = rows[0];
     if (!row) throw new Error("Failed to create distribution run");
     return toRun(row);
+}
+
+/** The program's run that is not yet terminal, if any. */
+export async function findLiveRun(companyId: bigint, programId: string): Promise<RunRecord | null> {
+    const db = getDb();
+    const [row] = await db
+        .select()
+        .from(distributionRuns)
+        .where(
+            and(
+                eq(distributionRuns.companyId, companyId),
+                eq(distributionRuns.programId, programId),
+                sql`${distributionRuns.status} not in ('completed', 'failed', 'stopped')`
+            )
+        )
+        .orderBy(desc(distributionRuns.createdAt))
+        .limit(1);
+    return row ? toRun(row) : null;
 }
 
 export async function getRun(id: string, companyId: bigint): Promise<RunRecord | null> {
@@ -333,11 +384,14 @@ export async function updateRun(
         errorMessage?: string | null;
         startedAt?: Date;
         completedAt?: Date;
+        shortlistedCount?: number;
+        enrichedCount?: number;
+        heartbeatAt?: Date;
     }
 ): Promise<RunRecord | null> {
     const db = getDb();
     const values: Partial<InferInsertModel<typeof distributionRuns>> = { ...patch };
-    if (patch.status === "completed" || patch.status === "failed") {
+    if (patch.status && isTerminalRunStatus(patch.status)) {
         values.completedAt = patch.completedAt ?? new Date();
     }
     const [row] = await db
@@ -346,6 +400,48 @@ export async function updateRun(
         .where(and(eq(distributionRuns.id, id), eq(distributionRuns.companyId, companyId)))
         .returning();
     return row ? toRun(row) : null;
+}
+
+/**
+ * Ask a live run to stop. One conditional update: only a run that is not yet
+ * terminal takes the request, and asking twice is harmless. Returns the run
+ * as it now is, or null when there is no such run for this company.
+ */
+export async function requestRunStop(id: string, companyId: bigint): Promise<RunRecord | null> {
+    const db = getDb();
+    const [row] = await db
+        .update(distributionRuns)
+        .set({ cancelRequestedAt: sql`coalesce(${distributionRuns.cancelRequestedAt}, now())` })
+        .where(
+            and(
+                eq(distributionRuns.id, id),
+                eq(distributionRuns.companyId, companyId),
+                sql`${distributionRuns.status} not in ('completed', 'failed', 'stopped')`
+            )
+        )
+        .returning();
+    return row ? toRun(row) : null;
+}
+
+/** Liveness, not progress: the worker touches this as it goes. */
+export async function touchRunHeartbeat(id: string, companyId: bigint): Promise<void> {
+    const db = getDb();
+    await db
+        .update(distributionRuns)
+        .set({ heartbeatAt: new Date() })
+        .where(and(eq(distributionRuns.id, id), eq(distributionRuns.companyId, companyId)));
+}
+
+/** One more candidate researched; also a heartbeat. */
+export async function incrementRunEnriched(id: string, companyId: bigint): Promise<void> {
+    const db = getDb();
+    await db
+        .update(distributionRuns)
+        .set({
+            enrichedCount: sql`${distributionRuns.enrichedCount} + 1`,
+            heartbeatAt: new Date(),
+        })
+        .where(and(eq(distributionRuns.id, id), eq(distributionRuns.companyId, companyId)));
 }
 
 export async function addRunCredits(id: string, companyId: bigint, amount: number): Promise<void> {
@@ -688,10 +784,20 @@ export interface PartnerListFilters {
     staleOnly?: boolean;
     /** Only relationships with a next action due on or before this date. */
     dueBefore?: Date;
+    /** Matches the organisation's name or domain, case-insensitively. */
     search?: string;
+    /** Only organisations first seen by this run ("new since the last run"). */
+    firstSeenRunId?: string;
+    /**
+     * Excluded means declined AND the domain is on the program's exclusion
+     * list. `excluded: false` keeps everything else; `true` keeps only those.
+     * Needs `excludedDomains` to mean anything.
+     */
+    excluded?: boolean;
+    excludedDomains?: readonly string[];
     limit?: number;
     offset?: number;
-    orderBy?: "fit" | "activity" | "stage" | "created";
+    orderBy?: "fit" | "activity" | "stage" | "created" | "name";
 }
 
 export interface PartnerListItem {
@@ -717,11 +823,29 @@ export function isStale(
     return last.getTime() < cutoff.getTime();
 }
 
-export async function listPartners(
-    companyId: bigint,
-    filters: PartnerListFilters = {}
-): Promise<PartnerListItem[]> {
-    const db = getDb();
+/**
+ * The stale rule in SQL, so a to-do list can ask for stale rows without
+ * loading the segment: the last activity (or the stage change) is older
+ * than the stage's own threshold. Stages with no threshold never match.
+ */
+function stalePredicate() {
+    const cases = (Object.entries(STALE_AFTER_DAYS) as Array<[RelationshipStage, number | null]>)
+        .filter((entry): entry is [RelationshipStage, number] => entry[1] !== null)
+        .map(([stage, days]) => sql`when ${stage} then now() - make_interval(days => ${days})`);
+    return sql`coalesce(${partnerRelationships.lastActivityAt}, ${partnerRelationships.stageChangedAt}) < (case ${partnerRelationships.stage} ${sql.join(cases, sql` `)} else null end)`;
+}
+
+/** The `excluded` predicate in SQL: declined, and the domain is on the exclusion list. */
+function excludedPredicate(domains: readonly string[]) {
+    if (domains.length === 0) return sql`false`;
+    return and(
+        eq(partnerRelationships.stage, "declined"),
+        isNotNull(partnerOrgs.domain),
+        inArray(partnerOrgs.domain, [...domains])
+    )!;
+}
+
+function partnerConditions(companyId: bigint, filters: PartnerListFilters) {
     const conditions = [eq(partnerRelationships.companyId, companyId)];
     if (filters.programId) conditions.push(eq(partnerRelationships.programId, filters.programId));
     if (filters.stage) {
@@ -737,9 +861,323 @@ export async function listPartners(
         conditions.push(lt(partnerRelationships.nextActionAt, filters.dueBefore));
     }
     if (filters.search) {
-        const needle = `%${filters.search.toLowerCase()}%`;
-        conditions.push(sql`lower(${partnerOrgs.name}) like ${needle}`);
+        const needle = `%${filters.search.toLowerCase().replace(/[%_]/g, m => `\\${m}`)}%`;
+        conditions.push(
+            or(
+                sql`lower(${partnerOrgs.name}) like ${needle}`,
+                sql`lower(coalesce(${partnerOrgs.domain}, '')) like ${needle}`
+            )!
+        );
     }
+    if (filters.firstSeenRunId)
+        conditions.push(eq(partnerOrgs.firstSeenRunId, filters.firstSeenRunId));
+    if (filters.staleOnly) conditions.push(stalePredicate());
+    if (filters.excluded !== undefined) {
+        const predicate = excludedPredicate(filters.excludedDomains ?? []);
+        conditions.push(filters.excluded ? predicate : not(predicate));
+    }
+    return conditions;
+}
+
+/** How many relationships match, for pagination; same filters as listPartners. */
+export async function countPartners(
+    companyId: bigint,
+    filters: PartnerListFilters = {}
+): Promise<number> {
+    const db = getDb();
+    const [row] = await db
+        .select({ n: sql<number>`count(*)::int` })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(and(...partnerConditions(companyId, filters)));
+    return Number(row?.n ?? 0);
+}
+
+export interface PartnerViewCounts {
+    all: number;
+    new: number;
+    highfit: number;
+    uncontacted: number;
+    excluded: number;
+}
+
+/**
+ * The five view counts in one query, with the same meaning the Prospects
+ * screens give them: `all` is everything not excluded; `new` was first seen
+ * by the latest completed run; `highfit` clears the threshold; `uncontacted`
+ * has not been reached out to (candidate, researched, qualified); `excluded`
+ * is declined and on the exclusion list.
+ */
+export async function countPartnerViews(
+    companyId: bigint,
+    programId: string,
+    opts: { latestRunId: string | null; excludedDomains: readonly string[]; fitThreshold: number }
+): Promise<PartnerViewCounts> {
+    const db = getDb();
+    const excluded = excludedPredicate(opts.excludedDomains);
+    const live = not(excluded);
+    const isNew = opts.latestRunId ? eq(partnerOrgs.firstSeenRunId, opts.latestRunId) : sql`false`;
+    const [row] = await db
+        .select({
+            all: sql<number>`count(*) filter (where ${live})::int`,
+            new: sql<number>`count(*) filter (where ${live} and ${isNew})::int`,
+            highfit: sql<number>`count(*) filter (where ${live} and ${partnerRelationships.fitScore} >= ${opts.fitThreshold})::int`,
+            uncontacted: sql<number>`count(*) filter (where ${live} and ${partnerRelationships.stage} in ('candidate', 'researched', 'qualified'))::int`,
+            excluded: sql<number>`count(*) filter (where ${excluded})::int`,
+        })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(
+            and(
+                eq(partnerRelationships.companyId, companyId),
+                eq(partnerRelationships.programId, programId)
+            )
+        );
+    return {
+        all: Number(row?.all ?? 0),
+        new: Number(row?.new ?? 0),
+        highfit: Number(row?.highfit ?? 0),
+        uncontacted: Number(row?.uncontacted ?? 0),
+        excluded: Number(row?.excluded ?? 0),
+    };
+}
+
+/** Relationships per stage for one program, from one grouped query. */
+export async function countRelationshipsByStage(
+    companyId: bigint,
+    programId: string,
+    opts: { excludedDomains?: readonly string[] } = {}
+): Promise<Record<RelationshipStage, number>> {
+    const db = getDb();
+    const conditions = [
+        eq(partnerRelationships.companyId, companyId),
+        eq(partnerRelationships.programId, programId),
+    ];
+    if (opts.excludedDomains) conditions.push(not(excludedPredicate(opts.excludedDomains)));
+    const rows = await db
+        .select({ stage: partnerRelationships.stage, n: sql<number>`count(*)::int` })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(and(...conditions))
+        .groupBy(partnerRelationships.stage);
+    const out = Object.fromEntries(
+        STAGE_ORDER.concat(["declined", "dormant"]).map(s => [s, 0])
+    ) as Record<RelationshipStage, number>;
+    for (const row of rows) out[row.stage] = Number(row.n);
+    return out;
+}
+
+/** Stage-change events for a program, oldest first per relationship, for momentum figures. */
+export async function listStageChangeEvents(
+    companyId: bigint,
+    programId: string
+): Promise<RelationshipEventRow[]> {
+    const db = getDb();
+    return db
+        .select({ event: relationshipEvents })
+        .from(relationshipEvents)
+        .innerJoin(
+            partnerRelationships,
+            eq(partnerRelationships.id, relationshipEvents.relationshipId)
+        )
+        .where(
+            and(
+                eq(relationshipEvents.companyId, companyId),
+                eq(relationshipEvents.type, "stage_changed"),
+                eq(partnerRelationships.programId, programId)
+            )
+        )
+        .orderBy(asc(relationshipEvents.relationshipId), asc(relationshipEvents.occurredAt))
+        .then(rows => rows.map(r => r.event));
+}
+
+// ─── People (public mailboxes inside dossiers) ───────────────────────────────
+
+/** Local parts that name a shared inbox rather than a person. */
+export const GENERIC_MAILBOX_LOCAL_PARTS =
+    "info|sales|hello|contact|office|purchasing|einkauf|import|export|mail|team|support|admin|kontakt|verkoop|inkoop";
+
+export interface PersonListFilters {
+    programId: string;
+    excludedDomains?: readonly string[];
+    /** Matches the mailbox, the organisation's name or its domain. */
+    search?: string;
+    /** true: shared inboxes only; false: named mailboxes only; undefined: both. */
+    generic?: boolean;
+    limit?: number;
+    offset?: number;
+}
+
+export interface PersonListRow {
+    relationshipId: string;
+    stage: RelationshipStage;
+    orgName: string;
+    orgDomain: string | null;
+    /** Position inside the dossier's contactChannels, so ids stay stable. */
+    index: number;
+    channel: string;
+    email: string;
+    excluded: boolean;
+}
+
+const EMAIL_RE = "^[^[:space:]@]+@[^[:space:]@]+\\.[^[:space:]@]+$";
+
+/**
+ * People are the email-shaped contact channels inside dossiers. Rather than
+ * load every dossier and pick them apart in memory, unnest them in SQL so a
+ * page, a search and a count are one query each.
+ */
+export async function listPeopleRows(
+    companyId: bigint,
+    filters: PersonListFilters
+): Promise<{ rows: PersonListRow[]; total: number }> {
+    const db = getDb();
+    const domains = filters.excludedDomains ?? [];
+    const excludedSql =
+        domains.length === 0
+            ? sql`false`
+            : sql`(${partnerRelationships.stage} = 'declined' and ${partnerOrgs.domain} = any(${sql`array[${sql.join(
+                  domains.map(d => sql`${d}`),
+                  sql`, `
+              )}]::text[]`}))`;
+    const conditions = [
+        eq(partnerRelationships.companyId, companyId),
+        eq(partnerRelationships.programId, filters.programId),
+        sql`trim(c.value ->> 'value') ~ ${EMAIL_RE}`,
+    ];
+    if (filters.generic !== undefined) {
+        const genericSql = sql`split_part(trim(c.value ->> 'value'), '@', 1) ~* ${`^(${GENERIC_MAILBOX_LOCAL_PARTS})$`}`;
+        conditions.push(filters.generic ? genericSql : not(genericSql));
+    }
+    if (filters.search) {
+        const needle = `%${filters.search.toLowerCase().replace(/[%_]/g, m => `\\${m}`)}%`;
+        conditions.push(
+            or(
+                sql`lower(c.value ->> 'value') like ${needle}`,
+                sql`lower(${partnerOrgs.name}) like ${needle}`,
+                sql`lower(coalesce(${partnerOrgs.domain}, '')) like ${needle}`
+            )!
+        );
+    }
+    const where = and(...conditions);
+    const lateral = sql`jsonb_array_elements(coalesce(${partnerRelationships.dossier} -> 'contactChannels', '[]'::jsonb)) with ordinality as c(value, ordinality)`;
+    const [countRow] = await db.execute<{ n: number }>(sql`
+        select count(*)::int as n
+        from ${partnerRelationships}
+        join ${partnerOrgs} on ${partnerOrgs.id} = ${partnerRelationships.orgId}
+        cross join lateral ${lateral}
+        where ${where}
+    `);
+    const rows = await db.execute<{
+        relationship_id: string;
+        stage: RelationshipStage;
+        org_name: string;
+        org_domain: string | null;
+        ordinality: number | string;
+        channel: string;
+        email: string;
+        excluded: boolean;
+    }>(sql`
+        select
+            ${partnerRelationships.id} as relationship_id,
+            ${partnerRelationships.stage} as stage,
+            ${partnerOrgs.name} as org_name,
+            ${partnerOrgs.domain} as org_domain,
+            c.ordinality as ordinality,
+            coalesce(c.value ->> 'channel', 'email') as channel,
+            trim(c.value ->> 'value') as email,
+            ${excludedSql} as excluded
+        from ${partnerRelationships}
+        join ${partnerOrgs} on ${partnerOrgs.id} = ${partnerRelationships.orgId}
+        cross join lateral ${lateral}
+        where ${where}
+        order by lower(${partnerOrgs.name}) asc, c.ordinality asc
+        limit ${Math.min(filters.limit ?? 100, 500)} offset ${filters.offset ?? 0}
+    `);
+    return {
+        total: Number(countRow?.n ?? 0),
+        rows: rows.map(r => ({
+            relationshipId: r.relationship_id,
+            stage: r.stage,
+            orgName: r.org_name,
+            orgDomain: r.org_domain ?? null,
+            // ordinality is 1-based; the dossier index is 0-based.
+            index: Number(r.ordinality) - 1,
+            channel: r.channel,
+            email: r.email,
+            excluded: Boolean(r.excluded),
+        })),
+    };
+}
+
+export interface ProgramCounts {
+    programId: string;
+    /** Relationships not excluded. */
+    companies: number;
+    /** Public mailboxes across those companies' dossiers. */
+    people: number;
+    /** Relationships past the lead stages and not excluded. */
+    deals: number;
+}
+
+/**
+ * The counts every segment summary needs, for many programs in one query.
+ * Excluded organisations (declined and on the program's exclusion list) are
+ * left out, which is what the exclusion list is for.
+ */
+export async function countProgramSummaries(
+    companyId: bigint,
+    programs: ReadonlyArray<{ id: string; knownPartnerDomains: readonly string[] }>
+): Promise<Map<string, ProgramCounts>> {
+    const out = new Map<string, ProgramCounts>();
+    if (programs.length === 0) return out;
+    const db = getDb();
+    const rows = await db
+        .select({
+            programId: partnerRelationships.programId,
+            stage: partnerRelationships.stage,
+            domain: partnerOrgs.domain,
+            people: sql<number>`(
+                select count(*)::int
+                from jsonb_array_elements(coalesce(${partnerRelationships.dossier} -> 'contactChannels', '[]'::jsonb)) c
+                where (c ->> 'value') ~ '^[^[:space:]@]+@[^[:space:]@]+\\.[^[:space:]@]+$'
+            )`,
+        })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(
+            and(
+                eq(partnerRelationships.companyId, companyId),
+                inArray(
+                    partnerRelationships.programId,
+                    programs.map(p => p.id)
+                )
+            )
+        );
+    const domainsOf = new Map(programs.map(p => [p.id, new Set(p.knownPartnerDomains)]));
+    for (const program of programs)
+        out.set(program.id, { programId: program.id, companies: 0, people: 0, deals: 0 });
+    for (const row of rows) {
+        const entry = out.get(row.programId);
+        if (!entry) continue;
+        const excluded =
+            row.stage === "declined" &&
+            row.domain !== null &&
+            (domainsOf.get(row.programId)?.has(row.domain) ?? false);
+        if (excluded) continue;
+        entry.companies += 1;
+        entry.people += Number(row.people ?? 0);
+        if (row.stage !== "candidate" && row.stage !== "researched") entry.deals += 1;
+    }
+    return out;
+}
+
+export async function listPartners(
+    companyId: bigint,
+    filters: PartnerListFilters = {}
+): Promise<PartnerListItem[]> {
+    const db = getDb();
+    const conditions = partnerConditions(companyId, filters);
 
     const evidenceCount = sql<number>`(
         select count(*)::int from ${partnerEvidence}
@@ -758,10 +1196,13 @@ export async function listPartners(
               ? [desc(partnerRelationships.createdAt)]
               : filters.orderBy === "stage"
                 ? [asc(partnerRelationships.stage), desc(partnerRelationships.fitScore)]
-                : [
-                      desc(sql`coalesce(${partnerRelationships.fitScore}, -1)`),
-                      desc(partnerRelationships.createdAt),
-                  ];
+                : filters.orderBy === "name"
+                  ? [asc(sql`lower(${partnerOrgs.name})`)]
+                  : [
+                        desc(sql`coalesce(${partnerRelationships.fitScore}, -1)`),
+                        asc(sql`lower(${partnerOrgs.name})`),
+                        desc(partnerRelationships.createdAt),
+                    ];
 
     const rows = await db
         .select({ relationship: partnerRelationships, org: partnerOrgs, evidenceCount })
@@ -1126,6 +1567,32 @@ export async function updateAgreement(
         )
         .returning();
     return row ? toAgreement(row) : null;
+}
+
+/** Agreements for many relationships in one query, keyed by relationship id. */
+export async function listAgreementsForRelationships(
+    companyId: bigint,
+    relationshipIds: readonly string[]
+): Promise<Map<string, AgreementRecord[]>> {
+    const out = new Map<string, AgreementRecord[]>();
+    if (relationshipIds.length === 0) return out;
+    const db = getDb();
+    const rows = await db
+        .select()
+        .from(distributionAgreements)
+        .where(
+            and(
+                eq(distributionAgreements.companyId, companyId),
+                inArray(distributionAgreements.relationshipId, [...relationshipIds])
+            )
+        )
+        .orderBy(desc(distributionAgreements.createdAt));
+    for (const row of rows) {
+        const list = out.get(row.relationshipId) ?? [];
+        list.push(toAgreement(row));
+        out.set(row.relationshipId, list);
+    }
+    return out;
 }
 
 export async function listAgreements(

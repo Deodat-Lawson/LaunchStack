@@ -1,10 +1,30 @@
 # Growth — design rules for this surface
 
-Growth is one app with two areas, Brand and Prospects, in one rail. Shared
-pieces (`PageHeader`, `EmptyState`, `SkeletonRows`, `useResource`, the
-formatters) live at the app level; each area keeps its own screens, API
-client and components. Brand's calendar and composer follow every rule
-below; a network is a monogram in the ink ladder, never a brand colour.
+Growth is two tool pages, Brand and Prospects, behind one front door, laid
+out the way every other tool in this app is: the shell's back bar on top, a
+`ToolHeader` (icon tile, name, one line, actions on the right), then the
+workspace. There is no rail and there are no tabs. What used to be a screen
+of its own is now one of three things:
+
+- **A view of the same workspace**, chosen by a segmented control in the
+  toolbar and spelled in the URL (`?view=companies|people|deals`). The
+  toolbar keeps filters, search and sort; the page never navigates.
+- **A side panel** (`Panel`, a right-hand sheet) over the workspace: a
+  company, the runs, the segment and its sources, the composer, the
+  accounts. The list stays in view behind it, Escape closes it, and its
+  state is in the URL too (`?company=<id>`, `?panel=runs|segment|compose|accounts`).
+- **A page**, only for the campaign generator, which is a workspace in its
+  own right and gets the same header.
+
+Shared pieces (`ToolHeader`, `ToolPage`, `Panel`, `EmptyState`,
+`SkeletonRows`, `useResource`, the formatters) live at the app level; each
+area keeps its own components, API client and workspace. A network is a
+monogram in the ink ladder, never a brand colour.
+
+Lists are paged: fifty rows, then "Show more" with the total in words, and
+the counts in the toolbar come from the server. A live run shows its
+progress from counters the worker writes, polled every few seconds, never
+every second.
 
 Prospects is an **operate** surface: someone opens it every morning to decide
 who to talk to. The design should vanish into that task. These rules are the
@@ -86,7 +106,7 @@ companies` or the screen's verb), at most four regions.
 3. `focus-visible` ring on every interactive element; tab order matches visual
    order; every icon-only button has `aria-label`.
 4. `tabular-nums` in every numeric column.
-5. Both themes checked in `/dev/prospects` (theme follows `data-theme` on
+5. Both themes checked in `/dev/growth` (theme follows `data-theme` on
    `<html>`); dark is composed from the ladder, not inverted.
 6. Reduced motion honored; no placeholder copy left in production paths.
 7. Empty, loading and error states exist for every region that loads data.

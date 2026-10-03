@@ -68,6 +68,21 @@ export function weekRange(weekStart: Date): { from: string; to: string } {
     return { from: weekStart.toISOString(), to: addDays(weekStart, 7).toISOString() };
 }
 
+/** "2026-09-28" in local time: how a week is spelled in the URL. */
+export function toDateKey(d: Date): string {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** The inverse of `toDateKey`; null for anything that is not a plain local date. */
+export function parseDateKey(value: string | null | undefined): Date | null {
+    if (!value) return null;
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!match) return null;
+    const d = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export const STATUS_WORD: Record<BrandPostStatus, string> = {
     draft: "Draft",
     scheduled: "Scheduled",
@@ -83,6 +98,11 @@ export function isDue(post: BrandPost, now = Date.now()): boolean {
         post.scheduledAt !== null &&
         new Date(post.scheduledAt).getTime() <= now
     );
+}
+
+/** A scheduled post the publisher has already tried and will try again. */
+export function isRetrying(post: BrandPost): boolean {
+    return post.status === "scheduled" && post.attempts > 0 && post.nextAttemptAt !== null;
 }
 
 export { DAY };

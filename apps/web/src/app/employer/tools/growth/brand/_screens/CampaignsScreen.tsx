@@ -1,18 +1,19 @@
 "use client";
 
+import { Sparkles } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 import { MarketingPipelineWorkspace } from "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace";
 import { toPlatformText } from "~/app/employer/documents/components/marketing-pipeline/useMarketingPipelineController";
 
-import { PageHeader } from "~/components/tools/PageHeader";
-import { useGrowthPaths } from "../../_lib/paths";
+import { ToolHeader, ToolPage } from "../../_components/ToolHeader";
+import { useGrowthUrls } from "../../_lib/paths";
 import { COMPOSE_HANDOFF_KEY, type ComposeHandoff } from "../api";
 
 function Workspace() {
     const router = useRouter();
-    const paths = useGrowthPaths();
+    const urls = useGrowthUrls();
     const params = useSearchParams();
     const debug = params.get("debug") === "true";
     return (
@@ -31,7 +32,7 @@ function Workspace() {
                 } catch {
                     /* a blocked storage only loses the hand-off; Compose opens empty */
                 }
-                router.push(paths.brand("/compose"));
+                router.push(urls.brand({ panel: "compose" }));
             }}
         />
     );
@@ -44,17 +45,17 @@ function Workspace() {
  */
 export function CampaignsScreen() {
     return (
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
-            <PageHeader
-                size="md"
+        <ToolPage width="reading">
+            <ToolHeader
+                icon={<Sparkles className="size-5" />}
                 title="Campaigns"
-                sub="Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
+                description="Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
             />
             <div className="border-line bg-panel rounded-lg border p-2 md:p-4">
                 <Suspense fallback={null}>
                     <Workspace />
                 </Suspense>
             </div>
-        </div>
+        </ToolPage>
     );
 }

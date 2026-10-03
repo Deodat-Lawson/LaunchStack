@@ -9,6 +9,12 @@
  * clients); hard character limits come from platform-profiles; and every
  * success carries the platform-native postId — the key the engagement
  * read-back loop needs.
+ *
+ * Credentials resolve per request: a caller-supplied `credentials` (the
+ * workspace's own account) wins; otherwise the deployment-wide env values
+ * from config.ts apply, so a single-tenant deploy keeps working unchanged.
+ * Every failure carries `status` / `retryable` / `authFailed` so a publish
+ * worker can tell "try again later" from "the account needs reconnecting".
  */
 
 import type { MarketingPlatform } from "../platform-profiles";
@@ -22,9 +28,21 @@ import {
 import { linkedinAdapter } from "./adapters/linkedin";
 import { redditAdapter } from "./adapters/reddit";
 import { xAdapter } from "./adapters/x";
-import type { PublishAdapter, PublishRequest, PublishResult } from "./types";
+import type {
+    PublishAdapter,
+    PublishRequest,
+    PublishResult,
+    SocialCredentials,
+    VerifyResult,
+} from "./types";
 
-export type { PublishAdapter, PublishRequest, PublishResult } from "./types";
+export type {
+    PublishAdapter,
+    PublishRequest,
+    PublishResult,
+    SocialCredentials,
+    VerifyResult,
+} from "./types";
 export { resetBlueskySession } from "./adapters/bluesky";
 export { resetRedditToken } from "./adapters/reddit";
 
@@ -51,6 +69,18 @@ export async function publishContent(
     return publishToPlatform({ platform, message, title });
 }
 
+/**
+ * Check a workspace credential against its network without posting. The
+ * success identity is the account the network reports (an @username, a
+ * LinkedIn name, a Bluesky handle) or null when the network names none.
+ */
+export async function verifyCredentials(
+    credentials: SocialCredentials,
+    options?: { fetchImpl?: typeof fetch }
+): Promise<VerifyResult> {
+    return PUBLISH_ADAPTERS[credentials.platform].verify(credentials, options);
+}
+
 export interface PublishConfigState {
     /** The deployment holds credentials for this network. */
     configured: boolean;
@@ -59,8 +89,9 @@ export interface PublishConfigState {
 }
 
 /**
- * Which networks this deployment can publish to. Reports presence only; no
- * credential ever leaves config.ts.
+ * Which networks this deployment can publish to from the environment alone.
+ * Reports presence only; no credential ever leaves config.ts. Per-workspace
+ * credentials are the caller's to describe.
  */
 export function describePublishConfig(): Record<MarketingPlatform, PublishConfigState> {
     const bluesky = getBlueskyCredentials();

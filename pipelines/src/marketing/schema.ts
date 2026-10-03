@@ -7,6 +7,7 @@ import {
     jsonb,
     text,
     timestamp,
+    uniqueIndex,
     varchar,
 } from "drizzle-orm/pg-core";
 import { pgTable } from "@launchstack/store/schema/helpers";
@@ -97,11 +98,57 @@ export const brandPosts = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared last: added by a later migration (ADD COLUMN appends, and
+        // the pg_dump parity gate compares physical column order).
+        /** Publish attempts so far, including the one that succeeded. */
+        attempts: integer("attempts").notNull().default(0),
+        /**
+         * When the scheduler may try again after a transient failure. Null
+         * means "at scheduledAt". The calendar keeps showing scheduledAt.
+         */
+        nextAttemptAt: timestamp("next_attempt_at", { withTimezone: true }),
+        lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true }),
     },
     table => [
         index("brand_posts_company_status_idx").on(table.companyId, table.status),
         index("brand_posts_company_scheduled_idx").on(table.companyId, table.scheduledAt),
         index("brand_posts_due_idx").on(table.status, table.scheduledAt),
+        index("brand_posts_next_attempt_idx").on(table.status, table.nextAttemptAt),
     ]
 );
 export type BrandPostRow = InferSelectModel<typeof brandPosts>;
+
+// ─── Brand accounts ──────────────────────────────────────────────────────────
+
+/**
+ * A workspace's own credential for one network. The credential is a JSON
+ * document sealed with the store's secret box (AES-256-GCM, key-versioned);
+ * `identity` is display-only. One row per network per workspace: connecting
+ * again replaces it. `revoked` means the network refused the credential and
+ * reconnecting is the only fix.
+ */
+export const brandAccounts = pgTable(
+    "brand_accounts",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+        platform: varchar("platform", { length: 20 }).notNull(),
+        /** The handle or name the network reported when the credential was verified. */
+        identity: varchar("identity", { length: 256 }),
+        credentialsCiphertext: text("credentials_ciphertext").notNull(),
+        encryptionKeyVersion: integer("encryption_key_version").notNull().default(1),
+        /** active | revoked */
+        status: varchar("status", { length: 16 }).notNull().default("active"),
+        lastError: text("last_error"),
+        connectedByUserId: varchar("connected_by_user_id", { length: 256 }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    table => [
+        uniqueIndex("brand_accounts_company_platform_unique").on(table.companyId, table.platform),
+        index("brand_accounts_company_idx").on(table.companyId),
+    ]
+);
+export type BrandAccountRow = InferSelectModel<typeof brandAccounts>;

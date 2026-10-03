@@ -111,6 +111,37 @@ export const founderWeeklyReviewStageDuration = new Histogram({
     registers: [metricsRegistry],
 });
 
+// ── Growth: Prospects runs and Brand publishing ─────────────────────────────
+
+export const prospectsRunsTotal = new Counter({
+    name: "pdr_prospects_runs_total",
+    help: "Prospects discovery runs finished, by mode and result",
+    labelNames: ["mode", "result"],
+    registers: [metricsRegistry],
+});
+
+export const prospectsRunDuration = new Histogram({
+    name: "pdr_prospects_run_duration_seconds",
+    help: "Wall time of a Prospects discovery run from start to finish",
+    labelNames: ["mode", "result"],
+    buckets: [5, 15, 30, 60, 120, 300, 600, 1200, 1800],
+    registers: [metricsRegistry],
+});
+
+export const prospectsCandidatesTotal = new Counter({
+    name: "pdr_prospects_candidates_total",
+    help: "Companies researched in Prospects runs, by outcome",
+    labelNames: ["mode", "status"],
+    registers: [metricsRegistry],
+});
+
+export const brandPublishTotal = new Counter({
+    name: "pdr_brand_publish_total",
+    help: "Brand post publish attempts by network and result",
+    labelNames: ["platform", "result"],
+    registers: [metricsRegistry],
+});
+
 export async function getMetricsSnapshot(): Promise<string> {
     return metricsRegistry.metrics();
 }

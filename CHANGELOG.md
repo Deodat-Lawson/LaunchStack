@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Growth is laid out like the other tools** - a front door, then Brand and
+  Prospects as one workspace page each, with no rail and no tabs
+  - A company, the runs, the segment and its sources, the composer and the
+    accounts open as side panels over the list; every panel, view, filter,
+    search and open company is in the URL, so old deep links redirect into
+    the right place
+  - Lists are paged from the database (fifty rows, then "Show more") with
+    server-side counts, search and sort; nothing loads a whole segment to
+    show one screen
+  - A run shows its progress from counters the worker writes and can be
+    stopped after the company it is on; one run per segment at a time
+  - Brand accounts are per workspace: a credential is verified against the
+    network and stored sealed; a refused one is marked as needing
+    reconnecting; the deployment's environment tokens remain the fallback
+  - A scheduled post that hits a transient error is retried with backoff
+    (five attempts) instead of failing on the first 5xx
+  - The preview harness under `/dev/growth` mounts the new pages and applies
+    production's stage rules
+- **Growth runs on the worker in every mode** - keyless and live runs are
+  queued to the worker; nothing runs in the web process after the response
+  any more, and the calendar no longer publishes on a GET
+  - The lean production Compose overlay ships a self-hosted Inngest server,
+    so the background verticals need no external service
+  - Prometheus counters and histograms for Prospects runs, candidates and
+    Brand publishing; a run-scoped logger in the pipeline
+  - The web-research fetcher limits in-flight requests per host and backs
+    off on 429 and 503; the Overpass client pauses between areas
+  - The old `/api/distribution/*` routes are removed; `/api/prospects/*` is
+    the one surface and carries the route tests
 - **Proposals** - a writing app of its own in Tools, with a Studio tile: find
   the funders that fit, then write the proposal from what your sources prove
   - Profile: what the workspace's sources can prove, fact by fact with

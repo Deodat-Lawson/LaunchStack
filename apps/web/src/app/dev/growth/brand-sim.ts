@@ -7,6 +7,7 @@
  */
 import type {
     BrandAccount,
+    BrandAccountField,
     BrandPlatform,
     BrandPost,
     BrandPostStatus,
@@ -22,57 +23,116 @@ const LIMITS: Record<BrandPlatform, number | null> = {
     reddit: 40000,
 };
 
-const ACCOUNTS: BrandAccount[] = [
-    {
-        platform: "linkedin",
-        label: "LinkedIn",
-        configured: true,
-        identity: null,
-        limit: 3000,
-        requires: [
-            "A LinkedIn developer app owned by the company",
-            "Community Management API access (registered entity; the page's super admin verifies the app)",
-            "An access token in LINKEDIN_ACCESS_TOKEN",
-        ],
-        note: "Free to post. Access is reviewed by LinkedIn: a development tier first, the standard tier after a screencast review.",
-    },
-    {
-        platform: "x",
-        label: "X",
-        configured: false,
-        identity: null,
-        limit: 280,
-        requires: [
-            "An X developer account on pay-per-use",
-            "A bearer token in TWITTER_BEARER_TOKEN",
-        ],
-        note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. No free tier for new developers.",
-    },
-    {
-        platform: "bluesky",
-        label: "Bluesky",
-        configured: true,
-        identity: "roastery.bsky.social",
-        limit: 300,
-        requires: [
-            "The account's handle in BLUESKY_HANDLE",
-            "An app password in BLUESKY_APP_PASSWORD",
-        ],
-        note: "Free, no review. Reading back is free too.",
-    },
-    {
-        platform: "reddit",
-        label: "Reddit",
-        configured: false,
-        identity: null,
-        limit: 40000,
-        requires: [
-            "A Reddit script app (client id and secret)",
-            "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT",
-        ],
-        note: "Free for this volume. Posts go to the account's own profile; each subreddit has its own rules.",
-    },
-];
+const FIELDS: Record<BrandPlatform, BrandAccountField[]> = {
+    linkedin: [
+        {
+            key: "accessToken",
+            label: "Access token",
+            secret: true,
+            hint: "An OAuth 2.0 member token with w_member_social. It expires after 60 days; reconnect then.",
+        },
+    ],
+    x: [
+        {
+            key: "bearerToken",
+            label: "User access token",
+            secret: true,
+            hint: "A user-context token. An app-only bearer token cannot post.",
+        },
+    ],
+    bluesky: [
+        { key: "handle", label: "Handle", secret: false, placeholder: "you.bsky.social" },
+        {
+            key: "appPassword",
+            label: "App password",
+            secret: true,
+            hint: "Never your main password. Revoke it from Bluesky at any time.",
+        },
+    ],
+    reddit: [
+        { key: "clientId", label: "Client id", secret: false },
+        { key: "clientSecret", label: "Client secret", secret: true },
+        {
+            key: "userAgent",
+            label: "User agent",
+            secret: false,
+            placeholder: "launchstack:brand:v1 (by /u/yourname)",
+        },
+    ],
+};
+
+function seedAccounts(now: number): BrandAccount[] {
+    return [
+        {
+            platform: "linkedin",
+            label: "LinkedIn",
+            configured: true,
+            scope: "deployment",
+            status: "connected",
+            identity: null,
+            connectedAt: null,
+            lastError: null,
+            limit: 3000,
+            requires: [
+                "A LinkedIn developer app owned by the company",
+                "Community Management API access (registered entity; the page's super admin verifies the app)",
+                "A member access token with the w_member_social scope",
+            ],
+            fields: FIELDS.linkedin,
+            note: "Free to post. Access is reviewed by LinkedIn: a development tier first, the standard tier after a screencast review.",
+        },
+        {
+            platform: "x",
+            label: "X",
+            configured: false,
+            scope: null,
+            status: "not_connected",
+            identity: null,
+            connectedAt: null,
+            lastError: null,
+            limit: 280,
+            requires: [
+                "An X developer account on pay-per-use",
+                "An OAuth 2.0 user access token with tweet.write",
+            ],
+            fields: FIELDS.x,
+            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. No free tier for new developers.",
+        },
+        {
+            platform: "bluesky",
+            label: "Bluesky",
+            configured: true,
+            scope: "workspace",
+            status: "connected",
+            identity: "roastery.bsky.social",
+            connectedAt: new Date(now - 12 * DAY).toISOString(),
+            lastError: null,
+            limit: 300,
+            requires: ["The account's handle", "An app password from Settings › App passwords"],
+            fields: FIELDS.bluesky,
+            note: "Free, no review. Reading back is free too.",
+        },
+        {
+            platform: "reddit",
+            label: "Reddit",
+            configured: false,
+            scope: "workspace",
+            status: "revoked",
+            identity: "u/roastery",
+            connectedAt: new Date(now - 40 * DAY).toISOString(),
+            lastError: "Reddit 401: the app secret was rotated",
+            limit: 40000,
+            requires: [
+                "A Reddit script app (client id and secret)",
+                "A user agent naming the app and the account, as Reddit's API rules ask",
+            ],
+            fields: FIELDS.reddit,
+            note: "Free for this volume. Posts go to the account's own profile; each subreddit has its own rules.",
+        },
+    ];
+}
+
+let ACCOUNTS: BrandAccount[] = seedAccounts(Date.now());
 
 type SimPost = BrandPost;
 
@@ -101,6 +161,8 @@ function seedPosts(now: number): SimPost[] {
         error: null,
         source: { kind: "compose" },
         createdAt: new Date(now - 3 * DAY).toISOString(),
+        attempts: 0,
+        nextAttemptAt: null,
     });
     return [
         {
@@ -123,7 +185,8 @@ function seedPosts(now: number): SimPost[] {
                 "failed"
             ),
             scheduledAt: at(now, -1 * DAY, 10, 0),
-            error: "X is not connected here: TWITTER_BEARER_TOKEN is not set.",
+            error: "This network is not connected for this workspace.",
+            attempts: 1,
         },
         {
             ...base(
@@ -161,6 +224,7 @@ let seq = 10;
 
 export function resetBrandSim(now = Date.now()): void {
     posts = seedPosts(now);
+    ACCOUNTS = seedAccounts(now);
     seq = 10;
 }
 
@@ -213,15 +277,22 @@ function bodyProblem(platform: BrandPlatform, body: string): string | null {
 /** The claim and the network call, as the real module does them. */
 function publish(post: SimPost, now: number): SimPost {
     if (!["draft", "scheduled", "failed"].includes(post.status)) return post;
+    post.attempts += 1;
     if (configured(post.platform)) {
         post.status = "published";
         post.publishedAt = new Date(now).toISOString();
         post.postId = `${post.platform}-${seq++}`;
         post.postUrl = `https://example.invalid/${post.platform}/${post.postId}`;
         post.error = null;
+        post.nextAttemptAt = null;
     } else {
+        const account = ACCOUNTS.find(a => a.platform === post.platform);
         post.status = "failed";
-        post.error = `${label(post.platform)} is not connected here.`;
+        post.nextAttemptAt = null;
+        post.error =
+            account?.status === "revoked"
+                ? `${account.lastError ?? "The network refused the credential"}. Reconnect the account under Accounts.`
+                : "This network is not connected for this workspace.";
     }
     return post;
 }
@@ -248,7 +319,48 @@ export async function simulateBrand(
         .split("/")
         .filter(Boolean);
 
-    if (parts[0] === "accounts") return json({ accounts: ACCOUNTS });
+    if (parts[0] === "accounts") {
+        if (parts.length === 1) return json({ accounts: ACCOUNTS });
+        const account = ACCOUNTS.find(a => a.platform === parts[1]);
+        if (!account) return err(404, "Unknown network");
+        if (method === "POST") {
+            const body = await readBody(init);
+            const values = (body.values ?? {}) as Record<string, string>;
+            for (const field of account.fields) {
+                if (!values[field.key]?.trim()) return err(400, `${field.label} is required`);
+            }
+            // The harness has no network: anything ending in "-bad" is refused, the rest is accepted.
+            const secret = account.fields.find(f => f.secret);
+            if (secret && values[secret.key]?.trim().endsWith("-bad"))
+                return err(401, `${account.label} refused the credential`, {
+                    code: "credentials_rejected",
+                });
+            account.configured = true;
+            account.scope = "workspace";
+            account.status = "connected";
+            account.identity =
+                account.platform === "bluesky"
+                    ? (values.handle ?? null)
+                    : account.platform === "reddit"
+                      ? "u/roastery"
+                      : account.platform === "x"
+                        ? "@roastery"
+                        : "Roastery";
+            account.connectedAt = new Date(now).toISOString();
+            account.lastError = null;
+            return json({ account }, 201);
+        }
+        if (method === "DELETE") {
+            account.configured = account.platform === "linkedin";
+            account.scope = account.platform === "linkedin" ? "deployment" : null;
+            account.status = account.platform === "linkedin" ? "connected" : "not_connected";
+            account.identity = null;
+            account.connectedAt = null;
+            account.lastError = null;
+            return json({ account });
+        }
+        return err(405, "Method not allowed");
+    }
 
     if (parts[0] !== "posts") return err(404, "Not found");
 
@@ -299,6 +411,8 @@ export async function simulateBrand(
                     ? (body.source as BrandPost["source"])
                     : { kind: "compose" },
             createdAt: new Date(now).toISOString(),
+            attempts: 0,
+            nextAttemptAt: null,
         }));
         posts.push(...created);
         if (body.publishNow) for (const post of created) publish(post, now);
@@ -310,6 +424,7 @@ export async function simulateBrand(
         return json({
             published: result.published.map(strip),
             failed: result.failed.map(strip),
+            retrying: [],
             skipped: 0,
         });
     }
@@ -353,6 +468,8 @@ export async function simulateBrand(
             post.status = body.status;
         }
         post.error = post.status === "failed" ? post.error : null;
+        post.attempts = 0;
+        post.nextAttemptAt = null;
         return json({ post: strip(post) });
     }
 

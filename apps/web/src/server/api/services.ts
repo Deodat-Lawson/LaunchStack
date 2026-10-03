@@ -169,16 +169,6 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
             "is the guarantee.",
     },
     {
-        id: "distribution",
-        tier: "tool",
-        summary:
-            "Find, qualify and run B2B distribution partners: programs, discovery runs, evidence-backed dossiers, relationship stages, agreements, and an outreach hand-off to email campaigns.",
-        scope: "workspace",
-        feature: "@launchstack/pipelines/distribution",
-        routes: ["distribution"],
-        notes: "Discovery runs execute on the worker (distribution/run.requested); dossiers publish into Sources.",
-    },
-    {
         id: "brand",
         tier: "tool",
         summary:
@@ -186,7 +176,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         scope: "workspace",
         feature: "@launchstack/pipelines/marketing",
         routes: ["brand"],
-        notes: "The Brand area of Growth. Posts are one row per network in brand_posts; the worker's brand-publish-due cron (and the web app's due-check in dev) claims and publishes them through @launchstack/tools/social-publish. Campaign drafting is the marketing pipeline, embedded.",
+        notes: "The Brand page of Growth. Posts are one row per network in brand_posts; the worker's brand-publish-due cron claims and publishes them through @launchstack/tools/social-publish with the workspace's own sealed credentials (brand_accounts), retrying transient failures. Campaign drafting is the marketing pipeline, embedded.",
     },
     {
         id: "prospects",
@@ -196,7 +186,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         scope: "workspace",
         feature: "@launchstack/pipelines/distribution",
         routes: ["prospects"],
-        notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
+        notes: "The one API over the Distribution data (the old /api/distribution routes are gone): a program is a segment, a partner organisation a company, its relationship the deal. Every list is paged and counted in SQL. Runs are queued to the worker on distribution/run.requested in every mode but sample, one per segment at a time, stoppable.",
     },
     {
         id: "proposals",

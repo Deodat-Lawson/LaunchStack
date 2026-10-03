@@ -2,11 +2,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { prospectsApi, type RunDto, type SegmentSummary } from "../api";
+import { prospectsApi, type NextRunMode, type RunDto, type SegmentSummary } from "../api";
 import { useResource } from "~/lib/tools/useResource";
 
+export type ProspectsPanel = "runs" | "segment";
+
 export interface ProspectsContextValue {
-    /** "/employer/tools/prospects" in the app, "/dev/prospects" in the harness. */
+    /** "/employer/tools/growth/prospects" in the app, "/dev/growth/prospects" in the harness. */
     basePath: string;
     href: (path?: string) => string;
     segments: SegmentSummary[];
@@ -17,11 +19,15 @@ export interface ProspectsContextValue {
     reloadSegments: () => Promise<void>;
     /** The run currently in progress for this segment, if any. */
     activeRun: RunDto | null;
-    runSheetOpen: boolean;
-    openRunSheet: (runId?: string) => void;
-    closeRunSheet: () => void;
+    /** What "Find companies" will do next in this environment. */
+    nextMode: NextRunMode | null;
+    /** Bumps when a run finishes, so lists that show its results can reload. */
+    runsVersion: number;
+    panel: ProspectsPanel | null;
+    openPanel: (panel: ProspectsPanel) => void;
+    closePanel: () => void;
     startRun: (options?: { sample?: boolean }) => Promise<void>;
-    noteRunFinished: () => void;
+    stopRun: () => Promise<void>;
     /** Remembered per browser: run with sample data instead of live providers. */
     samplePreferred: boolean;
     setSamplePreferred: (value: boolean) => void;
@@ -31,6 +37,8 @@ const Ctx = createContext<ProspectsContextValue | null>(null);
 
 const SEGMENT_KEY = "prospects:segment";
 const SAMPLE_KEY = "prospects:sample";
+/** How often a live run is re-read. The worker writes counters, so a few seconds is plenty. */
+const RUN_POLL_MS = 3000;
 
 function readSamplePreference(): boolean {
     try {
@@ -38,6 +46,10 @@ function readSamplePreference(): boolean {
     } catch {
         return false;
     }
+}
+
+export function isRunLive(run: RunDto | null): boolean {
+    return run !== null && (run.status === "running" || run.status === "queued");
 }
 
 export function ProspectsProvider({
@@ -77,14 +89,14 @@ export function ProspectsProvider({
 
     const segment = segments.find(s => s.id === segmentId) ?? null;
 
-    // Active run: polled while running so the rail indicator and any open
-    // sheet stay live. The sheet reads the same object.
+    // The run in flight, re-read on a slow poll while it is live. The panel
+    // and the header pill read the same object.
     const [activeRunId, setActiveRunId] = useState<string | null>(null);
-    const [runSheetOpen, setRunSheetOpen] = useState(false);
+    const [nextMode, setNextMode] = useState<NextRunMode | null>(null);
     const runRes = useResource(
         activeRunId ? `run:${activeRunId}` : null,
         () => prospectsApi.run(activeRunId!),
-        { pollMs: activeRunId ? 1000 : null }
+        { pollMs: activeRunId ? RUN_POLL_MS : null }
     );
     const activeRun = runRes.data?.run ?? null;
 
@@ -94,10 +106,10 @@ export function ProspectsProvider({
         let cancelled = false;
         void prospectsApi
             .runs(segmentId)
-            .then(({ runs }) => {
+            .then(({ active, nextMode: mode }) => {
                 if (cancelled) return;
-                const live = runs.find(r => r.status === "running" || r.status === "queued");
-                if (live) setActiveRunId(live.id);
+                if (mode) setNextMode(mode);
+                setActiveRunId(active ? active.id : null);
             })
             .catch(() => undefined);
         return () => {
@@ -105,14 +117,13 @@ export function ProspectsProvider({
         };
     }, [segmentId]);
 
-    const finished =
-        activeRun !== null &&
-        (activeRun.status === "completed" ||
-            activeRun.status === "failed" ||
-            activeRun.status === "stopped");
+    const finished = activeRun !== null && !isRunLive(activeRun);
+    const [runsVersion, setRunsVersion] = useState(0);
     const reloadSegments = segmentsRes.reload;
     useEffect(() => {
-        if (finished) void reloadSegments();
+        if (!finished) return;
+        setRunsVersion(v => v + 1);
+        void reloadSegments();
     }, [finished, reloadSegments]);
 
     const [samplePreferred, setSamplePreferredState] = useState(false);
@@ -126,26 +137,27 @@ export function ProspectsProvider({
         }
     }, []);
 
+    const [panel, setPanel] = useState<ProspectsPanel | null>(null);
+    const openPanel = useCallback((next: ProspectsPanel) => setPanel(next), []);
+    const closePanel = useCallback(() => setPanel(null), []);
+
     const startRun = useCallback(
         async (options?: { sample?: boolean }) => {
             if (!segmentId) return;
             const sample = options?.sample ?? samplePreferred;
             const { run } = await prospectsApi.startRun(segmentId, sample ? { sample: true } : {});
             setActiveRunId(run.id);
-            setRunSheetOpen(true);
+            if (!isRunLive(run)) setRunsVersion(v => v + 1);
+            setPanel("runs");
         },
         [segmentId, samplePreferred]
     );
 
-    const openRunSheet = useCallback((runId?: string) => {
-        if (runId) setActiveRunId(runId);
-        setRunSheetOpen(true);
-    }, []);
-    const closeRunSheet = useCallback(() => setRunSheetOpen(false), []);
-    const noteRunFinished = useCallback(() => {
-        setActiveRunId(null);
-        setRunSheetOpen(false);
-    }, []);
+    const stopRun = useCallback(async () => {
+        if (!activeRunId) return;
+        await prospectsApi.stopRun(activeRunId);
+        await runRes.reload();
+    }, [activeRunId, runRes]);
 
     const value = useMemo<ProspectsContextValue>(
         () => ({
@@ -157,12 +169,14 @@ export function ProspectsProvider({
             segment,
             setSegmentId,
             reloadSegments,
-            activeRun: finished ? activeRun : activeRun,
-            runSheetOpen,
-            openRunSheet,
-            closeRunSheet,
+            activeRun,
+            nextMode,
+            runsVersion,
+            panel,
+            openPanel,
+            closePanel,
             startRun,
-            noteRunFinished,
+            stopRun,
             samplePreferred,
             setSamplePreferred,
         }),
@@ -175,12 +189,13 @@ export function ProspectsProvider({
             setSegmentId,
             reloadSegments,
             activeRun,
-            finished,
-            runSheetOpen,
-            openRunSheet,
-            closeRunSheet,
+            nextMode,
+            runsVersion,
+            panel,
+            openPanel,
+            closePanel,
             startRun,
-            noteRunFinished,
+            stopRun,
             samplePreferred,
             setSamplePreferred,
         ]

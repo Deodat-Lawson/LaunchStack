@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
     UnsafeUrlError,
@@ -163,5 +163,213 @@ describe("fetchReadable", () => {
                 maxRedirects: 2,
             })
         ).rejects.toMatchObject({ code: "too_many_redirects" });
+    });
+
+    const okPage = () =>
+        new Response("<p>ok</p>", { status: 200, headers: { "content-type": "text/html" } });
+
+    it("retries a 429 after a 500 ms backoff and succeeds on the second attempt", async () => {
+        vi.useFakeTimers();
+        try {
+            let calls = 0;
+            const fetchImpl = fakeFetch({
+                "https://example.com/": () =>
+                    ++calls === 1 ? new Response("later", { status: 429 }) : okPage(),
+            });
+            const pending = fetchReadable("https://example.com/", {
+                fetchImpl,
+                lookup: publicLookup,
+            });
+            await vi.advanceTimersByTimeAsync(499);
+            expect(calls).toBe(1);
+            await vi.advanceTimersByTimeAsync(1);
+            const page = await pending;
+            expect(calls).toBe(2);
+            expect(page.status).toBe(200);
+            expect(page.text).toBe("ok");
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it("honours a numeric Retry-After header instead of the backoff", async () => {
+        let calls = 0;
+        const fetchImpl = fakeFetch({
+            "https://example.com/": () =>
+                ++calls === 1
+                    ? new Response("later", { status: 503, headers: { "retry-after": "0" } })
+                    : okPage(),
+        });
+        const started = Date.now();
+        const page = await fetchReadable("https://example.com/", {
+            fetchImpl,
+            lookup: publicLookup,
+        });
+        expect(calls).toBe(2);
+        expect(page.status).toBe(200);
+        expect(Date.now() - started).toBeLessThan(400);
+    });
+
+    it("gives up after maxRetries and returns the 429 page like any other non-2xx answer", async () => {
+        let calls = 0;
+        const fetchImpl = fakeFetch({
+            "https://example.com/": () => {
+                calls++;
+                return new Response("<p>slow down</p>", {
+                    status: 429,
+                    headers: { "retry-after": "0", "content-type": "text/html" },
+                });
+            },
+        });
+        const page = await fetchReadable("https://example.com/", {
+            fetchImpl,
+            lookup: publicLookup,
+            maxRetries: 2,
+        });
+        expect(calls).toBe(3);
+        expect(page.status).toBe(429);
+        expect(page.text).toBe("slow down");
+
+        calls = 0;
+        const once = await fetchReadable("https://example.com/", {
+            fetchImpl,
+            lookup: publicLookup,
+            maxRetries: 0,
+        });
+        expect(calls).toBe(1);
+        expect(once.status).toBe(429);
+    });
+
+    it("does not retry statuses other than 429 and 503", async () => {
+        let calls = 0;
+        const fetchImpl = fakeFetch({
+            "https://example.com/": () => {
+                calls++;
+                return new Response("boom", { status: 500, headers: { "retry-after": "0" } });
+            },
+        });
+        const page = await fetchReadable("https://example.com/", {
+            fetchImpl,
+            lookup: publicLookup,
+        });
+        expect(calls).toBe(1);
+        expect(page.status).toBe(500);
+    });
+
+    it("cuts a retry sleep short at the whole-request timeout", async () => {
+        let calls = 0;
+        const fetchImpl = fakeFetch({
+            "https://example.com/": () => {
+                calls++;
+                return new Response("later", { status: 429, headers: { "retry-after": "5" } });
+            },
+        });
+        const started = Date.now();
+        await expect(
+            fetchReadable("https://example.com/", {
+                fetchImpl,
+                lookup: publicLookup,
+                timeoutMs: 30,
+            })
+        ).rejects.toThrow(/timed out/);
+        expect(calls).toBe(1);
+        expect(Date.now() - started).toBeLessThan(1_000);
+    });
+
+    /** A fetch that takes `delayMs` and records how many requests each host had in flight. */
+    function slowFetch(delayMs: number) {
+        const inFlight = new Map<string, number>();
+        const peak = new Map<string, number>();
+        const order: string[] = [];
+        let peakTotal = 0;
+        const fetchImpl = (async (input: RequestInfo | URL) => {
+            const url = new URL(
+                typeof input === "string" ? input : input instanceof URL ? input.href : input.url
+            );
+            const host = url.hostname;
+            inFlight.set(host, (inFlight.get(host) ?? 0) + 1);
+            peak.set(host, Math.max(peak.get(host) ?? 0, inFlight.get(host)!));
+            peakTotal = Math.max(
+                peakTotal,
+                [...inFlight.values()].reduce((a, b) => a + b, 0)
+            );
+            order.push(url.pathname);
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+            inFlight.set(host, inFlight.get(host)! - 1);
+            return okPage();
+        }) as typeof fetch;
+        return {
+            fetchImpl,
+            peak,
+            order,
+            get peakTotal() {
+                return peakTotal;
+            },
+        };
+    }
+
+    it("serialises same-host requests at the per-host limit while other hosts proceed", async () => {
+        const limited = slowFetch(20);
+        const options = {
+            fetchImpl: limited.fetchImpl,
+            lookup: publicLookup,
+            maxConcurrentPerHost: 1,
+        };
+        await Promise.all([
+            fetchReadable("https://one.example/a", options),
+            fetchReadable("https://one.example/b", options),
+            fetchReadable("https://two.example/c", options),
+        ]);
+        expect(limited.peak.get("one.example")).toBe(1);
+        expect(limited.peak.get("two.example")).toBe(1);
+        expect(limited.peakTotal).toBe(2);
+        expect(limited.order).toEqual(["/a", "/c", "/b"]);
+
+        const relaxed = slowFetch(20);
+        await Promise.all([
+            fetchReadable("https://one.example/a", {
+                fetchImpl: relaxed.fetchImpl,
+                lookup: publicLookup,
+            }),
+            fetchReadable("https://one.example/b", {
+                fetchImpl: relaxed.fetchImpl,
+                lookup: publicLookup,
+            }),
+        ]);
+        expect(relaxed.peak.get("one.example")).toBe(2);
+    });
+
+    it("releases the host slot when a request fails or a queued request is aborted", async () => {
+        let calls = 0;
+        const fetchImpl = (async () => {
+            calls++;
+            if (calls === 1) throw new Error("connection reset");
+            await new Promise(resolve => setTimeout(resolve, 40));
+            return okPage();
+        }) as typeof fetch;
+        const options = {
+            fetchImpl,
+            lookup: publicLookup,
+            maxConcurrentPerHost: 1,
+            timeoutMs: 500,
+        };
+        await expect(fetchReadable("https://one.example/x", options)).rejects.toThrow(
+            "connection reset"
+        );
+
+        const aborter = new AbortController();
+        const holder = fetchReadable("https://one.example/y", options);
+        const queued = fetchReadable("https://one.example/z", {
+            ...options,
+            signal: aborter.signal,
+        });
+        setTimeout(() => aborter.abort(new Error("caller gave up")), 5);
+        await expect(queued).rejects.toThrow("caller gave up");
+        expect((await holder).status).toBe(200);
+        expect(calls).toBe(2);
+
+        const after = await fetchReadable("https://one.example/w", options);
+        expect(after.status).toBe(200);
+        expect(calls).toBe(3);
     });
 });

@@ -9,6 +9,10 @@
  *  - bodies are capped (2 MB default) and the cap is reported, not hidden;
  *  - scripts, styles and markup are stripped; whitespace is collapsed.
  *
+ * It is also polite to the sites it reads: at most a few requests are in
+ * flight per hostname at once (the rest queue in order), and a 429 or 503
+ * is retried a couple of times with backoff, honouring Retry-After.
+ *
  * Page content is *data*. Callers hand it to a model as untrusted text.
  */
 import { lookup as dnsLookup } from "node:dns/promises";
@@ -39,6 +43,17 @@ export interface FetchReadableOptions {
     timeoutMs?: number;
     /** Redirect hops to follow (default 3). */
     maxRedirects?: number;
+    /**
+     * Retries of a 429 or 503 answer across the whole request (default 2).
+     * A numeric Retry-After is honoured; otherwise backoff starts at 500 ms
+     * and doubles, capped at 8 s. Sleeps end early on timeout or abort.
+     */
+    maxRetries?: number;
+    /**
+     * In-flight requests allowed per hostname across all callers in this
+     * process (default 3); further requests queue in arrival order.
+     */
+    maxConcurrentPerHost?: number;
     signal?: AbortSignal;
     userAgent?: string;
     /** Injectable for tests; defaults to node:dns lookup(all). */
@@ -51,7 +66,15 @@ const DEFAULTS = {
     maxBytes: 2 * 1024 * 1024,
     timeoutMs: 15_000,
     maxRedirects: 3,
+    maxRetries: 2,
+    maxConcurrentPerHost: 3,
     userAgent: "LaunchStackResearchBot/1.0 (+https://launchstack.dev)",
+} as const;
+
+const RETRY = {
+    statuses: new Set([429, 503]),
+    baseDelayMs: 500,
+    maxDelayMs: 8_000,
 } as const;
 
 export class UnsafeUrlError extends ToolError {
@@ -296,6 +319,125 @@ async function readBodyCapped(
     return { text: new TextDecoder("utf-8", { fatal: false }).decode(merged), truncated };
 }
 
+/**
+ * Per-hostname in-flight limiter, shared by every caller in the process.
+ * A slot covers one HTTP request from the moment the socket opens until
+ * its body is consumed or discarded; waiters are served in arrival order.
+ */
+interface HostWaiter {
+    limit: number;
+    grant: () => void;
+}
+interface HostSlot {
+    active: number;
+    queue: HostWaiter[];
+}
+const hostSlots = new Map<string, HostSlot>();
+
+function settleHost(hostname: string, slot: HostSlot): void {
+    while (slot.queue.length > 0 && slot.active < slot.queue[0]!.limit) {
+        slot.active++;
+        slot.queue.shift()!.grant();
+    }
+    if (slot.active === 0 && slot.queue.length === 0) hostSlots.delete(hostname);
+}
+
+/** Resolves with a release function once a slot for `hostname` is free; rejects on abort while queued. */
+function acquireHost(hostname: string, limit: number, signal: AbortSignal): Promise<() => void> {
+    const slot = hostSlots.get(hostname) ?? { active: 0, queue: [] };
+    hostSlots.set(hostname, slot);
+    let released = false;
+    const release = () => {
+        if (released) return;
+        released = true;
+        slot.active--;
+        settleHost(hostname, slot);
+    };
+    if (slot.queue.length === 0 && slot.active < limit) {
+        slot.active++;
+        return Promise.resolve(release);
+    }
+    if (signal.aborted) {
+        settleHost(hostname, slot);
+        return Promise.reject(signal.reason);
+    }
+    return new Promise((resolve, reject) => {
+        const waiter: HostWaiter = {
+            limit,
+            grant: () => {
+                signal.removeEventListener("abort", onAbort);
+                resolve(release);
+            },
+        };
+        const onAbort = () => {
+            const index = slot.queue.indexOf(waiter);
+            if (index >= 0) slot.queue.splice(index, 1);
+            settleHost(hostname, slot);
+            reject(signal.reason);
+        };
+        slot.queue.push(waiter);
+        signal.addEventListener("abort", onAbort, { once: true });
+    });
+}
+
+async function withHostSlot<T>(
+    hostname: string,
+    limit: number,
+    signal: AbortSignal,
+    run: () => Promise<T>
+): Promise<T> {
+    const release = await acquireHost(hostname, limit, signal);
+    try {
+        return await run();
+    } finally {
+        release();
+    }
+}
+
+/** Sleeps `ms`, or rejects with the abort reason as soon as `signal` fires. */
+function sleepUnlessAborted(ms: number, signal: AbortSignal): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (signal.aborted) {
+            reject(signal.reason);
+            return;
+        }
+        const onAbort = () => {
+            clearTimeout(timer);
+            reject(signal.reason);
+        };
+        const timer = setTimeout(() => {
+            signal.removeEventListener("abort", onAbort);
+            resolve();
+        }, ms);
+        signal.addEventListener("abort", onAbort, { once: true });
+    });
+}
+
+/**
+ * Delay before retry number `attempt` (0-based): a numeric Retry-After in
+ * seconds when the server sent one, else 500 ms doubling. Both are capped so
+ * a hostile header cannot hold a host slot for minutes; the HTTP-date form
+ * of Retry-After is ignored and falls back to the backoff.
+ */
+function retryDelayMs(retryAfter: string | null, attempt: number): number {
+    const header = retryAfter?.trim();
+    if (header && /^\d+(\.\d+)?$/.test(header)) {
+        return Math.min(Number(header) * 1000, RETRY.maxDelayMs);
+    }
+    return Math.min(RETRY.baseDelayMs * 2 ** attempt, RETRY.maxDelayMs);
+}
+
+type HopOutcome =
+    | { kind: "retry"; retryAfter: string | null }
+    | { kind: "redirect"; location: string | null }
+    | {
+          kind: "page";
+          status: number;
+          contentType: string | null;
+          raw: string;
+          truncated: boolean;
+      };
+
 export async function fetchReadable(
     rawUrl: string,
     options: FetchReadableOptions = {}
@@ -303,6 +445,11 @@ export async function fetchReadable(
     const maxBytes = options.maxBytes ?? DEFAULTS.maxBytes;
     const timeoutMs = options.timeoutMs ?? DEFAULTS.timeoutMs;
     const maxRedirects = options.maxRedirects ?? DEFAULTS.maxRedirects;
+    const maxRetries = Math.max(0, options.maxRetries ?? DEFAULTS.maxRetries);
+    const maxConcurrentPerHost = Math.max(
+        1,
+        Math.floor(options.maxConcurrentPerHost ?? DEFAULTS.maxConcurrentPerHost)
+    );
     const lookup = options.lookup ?? defaultLookup;
     const fetchImpl = options.fetchImpl ?? fetch;
 
@@ -311,23 +458,55 @@ export async function fetchReadable(
     const onOuterAbort = () => controller.abort(options.signal?.reason);
     options.signal?.addEventListener("abort", onOuterAbort, { once: true });
 
+    /** One request to `url`, fully consumed or discarded before the host slot is released. */
+    const requestOnce = async (url: URL, canRetry: boolean): Promise<HopOutcome> => {
+        const response = await fetchImpl(url.toString(), {
+            method: "GET",
+            redirect: "manual",
+            signal: controller.signal,
+            headers: {
+                "User-Agent": options.userAgent ?? DEFAULTS.userAgent,
+                Accept: "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
+                "Accept-Language": "en,*;q=0.5",
+            },
+        });
+
+        if (canRetry && RETRY.statuses.has(response.status)) {
+            await response.body?.cancel().catch(() => undefined);
+            return { kind: "retry", retryAfter: response.headers.get("retry-after") };
+        }
+        if (response.status >= 300 && response.status < 400) {
+            await response.body?.cancel().catch(() => undefined);
+            return { kind: "redirect", location: response.headers.get("location") };
+        }
+        const contentType = response.headers.get("content-type");
+        const { text: raw, truncated } = await readBodyCapped(response, maxBytes);
+        return { kind: "page", status: response.status, contentType, raw, truncated };
+    };
+
     try {
         let current = await assertPublicUrl(rawUrl, lookup);
-        for (let hop = 0; ; hop++) {
-            const response = await fetchImpl(current.toString(), {
-                method: "GET",
-                redirect: "manual",
-                signal: controller.signal,
-                headers: {
-                    "User-Agent": options.userAgent ?? DEFAULTS.userAgent,
-                    Accept: "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
-                    "Accept-Language": "en,*;q=0.5",
-                },
-            });
+        let hop = 0;
+        let retriesUsed = 0;
+        for (;;) {
+            const outcome = await withHostSlot(
+                current.hostname,
+                maxConcurrentPerHost,
+                controller.signal,
+                () => requestOnce(current, retriesUsed < maxRetries)
+            );
 
-            if (response.status >= 300 && response.status < 400) {
-                const location = response.headers.get("location");
-                if (!location) {
+            if (outcome.kind === "retry") {
+                await sleepUnlessAborted(
+                    retryDelayMs(outcome.retryAfter, retriesUsed),
+                    controller.signal
+                );
+                retriesUsed++;
+                continue;
+            }
+
+            if (outcome.kind === "redirect") {
+                if (!outcome.location) {
                     throw new ToolError({
                         code: "bad_redirect",
                         status: 502,
@@ -341,26 +520,27 @@ export async function fetchReadable(
                         message: `More than ${maxRedirects} redirects starting at ${rawUrl}`,
                     });
                 }
-                await response.body?.cancel().catch(() => undefined);
-                current = await assertPublicUrl(new URL(location, current).toString(), lookup);
+                hop++;
+                current = await assertPublicUrl(
+                    new URL(outcome.location, current).toString(),
+                    lookup
+                );
                 continue;
             }
 
-            const contentType = response.headers.get("content-type");
-            const { text: raw, truncated } = await readBodyCapped(response, maxBytes);
-            const isHtml = !contentType || /html|xml/i.test(contentType);
+            const isHtml = !outcome.contentType || /html|xml/i.test(outcome.contentType);
             const readable = isHtml
-                ? htmlToReadableText(raw)
-                : { title: null, text: raw.replace(/\s+\n/g, "\n").trim() };
+                ? htmlToReadableText(outcome.raw)
+                : { title: null, text: outcome.raw.replace(/\s+\n/g, "\n").trim() };
 
             return {
                 url: rawUrl,
                 finalUrl: current.toString(),
-                status: response.status,
-                contentType,
+                status: outcome.status,
+                contentType: outcome.contentType,
                 title: readable.title,
                 text: readable.text,
-                truncated,
+                truncated: outcome.truncated,
                 fetchedAt: new Date().toISOString(),
             };
         }

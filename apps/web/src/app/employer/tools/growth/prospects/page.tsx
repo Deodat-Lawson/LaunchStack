@@ -1,5 +1,11 @@
-import { HomeScreen } from "./_screens/HomeScreen";
+import { Suspense } from "react";
 
-export default function ProspectsHomePage() {
-    return <HomeScreen />;
+import { ProspectsWorkspace } from "./_screens/ProspectsWorkspace";
+
+export default function ProspectsPage() {
+    return (
+        <Suspense fallback={null}>
+            <ProspectsWorkspace />
+        </Suspense>
+    );
 }

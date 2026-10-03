@@ -33,15 +33,41 @@ export interface BrandPost {
     error: string | null;
     source: BrandPostSource | null;
     createdAt: string;
+    /** Publish attempts so far; a scheduled post with attempts > 0 is being retried. */
+    attempts: number;
+    /** When the next retry is due, if a transient failure set one. */
+    nextAttemptAt: string | null;
+}
+
+/** A field the connect form asks for; secrets are never echoed back. */
+export interface BrandAccountField {
+    key: string;
+    label: string;
+    secret: boolean;
+    placeholder?: string;
+    hint?: string;
 }
 
 export interface BrandAccount {
     platform: BrandPlatform;
     label: string;
+    /** True when a post to this network can go out from this workspace. */
     configured: boolean;
+    /**
+     * Where the credential comes from: this workspace's own connection, the
+     * deployment's environment, or nowhere.
+     */
+    scope: "workspace" | "deployment" | null;
+    /** `revoked`: the network refused the credential; reconnect is the only fix. */
+    status: "connected" | "revoked" | "not_connected";
     identity: string | null;
+    connectedAt: string | null;
+    lastError: string | null;
     limit: number | null;
+    /** What connecting takes, in order. */
     requires: string[];
+    /** The fields the connect form asks for. */
+    fields: BrandAccountField[];
     note: string;
 }
 
@@ -122,10 +148,20 @@ export const brandApi = {
     publish: (id: string) =>
         call<{ post: BrandPost }>(`/api/brand/posts/${id}/publish`, { method: "POST" }),
     publishDue: () =>
-        call<{ published: BrandPost[]; failed: BrandPost[]; skipped: number }>(
-            "/api/brand/posts/publish-due",
-            { method: "POST" }
-        ),
+        call<{
+            published: BrandPost[];
+            failed: BrandPost[];
+            retrying: BrandPost[];
+            skipped: number;
+        }>("/api/brand/posts/publish-due", { method: "POST" }),
+    /** Verify the values against the network, then store them sealed for this workspace. */
+    connect: (platform: BrandPlatform, values: Record<string, string>) =>
+        call<{ account: BrandAccount }>(`/api/brand/accounts/${platform}`, {
+            method: "POST",
+            body: JSON.stringify({ values }),
+        }),
+    disconnect: (platform: BrandPlatform) =>
+        call<{ account: BrandAccount }>(`/api/brand/accounts/${platform}`, { method: "DELETE" }),
 };
 
 /** What the campaign generator hands to Compose through session storage. */

@@ -153,6 +153,8 @@ export interface WorldPerson {
 }
 
 export interface WorldCompany {
+    /** An agreement is recorded, which the production rule needs before "won". */
+    hasAgreement?: boolean;
     id: string;
     name: string;
     domain: string | null;
@@ -838,7 +840,7 @@ export const COMPANIES: WorldCompany[] = [
                 sourceUrl: "https://northgate3pl.example/people",
             },
         ],
-        stage: "proposal",
+        stage: "negotiating",
         ownerName: "Timo Lindqvist",
         nextStep: "Proposal review call",
         nextStepAt: daysAhead(0),

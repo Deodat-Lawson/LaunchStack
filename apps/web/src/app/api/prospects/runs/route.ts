@@ -1,24 +1,32 @@
 // GET  /api/prospects/runs?segmentId=
-// POST /api/prospects/runs — { segmentId, sample?: boolean }
+// POST /api/prospects/runs — { segmentId, sample?: boolean, mode?: "auto" | "sample" | "live" | "keyless" }
 //
-// Same path as Distribution's runs route: a live run is queued to the worker
-// after a credits pre-check; a sample run executes inline over fixture
-// providers and comes back finished.
-import { NextResponse, after } from "next/server";
+// Live and keyless runs are queued to the worker after a credits pre-check
+// (live only) and come back 202; the UI polls the run row as the worker
+// advances it. A sample run executes inline over fixture providers and comes
+// back finished, so a manual tester or CI gets a whole run from one POST.
+// One run per segment at a time: a second POST while one is in flight is a
+// 409, enforced by a partial unique index rather than a check.
+import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { RunOptionsSchema } from "@launchstack/pipelines/distribution/types";
-import { createRun, getProgram, getRun } from "@launchstack/pipelines/distribution/db";
+import {
+    RunInProgressError,
+    createRun,
+    getProgram,
+    getRun,
+} from "@launchstack/pipelines/distribution/db";
 import { hasTokens } from "~/lib/credits";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { isMeteringEnforced } from "~/server/deployment";
 import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
 import { toRunDto } from "~/server/prospects/adapter";
-import { runKeylessProspects } from "~/server/prospects/keyless-run";
+import { recordRunFinished } from "~/server/prospects/metrics";
 import { pickRunMode, readRunEnvironment } from "~/server/prospects/run-mode";
-import { listRunDtos } from "~/server/prospects/service";
+import { getActiveRun, listRunDtos } from "~/server/prospects/service";
 
 import { error, handleProspectsError, json, prospectsContext, readBody } from "../_http";
 
@@ -37,8 +45,13 @@ export async function GET(request: NextRequest) {
     try {
         const segmentId = request.nextUrl.searchParams.get("segmentId");
         if (!segmentId) return error("segmentId is required", 400);
+        const [runs, active] = await Promise.all([
+            listRunDtos(auth.ctx, segmentId),
+            getActiveRun(auth.ctx, segmentId),
+        ]);
         return json({
-            runs: await listRunDtos(auth.ctx, segmentId),
+            runs,
+            active,
             // What "Find companies" will do next in this environment.
             nextMode: pickRunMode("auto", readRunEnvironment(process.env)),
         });
@@ -82,12 +95,19 @@ export async function POST(request: NextRequest) {
                         );
                 }
                 const options = RunOptionsSchema.parse({ mode });
-                const run = await createRun({
-                    companyId: ctx.companyId,
-                    programId: program.id,
-                    userId: ctx.userId,
-                    options,
-                });
+                let run;
+                try {
+                    run = await createRun({
+                        companyId: ctx.companyId,
+                        programId: program.id,
+                        userId: ctx.userId,
+                        options,
+                    });
+                } catch (createError) {
+                    if (createError instanceof RunInProgressError)
+                        return error(createError.message, 409, { code: createError.code });
+                    throw createError;
+                }
                 if (mode === "fixture") {
                     try {
                         await runFixtureDistribution({
@@ -101,26 +121,12 @@ export async function POST(request: NextRequest) {
                         console.error("[prospects] sample run failed:", fixtureError);
                     }
                     const finished = await getRun(run.id, ctx.companyId);
+                    recordRunFinished(
+                        "fixture",
+                        finished?.status === "failed" ? "failed" : "completed",
+                        finished
+                    );
                     return json({ run: toRunDto(finished ?? run) }, 201);
-                }
-                if (mode === "keyless") {
-                    // Public sources take tens of seconds: answer now, work after the
-                    // response, and let the UI poll the run row as the stages advance.
-                    const requestUrl = request.url;
-                    after(async () => {
-                        try {
-                            await runKeylessProspects({
-                                runId: run.id,
-                                companyId: ctx.companyId,
-                                programId: program.id,
-                                userId: ctx.userId,
-                                requestUrl,
-                            });
-                        } catch (keylessError) {
-                            console.error("[prospects] keyless run failed:", keylessError);
-                        }
-                    });
-                    return json({ run: toRunDto(run) }, 202);
                 }
                 await inngest.send({
                     name: "distribution/run.requested",

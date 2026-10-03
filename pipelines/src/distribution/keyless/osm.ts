@@ -356,7 +356,27 @@ export interface OverpassClientOptions {
     /** Instances to try in order; defaults to OVERPASS_MIRRORS. */
     urls?: readonly string[];
     userAgent?: string;
+    /** Pause between successive area requests in one search (default 1000 ms). */
+    pauseMs?: number;
 }
+
+/** Resolves after `ms`, or as soon as `signal` fires. */
+const sleep = (ms: number, signal?: AbortSignal) =>
+    new Promise<void>(resolve => {
+        if (signal?.aborted) {
+            resolve();
+            return;
+        }
+        const onAbort = () => {
+            clearTimeout(timer);
+            resolve();
+        };
+        const timer = setTimeout(() => {
+            signal?.removeEventListener("abort", onAbort);
+            resolve();
+        }, ms);
+        signal?.addEventListener("abort", onAbort, { once: true });
+    });
 
 interface OverpassResponse {
     elements?: OverpassElement[];
@@ -402,9 +422,10 @@ async function requestArea(
 
 /**
  * Runs one Overpass request per area (a country, or the top cities of a big
- * one), trying each public instance in turn when one is overloaded, and
- * merges the places. Throws only when every instance failed for an area,
- * so the gather stage can mark the source failed.
+ * one), pausing between areas as the public instances ask, trying each
+ * instance in turn when one is overloaded, and merges the places. Throws
+ * only when every instance failed for an area, so the gather stage can mark
+ * the source failed.
  */
 export async function searchOverpass(
     req: OverpassRequest,
@@ -414,7 +435,10 @@ export async function searchOverpass(
     const areas = overpassAreas(req.country, req.region ?? null);
     const places: OsmPlace[] = [];
     let lastError: Error | null = null;
+    let first = true;
     for (const area of areas) {
+        if (!first) await sleep(options.pauseMs ?? 1000, options.signal);
+        first = false;
         if (options.signal?.aborted) break;
         const query = buildOverpassQuery(area, req);
         let elements: OverpassElement[] | null = null;

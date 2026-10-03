@@ -1,5 +1,6 @@
-import { CalendarScreen } from "../_screens/CalendarScreen";
+import { redirect } from "next/navigation";
 
+/** The calendar is the Brand page itself now; old links still land there. */
 export default function Page() {
-    return <CalendarScreen />;
+    redirect("/employer/tools/growth/brand");
 }

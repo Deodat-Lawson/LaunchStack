@@ -3,26 +3,39 @@
  * them to the adapter. Routes stay thin; everything that touches the
  * database lives here. Tenancy is by the `companyId` on the context, never a
  * value from the request body.
+ *
+ * Reads are queries, not scans: every list asks the database for the page,
+ * the counts and the search it needs, so a workspace with thousands of
+ * companies costs the same per screen as one with ten.
  */
 import { prepareEmailCampaign, type Recipient } from "@launchstack/pipelines/email";
 import {
     addEvent,
+    countPartnerViews,
+    countPartners,
+    countProgramSummaries,
+    countRelationshipsByStage,
     createProgram,
-    getDashboard,
+    findLiveRun,
     getOrg,
     getProgram,
     getRelationship,
     isStale,
     listAgreements,
+    listAgreementsForRelationships,
     listEvents,
     listEvidenceForOrg,
     listExclusions,
     listPartners,
+    listPeopleRows,
     listPrograms,
     listRuns,
+    listStageChangeEvents,
+    requestRunStop,
     transitionStage,
     updateProgram,
     updateRelationship,
+    type PartnerListFilters,
     type PartnerListItem,
 } from "@launchstack/pipelines/distribution/db";
 import {
@@ -34,6 +47,7 @@ import type {
     ProgramPatch,
     ProgramRecord,
     RelationshipRecord,
+    RelationshipStage,
     RunRecord,
     Territory,
 } from "@launchstack/pipelines/distribution/types";
@@ -65,22 +79,18 @@ import { env } from "~/env";
 import {
     FIT_THRESHOLD,
     SALES_OF,
-    contactPeople,
-    inMotion,
+    countsFromProgram,
     latestCompleted,
+    personFromRow,
     relationshipTarget,
-    searchMatches,
-    sortRows,
     sourceRows,
     toCompanyDetail,
     toCompanyRow,
     toDeal,
     toRunDto,
-    type RunProgress,
-    toSegment,
-    toSegmentSummary,
+    toSegmentSummaryWithCounts,
+    toSegmentWithCounts,
     toYield,
-    viewMatches,
     type RowContext,
     type SourceAvailability,
 } from "./adapter";
@@ -103,6 +113,21 @@ export class ProspectsError extends Error {
     }
 }
 
+/** Page sizes: what a screen shows before asking for more, and the ceiling. */
+export const DEFAULT_PAGE = 50;
+export const MAX_PAGE = 200;
+
+export function clampPage(limit: number | undefined, offset: number | undefined) {
+    return {
+        limit: Math.min(Math.max(1, limit ?? DEFAULT_PAGE), MAX_PAGE),
+        offset: Math.max(0, offset ?? 0),
+    };
+}
+
+function nextOffset(offset: number, limit: number, total: number): number | null {
+    return offset + limit < total ? offset + limit : null;
+}
+
 // ── Availability ──────────────────────────────────────────────────────────
 
 export function availability(): SourceAvailability {
@@ -119,31 +144,40 @@ function sourcesOn(avail: SourceAvailability): number {
     return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
 }
 
-// ── Loading ───────────────────────────────────────────────────────────────
+// ── Segment context ───────────────────────────────────────────────────────
 
-interface SegmentData {
+interface SegmentContext {
     program: ProgramRecord;
-    items: PartnerListItem[];
     runs: RunRecord[];
     latest: RunRecord | null;
+    excludedDomains: string[];
     rowCtx: RowContext;
-    rows: CompanyRow[];
 }
 
-async function loadSegment(ctx: ProspectsCtx, programId: string): Promise<SegmentData> {
+/** The program, its recent runs and its exclusion list: three small queries, no rows. */
+async function segmentContext(ctx: ProspectsCtx, programId: string): Promise<SegmentContext> {
     const program = await getProgram(programId, ctx.companyId);
     if (!program) throw new ProspectsError("Segment not found", 404);
-    const [items, runs, exclusions] = await Promise.all([
-        listPartners(ctx.companyId, { programId, limit: 500, orderBy: "fit" }),
+    const [runs, exclusions] = await Promise.all([
         listRuns(ctx.companyId, { programId, limit: 50 }),
         listExclusions(ctx.companyId, programId),
     ]);
     const latest = latestCompleted(runs);
-    const rowCtx: RowContext = {
-        latestRunId: latest?.id ?? null,
-        excludedDomains: new Set(exclusions.domains),
+    return {
+        program,
+        runs,
+        latest,
+        excludedDomains: exclusions.domains,
+        rowCtx: { latestRunId: latest?.id ?? null, excludedDomains: new Set(exclusions.domains) },
     };
-    return { program, items, runs, latest, rowCtx, rows: items.map(i => toCompanyRow(i, rowCtx)) };
+}
+
+async function segmentCounts(
+    ctx: ProspectsCtx,
+    program: ProgramRecord
+): Promise<SegmentSummary["counts"]> {
+    const counts = await countProgramSummaries(ctx.companyId, [program]);
+    return countsFromProgram(counts.get(program.id), sourcesOn(availability()));
 }
 
 async function loadItem(
@@ -163,19 +197,18 @@ async function loadItem(
 // ── Segments ──────────────────────────────────────────────────────────────
 
 export async function listSegments(ctx: ProspectsCtx): Promise<SegmentSummary[]> {
-    const programs = await listPrograms(ctx.companyId);
+    const programs = (await listPrograms(ctx.companyId)).filter(p => p.status === "active");
+    const counts = await countProgramSummaries(ctx.companyId, programs);
     const on = sourcesOn(availability());
-    const out: SegmentSummary[] = [];
-    for (const program of programs.filter(p => p.status === "active")) {
-        const data = await loadSegment(ctx, program.id);
-        out.push(toSegmentSummary(program, data.rows, on));
-    }
-    return out;
+    return programs.map(program =>
+        toSegmentSummaryWithCounts(program, countsFromProgram(counts.get(program.id), on))
+    );
 }
 
 export async function getSegment(ctx: ProspectsCtx, programId: string): Promise<SegmentDto> {
-    const data = await loadSegment(ctx, programId);
-    return toSegment(data.program, data.rows, sourcesOn(availability()));
+    const program = await getProgram(programId, ctx.companyId);
+    if (!program) throw new ProspectsError("Segment not found", 404);
+    return toSegmentWithCounts(program, await segmentCounts(ctx, program));
 }
 
 export async function createSegment(
@@ -199,7 +232,7 @@ export async function createSegment(
         userId: ctx.userId,
         input: programInput,
     });
-    return toSegment(program, [], sourcesOn(availability()));
+    return toSegmentWithCounts(program, countsFromProgram(undefined, sourcesOn(availability())));
 }
 
 function parseTerritory(value: string): Territory | null {
@@ -250,23 +283,84 @@ export async function patchSegment(
     }
     const program = await updateProgram(programId, ctx.companyId, patch);
     if (!program) throw new ProspectsError("Segment not found", 404);
-    const data = await loadSegment(ctx, programId);
-    return toSegment(data.program, data.rows, sourcesOn(availability()));
+    return toSegmentWithCounts(program, await segmentCounts(ctx, program));
 }
 
 // ── Home ──────────────────────────────────────────────────────────────────
 
-export async function getHome(ctx: ProspectsCtx, programId: string): Promise<HomeDto> {
-    const data = await loadSegment(ctx, programId);
-    const dashboard = await getDashboard(ctx.companyId, programId);
-    const live = data.rows.filter(r => !r.excluded);
-    const todo: TodoItem[] = [];
+const IN_MOTION_STAGES: RelationshipStage[] = ["contacted", "in_conversation", "negotiating"];
 
-    const fresh = live.filter(r => r.isNew).sort((a, b) => (b.fit ?? -1) - (a.fit ?? -1));
+function median(values: number[]): number | undefined {
+    if (values.length === 0) return undefined;
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
+}
+
+/** Median days spent in each stage, from stage_changed events: momentum, not inventory. */
+async function medianDaysInStage(
+    ctx: ProspectsCtx,
+    programId: string
+): Promise<Partial<Record<RelationshipStage, number>>> {
+    const events = await listStageChangeEvents(ctx.companyId, programId);
+    const durations = new Map<RelationshipStage, number[]>();
+    let prev: (typeof events)[number] | null = null;
+    for (const event of events) {
+        if (prev && prev.relationshipId === event.relationshipId) {
+            const stage = (prev.payload as { to?: RelationshipStage }).to;
+            if (stage) {
+                const days = (event.occurredAt.getTime() - prev.occurredAt.getTime()) / 86_400_000;
+                durations.set(stage, [...(durations.get(stage) ?? []), days]);
+            }
+        }
+        prev = event;
+    }
+    const out: Partial<Record<RelationshipStage, number>> = {};
+    for (const [stage, list] of durations) {
+        const m = median(list);
+        if (m !== undefined) out[stage] = Math.round(m * 10) / 10;
+    }
+    return out;
+}
+
+export async function getHome(ctx: ProspectsCtx, programId: string): Promise<HomeDto> {
+    const seg = await segmentContext(ctx, programId);
+    const base: PartnerListFilters = {
+        programId,
+        excluded: false,
+        excludedDomains: seg.excludedDomains,
+    };
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    const [counts, byStage, freshItems, dueItems, staleItems, medians] = await Promise.all([
+        segmentCounts(ctx, seg.program),
+        countRelationshipsByStage(ctx.companyId, programId, {
+            excludedDomains: seg.excludedDomains,
+        }),
+        seg.latest
+            ? listPartners(ctx.companyId, {
+                  ...base,
+                  firstSeenRunId: seg.latest.id,
+                  orderBy: "fit",
+                  limit: 12,
+              })
+            : Promise.resolve([] as PartnerListItem[]),
+        listPartners(ctx.companyId, {
+            ...base,
+            stage: IN_MOTION_STAGES,
+            dueBefore: endOfToday,
+            limit: 50,
+        }),
+        listPartners(ctx.companyId, { ...base, staleOnly: true, orderBy: "activity", limit: 50 }),
+        medianDaysInStage(ctx, programId),
+    ]);
+
+    const fresh = freshItems.map(i => toCompanyRow(i, seg.rowCtx));
     const freshHigh = fresh.filter(r => (r.fit ?? 0) >= FIT_THRESHOLD);
     // Keyless profiles rarely clear the live threshold (no brands, no known
     // signal), so a run that found companies still puts them in front of you.
     const toReview = freshHigh.length > 0 ? freshHigh : fresh;
+    const todo: TodoItem[] = [];
     if (toReview.length > 0)
         todo.push({
             id: "review-new",
@@ -277,31 +371,22 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
                 .join(", "),
             action: { label: "Review", href: "/companies?view=new" },
         });
-
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
-    const due = data.items.filter(
-        i =>
-            inMotion(SALES_OF[i.relationship.stage]) &&
-            i.relationship.nextActionAt !== null &&
-            i.relationship.nextActionAt <= endOfToday
-    );
-    if (due.length > 0)
+    if (dueItems.length > 0)
         todo.push({
             id: "due",
-            title: `${due.length} next ${due.length === 1 ? "step is" : "steps are"} due`,
-            detail: due
+            title: `${dueItems.length} next ${dueItems.length === 1 ? "step is" : "steps are"} due`,
+            detail: dueItems
                 .map(i => `${i.org.name}: ${i.relationship.nextAction ?? "follow up"}`)
                 .join(" · "),
             action: { label: "Open deals", href: "/deals" },
         });
-
-    const stale = live.filter(r => r.staleDays !== null);
-    if (stale.length > 0)
+    if (staleItems.length > 0)
         todo.push({
             id: "stale",
-            title: `${stale.length} ${stale.length === 1 ? "deal has" : "deals have"} gone quiet`,
-            detail: stale.map(r => `${r.name} for ${r.staleDays} days`).join(" · "),
+            title: `${staleItems.length} ${staleItems.length === 1 ? "deal has" : "deals have"} gone quiet`,
+            detail: staleItems
+                .map(i => `${i.org.name} for ${toCompanyRow(i, seg.rowCtx).staleDays ?? 0} days`)
+                .join(" · "),
             action: { label: "Follow up", href: "/deals" },
         });
 
@@ -314,26 +399,25 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
         "negotiating",
         "won",
     ];
-    const funnel = funnelStages.map(stage => ({
-        stage,
-        count: live.filter(r => r.stage === stage).length,
-    }));
-    const median =
-        dashboard.medianDaysInStage.contacted ?? dashboard.medianDaysInStage.in_conversation;
+    const salesCounts = new Map<SalesStage, number>();
+    for (const [stage, n] of Object.entries(byStage) as Array<[RelationshipStage, number]>) {
+        const sales = SALES_OF[stage];
+        salesCounts.set(sales, (salesCounts.get(sales) ?? 0) + n);
+    }
+    const funnel = funnelStages.map(stage => ({ stage, count: salesCounts.get(stage) ?? 0 }));
+    const medianValue = medians.contacted ?? medians.in_conversation;
 
     return {
-        segment: toSegmentSummary(data.program, data.rows, sourcesOn(availability())),
-        lastRunAt: data.latest
-            ? (data.latest.startedAt ?? data.latest.createdAt).toISOString()
-            : null,
+        segment: toSegmentSummaryWithCounts(seg.program, counts),
+        lastRunAt: seg.latest ? (seg.latest.startedAt ?? seg.latest.createdAt).toISOString() : null,
         todo,
         funnel,
         medianDays:
-            median !== undefined
-                ? { from: "contacted", to: "meeting", days: Math.round(median) }
+            medianValue !== undefined
+                ? { from: "contacted", to: "meeting", days: Math.round(medianValue) }
                 : null,
-        yield: data.latest?.summary
-            ? data.latest.summary.sources.map(s => toYield(s, data.latest!.options.mode))
+        yield: seg.latest?.summary
+            ? seg.latest.summary.sources.map(s => toYield(s, seg.latest!.options.mode))
             : [],
         fresh: fresh.slice(0, 4),
     };
@@ -341,21 +425,72 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
 
 // ── Companies ─────────────────────────────────────────────────────────────
 
+const SORT_OF: Record<CompaniesSort, PartnerListFilters["orderBy"]> = {
+    fit: "fit",
+    activity: "activity",
+    name: "name",
+};
+
+function viewFilters(view: CompaniesView, seg: SegmentContext): PartnerListFilters {
+    const base: PartnerListFilters = {
+        programId: seg.program.id,
+        excludedDomains: seg.excludedDomains,
+    };
+    switch (view) {
+        case "all":
+            return { ...base, excluded: false };
+        case "new":
+            // No completed run yet means nothing is "new"; an impossible id keeps the list empty.
+            return { ...base, excluded: false, firstSeenRunId: seg.latest?.id ?? "__none__" };
+        case "highfit":
+            return { ...base, excluded: false, minFit: FIT_THRESHOLD };
+        case "uncontacted":
+            return { ...base, excluded: false, stage: ["candidate", "researched", "qualified"] };
+        case "excluded":
+            return { ...base, excluded: true };
+    }
+}
+
 export async function listCompanies(
     ctx: ProspectsCtx,
     programId: string,
-    params: { view: CompaniesView; q: string; sort: CompaniesSort }
-): Promise<{ companies: CompanyRow[]; counts: Record<CompaniesView, number> }> {
-    const data = await loadSegment(ctx, programId);
-    const views: CompaniesView[] = ["all", "new", "highfit", "uncontacted", "excluded"];
-    const counts = Object.fromEntries(
-        views.map(v => [v, data.rows.filter(r => viewMatches(r, v)).length])
-    ) as Record<CompaniesView, number>;
-    const companies = sortRows(
-        data.rows.filter(r => viewMatches(r, params.view) && searchMatches(r, params.q)),
-        params.sort
-    );
-    return { companies, counts };
+    params: {
+        view: CompaniesView;
+        q: string;
+        sort: CompaniesSort;
+        limit?: number;
+        offset?: number;
+    }
+): Promise<{
+    companies: CompanyRow[];
+    counts: Record<CompaniesView, number>;
+    total: number;
+    nextOffset: number | null;
+}> {
+    const seg = await segmentContext(ctx, programId);
+    const { limit, offset } = clampPage(params.limit, params.offset);
+    const filters: PartnerListFilters = {
+        ...viewFilters(params.view, seg),
+        search: params.q.trim() || undefined,
+        orderBy: SORT_OF[params.sort],
+        limit,
+        offset,
+    };
+    const [items, total, counts] = await Promise.all([
+        listPartners(ctx.companyId, filters),
+        countPartners(ctx.companyId, filters),
+        countPartnerViews(ctx.companyId, programId, {
+            latestRunId: seg.latest?.id ?? null,
+            excludedDomains: seg.excludedDomains,
+            fitThreshold: FIT_THRESHOLD,
+        }),
+    ]);
+    return {
+        companies: items.map(i => toCompanyRow(i, seg.rowCtx)),
+        counts,
+        total,
+        nextOffset: nextOffset(offset, limit, total),
+    };
 }
 
 export async function getCompany(
@@ -535,25 +670,26 @@ export async function patchDeal(
 }
 
 export async function listDeals(ctx: ProspectsCtx, programId: string): Promise<DealRow[]> {
-    const data = await loadSegment(ctx, programId);
-    const out: DealRow[] = [];
-    for (const item of data.items) {
-        const row = toCompanyRow(item, data.rowCtx);
-        if (row.excluded) continue;
-        // Only the won check needs the agreement; skip the query elsewhere.
-        const hasAgreement =
-            item.relationship.stage === "negotiating"
-                ? (await listAgreements(ctx.companyId, item.relationship.id)).length > 0
-                : false;
-        out.push({
-            ...toDeal(item, hasAgreement, ctx.userId),
-            companyName: item.org.name,
-            domain: item.org.domain,
-            fit: item.relationship.fitScore,
-            fitThreshold: FIT_THRESHOLD,
-        });
-    }
-    return out;
+    const seg = await segmentContext(ctx, programId);
+    const items = await listPartners(ctx.companyId, {
+        programId,
+        excluded: false,
+        excludedDomains: seg.excludedDomains,
+        orderBy: "activity",
+        limit: MAX_PAGE * 2,
+    });
+    // Only the won check needs the agreement; one query for every deal that needs it.
+    const agreements = await listAgreementsForRelationships(
+        ctx.companyId,
+        items.filter(i => i.relationship.stage === "negotiating").map(i => i.relationship.id)
+    );
+    return items.map(item => ({
+        ...toDeal(item, (agreements.get(item.relationship.id)?.length ?? 0) > 0, ctx.userId),
+        companyName: item.org.name,
+        domain: item.org.domain,
+        fit: item.relationship.fitScore,
+        fitThreshold: FIT_THRESHOLD,
+    }));
 }
 
 // ── People ────────────────────────────────────────────────────────────────
@@ -561,37 +697,45 @@ export async function listDeals(ctx: ProspectsCtx, programId: string): Promise<D
 export async function listPeople(
     ctx: ProspectsCtx,
     programId: string,
-    params: { q: string; status: EmailStatusKind | null }
-): Promise<PersonRow[]> {
-    const data = await loadSegment(ctx, programId);
-    let people = data.items.flatMap(item => {
-        const row = toCompanyRow(item, data.rowCtx);
-        return contactPeople(
-            item.relationship,
-            item.org,
-            row.excluded ? `Company excluded: ${row.excludedReason ?? "by you"}` : null
-        );
+    params: { q: string; status: EmailStatusKind | null; limit?: number; offset?: number }
+): Promise<{ people: PersonRow[]; total: number; nextOffset: number | null }> {
+    const seg = await segmentContext(ctx, programId);
+    const { limit, offset } = clampPage(params.limit, params.offset);
+    // Verified and guessed mailboxes do not exist yet: people are the
+    // dossiers' public mailboxes, found on a page or a shared inbox.
+    if (params.status === "verified" || params.status === "guess")
+        return { people: [], total: 0, nextOffset: null };
+    const { rows, total } = await listPeopleRows(ctx.companyId, {
+        programId,
+        excludedDomains: seg.excludedDomains,
+        search: params.q.trim() || undefined,
+        generic: params.status === "generic" ? true : params.status === "found" ? false : undefined,
+        limit,
+        offset,
     });
-    if (params.status) people = people.filter(p => p.emailStatus === params.status);
-    const q = params.q.trim().toLowerCase();
-    if (q)
-        people = people.filter(p =>
-            [p.name, p.title, p.companyName, p.email ?? ""].some(t => t.toLowerCase().includes(q))
-        );
-    return people.sort(
-        (a, b) => a.companyName.localeCompare(b.companyName) || a.name.localeCompare(b.name)
-    );
+    return {
+        people: rows.map(row =>
+            personFromRow(row, row.excluded ? "Company excluded: Excluded from runs" : null)
+        ),
+        total,
+        nextOffset: nextOffset(offset, limit, total),
+    };
 }
 
 // ── Outreach ──────────────────────────────────────────────────────────────
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function sameDay(a: Date, b: Date): boolean {
+    return a.toDateString() === b.toDateString();
+}
+
 /**
  * One campaign in the email vertical for the selected companies; recipients
  * are the public mailboxes in each dossier. Nothing is sent from here: the
  * email vertical's approval gate owns dispatch. Same four exclusions as the
- * Distribution outreach route.
+ * Distribution outreach route, plus one: a company already drafted into a
+ * campaign today is not drafted again.
  */
 export async function draftOutreach(
     ctx: ProspectsCtx,
@@ -610,6 +754,7 @@ export async function draftOutreach(
     const skipped: OutreachResult["skipped"] = [];
     let program: ProgramRecord | null = null;
     let excludedDomains = new Set<string>();
+    const today = new Date();
 
     for (const relationshipId of relationshipIds) {
         const relationship = await getRelationship(relationshipId, ctx.companyId);
@@ -640,6 +785,20 @@ export async function draftOutreach(
         }
         if (org.domain && excludedDomains.has(org.domain)) {
             skipped.push({ personId: relationshipId, reason: `${org.name} is excluded` });
+            continue;
+        }
+        const events = await listEvents(ctx.companyId, relationship.id);
+        const draftedToday = events.some(
+            e =>
+                e.type === "note" &&
+                typeof e.payload.campaignId !== "undefined" &&
+                sameDay(e.occurredAt, today)
+        );
+        if (draftedToday) {
+            skipped.push({
+                personId: relationshipId,
+                reason: `${org.name} is already in today's campaign`,
+            });
             continue;
         }
         const emails = (relationship.dossier?.contactChannels ?? [])
@@ -700,30 +859,25 @@ export async function draftOutreach(
 
 // ── Runs and sources ──────────────────────────────────────────────────────
 
-/**
- * How far a live run's profiling has got, without a progress column: the
- * shortlist is on the run row and each organisation is stamped when its
- * profile lands, so "profiled so far" is the shortlist enriched since the
- * run started. Null once the run has a summary of its own.
- */
-export async function runProgress(ctx: ProspectsCtx, run: RunRecord): Promise<RunProgress | null> {
-    // Despite its name, the run row's list holds the shortlist's relationship ids.
-    const shortlist = new Set(run.candidateOrgIds ?? []);
-    if (run.summary || run.status === "failed" || shortlist.size === 0) return null;
-    const since = (run.startedAt ?? run.createdAt).getTime();
-    const items = await listPartners(ctx.companyId, { programId: run.programId, limit: 500 });
-    const profiled = items.filter(
-        i =>
-            shortlist.has(i.relationship.id) &&
-            i.org.lastEnrichedAt !== null &&
-            i.org.lastEnrichedAt.getTime() >= since
-    ).length;
-    return { profiled, shortlisted: shortlist.size };
-}
-
 export async function listRunDtos(ctx: ProspectsCtx, programId: string): Promise<RunDto[]> {
     const runs = await listRuns(ctx.companyId, { programId, limit: 50 });
-    return Promise.all(runs.map(async run => toRunDto(run, await runProgress(ctx, run))));
+    return runs.map(toRunDto);
+}
+
+/** The run in flight for this segment, if any. */
+export async function getActiveRun(ctx: ProspectsCtx, programId: string): Promise<RunDto | null> {
+    const run = await findLiveRun(ctx.companyId, programId);
+    return run ? toRunDto(run) : null;
+}
+
+/**
+ * Ask a run to stop. The worker checks the flag before every company, so
+ * the one in progress finishes and nothing after it starts.
+ */
+export async function stopRun(ctx: ProspectsCtx, runId: string): Promise<RunDto> {
+    const run = await requestRunStop(runId, ctx.companyId);
+    if (!run) throw new ProspectsError("No run in progress", 409);
+    return toRunDto(run);
 }
 
 export async function listSources(ctx: ProspectsCtx, programId: string): Promise<SourceRow[]> {

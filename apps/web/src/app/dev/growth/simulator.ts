@@ -25,6 +25,10 @@ import type {
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
 
+import type { RelationshipStage } from "@launchstack/pipelines/distribution/types";
+
+import { moveReason as productionMoveReason } from "~/server/prospects/adapter";
+
 import {
     COMPANIES,
     FIT_THRESHOLD,
@@ -49,15 +53,25 @@ const ALL_STAGES: SalesStage[] = [
     "lost",
     "nurture",
 ];
-const ORDER: SalesStage[] = [
-    "lead",
-    "qualified",
-    "contacted",
-    "meeting",
-    "proposal",
-    "negotiating",
-    "won",
-];
+const ORDER: SalesStage[] = ["lead", "qualified", "contacted", "meeting", "negotiating", "won"];
+
+/**
+ * The relationship stage each sales stage stands for, so the harness asks
+ * the production rule table which moves are legal instead of keeping rules
+ * of its own. Proposal is not a stage the backend has, and the world holds
+ * no company in it.
+ */
+const REL_OF: Record<SalesStage, RelationshipStage> = {
+    lead: "researched",
+    qualified: "qualified",
+    contacted: "contacted",
+    meeting: "in_conversation",
+    proposal: "negotiating",
+    negotiating: "negotiating",
+    won: "contracted",
+    lost: "declined",
+    nurture: "dormant",
+};
 const IN_MOTION = new Set<SalesStage>(["contacted", "meeting", "proposal", "negotiating"]);
 const STALE_AFTER: Partial<Record<SalesStage, number>> = {
     qualified: 14,
@@ -157,6 +171,18 @@ const nowIso = () => new Date(clock()).toISOString();
 /** A non-empty string from an untyped patch, else null. */
 const text = (v: unknown): string | null => (typeof v === "string" && v.length > 0 ? v : null);
 
+/** One page of a list, the way the routes page: limit, offset, total, nextOffset. */
+function page<T>(list: T[], u: URL): { items: T[]; total: number; nextOffset: number | null } {
+    const limit = Math.min(Math.max(1, Number(u.searchParams.get("limit")) || 50), 200);
+    const offset = Math.max(0, Number(u.searchParams.get("offset")) || 0);
+    const items = list.slice(offset, offset + limit);
+    return {
+        items,
+        total: list.length,
+        nextOffset: offset + limit < list.length ? offset + limit : null,
+    };
+}
+
 function inSegment(c: WorldCompany, segmentId: string): boolean {
     return segmentId === HOME_SEGMENT && !c.reserve;
 }
@@ -183,19 +209,19 @@ function initials(name: string): string {
         .join("");
 }
 
+/** The production rules, applied to the world: same table, same words. */
 function moveReason(c: WorldCompany, to: SalesStage): string | null {
     if (to === c.stage) return "Current stage";
     if (c.excluded) return "Excluded companies cannot move";
-    if (c.stage === "won" && to !== "nurture") return "Won deals stay won";
-    if (to === "lost" || to === "nurture") return null;
-    const ti = ORDER.indexOf(to);
-    const ci = ORDER.indexOf(c.stage);
-    if (ci >= 0 && ti < ci) return null;
-    if (ti >= ORDER.indexOf("contacted") && !c.ownerName) return "Needs an owner";
-    if (ti >= ORDER.indexOf("meeting") && !c.nextStep) return "Needs a next step";
-    if (to === "won" && c.stage !== "proposal" && c.stage !== "negotiating")
-        return "Needs a proposal first";
-    return null;
+    return productionMoveReason(
+        {
+            stage: REL_OF[c.stage],
+            ownerUserId: c.ownerName ? "owner" : null,
+            nextAction: c.nextStep,
+        },
+        c.hasAgreement ?? false,
+        to
+    );
 }
 
 function allowedMoves(c: WorldCompany): StageMove[] {
@@ -531,6 +557,7 @@ function toRun(run: LiveRun): RunDto {
         id: run.id,
         segmentId: run.segmentId,
         status,
+        mode: "live",
         startedAt: new Date(run.startedAt).toISOString(),
         completedAt:
             status === "completed"
@@ -538,6 +565,11 @@ function toRun(run: LiveRun): RunDto {
                 : stopped
                   ? new Date(run.stoppedAt!).toISOString()
                   : null,
+        progress:
+            elapsed >= T.shortlistEnd
+                ? { shortlisted: T.profiles, profiled: Math.min(T.profiles, profiled) }
+                : null,
+        stopRequested: stopped,
         steps,
         spend: {
             usd: Math.round(T.usd * frac * 100) / 100,
@@ -597,8 +629,11 @@ function pastToRun(rec: WorldRunRecord): RunDto {
         id: rec.id,
         segmentId: rec.segmentId,
         status: "completed",
+        mode: "live",
         startedAt: rec.startedAt,
         completedAt: new Date(new Date(rec.startedAt).getTime() + rec.durationMs).toISOString(),
+        progress: { shortlisted: rec.profiled, profiled: rec.profiled },
+        stopRequested: false,
         steps: [],
         spend: rec.spend,
         caps: "Cap: 25 calls per source, 4 min",
@@ -871,7 +906,13 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
                       ? activity(b) - activity(a)
                       : (b.fit ?? -1) - (a.fit ?? -1) || a.name.localeCompare(b.name)
             );
-            return json({ companies: list.map(toRow), counts });
+            const paged = page(list, u);
+            return json({
+                companies: paged.items.map(toRow),
+                counts,
+                total: paged.total,
+                nextOffset: paged.nextOffset,
+            });
         }
         const c = store.companies.find(x => x.id === parts[1] && !x.reserve);
         if (!c) return err(404, "Company not found");
@@ -930,7 +971,8 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
         people.sort(
             (a, b) => a.companyName.localeCompare(b.companyName) || a.name.localeCompare(b.name)
         );
-        return json({ people });
+        const paged = page(people, u);
+        return json({ people: paged.items, total: paged.total, nextOffset: paged.nextOffset });
     }
 
     // /outreach
@@ -1011,7 +1053,8 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
         if (parts.length === 1) {
             const live = store.liveRuns.filter(r => r.segmentId === segmentId).map(toRun);
             const past = store.pastRuns.filter(r => r.segmentId === segmentId).map(pastToRun);
-            return json({ runs: [...live, ...past], nextMode: "live" });
+            const active = live.find(r => r.status === "running" || r.status === "queued") ?? null;
+            return json({ runs: [...live, ...past], nextMode: "live", active });
         }
         const live = store.liveRuns.find(r => r.id === parts[1]);
         if (live) {

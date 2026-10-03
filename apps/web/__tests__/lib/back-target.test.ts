@@ -48,9 +48,11 @@ describe("backTargetFor", () => {
             href: "/employer/tools/growth/prospects",
             label: "Prospects",
         });
+        // Old deep links into a company redirect into the workspace; while
+        // they resolve, up is the workspace.
         expect(backTargetFor("/employer/tools/growth/prospects/companies/42")).toEqual({
-            href: "/employer/tools/growth/prospects/companies",
-            label: "Companies",
+            href: "/employer/tools/growth/prospects",
+            label: "Prospects",
         });
         expect(backTargetFor("/employer/tools/growth/brand/calendar")).toEqual({
             href: "/employer/tools/growth/brand",
@@ -78,14 +80,20 @@ describe("backTargetFor", () => {
     });
 
     /**
-     * `/employer/tools/growth` redirects to Brand, so "never points at itself"
-     * was true on paper and false in the browser: Brand's back went to Growth,
-     * which came straight back to Brand. A page that only redirects is not a
-     * place to go back to.
+     * `/employer/tools/growth` used to redirect to Brand, so Brand's back
+     * went to Growth, which came straight back to Brand. It is a page of its
+     * own now (the week on each side, and what to do next), so it is a place
+     * to go back to; the campaign generator sits under Brand.
      */
-    it("sends Growth's two halves out to the Studio, not to a redirect back into them", () => {
-        expect(backTargetFor("/employer/tools/growth/brand")).toEqual(STUDIO);
-        expect(backTargetFor("/employer/tools/growth/prospects")).toEqual(STUDIO);
+    it("sends Growth's two halves back to Growth's own front door, and that to the Studio", () => {
+        const growth = { href: "/employer/tools/growth", label: "Growth" };
+        expect(backTargetFor("/employer/tools/growth/brand")).toEqual(growth);
+        expect(backTargetFor("/employer/tools/growth/prospects")).toEqual(growth);
+        expect(backTargetFor("/employer/tools/growth/brand/campaigns")).toEqual({
+            href: "/employer/tools/growth/brand",
+            label: "Brand",
+        });
+        expect(backTargetFor("/employer/tools/growth")).toEqual(STUDIO);
     });
 
     it("ignores a trailing slash", () => {

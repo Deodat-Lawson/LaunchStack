@@ -1,26 +1,27 @@
 /**
  * Distribution discovery run on the worker (design §4.6 "Background jobs").
  *
- * Stages 1–4 are one step; every candidate's research is its own step so a
- * retry replays completed candidates instead of re-researching them; the
- * summary is the last step. Publishing dossiers into Sources and metering
- * are host ports because they need apps/web's storage and ledger.
+ * Every mode runs here: live providers with the research agent, or keyless
+ * public directories with the page profiler. Stages 1–4 are one step; every
+ * candidate's research is its own step so a retry replays completed
+ * candidates instead of re-researching them; the summary is the last step.
+ * Stop is honoured between candidates: the pipeline reads the run row's
+ * cancel flag before each one. Publishing dossiers into Sources and
+ * metering are host ports because they need apps/web's storage and ledger.
  */
 import {
     DistributionRunEventDataSchema,
-    createDefaultPorts,
     enrichCandidate,
     failRun,
     finalizeRun,
     prepareRun,
     type EnrichCandidateResult,
-    type PublishDossierInput,
 } from "@launchstack/pipelines/distribution";
+import { getProgram, getRun } from "@launchstack/pipelines/distribution/db";
 
 import { inngest } from "../client";
-import { uploadFile } from "~/lib/storage";
-import { debitTokens } from "~/lib/credits";
-import { processDocumentUpload } from "~/server/services/document-upload";
+import { portsForMode } from "~/server/prospects/host-ports";
+import { recordRunFinished, recordCandidate } from "~/server/prospects/metrics";
 
 function toErrorMessage(error: unknown): string {
     if (error instanceof Error && error.message) return error.message;
@@ -45,10 +46,10 @@ export const distributionRunJob = inngest.createFunction(
                 return;
             }
             try {
-                await failRun(
-                    { runId: parsed.data.runId, companyId: BigInt(parsed.data.companyId) },
-                    toErrorMessage(error)
-                );
+                const companyId = BigInt(parsed.data.companyId);
+                const run = await getRun(parsed.data.runId, companyId);
+                await failRun({ runId: parsed.data.runId, companyId }, toErrorMessage(error));
+                recordRunFinished(run?.options.mode ?? "live", "failed", run);
             } catch (failureError) {
                 console.error("[distribution] Could not mark run failed:", failureError);
             }
@@ -60,59 +61,47 @@ export const distributionRunJob = inngest.createFunction(
         const companyId = BigInt(data.companyId);
         const ctx = { runId: data.runId, companyId, programId: data.programId };
 
-        const publishDossier = async (input: PublishDossierInput) => {
-            const stored = await uploadFile({
-                filename: input.filename,
-                data: Buffer.from(input.markdown, "utf8"),
-                contentType: "text/markdown",
-                userId: data.userId,
-                companyId,
-            });
-            const upload = await processDocumentUpload({
-                user: { userId: data.userId, companyId },
-                documentName: input.title,
-                rawDocumentUrl: stored.url,
-                creationKey: input.creationKey,
-                category: input.category,
-                explicitStorageType: stored.provider,
-                mimeType: "text/markdown",
-                originalFilename: input.filename,
-                requestUrl: data.requestUrl,
-            });
-            return { documentId: upload.document.id };
-        };
+        // The run row decides the mode, not the event: what was queued is what runs.
+        const mode = await step.run("load", async () => {
+            const run = await getRun(data.runId, companyId);
+            if (!run) throw new Error("Run not found");
+            return run.options.mode;
+        });
 
-        const ports = () =>
-            createDefaultPorts({
-                publishDossier,
-                debitCredits: async ({ amount, description, referenceId }) => {
-                    await debitTokens({
-                        companyId,
-                        amount,
-                        service: "distribution_research",
-                        description,
-                        referenceId,
-                    });
-                },
+        const ports = async () => {
+            const program = await getProgram(data.programId, companyId);
+            if (!program) throw new Error("Program not found");
+            return portsForMode(mode, {
+                companyId,
+                userId: data.userId,
+                requestUrl: data.requestUrl,
+                program,
             });
+        };
 
         const startedAtIso = await step.run("start", async () => new Date().toISOString());
 
-        const prepared = await step.run("prepare", () => prepareRun(ctx, ports()));
+        const prepared = await step.run("prepare", async () => prepareRun(ctx, await ports()));
 
         const results: EnrichCandidateResult[] = [];
         for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
-            const result = await step.run(`enrich-${index}`, () =>
-                enrichCandidate(ctx, ports(), { relationshipId, profile: prepared.profile })
+            const result = await step.run(`enrich-${index}`, async () =>
+                enrichCandidate(ctx, await ports(), { relationshipId, profile: prepared.profile })
             );
             results.push(result);
+            recordCandidate(mode, result.status);
+            // The stop flag is read inside enrichCandidate; a cancelled result
+            // means nothing after it should start.
+            if (result.status === "cancelled") break;
         }
 
         const summary = await step.run("finalize", () =>
             finalizeRun(ctx, prepared, results, new Date(startedAtIso))
         );
+        const finished = await getRun(data.runId, companyId);
+        recordRunFinished(mode, finished?.status === "stopped" ? "stopped" : "completed", finished);
         return {
-            status: "completed",
+            status: finished?.status ?? "completed",
             enriched: summary.enriched,
             shortlisted: summary.shortlisted,
         };

@@ -10,7 +10,6 @@ import {
     BrandPostError,
     createBrandPosts,
     deleteBrandPost,
-    hasDueBrandPosts,
     listBrandPosts,
     publishBrandPost,
     publishDueBrandPosts,
@@ -155,16 +154,30 @@ describeDb("brand posts persistence", () => {
             body: "Tomorrow.",
             scheduledAt: new Date(Date.now() + 86_400_000),
         });
-        expect(await hasDueBrandPosts(companyB)).toBe(true);
-        expect(await hasDueBrandPosts(companyA)).toBe(false);
-
         const result = await publishDueBrandPosts({
             companyId: companyB,
             publish: async () => ok("bluesky"),
         });
         expect(result.published.map(p => p.id)).toEqual([due!.id]);
         expect(result.failed).toEqual([]);
-        expect(await hasDueBrandPosts(companyB)).toBe(false);
+        expect(result.retrying).toEqual([]);
+        // Nothing is due for company A, and B's due post is no longer due.
+        expect(
+            (
+                await publishDueBrandPosts({
+                    companyId: companyA,
+                    publish: async () => ok("bluesky"),
+                })
+            ).published
+        ).toEqual([]);
+        expect(
+            (
+                await publishDueBrandPosts({
+                    companyId: companyB,
+                    publish: async () => ok("bluesky"),
+                })
+            ).published
+        ).toEqual([]);
 
         const cancelled = await updateBrandPost(later!.id, companyB, { status: "cancelled" });
         expect(cancelled.status).toBe("cancelled");
@@ -175,5 +188,68 @@ describeDb("brand posts persistence", () => {
             scheduledAt: new Date(Date.now() + 7_200_000),
         });
         expect(rearmed.status).toBe("scheduled");
+    });
+
+    it("retries a transient failure later, gives up on a refused credential, and stops after the last attempt", async () => {
+        const [post] = await createBrandPosts({
+            companyId: companyB,
+            userId: "u2",
+            platforms: ["linkedin"],
+            body: "A post the network is too busy for.",
+            scheduledAt: new Date(Date.now() - 30_000),
+        });
+        const busy = async (): Promise<PublishResult> => ({
+            success: false,
+            platform: "linkedin",
+            error: "LinkedIn 503",
+            status: 503,
+            retryable: true,
+        });
+        const first = await publishBrandPost(post!.id, companyB, { publish: busy });
+        expect(first.status).toBe("scheduled");
+        expect(first.attempts).toBe(1);
+        expect(first.nextAttemptAt).not.toBeNull();
+        expect(first.error).toContain("Retrying in");
+        // Not due again until its retry time: the scheduler skips it now …
+        const early = await publishDueBrandPosts({ companyId: companyB, publish: busy });
+        expect(early.published.map(p => p.id)).not.toContain(post!.id);
+        expect(early.retrying.map(p => p.id)).not.toContain(post!.id);
+        // … and picks it up once the clock passes the retry time.
+        const later = await publishDueBrandPosts({
+            companyId: companyB,
+            now: new Date(first.nextAttemptAt!.getTime() + 1000),
+            publish: busy,
+        });
+        expect(later.retrying.map(p => p.id)).toEqual([post!.id]);
+        expect(later.retrying[0]!.attempts).toBe(2);
+
+        const refused = await publishBrandPost(post!.id, companyB, {
+            now: new Date(later.retrying[0]!.nextAttemptAt!.getTime() + 1000),
+            publish: async () => ({
+                success: false,
+                platform: "linkedin",
+                error: "401 token expired",
+                status: 401,
+                authFailed: true,
+            }),
+        });
+        expect(refused.status).toBe("failed");
+        expect(refused.nextAttemptAt).toBeNull();
+
+        // Re-arming starts the count over; the fifth attempt is the last.
+        const rearmed = await updateBrandPost(post!.id, companyB, {
+            status: "scheduled",
+            scheduledAt: new Date(Date.now() - 1000),
+        });
+        expect(rearmed.attempts).toBe(0);
+        let current = rearmed;
+        for (let i = 0; i < 5; i += 1) {
+            current = await publishBrandPost(post!.id, companyB, {
+                now: new Date((current.nextAttemptAt ?? new Date()).getTime() + 1000),
+                publish: busy,
+            });
+        }
+        expect(current.attempts).toBe(5);
+        expect(current.status).toBe("failed");
     });
 });

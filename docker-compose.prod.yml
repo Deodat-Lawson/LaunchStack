@@ -10,9 +10,14 @@
 #     cloud provider (packages/llm registry default) and OCR routes to the
 #     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
 #     containers move behind opt-in profiles.
-#   - No Inngest dev server. INNGEST_DEV is cleared; set INNGEST_EVENT_KEY /
-#     INNGEST_SIGNING_KEY to enable the background verticals via Inngest Cloud
-#     (ingestion itself runs through the outbox and needs neither).
+#   - No Inngest dev server. A self-hosted Inngest server (`inngest start`)
+#     runs beside the worker and syncs its /api/inngest endpoint over the
+#     compose network, so the background verticals (Prospects runs, the Brand
+#     scheduler, trend search, connector syncs, …) need no external service.
+#     INNGEST_EVENT_KEY and INNGEST_SIGNING_KEY are required; both app and
+#     worker talk to it through INNGEST_BASE_URL. To use Inngest Cloud
+#     instead, drop the `inngest` service and unset INNGEST_BASE_URL.
+#     Ingestion itself runs through the outbox and needs neither.
 #   - Caddy terminates TLS for ${DOMAIN} (app, plus /api/inngest on the
 #     worker) and files.${DOMAIN} (SeaweedFS object URLs, anonymous read).
 #   - No service publishes a host port except Caddy; the NSG only admits
@@ -36,6 +41,7 @@ services:
     environment:
       INNGEST_DEV: ""
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      INNGEST_BASE_URL: ${INNGEST_BASE_URL:-http://inngest:8288}
       # Public object-URL origin. Also the SDK endpoint — the app reaches its
       # own SeaweedFS through Caddy so that stored URLs and fetch checks agree
       # on one origin (lib/storage matches URLs by this prefix).
@@ -49,7 +55,34 @@ services:
     environment:
       INNGEST_DEV: ""
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      INNGEST_BASE_URL: ${INNGEST_BASE_URL:-http://inngest:8288}
       NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
+
+  # Self-hosted Inngest: one binary, SQLite on a volume, an in-memory queue
+  # with periodic snapshots. Enough for a single VM; point --postgres-uri and
+  # --redis-uri at external servers to run more than one node. The dashboard
+  # on :8288 is deliberately not published; reach it over an SSH tunnel.
+  inngest:
+    image: inngest/inngest:latest
+    container_name: pdr_ai_v2-inngest
+    restart: unless-stopped
+    command:
+      - inngest
+      - start
+      - --sdk-url=http://worker:8020/api/inngest
+      - --event-key=${INNGEST_EVENT_KEY}
+      - --signing-key=${INNGEST_SIGNING_KEY}
+      - --sqlite-dir=/data
+    volumes:
+      - inngest_data:/data
+    depends_on:
+      - worker
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8288/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   db:
     ports: !reset []
@@ -116,3 +149,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  inngest_data:

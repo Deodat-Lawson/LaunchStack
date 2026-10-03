@@ -1,5 +1,6 @@
-import { AccountsScreen } from "../_screens/AccountsScreen";
+import { redirect } from "next/navigation";
 
+/** Accounts is a panel over the Brand calendar now; old links still land there. */
 export default function Page() {
-    return <AccountsScreen />;
+    redirect("/employer/tools/growth/brand?panel=accounts");
 }

@@ -7,7 +7,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, eq, inArray, lte, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 import {
@@ -44,6 +44,40 @@ export interface BrandPostRecord {
     source: BrandPostSource | null;
     createdAt: Date;
     updatedAt: Date | null;
+    /** Publish attempts so far. */
+    attempts: number;
+    /** When the scheduler may retry after a transient failure; null means at scheduledAt. */
+    nextAttemptAt: Date | null;
+    lastAttemptAt: Date | null;
+}
+
+/**
+ * How many times a scheduled post is tried before it is left as failed, and
+ * how long to wait between tries. Transient errors (429, 5xx, a network
+ * timeout) are retried; anything else fails at once.
+ */
+export const MAX_PUBLISH_ATTEMPTS = 5;
+const RETRY_DELAYS_MS = [60_000, 5 * 60_000, 15 * 60_000, 60 * 60_000];
+
+export function retryDelayMs(attemptsSoFar: number): number {
+    return RETRY_DELAYS_MS[Math.min(attemptsSoFar - 1, RETRY_DELAYS_MS.length - 1)] ?? 60_000;
+}
+
+export type PublishOutcome =
+    | { kind: "published" }
+    | { kind: "retry"; delayMs: number }
+    | { kind: "failed" };
+
+/** Decide what a failed publish result means for the row: retry later, or give up. */
+export function classifyPublishFailure(
+    result: Pick<PublishResult, "success" | "retryable" | "authFailed">,
+    attemptsAfterThisOne: number
+): PublishOutcome {
+    if (result.success) return { kind: "published" };
+    if (result.authFailed) return { kind: "failed" };
+    if (result.retryable && attemptsAfterThisOne < MAX_PUBLISH_ATTEMPTS)
+        return { kind: "retry", delayMs: retryDelayMs(attemptsAfterThisOne) };
+    return { kind: "failed" };
 }
 
 /** Expected outcomes carry their own status; routes pass them through. */
@@ -122,8 +156,14 @@ function toRecord(row: BrandPostRow): BrandPostRecord {
         source: row.source ?? null,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
+        attempts: row.attempts ?? 0,
+        nextAttemptAt: row.nextAttemptAt ?? null,
+        lastAttemptAt: row.lastAttemptAt ?? null,
     };
 }
+
+/** The moment the scheduler should act on a scheduled post: the retry time if one is set, else its slot. */
+const DUE_AT = sql`coalesce(${brandPosts.nextAttemptAt}, ${brandPosts.scheduledAt})`;
 
 /** The moment a post belongs to on the calendar: when it is due, else when it went out, else when it was written. */
 const CALENDAR_AT = sql`coalesce(${brandPosts.scheduledAt}, ${brandPosts.publishedAt}, ${brandPosts.createdAt})`;
@@ -298,6 +338,9 @@ export async function updateBrandPost(
             scheduledAt: status === "draft" ? null : scheduledAt,
             status,
             error: status === "failed" ? existing.error : null,
+            // Any edit or re-arm starts the attempt count over.
+            attempts: 0,
+            nextAttemptAt: null,
         })
         .where(and(eq(brandPosts.id, id), eq(brandPosts.companyId, companyId)))
         .returning();
@@ -316,20 +359,25 @@ export async function deleteBrandPost(id: string, companyId: bigint): Promise<vo
         .where(and(eq(brandPosts.id, id), eq(brandPosts.companyId, companyId)));
 }
 
-export type PublishFn = (
-    platform: MarketingPlatform,
-    message: string,
-    title?: string
-) => Promise<PublishResult>;
+/**
+ * The host supplies the network call so it can resolve the workspace's own
+ * credentials; the default posts with the deployment's environment.
+ */
+export type PublishFn = (post: BrandPostRecord) => Promise<PublishResult>;
 
 export interface PublishDeps {
     publish?: PublishFn;
     now?: Date;
 }
 
+const defaultPublish: PublishFn = post =>
+    publishContent(post.platform, post.body, post.title ?? undefined);
+
 /**
  * Publish one post now. The claim is the whole concurrency story: whoever
- * flips the row to `publishing` posts; everyone else sees a 409.
+ * flips the row to `publishing` posts; everyone else sees a 409. A transient
+ * failure puts the post back to `scheduled` with a retry time; a permanent
+ * one, or the last allowed attempt, marks it `failed`.
  */
 export async function publishBrandPost(
     id: string,
@@ -337,9 +385,15 @@ export async function publishBrandPost(
     deps: PublishDeps = {}
 ): Promise<BrandPostRecord> {
     const db = getDb();
+    const now = deps.now ?? new Date();
     const [claimed] = await db
         .update(brandPosts)
-        .set({ status: "publishing", error: null })
+        .set({
+            status: "publishing",
+            error: null,
+            attempts: sql`${brandPosts.attempts} + 1`,
+            lastAttemptAt: now,
+        })
         .where(
             and(
                 eq(brandPosts.id, id),
@@ -362,73 +416,98 @@ export async function publishBrandPost(
         );
     }
     const post = toRecord(claimed);
-    const publish = deps.publish ?? publishContent;
+    const publish = deps.publish ?? defaultPublish;
     let result: PublishResult;
     try {
-        result = await publish(post.platform, post.body, post.title ?? undefined);
+        result = await publish(post);
     } catch (error) {
+        // A thrown error is a network or code failure, not the network
+        // refusing the post: worth another try.
         result = {
             success: false,
             platform: post.platform,
             error: error instanceof Error ? error.message : String(error),
+            retryable: true,
         };
     }
+    const outcome = classifyPublishFailure(result, post.attempts);
+    const errorText = (result.error ?? "The network did not accept the post.").slice(0, 2000);
     const [row] = await db
         .update(brandPosts)
         .set(
-            result.success
+            outcome.kind === "published"
                 ? {
                       status: "published" as const,
-                      publishedAt: deps.now ?? new Date(),
+                      publishedAt: now,
                       postId: result.postId ?? null,
                       postUrl: result.postUrl ?? null,
                       error: null,
+                      nextAttemptAt: null,
                   }
-                : {
-                      status: "failed" as const,
-                      error: (result.error ?? "The network did not accept the post.").slice(
-                          0,
-                          2000
-                      ),
-                  }
+                : outcome.kind === "retry"
+                  ? {
+                        status: "scheduled" as const,
+                        error: `${errorText} Retrying in ${describeDelay(outcome.delayMs)}.`,
+                        nextAttemptAt: new Date(now.getTime() + outcome.delayMs),
+                    }
+                  : {
+                        status: "failed" as const,
+                        error: errorText,
+                        nextAttemptAt: null,
+                    }
         )
         .where(eq(brandPosts.id, id))
         .returning();
     return toRecord(row!);
 }
 
+function describeDelay(ms: number): string {
+    const minutes = Math.round(ms / 60_000);
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.round(minutes / 60);
+    return `${hours} h`;
+}
+
 export interface PublishDueResult {
     published: BrandPostRecord[];
     failed: BrandPostRecord[];
+    /** Posts that hit a transient error and will be tried again. */
+    retrying: BrandPostRecord[];
     /** Rows another scheduler claimed first. */
     skipped: number;
 }
 
 /**
- * Everything scheduled for a moment that has passed, oldest first. Safe to
- * run from the worker's cron and from the web app at the same time.
+ * Everything scheduled for a moment that has passed, oldest first, including
+ * posts whose retry time has come. Safe to run from two schedulers at once:
+ * the claim inside publishBrandPost decides who posts.
  */
 export async function publishDueBrandPosts(
     args: { now?: Date; limit?: number; companyId?: bigint } & PublishDeps = {}
 ): Promise<PublishDueResult> {
     const now = args.now ?? new Date();
     const db = getDb();
-    const conditions = [eq(brandPosts.status, "scheduled"), lte(brandPosts.scheduledAt, now)];
+    const conditions = [
+        eq(brandPosts.status, "scheduled"),
+        sql`${DUE_AT} <= ${now.toISOString()}::timestamptz`,
+    ];
     if (args.companyId !== undefined) conditions.push(eq(brandPosts.companyId, args.companyId));
     const due = await db
         .select({ id: brandPosts.id, companyId: brandPosts.companyId })
         .from(brandPosts)
         .where(and(...conditions))
-        .orderBy(asc(brandPosts.scheduledAt))
+        .orderBy(asc(DUE_AT))
         .limit(args.limit ?? 25);
-    const out: PublishDueResult = { published: [], failed: [], skipped: 0 };
+    const out: PublishDueResult = { published: [], failed: [], retrying: [], skipped: 0 };
     for (const row of due) {
         try {
             const post = await publishBrandPost(row.id, row.companyId, {
                 publish: args.publish,
                 now,
             });
-            (post.status === "published" ? out.published : out.failed).push(post);
+            if (post.status === "published") out.published.push(post);
+            else if (post.status === "scheduled") out.retrying.push(post);
+            else out.failed.push(post);
         } catch (error) {
             if (error instanceof BrandPostError && error.code === "not_publishable")
                 out.skipped += 1;
@@ -436,21 +515,4 @@ export async function publishDueBrandPosts(
         }
     }
     return out;
-}
-
-/** Whether the web app should run the due-check after answering (dev has no worker). */
-export async function hasDueBrandPosts(companyId: bigint, now = new Date()): Promise<boolean> {
-    const db = getDb();
-    const [row] = await db
-        .select({ id: brandPosts.id })
-        .from(brandPosts)
-        .where(
-            and(
-                eq(brandPosts.companyId, companyId),
-                eq(brandPosts.status, "scheduled"),
-                lte(brandPosts.scheduledAt, now)
-            )
-        )
-        .limit(1);
-    return Boolean(row);
 }

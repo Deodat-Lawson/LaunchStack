@@ -162,6 +162,20 @@
       "when": 1790305746313,
       "tag": "20260925030906_agent_harness_and_meeting_workflows",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790723055009,
+      "tag": "20260929230415_growth_run_progress_and_post_retries",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790723150231,
+      "tag": "20260929230550_brand_accounts",
+      "breakpoints": true
     }
   ]
 }

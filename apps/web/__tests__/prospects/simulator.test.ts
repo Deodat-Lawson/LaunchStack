@@ -96,14 +96,21 @@ describe("deals", () => {
         expect(owned.body.deal.ownerName).toBe("You");
     });
 
-    it("keeps won deals won and needs a proposal before winning", async () => {
+    it("keeps won deals won and walks the funnel one stage at a time, with production's words", async () => {
         const won = await call<{ company: CompanyDetail }>("/api/prospects/companies/co-lls");
         const back = won.body.company.deal.allowedMoves.find(m => m.stage === "meeting");
         expect(back?.reason).toBe("Won deals stay won");
 
+        // The harness asks the production rule table, so a deal cannot skip a
+        // stage here any more than it can against the real backend.
         const early = await call<{ company: CompanyDetail }>("/api/prospects/companies/co-vandijk");
-        expect(early.body.company.deal.allowedMoves.find(m => m.stage === "won")?.reason).toBe(
-            "Needs a proposal first"
+        const moves = new Map(early.body.company.deal.allowedMoves.map(m => [m.stage, m.reason]));
+        expect(moves.get("won")).toBe("Move to Meeting first");
+        expect(moves.get("proposal")).toBe("Not a stage in this workspace yet");
+
+        const lead = await call<{ company: CompanyDetail }>("/api/prospects/companies/co-nordlager");
+        expect(lead.body.company.deal.allowedMoves.find(m => m.stage === "qualified")?.reason).toBe(
+            "Move to Contacted first"
         );
     });
 

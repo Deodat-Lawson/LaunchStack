@@ -1,4 +1,4 @@
-// GET /api/prospects/companies?segmentId=&view=&q=&sort=
+// GET /api/prospects/companies?segmentId=&view=&q=&sort=&limit=&offset=
 import type { NextRequest } from "next/server";
 
 import type { CompaniesSort, CompaniesView } from "~/app/employer/tools/growth/prospects/api";
@@ -8,6 +8,12 @@ import { error, handleProspectsError, json, prospectsContext } from "../_http";
 
 const VIEWS = new Set(["all", "new", "highfit", "uncontacted", "excluded"]);
 const SORTS = new Set(["fit", "activity", "name"]);
+
+function intParam(value: string | null): number | undefined {
+    if (value === null || value === "") return undefined;
+    const n = Number.parseInt(value, 10);
+    return Number.isFinite(n) ? n : undefined;
+}
 
 export async function GET(request: NextRequest) {
     const auth = await prospectsContext();
@@ -25,6 +31,8 @@ export async function GET(request: NextRequest) {
                 view: view as CompaniesView,
                 sort: sort as CompaniesSort,
                 q: q.get("q") ?? "",
+                limit: intParam(q.get("limit")),
+                offset: intParam(q.get("offset")),
             })
         );
     } catch (err) {

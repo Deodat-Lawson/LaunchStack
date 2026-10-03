@@ -240,12 +240,71 @@ describe("OpenStreetMap adapter", () => {
         };
         const places = await searchOverpass(
             { country: "DE", keywords: ["coffee"], limit: 10 },
-            { fetchImpl, urls: ["https://overpass.example"] }
+            { fetchImpl, urls: ["https://overpass.example"], pauseMs: 1 }
         );
         expect(calls).toHaveLength(4);
         expect(calls[0]!.ua).toMatch(/LaunchStack-Prospects/);
         expect(decodeURIComponent(calls[0]!.body)).toContain('area["name"="Berlin"]');
         expect(places.map(p => p.name)).toEqual(["Place 1", "Place 2", "Place 3", "Place 4"]);
+    });
+
+    const onePlacePerCall = (startedAt: number[]): typeof fetch => {
+        return async () => {
+            startedAt.push(Date.now());
+            const n = startedAt.length;
+            return new Response(
+                JSON.stringify({
+                    elements: [
+                        {
+                            type: "node",
+                            id: n,
+                            lat: 1,
+                            lon: 2,
+                            tags: { name: `Place ${n}`, website: `p${n}.example` },
+                        },
+                    ],
+                }),
+                { status: 200 }
+            );
+        };
+    };
+
+    it("pauses between area requests but not before the first", async () => {
+        const startedAt: number[] = [];
+        const places = await searchOverpass(
+            { country: "DE", keywords: ["coffee"], limit: 2 },
+            {
+                fetchImpl: onePlacePerCall(startedAt),
+                urls: ["https://overpass.example"],
+                pauseMs: 25,
+            }
+        );
+        expect(startedAt).toHaveLength(2);
+        expect(places.map(p => p.name)).toEqual(["Place 1", "Place 2"]);
+        expect(startedAt[1]! - startedAt[0]!).toBeGreaterThanOrEqual(20);
+    });
+
+    it("skips the pause and the remaining areas once the signal is aborted", async () => {
+        const startedAt: number[] = [];
+        const aborter = new AbortController();
+        const fetchImpl = onePlacePerCall(startedAt);
+        const begun = Date.now();
+        const places = await searchOverpass(
+            { country: "DE", keywords: ["coffee"], limit: 10 },
+            {
+                fetchImpl: async (url, init) => {
+                    const response = await fetchImpl(url, init);
+                    setTimeout(() => aborter.abort(), 5);
+                    return response;
+                },
+                urls: ["https://overpass.example"],
+                signal: aborter.signal,
+                pauseMs: 10_000,
+            }
+        );
+        expect(startedAt).toHaveLength(1);
+        expect(places.map(p => p.name)).toEqual(["Place 1"]);
+        expect(Date.now() - begun).toBeLessThan(2_000);
     });
 });
 

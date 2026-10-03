@@ -10,13 +10,23 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { cn } from "~/lib/utils";
 
 import { NETWORK_LABEL, NetworkMark } from "./NetworkMark";
-import { STATUS_WORD, dayAndMonth, isDue, postMoment, timeOfDay, toLocalInput } from "../_lib/time";
+import {
+    STATUS_WORD,
+    dayAndMonth,
+    isDue,
+    isRetrying,
+    postMoment,
+    timeOfDay,
+    toLocalInput,
+} from "../_lib/time";
 import { brandApi, type BrandPost } from "../api";
 
 /** Status as a dot and a word; semantic colour only where the status is one. */
 export function PostStatus({ post, className }: { post: BrandPost; className?: string }) {
+    const retrying = isRetrying(post);
     const due = isDue(post);
-    const word = due ? "Due" : STATUS_WORD[post.status];
+    const word = retrying ? "Retrying" : due ? "Due" : STATUS_WORD[post.status];
+    const attention = retrying || due;
     return (
         <span
             className={cn(
@@ -26,7 +36,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                 post.status === "failed" && "text-danger",
                 post.status === "cancelled" && "text-ink-3",
                 post.status === "draft" && "text-ink-3",
-                post.status === "scheduled" && (due ? "text-warn" : "text-ink-2"),
+                post.status === "scheduled" && (attention ? "text-warn" : "text-ink-2"),
                 className
             )}
         >
@@ -39,7 +49,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                     post.status === "failed" && "bg-danger",
                     post.status === "cancelled" && "bg-ink-4",
                     post.status === "draft" && "border-line border",
-                    post.status === "scheduled" && (due ? "bg-warn" : "bg-ink-3")
+                    post.status === "scheduled" && (attention ? "bg-warn" : "bg-ink-3")
                 )}
             />
             {word}
@@ -107,6 +117,12 @@ export function PostActions({
                           : "No time set"}
                     {post.source?.kind === "campaign" ? " · from a campaign" : ""}
                 </div>
+                {isRetrying(post) && post.nextAttemptAt && (
+                    <p className="text-warn mt-1 text-xs tabular-nums">
+                        Attempt {post.attempts} · next try at{" "}
+                        {timeOfDay(new Date(post.nextAttemptAt))}
+                    </p>
+                )}
                 {post.error && <p className="text-danger mt-2 text-xs">{post.error}</p>}
 
                 {editable && (

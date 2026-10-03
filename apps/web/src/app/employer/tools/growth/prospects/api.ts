@@ -1,11 +1,13 @@
 /**
  * Prospects — client contract for `/api/prospects/*`.
  *
- * This is the shape the UI is built against. Today the only implementation
- * is the in-memory simulator behind `/dev/prospects`; the real routes land
- * with the pipeline reframe and must answer with these exact JSON shapes.
- * Every DTO is the user's vocabulary (segment, company, person, deal, source,
- * run), never the pipeline's.
+ * This is the shape the UI is built against; the routes under
+ * `apps/web/src/app/api/prospects` answer it from the Distribution data and
+ * the in-memory simulator behind `/dev/growth` answers it from a fixture
+ * world. Every DTO is the user's vocabulary (segment, company, person,
+ * deal, source, run), never the pipeline's. Lists are paged: `total` is the
+ * size of the whole list for the filter and `nextOffset` is null on the
+ * last page.
  */
 
 export type SalesStage =
@@ -222,6 +224,17 @@ export interface HomeDto {
 export type RunStatus = "queued" | "running" | "completed" | "failed" | "stopped";
 export type StepStatus = "done" | "running" | "waiting" | "skipped" | "failed";
 
+/** How the run executes: live providers, public directories, or sample data. */
+export type RunMode = "live" | "keyless" | "sample";
+
+/** One page of a list. */
+export interface Page<T> {
+    items: T[];
+    total: number;
+    /** Offset of the next page, or null on the last one. */
+    nextOffset: number | null;
+}
+
 export interface RunStep {
     id: string;
     label: string;
@@ -239,8 +252,13 @@ export interface RunDto {
     id: string;
     segmentId: string;
     status: RunStatus;
+    mode: RunMode;
     startedAt: string;
     completedAt: string | null;
+    /** Written by the worker as it goes: how many of the shortlist are profiled. */
+    progress: { shortlisted: number; profiled: number } | null;
+    /** True once Stop was pressed; the run finishes its current company and stops. */
+    stopRequested: boolean;
     steps: RunStep[];
     spend: { usd: number; usdCap: number; credits: number };
     caps: string;
@@ -339,13 +357,22 @@ export const prospectsApi = {
         view?: CompaniesView;
         q?: string;
         sort?: CompaniesSort;
+        limit?: number;
+        offset?: number;
     }) =>
-        call<{ companies: CompanyRow[]; counts: Record<CompaniesView, number> }>(
+        call<{
+            companies: CompanyRow[];
+            counts: Record<CompaniesView, number>;
+            total: number;
+            nextOffset: number | null;
+        }>(
             `/api/prospects/companies${q({
                 segmentId: params.segmentId,
                 view: params.view,
                 q: params.q,
                 sort: params.sort,
+                limit: params.limit?.toString(),
+                offset: params.offset?.toString(),
             })}`
         ),
     company: (id: string) => call<{ company: CompanyDetail }>(`/api/prospects/companies/${id}`),
@@ -366,12 +393,20 @@ export const prospectsApi = {
     deals: (segmentId: string) =>
         call<{ deals: DealRow[] }>(`/api/prospects/deals${q({ segmentId })}`),
 
-    people: (params: { segmentId: string; q?: string; status?: EmailStatusKind }) =>
-        call<{ people: PersonRow[] }>(
+    people: (params: {
+        segmentId: string;
+        q?: string;
+        status?: EmailStatusKind;
+        limit?: number;
+        offset?: number;
+    }) =>
+        call<{ people: PersonRow[]; total: number; nextOffset: number | null }>(
             `/api/prospects/people${q({
                 segmentId: params.segmentId,
                 q: params.q,
                 status: params.status,
+                limit: params.limit?.toString(),
+                offset: params.offset?.toString(),
             })}`
         ),
     /**
@@ -385,7 +420,9 @@ export const prospectsApi = {
         }),
 
     runs: (segmentId: string) =>
-        call<{ runs: RunDto[]; nextMode?: NextRunMode }>(`/api/prospects/runs${q({ segmentId })}`),
+        call<{ runs: RunDto[]; nextMode?: NextRunMode; active: RunDto | null }>(
+            `/api/prospects/runs${q({ segmentId })}`
+        ),
     run: (id: string) => call<{ run: RunDto }>(`/api/prospects/runs/${id}`),
     startRun: (segmentId: string, options: { sample?: boolean } = {}) =>
         call<{ run: RunDto }>("/api/prospects/runs", {

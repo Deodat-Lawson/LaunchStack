@@ -82,9 +82,21 @@ export const RUN_STATUSES = [
     "reporting",
     "completed",
     "failed",
+    "stopped",
 ] as const;
 export const RunStatusSchema = z.enum(RUN_STATUSES);
 export type RunStatus = z.infer<typeof RunStatusSchema>;
+
+/** A run that will not change again. */
+export const TERMINAL_RUN_STATUSES: ReadonlySet<RunStatus> = new Set([
+    "completed",
+    "failed",
+    "stopped",
+]);
+
+export function isTerminalRunStatus(status: RunStatus): boolean {
+    return TERMINAL_RUN_STATUSES.has(status);
+}
 
 export const TerritorySchema = z.object({
     /** ISO-3166 alpha-2. */
@@ -230,6 +242,14 @@ export interface RunRecord {
     createdAt: Date;
     startedAt: Date | null;
     completedAt: Date | null;
+    /** Candidates on the shortlist, written when the shortlist is made. */
+    shortlistedCount: number;
+    /** Candidates whose research has finished, incremented per candidate. */
+    enrichedCount: number;
+    /** Set when someone asked for the run to stop; the worker checks it before each candidate. */
+    cancelRequestedAt: Date | null;
+    /** Touched by the worker as it works, so a reclaimer can tell stuck from slow. */
+    heartbeatAt: Date | null;
 }
 
 /** Inngest payload — bigint serialised as string. */

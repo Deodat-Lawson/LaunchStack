@@ -95,6 +95,16 @@ export const distributionRuns = pgTable(
         startedAt: timestamp("started_at", { withTimezone: true }),
         completedAt: timestamp("completed_at", { withTimezone: true }),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared last: added by a later migration (ADD COLUMN appends, and
+        // the pg_dump parity gate compares physical column order).
+        /** Candidates on the shortlist, written when the shortlist is made. */
+        shortlistedCount: integer("shortlisted_count").notNull().default(0),
+        /** Candidates whose research has finished, incremented per candidate. */
+        enrichedCount: integer("enriched_count").notNull().default(0),
+        /** Set when someone asked for the run to stop; checked before each candidate. */
+        cancelRequestedAt: timestamp("cancel_requested_at", { withTimezone: true }),
+        /** Touched by the worker as it works, so stuck and slow can be told apart. */
+        heartbeatAt: timestamp("heartbeat_at", { withTimezone: true }),
     },
     table => ({
         companyIdx: index("distribution_runs_company_idx").on(table.companyId),
@@ -103,6 +113,10 @@ export const distributionRuns = pgTable(
             table.companyId,
             table.status
         ),
+        /** Single-flight: one run per program that is not yet terminal. */
+        programLiveUnique: uniqueIndex("distribution_runs_program_live_unique")
+            .on(table.programId)
+            .where(sql`status not in ('completed', 'failed', 'stopped')`),
     })
 );
 export type DistributionRunRow = InferSelectModel<typeof distributionRuns>;

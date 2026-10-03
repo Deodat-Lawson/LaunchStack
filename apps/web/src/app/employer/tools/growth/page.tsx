@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { GrowthLanding } from "./_screens/GrowthLanding";
 
-/** The app opens on Brand; Prospects is one click down the rail. */
+/** Growth's front door: the week on each side, and the two things to do next. */
 export default function GrowthPage() {
-    redirect("/employer/tools/growth/brand");
+    return <GrowthLanding />;
 }

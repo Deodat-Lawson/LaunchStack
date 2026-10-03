@@ -1,5 +1,6 @@
-import { ComposeScreen } from "../_screens/ComposeScreen";
+import { redirect } from "next/navigation";
 
+/** Compose is a panel over the Brand calendar now; old links still land there. */
 export default function Page() {
-    return <ComposeScreen />;
+    redirect("/employer/tools/growth/brand?panel=compose");
 }

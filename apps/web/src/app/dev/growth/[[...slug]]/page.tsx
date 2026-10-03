@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import { GrowthPreview } from "../GrowthPreview";
 
 /**
- * Auth-free harness for Growth. Every screen of the real app mounts here over
- * an in-memory simulator of `/api/prospects/*` and `/api/brand/*`, so the
- * whole click path — the Brand calendar and composer, home, companies, a
- * company page, a run with live progress, people, deals, the segment review
- * and sources — can be exercised without a backend or a login. Development
- * only.
+ * Auth-free harness for Growth. The real pages mount here over an in-memory
+ * simulator of `/api/prospects/*` and `/api/brand/*`, so the whole click
+ * path — the front door, Brand's week with its composer and accounts, the
+ * campaign generator, Prospects with its company panel, a run with live
+ * progress, the deals board and the segment — can be exercised without a
+ * backend or a login. Development only.
  */
 export default async function GrowthPreviewPage({
     params,

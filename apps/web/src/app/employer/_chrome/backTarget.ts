@@ -26,11 +26,11 @@ export const STUDIO: BackTarget = { href: "/employer/documents", label: "Studio"
  * it. Order matters: the longest matching prefix wins, so a company detail
  * page goes to the company list rather than to the tool's home.
  */
+const GROWTH: BackTarget = { href: "/employer/tools/growth", label: "Growth" };
+
 const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
-    {
-        prefix: "/employer/tools/growth/prospects/companies/",
-        target: { href: "/employer/tools/growth/prospects/companies", label: "Companies" },
-    },
+    // Old deep links under Prospects and Brand redirect into the workspace
+    // pages; while they resolve, up is the workspace.
     {
         prefix: "/employer/tools/growth/prospects/",
         target: { href: "/employer/tools/growth/prospects", label: "Prospects" },
@@ -39,10 +39,8 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/growth/brand/",
         target: { href: "/employer/tools/growth/brand", label: "Brand" },
     },
-    // Growth has no home of its own: `/employer/tools/growth` redirects to
-    // Brand. Pointing its halves at it sent Brand back to Brand and Prospects
-    // sideways into Brand, so above Brand and Prospects is the Studio.
-    { prefix: "/employer/tools/growth/", target: STUDIO },
+    // Growth has a front door of its own, so its two workspaces go back to it.
+    { prefix: "/employer/tools/growth/", target: GROWTH },
     // `/employer/tools/prospects/*` is the old location, kept as a redirect
     // shim. Send it to where Prospects actually lives now.
     {

@@ -8,7 +8,11 @@
  * sources are the three the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
  */
-import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
+import type {
+    PartnerListItem,
+    PersonListRow,
+    ProgramCounts,
+} from "@launchstack/pipelines/distribution/db";
 import { ALLOWED_TRANSITIONS, stageRequirements } from "@launchstack/pipelines/distribution/stages";
 import {
     RUN_STATUSES,
@@ -396,6 +400,27 @@ export function contactPeople(
         });
 }
 
+/** One person from a mailbox row the database unnested; same shape as contactPeople produces. */
+export function personFromRow(row: PersonListRow, blockedReason: string | null): PersonRow {
+    const local = row.email.split("@")[0]!;
+    const generic = GENERIC_LOCAL.test(local);
+    const name = generic ? `${local.toLowerCase()}@ inbox` : local.replace(/[._-]+/g, " ");
+    return {
+        id: `${row.relationshipId}:${row.index}`,
+        companyId: row.relationshipId,
+        companyName: row.orgName,
+        name,
+        initials: generic ? "@" : initials(name),
+        title: generic ? "Shared inbox" : row.channel,
+        seniority: "—",
+        email: row.email,
+        emailStatus: generic ? "generic" : "found",
+        source: "Dossier",
+        sourceUrl: null,
+        blockedReason,
+    };
+}
+
 // ── Companies ─────────────────────────────────────────────────────────────
 
 const FOUND_VIA: Record<RelationshipRecord["source"], Omit<FoundVia, "url" | "at">> = {
@@ -566,6 +591,14 @@ export function toSegmentSummary(
     rows: CompanyRow[],
     sourcesOn: number
 ): SegmentSummary {
+    return toSegmentSummaryWithCounts(program, segmentCounts(rows, sourcesOn));
+}
+
+/** The summary from counts the database produced, without loading rows. */
+export function toSegmentSummaryWithCounts(
+    program: ProgramRecord,
+    counts: SegmentSummary["counts"]
+): SegmentSummary {
     const countries = program.targetTerritories.map(t => t.country);
     return {
         id: program.id,
@@ -573,7 +606,19 @@ export function toSegmentSummary(
         subtitle: `${countries.join(", ")} · ${program.partnerKinds.map(k => KIND_WORD[k] ?? k).join(", ")}`,
         headline: `${program.partnerKinds.map(k => KIND_WORD[k] ?? k).join(", ")} in ${joinNatural(countries)}`,
         status: program.status === "active" ? "confirmed" : "draft",
-        counts: segmentCounts(rows, sourcesOn),
+        counts,
+    };
+}
+
+export function countsFromProgram(
+    counts: ProgramCounts | undefined,
+    sourcesOn: number
+): SegmentSummary["counts"] {
+    return {
+        companies: counts?.companies ?? 0,
+        people: counts?.people ?? 0,
+        deals: counts?.deals ?? 0,
+        sources: sourcesOn,
     };
 }
 
@@ -634,8 +679,15 @@ export function toSegment(
     rows: CompanyRow[],
     sourcesOn: number
 ): SegmentDto {
+    return toSegmentWithCounts(program, segmentCounts(rows, sourcesOn));
+}
+
+export function toSegmentWithCounts(
+    program: ProgramRecord,
+    counts: SegmentSummary["counts"]
+): SegmentDto {
     return {
-        ...toSegmentSummary(program, rows, sourcesOn),
+        ...toSegmentSummaryWithCounts(program, counts),
         derivedAt: program.createdAt.toISOString(),
         confirmedAt: program.status === "active" ? program.createdAt.toISOString() : null,
         basis: { documents: 0, hasProfile: true },
@@ -807,20 +859,29 @@ const rank = (status: string) => RUN_STATUSES.indexOf(status as (typeof RUN_STAT
 
 function statusOf(run: RunRecord, startsAt: string, endsBefore: string): StepStatus {
     if (run.status === "failed") return "failed";
+    if (run.status === "stopped") {
+        // Everything up to where it stopped is done; the rest was skipped.
+        return run.summary || rank(run.status) >= rank(endsBefore) ? "done" : "skipped";
+    }
     const r = rank(run.status);
     if (run.status === "completed" || r >= rank(endsBefore)) return "done";
     if (r >= rank(startsAt)) return "running";
     return "waiting";
 }
 
-/** Where a running run's profiling has got to: shortlist members enriched since it started. */
-export interface RunProgress {
-    profiled: number;
-    shortlisted: number;
-}
+const MODE_WORD: Record<RunRecord["options"]["mode"], RunDto["mode"]> = {
+    live: "live",
+    keyless: "keyless",
+    fixture: "sample",
+};
 
-export function toRunDto(run: RunRecord, progress: RunProgress | null = null): RunDto {
+export function toRunDto(run: RunRecord): RunDto {
     const summary = run.summary;
+    // Progress comes from the counters the worker writes, never from a scan.
+    const progress =
+        run.shortlistedCount > 0 || run.enrichedCount > 0
+            ? { shortlisted: run.shortlistedCount, profiled: run.enrichedCount }
+            : null;
     const sourceChildren: RunStep[] = (
         summary?.sources ??
         (["web", "place", "trade"] as const).map(source => ({
@@ -874,7 +935,10 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 : progress
                   ? `${progress.profiled} of ${progress.shortlisted}`
                   : `0 of ${run.candidateOrgIds?.length ?? run.options.maxCandidates}`,
-            status: statusOf(run, "enriching", "completed"),
+            status:
+                run.status === "stopped" && summary && summary.enriched < summary.shortlisted
+                    ? "skipped"
+                    : statusOf(run, "enriching", "completed"),
             right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
         },
         {
@@ -899,11 +963,16 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 ? "completed"
                 : run.status === "failed"
                   ? "failed"
-                  : run.status === "queued"
-                    ? "queued"
-                    : "running",
+                  : run.status === "stopped"
+                    ? "stopped"
+                    : run.status === "queued"
+                      ? "queued"
+                      : "running",
+        mode: MODE_WORD[run.options.mode],
         startedAt: startedAt.toISOString(),
         completedAt: iso(run.completedAt),
+        progress,
+        stopRequested: run.cancelRequestedAt !== null,
         steps,
         spend: { usd: 0, usdCap: 0, credits: run.creditsUsed },
         caps: `${run.options.maxCandidates} candidates${run.options.mode === "fixture" ? " · sample data" : run.options.mode === "keyless" ? " · public sources, no keys" : ""}`,
@@ -921,10 +990,11 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     };
 }
 
+/** The newest run that produced a summary: completed, or stopped part-way. */
 export function latestCompleted(runs: RunRecord[]): RunRecord | null {
     return (
         [...runs]
-            .filter(r => r.status === "completed")
+            .filter(r => (r.status === "completed" || r.status === "stopped") && r.summary)
             .sort((a, b) => (b.completedAt?.getTime() ?? 0) - (a.completedAt?.getTime() ?? 0))[0] ??
         null
     );

@@ -4,28 +4,18 @@ import { Suspense, useEffect, useState } from "react";
 
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { Toaster } from "~/components/ui/sonner";
-import { GrowthShell } from "~/app/employer/tools/growth/_components/GrowthShell";
-import { AccountsScreen } from "~/app/employer/tools/growth/brand/_screens/AccountsScreen";
-import { CalendarScreen } from "~/app/employer/tools/growth/brand/_screens/CalendarScreen";
+import { GrowthLanding } from "~/app/employer/tools/growth/_screens/GrowthLanding";
+import { BrandWorkspace } from "~/app/employer/tools/growth/brand/_screens/BrandWorkspace";
 import { CampaignsScreen } from "~/app/employer/tools/growth/brand/_screens/CampaignsScreen";
-import { ComposeScreen } from "~/app/employer/tools/growth/brand/_screens/ComposeScreen";
-import { OverviewScreen } from "~/app/employer/tools/growth/brand/_screens/OverviewScreen";
 import { ProspectsProvider } from "~/app/employer/tools/growth/prospects/_lib/context";
-import { CompaniesScreen } from "~/app/employer/tools/growth/prospects/_screens/CompaniesScreen";
-import { CompanyScreen } from "~/app/employer/tools/growth/prospects/_screens/CompanyScreen";
-import { DealsScreen } from "~/app/employer/tools/growth/prospects/_screens/DealsScreen";
-import { HomeScreen } from "~/app/employer/tools/growth/prospects/_screens/HomeScreen";
-import { PeopleScreen } from "~/app/employer/tools/growth/prospects/_screens/PeopleScreen";
-import { RunsScreen } from "~/app/employer/tools/growth/prospects/_screens/RunsScreen";
-import { SegmentScreen } from "~/app/employer/tools/growth/prospects/_screens/SegmentScreen";
-import { SourcesScreen } from "~/app/employer/tools/growth/prospects/_screens/SourcesScreen";
+import { ProspectsWorkspace } from "~/app/employer/tools/growth/prospects/_screens/ProspectsWorkspace";
 
 import { resetSimulator, simulate } from "./simulator";
 
 /**
- * Mounts the real Growth screens with `/api/prospects/*` and `/api/brand/*`
+ * Mounts the real Growth pages with `/api/prospects/*` and `/api/brand/*`
  * answered by the in-memory simulator. Installed at module scope so the
- * first fetch the shell makes is already intercepted. `?reset=1` clears it.
+ * first fetch a page makes is already intercepted. `?reset=1` clears it.
  */
 let stubbed = false;
 function stubApi() {
@@ -42,59 +32,19 @@ function stubApi() {
 
 stubApi();
 
-function BrandScreen({ slug }: { slug: string[] }) {
-    switch (slug[0]) {
-        case undefined:
-            return <OverviewScreen />;
-        case "compose":
-            return <ComposeScreen />;
-        case "calendar":
-            return <CalendarScreen />;
-        case "campaigns":
-            return <CampaignsScreen />;
-        case "accounts":
-            return <AccountsScreen />;
-        default:
-            return <Missing slug={["brand", ...slug]} />;
-    }
-}
-
-function ProspectsScreen({ slug }: { slug: string[] }) {
-    const [head, second] = slug;
-    switch (head) {
-        case undefined:
-            return <HomeScreen />;
-        case "companies":
-            return second ? (
-                <CompanyScreen id={second} />
-            ) : (
-                <Suspense fallback={null}>
-                    <CompaniesScreen />
-                </Suspense>
-            );
-        case "people":
-            return <PeopleScreen />;
-        case "deals":
-            return <DealsScreen />;
-        case "runs":
-            return <RunsScreen />;
-        case "segment":
-            return <SegmentScreen />;
-        case "sources":
-            return <SourcesScreen />;
-        default:
-            return <Missing slug={["prospects", ...slug]} />;
-    }
-}
-
 function Missing({ slug }: { slug: string[] }) {
-    return <p className="text-ink-2 text-sm">No such screen in the harness: /{slug.join("/")}</p>;
+    return <p className="text-ink-2 p-6 text-sm">No such page in the harness: /{slug.join("/")}</p>;
 }
 
 function Screen({ slug }: { slug: string[] }) {
     const [area, ...rest] = slug;
-    if (area === undefined || area === "brand") return <BrandScreen slug={rest} />;
-    if (area === "prospects") return <ProspectsScreen slug={rest} />;
+    if (area === undefined) return <GrowthLanding />;
+    if (area === "brand") {
+        if (rest.length === 0) return <BrandWorkspace />;
+        if (rest[0] === "campaigns") return <CampaignsScreen />;
+        return <Missing slug={slug} />;
+    }
+    if (area === "prospects" && rest.length === 0) return <ProspectsWorkspace />;
     return <Missing slug={slug} />;
 }
 
@@ -109,14 +59,14 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
         <div data-preview="growth" className="flex min-h-dvh flex-col">
             <div className="bg-warn-soft text-warn border-warn/40 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data. Find companies runs a simulated
-                20-second run; Brand posts publish in memory. Add{" "}
-                <span className="font-mono">?reset=1</span> to start over.
+                20-second run; Brand posts publish in memory; a credential ending in “-bad” is
+                refused. Add <span className="font-mono">?reset=1</span> to start over.
             </div>
             <ToolsStudioShell>
                 <ProspectsProvider basePath="/dev/growth/prospects">
-                    <GrowthShell>
+                    <Suspense fallback={null}>
                         <Screen slug={slug} />
-                    </GrowthShell>
+                    </Suspense>
                 </ProspectsProvider>
             </ToolsStudioShell>
             <Toaster richColors position="top-right" />

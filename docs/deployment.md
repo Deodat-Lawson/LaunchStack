@@ -112,15 +112,24 @@ Kubernetes) alongside managed PostgreSQL with pgvector:
 3. Set the environment variables in the [summary table](#environment-variables-summary).
 4. **Deploy the worker image too.** The web app only accepts commands; without a
    worker, uploads are stored but never processed (ADR-003).
-5. Register the **worker's** public `/api/inngest` URL in Inngest Cloud — the
-   Next.js app no longer serves an Inngest endpoint.
+5. Run an Inngest server for the background verticals (Prospects runs, the
+   Brand scheduler, trend search, connector syncs). The lean Compose overlay
+   ships a self-hosted one (`inngest start`, service `inngest`) that syncs
+   the worker's `/api/inngest` over the private network; set
+   `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY` and `INNGEST_BASE_URL`
+   (`http://inngest:8288` in Compose) on both app and worker. Inngest Cloud
+   works too: register the **worker's** public `/api/inngest` URL there and
+   leave `INNGEST_BASE_URL` unset. The Next.js app serves no Inngest endpoint.
 
 `apps/landing` is a separate app and has no deploy pipeline in this repo; it is
 not part of a self-hosted deployment.
 
 Optional integrations:
 
-- Inngest Cloud for background jobs (required in production)
+- An Inngest server for background jobs: self-hosted (bundled in the lean
+  Compose overlay) or Inngest Cloud. Without one, ingestion still works but
+  Prospects runs, the Brand scheduler and the other background verticals do
+  not.
 - LangSmith for LLM tracing
 - Compute services (`services/transcription`, `services/adeu-ai-docs-editing`,
   `services/document-converter`) deployed separately to Fly.io / Railway /

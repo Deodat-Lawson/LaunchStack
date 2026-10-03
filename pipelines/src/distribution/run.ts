@@ -49,7 +49,7 @@ import type {
     Territory,
 } from "./types";
 
-export type DistributionStage = Exclude<RunStatus, "queued" | "completed" | "failed">;
+export type DistributionStage = Exclude<RunStatus, "queued" | "completed" | "failed" | "stopped">;
 
 const STAGE_LABELS: Record<DistributionStage, string> = {
     profiling: "Reading the seller profile",
@@ -63,6 +63,32 @@ const STAGE_LABELS: Record<DistributionStage, string> = {
 };
 
 const LOG_PREFIX = "[distribution]";
+
+/** A run-scoped logger: every line carries the run and the tenant. */
+export interface RunLogger {
+    info(message: string, fields?: Record<string, unknown>): void;
+    warn(message: string, fields?: Record<string, unknown>): void;
+    error(message: string, fields?: Record<string, unknown>): void;
+}
+
+function consoleRunLogger(runId: string, companyId: bigint): RunLogger {
+    const prefix = `${LOG_PREFIX} run=${runId} company=${companyId.toString()}`;
+    const line = (message: string, fields?: Record<string, unknown>) =>
+        fields ? `${prefix} ${message} ${JSON.stringify(fields)}` : `${prefix} ${message}`;
+    return {
+        info: (m, f) => console.info(line(m, f)),
+        warn: (m, f) => console.warn(line(m, f)),
+        error: (m, f) => console.error(line(m, f)),
+    };
+}
+
+function loggerOf(ctx: RunContext): RunLogger {
+    return ctx.logger ?? consoleRunLogger(ctx.runId, ctx.companyId);
+}
+
+function errorFields(error: unknown): Record<string, unknown> {
+    return { error: error instanceof Error ? error.message : String(error) };
+}
 
 export interface PublishDossierInput {
     title: string;
@@ -130,6 +156,8 @@ export interface RunContext {
     programId: string;
     onProgress?: (event: PipelineProgressEvent<DistributionStage>) => void;
     signal?: AbortSignal;
+    /** Host-provided structured logger; console with a run prefix otherwise. */
+    logger?: RunLogger;
 }
 
 function stageRunner(ctx: RunContext) {
@@ -144,9 +172,17 @@ function stageRunner(ctx: RunContext) {
             label: STAGE_LABELS[options.id],
             onProgress: ctx.onProgress,
             signal: ctx.signal,
-            logPrefix: LOG_PREFIX,
+            logPrefix: `${LOG_PREFIX} run=${ctx.runId}`,
         });
     };
+}
+
+/** Whether someone asked this run to stop. Read fresh each time; never cached. */
+export async function stopRequested(
+    ctx: Pick<RunContext, "runId" | "companyId">
+): Promise<boolean> {
+    const run = await db.getRun(ctx.runId, ctx.companyId);
+    return run?.cancelRequestedAt !== null && run?.cancelRequestedAt !== undefined;
 }
 
 async function setStatus(
@@ -199,7 +235,7 @@ export async function prepareRun(
         : program.targetTerritories;
     const partnerKinds = options.partnerKinds?.length ? options.partnerKinds : program.partnerKinds;
 
-    await setStatus(ctx, "profiling", { startedAt: new Date() });
+    await setStatus(ctx, "profiling", { startedAt: new Date(), heartbeatAt: new Date() });
 
     // 1. profile
     const identity = await stage({
@@ -220,7 +256,7 @@ export async function prepareRun(
         fallback: {
             value: "",
             detail: "knowledge base unavailable",
-            logMessage: `${LOG_PREFIX} knowledge context failed`,
+            logMessage: `${LOG_PREFIX} run=${ctx.runId} knowledge context failed`,
         },
         report: value => ({
             detail: value ? `${value.length} chars of context` : "empty knowledge base",
@@ -259,10 +295,10 @@ export async function prepareRun(
             detail: `${value.plan.queries.length} queries, ${value.plan.adjacentBrands.length} adjacent brands`,
         }),
     });
-    await db.updateRun(ctx.runId, ctx.companyId, { plan });
+    await db.updateRun(ctx.runId, ctx.companyId, { plan, heartbeatAt: new Date() });
 
     // 3. gather
-    await setStatus(ctx, "gathering");
+    await setStatus(ctx, "gathering", { heartbeatAt: new Date() });
     const gatherPorts: GatherPorts = {
         searchWeb: ports.searchWeb
             ? queries =>
@@ -312,7 +348,7 @@ export async function prepareRun(
     }
 
     // 4. resolve
-    await setStatus(ctx, "resolving");
+    await setStatus(ctx, "resolving", { heartbeatAt: new Date() });
     const resolvedResult = await stage({
         id: "resolving",
         policy: "required",
@@ -399,7 +435,9 @@ export async function prepareRun(
 
     await db.updateRun(ctx.runId, ctx.companyId, {
         candidateOrgIds: resolvedResult.candidateIds,
+        shortlistedCount: resolvedResult.candidateIds.length,
         status: "enriching",
+        heartbeatAt: new Date(),
     });
     return {
         candidateRelationshipIds: resolvedResult.candidateIds,
@@ -416,7 +454,8 @@ export async function prepareRun(
 
 export interface EnrichCandidateResult {
     relationshipId: string;
-    status: "ok" | "budget_exhausted" | "gate_failed";
+    /** `cancelled`: the run was asked to stop before this candidate started. */
+    status: "ok" | "budget_exhausted" | "gate_failed" | "cancelled";
     fitScore: number;
     evidenceCount: number;
     flagged: boolean;
@@ -426,11 +465,31 @@ export interface EnrichCandidateResult {
     creditsDebited: number;
 }
 
+const EMPTY_USAGE: ChatTokenUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
+
 export async function enrichCandidate(
     ctx: RunContext,
     ports: DistributionPorts,
     args: { relationshipId: string; profile: SellerProfile; seedUrls?: string[] }
 ): Promise<EnrichCandidateResult> {
+    const log = loggerOf(ctx);
+    // The stop check lives here, not only in the in-process loop, so a durable
+    // host that runs one step per candidate honours it too.
+    if (await stopRequested(ctx)) {
+        log.info("stop requested; skipping candidate", { relationshipId: args.relationshipId });
+        return {
+            relationshipId: args.relationshipId,
+            status: "cancelled",
+            fitScore: 0,
+            evidenceCount: 0,
+            flagged: false,
+            screened: false,
+            published: false,
+            usage: EMPTY_USAGE,
+            creditsDebited: 0,
+        };
+    }
+    await db.touchRunHeartbeat(ctx.runId, ctx.companyId);
     const relationship = await db.getRelationship(args.relationshipId, ctx.companyId);
     if (!relationship) throw new Error("Relationship not found");
     const [program, org] = await Promise.all([
@@ -508,7 +567,7 @@ export async function enrichCandidate(
                 flags: result.flags,
             };
         } catch (error) {
-            console.warn(`${LOG_PREFIX} screening failed for ${org.name}:`, error);
+            log.warn("screening failed", { org: org.name, ...errorFields(error) });
             screening = { status: "not_run" };
         }
     }
@@ -556,7 +615,7 @@ export async function enrichCandidate(
             );
             if (written.trim()) rationale = written.trim();
         } catch (error) {
-            console.warn(`${LOG_PREFIX} rationale failed for ${org.name}:`, error);
+            log.warn("rationale failed", { org: org.name, ...errorFields(error) });
         }
     }
 
@@ -624,7 +683,7 @@ export async function enrichCandidate(
             });
             published = true;
         } catch (error) {
-            console.warn(`${LOG_PREFIX} publish failed for ${org.name}:`, error);
+            log.warn("publish failed", { org: org.name, ...errorFields(error) });
         }
     }
 
@@ -640,9 +699,17 @@ export async function enrichCandidate(
             await db.addRunCredits(ctx.runId, ctx.companyId, ports.creditsPerCandidate);
             creditsDebited = ports.creditsPerCandidate;
         } catch (error) {
-            console.warn(`${LOG_PREFIX} credit debit failed:`, error);
+            log.warn("credit debit failed", { org: org.name, ...errorFields(error) });
         }
     }
+
+    await db.incrementRunEnriched(ctx.runId, ctx.companyId);
+    log.info("candidate researched", {
+        org: org.name,
+        status: agentResult.outcome.status,
+        fit: breakdown.total,
+        evidence: evidence.length,
+    });
 
     return {
         relationshipId: relationship.id,
@@ -668,6 +735,7 @@ export async function finalizeRun(
     enriched: EnrichCandidateResult[],
     startedAt: Date
 ): Promise<RunSummary> {
+    const stopped = enriched.some(e => e.status === "cancelled") || (await stopRequested(ctx));
     const tokens = enriched.reduce(
         (acc, e) => ({
             input: acc.input + (e.usage.inputTokens ?? 0),
@@ -691,14 +759,22 @@ export async function finalizeRun(
         degraded:
             prepared.sources.some(s => s.status === "degraded" || s.status === "failed") ||
             prepared.warnings.length > 0,
-        warnings: prepared.warnings,
+        warnings: stopped
+            ? [...prepared.warnings, "Stopped before every shortlisted company was researched."]
+            : prepared.warnings,
         tokens,
         wallMs: Date.now() - startedAt.getTime(),
     };
     await db.updateRun(ctx.runId, ctx.companyId, {
-        status: "completed",
+        status: stopped ? "stopped" : "completed",
         summary,
         errorMessage: null,
+    });
+    loggerOf(ctx).info(stopped ? "run stopped" : "run completed", {
+        shortlisted: summary.shortlisted,
+        enriched: summary.enriched,
+        published: summary.published,
+        wallMs: summary.wallMs,
     });
     return summary;
 }
@@ -722,9 +798,12 @@ export async function runDistributionPipeline(
         const enriched: EnrichCandidateResult[] = [];
         for (const relationshipId of prepared.candidateRelationshipIds) {
             if (ctx.signal?.aborted) break;
-            enriched.push(
-                await enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile })
-            );
+            const result = await enrichCandidate(ctx, ports, {
+                relationshipId,
+                profile: prepared.profile,
+            });
+            enriched.push(result);
+            if (result.status === "cancelled") break;
         }
         return await finalizeRun(ctx, prepared, enriched, startedAt);
     } catch (error) {

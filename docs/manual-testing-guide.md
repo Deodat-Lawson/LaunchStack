@@ -195,171 +195,169 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 ---
 
-### 3.10 Growth › Brand (`/employer/tools/growth/brand`)
+### 3.10 Growth (`/employer/tools/growth`)
 
-Growth is one app for the two halves of growing a company: **Brand** (make it
-known) and **Prospects** (find the companies that will buy). One rail, two
-groups; `/employer/tools/growth` opens on Brand. Reachable from the Studio
+Growth is two tool pages behind one front door: **Brand** (make the company
+known) and **Prospects** (find the companies that will buy). Each page is
+laid out like every other tool: the shell's back bar, a header with the
+tool's icon, name, one line and its actions, then the workspace. There is no
+rail and there are no tabs; a company, the runs, the segment, the composer
+and the accounts open as side panels over the workspace, and everything a
+panel or a filter shows is spelled in the URL. Reachable from the Studio
 drawer (Tools → Growth), the ⌘K palette (Growth, Brand, Prospects), the
 onboarding tiles, and `?feature=growth|brand|prospects|marketing|distribution`
 on the workspace. The old routes `/employer/tools/marketing-pipeline`,
-`/employer/tools/distribution` and `/employer/tools/prospects/*` redirect in.
+`/employer/tools/distribution`, `/employer/tools/prospects/*` and the former
+sub-pages (`/growth/brand/compose|calendar|accounts`,
+`/growth/prospects/companies|people|deals|runs|segment|sources`) redirect
+into the right page with the right panel or view open.
 
-Brand is the marketing tool reframed around running a presence, the way
-Hootsuite does: compose once, schedule or publish, see the calendar, know
-which accounts are connected. Posts are one row per network in
-`brand_posts`; the worker's `brand-publish-due` cron (every minute) claims
-due rows with one conditional update and publishes them through the existing
-adapters (LinkedIn, X, Bluesky, Reddit). Without a worker (dev), the web app
-runs the same claim after answering a calendar request that shows something
-due, so scheduling works with no infrastructure.
+1. `/employer/tools/growth` is a page of its own: a card per side with the
+   week's numbers (posts coming up and overdue, posts out, networks
+   connected; companies, deals, things to do) and the two things to do next.
+   The back bar above it says Studio; on Brand and Prospects it says Growth.
+2. **Harness**: `/dev/growth`, `/dev/growth/brand`, `/dev/growth/brand/campaigns`
+   and `/dev/growth/prospects` mount the real pages over the in-memory
+   simulator (`?reset=1` starts over). Brand posts publish in memory; a
+   credential ending in `-bad` is refused by the fake network; Find
+   companies runs a simulated 20-second run.
 
-**Accounts** are the deployment's credentials today (`LINKEDIN_ACCESS_TOKEN`,
+### 3.11 Growth › Brand (`/employer/tools/growth/brand`)
+
+Brand is the marketing tool reframed around running a presence: compose
+once, schedule or publish, see the week, know which accounts post. Posts are
+one row per network in `brand_posts`; the worker's `brand-publish-due` cron
+(every minute) claims due rows with one conditional update and publishes
+them through the adapters (LinkedIn, X, Bluesky, Reddit). The web app never
+publishes on a timer any more: a transient failure (429, 5xx, a timeout)
+puts the row back to `scheduled` with a retry time (1, 5, 15 then 60
+minutes, five attempts in all) and the calendar shows "Retrying"; a refused
+credential or the last attempt marks it failed with the reason.
+
+**Accounts** are per workspace: a member with `connectors.manage` enters a
+network's credential once, it is verified against the network, stored
+sealed in `brand_accounts`, and only its presence and identity are ever
+shown. A workspace with no account of its own falls back to the
+deployment's environment tokens (`LINKEDIN_ACCESS_TOKEN`,
 `TWITTER_BEARER_TOKEN`, `BLUESKY_HANDLE` + `BLUESKY_APP_PASSWORD`,
-`REDDIT_CLIENT_ID/SECRET/USER_AGENT`); a fresh dev setup has none connected,
-and a post to an unconnected network fails with the network's error and stays
-on the calendar as failed. Per-workspace sign-in is the next phase.
+`REDDIT_CLIENT_ID/SECRET/USER_AGENT`), which the Accounts panel labels
+"deployment-wide". A workspace that has connected its own account never
+falls back. When a network refuses a stored credential the account is
+marked revoked, the panel says "Needs reconnecting" with the network's
+words, and posts to it fail until it is reconnected.
 
-1. Open Growth: the rail shows Brand (Overview, Compose, Calendar, Campaigns,
-   Accounts) above Prospects with its segment switcher; Overview says how
-   many networks are connected and lists what is coming up and what went out.
+1. Header: Networks pill ("2 of 4 connected", "reconnect" in warn when one
+   is revoked) opens the Accounts panel; "Generate a campaign" opens the
+   generator page; "Compose" (or `c`) opens the composer panel.
 2. Compose: type a post, tick LinkedIn and X, watch the counters; over 280
-   characters the X row and preview turn red and the primary button disables.
-   Choose "Schedule for" (defaults to the next quarter hour), Schedule → the
-   calendar opens on this week with one block per network.
-3. Calendar: click a block → the popover shows the text, the due time and the
-   actions. Move it, cancel it (stays, struck through), delete a draft. When
-   a scheduled time passes, the row reads "Due" and the header offers
-   "Publish overdue now"; within a minute the due-check (or the worker) tries
-   it, and with no credentials it lands as failed with the reason.
-4. Compose → "Publish now" to Bluesky with credentials configured: the post
-   goes out and the row shows "Published" with an Open link.
-5. Campaigns: the generator, embedded; "Schedule…" beside "Publish" hands the
-   edited post to Compose with the network preselected.
-6. Accounts: each network's status, limit, cost note and what connecting
-   takes. No credential is ever shown.
-7. Harness: `/dev/growth` mounts every screen over the in-memory simulator
-   (Brand endpoints included: a published post, a scheduled pair, a failed
-   one, a draft; scheduling and publishing work in memory). `?reset=1` starts
-   over.
+   characters the X row and preview turn red and the primary button
+   disables. Not-connected and revoked networks say so in the checklist.
+   Choose "Schedule for" (defaults to the next quarter hour), Schedule →
+   the panel closes, the week shows one block per network.
+3. Week: previous and next week, "This week" when away, `?week=YYYY-MM-DD`
+   in the URL. Click a block → the popover shows the text, the due time and
+   the actions: move, publish now, cancel (stays, struck through), delete a
+   draft, open where it went. When a scheduled time passes, the block reads
+   "Due" and the toolbar offers "Publish overdue now"; within a minute the
+   worker tries it. With no credential it lands as failed with the reason;
+   with a network error it reads "Retrying · attempt 1 · next at HH:MM".
+4. Lists under the week: Coming up (failed count in danger), Drafts, Went
+   out (last 7 days).
+5. Accounts panel: each network's status, identity, limit, cost note and
+   what connecting takes; the connect form asks for the fields the network
+   needs (secrets as password fields), verifies them and shows the
+   network's refusal inline; Disconnect (with a confirm) only for the
+   workspace's own accounts.
+6. Campaigns (`/growth/brand/campaigns`): the generator, embedded under the
+   same header; "Schedule…" beside "Publish" hands the edited post to the
+   composer with the network preselected.
 
-### 3.11 Growth › Prospects (`/employer/tools/growth/prospects`)
+### 3.12 Growth › Prospects (`/employer/tools/growth/prospects`)
 
 Prospects is the reframe of Distribution: find the companies that would buy
 what the workspace sells, profile them with cited evidence, find the people,
-run the deal. It is the second group in the Growth rail (Tools → Growth in the Studio, the
-⌘K palette's Prospects link, `/employer/documents?feature=prospects`, the
-onboarding tile); `/employer/tools/prospects/*` redirects here. The rail's
-"Back to Studio" returns to the workspace.
+run the deal. One page: the segment switcher, the run pill and "Find
+companies" in the header; a "To do" column with the funnel and each
+source's yield beside the list; the list itself in three views (Companies,
+People, Deals) with filters, search, sort and "Show more" paging; a company
+as a side panel with previous and next.
 
-**In the app** the `/api/prospects/*` routes are an adapter over today's
+**In the app** the `/api/prospects/*` routes are an adapter over the
 Distribution data: a segment is a program, a company is a discovered
 organisation, a deal is its relationship, people are the public mailboxes in
-the dossier. Until the pipeline reframe lands: the segment's buyer type comes
-from the program's partner kinds, sources are what the gather stage has, and
-their switches are locked.
+the dossier. Every list is a query: the page, the count and the five view
+counts come from the database, so a workspace with thousands of companies
+costs the same per screen as one with ten. The old `/api/distribution/*`
+routes are gone.
 
-**Run modes.** Find companies picks the mode from the environment:
+**Run modes.** Find companies picks the mode from the environment, and every
+mode but sample runs on the worker (ADR-003):
 
 - **Keyless** (no model or search key configured, which is every fresh dev
-  setup): OpenStreetMap (Photon category search plus the OSM API, then
-  Overpass, then Nominatim by native-language names) and the Y Combinator
-  directory find organisations with a website in each territory; each site is read by the page profiler
-  (home plus about/contact/careers pages) which records what the pages
-  literally say as evidence — description, headcount, roles, countries,
-  certifications, public mailboxes — and assembles the dossier. It runs in
-  the web process after the response and updates the run row per stage;
-  while it profiles, the run sheet and the rail read "profiling 12 of 25"
-  from the companies stamped so far. Expect 30 s to 4 min depending on how
-  many sites answer. Nothing is paid for. The Runs header says when this is
-  the mode in use.
-- **Live** (a model key plus Exa, Serper or Foursquare): queued to the
-  worker; the research agent profiles each company. Needs credits.
-- **Sample** (the switch on Runs): deterministic fixtures, inline, seconds.
+  setup): OpenStreetMap (Photon, then Overpass with a pause between areas,
+  then Nominatim) and the Y Combinator directory find organisations with a
+  website in each territory; each site is read by the page profiler, which
+  records what the pages literally say as evidence and assembles the
+  dossier. Expect 30 s to 4 min. Nothing is paid for. The Runs panel says
+  when this is the mode in use. **Needs the worker running** (`pnpm
+  --filter @launchstack/worker dev` and the Inngest dev server).
+- **Live** (a model key plus Exa, Serper or Foursquare): the research agent
+  profiles each company. Needs credits.
+- **Sample** (the switch in the Runs panel, or "Run once with sample data"
+  under the Find companies chevron): deterministic fixtures, inline,
+  seconds, no worker needed.
+
+One run per segment at a time: a second "Find companies" while one is in
+flight is refused ("A run is already in progress for this segment"). "Stop"
+asks the worker to finish the company it is on and stop; the run ends as
+"Stopped" with what it found. Progress ("12 of 25 profiled") is written by
+the worker as it goes and read every three seconds.
 
 Profiles are published into Sources only when `FILE_ACCESS_TOKEN_SECRET` is
 set (the ingestion pipeline needs it); without it every row is kept and the
-document is skipped, with one warning in the server log.
+document is skipped, with one warning in the worker's log.
 
-The run's `caps` line and the Sources yield labels say which mode produced
-it ("OpenStreetMap" and "Public directories (YC)" for keyless; "Sample …" for
-fixtures). Segments that name concrete, physical buyer types (cafés,
-roasters, bakeries, warehouses, clinics) get the most from OpenStreetMap;
-abstract software categories mostly reach the YC directory.
-
-1. Open Prospects with no program: the rail says "No segment"; New segment
-   (segment switcher → New segment) asks for a name, what you sell,
+1. Open Prospects with no program: the empty state says to create a segment;
+   the segment switcher → New segment asks for a name, what you sell,
    industries and two-letter countries and creates the program.
-2. Runs → switch on **Sample data** → Find companies. The run completes
-   inline; the sheet shows Sources (web ok, trade ok, places skipped),
-   Shortlist, Profiles n of n, People skipped ("arrives with people lookup").
-   Companies fills with the fixture organisations; each opens to a cited
-   profile (dossier facts with superscripts to the evidence list).
-3. Stage rules are the Distribution ones in plain words: Contacted needs an
-   owner ("Take it"), Meeting needs a next step, Won needs an agreement
-   recorded in Distribution; Proposal is disabled ("Not a stage in this
-   workspace yet").
-4. Add to outreach (Companies bulk bar, or a company page's "Draft to the
-   public inbox") drafts a campaign in Email and logs a note on the deal.
-5. Exclude adds the domain to the program's exclusion list and parks the
-   deal as Not a fit; the Excluded view lists it; Include again reverses.
-6. Live runs need the same keys and credits as Distribution and are queued
-   to the worker; the Runs table and the rail indicator poll until done.
-
-**Preview harness** `/dev/growth/prospects` (add `?reset=1` to start over) mounts
-the same screens over an in-memory simulator with a richer fixture world.
-Everything below can be exercised there without a login, a key or a credit.
-The rail shows the segment "Fulfilment operators · EU", the views with
-counts, and the segment switcher (the second segment is a draft).
-
-1. **Home**: the serif headline names the segment. "To do" lists new high-fit
-   companies, next steps due today and stale deals; each button lands on the
-   right view. The funnel is one row; "Where companies come from" shows each
-   source's yield and how many of its companies are in a deal.
-2. **Companies**: views (All / New / High fit / Not contacted / Excluded) live
-   in the URL. Type `/` to search, `j` `k` to move, `x` to select, `Enter` to
-   open, `o` to add to outreach. Select three rows: the bulk bar floats up
-   with Add to outreach / Move to Qualified / Exclude. "Move to Qualified"
-   refuses companies that cannot move and says so in a toast.
-3. **Company page** (open Delta Logistics): every sentence in About and Why
-   they fit carries a superscript; hover shows the page and quote, click
-   scrolls to the numbered evidence row and flashes it. The stage control
-   lists every stage; illegal moves are disabled with the reason ("Needs an
-   owner", "Needs a next step"). Open Nordlager Fulfilment: it is a lead with
-   no owner — the menu refuses Contacted until you click "Take it". Set a
-   next step inline, then Meeting is allowed. `↑` `↓` move between companies
-   in the list's order.
-4. **Add people to outreach**: the dialog preselects Verified and Found emails,
-   disables Guess and Generic with the reason, and toasts "Campaign drafted in
-   Email". On an excluded company (Excluded view → Globex Logistics) the
-   button is disabled and the people rows say why.
-5. **Find companies** (any screen): a sheet opens with the run's steps. Sources
-   finish one by one over ~8 s with "41 found · 9 new"; Google Maps shows
-   cities; OpenStreetMap and Trustpilot are skipped as off, Glassdoor as "no
-   key". Then Shortlist, Profiles n of 25, People. "Run in background" closes
-   the sheet; the rail keeps a "Finding companies · 4 of 7 done" indicator
-   that reopens it. At ~19 s the run completes and five new companies appear
-   in Companies (view New) and on Home. "Stop" ends a run early and keeps
-   what was found.
-6. **Runs**: the finished run is a row; expanding it shows the yield table per
-   source with status words (ok / off / no key / rate limited).
-7. **People**: filter by email status; only Verified and Found rows can be
-   selected; Add to outreach reports how many were skipped and why.
-8. **Deals**: board by stage (leads stay in Companies). A stale deal has a thin
-   warn rule on the left and says how long it has been quiet. The card's
-   stage menu enforces the same rules as the company page.
-9. **Segment**: every field shows where it came from. Edit a chip list, save:
-   the segment becomes a draft and "Find companies" refuses until you Confirm.
-   Re-derive updates the date.
-10. **Sources**: switches per platform; Glassdoor is disabled with "Needs
-    SERPER_API_KEY". Turn OpenStreetMap on and start a run: it now appears in
-    the step list. The rail's Sources count follows the switches.
-11. **Themes**: the harness follows `data-theme` on `<html>`; check both.
+2. Find companies chevron → "Run once with sample data". The Runs panel
+   opens with the run's steps and completes inline; Companies fills with
+   the fixture organisations, the To do column lists the new ones, the
+   funnel and the yield fill in.
+3. Companies: filters (All / New / High fit / Not contacted / Excluded)
+   with server counts, `/` to search, sort by fit, activity or name, "Show
+   more" at fifty rows. `j` `k` move, `x` selects, `Enter` opens, `o` adds
+   to outreach. Select three rows: the bulk bar floats up with Add to
+   outreach / Move to Qualified / Exclude.
+4. Company panel: every sentence in About and Why they fit carries a
+   superscript; hover shows the page and quote, click scrolls to the
+   evidence row. The stage control lists every stage; illegal moves are
+   disabled with the reason, in production's words ("Needs an owner",
+   "Move to Contacted first", "Needs an agreement recorded in Distribution",
+   "Not a stage in this workspace yet" for Proposal). `↑` `↓` move through
+   the list behind the panel; `?company=<id>` deep-links to it.
+5. Add people to outreach drafts a campaign in Email and logs a note on the
+   deal; a company already drafted today is skipped with that reason.
+6. Exclude adds the domain to the segment's exclusion list and parks the
+   deal as Not a fit; the Excluded filter lists it; Include again reverses.
+7. People: found and shared-inbox mailboxes, searchable and paged; only
+   found mailboxes can be selected for outreach.
+8. Deals: the board by stage (leads stay in Companies); a quiet deal has a
+   thin warn rule and says how long; the card's stage menu enforces the
+   same rules as the panel.
+9. Segment panel: every field shows where it came from; editing makes the
+   segment a draft until it is confirmed; the sources for the next run are
+   listed under the fields with their last yield.
+10. Runs panel: the run in flight with its steps, progress bar and Stop; the
+    sample-data switch; earlier runs, each expanding to its yield per source.
+11. Themes: the harness follows `data-theme` on `<html>`; check both.
 
 Design rules for the surface are in
-`apps/web/src/app/employer/tools/prospects/DESIGN.md`. The simulator's rules
-are covered by `apps/web/__tests__/prospects/simulator.test.ts`; the adapter's
-stage mapping, reasons and run steps by `adapter.test.ts`.
+`apps/web/src/app/employer/tools/growth/DESIGN.md`. Routes are covered by
+`apps/web/__tests__/api/prospects/routes.test.ts`, the simulator's rules
+(which are production's) by `__tests__/prospects/simulator.test.ts`, the
+adapter's stage mapping, reasons and run steps by `adapter.test.ts`, and the
+scheduler's claim and retries by `__tests__/api/brand/posts.integration.test.ts`.
 
 ## 4. Members and viewers (Everyone shares one document screen; what differs is what their role permits)
 

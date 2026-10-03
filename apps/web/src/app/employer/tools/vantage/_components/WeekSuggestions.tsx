@@ -45,8 +45,10 @@ export function WeekSuggestions({
     meetingWeek?: { start: string; end: string };
     /** Open the decision dialog: a next step without an owner, or a different decision. */
     onDecide: (topic: TopicDto) => void;
-    onLogEvidence: () => void;
-    onRecordNumbers: () => void;
+    /** For the "log a conversation" nudge; screens without that group leave it out. */
+    onLogEvidence?: () => void;
+    /** For the "record this week's numbers" nudge. */
+    onRecordNumbers?: () => void;
     onOpenTopic?: (topic: TopicDto) => void;
     className?: string;
 }) {
@@ -110,8 +112,8 @@ function Suggestion({
     s: WeekSuggestion;
     act: (id: string, work: () => Promise<Outcome>) => Promise<void>;
     onDecide: (topic: TopicDto) => void;
-    onLogEvidence: () => void;
-    onRecordNumbers: () => void;
+    onLogEvidence?: () => void;
+    onRecordNumbers?: () => void;
     onOpenTopic?: (topic: TopicDto) => void;
 }) {
     switch (s.kind) {
@@ -184,7 +186,7 @@ function Suggestion({
                     title={<>No numbers yet this week for {listed}.</>}
                     actions={
                         <>
-                            <Button size="sm" onClick={onRecordNumbers}>
+                            <Button size="sm" onClick={() => onRecordNumbers?.()}>
                                 Enter numbers
                             </Button>
                             <Button
@@ -223,7 +225,7 @@ function Suggestion({
                     }
                     actions={
                         <>
-                            <Button size="sm" onClick={onLogEvidence}>
+                            <Button size="sm" onClick={() => onLogEvidence?.()}>
                                 Log a conversation
                             </Button>
                             <Button

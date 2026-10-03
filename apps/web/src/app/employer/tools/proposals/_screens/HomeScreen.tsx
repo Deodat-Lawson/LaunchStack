@@ -19,32 +19,62 @@ import { useProposals } from "../_lib/context";
 import { amountWords, closeWords, deadlineTone, deadlineWords } from "../_lib/words";
 import { proposalsApi, type ApplicationRow } from "../api";
 
-function ApplicationLine({ app, href }: { app: ApplicationRow; href: string }) {
+function ApplicationLine({
+    app,
+    href,
+    compact = false,
+}: {
+    app: ApplicationRow;
+    href: string;
+    /** In a half-width panel: deadline and status fold into the second line. */
+    compact?: boolean;
+}) {
     const tone = deadlineTone(app.daysLeft);
+    const deadline = deadlineWords(app.deadline, app.daysLeft);
     return (
         <Link
             href={href}
-            className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0 md:grid-cols-[minmax(0,1fr)_140px_120px_auto]"
+            className={cn(
+                "border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0",
+                !compact && "md:grid-cols-[minmax(0,1fr)_140px_120px_auto]"
+            )}
         >
             <span className="min-w-0">
                 <span className="text-ink block truncate text-sm font-medium">{app.title}</span>
                 <span className="text-ink-3 block truncate text-xs">
                     {app.funder ?? "Funder not set"}
+                    {compact && (
+                        <>
+                            {" · "}
+                            <span
+                                className={cn(
+                                    tone === "warn" && "text-warn",
+                                    tone === "lost" && "text-danger"
+                                )}
+                            >
+                                {deadline}
+                            </span>
+                        </>
+                    )}
                 </span>
             </span>
-            <span
-                className={cn(
-                    "hidden text-xs md:block",
-                    tone === "warn" && "text-warn",
-                    tone === "lost" && "text-danger",
-                    tone === "quiet" && "text-ink-3"
-                )}
-            >
-                {deadlineWords(app.deadline, app.daysLeft)}
-            </span>
-            <span className="hidden md:block">
-                <ApplicationStatusPill status={app.status} />
-            </span>
+            {!compact && (
+                <span
+                    className={cn(
+                        "hidden text-xs md:block",
+                        tone === "warn" && "text-warn",
+                        tone === "lost" && "text-danger",
+                        tone === "quiet" && "text-ink-3"
+                    )}
+                >
+                    {deadline}
+                </span>
+            )}
+            {!compact && (
+                <span className="hidden md:block">
+                    <ApplicationStatusPill status={app.status} />
+                </span>
+            )}
             <ReadinessMeter value={app.readiness} />
         </Link>
     );
@@ -185,6 +215,7 @@ export function HomeScreen() {
                                     key={app.id}
                                     app={app}
                                     href={href(`/write/${app.id}`)}
+                                    compact
                                 />
                             ))}
                         </div>

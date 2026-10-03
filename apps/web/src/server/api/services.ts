@@ -216,7 +216,7 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         scope: "workspace",
         feature: "@launchstack/pipelines/vantage",
         routes: ["vantage"],
-        notes: "The draft comes from the deployment's default chat model when one is configured and from deterministic rules otherwise; the agenda records which (model_metadata). Sharing is per topic, commitment and evidence item; triage and the weekly update read only shared rows. Program deadlines need settings.manage.",
+        notes: "The draft comes from the deployment's default chat model when one is configured and from deterministic rules otherwise; the agenda records which (model_metadata). Sharing is per topic, commitment and evidence item; triage and the weekly update read only shared rows. Triage and program deadlines need settings.manage.",
     },
     {
         id: "investors",

@@ -36,7 +36,7 @@ function ApplicationLine({
             href={href}
             className={cn(
                 "border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0",
-                !compact && "md:grid-cols-[minmax(0,1fr)_140px_120px_auto]"
+                !compact && "lg:grid-cols-[minmax(0,1fr)_140px_120px_auto]"
             )}
         >
             <span className="min-w-0">
@@ -61,7 +61,7 @@ function ApplicationLine({
             {!compact && (
                 <span
                     className={cn(
-                        "hidden text-xs md:block",
+                        "hidden text-xs lg:block",
                         tone === "warn" && "text-warn",
                         tone === "lost" && "text-danger",
                         tone === "quiet" && "text-ink-3"
@@ -71,7 +71,7 @@ function ApplicationLine({
                 </span>
             )}
             {!compact && (
-                <span className="hidden md:block">
+                <span className="hidden lg:block">
                     <ApplicationStatusPill status={app.status} />
                 </span>
             )}

@@ -69,7 +69,7 @@ function FunderItem({
     const amount = amountWords(f.amountMin, f.amountMax);
     return (
         <div className="border-line-2 border-t first:border-t-0">
-            <div className="grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 md:grid-cols-[20px_minmax(0,1fr)_120px_110px_auto]">
+            <div className="grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 lg:grid-cols-[20px_minmax(0,1fr)_120px_110px_auto]">
                 <button
                     type="button"
                     onClick={() => setOpen(o => !o)}
@@ -92,7 +92,7 @@ function FunderItem({
                 </span>
                 <span
                     className={cn(
-                        "hidden text-xs md:block",
+                        "hidden text-xs lg:block",
                         f.daysLeft !== null && f.daysLeft >= 0 && f.daysLeft <= 14
                             ? "text-warn"
                             : "text-ink-3"
@@ -100,7 +100,7 @@ function FunderItem({
                 >
                     {closeWords(f.closesOn, f.daysLeft)}
                 </span>
-                <span className="hidden md:block">
+                <span className="hidden lg:block">
                     <FitMeter value={f.fit} threshold={70} />
                 </span>
                 <span className="flex items-center gap-1.5">

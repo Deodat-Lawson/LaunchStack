@@ -100,7 +100,7 @@ export function ApplicationsScreen() {
                 />
             ) : (
                 <div className="border-line bg-panel overflow-hidden rounded-lg border">
-                    <div className="text-ink-3 border-line-2 hidden grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] gap-4 border-b px-4 py-2 text-xs md:grid">
+                    <div className="text-ink-3 border-line-2 hidden grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] gap-4 border-b px-4 py-2 text-xs lg:grid">
                         <span>Application</span>
                         <span>Deadline</span>
                         <span>Status</span>
@@ -113,7 +113,7 @@ export function ApplicationsScreen() {
                             <Link
                                 key={app.id}
                                 href={href(`/write/${app.id}`)}
-                                className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0 md:grid-cols-[minmax(0,1fr)_150px_120px_120px_100px]"
+                                className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0 lg:grid-cols-[minmax(0,1fr)_150px_120px_120px_100px]"
                             >
                                 <span className="min-w-0">
                                     <span className="text-ink block truncate text-sm font-medium">
@@ -126,7 +126,7 @@ export function ApplicationsScreen() {
                                 </span>
                                 <span
                                     className={cn(
-                                        "hidden text-xs md:block",
+                                        "hidden text-xs lg:block",
                                         tone === "warn" && "text-warn",
                                         tone === "lost" && "text-danger",
                                         tone === "quiet" && "text-ink-3"
@@ -136,10 +136,10 @@ export function ApplicationsScreen() {
                                         ? deadlineWords(app.deadline, app.daysLeft)
                                         : (app.deadline ?? "—")}
                                 </span>
-                                <span className="hidden md:block">
+                                <span className="hidden lg:block">
                                     <ApplicationStatusPill status={app.status} />
                                 </span>
-                                <span className="text-ink-2 hidden text-xs tabular-nums md:block">
+                                <span className="text-ink-2 hidden text-xs tabular-nums lg:block">
                                     {app.sections.total === 0
                                         ? "none yet"
                                         : `${app.sections.written} of ${app.sections.total} written`}

@@ -22,12 +22,14 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "better-auth/crypto";
 import { nextCookies } from "better-auth/next-js";
+import { lastLoginMethod } from "better-auth/plugins";
 import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import { authAccount, authSession, authUser, authVerification } from "~/server/db/schema/auth";
 import { sendAuthEmail } from "./email";
+import { enabledSocialProviders } from "./providers";
 
 // process.env directly, not ~/env — the same trade the middleware's own DB
 // client makes. This module sits in the middleware bundle, and ~/env drags
@@ -39,8 +41,9 @@ const buildAuth = () => {
         schema: { authUser, authSession, authAccount, authVerification },
     });
 
-    const google = process.env.AUTH_GOOGLE_CLIENT_ID && process.env.AUTH_GOOGLE_CLIENT_SECRET;
-    const github = process.env.AUTH_GITHUB_CLIENT_ID && process.env.AUTH_GITHUB_CLIENT_SECRET;
+    const social = enabledSocialProviders();
+    const google = social.includes("google");
+    const github = social.includes("github");
 
     return betterAuth({
         secret: process.env.BETTER_AUTH_SECRET,
@@ -81,6 +84,11 @@ const buildAuth = () => {
         session: {
             cookieCache: { enabled: true, maxAge: 60 },
         },
+        // OAuth failures that happen before a sign-in's own errorCallbackURL
+        // is known (a lost state cookie, a malformed callback) land here
+        // instead of better-auth's bare /api/auth/error page. The sign-in page
+        // turns `?error=<code>` into a sentence.
+        onAPIError: { errorURL: "/signin" },
         socialProviders: {
             ...(google
                 ? {
@@ -99,7 +107,14 @@ const buildAuth = () => {
                   }
                 : {}),
         },
-        plugins: [nextCookies()],
+        plugins: [
+            // Sets a readable 30-day cookie naming the method behind each new
+            // session ("email", "google", "github"), so the sign-in page can
+            // mark it "Last used". Cookie only — no column, no migration.
+            lastLoginMethod(),
+            // Last, per better-auth: it forwards cookies the hooks above set.
+            nextCookies(),
+        ],
     });
 };
 

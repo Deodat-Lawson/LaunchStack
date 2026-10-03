@@ -20,6 +20,7 @@ import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { storedFileHeaders } from "~/server/security/stored-file-headers";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
     ".pdf": "application/pdf",
@@ -125,7 +126,8 @@ export async function GET(
         return new NextResponse(blobRes.body, {
             status: 200,
             headers: {
-                "Content-Type": mimeType,
+                // The version's type is the uploader's claim, same as /api/files.
+                ...storedFileHeaders(mimeType),
                 ...(blobRes.headers.get("content-length")
                     ? { "Content-Length": blobRes.headers.get("content-length")! }
                     : {}),

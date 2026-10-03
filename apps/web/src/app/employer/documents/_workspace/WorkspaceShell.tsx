@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { PanelLeftOpen, PanelsTopLeft, Plus } from "lucide-react";
+import { PanelLeftOpen } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { firstFilled } from "~/lib/profile/resolve";
 import { useMyProfile } from "~/lib/profile/use-my-profile";
@@ -47,7 +47,7 @@ import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { useAgents } from "./collab/useMeetings";
 import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
-import { AskPanel, workspaceMainHeaderBarStyle, type ComposerSeed } from "./AskPanel";
+import { AskPanel, type ComposerSeed } from "./AskPanel";
 import type { DocumentTargetData } from "./documentContextMenu";
 import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
@@ -58,6 +58,9 @@ import { FolderDialog, type FolderDialogRequest } from "./FolderDialog";
 import { MindmapEditorHost } from "./MindmapEditorHost";
 import { RenameSourceDialog } from "./RenameSourceDialog";
 import { SourceRail } from "./SourceRail";
+import { RailResizeHandle, useRailWidth } from "./RailResizeHandle";
+import { PaneLauncher } from "./PaneLauncher";
+import { useLayoutPersistence } from "./useLayoutPersistence";
 import * as sessionApi from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { StudioDrawer } from "./StudioDrawer";
@@ -121,15 +124,30 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     meetings: "/employer/documents?feature=meetings",
 };
 
+/** What an empty pane offers first, before "All apps". */
+const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
+
 /**
- * Feature ids that used to be Studio entries of their own and now live inside
- * Growth. Old `?feature=` links land on the right area.
+ * Tabs a saved layout may bring back. The mindmap editor is left behind: it
+ * edits one map, and which map is not part of the layout.
+ */
+function isRestorableTab(id: string): boolean {
+    if (id === "mindmap") return false;
+    return id.startsWith(SOURCE_TAB_PREFIX) || Boolean(resolveStudioFeature(id));
+}
+
+/**
+ * Feature ids that used to be Studio entries of their own. Old `?feature=`
+ * links land where the thing lives now: Growth's areas, and — for the two
+ * imports that were tools — their tabs in Add a source.
  */
 const RETIRED_FEATURE_HREFS: Record<string, string> = {
     marketing: "/employer/tools/growth/brand/campaigns",
     distribution: "/employer/tools/growth/prospects",
     prospects: "/employer/tools/growth/prospects",
     brand: "/employer/tools/growth/brand",
+    artifacts: "/employer/documents?add=1&tab=artifact",
+    "agent-sessions": "/employer/documents?add=1&tab=agent-sessions",
 };
 
 /**
@@ -272,6 +290,8 @@ export function WorkspaceShell() {
     /** The same, for the verbs that act on whichever column has the focus. */
     const paneVerbsRef = useRef({
         split: () => undefined as void,
+        splitDown: () => undefined as void,
+        zoom: () => undefined as void,
         close: () => undefined as void,
         focusAdjacent: (_delta: -1 | 1) => undefined as void,
     });
@@ -323,8 +343,9 @@ export function WorkspaceShell() {
     const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
     /**
-     * Which apps are open, in which column, and which one each column shows.
-     * Every open app stays mounted, so switching keeps drafts, scroll and undo.
+     * Which apps are open, in which pane, and which one each pane shows — and
+     * how the panes are split. Every open app stays mounted, so switching
+     * keeps drafts, scroll and undo.
      *
      * `open` both inserts and focuses, which is why it is bound to the old
      * `setActiveFeatureId` name: a tab can be closed now, and every existing
@@ -339,14 +360,29 @@ export function WorkspaceShell() {
         closeToRight,
         move: moveTab,
         split: splitTab,
+        splitAtRoot,
+        splitPane,
+        closeGroup,
         pair: pairTabs,
         merge: mergeColumns,
         focusGroup,
         focusAdjacentGroup,
+        toggleZoom,
+        resize: resizeSplit,
+        restore: restoreLayout,
     } = useStudioLayout();
     /** What the focused column shows — the app most verbs act on. */
     const activeFeatureId =
         layout.groups.find(group => group.id === layout.activeGroupId)?.activeId ?? "";
+    /** Whose layout this is: saved per member and workspace, once both are known. */
+    const layoutScope = userId && companyId != null ? `${userId}:${companyId}` : null;
+    /** Why the focused pane cannot be split right now, or false when it can. */
+    const splitRefusal = () =>
+        layout.groups.length >= MAX_GROUPS
+            ? "Every pane is taken."
+            : !activeFeatureId
+              ? "This pane is empty: open something in it first."
+              : false;
     /** Close a tab wherever it happens to be. */
     const closeTab = useCallback(
         (id: string) => {
@@ -386,6 +422,7 @@ export function WorkspaceShell() {
     }, [mindmapTabActive]);
     const [railHidden, setRailHidden] = useState(false);
     const railHiddenReady = useRef(false);
+    const railWidth = useRailWidth();
     /**
      * On a phone the sidebar cannot dock: at 390px its 280px left the chat —
      * and any document beside it — a column one word wide. Below the
@@ -393,6 +430,15 @@ export function WorkspaceShell() {
      * asked for. `railHidden` stays the desktop choice and is not touched.
      */
     const compactViewport = useCompactViewport();
+    // After the viewport is known: a window too narrow for panes folds them,
+    // and the fold must not be saved over the arrangement.
+    useLayoutPersistence({
+        scope: layoutScope,
+        layout,
+        restore: restoreLayout,
+        keep: isRestorableTab,
+        paused: compactViewport,
+    });
     const [railDrawerOpen, setRailDrawerOpen] = useState(false);
     useEffect(() => {
         if (!compactViewport) setRailDrawerOpen(false);
@@ -1260,7 +1306,7 @@ export function WorkspaceShell() {
      * somewhere else entirely — we follow that destination.
      */
     const expandFeature = useCallback(
-        (featureId: string) => {
+        (featureId: string, groupId?: string) => {
             const feature = resolveStudioFeature(featureId);
             // A separate app with its own routes and chrome. Navigate; a tab
             // cannot hold a route tree.
@@ -1280,14 +1326,34 @@ export function WorkspaceShell() {
             }
             // Fails closed: `can` answers false until permissions load.
             if (!can(feature.requires)) return;
-            setActiveFeatureId(featureId);
+            setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
         },
         [can, router, setActiveFeatureId]
     );
     expandFeatureRef.current = expandFeature;
+
+    /**
+     * An app in a pane beside what is showing — ⌘-click in Studio, or its
+     * "Open beside". The same placement as a source opened to the side: the
+     * pane to the right if there is one, a new one if there is room.
+     */
+    const openFeatureBeside = useCallback(
+        (featureId: string) => {
+            const feature = resolveStudioFeature(featureId);
+            if (compactViewport || !feature || feature.external || !can(feature.requires)) {
+                expandFeature(featureId);
+                return;
+            }
+            setStudioOpen(false);
+            openBeside(featureId);
+        },
+        [compactViewport, can, expandFeature, openBeside]
+    );
     paneVerbsRef.current = {
-        split: () => activeFeatureId && splitTab(activeFeatureId),
+        split: () => splitPane("right"),
+        splitDown: () => splitPane("down"),
+        zoom: () => toggleZoom(),
         close: () => {
             const group = groupOf(layout, activeFeatureId);
             if (!group) return;
@@ -1563,24 +1629,40 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.split",
-            label: "Split to the right",
+            label: "Split right",
             icon: "split",
-            shortcut: "⌘⌥\\",
+            shortcut: formatKeys("Mod+Alt+\\"),
             order: 5,
             appliesTo: target => target.kind === APP_TARGET_KIND,
+            disabled: () => splitRefusal(),
+            run: () => splitPane("right"),
+        },
+        {
+            id: "workspace.split-down",
+            label: "Split down",
+            icon: "splitDown",
+            shortcut: formatKeys("Mod+Alt+Shift+\\"),
+            order: 5,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
+            disabled: () => splitRefusal(),
+            run: () => splitPane("down"),
+        },
+        {
+            id: "workspace.zoom",
+            label: layout.zoomedGroupId ? "Restore the other panes" : "Maximize this pane",
+            icon: "expand",
+            shortcut: formatKeys("Mod+Shift+Enter"),
+            order: 6,
+            appliesTo: target => target.kind === APP_TARGET_KIND,
             disabled: () =>
-                layout.groups.length >= MAX_GROUPS
-                    ? "Every column is taken."
-                    : (groupOf(layout, activeFeatureId)?.tabIds.length ?? 0) < 2
-                      ? "There is only one app in this column."
-                      : false,
-            run: () => {
-                if (activeFeatureId) splitTab(activeFeatureId);
-            },
+                layout.groups.length < 2 && !layout.zoomedGroupId
+                    ? "The workspace is not split."
+                    : false,
+            run: () => toggleZoom(),
         },
         {
             id: "workspace.focus-next-column",
-            label: "Focus the next column",
+            label: "Focus the next pane",
             icon: "move",
             order: 6,
             appliesTo: target => target.kind === APP_TARGET_KIND,
@@ -1769,6 +1851,9 @@ export function WorkspaceShell() {
             rail: hint("rail.toggle"),
             search: hint("search.focus"),
             studio: hint("studio.toggle"),
+            splitRight: hint("pane.split"),
+            splitDown: hint("pane.splitDown"),
+            zoom: hint("pane.zoom"),
         };
     }, [bindings]);
     useEffect(() => {
@@ -1814,6 +1899,12 @@ export function WorkspaceShell() {
                 case "pane.split":
                     paneVerbsRef.current.split();
                     break;
+                case "pane.splitDown":
+                    paneVerbsRef.current.splitDown();
+                    break;
+                case "pane.zoom":
+                    paneVerbsRef.current.zoom();
+                    break;
                 case "pane.focusNext":
                     paneVerbsRef.current.focusAdjacent(1);
                     break;
@@ -1833,11 +1924,11 @@ export function WorkspaceShell() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
-    if (!isLoaded) return <LoadingPage />;
-    if (!isSignedIn) return <LoadingPage />;
+    if (!isLoaded) return <LoadingPage label="Opening your workspace…" />;
+    if (!isSignedIn) return <LoadingPage label="Opening your workspace…" />;
 
     // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
-    if (legacyRedirect) return <LoadingPage />;
+    if (legacyRedirect) return <LoadingPage label="Opening your workspace…" />;
 
     // How this workspace sees you; the session's name until the profile loads.
     const me = myProfile?.effective;
@@ -1965,85 +2056,95 @@ export function WorkspaceShell() {
                     </SheetContent>
                 </Sheet>
             ) : !railHidden ? (
-                <SourceRail
-                    sources={sources}
-                    folders={folders}
-                    selected={selected}
-                    setSelected={setSelected}
-                    onOpenAdd={() => openAdd()}
-                    onOpenKnowledge={() => expandFeature("knowledge")}
-                    onOpenPalette={() => setPalOpen(true)}
-                    shortcuts={shortcutHints}
-                    accountSlot={accountMenu("row")}
-                    onOpenSource={source => {
-                        // Out of the way of what it opened, on a phone.
-                        setRailDrawerOpen(false);
-                        handleOpenSource(source);
-                    }}
-                    onOpenSourceBeside={source => {
-                        setRailDrawerOpen(false);
-                        openSourceBeside(source);
-                    }}
-                    onNewFolder={
-                        canManageFolders
-                            ? parentPath =>
-                                  setFolderDialog({
-                                      mode: "create",
-                                      parentPath: parentPath ?? null,
-                                  })
-                            : undefined
-                    }
-                    onRenameFolder={
-                        canManageFolders
-                            ? folder => setFolderDialog({ mode: "rename", path: folder.name })
-                            : undefined
-                    }
-                    onMoveFolder={
-                        canManageFolders
-                            ? (path, target) => void handleMoveFolder(path, target)
-                            : undefined
-                    }
-                    onDeleteFolder={
-                        canManageFolders ? folder => setDeleteFolderPath(folder.name) : undefined
-                    }
-                    onShareFolder={openFolderAccess}
-                    onRestrictAccess={openDocumentAccess}
-                    onRenameSource={source => setRenameSource(source)}
-                    onDeleteSource={source => requestDelete([source])}
-                    onDeleteSources={requestDelete}
-                    onAddToFolder={path => {
-                        setAddFolder(path);
-                        openAdd();
-                    }}
-                    onMoveToFolder={
-                        canManageFolders
-                            ? (id, name) => void handleMoveToFolder(id, name)
-                            : undefined
-                    }
-                    activeFolder={activeFolder}
-                    setActiveFolder={setActiveFolder}
-                    activeTag={activeTag}
-                    setActiveTag={setActiveTag}
-                    onClose={() =>
-                        compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
-                    }
-                    history={{
-                        entries: history.entries,
-                        loading: history.loading,
-                        error: history.error,
-                        degraded: history.degraded,
-                        activeSessionId: sessionParam,
-                        onNewChat: startNewChat,
-                        onResumeSession: resumeSession,
-                        onOpenRun: entry => {
-                            if (entry.href) router.push(entry.href);
-                        },
-                        onRenameSession: handleRenameSession,
-                        onDeleteSession: handleDeleteSession,
-                        onDeleteRun: handleDeleteRun,
-                        onRefresh: () => void refreshHistory(),
-                    }}
-                />
+                <>
+                    <SourceRail
+                        width={railWidth.width}
+                        sources={sources}
+                        folders={folders}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onOpenAdd={() => openAdd()}
+                        onOpenKnowledge={() => expandFeature("knowledge")}
+                        onOpenPalette={() => setPalOpen(true)}
+                        shortcuts={shortcutHints}
+                        accountSlot={accountMenu("row")}
+                        onOpenSource={source => {
+                            // Out of the way of what it opened, on a phone.
+                            setRailDrawerOpen(false);
+                            handleOpenSource(source);
+                        }}
+                        onOpenSourceBeside={source => {
+                            setRailDrawerOpen(false);
+                            openSourceBeside(source);
+                        }}
+                        onNewFolder={
+                            canManageFolders
+                                ? parentPath =>
+                                      setFolderDialog({
+                                          mode: "create",
+                                          parentPath: parentPath ?? null,
+                                      })
+                                : undefined
+                        }
+                        onRenameFolder={
+                            canManageFolders
+                                ? folder => setFolderDialog({ mode: "rename", path: folder.name })
+                                : undefined
+                        }
+                        onMoveFolder={
+                            canManageFolders
+                                ? (path, target) => void handleMoveFolder(path, target)
+                                : undefined
+                        }
+                        onDeleteFolder={
+                            canManageFolders
+                                ? folder => setDeleteFolderPath(folder.name)
+                                : undefined
+                        }
+                        onShareFolder={openFolderAccess}
+                        onRestrictAccess={openDocumentAccess}
+                        onRenameSource={source => setRenameSource(source)}
+                        onDeleteSource={source => requestDelete([source])}
+                        onDeleteSources={requestDelete}
+                        onAddToFolder={path => {
+                            setAddFolder(path);
+                            openAdd();
+                        }}
+                        onMoveToFolder={
+                            canManageFolders
+                                ? (id, name) => void handleMoveToFolder(id, name)
+                                : undefined
+                        }
+                        activeFolder={activeFolder}
+                        setActiveFolder={setActiveFolder}
+                        activeTag={activeTag}
+                        setActiveTag={setActiveTag}
+                        onClose={() =>
+                            compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
+                        }
+                        history={{
+                            entries: history.entries,
+                            loading: history.loading,
+                            error: history.error,
+                            degraded: history.degraded,
+                            activeSessionId: sessionParam,
+                            onNewChat: startNewChat,
+                            onResumeSession: resumeSession,
+                            onOpenRun: entry => {
+                                if (entry.href) router.push(entry.href);
+                            },
+                            onRenameSession: handleRenameSession,
+                            onDeleteSession: handleDeleteSession,
+                            onDeleteRun: handleDeleteRun,
+                            onRefresh: () => void refreshHistory(),
+                        }}
+                    />
+                    <RailResizeHandle
+                        width={railWidth.width}
+                        onPreview={railWidth.preview}
+                        onCommit={railWidth.commit}
+                    />
+                </>
             ) : (
                 <CollapsedRail
                     onExpand={toggleRail}
@@ -2073,6 +2174,15 @@ export function WorkspaceShell() {
                     closeToRight(groupId, id);
                 }}
                 onSplit={splitTab}
+                onSplitRoot={splitAtRoot}
+                paneKeys={shortcutHints}
+                onSplitPane={(groupId, side) => splitPane(side, groupId)}
+                onCloseGroup={groupId => {
+                    releaseTabs(layout.groups.find(group => group.id === groupId)?.tabIds ?? []);
+                    closeGroup(groupId);
+                }}
+                onToggleZoom={toggleZoom}
+                onResize={resizeSplit}
                 onMove={moveTab}
                 onFocusGroup={focusGroup}
                 onOpenStudio={openFeature}
@@ -2093,19 +2203,29 @@ export function WorkspaceShell() {
                         </Button>
                     ) : undefined
                 }
-                emptyState={
-                    <div className="bg-surface text-ink-3 flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-                        <PanelsTopLeft className="text-ink-3 size-9" strokeWidth={1.25} />
-                        <h2 className="text-ink text-base font-medium">
-                            Your workspace, ready when you are
-                        </h2>
-                        <p className="max-w-sm text-sm">Open an app from Studio to get started.</p>
-                        <Button variant="outline" onClick={openFeature}>
-                            <Plus className="size-4" />
-                            Open Studio
-                        </Button>
-                    </div>
-                }
+                renderEmpty={groupId => (
+                    <PaneLauncher
+                        title={
+                            layout.groups.length > 1
+                                ? "Open something here"
+                                : "Your workspace, ready when you are"
+                        }
+                        hint={
+                            layout.groups.length > 1
+                                ? "Pick an app, or drag a tab or a source from the sidebar here."
+                                : "Open an app to get started. Later, drag a tab or a source to any edge to split, or ⌘-click one to open it beside."
+                        }
+                        apps={LAUNCHER_APPS.flatMap(id => {
+                            const feature = resolveStudioFeature(id);
+                            return feature && can(feature.requires) ? [feature] : [];
+                        })}
+                        onPick={id => expandFeature(id, groupId)}
+                        onMore={() => {
+                            focusGroup(groupId);
+                            openFeature();
+                        }}
+                    />
+                )}
                 renderPane={paneId => {
                     const paneGroup = groupOf(layout, paneId);
                     const paneFocused =
@@ -2216,11 +2336,6 @@ export function WorkspaceShell() {
                                     newMeetingRequest,
                                     openAgentRequest,
                                 },
-                                sessions: {
-                                    onImported: refresh,
-                                    onOpenDocument: id => openSource(`d${id}`),
-                                    onContinue: id => void startContinuation(id),
-                                },
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {
@@ -2238,7 +2353,9 @@ export function WorkspaceShell() {
                 open={studioOpen}
                 activeFeatureId={activeFeatureId}
                 onClose={() => setStudioOpen(false)}
-                onPickFeature={expandFeature}
+                onPickFeature={(featureId, options) =>
+                    options?.beside ? openFeatureBeside(featureId) : expandFeature(featureId)
+                }
             />
 
             <AddSourceModal
@@ -2267,6 +2384,11 @@ export function WorkspaceShell() {
                 restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
+                }}
+                sessions={{
+                    onImported: refresh,
+                    onOpenDocument: id => openSource(`d${id}`),
+                    onContinue: id => void startContinuation(id),
                 }}
                 onMindmapCreated={id => {
                     setAddOpen(false);
@@ -2462,40 +2584,16 @@ interface ExpandedFeatureViewProps {
 function ExpandedFeatureView({ featureId, onPaneExit, paneContext }: ExpandedFeatureViewProps) {
     const feature = resolveStudioFeature(featureId);
 
+    // No header bar of its own: the tab above already names the app, with its
+    // description in the tab's tooltip, and the apps open with a heading of
+    // their own. Three titles stacked in a half-width pane was two too many.
     return (
-        <main
-            style={{
-                flex: 1,
-                minHeight: 0,
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                overflow: "hidden",
-                background: "var(--bg)",
-            }}
-        >
-            <div style={workspaceMainHeaderBarStyle()}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>
-                        {feature?.label ?? "Studio"}
-                    </div>
-                    <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{feature?.desc ?? ""}</div>
-                </div>
-            </div>
-            <div style={{ flex: 1, overflow: "hidden" }}>
+        <main className="bg-surface flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+            <div className="min-h-0 flex-1 overflow-hidden">
                 {feature ? (
                     renderStudioPane(feature, onPaneExit, paneContext)
                 ) : (
-                    <div
-                        style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "var(--ink-3)",
-                            fontSize: 13,
-                        }}
-                    >
+                    <div className="text-ink-3 flex h-full items-center justify-center text-[13px]">
                         This app is not available.
                     </div>
                 )}

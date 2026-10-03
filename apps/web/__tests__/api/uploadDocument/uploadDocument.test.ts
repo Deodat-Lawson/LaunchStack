@@ -1,4 +1,5 @@
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+import type * as Validation from "~/lib/validation";
 
 import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
@@ -120,6 +121,61 @@ describe("POST /api/uploadDocument", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         canEditFolderMock.mockResolvedValue(true);
+    });
+
+    it("records a Claude artifact so the viewer renders it in a sandbox", async () => {
+        mockAuthenticatedContext({ role: "member" });
+        const body = {
+            documentName: "Revenue dashboard",
+            documentUrl: "/api/files/9",
+            category: "Unfiled",
+            mimeType: "text/html",
+            originalFilename: "Revenue-dashboard.html",
+            artifact: { artifactType: "html", sourceUrl: "https://claude.ai/share/abc" },
+        };
+        mockValidRequest(body);
+        processDocumentUploadMock.mockResolvedValue(mockUploadResult());
+
+        const response = await POST(requestFor(body));
+
+        expect(response.status).toBe(202);
+        const call = processDocumentUploadMock.mock.calls[0]![0];
+        expect(call.ocrMetadata).toMatchObject({
+            kind: "claude-artifact",
+            artifactType: "html",
+            sourceUrl: "https://claude.ai/share/abc",
+        });
+        expect(call.documentName).toBe("Revenue dashboard");
+    });
+
+    it("leaves an ordinary upload unmarked", async () => {
+        mockAuthenticatedContext({ role: "member" });
+        const body = { documentName: "Plan", documentUrl: "/api/files/3", category: "Unfiled" };
+        mockValidRequest(body);
+        processDocumentUploadMock.mockResolvedValue(mockUploadResult());
+
+        await POST(requestFor(body));
+
+        expect(processDocumentUploadMock.mock.calls[0]![0].ocrMetadata).toBeUndefined();
+    });
+
+    it("refuses an artifact whose link to the original is not http(s)", async () => {
+        mockAuthenticatedContext({ role: "member" });
+        // The real validator, for once: this is the schema's job.
+        (validateRequestBody as jest.Mock).mockImplementationOnce(
+            jest.requireActual<typeof Validation>("~/lib/validation").validateRequestBody
+        );
+
+        const response = await POST(
+            requestFor({
+                documentName: "Sneaky",
+                documentUrl: "/api/files/4",
+                artifact: { artifactType: "html", sourceUrl: "javascript:alert(1)" },
+            })
+        );
+
+        expect(response.status).toBe(400);
+        expect(processDocumentUploadMock).not.toHaveBeenCalled();
     });
 
     it("returns 403 for a viewer (no documents.upload)", async () => {

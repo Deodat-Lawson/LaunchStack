@@ -221,13 +221,17 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
     {
         id: "artifacts",
         tier: "tool",
-        summary: "Import pages, diagrams, and snippets built in Claude; view them sandboxed.",
+        summary:
+            "Claude artifacts from before they were sources: listed, read and archived as " +
+            "Add a source → Claude artifact moves them into the library.",
         scope: "workspace",
         routes: ["artifacts"],
         notes:
-            "Bodies are stored inline and rendered in an iframe sandboxed without " +
-            "allow-same-origin — the app's one untrusted-HTML surface. The raw route serves " +
-            "attachment-only for the same reason.",
+            "New imports are ordinary documents, registered through uploadDocument with an " +
+            "artifact marker (~/lib/artifact-document) and stored as text/plain; the viewer " +
+            "renders them in an iframe sandboxed without allow-same-origin. These routes " +
+            "remain for the old rows until every workspace has moved them. The raw route " +
+            "serves attachment-only for the same reason.",
     },
     {
         id: "notes",

@@ -3,6 +3,7 @@ import { LogIn, BookOpen } from "lucide-react";
 import { IconGithub } from "~/components/icons/brand";
 import type { Metadata } from "next";
 import { LaunchstackMark } from "./_components/LaunchstackLogo";
+import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { LANDING_DEPLOYMENT_URL } from "~/config/landing";
 
 export const metadata: Metadata = {
@@ -18,9 +19,11 @@ export default function NotFound() {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,var(--accent-soft),transparent)]" />
 
             <div className="relative max-w-lg text-center">
-                <div className="mb-8 flex items-center justify-center gap-2">
-                    <LaunchstackMark size={26} title="Launchstack" />
-                    <span className="text-lg font-bold">Launchstack</span>
+                <div className="mb-8 flex justify-center">
+                    <LandingLogoLink className="flex items-center gap-2">
+                        <LaunchstackMark size={26} title="Launchstack" />
+                        <span className="text-lg font-bold">Launchstack</span>
+                    </LandingLogoLink>
                 </div>
 
                 <h1 className="text-brand-ink mb-4 text-7xl font-bold md:text-8xl">404</h1>

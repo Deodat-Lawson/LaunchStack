@@ -1316,7 +1316,7 @@ function Composer({
                             flexShrink: 0,
                         }}
                     >
-                        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+                        <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
                             <kbd
                                 style={{
                                     padding: "1.5px 5px",
@@ -1431,7 +1431,7 @@ function AgentPill({
                     ) : (
                         <>
                             <Bot size={12} />
-                            Agent
+                            <span className="@max-sm:sr-only">Agent</span>
                         </>
                     )}
                 </button>
@@ -1511,41 +1511,33 @@ function AgentPill({
     );
 }
 
+/**
+ * One of the composer's toggles. In a narrow pane it drops to its icon — the
+ * label stays for screen readers and in the tooltip — rather than wrapping
+ * the row onto a second line.
+ */
 function ToolbarPill({ label, title, icon, active, disabled, onClick, badge }: ToolbarPillProps) {
     return (
         <button
+            type="button"
             onClick={onClick}
             title={title}
             disabled={disabled}
-            style={{
-                fontSize: 12,
-                padding: "6px 10px",
-                borderRadius: 8,
-                color: active ? "white" : "var(--ink-2)",
-                background: active ? "var(--accent)" : "transparent",
-                border: `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                opacity: disabled ? 0.5 : 1,
-                cursor: disabled ? "not-allowed" : "pointer",
-                transition: "background 120ms, border-color 120ms, color 120ms",
-            }}
+            className={cn(
+                "@max-sm:px-2 flex items-center gap-[5px] rounded-lg border px-2.5 py-1.5 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                active
+                    ? "border-brand bg-brand text-brand-fg"
+                    : "border-line text-ink-2 hover:bg-line-2 bg-transparent"
+            )}
         >
             {icon}
-            {label}
+            <span className="@max-sm:sr-only">{label}</span>
             {badge && (
                 <span
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        padding: "0 5px",
-                        borderRadius: 999,
-                        background: active ? "rgba(255,255,255,0.25)" : "var(--line-2)",
-                        color: active ? "white" : "var(--ink-3)",
-                        minWidth: 14,
-                        textAlign: "center",
-                    }}
+                    className={cn(
+                        "min-w-3.5 rounded-full px-[5px] text-center text-[10px] font-bold",
+                        active ? "bg-brand-fg/25 text-brand-fg" : "bg-line-2 text-ink-3"
+                    )}
                 >
                     {badge}
                 </span>
@@ -1652,7 +1644,7 @@ function EmptyState({
     return (
         <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
             <div className="mb-10 text-center">
-                <div className="display text-ink mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
+                <div className="display text-ink @max-md:text-[34px] @max-sm:text-[28px] mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
                     What do you want to <em className="text-brand">ask</em> yourself?
                 </div>
                 <div className="text-ink-3 text-sm">

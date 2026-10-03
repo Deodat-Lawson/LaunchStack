@@ -253,7 +253,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                                     <Badge variant="success">This browser</Badge>
                                                 )}
                                             </div>
-                                            <div className="text-ink-3 text-[12px]">
+                                            {/* An IPv6 address has no break opportunities of its
+                                                own; without this it widens a narrow pane. */}
+                                            <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
                                                 {row.ipAddress ? `${row.ipAddress} · ` : ""}
                                                 last active {relativeTime(iso(row.updatedAt))} ·
                                                 expires {relativeTime(iso(row.expiresAt))}

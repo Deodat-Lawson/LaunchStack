@@ -40,13 +40,48 @@ import { vantagePath } from "../_lib/paths";
  * the founder chose to share: requests for help, commitments that slipped,
  * program deadlines coming up, and whether the team has gone quiet. Nothing
  * private reaches this screen, by construction rather than by policy.
+ *
+ * settings.manage only, like its rail entry and its API. Someone without it
+ * who lands here by URL is told whose screen it is (the same words the
+ * Vantage tab uses). No list says "nothing here" until there is an answer to
+ * say it from: skeletons while permissions or the first response are on
+ * their way, and only the error when the first response failed.
  */
 export function TriageScreen() {
-    const res = useResource("vantage:triage", () => vantageApi.triage(), { pollMs: 60_000 });
-    const { can } = usePermissions();
+    const { can, loaded, error: permissionsError, refresh } = usePermissions();
+    const allowed = can("settings.manage");
+    const res = useResource(allowed ? "vantage:triage" : null, () => vantageApi.triage(), {
+        pollMs: 60_000,
+    });
     const [adding, setAdding] = useState(false);
     const data = res.data;
+    const loading = !loaded || res.loading || (allowed && data === null && res.error === null);
     const today = todayIso();
+
+    if (loaded && !allowed) {
+        return (
+            <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
+                <PageHeader title="Where the team" accent="needs a hand" />
+                {permissionsError ? (
+                    <InlineError message={permissionsError} onRetry={() => void refresh()} />
+                ) : (
+                    <EmptyState
+                        title="Triage is the program's view"
+                        body="It gathers what founders chose to share — requests for help, commitments that slipped, program deadlines — for the people who run the program. Opening it needs permission to manage this workspace's settings; an owner or admin can grant it."
+                    />
+                )}
+            </div>
+        );
+    }
+
+    if (res.error && !data) {
+        return (
+            <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
+                <PageHeader title="Where the team" accent="needs a hand" />
+                <InlineError message={res.error} onRetry={() => void res.reload()} />
+            </div>
+        );
+    }
 
     const removeDeadline = async (id: string) => {
         try {
@@ -103,7 +138,7 @@ export function TriageScreen() {
 
             <section>
                 <SectionHeading title="Requests for help" aside="from shared topics" />
-                {res.loading ? (
+                {loading ? (
                     <SkeletonRows rows={2} height={52} />
                 ) : !data || data.helpRequests.length === 0 ? (
                     <p className="text-ink-3 text-[13px]">
@@ -143,7 +178,7 @@ export function TriageScreen() {
 
             <section>
                 <SectionHeading title="Missed commitments" aside="shared ones" />
-                {res.loading ? (
+                {loading ? (
                     <SkeletonRows rows={2} height={44} />
                 ) : !data || data.missedCommitments.length === 0 ? (
                     <p className="text-ink-3 text-[13px]">Nothing shared has slipped.</p>
@@ -197,7 +232,7 @@ export function TriageScreen() {
 
             <section>
                 <SectionHeading title="Program deadlines" />
-                {res.loading ? (
+                {loading ? (
                     <SkeletonRows rows={2} height={40} />
                 ) : !data || data.deadlines.length === 0 ? (
                     <EmptyState

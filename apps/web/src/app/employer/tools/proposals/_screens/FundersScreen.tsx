@@ -349,6 +349,11 @@ export function FundersScreen() {
     const [geography, setGeography] = useState("");
     const [applicantType, setApplicantType] = useState<ApplicantType | "auto">("auto");
     const [includeWeb, setIncludeWeb] = useState(true);
+    // The switch follows what the deployment can do; a person can still turn it off.
+    const webAvailable = res.data?.sources.web;
+    useEffect(() => {
+        if (webAvailable !== undefined) setIncludeWeb(webAvailable);
+    }, [webAvailable]);
     const [starting, setStarting] = useState(false);
     const [adding, setAdding] = useState(false);
     const [applying, setApplying] = useState<FunderRow | null>(null);

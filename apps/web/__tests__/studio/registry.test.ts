@@ -16,6 +16,7 @@ import {
     STUDIO_GROUPS,
     demotedFeatureHref,
     resolveStudioFeature,
+    settingsSectionOf,
 } from "~/app/employer/documents/_workspace/types";
 import { toolTargetFromHref } from "~/lib/tool-app/locations";
 
@@ -45,6 +46,24 @@ describe("studio registry", () => {
         expect(leaving).toEqual([]);
         // The flag that made a tool "a separate app" is gone for good.
         for (const app of apps) expect(Object.keys(app)).not.toContain("external");
+    });
+
+    it("gives every palette row a unique id", () => {
+        // The palette keys its rows by id and opens them by id, so two rows
+        // sharing one collide in React and open the same place.
+        const ids = DEMOTED_FEATURES.map(f => f.id);
+        const repeated = ids.filter((id, i) => ids.indexOf(id) !== i);
+        expect(repeated).toEqual([]);
+    });
+
+    it("opens Agents as the app and Agents & nodes as its section of Settings", () => {
+        expect(DEMOTED_FEATURES.find(f => f.id === "agents")?.label).toBe("Agents");
+        expect(resolveStudioFeature("agents")?.label).toBe("Agents");
+        const nodes = DEMOTED_FEATURES.find(f => f.label === "Agents & nodes")!;
+        // Not a Studio app of its own: the shell follows its href, which is
+        // a Settings section and so opens the Settings tab on it.
+        expect(resolveStudioFeature(nodes.id)).toBeUndefined();
+        expect(settingsSectionOf(demotedFeatureHref(nodes.id)!)).toBe("agents");
     });
 
     it("points every palette quick link at a page that exists", () => {
@@ -181,5 +200,12 @@ describe("studio registry", () => {
         // Its href points back at this page, so following it would loop.
         expect(demotedFeatureHref("rewrite")).toBeUndefined();
         expect(demotedFeatureHref("nonsense")).toBeUndefined();
+    });
+
+    it("reads the section out of a link into Settings, and nothing out of any other link", () => {
+        expect(settingsSectionOf("/employer/settings#people")).toBe("people");
+        expect(settingsSectionOf("/employer/settings")).toBe("");
+        expect(settingsSectionOf("/employer/tools/growth/brand")).toBeUndefined();
+        expect(settingsSectionOf("/employer/documents?feature=agents")).toBeUndefined();
     });
 });

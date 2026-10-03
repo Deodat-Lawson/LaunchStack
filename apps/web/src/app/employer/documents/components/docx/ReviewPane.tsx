@@ -100,7 +100,7 @@ function CommentReply({
                 value={text}
                 onChange={e => setText(e.target.value)}
                 placeholder="Write a reply…"
-                className="min-h-0 resize-none text-xs"
+                className="min-h-0 resize-none text-xs md:text-xs"
                 onKeyDown={e => {
                     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
                     if (e.key === "Escape") setOpen(false);

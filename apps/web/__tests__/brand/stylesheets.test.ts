@@ -26,13 +26,16 @@ function walk(dir: string): string[] {
         if (name === "node_modules" || name.startsWith(".")) continue;
         const path = join(dir, name);
         if (statSync(path).isDirectory()) out.push(...walk(path));
-        else if (/\.(ts|tsx)$/.test(name)) out.push(path);
+        else if (/\.(ts|tsx|css)$/.test(name)) out.push(path);
     }
     return out;
 }
 
-const cssImports = (text: string) =>
-    [...text.matchAll(/^import\s+(?:\w+\s+from\s+)?["']([^"']+\.css)["'];?$/gm)].map(m => m[1]!);
+// Stylesheets a file pulls in: `import "x.css"` in TS, `@import "x"` in CSS.
+const cssImports = (text: string) => [
+    ...[...text.matchAll(/^import\s+(?:\w+\s+from\s+)?["']([^"']+\.css)["'];?$/gm)].map(m => m[1]!),
+    ...[...text.matchAll(/@import\s+(?:url\(\s*)?["']([^"']+)["']/g)].map(m => m[1]!),
+];
 
 // A bare single-class rule whose name is shaped like a Tailwind utility,
 // e.g. `.flex{`, `.text-sm,`, `.rounded-lg{`, `.sr-only{`.
@@ -49,7 +52,7 @@ describe("stylesheet order", () => {
         const offenders: string[] = [];
         for (const file of walk(SRC)) {
             for (const spec of cssImports(read(file))) {
-                if (spec.startsWith(".") || spec.startsWith("~/")) continue;
+                if (/^(\.|~\/|\/|https?:)/.test(spec)) continue;
                 const resolved = require.resolve(spec, { paths: [WEB_ROOT] });
                 const match = UTILITY_RULE.exec(read(resolved));
                 if (match) {

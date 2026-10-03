@@ -8,7 +8,7 @@ import { cn } from "~/lib/utils";
 import { runIsLive } from "../prospects/_components/RunSheet";
 import { useProspects } from "../prospects/_lib/context";
 
-/** The rail's one-line account of a run: which step is running, with its count. */
+/** The bar's one-line account of a run: which step is running, with its count. */
 const RUNNING_VERB: Record<string, string> = {
     sources: "searching sources",
     shortlist: "shortlisting",
@@ -17,9 +17,10 @@ const RUNNING_VERB: Record<string, string> = {
 };
 
 /**
- * A run in progress, at the foot of the Prospects group. Closing the run
- * sheet leaves the run going; this is how you get back to it from any
- * screen. Nothing shows when no run is live.
+ * A run in progress. Closing the run sheet leaves the run going; this is how
+ * you get back to it from any screen, Brand's included — `compact` is its
+ * place in the tool's bar (a short pill, just the spinner in a narrow tab).
+ * Nothing shows when no run is live.
  */
 export function RunIndicator({ compact = false }: { compact?: boolean }) {
     const { activeRun, openRunSheet } = useProspects();
@@ -28,20 +29,28 @@ export function RunIndicator({ compact = false }: { compact?: boolean }) {
     const doing = current
         ? `${RUNNING_VERB[current.id] ?? current.label.toLowerCase()}${current.detail ? ` ${current.detail}` : ""}`
         : null;
+    const label = `Finding companies${doing ? ` · ${doing}` : ""}`;
     return (
         <Button
             type="button"
             variant="ghost"
             onClick={() => openRunSheet()}
+            title={label}
+            aria-label={`${label}. Open the run`}
             className={cn(
                 "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
-                // In the bar: one short pill. Under the phone menu: full width.
-                compact ? "h-7 max-w-[260px] px-2.5" : "h-auto w-full px-2.5 py-2"
+                compact ? "h-7 max-w-[200px] px-2.5" : "h-auto w-full px-2.5 py-2"
             )}
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-            <span className="min-w-0 flex-1 truncate">
-                Finding companies{doing ? ` · ${doing}` : ""}
+            <span
+                className={cn(
+                    "min-w-0 flex-1 truncate",
+                    // A narrow tab keeps just the spinner, so the bar stays two rows.
+                    compact && "[@container(max-width:719px)]:hidden"
+                )}
+            >
+                {label}
             </span>
         </Button>
     );

@@ -41,25 +41,32 @@ export function ProposalsTool({ host }: { host?: ToolHost }) {
     );
 }
 
-/** The rail's one line about a run: what it is doing, with the current step. */
+/** A run in progress, in the bar on every screen: what it is doing, with the current step. */
 function RunIndicator({ compact = false }: { compact?: boolean }) {
     const { activeRun, openRunSheet } = useProposals();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
+    const label = `${RUN_KIND_LABEL[activeRun.kind]}${current ? ` · ${current.label.toLowerCase()}` : ""}`;
     return (
         <Button
             type="button"
             variant="ghost"
             onClick={() => openRunSheet()}
+            title={label}
+            aria-label={`${label}. Open the run`}
             className={cn(
                 "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
-                compact ? "h-7 max-w-[260px] px-2.5" : "h-auto w-full px-2.5 py-2"
+                compact ? "h-7 max-w-[200px] px-2.5" : "h-auto w-full px-2.5 py-2"
             )}
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-            <span className="min-w-0 flex-1 truncate">
-                {RUN_KIND_LABEL[activeRun.kind]}
-                {current ? ` · ${current.label.toLowerCase()}` : ""}
+            <span
+                className={cn(
+                    "min-w-0 flex-1 truncate",
+                    compact && "[@container(max-width:719px)]:hidden"
+                )}
+            >
+                {label}
             </span>
         </Button>
     );
@@ -73,7 +80,7 @@ function RunIndicator({ compact = false }: { compact?: boolean }) {
  */
 function ProposalsFrame() {
     const path = useToolPathname();
-    const { counts, activeRun } = useProposals();
+    const { counts } = useProposals();
     const groups: ToolNavGroup[] = [
         {
             id: "proposals",
@@ -84,10 +91,6 @@ function ProposalsFrame() {
                 { to: "/profile", label: "Profile", icon: Building2 },
                 { to: "/library", label: "Library", icon: BookMarked, count: counts?.library },
             ],
-            toolbar: <RunIndicator compact />,
-            // Only while a run is live: the phone menu makes room for any
-            // footer it is given, even one that renders nothing.
-            footer: runIsLive(activeRun) ? <RunIndicator /> : undefined,
         },
     ];
     return (
@@ -96,6 +99,7 @@ function ProposalsFrame() {
             mark={<ProposalsMark />}
             groups={groups}
             about="Drafts cite your Sources. Approved answers go to the Library. A finished proposal can be exported back into Sources."
+            status={<RunIndicator compact />}
             overlay={<ProposalRunSheet />}
         >
             <Screen screen={proposalsScreenFor(path)} />

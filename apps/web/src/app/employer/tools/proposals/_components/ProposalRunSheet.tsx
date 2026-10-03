@@ -66,7 +66,7 @@ const DONE_TITLE: Record<string, string> = {
 
 /**
  * A run is visible work: one row per step as it finishes. Closing the sheet
- * leaves the run going; the rail keeps its indicator until it is done.
+ * leaves the run going; the bar keeps its indicator until it is done.
  */
 export function ProposalRunSheet() {
     const { activeRun, runSheetOpen, closeRunSheet, href } = useProposals();

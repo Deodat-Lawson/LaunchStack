@@ -7,10 +7,8 @@ import { cn } from "~/lib/utils";
  * the Companies screen with a shadow, because it is the only thing floating.
  *
  * Sticky, not fixed: the screen sits in a tab whose content column is the
- * scroller, beside the tool's rail. Pinned to the foot of that column it
- * stays centred on the list, where `fixed` would centre it on the whole tab
- * and slide it under the rail in a narrow one. Render it as the last child
- * of the screen's column.
+ * scroller. Pinned to the foot of that column it stays centred on the list
+ * and inside the tab. Render it as the last child of the screen's column.
  */
 export function BulkBar({
     count,

@@ -16,7 +16,7 @@ import { DRAFTS_ROOTS, draftsScreenFor } from "./generator/drafts-screens";
  * A tab of the workspace in the same frame as every other tool. Its screens
  * are paths inside the tab — New document ("/"), My documents
  * ("/documents"), one draft ("/documents/<id>") and the assistant
- * ("/assistant"), see `generator/drafts-screens.ts` — so the rail, Back and
+ * ("/assistant"), see `generator/drafts-screens.ts` — so the screen tabs, Back and
  * Forward work, and the tab reopens where the person left it. The workspace
  * mounts it with `host`; a harness can mount it bare.
  */
@@ -28,7 +28,7 @@ export function DraftsTool({ host }: { host?: ToolHost }) {
     );
 }
 
-/** The rail: one unlabelled group. The count waits for the list rather than showing 0. */
+/** The screens: one unlabelled group. The count waits for the list rather than showing 0. */
 export function draftsRail(documentCount: number | null): ToolNavGroup[] {
     return [
         {
@@ -44,7 +44,7 @@ export function draftsRail(documentCount: number | null): ToolNavGroup[] {
 
 function DraftsFrame() {
     const path = useToolPathname();
-    // Above the screens, so the rail can count the drafts and a trip between
+    // Above the screens, so the bar can count the drafts and a trip between
     // screens never fetches the list again.
     const drafts = useDraftDocuments();
     return (

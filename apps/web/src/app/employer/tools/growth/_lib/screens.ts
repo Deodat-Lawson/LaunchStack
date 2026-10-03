@@ -13,7 +13,7 @@ import { parseToolHref } from "~/lib/tool-app/locations";
 /** First path segments that are Growth's own screens. */
 export const GROWTH_ROOTS = ["brand", "prospects"] as const;
 
-/** Where "/" lands: Growth opens on Brand, Prospects is one click down the rail. */
+/** Where "/" lands: Growth opens on Brand, Prospects is one click away in the bar. */
 export const GROWTH_HOME = "/brand";
 
 export type GrowthScreen =

@@ -219,7 +219,7 @@ describe("GrowthTool", () => {
         expect(currentScreen()).toBe("brand-overview");
     });
 
-    it("shows the segment's counts in the Prospects rail", async () => {
+    it("shows the segment's counts in the Prospects screen tabs", async () => {
         await mount("/prospects");
         expect(currentScreen()).toBe("prospects-home");
         const rail = screen.getByRole("navigation", { name: "Growth screens" });

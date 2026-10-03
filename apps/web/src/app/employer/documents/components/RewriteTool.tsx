@@ -36,10 +36,10 @@ import {
  * Rewrite: improve existing prose with a diff-first rewrite.
  *
  * A tab of the workspace in the same frame as every other tool. Each screen
- * is a path inside the tab (see `rewrite-screens.ts`), so the rail, Back and
+ * is a path inside the tab (see `rewrite-screens.ts`), so the screen tabs, Back and
  * Forward, "Copy link" and the remembered last screen all work:
  *
- * - `/` New rewrite, `/rewrites` My rewrites — the rail's two items.
+ * - `/` New rewrite, `/rewrites` My rewrites — the bar's two tabs.
  * - `/rewrites/<id>` a saved rewrite in the editor; Back returns to the list.
  * - `/rewrites/new` the editor before its first save. That first save
  *   replaces the entry with `/rewrites/<id>` without remounting the editor.
@@ -237,7 +237,7 @@ function RewriteFrame() {
     const wasEditing = useRef(editing);
     useEffect(() => {
         // Leaving the editor, however it is left (its Back, the frame's, the
-        // rail), refreshes the list, as the old Back to list did.
+        // screen tabs), refreshes the list, as the old Back to list did.
         if (wasEditing.current && !editing) void loadDocuments();
         wasEditing.current = editing;
     }, [editing, loadDocuments]);

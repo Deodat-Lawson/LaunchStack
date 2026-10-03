@@ -82,7 +82,7 @@ export function ProspectsProvider({
 
     const segment = segments.find(s => s.id === segmentId) ?? null;
 
-    // Active run: polled while running so the rail indicator and any open
+    // Active run: polled while running so the bar's run indicator and any open
     // sheet stay live. The sheet reads the same object.
     const [activeRunId, setActiveRunId] = useState<string | null>(null);
     const [runSheetOpen, setRunSheetOpen] = useState(false);

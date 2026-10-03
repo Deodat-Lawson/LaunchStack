@@ -122,7 +122,7 @@ describe("draftsScreenFor", () => {
         }
     });
 
-    it("the rail counts drafts only once the list is known", () => {
+    it("the screen tabs count drafts only once the list is known", () => {
         const [group] = draftsRail(null);
         expect(group!.items.map(i => [i.to, i.label, i.count])).toEqual([
             ["/", "New document", undefined],
@@ -232,7 +232,7 @@ const railLink = (name: RegExp) => within(rail()).getByRole("link", { name });
 const goBack = () => fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
 
 describe("the Templated Drafts tab", () => {
-    it("opens on New document with a rail instead of the library's own tabs", async () => {
+    it("opens on New document with screen tabs instead of the library's own tabs", async () => {
         mount("/");
         expect(
             await screen.findByRole("heading", { name: /generate a legal document/i })
@@ -246,7 +246,7 @@ describe("the Templated Drafts tab", () => {
         expect(screen.getByText(/Recent in your workspace/i)).toBeVisible();
     });
 
-    it("shows the loading state, with no count in the rail, until the list arrives", async () => {
+    it("shows the loading state, with no count in the tabs, until the list arrives", async () => {
         let release!: () => void;
         holdList = new Promise(resolve => (release = resolve));
         mount("/documents");
@@ -256,7 +256,7 @@ describe("the Templated Drafts tab", () => {
         expect(await screen.findByRole("heading", { name: "My documents" })).toBeVisible();
     });
 
-    it("moves to My documents from the rail and opens a draft as a record under it", async () => {
+    it("moves to My documents from the tabs and opens a draft as a record under it", async () => {
         mount("/");
         await screen.findByRole("heading", { name: /generate a legal document/i });
 
@@ -312,7 +312,7 @@ describe("the Templated Drafts tab", () => {
         ).toBeVisible();
     });
 
-    it("hands the home's question to the assistant once, and keeps the conversation across the rail", async () => {
+    it("hands the home's question to the assistant once, and keeps the conversation across the screens", async () => {
         mount("/");
         await screen.findByRole("heading", { name: /generate a legal document/i });
 

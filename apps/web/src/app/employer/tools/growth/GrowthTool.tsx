@@ -63,7 +63,7 @@ export function GrowthTool({ host }: { host?: ToolHost }) {
 }
 
 /**
- * One rail for the two halves of growing a company. Brand has no unit of
+ * One bar for the two halves of growing a company. Brand has no unit of
  * navigation beyond the week, so its group is plain screens; Prospects keeps
  * the segment switcher, since every screen there is about one segment. The
  * run sheet is the frame's overlay so any screen's "Find companies" can open
@@ -77,6 +77,9 @@ function GrowthFrame() {
             title="Growth"
             mark={<ProspectsMark size={15} tile />}
             groups={groups}
+            // A run belongs to the whole tool: its pill is in the bar on
+            // Brand's screens too, so there is always a way back to it.
+            status={<RunIndicator compact />}
             overlay={<RunSheet />}
         >
             {/* Keyed by path so a screen starts fresh on each visit, as it did
@@ -107,14 +110,8 @@ function useGrowthGroups(): ToolNavGroup[] {
         {
             id: "prospects",
             label: "Prospects",
-            toolbar: (
-                <>
-                    <RunIndicator compact />
-                    <SegmentSwitcher compact />
-                </>
-            ),
+            toolbar: <SegmentSwitcher compact />,
             header: <SegmentSwitcher />,
-            footer: <RunIndicator />,
             items: [
                 { to: paths.prospects(""), label: "Home", icon: House, exact: true },
                 {

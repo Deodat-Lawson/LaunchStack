@@ -23,7 +23,7 @@ import { TriageScreen } from "./_screens/TriageScreen";
 /**
  * Vantage, the evidence-backed weekly meeting loop, as a tab of the
  * workspace. It used to be its own route tree under `/employer/tools/vantage`
- * with a layout and a rail, so opening it closed every other tab; now the
+ * with a layout and a sidebar, so opening it closed every other tab; now the
  * workspace renders this, the tab keeps its own history, and the old URLs
  * redirect here (see `[[...slug]]/page.tsx`).
  */
@@ -36,7 +36,7 @@ export function VantageTool({ host }: { host?: ToolHost }) {
 }
 
 /**
- * The rail runs in the order the week does: the founder's screens first,
+ * The bar runs in the order the week does: the founder's screens first,
  * then capture. Triage sits apart under "Program": it is the administrator's
  * side of the same table and only reads what the founder chose to share.
  */

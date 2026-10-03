@@ -78,6 +78,11 @@ export interface ToolFrameProps {
     /** One or two sentences on what the tool is for, at the top of its ⋯ menu. */
     about?: ReactNode;
     /**
+     * Tool-wide status in the bar on every screen and at every width — a run
+     * in progress, which you need a way back to from anywhere in the tool.
+     */
+    status?: ReactNode;
+    /**
      * Sheets the tool owns (a run in progress). Every kit sheet inside the
      * frame — these, and any a screen opens — covers this tab only, never
      * the column beside it.
@@ -122,6 +127,7 @@ export function ToolFrame({
     mark,
     groups,
     about,
+    status,
     overlay,
     contentClassName,
     fill = false,
@@ -186,6 +192,9 @@ export function ToolFrame({
         groups && groups.length > 1 && totalItems > 8 && groups.every(g => g.label)
     );
     const tabGroups = twoLevel ? (activeGroup ? [activeGroup] : groups!.slice(0, 1)) : groups;
+    const tabs = (
+        <ScreenTabs title={title} groups={tabGroups ?? []} path={nav.path} ownRow={twoLevel} />
+    );
 
     return (
         <SheetContainerProvider container={root}>
@@ -222,16 +231,16 @@ export function ToolFrame({
                                         />
                                     )}
                                 </div>
-                                <ScreenTabs
-                                    title={title}
-                                    groups={tabGroups ?? []}
-                                    path={nav.path}
-                                    ownRow={twoLevel}
-                                />
+                                {/* In the DOM where it is seen, so Tab moves through
+                                    the bar in reading order: a two-level bar's tabs
+                                    are always the second row, after the controls. */}
+                                {!twoLevel && tabs}
                                 <div className="ml-auto flex h-11 shrink-0 items-center gap-2">
+                                    {status}
                                     {activeGroup?.toolbar}
                                     <FrameMenu title={title} about={about} />
                                 </div>
+                                {twoLevel && tabs}
                             </div>
                         </div>
                         {/* A phone: the screens fold into a menu. */}
@@ -247,6 +256,7 @@ export function ToolFrame({
                                         activeItem={activeItem}
                                         path={nav.path}
                                     />
+                                    {status}
                                     <FrameMenu title={title} about={about} />
                                 </div>
                                 {(activeGroup?.header ?? activeGroup?.footer) && (
@@ -302,23 +312,83 @@ function ScreenTabs({
     path: string;
     ownRow: boolean;
 }) {
-    const list = useRef<HTMLUListElement | null>(null);
-    // Keep the current screen's tab in view when the row scrolls.
-    useEffect(() => {
-        const current = list.current?.querySelector<HTMLElement>('[aria-current="page"]');
-        current?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+    const row = useRef<HTMLElement | null>(null);
+    const [edges, setEdges] = useState({ left: false, right: false });
+
+    // Keep the current screen's tab in view — when the screen changes, and
+    // when the row changes width under it (counts arriving widen the tabs
+    // before it; a split narrows the tab). Only moves when the tab is cut
+    // off, so a row the person scrolled by hand stays where they put it.
+    useLayoutEffect(() => {
+        const el = row.current;
+        if (!el) return;
+        const update = () => {
+            const current = el.querySelector<HTMLElement>('[aria-current="page"]');
+            if (current) {
+                // Measured against the row itself (a tab's offsetLeft counts
+                // from the frame), keeping the tab clear of the edge fade.
+                const rowBox = el.getBoundingClientRect();
+                const tabBox = current.getBoundingClientRect();
+                const margin = 32;
+                if (tabBox.left < rowBox.left + margin) {
+                    el.scrollLeft -= rowBox.left + margin - tabBox.left;
+                } else if (tabBox.right > rowBox.right - margin) {
+                    el.scrollLeft += tabBox.right - (rowBox.right - margin);
+                }
+            }
+            setEdges({
+                left: el.scrollLeft > 1,
+                right: el.scrollLeft + el.clientWidth < el.scrollWidth - 1,
+            });
+        };
+        update();
+        if (typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(update);
+        observer.observe(el);
+        if (el.firstElementChild) observer.observe(el.firstElementChild);
+        return () => observer.disconnect();
     }, [path]);
+
+    const onScroll = () => {
+        const el = row.current;
+        if (!el) return;
+        setEdges({
+            left: el.scrollLeft > 1,
+            right: el.scrollLeft + el.clientWidth < el.scrollWidth - 1,
+        });
+    };
+
+    // A mouse wheel scrolls up and down; this row only scrolls sideways.
+    const onWheel = (event: React.WheelEvent<HTMLElement>) => {
+        const el = row.current;
+        if (!el || event.deltaX !== 0 || el.scrollWidth <= el.clientWidth) return;
+        el.scrollLeft += event.deltaY;
+    };
+
     return (
         <nav
+            ref={row}
             aria-label={`${title} screens`}
+            onScroll={onScroll}
+            onWheel={onWheel}
             className={cn(
-                "-mb-px min-w-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+                "-mb-px min-w-0 self-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
                 ownRow
                     ? "order-last basis-full"
-                    : "flex-1 [@container(max-width:719px)]:order-last [@container(max-width:719px)]:basis-full"
+                    : "flex-1 [@container(max-width:719px)]:order-last [@container(max-width:719px)]:basis-full",
+                // Tabs past the edge fade out, so a row that scrolls says so.
+                edges.left && edges.right
+                    ? "[mask-image:linear-gradient(to_right,transparent,black_28px,black_calc(100%-28px),transparent)]"
+                    : edges.left
+                      ? "[mask-image:linear-gradient(to_right,transparent,black_28px)]"
+                      : edges.right
+                        ? "[mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent)]"
+                        : undefined
             )}
         >
-            <ul ref={list} className="flex items-stretch gap-0.5">
+            {/* Sized to its tabs, not the row: the observer above sees it
+                grow when counts arrive and widen the tabs. */}
+            <ul className="flex h-full w-max min-w-full items-stretch gap-0.5">
                 {groups.map((group, index) => (
                     <Fragment key={group.id}>
                         {index > 0 && (
@@ -337,14 +407,16 @@ function ScreenTabs({
 function ScreenTab({ item, active }: { item: ToolNavItem; active: boolean }) {
     const Icon = item.icon;
     return (
-        <li className="shrink-0">
+        <li className="flex shrink-0">
             <ToolLink
                 href={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                     // The underline sits on the bar's bottom border, so the
                     // current screen reads as part of the page below.
-                    "focus-visible:ring-brand/50 relative inline-flex h-10 items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 text-[13px] outline-none transition-colors after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full focus-visible:ring-[3px]",
+                    // The ring is inset: the row scrolls, and an outer ring
+                    // would be clipped at its edges.
+                    "focus-visible:ring-brand/50 relative inline-flex min-h-10 items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 text-[13px] outline-none transition-colors after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full focus-visible:ring-2 focus-visible:ring-inset",
                     active
                         ? "text-ink after:bg-brand font-medium"
                         : "text-ink-3 hover:text-ink after:bg-transparent"

@@ -2457,12 +2457,18 @@
     align-items: center;
     flex-shrink: 0;
 }
+/* The title block (title row + meta) takes the row the actions share; the
+   status badge drops under the title before the title is cut short. */
+.rdDocHead > :first-child {
+    flex: 1 1 240px;
+    min-width: 0;
+}
 .rdDocTitleRow {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 4px 10px;
     min-width: 0;
-    flex: 1 1 240px;
 }
 .rdDocTitle {
     font-size: 18px;
@@ -2474,7 +2480,7 @@
     color: var(--ink);
     padding: 2px 0;
     min-width: 0;
-    flex: 1;
+    flex: 1 1 240px;
     font-family: inherit;
 }
 .rdDocTitle:focus {

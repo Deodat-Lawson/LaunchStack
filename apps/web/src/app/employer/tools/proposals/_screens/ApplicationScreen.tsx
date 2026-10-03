@@ -41,6 +41,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { useToolRouter } from "~/components/tool-app/nav";
+import { ToolNotFound } from "~/components/tool-app/ToolFrame";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
@@ -984,6 +985,19 @@ export function ApplicationScreen({ id }: { id: string }) {
         if (target) setSelectedId(target.id);
         setTab("write");
     };
+
+    // Gone (deleted, or a link from another workspace): say so, and do not
+    // remember it as the tab's last screen.
+    if (res.errorStatus === 404) {
+        return (
+            <ToolNotFound
+                home={href("/write")}
+                homeLabel="Applications"
+                title="This application is no longer here"
+                body="It may have been deleted, or the link is from another workspace."
+            />
+        );
+    }
 
     if (res.error) {
         return (

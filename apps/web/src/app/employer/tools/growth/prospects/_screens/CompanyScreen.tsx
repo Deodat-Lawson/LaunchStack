@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { ToolNotFound } from "~/components/tool-app/ToolFrame";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolActive, useToolRouter } from "~/components/tool-app/nav";
 
@@ -153,6 +154,19 @@ export function CompanyScreen({ id }: { id: string }) {
             toast.error(e instanceof Error ? e.message : "Could not update");
         }
     };
+
+    // Gone (removed, or a link from another workspace): say so, and do not
+    // remember it as the tab's last screen.
+    if (res.errorStatus === 404) {
+        return (
+            <ToolNotFound
+                home={href("/companies")}
+                homeLabel="Companies"
+                title="This company is no longer here"
+                body="It may have been removed from the segment, or the link is from another workspace."
+            />
+        );
+    }
 
     if (res.error) {
         return (

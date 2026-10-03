@@ -3,6 +3,7 @@
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
+import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Skeleton } from "~/components/ui/skeleton";
 
@@ -28,9 +29,10 @@ export function SegmentSwitcher() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <button
+                <Button
                     type="button"
-                    className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 flex w-full items-center gap-2 rounded-lg border px-2.5 py-2 text-left outline-none transition-colors focus-visible:ring-[3px]"
+                    variant="outline"
+                    className="border-line bg-panel hover:bg-panel-2 hover:text-ink h-auto w-full justify-start gap-2 rounded-lg px-2.5 py-2 text-left font-normal"
                     aria-label="Switch segment"
                 >
                     <span className="min-w-0 flex-1">
@@ -42,16 +44,17 @@ export function SegmentSwitcher() {
                         </span>
                     </span>
                     <ChevronsUpDown className="text-ink-3 size-3.5 shrink-0" />
-                </button>
+                </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[248px] p-1.5">
                 <div className="text-ink-3 px-2 pb-1 pt-1 text-[11.5px]">Segments</div>
                 {segments.map(s => (
-                    <button
+                    <Button
                         key={s.id}
                         type="button"
+                        variant="ghost"
                         onClick={() => setSegmentId(s.id)}
-                        className="hover:bg-panel-2 focus-visible:ring-brand/50 flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left outline-none focus-visible:ring-[3px]"
+                        className="hover:bg-panel-2 hover:text-ink h-auto w-full justify-start gap-2 px-2 py-1.5 text-left font-normal"
                     >
                         <span className="min-w-0 flex-1">
                             <span className="text-ink block truncate text-[13px] font-medium">
@@ -62,16 +65,17 @@ export function SegmentSwitcher() {
                             </span>
                         </span>
                         {s.id === segmentId && <Check className="text-brand size-3.5" />}
-                    </button>
+                    </Button>
                 ))}
                 <div className="border-line mt-1 border-t pt-1">
-                    <button
+                    <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => setCreating(true)}
-                        className="text-brand-ink hover:bg-panel-2 focus-visible:ring-brand/50 w-full rounded-md px-2 py-1.5 text-left text-[13px] outline-none focus-visible:ring-[3px]"
+                        className="text-brand-ink hover:bg-panel-2 hover:text-brand-ink h-auto w-full justify-start px-2 py-1.5 text-left text-[13px] font-normal"
                     >
                         New segment
-                    </button>
+                    </Button>
                 </div>
             </PopoverContent>
             <NewSegmentDialog open={creating} onOpenChange={setCreating} />

@@ -818,8 +818,8 @@ export function LegalChatbot({
                                     Pick a template to begin
                                 </div>
                                 <p className={s.assistPreviewEmptySub}>
-                                    Tell the assistant what you need on the left. As you answer
-                                    questions, the document fills in here in real time.
+                                    Tell the assistant what you need. As you answer questions, the
+                                    document fills in here in real time.
                                 </p>
                             </div>
                         )}

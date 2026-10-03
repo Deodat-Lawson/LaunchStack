@@ -694,10 +694,25 @@ export function DocumentGeneratorEditor({
     };
 
     // Handle tool selection
-    // In the compact layout the tool's panel lives in the sheet: open it.
+    // In the compact layout the tool's panel lives in the sheet: open it when
+    // a tool is picked there — not when the tab merely narrows past the
+    // threshold with a tool already chosen.
+    const shownTool = useRef(activeTool);
     useEffect(() => {
-        if (compact && activeTool && activeTool !== "ai-generate") setPanelOpen(true);
+        const picked = activeTool !== shownTool.current;
+        shownTool.current = activeTool;
+        if (compact && picked && activeTool && activeTool !== "ai-generate") setPanelOpen(true);
     }, [compact, activeTool]);
+    // The sheet belongs to the compact layout only: widening the tab closes
+    // it, so narrowing again does not bring it back unasked.
+    useEffect(() => {
+        if (!compact) setPanelOpen(false);
+    }, [compact]);
+    // A rewrite preview appears in the document, under the sheet: step aside
+    // so Accept / Reject are in view.
+    useEffect(() => {
+        if (compact && rewritePreview) setPanelOpen(false);
+    }, [compact, rewritePreview]);
 
     const handleToolSelect = (tool: ToolType) => {
         if (tool === "export") {
@@ -812,7 +827,7 @@ export function DocumentGeneratorEditor({
                     <div className="flex shrink-0 items-center gap-2">
                         {lastSaved && !compact && (
                             <span className="text-ink-3 flex items-center gap-1 text-xs">
-                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                <CheckCircle className="text-success h-3 w-3" />
                                 Saved {lastSaved.toLocaleTimeString()}
                             </span>
                         )}
@@ -1292,7 +1307,9 @@ export function DocumentGeneratorEditor({
                         sidePanel
                     ) : (
                         <div className="flex h-full min-h-0 flex-col">
-                            <div className="border-line max-h-[45%] shrink-0 overflow-y-auto border-b">
+                            {/* Starts below the sheet's own close button, which
+                                the palette's collapse control sat under. */}
+                            <div className="border-line max-h-[45%] shrink-0 overflow-y-auto border-b pt-10">
                                 <ToolPalette
                                     activeTool={activeTool}
                                     onToolSelect={handleToolSelect}

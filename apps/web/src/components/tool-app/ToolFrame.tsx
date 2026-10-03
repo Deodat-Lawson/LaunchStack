@@ -495,18 +495,26 @@ export function ToolMark({ icon: Icon, className }: { icon: LucideIcon; classNam
 }
 
 /** What a tool shows for a path it has no screen for — an old or mistyped link. */
-export function ToolNotFound({ home, homeLabel }: { home: string; homeLabel: string }) {
+export function ToolNotFound({
+    home,
+    homeLabel,
+    title = "This screen does not exist",
+    body = "The link may be from an older version of the app, or the thing it pointed at was removed.",
+}: {
+    home: string;
+    homeLabel: string;
+    /** For a record that has gone: "This company is no longer here". */
+    title?: string;
+    body?: string;
+}) {
     const { navigate, forgetCurrent } = useToolNav();
     // A dead link is not a place to come back to: the tab keeps remembering
     // the last screen that existed.
     useEffect(() => forgetCurrent(), [forgetCurrent]);
     return (
         <div className="border-line bg-panel flex max-w-xl flex-col items-start gap-2 rounded-lg border px-5 py-5">
-            <div className="text-ink text-sm font-medium">This screen does not exist</div>
-            <p className="text-ink-2 text-sm">
-                The link may be from an older version of the app, or the thing it pointed at was
-                removed.
-            </p>
+            <div className="text-ink text-sm font-medium">{title}</div>
+            <p className="text-ink-2 text-sm">{body}</p>
             <Button size="sm" variant="outline" className="mt-1" onClick={() => navigate(home)}>
                 Go to {homeLabel}
             </Button>

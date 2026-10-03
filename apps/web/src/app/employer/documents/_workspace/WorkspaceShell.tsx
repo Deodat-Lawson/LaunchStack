@@ -1499,8 +1499,12 @@ export function WorkspaceShell() {
     const connectorResultParam = searchParams.get("result");
     // `?continue=<docId>` — continue an imported agent session in this chat.
     const continueParam = searchParams.get("continue");
+    // `?ask=<text>` — open the chat with this question in the composer. How
+    // another app (Proposals, for one) hands a question about the sources to
+    // the workspace without owning a chat of its own.
+    const askParam = searchParams.get("ask");
     useEffect(() => {
-        if (!featureParam && !addParam && !connectorParam && !continueParam) return;
+        if (!featureParam && !addParam && !connectorParam && !continueParam && !askParam) return;
         if (legacyRedirect) return;
         if (featureParam && RETIRED_FEATURE_HREFS[featureParam]) {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
@@ -1529,6 +1533,7 @@ export function WorkspaceShell() {
             const docId = Number.parseInt(continueParam, 10);
             if (Number.isFinite(docId)) void startContinuation(docId);
         }
+        if (askParam?.trim()) seedComposer(askParam.trim().slice(0, 4_000), "replace");
         if (connectorParam) {
             const tabByProvider: Record<string, string> = {
                 "google-drive": "drive",
@@ -1563,6 +1568,7 @@ export function WorkspaceShell() {
         params.delete("connector");
         params.delete("result");
         params.delete("continue");
+        params.delete("ask");
         const query = params.toString();
         router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
     }, [
@@ -1572,10 +1578,12 @@ export function WorkspaceShell() {
         connectorParam,
         connectorResultParam,
         continueParam,
+        askParam,
         legacyRedirect,
         permissionsLoaded,
         expandFeature,
         startContinuation,
+        seedComposer,
         router,
         searchParams,
     ]);

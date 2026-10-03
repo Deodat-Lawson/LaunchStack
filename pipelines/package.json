@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/pipelines",
     "version": "0.1.0",
-    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Eleven verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, and the distribution pipeline.",
+    "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Twelve verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,
@@ -51,7 +51,11 @@
         "./distribution/db": "./src/distribution/db.ts",
         "./distribution/schema": "./src/distribution/schema.ts",
         "./distribution/types": "./src/distribution/types.ts",
-        "./distribution/stages": "./src/distribution/stages.ts"
+        "./distribution/stages": "./src/distribution/stages.ts",
+        "./proposals": "./src/proposals/index.ts",
+        "./proposals/db": "./src/proposals/db.ts",
+        "./proposals/schema": "./src/proposals/schema.ts",
+        "./proposals/types": "./src/proposals/types.ts"
     },
     "files": [
         "dist",
@@ -223,6 +227,22 @@
             "./distribution/types": {
                 "types": "./dist/distribution/types.d.ts",
                 "default": "./dist/distribution/types.js"
+            },
+            "./proposals": {
+                "types": "./dist/proposals/index.d.ts",
+                "default": "./dist/proposals/index.js"
+            },
+            "./proposals/db": {
+                "types": "./dist/proposals/db.d.ts",
+                "default": "./dist/proposals/db.js"
+            },
+            "./proposals/schema": {
+                "types": "./dist/proposals/schema.d.ts",
+                "default": "./dist/proposals/schema.js"
+            },
+            "./proposals/types": {
+                "types": "./dist/proposals/types.d.ts",
+                "default": "./dist/proposals/types.js"
             }
         }
     },

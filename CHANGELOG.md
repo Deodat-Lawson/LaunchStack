@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Proposals** - a writing app of its own in Tools, with a Studio tile: find
+  the funders that fit, then write the proposal from what your sources prove
+  - Profile: what the workspace's sources can prove, fact by fact with
+    citations; edit a fact by hand, rebuild after new reports land
+  - Funders: a search planned from the profile over Grants.gov (public API,
+    no key) and the web (with an EXA/SERPER key), each call scored for fit
+    with why and concerns; save, dismiss, or apply from the row; a link to
+    Investor relations for equity
+  - Write: paste a call, give its link, or pick a Source; it becomes a
+    checklist (eligibility, every question with its word limit, attachments,
+    format, deadline) and an outline of sections to write
+  - An editor per section: draft from the sources with numbered evidence and
+    the gaps named, rewrite (tighten to the limit, more specific, plainer,
+    stronger, or your own instruction), approve, save to the Library; the
+    evidence rail shows what the answer cites; "Ask in chat" hands a question
+    about the sources to the Studio chat (`?ask=` on the workspace)
+  - A review that reads the drafts like a programme officer, readiness on
+    every row, a whole-document preview, export into Sources as markdown
+  - Runs execute in the web process after the response, or on the worker
+    with `PROPOSALS_EXECUTOR=worker`; every run lists in History
+  - `@launchstack/tools/grant-search` (Grants.gov + web listings) and
+    `@launchstack/pipelines/proposals` (six tables, six stages, the run
+    orchestrator); preview at `/dev/proposals`
+
 - **Split the workspace centre** - panes side by side and stacked, nested as
   deep as you split them (up to six), each its own strip of tabs
   - Drag a tab, or a source from the sidebar, onto a pane: its edges split
@@ -27,8 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     (⌘⌥⇧\), maximize (⌘⇧↩), focus the next or previous pane (⌘⌥] and ⌘⌥[),
     close the current app (⌘⌥W)
   - Apps fit the pane they are in, not the window: the composer drops to icons
-    and Meetings stacks its channel list in a narrow pane
-  - The document viewer folds its versions and notes rail into a Details
+    and Meetings stacks its channel list in a narrow pane  - The document viewer folds its versions and notes rail into a Details
     panel once its column is too narrow for both
 - **Resizable sidebar** - drag its edge (or use the arrow keys) between 220 and
   520px; the width is remembered

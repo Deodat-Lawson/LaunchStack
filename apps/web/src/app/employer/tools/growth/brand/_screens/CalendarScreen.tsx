@@ -8,12 +8,12 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-import { InlineError } from "../../_components/EmptyState";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
-import { plural } from "../../_lib/format";
+import { InlineError } from "~/components/tools/EmptyState";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { plural } from "~/lib/tools/format";
 import { useGrowthPaths } from "../../_lib/paths";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { NetworkMark } from "../_components/NetworkMark";
 import { PostActions, PostStatus } from "../_components/PostRow";
 import {

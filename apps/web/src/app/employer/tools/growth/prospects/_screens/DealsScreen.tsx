@@ -9,13 +9,13 @@ import { cn } from "~/lib/utils";
 
 import { ProspectsApiError, prospectsApi, type DealRow, type SalesStage } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../../_lib/format";
+import { relativeTime } from "~/lib/tools/format";
 import { EXIT_STAGES, FUNNEL_STAGES, STAGE_LABELS } from "../_lib/stages";
-import { useResource } from "../../_lib/useResource";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { StageMenu } from "../_components/StagePill";
 
 const BOARD: SalesStage[] = FUNNEL_STAGES.filter(s => s !== "lead");

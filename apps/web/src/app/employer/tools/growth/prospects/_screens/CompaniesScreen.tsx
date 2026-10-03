@@ -29,14 +29,14 @@ import { cn } from "~/lib/utils";
 
 import { prospectsApi, type CompaniesSort, type CompaniesView, type CompanyRow } from "../api";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "../../_lib/format";
+import { relativeTime } from "~/lib/tools/format";
 import { rememberListOrder } from "../_lib/listOrder";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
-import { EmptyState, InlineError } from "../../_components/EmptyState";
-import { FitMeter } from "../_components/FitMeter";
-import { PageHeader } from "../../_components/PageHeader";
-import { SkeletonRows } from "../../_components/SkeletonRows";
+import { EmptyState, InlineError } from "~/components/tools/EmptyState";
+import { FitMeter } from "~/components/tools/FitMeter";
+import { PageHeader } from "~/components/tools/PageHeader";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { FoundViaChips } from "../_components/SourceChip";
 import { StagePill } from "../_components/StagePill";
 

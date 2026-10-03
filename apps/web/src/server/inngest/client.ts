@@ -3,6 +3,7 @@ import { chatConfigMiddleware } from "./chat-config-middleware";
 import type { TrendSearchEventData } from "@launchstack/pipelines/trend-search";
 import type { ProspectorEventData } from "@launchstack/pipelines/client-prospector";
 import type { DistributionRunEventData } from "@launchstack/pipelines/distribution/types";
+import type { ProposalRunEventData } from "@launchstack/pipelines/proposals/types";
 import type { DocumentEdit, ReviewAction } from "@launchstack/editing";
 
 // Retired event types (ADR-003): document/process.requested,
@@ -104,6 +105,11 @@ export type DistributionRunEvent = {
     data: DistributionRunEventData;
 };
 
+export type ProposalsRunEvent = {
+    name: "proposals/run.requested";
+    data: ProposalRunEventData;
+};
+
 export type GoogleDriveSyncEvent = {
     name: "google-drive/sync.requested";
     data: {
@@ -137,7 +143,8 @@ export type Events =
     | RepoExplainerJobEvent
     | GoogleDriveSyncEvent
     | GmailSyncEvent
-    | DistributionRunEvent;
+    | DistributionRunEvent
+    | ProposalsRunEvent;
 
 /**
  * Create the Inngest client.

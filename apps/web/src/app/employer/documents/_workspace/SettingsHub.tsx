@@ -44,6 +44,15 @@ import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
 import { WorkspaceSwitchCard } from "~/app/employer/_chrome/WorkspaceSwitchCard";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 import type { Permission } from "~/lib/authz/permissions";
 import { SETTINGS } from "~/lib/settings/registry";
 import { isSettingsSectionId, type SettingsSectionId } from "~/lib/settings/types";
@@ -387,11 +396,23 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
     const active = useMemo(() => SECTIONS.find(s => s.id === section) ?? SECTIONS[0]!, [section]);
     const readOnly = Boolean(active.permission) && permissionsLoaded && !can(active.permission);
 
+    // The hub sizes itself by the space it is given, not by the viewport: as a
+    // Studio tab it can sit in a split far narrower than the window. Below
+    // 640px of its own width (a 240px rail plus room to read) the rail gives
+    // way to a section picker above the header, instead of squeezing the
+    // section into whatever the rail leaves over. The picker is shown by
+    // default and hidden from 640px up, not `hidden` plus a query to show it:
+    // another stylesheet on the page also defines `.hidden` and loads later.
     return (
-        <div className={cn("bg-surface text-ink flex min-h-0", embedded ? "h-full" : "h-screen")}>
+        <div
+            className={cn(
+                "bg-surface text-ink flex min-h-0 [container-type:inline-size]",
+                embedded ? "h-full" : "h-screen"
+            )}
+        >
             <nav
                 aria-label="Settings sections"
-                className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4"
+                className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4 [@container(max-width:639px)]:hidden"
             >
                 {/* Standalone, the way back leads the rail as it does in
                     Documents. Embedded as a Studio tab there is nowhere to go
@@ -448,12 +469,36 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             </nav>
 
             <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+                <div className="border-line bg-panel shrink-0 border-b px-4 py-2.5 [@container(min-width:640px)]:hidden">
+                    <Select
+                        value={section}
+                        onValueChange={next => {
+                            if (isSettingsSectionId(next)) selectSection(next);
+                        }}
+                    >
+                        <SelectTrigger aria-label="Settings section" className="w-full">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {GROUPS.map(group => (
+                                <SelectGroup key={group.id}>
+                                    <SelectLabel>{group.label}</SelectLabel>
+                                    {SECTIONS.filter(item => item.group === group.id).map(item => (
+                                        <SelectItem key={item.id} value={item.id}>
+                                            {item.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
                 <SectionHeader definition={active} actions={actions} readOnly={readOnly} />
 
                 <div className="min-h-0 flex-1 overflow-y-auto">
                     <div
                         className={cn(
-                            "mx-auto w-full px-7 pb-[72px] pt-6",
+                            "mx-auto w-full px-7 pb-[72px] pt-6 [@container(max-width:639px)]:px-4",
                             active.wide ? "max-w-[1200px]" : "max-w-[840px]"
                         )}
                     >
@@ -482,7 +527,7 @@ function SectionHeader({
     const busyLabel = actions?.primaryBusyLabel ?? `${actions?.primaryLabel ?? ""}…`;
 
     return (
-        <header className="border-line bg-panel shrink-0 border-b px-7 pb-4 pt-[18px]">
+        <header className="border-line bg-panel shrink-0 border-b px-7 pb-4 pt-[18px] [@container(max-width:639px)]:px-4">
             <div
                 className={cn(
                     "mx-auto flex w-full items-start gap-4",

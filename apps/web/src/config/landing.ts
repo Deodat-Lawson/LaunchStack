@@ -11,8 +11,14 @@
  * and importing it from client components to read one optional URL would pull
  * it into far more bundles than it belongs in. A wrong value here yields a
  * link to the wrong host, not a boot failure, so there is nothing to validate.
+ *
+ * Under `next dev` the fallback is the landing app's own dev server
+ * (`pnpm --filter @launchstack/landing dev`, port 3001), so the logo and
+ * sign-out keep a local stack local instead of jumping to the production site.
  */
-export const LANDING_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
+export const LANDING_URL =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://launchstack.app");
 
 export const LANDING_CONTACT_URL = `${LANDING_URL}/contact`;
 export const LANDING_DEPLOYMENT_URL = `${LANDING_URL}/deployment`;

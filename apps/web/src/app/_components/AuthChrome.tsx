@@ -5,6 +5,7 @@ import { useAuth, useUser } from "~/lib/auth-client";
 import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
+import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { LANDING_URL } from "~/config/landing";
 
 /**
@@ -37,28 +38,10 @@ export function AuthChrome() {
               the brand from a sign-in screen wants the public site, not a
               redirect straight back to where they already are.
             */}
-            <a
-                href={LANDING_URL}
-                rel="noopener"
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 9,
-                    textDecoration: "none",
-                    color: "inherit",
-                }}
-            >
+            <LandingLogoLink className="flex items-center gap-[9px]">
                 <LaunchstackMark size={26} title="Launchstack" />
-                <span
-                    style={{
-                        fontSize: 14,
-                        fontWeight: 700,
-                        letterSpacing: "-0.01em",
-                    }}
-                >
-                    Launchstack
-                </span>
-            </a>
+                <span className="text-sm font-bold tracking-[-0.01em]">Launchstack</span>
+            </LandingLogoLink>
             <div style={{ flex: 1 }} />
             <ThemeToggle />
             {isLoaded && isSignedIn && user && (

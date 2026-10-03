@@ -505,16 +505,24 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         id: "management",
         label: "Management",
         features: [
-            // Processing, agents and nodes, integrations, company profile, and
-            // analytics are all sections of one Settings surface — see `SettingsHub`.
-            // `metadata` and `analytics` remain as ids so existing deep links open
-            // the right section instead of 404ing.
+            // Processing, agents and nodes, integrations and the company profile
+            // are sections of one Settings surface — see `SettingsHub`; `metadata`
+            // survives as an id so old deep links open the right section.
+            // Analytics is not one of them: it has its own pane and its own
+            // permission, and Settings' `#analytics` only forwards to this tab.
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile, analytics",
+                desc: "People and access, processing, agents and nodes, integrations, company profile",
                 requires: "settings.manage",
+            },
+            {
+                id: "analytics",
+                label: "Analytics",
+                Icon: IconChart,
+                desc: "Documents, queries, and activity across the workspace",
+                requires: "analytics.view",
             },
         ],
     },
@@ -532,9 +540,8 @@ export const STUDIO_FEATURES_BY_ID: Record<string, StudioFeature> = STUDIO_GROUP
 
 /**
  * Panes that are no longer Studio entries but are still reachable by link:
- * `?feature=metadata` from an old bookmark, `?feature=analytics`, which is where
- * `SettingsHub` sends `#analytics`, and `workflows`, which keeps a pane, a
- * palette row and the `feature.workflows` shortcut but no picker tile. Each
+ * `?feature=metadata` from an old bookmark, and `workflows`, which keeps a
+ * pane, a palette row and the `feature.workflows` shortcut but no picker tile. Each
  * renders a real pane; a tab needs a label and an icon, so
  * `resolveStudioFeature` has to be able to name them.
  */
@@ -562,12 +569,6 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         label: "Company profile",
         Icon: IconBuilding,
         desc: "What the workspace knows about your company",
-    },
-    analytics: {
-        id: "analytics",
-        label: "Analytics",
-        Icon: IconChart,
-        desc: "Documents, queries, and activity",
     },
 };
 

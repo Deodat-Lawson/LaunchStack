@@ -364,7 +364,7 @@ function InviteForm({
                             readOnly
                             value={result.acceptUrl}
                             aria-label="Invitation link"
-                            className="bg-panel min-w-0 flex-1 font-mono text-xs md:text-xs"
+                            className="bg-panel min-w-0 flex-1 font-mono text-xs"
                             onFocus={e => e.currentTarget.select()}
                         />
                         <CopyButton value={result.acceptUrl} label="Copy link" />
@@ -528,7 +528,7 @@ function InvitationList({
                                                         readOnly
                                                         value={resent.acceptUrl}
                                                         aria-label="Invitation link"
-                                                        className="bg-panel min-w-0 flex-1 font-mono text-xs md:text-xs"
+                                                        className="bg-panel min-w-0 flex-1 font-mono text-xs"
                                                         onFocus={e => e.currentTarget.select()}
                                                     />
                                                     <CopyButton

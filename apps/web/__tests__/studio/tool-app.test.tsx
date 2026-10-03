@@ -37,7 +37,9 @@ describe("tool locations", () => {
 
     it("builds the link that opens a tool's tab at a screen", () => {
         expect(toolTabHref("growth")).toBe("/employer/documents?feature=growth");
-        expect(toolTabHref("growth", "/")).toBe("/employer/documents?feature=growth");
+        // "/" is a screen too: an old link to a tool's home lands on its home,
+        // not on whatever the tab showed last.
+        expect(toolTabHref("growth", "/")).toBe("/employer/documents?feature=growth&at=%2F");
         expect(toolTabHref("growth", "/prospects/companies?view=new")).toBe(
             "/employer/documents?feature=growth&at=%2Fprospects%2Fcompanies%3Fview%3Dnew"
         );

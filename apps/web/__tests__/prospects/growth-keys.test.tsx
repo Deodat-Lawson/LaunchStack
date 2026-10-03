@@ -92,7 +92,11 @@ describe("Growth keyboard shortcuts in a tab", () => {
     it("move the Companies cursor only while the tab is active", async () => {
         const request = { at: "/prospects/companies", nonce: 1 };
         const { rerender } = render(<GrowthTool host={{ active: true, request }} />);
-        expect(await screen.findByText("Alpha Fulfilment")).toBeInTheDocument();
+        // The whole tab mounts here (frame, provider, screen); under a busy
+        // full-suite run that takes longer than findBy's 1s default.
+        expect(
+            await screen.findByText("Alpha Fulfilment", undefined, { timeout: 10_000 })
+        ).toBeInTheDocument();
 
         fireEvent.keyDown(window, { key: "j" });
         expect(focusedRow()).toBe("0");
@@ -106,5 +110,5 @@ describe("Growth keyboard shortcuts in a tab", () => {
         await act(async () => {});
         fireEvent.keyDown(window, { key: "j" });
         expect(focusedRow()).toBe("1");
-    });
+    }, 20_000);
 });

@@ -118,7 +118,10 @@ describe("the old /employer/tools/vantage pages", () => {
     }
 
     it("redirect every screen into the tab, query included", async () => {
-        await expect(redirectFor(undefined)).resolves.toBe("/employer/documents?feature=vantage");
+        // The old home URL lands on the tool's home, not the last screen.
+        await expect(redirectFor(undefined)).resolves.toBe(
+            "/employer/documents?feature=vantage&at=%2F"
+        );
         await expect(redirectFor(["agenda"], { week: "2026-10-05" })).resolves.toBe(
             "/employer/documents?feature=vantage&at=%2Fagenda%3Fweek%3D2026-10-05"
         );

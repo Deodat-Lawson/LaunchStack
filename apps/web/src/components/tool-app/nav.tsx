@@ -88,6 +88,8 @@ export interface ToolNavValue {
     linkFor: (to: string) => string;
     /** Whether `to` stays inside this tool's tab. */
     isInternal: (to: string) => boolean;
+    /** Do not remember this visit as the tab's last screen (a not-found page). */
+    forgetCurrent: () => void;
 }
 
 const ToolNavContext = createContext<ToolNavValue | null>(null);
@@ -236,8 +238,18 @@ export function ToolNavProvider({
         moved.current = true;
     }, [scope, toolId, go, resolve]);
 
+    // Visits that must not become the remembered screen. Children's effects
+    // run before this provider's, so a not-found screen marks its visit in
+    // time for the write below to skip it.
+    const unremembered = useRef(new Set<number>());
+    const currentKeyRef = useRef(current.key);
+    currentKeyRef.current = current.key;
+    const forgetCurrent = useCallback(() => {
+        unremembered.current.add(currentKeyRef.current);
+    }, []);
+
     useEffect(() => {
-        if (!scope) return;
+        if (!scope || unremembered.current.has(current.key)) return;
         try {
             window.localStorage.setItem(
                 `${STORAGE_PREFIX}${scope}:${toolId}`,
@@ -266,6 +278,7 @@ export function ToolNavProvider({
             forward,
             linkFor,
             isInternal,
+            forgetCurrent,
         }),
         [
             toolId,
@@ -279,6 +292,7 @@ export function ToolNavProvider({
             forward,
             linkFor,
             isInternal,
+            forgetCurrent,
         ]
     );
 

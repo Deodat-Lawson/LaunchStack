@@ -131,6 +131,21 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
 const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
 
 /**
+ * Tools mount the first time their tab is shown. A restored layout can bring
+ * back Growth, Proposals and Vantage behind the tab in front, and each would
+ * otherwise load its data on every visit to the workspace for a screen
+ * nobody is looking at. Once shown, a tool stays mounted like any tab.
+ */
+const MOUNT_ON_FIRST_SHOW = new Set([
+    "growth",
+    "proposals",
+    "vantage",
+    "investors",
+    "draft",
+    "rewrite",
+]);
+
+/**
  * Tabs a saved layout may bring back. The mindmap editor is left behind: it
  * edits one map, and which map is not part of the layout.
  */
@@ -506,6 +521,7 @@ export function WorkspaceShell() {
         Partial<Record<string, { at: string; nonce: number }>>
     >({});
     const toolRequestNonce = useRef(0);
+    const shownTools = useRef(new Set<string>());
     const requestToolLocation = useCallback((toolId: string, at: string) => {
         toolRequestNonce.current += 1;
         const nonce = toolRequestNonce.current;
@@ -2263,6 +2279,10 @@ export function WorkspaceShell() {
                     const paneGroup = groupOf(layout, paneId);
                     const paneFocused =
                         paneGroup?.id === layout.activeGroupId && paneGroup.activeId === paneId;
+                    if (paneGroup?.activeId === paneId) shownTools.current.add(paneId);
+                    if (MOUNT_ON_FIRST_SHOW.has(paneId) && !shownTools.current.has(paneId)) {
+                        return null;
+                    }
                     return paneId === "chat" ? (
                         <AskPanel
                             leadingChromeInsetPx={0}

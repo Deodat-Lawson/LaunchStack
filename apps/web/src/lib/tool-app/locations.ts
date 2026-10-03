@@ -49,10 +49,13 @@ export function normalizeToolPath(path: string): string {
     return withSlash.length > 1 ? withSlash.replace(/\/+$/, "") || "/" : withSlash;
 }
 
-/** The link that opens `toolId`'s tab, at `at` when given. */
+/**
+ * The link that opens `toolId`'s tab. With `at` — "/" included — it opens on
+ * that screen; without, on whatever screen the tab last showed.
+ */
 export function toolTabHref(toolId: string, at?: string): string {
     const params = new URLSearchParams({ feature: toolId });
-    if (at && at !== "/") params.set("at", at);
+    if (at) params.set("at", at);
     return `${WORKSPACE_PATH}?${params.toString()}`;
 }
 

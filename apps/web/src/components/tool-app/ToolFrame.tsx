@@ -10,7 +10,7 @@ import {
     MoreHorizontal,
     type LucideIcon,
 } from "lucide-react";
-import { useCallback, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -70,6 +70,12 @@ export interface ToolFrameProps {
     overlay?: ReactNode;
     /** Classes for the padded content column, e.g. a max width. */
     contentClassName?: string;
+    /**
+     * The current screen lays itself out to the full height of the tab and
+     * brings its own padding — an editor, a chat. The frame then adds none;
+     * the screen gets a full-height box that still scrolls if it overflows.
+     */
+    fill?: boolean;
     children: ReactNode;
 }
 
@@ -100,6 +106,7 @@ export function ToolFrame({
     railFooter,
     overlay,
     contentClassName,
+    fill = false,
     children,
 }: ToolFrameProps) {
     const nav = useToolNav();
@@ -120,14 +127,35 @@ export function ToolFrame({
         if (!el) return;
         const saved = positions.current.get(nav.entryKey) ?? 0;
         el.scrollTop = saved;
-        if (saved === 0) return;
-        // The screen may still be loading its rows; try once more after paint.
-        const frame = requestAnimationFrame(() => {
-            if (scroller.current && entryKey.current === nav.entryKey) {
-                scroller.current.scrollTop = saved;
-            }
-        });
-        return () => cancelAnimationFrame(frame);
+        if (saved === 0 || el.scrollTop >= saved - 1) return;
+        // The screen is still loading its rows, so there is not yet room to
+        // scroll that far. Follow the content as it grows and put the position
+        // back once it fits — unless the person scrolls first, or it never
+        // arrives (a list that came back shorter).
+        const content = el.firstElementChild;
+        let observer: ResizeObserver | null = null;
+        let timer = 0;
+        const stop = () => {
+            observer?.disconnect();
+            observer = null;
+            el.removeEventListener("wheel", stop);
+            el.removeEventListener("touchstart", stop);
+            el.removeEventListener("keydown", stop);
+            window.clearTimeout(timer);
+        };
+        if (typeof ResizeObserver !== "undefined" && content) {
+            observer = new ResizeObserver(() => {
+                if (entryKey.current !== nav.entryKey) return stop();
+                el.scrollTop = saved;
+                if (el.scrollTop >= saved - 1) stop();
+            });
+            observer.observe(content);
+        }
+        el.addEventListener("wheel", stop, { passive: true });
+        el.addEventListener("touchstart", stop, { passive: true });
+        el.addEventListener("keydown", stop);
+        timer = window.setTimeout(stop, 4000);
+        return stop;
     }, [nav.entryKey]);
 
     const hasRail = Boolean(groups?.length);
@@ -214,7 +242,9 @@ export function ToolFrame({
                     >
                         <div
                             className={cn(
-                                "@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6",
+                                fill
+                                    ? "h-full w-full"
+                                    : "@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6",
                                 contentClassName
                             )}
                         >
@@ -388,10 +418,11 @@ function ScreenMenu({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button
+                <Button
                     type="button"
+                    variant="ghost"
                     aria-label={`${title} screens`}
-                    className="hover:bg-line-2 focus-visible:ring-brand/50 data-[state=open]:bg-line-2 flex h-8 min-w-0 flex-1 items-center gap-2 rounded-md px-1.5 text-left outline-none focus-visible:ring-[3px]"
+                    className="hover:bg-line-2 hover:text-ink data-[state=open]:bg-line-2 h-8 min-w-0 flex-1 justify-start gap-2 px-1.5 text-left font-normal"
                 >
                     {mark}
                     <span className="text-ink shrink-0 text-[13.5px] font-semibold tracking-[-0.02em]">
@@ -410,7 +441,7 @@ function ScreenMenu({
                         </>
                     )}
                     <ChevronDown className="text-ink-3 ml-auto size-3.5 shrink-0" />
-                </button>
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="max-h-[70vh] w-64 overflow-y-auto">
                 {groups.map((group, index) => (
@@ -465,7 +496,10 @@ export function ToolMark({ icon: Icon, className }: { icon: LucideIcon; classNam
 
 /** What a tool shows for a path it has no screen for — an old or mistyped link. */
 export function ToolNotFound({ home, homeLabel }: { home: string; homeLabel: string }) {
-    const { navigate } = useToolNav();
+    const { navigate, forgetCurrent } = useToolNav();
+    // A dead link is not a place to come back to: the tab keeps remembering
+    // the last screen that existed.
+    useEffect(() => forgetCurrent(), [forgetCurrent]);
     return (
         <div className="border-line bg-panel flex max-w-xl flex-col items-start gap-2 rounded-lg border px-5 py-5">
             <div className="text-ink text-sm font-medium">This screen does not exist</div>

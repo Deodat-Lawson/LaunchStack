@@ -78,7 +78,7 @@ import {
     useStudioLayout,
 } from "./paneLayout";
 import * as sourceApi from "./sourceApi";
-import { SOURCE_META, demotedFeatureHref, resolveStudioFeature } from "./types";
+import { SOURCE_META, demotedFeatureHref, resolveStudioFeature, settingsSectionOf } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
     CitationHighlight,
@@ -150,6 +150,21 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
     artifacts: "/employer/documents?add=1&tab=artifact",
     "agent-sessions": "/employer/documents?add=1&tab=agent-sessions",
 };
+
+/**
+ * Points the Settings hub at a section. The hub follows the hash, mounted or
+ * not. Setting the hash it already has fires no `hashchange`, so announce it
+ * instead: picking a section again, after moving to another inside the hub,
+ * would otherwise leave the hub where it was.
+ */
+function showSettingsSection(section: string) {
+    if (!section) return;
+    if (window.location.hash.replace(/^#/, "") === section) {
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+    } else {
+        window.location.hash = section;
+    }
+}
 
 /**
  * A stored turn becomes a thread turn. `citations` and `attachments` are
@@ -1319,10 +1334,18 @@ export function WorkspaceShell() {
             if (!feature) {
                 // Retired ids and palette rows that point outside Studio.
                 const href = RETIRED_FEATURE_HREFS[featureId] ?? demotedFeatureHref(featureId);
-                if (href) {
-                    setStudioOpen(false);
-                    router.push(href);
+                if (!href) return;
+                const section = settingsSectionOf(href);
+                if (section !== undefined) {
+                    // "Agents & nodes", "Workspace" and the like are sections
+                    // of Settings, which is a tab here. Following the link
+                    // would leave the workspace and close every open tab.
+                    showSettingsSection(section);
+                    expandFeatureRef.current("settings");
+                    return;
                 }
+                setStudioOpen(false);
+                router.push(href);
                 return;
             }
             // Fails closed: `can` answers false until permissions load.
@@ -1377,9 +1400,9 @@ export function WorkspaceShell() {
      */
     const navigateStudio = useCallback(
         (href: string) => {
-            const url = new URL(href, window.location.origin);
-            if (url.pathname === "/employer/settings") {
-                if (url.hash) window.location.hash = url.hash;
+            const section = settingsSectionOf(href);
+            if (section !== undefined) {
+                showSettingsSection(section);
                 expandFeature("settings");
                 return;
             }
@@ -2434,7 +2457,7 @@ export function WorkspaceShell() {
                     setPalOpen(false);
                     // The hub reads the hash on mount and on change; the row
                     // scrolls itself into view.
-                    window.location.hash = key;
+                    showSettingsSection(key);
                     setTimeout(() => expandFeature("settings"), 100);
                 }}
             />

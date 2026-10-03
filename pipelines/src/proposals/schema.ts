@@ -28,7 +28,6 @@ import type {
     Evidence,
     ExtractedRequest,
     Fit,
-    OrgProfile,
     Requirement,
     Review,
     RunInput,
@@ -38,35 +37,10 @@ import type {
 import {
     APPLICATION_STATUSES,
     OPPORTUNITY_STATUSES,
-    PROFILE_STATUSES,
     RUN_KINDS,
     RUN_STATUSES,
     SECTION_STATUSES,
 } from "./types";
-
-// ─── Organisation profile ────────────────────────────────────────────────────
-
-export const proposalProfiles = pgTable(
-    "proposal_profiles",
-    {
-        id: varchar("id", { length: 64 }).primaryKey(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        status: varchar("status", { length: 16, enum: PROFILE_STATUSES })
-            .notNull()
-            .default("empty"),
-        profile: jsonb("profile").$type<OrgProfile>(),
-        error: text("error"),
-        builtAt: timestamp("built_at", { withTimezone: true }),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
-    },
-    table => [uniqueIndex("proposal_profiles_company_unique").on(table.companyId)]
-);
-export type ProposalProfileRow = InferSelectModel<typeof proposalProfiles>;
 
 // ─── Opportunities ───────────────────────────────────────────────────────────
 

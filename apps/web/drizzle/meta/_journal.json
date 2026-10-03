@@ -176,6 +176,13 @@
       "when": 1790994077492,
       "tag": "20261003022117_vantage",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1791067895823,
+      "tag": "20261003225135_company_profile_sources",
+      "breakpoints": true
     }
   ]
 }

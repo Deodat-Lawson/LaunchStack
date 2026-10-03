@@ -6,18 +6,11 @@
  */
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import type { BaseMessageLike } from "@langchain/core/messages";
-import { eq } from "drizzle-orm";
 import type { z } from "zod";
 
 import { invokeStructured, resolveChatModel, type ResolveChatModelOptions } from "@launchstack/llm";
 import type { DocumentScope, RagSearchResult } from "@launchstack/retrieval";
-import { getDb } from "@launchstack/store/client";
-import {
-    formatMetadataContext,
-    getCompanyIdentity,
-    type CompanyIdentity,
-} from "@launchstack/tools/company-context";
-import { companyMetadata } from "@launchstack/tools/company-context/schema";
+import { getCompanyIdentity, type CompanyIdentity } from "@launchstack/tools/company-context";
 import {
     findGrants,
     type GrantSearchQuery,
@@ -28,7 +21,6 @@ import { fetchReadable } from "@launchstack/tools/web-research";
 
 /** One model policy per stage; a route or temperature change is an explicit edit here. */
 export const PROPOSALS_MODELS = {
-    profile: { route: "fast", temperature: 0.2 },
     plan: { route: "fast", temperature: 0.3 },
     score: { route: "fast", temperature: 0.2 },
     extract: { route: "fast", temperature: 0.1 },
@@ -41,7 +33,6 @@ export type ProposalStage = keyof typeof PROPOSALS_MODELS;
 
 /** Credits per stage, in the ledger's token units. */
 export const PROPOSAL_CREDITS = {
-    profile: 3_000,
     funders: 2_000,
     extract: 1_000,
     draft: 1_500,
@@ -58,8 +49,6 @@ export interface RetrieveArgs {
 
 export interface ProposalPorts {
     identity(companyId: number): Promise<CompanyIdentity>;
-    /** The company-metadata projection as a prompt block; null when none exists. */
-    metadataContext(companyId: number): Promise<string | null>;
     retrieve(args: RetrieveArgs): Promise<RagSearchResult[]>;
     structured<T>(
         stage: ProposalStage,
@@ -87,14 +76,6 @@ export interface CreateDefaultPortsOptions {
 export function createDefaultPorts(options: CreateDefaultPortsOptions = {}): ProposalPorts {
     return {
         identity: async companyId => (await getCompanyIdentity({ companyId })).data,
-        metadataContext: async companyId => {
-            const [row] = await getDb()
-                .select({ metadata: companyMetadata.metadata })
-                .from(companyMetadata)
-                .where(eq(companyMetadata.companyId, BigInt(companyId)))
-                .limit(1);
-            return row?.metadata ? formatMetadataContext(row.metadata) : null;
-        },
         retrieve: async ({ companyId, query, policy, scope }) =>
             (
                 await retrieveCompanySnippets({

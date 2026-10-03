@@ -1,19 +1,64 @@
 "use client";
 
+import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useOptionalToolNav } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
 
-import type { EvidenceDto } from "../api";
+/**
+ * One numbered excerpt something cites. Structural on purpose: the company
+ * profile's evidence and a Proposals draft's evidence both fit it, and
+ * neither has to know about the other.
+ */
+export interface CiteEvidence {
+    n: number;
+    title: string;
+    page: number | null;
+    quote: string;
+    /** Where the source opens in the Studio; null when it cannot be opened there. */
+    href: string | null;
+    /** A web page, for evidence that did not come from a source. */
+    url?: string | null;
+}
+
+/**
+ * A link to a source. Inside a tool's tab it is a `ToolLink`, so a plain
+ * click stays in the workspace; anywhere else (Settings) it is a plain
+ * client-side link to the same Studio URL.
+ */
+export function SourceLink({
+    href,
+    className,
+    children,
+}: {
+    href: string;
+    className?: string;
+    children: React.ReactNode;
+}) {
+    const nav = useOptionalToolNav();
+    if (nav) {
+        return (
+            <ToolLink href={href} className={className}>
+                {children}
+            </ToolLink>
+        );
+    }
+    return (
+        <Link href={href} className={className}>
+            {children}
+        </Link>
+    );
+}
 
 /**
  * A superscript naming its evidence. Hover shows the source, the page and
  * the quote; the title opens the source in the Studio. The same component
  * cites a profile fact and a drafted answer.
  */
-export function Cite({ n, evidence }: { n: number; evidence: EvidenceDto[] }) {
+export function Cite({ n, evidence }: { n: number; evidence: CiteEvidence[] }) {
     const item = evidence.find(e => e.n === n);
     const sup = (
         <span
@@ -29,13 +74,13 @@ export function Cite({ n, evidence }: { n: number; evidence: EvidenceDto[] }) {
             <HoverCardTrigger asChild>{sup}</HoverCardTrigger>
             <HoverCardContent align="start" className="w-80 p-3">
                 {item.href ? (
-                    <ToolLink
+                    <SourceLink
                         href={item.href}
                         className="text-ink hover:text-brand-ink inline-flex items-center gap-1 text-[13px] font-medium"
                     >
                         {item.title}
                         <ExternalLink className="size-3" />
-                    </ToolLink>
+                    </SourceLink>
                 ) : item.url ? (
                     <a
                         href={item.url}
@@ -63,7 +108,7 @@ export function CiteList({
     className,
 }: {
     cites: number[];
-    evidence: EvidenceDto[];
+    evidence: CiteEvidence[];
     className?: string;
 }) {
     if (cites.length === 0) return null;
@@ -78,7 +123,7 @@ export function CiteList({
 }
 
 /** The evidence list under a profile or a draft: numbered rows, each a link. */
-export function EvidenceRows({ evidence }: { evidence: EvidenceDto[] }) {
+export function EvidenceRows({ evidence }: { evidence: CiteEvidence[] }) {
     if (evidence.length === 0) return null;
     return (
         <div className="border-line bg-panel overflow-hidden rounded-lg border">
@@ -90,12 +135,12 @@ export function EvidenceRows({ evidence }: { evidence: EvidenceDto[] }) {
                     <span className="text-ink-3 font-mono text-[11px] tabular-nums">{e.n}</span>
                     <span className="min-w-0">
                         {e.href ? (
-                            <ToolLink
+                            <SourceLink
                                 href={e.href}
                                 className="text-ink hover:text-brand-ink font-medium"
                             >
                                 {e.title}
-                            </ToolLink>
+                            </SourceLink>
                         ) : (
                             <span className="text-ink font-medium">{e.title}</span>
                         )}

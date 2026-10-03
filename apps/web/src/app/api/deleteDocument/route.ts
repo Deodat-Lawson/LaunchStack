@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
+import { reassembleAfterDelete } from "~/server/company-profile/service";
 import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
@@ -59,6 +60,8 @@ export async function DELETE(request: Request) {
                 detail: { title: doc.title, category: doc.category },
             });
         });
+        // The company profile drops what the deleted documents said.
+        reassembleAfterDelete(ctx.data.companyId, ctx.data.authUserId);
 
         return NextResponse.json(
             {

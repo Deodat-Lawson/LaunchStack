@@ -13,15 +13,19 @@
  *  5. New facts not present in existing metadata are added.
  *  6. People/services/projects are matched by normalised name.
  *  7. Market facts are unioned by normalised value.
- *  8. Policy facts are merged by key.
+ *  8. Policy facts and profile facts are merged by key.
+ *  9. Two sources stating the same value keep both citations (up to
+ *     {@link MAX_SOURCES}), the higher confidence, and the newer date.
  */
 
 import type {
     CompanyMetadataJSON,
     ExtractedCompanyFacts,
+    LabeledFact,
     MergeResult,
     MetadataDiff,
     MetadataFact,
+    MetadataSource,
     CompanyInfo,
     PersonEntry,
     ServiceEntry,
@@ -106,6 +110,19 @@ export function mergeCompanyMetadata(
         merged.policies = mergePolicies(merged.policies, extracted.facts.policies, diff);
     }
 
+    // ---- Profile facts (mission, outcomes, budget…) ----
+    if (extracted.facts.profile?.facts) {
+        merged.profile = {
+            ...merged.profile,
+            facts: mergeKeyed(
+                merged.profile?.facts ?? {},
+                extracted.facts.profile.facts,
+                "profile.facts",
+                diff
+            ),
+        };
+    }
+
     // ---- Provenance ----
     merged.provenance = {
         ...merged.provenance,
@@ -163,6 +180,48 @@ function deprecate(fact: MetadataFact<unknown>): MetadataFact<unknown> {
     };
 }
 
+/** Citations kept per fact; the first ones are the strongest. */
+const MAX_SOURCES = 4;
+
+function normaliseValue(value: unknown): string {
+    return String(value).toLowerCase().trim().replace(/\s+/g, " ");
+}
+
+/** Two automated facts that say the same thing. */
+function sameStatement(a: MetadataFact<unknown>, b: MetadataFact<unknown>): boolean {
+    return (
+        a.priority !== "manual_override" &&
+        b.priority !== "manual_override" &&
+        normaliseValue(a.value) === normaliseValue(b.value)
+    );
+}
+
+function sourceKey(source: MetadataSource): string {
+    return `${source.doc_id}|${source.page ?? ""}|${(source.quote ?? "").slice(0, 80)}`;
+}
+
+/** The same statement from another source: keep both citations. */
+function corroborate<T extends MetadataFact<unknown>>(existing: T, incoming: T): T {
+    const seen = new Set(existing.sources.map(sourceKey));
+    const sources = [...existing.sources];
+    for (const source of incoming.sources) {
+        if (sources.length >= MAX_SOURCES) break;
+        if (!seen.has(sourceKey(source))) {
+            seen.add(sourceKey(source));
+            sources.push(source);
+        }
+    }
+    return {
+        ...existing,
+        confidence: Math.max(existing.confidence, incoming.confidence),
+        last_updated:
+            incoming.last_updated > existing.last_updated
+                ? incoming.last_updated
+                : existing.last_updated,
+        sources,
+    };
+}
+
 // ============================================================================
 // Company info merge
 // ============================================================================
@@ -183,6 +242,8 @@ function mergeCompanyInfo(
             // New fact — add it
             result[key] = incomingFact;
             diff.added.push({ path: `company.${key}`, new: incomingFact });
+        } else if (sameStatement(existingFact, incomingFact)) {
+            result[key] = corroborate(existingFact, incomingFact);
         } else if (shouldReplace(existingFact, incomingFact)) {
             // Incoming wins — replace and record diff
             result[key] = incomingFact;
@@ -265,6 +326,8 @@ function mergeNamedArray<T extends NamedEntry>(
                         path: `${section}[${idx}].${field}`,
                         new: typed,
                     });
+                } else if (sameStatement(existingFact, typed)) {
+                    mergedEntry[field] = corroborate(existingFact, typed);
                 } else if (shouldReplace(existingFact, typed)) {
                     mergedEntry[field] = typed;
                     diff.updated.push({
@@ -329,10 +392,16 @@ function mergeMarkets(
 
             if (!existingFact) {
                 merged.push(incomingFact);
+                existingValues.set(key, incomingFact);
                 diff.added.push({
                     path: `markets.${cat}[${merged.length - 1}]`,
                     new: incomingFact,
                 });
+            } else if (sameStatement(existingFact, incomingFact)) {
+                const idx = merged.indexOf(existingFact);
+                const combined = corroborate(existingFact, incomingFact);
+                merged[idx] = combined;
+                existingValues.set(key, combined);
             } else if (shouldReplace(existingFact, incomingFact)) {
                 const idx = merged.indexOf(existingFact);
                 merged[idx] = incomingFact;
@@ -351,7 +420,7 @@ function mergeMarkets(
 }
 
 // ============================================================================
-// Policies merge
+// Keyed merge (policies, profile facts)
 // ============================================================================
 
 function mergePolicies(
@@ -359,23 +428,34 @@ function mergePolicies(
     incoming: Record<string, MetadataFact>,
     diff: MetadataDiff
 ): Record<string, MetadataFact> {
+    return mergeKeyed(existing, incoming, "policies", diff);
+}
+
+function mergeKeyed<T extends MetadataFact | LabeledFact>(
+    existing: Record<string, T>,
+    incoming: Record<string, T>,
+    section: string,
+    diff: MetadataDiff
+): Record<string, T> {
     const result = { ...existing };
 
     for (const [key, incomingFact] of Object.entries(incoming)) {
-        const existingFact = existing[key];
+        const existingFact = result[key];
 
         if (!existingFact) {
             result[key] = incomingFact;
-            diff.added.push({ path: `policies.${key}`, new: incomingFact });
+            diff.added.push({ path: `${section}.${key}`, new: incomingFact });
+        } else if (sameStatement(existingFact, incomingFact)) {
+            result[key] = corroborate(existingFact, incomingFact);
         } else if (shouldReplace(existingFact, incomingFact)) {
             result[key] = incomingFact;
             diff.updated.push({
-                path: `policies.${key}`,
+                path: `${section}.${key}`,
                 old: existingFact,
                 new: incomingFact,
             });
             diff.deprecated.push({
-                path: `policies.${key}`,
+                path: `${section}.${key}`,
                 old: deprecate(existingFact),
             });
         }

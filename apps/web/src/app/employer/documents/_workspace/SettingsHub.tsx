@@ -95,8 +95,8 @@ const UsageSection = load(() => import("./settings/UsageSection").then(m => m.Us
 const ArchiveSection = load(() => import("./settings/ArchiveSection").then(m => m.ArchiveSection));
 const PrivacySection = load(() => import("./settings/PrivacySection").then(m => m.PrivacySection));
 const LabsSection = load(() => import("./settings/LabsSection").then(m => m.LabsSection));
-const MetadataView = dynamic(
-    () => import("~/app/employer/metadata/MetadataView").then(m => m.MetadataView),
+const CompanyProfileView = dynamic(
+    () => import("~/components/company-profile/CompanyProfileView").then(m => m.CompanyProfileView),
     { loading: () => <SectionLoading /> }
 );
 
@@ -206,11 +206,11 @@ export const SECTIONS: SectionDef[] = [
         id: "company",
         group: "workspace",
         label: "Company profile",
-        blurb: "Industry, people, markets",
+        blurb: "What your sources prove",
         eyebrow: "Company",
-        title: "What the AI knows about your company",
+        title: "What your sources can prove",
         description:
-            "Extracted from your documents and editable by hand. Agents cite this when a meeting needs company context, and generated documents take their house style from it.",
+            "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that.",
         Icon: Building2,
         wide: true,
         aliases: ["company", "metadata", "profile"],
@@ -590,7 +590,7 @@ function SectionBody({
         case "people":
             return <PeopleAccessSection onActions={onActions} />;
         case "company":
-            return <MetadataView bare onActions={onActions} />;
+            return <CompanyProfileView variant="settings" onActions={onActions} />;
         case "processing":
             return <ProcessingSettings onActions={onActions} />;
         case "models":

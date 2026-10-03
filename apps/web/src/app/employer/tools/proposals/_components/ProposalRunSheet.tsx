@@ -145,11 +145,6 @@ export function ProposalRunSheet() {
                                     <ToolLink href={href("/funders")}>See funders</ToolLink>
                                 </Button>
                             )}
-                            {!live && !run.applicationId && run.kind === "profile" && (
-                                <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
-                                    <ToolLink href={href("/profile")}>See the profile</ToolLink>
-                                </Button>
-                            )}
                         </div>
                     </div>
                 )}

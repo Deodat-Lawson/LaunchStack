@@ -1,211 +1,91 @@
 /**
- * Company Metadata Extractor — Chunk-Level Extraction + Aggregation
+ * Company fact extraction — one source version's clean passages in, cited
+ * facts out.
  *
- * Instead of sending the whole document in one LLM call, this extractor:
- *   1. Reads all chunks for a document from the database.
- *   2. Groups them into small batches (configurable).
- *   3. Sends each batch to the LLM in parallel (with concurrency cap).
- *   4. Aggregates and deduplicates the per-batch results:
- *      - Company fields: highest confidence wins.
- *      - People/services/projects: matched by normalised name, fields merged.
- *      - Markets: union of unique values.
- *      - Policies: merge by key, highest confidence wins.
- *      - Facts seen in multiple batches get a confidence boost.
- *   5. Returns a single {@link ExtractedCompanyFacts} — same contract as before.
+ *   1. The passages (already stripped of references, tables, figure residue
+ *      and boilerplate by ./passages) are numbered [P1]…[Pn] and packed into
+ *      calls under a character budget.
+ *   2. Each call returns facts with the exact quote and the passage number
+ *      that states them.
+ *   3. The grounding gate keeps a fact only when its quote appears verbatim
+ *      in a passage of that call, and every number in the value appears in
+ *      the quote. What survives carries its own page and quote as provenance.
+ *   4. Calls are combined with the merger, so the same fact read twice keeps
+ *      both citations.
  *
- * This is a pure extraction step — it does NOT write to the database.
+ * Pure apart from the host-supplied `generate`: no database.
  */
 
 import { z, type ZodType } from "zod";
-import { and, eq } from "drizzle-orm";
 
-import { getDb } from "@launchstack/store/client";
-import { documentContextChunks, document as documentTable } from "@launchstack/store/schema";
-import { EXTRACTION_SYSTEM_PROMPT, buildChunkExtractionPrompt } from "./prompts";
-import type {
-    ExtractedCompanyFacts,
-    MetadataFact,
-    MetadataSource,
-    Visibility,
-    Usage,
-    CompanyInfo,
-    PersonEntry,
-    ServiceEntry,
-    ProjectEntry,
-    SubprojectEntry,
-    LegalEntry,
-    MarketsInfo,
+import { mergeCompanyMetadata } from "./merger";
+import { normalizeForMatch, quoteAppearsIn, type Passage } from "./passages";
+import { EXTRACTION_SYSTEM_PROMPT, buildExtractionPrompt } from "./prompts";
+import {
+    createEmptyMetadata,
+    type CompanyInfo,
+    type LabeledFact,
+    type LegalEntry,
+    type MarketsInfo,
+    type MetadataFact,
+    type MetadataSource,
+    type PersonEntry,
+    type ProjectEntry,
+    type ServiceEntry,
+    type SourceFacts,
+    type Usage,
+    type Visibility,
 } from "./types";
 
 // ============================================================================
 // Configuration
 // ============================================================================
 
-/** Number of chunks per LLM batch. */
-const CHUNKS_PER_BATCH = 15;
+/** Passage characters per model call. */
+const CALL_BUDGET_CHARS = 12_000;
 
-/**
- * Max parallel LLM calls.
- *
- * Note: this was chosen for OpenAI cloud throughput. When the active provider
- * is Ollama (single-GPU local inference) this may be too aggressive and
- * saturate the local model. The unified LLM library doesn't currently expose
- * per-provider concurrency hints; if we see problems in practice, add a
- * capability-level `maxConcurrency` to the config and plumb it through here.
- */
-const MAX_CONCURRENCY = 5;
+/** Parallel calls per source. */
+const MAX_CONCURRENCY = 4;
 
-/**
- * Confidence boost when a fact is seen in multiple batches.
- * Final confidence = min(1.0, base + MULTI_MENTION_BOOST * (mentionCount - 1))
- */
-const MULTI_MENTION_BOOST = 0.05;
+/** Facts below this confidence are dropped, as the prompt asks. */
+const MIN_CONFIDENCE = 0.4;
 
-// ============================================================================
-// Boilerplate detection heuristics
-// ============================================================================
+/** Stored quote length; the gate checks the full quote first. */
+const MAX_QUOTE_CHARS = 300;
 
-/** Minimum character count for a chunk to be worth sending to LLM. */
-const MIN_CHUNK_CHARS = 40;
-
-/** Patterns that indicate boilerplate content (case-insensitive). */
-const BOILERPLATE_PATTERNS = [
-    /^table of contents$/i,
-    /^\s*contents\s*$/i,
-    /^page\s+\d+\s*(of\s+\d+)?$/i,
-    /^©\s*\d{4}/,
-    /copyright\s+©?\s*\d{4}/i,
-    /all rights reserved/i,
-    /confidential\s+and\s+proprietary/i,
-    /^\s*disclaimer\s*$/i,
-    /this document is confidential/i,
-    /do not distribute/i,
-    /^\s*\d+\s*$/, // just a page number
-    /^(\.{2,}\s*\d+\s*\n?)+$/, // TOC dotted lines: "Section...12"
-];
-
-/**
- * Returns true if a chunk is likely boilerplate that won't contain
- * useful company metadata. Uses content length and pattern matching.
- */
-function isBoilerplate(content: string): boolean {
-    const trimmed = content.trim();
-
-    // Too short to contain meaningful facts
-    if (trimmed.length < MIN_CHUNK_CHARS) return true;
-
-    // Check against boilerplate patterns
-    for (const pattern of BOILERPLATE_PATTERNS) {
-        if (pattern.test(trimmed)) return true;
-    }
-
-    // TOC heuristic: many lines that end with page numbers (e.g., "Introduction ... 3")
-    const lines = trimmed.split("\n").filter(l => l.trim().length > 0);
-    if (lines.length >= 3) {
-        const tocLines = lines.filter(l => /\.{2,}\s*\d+\s*$/.test(l) || /\s{3,}\d+\s*$/.test(l));
-        if (tocLines.length / lines.length > 0.6) return true;
-    }
-
-    return false;
-}
+/** The reusable facts a proposal or pitch writer keeps at hand, with their labels. */
+export const PROFILE_FACT_LABELS = {
+    mission: "Mission",
+    programs: "Programs",
+    beneficiaries: "Who it serves",
+    outcomes: "Outcomes",
+    need: "Need addressed",
+    legal_status: "Legal status",
+    annual_budget: "Annual budget",
+    funding_sources: "Funding sources",
+    funding_raised: "Funding raised",
+    customers: "Customers",
+    traction: "Traction",
+    business_model: "Business model",
+    pricing: "Pricing",
+    leadership: "Leadership",
+    board: "Board",
+    partners: "Partners",
+    awards: "Awards",
+    theory_of_change: "Theory of change",
+    evaluation: "Evaluation",
+    plans: "Plans",
+} as const;
+export type ProfileFactKey = keyof typeof PROFILE_FACT_LABELS;
+const PROFILE_FACT_KEYS = Object.keys(PROFILE_FACT_LABELS) as [ProfileFactKey, ...ProfileFactKey[]];
 
 // ============================================================================
-// Zod schema for structured output (same schema, used per-batch)
-// ============================================================================
-
-const MetadataFactSchema = z.object({
-    value: z.union([z.string(), z.number()]),
-    visibility: z.enum(["public", "partner", "private", "internal"]),
-    usage: z.enum(["outreach_ok", "outreach_ok_with_approval", "no_outreach"]),
-    confidence: z.number(),
-});
-
-const PersonSchema = z.object({
-    name: MetadataFactSchema,
-    role: MetadataFactSchema.nullable(),
-    email: MetadataFactSchema.nullable(),
-    phone: MetadataFactSchema.nullable(),
-    department: MetadataFactSchema.nullable(),
-});
-
-const ServiceSchema = z.object({
-    name: MetadataFactSchema,
-    description: MetadataFactSchema.nullable(),
-    status: MetadataFactSchema.nullable(),
-});
-
-const SubprojectSchema = z.object({
-    name: MetadataFactSchema,
-    description: MetadataFactSchema.nullable(),
-    status: MetadataFactSchema.nullable(),
-});
-
-const ProjectSchema = z.object({
-    name: MetadataFactSchema,
-    description: MetadataFactSchema.nullable(),
-    status: MetadataFactSchema.nullable(),
-    subprojects: z.array(SubprojectSchema).nullable(),
-});
-
-const LegalSchema = z.object({
-    name: MetadataFactSchema,
-    type: MetadataFactSchema.nullable(),
-    summary: MetadataFactSchema.nullable(),
-    effective_date: MetadataFactSchema.nullable(),
-    expiry_date: MetadataFactSchema.nullable(),
-    parties: MetadataFactSchema.nullable(),
-    status: MetadataFactSchema.nullable(),
-});
-
-const ExtractionOutputSchema = z.object({
-    company: z
-        .object({
-            name: MetadataFactSchema.nullable(),
-            industry: MetadataFactSchema.nullable(),
-            founded_year: MetadataFactSchema.nullable(),
-            headquarters: MetadataFactSchema.nullable(),
-            description: MetadataFactSchema.nullable(),
-            website: MetadataFactSchema.nullable(),
-            size: MetadataFactSchema.nullable(),
-        })
-        .describe("Core company-level facts"),
-    people: z.array(PersonSchema).describe("Key people mentioned"),
-    services: z.array(ServiceSchema).describe("Products or services offered"),
-    markets: z
-        .object({
-            primary: z.array(MetadataFactSchema).nullable(),
-            verticals: z.array(MetadataFactSchema).nullable(),
-            geographies: z.array(MetadataFactSchema).nullable(),
-        })
-        .describe("Target markets, verticals, and geographies"),
-    projects: z.array(ProjectSchema).describe("Projects and subprojects"),
-    policies: z
-        .array(
-            z.object({
-                key: z.string().describe("Policy identifier, e.g. 'SOC2', 'GDPR', 'HIPAA'"),
-                fact: MetadataFactSchema,
-            })
-        )
-        .describe("Company policies, certifications, or compliance facts"),
-    legal: z
-        .array(LegalSchema)
-        .describe(
-            "Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"
-        ),
-});
-
-type ExtractionOutput = z.infer<typeof ExtractionOutputSchema>;
-type RawFact = z.infer<typeof MetadataFactSchema>;
-
-// ============================================================================
-// Public API
+// Host contract
 // ============================================================================
 
 /**
- * Structured LLM call contract. Shape intentionally mirrors Vercel AI SDK's
- * schema generation helper (system + prompt + schema) so hosts can adapt their
- * existing LLM layer with a thin wrapper. Callers pass a concrete function
- * — apps/web passes its `generateStructured` from ~/lib/llm.
+ * Host-supplied structured-extraction function. The vertical has no opinion
+ * on which provider answers — apps thread their own `generateStructured`.
  */
 export type GenerateStructuredFn = <TSchema extends ZodType>(input: {
     system?: string;
@@ -214,607 +94,467 @@ export type GenerateStructuredFn = <TSchema extends ZodType>(input: {
     schemaName?: string;
 }) => Promise<z.infer<TSchema>>;
 
-export interface ExtractorInput {
+export interface ExtractSourceInput {
+    companyName: string;
     documentId: number;
-    companyId: string;
-    /**
-     * Host-supplied structured-extraction function. The feature has no
-     * opinion on which LLM provider to call — apps/web threads its own
-     * `generateStructured` through here.
-     */
+    documentName: string;
+    versionId: number | null;
+    passages: Passage[];
     generate: GenerateStructuredFn;
+    now?: Date;
+    /** A person said this source speaks for the organisation (an override), whatever its voice. */
+    vouched?: boolean;
 }
 
+export interface ExtractSourceResult {
+    facts: SourceFacts;
+    factCount: number;
+    /** Facts the model returned that the grounding gate rejected. */
+    rejected: number;
+    /** Calls that failed outright; the rest still count. */
+    failedCalls: number;
+    calls: number;
+}
+
+// ============================================================================
+// Model output schema
+// ============================================================================
+
+/** The fields each section takes; anything else the model names is dropped. */
+export const SECTION_FIELDS = {
+    company: ["name", "industry", "founded_year", "headquarters", "description", "website", "size"],
+    people: ["name", "role", "email", "phone", "department"],
+    services: ["name", "description", "status"],
+    projects: ["name", "description", "status"],
+    legal: ["name", "type", "summary", "effective_date", "expiry_date", "parties", "status"],
+    markets: ["primary", "verticals", "geographies"],
+    profile: PROFILE_FACT_KEYS,
+} as const;
+type NamedSection = "people" | "services" | "projects" | "legal";
+
 /**
- * Extract company metadata facts from a single document using chunk-level
- * extraction with parallel LLM calls and cross-chunk aggregation.
- *
- * Returns `null` if the document has no chunks or no facts were found.
+ * One flat list of statements, not a nested object per section. A nested
+ * schema with a fact object at every field is too large for Gemini's
+ * structured output ("Request contains an invalid argument") and, when the
+ * fact object is shared, turns into `$ref`s it rejects outright — the reason
+ * the old extractor never wrote a fact on Gemini. Flat statements keep the
+ * schema small; code rebuilds the sections.
  */
-export async function extractCompanyFacts(
-    input: ExtractorInput
-): Promise<ExtractedCompanyFacts | null> {
-    const { documentId, generate } = input;
-    const db = getDb();
+const StatementSchema = z.object({
+    section: z.enum([
+        "company",
+        "people",
+        "services",
+        "projects",
+        "legal",
+        "markets",
+        "policies",
+        "profile",
+    ]),
+    subject: z
+        .string()
+        .nullable()
+        .describe("people/services/projects/legal: the entry's name. Otherwise null."),
+    field: z.string().describe("The field within the section; see the instructions"),
+    value: z.string(),
+    quote: z.string().describe("Exact words copied from one passage that state this fact"),
+    passage: z.number().int().describe("The [P#] number of the passage the quote is copied from"),
+    confidence: z.number(),
+    visibility: z.enum(["public", "partner", "private", "internal"]),
+    usage: z.enum(["outreach_ok", "outreach_ok_with_approval", "no_outreach"]),
+});
+type Statement = z.infer<typeof StatementSchema>;
+type CitedFact = Pick<
+    Statement,
+    "value" | "quote" | "passage" | "confidence" | "visibility" | "usage"
+>;
 
-    // 1. Fetch document name and the version the facts will be attributed to.
-    //    Chunks below are already filtered to `currentVersionId`, so that is
-    //    the revision every extracted fact actually came from — recording it
-    //    is what lets a fact resolve to a citation anchor later.
-    const [doc] = await db
-        .select({
-            title: documentTable.title,
-            currentVersionId: documentTable.currentVersionId,
-        })
-        .from(documentTable)
-        .where(eq(documentTable.id, documentId))
-        .limit(1);
+export const ExtractionOutputSchema = z.object({
+    facts: z
+        .array(StatementSchema)
+        .describe("Every fact the passages state about the organisation"),
+});
+export type ExtractionOutput = z.infer<typeof ExtractionOutputSchema>;
 
-    if (!doc) {
-        console.warn(`[CompanyMetadataExtractor] Document ${documentId} not found`);
-        return null;
-    }
+// ============================================================================
+// Public API
+// ============================================================================
 
-    // 2. Fetch chunks for the CURRENT version only, sorted by page.
-    //
-    // The join + version filter is important: without it, this query returns
-    // chunks from every historical version of the document. On a doc with N
-    // versions that's N× the chunks and N× the input tokens into the LLM
-    // call below, plus it re-extracts facts from content that was already
-    // processed when prior versions uploaded — wasted work that scales
-    // super-linearly because structured output latency grows with prompt size.
-    //
-    // The semantics also match RAG: the company metadata should reflect the
-    // document's *current* authoritative content, not a union of every
-    // historical claim. Reverting to an old version will cause the next run
-    // to re-extract from that version's chunks, which is the correct behavior.
-    //
-    // Chunks are included only when their version matches the document's
-    // current version. Documents without a current version have no
-    // authoritative chunks to extract from.
-    const chunks = await db
-        .select({
-            content: documentContextChunks.content,
-            pageNumber: documentContextChunks.pageNumber,
-            semanticType: documentContextChunks.semanticType,
-        })
-        .from(documentContextChunks)
-        .innerJoin(documentTable, eq(documentContextChunks.documentId, documentTable.id))
-        .where(
-            and(
-                eq(documentContextChunks.documentId, BigInt(documentId)),
-                eq(documentContextChunks.versionId, documentTable.currentVersionId)
-            )
-        );
+export async function extractSourceFacts(input: ExtractSourceInput): Promise<ExtractSourceResult> {
+    const now = (input.now ?? new Date()).toISOString();
+    const numbered = input.passages.map((p, i) => ({ ...p, n: i + 1 }));
+    const batches = packBatches(numbered, CALL_BUDGET_CHARS);
+    let rejected = 0;
+    let failedCalls = 0;
+    const rejectedSamples: string[] = [];
 
-    if (chunks.length === 0) {
-        console.warn(`[CompanyMetadataExtractor] No chunks for document ${documentId}`);
-        return null;
-    }
-
-    const sortedChunks = chunks.sort((a, b) => (a.pageNumber ?? 0) - (b.pageNumber ?? 0));
-
-    // 2b. Filter out low-value chunks to reduce LLM tokens
-    const filteredChunks = sortedChunks.filter(c => {
-        // Skip chunks tagged as reference (TOCs, disclaimers)
-        if (c.semanticType === "reference") {
-            return false;
-        }
-        // Skip chunks that are mostly boilerplate based on content heuristics
-        if (isBoilerplate(c.content)) {
-            return false;
-        }
-        return true;
-    });
-
-    if (filteredChunks.length === 0) {
-        console.warn(
-            `[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`
-        );
-        return null;
-    }
-
-    // 3. Split into batches
-    const batches = splitIntoBatches(
-        filteredChunks.map(c => c.content),
-        CHUNKS_PER_BATCH
-    );
-
-    console.log(
-        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`
-    );
-
-    // 4. Extract from each batch in parallel (capped concurrency)
-    const batchResults = await runWithConcurrency(
-        batches.map(
-            (batch, idx) => () =>
-                callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)
-        ),
+    const outputs = await runWithConcurrency(
+        batches.map((batch, idx) => async () => {
+            try {
+                return await input.generate({
+                    system: EXTRACTION_SYSTEM_PROMPT,
+                    prompt: buildExtractionPrompt({
+                        companyName: input.companyName,
+                        documentName: input.documentName,
+                        passages: formatPassages(batch),
+                        batchIndex: idx,
+                        totalBatches: batches.length,
+                        vouched: input.vouched,
+                    }),
+                    schema: ExtractionOutputSchema,
+                    schemaName: "company_profile_facts",
+                });
+            } catch (error) {
+                failedCalls++;
+                console.error(
+                    `[CompanyProfile] Call ${idx + 1}/${batches.length} for document ${input.documentId} failed:`,
+                    error
+                );
+                return null;
+            }
+        }),
         MAX_CONCURRENCY
     );
 
-    // Filter out failed/empty batches
-    const successfulResults = batchResults.filter((r): r is ExtractionOutput => r !== null);
-
-    if (successfulResults.length === 0) {
-        console.warn(
-            `[CompanyMetadataExtractor] All ${batches.length} batch extractions returned empty for document ${documentId}`
+    let combined = createEmptyMetadata("source");
+    outputs.forEach((output, idx) => {
+        if (!output) return;
+        const batch = batches[idx] ?? [];
+        const grounded = groundOutput(
+            output,
+            batch,
+            {
+                doc_id: input.documentId,
+                doc_name: input.documentName,
+                extracted_at: now,
+                ...(input.versionId ? { version_id: input.versionId } : {}),
+            },
+            rejectedSamples
         );
-        return null;
-    }
+        rejected += grounded.rejected;
+        combined = mergeCompanyMetadata(combined, {
+            document_id: input.documentId,
+            document_name: input.documentName,
+            extracted_at: now,
+            facts: grounded.facts,
+        }).updatedMetadata;
+    });
 
-    console.log(
-        `[CompanyMetadataExtractor] ${successfulResults.length}/${batches.length} batches returned facts`
+    const facts = sectionsOf(combined);
+    const returned = outputs.reduce((n, o) => n + (o?.facts.length ?? 0), 0);
+    console.info(
+        `[CompanyProfile] document ${input.documentId}: ${batches.length} call(s), ${returned} statements, ${countFacts(facts)} facts kept, ${rejected} rejected by the quote check${failedCalls ? `, ${failedCalls} call(s) failed` : ""}${rejectedSamples.length ? ` — e.g. ${rejectedSamples.map(q => `«${q}»`).join(" ")}` : ""}`
     );
-
-    // 5. Aggregate across all batch results
-    const now = new Date().toISOString();
-    const versionId =
-        doc.currentVersionId === null || doc.currentVersionId === undefined
-            ? undefined
-            : Number(doc.currentVersionId);
-    const source: MetadataSource = {
-        doc_id: documentId,
-        doc_name: doc.title,
-        extracted_at: now,
-        // Omitted rather than zeroed when the document has no current version:
-        // a zero would pass an `if (version_id)` check and mint an anchor that
-        // points at nothing.
-        ...(versionId ? { version_id: versionId } : {}),
-    };
-
-    return aggregateResults(successfulResults, documentId, doc.title, now, source);
-}
-
-// ============================================================================
-// Batch helpers
-// ============================================================================
-
-function splitIntoBatches<T>(items: T[], batchSize: number): T[][] {
-    const batches: T[][] = [];
-    for (let i = 0; i < items.length; i += batchSize) {
-        batches.push(items.slice(i, i + batchSize));
-    }
-    return batches;
-}
-
-/**
- * Run async tasks with a concurrency limit.
- * Returns results in the same order as the input tasks.
- */
-async function runWithConcurrency<T>(tasks: Array<() => Promise<T>>, limit: number): Promise<T[]> {
-    const results = Array.from<T>({ length: tasks.length });
-    let nextIndex = 0;
-
-    async function worker() {
-        while (nextIndex < tasks.length) {
-            const idx = nextIndex++;
-            const task = tasks[idx];
-            if (task) {
-                results[idx] = await task();
-            }
-        }
-    }
-
-    const workers = Array.from({ length: Math.min(limit, tasks.length) }, () => worker());
-    await Promise.all(workers);
-    return results;
-}
-
-// ============================================================================
-// LLM call (per-batch)
-// ============================================================================
-
-/**
- * Per-batch extraction call. Routes through the unified LLM library rather
- * than instantiating a specific provider, so the same call works against
- * Gemini by default, or any OpenAI-compatible endpoint, depending on which credentials
- * are available. See `src/lib/llm/` for the resolution logic.
- *
- * On any failure (network, rate limit, schema validation) this returns
- * `null` so the caller can drop the batch and continue with the rest.
- * Individual batch failures are logged but not thrown — consistent with
- * the pre-migration behavior that treated partial extraction as acceptable.
- */
-async function callLLM(
-    generate: GenerateStructuredFn,
-    documentName: string,
-    batchContent: string,
-    batchIndex: number,
-    totalBatches: number
-): Promise<ExtractionOutput | null> {
-    try {
-        return await generate({
-            system: EXTRACTION_SYSTEM_PROMPT,
-            prompt: buildChunkExtractionPrompt(
-                documentName,
-                batchContent,
-                batchIndex,
-                totalBatches
-            ),
-            schema: ExtractionOutputSchema,
-            schemaName: "company_metadata_extraction",
-        });
-    } catch (error) {
-        console.error(
-            `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,
-            error
-        );
-        return null;
-    }
-}
-
-// ============================================================================
-// Aggregation: merge results from all batches into one ExtractedCompanyFacts
-// ============================================================================
-
-function aggregateResults(
-    batchResults: ExtractionOutput[],
-    documentId: number,
-    documentName: string,
-    extractedAt: string,
-    source: MetadataSource
-): ExtractedCompanyFacts {
-    // ---- Company fields: take highest confidence per field ----
-    const company: CompanyInfo = {};
-    const companyFields = [
-        "name",
-        "industry",
-        "founded_year",
-        "headquarters",
-        "description",
-        "website",
-        "size",
-    ] as const;
-
-    for (const field of companyFields) {
-        const candidates = batchResults
-            .map(r => r.company[field])
-            .filter((f): f is RawFact => f != null);
-
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            const boosted = boostConfidence(best.confidence, candidates.length);
-            (company as Record<string, unknown>)[field] = hydrate(
-                best,
-                boosted,
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    // ---- People: merge by normalised name ----
-    const people = mergeNamedEntries(
-        batchResults.flatMap(r => r.people),
-        extractedAt,
-        source,
-        hydratePersonEntry
-    );
-
-    // ---- Services: merge by normalised name ----
-    const services = mergeNamedEntries(
-        batchResults.flatMap(r => r.services),
-        extractedAt,
-        source,
-        hydrateServiceEntry
-    );
-
-    // ---- Projects: merge by normalised name ----
-    const projects = mergeNamedEntries(
-        batchResults.flatMap(r => r.projects),
-        extractedAt,
-        source,
-        hydrateProjectEntry
-    );
-
-    // ---- Markets: union unique values per category ----
-    const markets: MarketsInfo = {};
-    const marketCategories = ["primary", "verticals", "geographies"] as const;
-
-    for (const cat of marketCategories) {
-        const allFacts = batchResults.flatMap(r => r.markets[cat] ?? []);
-        const unique = deduplicateByValue(allFacts);
-        if (unique.length > 0) {
-            markets[cat] = unique.map(u =>
-                hydrate(u.best, boostConfidence(u.best.confidence, u.count), extractedAt, source)
-            );
-        }
-    }
-
-    // ---- Policies: merge by key, highest confidence wins ----
-    const policies: Record<string, MetadataFact> = {};
-    for (const result of batchResults) {
-        for (const entry of result.policies) {
-            const existing = policies[entry.key];
-            const hydrated = hydrate(entry.fact, entry.fact.confidence, extractedAt, source);
-            if (!existing || entry.fact.confidence > existing.confidence) {
-                policies[entry.key] = hydrated;
-            }
-        }
-    }
-
-    // ---- Legal: merge by normalised name ----
-    const legal = mergeNamedEntries(
-        batchResults.flatMap(r => r.legal),
-        extractedAt,
-        source,
-        hydrateLegalEntry
-    );
-
-    // ---- Assemble ----
     return {
-        document_id: documentId,
-        document_name: documentName,
-        extracted_at: extractedAt,
+        facts,
+        factCount: countFacts(facts),
+        rejected,
+        failedCalls,
+        calls: batches.length,
+    };
+}
+
+/** How many facts a set of sections holds (entries count once per stated field). */
+export function countFacts(facts: SourceFacts): number {
+    let n = 0;
+    const count = (fact: MetadataFact<unknown> | undefined) => {
+        if (fact && fact.status === "active") n++;
+    };
+    const countEntry = (entry: object) => {
+        for (const [key, value] of Object.entries(entry) as Array<[string, unknown]>) {
+            if (key === "subprojects" && Array.isArray(value))
+                (value as object[]).forEach(countEntry);
+            else if (value && typeof value === "object" && "value" in value)
+                count(value as MetadataFact<unknown>);
+        }
+    };
+    Object.values(facts.company ?? {}).forEach(count);
+    for (const list of [facts.people, facts.services, facts.projects, facts.legal])
+        (list ?? []).forEach(countEntry);
+    for (const cat of ["primary", "verticals", "geographies"] as const)
+        (facts.markets?.[cat] ?? []).forEach(count);
+    Object.values(facts.policies ?? {}).forEach(count);
+    Object.values(facts.profile?.facts ?? {}).forEach(count);
+    return n;
+}
+
+// ============================================================================
+// Grounding gate
+// ============================================================================
+
+type NumberedPassage = Passage & { n: number };
+
+/** Digit runs in a value ("$1.2m in FY2025" → ["1.2", "2025"]). */
+function numbersIn(text: string): string[] {
+    return (text.match(/\d+(?:[.,]\d+)*/g) ?? []).map(n => n.replace(/,/g, ""));
+}
+
+/**
+ * The passage that proves a fact, or null. The named passage is tried
+ * first; a quote copied from a neighbouring passage of the same call still
+ * counts. Every number in the value must be in the quote — the cheapest
+ * guard against a figure the model added.
+ */
+export function groundFact(
+    fact: Pick<CitedFact, "value" | "quote" | "passage">,
+    batch: NumberedPassage[]
+): NumberedPassage | null {
+    const quote = fact.quote.trim();
+    if (!quote) return null;
+    const quoteNumbers = new Set(numbersIn(quote));
+    for (const n of numbersIn(String(fact.value))) if (!quoteNumbers.has(n)) return null;
+    const named = batch.find(p => p.n === fact.passage);
+    if (named && quoteAppearsIn(quote, named.text)) return named;
+    return batch.find(p => p !== named && quoteAppearsIn(quote, p.text)) ?? null;
+}
+
+interface GroundContext {
+    batch: NumberedPassage[];
+    base: MetadataSource;
+    rejected: number;
+    /** A few rejected quotes, for the log line that explains a thin source. */
+    samples?: string[];
+}
+
+function hydrate<T = string>(raw: CitedFact | null, ctx: GroundContext): MetadataFact<T> | null {
+    if (!raw) return null;
+    if (raw.confidence < MIN_CONFIDENCE || String(raw.value).trim() === "") return null;
+    const passage = groundFact(raw, ctx.batch);
+    if (!passage) {
+        ctx.rejected++;
+        if (ctx.samples && ctx.samples.length < 3)
+            ctx.samples.push(`[P${raw.passage}] ${raw.quote.slice(0, 120)}`);
+        return null;
+    }
+    const quote = raw.quote.trim().replace(/\s+/g, " ");
+    return {
+        value: (typeof raw.value === "string" ? raw.value.trim() : raw.value) as T,
+        visibility: raw.visibility as Visibility,
+        usage: raw.usage as Usage,
+        confidence: Math.min(1, Math.max(0, raw.confidence)),
+        priority: "normal",
+        status: "active",
+        last_updated: ctx.base.extracted_at,
+        sources: [
+            {
+                ...ctx.base,
+                ...(passage.page !== null ? { page: passage.page } : {}),
+                snippet_ref: `chunk:${passage.chunkId}`,
+                quote:
+                    quote.length > MAX_QUOTE_CHARS
+                        ? `${quote.slice(0, MAX_QUOTE_CHARS - 1)}…`
+                        : quote,
+            },
+        ],
+    };
+}
+
+const normaliseName = (value: string): string => value.toLowerCase().trim().replace(/\s+/g, " ");
+
+/**
+ * The quote names the entry: every word of the subject (three letters or
+ * more) is in it — "Propositionizer model" is named by "we named the model
+ * Propositionizer", "Tong Chen" is not named by "Jane Doe is our CEO".
+ */
+const SUBJECT_STOPWORDS = new Set(["the", "and", "for", "our", "inc", "llc", "ltd"]);
+
+function subjectInQuote(subject: string, quote: string): boolean {
+    const words = new Set(normalizeForMatch(quote).split(/[^\p{L}\p{N}]+/u));
+    const wanted = normalizeForMatch(subject)
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter(w => w.length >= 3 && !SUBJECT_STOPWORDS.has(w));
+    return wanted.length > 0 && wanted.every(w => words.has(w));
+}
+
+/** The name, as written, inside the quote that states it. */
+function nameInQuote(name: string, quote: string): boolean {
+    const n = normalizeForMatch(name);
+    return n.length > 0 && normalizeForMatch(quote).includes(n);
+}
+
+function groundOutput(
+    output: ExtractionOutput,
+    batch: NumberedPassage[],
+    base: MetadataSource,
+    samples?: string[]
+): { facts: SourceFacts; rejected: number } {
+    const ctx: GroundContext = { batch, base, rejected: 0, samples };
+    const company: CompanyInfo = {};
+    const markets: MarketsInfo = {};
+    const policies: Record<string, MetadataFact> = {};
+    const profileFacts: Record<string, LabeledFact> = {};
+    const entries: Record<NamedSection, Map<string, Record<string, MetadataFact>>> = {
+        people: new Map(),
+        services: new Map(),
+        projects: new Map(),
+        legal: new Map(),
+    };
+    const better = (a: MetadataFact | undefined, b: MetadataFact) =>
+        !a || b.confidence > a.confidence;
+
+    for (const statement of output.facts) {
+        const field = statement.field
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+        const fields = (SECTION_FIELDS as Record<string, readonly string[]>)[statement.section];
+        if (fields && !fields.includes(field)) continue;
+        const fact = hydrate(statement, ctx);
+        if (!fact) continue;
+        // A name is copied, never inferred: "LaunchStack Dev" from a quote saying "Launchstack" is a guess.
+        if (field === "name" && !nameInQuote(String(fact.value), fact.sources[0]?.quote ?? "")) {
+            ctx.rejected++;
+            continue;
+        }
+
+        switch (statement.section) {
+            case "company": {
+                if (field === "founded_year") {
+                    const year = Number(/\d{4}/.exec(String(fact.value))?.[0]);
+                    if (
+                        Number.isInteger(year) &&
+                        better(company.founded_year as MetadataFact | undefined, fact)
+                    )
+                        company.founded_year = { ...fact, value: year };
+                } else if (better(company[field] as MetadataFact | undefined, fact))
+                    company[field] = fact;
+                break;
+            }
+            case "markets": {
+                const cat = field as keyof MarketsInfo;
+                const list = (markets[cat] ??= []);
+                if (
+                    !list.some(
+                        f => normaliseName(String(f.value)) === normaliseName(String(fact.value))
+                    )
+                )
+                    list.push(fact);
+                break;
+            }
+            case "policies": {
+                const key = statement.field.trim();
+                if (key && better(policies[key], fact)) policies[key] = fact;
+                break;
+            }
+            case "profile": {
+                if (better(profileFacts[field], fact))
+                    profileFacts[field] = {
+                        ...fact,
+                        label: PROFILE_FACT_LABELS[field as ProfileFactKey],
+                    };
+                break;
+            }
+            default: {
+                // A named entry: its name is the subject, proven by the same quote.
+                // Models write the string "null" for a missing subject as often as null.
+                const named = statement.subject?.trim();
+                const subject = (
+                    named && named.toLowerCase() !== "null"
+                        ? named
+                        : field === "name"
+                          ? String(fact.value)
+                          : ""
+                ).trim();
+                if (!subject) continue;
+                if (!subjectInQuote(subject, fact.sources[0]?.quote ?? "")) {
+                    ctx.rejected++;
+                    continue;
+                }
+                const map = entries[statement.section];
+                const key = normaliseName(subject);
+                // The name as the document writes it when stated; else the subject the model used.
+                const nameFact = field === "name" ? fact : { ...fact, value: subject };
+                const entry = map.get(key) ?? { name: nameFact };
+                if (field !== "name" && better(entry[field], fact)) entry[field] = fact;
+                else if (
+                    field === "name" &&
+                    (entry.name === nameFact ||
+                        better(entry.name, fact) ||
+                        entry.name?.value === subject)
+                )
+                    entry.name = nameFact;
+                map.set(key, entry);
+            }
+        }
+    }
+
+    const list = <T>(section: NamedSection) => [...entries[section].values()] as unknown as T[];
+    const people = list<PersonEntry>("people");
+    const services = list<ServiceEntry>("services");
+    const projects = list<ProjectEntry>("projects");
+    const legal = list<LegalEntry>("legal");
+    return {
+        rejected: ctx.rejected,
         facts: {
-            ...(Object.keys(company).length > 0 && { company }),
-            ...(people.length > 0 && { people }),
-            ...(services.length > 0 && { services }),
-            ...(Object.keys(markets).length > 0 && { markets }),
-            ...(projects.length > 0 && { projects }),
-            ...(Object.keys(policies).length > 0 && { policies }),
-            ...(legal.length > 0 && { legal }),
+            ...(Object.keys(company).length && { company }),
+            ...(people.length && { people }),
+            ...(services.length && { services }),
+            ...(Object.keys(markets).length && { markets }),
+            ...(projects.length && { projects }),
+            ...(Object.keys(policies).length && { policies }),
+            ...(legal.length && { legal }),
+            ...(Object.keys(profileFacts).length && { profile: { facts: profileFacts } }),
         },
     };
 }
 
-// ============================================================================
-// Hydration: raw LLM fact → full MetadataFact
-// ============================================================================
-
-function hydrate<T = string>(
-    fact: RawFact,
-    confidence: number,
-    extractedAt: string,
-    source: MetadataSource
-): MetadataFact<T> {
-    return {
-        value: fact.value as T,
-        visibility: fact.visibility as Visibility,
-        usage: fact.usage as Usage,
-        confidence,
-        priority: "normal" as const,
-        status: "active" as const,
-        last_updated: extractedAt,
-        sources: [source],
-    };
+/** The fact sections of a merged document, without its envelope. */
+function sectionsOf(metadata: ReturnType<typeof createEmptyMetadata>): SourceFacts {
+    const out: SourceFacts = {};
+    if (Object.keys(metadata.company).length) out.company = metadata.company;
+    if (metadata.people.length) out.people = metadata.people;
+    if (metadata.services.length) out.services = metadata.services;
+    if (Object.keys(metadata.markets).length) out.markets = metadata.markets;
+    if (metadata.projects.length) out.projects = metadata.projects;
+    if (Object.keys(metadata.policies).length) out.policies = metadata.policies;
+    if (metadata.legal.length) out.legal = metadata.legal;
+    if (metadata.profile?.facts && Object.keys(metadata.profile.facts).length)
+        out.profile = { facts: metadata.profile.facts };
+    return out;
 }
 
 // ============================================================================
-// Deduplication helpers
+// Batching
 // ============================================================================
 
-/** Normalise a name for dedup comparison. */
-function normaliseName(raw: string | number): string {
-    return String(raw).toLowerCase().trim().replace(/\s+/g, " ");
+function formatPassages(batch: NumberedPassage[]): string {
+    return batch
+        .map(p => `[P${p.n}]${p.page !== null ? ` (p. ${p.page})` : ""} ${p.text}`)
+        .join("\n\n");
 }
 
-/** From a list of raw facts for the same field, pick the one with highest confidence. */
-function pickHighestConfidence(candidates: RawFact[]): RawFact {
-    return candidates.reduce((best, c) => (c.confidence > best.confidence ? c : best));
+/** Consecutive passages up to a character budget; a single long passage gets a call of its own. */
+function packBatches(passages: NumberedPassage[], budget: number): NumberedPassage[][] {
+    const batches: NumberedPassage[][] = [];
+    let current: NumberedPassage[] = [];
+    let size = 0;
+    for (const passage of passages) {
+        if (current.length && size + passage.text.length > budget) {
+            batches.push(current);
+            current = [];
+            size = 0;
+        }
+        current.push(passage);
+        size += passage.text.length;
+    }
+    if (current.length) batches.push(current);
+    return batches;
 }
 
-/** Boost confidence when a fact is confirmed by multiple batches. */
-function boostConfidence(base: number, mentionCount: number): number {
-    if (mentionCount <= 1) return base;
-    return Math.min(1.0, base + MULTI_MENTION_BOOST * (mentionCount - 1));
-}
-
-/** Deduplicate an array of raw facts by normalised value, tracking mention count. */
-function deduplicateByValue(facts: RawFact[]): Array<{ best: RawFact; count: number }> {
-    const map = new Map<string, { best: RawFact; count: number }>();
-
-    for (const fact of facts) {
-        const key = normaliseName(fact.value);
-        const existing = map.get(key);
-        if (!existing) {
-            map.set(key, { best: fact, count: 1 });
-        } else {
-            existing.count++;
-            if (fact.confidence > existing.best.confidence) {
-                existing.best = fact;
-            }
+/** Run async tasks with a concurrency limit; results keep the input order. */
+export async function runWithConcurrency<T>(
+    tasks: Array<() => Promise<T>>,
+    limit: number
+): Promise<T[]> {
+    const results = Array.from<T>({ length: tasks.length });
+    let nextIndex = 0;
+    async function worker() {
+        while (nextIndex < tasks.length) {
+            const idx = nextIndex++;
+            const task = tasks[idx];
+            if (task) results[idx] = await task();
         }
     }
-
-    return Array.from(map.values());
-}
-
-/**
- * Generic merge for arrays of named entries (people, services, projects).
- * Groups by normalised name, then calls a type-specific hydrator.
- */
-function mergeNamedEntries<TRaw extends { name: RawFact }, TOut>(
-    entries: TRaw[],
-    extractedAt: string,
-    source: MetadataSource,
-    hydrateEntry: (grouped: TRaw[], extractedAt: string, source: MetadataSource) => TOut
-): TOut[] {
-    const groups = new Map<string, TRaw[]>();
-
-    for (const entry of entries) {
-        const key = normaliseName(entry.name.value);
-        const group = groups.get(key);
-        if (group) {
-            group.push(entry);
-        } else {
-            groups.set(key, [entry]);
-        }
-    }
-
-    return Array.from(groups.values()).map(group => hydrateEntry(group, extractedAt, source));
-}
-
-// ============================================================================
-// Type-specific entry hydrators
-// ============================================================================
-
-type RawPerson = z.infer<typeof PersonSchema>;
-type RawService = z.infer<typeof ServiceSchema>;
-type RawProject = z.infer<typeof ProjectSchema>;
-type RawSubproject = z.infer<typeof SubprojectSchema>;
-type RawLegal = z.infer<typeof LegalSchema>;
-
-function hydratePersonEntry(
-    group: RawPerson[],
-    extractedAt: string,
-    source: MetadataSource
-): PersonEntry {
-    const count = group.length;
-    const bestName = pickHighestConfidence(group.map(g => g.name));
-
-    const entry: PersonEntry = {
-        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
-    };
-
-    const optionalFields = ["role", "email", "phone", "department"] as const;
-    for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(
-                best,
-                boostConfidence(best.confidence, candidates.length),
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    return entry;
-}
-
-function hydrateServiceEntry(
-    group: RawService[],
-    extractedAt: string,
-    source: MetadataSource
-): ServiceEntry {
-    const count = group.length;
-    const bestName = pickHighestConfidence(group.map(g => g.name));
-
-    const entry: ServiceEntry = {
-        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
-    };
-
-    const optionalFields = ["description", "status"] as const;
-    for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(
-                best,
-                boostConfidence(best.confidence, candidates.length),
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    return entry;
-}
-
-function hydrateProjectEntry(
-    group: RawProject[],
-    extractedAt: string,
-    source: MetadataSource
-): ProjectEntry {
-    const count = group.length;
-    const bestName = pickHighestConfidence(group.map(g => g.name));
-
-    const entry: ProjectEntry = {
-        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
-    };
-
-    const optionalFields = ["description", "status"] as const;
-    for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(
-                best,
-                boostConfidence(best.confidence, candidates.length),
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    // Merge subprojects across all mentions of this project
-    const allSubprojects = group.flatMap(g => g.subprojects ?? []);
-    if (allSubprojects.length > 0) {
-        entry.subprojects = mergeNamedEntries(
-            allSubprojects,
-            extractedAt,
-            source,
-            hydrateSubprojectEntry
-        );
-    }
-
-    return entry;
-}
-
-function hydrateSubprojectEntry(
-    group: RawSubproject[],
-    extractedAt: string,
-    source: MetadataSource
-): SubprojectEntry {
-    const count = group.length;
-    const bestName = pickHighestConfidence(group.map(g => g.name));
-
-    const entry: SubprojectEntry = {
-        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
-    };
-
-    const optionalFields = ["description", "status"] as const;
-    for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(
-                best,
-                boostConfidence(best.confidence, candidates.length),
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    return entry;
-}
-
-function hydrateLegalEntry(
-    group: RawLegal[],
-    extractedAt: string,
-    source: MetadataSource
-): LegalEntry {
-    const count = group.length;
-    const bestName = pickHighestConfidence(group.map(g => g.name));
-
-    const entry: LegalEntry = {
-        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
-    };
-
-    const optionalFields = [
-        "type",
-        "summary",
-        "effective_date",
-        "expiry_date",
-        "parties",
-        "status",
-    ] as const;
-    for (const field of optionalFields) {
-        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
-        if (candidates.length > 0) {
-            const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(
-                best,
-                boostConfidence(best.confidence, candidates.length),
-                extractedAt,
-                source
-            );
-        }
-    }
-
-    return entry;
+    await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, () => worker()));
+    return results;
 }

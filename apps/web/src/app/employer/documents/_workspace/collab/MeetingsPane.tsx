@@ -103,7 +103,9 @@ export function MeetingsPane({ onOpenAgents, newMeetingRequest }: MeetingsPanePr
     );
 
     return (
-        <div style={{ display: "flex", height: "100%", minHeight: 0, background: "var(--bg)" }}>
+        // In a narrow pane the channel list goes above the channel instead of
+        // beside it: at 268px it left the meeting itself a column one word wide.
+        <div className="bg-surface @max-md:flex-col flex h-full min-h-0">
             <ChannelList
                 meetings={meetings}
                 loading={listLoading}
@@ -163,17 +165,7 @@ function ChannelList({
     const other = meetings.filter(m => !live.includes(m));
 
     return (
-        <aside
-            style={{
-                width: 268,
-                flexShrink: 0,
-                borderRight: "1px solid var(--line)",
-                background: "var(--panel)",
-                display: "flex",
-                flexDirection: "column",
-                minHeight: 0,
-            }}
-        >
+        <aside className="border-line bg-panel @max-md:max-h-[38%] @max-md:w-full @max-md:border-b @max-md:border-r-0 flex min-h-0 w-[268px] shrink-0 flex-col border-r">
             <div
                 style={{
                     padding: "14px 16px 12px",

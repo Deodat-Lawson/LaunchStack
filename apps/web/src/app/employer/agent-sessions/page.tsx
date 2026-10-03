@@ -1,17 +1,9 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { Suspense } from "react";
-
-import { useSetBreadcrumbs } from "../_chrome/BreadcrumbContext";
-import { SessionsBrowser } from "./_sessions/ui/SessionsBrowser";
-
-const SESSION_CRUMBS = ["Drift", "Coding sessions"];
-
-export default function AgentSessionsPage() {
-    useSetBreadcrumbs(SESSION_CRUMBS);
-    return (
-        <Suspense>
-            <SessionsBrowser />
-        </Suspense>
-    );
+/**
+ * Coding sessions are imported from Add a source → Coding sessions, which
+ * holds the whole browser. An old link lands there.
+ */
+export default function AgentSessionsRedirect() {
+    redirect("/employer/documents?add=1&tab=agent-sessions");
 }

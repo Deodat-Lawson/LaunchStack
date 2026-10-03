@@ -67,14 +67,25 @@ describe("studio registry", () => {
         }
     });
 
-    it("opens Artifacts and Coding sessions in a tab, keeping their routes for direct links", () => {
-        for (const id of ["artifacts", "agent-sessions"]) {
-            const feature = STUDIO_FEATURES_BY_ID[id];
-            expect(feature).toBeDefined();
-            // Not external: the shell mounts these rather than navigating.
-            expect(feature!.external).toBeUndefined();
-            expect(pageExists(feature!.href!)).toBe(true);
+    it("treats Claude artifacts and coding sessions as sources you add, not Studio apps", () => {
+        const addTabs = ADD_TABS.flatMap(g => g.items).map(tab => tab.id);
+        for (const [id, tab] of [
+            ["artifacts", "artifact"],
+            ["agent-sessions", "agent-sessions"],
+        ] as const) {
+            // Not a tile, and nothing a saved layout could reopen as a tab.
+            expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
+            expect(resolveStudioFeature(id)).toBeUndefined();
+            // Their way in is a tab of Add a source, which ⌘K opens.
+            expect(addTabs).toContain(tab);
+            expect(DEMOTED_FEATURES.find(f => f.id === id)?.href).toBe(
+                `/employer/documents?add=1&tab=${tab}`
+            );
         }
+        // An artifact is uploaded; sessions come from a connector.
+        const group = (name: string) => ADD_TABS.find(g => g.group === name)!.items.map(t => t.id);
+        expect(group("Upload")).toContain("artifact");
+        expect(group("Connect")).toContain("agent-sessions");
     });
 
     it("treats a mindmap as a source you make, not a Studio app", () => {
@@ -118,16 +129,24 @@ describe("studio registry", () => {
     });
 
     it("can name every app the workspace is able to open in a tab", () => {
-        // A tab needs a label and an icon. These three have a working pane and
+        // A tab needs a label and an icon. These two have a working pane and
         // a live way in — a shortcut, a palette row, an old bookmark — but no
         // tile in the picker, so the registry has to be able to name them.
-        for (const id of ["workflows", "analytics", "metadata"]) {
+        for (const id of ["workflows", "metadata"]) {
             expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
             const feature = resolveStudioFeature(id);
             expect(feature).toBeDefined();
             expect(feature!.label).toBeTruthy();
             expect(feature!.Icon).toBeTruthy();
         }
+    });
+
+    it("lists Analytics as its own Management app, gated like its API", () => {
+        const management = STUDIO_GROUPS.find(g => g.id === "management");
+        const analytics = management?.features.find(f => f.id === "analytics");
+        expect(analytics?.requires).toBe("analytics.view");
+        // Settings does not hold analytics; its #analytics hash forwards here.
+        expect(STUDIO_FEATURES_BY_ID.settings?.desc).not.toMatch(/analytics/i);
     });
 
     it("sends a palette row with nowhere of its own to its real destination", () => {

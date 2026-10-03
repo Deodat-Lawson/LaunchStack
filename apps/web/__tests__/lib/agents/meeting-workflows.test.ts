@@ -10,6 +10,7 @@ import {
     meetingWorkflow,
     phasesForRoom,
     workflowTurnCount,
+    workflowsByCategory,
 } from "~/lib/agents/meeting-workflows";
 import { STARTER_AGENT_KEYS } from "~/lib/agents/starter-agents";
 
@@ -73,5 +74,16 @@ describe("meeting workflows", () => {
     it("has an open discussion with no phases", () => {
         expect(meetingWorkflow("open-discussion")!.phases).toEqual([]);
         expect(meetingWorkflow("nope")).toBeUndefined();
+    });
+
+    it("groups every workflow once under its category, keeping list order", () => {
+        const groups = workflowsByCategory();
+        expect(groups.map(([category]) => category)).toEqual([
+            ...new Set(MEETING_WORKFLOWS.map(w => w.category)),
+        ]);
+        for (const [category, workflows] of groups) {
+            expect(workflows).toEqual(MEETING_WORKFLOWS.filter(w => w.category === category));
+        }
+        expect(groups.flatMap(([, workflows]) => workflows)).toHaveLength(MEETING_WORKFLOWS.length);
     });
 });

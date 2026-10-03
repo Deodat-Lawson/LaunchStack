@@ -35,6 +35,9 @@ export interface ShortcutHints {
     rail?: string | null;
     search?: string | null;
     studio?: string | null;
+    splitRight?: string | null;
+    splitDown?: string | null;
+    zoom?: string | null;
 }
 
 /** "Jump to anything  ⌘K" — a tooltip that carries the key as well as the name. */

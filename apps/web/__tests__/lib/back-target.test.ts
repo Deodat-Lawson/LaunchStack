@@ -15,8 +15,6 @@ describe("backTargetFor", () => {
             "/employer/metadata",
             "/employer/upload",
             "/employer/contact",
-            "/employer/agent-sessions",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/marketing-pipeline",
             "/employer/tools/knowledge-graph",
@@ -41,10 +39,6 @@ describe("backTargetFor", () => {
     });
 
     it("prefers the nearest section over the Studio", () => {
-        expect(backTargetFor("/employer/artifacts/abc123")).toEqual({
-            href: "/employer/artifacts",
-            label: "Artifacts",
-        });
         expect(backTargetFor("/employer/tools/growth/prospects/deals")).toEqual({
             href: "/employer/tools/growth/prospects",
             label: "Prospects",
@@ -72,7 +66,6 @@ describe("backTargetFor", () => {
     it("never points a page at itself", () => {
         for (const path of [
             "/employer/documents",
-            "/employer/artifacts",
             "/employer/tools/growth",
             "/employer/tools/growth/prospects",
             "/employer/tools/growth/prospects/companies",

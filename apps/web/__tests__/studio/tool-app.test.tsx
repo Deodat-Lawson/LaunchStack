@@ -258,4 +258,30 @@ describe("ToolNavProvider", () => {
         fireEvent.click(screen.getByText("Thing 7"));
         expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBe("/things/7");
     });
+
+    it("lets go of a remembered record that has since gone, so the next visit starts at home", () => {
+        window.localStorage.setItem("tool.location.v1:u1:c1:example", "/things/404");
+        function LateNotFound() {
+            const nav = useToolNav();
+            return (
+                <button type="button" onClick={nav.forgetCurrent}>
+                    Nothing here
+                </button>
+            );
+        }
+        render(
+            <ToolNavProvider
+                toolId="example"
+                roots={["things", "settings"]}
+                home="/things"
+                host={{ storageScope: "u1:c1" }}
+            >
+                <Probe />
+                <LateNotFound />
+            </ToolNavProvider>
+        );
+        expect(here()).toBe("/things/404");
+        fireEvent.click(screen.getByText("Nothing here"));
+        expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBeNull();
+    });
 });

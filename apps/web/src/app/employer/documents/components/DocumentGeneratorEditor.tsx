@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, useId } from "react";
+import { Fragment, useState, useRef, useEffect, useCallback, useId, useLayoutEffect } from "react";
 import {
     ArrowLeft,
     Save,
@@ -21,6 +21,7 @@ import {
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "~/components/ui/resizable";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Sheet, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 import { useToolActive } from "~/components/tool-app/nav";
@@ -121,6 +122,21 @@ export function DocumentGeneratorEditor({
     // Tool tabs are hidden, not unmounted: the shortcuts below must not fire
     // (or swallow ⌘K) while the person is typing in another tab.
     const toolActive = useToolActive();
+
+    // The editor's own width, not the window's: as a tool tab it can sit in
+    // a split column far narrower than the screen.
+    const rootRef = useRef<HTMLDivElement>(null);
+    const [compact, setCompact] = useState(false);
+    const [panelOpen, setPanelOpen] = useState(false);
+    useLayoutEffect(() => {
+        const el = rootRef.current;
+        if (!el || typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(([entry]) => {
+            if (entry) setCompact(entry.contentRect.width < 760);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
     const componentId = useId();
     const [citationCounter, setCitationCounter] = useState(0);
     // Core state
@@ -678,6 +694,11 @@ export function DocumentGeneratorEditor({
     };
 
     // Handle tool selection
+    // In the compact layout the tool's panel lives in the sheet: open it.
+    useEffect(() => {
+        if (compact && activeTool && activeTool !== "ai-generate") setPanelOpen(true);
+    }, [compact, activeTool]);
+
     const handleToolSelect = (tool: ToolType) => {
         if (tool === "export") {
             setIsExportOpen(true);
@@ -758,12 +779,456 @@ export function DocumentGeneratorEditor({
         { label: "Make Professional", action: "change_tone" as AIAction },
     ];
 
-    return (
+    // Below ~760px of tab width — a split column, a phone — the document and a
+    // side panel cannot sit side by side: the page shrinks to a few words a
+    // line. The editor then takes the whole tab and the panel opens as a
+    // sheet over it (scoped to the tab) from a button in the top bar.
+    const editorPane = (
         <div className="bg-surface flex h-full flex-col">
+            {/* Toolbar */}
+            <div className="border-line flex-shrink-0 border-b">
+                {/* Top Bar */}
+                <div className="border-line bg-surface flex items-center justify-between gap-2 border-b px-4 py-3">
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={onBack}
+                            className="text-ink-3 hover:text-ink"
+                        >
+                            <ArrowLeft className={cn("h-4 w-4", !compact && "mr-2")} />
+                            {compact ? <span className="sr-only">{backLabel}</span> : backLabel}
+                        </Button>
+                        <div className="bg-line h-6 w-px" />
+                        <Input
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            className="text-ink min-w-0 max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0"
+                            placeholder={
+                                isRewriteMode ? "Add a title (optional)" : "Untitled Document"
+                            }
+                        />
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                        {lastSaved && !compact && (
+                            <span className="text-ink-3 flex items-center gap-1 text-xs">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                Saved {lastSaved.toLocaleTimeString()}
+                            </span>
+                        )}
+                        {docxBase64 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                    const byteCharacters = atob(docxBase64);
+                                    const byteNumbers = new Array(byteCharacters.length);
+                                    for (let i = 0; i < byteCharacters.length; i++) {
+                                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                    }
+                                    const byteArray = new Uint8Array(byteNumbers);
+                                    const blob = new Blob([byteArray], {
+                                        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                    });
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `${title || "document"}.docx`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                }}
+                                className="text-ink-3 hover:text-ink"
+                            >
+                                <Download className={cn("h-4 w-4", !compact && "mr-2")} />
+                                {compact ? (
+                                    <span className="sr-only">Download DOCX</span>
+                                ) : (
+                                    "Download DOCX"
+                                )}
+                            </Button>
+                        )}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => void handleSave()}
+                            disabled={isSaving}
+                            className="text-ink-3 hover:text-ink"
+                        >
+                            {isSaving ? (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : (
+                                <Save className="mr-2 h-4 w-4" />
+                            )}
+                            {isRewriteMode && !compact ? "Save to Documents" : "Save"}
+                        </Button>
+                        {compact && (
+                            <Button variant="outline" size="sm" onClick={() => setPanelOpen(true)}>
+                                <Sparkles className="h-4 w-4" />
+                                {isRewriteMode ? "AI" : "Tools"}
+                            </Button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Formatting Bar */}
+                <div className="bg-surface/50 flex flex-wrap items-center gap-1 px-4 py-2 backdrop-blur-sm">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Bold (Ctrl+B)"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            if (wysiwygEditorRef.current) {
+                                wysiwygEditorRef.current.toggleBold();
+                            } else {
+                                applyFormat("bold");
+                            }
+                        }}
+                    >
+                        <Bold className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Italic (Ctrl+I)"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            if (wysiwygEditorRef.current) {
+                                wysiwygEditorRef.current.toggleItalic();
+                            } else {
+                                applyFormat("italic");
+                            }
+                        }}
+                    >
+                        <Italic className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Underline"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            if (wysiwygEditorRef.current) {
+                                wysiwygEditorRef.current.toggleUnderline();
+                            } else {
+                                applyFormat("underline");
+                            }
+                        }}
+                    >
+                        <Underline className="h-4 w-4" />
+                    </Button>
+                    <div className="bg-line mx-2 h-6 w-px" />
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Bullet List"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            if (wysiwygEditorRef.current) {
+                                wysiwygEditorRef.current.toggleBulletList();
+                            } else {
+                                applyFormat("bulletList");
+                            }
+                        }}
+                    >
+                        <List className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Numbered List"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            if (wysiwygEditorRef.current) {
+                                wysiwygEditorRef.current.toggleOrderedList();
+                            } else {
+                                applyFormat("numberedList");
+                            }
+                        }}
+                    >
+                        <ListOrdered className="h-4 w-4" />
+                    </Button>
+                    <div className="bg-line mx-2 h-6 w-px" />
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Align Left"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            wysiwygEditorRef.current?.setTextAlign("left");
+                        }}
+                    >
+                        <AlignLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Align Center"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            wysiwygEditorRef.current?.setTextAlign("center");
+                        }}
+                    >
+                        <AlignCenter className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-ink-3 hover:text-ink h-8 w-8 p-0"
+                        title="Align Right"
+                        onMouseDown={e => {
+                            e.preventDefault();
+                            wysiwygEditorRef.current?.setTextAlign("right");
+                        }}
+                    >
+                        <AlignRight className="h-4 w-4" />
+                    </Button>
+
+                    {/* Word count */}
+                    <div className="text-ink-3 ml-auto text-xs">
+                        {content.split(/\s+/).filter(Boolean).length} words
+                    </div>
+                </div>
+            </div>
+
+            {/* Editor Content - Edit or Preview (single pane) */}
+            <div className="bg-panel-2/30 custom-scrollbar relative flex-1 overflow-y-auto [container-type:inline-size]">
+                <div className="@max-sm:px-2 @max-sm:py-4 px-4 py-8">
+                    <div
+                        className="bg-panel border-line/50 text-ink @max-md:px-10 @max-md:py-12 @max-sm:min-h-[640px] @max-sm:px-5 @max-sm:py-8 mx-auto min-h-[1056px] max-w-[816px] border px-24 py-20 text-base leading-relaxed shadow-xl"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                    >
+                        {/* Editor stays mounted when rewrite preview shows so Accept can replace content */}
+                        <div className={rewritePreview ? "sr-only" : undefined}>
+                            <WysiwygEditor
+                                key={documentId ?? "new"}
+                                ref={wysiwygEditorRef}
+                                initialContent={content}
+                                onChange={md => {
+                                    setRewritePreview(null);
+                                    setContent(md);
+                                }}
+                                onSelectionChange={info => {
+                                    setSelectedText(info.text);
+                                    setSelectionStart(info.from);
+                                    setSelectionEnd(info.to);
+                                    lastSelectionRef.current = info.text ? info : null;
+                                }}
+                                placeholder={
+                                    isRewriteMode
+                                        ? "Paste or type text here, then select and use the AI panel to rewrite..."
+                                        : "Start writing or use the AI tools..."
+                                }
+                                className="min-h-[900px] w-full [&_.ProseMirror]:min-h-[900px]"
+                            />
+                        </div>
+                        {rewritePreview ? (
+                            <div className="whitespace-pre-wrap">
+                                {rewritePreview.textBefore}
+                                <InlineRewriteDiff
+                                    originalText={rewritePreview.originalText}
+                                    proposedText={rewritePreview.proposedText}
+                                    onAccept={handleRewriteAccept}
+                                    onReject={handleRewriteReject}
+                                    onTryAgain={handleRewriteTryAgain}
+                                    isRetrying={isRetryingRewrite}
+                                />
+                                {rewritePreview.textAfter}
+                            </div>
+                        ) : null}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    const sidePanel =
+        activeTool && activeTool !== "ai-generate" && !isRewriteMode ? (
+            renderToolPanel()
+        ) : (
+            <div className="bg-surface border-line flex h-full flex-col border-l">
+                {/* Header */}
+                <div className="border-line bg-surface/50 flex-shrink-0 border-b p-4 backdrop-blur-md">
+                    <div className="mb-1 flex items-center gap-2">
+                        <Sparkles className="text-brand-ink h-5 w-5" />
+                        <h3 className="text-ink font-semibold">AI Assistant</h3>
+                    </div>
+                    <p className="text-ink-3 text-xs">
+                        {isRewriteMode
+                            ? selectedText
+                                ? "Selected text - Ask AI to rewrite it"
+                                : "Paste or type text, then select and ask AI to rewrite"
+                            : selectedText
+                              ? "Selected text - Ask AI to edit it"
+                              : "Ask AI to add content"}
+                    </p>
+                </div>
+
+                {/* Chat Messages */}
+                <div className="custom-scrollbar flex-1 overflow-y-auto p-4">
+                    <div className="space-y-4">
+                        {chatMessages.length === 0 && !rewritePreview && (
+                            <div className="space-y-3">
+                                <div className="border-brand bg-brand-soft rounded-lg border p-3">
+                                    <p className="text-ink mb-2 flex items-center gap-2 text-sm font-medium">
+                                        <Sparkles className="text-brand-ink h-4 w-4" />
+                                        How to use AI
+                                    </p>
+                                    <ul className="text-ink-3 space-y-1 text-xs">
+                                        <li>• Select text to ask AI to edit it</li>
+                                        <li>• Type requests to add new content</li>
+                                        <li>• Use quick actions below</li>
+                                        <li>• Press ⌘K for quick access</li>
+                                    </ul>
+                                </div>
+
+                                {selectedText ? (
+                                    <div>
+                                        <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
+                                            EDIT SELECTED TEXT
+                                        </p>
+                                        <div className="space-y-2">
+                                            {editActions.map(action => (
+                                                <Button
+                                                    key={action.label}
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
+                                                    onClick={() =>
+                                                        void handleAIAction(action.action)
+                                                    }
+                                                    disabled={isProcessing}
+                                                >
+                                                    {action.label}
+                                                </Button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
+                                            QUICK ACTIONS
+                                        </p>
+                                        <div className="space-y-2">
+                                            {quickActions.map(action => (
+                                                <Button
+                                                    key={action.label}
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
+                                                    onClick={() =>
+                                                        void handleAIAction(action.action)
+                                                    }
+                                                    disabled={isProcessing}
+                                                >
+                                                    <Sparkles className="text-brand-ink mr-2 h-3 w-3" />
+                                                    {action.label}
+                                                </Button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {chatMessages.map((message, index) => (
+                            <div
+                                key={index}
+                                className={cn(
+                                    "border-line/50 rounded-2xl border p-3 shadow-sm",
+                                    message.role === "user"
+                                        ? "border-brand-soft bg-brand-soft ml-4"
+                                        : "bg-panel-2/50 mr-4"
+                                )}
+                            >
+                                <p className="text-ink-3 mb-1 text-[10px] font-black uppercase tracking-widest">
+                                    {message.role === "user" ? "You" : "AI Assistant"}
+                                </p>
+                                <p className="text-ink text-sm leading-relaxed">
+                                    {message.content}
+                                </p>
+                            </div>
+                        ))}
+
+                        {isProcessing && (
+                            <div className="text-ink-3 flex animate-pulse items-center gap-2 text-sm">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                AI is processing...
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Input */}
+                <div className="border-line bg-surface flex-shrink-0 border-t p-4">
+                    <div className="space-y-2">
+                        {selectedText && (
+                            <div className="border-brand-soft bg-brand-soft dark:border-brand-soft rounded-xl border p-2 text-[10px]">
+                                <p className="text-brand-ink mb-1 font-black uppercase tracking-widest">
+                                    Selected Text
+                                </p>
+                                <p className="text-ink-3 line-clamp-2 italic">
+                                    &quot;{selectedText}&quot;
+                                </p>
+                            </div>
+                        )}
+                        <Textarea
+                            placeholder={
+                                selectedText
+                                    ? "Ask AI to edit selection..."
+                                    : "Ask AI to add content..."
+                            }
+                            value={aiPrompt}
+                            onChange={e => setAiPrompt(e.target.value)}
+                            className="bg-panel-2/30 border-line focus-visible:ring-brand resize-none rounded-xl"
+                            rows={3}
+                            onKeyDown={e => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    void handleAIRequest();
+                                }
+                            }}
+                        />
+                        <Button
+                            onClick={() => void handleAIRequest()}
+                            disabled={!aiPrompt.trim() || isProcessing}
+                            className="bg-brand shadow-brand-glow hover:bg-brand-hi w-full rounded-xl text-white shadow-lg"
+                            size="sm"
+                        >
+                            {isProcessing ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Processing...
+                                </>
+                            ) : (
+                                <>
+                                    <Send className="mr-2 h-4 w-4" />
+                                    Send to AI
+                                </>
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+
+    return (
+        <div ref={rootRef} className="bg-surface flex h-full flex-col">
             <ResizablePanelGroup direction="horizontal" className="flex-1">
-                {!isRewriteMode && (
-                    <>
+                {!isRewriteMode && !compact && (
+                    <Fragment key="palette">
                         <ResizablePanel
+                            id="palette"
+                            order={1}
                             defaultSize={isToolPaletteCollapsed ? 4 : 15}
                             minSize={isToolPaletteCollapsed ? 4 : 12}
                             maxSize={isToolPaletteCollapsed ? 4 : 20}
@@ -780,463 +1245,68 @@ export function DocumentGeneratorEditor({
                             />
                         </ResizablePanel>
                         <ResizableHandle className="bg-line w-px" />
-                    </>
+                    </Fragment>
                 )}
 
-                {/* Main Editor */}
+                {/* Main Editor — keyed, so crossing the compact width keeps it
+                    mounted, with its cursor and undo history. */}
                 <ResizablePanel
+                    key="editor"
+                    id="editor"
+                    order={2}
                     defaultSize={activeTool && !isRewriteMode ? 50 : isRewriteMode ? 65 : 55}
                     minSize={40}
                 >
-                    <div className="bg-surface flex h-full flex-col">
-                        {/* Toolbar */}
-                        <div className="border-line flex-shrink-0 border-b">
-                            {/* Top Bar */}
-                            <div className="border-line bg-surface flex items-center justify-between border-b px-4 py-3">
-                                <div className="flex items-center gap-3">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={onBack}
-                                        className="text-ink-3 hover:text-ink"
-                                    >
-                                        <ArrowLeft className="mr-2 h-4 w-4" />
-                                        {backLabel}
-                                    </Button>
-                                    <div className="bg-line h-6 w-px" />
-                                    <Input
-                                        value={title}
-                                        onChange={e => setTitle(e.target.value)}
-                                        className="text-ink max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0"
-                                        placeholder={
-                                            isRewriteMode
-                                                ? "Add a title (optional)"
-                                                : "Untitled Document"
-                                        }
-                                    />
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    {lastSaved && (
-                                        <span className="text-ink-3 flex items-center gap-1 text-xs">
-                                            <CheckCircle className="h-3 w-3 text-green-500" />
-                                            Saved {lastSaved.toLocaleTimeString()}
-                                        </span>
-                                    )}
-                                    {docxBase64 && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => {
-                                                const byteCharacters = atob(docxBase64);
-                                                const byteNumbers = new Array(
-                                                    byteCharacters.length
-                                                );
-                                                for (let i = 0; i < byteCharacters.length; i++) {
-                                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                                                }
-                                                const byteArray = new Uint8Array(byteNumbers);
-                                                const blob = new Blob([byteArray], {
-                                                    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                                });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement("a");
-                                                a.href = url;
-                                                a.download = `${title || "document"}.docx`;
-                                                document.body.appendChild(a);
-                                                a.click();
-                                                document.body.removeChild(a);
-                                                URL.revokeObjectURL(url);
-                                            }}
-                                            className="text-ink-3 hover:text-ink"
-                                        >
-                                            <Download className="mr-2 h-4 w-4" />
-                                            Download DOCX
-                                        </Button>
-                                    )}
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => void handleSave()}
-                                        disabled={isSaving}
-                                        className="text-ink-3 hover:text-ink"
-                                    >
-                                        {isSaving ? (
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        ) : (
-                                            <Save className="mr-2 h-4 w-4" />
-                                        )}
-                                        {isRewriteMode ? "Save to Documents" : "Save"}
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {/* Formatting Bar */}
-                            <div className="bg-surface/50 flex items-center gap-1 px-4 py-2 backdrop-blur-sm">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Bold (Ctrl+B)"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        if (wysiwygEditorRef.current) {
-                                            wysiwygEditorRef.current.toggleBold();
-                                        } else {
-                                            applyFormat("bold");
-                                        }
-                                    }}
-                                >
-                                    <Bold className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Italic (Ctrl+I)"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        if (wysiwygEditorRef.current) {
-                                            wysiwygEditorRef.current.toggleItalic();
-                                        } else {
-                                            applyFormat("italic");
-                                        }
-                                    }}
-                                >
-                                    <Italic className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Underline"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        if (wysiwygEditorRef.current) {
-                                            wysiwygEditorRef.current.toggleUnderline();
-                                        } else {
-                                            applyFormat("underline");
-                                        }
-                                    }}
-                                >
-                                    <Underline className="h-4 w-4" />
-                                </Button>
-                                <div className="bg-line mx-2 h-6 w-px" />
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Bullet List"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        if (wysiwygEditorRef.current) {
-                                            wysiwygEditorRef.current.toggleBulletList();
-                                        } else {
-                                            applyFormat("bulletList");
-                                        }
-                                    }}
-                                >
-                                    <List className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Numbered List"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        if (wysiwygEditorRef.current) {
-                                            wysiwygEditorRef.current.toggleOrderedList();
-                                        } else {
-                                            applyFormat("numberedList");
-                                        }
-                                    }}
-                                >
-                                    <ListOrdered className="h-4 w-4" />
-                                </Button>
-                                <div className="bg-line mx-2 h-6 w-px" />
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Align Left"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        wysiwygEditorRef.current?.setTextAlign("left");
-                                    }}
-                                >
-                                    <AlignLeft className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Align Center"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        wysiwygEditorRef.current?.setTextAlign("center");
-                                    }}
-                                >
-                                    <AlignCenter className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                                    title="Align Right"
-                                    onMouseDown={e => {
-                                        e.preventDefault();
-                                        wysiwygEditorRef.current?.setTextAlign("right");
-                                    }}
-                                >
-                                    <AlignRight className="h-4 w-4" />
-                                </Button>
-
-                                {/* Word count */}
-                                <div className="text-ink-3 ml-auto text-xs">
-                                    {content.split(/\s+/).filter(Boolean).length} words
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Editor Content - Edit or Preview (single pane) */}
-                        <div className="bg-panel-2/30 custom-scrollbar relative flex-1 overflow-y-auto">
-                            <div className="px-4 py-8">
-                                <div
-                                    className="bg-panel border-line/50 text-ink mx-auto min-h-[1056px] max-w-[816px] border px-24 py-20 text-base leading-relaxed shadow-xl"
-                                    style={{ fontFamily: "var(--font-serif)" }}
-                                >
-                                    {/* Editor stays mounted when rewrite preview shows so Accept can replace content */}
-                                    <div className={rewritePreview ? "sr-only" : undefined}>
-                                        <WysiwygEditor
-                                            key={documentId ?? "new"}
-                                            ref={wysiwygEditorRef}
-                                            initialContent={content}
-                                            onChange={md => {
-                                                setRewritePreview(null);
-                                                setContent(md);
-                                            }}
-                                            onSelectionChange={info => {
-                                                setSelectedText(info.text);
-                                                setSelectionStart(info.from);
-                                                setSelectionEnd(info.to);
-                                                lastSelectionRef.current = info.text ? info : null;
-                                            }}
-                                            placeholder={
-                                                isRewriteMode
-                                                    ? "Paste or type text here, then select and use the AI panel to rewrite..."
-                                                    : "Start writing or use the AI tools..."
-                                            }
-                                            className="min-h-[900px] w-full [&_.ProseMirror]:min-h-[900px]"
-                                        />
-                                    </div>
-                                    {rewritePreview ? (
-                                        <div className="whitespace-pre-wrap">
-                                            {rewritePreview.textBefore}
-                                            <InlineRewriteDiff
-                                                originalText={rewritePreview.originalText}
-                                                proposedText={rewritePreview.proposedText}
-                                                onAccept={handleRewriteAccept}
-                                                onReject={handleRewriteReject}
-                                                onTryAgain={handleRewriteTryAgain}
-                                                isRetrying={isRetryingRewrite}
-                                            />
-                                            {rewritePreview.textAfter}
-                                        </div>
-                                    ) : null}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {editorPane}
                 </ResizablePanel>
 
-                <ResizableHandle className="bg-line w-px" />
+                {!compact && (
+                    <Fragment key="side">
+                        <ResizableHandle className="bg-line w-px" />
+                        {/* Tool Panel or AI Assistant - in rewrite mode always show AI Assistant */}
+                        <ResizablePanel
+                            id="side"
+                            order={3}
+                            defaultSize={
+                                activeTool && activeTool !== "ai-generate" && !isRewriteMode
+                                    ? 30
+                                    : isRewriteMode
+                                      ? 35
+                                      : 30
+                            }
+                            minSize={25}
+                            maxSize={45}
+                        >
+                            {sidePanel}
+                        </ResizablePanel>
+                    </Fragment>
+                )}
+            </ResizablePanelGroup>
 
-                {/* Tool Panel or AI Assistant - in rewrite mode always show AI Assistant */}
-                <ResizablePanel
-                    defaultSize={
-                        activeTool && activeTool !== "ai-generate" && !isRewriteMode
-                            ? 30
-                            : isRewriteMode
-                              ? 35
-                              : 30
-                    }
-                    minSize={25}
-                    maxSize={45}
-                >
-                    {activeTool && activeTool !== "ai-generate" && !isRewriteMode ? (
-                        renderToolPanel()
+            <Sheet open={compact && panelOpen} onOpenChange={setPanelOpen}>
+                <SheetContent side="right" className="w-full gap-0 p-0 sm:max-w-[420px]">
+                    <SheetTitle className="sr-only">
+                        {isRewriteMode ? "AI Assistant" : "Tools"}
+                    </SheetTitle>
+                    {isRewriteMode ? (
+                        sidePanel
                     ) : (
-                        <div className="bg-surface border-line flex h-full flex-col border-l">
-                            {/* Header */}
-                            <div className="border-line bg-surface/50 flex-shrink-0 border-b p-4 backdrop-blur-md">
-                                <div className="mb-1 flex items-center gap-2">
-                                    <Sparkles className="text-brand-ink h-5 w-5" />
-                                    <h3 className="text-ink font-semibold">AI Assistant</h3>
-                                </div>
-                                <p className="text-ink-3 text-xs">
-                                    {isRewriteMode
-                                        ? selectedText
-                                            ? "Selected text - Ask AI to rewrite it"
-                                            : "Paste or type text, then select and ask AI to rewrite"
-                                        : selectedText
-                                          ? "Selected text - Ask AI to edit it"
-                                          : "Ask AI to add content"}
-                                </p>
+                        <div className="flex h-full min-h-0 flex-col">
+                            <div className="border-line max-h-[45%] shrink-0 overflow-y-auto border-b">
+                                <ToolPalette
+                                    activeTool={activeTool}
+                                    onToolSelect={handleToolSelect}
+                                    onAIAction={handleAIAction}
+                                    hasSelection={selectedText.length > 0}
+                                    isCollapsed={false}
+                                    onToggleCollapse={() => setPanelOpen(false)}
+                                />
                             </div>
-
-                            {/* Chat Messages */}
-                            <div className="custom-scrollbar flex-1 overflow-y-auto p-4">
-                                <div className="space-y-4">
-                                    {chatMessages.length === 0 && !rewritePreview && (
-                                        <div className="space-y-3">
-                                            <div className="border-brand bg-brand-soft rounded-lg border p-3">
-                                                <p className="text-ink mb-2 flex items-center gap-2 text-sm font-medium">
-                                                    <Sparkles className="text-brand-ink h-4 w-4" />
-                                                    How to use AI
-                                                </p>
-                                                <ul className="text-ink-3 space-y-1 text-xs">
-                                                    <li>• Select text to ask AI to edit it</li>
-                                                    <li>• Type requests to add new content</li>
-                                                    <li>• Use quick actions below</li>
-                                                    <li>• Press ⌘K for quick access</li>
-                                                </ul>
-                                            </div>
-
-                                            {selectedText ? (
-                                                <div>
-                                                    <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
-                                                        EDIT SELECTED TEXT
-                                                    </p>
-                                                    <div className="space-y-2">
-                                                        {editActions.map(action => (
-                                                            <Button
-                                                                key={action.label}
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
-                                                                onClick={() =>
-                                                                    void handleAIAction(
-                                                                        action.action
-                                                                    )
-                                                                }
-                                                                disabled={isProcessing}
-                                                            >
-                                                                {action.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
-                                                        QUICK ACTIONS
-                                                    </p>
-                                                    <div className="space-y-2">
-                                                        {quickActions.map(action => (
-                                                            <Button
-                                                                key={action.label}
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
-                                                                onClick={() =>
-                                                                    void handleAIAction(
-                                                                        action.action
-                                                                    )
-                                                                }
-                                                                disabled={isProcessing}
-                                                            >
-                                                                <Sparkles className="text-brand-ink mr-2 h-3 w-3" />
-                                                                {action.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {chatMessages.map((message, index) => (
-                                        <div
-                                            key={index}
-                                            className={cn(
-                                                "border-line/50 rounded-2xl border p-3 shadow-sm",
-                                                message.role === "user"
-                                                    ? "border-brand-soft bg-brand-soft ml-4"
-                                                    : "bg-panel-2/50 mr-4"
-                                            )}
-                                        >
-                                            <p className="text-ink-3 mb-1 text-[10px] font-black uppercase tracking-widest">
-                                                {message.role === "user" ? "You" : "AI Assistant"}
-                                            </p>
-                                            <p className="text-ink text-sm leading-relaxed">
-                                                {message.content}
-                                            </p>
-                                        </div>
-                                    ))}
-
-                                    {isProcessing && (
-                                        <div className="text-ink-3 flex animate-pulse items-center gap-2 text-sm">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
-                                            AI is processing...
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Input */}
-                            <div className="border-line bg-surface flex-shrink-0 border-t p-4">
-                                <div className="space-y-2">
-                                    {selectedText && (
-                                        <div className="border-brand-soft bg-brand-soft dark:border-brand-soft rounded-xl border p-2 text-[10px]">
-                                            <p className="text-brand-ink mb-1 font-black uppercase tracking-widest">
-                                                Selected Text
-                                            </p>
-                                            <p className="text-ink-3 line-clamp-2 italic">
-                                                &quot;{selectedText}&quot;
-                                            </p>
-                                        </div>
-                                    )}
-                                    <Textarea
-                                        placeholder={
-                                            selectedText
-                                                ? "Ask AI to edit selection..."
-                                                : "Ask AI to add content..."
-                                        }
-                                        value={aiPrompt}
-                                        onChange={e => setAiPrompt(e.target.value)}
-                                        className="bg-panel-2/30 border-line focus-visible:ring-brand resize-none rounded-xl"
-                                        rows={3}
-                                        onKeyDown={e => {
-                                            if (e.key === "Enter" && !e.shiftKey) {
-                                                e.preventDefault();
-                                                void handleAIRequest();
-                                            }
-                                        }}
-                                    />
-                                    <Button
-                                        onClick={() => void handleAIRequest()}
-                                        disabled={!aiPrompt.trim() || isProcessing}
-                                        className="bg-brand shadow-brand-glow hover:bg-brand-hi w-full rounded-xl text-white shadow-lg"
-                                        size="sm"
-                                    >
-                                        {isProcessing ? (
-                                            <>
-                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Send className="mr-2 h-4 w-4" />
-                                                Send to AI
-                                            </>
-                                        )}
-                                    </Button>
-                                </div>
-                            </div>
+                            <div className="min-h-0 flex-1">{sidePanel}</div>
                         </div>
                     )}
-                </ResizablePanel>
-            </ResizablePanelGroup>
+                </SheetContent>
+            </Sheet>
 
             {/* Export Dialog */}
             <ExportDialog

@@ -296,8 +296,13 @@ export function LegalChatbot({
         currentResponseRef.current = currentResponse;
     }, [currentResponse]);
 
+    // Follow the conversation to its newest turn — but not before there is
+    // one: the welcome reads from the top, and in a short (stacked) chat
+    // column scrolling it to the bottom hid its heading.
     useEffect(() => {
-        if (feedRef.current) feedRef.current.scrollTop = feedRef.current.scrollHeight;
+        if (!feedRef.current) return;
+        if (messages.length === 0 && !pendingConfirm && !isLoading) return;
+        feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }, [messages, pendingConfirm, isLoading]);
 
     const activeTemplateId = confirmedTemplateId ?? currentResponse?.selectedTemplateId ?? null;
@@ -1012,7 +1017,7 @@ function WelcomeMessage({ onSuggest }: { onSuggest: (q: string) => void }) {
             </h2>
             <p className={s.assistWelcomeSub}>
                 Describe your situation — I&apos;ll recommend the right template and help you fill
-                it out, with the document filling in live on the right.
+                it out, with the document filling in live as you answer.
             </p>
             <div className={s.assistWelcomeChips}>
                 {suggestions.map(q => (

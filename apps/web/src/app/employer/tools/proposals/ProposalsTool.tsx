@@ -2,6 +2,8 @@
 
 import { BookMarked, Building2, FileText, Home, Landmark, Loader2 } from "lucide-react";
 
+import { Button } from "~/components/ui/button";
+
 import { ToolFrame, ToolNotFound, type ToolNavGroup } from "~/components/tool-app/ToolFrame";
 import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/tool-app/nav";
 
@@ -44,17 +46,18 @@ function RunIndicator() {
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
     return (
-        <button
+        <Button
             type="button"
+            variant="ghost"
             onClick={() => openRunSheet()}
-            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 focus-visible:ring-brand/50 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs outline-none focus-visible:ring-[3px]"
+            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-auto w-full justify-start gap-2 px-2.5 py-2 text-left text-xs font-normal"
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
             <span className="min-w-0 flex-1 truncate">
                 {RUN_KIND_LABEL[activeRun.kind]}
                 {current ? ` · ${current.label.toLowerCase()}` : ""}
             </span>
-        </button>
+        </Button>
     );
 }
 

@@ -2243,6 +2243,8 @@
     font-size: 13px;
     color: var(--ink-2);
     min-width: 0;
+    /* One line however narrow the tab: the last crumb ellipsises instead. */
+    white-space: nowrap;
 }
 .rdCrumbsSep {
     color: var(--ink-4);
@@ -2442,12 +2444,16 @@
     overflow: hidden;
     background: color-mix(in oklch, var(--bg) 30%, transparent);
 }
+/* The title and the actions share a row while they fit and wrap onto two
+   when they do not — a document column beside the Fields pane in a tool tab
+   is narrower than the window suggests, and a grid row clipped the actions
+   off the edge of the tab. */
 .rdDocHead {
     padding: 14px 24px 10px;
     border-bottom: 1px solid var(--line-2);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
     align-items: center;
     flex-shrink: 0;
 }
@@ -2456,6 +2462,7 @@
     align-items: center;
     gap: 10px;
     min-width: 0;
+    flex: 1 1 240px;
 }
 .rdDocTitle {
     font-size: 18px;
@@ -2537,8 +2544,10 @@
 }
 .rdDocActions {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 8px;
-    flex-shrink: 0;
+    margin-left: auto;
 }
 
 /* Format toolbar */
@@ -2697,7 +2706,8 @@
     flex-shrink: 0;
 }
 .rdPaneTab {
-    padding: 12px 12px;
+    padding: 12px 10px;
+    white-space: nowrap;
     background: transparent;
     border: 0;
     cursor: pointer;
@@ -3265,6 +3275,12 @@ textarea.rdFieldInput {
         border-right: 0;
         border-left: 0;
         border-bottom: 1px solid var(--line-2);
+    }
+    .rdDocHead {
+        padding: 12px 16px 10px;
+    }
+    .rdDocPage {
+        padding: 40px 32px;
     }
 }
 @container (max-width: 519px) {

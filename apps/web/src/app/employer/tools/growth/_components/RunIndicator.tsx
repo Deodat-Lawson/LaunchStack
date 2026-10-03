@@ -2,6 +2,8 @@
 
 import { Loader2 } from "lucide-react";
 
+import { Button } from "~/components/ui/button";
+
 import { runIsLive } from "../prospects/_components/RunSheet";
 import { useProspects } from "../prospects/_lib/context";
 
@@ -26,15 +28,16 @@ export function RunIndicator() {
         ? `${RUNNING_VERB[current.id] ?? current.label.toLowerCase()}${current.detail ? ` ${current.detail}` : ""}`
         : null;
     return (
-        <button
+        <Button
             type="button"
+            variant="ghost"
             onClick={() => openRunSheet()}
-            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 focus-visible:ring-brand/50 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs outline-none focus-visible:ring-[3px]"
+            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-auto w-full justify-start gap-2 px-2.5 py-2 text-left text-xs font-normal"
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
             <span className="min-w-0 flex-1 truncate">
                 Finding companies{doing ? ` · ${doing}` : ""}
             </span>
-        </button>
+        </Button>
     );
 }

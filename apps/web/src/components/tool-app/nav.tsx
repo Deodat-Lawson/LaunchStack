@@ -247,6 +247,8 @@ export function ToolNavProvider({
     const unremembered = useRef(new Set<number>());
     const currentKeyRef = useRef(current.key);
     currentKeyRef.current = current.key;
+    const currentHrefRef = useRef(formatToolHref(current));
+    currentHrefRef.current = formatToolHref(current);
     const written = useRef<{ key: number; previous: string | null } | null>(null);
     const storageKey = scope ? `${STORAGE_PREFIX}${scope}:${toolId}` : null;
     const storageKeyRef = useRef(storageKey);
@@ -256,9 +258,13 @@ export function ToolNavProvider({
         unremembered.current.add(key);
         const last = written.current;
         if (!last || last.key !== key || !storageKeyRef.current) return;
+        // Reopened on a remembered record that has since gone (deleted on
+        // another device): what was remembered before is this same dead
+        // path, so forget it outright and let the next visit start at home.
+        const previous = last.previous === currentHrefRef.current ? null : last.previous;
         try {
-            if (last.previous === null) window.localStorage.removeItem(storageKeyRef.current);
-            else window.localStorage.setItem(storageKeyRef.current, last.previous);
+            if (previous === null) window.localStorage.removeItem(storageKeyRef.current);
+            else window.localStorage.setItem(storageKeyRef.current, previous);
         } catch {
             // Storage blocked: nothing was remembered to undo.
         }

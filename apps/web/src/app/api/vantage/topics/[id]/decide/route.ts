@@ -1,8 +1,10 @@
-// POST /api/vantage/topics/:id/decide — { decision, commitment | null }
-// Records what the meeting decided and opens the commitment next week checks.
+// POST   /api/vantage/topics/:id/decide — { decision, commitment | null }
+//        Records what the meeting decided and opens the commitment next week checks.
+// DELETE /api/vantage/topics/:id/decide?commitment=<id> — the Undo after a
+//        one-click commit: the topic is undecided again, that commitment gone.
 import type { NextRequest } from "next/server";
 
-import { recordDecision } from "@launchstack/pipelines/vantage";
+import { recordDecision, undoDecision } from "@launchstack/pipelines/vantage";
 
 import {
     error,
@@ -33,5 +35,21 @@ export async function POST(request: NextRequest, { params }: Params) {
         return json({ topic });
     } catch (err) {
         return handleVantageError("POST decide", err);
+    }
+}
+
+export async function DELETE(request: NextRequest, { params }: Params) {
+    const auth = await vantageContext();
+    if (!auth.ok) return auth.response;
+    try {
+        const { id } = await params;
+        const topic = await undoDecision({
+            companyId: auth.ctx.companyId,
+            topicId: id,
+            commitmentId: request.nextUrl.searchParams.get("commitment"),
+        });
+        return json({ topic });
+    } catch (err) {
+        return handleVantageError("DELETE decide", err);
     }
 }

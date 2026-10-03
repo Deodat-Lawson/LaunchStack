@@ -34,6 +34,12 @@ export interface OverviewDto {
     agendaWeek: string;
     agendaWeekEnd: string;
     agenda: AgendaDto | null;
+    /**
+     * The week before's agenda: once its meeting is held, its undecided
+     * topics are what Vantage suggests committing to, even after the Thursday
+     * rule has moved "next meeting" on.
+     */
+    previousAgenda: AgendaDto | null;
     signals: WeeklySignals;
     /** Commitments to check in on: overdue or due this week. */
     checkIns: CommitmentDto[];
@@ -47,13 +53,15 @@ export async function loadOverview(args: { companyId: bigint; now?: Date }): Pro
     const now = args.now ?? new Date();
     const today = toIsoDate(now);
     const agendaWeek = defaultAgendaWeek(now);
-    const [{ signals }, agenda, commitments, recentEvidence, last] = await Promise.all([
-        computeWeeklySignals({ companyId: args.companyId, weekStart: agendaWeek, now }),
-        getAgendaByWeek({ companyId: args.companyId, weekStart: agendaWeek }),
-        listCommitments({ companyId: args.companyId, status: ["open"] }),
-        listEvidence({ companyId: args.companyId, since: addDays(today, -14), limit: 8 }),
-        lastEntryAt(args.companyId),
-    ]);
+    const [{ signals }, agenda, previousAgenda, commitments, recentEvidence, last] =
+        await Promise.all([
+            computeWeeklySignals({ companyId: args.companyId, weekStart: agendaWeek, now }),
+            getAgendaByWeek({ companyId: args.companyId, weekStart: agendaWeek }),
+            getAgendaByWeek({ companyId: args.companyId, weekStart: addDays(agendaWeek, -7) }),
+            listCommitments({ companyId: args.companyId, status: ["open"] }),
+            listEvidence({ companyId: args.companyId, since: addDays(today, -14), limit: 8 }),
+            lastEntryAt(args.companyId),
+        ]);
     const checkIds = new Set([
         ...signals.overdueCommitmentIds,
         ...signals.dueThisWeekCommitmentIds,
@@ -64,6 +72,7 @@ export async function loadOverview(args: { companyId: bigint; now?: Date }): Pro
         agendaWeek,
         agendaWeekEnd: weekEndOf(agendaWeek),
         agenda,
+        previousAgenda,
         signals,
         checkIns,
         recentEvidence,

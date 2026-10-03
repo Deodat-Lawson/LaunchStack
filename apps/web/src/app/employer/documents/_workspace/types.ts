@@ -398,7 +398,9 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/settings#company",
     },
     {
-        id: "agents",
+        // Not `agents`: that is the Agents app above, and the palette keys
+        // and routes its rows by id.
+        id: "agents-nodes",
         label: "Agents & nodes",
         Icon: IconUsers,
         desc: "The meeting roster, and the machines that run it",
@@ -624,6 +626,17 @@ export function demotedFeatureHref(id: string): string | undefined {
     // A `?feature=` href would come straight back here; those ids have no
     // destination beyond this page and are left alone.
     return href?.startsWith("/employer/documents?feature=") ? undefined : href;
+}
+
+/**
+ * Settings is a Studio app, so a link into it opens the tab rather than
+ * leaving the workspace. Answers the section a `/employer/settings#…` link
+ * names ("" when it names none), or undefined for a link anywhere else.
+ */
+export function settingsSectionOf(href: string): string | undefined {
+    const url = new URL(href, "http://workspace.invalid");
+    if (url.pathname !== "/employer/settings") return undefined;
+    return url.hash.replace(/^#/, "");
 }
 
 /** Add-source modal tabs, grouped Create / Upload / Connect. */

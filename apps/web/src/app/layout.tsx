@@ -1,6 +1,5 @@
 import "@launchstack/design-tokens/tokens.css";
 import "~/styles/globals.css";
-import "@uploadthing/react/styles.css";
 import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 import { ContextMenuProvider } from "~/components/context-menu";

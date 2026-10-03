@@ -158,7 +158,9 @@ export function ToolFrame({
                             <div className="flex items-center gap-1 pl-1.5">
                                 <span className="flex min-w-0 flex-1 items-center gap-2">
                                     {mark}
-                                    <span className="text-ink truncate text-[13.5px] font-semibold tracking-[-0.02em]">
+                                    {/* Wraps rather than truncates: "Investor relations"
+                                        beside the history buttons is wider than the rail. */}
+                                    <span className="text-ink min-w-0 text-balance text-[13.5px] font-semibold leading-tight tracking-[-0.02em]">
                                         {title}
                                     </span>
                                 </span>

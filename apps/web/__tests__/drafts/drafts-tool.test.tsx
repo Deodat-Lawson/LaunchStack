@@ -4,13 +4,13 @@
  * Templated Drafts as a tab on the shared tool frame. What this pins:
  *
  * - the path → screen switch (`draftsScreenFor`), on its own;
- * - the rail replaces the library's old New document / My documents tabs,
+ * - the screen tabs replace the library's old New document / My documents tabs,
  *   counts the drafts, and moves inside the tab;
  * - a draft is a record page at /documents/<id> whose back control leads to
  *   My documents, and an id the list does not have is a not-found state the
  *   tab does not remember;
  * - the home's "Ask AI" hands its text to the assistant once, and the
- *   assistant keeps its conversation across trips through the rail;
+ *   assistant keeps its conversation across trips between screens;
  * - loading, error and retry behave as they did.
  *
  * The editors and the chat are stand-ins: they are large, and what matters
@@ -22,7 +22,7 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import "@testing-library/jest-dom";
 
 import type { ToolHost } from "~/components/tool-app/nav";
-import { DraftsTool, draftsRail } from "~/app/employer/documents/components/DraftsTool";
+import { DraftsTool, draftsScreens } from "~/app/employer/documents/components/DraftsTool";
 import {
     DRAFTS_ROOTS,
     draftsDocumentPath,
@@ -123,13 +123,13 @@ describe("draftsScreenFor", () => {
     });
 
     it("the screen tabs count drafts only once the list is known", () => {
-        const [group] = draftsRail(null);
+        const [group] = draftsScreens(null);
         expect(group!.items.map(i => [i.to, i.label, i.count])).toEqual([
             ["/", "New document", undefined],
             ["/documents", "My documents", null],
             ["/assistant", "Assistant", undefined],
         ]);
-        expect(draftsRail(3)[0]!.items[1]!.count).toBe(3);
+        expect(draftsScreens(3)[0]!.items[1]!.count).toBe(3);
     });
 });
 
@@ -227,8 +227,8 @@ function mount(at: string, extra: Partial<ToolHost> = {}) {
     return render(<DraftsTool host={host} />);
 }
 
-const rail = () => screen.getByRole("navigation", { name: "Templated Drafts screens" });
-const railLink = (name: RegExp) => within(rail()).getByRole("link", { name });
+const tabs = () => screen.getByRole("navigation", { name: "Templated Drafts screens" });
+const screenTab = (name: RegExp) => within(tabs()).getByRole("link", { name });
 const goBack = () => fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
 
 describe("the Templated Drafts tab", () => {
@@ -239,10 +239,10 @@ describe("the Templated Drafts tab", () => {
         ).toBeVisible();
         expect(screen.queryByRole("tablist", { name: "Document view" })).toBeNull();
 
-        expect(railLink(/new document/i)).toHaveAttribute("aria-current", "page");
+        expect(screenTab(/new document/i)).toHaveAttribute("aria-current", "page");
         // The Rewrite draft is not Templated Drafts' to count.
-        expect(railLink(/my documents/i)).toHaveTextContent(/My documents\s*1$/);
-        expect(railLink(/assistant/i)).toBeInTheDocument();
+        expect(screenTab(/my documents/i)).toHaveTextContent(/My documents\s*1$/);
+        expect(screenTab(/assistant/i)).toBeInTheDocument();
         expect(screen.getByText(/Recent in your workspace/i)).toBeVisible();
     });
 
@@ -251,7 +251,7 @@ describe("the Templated Drafts tab", () => {
         holdList = new Promise(resolve => (release = resolve));
         mount("/documents");
         expect(screen.getByText("Loading documents…")).toBeVisible();
-        expect(railLink(/my documents/i)).toHaveTextContent(/^My documents$/);
+        expect(screenTab(/my documents/i)).toHaveTextContent(/^My documents$/);
         await act(async () => release());
         expect(await screen.findByRole("heading", { name: "My documents" })).toBeVisible();
     });
@@ -260,15 +260,15 @@ describe("the Templated Drafts tab", () => {
         mount("/");
         await screen.findByRole("heading", { name: /generate a legal document/i });
 
-        fireEvent.click(railLink(/my documents/i));
+        fireEvent.click(screenTab(/my documents/i));
         expect(await screen.findByRole("heading", { name: "My documents" })).toBeVisible();
-        expect(railLink(/my documents/i)).toHaveAttribute("aria-current", "page");
+        expect(screenTab(/my documents/i)).toHaveAttribute("aria-current", "page");
 
         fireEvent.click(screen.getByRole("button", { name: /Acme NDA/ }));
         const editor = await screen.findByTestId("legal-editor");
         expect(within(editor).getByRole("heading", { name: "Acme NDA" })).toBeInTheDocument();
-        // Still My documents in the rail: the draft is a record under it.
-        expect(railLink(/my documents/i)).toHaveAttribute("aria-current", "page");
+        // Still My documents in the tabs: the draft is a record under it.
+        expect(screenTab(/my documents/i)).toHaveAttribute("aria-current", "page");
         // Opening rebuilt the DOCX from the draft's content, as it always did.
         expect(calls.some(c => c.url === "/api/document-generator/legal-generate")).toBe(true);
 
@@ -287,7 +287,7 @@ describe("the Templated Drafts tab", () => {
                 content: "<p>Body</p>",
             })
         );
-        fireEvent.click(railLink(/my documents/i));
+        fireEvent.click(screenTab(/my documents/i));
         expect(await screen.findByRole("button", { name: /Renamed NDA/ })).toBeVisible();
     });
 
@@ -304,7 +304,7 @@ describe("the Templated Drafts tab", () => {
             title: "Non-Disclosure Agreement",
             templateId: "nda",
         });
-        expect(railLink(/my documents/i)).toHaveTextContent(/My documents\s*2$/);
+        expect(screenTab(/my documents/i)).toHaveTextContent(/My documents\s*2$/);
 
         goBack();
         expect(
@@ -324,23 +324,23 @@ describe("the Templated Drafts tab", () => {
         expect(await screen.findByTestId("chat-initial")).toHaveTextContent(
             "NDA for a new contractor"
         );
-        expect(railLink(/assistant/i)).toHaveAttribute("aria-current", "page");
-        // A screen of the rail: no back button of its own.
+        expect(screenTab(/assistant/i)).toHaveAttribute("aria-current", "page");
+        // A screen of the bar: no back button of its own.
         expect(screen.queryByRole("button", { name: "Chat back" })).toBeNull();
         fireEvent.click(screen.getByRole("button", { name: "Type" }));
         expect(mockChatMounts).toHaveBeenCalledTimes(1);
 
-        fireEvent.click(railLink(/my documents/i));
+        fireEvent.click(screenTab(/my documents/i));
         expect(await screen.findByRole("heading", { name: "My documents" })).toBeVisible();
         expect(screen.getByTestId("chat")).not.toBeVisible();
 
-        fireEvent.click(railLink(/assistant/i));
+        fireEvent.click(screenTab(/assistant/i));
         expect(screen.getByTestId("chat")).toBeVisible();
         expect(screen.getByTestId("chat-typed")).toHaveTextContent("1");
         expect(mockChatMounts).toHaveBeenCalledTimes(1);
 
         // "Ask AI" again is a new conversation.
-        fireEvent.click(railLink(/new document/i));
+        fireEvent.click(screenTab(/new document/i));
         await screen.findByRole("heading", { name: /generate a legal document/i });
         fireEvent.click(screen.getByRole("button", { name: /ask ai/i }));
         await waitFor(() => expect(mockChatMounts).toHaveBeenCalledTimes(2));

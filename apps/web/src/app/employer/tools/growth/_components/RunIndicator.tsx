@@ -3,7 +3,6 @@
 import { Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
 
 import { runIsLive } from "../prospects/_components/RunSheet";
 import { useProspects } from "../prospects/_lib/context";
@@ -22,7 +21,7 @@ const RUNNING_VERB: Record<string, string> = {
  * place in the tool's bar (a short pill, just the spinner in a narrow tab).
  * Nothing shows when no run is live.
  */
-export function RunIndicator({ compact = false }: { compact?: boolean }) {
+export function RunIndicator() {
     const { activeRun, openRunSheet } = useProspects();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
@@ -37,19 +36,11 @@ export function RunIndicator({ compact = false }: { compact?: boolean }) {
             onClick={() => openRunSheet()}
             title={label}
             aria-label={`${label}. Open the run`}
-            className={cn(
-                "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
-                compact ? "h-7 max-w-[200px] px-2.5" : "h-auto w-full px-2.5 py-2"
-            )}
+            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-7 max-w-[200px] justify-start gap-2 px-2.5 text-left text-xs font-normal"
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-            <span
-                className={cn(
-                    "min-w-0 flex-1 truncate",
-                    // A narrow tab keeps just the spinner, so the bar stays two rows.
-                    compact && "[@container(max-width:719px)]:hidden"
-                )}
-            >
+            {/* Under 900px of tab width, just the spinner: the bar keeps its rows. */}
+            <span className="min-w-0 flex-1 truncate [@container(max-width:899px)]:hidden">
                 {label}
             </span>
         </Button>

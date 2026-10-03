@@ -1,6 +1,6 @@
 # Growth — design rules for this surface
 
-Growth is one tool with two areas, Brand and Prospects, in one rail. It is a
+Growth is one tool with two areas, Brand and Prospects, switched in its bar. It is a
 tab of the workspace, not a route: `GrowthTool.tsx` mounts it, and
 `_lib/screens.ts` maps the tab's app-relative path ("/prospects/companies")
 to a screen. Screens follow `components/tool-app/README.md`: `ToolLink` and
@@ -33,7 +33,7 @@ screen. They are checked in the finish pass; see the last section.
 
 ## Color roles
 
-- Canvas `bg-surface`, rail `bg-panel` (the tool frame's), panels `bg-panel`, hover and
+- Canvas `bg-surface`, the bar `bg-panel` (the tool frame's), panels `bg-panel`, hover and
   skeletons `bg-panel-2`. Hairlines inside a list `border-line-2`, around it
   `border-line`.
 - **Accent is for three things**: the primary button, the current selection,

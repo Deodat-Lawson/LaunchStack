@@ -40,7 +40,7 @@ export function VantageTool({ host }: { host?: ToolHost }) {
  * then capture. Triage sits apart under "Program": it is the administrator's
  * side of the same table and only reads what the founder chose to share.
  */
-function railGroups(admin: boolean): ToolNavGroup[] {
+function screenGroups(admin: boolean): ToolNavGroup[] {
     const groups: ToolNavGroup[] = [
         {
             id: "week",
@@ -74,7 +74,7 @@ function VantageFrame() {
     const { path, search } = useToolNav();
     const { can, loaded } = usePermissions();
     const admin = can("settings.manage");
-    const groups = useMemo(() => railGroups(admin), [admin]);
+    const groups = useMemo(() => screenGroups(admin), [admin]);
     const screen = vantageScreenFor(
         `${path}${search}`,
         admin ? "allowed" : loaded ? "denied" : "pending"

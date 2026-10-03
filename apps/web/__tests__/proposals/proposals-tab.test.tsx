@@ -1,9 +1,9 @@
 /** @jest-environment jsdom */
 
 /**
- * The real Proposals tab — frame, rail and the real screens — over the
+ * The real Proposals tab — frame, screen tabs and the real screens — over the
  * harness's simulator of `/api/proposals/*`. What it pins is that the tab
- * never leaves the page: rail links, the todo links the server builds as old
+ * never leaves the page: screen tabs, the todo links the server builds as old
  * page URLs, and Back all move inside the tab, while a site link (Investor
  * relations, Ask in chat) is handed to the workspace.
  */
@@ -72,14 +72,14 @@ function mount(at: string) {
     return { openHref, openTool };
 }
 
-const rail = () => screen.getByRole("navigation", { name: "Proposals screens" });
+const tabs = () => screen.getByRole("navigation", { name: "Proposals screens" });
 
 describe("the Proposals tab", () => {
-    it("opens on Home and moves to a screen from the rail without leaving the page", async () => {
+    it("opens on Home and moves to a screen from the tabs without leaving the page", async () => {
         mount("/");
         expect(await screen.findByRole("heading", { name: /your proposals/i })).toBeVisible();
 
-        const funders = within(rail()).getByRole("link", { name: /funders/i });
+        const funders = within(tabs()).getByRole("link", { name: /funders/i });
         expect(funders).toHaveAttribute(
             "href",
             "/employer/documents?feature=proposals&at=%2Ffunders"

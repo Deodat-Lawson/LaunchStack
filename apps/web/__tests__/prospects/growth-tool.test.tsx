@@ -84,7 +84,7 @@ jest.mock("~/app/employer/tools/growth/prospects/_screens/SourcesScreen", () => 
 }));
 
 // The provider loads segments and looks for a live run; answer both without
-// a network so the rail's counts come from a known segment.
+// a network so the tabs' counts come from a known segment.
 jest.mock("~/app/employer/tools/growth/prospects/api", () => {
     const actual = jest.requireActual<typeof ProspectsApiModule>(
         "~/app/employer/tools/growth/prospects/api"
@@ -180,7 +180,7 @@ describe("GrowthTool", () => {
     async function mount(at: string) {
         const openHref = jest.fn();
         render(<GrowthTool host={{ active: true, request: { at, nonce: 1 }, openHref }} />);
-        // Let the provider's segment load settle so the rail has its counts.
+        // Let the provider's segment load settle so the tabs have their counts.
         await act(async () => {});
         return { openHref };
     }
@@ -190,8 +190,8 @@ describe("GrowthTool", () => {
         await mount("/");
         expect(currentScreen()).toBe("brand-overview");
 
-        const rail = screen.getByRole("navigation", { name: "Growth screens" });
-        const calendar = within(rail).getByRole("link", { name: "Calendar" });
+        const tabs = screen.getByRole("navigation", { name: "Growth screens" });
+        const calendar = within(tabs).getByRole("link", { name: "Calendar" });
         // A real link to share or ⌘-click, pointing at the tab, not an old page.
         expect(calendar).toHaveAttribute(
             "href",
@@ -222,9 +222,9 @@ describe("GrowthTool", () => {
     it("shows the segment's counts in the Prospects screen tabs", async () => {
         await mount("/prospects");
         expect(currentScreen()).toBe("prospects-home");
-        const rail = screen.getByRole("navigation", { name: "Growth screens" });
-        expect(within(rail).getByRole("link", { name: /Companies/ })).toHaveTextContent("12");
-        expect(within(rail).getByRole("link", { name: /Sources/ })).toHaveTextContent("9");
+        const tabs = screen.getByRole("navigation", { name: "Growth screens" });
+        expect(within(tabs).getByRole("link", { name: /Companies/ })).toHaveTextContent("12");
+        expect(within(tabs).getByRole("link", { name: /Sources/ })).toHaveTextContent("9");
         // The segment switcher sits in the bar while Prospects is showing.
         expect(
             screen.getByRole("button", { name: "Segment: Fulfilment operators. Switch segment" })

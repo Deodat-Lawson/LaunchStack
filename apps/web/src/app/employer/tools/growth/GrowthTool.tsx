@@ -79,7 +79,7 @@ function GrowthFrame() {
             groups={groups}
             // A run belongs to the whole tool: its pill is in the bar on
             // Brand's screens too, so there is always a way back to it.
-            status={<RunIndicator compact />}
+            status={<RunIndicator />}
             overlay={<RunSheet />}
         >
             {/* Keyed by path so a screen starts fresh on each visit, as it did

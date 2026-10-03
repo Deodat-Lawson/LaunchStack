@@ -29,7 +29,7 @@ export function DraftsTool({ host }: { host?: ToolHost }) {
 }
 
 /** The screens: one unlabelled group. The count waits for the list rather than showing 0. */
-export function draftsRail(documentCount: number | null): ToolNavGroup[] {
+export function draftsScreens(documentCount: number | null): ToolNavGroup[] {
     return [
         {
             id: "drafts",
@@ -51,7 +51,7 @@ function DraftsFrame() {
         <ToolFrame
             title="Templated Drafts"
             mark={<ToolMark icon={Pen} />}
-            groups={draftsRail(drafts.loaded ? drafts.documents.length : null)}
+            groups={draftsScreens(drafts.loaded ? drafts.documents.length : null)}
             // Every screen brings its own padding, and the editors and the
             // assistant lay themselves out to the full height of the tab.
             fill

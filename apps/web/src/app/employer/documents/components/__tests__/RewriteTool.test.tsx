@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 /**
- * Rewrite, as someone uses it inside its tab: the rail replaces the old
+ * Rewrite, as someone uses it inside its tab: the screen tabs replace the old
  * New rewrite / My rewrites buttons, a saved rewrite opens at a path of its
  * own and Back returns to the list, the first save of a new rewrite gives it
  * that path without losing the editor, the step-by-step workflow is a screen
@@ -156,8 +156,8 @@ function mount(host: ToolHost = {}) {
     return render(<RewriteTool host={{ storageScope: SCOPE, ...host }} />);
 }
 
-/** The rail, not the folded screen bar: its links are what a wide tab shows. */
-function rail() {
+/** The screen tabs, not the folded phone menu: their links are what a wide tab shows. */
+function tabs() {
     return within(screen.getByRole("navigation", { name: "Rewrite screens" }));
 }
 
@@ -166,18 +166,18 @@ function remembered() {
 }
 
 describe("RewriteTool", () => {
-    it("opens on New rewrite: the rail has both screens, the hero keeps its heading but not its tabs", async () => {
+    it("opens on New rewrite: the tabs have both screens, the hero keeps its heading but not its tabs", async () => {
         mount();
         expect(screen.getByRole("heading", { name: /Refine your\s+prose/ })).toBeInTheDocument();
         expect(screen.getByText("Step-by-step rewrite")).toBeInTheDocument();
         expect(screen.getByText("How the workflow works")).toBeInTheDocument();
 
-        const newLink = rail().getByRole("link", { name: "New rewrite" });
+        const newLink = tabs().getByRole("link", { name: "New rewrite" });
         expect(newLink).toHaveAttribute("aria-current", "page");
         expect(newLink).toHaveAttribute("href", "/employer/documents?feature=rewrite&at=%2F");
         // The count arrives with the list.
         await waitFor(() =>
-            expect(rail().getByRole("link", { name: /My rewrites/ })).toHaveTextContent(
+            expect(tabs().getByRole("link", { name: /My rewrites/ })).toHaveTextContent(
                 "My rewrites2"
             )
         );
@@ -188,7 +188,7 @@ describe("RewriteTool", () => {
 
     it("lists saved rewrites, opens one at its own path, and Back returns to the list", async () => {
         mount();
-        fireEvent.click(rail().getByRole("link", { name: /My rewrites/ }));
+        fireEvent.click(tabs().getByRole("link", { name: /My rewrites/ }));
         expect(remembered()).toBe("/rewrites");
 
         const row = await screen.findByRole("link", { name: /Quarterly letter/ });
@@ -211,7 +211,7 @@ describe("RewriteTool", () => {
         expect(screen.getByTestId("editor-document-id")).toHaveTextContent("1");
         expect(remembered()).toBe("/rewrites/1");
         // A rewrite is a record under My rewrites.
-        expect(rail().getByRole("link", { name: /My rewrites/ })).toHaveAttribute(
+        expect(tabs().getByRole("link", { name: /My rewrites/ })).toHaveAttribute(
             "aria-current",
             "page"
         );
@@ -246,7 +246,7 @@ describe("RewriteTool", () => {
     it("gives a new rewrite its own path on the first save, in the same editor", async () => {
         mount();
         await waitFor(() =>
-            expect(rail().getByRole("link", { name: /My rewrites/ })).toHaveTextContent("2")
+            expect(tabs().getByRole("link", { name: /My rewrites/ })).toHaveTextContent("2")
         );
         fireEvent.click(screen.getByRole("button", { name: /Start from blank/ }));
 
@@ -266,7 +266,7 @@ describe("RewriteTool", () => {
         });
         expect(screen.getByTestId("editor-mount").textContent).toBe(mountBefore);
         expect(remembered()).toBe("/rewrites/77");
-        expect(rail().getByRole("link", { name: /My rewrites/ })).toHaveTextContent("3");
+        expect(tabs().getByRole("link", { name: /My rewrites/ })).toHaveTextContent("3");
 
         // The next save updates the rewrite it just created.
         fireEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -360,7 +360,7 @@ describe("RewriteTool", () => {
 
     it("does not remember a link to a rewrite that is gone", async () => {
         const view = mount();
-        fireEvent.click(rail().getByRole("link", { name: /My rewrites/ }));
+        fireEvent.click(tabs().getByRole("link", { name: /My rewrites/ }));
         await screen.findByRole("link", { name: /Quarterly letter/ });
         expect(remembered()).toBe("/rewrites");
 

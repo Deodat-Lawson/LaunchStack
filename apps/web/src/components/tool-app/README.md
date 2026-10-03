@@ -37,8 +37,10 @@ anywhere but a tab.
    in labelled groups, and the bar switches between groups (Growth: Brand |
    Prospects) with each group returning to the screen it was last on. A
    group's `toolbar` holds compact controls shown in the bar while it is
-   active (Growth's segment switcher, a run in progress); `header` and
-   `footer` are their full-width forms under the phone menu. `about` is a
+   active (Growth's segment switcher), and `header` its full-width form under
+   the phone menu. The frame's `status` is tool-wide: a run in progress, shown
+   in the bar on every screen and at every width so there is always a way back
+   to it. `about` is a
    sentence on what the tool is for, at the top of its ⋯ menu. Mount the
    tool like this:
 

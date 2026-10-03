@@ -35,12 +35,13 @@ export function SegmentSwitcher({ compact = false }: { compact?: boolean }) {
                         type="button"
                         variant="outline"
                         title={segment?.subtitle}
-                        // Narrower in a narrow tab, so it stays on the bar's
-                        // first row beside Brand | Prospects.
-                        className="border-line bg-surface hover:bg-panel-2 hover:text-ink dark:bg-surface dark:hover:bg-panel-2 h-7 max-w-[240px] gap-1.5 px-2 text-[12.5px] font-medium has-[>svg]:px-2 [@container(max-width:719px)]:max-w-[150px]"
+                        // Narrower as the tab narrows, so it (and a run's
+                        // pill) stay on the bar's first row beside Brand |
+                        // Prospects at every width.
+                        className="border-line bg-surface hover:bg-panel-2 hover:text-ink dark:bg-surface dark:hover:bg-panel-2 h-7 max-w-[240px] gap-1.5 px-2 text-[12.5px] font-medium has-[>svg]:px-2 [@container(max-width:599px)]:max-w-[120px] [@container(max-width:899px)]:max-w-[150px]"
                         aria-label={`Segment: ${segment?.name ?? "none"}. Switch segment`}
                     >
-                        <span className="text-ink-3 font-normal [@container(max-width:719px)]:hidden">
+                        <span className="text-ink-3 font-normal [@container(max-width:899px)]:hidden">
                             Segment
                         </span>
                         <span className="text-ink min-w-0 truncate">{segment?.name ?? "None"}</span>

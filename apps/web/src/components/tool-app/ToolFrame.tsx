@@ -61,11 +61,10 @@ export interface ToolNavGroup {
     id: string;
     label?: string;
     items: ToolNavItem[];
-    /** Compact controls shown in the bar while this group is active: Growth's segment switcher, a run in progress. */
+    /** Compact controls shown in the bar while this group is active: Growth's segment switcher. (A run is the frame's `status`.) */
     toolbar?: ReactNode;
-    /** On a phone the bar folds into a screen menu; these sit under it, full width. */
+    /** On a phone the bar folds into a screen menu; this sits under it, full width. */
     header?: ReactNode;
-    footer?: ReactNode;
 }
 
 export interface ToolFrameProps {
@@ -112,9 +111,10 @@ function isActive(item: ToolNavItem, path: string): boolean {
  *   screens as tabs, its controls and a ⋯ menu. The workspace sidebar
  *   (Sources, History) stays the only sidebar — a tool used to bring a rail
  *   of its own, which put two sidebars side by side.
- * - The bar sizes by the tab, not the window: under 720px of its own width
- *   the screens drop to a row of their own (scrolling sideways), and under
- *   520px — a phone — the bar folds into a screen menu.
+ * - The bar sizes by the tab, not the window: a tool's screens scroll
+ *   sideways when they do not fit (fading at the edge that has more), and
+ *   under 520px — a phone — the bar folds into a screen menu. A tool with
+ *   many screens in groups (Growth) puts them on a second row.
  * - Back and forward walk the tab's own history; the page never navigates.
  * - Each screen keeps its scroll position when you come back to it.
  * - Sheets open over this tab only.
@@ -219,7 +219,10 @@ export function ToolFrame({
                                     <HistoryButtons />
                                     <span className="ml-1 flex min-w-0 items-center gap-2">
                                         {mark}
-                                        <span className="text-ink truncate text-[13.5px] font-semibold tracking-[-0.02em]">
+                                        {/* The tab strip names the tool too; in a tab under
+                                            600px the mark is enough and the room goes to
+                                            the screens. */}
+                                        <span className="text-ink truncate text-[13.5px] font-semibold tracking-[-0.02em] [@container(max-width:599px)]:hidden">
                                             {title}
                                         </span>
                                     </span>
@@ -259,13 +262,8 @@ export function ToolFrame({
                                     {status}
                                     <FrameMenu title={title} about={about} />
                                 </div>
-                                {(activeGroup?.header ?? activeGroup?.footer) && (
-                                    // `empty:hidden`: a footer that renders nothing
-                                    // (no run in progress) must not leave a gap.
-                                    <div className="flex flex-col gap-2 empty:hidden">
-                                        {activeGroup.header}
-                                        {activeGroup.footer}
-                                    </div>
+                                {activeGroup?.header && (
+                                    <div className="flex flex-col gap-2">{activeGroup.header}</div>
                                 )}
                             </div>
                         </div>
@@ -297,9 +295,8 @@ export function ToolFrame({
 }
 
 /**
- * The tool's screens as tabs. In one row with the title while there is room;
- * under 720px of tab width (and always for a two-level tool) on a row of
- * their own, scrolling sideways rather than wrapping.
+ * The tool's screens as tabs: in the row with the title, or on a row of
+ * their own for a two-level tool; scrolling sideways rather than wrapping.
  */
 function ScreenTabs({
     title,
@@ -358,6 +355,21 @@ function ScreenTabs({
         });
     };
 
+    // A tab reached with the keyboard comes clear of the edge fade (the
+    // browser only scrolls when less of it than the fade covers is showing).
+    const onFocus = (event: React.FocusEvent<HTMLElement>) => {
+        const el = row.current;
+        const tab = event.target as HTMLElement;
+        if (!el?.contains(tab)) return;
+        const rowBox = el.getBoundingClientRect();
+        const tabBox = tab.getBoundingClientRect();
+        const margin = 32;
+        if (tabBox.left < rowBox.left + margin) el.scrollLeft -= rowBox.left + margin - tabBox.left;
+        else if (tabBox.right > rowBox.right - margin) {
+            el.scrollLeft += tabBox.right - (rowBox.right - margin);
+        }
+    };
+
     // A mouse wheel scrolls up and down; this row only scrolls sideways.
     const onWheel = (event: React.WheelEvent<HTMLElement>) => {
         const el = row.current;
@@ -371,11 +383,13 @@ function ScreenTabs({
             aria-label={`${title} screens`}
             onScroll={onScroll}
             onWheel={onWheel}
+            onFocus={onFocus}
             className={cn(
                 "-mb-px min-w-0 self-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-                ownRow
-                    ? "order-last basis-full"
-                    : "flex-1 [@container(max-width:719px)]:order-last [@container(max-width:719px)]:basis-full",
+                // A one-row tool keeps its tabs in the row at every desktop
+                // width (scrolling, with fades), so the DOM order is the
+                // order you see and the bar never grows a row it doesn't need.
+                ownRow ? "order-last basis-full" : "flex-1",
                 // Tabs past the edge fade out, so a row that scrolls says so.
                 edges.left && edges.right
                     ? "[mask-image:linear-gradient(to_right,transparent,black_28px,black_calc(100%-28px),transparent)]"

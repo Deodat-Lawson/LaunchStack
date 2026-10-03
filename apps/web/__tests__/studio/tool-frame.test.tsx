@@ -125,4 +125,64 @@ describe("ToolFrame", () => {
         fireEvent.click(within(area).getByRole("radio", { name: "Prospects" }));
         expect(here()).toBe("/prospects/deals");
     });
+
+    it("keeps a tool-wide status (a run) in the bar on every screen, and the bar in reading order", () => {
+        const items = (base: string, labels: string[]) =>
+            labels.map((label, i) => ({
+                to: i === 0 ? base : `${base}/${label.toLowerCase()}`,
+                label,
+                exact: i === 0,
+            }));
+        render(
+            <ToolNavProvider toolId="example" roots={["brand", "prospects"]} home="/brand">
+                <ToolFrame
+                    title="Example"
+                    mark={<span />}
+                    status={<button type="button">Run going</button>}
+                    groups={[
+                        {
+                            id: "brand",
+                            label: "Brand",
+                            items: items("/brand", [
+                                "Overview",
+                                "Compose",
+                                "Calendar",
+                                "Campaigns",
+                                "Accounts",
+                            ]),
+                        },
+                        {
+                            id: "prospects",
+                            label: "Prospects",
+                            toolbar: <button type="button">Segment</button>,
+                            items: items("/prospects", [
+                                "Home",
+                                "Companies",
+                                "People",
+                                "Deals",
+                                "Runs",
+                            ]),
+                        },
+                    ]}
+                >
+                    <Here />
+                </ToolFrame>
+            </ToolNavProvider>
+        );
+        // On Brand — where the old rail never showed Prospects' run.
+        expect(here()).toBe("/brand");
+        expect(screen.getAllByRole("button", { name: "Run going" }).length).toBeGreaterThan(0);
+
+        fireEvent.click(
+            within(screen.getByRole("radiogroup", { name: "Area" })).getByRole("radio", {
+                name: "Prospects",
+            })
+        );
+        const segment = screen.getByRole("button", { name: "Segment" });
+        // The second-row tabs come after the bar's controls in the DOM, so
+        // Tab moves through the bar in the order it is read.
+        expect(
+            segment.compareDocumentPosition(screens()) & Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+    });
 });

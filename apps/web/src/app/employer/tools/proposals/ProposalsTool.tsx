@@ -3,7 +3,6 @@
 import { BookMarked, Building2, FileText, Home, Landmark, Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
 
 import { ToolFrame, ToolNotFound, type ToolNavGroup } from "~/components/tool-app/ToolFrame";
 import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/tool-app/nav";
@@ -42,7 +41,7 @@ export function ProposalsTool({ host }: { host?: ToolHost }) {
 }
 
 /** A run in progress, in the bar on every screen: what it is doing, with the current step. */
-function RunIndicator({ compact = false }: { compact?: boolean }) {
+function RunIndicator() {
     const { activeRun, openRunSheet } = useProposals();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
@@ -54,18 +53,11 @@ function RunIndicator({ compact = false }: { compact?: boolean }) {
             onClick={() => openRunSheet()}
             title={label}
             aria-label={`${label}. Open the run`}
-            className={cn(
-                "bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink justify-start gap-2 text-left text-xs font-normal",
-                compact ? "h-7 max-w-[200px] px-2.5" : "h-auto w-full px-2.5 py-2"
-            )}
+            className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-7 max-w-[200px] justify-start gap-2 px-2.5 text-left text-xs font-normal"
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-            <span
-                className={cn(
-                    "min-w-0 flex-1 truncate",
-                    compact && "[@container(max-width:719px)]:hidden"
-                )}
-            >
+            {/* Under 900px of tab width, just the spinner: the bar keeps its rows. */}
+            <span className="min-w-0 flex-1 truncate [@container(max-width:899px)]:hidden">
                 {label}
             </span>
         </Button>
@@ -99,7 +91,7 @@ function ProposalsFrame() {
             mark={<ProposalsMark />}
             groups={groups}
             about="Drafts cite your Sources. Approved answers go to the Library. A finished proposal can be exported back into Sources."
-            status={<RunIndicator compact />}
+            status={<RunIndicator />}
             overlay={<ProposalRunSheet />}
         >
             <Screen screen={proposalsScreenFor(path)} />

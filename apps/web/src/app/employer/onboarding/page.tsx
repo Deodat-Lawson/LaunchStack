@@ -370,13 +370,13 @@ function QuickStartStep({
             Icon: Megaphone,
             title: "Establish your brand",
             text: "Compose a post for every network, schedule it, or generate a campaign from your documents",
-            href: "/employer/tools/growth/brand",
+            href: "/employer/documents?feature=growth&at=%2Fbrand",
         },
         {
             Icon: IconProspects,
             title: "Find companies to sell to",
             text: "Prospects searches for buyers that match what you sell, profiles them with cited evidence, and tracks the deal",
-            href: "/employer/tools/growth/prospects",
+            href: "/employer/documents?feature=growth&at=%2Fprospects",
         },
         {
             Icon: Building2,

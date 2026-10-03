@@ -1,6 +1,12 @@
 # Growth — design rules for this surface
 
-Growth is one app with two areas, Brand and Prospects, in one rail. Shared
+Growth is one tool with two areas, Brand and Prospects, switched in its bar. It is a
+tab of the workspace, not a route: `GrowthTool.tsx` mounts it, and
+`_lib/screens.ts` maps the tab's app-relative path ("/prospects/companies")
+to a screen. Screens follow `components/tool-app/README.md`: `ToolLink` and
+`useToolRouter`, never `next/link` or `next/navigation`; container variants
+(`@max-lg:`), never viewport ones; window key listeners gated on
+`useToolActive()`; the tab's content column scrolls, not the window. Shared
 pieces (`PageHeader`, `EmptyState`, `SkeletonRows`, `useResource`, the
 formatters) live at the app level; each area keeps its own screens, API
 client and components. Brand's calendar and composer follow every rule
@@ -27,7 +33,7 @@ screen. They are checked in the finish pass; see the last section.
 
 ## Color roles
 
-- Canvas `bg-surface`, rail `bg-surface-2`, panels `bg-panel`, hover and
+- Canvas `bg-surface`, the bar `bg-panel` (the tool frame's), panels `bg-panel`, hover and
   skeletons `bg-panel-2`. Hairlines inside a list `border-line-2`, around it
   `border-line`.
 - **Accent is for three things**: the primary button, the current selection,
@@ -86,7 +92,7 @@ companies` or the screen's verb), at most four regions.
 3. `focus-visible` ring on every interactive element; tab order matches visual
    order; every icon-only button has `aria-label`.
 4. `tabular-nums` in every numeric column.
-5. Both themes checked in `/dev/prospects` (theme follows `data-theme` on
+5. Both themes checked in `/dev/growth` (theme follows `data-theme` on
    `<html>`); dark is composed from the ladder, not inverted.
 6. Reduced motion honored; no placeholder copy left in production paths.
 7. Empty, loading and error states exist for every region that loads data.

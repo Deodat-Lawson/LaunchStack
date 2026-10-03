@@ -111,10 +111,10 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                         id: "open-beside",
                                                         label: "Open beside",
                                                         icon: "split",
-                                                        disabled: isComing || feature.external,
+                                                        disabled: isComing,
                                                         disabledReason: isComing
                                                             ? "Coming soon."
-                                                            : "It opens as a page of its own.",
+                                                            : undefined,
                                                         onSelect: () =>
                                                             pickFeature(feature.id, true),
                                                     },

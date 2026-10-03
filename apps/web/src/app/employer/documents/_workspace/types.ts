@@ -332,35 +332,35 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         label: "Growth",
         Icon: IconGrowth,
         desc: "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals",
-        href: "/employer/tools/growth",
+        href: "/employer/documents?feature=growth",
     },
     {
         id: "brand",
         label: "Brand",
         Icon: IconMegaphone,
         desc: "Compose once for every network, schedule it, see the calendar, generate campaigns from your documents",
-        href: "/employer/tools/growth/brand",
+        href: "/employer/documents?feature=growth&at=%2Fbrand",
     },
     {
         id: "prospects",
         label: "Prospects",
         Icon: IconProspects,
         desc: "Find the companies that would buy what you sell, profile them with evidence, and run the deal",
-        href: "/employer/tools/growth/prospects",
+        href: "/employer/documents?feature=growth&at=%2Fprospects",
     },
     {
         id: "vantage",
         label: "Vantage",
         Icon: IconVantage,
         desc: "Prepare next week's meeting from evidence: cited agenda, decisions, commitments checked the week after",
-        href: "/employer/tools/vantage",
+        href: "/employer/documents?feature=vantage",
     },
     {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
         desc: "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations",
-        href: "/employer/tools/proposals",
+        href: "/employer/documents?feature=proposals",
     },
     {
         id: "investors",
@@ -416,25 +416,24 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
 ] as const;
 
 /**
- * Studio drawer features grouped by purpose. Tools render interactive panes
- * (or a "coming soon" placeholder if `comingSoon` is true); Management entries
- * link out to their dedicated employer routes.
+ * Studio apps grouped by purpose. Every one of them opens as a tab of the
+ * workspace — there is no such thing as a Studio app that is a page of its
+ * own. A tool with screens of its own (Growth, Proposals, Vantage) keeps them
+ * inside its tab; see `components/tool-app/README.md`.
  */
 export interface StudioFeature {
     id: string;
     label: string;
     Icon: ComponentType<IconProps>;
     desc: string;
-    /** Destination for link-out features. Required when no interactive pane exists. */
+    /**
+     * The link that opens this app's tab — "Open in a new browser tab" uses
+     * it. Always `/employer/documents?feature=<id>` (or a deep link into the
+     * tab); `registry.test.ts` fails on anything that would leave the page.
+     */
     href?: string;
     /** When true, renders a "coming soon" pane instead of an interactive one. */
     comingSoon?: boolean;
-    /**
-     * The feature is a separate app with its own routes and chrome — Growth,
-     * for instance, whose rail and nested pages cannot be mounted in a tab.
-     * Picking it navigates instead of opening a Studio tab.
-     */
-    external?: boolean;
     /**
      * Permission a person must hold to see this feature. Checked through
      * `usePermissions().can(...)`, which answers false until loaded — so a
@@ -485,30 +484,29 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         label: "Tools",
         features: [
             {
-                // One app with its own rail for the whole growth motion: Brand
-                // (compose, schedule, calendar, campaigns, accounts) and Prospects
-                // (segment, companies, people, deals, runs, sources).
+                // The whole growth motion in one tab, with its screens in a
+                // rail inside it: Brand (compose, schedule, calendar,
+                // campaigns, accounts) and Prospects (segment, companies,
+                // people, deals, runs, sources).
                 id: "growth",
                 label: "Growth",
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
-                href: "/employer/tools/growth",
-                external: true,
+                href: "/employer/documents?feature=growth",
             },
             {
-                // A writing app with its own rail: the proposal is the unit of
-                // work, and every sentence in it points at a source.
+                // A writing app: the proposal is the unit of work, and every
+                // sentence in it points at a source — which is one tab away.
                 id: "proposals",
                 label: "Proposals",
                 Icon: IconProposals,
                 desc: "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit",
-                href: "/employer/tools/proposals",
-                external: true,
+                href: "/employer/documents?feature=proposals",
             },
             {
-                // Second only to Growth: being known, then being funded. Not
-                // `external` — the search and the pitch starters are one pane,
-                // and "Draft in chat" is a move to the chat tab beside it.
+                // Second only to Growth: being known, then being funded. The
+                // search and the pitch starters are its two screens, and
+                // "Draft in chat" is a move to the chat tab beside it.
                 id: "investors",
                 label: "Investor relations",
                 Icon: IconInvestors,
@@ -517,14 +515,13 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             },
             {
                 // The weekly loop: evidence in, a cited agenda out, decisions
-                // that become commitments checked the week after. Its own
-                // rail and screens, so it navigates like Growth.
+                // that become commitments checked the week after. Screens of
+                // its own inside its tab, like Growth.
                 id: "vantage",
                 label: "Vantage",
                 Icon: IconVantage,
                 desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
-                href: "/employer/tools/vantage",
-                external: true,
+                href: "/employer/documents?feature=vantage",
             },
             {
                 id: "draft",

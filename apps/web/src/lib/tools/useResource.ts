@@ -6,6 +6,11 @@ export interface Resource<T> {
     data: T | null;
     loading: boolean;
     error: string | null;
+    /**
+     * The HTTP status behind `error`, when the API client reported one — so a
+     * screen can tell "this record is gone" (404) from "try again".
+     */
+    errorStatus: number | null;
     /** Re-fetch without dropping the current data (no skeleton flash). */
     reload: () => Promise<void>;
     /** Optimistic local update; the next reload replaces it. */
@@ -32,6 +37,7 @@ export function useResource<T>(
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(key !== null);
     const [error, setError] = useState<string | null>(null);
+    const [errorStatus, setErrorStatus] = useState<number | null>(null);
     const fetcherRef = useRef(fetcher);
     fetcherRef.current = fetcher;
     const keyRef = useRef(key);
@@ -47,9 +53,12 @@ export function useResource<T>(
             if (mine !== seq.current) return;
             setData(next);
             setError(null);
+            setErrorStatus(null);
         } catch (e) {
             if (mine !== seq.current) return;
             setError(e instanceof Error ? e.message : "Something went wrong");
+            const status = (e as { status?: unknown } | null)?.status;
+            setErrorStatus(typeof status === "number" ? status : null);
         } finally {
             if (mine === seq.current) {
                 setLoading(false);
@@ -82,5 +91,5 @@ export function useResource<T>(
         setData(current => (current === null ? current : updater(current)));
     }, []);
 
-    return { data, loading, error, reload, mutate };
+    return { data, loading, error, errorStatus, reload, mutate };
 }

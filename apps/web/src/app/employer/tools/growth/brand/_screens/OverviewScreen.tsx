@@ -1,9 +1,9 @@
 "use client";
 
 import { Check } from "lucide-react";
-import Link from "next/link";
 import { useMemo } from "react";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
@@ -71,10 +71,12 @@ export function OverviewScreen() {
                 actions={
                     <>
                         <Button asChild variant="outline" size="sm">
-                            <Link href={paths.brand("/campaigns")}>Generate a campaign</Link>
+                            <ToolLink href={paths.brand("/campaigns")}>
+                                Generate a campaign
+                            </ToolLink>
                         </Button>
                         <Button asChild size="sm">
-                            <Link href={paths.brand("/compose")}>Compose</Link>
+                            <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
                         </Button>
                     </>
                 }
@@ -101,7 +103,7 @@ export function OverviewScreen() {
                         body="Write a post and pick a time; it goes out on its own. Or generate a campaign from your documents and schedule the drafts."
                         action={
                             <Button asChild size="sm" variant="outline">
-                                <Link href={paths.brand("/compose")}>Compose a post</Link>
+                                <ToolLink href={paths.brand("/compose")}>Compose a post</ToolLink>
                             </Button>
                         }
                     />
@@ -115,12 +117,12 @@ export function OverviewScreen() {
                             />
                         ))}
                         {upcoming.length > 8 && (
-                            <Link
+                            <ToolLink
                                 href={paths.brand("/calendar")}
                                 className="text-ink-2 hover:text-ink border-line-2 block border-t px-4 py-2 text-[13px]"
                             >
                                 {upcoming.length - 8} more on the calendar
-                            </Link>
+                            </ToolLink>
                         )}
                     </div>
                 )}
@@ -164,9 +166,9 @@ export function OverviewScreen() {
                 <SectionHeading
                     title="Networks"
                     aside={
-                        <Link href={paths.brand("/accounts")} className="hover:text-ink">
+                        <ToolLink href={paths.brand("/accounts")} className="hover:text-ink">
                             Accounts
-                        </Link>
+                        </ToolLink>
                     }
                 />
                 {accounts.error && (

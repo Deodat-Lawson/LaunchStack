@@ -1,11 +1,11 @@
 "use client";
 
 import { ArrowRight, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useToolRouter } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonBlock, SkeletonRows } from "~/components/tools/SkeletonRows";
@@ -32,7 +32,7 @@ const AGENDA_WORD: Record<string, string> = {
  * on, what was logged lately — and the two things to do next. No tiles.
  */
 export function OverviewScreen() {
-    const router = useRouter();
+    const router = useToolRouter();
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const [adding, setAdding] = useState<VantageEvidenceKind | null>(null);
     const [preparing, setPreparing] = useState(false);
@@ -78,9 +78,9 @@ export function OverviewScreen() {
                         </Button>
                         {agenda ? (
                             <Button asChild size="sm">
-                                <Link href={vantagePath(`/agenda?week=${agenda.weekStart}`)}>
+                                <ToolLink href={vantagePath(`/agenda?week=${agenda.weekStart}`)}>
                                     Open the agenda
-                                </Link>
+                                </ToolLink>
                             </Button>
                         ) : (
                             <Button
@@ -126,7 +126,7 @@ export function OverviewScreen() {
                         <SkeletonBlock lines={3} />
                     </div>
                 ) : agenda ? (
-                    <Link
+                    <ToolLink
                         href={vantagePath(`/agenda?week=${agenda.weekStart}`)}
                         className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 block rounded-lg border px-5 py-4 outline-none transition-colors focus-visible:ring-[3px]"
                     >
@@ -170,7 +170,7 @@ export function OverviewScreen() {
                                     </li>
                                 ))}
                         </ol>
-                    </Link>
+                    </ToolLink>
                 ) : (
                     <EmptyState
                         title={
@@ -225,12 +225,12 @@ export function OverviewScreen() {
                       signals.newEvidence.length === 0) ? (
                     <p className="text-ink-3 text-[13px]">
                         No numbers or evidence in the last two weeks.{" "}
-                        <Link
+                        <ToolLink
                             href={vantagePath("/metrics")}
                             className="hover:text-ink underline underline-offset-2"
                         >
                             Enter this week&apos;s numbers
-                        </Link>
+                        </ToolLink>
                         .
                     </p>
                 ) : (
@@ -311,9 +311,9 @@ export function OverviewScreen() {
                 <SectionHeading
                     title="Check in"
                     aside={
-                        <Link href={vantagePath("/commitments")} className="hover:text-ink">
+                        <ToolLink href={vantagePath("/commitments")} className="hover:text-ink">
                             All commitments
-                        </Link>
+                        </ToolLink>
                     }
                 />
                 {overview.loading ? (
@@ -337,9 +337,9 @@ export function OverviewScreen() {
                 <SectionHeading
                     title="Logged lately"
                     aside={
-                        <Link href={vantagePath("/evidence")} className="hover:text-ink">
+                        <ToolLink href={vantagePath("/evidence")} className="hover:text-ink">
                             Evidence inbox
-                        </Link>
+                        </ToolLink>
                     }
                 />
                 {overview.loading ? (

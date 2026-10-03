@@ -131,7 +131,9 @@ export function EvidenceScreen() {
                     onChange={e => setQ(e.target.value)}
                     placeholder="Search title, text, source"
                     aria-label="Search evidence"
-                    className="h-8 w-full text-[13px] sm:ml-auto sm:w-64"
+                    // 16rem, not `w-64`: uploadthing's stylesheet redefines
+                    // `.w-64` after ours, which would beat `@max-sm:w-full`.
+                    className="@max-sm:ml-0 @max-sm:w-full ml-auto h-8 w-[16rem] text-[13px]"
                 />
             </div>
 
@@ -167,7 +169,7 @@ export function EvidenceScreen() {
                                             {e.title}
                                         </span>
                                     </button>
-                                    <span className="text-ink-3 hidden max-w-[200px] truncate text-[12px] sm:inline">
+                                    <span className="text-ink-3 @max-sm:hidden inline max-w-[200px] truncate text-[12px]">
                                         {e.source ?? ""}
                                     </span>
                                     <span className="text-ink-3 shrink-0 font-mono text-[11.5px] tabular-nums">
@@ -175,7 +177,7 @@ export function EvidenceScreen() {
                                     </span>
                                     <SharedMark
                                         shared={e.visibility === "shared"}
-                                        className="hidden sm:inline-flex"
+                                        className="@max-sm:hidden"
                                     />
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

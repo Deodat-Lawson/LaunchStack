@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo } from "react";
 import { toast } from "sonner";
+
+import { ToolLink } from "~/components/tool-app/ToolLink";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
@@ -63,12 +64,12 @@ export function DealsScreen() {
                     res.data ? (
                         <>
                             {deals.length - leads} in motion ·{" "}
-                            <Link
+                            <ToolLink
                                 href={href("/companies?view=uncontacted")}
                                 className="hover:text-ink"
                             >
                                 {leads} leads not yet qualified
-                            </Link>
+                            </ToolLink>
                             {exits.some(e => e.count > 0) && (
                                 <>
                                     {" "}
@@ -122,12 +123,12 @@ export function DealsScreen() {
                                                     "border-l-warn border-l-2"
                                             )}
                                         >
-                                            <Link
+                                            <ToolLink
                                                 href={href(`/companies/${d.companyId}`)}
                                                 className="text-ink block truncate font-medium hover:underline"
                                             >
                                                 {d.companyName}
-                                            </Link>
+                                            </ToolLink>
                                             <div className="text-ink-3 mt-1 truncate text-xs">
                                                 {d.nextStep ??
                                                     (d.staleDays && d.staleDays > 0

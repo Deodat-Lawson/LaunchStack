@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -100,20 +100,20 @@ export function ApplicationsScreen() {
                 />
             ) : (
                 <div className="border-line bg-panel overflow-hidden rounded-lg border">
-                    <div className="text-ink-3 border-line-2 hidden grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] gap-4 border-b px-4 py-2 text-xs lg:grid">
+                    <div className="text-ink-3 border-line-2 @max-lg:grid-cols-[minmax(0,1fr)_130px_120px_100px] @max-md:hidden grid grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] gap-4 border-b px-4 py-2 text-xs">
                         <span>Application</span>
                         <span>Deadline</span>
                         <span>Status</span>
-                        <span>Sections</span>
+                        <span className="@max-lg:hidden">Sections</span>
                         <span>Ready</span>
                     </div>
                     {rows.map(app => {
                         const tone = deadlineTone(app.daysLeft);
                         return (
-                            <Link
+                            <ToolLink
                                 key={app.id}
                                 href={href(`/write/${app.id}`)}
-                                className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0 lg:grid-cols-[minmax(0,1fr)_150px_120px_120px_100px]"
+                                className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 @max-lg:grid-cols-[minmax(0,1fr)_130px_120px_100px] @max-md:grid-cols-[minmax(0,1fr)_auto] grid grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0"
                             >
                                 <span className="min-w-0">
                                     <span className="text-ink block truncate text-sm font-medium">
@@ -126,7 +126,7 @@ export function ApplicationsScreen() {
                                 </span>
                                 <span
                                     className={cn(
-                                        "hidden text-xs lg:block",
+                                        "@max-md:hidden text-xs",
                                         tone === "warn" && "text-warn",
                                         tone === "lost" && "text-danger",
                                         tone === "quiet" && "text-ink-3"
@@ -136,16 +136,16 @@ export function ApplicationsScreen() {
                                         ? deadlineWords(app.deadline, app.daysLeft)
                                         : (app.deadline ?? "—")}
                                 </span>
-                                <span className="hidden lg:block">
+                                <span className="@max-md:hidden">
                                     <ApplicationStatusPill status={app.status} />
                                 </span>
-                                <span className="text-ink-2 hidden text-xs tabular-nums lg:block">
+                                <span className="text-ink-2 @max-lg:hidden text-xs tabular-nums">
                                     {app.sections.total === 0
                                         ? "none yet"
                                         : `${app.sections.written} of ${app.sections.total} written`}
                                 </span>
                                 <ReadinessMeter value={app.readiness} />
-                            </Link>
+                            </ToolLink>
                         );
                     })}
                 </div>

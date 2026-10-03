@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -17,6 +16,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
+import { useToolRouter } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
 
 import { useProposals } from "../_lib/context";
@@ -39,7 +39,7 @@ export function NewApplicationDialog({
     /** Pre-fills from a found funder and links the application to it. */
     funder?: FunderRow | null;
 }) {
-    const router = useRouter();
+    const router = useToolRouter();
     const { href, trackRun, reloadCounts } = useProposals();
     const [title, setTitle] = useState("");
     const [funderName, setFunderName] = useState("");

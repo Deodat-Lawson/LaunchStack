@@ -298,15 +298,15 @@ export function ResearchPanel({
                             All ({results.length})
                         </TabsTrigger>
                         <TabsTrigger value="documents" className="px-2 text-xs">
-                            <FileText className="mr-1 hidden h-3 w-3 sm:inline" />
+                            <FileText className="@max-xl:hidden mr-1 inline h-3 w-3" />
                             Docs ({documentResults.length})
                         </TabsTrigger>
                         <TabsTrigger value="web" className="px-2 text-xs">
-                            <Globe className="mr-1 hidden h-3 w-3 sm:inline" />
+                            <Globe className="@max-xl:hidden mr-1 inline h-3 w-3" />
                             Web ({webResults.length})
                         </TabsTrigger>
                         <TabsTrigger value="arxiv" className="px-2 text-xs">
-                            <GraduationCap className="mr-1 hidden h-3 w-3 sm:inline" />
+                            <GraduationCap className="@max-xl:hidden mr-1 inline h-3 w-3" />
                             arXiv ({arxivResults.length})
                         </TabsTrigger>
                     </TabsList>

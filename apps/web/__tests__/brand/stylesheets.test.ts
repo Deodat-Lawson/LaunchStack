@@ -34,7 +34,7 @@ function walk(dir: string): string[] {
 // Stylesheets a file pulls in: `import "x.css"` in TS, `@import "x"` in CSS.
 const cssImports = (text: string) => [
     ...[...text.matchAll(/^import\s+(?:\w+\s+from\s+)?["']([^"']+\.css)["'];?$/gm)].map(m => m[1]!),
-    ...[...text.matchAll(/@import\s+(?:url\(\s*)?["']([^"']+)["']/g)].map(m => m[1]!),
+    ...[...text.matchAll(/@import\s*(?:url\(\s*["']?|["'])([^"'()\s;]+)/gi)].map(m => m[1]!),
 ];
 
 // A bare single-class rule whose name is shaped like a Tailwind utility,

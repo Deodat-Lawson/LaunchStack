@@ -44,6 +44,14 @@ const SECTION_PARENTS: ReadonlyArray<{ prefix: string; target: BackTarget }> = [
         prefix: "/employer/tools/vantage/",
         target: { href: "/employer/tools/vantage", label: "Vantage" },
     },
+    {
+        prefix: "/employer/tools/proposals/write/",
+        target: { href: "/employer/tools/proposals/write", label: "Proposals" },
+    },
+    {
+        prefix: "/employer/tools/proposals/",
+        target: { href: "/employer/tools/proposals", label: "Proposals" },
+    },
     // Growth has no home of its own: `/employer/tools/growth` redirects to
     // Brand. Pointing its halves at it sent Brand back to Brand and Prospects
     // sideways into Brand, so above Brand and Prospects is the Studio.

@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { prospectsApi, type RunDto, type SegmentSummary } from "../api";
-import { useResource } from "../../_lib/useResource";
+import { useResource } from "~/lib/tools/useResource";
 
 export interface ProspectsContextValue {
     /** "/employer/tools/prospects" in the app, "/dev/prospects" in the harness. */

@@ -10,6 +10,7 @@ import {
     MapPin,
     MessageSquare,
     MoreHorizontal,
+    PenLine,
     Plus,
     RotateCw,
     Share2,
@@ -51,6 +52,7 @@ export const HISTORY_KIND_ICONS: Record<HistoryKindMeta["icon"], typeof MessageS
     mail: Mail,
     calendar: CalendarDays,
     compass: Compass,
+    "pen-line": PenLine,
 };
 
 export interface HistoryRailProps {

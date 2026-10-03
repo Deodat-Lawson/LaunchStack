@@ -100,9 +100,9 @@ describe("studio registry", () => {
         expect(editor?.Icon).toBeTruthy();
     });
 
-    it("puts Growth first in Tools and Investor relations second, opening in a tab", () => {
+    it("puts Growth first in Tools, Proposals second and Investor relations third, opening in a tab", () => {
         const tools = STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id);
-        expect(tools.slice(0, 2)).toEqual(["growth", "investors"]);
+        expect(tools.slice(0, 3)).toEqual(["growth", "proposals", "investors"]);
         const investors = STUDIO_FEATURES_BY_ID.investors!;
         expect(investors.label).toBe("Investor relations");
         expect(investors.external).toBeUndefined();
@@ -112,9 +112,9 @@ describe("studio registry", () => {
         expect(demotedFeatureHref("investors")).toBeUndefined();
     });
 
-    it("names Growth and Vantage as the apps a tab cannot hold", () => {
+    it("names Growth, Proposals and Vantage as the apps a tab cannot hold", () => {
         const external = STUDIO_GROUPS.flatMap(g => g.features).filter(f => f.external);
-        expect(external.map(f => f.id)).toEqual(["growth", "vantage"]);
+        expect(external.map(f => f.id)).toEqual(["growth", "proposals", "vantage"]);
     });
 
     it("lists Vantage in Tools as a separate app, reachable from the palette too", () => {

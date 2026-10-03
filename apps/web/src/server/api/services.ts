@@ -199,6 +199,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "An adapter over the Distribution data until the pipeline reframe lands: a program is a segment, a partner organisation a company, its relationship the deal. Runs reuse distribution/run.requested.",
     },
     {
+        id: "proposals",
+        tier: "tool",
+        summary:
+            "Write grant and funding proposals from what the workspace's sources prove: an organisation profile, funders that fit, the call turned into a checklist, each answer drafted from evidence, a review pass, and reusable answers.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/proposals",
+        routes: ["proposals"],
+        notes: "Runs are the unit of background work (profile, funders, extract, draft, rewrite, review) and list in the History feed. Claimed here when Vantage landed beside it; the Proposals PR had left its routes unclaimed.",
+    },
+    {
         id: "vantage",
         tier: "tool",
         summary:

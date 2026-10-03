@@ -43,6 +43,15 @@ describe("backTargetFor", () => {
             href: "/employer/tools/growth/prospects",
             label: "Prospects",
         });
+        expect(backTargetFor("/employer/tools/proposals/funders")).toEqual({
+            href: "/employer/tools/proposals",
+            label: "Proposals",
+        });
+        expect(backTargetFor("/employer/tools/proposals/write/abc")).toEqual({
+            href: "/employer/tools/proposals/write",
+            label: "Proposals",
+        });
+        expect(backTargetFor("/employer/tools/proposals")).toEqual(STUDIO);
         expect(backTargetFor("/employer/tools/growth/prospects/companies/42")).toEqual({
             href: "/employer/tools/growth/prospects/companies",
             label: "Companies",

@@ -15,6 +15,7 @@ import {
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
+    PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
     ClipboardList as IconPaste,
@@ -355,6 +356,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/tools/vantage",
     },
     {
+        id: "proposals",
+        label: "Proposals",
+        Icon: IconProposals,
+        desc: "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations",
+        href: "/employer/tools/proposals",
+    },
+    {
         id: "investors",
         label: "Investor relations",
         Icon: IconInvestors,
@@ -483,6 +491,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
                 href: "/employer/tools/growth",
+                external: true,
+            },
+            {
+                // A writing app with its own rail: the proposal is the unit of
+                // work, and every sentence in it points at a source.
+                id: "proposals",
+                label: "Proposals",
+                Icon: IconProposals,
+                desc: "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit",
+                href: "/employer/tools/proposals",
                 external: true,
             },
             {

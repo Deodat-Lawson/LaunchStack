@@ -1,5 +1,5 @@
 {
-  "id": "bc0df294-c5eb-4009-80c3-5b58a02cf543",
+  "id": "d099a1cd-91c7-41cb-ba1e-818ddc4dee77",
   "prevId": "0fb37d9e-81da-4bfc-8afb-e2c6816cc86f",
   "version": "7",
   "dialect": "postgresql",
@@ -12078,8 +12078,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_vantage_agenda_topics": {
-      "name": "pdr_ai_v2_vantage_agenda_topics",
+    "public.pdr_ai_v2_proposal_applications": {
+      "name": "pdr_ai_v2_proposal_applications",
       "schema": "",
       "columns": {
         "id": {
@@ -12088,128 +12088,116 @@
           "primaryKey": true,
           "notNull": true
         },
-        "agenda_id": {
-          "name": "agenda_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "company_id": {
           "name": "company_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "position": {
-          "name": "position",
+        "opportunity_id": {
+          "name": "opportunity_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funder": {
+          "name": "funder",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "deadline": {
+          "name": "deadline",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner_user_id": {
+          "name": "owner_user_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_text": {
+          "name": "request_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_url": {
+          "name": "request_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_document_id": {
+          "name": "request_document_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "extracted": {
+          "name": "extracted",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requirements": {
+          "name": "requirements",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "review": {
+          "name": "review",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "readiness": {
+          "name": "readiness",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "default": 0
         },
-        "status": {
-          "name": "status",
-          "type": "varchar(12)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'suggested'"
-        },
-        "origin": {
-          "name": "origin",
-          "type": "varchar(12)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "facts": {
-          "name": "facts",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
-        },
-        "why_it_matters": {
-          "name": "why_it_matters",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "decision_question": {
-          "name": "decision_question",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "proposed_next_step": {
-          "name": "proposed_next_step",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "proposed_owner": {
-          "name": "proposed_owner",
-          "type": "varchar(200)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "proposed_due": {
-          "name": "proposed_due",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "help_requested": {
-          "name": "help_requested",
+        "notes": {
+          "name": "notes",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "unknowns": {
-          "name": "unknowns",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
-        },
-        "conflicts": {
-          "name": "conflicts",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
-        },
-        "rationale": {
-          "name": "rationale",
-          "type": "text",
+        "exported_document_id": {
+          "name": "exported_document_id",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "shared": {
-          "name": "shared",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "decision": {
-          "name": "decision",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "decided_at": {
-          "name": "decided_at",
+        "submitted_at": {
+          "name": "submitted_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -12226,17 +12214,17 @@
         }
       },
       "indexes": {
-        "vantage_agenda_topics_agenda_position_idx": {
-          "name": "vantage_agenda_topics_agenda_position_idx",
+        "proposal_applications_company_status_idx": {
+          "name": "proposal_applications_company_status_idx",
           "columns": [
             {
-              "expression": "agenda_id",
+              "expression": "company_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             },
             {
-              "expression": "position",
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12247,8 +12235,8 @@
           "method": "btree",
           "with": {}
         },
-        "vantage_agenda_topics_company_shared_idx": {
-          "name": "vantage_agenda_topics_company_shared_idx",
+        "proposal_applications_company_deadline_idx": {
+          "name": "proposal_applications_company_deadline_idx",
           "columns": [
             {
               "expression": "company_id",
@@ -12257,7 +12245,7 @@
               "nulls": "last"
             },
             {
-              "expression": "shared",
+              "expression": "deadline",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12270,12 +12258,12 @@
         }
       },
       "foreignKeys": {
-        "pdr_ai_v2_vantage_agenda_topics_agenda_id_pdr_ai_v2_vantage_agendas_id_fk": {
-          "name": "pdr_ai_v2_vantage_agenda_topics_agenda_id_pdr_ai_v2_vantage_agendas_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_agenda_topics",
-          "tableTo": "pdr_ai_v2_vantage_agendas",
+        "pdr_ai_v2_proposal_applications_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_applications_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_applications",
+          "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
-            "agenda_id"
+            "company_id"
           ],
           "columnsTo": [
             "id"
@@ -12283,9 +12271,361 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "pdr_ai_v2_vantage_agenda_topics_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_agenda_topics_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_agenda_topics",
+        "pdr_ai_v2_proposal_applications_opportunity_id_pdr_ai_v2_proposal_opportunities_id_fk": {
+          "name": "pdr_ai_v2_proposal_applications_opportunity_id_pdr_ai_v2_proposal_opportunities_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_applications",
+          "tableTo": "pdr_ai_v2_proposal_opportunities",
+          "columnsFrom": [
+            "opportunity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pdr_ai_v2_proposal_library_items": {
+      "name": "pdr_ai_v2_proposal_library_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(64)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answer": {
+          "name": "answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "evidence": {
+          "name": "evidence",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "source_application_id": {
+          "name": "source_application_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_section_key": {
+          "name": "source_section_key",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uses": {
+          "name": "uses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "proposal_library_items_company_idx": {
+          "name": "proposal_library_items_company_idx",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pdr_ai_v2_proposal_library_items_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_library_items_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_library_items",
+          "tableTo": "pdr_ai_v2_company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pdr_ai_v2_proposal_library_items_source_application_id_pdr_ai_v2_proposal_applications_id_fk": {
+          "name": "pdr_ai_v2_proposal_library_items_source_application_id_pdr_ai_v2_proposal_applications_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_library_items",
+          "tableTo": "pdr_ai_v2_proposal_applications",
+          "columnsFrom": [
+            "source_application_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pdr_ai_v2_proposal_opportunities": {
+      "name": "pdr_ai_v2_proposal_opportunities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(64)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funder": {
+          "name": "funder",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opens_on": {
+          "name": "opens_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "closes_on": {
+          "name": "closes_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'candidate'"
+        },
+        "amount_min": {
+          "name": "amount_min",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_max": {
+          "name": "amount_max",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eligibility": {
+          "name": "eligibility",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categories": {
+          "name": "categories",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "fit": {
+          "name": "fit",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "run_id": {
+          "name": "run_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "proposal_opportunities_company_source_external_unique": {
+          "name": "proposal_opportunities_company_source_external_unique",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "external_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proposal_opportunities_company_status_idx": {
+          "name": "proposal_opportunities_company_status_idx",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proposal_opportunities_company_closes_idx": {
+          "name": "proposal_opportunities_company_closes_idx",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "closes_on",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pdr_ai_v2_proposal_opportunities_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_opportunities_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_opportunities",
           "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
             "company_id"
@@ -12303,8 +12643,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_vantage_agendas": {
-      "name": "pdr_ai_v2_vantage_agendas",
+    "public.pdr_ai_v2_proposal_profiles": {
+      "name": "pdr_ai_v2_proposal_profiles",
       "schema": "",
       "columns": {
         "id": {
@@ -12319,51 +12659,27 @@
           "primaryKey": false,
           "notNull": true
         },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "week_start": {
-          "name": "week_start",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
         "status": {
           "name": "status",
-          "type": "varchar(12)",
+          "type": "varchar(16)",
           "primaryKey": false,
           "notNull": true,
-          "default": "'draft'"
+          "default": "'empty'"
         },
-        "summary": {
-          "name": "summary",
+        "profile": {
+          "name": "profile",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error": {
+          "name": "error",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "signals": {
-          "name": "signals",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "model_metadata": {
-          "name": "model_metadata",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "generated_at": {
-          "name": "generated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "held_at": {
-          "name": "held_at",
+        "built_at": {
+          "name": "built_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -12383,17 +12699,11 @@
         }
       },
       "indexes": {
-        "vantage_agendas_company_week_unique": {
-          "name": "vantage_agendas_company_week_unique",
+        "proposal_profiles_company_unique": {
+          "name": "proposal_profiles_company_unique",
           "columns": [
             {
               "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "week_start",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12403,9 +12713,132 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pdr_ai_v2_proposal_profiles_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_profiles_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_profiles",
+          "tableTo": "pdr_ai_v2_company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pdr_ai_v2_proposal_runs": {
+      "name": "pdr_ai_v2_proposal_runs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(64)",
+          "primaryKey": true,
+          "notNull": true
         },
-        "vantage_agendas_company_created_idx": {
-          "name": "vantage_agendas_company_created_idx",
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'queued'"
+        },
+        "application_id": {
+          "name": "application_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "input": {
+          "name": "input",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "steps": {
+          "name": "steps",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "summary": {
+          "name": "summary",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error": {
+          "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credits_used": {
+          "name": "credits_used",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "proposal_runs_company_created_idx": {
+          "name": "proposal_runs_company_created_idx",
           "columns": [
             {
               "expression": "company_id",
@@ -12424,130 +12857,9 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_vantage_agendas_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_agendas_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_agendas",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_vantage_commitments": {
-      "name": "pdr_ai_v2_vantage_commitments",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": true,
-          "notNull": true
         },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "agenda_id": {
-          "name": "agenda_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "topic_id": {
-          "name": "topic_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "owner": {
-          "name": "owner",
-          "type": "varchar(200)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "due_on": {
-          "name": "due_on",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "test": {
-          "name": "test",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(12)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'open'"
-        },
-        "outcome": {
-          "name": "outcome",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "shared": {
-          "name": "shared",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "resolved_at": {
-          "name": "resolved_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "vantage_commitments_company_status_due_idx": {
-          "name": "vantage_commitments_company_status_due_idx",
+        "proposal_runs_company_status_idx": {
+          "name": "proposal_runs_company_status_idx",
           "columns": [
             {
               "expression": "company_id",
@@ -12560,12 +12872,6 @@
               "isExpression": false,
               "asc": true,
               "nulls": "last"
-            },
-            {
-              "expression": "due_on",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
             }
           ],
           "isUnique": false,
@@ -12573,11 +12879,11 @@
           "method": "btree",
           "with": {}
         },
-        "vantage_commitments_agenda_idx": {
-          "name": "vantage_commitments_agenda_idx",
+        "proposal_runs_application_idx": {
+          "name": "proposal_runs_application_idx",
           "columns": [
             {
-              "expression": "agenda_id",
+              "expression": "application_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12590,9 +12896,9 @@
         }
       },
       "foreignKeys": {
-        "pdr_ai_v2_vantage_commitments_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_commitments_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_commitments",
+        "pdr_ai_v2_proposal_runs_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_runs_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_runs",
           "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
             "company_id"
@@ -12603,176 +12909,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "pdr_ai_v2_vantage_commitments_agenda_id_pdr_ai_v2_vantage_agendas_id_fk": {
-          "name": "pdr_ai_v2_vantage_commitments_agenda_id_pdr_ai_v2_vantage_agendas_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_commitments",
-          "tableTo": "pdr_ai_v2_vantage_agendas",
+        "pdr_ai_v2_proposal_runs_application_id_pdr_ai_v2_proposal_applications_id_fk": {
+          "name": "pdr_ai_v2_proposal_runs_application_id_pdr_ai_v2_proposal_applications_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_runs",
+          "tableTo": "pdr_ai_v2_proposal_applications",
           "columnsFrom": [
-            "agenda_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_vantage_commitments_topic_id_pdr_ai_v2_vantage_agenda_topics_id_fk": {
-          "name": "pdr_ai_v2_vantage_commitments_topic_id_pdr_ai_v2_vantage_agenda_topics_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_commitments",
-          "tableTo": "pdr_ai_v2_vantage_agenda_topics",
-          "columnsFrom": [
-            "topic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_vantage_evidence": {
-      "name": "pdr_ai_v2_vantage_evidence",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "kind": {
-          "name": "kind",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "body": {
-          "name": "body",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "source_url": {
-          "name": "source_url",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "observed_at": {
-          "name": "observed_at",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "visibility": {
-          "name": "visibility",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'private'"
-        },
-        "tags": {
-          "name": "tags",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "vantage_evidence_company_observed_idx": {
-          "name": "vantage_evidence_company_observed_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "observed_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "vantage_evidence_company_kind_idx": {
-          "name": "vantage_evidence_company_kind_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "kind",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_vantage_evidence_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_evidence_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_evidence",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
+            "application_id"
           ],
           "columnsTo": [
             "id"
@@ -12787,8 +12929,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_vantage_metric_definitions": {
-      "name": "pdr_ai_v2_vantage_metric_definitions",
+    "public.pdr_ai_v2_proposal_sections": {
+      "name": "pdr_ai_v2_proposal_sections",
       "schema": "",
       "columns": {
         "id": {
@@ -12800,6 +12942,18 @@
         "company_id": {
           "name": "company_id",
           "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "application_id": {
+          "name": "application_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -12809,24 +12963,49 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "definition": {
-          "name": "definition",
+        "question": {
+          "name": "question",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "unit": {
-          "name": "unit",
-          "type": "varchar(32)",
+        "guidance": {
+          "name": "guidance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "word_limit": {
+          "name": "word_limit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "required": {
+          "name": "required",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": "'count'"
+          "default": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'empty'"
+        },
+        "draft": {
+          "name": "draft",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "draft_meta": {
+          "name": "draft_meta",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -12843,133 +13022,32 @@
         }
       },
       "indexes": {
-        "vantage_metric_definitions_company_key_unique": {
-          "name": "vantage_metric_definitions_company_key_unique",
+        "proposal_sections_application_position_idx": {
+          "name": "proposal_sections_application_position_idx",
           "columns": [
             {
-              "expression": "company_id",
+              "expression": "application_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             },
             {
-              "expression": "key",
+              "expression": "position",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "isUnique": true,
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_vantage_metric_definitions_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_metric_definitions_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_metric_definitions",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_vantage_metric_observations": {
-      "name": "pdr_ai_v2_vantage_metric_observations",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": true,
-          "notNull": true
         },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "metric_id": {
-          "name": "metric_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "double precision",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "period_start": {
-          "name": "period_start",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "period_end": {
-          "name": "period_end",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "note": {
-          "name": "note",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "vantage_metric_observations_company_metric_period_idx": {
-          "name": "vantage_metric_observations_company_metric_period_idx",
+        "proposal_sections_company_idx": {
+          "name": "proposal_sections_company_idx",
           "columns": [
             {
               "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "metric_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "period_end",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -12982,9 +13060,9 @@
         }
       },
       "foreignKeys": {
-        "pdr_ai_v2_vantage_metric_observations_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_metric_observations_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_metric_observations",
+        "pdr_ai_v2_proposal_sections_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_proposal_sections_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_sections",
           "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
             "company_id"
@@ -12995,104 +13073,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "pdr_ai_v2_vantage_metric_observations_metric_id_pdr_ai_v2_vantage_metric_definitions_id_fk": {
-          "name": "pdr_ai_v2_vantage_metric_observations_metric_id_pdr_ai_v2_vantage_metric_definitions_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_metric_observations",
-          "tableTo": "pdr_ai_v2_vantage_metric_definitions",
+        "pdr_ai_v2_proposal_sections_application_id_pdr_ai_v2_proposal_applications_id_fk": {
+          "name": "pdr_ai_v2_proposal_sections_application_id_pdr_ai_v2_proposal_applications_id_fk",
+          "tableFrom": "pdr_ai_v2_proposal_sections",
+          "tableTo": "pdr_ai_v2_proposal_applications",
           "columnsFrom": [
-            "metric_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_vantage_program_deadlines": {
-      "name": "pdr_ai_v2_vantage_program_deadlines",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "due_on": {
-          "name": "due_on",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "note": {
-          "name": "note",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "vantage_program_deadlines_company_due_idx": {
-          "name": "vantage_program_deadlines_company_due_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "due_on",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_vantage_program_deadlines_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_vantage_program_deadlines_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_vantage_program_deadlines",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
+            "application_id"
           ],
           "columnsTo": [
             "id"

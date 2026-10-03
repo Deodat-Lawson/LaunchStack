@@ -1,6 +1,6 @@
 # @launchstack/pipelines
 
-The compositions — level two. Twelve verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, the repo explainer, repo workspaces, the distribution pipeline, and Vantage (the weekly founder-meeting loop). It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
+The compositions — level two. Thirteen verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, the repo explainer, repo workspaces, the distribution pipeline, proposals, and Vantage (the weekly founder-meeting loop). It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
 
 ## Install
 
@@ -30,6 +30,7 @@ import { runClientProspector } from "@launchstack/pipelines/client-prospector";
 | `./repo-explainer` | GitHub URL → summary + Mermaid diagram (legacy request-scoped path), plus the workspace-backed gated agent explanation |
 | `./repo-workspace` | connected repository → synced git mirror + deterministic per-commit context bundle (tree, ranked repo map, memory files, stats, hygiene manifest) |
 | `./distribution` | program (offering, territories, partner kinds) → evidence-backed partner dossiers, fit scores, relationship pipeline with stage rules, coverage dashboard; outreach hands off to `./email` |
+| `./proposals` | organisation profile from its sources → funders that fit → a call as a checklist → each answer drafted from evidence → review → reusable answers; runs are the unit of background work |
 | `./vantage` | evidence inbox + dated metric observations → a weekly agenda whose facts cite their sources (model when configured, rules otherwise), decisions that open commitments checked the week after, a shared-only weekly update and program triage |
 | `./schema` | the product schema the verticals own (applied by apps/web's migration set) |
 

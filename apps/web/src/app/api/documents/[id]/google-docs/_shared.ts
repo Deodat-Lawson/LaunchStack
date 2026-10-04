@@ -16,6 +16,12 @@ import {
     requireWorkspacePermission,
 } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import {
+    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+    callNoteDocumentReference,
+    isCallNoteDocument,
+} from "~/lib/call-note-document";
 import {
     GoogleDriveConfigError,
     isDriveLinkingEnabled,
@@ -74,6 +80,8 @@ export async function authorizeDriveRoute(
             title: document.title,
             fileType: document.fileType,
             mimeType: document.mimeType,
+            ocrMetadata: document.ocrMetadata,
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
         })
         .from(document)
         .where(
@@ -85,6 +93,17 @@ export async function authorizeDriveRoute(
 
     if (!doc) {
         return { ok: false, response: fail(404, "not_found", "Document not found") };
+    }
+
+    if (options?.requirePermission !== false && isCallNoteDocument(doc)) {
+        return {
+            ok: false,
+            response: fail(
+                409,
+                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE
+            ),
+        };
     }
 
     return {

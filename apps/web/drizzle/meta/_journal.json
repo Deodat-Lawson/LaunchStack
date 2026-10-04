@@ -54,124 +54,194 @@
     {
       "idx": 7,
       "version": "7",
+      "when": 1787188199398,
+      "tag": "20260820010959_simple_khan",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1787205296532,
+      "tag": "20260820055456_deep_veda",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1787205446269,
+      "tag": "20260820055726_famous_titanium_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
       "when": 1787442919298,
       "tag": "20260822235519_marketing-history-publish-writeback",
       "breakpoints": true
     },
     {
-      "idx": 8,
+      "idx": 11,
+      "version": "7",
+      "when": 1787492396419,
+      "tag": "20260823133956_certain_iron_monger",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
       "version": "7",
       "when": 1788032041550,
       "tag": "20260829193401_lowly_silverclaw",
       "breakpoints": true
     },
     {
-      "idx": 9,
+      "idx": 13,
       "version": "7",
       "when": 1788036212629,
       "tag": "20260829204332_google_drive_links",
       "breakpoints": true
     },
     {
-      "idx": 10,
+      "idx": 14,
       "version": "7",
       "when": 1788037408131,
       "tag": "20260829210328_workspace_connections_tokens",
       "breakpoints": true
     },
     {
-      "idx": 11,
+      "idx": 15,
       "version": "7",
       "when": 1788118573347,
       "tag": "20260830193613_claude_artifacts",
       "breakpoints": true
     },
     {
-      "idx": 12,
+      "idx": 16,
+      "version": "7",
+      "when": 1788354112851,
+      "tag": "20260902130152_opposite_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1788358503203,
+      "tag": "20260902141503_big_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
       "version": "7",
       "when": 1788396468893,
       "tag": "20260903004748_repo_workspaces",
       "breakpoints": true
     },
     {
-      "idx": 13,
+      "idx": 19,
       "version": "7",
       "when": 1788489462403,
       "tag": "20260904023742_distribution_pipeline",
       "breakpoints": true
     },
     {
-      "idx": 14,
+      "idx": 20,
       "version": "7",
       "when": 1788491665025,
       "tag": "20260904031425_workspace_access",
       "breakpoints": true
     },
     {
-      "idx": 15,
+      "idx": 21,
       "version": "7",
       "when": 1788584047514,
       "tag": "20260905045407_mindmap_published_revision",
       "breakpoints": true
     },
     {
-      "idx": 16,
+      "idx": 22,
       "version": "7",
       "when": 1788651652871,
       "tag": "20260905234052_workspace_sessions",
       "breakpoints": true
     },
     {
-      "idx": 17,
+      "idx": 23,
+      "version": "7",
+      "when": 1788668126728,
+      "tag": "20260906041526_youthful_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1788674400000,
+      "tag": "20260906060000_sunset_transcript_bookmarks",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1788723945685,
+      "tag": "20260906194545_legal_bromley",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
       "version": "7",
       "when": 1788825566173,
       "tag": "20260907235926_drive_link_origin",
       "breakpoints": true
     },
     {
-      "idx": 18,
+      "idx": 27,
       "version": "7",
       "when": 1788836451719,
       "tag": "20260908030051_gmail_connector",
       "breakpoints": true
     },
     {
-      "idx": 19,
+      "idx": 28,
       "version": "7",
       "when": 1789620306478,
       "tag": "20260917044506_settings_values_and_agent_autonomy",
       "breakpoints": true
     },
     {
-      "idx": 20,
+      "idx": 29,
       "version": "7",
       "when": 1789701428387,
       "tag": "20260918031708_brand_posts",
       "breakpoints": true
     },
     {
-      "idx": 21,
+      "idx": 30,
       "version": "7",
       "when": 1790222016700,
       "tag": "20260924035336_user_profiles",
       "breakpoints": true
     },
     {
-      "idx": 22,
+      "idx": 31,
       "version": "7",
       "when": 1790305746313,
       "tag": "20260925030906_agent_harness_and_meeting_workflows",
       "breakpoints": true
     },
     {
-      "idx": 23,
+      "idx": 32,
       "version": "7",
       "when": 1790726558390,
       "tag": "20260930000238_proposals",
       "breakpoints": true
     },
     {
-      "idx": 24,
+      "idx": 33,
+      "version": "7",
+      "when": 1790730718441,
+      "tag": "20260930011158_call_note_document_index",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
       "version": "7",
       "when": 1790994077492,
       "tag": "20261003022117_vantage",

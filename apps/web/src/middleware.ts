@@ -57,6 +57,8 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
     "/api/inngest",
+    // Local capture workers use the route's scoped bearer token, not a browser session.
+    "/api/internal/call-notes/local",
     // Pre-auth join UX: an invitation or join link is previewed (workspace
     // name, role) before the person has an account. Neither route consumes
     // anything; accepting requires a session.

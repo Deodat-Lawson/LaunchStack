@@ -20,10 +20,20 @@ import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { deleteDocumentCore } from "~/server/services/document-delete";
+import {
+    deleteDocumentBlobs,
+    deleteDocumentCore,
+    type DocumentBlobDeletion,
+} from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import {
+    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+    callNoteDocumentReference,
+    isCallNoteDocument,
+} from "~/lib/call-note-document";
 
 const BatchDeleteSchema = z.object({
     docIds: z
@@ -49,7 +59,13 @@ export async function DELETE(request: Request) {
             // stale client — reject the whole batch rather than silently
             // partial-deleting.
             const rows = await db
-                .select({ id: document.id, title: document.title, category: document.category })
+                .select({
+                    id: document.id,
+                    title: document.title,
+                    category: document.category,
+                    ocrMetadata: document.ocrMetadata,
+                    indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+                })
                 .from(document)
                 .where(
                     and(
@@ -65,9 +81,24 @@ export async function DELETE(request: Request) {
                 );
             }
 
-            await db.transaction(async tx => {
+            const managedDocumentIds = rows
+                .filter(row => isCallNoteDocument(row))
+                .map(row => Number(row.id));
+            if (managedDocumentIds.length > 0) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+                        documentIds: managedDocumentIds,
+                    },
+                    { status: 409 }
+                );
+            }
+
+            const blobDeletions = await db.transaction(async tx => {
+                const pendingBlobs: DocumentBlobDeletion[] = [];
                 for (const row of rows) {
-                    await deleteDocumentCore(tx, Number(row.id));
+                    pendingBlobs.push(...(await deleteDocumentCore(tx, Number(row.id))));
                     await recordAuditEvent(tx, {
                         companyId: ctx.data.companyId,
                         actorUserId: ctx.data.authUserId,
@@ -77,7 +108,9 @@ export async function DELETE(request: Request) {
                         detail: { title: row.title, category: row.category },
                     });
                 }
+                return pendingBlobs;
             });
+            await deleteDocumentBlobs(blobDeletions);
 
             return NextResponse.json({
                 success: true,

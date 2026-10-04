@@ -1,3 +1,4 @@
+import type * as DrizzlePgCore from "drizzle-orm/pg-core";
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
 import { POST } from "~/app/api/documents/[id]/versions/route";
@@ -86,16 +87,21 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-jest.mock("@launchstack/store/schema", () => ({
-    document: {
-        id: "document.id",
-    },
-    documentVersions: {
-        documentId: "documentVersions.documentId",
-        versionNumber: "documentVersions.versionNumber",
-        id: "documentVersions.id",
-    },
-}));
+jest.mock("@launchstack/store/schema", () => {
+    const { bigint, integer, pgTable } =
+        jest.requireActual<typeof DrizzlePgCore>("drizzle-orm/pg-core");
+    return {
+        document: pgTable("pdr_ai_v2_document", {
+            id: integer("id"),
+            companyId: bigint("company_id", { mode: "bigint" }),
+        }),
+        documentVersions: {
+            documentId: "documentVersions.documentId",
+            versionNumber: "documentVersions.versionNumber",
+            id: "documentVersions.id",
+        },
+    };
+});
 
 jest.mock("@launchstack/conversion/ocr/config", () => ({
     getOcrConfig: jest.fn(),
@@ -106,6 +112,9 @@ jest.mock("@launchstack/conversion/ocr/trigger", () => ({
 }));
 
 jest.mock("drizzle-orm", () => ({
+    sql: jest.requireActual("drizzle-orm").sql,
+    getTableName: jest.requireActual("drizzle-orm").getTableName,
+    getTableColumns: jest.requireActual("drizzle-orm").getTableColumns,
     and: (...conditions: unknown[]) => ({ op: "and", conditions }),
     desc: (column: unknown) => ({ op: "desc", column }),
     eq: (column: unknown, value: unknown) => ({ op: "eq", column, value }),

@@ -7,8 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Long-meeting note generation** — Large transcripts and owner-note bodies now use on-demand, size-bounded summaries before final composition, with two concurrent requests per enrichment and additional reduction only when needed. Short meetings retain the single-call path. Transcript/owner-note sources remain separate, oversized Unicode segments retain their text and attribution, and a failed summary cannot produce a partial-evidence proposal. Final streaming previews and explicit note acceptance are unchanged.
+- **Automatic note proposals after Stop** — Native JSON-schema streaming in the shared structured-output helper now sends the strict-converted schema with `strict: true`, matching the compaction summaries. Before, the final streamed proposal could come back without its required fields, so automatic enrichment after Stop failed while a manual retry of the same revision succeeded. Covered by a wire-level request test and the HTTP/PostgreSQL Stop-to-proposal E2E test.
+- **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history, including workspace sessions and Google Drive document origins; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables. Chat history persists the same filtered source context used for retrieval, including indexed Call Notes.
+- **PR reconciliation and scope audit** — Merged current Gmail, settings, and Prospects changes without losing Call Notes; reconciled migration snapshots without rewriting applied SQL; preserved command-palette Settings deep links when leaving Calls. Removed incidental generated pipeline output changes, unused capture-worker settings/database credentials, its unused direct database dependency, and an unused fixture collection. CI now runs capture-worker tests on Node 24 while the web capture integration test remains compatible with the web application's Node 20 runtime.
+- **Studio tabs reconciliation** — Merged main's tabbed Studio, split columns, context-menu layer, and lucide icon set without losing Call Notes. Calls is a Studio tab whose `?feature=calls&call=` URL follows tab focus, tab close, and browser history; Call Notes open in Calls from the rail, the palette, and `?source=` links, while indexed company-visible notes can also be pinned as chat context. `?source=` deep links are no longer dropped while the session is still resolving. Calls styles use the font tokens. Main's three migrations follow the Call Notes migrations in the journal, and their snapshots carry the Call Notes tables so the next generate emits no drops.
+- **Chat-configuration guard restored** — An earlier main merge deleted main's "error handlers do not re-enter chat configuration" test instead of satisfying it. The test is back unchanged. The Call chat route now resolves its model after authentication and before loading the Call, so a misconfigured model reports its configuration error without first loading Call data.
+- **Calls redirect build compatibility** — The `/calls` page now uses the required Next.js page-props signature while retaining its workspace/deep-link redirect behavior.
+- **Local capture worker authentication** — Let the exact private worker ingress reach its scoped bearer-token checks without a browser session. Calls user APIs and neighboring internal paths remain session-protected.
+- **Call title renaming** — Removed the purple outline during inline title editing; text selection remains visible, and keyboard focus is still indicated before editing.
+- **AI proposal review notice** — Kept the subtle highlighted container with a uniform border; removed the thick left accent. Accepted notes do not show a review banner.
+
+### Changed
+
+- **macOS-only capture setup** — Capture uses one Local Capture Worker running directly on the configured Capture User's Mac, not the server's Docker stack. Removed the Docker `call-worker` setup; `apps/call-worker/README.md` documents the helper build, permissions, worker configuration, and manual launch.
+- **Calls UI on the design system** — Calls controls now use `~/components/ui/*` kit primitives and shared design tokens. The shared `Textarea` forwards DOM refs.
+- **Cleanup** — Removed worker-only Call Notes environment variables from the web app, along with the unused work-items alias/factory and unused types.
+
+### Known gaps
+
+- **macOS distribution and enrollment** — A packaged installer, supervised background agent, and device enrollment remain deferred; the current Local Capture Worker setup requires manual building, configuration, permissions, and launch.
+- **Single configured Capture User** — Capture is limited to one configured user and one Local Capture Worker per deployment, using a shared internal token rather than per-device credentials.
+
+### Removed
+
+- **Transcript bookmarking** — Removed marker controls and guidance, bookmark commands/capabilities, storage queries, and AI bookmark inputs/citations. A forward migration drops the bookmark table, purges retained bookmark-command payloads, and strips retired citation metadata from saved proposals without rewriting notes or transcript evidence.
+- **Knowledge-inclusion opt-in** — Removed the knowledge-inclusion toggle, `set_knowledge_inclusion` command, and `knowledge_included` column. Eligible canonical Call Notes now use document indexing without a separate publication gate.
+- **Linux Docker capture worker** — Removed the Docker `call-worker` service and its Dockerfile; there is no Linux/containerized Capture fallback.
+
 ### Added
 
+- **Call Notes in company knowledge** — Completed, company-visible canonical Call Notes with a positive saved revision are indexed as documents in `Calls`, selectable as workspace chat context, and cited back to Calls. Scope checks deny ineligible copies for every subject, including folder managers, using the `ocr_metadata.callNote` marker or a Call's `indexed_document_id` reference; live eligibility also requires a canonical note matching the Call's note ID, owner and company. Indexing pre-checks before uploading Markdown, cleans up uploads not retained by a document/version after exits, errors or retries, and merge-stamps the marker on publication, versioning and unchanged syncs. Metadata merges preserve provenance; successful Drive/Gmail re-syncs also clear their deletion flags. Generic document, canonical-note PUT/DELETE and Calls-folder mutation guards return 409. Session file reads enforce document scope for current and historical uploads at internal or external storage URLs. Document and unshared upload rows are deleted transactionally; blob deletion runs only after commit, with failures logged. Uploads shared by surviving documents/versions are retained across internal file URL aliases. Company-scoped Call-reference and marked-document indexes support these checks. Private notes are ineligible; Transcripts and unaccepted proposals are never indexed. The backfill first stamps every referenced document regardless of eligibility, then reconciles completed Calls: `pnpm --filter @launchstack/web db:backfill --only=2026-09-call-note-documents`.
+- **Current file highlight** — The workspace sidebar marks the open file with a solid accent background, including Call Notes opened from the sidebar or a deep link. Current-file state remains separate from chat-context selection and clears when returning to Calls home.
+- **Integrated Call Notes** — The current frontend now connects capture controls, durable transcripts, title/rich-note autosave, visibility, deletion, and owner-reviewed AI enrichment to the backend. Canonical notes appear as permission-scoped files in the workspace's Calls folder. Browser verification covered real authentication, Azure transcription, enrichment, persistence, and file reopening with isolated synthetic audio.
+- **Explicit local capture controls** — Calls now starts capture only after authenticated Start and drains outstanding transcription on Stop. A private worker polls and claims one configured user's session; silence no longer creates or finishes Calls. Added HTTP/PostgreSQL lifecycle E2E coverage and recorded deferred macOS installation, supervision, permission, and enrollment work.
+- **Reliable local Capture readiness and Stop** — Start now requires a fresh scoped worker heartbeat, Live waits for required audio input, and expired claims recover with preserved evidence rather than remaining stuck. Stop closes native inputs before draining transcription; enrichment runs separately. Added 200ms speech-onset buffering and shorter 3-second utterances, worker-unavailable UI feedback, and real macOS/Azure browser verification. Shared application/worker startup and shutdown orchestration remains deferred in the specification.
+- **Focused Calls workspace** — Separate date-grouped notes home and centered note view inside LaunchStack's existing main workspace pane, preserving the application sidebar and navigation. Transcript and AI chat share one bottom dock that morphs upward into the same panel, reverses smoothly on collapse, and preserves drafts, conversation history, and transcript search across mode switches. Includes searchable and copyable channel-aligned bubbles, history-safe navigation, and theme-aware purple accents.
+- **Call-scoped AI chat** — Bottom composer and follow-up email drafts use the configured model with the authenticated viewer's visible note and transcript. No document retrieval or cross-call search; oversized context is rejected rather than silently truncated.
+- **Tiptap Call Notes** — Owner-only rich-text note editing with double-click inline title renaming, a sticky formatting toolbar, JSON/Markdown autosave through the existing revisioned note command, stable polling, explicit conflict recovery, and idempotent retries. Read-only and private-note boundaries remain intact.
+- **Chronological AI enhancement** — Call summaries now use short, discussion-driven topic headings and concise Markdown bullets instead of paragraphs or fixed appendices. The prompt prioritizes key points and removes filler and repetition while preserving user-note ideas, paraphrased inline with Markdown bold as an intuitive citation cue. The editor preserves bold through review, editing, acceptance, and reload; structured evidence metadata and the existing acceptance flow remain intact.
+- **Live AI note previews** — Enhanced note Markdown now arrives during model generation through an authenticated, reconnectable SSE observer backed by bounded durable preview storage. Manual and automatic enrichment retain final schema/provenance validation and explicit acceptance; provisional text never changes the saved note.
 - **Proposals** - a writing app of its own in Tools, with a Studio tile: find
   the funders that fit, then write the proposal from what your sources prove
   - Profile: what the workspace's sources can prove, fact by fact with
@@ -67,7 +107,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     consumes keyboard and paste events
   - `?feature=workflows`, `?feature=analytics` and `?feature=metadata` open
     their panes again instead of showing "Unknown feature"
-
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing
@@ -107,6 +146,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhanced
 
+- **Streaming call-chat answers** — The call assistant renders Markdown as model text arrives instead of waiting for the full response. Model resolution explicitly enables streaming to prevent the SDK from silently returning a buffered completion. Interrupted answers are marked incomplete, retries exclude partial output, and leaving the call cancels generation.
+
+- **Current call-chat context** — Every question uses the latest server-side transcript and saved note, with capture-state awareness and current evidence taking precedence over old answers. Completed calls also supply ready AI-enhanced notes as review drafts; accepted notes use the current canonical revision. Rejected, stale, and private proposals stay excluded.
 - **Document Upload API** (`src/app/api/uploadDocument/route.ts`):
   - Dual-path processing architecture: OCR path for scanned documents, standard path for digital PDFs
   - Unified chunking and embedding pipeline for both processing methods

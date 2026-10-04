@@ -24,6 +24,15 @@ const normalize = (value: unknown) =>
 const requiredString = () => z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () => z.preprocess(normalize, z.string().min(1).optional());
+const localCaptureBoolean = (defaultValue: boolean) =>
+    z.preprocess(value => {
+        const normalized = normalize(value);
+        if (normalized === undefined) return undefined;
+        if (normalized === true || normalized === false) return normalized;
+        if (normalized === "true" || normalized === "1") return true;
+        if (normalized === "false" || normalized === "0") return false;
+        return normalized;
+    }, z.boolean().default(defaultValue));
 
 const serverSchema = z.object({
     // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
@@ -331,6 +340,12 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
+    // Local audio capture is fail-closed unless explicitly enabled. The worker
+    // posts normalized microphone and system-audio events back to this app.
+    CALL_NOTES_CAPTURE_ENABLED: localCaptureBoolean(false),
+    CALL_NOTES_INTERNAL_TOKEN: optionalString(),
+    CALL_NOTES_LOCAL_COMPANY_ID: optionalString(),
+    CALL_NOTES_LOCAL_USER_ID: optionalString(),
     // Drive-linked files: PDFs and Word docs manually editable via a durable
     // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
     // OAuth client below exists — the GCP consent screen is the one real
@@ -545,6 +560,7 @@ function parseServerEnv() {
         TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
         TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
         GEMINI_TTS_VOICE: process.env.GEMINI_TTS_VOICE,
+
         TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as
             | "cloud"
             | "sidecar"
@@ -561,6 +577,10 @@ function parseServerEnv() {
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
         SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+        CALL_NOTES_CAPTURE_ENABLED: process.env.CALL_NOTES_CAPTURE_ENABLED,
+        CALL_NOTES_INTERNAL_TOKEN: process.env.CALL_NOTES_INTERNAL_TOKEN,
+        CALL_NOTES_LOCAL_COMPANY_ID: process.env.CALL_NOTES_LOCAL_COMPANY_ID,
+        CALL_NOTES_LOCAL_USER_ID: process.env.CALL_NOTES_LOCAL_USER_ID,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"
             | "database"

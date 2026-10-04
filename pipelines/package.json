@@ -29,6 +29,10 @@
         "./trend-search/providers/types": "./src/trend-search/providers/types.ts",
         "./client-prospector": "./src/client-prospector/index.ts",
         "./client-prospector/db": "./src/client-prospector/db.ts",
+        "./call-notes": "./src/call-notes/index.ts",
+        "./call-notes/contracts": "./src/call-notes/contracts.ts",
+        "./call-notes/files": "./src/call-notes/files.ts",
+        "./call-notes/enrichment": "./src/call-notes/enrichment.ts",
         "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
         "./marketing": "./src/marketing/index.ts",
         "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
@@ -153,6 +157,22 @@
                 "types": "./dist/client-prospector/db.d.ts",
                 "default": "./dist/client-prospector/db.js"
             },
+            "./call-notes": {
+                "types": "./dist/call-notes/index.d.ts",
+                "default": "./dist/call-notes/index.js"
+            },
+            "./call-notes/contracts": {
+                "types": "./dist/call-notes/contracts.d.ts",
+                "default": "./dist/call-notes/contracts.js"
+            },
+            "./call-notes/files": {
+                "types": "./dist/call-notes/files.d.ts",
+                "default": "./dist/call-notes/files.js"
+            },
+            "./call-notes/enrichment": {
+                "types": "./dist/call-notes/enrichment.d.ts",
+                "default": "./dist/call-notes/enrichment.js"
+            },
             "./founder-weekly-review": {
                 "types": "./dist/founder-weekly-review/index.d.ts",
                 "default": "./dist/founder-weekly-review/index.js"
@@ -213,6 +233,14 @@
                 "types": "./dist/connectors/agent-sessions/index.d.ts",
                 "default": "./dist/connectors/agent-sessions/index.js"
             },
+            "./connectors/google-drive": {
+                "types": "./dist/connectors/google-drive/index.d.ts",
+                "default": "./dist/connectors/google-drive/index.js"
+            },
+            "./connectors/gmail": {
+                "types": "./dist/connectors/gmail/index.d.ts",
+                "default": "./dist/connectors/gmail/index.js"
+            },
             "./package.json": "./package.json",
             "./distribution": {
                 "types": "./dist/distribution/index.d.ts",
@@ -229,6 +257,10 @@
             "./distribution/types": {
                 "types": "./dist/distribution/types.d.ts",
                 "default": "./dist/distribution/types.js"
+            },
+            "./distribution/stages": {
+                "types": "./dist/distribution/stages.d.ts",
+                "default": "./dist/distribution/stages.js"
             },
             "./proposals": {
                 "types": "./dist/proposals/index.d.ts",

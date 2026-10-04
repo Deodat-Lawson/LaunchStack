@@ -28,9 +28,12 @@ import {
     createCompanyNotesRetriever,
     createMultiDocNotesRetriever,
 } from "~/server/notes/notes-retriever";
+import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
+
 import { companyFactsLegs } from "./company-facts-retriever";
 
 const notesLegs: NotesLegProvider = {
+    embeddingProvider: resolveNoteEmbeddingRuntime()?.embeddings ?? null,
     createDocumentLeg: (documentId, embeddings, topK) =>
         createDocumentNotesRetriever(documentId, embeddings, topK),
     createCompanyLeg: (companyId, embeddings, topK, scope) =>

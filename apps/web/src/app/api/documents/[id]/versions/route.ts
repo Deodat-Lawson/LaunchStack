@@ -25,7 +25,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
@@ -41,6 +41,12 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import {
+    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+    callNoteDocumentReference,
+    isCallNoteDocument,
+} from "~/lib/call-note-document";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import {
@@ -95,7 +101,7 @@ async function authorizeDocumentAccess(
           userId: string;
           companyId: bigint;
           canEditFolder: (categoryName: string) => Promise<boolean>;
-          doc: typeof document.$inferSelect;
+          doc: typeof document.$inferSelect & { indexedCallNote: boolean };
       }
     | { ok: false; response: NextResponse }
 > {
@@ -105,7 +111,10 @@ async function authorizeDocumentAccess(
     }
 
     const [doc] = await db
-        .select()
+        .select({
+            ...getTableColumns(document),
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+        })
         .from(document)
         .where(
             and(
@@ -141,6 +150,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             if (!authResult.ok) return authResult.response;
 
             const { userId, doc } = authResult;
+
+            if (isCallNoteDocument(doc)) {
+                return NextResponse.json(
+                    { error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE },
+                    { status: 409 }
+                );
+            }
 
             // A new version is an upload into the document's folder; a
             // restricted folder needs edit access to it.

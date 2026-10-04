@@ -13,6 +13,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { createUserNotesRetriever } from "~/server/notes/notes-retriever";
 import { createNotesEmbeddingsProvider } from "~/server/notes/embedding-config";
+
 import { normalizeModelContent } from "../services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

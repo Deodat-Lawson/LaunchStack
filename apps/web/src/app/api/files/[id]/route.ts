@@ -103,9 +103,9 @@ export async function GET(request: Request, { params }: RouteParams) {
             if (file.companyId == null || file.companyId !== sessionCompanyId) {
                 return NextResponse.json({ error: "File not found" }, { status: 404 });
             }
-            // The file is the bytes behind a document (current or a past
-            // version); serving it would bypass the document's folder. A file
-            // no document references yet (mid-upload) is only company-scoped.
+            // Current and historical versions can reference either this route
+            // or the upload's external storage URL. Both must honor document
+            // scope; unreferenced mid-upload files remain company-scoped.
             if (sessionScope && sessionScope.kind !== "everything") {
                 const pattern = `%/api/files/${fileId}`;
                 const backed = await db
@@ -115,7 +115,16 @@ export async function GET(request: Request, { params }: RouteParams) {
                     .where(
                         and(
                             eq(document.companyId, sessionCompanyId),
-                            or(like(document.url, pattern), like(documentVersions.url, pattern))
+                            or(
+                                like(document.url, pattern),
+                                like(documentVersions.url, pattern),
+                                ...(file.storageUrl
+                                    ? [
+                                          eq(document.url, file.storageUrl),
+                                          eq(documentVersions.url, file.storageUrl),
+                                      ]
+                                    : [])
+                            )
                         )
                     );
                 if (backed.length > 0 && !backed.some(doc => scopeAllows(sessionScope, doc))) {

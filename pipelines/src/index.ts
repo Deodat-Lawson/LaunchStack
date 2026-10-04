@@ -4,3 +4,4 @@
  * need from its subpath rather than this barrel.
  */
 export * from "./founder-weekly-review";
+export * from "./call-notes";

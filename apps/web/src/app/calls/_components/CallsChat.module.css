@@ -1,0 +1,506 @@
+.dock {
+    position: absolute;
+    z-index: 30;
+    bottom: 28px;
+    left: 50%;
+    display: flex;
+    width: min(710px, calc(100% - 40px));
+    max-width: 710px;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.dock.noteDock {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    gap: 0;
+    transform: none;
+}
+
+.homeDock {
+    width: min(710px, calc(100% - 40px));
+}
+
+.dock > * {
+    pointer-events: auto;
+}
+
+.conversation {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 90ms ease,
+        visibility 90ms;
+}
+.noteDock[data-open="true"] .conversation {
+    opacity: 1;
+    visibility: visible;
+    transition-property: opacity;
+}
+
+.conversationHeader {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.conversationTitle {
+    flex: 1;
+    margin-left: 8px;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.conversationClose {
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    place-items: center;
+    color: var(--ink-3);
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.conversationClose:hover {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 5.5%, transparent);
+}
+
+.conversationClose:focus-visible,
+.retry:focus-visible,
+.send:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.conversationBody {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 15px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+
+.conversationContent {
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 0;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.emptyState {
+    display: flex;
+    max-width: 420px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 2px 1px;
+    color: var(--ink-3);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.emptyState strong {
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.retry {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: auto;
+    padding: 5px 9px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 650;
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.message {
+    display: flex;
+    max-width: 94%;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.messageUser {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.messageAssistant {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.messageMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-3);
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+}
+
+.messageIcon {
+    display: inline-grid;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 4px;
+    place-items: center;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    font-size: 8px;
+    letter-spacing: -0.02em;
+}
+
+.messageUser .messageIcon {
+    color: var(--panel);
+    background: var(--ink);
+}
+
+.messageText,
+.markdown {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.messageText {
+    padding: 9px 11px;
+    color: var(--ink);
+    white-space: pre-wrap;
+    background: var(--accent-soft);
+    border-radius: 12px 4px 12px 12px;
+}
+
+.markdown {
+    width: 100%;
+    color: var(--ink);
+}
+
+.markdown :global(p) {
+    margin: 0 0 7px;
+}
+
+.markdown :global(p:last-child) {
+    margin-bottom: 0;
+}
+
+.markdown :global(ul),
+.markdown :global(ol) {
+    margin: 5px 0;
+    padding-left: 19px;
+}
+
+.markdown :global(pre) {
+    max-width: 100%;
+    padding: 9px;
+    overflow-x: auto;
+    color: var(--ink);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.markdown :global(code) {
+    overflow-wrap: anywhere;
+    font-family: var(--font-mono);
+}
+
+.markdown :global(a) {
+    color: var(--accent);
+}
+
+.pending {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 7px;
+    color: var(--ink-3);
+    font-size: 12px;
+}
+
+.spinner {
+    animation: spin 850ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 10px;
+    color: var(--danger);
+    font-size: 11px;
+    line-height: 1.45;
+    background: color-mix(in srgb, var(--danger) 8%, var(--panel));
+    border: 1px solid color-mix(in srgb, var(--danger) 22%, var(--line));
+    border-radius: 9px;
+}
+
+.error > span {
+    overflow-wrap: anywhere;
+}
+
+.retry {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    color: var(--danger);
+    background: transparent;
+    border-color: currentColor;
+}
+
+.composer {
+    display: flex;
+    min-height: 58px;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 14px 14px 10px;
+    background: var(--panel);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+    border-radius: 28px;
+    box-shadow:
+        0 14px 35px var(--scrim-shadow),
+        0 0 0 3px color-mix(in srgb, var(--accent) 5.5%, transparent);
+}
+
+.noteDock .composer {
+    position: relative;
+    width: calc(100% - 64px);
+    min-height: 56px;
+    margin-left: 64px;
+    padding: 8px 10px;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transition:
+        width var(--dock-duration) var(--dock-easing),
+        margin var(--dock-duration) var(--dock-easing),
+        border-color 150ms;
+}
+.noteDock[data-open="true"] .composer {
+    width: calc(100% - 8px);
+    margin: 4px;
+    border-color: var(--line);
+}
+.noteDock .composer:focus-within {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent-soft);
+}
+.chatTrigger {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    overflow: hidden;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: var(--ink-3);
+    font-size: 14px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        opacity 90ms ease,
+        visibility 90ms;
+}
+.noteDock[data-open="true"] .chatTrigger {
+    opacity: 0;
+    visibility: hidden;
+}
+.noteDock[data-open="false"] .chatTrigger {
+    transition-property: opacity;
+}
+
+.homeComposer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 10px 9px 20px;
+    color: var(--ink-3);
+    text-decoration: none;
+}
+
+.assistantLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.composer:focus-within {
+    border-color: var(--accent);
+    box-shadow:
+        0 14px 35px var(--scrim-shadow),
+        0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.retry:hover {
+    filter: brightness(0.97);
+}
+
+.send:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.composerForm {
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 0;
+    width: calc(100% - 20px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 90ms ease,
+        visibility 90ms;
+}
+.noteDock[data-open="true"] .composerForm {
+    position: relative;
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transition-property: opacity;
+}
+
+.composerActions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+    min-height: 30px;
+}
+
+.input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 32px;
+    max-height: min(180px, 30cqh);
+    field-sizing: fixed;
+    padding: 5px 6px;
+    overflow-y: auto;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    resize: none;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+}
+
+.input::placeholder {
+    color: var(--ink-3);
+    opacity: 0.85;
+}
+
+.send {
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    place-items: center;
+    color: var(--accent-fg);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+        filter 140ms ease,
+        opacity 140ms ease;
+}
+
+.sendHidden {
+    display: none;
+}
+
+.send:hover:not(:disabled) {
+    filter: brightness(0.94);
+}
+
+@container calls-workspace (max-width: 640px) {
+    .dock {
+        bottom: 28px;
+        width: calc(100% - 24px);
+    }
+
+    .homeDock {
+        left: 50%;
+        width: calc(100% - 24px);
+        transform: translateX(-50%);
+    }
+
+    .error {
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .retry {
+        align-self: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .noteDock .composer,
+    .composerForm,
+    .chatTrigger,
+    .conversation {
+        transition: none;
+    }
+}

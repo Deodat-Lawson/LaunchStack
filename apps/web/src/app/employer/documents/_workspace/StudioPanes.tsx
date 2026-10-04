@@ -4,6 +4,7 @@ import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import LoadingPage from "~/app/_components/loading";
+import { CallsFeature } from "~/app/calls/_components/CallsFeature";
 import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
@@ -18,6 +19,8 @@ import { ChevronRight as IconChevronRight } from "lucide-react";
  */
 export interface StudioPaneContext {
     knowledge?: KnowledgePaneProps;
+    /** Refresh workspace file metadata after a successful Calls mutation. */
+    onCallChanged?: () => void;
     /** Maps are created from the Add-source modal; the workspace owns it. */
     mindmap?: { onCreate: () => void };
     /**
@@ -830,6 +833,8 @@ export function renderStudioPane(
             return <MindmapStudioPane onClose={onClose} context={context} />;
         case "meetings":
             return <MeetingsStudioPane onClose={onClose} context={context} />;
+        case "calls":
+            return <CallsFeature onCallChanged={context?.onCallChanged} />;
         case "agents":
             return <AgentsStudioPane onClose={onClose} context={context} />;
         case "draft":

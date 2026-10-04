@@ -1,9 +1,10 @@
 import { type Backfill } from "@launchstack/store/backfills";
 import { getTableName, sql } from "drizzle-orm";
 // Product tables: notes live on the application side of the boundary.
-import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
+import { callNotesCalls, documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
+import { callNoteDocuments } from "./call-note-documents";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
 import { countUnstampedFileUploads, stampFileUploadsCompanyId } from "./file-uploads-company-id";
 import {
@@ -28,7 +29,9 @@ const pendingNotesSql = (after: number, limit?: number) => sql`
   SELECT n.id
     FROM ${sql.identifier(notes())} n
     LEFT JOIN ${sql.identifier(embeddings())} ne ON ne.note_id = n.id
+    LEFT JOIN ${callNotesCalls} c ON c.document_note_id = n.id
    WHERE ne.id IS NULL
+     AND c.id IS NULL
      AND n.id > ${after}
    ORDER BY n.id ASC
    ${limit === undefined ? sql`` : sql`LIMIT ${limit}`}
@@ -192,6 +195,7 @@ const workspaceAccessBackfill: Backfill = {
 
 export const BACKFILLS: Backfill[] = [
     noteEmbeddings,
+    callNoteDocuments,
     documentVersionsBackfill,
     fileUploadsCompanyId,
     userCompanyMembershipsBackfill,

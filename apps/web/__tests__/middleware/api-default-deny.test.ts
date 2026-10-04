@@ -29,6 +29,7 @@ const PUBLIC_API_PATHS = [
     "/api/health",
     "/api/webhooks/uploadthing",
     "/api/inngest",
+    "/api/internal/call-notes/local",
     "/api/workspace/invitations/preview",
     "/api/workspace/join-links/preview",
     "/api/ocr/benchmark",
@@ -54,6 +55,9 @@ const PROTECTED_API_PATHS = [
     "/api/workspace/join-links",
     "/api/collab/agents",
     "/api/collab/meetings",
+    "/api/call-notes",
+    "/api/call-notes/worker",
+    "/api/internal/call-notes/local/other",
 ];
 
 describe("middleware /api default-deny", () => {

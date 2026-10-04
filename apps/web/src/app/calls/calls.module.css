@@ -1,0 +1,1119 @@
+.root {
+    --call-canvas: var(--bg);
+    --call-paper: var(--panel);
+    --call-ink: var(--ink);
+    --call-muted: var(--ink-2);
+    --call-faint: var(--ink-3);
+    --call-line: var(--line);
+    --call-accent: var(--accent);
+    --call-accent-soft: var(--accent-soft);
+    --call-chrome-height: 52px;
+    position: relative;
+    isolation: isolate;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    container: calls-workspace / size;
+    overflow: hidden;
+    color: var(--call-ink);
+    background: var(--call-canvas);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.workerNotice {
+    margin: 0 0 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--call-line);
+    border-radius: 8px;
+    color: var(--call-muted);
+    font-size: 13px;
+}
+
+.root *,
+.root *::before,
+.root *::after {
+    box-sizing: border-box;
+}
+:where(.root) button,
+:where(.root) input {
+    color: inherit;
+    font: inherit;
+}
+.root button {
+    cursor: pointer;
+}
+.root button:focus-visible,
+.root a:focus-visible,
+.root input:focus-visible {
+    outline: 2px solid var(--call-accent);
+    outline-offset: 4px;
+    box-shadow: none;
+}
+.root button:disabled {
+    cursor: default;
+    opacity: 0.45;
+}
+.root button,
+.root a {
+    -webkit-tap-highlight-color: transparent;
+}
+.panel {
+    height: 100%;
+    min-width: 0;
+}
+.chrome {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--call-chrome-height);
+    background: var(--call-canvas);
+    padding: 0 18px;
+}
+.chromeGroup {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.iconButton,
+.homeButton,
+.pill,
+.textButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: 0;
+    color: var(--call-muted);
+}
+.iconButton {
+    flex: 0 0 auto;
+    width: 29px;
+    height: 29px;
+    padding: 0;
+    border-radius: 7px;
+}
+.root .iconButton:hover,
+.root .textButton:hover {
+    color: var(--call-ink);
+    background: var(--call-line);
+}
+.root .pill,
+.root .homeButton {
+    height: auto;
+    min-height: 30px;
+    padding: 4px 11px;
+    border: 1px solid var(--call-line);
+    border-radius: 999px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.root button.pill:hover,
+.root .homeButton:hover {
+    border-color: color-mix(in srgb, var(--call-accent) 45%, transparent);
+    background: var(--call-accent-soft);
+}
+.root .captureButton {
+    color: var(--accent-ink);
+    border-color: color-mix(in srgb, var(--call-accent) 35%, transparent);
+    background: var(--call-accent-soft);
+}
+.root .captureButton:hover:not(:disabled) {
+    border-color: var(--call-accent);
+    background: color-mix(in srgb, var(--call-accent) 16%, var(--call-paper));
+}
+.root .stopButton {
+    color: var(--call-accent);
+    border-color: color-mix(in srgb, var(--call-accent) 35%, transparent);
+}
+.root .stopButton:hover:not(:disabled) {
+    border-color: var(--call-accent);
+    background: var(--call-accent-soft);
+}
+.root .homeButton {
+    gap: 3px;
+    padding: 4px 8px;
+}
+.scroll {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-gutter: stable both-edges;
+}
+.homeContent,
+.noteContent {
+    width: min(100% - 48px, 660px);
+    margin: 0 auto;
+    padding: calc(var(--call-chrome-height) + 5px) 0 150px;
+}
+.sectionHeading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 8px 10px;
+}
+.sectionHeading h1,
+.noteContent > h1 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 28px;
+    font-weight: var(--fw-display);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+}
+.sectionHeading .chromeGroup {
+    gap: 0;
+}
+.agenda {
+    display: flex;
+    align-items: stretch;
+    min-height: 112px;
+    border: 1px solid var(--call-line);
+    border-radius: 18px;
+    background: var(--call-paper);
+    overflow: hidden;
+}
+.agendaDate {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 0 0 176px;
+    padding: 20px 24px;
+}
+.dayNumber {
+    font-family: var(--font-sans);
+    font-size: 32px;
+    line-height: 1;
+}
+.agendaDate > div {
+    padding-top: 2px;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.agendaDate i {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-left: 5px;
+    border-radius: 50%;
+    background: var(--call-accent);
+    box-shadow: 0 0 7px var(--accent-glow);
+}
+.agendaDate small {
+    display: block;
+    color: var(--call-faint);
+    font-size: 12px;
+}
+.agendaEvents {
+    flex: 1;
+    display: grid;
+    align-content: center;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px 16px 20px 0;
+}
+.agendaEmpty,
+.agendaEvent {
+    position: relative;
+    display: grid;
+    gap: 3px;
+    height: auto;
+    justify-content: normal;
+    white-space: normal;
+    padding: 0 0 0 16px;
+    color: var(--call-muted);
+    text-align: left;
+    background: transparent;
+}
+.agendaEmpty::before,
+.agendaEvent::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 0;
+    width: 3px;
+    background: var(--call-accent);
+    border-radius: 3px;
+}
+.agendaEmpty small,
+.agendaEvent span {
+    color: var(--call-faint);
+    font-size: 12px;
+}
+.agendaEvent strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 450;
+    color: var(--call-ink);
+}
+.root .agendaEvent:hover {
+    background: transparent;
+}
+.root .agendaEvent:hover strong {
+    color: var(--call-accent);
+}
+.notesList {
+    padding: 27px 8px 0;
+}
+.dateGroup + .dateGroup {
+    margin-top: 28px;
+}
+.dateGroup h2 {
+    margin: 0 0 5px;
+    color: var(--call-muted);
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 400;
+}
+.noteRow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: calc(100% + 16px);
+    height: auto;
+    min-height: 51px;
+    margin: 0 -8px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    text-align: left;
+    color: var(--call-ink);
+    background: transparent;
+}
+.root .noteRow:hover {
+    color: var(--call-ink);
+    background: color-mix(in srgb, var(--call-accent) 7%, transparent);
+}
+.noteIcon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 31px;
+    width: 31px;
+    height: 31px;
+    color: var(--call-muted);
+    background: var(--call-paper);
+    border: 1px solid var(--call-line);
+    border-radius: 7px;
+}
+.activeIcon {
+    color: var(--call-accent);
+    background: var(--call-accent-soft);
+    border-color: color-mix(in srgb, var(--call-accent) 30%, transparent);
+}
+.noteRowText {
+    display: grid;
+    min-width: 0;
+    gap: 0;
+    flex: 1;
+}
+.noteRowText strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 450;
+    line-height: 20px;
+}
+.noteRowText small {
+    color: var(--call-faint);
+    font-size: 12px;
+    line-height: 17px;
+}
+.noteRow time {
+    flex-shrink: 0;
+    margin-left: auto;
+    color: var(--call-muted);
+    font-size: 12px;
+}
+.rowLock {
+    color: var(--call-faint);
+}
+.search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    margin-top: 20px;
+    padding: 5px 12px;
+    border: 1px solid var(--call-line);
+    border-radius: 10px;
+    color: var(--call-faint);
+    background: var(--call-paper);
+}
+.search:focus-within {
+    border-color: var(--call-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--call-accent) 8%, transparent);
+}
+.search input {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    border: 0;
+    outline: 0 !important;
+    background: transparent;
+    font-size: 13px;
+}
+.search input::placeholder {
+    color: var(--call-faint);
+}
+.noteContent {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.noteContent > h1 {
+    margin-bottom: 15px;
+    overflow-wrap: anywhere;
+}
+.noteMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    color: var(--call-muted);
+}
+.noteMeta .pill {
+    min-height: 29px;
+    padding: 3px 10px;
+    font-size: 12px;
+}
+.noteSwitcher {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    border: 1px solid var(--call-line);
+    border-radius: 999px;
+}
+.noteSwitcher button {
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    gap: 5px;
+    min-height: 24px;
+    padding: 2px 9px;
+    background: transparent;
+    color: var(--call-muted);
+    border-radius: 999px;
+    font-size: 12px;
+}
+.root .noteSwitcher .selectedTab {
+    color: var(--accent-ink);
+    background: color-mix(in srgb, var(--call-accent) 13%, var(--call-paper));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--call-accent) 13%, transparent);
+}
+.noteSwitcher i,
+.captureStatus i {
+    flex: 0 0 auto;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.captureStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--call-faint);
+    font-size: 11px;
+}
+.captureStatus[data-live="true"] {
+    color: var(--call-accent);
+}
+.captureStatus[data-live="true"] i {
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+.noteBody {
+    min-height: 220px;
+}
+.markdown {
+    color: var(--call-muted);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+.markdown > :first-child {
+    margin-top: 0;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+    position: relative;
+    margin: 25px 0 3px;
+    color: var(--call-ink);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.65;
+}
+.markdown h1::before,
+.markdown h2::before,
+.markdown h3::before {
+    content: "#";
+    position: absolute;
+    right: calc(100% + 9px);
+    color: var(--call-faint);
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.6;
+}
+.markdown ul,
+.markdown ol {
+    padding-left: 17px;
+    margin: 2px 0 12px;
+}
+.markdown ul {
+    list-style-type: disc;
+}
+.markdown ol {
+    list-style-type: decimal;
+}
+.markdown ul ul {
+    list-style-type: circle;
+}
+.markdown li {
+    padding-left: 0;
+    margin: 3px 0;
+}
+.markdown li::marker {
+    color: var(--call-faint);
+}
+.markdown li > ul,
+.markdown li > ol {
+    margin: 1px 0;
+}
+.markdown p {
+    margin: 0 0 12px;
+}
+.markdown li > p {
+    margin: 0;
+}
+.markdown strong {
+    color: var(--call-ink);
+    font-weight: 550;
+}
+.markdown a {
+    color: var(--call-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.markdown blockquote {
+    margin: 15px 0;
+    padding-left: 16px;
+    border-left: 2px solid var(--call-accent);
+}
+.markdown pre {
+    padding: 12px;
+    background: var(--call-paper);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+}
+.markdown code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+}
+.markdown table {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+}
+.markdown th,
+.markdown td {
+    padding: 6px 12px;
+    border: 1px solid var(--call-line);
+}
+.markdown .draftLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    color: var(--call-accent);
+    font-size: 12px;
+}
+.noteFooter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 14px;
+    border-top: 1px solid var(--call-line);
+    color: var(--call-faint);
+    font-size: 11px;
+}
+.noteFooter > :first-child {
+    flex: 1 1 180px;
+}
+.noteFooter button {
+    height: auto;
+    border: 1px solid var(--call-line);
+    border-radius: 6px;
+    padding: 5px 8px;
+    color: var(--call-accent);
+    background: transparent;
+    cursor: pointer;
+}
+.noteFooter button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.root .textButton {
+    padding: 4px 8px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+.textButton span {
+    color: var(--call-faint);
+}
+.emptyState {
+    display: grid;
+    justify-items: start;
+    gap: 9px;
+    padding: 24px 0;
+    color: var(--call-faint);
+}
+.emptyState > svg {
+    color: var(--call-accent);
+}
+.emptyState h2,
+.emptyState strong {
+    margin: 0;
+    color: var(--call-muted);
+    font-size: 16px;
+    font-weight: 450;
+}
+.emptyState p {
+    max-width: 460px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.noSearchResults {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+}
+.noSearchResults > .notesList {
+    display: grid;
+    flex: 1;
+    place-items: center;
+    min-height: 180px;
+}
+.searchEmptyState {
+    display: grid;
+    gap: 4px;
+    width: 100%;
+    max-width: 320px;
+    padding: 24px 0;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+.searchEmptyState h2 {
+    margin: 0;
+    color: var(--call-muted);
+    font-size: 14px;
+    font-weight: 450;
+    line-height: 20px;
+}
+.searchEmptyState p {
+    margin: 0;
+    color: var(--call-faint);
+    font-size: 12px;
+    line-height: 18px;
+}
+.copyStatus {
+    position: absolute;
+    right: 18px;
+    top: 48px;
+    padding: 7px 12px;
+    border: 1px solid var(--call-line);
+    border-radius: 8px;
+    background: var(--call-paper);
+    font-size: 12px;
+}
+.commandError {
+    position: absolute;
+    z-index: 14;
+    top: 60px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: min(560px, calc(100% - 32px));
+    padding: 8px 10px 8px 13px;
+    border: 1px solid color-mix(in srgb, var(--call-accent) 35%, var(--call-line));
+    border-radius: 9px;
+    background: var(--call-paper);
+    color: var(--call-muted);
+    box-shadow: var(--shadow-3);
+    transform: translateX(-50%);
+    font-size: 12px;
+}
+.commandError span {
+    overflow-wrap: anywhere;
+}
+.commandError button {
+    flex: 0 0 auto;
+    height: auto;
+    padding: 4px 9px;
+    border: 1px solid var(--call-line);
+    border-radius: 6px;
+    background: var(--call-accent-soft);
+    color: var(--accent-ink);
+    font-size: 12px;
+}
+.infoPopover {
+    width: min(340px, calc(100vw - 36px));
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    box-shadow: var(--shadow-3);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+}
+.popoverHeading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.infoPopover p {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--ink-2);
+}
+.infoPopover .iconButton {
+    color: var(--ink-2);
+}
+.infoPopover .iconButton:hover {
+    color: var(--ink);
+    background: var(--line);
+}
+.callDock {
+    --dock-duration: 160ms;
+    --dock-easing: cubic-bezier(0.22, 1, 0.36, 1);
+    position: absolute;
+    z-index: 35;
+    bottom: 24px;
+    left: 50%;
+    width: min(672px, calc(100% - 40px));
+    height: 56px;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 28px;
+    transform: translateX(-50%);
+    transition:
+        height var(--dock-duration) var(--dock-easing),
+        width var(--dock-duration) var(--dock-easing),
+        border-radius var(--dock-duration) var(--dock-easing);
+}
+.callDock::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 0 64px;
+    border: 1px solid var(--call-line);
+    border-radius: 28px;
+    background: var(--call-paper);
+    transition:
+        left var(--dock-duration) var(--dock-easing),
+        border-radius var(--dock-duration) var(--dock-easing);
+}
+.callDock:not([data-mode="collapsed"]) {
+    width: min(680px, calc(100% - 32px));
+    height: min(464px, calc(100cqh - 96px));
+    border-radius: 32px;
+}
+.callDock:not([data-mode="collapsed"])::before {
+    left: 0;
+    border-radius: 32px;
+}
+.dockView {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 90ms ease,
+        visibility 90ms;
+}
+.dockView[data-active="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-property: opacity;
+}
+.transcript {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+}
+.transcriptHeader {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--call-line);
+}
+.transcriptSearch {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+    color: var(--call-faint);
+}
+.transcriptSearch input {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    padding: 8px 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--call-ink);
+    font: inherit;
+    font-size: 12px;
+}
+.transcriptSearch:focus-within {
+    color: var(--call-accent);
+}
+.transcriptSearch input::placeholder {
+    color: var(--call-faint);
+}
+.transcriptCount {
+    color: var(--call-faint);
+    font-size: 10px;
+    white-space: nowrap;
+}
+.transcriptBody {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--call-line) transparent;
+    padding: 4px 24px 22px;
+}
+.segment {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 5px;
+}
+.segment[data-group-start="true"] {
+    margin-top: 18px;
+}
+.segment:first-child {
+    margin-top: 0;
+}
+.segment[data-channel="microphone"] {
+    align-items: flex-end;
+}
+.segmentMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin: 0 4px 7px;
+    color: var(--call-faint);
+    font-size: 10px;
+}
+.segmentMeta strong {
+    color: var(--call-muted);
+    font-size: 11px;
+    font-weight: 500;
+}
+.segmentMeta time {
+    font-variant-numeric: tabular-nums;
+}
+.segment p {
+    max-width: 84%;
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 14px 14px 14px 4px;
+    background: color-mix(in srgb, var(--call-ink) 5%, var(--call-paper));
+    color: var(--call-ink);
+    font-size: 13px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+.segment[data-channel="microphone"] p {
+    border-radius: 14px 14px 4px 14px;
+    background: color-mix(in srgb, var(--call-accent) 13%, var(--call-paper));
+}
+.segment p svg {
+    display: inline;
+    margin-left: 8px;
+    color: var(--call-accent);
+    vertical-align: middle;
+}
+.gap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin: 14px 0;
+    padding: 9px;
+    border: 1px dashed var(--call-line);
+    border-radius: 6px;
+    color: var(--call-faint);
+    font-size: 11px;
+}
+.gap strong {
+    font-weight: 500;
+}
+.transcriptEmpty {
+    padding: 16px 0;
+    color: var(--call-faint);
+    font-size: 13px;
+}
+.transcriptFooter {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 12px;
+    height: 64px;
+    padding: 0 20px 0 64px;
+    border-top: 1px solid var(--call-line);
+    color: var(--call-faint);
+    font-size: 11px;
+}
+.transcriptCapture,
+.transcriptProvenance {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+.transcriptCapture i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--call-accent);
+}
+.transcriptFeedback {
+    flex: 1;
+    min-width: 0;
+    font-size: 10px;
+    color: var(--call-accent);
+}
+.transcriptProvenance {
+    font-size: 10px;
+}
+.root .dockWaveform {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 1px solid var(--call-line);
+    border-radius: 28px;
+    background: var(--call-paper);
+    color: var(--call-muted);
+    transition:
+        left var(--dock-duration) var(--dock-easing),
+        bottom var(--dock-duration) var(--dock-easing),
+        background-color 150ms,
+        border-color 150ms,
+        opacity 90ms,
+        visibility 90ms;
+}
+.callDock:not([data-mode="chat"]) .dockWaveform {
+    transition-property: left, bottom, background-color, border-color, opacity;
+}
+.root .dockWaveform:hover,
+.root .dockWaveform[aria-expanded="true"] {
+    color: var(--call-accent);
+}
+.callDock[data-mode="transcript"] .dockWaveform {
+    left: 8px;
+    bottom: 4px;
+    border-color: transparent;
+    background: transparent;
+}
+.callDock[data-mode="chat"] .dockWaveform {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.transcriptChevron {
+    transform: rotate(180deg);
+    transition: transform var(--dock-duration) var(--dock-easing);
+}
+.callDock[data-mode="transcript"] .transcriptChevron {
+    transform: rotate(0);
+}
+.visibilityControl {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    min-width: 96px;
+    height: auto;
+    min-height: 30px;
+    padding: 4px 9px;
+    gap: 6px;
+    border: 1px solid var(--call-line);
+    border-radius: 999px;
+    background: var(--call-paper);
+    color: var(--call-muted);
+    font-family: var(--font-sans);
+    font-size: 12px;
+}
+.editableTitle {
+    min-height: 1.3em;
+    cursor: text;
+    border-radius: 4px;
+}
+.editableTitle:focus-visible {
+    outline: 1px solid var(--call-accent);
+    outline-offset: 5px;
+}
+.editableTitle[contenteditable="plaintext-only"] {
+    outline: none;
+}
+.actionButton,
+.secondaryAction,
+.enrichmentActions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: auto;
+    min-height: 30px;
+    padding: 5px 10px;
+    border: 1px solid color-mix(in srgb, var(--call-accent) 35%, var(--call-line));
+    border-radius: 7px;
+    background: var(--call-accent-soft);
+    color: var(--accent-ink);
+    font-size: 12px;
+}
+.secondaryAction,
+.enrichmentActions .secondaryAction {
+    border-color: var(--call-line);
+    background: transparent;
+    color: var(--call-muted);
+}
+.actionButton:disabled,
+.secondaryAction:disabled,
+.enrichmentActions button:disabled {
+    cursor: default;
+    opacity: 0.45;
+}
+.enrichmentPanel {
+    display: grid;
+    gap: 14px;
+}
+.enrichmentPanel .editor {
+    min-height: 220px;
+}
+.enrichmentWarning {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 10px 12px;
+    border-left: 2px solid var(--call-accent);
+    background: var(--call-accent-soft);
+    color: var(--accent-ink);
+    font-size: 12px;
+}
+.enrichmentActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .callDock,
+    .callDock::before,
+    .dockView,
+    .root .dockWaveform,
+    .transcriptChevron {
+        transition: none;
+    }
+}
+@container calls-workspace (max-width: 700px) {
+    .chrome {
+        height: 48px;
+        padding: 0 12px;
+    }
+    .homeContent,
+    .noteContent {
+        width: calc(100% - 36px);
+        padding-top: 66px;
+        padding-bottom: 160px;
+    }
+    .noteContent {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .sectionHeading {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .sectionHeading h1,
+    .noteContent > h1 {
+        font-size: 28px;
+    }
+    .agendaDate {
+        flex-basis: 124px;
+        padding: 20px 14px;
+        gap: 10px;
+    }
+    .agendaEmpty small {
+        max-width: 180px;
+        font-size: 11px;
+    }
+    .notesList {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .noteRow {
+        gap: 10px;
+    }
+    .noteRowText strong {
+        font-size: 13px;
+    }
+    .noteRow time {
+        font-size: 10px;
+    }
+    .noteMeta {
+        gap: 6px;
+    }
+    .markdown {
+        font-size: 15px;
+    }
+    .markdown h1::before,
+    .markdown h2::before,
+    .markdown h3::before {
+        display: none;
+    }
+    .transcriptBody {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+    .transcriptCount,
+    .transcriptProvenance {
+        display: none;
+    }
+}

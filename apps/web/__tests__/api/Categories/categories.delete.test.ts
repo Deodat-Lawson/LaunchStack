@@ -24,8 +24,12 @@ jest.mock("~/lib/authz/audit", () => ({
     recordAuditEvent: jest.fn().mockResolvedValue(undefined),
 }));
 
+const mockSelect = jest.fn();
 const mockDelete = jest.fn();
-const mockTx = { delete: (...args: unknown[]) => mockDelete(...args) };
+const mockTx = {
+    select: (...args: unknown[]) => mockSelect(...args),
+    delete: (...args: unknown[]) => mockDelete(...args),
+};
 
 jest.mock("~/server/db/index", () => ({
     db: {
@@ -41,6 +45,11 @@ function mockCtx(role: string, companyId = BigInt(1)) {
 }
 
 function mockDeleteReturning(rows: { id: number; name: string }[]) {
+    mockSelect.mockReturnValue({
+        from: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({ for: jest.fn().mockResolvedValue(rows) }),
+        }),
+    });
     const returning = jest.fn().mockResolvedValue(rows);
     const where = jest.fn().mockReturnValue({ returning });
     mockDelete.mockReturnValue({ where });
@@ -58,6 +67,13 @@ function request(body: unknown) {
 describe("DELETE /api/Categories/DeleteCategory", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        mockSelect.mockReturnValue({
+            from: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    for: jest.fn().mockResolvedValue([{ id: 123, name: "Legal" }]),
+                }),
+            }),
+        });
     });
 
     it("should allow an authenticated owner to delete a category", async () => {
@@ -98,6 +114,22 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
 
         expect(response.status).toBe(200);
         expect(json.success).toBe(true);
+    });
+
+    it("refuses to delete the Calls collection before deleting any category", async () => {
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: { id: 123 },
+        });
+        mockCtx("owner");
+        mockDeleteReturning([{ id: 123, name: "Calls" }]);
+
+        const response = await DELETE(request({ id: 123 }));
+
+        expect(response.status).toBe(409);
+        expect(await response.json()).toEqual({ error: "Calls is managed by Call Notes" });
+        expect(mockDelete).not.toHaveBeenCalled();
+        expect(recordAuditEvent).not.toHaveBeenCalled();
     });
 
     it("returns 401 when workspace context fails", async () => {

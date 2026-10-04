@@ -192,7 +192,7 @@ export function CommandPalette({
                 kind: "source",
                 id: s.id,
                 label: s.title,
-                sub: `${meta.label} · ${s.size || s.added}`,
+                sub: `${meta.label} · ${s.preview ?? s.size ?? s.added}`,
                 keywords: s.searchText,
                 Icon: meta.Icon,
                 onRun: () => onPickSource(s.id),

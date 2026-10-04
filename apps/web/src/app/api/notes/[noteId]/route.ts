@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { callNotesCalls } from "@launchstack/pipelines/schema";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
 import { eq, and, or, isNull } from "drizzle-orm";
@@ -18,6 +19,8 @@ import { serializeNote } from "~/server/notes/serialize";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
 import { isNoteDocumentVisible } from "~/server/notes/document-scope";
 import type { JSONContent } from "@tiptap/react";
+
+const CALL_NOTE_MANAGED_MESSAGE = "Call Notes are managed from Calls";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ noteId: string }> }) {
     try {
@@ -73,14 +76,21 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
         // document left the caller's scope reads as missing.
         const scope = await ctx.data.documentScope();
         const [existing] = await db
-            .select({ documentId: documentNotes.documentId })
+            .select({
+                documentId: documentNotes.documentId,
+                callId: callNotesCalls.id,
+            })
             .from(documentNotes)
+            .leftJoin(callNotesCalls, eq(callNotesCalls.documentNoteId, documentNotes.id))
             .where(noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId));
         if (
             !existing ||
             !(await isNoteDocumentVisible(existing.documentId, ctx.data.companyId, scope))
         ) {
             return NextResponse.json({ error: "Note not found" }, { status: 404 });
+        }
+        if (existing.callId !== null) {
+            return NextResponse.json({ error: CALL_NOTE_MANAGED_MESSAGE }, { status: 409 });
         }
 
         const [updated] = await db
@@ -164,6 +174,18 @@ export async function DELETE(
         const id = parseInt(noteId, 10);
         if (isNaN(id)) {
             return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
+        }
+
+        const [existing] = await db
+            .select({ callId: callNotesCalls.id })
+            .from(documentNotes)
+            .leftJoin(callNotesCalls, eq(callNotesCalls.documentNoteId, documentNotes.id))
+            .where(noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId));
+        if (!existing) {
+            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+        }
+        if (existing.callId !== null) {
+            return NextResponse.json({ error: CALL_NOTE_MANAGED_MESSAGE }, { status: 409 });
         }
 
         const [deleted] = await db

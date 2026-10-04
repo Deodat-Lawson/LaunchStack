@@ -8,6 +8,7 @@ import {
     documentRetrievalChunks,
     documentStructure,
 } from "@launchstack/store/schema";
+import { callNotesCalls } from "@launchstack/pipelines/schema";
 import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
 
 /**
@@ -17,7 +18,7 @@ import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/serve
  * reindex UPDATE — cannot be expressed in the query builder and must name
  * tables literally. Deriving those names from the schema instead of hardcoding
  * `"pdr_ai_v2_..."` strings means the table prefix lives in exactly one place
- * (packages/core/src/db/schema/helpers.ts) and the compiler catches a rename.
+ * (packages/store/src/db/schema/helpers.ts) and the compiler catches a rename.
  *
  * Note this makes the CODE side of a prefix change a one-line edit, but not the
  * database side: `drizzle-kit generate` cannot tell a mass rename from a
@@ -37,6 +38,8 @@ export const NAME = {
     metadata: getTableName(documentMetadata),
     notes: getTableName(documentNotes),
     noteEmbeddings: getTableName(documentNoteEmbeddings),
+    callNotesCalls: getTableName(callNotesCalls),
+
     embeddings768: getTableName(documentEmbeddings768),
     embeddings1024: getTableName(documentEmbeddings1024),
     trendSearchCache: getTableName(trendSearchCache),
@@ -50,6 +53,7 @@ export const T = {
     metadata: ident(documentMetadata),
     notes: ident(documentNotes),
     noteEmbeddings: ident(documentNoteEmbeddings),
+    callNotesCalls: ident(callNotesCalls),
     embeddings768: ident(documentEmbeddings768),
     embeddings1024: ident(documentEmbeddings1024),
     trendSearchCache: ident(trendSearchCache),

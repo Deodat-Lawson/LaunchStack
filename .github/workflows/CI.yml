@@ -39,7 +39,8 @@ jobs:
       # translation, so CI exercises the canonical variables.
       CHAT_BASE_URL: https://ci.invalid/v1
       CHAT_API_KEY: chat-ci-placeholder
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ci-placeholder' }}
+      # Live embedding evals opt in on a real key; a placeholder triggers 401s.
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
       INNGEST_EVENT_KEY: ci-placeholder
 
@@ -120,6 +121,14 @@ jobs:
       # suites are fixed and run with everything else.
       - name: Web tests
         run: pnpm --filter @launchstack/web exec jest --runInBand --forceExit
+
+      - name: Setup capture worker runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Local capture worker tests
+        run: pnpm --filter @launchstack/call-worker test
 
   python-services:
     runs-on: ubuntu-latest
@@ -295,6 +304,17 @@ jobs:
           status=0
           for f in $changed; do
             [ -f "$f" ] || continue
+            # Already applied on meeting-notes before its reconciliation with
+            # main. Editing even a comment would invalidate the deployment
+            # ledger. Approve only these exact historical bytes, not their
+            # filenames or any future DML/destructive migration.
+            checksum=$(sha256sum "$f" | cut -d ' ' -f 1)
+            case "$checksum" in
+              1a7bf419b6d84bb9299e77eeb82ae57307cedbf32ebfabbda538f251b67a1f91|\
+              3f2412739179a5e3c94569af0473e87ba92d58e7ebacb3201708b805cb2570a0|\
+              bcaf34bf141035c9e826e0f85e472950eb629dee8d9b1c834c1cfb9cdbf6068b)
+                continue ;;
+            esac
             if ! grep -q 'launchstack:allow-dml' "$f" \
                && grep -qEi '^[[:space:]]*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)' "$f"; then
               echo "::error file=$f::Migration contains DML. Move it to a backfill."

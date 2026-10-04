@@ -257,7 +257,11 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -280,7 +284,11 @@ services:
     ports:
       - "8003:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -436,6 +444,11 @@ services:
       - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
       <<: *shared-env
+      # Internal capture ingress; never expose this token to the browser.
+      CALL_NOTES_INTERNAL_TOKEN: ${CALL_NOTES_INTERNAL_TOKEN:-}
+      CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
+      CALL_NOTES_LOCAL_COMPANY_ID: ${CALL_NOTES_LOCAL_COMPANY_ID:-}
+      CALL_NOTES_LOCAL_USER_ID: ${CALL_NOTES_LOCAL_USER_ID:-}
     ports:
       - "3000:3000"
 

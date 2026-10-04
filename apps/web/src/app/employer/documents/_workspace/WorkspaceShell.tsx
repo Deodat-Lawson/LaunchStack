@@ -165,6 +165,17 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
     "agent-sessions": "/employer/documents?add=1&tab=agent-sessions",
 };
 
+/** Published document references resolve to their canonical workspace source. */
+function resolveSourceReference(
+    sources: WorkspaceSource[],
+    id: string
+): WorkspaceSource | undefined {
+    const source = sources.find(item => item.id === id);
+    if (source || !/^d[1-9]\d*$/.test(id)) return source;
+    const documentId = Number(id.slice(1));
+    return sources.find(item => item.documentId === documentId);
+}
+
 /**
  * Points the Settings hub at a section. The hub follows the hash, mounted or
  * not. Setting the hash it already has fires no `hashchange`, so announce it
@@ -262,7 +273,32 @@ export function WorkspaceShell() {
     } = useWorkspaceData(userId ?? null);
 
     const [selected, setSelected] = useState<string[]>([]);
-    const [thread, setThread] = useState<ThreadMessage[]>([]);
+    const [threadTurns, setThread] = useState<ThreadMessage[]>([]);
+    // Stored citations can name a document now hidden behind a Call Note or
+    // mindmap. Keep the saved evidence, but render its canonical source.
+    const thread = useMemo(
+        () =>
+            threadTurns.map(message => {
+                const citations = message.citations;
+                if (
+                    !citations?.some(cite => {
+                        const source = resolveSourceReference(sources, cite.sourceId);
+                        return source && source.id !== cite.sourceId;
+                    })
+                ) {
+                    return message;
+                }
+                return {
+                    ...message,
+                    citations: citations.map(cite => ({
+                        ...cite,
+                        sourceId:
+                            resolveSourceReference(sources, cite.sourceId)?.id ?? cite.sourceId,
+                    })),
+                };
+            }),
+        [threadTurns, sources]
+    );
     /**
      * Set when this chat continues an imported agent session (`?continue=<docId>`):
      * the transcript's tail travels as conversationHistory on every send, and
@@ -345,6 +381,19 @@ export function WorkspaceShell() {
         (id: string, edit = false) => router.push(sourceUrl(id, edit)),
         [router, sourceUrl]
     );
+    /** Call Notes open in the Calls app, which keeps its selection in `?call=`. */
+    const openCall = useCallback(
+        (callId: string) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("source");
+            params.delete("edit");
+            params.delete("present");
+            params.set("feature", "calls");
+            params.set("call", callId);
+            router.push(`/employer/documents?${params.toString()}`);
+        },
+        [router, searchParams]
+    );
     const closeSource = useCallback(() => router.push(sourceUrl(null)), [router, sourceUrl]);
 
     useEffect(() => {
@@ -353,6 +402,11 @@ export function WorkspaceShell() {
             return;
         }
         const found = sources.find(s => s.id === sourceParam) ?? null;
+        if (found?.type === "call-note" && found.callId) {
+            setViewerSource(null);
+            openCall(found.callId);
+            return;
+        }
         if (found) {
             setViewerSource(found);
             return;
@@ -362,7 +416,23 @@ export function WorkspaceShell() {
         // Drop the param rather than holding an empty viewer open.
         setViewerSource(null);
         router.replace(sourceUrl(null));
-    }, [sourceParam, sources, sourcesLoading, router, sourceUrl]);
+    }, [sourceParam, sources, sourcesLoading, router, sourceUrl, openCall]);
+    const activeCallId = searchParams.get("call");
+    const activeSourceId =
+        sourceParam ?? sources.find(s => s.type === "call-note" && s.callId === activeCallId)?.id;
+    // Private, unavailable, or unindexed Call Notes are not chat context.
+    // Indexed Call Notes keep their pins, including those restored from history.
+    useEffect(() => {
+        const unavailableCallNotes = new Set(
+            sources
+                .filter(source => source.type === "call-note" && !source.documentId)
+                .map(source => source.id)
+        );
+        setSelected(prev => {
+            const next = prev.filter(id => !unavailableCallNotes.has(id));
+            return next.length === prev.length ? prev : next;
+        });
+    }, [sources, selected]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     /** What the delete dialog is about: one source from its row, or a multi-selection. */
@@ -404,6 +474,9 @@ export function WorkspaceShell() {
     /** What the focused column shows — the app most verbs act on. */
     const activeFeatureId =
         layout.groups.find(group => group.id === layout.activeGroupId)?.activeId ?? "";
+    /** The same, for effects that must read focus without re-running on it. */
+    const activeFeatureIdRef = useRef(activeFeatureId);
+    activeFeatureIdRef.current = activeFeatureId;
     /** Whose layout this is: saved per member and workspace, once both are known. */
     const layoutScope = userId && companyId != null ? `${userId}:${companyId}` : null;
     /** Why the focused pane cannot be split right now, or false when it can. */
@@ -850,10 +923,17 @@ export function WorkspaceShell() {
             const askedAgent = send.agentKey
                 ? chatAgents.find(a => a.id === send.agentKey)
                 : undefined;
+            const chatSources = send.refs
+                .map(ref => resolveSourceReference(sources, ref))
+                .filter(
+                    (source): source is WorkspaceSource & { documentId: number } =>
+                        typeof source?.documentId === "number"
+                );
+            const chatRefs = chatSources.map(source => source.id);
             const userTurn: ThreadMessage = {
                 role: "user",
                 text: send.text,
-                refs: send.refs,
+                refs: chatRefs,
                 attachments: send.attachments.length > 0 ? send.attachments : undefined,
                 agent: askedAgent
                     ? {
@@ -867,9 +947,7 @@ export function WorkspaceShell() {
             };
             setThread(prev => [...prev, userTurn]);
 
-            const numericIds = send.refs
-                .map(r => sources.find(s => s.id === r)?.documentId)
-                .filter((n): n is number => typeof n === "number");
+            const numericIds = chatSources.map(source => source.documentId);
 
             const scope =
                 numericIds.length >= 2
@@ -952,7 +1030,7 @@ export function WorkspaceShell() {
             setThread(prev => [...prev, assistantTurn]);
             // `thread` here is the transcript as it stood before this send —
             // exactly the "prior turns" a first save needs.
-            void persistTurns([userTurn, assistantTurn], send.refs, thread);
+            void persistTurns([userTurn, assistantTurn], chatRefs, thread);
         },
         [sources, sendQuery, companyId, continuation, thread, persistTurns, chatAgents]
     );
@@ -1035,6 +1113,10 @@ export function WorkspaceShell() {
     const handleOpenSource = useCallback(
         (source: WorkspaceSource) => {
             setViewerHighlight(null);
+            if (source.type === "call-note" && source.callId) {
+                openCall(source.callId);
+                return;
+            }
             // Already beside the chat: bring that column forward rather than
             // laying an overlay over the split.
             if (groupOf(layout, tabIdOfSource(source.id))) {
@@ -1043,14 +1125,19 @@ export function WorkspaceShell() {
             }
             openSource(source.id);
         },
-        [openSource, layout, setActiveFeatureId]
+        [openSource, openCall, layout, setActiveFeatureId]
     );
 
-    /** A citation click opens the cited document with the passage highlighted. */
+    /** Citations open Call Notes in Calls; other sources highlight the cited passage. */
     const handleOpenCitation = useCallback(
         (cite: ThreadReference) => {
-            const src = sources.find(s => s.id === cite.sourceId);
+            const src = resolveSourceReference(sources, cite.sourceId);
             if (!src) return;
+            if (src.type === "call-note" && src.callId) {
+                setViewerHighlight(null);
+                openCall(src.callId);
+                return;
+            }
             citationNonce.current += 1;
             setViewerHighlight({
                 text: cite.snippet,
@@ -1060,7 +1147,7 @@ export function WorkspaceShell() {
             });
             openSource(src.id);
         },
-        [sources, openSource]
+        [sources, openSource, openCall]
     );
 
     const handleRenameSource = useCallback(
@@ -1263,6 +1350,10 @@ export function WorkspaceShell() {
     }, []);
 
     const openDocumentAccess = useCallback((source: WorkspaceSource) => {
+        if (source.type === "call-note") {
+            toast.info("Call Note access is managed in Calls.");
+            return;
+        }
         if (!source.documentId) {
             toast.info("This source is still being indexed.");
             return;
@@ -1351,6 +1442,30 @@ export function WorkspaceShell() {
     const openFeature = useCallback(() => setStudioOpen(true), []);
 
     /**
+     * Calls keeps its selection in the URL (`?feature=calls&call=…`) so a
+     * reload or a history step lands on the same note. Focusing Calls writes
+     * the feature param; focusing anything else drops both.
+     */
+    const syncCallsUrl = useCallback(
+        (focusedId: string) => {
+            const inCalls = searchParams.get("feature") === "calls";
+            if ((focusedId === "calls") === inCalls) return;
+            const params = new URLSearchParams(searchParams.toString());
+            if (focusedId === "calls") {
+                params.set("feature", "calls");
+            } else {
+                params.delete("feature");
+                params.delete("call");
+            }
+            const query = params.toString();
+            router.push(
+                `${query ? `/employer/documents?${query}` : "/employer/documents"}${window.location.hash}`
+            );
+        },
+        [router, searchParams]
+    );
+
+    /**
      * Every way of picking an app ends here: the picker, the Studio menu, the
      * command palette, a keyboard shortcut and `?feature=`. The app opens in
      * a tab — every Studio app does, tools with screens of their own
@@ -1385,8 +1500,9 @@ export function WorkspaceShell() {
             if (!can(feature.requires)) return;
             setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
+            syncCallsUrl(featureId);
         },
-        [can, router, setActiveFeatureId, requestToolLocation]
+        [can, router, setActiveFeatureId, requestToolLocation, syncCallsUrl]
     );
     expandFeatureRef.current = expandFeature;
 
@@ -1511,26 +1627,29 @@ export function WorkspaceShell() {
             if (activeFeatureId === "mindmap" && id !== "mindmap") void refresh();
             if (id.startsWith(SOURCE_TAB_PREFIX)) {
                 setActiveFeatureId(id);
+                syncCallsUrl(id);
                 return;
             }
             expandFeature(id);
         },
-        [activeFeatureId, refresh, setActiveFeatureId, expandFeature]
+        [activeFeatureId, refresh, setActiveFeatureId, expandFeature, syncCallsUrl]
     );
 
     /**
-     * The mindmap tab owns more than a pane: an edited map, and `&edit=1` in
-     * the URL. Every way of closing it has to let go of both — its own close,
-     * "close the others", "close everything to the right", and the keyboard.
+     * Some tabs own more than a pane. The mindmap tab holds an edited map and
+     * `&edit=1`; the Calls tab holds `?feature=calls&call=…`. Every way of
+     * closing them has to let go of that — their own close, "close the
+     * others", "close everything to the right", and the keyboard.
      */
     const releaseTabs = useCallback(
         (closing: string[]) => {
+            if (closing.includes("calls")) syncCallsUrl("");
             if (!closing.includes("mindmap")) return;
             setEditedMindmapId(null);
             if (editing) closeSource();
             void refresh();
         },
-        [editing, closeSource, refresh]
+        [editing, closeSource, refresh, syncCallsUrl]
     );
 
     /** Which ids a verb is about to take out of a column. */
@@ -1549,6 +1668,11 @@ export function WorkspaceShell() {
     /** Put a source in a column of its own, beside whatever is open. */
     const openSourceBeside = useCallback(
         (source: WorkspaceSource) => {
+            // Call Notes are managed in Calls, not the document viewer.
+            if (source.type === "call-note" && source.callId) {
+                openCall(source.callId);
+                return;
+            }
             // The overlay and the column would otherwise both be showing a
             // document, one on top of the other.
             closeSource();
@@ -1557,7 +1681,7 @@ export function WorkspaceShell() {
             if (compactViewport) setActiveFeatureId(tabIdOfSource(source.id));
             else openBeside(tabIdOfSource(source.id));
         },
-        [closeSource, openBeside, compactViewport, setActiveFeatureId]
+        [closeSource, openBeside, compactViewport, setActiveFeatureId, openCall]
     );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
@@ -1578,8 +1702,18 @@ export function WorkspaceShell() {
     const askParam = searchParams.get("ask");
     // `?feature=<tool>&at=<path>` — a tool's tab at one of its screens.
     const atParam = searchParams.get("at");
+    const previousFeatureParam = useRef<string | null>(null);
     useEffect(() => {
-        if (!featureParam && !addParam && !connectorParam && !continueParam && !askParam) return;
+        const priorFeatureParam = previousFeatureParam.current;
+        previousFeatureParam.current = featureParam;
+        if (!featureParam && !addParam && !connectorParam && !continueParam && !askParam) {
+            // Browser back out of Calls: the tab stays open, the chat comes
+            // forward. Closing or leaving the tab already moved the focus.
+            if (priorFeatureParam === "calls" && activeFeatureIdRef.current === "calls") {
+                setActiveFeatureId("chat");
+            }
+            return;
+        }
         if (legacyRedirect) return;
         if (featureParam && RETIRED_FEATURE_HREFS[featureParam]) {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
@@ -1631,7 +1765,9 @@ export function WorkspaceShell() {
             }
         }
         const params = new URLSearchParams(searchParams.toString());
-        params.delete("feature");
+        // Calls keeps its URL state for note selection, reload, and browser history.
+        if (featureParam !== "calls" || continueParam) params.delete("feature");
+        if (continueParam) params.delete("call");
         params.delete("at");
         params.delete("add");
         params.delete("tab");
@@ -1640,7 +1776,11 @@ export function WorkspaceShell() {
         params.delete("continue");
         params.delete("ask");
         const query = params.toString();
-        router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
+        if (query !== searchParams.toString()) {
+            router.replace(
+                `${query ? `/employer/documents?${query}` : "/employer/documents"}${window.location.hash}`
+            );
+        }
     }, [
         featureParam,
         addParam,
@@ -1657,6 +1797,7 @@ export function WorkspaceShell() {
         startContinuation,
         seedComposer,
         router,
+        setActiveFeatureId,
         searchParams,
     ]);
 
@@ -2048,6 +2189,7 @@ export function WorkspaceShell() {
                             folders={folders}
                             selected={selected}
                             setSelected={setSelected}
+                            activeSourceId={activeSourceId}
                             onOpenAdd={() => openAdd()}
                             onOpenKnowledge={() => expandFeature("knowledge")}
                             onOpenPalette={() => setPalOpen(true)}
@@ -2135,6 +2277,7 @@ export function WorkspaceShell() {
                         folders={folders}
                         selected={selected}
                         setSelected={setSelected}
+                        activeSourceId={activeSourceId}
                         onOpenAdd={() => openAdd()}
                         onOpenKnowledge={() => expandFeature("knowledge")}
                         onOpenPalette={() => setPalOpen(true)}
@@ -2383,7 +2526,16 @@ export function WorkspaceShell() {
                                     onOpenSourceBeside: openSourceBeside,
                                     onOpenAdd: openAdd,
                                     onAskAbout: ids => {
-                                        setSelected(ids);
+                                        setSelected(
+                                            ids.filter(id => {
+                                                const source = sources.find(item => item.id === id);
+                                                return (
+                                                    source &&
+                                                    (source.type !== "call-note" ||
+                                                        Boolean(source.documentId))
+                                                );
+                                            })
+                                        );
                                         setActiveFeatureId("chat");
                                     },
                                     onRenameSource: source => setRenameSource(source),
@@ -2419,6 +2571,7 @@ export function WorkspaceShell() {
                                         openAdd("paste");
                                     },
                                 },
+                                onCallChanged: () => void refresh(),
                                 tool: {
                                     // Hidden tabs stay mounted; only the
                                     // focused one may own the keyboard.
@@ -2498,6 +2651,12 @@ export function WorkspaceShell() {
                     else if (entry.href) navigateStudio(entry.href);
                 }}
                 onPickSource={id => {
+                    const source = sources.find(item => item.id === id);
+                    if (source?.type === "call-note" && source.callId) {
+                        setPalOpen(false);
+                        openCall(source.callId);
+                        return;
+                    }
                     setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
                 }}
                 agents={chatAgents}

@@ -32,7 +32,8 @@ export interface AIChatRequest {
         | "financial-expert"
         | "legal-expert"
         | "math-reasoning";
-    thinkingMode?: boolean;
+    /** Auto enables reasoning only when the selected model and agent allow it. */
+    thinkingMode?: boolean | "auto";
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
     reasoningEffort?: string;
     chatMode?: "default" | "plan";

@@ -261,6 +261,7 @@ export function useChatRuntime(input: {
 
     runRef.current = async (context, send, persistedUser) => {
         if (context.busy || contexts.current.get(context.key) !== context) return false;
+        send = { ...send, webSearch: true, thinking: true };
         context.busy = true;
         context.controller = new AbortController();
         const signal = context.controller.signal;
@@ -386,8 +387,10 @@ export function useChatRuntime(input: {
                     companyId: companyId ?? undefined,
                     documentId: scope === "document" ? ids[0] : undefined,
                     selectedDocumentIds: scope === "selected" ? ids : undefined,
-                    enableWebSearch: send.webSearch,
-                    thinkingMode: send.thinking,
+                    // All workspace sends share automatic defaults, including old
+                    // persisted drafts, queued prompts, edits and retries.
+                    enableWebSearch: true,
+                    thinkingMode: "auto",
                     conversationHistory: conversationContext(
                         prior,
                         [context.continuation?.context, ...references].filter(Boolean).join("\n\n")
@@ -445,6 +448,7 @@ export function useChatRuntime(input: {
 
     const submit = useCallback(
         async (send: ComposerSend, originKey?: string) => {
+            send = { ...send, webSearch: true, thinking: true };
             const context = originKey ? contexts.current.get(originKey) : get();
             if (!context)
                 throw new Error(
@@ -469,12 +473,16 @@ export function useChatRuntime(input: {
                         ...send,
                         modelRoute: route,
                         modelRoutes: undefined,
+                        reasoningEffort:
+                            route === send.modelRoute ? send.reasoningEffort : undefined,
                     });
                 });
                 context.pending = runRef.current(context, {
                     ...send,
                     modelRoute: routes[0],
                     modelRoutes: undefined,
+                    reasoningEffort:
+                        routes[0] === send.modelRoute ? send.reasoningEffort : undefined,
                 });
                 const results = await Promise.all([context.pending, ...comparisons]);
                 return results.every(Boolean)

@@ -289,10 +289,6 @@ export function AskStartersPreview() {
                 onNewChat={() => setThread([])}
                 openPalette={() => setLastNavigation("palette")}
                 onStudioNavigate={href => setLastNavigation(href)}
-                webSearch={false}
-                onToggleWebSearch={() => undefined}
-                thinking={false}
-                onToggleThinking={() => undefined}
                 agents={PREVIEW_AGENTS}
                 agentKey={agentKey}
                 onChangeAgent={setAgentKey}

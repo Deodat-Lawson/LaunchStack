@@ -37,6 +37,29 @@ describe("useAIChat", () => {
         expect(body).not.toHaveProperty("provider");
     });
 
+    it.each(["auto", true, false] as const)(
+        "transports thinkingMode=%p without changing explicit API intent",
+        async thinkingMode => {
+            fetchMock.mockResolvedValue({ ok: true, json: async () => ({ success: true }) });
+            const { result } = renderHook(() => useAIChat());
+            await act(async () => {
+                await result.current.sendQuery({
+                    question: "hi",
+                    searchScope: "none",
+                    thinkingMode,
+                    enableWebSearch: false,
+                    modelRoute: "fast",
+                });
+            });
+            const [, request] = fetchMock.mock.calls[0] as [string, RequestInit];
+            expect(JSON.parse(request.body as string)).toMatchObject({
+                thinkingMode,
+                enableWebSearch: false,
+                modelRoute: "fast",
+            });
+        }
+    );
+
     it("returns the endpoint error so the workspace can display it", async () => {
         fetchMock.mockResolvedValue({
             ok: false,

@@ -37,6 +37,7 @@ import {
 import {
     describeChatResolutionFailure,
     resolveConfiguredChatModel,
+    resolveConfiguredChatRoute,
     selectChatRoute,
 } from "~/lib/models";
 import { normalizeTokenUsage } from "@launchstack/llm";
@@ -509,10 +510,16 @@ export async function POST(request: Request) {
             const numericCompanyId = Number(userCompanyId);
             const scope = await ctx.data.documentScope();
             observeScopeSize(scope);
+            const automaticThinking = requestedThinking === "auto";
+            const wantsThinking =
+                automaticThinking ||
+                requestedThinking === true ||
+                requestedModelRoute === "reasoning" ||
+                Boolean(reasoningEffort);
 
             // The agent for this turn: an `@handle` in the question wins over
             // the composer's pick, the way a mention summons a subagent in
-            // OpenCode. Its tool policy decides which toggles survive.
+            // OpenCode. Its tool policy decides which requested tools are allowed.
             let agent = null;
             try {
                 const mentioned = mentionedAgentKeys(
@@ -522,10 +529,7 @@ export async function POST(request: Request) {
                 const agentKey = mentioned[0] ?? requestedAgentKey;
                 agent = await resolveChatAgent(userCompanyId, agentKey, {
                     webSearch: Boolean(requestedWebSearch),
-                    thinking:
-                        Boolean(requestedThinking) ||
-                        requestedModelRoute === "reasoning" ||
-                        Boolean(reasoningEffort),
+                    thinking: wantsThinking,
                     hasAttachments: (requestedAttachments ?? []).length > 0,
                     mentioned: mentioned.length > 0,
                 });
@@ -540,13 +544,7 @@ export async function POST(request: Request) {
                 throw agentError;
             }
             const enableWebSearch = agent ? agent.turn.webSearch : Boolean(requestedWebSearch);
-            const thinkingMode = agent
-                ? agent.turn.thinking
-                : Boolean(
-                      Boolean(requestedThinking) ||
-                          requestedModelRoute === "reasoning" ||
-                          Boolean(reasoningEffort)
-                  );
+            const thinkingMode = agent ? agent.turn.thinking : wantsThinking;
             const wantsStreaming =
                 Boolean(bodyStreaming) ||
                 Boolean(request.headers.get("accept")?.includes("application/x-ndjson"));
@@ -566,9 +564,11 @@ export async function POST(request: Request) {
             const textAttachments = (attachments ?? []).filter(a => a.kind === "text");
             const selected = selectChatRoute({
                 vision: imageAttachments.length > 0,
-                reasoning: Boolean(thinkingMode),
+                // Automatic thinking follows the chosen model. It never forces
+                // a different route or makes reasoning a required capability.
+                reasoning: thinkingMode && !automaticThinking,
                 // An agent's preferred route applies when nothing stronger —
-                // an image, a Think toggle — has already chosen one.
+                // an image, an explicit reasoning request — has chosen one.
                 fast: requestedModelRoute === "fast" || agent?.turn.route === "fast",
             });
             // Explicit selections must keep their actual model identity. Validate
@@ -589,10 +589,27 @@ export async function POST(request: Request) {
 
             let resolved;
             try {
+                const behavior = automaticThinking
+                    ? resolveConfiguredChatRoute(route).definition.behavior
+                    : undefined;
+                const automaticReasoning = thinkingMode && behavior?.reasoning.mode !== "none";
+                // Old drafts and model comparisons can carry another route's
+                // effort. Auto mode uses only levels this model actually offers.
+                const effort = automaticThinking
+                    ? automaticReasoning &&
+                      behavior?.reasoning.mode === "effort" &&
+                      reasoningEffort &&
+                      Object.hasOwn(behavior.reasoning.levels, reasoningEffort)
+                        ? reasoningEffort
+                        : undefined
+                    : reasoningEffort;
                 resolved = resolveConfiguredChatModel({
                     route,
                     requiredCapabilities,
-                    reasoningControl: { enabled: Boolean(thinkingMode), effort: reasoningEffort },
+                    reasoningControl: {
+                        enabled: automaticThinking ? automaticReasoning : thinkingMode,
+                        effort,
+                    },
                     streaming: Boolean(wantsStreaming),
                     temperature: agent?.turn.temperature ?? undefined,
                 });

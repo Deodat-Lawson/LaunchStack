@@ -64,10 +64,6 @@ function mount(overrides: Partial<AskPanelProps> = {}) {
         onNewChat: jest.fn(),
         openPalette: jest.fn(),
         onStudioNavigate: jest.fn(),
-        webSearch: false,
-        onToggleWebSearch: jest.fn(),
-        thinking: false,
-        onToggleThinking: jest.fn(),
         ...overrides,
     };
     return { ...render(<AskPanel {...props} />), props };

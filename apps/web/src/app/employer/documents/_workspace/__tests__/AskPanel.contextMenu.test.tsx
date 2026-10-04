@@ -80,10 +80,6 @@ function Harness({
                 onNewChat={onNewChat}
                 openPalette={jest.fn()}
                 onStudioNavigate={jest.fn()}
-                webSearch={false}
-                onToggleWebSearch={jest.fn()}
-                thinking={false}
-                onToggleThinking={jest.fn()}
             />
         </ContextMenuProvider>
     );

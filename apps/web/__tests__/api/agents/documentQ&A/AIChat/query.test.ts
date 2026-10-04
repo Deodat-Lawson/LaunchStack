@@ -17,7 +17,11 @@ import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { recordAuthzDenied } from "~/server/metrics/authz";
 import { documentEnsembleSearch, multiDocEnsembleSearch } from "~/server/rag/ensemble";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import { resolveConfiguredChatModel, resolveConfiguredChatRoute } from "~/lib/models";
+import { performWebSearch } from "~/app/api/agents/documentQ&A/services";
+import type { ChatModelBehavior, ChatReasoningBehavior } from "@launchstack/llm/types";
+import type { AppliedReasoning } from "@launchstack/llm/chat-model-factory";
+import type * as ChatModelFactory from "@launchstack/llm/chat-model-factory";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { debitTokens } from "~/lib/credits";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
@@ -182,7 +186,26 @@ jest.mock("~/lib/models", () => ({
         behavior: mockBehavior,
         prepareMessages: (messages: unknown) => messages,
     })),
+    resolveConfiguredChatRoute: jest.fn(() => ({ definition: { behavior: mockBehavior } })),
     describeChatResolutionFailure: (error: Error) => ({ status: 400, message: error.message }),
+}));
+
+let mockAgentTools: string[] | null = null;
+jest.mock("~/server/collab/personas", () => ({
+    getPersonaByKey: async (_companyId: bigint, key: string) => ({
+        id: key,
+        displayName: "Restricted assistant",
+        role: "Assistant",
+        systemPrompt: "Answer carefully.",
+        mode: "all",
+        archived: false,
+        tools: mockAgentTools,
+        route: null,
+        style: null,
+        temperature: null,
+    }),
+    personaToDefinition: (persona: unknown) => persona,
+    listPersonas: async () => [],
 }));
 
 jest.mock("~/server/chat-request-compat", () => ({
@@ -583,8 +606,244 @@ describe("chat transport and general scope", () => {
         );
     });
 
+    describe("automatic reasoning on the actual selected model", () => {
+        function installModel(reasoning: ChatReasoningBehavior) {
+            const behavior: ChatModelBehavior = {
+                input: ["text"],
+                reasoning,
+                nativeStructuredOutput: [],
+                parameters: {
+                    temperature: "supported",
+                    maxOutputTokens: "supported",
+                    systemMessages: "supported",
+                    streaming: "supported",
+                },
+            };
+            mockBehavior = behavior as unknown as Record<string, unknown>;
+            const { resolveChatModel } = jest.requireActual<typeof ChatModelFactory>(
+                "@launchstack/llm/chat-model-factory"
+            );
+            const applications: AppliedReasoning[] = [];
+            jest.mocked(resolveConfiguredChatModel).mockImplementationOnce(options => {
+                const resolved = resolveChatModel({
+                    ...options,
+                    config: {
+                        version: 1,
+                        endpoint: { baseUrl: "https://chat.example.test/v1" },
+                        models: new Map([["selected", { id: "selected-model", behavior }]]),
+                        routes: {
+                            default: "selected",
+                            fast: "selected",
+                            reasoning: undefined,
+                            vision: undefined,
+                        },
+                    },
+                });
+                applications.push(resolved.reasoning);
+                return {
+                    ...resolved,
+                    chat: {
+                        invoke: mockInvoke,
+                        stream: mockStream,
+                    } as unknown as typeof resolved.chat,
+                    // Keep factory reasoning real while this route's minimal
+                    // message fixtures bypass LangChain message coercion.
+                    prepareMessages: messages =>
+                        messages as unknown as ReturnType<typeof resolved.prepareMessages>,
+                };
+            });
+            return applications;
+        }
+
+        it.each([
+            [{ mode: "none" }, false, {}],
+            [{ mode: "always", request: { intrinsic: true } }, true, { intrinsic: true }],
+            [{ mode: "toggle", on: { think: true }, off: { think: false } }, true, { think: true }],
+            [
+                { mode: "effort", default: "normal", levels: { normal: { effort: "normal" } } },
+                true,
+                { effort: "normal" },
+            ],
+            [
+                { mode: "budget", min: 0, max: 1000, default: 500, field: "thinking_budget" },
+                true,
+                { thinking_budget: 500 },
+            ],
+        ] as const)(
+            "serves mode %j without changing explicit fast route",
+            async (reasoning, enabled, patch) => {
+                const applications = installModel(reasoning);
+                const response = await POST(
+                    queryRequest({
+                        question: "Answer using automatic defaults",
+                        searchScope: "none",
+                        enableWebSearch: true,
+                        thinkingMode: "auto",
+                        modelRoute: "fast",
+                    })
+                );
+                expect(response.status).toBe(200);
+                expect(await response.json()).toMatchObject({
+                    success: true,
+                    aiModel: "selected-model",
+                });
+                expect(resolveConfiguredChatRoute).toHaveBeenCalledWith("fast");
+                expect(resolveConfiguredChatModel).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        route: "fast",
+                        requiredCapabilities: [],
+                        reasoningControl: { enabled, effort: undefined },
+                    })
+                );
+                expect(applications).toEqual([
+                    expect.objectContaining({ enabled, requestPatch: patch }),
+                ]);
+                expect(performWebSearch).toHaveBeenCalledWith(
+                    expect.any(String),
+                    undefined,
+                    true,
+                    5
+                );
+            }
+        );
+
+        it("keeps the default route and uses its own effort rather than a stale route's level", async () => {
+            const applications = installModel({
+                mode: "effort",
+                default: "normal",
+                levels: { normal: { effort: "normal" } },
+            });
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    thinkingMode: "auto",
+                    reasoningEffort: "other-model-only",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(resolveConfiguredChatRoute).toHaveBeenCalledWith("default");
+            expect(applications[0]).toMatchObject({ enabled: true, effort: "normal" });
+        });
+
+        it("keeps a valid effort from the actual selected model", async () => {
+            const applications = installModel({
+                mode: "effort",
+                default: "normal",
+                levels: { normal: {}, high: { effort: "high" } },
+            });
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    thinkingMode: "auto",
+                    modelRoute: "fast",
+                    reasoningEffort: "high",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(applications[0]).toMatchObject({
+                enabled: true,
+                effort: "high",
+                requestPatch: { effort: "high" },
+            });
+        });
+
+        it("respects agent web and controllable reasoning restrictions", async () => {
+            const applications = installModel({
+                mode: "effort",
+                default: "normal",
+                levels: { normal: {}, "old-high-effort": { effort: "high" } },
+                off: { think: false },
+            });
+            mockAgentTools = ["retrieval"];
+            try {
+                const response = await POST(
+                    queryRequest({
+                        question: "hi",
+                        searchScope: "none",
+                        enableWebSearch: true,
+                        thinkingMode: "auto",
+                        modelRoute: "fast",
+                        reasoningEffort: "old-high-effort",
+                        agentKey: "restricted",
+                    })
+                );
+                expect(response.status).toBe(200);
+                expect(applications[0]).toMatchObject({
+                    enabled: false,
+                    requestPatch: { think: false },
+                });
+                expect(resolveConfiguredChatModel).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        requiredCapabilities: [],
+                        reasoningControl: { enabled: false, effort: undefined },
+                    })
+                );
+                expect(performWebSearch).toHaveBeenCalledWith(
+                    expect.any(String),
+                    undefined,
+                    false,
+                    5
+                );
+                expect(await response.json()).toMatchObject({
+                    agent: {
+                        notes: [
+                            "web search is off for this agent",
+                            "extended reasoning is off for this agent",
+                        ],
+                    },
+                });
+            } finally {
+                mockAgentTools = null;
+            }
+        });
+
+        it("preserves explicit false API behavior for a controllable model", async () => {
+            const applications = installModel({
+                mode: "toggle",
+                on: { think: true },
+                off: { think: false },
+            });
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    enableWebSearch: false,
+                    thinkingMode: false,
+                    modelRoute: "fast",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(applications[0]).toMatchObject({
+                enabled: false,
+                requestPatch: { think: false },
+            });
+            expect(resolveConfiguredChatRoute).not.toHaveBeenCalled();
+            expect(performWebSearch).toHaveBeenCalledWith(expect.any(String), undefined, false, 5);
+        });
+
+        it("keeps explicit true API reasoning strict for an unsupported model", async () => {
+            installModel({ mode: "none" });
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    thinkingMode: true,
+                    modelRoute: "fast",
+                })
+            );
+            expect(response.status).toBe(400);
+            expect(mockInvoke).not.toHaveBeenCalled();
+        });
+    });
+
     it("rejects unknown model routes and oversized prompts before model resolution", async () => {
-        for (const body of [{ modelRoute: "custom" }, { question: "x".repeat(120_001) }]) {
+        for (const body of [
+            { modelRoute: "custom" },
+            { thinkingMode: "sometimes" },
+            { question: "x".repeat(120_001) },
+        ]) {
             const response = await POST(
                 queryRequest({ question: "hi", searchScope: "none", ...body })
             );

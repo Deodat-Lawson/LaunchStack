@@ -479,13 +479,8 @@ export function WorkspaceShell() {
         }
     }, [railHidden]);
 
-    // Composer preferences persisted across reloads so toggling Web/Think
-    // doesn't reset on every refresh. Ephemeral attachments are NOT persisted —
-    // those are turn-scoped, owned by the Composer.
-    const [composerWebSearch, setComposerWebSearch] = useState(false);
-    const [composerThinking, setComposerThinking] = useState(false);
-    // The agent the chat is held with. A preference like Web/Think, and also
-    // stored on the session so a reopened chat keeps its voice.
+    // Persist the preferred agent across reloads and on the session so a
+    // reopened chat keeps its voice. Web and reasoning follow automatic defaults.
     const [composerAgentKey, setComposerAgentKey] = useState<string | null>(null);
     const composerAgentKeyRef = useRef<string | null>(null);
     composerAgentKeyRef.current = composerAgentKey;
@@ -550,12 +545,8 @@ export function WorkspaceShell() {
             const raw = localStorage.getItem("askPanel.composer.v1");
             if (raw) {
                 const parsed = JSON.parse(raw) as {
-                    webSearch?: boolean;
-                    thinking?: boolean;
                     agentKey?: string | null;
                 };
-                if (typeof parsed.webSearch === "boolean") setComposerWebSearch(parsed.webSearch);
-                if (typeof parsed.thinking === "boolean") setComposerThinking(parsed.thinking);
                 if (typeof parsed.agentKey === "string") setComposerAgentKey(parsed.agentKey);
             }
         } catch {
@@ -570,15 +561,13 @@ export function WorkspaceShell() {
             localStorage.setItem(
                 "askPanel.composer.v1",
                 JSON.stringify({
-                    webSearch: composerWebSearch,
-                    thinking: composerThinking,
                     agentKey: composerAgentKey,
                 })
             );
         } catch {
             // Quota / private mode — drop silently.
         }
-    }, [composerWebSearch, composerThinking, composerAgentKey]);
+    }, [composerAgentKey]);
 
     // ---------------------------------------------------------------------
     // Session persistence
@@ -860,25 +849,27 @@ export function WorkspaceShell() {
      */
     const payloadForMessage = useCallback(
         (message: ThreadMessage): ComposerSend =>
-            message.send ?? {
-                text: message.text,
-                refs: message.refs ?? selected,
-                attachments: message.attachments ?? [],
-                webSearch: composerWebSearch,
-                thinking: composerThinking,
-                agentKey: message.agent?.key ?? composerAgentKey,
-            },
-        [selected, composerWebSearch, composerThinking, composerAgentKey]
+            message.send
+                ? { ...message.send, webSearch: true, thinking: true }
+                : {
+                      text: message.text,
+                      refs: message.refs ?? selected,
+                      attachments: message.attachments ?? [],
+                      webSearch: true,
+                      thinking: true,
+                      agentKey: message.agent?.key ?? composerAgentKey,
+                  },
+        [selected, composerAgentKey]
     );
 
     const askAgain = useCallback(
-        async (index: number, overrides: { webSearch?: boolean; thinking?: boolean } = {}) => {
+        async (index: number) => {
             let questionIndex = index;
             while (questionIndex >= 0 && thread[questionIndex]?.role !== "user") questionIndex--;
             const question = thread[questionIndex];
             if (!question) return;
             try {
-                const send = { ...payloadForMessage(question), ...overrides };
+                const send = payloadForMessage(question);
                 const backup = backupChatEdit(composerDraftKey, send);
                 if (!backup)
                     throw new Error(
@@ -1106,20 +1097,12 @@ export function WorkspaceShell() {
                 text: `${prefix}${from}:\n\n${contextQuoteBlock(quote).trimEnd()}`,
                 refs: home?.kind === "document" ? [home.source.id] : selected,
                 attachments: [],
-                webSearch: composerWebSearch,
-                thinking: composerThinking,
+                webSearch: true,
+                thinking: true,
                 agentKey: composerAgentKey,
             });
         },
-        [
-            handleAskAbout,
-            sendMessage,
-            selected,
-            composerWebSearch,
-            composerThinking,
-            composerAgentKey,
-            setActiveFeatureId,
-        ]
+        [handleAskAbout, sendMessage, selected, composerAgentKey, setActiveFeatureId]
     );
 
     const openAdd = useCallback((tabId?: string) => {
@@ -1677,33 +1660,7 @@ export function WorkspaceShell() {
             order: 10,
             appliesTo: target => target.kind === "chat-message",
             disabled: () => (isSending ? "Wait for the current answer." : false),
-            children: target => {
-                const { index } = target.data as { index: number };
-                return [
-                    {
-                        type: "item",
-                        id: "chat.message.ask-again.same",
-                        label: "Ask again",
-                        icon: "retry",
-                        onSelect: () => void askAgain(index),
-                    },
-                    {
-                        type: "item",
-                        id: "chat.message.ask-again.web",
-                        label: "Ask again with web search",
-                        icon: "globe",
-                        onSelect: () => void askAgain(index, { webSearch: true }),
-                    },
-                    {
-                        type: "item",
-                        id: "chat.message.ask-again.think",
-                        label: "Ask again with extended thinking",
-                        icon: "brain",
-                        onSelect: () => void askAgain(index, { thinking: true }),
-                    },
-                ];
-            },
-            run: () => undefined,
+            run: target => void askAgain((target.data as { index: number }).index),
         },
         {
             id: "chat.message.branch",
@@ -2292,8 +2249,8 @@ export function WorkspaceShell() {
                                     text: `Carry out this plan using the available workspace tools and explain the result:\n\n${text}`,
                                     refs: selected,
                                     attachments: [],
-                                    webSearch: composerWebSearch,
-                                    thinking: composerThinking,
+                                    webSearch: true,
+                                    thinking: true,
                                     agentKey: composerAgentKey,
                                     chatMode: "default",
                                     origin: "plan-implementation",
@@ -2315,10 +2272,6 @@ export function WorkspaceShell() {
                             onNewChat={startNewChat}
                             openPalette={() => setPalOpen(true)}
                             onStudioNavigate={navigateStudio}
-                            webSearch={composerWebSearch}
-                            onToggleWebSearch={() => setComposerWebSearch(v => !v)}
-                            thinking={composerThinking}
-                            onToggleThinking={() => setComposerThinking(v => !v)}
                             agents={chatAgents}
                             agentKey={composerAgentKey}
                             onChangeAgent={setComposerAgentKey}

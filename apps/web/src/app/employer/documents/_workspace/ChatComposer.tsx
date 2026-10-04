@@ -14,14 +14,13 @@ import React, {
 import {
     ArrowUp,
     Bot,
-    Brain,
     Check,
     FileText,
-    Globe,
+    ChevronDown,
+    MoreHorizontal,
     Paperclip,
     Save,
     Search,
-    Settings2,
     Square,
     Star,
     X,
@@ -113,10 +112,6 @@ export interface ComposerProps {
     threadContextOptions?: { id: string; title: string }[];
     folderContextOptions?: { id: string; name: string }[];
     onOpenThreadContext?: (id: string) => void;
-    webSearch: boolean;
-    onToggleWebSearch: () => void;
-    thinking: boolean;
-    onToggleThinking: () => void;
     onOpenSource?: (source: WorkspaceSource) => void;
     seed?: ComposerSeed | null;
     agents: ChatAgentOption[];
@@ -169,16 +164,16 @@ export function Composer({
     threadContextOptions = [],
     folderContextOptions = [],
     onOpenThreadContext,
-    webSearch,
-    onToggleWebSearch,
-    thinking,
-    onToggleThinking,
     onOpenSource,
     seed,
     agents,
     agentKey,
     onChangeAgent,
 }: ComposerProps) {
+    // Capabilities are automatic; legacy draft flags no longer change them.
+    const webSearch = true;
+    const thinking = true;
+    const [optionsOpen, setOptionsOpen] = useState(false);
     const [text, setText] = useState("");
     const [focus, setFocus] = useState(false);
     const [dragging, setDragging] = useState(false);
@@ -250,8 +245,6 @@ export function Composer({
         thinking,
         agentKey,
         setSelected,
-        onToggleWebSearch,
-        onToggleThinking,
         onChangeAgent,
     });
     callbacks.current = {
@@ -260,8 +253,6 @@ export function Composer({
         thinking,
         agentKey,
         setSelected,
-        onToggleWebSearch,
-        onToggleThinking,
         onChangeAgent,
     };
     const configuredRoutes = useChatRoutes();
@@ -334,10 +325,13 @@ export function Composer({
         { webSearch, thinking, hasAttachments: attachments.length > 0 }
     );
     const routeInfo = chatRoutes.config.routes[modelRoute];
-    const effortInfo =
-        modelRoute === "default" && thinking
-            ? chatRoutes.config.routes.reasoning.reasoning
-            : routeInfo?.reasoning;
+    const effectiveRoute =
+        modelRoute === "default" &&
+        attachments.some(item => item.kind === "image") &&
+        !routeInfo?.vision?.supported
+            ? "vision"
+            : modelRoute;
+    const effortInfo = chatRoutes.config.routes[effectiveRoute]?.reasoning;
     const effortOptions =
         effortInfo?.controllable && effortInfo.mode === "effort" ? (effortInfo.efforts ?? []) : [];
     const mentionMatches = mention
@@ -518,8 +512,6 @@ export function Composer({
             setChatMode(draft.chatMode === "plan" ? "plan" : "default");
             const current = callbacks.current;
             current.setSelected(draft.refs);
-            if (draft.webSearch !== current.webSearch) current.onToggleWebSearch();
-            if (draft.thinking !== current.thinking) current.onToggleThinking();
             if (draft.agentKey !== current.agentKey) current.onChangeAgent(draft.agentKey);
             setRecallIndex(null);
         },
@@ -768,10 +760,6 @@ export function Composer({
         if (seed.reasoningEffort) setReasoningEffort(seed.reasoningEffort);
         if (seed.chatMode) setChatMode(seed.chatMode);
         const controls = callbacks.current;
-        if (seed.webSearch !== undefined && seed.webSearch !== controls.webSearch)
-            controls.onToggleWebSearch();
-        if (seed.thinking !== undefined && seed.thinking !== controls.thinking)
-            controls.onToggleThinking();
         if (seed.agentKey !== undefined && seed.agentKey !== controls.agentKey)
             controls.onChangeAgent(seed.agentKey);
         setRecallIndex(null);
@@ -869,14 +857,7 @@ export function Composer({
             webSearch,
             thinking,
             agentKey: mentionedKey ?? agentKey,
-            modelRoute:
-                modelRoute === "default" &&
-                attachments.some(item => item.kind === "image") &&
-                !routeInfo?.vision?.supported
-                    ? "vision"
-                    : modelRoute === "default" && thinking && !routeInfo?.reasoning?.controllable
-                      ? "reasoning"
-                      : modelRoute,
+            modelRoute: effectiveRoute,
             ...(modelRoutes.length >= 2 ? { modelRoutes } : {}),
             ...(threadRefs.length ? { threadRefs } : {}),
             ...(reasoningEffort && effortOptions.includes(reasoningEffort)
@@ -1483,10 +1464,6 @@ export function Composer({
                     hasContent,
                     uploading,
                     disabled,
-                    webSearch,
-                    thinking,
-                    reasoningEnabled: Boolean(chatRoutes.reasoningEnabled),
-                    reasoningDisabledReason: chatRoutes.reasoningDisabledReason,
                 },
                 {
                     onCut: () => {
@@ -1514,8 +1491,6 @@ export function Composer({
                         });
                     },
                     onAttach: () => fileInputRef.current?.click(),
-                    onToggleWebSearch,
-                    onToggleThinking,
                     onClear: () => {
                         cancelPreparation();
                         requests.current.forEach(request => request.abort());
@@ -1538,7 +1513,7 @@ export function Composer({
             {...composerTarget}
             data-testid="chat-composer"
             className={cn(
-                "bg-panel border-line mx-auto w-full max-w-[760px] rounded-xl border p-3.5 shadow-sm transition-colors",
+                "bg-panel border-line mx-auto w-full max-w-[760px] rounded-2xl border p-3 shadow-sm transition-colors",
                 (focus || dragging) && "border-brand ring-brand/15 ring-4"
             )}
             onDragOver={event => {
@@ -1834,6 +1809,23 @@ export function Composer({
                     ))}
                 </div>
             )}
+            {(Boolean(turnAgent) || chatMode === "plan") && (
+                <div className="text-ink-2 mb-2 flex flex-wrap items-center gap-2 px-1 text-xs">
+                    {turnAgent && (
+                        <span className="inline-flex items-center gap-1.5">
+                            <AgentAvatar agent={turnAgent} size={16} />
+                            {turnAgent.displayName}
+                            {mentionedKey && <span className="text-ink-3">· this turn</span>}
+                        </span>
+                    )}
+                    {chatMode === "plan" && (
+                        <span className="text-brand inline-flex items-center gap-1">
+                            <FileText className="size-3" />
+                            Plan first
+                        </span>
+                    )}
+                </div>
+            )}
             {editorMode === "rich" ? (
                 <Suspense
                     fallback={<p className="text-ink-3 py-3 text-sm">Loading rich editor…</p>}
@@ -1964,13 +1956,13 @@ export function Composer({
                     aria-activedescendant={
                         completionCount ? `composer-option-${completionIndex}` : undefined
                     }
-                    className="text-ink placeholder:text-ink-3 min-h-[44px] w-full resize-none border-0 bg-transparent text-[15px] leading-6 outline-none"
+                    className="text-ink placeholder:text-ink-3 min-h-[64px] w-full resize-none border-0 bg-transparent px-1 py-1 text-[15px] leading-6 outline-none"
                     placeholder={
                         agent
                             ? `Ask ${agent.displayName}, your ${agent.role.toLowerCase()}… or @mention another agent`
                             : selSources.length > 0
                               ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
-                              : "Ask anything. Pick sources on the left, type @ to bring in an agent."
+                              : "Ask anything…"
                     }
                     onChange={event => {
                         setText(event.target.value);
@@ -2016,7 +2008,7 @@ export function Composer({
             )}
             <input
                 ref={fileInputRef}
-                aria-label="Attach files"
+                aria-label="Upload attachments"
                 type="file"
                 multiple
                 accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/*,.pdf,.doc,.docx,.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.rtf,.log,.html,.htm"
@@ -2037,31 +2029,25 @@ export function Composer({
                     event.target.value = "";
                 }}
             />
-            <div className="border-line-2 mt-2 flex flex-wrap items-center gap-2 border-t pt-3">
-                <AgentPicker
-                    agents={agents}
-                    agent={agent}
-                    mentioned={
-                        mentionedKey && mentionedKey !== agentKey
-                            ? (agents.find(option => option.id === mentionedKey) ?? null)
-                            : null
-                    }
-                    onChange={onChangeAgent}
-                />
+            <div
+                role="group"
+                aria-label="Message tools"
+                className="mt-2 flex min-w-0 items-center gap-1"
+            >
                 <Popover open={modelOpen} onOpenChange={setModelOpen}>
                     <PopoverTrigger asChild>
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             aria-label="Choose model"
-                            className="text-ink-2 h-8 max-w-[180px] text-xs"
+                            className="text-ink-2 @max-sm:max-w-[130px] h-9 min-w-0 max-w-[200px] shrink gap-1.5 rounded-lg px-2 text-xs"
                         >
-                            <Brain className="size-3" />
                             <span className="truncate">
                                 {modelRoutes.length >= 2
                                     ? `${modelRoutes.length} models`
                                     : (routeInfo?.model ?? "Model")}
                             </span>
+                            <ChevronDown className="size-3 shrink-0" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent
@@ -2244,28 +2230,32 @@ export function Composer({
                         )}
                     </PopoverContent>
                 </Popover>
-                <ToolbarPill
-                    label="Attach"
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-ink-2 relative size-9 shrink-0 rounded-lg"
+                    aria-label="Attach files"
                     title={`Attach up to ${ATTACH_MAX_COUNT} files`}
-                    icon={<Paperclip className="size-3" />}
-                    active={attachments.length > 0}
                     disabled={disabled}
                     onClick={() => fileInputRef.current?.click()}
-                    badge={
-                        attachments.length + uploads.length
-                            ? String(attachments.length + uploads.length)
-                            : undefined
-                    }
-                />
+                >
+                    <Paperclip className="size-4" />
+                    {attachments.length + uploads.length > 0 && (
+                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[10px]">
+                            {attachments.length + uploads.length}
+                        </span>
+                    )}
+                </Button>
                 <Popover open={sourceOpen} onOpenChange={setSourceOpen}>
                     <PopoverTrigger asChild>
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="text-ink-2 h-8 text-xs"
+                            className="text-ink-2 @max-sm:px-2 h-9 shrink-0 gap-1.5 rounded-lg px-2 text-xs"
                             aria-label="Choose sources"
+                            title="Choose sources"
                         >
-                            <Search className="size-3" />
+                            <Search className="size-4" />
                             <span className="@max-sm:sr-only">Sources</span>
                             {selected.length > 0 && <span>{selected.length}</span>}
                         </Button>
@@ -2324,57 +2314,66 @@ export function Composer({
                         )}
                     </PopoverContent>
                 </Popover>
-                <ToolbarPill
-                    label="Web"
-                    title="Search the web in addition to your sources"
-                    icon={<Globe className="size-3" />}
-                    active={webSearch}
-                    onClick={onToggleWebSearch}
-                />
-                <ToolbarPill
-                    label="Think"
-                    title={
-                        chatRoutes.reasoningEnabled
-                            ? "Reason before answering"
-                            : (chatRoutes.reasoningDisabledReason ??
-                              "Configure a controllable reasoning model to enable this")
-                    }
-                    icon={<Brain className="size-3" />}
-                    active={thinking && chatRoutes.reasoningEnabled}
-                    disabled={!chatRoutes.reasoningEnabled}
-                    onClick={onToggleThinking}
-                />
-                <ToolbarPill
-                    label={chatMode === "plan" ? "Plan" : "Default"}
-                    title="Toggle planning mode"
-                    icon={<FileText className="size-3" />}
-                    active={chatMode === "plan"}
-                    onClick={() =>
-                        setChatMode(previous => (previous === "plan" ? "default" : "plan"))
-                    }
-                />
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8"
-                    aria-label={hasContent ? "Save prompt" : "Restore saved prompts"}
-                    title="Save or restore prompt (⌘/Ctrl+S)"
-                    onClick={handleStash}
-                >
-                    <Save className="size-3.5" />
-                </Button>
-                <Popover>
+                <Popover open={optionsOpen} onOpenChange={setOptionsOpen}>
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="size-8"
-                            aria-label="Composer settings"
+                            className="text-ink-2 size-9 shrink-0 rounded-lg"
+                            aria-label="More message options"
+                            title="More message options"
                         >
-                            <Settings2 className="size-3.5" />
+                            <MoreHorizontal className="size-4" />
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent align="end" className="w-72 p-3">
+                    <PopoverContent
+                        align="end"
+                        className="max-h-[min(560px,70dvh)] w-[min(320px,calc(100vw-2rem))] overflow-y-auto p-3"
+                    >
+                        <p className="text-ink mb-2 text-sm font-medium">Assistant</p>
+                        <AgentPicker
+                            agents={agents}
+                            agent={agent}
+                            mentioned={
+                                mentionedKey && mentionedKey !== agentKey
+                                    ? (agents.find(option => option.id === mentionedKey) ?? null)
+                                    : null
+                            }
+                            onChange={onChangeAgent}
+                        />
+                        <p className="text-ink mb-2 mt-3 text-sm font-medium">Response</p>
+                        <div className="flex gap-1">
+                            <Button
+                                variant={chatMode === "default" ? "default" : "outline"}
+                                size="sm"
+                                aria-pressed={chatMode === "default"}
+                                onClick={() => setChatMode("default")}
+                            >
+                                Answer
+                            </Button>
+                            <Button
+                                variant={chatMode === "plan" ? "default" : "outline"}
+                                size="sm"
+                                aria-pressed={chatMode === "plan"}
+                                onClick={() => setChatMode("plan")}
+                            >
+                                <FileText className="size-3.5" />
+                                Plan first
+                            </Button>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="border-line my-3 w-full justify-start rounded-none border-y"
+                            onClick={() => {
+                                setOptionsOpen(false);
+                                handleStash();
+                            }}
+                        >
+                            <Save className="size-3.5" />
+                            {hasContent ? "Save prompt" : "Restore saved prompts"}
+                            <span className="text-ink-3 ml-auto text-[10px]">⌘/Ctrl+S</span>
+                        </Button>
                         <p className="text-ink mb-2 text-sm font-medium">Editor</p>
                         <div className="mb-3 flex gap-1">
                             <Button
@@ -2438,14 +2437,14 @@ export function Composer({
                         </p>
                     </PopoverContent>
                 </Popover>
-                <div className="ml-auto flex items-center gap-2">
+                <div className="ml-auto flex shrink-0 items-center gap-2">
                     <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
                         {sendKey === "enter" ? "↵" : "⌘/Ctrl+↵"} to{" "}
                         {editingQueued ? "save" : active ? followUp : "send"}
                     </span>
                     <Button
                         size="icon"
-                        className="size-9"
+                        className="size-9 rounded-xl"
                         aria-label={
                             editingQueued
                                 ? "Save queued message"
@@ -2483,12 +2482,12 @@ export function Composer({
                         )}
                     </Button>
                 </div>
-                {turnEffects.notes.length > 0 && (
-                    <div className="text-ink-3 basis-full text-[11px]" role="status">
-                        {turnAgent?.displayName ?? "This agent"}: {turnEffects.notes.join("; ")}.
-                    </div>
-                )}
             </div>
+            {turnEffects.notes.length > 0 && (
+                <div className="text-ink-3 mt-2 text-[11px]" role="status">
+                    {turnAgent?.displayName ?? "This agent"}: {turnEffects.notes.join("; ")}.
+                </div>
+            )}
             {editingQueued && (
                 <div className="text-ink-3 mt-2 flex items-center justify-between text-xs">
                     <span>Editing queued message · your unsent draft will return afterwards.</span>
@@ -2520,7 +2519,7 @@ export function Composer({
                     </span>
                 </div>
             )}
-            <div id="composer-hint" className="text-ink-3 mt-2 text-[10px]">
+            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[10px]">
                 {overLimit ? (
                     <span role="alert" className="text-danger">
                         {text.length.toLocaleString()} / {COMPOSER_MAX_CHARACTERS.toLocaleString()}{" "}
@@ -2643,41 +2642,6 @@ export function Composer({
                 </DialogContent>
             </Dialog>
         </div>
-    );
-}
-
-function ToolbarPill({
-    label,
-    title,
-    icon,
-    active,
-    disabled,
-    onClick,
-    badge,
-}: {
-    label: string;
-    title: string;
-    icon: React.ReactNode;
-    active: boolean;
-    disabled?: boolean;
-    onClick: () => void;
-    badge?: string;
-}) {
-    return (
-        <Button
-            variant={active ? "default" : "outline"}
-            size="sm"
-            onClick={onClick}
-            title={title}
-            aria-label={label}
-            aria-pressed={active}
-            disabled={disabled}
-            className="@max-sm:px-2 h-8 gap-1.5 text-xs"
-        >
-            {icon}
-            <span className="@max-sm:sr-only">{label}</span>
-            {badge && <span className="text-[10px]">{badge}</span>}
-        </Button>
     );
 }
 

@@ -139,10 +139,6 @@ function renderPanel(overrides: {
                 onNewChat={jest.fn()}
                 openPalette={jest.fn()}
                 onStudioNavigate={overrides.onStudioNavigate ?? jest.fn()}
-                webSearch={false}
-                onToggleWebSearch={jest.fn()}
-                thinking={false}
-                onToggleThinking={jest.fn()}
             />
         );
     }
@@ -177,8 +173,8 @@ describe("AskPanel starter questions", () => {
             text: "What are the renewal terms in the Globex MSA?",
             refs: ["d7"],
             attachments: [],
-            webSearch: false,
-            thinking: false,
+            webSearch: true,
+            thinking: true,
             agentKey: null,
         });
     });

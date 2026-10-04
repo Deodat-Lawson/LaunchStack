@@ -92,14 +92,12 @@ describe("chat menu builders", () => {
         expect(empty.find(i => i.id === "copy-passage")).toMatchObject({ disabled: true });
     });
 
-    it("reflects composer state: clipboard verbs need a selection, toggles show their state", () => {
+    it("reflects clipboard state without offering redundant capability switches", () => {
         const handlers = {
             onCut: jest.fn(),
             onCopy: jest.fn(),
             onPaste: jest.fn(),
             onAttach: jest.fn(),
-            onToggleWebSearch: jest.fn(),
-            onToggleThinking: jest.fn(),
             onClear: jest.fn(),
         };
         const items = buildComposerMenuItems(
@@ -108,20 +106,12 @@ describe("chat menu builders", () => {
                 hasContent: true,
                 uploading: false,
                 disabled: false,
-                webSearch: true,
-                thinking: true,
-                reasoningEnabled: false,
-                reasoningDisabledReason: "No reasoning route",
             },
             handlers
         );
         expect(items.find(i => i.id === "cut")).toMatchObject({ disabled: true });
-        expect(items.find(i => i.id === "web")).toMatchObject({ checked: true, icon: "check" });
-        expect(items.find(i => i.id === "think")).toMatchObject({
-            checked: false,
-            disabled: true,
-            disabledReason: "No reasoning route",
-        });
+        expect(items.find(i => i.id === "web")).toBeUndefined();
+        expect(items.find(i => i.id === "think")).toBeUndefined();
         pick(items, "clear");
         expect(handlers.onClear).toHaveBeenCalled();
     });

@@ -97,6 +97,11 @@ test("normal follow-ups carry real prior turns and use general chat with no read
         await result.current.runtime.submit(send("Which city?"));
     });
     expect(mockRequest.mock.calls[0][0].searchScope).toBe("none");
+    expect(mockRequest.mock.calls[0][0]).toMatchObject({
+        enableWebSearch: true,
+        thinkingMode: "auto",
+    });
+    expect(result.current.thread[0]?.send).toMatchObject({ webSearch: true, thinking: true });
     expect(mockRequest.mock.calls[1][0].conversationHistory).toContain("User: Remember Paris");
     expect(mockRequest.mock.calls[1][0].conversationHistory).toContain("Assistant: The response");
     expect(result.current.thread).toHaveLength(4);
@@ -614,6 +619,8 @@ test("comparison creates separate real requests and persists complete context fo
     await act(async () => {
         await result.current.runtime.submit({
             ...send("Compare"),
+            modelRoute: "reasoning",
+            reasoningEffort: "primary-model-only",
             modelRoutes: ["fast", "reasoning"],
         });
     });
@@ -621,8 +628,13 @@ test("comparison creates separate real requests and persists complete context fo
     expect(new Set(mockRequest.mock.calls.map(call => call[0].modelRoute))).toEqual(
         new Set(["fast", "reasoning"])
     );
-    for (const [request] of mockRequest.mock.calls)
+    for (const [request] of mockRequest.mock.calls) {
         expect(request.conversationHistory).toContain("Prior decision");
+        expect(request).toMatchObject({ enableWebSearch: true, thinkingMode: "auto" });
+        expect(request.reasoningEffort).toBe(
+            request.modelRoute === "reasoning" ? "primary-model-only" : undefined
+        );
+    }
     expect(sessions.createSession).toHaveBeenCalledTimes(2);
     expect(result.current.thread).toHaveLength(3);
 });
@@ -715,10 +727,40 @@ test("claim's persisted user turn is not appended again before generation", asyn
         await result.current.runtime.resume();
     });
     expect(result.current.thread[0]).toMatchObject({ id: "durable-id", text: "Durable question" });
+    expect(mockRequest.mock.calls[0][0]).toMatchObject({
+        enableWebSearch: true,
+        thinkingMode: "auto",
+    });
+    expect(result.current.thread[0]?.send).toMatchObject({ webSearch: true, thinking: true });
     expect(sessions.appendMessages).toHaveBeenCalledTimes(1);
     expect(jest.mocked(sessions.appendMessages).mock.calls[0]![1].messages[0]?.role).toBe(
         "assistant"
     );
+});
+
+test("retrying a stored false draft uses automatic defaults and keeps its chosen model", async () => {
+    const legacy = { ...send("Legacy question"), modelRoute: "fast" as const };
+    const { result } = harness();
+    act(() => {
+        result.current.runtime.open("saved", {
+            id: "saved",
+            messages: [
+                { role: "user", text: legacy.text, metadata: { send: legacy } },
+                { role: "assistant", text: "Old answer" },
+            ],
+        } as unknown as sessions.StoredSession);
+    });
+    await act(async () => {
+        await result.current.runtime.retry(0, legacy);
+    });
+    expect(mockRequest).toHaveBeenCalledTimes(1);
+    expect(mockRequest.mock.calls[0][0]).toMatchObject({
+        enableWebSearch: true,
+        thinkingMode: "auto",
+        modelRoute: "fast",
+    });
+    expect(result.current.thread[0]?.send).toMatchObject({ webSearch: true, thinking: true });
+    expect(legacy).toMatchObject({ webSearch: false, thinking: false });
 });
 
 test("mixed model comparison reports only failed route selections for restoration", async () => {

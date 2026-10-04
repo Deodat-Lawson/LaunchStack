@@ -126,7 +126,10 @@ export const QuestionSchema = z
         chatMode: z.enum(["default", "plan"]).optional().default("default"),
         stream: z.boolean().optional().default(false),
         embeddingIndexKey: z.string().min(1).optional(),
-        thinkingMode: z.boolean().optional().default(false),
+        thinkingMode: z
+            .union([z.boolean(), z.literal("auto")])
+            .optional()
+            .default(false),
         // Ephemeral per-turn attachments (NOT indexed as Sources). Images are sent
         // as multimodal content blocks on vision-capable models; text files are
         // inlined into the prompt. Provider image and cumulative byte limits are

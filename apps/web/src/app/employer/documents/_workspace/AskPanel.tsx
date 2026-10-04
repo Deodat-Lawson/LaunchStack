@@ -1097,11 +1097,6 @@ export interface AskPanelProps {
     onNewChat: () => void;
     openPalette: () => void;
     onStudioNavigate: (href: string) => void;
-    /** Composer options persisted across turns — owned by WorkspaceShell. */
-    webSearch: boolean;
-    onToggleWebSearch: () => void;
-    thinking: boolean;
-    onToggleThinking: () => void;
     /** The roster, for the agent picker, `@handle` completion and attribution. */
     agents?: ChatAgentOption[];
     /** The agent the chat is held with; null = the default assistant. */
@@ -1148,10 +1143,6 @@ export function AskPanel({
     onNewChat,
     openPalette,
     onStudioNavigate,
-    webSearch,
-    onToggleWebSearch,
-    thinking,
-    onToggleThinking,
     agents = [],
     agentKey = null,
     onChangeAgent,
@@ -1356,12 +1347,12 @@ export function AskPanel({
                 text: starter.question,
                 refs: refs.length > 0 ? refs : selected,
                 attachments: [],
-                webSearch,
-                thinking,
+                webSearch: true,
+                thinking: true,
                 agentKey,
             });
         },
-        [selected, setSelected, sendMessage, webSearch, thinking, agentKey]
+        [selected, setSelected, sendMessage, agentKey]
     );
 
     return (
@@ -1713,10 +1704,6 @@ export function AskPanel({
                     editingQueued={editingQueued}
                     queuedEditUnavailable={queuedEditUnavailable}
                     onCancelQueueEdit={onCancelQueueEdit}
-                    webSearch={webSearch}
-                    onToggleWebSearch={onToggleWebSearch}
-                    thinking={thinking}
-                    onToggleThinking={onToggleThinking}
                     onOpenSource={onOpenSource}
                     seed={seed?.draftKey === suppliedDraftKey ? seed : null}
                     agents={agents}

@@ -117,10 +117,6 @@ function mount(overrides: Partial<ComposerProps> = {}) {
         selected: [],
         setSelected: jest.fn(),
         onSend,
-        webSearch: false,
-        onToggleWebSearch: jest.fn(),
-        thinking: false,
-        onToggleThinking: jest.fn(),
         agents: [],
         agentKey: null,
         onChangeAgent: jest.fn(),
@@ -135,7 +131,7 @@ function mount(overrides: Partial<ComposerProps> = {}) {
     };
 }
 function attach(file = new File(["hello"], "notes.txt", { type: "text/plain" })) {
-    fireEvent.change(screen.getByLabelText("Attach files"), { target: { files: [file] } });
+    fireEvent.change(screen.getByLabelText("Upload attachments"), { target: { files: [file] } });
 }
 
 beforeEach(() => {
@@ -295,7 +291,7 @@ describe("Composer draft and keyboard behavior", () => {
     it("supports modifier Enter settings and preserves ordinary Enter", async () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
-        await user.click(screen.getByRole("button", { name: "Composer settings" }));
+        await user.click(screen.getByRole("button", { name: "More message options" }));
         await user.click(screen.getByRole("button", { name: "⌘/Ctrl+Enter" }));
         fireEvent.change(box, { target: { value: "Multiline draft" } });
         fireEvent.keyDown(box, { key: "Enter" });
@@ -472,7 +468,7 @@ describe("Composer uploads and completion", () => {
     it("reserves conversion slots before asynchronous work so another batch cannot exceed 100", async () => {
         convertHeic.mockImplementation(() => new Promise<Blob>(() => {}));
         mount();
-        fireEvent.change(screen.getByLabelText("Attach files"), {
+        fireEvent.change(screen.getByLabelText("Upload attachments"), {
             target: {
                 files: Array.from(
                     { length: 99 },
@@ -480,7 +476,7 @@ describe("Composer uploads and completion", () => {
                 ),
             },
         });
-        fireEvent.change(screen.getByLabelText("Attach files"), {
+        fireEvent.change(screen.getByLabelText("Upload attachments"), {
             target: { files: [new File(["a"], "extra-a.txt"), new File(["b"], "extra-b.txt")] },
         });
         expect(screen.getByRole("alert")).toHaveTextContent("Attach up to 100 files");
@@ -571,7 +567,7 @@ describe("Composer uploads and completion", () => {
 
     it("enforces count, file size, and configured image formats", async () => {
         mount();
-        fireEvent.change(screen.getByLabelText("Attach files"), {
+        fireEvent.change(screen.getByLabelText("Upload attachments"), {
             target: {
                 files: Array.from(
                     { length: 101 },
@@ -711,11 +707,34 @@ describe("Composer uploads and completion", () => {
         expect(box).toHaveValue("Unsent draft");
     });
 
-    it("restores explicitly seeded send controls while quote seeds leave them unchanged", () => {
-        const onToggleWebSearch = jest.fn();
-        const onToggleThinking = jest.fn();
+    it("keeps capabilities automatic when restoring old draft and seed flags", () => {
+        localStorage.setItem(
+            "launchstack:composer:auto-defaults",
+            JSON.stringify({
+                text: "Old draft",
+                attachments: [],
+                refs: [],
+                webSearch: false,
+                thinking: false,
+                agentKey: null,
+                modelRoute: "fast",
+            })
+        );
         const onChangeAgent = jest.fn();
-        const { props, rerender } = mount({ onToggleWebSearch, onToggleThinking, onChangeAgent });
+        const { props, rerender, box, onSend } = mount({
+            draftKey: "auto-defaults",
+            onChangeAgent,
+        });
+        expect(box).toHaveValue("Old draft");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                text: "Old draft",
+                webSearch: true,
+                thinking: true,
+                modelRoute: "fast",
+            })
+        );
         rerender(
             <Composer
                 {...props}
@@ -723,21 +742,52 @@ describe("Composer uploads and completion", () => {
                     nonce: 903,
                     text: "Queued prompt",
                     mode: "replace",
-                    webSearch: true,
-                    thinking: true,
+                    webSearch: false,
+                    thinking: false,
                     agentKey: "research",
                 }}
             />
         );
-        expect(onToggleWebSearch).toHaveBeenCalledTimes(1);
-        expect(onToggleThinking).toHaveBeenCalledTimes(1);
         expect(onChangeAgent).toHaveBeenCalledWith("research");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                text: "Queued prompt",
+                webSearch: true,
+                thinking: true,
+            })
+        );
         rerender(
             <Composer {...props} seed={{ nonce: 904, text: "> Selected quote", mode: "append" }} />
         );
-        expect(onToggleWebSearch).toHaveBeenCalledTimes(1);
-        expect(onToggleThinking).toHaveBeenCalledTimes(1);
         expect(onChangeAgent).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps the writing toolbar compact and preserves planning and stash actions in its menu", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount({ draftKey: "compact-menu" });
+        const toolbar = within(screen.getByRole("group", { name: "Message tools" }));
+        expect(toolbar.getAllByRole("button")).toHaveLength(5);
+        expect(screen.queryByRole("button", { name: /^Web$/ })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /^Think$/ })).not.toBeInTheDocument();
+        await user.type(box, "Keep this question");
+        await user.click(toolbar.getByRole("button", { name: "More message options" }));
+        await user.click(screen.getByRole("button", { name: "Plan first" }));
+        await user.click(screen.getByRole("button", { name: /Save prompt/ }));
+        expect(box).toHaveValue("");
+        await user.click(toolbar.getByRole("button", { name: "More message options" }));
+        await user.click(screen.getByRole("button", { name: /Restore saved prompts/ }));
+        await user.click(screen.getByText("Keep this question"));
+        expect(box).toHaveValue("Keep this question");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                text: "Keep this question",
+                chatMode: "plan",
+                webSearch: true,
+                thinking: true,
+            })
+        );
     });
 
     it("restores the unsent draft after remount without replaying a consumed queue-edit seed", () => {
@@ -811,7 +861,8 @@ describe("Composer uploads and completion", () => {
             ])
         );
         const { box } = mount({ draftKey: "thumbnails" });
-        fireEvent.click(screen.getByRole("button", { name: "Restore saved prompts" }));
+        fireEvent.click(screen.getByRole("button", { name: "More message options" }));
+        fireEvent.click(screen.getByRole("button", { name: /Restore saved prompts/ }));
         expect(screen.getByRole("img", { name: "saved.png thumbnail" })).toHaveAttribute(
             "src",
             "/saved.png"

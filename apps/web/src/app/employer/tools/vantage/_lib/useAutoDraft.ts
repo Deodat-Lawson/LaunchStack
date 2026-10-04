@@ -84,5 +84,9 @@ export function useAutoDraft(args: {
         draft();
     }, [auto, week, draft]);
 
-    return { drafting, error, draft };
+    // About to draft (the effect runs after this render): say so already, so
+    // the screen goes straight to its drafting state without a frame of
+    // "no agenda".
+    const starting = auto && week !== null && !attempted.current.has(week);
+    return { drafting: drafting || starting, error, draft };
 }

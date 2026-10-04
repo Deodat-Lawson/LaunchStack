@@ -129,17 +129,31 @@ export async function loadTriage(args: { companyId: bigint; now?: Date }): Promi
 }
 
 /**
+ * Prepares running on this server, by workspace and week. Vantage drafts a
+ * week when someone opens it, so a reload, a second tab or a teammate
+ * opening the same empty week while its draft is still being written must
+ * not start a second model call — they wait for the one already running and
+ * get the same agenda. Forgotten once it settles, so a later "fresh
+ * suggestions" really asks again. (One server process holds the map; the
+ * deployment runs one.)
+ */
+const preparing = new Map<string, Promise<AgendaDto>>();
+
+/**
  * Prepare a week's agenda with this deployment's default chat model when one
  * is configured. A missing or failing model is logged and the rules draft
  * takes over — the founder still gets an agenda, and its metadata says how
  * it was made.
  */
-export async function prepareWeek(args: {
+export function prepareWeek(args: {
     companyId: bigint;
     userId: string;
     weekStart: string;
 }): Promise<AgendaDto> {
-    return prepareAgenda({
+    const key = `${args.companyId}:${args.weekStart}`;
+    const running = preparing.get(key);
+    if (running) return running;
+    const draft = prepareAgenda({
         companyId: args.companyId,
         userId: args.userId,
         weekStart: args.weekStart,
@@ -150,5 +164,7 @@ export async function prepareWeek(args: {
                 error instanceof Error ? error.message : error
             );
         },
-    });
+    }).finally(() => preparing.delete(key));
+    preparing.set(key, draft);
+    return draft;
 }

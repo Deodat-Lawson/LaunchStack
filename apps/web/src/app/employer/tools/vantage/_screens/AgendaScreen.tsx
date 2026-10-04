@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -87,11 +87,21 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
     const nextMeeting = ov.data ? ov.data.agendaWeek === week : false;
     const auto = useAutoDraft({
         week: isIsoWeek(week) ? week : null,
-        auto: missing && nextMeeting && Boolean(ov.data && hasMaterial(ov.data)),
+        // The overview read comes after the agendas read; if a draft landed in
+        // between (This week drafting as you switched tabs), it shows here.
+        auto: missing && nextMeeting && Boolean(ov.data && !ov.data.agenda && hasMaterial(ov.data)),
         // Read the agenda back rather than trusting the draft's copy: the read
         // is what this workspace has (the drafting state holds until it lands).
         onDrafted: () => res.reload(),
     });
+
+    // The overview has this week's agenda but the agendas read said none: it
+    // landed in between (This week drafting as you switched tabs). Read again.
+    const reloadAgenda = res.reload;
+    const landedMeanwhile = missing && nextMeeting && Boolean(ov.data?.agenda);
+    useEffect(() => {
+        if (landedMeanwhile) void reloadAgenda();
+    }, [landedMeanwhile, reloadAgenda]);
 
     const goTo = (w: string) => router.push(vantagePath(`/agenda?week=${w}`));
 

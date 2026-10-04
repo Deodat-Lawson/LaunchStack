@@ -229,7 +229,16 @@ export const companyMetadata = pgTable(
         lastExtractionDocumentId: bigint("last_extraction_document_id", {
             mode: "bigint",
         }).references(() => document.id, { onDelete: "set null" }),
-        /** A whole-profile rebuild in flight, or the last one failed. Per-upload refreshes don't set it. */
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared after the timestamps because the migration adds them to an existing
+        // table: a fresh `push` and the migrated schema must have the same column order.
+        /**
+         * A build in flight — a Rebuild, or a per-upload refresh while nothing else is
+         * building — or the last one failed.
+         */
         buildStatus: varchar("build_status", { length: 16, enum: BUILD_STATUS_VALUES })
             .notNull()
             .default("idle"),
@@ -237,10 +246,6 @@ export const companyMetadata = pgTable(
         buildStartedAt: timestamp("build_started_at", { withTimezone: true }),
         /** When the profile was last assembled from its sources. */
         builtAt: timestamp("built_at", { withTimezone: true }),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
     table => ({
         companyIdUnique: uniqueIndex("company_metadata_company_id_unique").on(table.companyId),

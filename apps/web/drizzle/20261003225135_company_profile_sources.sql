@@ -1,3 +1,13 @@
+-- launchstack:allow-dml
+-- Reason: Proposals' own profile table is dropped below, and the facts people
+-- added to it by hand must be copied into the company profile first. A
+-- backfill runs after migrations, when the table is already gone, so the copy
+-- cannot move out of this migration. It, the deletion of the retired profile
+-- runs and the built_at stamp are bounded and one-shot.
+-- launchstack:destructive-ok
+-- Reason: pdr_ai_v2_proposal_profiles is retired; the company profile replaces
+-- it. What it held is rebuilt from sources, and its hand-added facts are
+-- copied above before the drop.
 CREATE TABLE "pdr_ai_v2_company_profile_sources" (
 	"id" bigserial PRIMARY KEY NOT NULL,
 	"company_id" bigint NOT NULL,

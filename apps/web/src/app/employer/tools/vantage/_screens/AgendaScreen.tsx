@@ -337,7 +337,12 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
 
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
 
-            {res.loading || (missing && ov.loading) ? (
+            {/* Skeleton, not "No agenda", until the overview has answered (useResource
+                reports loading=false for the first render after its key turns
+                non-null) and while a re-read for a draft that landed is on its way. */}
+            {res.loading ||
+            (missing && ov.data === null && ov.error === null) ||
+            landedMeanwhile ? (
                 <SkeletonRows rows={4} height={64} />
             ) : !agenda ? (
                 auto.drafting ? (

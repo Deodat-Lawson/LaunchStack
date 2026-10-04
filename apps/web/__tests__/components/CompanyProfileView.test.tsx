@@ -221,7 +221,7 @@ describe("CompanyProfileView", () => {
         // A hand-set fact carries no number and says it was edited.
         const budget = screen.getByText("$480k");
         expect(within(budget).queryByLabelText(/^Source /)).toBeNull();
-        expect(screen.getByText("· edited")).toBeInTheDocument();
+        expect(screen.getByText("· from you")).toBeInTheDocument();
 
         // The header counts facts and the sources read for them.
         expect(screen.getByText(/3 facts from 3 sources · built/)).toBeInTheDocument();
@@ -586,5 +586,41 @@ describe("factPathFor", () => {
         expect(factPathFor("Mission", ["profile.facts.mission", "profile.facts.mission_2"])).toBe(
             "profile.facts.mission_3"
         );
+    });
+});
+
+describe("the way back to onboarding", () => {
+    it("an empty workspace is offered the setup once, in the empty state", async () => {
+        mockApi.get.mockResolvedValue({
+            profile: {
+                ...readyProfile(),
+                status: "empty",
+                summary: null,
+                facts: [],
+                people: [],
+                sources: [],
+                evidence: [],
+                counts: { sources: 0, counted: 0, setAside: 0, pending: 0 },
+            },
+        });
+        render(<CompanyProfileView variant="settings" />);
+        const link = await screen.findByRole("link", { name: "Tell us about LaunchStack" });
+        expect(link).toHaveAttribute("href", "/employer/onboarding");
+        expect(screen.queryByRole("link", { name: "Go through setup again" })).toBeNull();
+    });
+
+    it("a workspace with sources can go through setup again; a member is not offered it", async () => {
+        mockApi.get.mockResolvedValue({ profile: readyProfile() });
+        const { unmount } = render(<CompanyProfileView variant="settings" />);
+        expect(await screen.findByRole("link", { name: "Go through setup again" })).toHaveAttribute(
+            "href",
+            "/employer/onboarding"
+        );
+        unmount();
+
+        mockApi.get.mockResolvedValue({ profile: readyProfile({ canEdit: false }) });
+        render(<CompanyProfileView variant="settings" />);
+        await screen.findByText("Baltimore, Maryland");
+        expect(screen.queryByRole("link", { name: "Go through setup again" })).toBeNull();
     });
 });

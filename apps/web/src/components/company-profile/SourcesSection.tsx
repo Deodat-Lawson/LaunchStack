@@ -206,7 +206,9 @@ function SourceRow({
                             Reading…
                         </p>
                     ) : (
-                        <p className="text-ink-3 mt-0.5 text-xs">Read on the next build.</p>
+                        <p className="text-ink-3 mt-0.5 text-xs">
+                            {source.reason ?? "Read on the next build."}
+                        </p>
                     )
                 ) : (
                     note && (

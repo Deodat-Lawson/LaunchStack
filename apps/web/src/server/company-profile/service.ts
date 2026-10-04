@@ -149,7 +149,7 @@ async function buildAfterResponse(
 }
 
 /** Reassemble after the response, reading only what is stale. */
-async function reassembleAfterResponse(companyId: bigint, changedBy: string): Promise<void> {
+export async function reassembleAfterResponse(companyId: bigint, changedBy: string): Promise<void> {
     await buildAfterResponse(companyId, "reassembly", () =>
         catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
     );

@@ -1,6 +1,7 @@
 "use client";
 
 import { RefreshCw } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -195,7 +196,12 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
                     <p className="text-ink-3 text-[13px]" aria-live="polite">
                         {sub ?? " "}
                     </p>
-                    {!chromeOwnsRebuild && rebuildButton}
+                    <div className="flex flex-wrap items-center gap-2">
+                        {p?.canEdit && hasSources && (
+                            <SetupLink variant="ghost">Go through setup again</SetupLink>
+                        )}
+                        {!chromeOwnsRebuild && rebuildButton}
+                    </div>
                 </div>
             )}
 
@@ -233,6 +239,21 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
     );
 }
 
+/** Onboarding: the website, what the company does, the idea, documents about it. */
+function SetupLink({
+    children,
+    variant = "outline",
+}: {
+    children: ReactNode;
+    variant?: "outline" | "ghost";
+}) {
+    return (
+        <Button asChild size="sm" variant={variant}>
+            <Link href="/employer/onboarding">{children}</Link>
+        </Button>
+    );
+}
+
 function StaleBanner({ onRebuild, disabled }: { onRebuild: () => void; disabled: boolean }) {
     return (
         <div
@@ -252,7 +273,7 @@ function StaleBanner({ onRebuild, disabled }: { onRebuild: () => void; disabled:
 
 function Chip({ children }: { children: ReactNode }) {
     return (
-        <li className="border-line text-ink-2 inline-flex h-[22px] items-center rounded-full border px-2.5 text-[11.5px]">
+        <li className="border-line text-ink-2 inline-flex min-h-[22px] items-center rounded-[11px] border px-2.5 py-0.5 text-[11.5px] leading-snug">
             {children}
         </li>
     );
@@ -292,6 +313,7 @@ function Body({
             <EmptyState
                 title="Nothing to read yet"
                 body={`The profile is built from what your sources say about ${p.name}: past proposals, annual reports, a pitch deck, your website. Add a few to Sources, then build it here.`}
+                action={p.canEdit ? <SetupLink>Tell us about {p.name}</SetupLink> : undefined}
             />
         );
     }
@@ -492,6 +514,11 @@ function NothingProven({ profile: p }: { profile: CompanyProfileDto }) {
                 website — and rebuild.
                 {p.canEdit && " If a source below is about you after all, count it."}
             </p>
+            {p.canEdit && (
+                <div className="mt-1">
+                    <SetupLink>Tell us about {p.name}</SetupLink>
+                </div>
+            )}
         </section>
     );
 }

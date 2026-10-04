@@ -176,6 +176,13 @@
       "when": 1790994077492,
       "tag": "20261003022117_vantage",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1791135190912,
+      "tag": "20261004173310_chatbox_parity",
+      "breakpoints": true
     }
   ]
 }

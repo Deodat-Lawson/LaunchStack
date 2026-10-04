@@ -105,9 +105,12 @@ export const QuestionSchema = z
     .object({
         documentId: z.number().int().positive().optional(),
         companyId: z.number().int().positive().optional(),
-        question: z.string().min(1, "Question is required"),
+        question: z
+            .string()
+            .min(1, "Question is required")
+            .max(120_000, "Question must be at most 120000 characters"),
         style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-        searchScope: z.enum(["document", "company", "archive", "selected"]).optional(),
+        searchScope: z.enum(["document", "company", "archive", "selected", "none"]).optional(),
         archiveName: z.string().optional(),
         // Document IDs for the "selected" scope — a user-picked subset of docs in
         // the sidebar. The route handler verifies every ID belongs to the caller's
@@ -117,13 +120,18 @@ export const QuestionSchema = z
         aiPersona: z.enum(aiPersonaOptions).optional(),
         aiModel: z.string().min(1).optional(),
         provider: z.string().min(1).optional(),
-        conversationHistory: z.string().optional(),
+        conversationHistory: z.string().max(120_000).optional(),
+        modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+        reasoningEffort: z.string().min(1).max(64).optional(),
+        chatMode: z.enum(["default", "plan"]).optional().default("default"),
+        stream: z.boolean().optional().default(false),
         embeddingIndexKey: z.string().min(1).optional(),
         thinkingMode: z.boolean().optional().default(false),
         // Ephemeral per-turn attachments (NOT indexed as Sources). Images are sent
         // as multimodal content blocks on vision-capable models; text files are
-        // inlined into the prompt. Capped at 5 to bound context growth.
-        attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
+        // inlined into the prompt. Provider image and cumulative byte limits are
+        // enforced separately by the route.
+        attachments: z.array(AttachmentPayloadSchema).max(100).optional(),
         /**
          * Handle of the workspace agent answering this turn. Its standing
          * instructions, style, route and tool policy shape the answer; the
@@ -151,6 +159,10 @@ export const QuestionSchema = z
             aiModel: data.aiModel,
             provider: data.provider,
             conversationHistory: data.conversationHistory,
+            modelRoute: data.modelRoute,
+            reasoningEffort: data.reasoningEffort,
+            chatMode: data.chatMode,
+            stream: data.stream,
             embeddingIndexKey: data.embeddingIndexKey,
             thinkingMode: data.thinkingMode ?? false,
             attachments: data.attachments,
@@ -845,16 +857,87 @@ export const UpdateArtifactSchema = z
  * bounded instead of parsed — an array cap plus the text cap is what keeps a
  * session row from becoming a dumping ground.
  */
+export const ChatSendPayloadSchema = z.object({
+    recallText: z.string().max(120_000).optional(),
+    origin: z.enum(["user", "attachment", "plan-implementation"]).optional(),
+    text: z.string().max(120_000),
+    refs: z.array(z.string().max(64)).max(200),
+    attachments: z
+        .array(
+            z.object({
+                id: z.string().max(128),
+                name: z.string().max(512),
+                mimeType: z.string().max(256),
+                size: z
+                    .number()
+                    .nonnegative()
+                    .max(50 * 1024 * 1024),
+                url: z.string().url().max(4096),
+                kind: z.enum(["image", "text"]),
+            })
+        )
+        .max(100),
+    webSearch: z.boolean(),
+    thinking: z.boolean(),
+    agentKey: z.string().max(64).nullable(),
+    modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+    reasoningEffort: z.string().max(64).optional(),
+    chatMode: z.enum(["default", "plan"]).optional(),
+    followUp: z.enum(["queue", "interrupt"]).optional(),
+    modelRoutes: z
+        .array(z.enum(["default", "fast", "reasoning", "vision"]))
+        .max(4)
+        .optional(),
+    threadRefs: z.array(z.string().min(1).max(64)).max(20).optional(),
+});
+
+export const ChatQueueSchema = z
+    .object({
+        revision: z.number().int().nonnegative(),
+        items: z
+            .array(z.object({ id: z.string().min(1).max(128), send: ChatSendPayloadSchema }))
+            .max(50),
+    })
+    .refine(data => new Set(data.items.map(item => item.id)).size === data.items.length, {
+        message: "Queue ids must be unique",
+    });
+export const ClaimChatQueueSchema = z.object({
+    revision: z.number().int().nonnegative(),
+    id: z.string().min(1).max(128),
+});
+export const TruncateSessionSchema = z.object({
+    keepCount: z.number().int().nonnegative(),
+    expectedCount: z.number().int().nonnegative(),
+});
+
 export const SessionMessageSchema = z.object({
     role: z.enum(["user", "assistant"]),
     text: z.string().max(MAX_SESSION_MESSAGE_CHARS),
     refs: z.array(z.string().max(64)).max(200).optional(),
     citations: z.array(z.unknown()).max(20).optional(),
-    attachments: z.array(z.unknown()).max(20).optional(),
+    attachments: z.array(z.unknown()).max(100).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
     agentKey: z.string().max(64).nullable().optional(),
+    metadata: z
+        .object({
+            forkedFromSessionId: z.string().max(128).optional(),
+            intent: z.enum(["queued", "interrupt"]).optional(),
+            id: z.string().max(128).optional(),
+            status: z.enum(["complete", "stopped", "error"]).optional(),
+            reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
+            elapsedMs: z.number().nonnegative().optional(),
+            send: ChatSendPayloadSchema.optional(),
+            tokenBreakdown: z
+                .object({
+                    inputTokens: z.number().nonnegative(),
+                    outputTokens: z.number().nonnegative(),
+                })
+                .optional(),
+            chunksAnalyzed: z.number().nonnegative().optional(),
+        })
+        .optional(),
 });
 
 const SessionAgentKeySchema = z.string().max(64).nullable().optional();

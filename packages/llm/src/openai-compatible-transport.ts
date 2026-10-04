@@ -89,6 +89,12 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
         ...(parameters.streaming === "supported" && options.streaming !== undefined
             ? { streaming: options.streaming }
             : {}),
+        // This adapter otherwise discards OpenAI-compatible reasoning_content
+        // deltas. The chat route extracts only those strings, then removes the
+        // raw response before accumulating chunks or sending browser events.
+        ...(parameters.streaming === "supported" && options.streaming === true
+            ? { __includeRawResponse: true }
+            : {}),
         ...(Object.keys(modelKwargs).length > 0 ? { modelKwargs } : {}),
     });
 }

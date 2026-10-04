@@ -32,6 +32,7 @@ let captured: Capture[] = [];
 let respondWith: (body: Record<string, unknown>) => {
     status: number;
     payload: unknown;
+    contentType?: string;
 } = () => ({ status: 200, payload: completion("ok") });
 
 function completion(content: string, extra: Record<string, unknown> = {}) {
@@ -57,9 +58,11 @@ beforeAll(async () => {
                 authorization: req.headers.authorization,
                 body,
             });
-            const { status, payload } = respondWith(body);
-            res.writeHead(status, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(payload));
+            const { status, payload, contentType } = respondWith(body);
+            res.writeHead(status, { "Content-Type": contentType ?? "application/json" });
+            res.end(
+                contentType === "text/event-stream" ? String(payload) : JSON.stringify(payload)
+            );
         });
     });
     await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
@@ -237,6 +240,58 @@ describe("request parameters follow declared behavior", () => {
         // The mock returns a non-streaming body; we only assert the request flag,
         // which is what the behavior contract governs.
         await resolved.chat.invoke([new HumanMessage("hi")]).catch(() => undefined);
+        expect(captured[0]!.body.stream).toBe(true);
+    });
+});
+
+describe("real provider streaming", () => {
+    it("preserves actual reasoning deltas and measured usage without putting the internal capture option on the wire", async () => {
+        const chunks = [
+            {
+                id: "chatcmpl-stream",
+                choices: [
+                    {
+                        index: 0,
+                        delta: { role: "assistant", reasoning_content: "Checking the source" },
+                    },
+                ],
+            },
+            {
+                id: "chatcmpl-stream",
+                choices: [
+                    { index: 0, delta: { content: "Verified answer" }, finish_reason: "stop" },
+                ],
+            },
+            {
+                id: "chatcmpl-stream",
+                choices: [],
+                usage: { prompt_tokens: 11, completion_tokens: 7, total_tokens: 18 },
+            },
+        ];
+        respondWith = () => ({
+            status: 200,
+            contentType: "text/event-stream",
+            payload:
+                chunks.map(chunk => `data: ${JSON.stringify(chunk)}\n\n`).join("") +
+                "data: [DONE]\n\n",
+        });
+        const resolved = resolveChatModel({ config: deployment(FULL_SUPPORT), streaming: true });
+        const stream = await resolved.chat.stream([new HumanMessage("hi")]);
+        const received = [];
+        for await (const chunk of stream) received.push(chunk);
+        const raw = received[0]?.additional_kwargs.__raw_response as
+            | { choices?: { delta?: { reasoning_content?: string } }[] }
+            | undefined;
+        expect(raw?.choices?.[0]?.delta?.reasoning_content).toBe("Checking the source");
+        expect(
+            received.map(chunk => (typeof chunk.content === "string" ? chunk.content : "")).join("")
+        ).toBe("Verified answer");
+        expect(normalizeTokenUsage(received.at(-1))).toMatchObject({
+            inputTokens: 11,
+            outputTokens: 7,
+            totalTokens: 18,
+        });
+        expect(captured[0]!.body).not.toHaveProperty("__includeRawResponse");
         expect(captured[0]!.body.stream).toBe(true);
     });
 });

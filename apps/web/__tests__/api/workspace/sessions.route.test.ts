@@ -28,6 +28,8 @@ const mockRepo = {
     updateSession: jest.fn(),
     deleteSession: jest.fn(),
     listSessions: jest.fn(),
+    changeQueue: jest.fn(),
+    truncateMessages: jest.fn(),
 };
 
 jest.mock("~/server/sessions/repository", () => ({
@@ -37,6 +39,8 @@ jest.mock("~/server/sessions/repository", () => ({
     updateSession: (...args: unknown[]) => mockRepo.updateSession(...args),
     deleteSession: (...args: unknown[]) => mockRepo.deleteSession(...args),
     listSessions: (...args: unknown[]) => mockRepo.listSessions(...args),
+    changeQueue: (...args: unknown[]) => mockRepo.changeQueue(...args),
+    truncateMessages: (...args: unknown[]) => mockRepo.truncateMessages(...args),
 }));
 
 import { POST as createSessionRoute } from "~/app/api/workspace/sessions/route";
@@ -45,7 +49,16 @@ import {
     GET as getSessionRoute,
     PATCH as patchSessionRoute,
 } from "~/app/api/workspace/sessions/[sessionId]/route";
-import { POST as appendRoute } from "~/app/api/workspace/sessions/[sessionId]/messages/route";
+import {
+    POST as appendRoute,
+    DELETE as rewindRoute,
+} from "~/app/api/workspace/sessions/[sessionId]/messages/route";
+
+import {
+    GET as readQueue,
+    PUT as writeQueue,
+    POST as claimQueue,
+} from "~/app/api/workspace/sessions/[sessionId]/queue/route";
 
 const OWNER = { companyId: BigInt(42), userId: "user-a" };
 
@@ -220,5 +233,90 @@ describe("authentication", () => {
 
         expect(response.status).toBe(401);
         expect(mockRepo.createSession).not.toHaveBeenCalled();
+    });
+});
+
+describe("durable queue and rewind boundaries", () => {
+    const item = {
+        id: "queued-1",
+        send: {
+            text: "Next question",
+            refs: [],
+            attachments: [],
+            webSearch: false,
+            thinking: false,
+            agentKey: null,
+        },
+    };
+    it("loads and writes only the authenticated owner's queue", async () => {
+        mockRepo.getSession.mockResolvedValue({ queuedMessages: [item], queueRevision: 7 });
+        const read = await readQueue(new Request("http://t"), params("s1"));
+        expect(await read.json()).toEqual({ items: [item], revision: 7 });
+        expect(mockRepo.getSession).toHaveBeenCalledWith(OWNER, "s1");
+        mockRepo.changeQueue.mockResolvedValue({ items: [item], revision: 8 });
+        const written = await writeQueue(
+            post("http://t", { revision: 7, items: [item], companyId: 99, userId: "other" }),
+            params("s1")
+        );
+        expect(written.status).toBe(200);
+        expect(mockRepo.changeQueue).toHaveBeenCalledWith(OWNER, "s1", 7, { items: [item] });
+    });
+    it("returns current server state on a revision conflict without retrying the write", async () => {
+        mockRepo.changeQueue.mockResolvedValue({ items: [item], revision: 9, conflict: true });
+        const response = await writeQueue(
+            post("http://t", { revision: 3, items: [] }),
+            params("s1")
+        );
+        expect(response.status).toBe(409);
+        expect(await response.json()).toEqual({ items: [item], revision: 9, conflict: true });
+        expect(mockRepo.changeQueue).toHaveBeenCalledTimes(1);
+    });
+    it("claims one id through the guarded repository and hides another owner's session", async () => {
+        mockRepo.changeQueue.mockResolvedValue(null);
+        const response = await claimQueue(
+            post("http://t", { revision: 1, id: "queued-1" }),
+            params("other-chat")
+        );
+        expect(response.status).toBe(404);
+        expect(mockRepo.changeQueue).toHaveBeenCalledWith(OWNER, "other-chat", 1, {
+            claimId: "queued-1",
+        });
+    });
+    it("rejects duplicate queue ids and invalid model routes before persistence", async () => {
+        for (const items of [
+            [item, item],
+            [{ ...item, send: { ...item.send, modelRoute: "unconfigured" } }],
+        ]) {
+            const response = await writeQueue(
+                post("http://t", { revision: 1, items }),
+                params("s1")
+            );
+            expect(response.status).toBe(400);
+        }
+        expect(mockRepo.changeQueue).not.toHaveBeenCalled();
+    });
+    it("guards transcript rewind by owner and expected length", async () => {
+        mockRepo.truncateMessages.mockResolvedValue("conflict");
+        const response = await rewindRoute(
+            post("http://t", { keepCount: 2, expectedCount: 6 }),
+            params("s1")
+        );
+        expect(response.status).toBe(409);
+        expect(mockRepo.truncateMessages).toHaveBeenCalledWith(OWNER, "s1", 2, 6);
+    });
+    it("never reaches queue or rewind persistence without authentication", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({
+            success: false,
+            response: new Response(null, { status: 401 }),
+        });
+        expect(
+            (await writeQueue(post("http://t", { revision: 1, items: [] }), params("s1"))).status
+        ).toBe(401);
+        expect(
+            (await rewindRoute(post("http://t", { keepCount: 0, expectedCount: 2 }), params("s1")))
+                .status
+        ).toBe(401);
+        expect(mockRepo.changeQueue).not.toHaveBeenCalled();
+        expect(mockRepo.truncateMessages).not.toHaveBeenCalled();
     });
 });

@@ -30,12 +30,10 @@ import {
     deleteLibraryItem,
     deleteOpportunity,
     deleteSection,
-    ensureProfile,
     findLiveRun,
     getApplication,
     getLibraryItem,
     getOpportunity,
-    getProfile,
     getRun,
     getSection,
     listApplications,
@@ -43,12 +41,13 @@ import {
     listOpportunities,
     listRuns,
     listSections,
-    patchProfileFact,
+    loadOrgProfile,
     setOpportunityStatus,
     updateApplication,
     updateLibraryItem,
     updateSection,
 } from "@launchstack/pipelines/proposals/db";
+import { getProfileRow, profileView } from "@launchstack/pipelines/company-metadata";
 
 import type {
     ApplicationDetail,
@@ -60,13 +59,13 @@ import type {
     LibraryItemDto,
     NewApplicationInput,
     NewFunderInput,
-    ProfileDto,
     RunDto,
     SectionDto,
     SectionPatch,
     SourceOption,
 } from "~/app/employer/tools/proposals/api";
 import { db } from "~/server/db";
+import { isBuilding } from "~/server/company-profile/adapter";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
 
@@ -78,7 +77,6 @@ import {
     toApplicationRow,
     toFunderRow,
     toLibraryItemDto,
-    toProfileDto,
     toRunDto,
     toSectionDto,
 } from "./adapter";
@@ -154,40 +152,6 @@ export async function listSourceOptions(
     }));
 }
 
-// ─── Profile ─────────────────────────────────────────────────────────────────
-
-export async function loadProfile(ctx: ProposalsCtx): Promise<ProfileDto> {
-    const [record, sources] = await Promise.all([
-        getProfile(ctx.companyId),
-        countSources(ctx.companyId),
-    ]);
-    return toProfileDto(record, sources);
-}
-
-export async function buildProfile(ctx: ProposalsCtx): Promise<RunDto> {
-    await ensureProfile(ctx.companyId);
-    const run = await startProposalRun({
-        companyId: ctx.companyId,
-        userId: ctx.userId,
-        kind: "profile",
-        input: {},
-    });
-    return toRunDto(run);
-}
-
-export async function editProfileFact(
-    ctx: ProposalsCtx,
-    fact: { key: string; label?: string; value: string }
-): Promise<ProfileDto> {
-    const record = await patchProfileFact(ctx.companyId, {
-        key: slugKey(fact.key, 64).replace(/-/g, "_"),
-        label: fact.label,
-        value: fact.value,
-    });
-    if (!record?.profile) throw new ProposalsError("Build the profile before editing it", 409);
-    return toProfileDto(record, await countSources(ctx.companyId));
-}
-
 // ─── Funders ─────────────────────────────────────────────────────────────────
 
 async function applicationsByOpportunity(ctx: ProposalsCtx): Promise<Map<string, string>> {
@@ -221,8 +185,8 @@ export async function findFundersRun(
         includeWeb?: boolean;
     }
 ): Promise<RunDto> {
-    const profile = await getProfile(ctx.companyId);
-    if (!profile?.profile && !(input.keywords && input.keywords.length > 0))
+    const profile = await loadOrgProfile(ctx.companyId);
+    if (!profile && !(input.keywords && input.keywords.length > 0))
         throw new ProposalsError(
             "Build your organisation profile first, or give keywords to search for",
             409,
@@ -777,15 +741,27 @@ export async function loadRun(ctx: ProposalsCtx, id: string): Promise<RunDto> {
 
 // ─── Home and counts ─────────────────────────────────────────────────────────
 
+/** The company profile as the Proposals home reads it: built, being built, or not yet. */
+async function profileStatus(ctx: ProposalsCtx): Promise<HomeDto["profile"]> {
+    const row = await getProfileRow(ctx.companyId);
+    const view = profileView(row?.metadata ?? null);
+    return {
+        status: isBuilding(row, new Date()) ? "building" : row?.builtAt ? "ready" : "empty",
+        builtAt: row?.builtAt?.toISOString() ?? null,
+        facts: view.facts.length,
+        documents: view.documents,
+    };
+}
+
 export async function loadCounts(ctx: ProposalsCtx): Promise<CountsDto> {
     const [profile, funders, applications, library] = await Promise.all([
-        getProfile(ctx.companyId),
+        profileStatus(ctx),
         listOpportunities(ctx.companyId, { statuses: ["saved", "applied"] }),
         listApplications(ctx.companyId),
         listLibraryItems(ctx.companyId),
     ]);
     return {
-        profileReady: profile?.status === "ready",
+        profileReady: profile.status === "ready",
         funders: funders.length,
         applications: applications.filter(a => OPEN_STATUSES.has(a.status)).length,
         library: library.length,
@@ -794,7 +770,7 @@ export async function loadCounts(ctx: ProposalsCtx): Promise<CountsDto> {
 
 export async function loadHome(ctx: ProposalsCtx): Promise<HomeDto> {
     const [profile, sources, applications, funders, library, runs, live] = await Promise.all([
-        getProfile(ctx.companyId),
+        profileStatus(ctx),
         countSources(ctx.companyId),
         loadApplications(ctx),
         loadFunders(ctx),
@@ -806,14 +782,9 @@ export async function loadHome(ctx: ProposalsCtx): Promise<HomeDto> {
     const candidates = funders.filter(f => f.status === "candidate");
     const strong = candidates.filter(f => (f.fit ?? 0) >= 70);
     return {
-        profile: {
-            status: profile?.status ?? "empty",
-            builtAt: profile?.profile?.builtAt ?? null,
-            facts: profile?.profile?.facts.length ?? 0,
-            documents: profile?.profile?.builtFrom.documents ?? 0,
-        },
+        profile,
         todo: buildTodo({
-            profileReady: profile?.status === "ready",
+            profileReady: profile.status === "ready",
             sources,
             applications,
             funders,

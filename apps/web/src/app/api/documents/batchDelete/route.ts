@@ -20,6 +20,7 @@ import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { reassembleAfterDelete } from "~/server/company-profile/service";
 import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
@@ -78,6 +79,8 @@ export async function DELETE(request: Request) {
                     });
                 }
             });
+            // The company profile drops what the deleted documents said.
+            reassembleAfterDelete(ctx.data.companyId, ctx.data.authUserId);
 
             return NextResponse.json({
                 success: true,

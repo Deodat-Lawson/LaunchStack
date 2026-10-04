@@ -8,7 +8,6 @@ import type {
     Evidence,
     LibraryItemRecord,
     OpportunityRecord,
-    ProfileRecord,
     RunRecord,
     SectionRecord,
 } from "@launchstack/pipelines/proposals/types";
@@ -20,7 +19,6 @@ import type {
     EvidenceDto,
     FunderRow,
     LibraryItemDto,
-    ProfileDto,
     RunDto,
     SectionDto,
     TodoItem,
@@ -32,23 +30,6 @@ export function sourceHref(documentId: number | null): string | null {
 
 export function toEvidenceDto(evidence: Evidence): EvidenceDto {
     return { ...evidence, href: evidence.url ? null : sourceHref(evidence.documentId) };
-}
-
-export function toProfileDto(record: ProfileRecord | null, sources: number): ProfileDto {
-    const profile = record?.profile ?? null;
-    return {
-        status: record?.status ?? "empty",
-        error: record?.error ?? null,
-        builtAt: profile?.builtAt ?? null,
-        summary: profile?.summary ?? null,
-        applicantType: profile?.applicantType ?? null,
-        focusAreas: profile?.focusAreas ?? [],
-        geography: profile?.geography ?? [],
-        facts: profile?.facts ?? [],
-        evidence: (profile?.evidence ?? []).map(toEvidenceDto),
-        builtFrom: profile?.builtFrom ?? null,
-        sources,
-    };
 }
 
 export function toFunderRow(

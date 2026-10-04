@@ -6,16 +6,13 @@
  */
 import {
     createRun,
-    ensureProfile,
     getApplication,
-    getProfile,
     getRun,
     listLibraryItems,
     listSections,
     noteLibraryUses,
+    loadOrgProfile,
     replaceSections,
-    saveProfile,
-    setProfileStatus,
     updateApplication,
     updateRun,
     updateSection,
@@ -25,7 +22,6 @@ import { PROPOSAL_CREDITS, type ProposalPorts } from "./ports";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
 import {
-    buildOrgProfile,
     draftSection,
     extractRequest,
     findFunders,
@@ -51,12 +47,6 @@ export function stepsFor(kind: RunKind, input: RunInput, sectionLabels: string[]
         detail: null,
     });
     switch (kind) {
-        case "profile":
-            return [
-                step("gather", "Reading your sources"),
-                step("synthesize", "Writing the profile"),
-                step("save", "Saving"),
-            ];
         case "funders":
             return [
                 step(
@@ -194,15 +184,6 @@ export async function executeProposalRun(
     try {
         let summary: RunSummary;
         switch (run.kind) {
-            case "profile":
-                summary = await runProfile(ctx, ports, log);
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.profile,
-                    "Proposals: organisation profile"
-                );
-                break;
             case "funders":
                 summary = await runFunders(ctx, ports, log, run);
                 credits += await debit(
@@ -253,7 +234,6 @@ export async function executeProposalRun(
         const message = errorMessage(error);
         const current = log.current();
         if (current) await log.fail(current, message);
-        if (run.kind === "profile") await setProfileStatus(ctx.companyId, "failed", message);
         const failed = await updateRun(ctx.companyId, ctx.runId, {
             status: "failed",
             error: message,
@@ -268,7 +248,6 @@ export async function executeProposalRun(
 export async function failProposalRun(ctx: ProposalRunContext, message: string): Promise<void> {
     const run = await getRun(ctx.runId, ctx.companyId);
     if (!run || run.status === "completed" || run.status === "failed") return;
-    if (run.kind === "profile") await setProfileStatus(ctx.companyId, "failed", message);
     await updateRun(ctx.companyId, ctx.runId, {
         status: "failed",
         error: message,
@@ -278,44 +257,17 @@ export async function failProposalRun(ctx: ProposalRunContext, message: string):
 
 // ─── Per kind ────────────────────────────────────────────────────────────────
 
-async function runProfile(
-    ctx: ProposalRunContext,
-    ports: ProposalPorts,
-    log: StepLog
-): Promise<RunSummary> {
-    await ensureProfile(ctx.companyId);
-    await setProfileStatus(ctx.companyId, "building");
-    await log.start("gather");
-    let gathered = "";
-    const profile = await buildOrgProfile(ports, {
-        companyId: Number(ctx.companyId),
-        onStep: (step, detail) => {
-            if (step === "gather") gathered = detail;
-        },
-    });
-    await log.done("gather", gathered || null);
-    await log.start("synthesize");
-    await log.done("synthesize", `${profile.facts.length} facts`);
-    await log.start("save");
-    await saveProfile(ctx.companyId, profile);
-    await log.done("save");
-    return {
-        headline: `${profile.facts.length} facts from ${profile.builtFrom.documents} sources`,
-        counts: { facts: profile.facts.length, documents: profile.builtFrom.documents },
-    };
-}
-
 async function runFunders(
     ctx: ProposalRunContext,
     ports: ProposalPorts,
     log: StepLog,
     run: RunRecord
 ): Promise<RunSummary> {
-    const profileRow = await getProfile(ctx.companyId);
+    const profile = await loadOrgProfile(ctx.companyId);
     await log.start("plan");
     const details: Record<string, string> = {};
     const result = await findFunders(ports, {
-        profile: profileRow?.profile ?? null,
+        profile,
         overrides: run.input.funders,
         onStep: (step, detail) => {
             details[step] = detail;
@@ -432,8 +384,8 @@ async function runDraft(
     run: RunRecord
 ): Promise<{ summary: RunSummary; drafted: number }> {
     const application = await loadApplication(ctx, run);
-    const [profileRow, library, all] = await Promise.all([
-        getProfile(ctx.companyId),
+    const [profile, library, all] = await Promise.all([
+        loadOrgProfile(ctx.companyId),
         listLibraryItems(ctx.companyId),
         listSections(ctx.companyId, application.id),
     ]);
@@ -448,7 +400,7 @@ async function runDraft(
             companyId: Number(ctx.companyId),
             application,
             section,
-            profile: profileRow?.profile ?? null,
+            profile,
             library,
         });
         await updateSection(ctx.companyId, section.id, {
@@ -488,8 +440,8 @@ async function runRewrite(
     const application = await loadApplication(ctx, run);
     const sectionId = run.input.sectionIds?.[0];
     if (!sectionId) throw new Error("This run names no section");
-    const [profileRow, all] = await Promise.all([
-        getProfile(ctx.companyId),
+    const [profile, all] = await Promise.all([
+        loadOrgProfile(ctx.companyId),
         listSections(ctx.companyId, application.id),
     ]);
     const section = all.find(s => s.id === sectionId);
@@ -498,7 +450,7 @@ async function runRewrite(
     const result = await rewriteSection(ports, {
         application,
         section,
-        profile: profileRow?.profile ?? null,
+        profile,
         preset: run.input.rewrite?.preset ?? "custom",
         instruction: run.input.rewrite?.instruction,
     });
@@ -530,8 +482,8 @@ async function runReview(
     run: RunRecord
 ): Promise<RunSummary> {
     const application = await loadApplication(ctx, run);
-    const [profileRow, sections] = await Promise.all([
-        getProfile(ctx.companyId),
+    const [profile, sections] = await Promise.all([
+        loadOrgProfile(ctx.companyId),
         listSections(ctx.companyId, application.id),
     ]);
     await log.start("check");
@@ -544,7 +496,7 @@ async function runReview(
     const review = await reviewApplication(ports, {
         application: { ...application, requirements },
         sections,
-        profile: profileRow?.profile ?? null,
+        profile,
     });
     await updateApplication(ctx.companyId, application.id, {
         requirements,

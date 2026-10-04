@@ -2,8 +2,9 @@
  * In-memory `/api/proposals/*` for the preview harness: a literacy nonprofit
  * with a built profile, a handful of found funders, three applications in
  * different states, a small library, and runs that advance in real time
- * and change the world when they finish — the profile fills, funders
- * appear, a request becomes sections, sections get drafts, a review lands.
+ * and change the world when they finish — funders appear, a request
+ * becomes sections, sections get drafts, a review lands. The profile itself
+ * is the shared company profile, simulated in ../company-profile.
  */
 import type {
     ApplicationDetail,
@@ -15,7 +16,8 @@ import type {
     FunderStatus,
     HomeDto,
     LibraryItemDto,
-    ProfileDto,
+    ProfileStatus,
+    ApplicantType,
     RequirementDto,
     RunDto,
     RunKind,
@@ -26,8 +28,34 @@ import type {
 
 const DAY = 86_400_000;
 
+/**
+ * The organisation profile the home summarises. Proposals no longer builds
+ * or serves it: it is the shared company profile at `/api/company/profile`
+ * (see ../company-profile/simulator). The home still reports its status
+ * and size, which is all this is kept for.
+ */
+interface SimProfile {
+    status: ProfileStatus;
+    error: string | null;
+    builtAt: string | null;
+    summary: string | null;
+    applicantType: ApplicantType | null;
+    focusAreas: string[];
+    geography: string[];
+    facts: Array<{
+        key: string;
+        label: string;
+        value: string;
+        cites: number[];
+        source: "documents" | "profile" | "manual";
+    }>;
+    evidence: EvidenceDto[];
+    builtFrom: { documents: number; snippets: number } | null;
+    sources: number;
+}
+
 type World = {
-    profile: ProfileDto;
+    profile: SimProfile;
     funders: FunderRow[];
     applications: ApplicationDetail[];
     library: LibraryItemDto[];
@@ -114,7 +142,7 @@ const EVIDENCE: EvidenceDto[] = [
     },
 ];
 
-function seedProfile(): ProfileDto {
+function seedProfile(): SimProfile {
     return {
         status: "ready",
         error: null,
@@ -653,11 +681,6 @@ function counts(): CountsDto {
 // ── Runs ──────────────────────────────────────────────────────────────────
 
 const STEPS: Record<RunKind, Array<[string, string]>> = {
-    profile: [
-        ["gather", "Reading your sources"],
-        ["synthesize", "Writing the profile"],
-        ["save", "Saving"],
-    ],
     funders: [
         ["plan", "Planning the search"],
         ["search", "Searching Grants.gov and the web"],
@@ -677,7 +700,6 @@ const STEPS: Record<RunKind, Array<[string, string]>> = {
     ],
 };
 const PACE: Record<RunKind, number[]> = {
-    profile: [2500, 6000, 6500],
     funders: [1500, 4500, 7000, 7500],
     extract: [1200, 4000, 4500],
     draft: [6000],
@@ -710,7 +732,6 @@ function startRun(kind: RunKind, input: LiveRun["input"], labels: string[] = [])
         credits: 0,
     };
     world.runs.unshift({ dto, startedAt: clock(), plan, applied: false, input });
-    if (kind === "profile") world.profile = { ...world.profile, status: "building" };
     return dto;
 }
 
@@ -731,7 +752,6 @@ function settleRuns(): void {
             run.dto.status = "completed";
             run.dto.completedAt = nowIso();
             run.dto.credits = {
-                profile: 3000,
                 funders: 2000,
                 extract: 1000,
                 draft: 1500 * Math.max(1, run.input.sectionIds?.length ?? 1),
@@ -745,8 +765,6 @@ function settleRuns(): void {
 
 function stepDetail(run: LiveRun, i: number): string | null {
     switch (run.dto.kind) {
-        case "profile":
-            return i === 0 ? "5 excerpts from 4 sources" : i === 1 ? "7 facts" : null;
         case "funders":
             return i === 0
                 ? (run.input.keywords?.join(", ") ??
@@ -772,9 +790,6 @@ function applyRun(run: LiveRun): string {
         ? world.applications.find(a => a.id === run.input.applicationId)
         : null;
     switch (run.dto.kind) {
-        case "profile":
-            world.profile = { ...seedProfile(), builtAt: nowIso() };
-            return "7 facts from 4 sources";
         case "funders": {
             const fresh: FunderRow[] = [
                 funder({
@@ -1132,31 +1147,6 @@ export async function simulateProposals(
     if (head === "sources") {
         const q = (u.searchParams.get("q") ?? "").toLowerCase();
         return json({ sources: SOURCES.filter(s => !q || s.title.toLowerCase().includes(q)) });
-    }
-    if (head === "profile") {
-        if (method === "GET") return json({ profile: world.profile });
-        if (method === "POST") return json({ run: startRun("profile", {}) }, 202);
-        if (method === "PATCH") {
-            const body = await readBody(init);
-            const key = str(body.key)
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "_");
-            const value = str(body.value).trim();
-            const facts = world.profile.facts.filter(f => f.key !== key);
-            if (value)
-                facts.push({
-                    key,
-                    label:
-                        typeof body.label === "string"
-                            ? body.label
-                            : (world.profile.facts.find(f => f.key === key)?.label ?? key),
-                    value,
-                    cites: [],
-                    source: "manual",
-                });
-            world.profile = { ...world.profile, facts };
-            return json({ profile: world.profile });
-        }
     }
     if (head === "funders") {
         if (!id && method === "GET") {

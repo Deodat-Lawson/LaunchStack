@@ -9,7 +9,6 @@ import type {
     FunderRow,
     HomeDto,
     LibraryItemDto,
-    ProfileDto,
     RunDto,
     SectionDto,
 } from "~/app/employer/tools/proposals/api";
@@ -125,18 +124,6 @@ describe("runs", () => {
         expect(app.review).not.toBeNull();
         expect(app.status).toBe("in_review");
         expect(app.review!.findings.some(f => f.kind === "eligibility")).toBe(true);
-    });
-
-    it("rebuilds the profile", async () => {
-        const run = (await call<{ run: RunDto }>("/api/proposals/profile", post())).body.run;
-        const building = (await call<{ profile: ProfileDto }>("/api/proposals/profile")).body
-            .profile;
-        expect(building.status).toBe("building");
-        now += 7000;
-        await call(`/api/proposals/runs/${run.id}`);
-        const ready = (await call<{ profile: ProfileDto }>("/api/proposals/profile")).body.profile;
-        expect(ready.status).toBe("ready");
-        expect(ready.facts.length).toBe(7);
     });
 });
 

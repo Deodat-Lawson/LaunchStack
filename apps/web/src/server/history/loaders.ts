@@ -394,7 +394,6 @@ const vantageLoader: HistoryLoader = {
 };
 
 const PROPOSAL_RUN_TITLE: Record<string, string> = {
-    profile: "Organisation profile",
     funders: "Funder search",
     extract: "Requirements",
     draft: "Drafts",
@@ -437,9 +436,7 @@ const proposalsLoader: HistoryLoader = {
                 ? `/employer/tools/proposals/write/${row.applicationId}`
                 : row.kind === "funders"
                   ? "/employer/tools/proposals/funders"
-                  : row.kind === "profile"
-                    ? "/employer/tools/proposals/profile"
-                    : "/employer/tools/proposals",
+                  : "/employer/tools/proposals",
         }));
     },
     async remove({ companyId }, refId) {

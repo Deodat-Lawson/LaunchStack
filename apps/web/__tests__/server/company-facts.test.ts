@@ -132,6 +132,30 @@ describe("flattenCompanyFacts", () => {
         expect(jane.confidence).toBe(0.9);
     });
 
+    it("gives each profile fact (mission, budget…) its own citeable row, and skips a removed one", () => {
+        const md = projection();
+        md.profile = {
+            facts: {
+                mission: { ...fact("Safer warehouses"), label: "Mission" },
+                annual_budget: {
+                    ...fact("$1.2m (FY2025)", {
+                        status: "deprecated",
+                        priority: "manual_override",
+                    }),
+                    label: "Annual budget",
+                },
+            },
+        };
+        const rows = flattenCompanyFacts(md).filter(r => r.section === "profile");
+        expect(rows).toHaveLength(1);
+        expect(rows[0]).toMatchObject({
+            path: "profile.facts.mission",
+            subject: "Mission",
+            sourceDocumentIds: [41],
+        });
+        expect(rows[0]!.details[0]!.value).toBe("Safer warehouses");
+    });
+
     it("cites a document-backed source even when the subject was edited by hand", () => {
         const rows = flattenCompanyFacts(projection());
         const company = rows.find(r => r.path === "company")!;

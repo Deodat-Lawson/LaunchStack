@@ -1,14 +1,15 @@
 /**
- * The five stages, each a function of its ports and its inputs: build the
- * profile, find funders, extract a request, draft a section, review an
- * application. Nothing here touches the database — ./run does the reading
+ * The stages, each a function of its ports and its inputs: find funders,
+ * extract a request, draft a section, rewrite it, review an application. The
+ * organisation profile they write from is the company profile (built by
+ * ../company-metadata), read through ./profile. Nothing here touches the database — ./run does the reading
  * and writing around these, so each stage can be exercised with fake ports.
  */
 import type { DocumentScope } from "@launchstack/retrieval";
 import type { GrantOpportunity } from "@launchstack/tools/grant-search";
 import type { SnippetPolicy } from "@launchstack/tools/grounded-retrieval";
 
-import { documentCount, formatEvidenceBlock, numberEvidence, validCites } from "./evidence";
+import { formatEvidenceBlock, numberEvidence, validCites } from "./evidence";
 import { formatLibraryBlock, matchLibrary } from "./library";
 import type { ProposalPorts } from "./ports";
 import {
@@ -17,7 +18,6 @@ import {
     FIT_SYSTEM,
     FUNDER_PLAN_SYSTEM,
     PROPOSALS_PROMPT_VERSION,
-    PROFILE_SYSTEM,
     REVIEW_SYSTEM,
     REWRITE_SYSTEM,
 } from "./prompts";
@@ -34,7 +34,6 @@ import {
     ExtractedRequestSchema,
     FitBatchSchema,
     FunderPlanSchema,
-    OrgProfileDraftSchema,
     ReviewDraftSchema,
     RewriteResultSchema,
     type ApplicationRecord,
@@ -53,133 +52,12 @@ import {
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
-/** What a grant writer needs to know, as retrieval queries. */
-export const PROFILE_QUERIES: ReadonlyArray<{ key: string; query: string }> = [
-    { key: "mission", query: "mission statement purpose who we serve why the organisation exists" },
-    { key: "programs", query: "programs services products activities delivered to participants" },
-    { key: "outcomes", query: "results outcomes impact numbers people served metrics achieved" },
-    { key: "need", query: "the problem or community need addressed evidence of need statistics" },
-    {
-        key: "organisation",
-        query: "founded year legal status nonprofit 501(c)(3) incorporation headquarters regions served",
-    },
-    {
-        key: "finances",
-        query: "annual budget revenue funding sources previous grants funders awarded",
-    },
-    { key: "team", query: "leadership team staff board members qualifications experience" },
-    {
-        key: "partners",
-        query: "partnerships collaborators letters of support community relationships",
-    },
-    {
-        key: "plans",
-        query: "strategic plan goals next year planned projects project budget timeline",
-    },
-];
-
-const PROFILE_POLICY: SnippetPolicy = {
-    topK: 6,
-    weights: [0.4, 0.6],
-    maxSnippets: 6,
-    maxSnippetChars: 700,
-};
 const DRAFT_POLICY: SnippetPolicy = {
     topK: 8,
     weights: [0.4, 0.6],
     maxSnippets: 8,
     maxSnippetChars: 700,
 };
-
-export interface BuildProfileInput {
-    companyId: number;
-    scope?: DocumentScope;
-    onStep?: (step: "gather" | "synthesize", detail: string) => void;
-}
-
-export async function buildOrgProfile(
-    ports: ProposalPorts,
-    input: BuildProfileInput
-): Promise<OrgProfile> {
-    const [identity, metadata] = await Promise.all([
-        ports.identity(input.companyId),
-        ports.metadataContext(input.companyId),
-    ]);
-    const perQuery = await Promise.all(
-        PROFILE_QUERIES.map(q =>
-            ports.retrieve({
-                companyId: input.companyId,
-                query: q.query,
-                policy: PROFILE_POLICY,
-                scope: input.scope,
-            })
-        )
-    );
-    const evidence = numberEvidence(perQuery.flat());
-    input.onStep?.("gather", `${evidence.length} excerpts from ${documentCount(evidence)} sources`);
-
-    const user = [
-        `COMPANY RECORD`,
-        `Name: ${identity.name}`,
-        identity.description ? `Description: ${identity.description}` : "",
-        identity.industry ? `Industry: ${identity.industry}` : "",
-        identity.numberOfEmployees ? `Employees: ${identity.numberOfEmployees}` : "",
-        identity.categories.length ? `Folders: ${identity.categories.join(", ")}` : "",
-        "",
-        metadata ? `COMPANY METADATA\n${metadata}\n` : "",
-        `NUMBERED EVIDENCE`,
-        formatEvidenceBlock(
-            evidence,
-            "(no excerpts were retrieved — the workspace has no indexed sources yet)"
-        ),
-    ]
-        .filter(line => line !== "")
-        .join("\n");
-
-    const { result, modelId } = await ports.structured(
-        "profile",
-        OrgProfileDraftSchema,
-        PROFILE_SYSTEM,
-        user,
-        "org_profile"
-    );
-    input.onStep?.("synthesize", `${result.facts.length} facts`);
-
-    const facts = result.facts
-        .filter(f => f.key.trim() && f.value.trim())
-        .map(f => ({
-            key: f.key
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "_")
-                .slice(0, 64),
-            label: f.label.trim().slice(0, 120) || f.key,
-            value: f.value.trim().slice(0, 2_000),
-            cites: validCites(f.cites, evidence),
-            source: "documents" as const,
-        }))
-        // A fact without evidence is the model's guess; the rules say omit it.
-        .filter(f => f.cites.length > 0 || evidence.length === 0);
-
-    return {
-        summary: result.summary.trim(),
-        applicantType: result.applicantType,
-        focusAreas: result.focusAreas
-            .map(s => s.trim())
-            .filter(Boolean)
-            .slice(0, 10),
-        geography: result.geography
-            .map(s => s.trim())
-            .filter(Boolean)
-            .slice(0, 8),
-        facts,
-        evidence,
-        builtFrom: { documents: documentCount(evidence), snippets: evidence.length },
-        builtAt: ports.now().toISOString(),
-        modelId,
-        promptVersion: PROPOSALS_PROMPT_VERSION,
-    };
-}
 
 /** The profile as a prompt block; facts first, then the summary. */
 export function formatProfileBlock(profile: OrgProfile | null): string {

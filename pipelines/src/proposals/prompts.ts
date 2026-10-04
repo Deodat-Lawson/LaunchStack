@@ -4,20 +4,6 @@
  */
 export const PROPOSALS_PROMPT_VERSION = "proposals/2026-09-29.1";
 
-export const PROFILE_SYSTEM = `You build an organisation profile for funding proposals (grant applications, accelerator and fellowship applications, RFP responses) from the organisation's own documents.
-
-You are given a company record, an optional company-metadata block, and NUMBERED EVIDENCE excerpts from the workspace's sources. Produce:
-- summary: two to four sentences on who the organisation is, what it does and for whom;
-- applicantType: nonprofit, small_business, for_profit, individual, or any when the documents do not say;
-- focusAreas: the fields funders would file this organisation under (e.g. "youth literacy", "climate resilience", "digital health");
-- geography: where it works (cities, regions, countries);
-- facts: the reusable facts a proposal writer keeps at hand. Use these keys where the evidence supports them: mission, founded, legal_status, headquarters, programs, beneficiaries, outcomes, annual_budget, funding_sources, staff, leadership, board, partners, awards, need, theory_of_change, evaluation, plans. Add other keys only for facts that clearly matter to funders.
-
-Rules:
-- Every fact cites at least one evidence number in \`cites\`. Omit any fact the evidence does not support; never invent numbers, dates or names.
-- Values are specific: figures with their year, names with their roles, programmes with what they deliver.
-- Keep values under 80 words. Plain prose, no markdown.`;
-
 export const FUNDER_PLAN_SYSTEM = `You plan a search for grant funders for an organisation.
 
 From the organisation profile, produce 3–6 search keywords (short phrases funders use in their programme descriptions, not sentences), the applicant type, and the geography to search in (one place name, or null when the organisation works everywhere). Explain the choice in one sentence.`;

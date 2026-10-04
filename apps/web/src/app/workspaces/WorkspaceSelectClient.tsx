@@ -315,7 +315,8 @@ export function WorkspaceSelectClient({
                 return;
             }
             resetMyProfile();
-            router.push("/employer/documents");
+            // A new workspace starts by telling us about the company (skippable).
+            router.push("/employer/onboarding");
             router.refresh();
         } catch (err) {
             console.error(err);

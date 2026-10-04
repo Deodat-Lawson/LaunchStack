@@ -9,17 +9,18 @@ import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 
+import { getProfileRow, profileView } from "../company-metadata";
+import { orgProfileFromView } from "./profile";
+
 import {
     proposalApplications,
     proposalLibraryItems,
     proposalOpportunities,
-    proposalProfiles,
     proposalRuns,
     proposalSections,
     type ProposalApplicationRow,
     type ProposalLibraryItemRow,
     type ProposalOpportunityRow,
-    type ProposalProfileRow,
     type ProposalRunRow,
     type ProposalSectionRow,
 } from "./schema";
@@ -35,8 +36,6 @@ import type {
     OpportunityRecord,
     OpportunityStatus,
     OrgProfile,
-    ProfileRecord,
-    ProfileStatus,
     Requirement,
     Review,
     RunInput,
@@ -50,19 +49,6 @@ import type {
 } from "./types";
 
 // ─── Mappers ─────────────────────────────────────────────────────────────────
-
-function toProfile(row: ProposalProfileRow): ProfileRecord {
-    return {
-        id: row.id,
-        companyId: row.companyId,
-        status: row.status,
-        profile: row.profile ?? null,
-        error: row.error ?? null,
-        builtAt: row.builtAt ?? null,
-        createdAt: row.createdAt,
-        updatedAt: row.updatedAt ?? null,
-    };
-}
 
 function toOpportunity(row: ProposalOpportunityRow): OpportunityRecord {
     return {
@@ -175,76 +161,15 @@ const newId = () => randomUUID();
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
-export async function getProfile(companyId: bigint): Promise<ProfileRecord | null> {
-    const [row] = await getDb()
-        .select()
-        .from(proposalProfiles)
-        .where(eq(proposalProfiles.companyId, companyId))
-        .limit(1);
-    return row ? toProfile(row) : null;
-}
-
-/** The workspace's profile row, created empty on first touch. */
-export async function ensureProfile(companyId: bigint): Promise<ProfileRecord> {
-    const existing = await getProfile(companyId);
-    if (existing) return existing;
-    const db = getDb();
-    await db
-        .insert(proposalProfiles)
-        .values({ id: newId(), companyId, status: "empty" })
-        .onConflictDoNothing({ target: proposalProfiles.companyId });
-    const created = await getProfile(companyId);
-    if (!created) throw new Error("Could not create the grant profile row");
-    return created;
-}
-
-export async function setProfileStatus(
-    companyId: bigint,
-    status: ProfileStatus,
-    error: string | null = null
-): Promise<void> {
-    await ensureProfile(companyId);
-    await getDb()
-        .update(proposalProfiles)
-        .set({ status, error })
-        .where(eq(proposalProfiles.companyId, companyId));
-}
-
-export async function saveProfile(companyId: bigint, profile: OrgProfile): Promise<ProfileRecord> {
-    await ensureProfile(companyId);
-    await getDb()
-        .update(proposalProfiles)
-        .set({ status: "ready", profile, error: null, builtAt: new Date(profile.builtAt) })
-        .where(eq(proposalProfiles.companyId, companyId));
-    const saved = await getProfile(companyId);
-    if (!saved) throw new Error("Profile vanished while saving");
-    return saved;
-}
-
-/** A person's edit to one fact; a new key appends, an empty value removes. */
-export async function patchProfileFact(
-    companyId: bigint,
-    fact: { key: string; label?: string; value: string }
-): Promise<ProfileRecord | null> {
-    const current = await getProfile(companyId);
-    if (!current?.profile) return current;
-    const facts = current.profile.facts.filter(f => f.key !== fact.key);
-    if (fact.value.trim().length > 0) {
-        const previous = current.profile.facts.find(f => f.key === fact.key);
-        facts.push({
-            key: fact.key,
-            label: fact.label ?? previous?.label ?? fact.key,
-            value: fact.value.trim(),
-            cites: [],
-            source: "manual",
-        });
-    }
-    const profile: OrgProfile = { ...current.profile, facts };
-    await getDb()
-        .update(proposalProfiles)
-        .set({ profile })
-        .where(eq(proposalProfiles.companyId, companyId));
-    return getProfile(companyId);
+/**
+ * The organisation profile the stages write from: the company profile
+ * (Settings › Company), read through the same view the profile page uses so
+ * excerpt numbers match. Null until it has been built.
+ */
+export async function loadOrgProfile(companyId: bigint): Promise<OrgProfile | null> {
+    const row = await getProfileRow(companyId);
+    if (!row?.builtAt || !row.metadata) return null;
+    return orgProfileFromView(profileView(row.metadata), row.builtAt);
 }
 
 // ─── Opportunities ───────────────────────────────────────────────────────────

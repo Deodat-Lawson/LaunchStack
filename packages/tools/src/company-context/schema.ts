@@ -17,7 +17,9 @@ import { relations, sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import {
     index,
+    integer,
     jsonb,
+    text,
     timestamp,
     varchar,
     bigint,
@@ -135,6 +137,33 @@ export interface LegalEntry {
     [key: string]: MetadataFact<unknown> | undefined;
 }
 
+/** A fact with the label a person reads: "Mission", "Annual budget". */
+export interface LabeledFact<T = string> extends MetadataFact<T> {
+    label: string;
+}
+
+export const APPLICANT_TYPE_VALUES = [
+    "nonprofit",
+    "small_business",
+    "for_profit",
+    "individual",
+] as const;
+export type ApplicantType = (typeof APPLICANT_TYPE_VALUES)[number];
+
+/**
+ * What a reader of the whole profile needs beyond the catalog sections: a
+ * summary, the kind of organisation, the fields it works in, and the
+ * reusable facts a proposal writer keeps at hand (mission, outcomes,
+ * budget…). Schema 1.1.0; absent on profiles built before it.
+ */
+export interface ProfileInfo {
+    summary?: MetadataFact;
+    applicant_type?: MetadataFact<ApplicantType>;
+    focus_areas?: MetadataFact[];
+    /** Keyed by a stable slug: mission, programs, outcomes, annual_budget, … */
+    facts?: Record<string, LabeledFact>;
+}
+
 export interface ProvenanceInfo {
     total_documents_processed: number;
     last_document_processed?: {
@@ -144,6 +173,10 @@ export interface ProvenanceInfo {
     };
     extraction_model: string;
     extraction_version: string;
+    /** Sources read for the profile on the last build (schema 1.1.0). */
+    sources_counted?: number;
+    /** Hash of the assembled facts the summary was written from; unchanged facts skip the summary call. */
+    facts_hash?: string;
 }
 
 export interface CompanyMetadataJSON {
@@ -158,6 +191,8 @@ export interface CompanyMetadataJSON {
     projects: ProjectEntry[];
     policies: Record<string, MetadataFact>;
     legal: LegalEntry[];
+    /** Schema 1.1.0. */
+    profile?: ProfileInfo;
 
     provenance: ProvenanceInfo;
     derived_views?: Record<string, string>;
@@ -179,6 +214,9 @@ export interface MetadataDiff {
 // Company Metadata (canonical current state — one row per company)
 // ============================================================================
 
+export const BUILD_STATUS_VALUES = ["idle", "building", "failed"] as const;
+export type BuildStatus = (typeof BUILD_STATUS_VALUES)[number];
+
 export const companyMetadata = pgTable(
     "company_metadata",
     {
@@ -195,6 +233,19 @@ export const companyMetadata = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Declared after the timestamps because the migration adds them to an existing
+        // table: a fresh `push` and the migrated schema must have the same column order.
+        /**
+         * A build in flight — a Rebuild, or a per-upload refresh while nothing else is
+         * building — or the last one failed.
+         */
+        buildStatus: varchar("build_status", { length: 16, enum: BUILD_STATUS_VALUES })
+            .notNull()
+            .default("idle"),
+        buildError: text("build_error"),
+        buildStartedAt: timestamp("build_started_at", { withTimezone: true }),
+        /** When the profile was last assembled from its sources. */
+        builtAt: timestamp("built_at", { withTimezone: true }),
     },
     table => ({
         companyIdUnique: uniqueIndex("company_metadata_company_id_unique").on(table.companyId),
@@ -232,6 +283,98 @@ export const companyMetadataHistory = pgTable(
         changeTypeIdx: index("company_metadata_history_change_type_idx").on(table.changeType),
     })
 );
+
+// ============================================================================
+// Company profile sources (one row per document: what reading it decided)
+// ============================================================================
+
+export const SOURCE_ROLE_VALUES = ["about_us", "third_party", "no_content"] as const;
+/** Written by or about the company, someone else's material, or nothing to read. */
+export type SourceRole = (typeof SOURCE_ROLE_VALUES)[number];
+
+export const SOURCE_OVERRIDE_VALUES = ["about_us", "set_aside"] as const;
+export type SourceOverride = (typeof SOURCE_OVERRIDE_VALUES)[number];
+
+export const SOURCE_STATUS_VALUES = ["pending", "done", "failed"] as const;
+export type SourceStatus = (typeof SOURCE_STATUS_VALUES)[number];
+
+/** Passages in, passages kept, and why the rest were dropped. */
+export interface SourcePassageCounts {
+    total: number;
+    kept: number;
+    dropped: Record<string, number>;
+}
+
+/**
+ * The facts one source version supplies, before they are assembled into the
+ * profile. Same sections as {@link CompanyMetadataJSON}; every fact carries
+ * its own quote and page in `sources`.
+ */
+export type SourceFacts = Partial<
+    Pick<
+        CompanyMetadataJSON,
+        | "company"
+        | "people"
+        | "services"
+        | "markets"
+        | "projects"
+        | "policies"
+        | "legal"
+        | "profile"
+    >
+>;
+
+/**
+ * What reading one document decided, for the version it was read at. The
+ * profile is assembled from these rows on every build, so a deleted document
+ * (cascade), a new version (re-read), or a person's override (`override`)
+ * changes the profile without any fact being patched by hand.
+ */
+export const companyProfileSources = pgTable(
+    "company_profile_sources",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        /** The document version this row was read at; a different current version means re-read. */
+        versionId: bigint("version_id", { mode: "bigint" }),
+        role: varchar("role", { length: 16, enum: SOURCE_ROLE_VALUES }),
+        roleBy: varchar("role_by", { length: 8, enum: ["rules", "model"] }),
+        /** One sentence for the person: who wrote it and why it does or doesn't count. */
+        reason: text("reason"),
+        /** A person's decision; survives new versions. */
+        override: varchar("override", { length: 16, enum: SOURCE_OVERRIDE_VALUES }),
+        overrideBy: varchar("override_by", { length: 256 }),
+        status: varchar("status", { length: 16, enum: SOURCE_STATUS_VALUES })
+            .notNull()
+            .default("pending"),
+        error: text("error"),
+        /** Null when the source was not read for facts (set aside, or nothing to read). */
+        facts: jsonb("facts").$type<SourceFacts>(),
+        factCount: integer("fact_count").notNull().default(0),
+        passages: jsonb("passages").$type<SourcePassageCounts>(),
+        /** Prompt + rules version the row was produced under; a bump re-reads every source. */
+        readerVersion: varchar("reader_version", { length: 32 }),
+        modelId: varchar("model_id", { length: 128 }),
+        readAt: timestamp("read_at", { withTimezone: true }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    table => ({
+        documentUnique: uniqueIndex("company_profile_sources_document_unique").on(
+            table.companyId,
+            table.documentId
+        ),
+        documentIdIdx: index("company_profile_sources_document_id_idx").on(table.documentId),
+    })
+);
+export type CompanyProfileSourceRow = InferSelectModel<typeof companyProfileSources>;
 
 // ============================================================================
 // Relations

@@ -12,11 +12,9 @@ import { numberEvidence, validCites } from "./evidence";
 import type { ProposalPorts, ProposalStage } from "./ports";
 import { renderApplicationMarkdown } from "./render";
 import {
-    buildOrgProfile,
     draftSection,
     extractRequest,
     findFunders,
-    formatProfileBlock,
     reviewApplication,
     rewriteInstruction,
     rewriteSection,
@@ -50,7 +48,6 @@ function ports(
             numberOfEmployees: "6",
             categories: ["Reports", "Board"],
         }),
-        metadataContext: async () => null,
         retrieve: async ({ query }) => {
             calls.push(`retrieve:${query.slice(0, 20)}`);
             return [
@@ -141,44 +138,6 @@ describe("evidence", () => {
             [2, 2, "beta"],
         ]);
         expect(validCites([2, 9, 1, 2, 1.5], evidence)).toEqual([1, 2]);
-    });
-});
-
-describe("buildOrgProfile", () => {
-    it("retrieves every profile query, numbers the evidence, and keeps only cited facts", async () => {
-        const p = ports((stage, user) => {
-            expect(stage).toBe("profile");
-            expect(user).toContain("Riverbend Literacy");
-            expect(user).toContain("[1] Doc 11 (p. 2)");
-            expect(user).toContain("[2] Impact report 2025");
-            return {
-                summary: "Riverbend runs after-school reading programmes.",
-                applicantType: "nonprofit",
-                focusAreas: ["youth literacy", ""],
-                geography: ["Portland, Oregon"],
-                facts: [
-                    { key: "Founded", label: "Founded", value: "2014", cites: [1] },
-                    {
-                        key: "outcomes",
-                        label: "Outcomes",
-                        value: "78% gained a level (2025)",
-                        cites: [2, 7],
-                    },
-                    { key: "budget", label: "Budget", value: "$2m", cites: [] },
-                ],
-            };
-        });
-        const profile = await buildOrgProfile(p, { companyId: 1 });
-        expect(p.calls.filter(c => c.startsWith("retrieve:"))).toHaveLength(9);
-        expect(profile.evidence).toHaveLength(2);
-        expect(profile.facts.map(f => [f.key, f.cites])).toEqual([
-            ["founded", [1]],
-            ["outcomes", [2]],
-        ]);
-        expect(profile.focusAreas).toEqual(["youth literacy"]);
-        expect(profile.builtFrom).toEqual({ documents: 2, snippets: 2 });
-        expect(profile.modelId).toBe("fake/profile");
-        expect(formatProfileBlock(profile)).toContain("- Founded: 2014");
     });
 });
 

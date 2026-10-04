@@ -8,6 +8,7 @@ import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
+import { readFact } from "@launchstack/tools/company-context/facts";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -53,11 +54,13 @@ function buildFieldList(templateId: string): string {
 function extractCompanyDefaults(meta: CompanyMetadataJSON | null): Record<string, string> {
     if (!meta) return {};
     const defaults: Record<string, string> = {};
-    const c = meta.company;
-    if (c?.name?.value) defaults.company_name = c.name.value;
-    if (c?.headquarters?.value) {
-        defaults.company_address = c.headquarters.value;
-        defaults.governing_law_jurisdiction = c.headquarters.value;
+    // Through readFact: a removed or low-confidence fact must not pre-fill a contract.
+    const name = readFact(meta.company?.name);
+    const headquarters = readFact(meta.company?.headquarters);
+    if (name) defaults.company_name = name;
+    if (headquarters) {
+        defaults.company_address = headquarters;
+        defaults.governing_law_jurisdiction = headquarters;
     }
     return defaults;
 }
@@ -174,7 +177,7 @@ export async function POST(request: Request) {
                 .limit(1);
 
             if (metaRow?.metadata) {
-                companyDefaults = extractCompanyDefaults(metaRow.metadata as CompanyMetadataJSON);
+                companyDefaults = extractCompanyDefaults(metaRow.metadata);
             }
         }
 

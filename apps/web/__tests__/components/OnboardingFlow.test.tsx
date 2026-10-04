@@ -107,6 +107,10 @@ beforeEach(() => {
         description: null,
         idea: null,
         industry: null,
+        saved: { website: false, description: false, idea: false },
+        fromSources: { website: null, description: null },
+        websiteImported: false,
+        canEdit: true,
     };
     websiteResponse = { status: 202, body: { success: true } };
     mockGetProfile.mockResolvedValue({ profile: profile() });
@@ -141,6 +145,9 @@ it("starts a second pass filled in with what was saved", async () => {
         description: "We make anvils.",
         idea: "Anvils by subscription.",
         industry: "Manufacturing",
+        saved: { website: true, description: true, idea: true },
+        websiteImported: true,
+        canEdit: true,
     };
     await renderLoaded();
     expect(screen.getByLabelText("Website")).toHaveValue("https://acme.com/");
@@ -376,4 +383,200 @@ it("lists what the person told us before what the sources say, and links to the 
         "href",
         "/employer/settings#company"
     );
+});
+
+describe("going through it again", () => {
+    it("shows what the documents say as a hint, and Continue leaves it theirs", async () => {
+        const user = userEvent.setup();
+        onboardingState = {
+            name: "Acme",
+            website: null,
+            description: null,
+            idea: null,
+            industry: null,
+            saved: { website: false, description: false, idea: false },
+            fromSources: {
+                website: "https://acme.com/",
+                description: "Acme Robotics builds warehouse robots.",
+            },
+            websiteImported: false,
+            canEdit: true,
+        };
+        await renderLoaded();
+        const description = screen.getByLabelText("What does the company do?");
+        expect(description).toHaveValue("");
+        expect(description).toHaveAttribute(
+            "placeholder",
+            "From your sources: Acme Robotics builds warehouse robots."
+        );
+        expect(screen.getByLabelText("Website")).toHaveAttribute(
+            "placeholder",
+            "From your sources: https://acme.com/"
+        );
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST")).toEqual([]);
+    });
+
+    beforeEach(() => {
+        onboardingState = {
+            name: "Acme",
+            website: "https://acme.com/",
+            description: "We make anvils.",
+            idea: "Anvils by subscription.",
+            industry: "Manufacturing",
+            saved: { website: true, description: true, idea: true },
+            websiteImported: true,
+            canEdit: true,
+        };
+    });
+
+    it("sends nothing and imports nothing when nothing changed", async () => {
+        const user = userEvent.setup();
+        await renderLoaded();
+        expect(screen.getByText(/homepage is already a source/)).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST")).toEqual([]);
+    });
+
+    it("sends only what changed", async () => {
+        const user = userEvent.setup();
+        await renderLoaded();
+        const idea = screen.getByLabelText(/idea you.re working on/);
+        await user.clear(idea);
+        await user.type(idea, "Anvils for rent.");
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST")).toEqual([
+            { url: "/api/company/onboarding", method: "POST", body: { idea: "Anvils for rent." } },
+        ]);
+    });
+
+    it("a description from the company record is still the person's to save", async () => {
+        const user = userEvent.setup();
+        onboardingState = {
+            ...onboardingState,
+            website: null,
+            idea: null,
+            description: "From the workspace picker.",
+            saved: { website: false, description: false, idea: false },
+            websiteImported: false,
+        };
+        await renderLoaded();
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST")).toEqual([
+            {
+                url: "/api/company/onboarding",
+                method: "POST",
+                body: { description: "From the workspace picker." },
+            },
+        ]);
+    });
+
+    it("imports the homepage when it is saved but not a source (deleted, or never fetched)", async () => {
+        const user = userEvent.setup();
+        onboardingState = { ...onboardingState, websiteImported: false };
+        await renderLoaded();
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST")).toEqual([
+            {
+                url: "/api/upload/website",
+                method: "POST",
+                body: { url: "https://acme.com/", category: "Company" },
+            },
+        ]);
+    });
+
+    it("imports a new address", async () => {
+        const user = userEvent.setup();
+        await renderLoaded();
+        const website = screen.getByLabelText("Website");
+        await user.clear(website);
+        await user.type(website, "acme.io");
+        expect(screen.getByText(/We import your homepage/)).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByRole("heading", { name: "Add documents about the company" });
+        expect(calls.filter(c => c.method === "POST").map(c => c.body)).toEqual([
+            { website: "https://acme.io/" },
+            { url: "https://acme.io/", category: "Company" },
+        ]);
+    });
+});
+
+it("caps each answer at what the server accepts", async () => {
+    await renderLoaded();
+    expect(screen.getByLabelText("Website")).toHaveAttribute("maxLength", "2048");
+    expect(screen.getByLabelText("What does the company do?")).toHaveAttribute("maxLength", "5000");
+    expect(screen.getByLabelText(/idea you.re working on/)).toHaveAttribute("maxLength", "5000");
+});
+
+it("someone who cannot set up the profile is shown the way out, not a form", async () => {
+    const user = userEvent.setup();
+    onboardingState = { ...onboardingState, canEdit: false };
+    render(<OnboardingFlow />);
+    await screen.findByRole("heading", { name: "Setting up Acme" });
+    expect(screen.queryByLabelText("Website")).toBeNull();
+    expect(screen.getByRole("link", { name: "See the company profile" })).toHaveAttribute(
+        "href",
+        "/employer/settings#company"
+    );
+    await user.click(screen.getByRole("button", { name: /Open your workspace/ }));
+    expect(mockReplace).toHaveBeenCalledWith("/employer/documents");
+});
+
+it("an address that can never be fetched is not offered again", async () => {
+    const user = userEvent.setup();
+    websiteResponse = {
+        status: 400,
+        body: { error: "URL resolves to a private or internal address" },
+    };
+    await renderLoaded();
+    await user.type(screen.getByLabelText("Website"), "169.254.169.254.nip.io");
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.click(await screen.findByRole("button", { name: /Skip this step/ }));
+    expect(
+        await screen.findByText(/private or internal address\. It stays your website/)
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Try again" })).toBeNull();
+});
+
+it("says so when the profile could not be built", async () => {
+    const user = userEvent.setup();
+    mockGetProfile.mockResolvedValue({
+        profile: profile({ status: "failed", error: "The model did not answer" }),
+    });
+    await renderLoaded();
+    await user.click(screen.getByRole("button", { name: "Skip this step" }));
+    await user.click(screen.getByRole("button", { name: /Skip this step/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+        "The profile could not be built: The model did not answer"
+    );
+});
+
+it("tells a screen reader how far reading has got", async () => {
+    const user = userEvent.setup();
+    mockGetProfile.mockResolvedValue({
+        profile: profile({
+            sources: [
+                source({ documentId: 1, facts: 2 }),
+                source({ documentId: 2, status: "pending", role: null }),
+            ],
+            facts: [
+                {
+                    path: "company.website",
+                    label: "Website",
+                    value: "https://acme.com/",
+                    cites: [],
+                    source: "manual",
+                },
+            ],
+        }),
+    });
+    await renderLoaded();
+    await user.click(screen.getByRole("button", { name: "Skip this step" }));
+    await user.click(screen.getByRole("button", { name: /Skip this step/ }));
+    expect(await screen.findByText("1 of 2 sources read. 1 fact so far.")).toBeInTheDocument();
 });

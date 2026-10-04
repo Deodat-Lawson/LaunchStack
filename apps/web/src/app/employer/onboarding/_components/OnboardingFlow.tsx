@@ -52,11 +52,25 @@ interface Answers {
     industry: string;
 }
 
+/** What GET /api/company/onboarding says is already known. */
+interface Known {
+    saved: { website: boolean; description: boolean; idea: boolean };
+    fromSources: { website: string | null; description: string | null };
+    websiteImported: boolean;
+    canEdit: boolean;
+    answers: Answers;
+}
+
 type ImportState =
     | { state: "idle" }
     | { state: "importing"; url: string }
     | { state: "done"; url: string }
-    | { state: "failed"; url: string; message: string };
+    /** `retry`: worth trying again (the site or the network failed), not an address that can never be fetched. */
+    | { state: "failed"; url: string; message: string; retry: boolean };
+
+/** The server's limits (CompanyOnboardingSchema). */
+const MAX_WEBSITE = 2048;
+const MAX_TEXT = 5000;
 
 interface UploadItem {
     key: string;
@@ -76,6 +90,48 @@ function formatSize(bytes: number): string {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+interface OnboardingResponse {
+    name?: string | null;
+    website?: string | null;
+    description?: string | null;
+    idea?: string | null;
+    industry?: string | null;
+    saved?: Known["saved"];
+    fromSources?: Known["fromSources"];
+    websiteImported?: boolean;
+    canEdit?: boolean;
+}
+
+/**
+ * Only what the person typed or changed. An answer shown as it was saved is
+ * not sent again, and nothing that came from the documents is offered in the
+ * first place, so Continue never turns a document's fact into the person's.
+ */
+/** A value the documents supply, offered as a placeholder the person can write over. */
+function hint(value: string | null | undefined): string | null {
+    if (!value) return null;
+    const short = value.length > 140 ? `${value.slice(0, 139)}…` : value;
+    return `From your sources: ${short}`;
+}
+
+function changedAnswers(
+    answers: Answers,
+    website: string | null,
+    known: Known | null
+): Partial<Answers> {
+    const payload: Partial<Answers> = {};
+    const fresh = (field: "website" | "description" | "idea", value: string) =>
+        value !== "" && (!known?.saved[field] || value !== known.answers[field]);
+    if (website && fresh("website", website)) payload.website = website;
+    const description = answers.description.trim();
+    if (fresh("description", description)) payload.description = description;
+    const idea = answers.idea.trim();
+    if (fresh("idea", idea)) payload.idea = idea;
+    if (answers.industry && answers.industry !== known?.answers.industry)
+        payload.industry = answers.industry;
+    return payload;
+}
+
 /**
  * The first minutes of a workspace: what the company is, its website, and
  * documents about it. What a person types becomes their own facts on the
@@ -93,6 +149,7 @@ export function OnboardingFlow() {
         industry: "",
     });
     const [loaded, setLoaded] = useState(false);
+    const [known, setKnown] = useState<Known | null>(null);
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
     const [websiteImport, setWebsiteImport] = useState<ImportState>({ state: "idle" });
@@ -114,14 +171,22 @@ export function OnboardingFlow() {
         let alive = true;
         void fetch("/api/company/onboarding")
             .then(r => (r.ok ? r.json() : null))
-            .then((data: (Partial<Answers> & { name?: string | null }) | null) => {
+            .then((data: OnboardingResponse | null) => {
                 if (!alive || !data) return;
-                setName(data.name ?? null);
-                setAnswers({
+                const loadedAnswers = {
                     website: data.website ?? "",
                     description: data.description ?? "",
                     idea: data.idea ?? "",
                     industry: data.industry ?? "",
+                };
+                setName(data.name ?? null);
+                setAnswers(loadedAnswers);
+                setKnown({
+                    saved: data.saved ?? { website: false, description: false, idea: false },
+                    fromSources: data.fromSources ?? { website: null, description: null },
+                    websiteImported: data.websiteImported ?? false,
+                    canEdit: data.canEdit ?? true,
+                    answers: loadedAnswers,
                 });
             })
             .finally(() => alive && setLoaded(true));
@@ -142,11 +207,23 @@ export function OnboardingFlow() {
             });
             if (!res.ok) {
                 const body = (await res.json().catch(() => ({}))) as { error?: string };
-                throw new Error(body.error ?? `The page could not be fetched (HTTP ${res.status})`);
+                setWebsiteImport({
+                    state: "failed",
+                    url,
+                    message: body.error ?? `The page could not be fetched (HTTP ${res.status})`,
+                    // A refused address (private, malformed) or folder fails the same way every time.
+                    retry: res.status >= 500 || res.status === 429,
+                });
+                return;
             }
             setWebsiteImport({ state: "done", url });
         } catch (e) {
-            setWebsiteImport({ state: "failed", url, message: errorText(e, "Import failed") });
+            setWebsiteImport({
+                state: "failed",
+                url,
+                message: errorText(e, "Import failed"),
+                retry: true,
+            });
         }
     }, []);
 
@@ -160,25 +237,30 @@ export function OnboardingFlow() {
         setSaving(true);
         setSaveError(null);
         try {
-            const res = await fetch("/api/company/onboarding", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    website: normalized ?? undefined,
-                    description: answers.description.trim() || undefined,
-                    idea: answers.idea.trim() || undefined,
-                    industry: answers.industry || undefined,
-                }),
-            });
-            if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
-                throw new Error(body.error ?? "Saving failed");
+            const payload = changedAnswers(answers, normalized, known);
+            if (Object.keys(payload).length > 0) {
+                const res = await fetch("/api/company/onboarding", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: string };
+                    throw new Error(body.error ?? "Saving failed");
+                }
             }
-            // Import the homepage once per address; it keeps going while the person moves on.
-            const already =
+            // Import the homepage when the address is new or not a source yet, once per
+            // address; it keeps going while the person moves on.
+            const isSource =
+                known !== null &&
+                known.saved.website &&
+                known.websiteImported &&
+                known.answers.website === normalized;
+            const underway =
                 websiteImport.state !== "idle" &&
                 websiteImport.state !== "failed" &&
                 websiteImport.url === normalized;
+            const already = isSource || underway;
             if (normalized && !already) void importWebsite(normalized);
             setStep(1);
         } catch (e) {
@@ -218,6 +300,8 @@ export function OnboardingFlow() {
 
     const companyName = name ?? "your company";
 
+    if (known && !known.canEdit) return <ReadOnly companyName={companyName} onLeave={leave} />;
+
     return (
         <div className="mx-auto flex w-full max-w-[680px] flex-col gap-5">
             <div className="flex flex-col gap-2">
@@ -236,6 +320,11 @@ export function OnboardingFlow() {
                 {step === 0 && (
                     <CompanyStep
                         companyName={companyName}
+                        fromSources={known?.fromSources ?? null}
+                        homepageIsSource={Boolean(
+                            known?.websiteImported &&
+                                normalizeWebsite(answers.website) === known.answers.website
+                        )}
                         answers={answers}
                         loaded={loaded}
                         onChange={patch => setAnswers(a => ({ ...a, ...patch }))}
@@ -296,6 +385,8 @@ function StepFooter({ children }: { children: React.ReactNode }) {
 
 function CompanyStep({
     companyName,
+    fromSources,
+    homepageIsSource,
     answers,
     loaded,
     onChange,
@@ -306,6 +397,8 @@ function CompanyStep({
 }: {
     companyName: string;
     answers: Answers;
+    fromSources: Known["fromSources"] | null;
+    homepageIsSource: boolean;
     loaded: boolean;
     onChange: (patch: Partial<Answers>) => void;
     error: string | null;
@@ -332,13 +425,16 @@ function CompanyStep({
                         id="onboarding-website"
                         inputMode="url"
                         autoComplete="url"
-                        placeholder="acme.com"
+                        placeholder={hint(fromSources?.website) ?? "acme.com"}
                         value={answers.website}
                         onChange={e => onChange({ website: e.target.value })}
+                        maxLength={MAX_WEBSITE}
                         disabled={!loaded}
                     />
                     <p className="text-ink-3 text-xs">
-                        We import your homepage as a source, so the profile can quote it.
+                        {homepageIsSource
+                            ? "Your homepage is already a source; it is not imported again."
+                            : "We import your homepage as a source, so the profile can quote it."}
                     </p>
                 </div>
                 <div className="grid gap-1.5">
@@ -346,9 +442,13 @@ function CompanyStep({
                     <Textarea
                         id="onboarding-description"
                         rows={3}
-                        placeholder="A sentence or two: what you offer and to whom."
+                        placeholder={
+                            hint(fromSources?.description) ??
+                            "A sentence or two: what you offer and to whom."
+                        }
                         value={answers.description}
                         onChange={e => onChange({ description: e.target.value })}
+                        maxLength={MAX_TEXT}
                         disabled={!loaded}
                     />
                 </div>
@@ -362,6 +462,7 @@ function CompanyStep({
                         placeholder="What you're building, for whom, and why now."
                         value={answers.idea}
                         onChange={e => onChange({ idea: e.target.value })}
+                        maxLength={MAX_TEXT}
                         disabled={!loaded}
                     />
                 </div>
@@ -473,6 +574,7 @@ function DocumentsStep({
                     <ul
                         className="border-line divide-line-2 divide-y rounded-lg border"
                         aria-label="Added documents"
+                        aria-live="polite"
                     >
                         {uploads.map(u => (
                             <li key={u.key} className="flex items-center gap-3 px-3 py-2 text-sm">
@@ -522,6 +624,15 @@ function UploadState({ item }: { item: UploadItem }) {
 const POLL_MS = 3000;
 const SHOWN_FACTS = 8;
 const POLL_FOR_MS = 5 * 60 * 1000;
+
+/** For screen readers, as the page updates: how far reading has got. */
+function progressLine(profile: CompanyProfileDto): string {
+    const read = profile.sources.filter(s => s.status !== "pending").length;
+    const total = profile.sources.length;
+    const facts = profile.facts.length;
+    const sources = total ? `${read} of ${total} sources read. ` : "";
+    return `${sources}${facts} ${facts === 1 ? "fact" : "facts"} so far.`;
+}
 
 function sourceState(source: ProfileSourceDto): {
     text: string;
@@ -621,17 +732,31 @@ function UnderstoodStep({
                         )}
                         {websiteImport.state === "failed" && (
                             <>
-                                <span className="text-danger text-xs">{websiteImport.message}</span>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => onRetryWebsite(websiteImport.url)}
-                                >
-                                    Try again
-                                </Button>
+                                <span className="text-danger text-xs">
+                                    {websiteImport.message}
+                                    {!websiteImport.retry &&
+                                        ". It stays your website; change it in Settings › Company."}
+                                </span>
+                                {websiteImport.retry && (
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => onRetryWebsite(websiteImport.url)}
+                                    >
+                                        Try again
+                                    </Button>
+                                )}
                             </>
                         )}
                     </div>
+                )}
+
+                {profile?.status === "failed" && (
+                    <p role="alert" className="text-danger text-sm">
+                        The profile could not be built
+                        {profile.error ? `: ${profile.error}` : "."} Your answers and sources are
+                        kept; rebuild it from the company profile.
+                    </p>
                 )}
 
                 {profile?.summary ? (
@@ -640,11 +765,17 @@ function UnderstoodStep({
                     </p>
                 ) : (
                     <p className="text-ink-3 text-sm">
-                        {profile
-                            ? "No summary yet: it is written once there are facts to write from."
-                            : "Loading…"}
+                        {!profile
+                            ? "Loading…"
+                            : profile.status === "building"
+                              ? "Writing the summary…"
+                              : "No summary yet. It is written from your sources: add your website or a document about the company."}
                     </p>
                 )}
+
+                <p className="sr-only" aria-live="polite">
+                    {profile ? progressLine(profile) : ""}
+                </p>
 
                 {facts.length > 0 && (
                     <div className="flex flex-col gap-2">
@@ -775,5 +906,31 @@ function NextTile({
             <span className="text-ink text-sm font-medium">{title}</span>
             <span className="text-ink-3 text-xs leading-relaxed">{text}</span>
         </Link>
+    );
+}
+
+/** Someone without settings.manage: the profile is the admins' to set up. */
+function ReadOnly({ companyName, onLeave }: { companyName: string; onLeave: () => void }) {
+    return (
+        <div className="mx-auto flex w-full max-w-[680px] flex-col gap-5">
+            <section className="border-line bg-panel rounded-lg border">
+                <StepHeader title={`Setting up ${companyName}`}>
+                    A workspace admin tells the profile about the company: its website, what it does
+                    and the documents about it. You can read the profile and ask questions of
+                    everything in the workspace.
+                </StepHeader>
+                <div className="h-6" />
+                <StepFooter>
+                    <Button asChild variant="outline">
+                        <Link href="/employer/settings#company">See the company profile</Link>
+                    </Button>
+                    <div className="flex-1 max-sm:hidden" />
+                    <Button type="button" onClick={onLeave}>
+                        Open your workspace
+                        <ArrowRight className="size-4" />
+                    </Button>
+                </StepFooter>
+            </section>
+        </div>
     );
 }

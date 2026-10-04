@@ -7,6 +7,7 @@
  */
 import type * as CompanyMetadata from "@launchstack/pipelines/company-metadata";
 import {
+    applyFactEdit,
     createEmptyMetadata,
     type CompanyMetadataJSON,
 } from "@launchstack/pipelines/company-metadata";
@@ -15,6 +16,13 @@ const mockUpdates: { set: Record<string, unknown> }[] = [];
 let mockCompanyRows: Record<string, unknown>[] = [];
 let mockStored: CompanyMetadataJSON | null = null;
 const mockSaves: { metadata: CompanyMetadataJSON; options: Record<string, unknown> }[] = [];
+/** Raw creation keys that have produced a document. */
+const mockImported = new Set<string>();
+
+jest.mock("~/server/services/document-creation", () => ({
+    findDocumentByCreationKey: (_companyId: bigint, key: string) =>
+        Promise.resolve(mockImported.has(key) ? { id: 1 } : null),
+}));
 
 jest.mock("~/server/db", () => ({
     db: {
@@ -62,6 +70,7 @@ import {
 const ctx = { companyId: BigInt(5), authUserId: "user-a" };
 
 beforeEach(() => {
+    mockImported.clear();
     mockUpdates.length = 0;
     mockSaves.length = 0;
     mockStored = null;
@@ -162,6 +171,20 @@ describe("saveOnboarding", () => {
 });
 
 describe("loadOnboarding", () => {
+    const admin = { ...ctx, can: () => true };
+
+    function fromDocuments(value: string) {
+        return {
+            value,
+            visibility: "public",
+            confidence: 0.95,
+            priority: "normal",
+            status: "active",
+            last_updated: "2026-10-01T00:00:00.000Z",
+            sources: [{ doc_id: 9, doc_name: "deck.pdf", quote: value }],
+        } as never;
+    }
+
     it("starts a second pass filled in with what was saved", async () => {
         await saveOnboarding(ctx, {
             website: "acme.com",
@@ -169,24 +192,71 @@ describe("loadOnboarding", () => {
             idea: "Anvils by subscription.",
         });
         mockCompanyRows = [{ name: "Acme", description: "Old words", industry: "Manufacturing" }];
+        mockImported.add("website:https://acme.com/");
 
-        await expect(loadOnboarding(ctx)).resolves.toEqual({
+        await expect(loadOnboarding(admin)).resolves.toEqual({
             name: "Acme",
             website: "https://acme.com/",
             description: "We make anvils.",
             idea: "Anvils by subscription.",
             industry: "Manufacturing",
+            saved: { website: true, description: true, idea: true },
+            fromSources: { website: null, description: null },
+            websiteImported: true,
+            canEdit: true,
+        });
+    });
+
+    it("never offers a fact the documents supplied as the person's answer", async () => {
+        const metadata = createEmptyMetadata("5");
+        metadata.company.website = fromDocuments("https://acme.com/");
+        metadata.company.description = fromDocuments("Acme Robotics builds warehouse robots.");
+        mockStored = metadata;
+        // The person's old words in the company record are not offered over the documents'
+        // description either: they may have chosen "Use what the sources say".
+        mockCompanyRows = [{ name: "Acme", description: "Robots for grocers", industry: null }];
+
+        await expect(loadOnboarding(admin)).resolves.toMatchObject({
+            website: null,
+            description: null,
+            saved: { website: false, description: false, idea: false },
+            fromSources: {
+                website: "https://acme.com/",
+                description: "Acme Robotics builds warehouse robots.",
+            },
+            websiteImported: false,
         });
     });
 
     it("falls back to the company record before there is a profile", async () => {
         mockCompanyRows = [{ name: "Acme", description: "From signup", industry: null }];
-        await expect(loadOnboarding(ctx)).resolves.toEqual({
+        await expect(loadOnboarding(admin)).resolves.toEqual({
             name: "Acme",
             website: null,
             description: "From signup",
             idea: null,
             industry: null,
+            saved: { website: false, description: false, idea: false },
+            fromSources: { website: null, description: null },
+            websiteImported: false,
+            canEdit: true,
+        });
+    });
+
+    it("says whether the viewer may save", async () => {
+        await expect(loadOnboarding({ ...ctx, can: () => false })).resolves.toMatchObject({
+            canEdit: false,
+        });
+    });
+
+    it("a removed website is not offered", async () => {
+        await saveOnboarding(ctx, { website: "acme.com" });
+        const metadata = structuredClone(mockStored!);
+        applyFactEdit(metadata, { path: "company.website", value: "" });
+        mockStored = metadata;
+        await expect(loadOnboarding(admin)).resolves.toMatchObject({
+            website: null,
+            saved: { website: false, description: false, idea: false },
         });
     });
 });

@@ -221,7 +221,7 @@ describe("CompanyProfileView", () => {
         // A hand-set fact carries no number and says it was edited.
         const budget = screen.getByText("$480k");
         expect(within(budget).queryByLabelText(/^Source /)).toBeNull();
-        expect(screen.getByText("· from you")).toBeInTheDocument();
+        expect(screen.getByText("· added by hand")).toBeInTheDocument();
 
         // The header counts facts and the sources read for them.
         expect(screen.getByText(/3 facts from 3 sources · built/)).toBeInTheDocument();

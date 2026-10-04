@@ -87,7 +87,9 @@ export function ProfileRow({
                 {label}
                 {/* No value to hang them on: the excerpts prove the name itself. */}
                 {!value && cites.map(n => <Cite key={n} n={n} evidence={evidence} />)}
-                {edited && <span className="text-ink-3 ml-1 text-xs font-normal">· from you</span>}
+                {edited && (
+                    <span className="text-ink-3 ml-1 text-xs font-normal">· added by hand</span>
+                )}
             </div>
             {editing ? (
                 <form

@@ -83,6 +83,7 @@ const EMPTY_CONTENT = {
     people: [],
     services: [],
     projects: [],
+    legal: [],
     evidence: [],
 } satisfies Partial<CompanyProfileDto>;
 
@@ -281,6 +282,7 @@ function readyProfile(now: number): CompanyProfileDto {
         people,
         services,
         projects: [],
+        legal: [],
         evidence,
         sources,
         counts: counts(sources),

@@ -70,6 +70,8 @@ export interface ProfileView {
     people: ViewEntry[];
     services: ViewEntry[];
     projects: ViewEntry[];
+    /** Agreements the organisation is party to. */
+    legal: ViewEntry[];
     evidence: ViewEvidence[];
     /** Documents the shown facts rest on. */
     documents: number;
@@ -124,13 +126,21 @@ export function profileView(
     const documents = new Set<number>();
 
     /** The fact if the viewer may see it, with the excerpt numbers it cites. */
+    /**
+     * The fact if the viewer may see it, with the excerpt numbers it cites.
+     * `whole`: shown only when every source is visible — for what was
+     * written from several facts (summary, applicant type, focus areas),
+     * whose wording can carry what a hidden source said.
+     */
     const read = (
-        fact: MetadataFact<unknown> | undefined
+        fact: MetadataFact<unknown> | undefined,
+        whole = false
     ): { fact: MetadataFact<unknown>; cites: number[] } | null => {
         if (!usable(fact)) return null;
         const sources = docSources(fact);
         const visible = sources.filter(s => canSee(s.doc_id));
         // A document fact whose every source is hidden from this viewer is hidden too.
+        if (whole && visible.length < sources.length) return null;
         if (fact.priority !== "manual_override" && sources.length > 0 && visible.length === 0)
             return null;
         const cites: number[] = [];
@@ -170,6 +180,7 @@ export function profileView(
             people: [],
             services: [],
             projects: [],
+            legal: [],
             evidence: [],
             documents: 0,
         };
@@ -220,8 +231,8 @@ export function profileView(
     }
 
     const entries = (
-        section: "people" | "services" | "projects",
-        detailField: "role" | "description"
+        section: "people" | "services" | "projects" | "legal",
+        detailField: "role" | "description" | "summary"
     ): ViewEntry[] => {
         const out: ViewEntry[] = [];
         (metadata[section] ?? []).forEach((entry, i) => {
@@ -247,11 +258,12 @@ export function profileView(
     const people = entries("people", "role");
     const services = entries("services", "description");
     const projects = entries("projects", "description");
+    const legal = entries("legal", "summary");
 
-    const values = (list: MetadataFact[] | undefined): string[] => [
+    const values = (list: MetadataFact[] | undefined, whole = false): string[] => [
         ...new Set(
             (list ?? [])
-                .map(f => read(f))
+                .map(f => read(f, whole))
                 .filter(Boolean)
                 .map(g => String(g!.fact.value))
         ),
@@ -262,9 +274,9 @@ export function profileView(
     ];
 
     // The summary cites the excerpts of the facts it rests on, so it reads last.
-    const summary = read(metadata.profile?.summary);
-    const applicant = read(metadata.profile?.applicant_type);
-    const focusAreas = values(metadata.profile?.focus_areas);
+    const summary = read(metadata.profile?.summary, true);
+    const applicant = read(metadata.profile?.applicant_type, true);
+    const focusAreas = values(metadata.profile?.focus_areas, true);
 
     return {
         summary: summary ? String(summary.fact.value) : null,
@@ -277,6 +289,7 @@ export function profileView(
         people,
         services,
         projects,
+        legal,
         evidence,
         documents: documents.size,
     };

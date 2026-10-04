@@ -46,11 +46,13 @@ export {
 } from "./views";
 export {
     assembleProfile,
+    catchUpAndAssemble,
     isSourceFresh,
     readSource,
     recordOverride,
     rebuildProfile,
     refreshForDocument,
+    staleDocumentIds,
     type CompanyIdentityHint,
     type ProfileBuildPorts,
     type RebuildResult,
@@ -60,8 +62,10 @@ export {
     isCounted,
     listSourceRows,
     listWorkspaceDocuments,
+    finishBuild,
     saveProfileLocked,
     setBuildStatus,
+    startBuild,
     type ProfileDocument,
     type ProfileRow,
 } from "./db";

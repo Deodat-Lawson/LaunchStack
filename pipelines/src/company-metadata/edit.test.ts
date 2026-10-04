@@ -102,6 +102,21 @@ describe("applyFactEdit", () => {
     });
 });
 
+describe("names", () => {
+    it("refuses retyping an entry's name, and removes the entry when the name is cleared", () => {
+        const m = doc();
+        expect(applyFactEdit(m, { path: "people.0.name", value: "Janet Doe" }, NOW)).toEqual({
+            ok: false,
+            error: "A name comes from the sources; remove the entry instead",
+        });
+        expect(applyFactEdit(m, { path: "people.0.name", value: "" }, NOW).ok).toBe(true);
+        expect(m.people[0]?.name).toMatchObject({
+            status: "deprecated",
+            priority: "manual_override",
+        });
+    });
+});
+
 describe("resetFactEdit", () => {
     it("drops a person's edit so the sources' value can come back, and only an edit", () => {
         const m = doc();

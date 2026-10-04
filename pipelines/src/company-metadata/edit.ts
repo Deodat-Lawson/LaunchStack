@@ -150,6 +150,10 @@ export function applyFactEdit(
         if (!list || !Number.isInteger(idx) || idx < 0 || idx >= list.length)
             return { ok: false, error: `Invalid ${section} index` };
         if (b === "subprojects") return { ok: false, error: `Unsupported path: ${edit.path}` };
+        // A name is what matches an entry to its sources on every rebuild; it can be
+        // removed (the entry leaves the profile) but not retyped.
+        if (b === "name" && edit.value.trim())
+            return { ok: false, error: "A name comes from the sources; remove the entry instead" };
         const entry = list[idx]!;
         const old = entry[b];
         const fact = next(old, edit.value, at);

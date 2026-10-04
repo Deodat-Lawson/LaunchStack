@@ -113,6 +113,7 @@ export function toCompanyProfileDto(input: ProfileDtoInput): CompanyProfileDto {
         people: view.people,
         services: view.services,
         projects: view.projects,
+        legal: view.legal,
         evidence: view.evidence.map(e => ({
             ...e,
             href:

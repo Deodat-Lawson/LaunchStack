@@ -2,8 +2,10 @@
  * GET /api/company/metadata
  *
  * The raw company-metadata JSON for the logged-in user's company — the
- * export of what the company profile builder wrote. The profile screen and
- * its edits use /api/company/profile.
+ * export of what the company profile builder wrote. It carries excerpts from
+ * every document regardless of folder access, so it is for admins
+ * (settings.manage); the profile screen uses /api/company/profile, which
+ * hides what the viewer may not open.
  */
 
 import { NextResponse } from "next/server";
@@ -11,11 +13,11 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
         const [result] = await db

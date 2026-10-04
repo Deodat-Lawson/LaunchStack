@@ -26,8 +26,10 @@ import {
     listCountedSources,
     listWorkspaceDocuments,
     loadVersionChunks,
+    finishBuild,
+    listSourceRows,
     saveProfileLocked,
-    setBuildStatus,
+    startBuild,
     upsertSourceRow,
     type ProfileDocument,
 } from "./db";
@@ -184,9 +186,21 @@ export async function readSource(
     }
 }
 
+type CountedSource = Awaited<ReturnType<typeof listCountedSources>>[number];
+
+const toAssembleSources = (rows: CountedSource[]) =>
+    rows.map(s => ({ documentId: Number(s.documentId), title: s.title, facts: s.facts ?? {} }));
+
 /**
- * Assemble the profile from every counted source and save it. The summary
- * is rewritten only when the facts it would be written from changed.
+ * Assemble the profile from every counted source and save it.
+ *
+ * Two passes. Outside the lock, a draft decides whether the summary must be
+ * rewritten — a model call, so never under the lock. Under the lock, the
+ * profile is assembled again from the source rows and the edits as they are
+ * NOW: a build that ran alongside, a reset, a delete or an override made in
+ * the meantime is reflected, so the last save is always current. When the
+ * facts moved on after the summary was written, the summary is kept but
+ * marked out of date (its facts hash), and the next assembly rewrites it.
  */
 export async function assembleProfile(
     companyId: bigint,
@@ -199,57 +213,103 @@ export async function assembleProfile(
         getProfileRow(companyId),
     ]);
     const previous = current?.metadata ?? null;
-    const assembled = assembleMetadata(
-        String(companyId),
-        sources.map(s => ({
-            documentId: Number(s.documentId),
-            title: s.title,
-            facts: s.facts ?? {},
-        })),
-        previous,
-        now
-    );
-    assembled.provenance.extraction_model =
-        ports.modelId ?? previous?.provenance.extraction_model ?? "";
-
-    const hash = factsHash(assembled);
+    const draft = assembleMetadata(String(companyId), toAssembleSources(sources), previous, now);
+    const draftHash = factsHash(draft);
     const reusable =
-        previous?.provenance.facts_hash === hash &&
-        previous.schema_version === assembled.schema_version;
+        previous?.provenance.facts_hash === draftHash &&
+        previous.schema_version === draft.schema_version;
     const written = reusable
-        ? {
-              summary: previous.profile?.summary,
-              applicant_type: previous.profile?.applicant_type,
-              focus_areas: previous.profile?.focus_areas,
-          }
+        ? writtenPart(previous)
         : await synthesizeProfile({
-              metadata: assembled,
+              metadata: draft,
               companyName: (audit.identity ?? (await identityOf(companyId, ports))).name,
               generate: ports.generate,
               now,
           });
-    assembled.profile = {
-        ...assembled.profile,
-        summary: written.summary,
-        applicant_type: written.applicant_type,
-        focus_areas: written.focus_areas,
-    };
-    // Edits to the summary itself outrank what was just written.
-    const withEdits = applyManualOverrides(assembled, previous);
-    withEdits.provenance.facts_hash = hash;
 
-    const { metadata } = await saveProfileLocked(
+    const saved = await saveProfileLocked(
         companyId,
-        locked => {
-            const final = applyManualOverrides(withEdits, locked);
+        async (locked, tx) => {
+            const fresh = assembleMetadata(
+                String(companyId),
+                toAssembleSources(await listCountedSources(companyId, tx)),
+                locked,
+                now
+            );
+            fresh.provenance.extraction_model =
+                ports.modelId ?? locked?.provenance.extraction_model ?? "";
+            const hash = factsHash(fresh);
+            // Another build may already have written the summary for exactly these facts.
+            const lockedFits =
+                hash !== draftHash &&
+                locked?.provenance.facts_hash === hash &&
+                locked.schema_version === fresh.schema_version;
+            const summary = lockedFits ? writtenPart(locked) : written;
+            fresh.profile = { ...fresh.profile, ...summary };
+            // Edits to the summary itself outrank what was written.
+            const final = applyManualOverrides(fresh, locked);
+            final.provenance.facts_hash = hash === draftHash || lockedFits ? hash : draftHash;
             return { metadata: final, diff: diffMetadata(locked, final) };
         },
         { changedBy: audit.changedBy, documentId: audit.documentId ?? null }
     );
-    return metadata;
+    return saved!.metadata;
 }
 
-/** A new or changed document: read it, then reassemble. The per-upload path. */
+function writtenPart(
+    metadata: CompanyMetadataJSON
+): Pick<NonNullable<CompanyMetadataJSON["profile"]>, "summary" | "applicant_type" | "focus_areas"> {
+    return {
+        summary: metadata.profile?.summary,
+        applicant_type: metadata.profile?.applicant_type,
+        focus_areas: metadata.profile?.focus_areas,
+    };
+}
+
+/**
+ * Documents whose source row is missing or was read at another version or
+ * under an older reader. A failed read is left to Rebuild, so one bad file
+ * does not cost a model call on every event.
+ */
+export async function staleDocumentIds(companyId: bigint): Promise<number[]> {
+    const [docs, rows] = await Promise.all([
+        listWorkspaceDocuments(companyId),
+        listSourceRows(companyId),
+    ]);
+    const byDocument = new Map(rows.map(r => [Number(r.documentId), r]));
+    return docs
+        .filter(doc => {
+            const row = byDocument.get(doc.id);
+            return (
+                !row ||
+                row.readerVersion !== READER_VERSION ||
+                (row.versionId === null ? null : Number(row.versionId)) !== doc.currentVersionId
+            );
+        })
+        .map(doc => doc.id);
+}
+
+/**
+ * Read whatever is stale, then reassemble. Every per-event path (an upload,
+ * a person's override or reset, a delete) comes through here, so a profile
+ * is never assembled from a partial set of sources — on a workspace's first
+ * event after this builder shipped, that means reading all of it once.
+ */
+export async function catchUpAndAssemble(
+    companyId: bigint,
+    ports: ProfileBuildPorts,
+    audit: { changedBy: string; documentId?: number | null; identity?: CompanyIdentityHint }
+): Promise<CompanyMetadataJSON> {
+    const identity = audit.identity ?? (await identityOf(companyId, ports));
+    const stale = await staleDocumentIds(companyId);
+    await runWithConcurrency(
+        stale.map(id => () => readSource(companyId, id, ports, { identity })),
+        REBUILD_CONCURRENCY
+    );
+    return assembleProfile(companyId, ports, { ...audit, identity });
+}
+
+/** A new or changed document: read it (and anything stale), then reassemble. The per-upload path. */
 export async function refreshForDocument(
     companyId: bigint,
     documentId: number,
@@ -257,7 +317,7 @@ export async function refreshForDocument(
 ): Promise<CompanyMetadataJSON> {
     const identity = await identityOf(companyId, ports);
     await readSource(companyId, documentId, ports, { identity });
-    return assembleProfile(companyId, ports, { changedBy: "system", documentId, identity });
+    return catchUpAndAssemble(companyId, ports, { changedBy: "system", documentId, identity });
 }
 
 export interface RebuildResult {
@@ -276,7 +336,7 @@ export async function rebuildProfile(
     ports: ProfileBuildPorts,
     options: { changedBy: string; force?: boolean }
 ): Promise<RebuildResult> {
-    await setBuildStatus(companyId, "building");
+    const token = await startBuild(companyId);
     try {
         const identity = await identityOf(companyId, ports);
         const docs = await listWorkspaceDocuments(companyId);
@@ -291,7 +351,7 @@ export async function rebuildProfile(
             changedBy: options.changedBy,
             identity,
         });
-        await setBuildStatus(companyId, "idle");
+        await finishBuild(companyId, token, "idle");
         return {
             metadata,
             sources: docs.length,
@@ -299,7 +359,7 @@ export async function rebuildProfile(
         };
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        await setBuildStatus(companyId, "failed", message.slice(0, 500));
+        await finishBuild(companyId, token, "failed", message.slice(0, 500));
         throw error;
     }
 }

@@ -208,6 +208,8 @@ import { PATCH as renameCategory } from "~/app/api/Categories/[id]/route";
 import { POST as updateUploadPreference } from "~/app/api/updateUploadPreference/route";
 import { POST as updateCompany } from "~/app/api/updateCompany/route";
 import { POST as companyOnboarding } from "~/app/api/company/onboarding/route";
+import { GET as getCompanyMetadata } from "~/app/api/company/metadata/route";
+import { GET as getCompanyMetadataHistory } from "~/app/api/company/metadata/history/route";
 import { PATCH as patchProfileFact } from "~/app/api/company/profile/facts/route";
 import { PATCH as patchProfileSource } from "~/app/api/company/profile/sources/[documentId]/route";
 import { POST as repoExplainer } from "~/app/api/repo-explainer/route";
@@ -312,6 +314,18 @@ const GATES: readonly Gate[] = [
         permission: "settings.manage",
         deniedRole: "member",
         call: () => companyOnboarding(json("/api/company/onboarding", "POST", { industry: "x" })),
+    },
+    {
+        route: "GET /api/company/metadata (raw export, excerpts from every folder)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => getCompanyMetadata(),
+    },
+    {
+        route: "GET /api/company/metadata/history",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => getCompanyMetadataHistory(),
     },
     {
         route: "PATCH /api/company/profile/facts",

@@ -68,6 +68,20 @@ vi.mock("./db", () => {
                 )
                 .map(r => ({ ...r, title: (store.docs.get(Number(r.documentId)) as Doc).title })),
         getProfileRow: async () => store.profile,
+        listSourceRows: async () =>
+            [...store.rows.values()].filter(r => store.docs.has(Number(r.documentId))),
+        startBuild: async () => {
+            const at = new Date();
+            store.profile = {
+                metadata: store.profile?.metadata ?? null,
+                builtAt: store.profile?.builtAt ?? null,
+                buildStatus: "building",
+            };
+            return at;
+        },
+        finishBuild: async (_c: bigint, _at: Date, status: string) => {
+            if (store.profile) store.profile = { ...store.profile, buildStatus: status };
+        },
         setBuildStatus: async (_c: bigint, status: string) => {
             store.profile = {
                 metadata: store.profile?.metadata ?? null,
@@ -77,9 +91,13 @@ vi.mock("./db", () => {
         },
         saveProfileLocked: async (
             _c: bigint,
-            finish: (current: unknown) => { metadata: unknown; diff: MetadataDiff }
+            finish: (
+                current: unknown,
+                tx: unknown
+            ) => Promise<{ metadata: unknown; diff: MetadataDiff } | null>
         ) => {
-            const result = finish(store.profile?.metadata ?? null);
+            const result = await finish(store.profile?.metadata ?? null, "tx");
+            if (!result) return null;
             store.profile = {
                 buildStatus: store.profile?.buildStatus ?? "idle",
                 metadata: result.metadata,
@@ -166,6 +184,10 @@ function factsFor(prompt: string) {
             )
         );
     }
+    if (prompt.includes("serves grocers across Texas"))
+        facts.push(
+            say("markets", "geographies", "Texas", "Acme Robotics serves grocers across Texas.")
+        );
     if (prompt.includes("Rewritten deck"))
         facts.push(
             say("company", "headquarters", "Austin, TX", "We moved our headquarters to Austin, TX.")
@@ -183,11 +205,18 @@ function factsFor(prompt: string) {
 }
 
 const calls: Array<{ schemaName: string; prompt: string }> = [];
+/** Milliseconds the next summary call waits — to make one build finish after another. */
+const slowSummaries: number[] = [];
 const generate = vi.fn(async (input: { prompt: string; schemaName?: string }) => {
     calls.push({ schemaName: input.schemaName ?? "", prompt: input.prompt });
+    if (input.schemaName === "company_profile_summary") {
+        const wait = slowSummaries.shift();
+        if (wait) await new Promise(r => setTimeout(r, wait));
+    }
     if (input.schemaName === "source_role")
         return input.prompt.includes("Acme Robotics builds") ||
-            input.prompt.includes("Rewritten deck")
+            input.prompt.includes("Rewritten deck") ||
+            input.prompt.includes("serves grocers across Texas")
             ? {
                   role: "about_us",
                   reason: "Acme Robotics' own pitch deck.",
@@ -229,6 +258,7 @@ beforeEach(() => {
     store.profile = null;
     store.history.length = 0;
     calls.length = 0;
+    slowSummaries.length = 0;
     store.docs.set(1, doc(1, "Acme deck.pdf", 11));
     store.chunks.set("1:11", [chunk(101, DECK, "Acme deck.pdf")]);
     store.docs.set(2, doc(2, "2312.06648v3.pdf", 21));
@@ -329,5 +359,61 @@ describe("a person's override and a changing workspace", () => {
         await assembleProfile(C, ports, { changedBy: "system" });
         expect(metadata().company.headquarters?.value).toBe("Austin, TX");
         expect(metadata().people).toEqual([]);
+    });
+});
+
+describe("builds that overlap, and the first event after upgrading", () => {
+    const SITE =
+        "Acme Robotics serves grocers across Texas. Our team answers support questions within one business day, and our robots ship with a two-year warranty.";
+
+    it("a slow reassembly that drafted before an upload landed still saves the upload's facts", async () => {
+        await rebuildProfile(C, ports, { changedBy: "u1" });
+        // Force the next reassembly to write a summary, and make that call slow.
+        store.profile!.metadata = {
+            ...(store.profile!.metadata as CompanyMetadataJSON),
+            provenance: { ...metadata().provenance, facts_hash: "stale" },
+        };
+        slowSummaries.push(40);
+        const slow = assembleProfile(C, ports, { changedBy: "delete" }); // drafts now, saves last
+        await new Promise(r => setTimeout(r, 5));
+        store.docs.set(4, doc(4, "Acme site.md", 41));
+        store.chunks.set("4:41", [chunk(401, SITE, "Acme site.md")]);
+        await refreshForDocument(C, 4, ports); // reads the new source and saves first
+        await slow;
+        const m = metadata();
+        expect(m.company.headquarters?.value).toBe("Baltimore, MD");
+        expect(m.markets.geographies?.map(f => f.value)).toEqual(["Texas"]);
+    });
+
+    it("the first upload after upgrading reads every source, so the profile does not collapse to one document", async () => {
+        store.docs.set(4, doc(4, "Acme site.md", 41));
+        store.chunks.set("4:41", [chunk(401, SITE, "Acme site.md")]);
+        // A profile from before this builder: built, no source rows.
+        store.profile = {
+            buildStatus: "idle",
+            builtAt: new Date("2026-09-01"),
+            metadata: {
+                schema_version: "1.0.0",
+                company_id: "50",
+                updated_at: "",
+                company: {},
+                people: [],
+                services: [],
+                markets: {},
+                projects: [],
+                policies: {},
+                legal: [],
+                provenance: {
+                    total_documents_processed: 3,
+                    extraction_model: "",
+                    extraction_version: "1.0.0",
+                },
+            },
+        };
+        await refreshForDocument(C, 4, ports);
+        expect(extractionPrompts().some(p => p.includes("Acme Robotics builds"))).toBe(true);
+        expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
+        expect(metadata().markets.geographies?.map(f => f.value)).toEqual(["Texas"]);
+        expect(row(2).role).toBe("third_party");
     });
 });

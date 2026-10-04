@@ -43,25 +43,38 @@ SET "metadata" = jsonb_set(
     COALESCE(m."metadata"->'profile', '{}'::jsonb)
         || jsonb_build_object('facts', COALESCE(m."metadata"->'profile'->'facts', '{}'::jsonb) || manual.facts))
 FROM (
-    SELECT p."company_id", jsonb_object_agg(
-        left(regexp_replace(lower(f->>'key'), '[^a-z0-9_]', '_', 'g'), 64),
-        jsonb_build_object(
-            'value', f->>'value',
-            'label', COALESCE(NULLIF(f->>'label', ''), f->>'key'),
-            'visibility', 'private',
-            'usage', 'outreach_ok_with_approval',
-            'confidence', 1,
-            'priority', 'manual_override',
-            'status', 'active',
-            'last_updated', to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
-            'sources', jsonb_build_array(jsonb_build_object(
-                'doc_id', 0,
-                'doc_name', 'Manual edit',
-                'extracted_at', to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'))))) AS facts
-    FROM "pdr_ai_v2_proposal_profiles" p,
-        jsonb_array_elements(COALESCE(p."profile"->'facts', '[]'::jsonb)) f
-    WHERE f->>'source' = 'manual' AND COALESCE(f->>'key', '') <> '' AND COALESCE(f->>'value', '') <> ''
-    GROUP BY p."company_id"
+    -- Keys are slugged; two facts that slug alike ("Annual Budget", "annual_budget")
+    -- both survive, the second as "annual_budget_2".
+    SELECT keyed."company_id",
+        jsonb_object_agg(keyed.slug || CASE WHEN keyed.n > 1 THEN '_' || keyed.n ELSE '' END, keyed.fact) AS facts
+    FROM (
+        SELECT slugged."company_id", slugged.slug, slugged.fact,
+            row_number() OVER (PARTITION BY slugged."company_id", slugged.slug ORDER BY slugged.ord) AS n
+        FROM (
+            SELECT p."company_id",
+                f.ord,
+                left(regexp_replace(lower(f.value->>'key'), '[^a-z0-9_]', '_', 'g'), 60) AS slug,
+                jsonb_build_object(
+                    'value', f.value->>'value',
+                    'label', COALESCE(NULLIF(f.value->>'label', ''), initcap(replace(f.value->>'key', '_', ' '))),
+                    'visibility', 'private',
+                    'usage', 'outreach_ok_with_approval',
+                    'confidence', 1,
+                    'priority', 'manual_override',
+                    'status', 'active',
+                    'last_updated', to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+                    'sources', jsonb_build_array(jsonb_build_object(
+                        'doc_id', 0,
+                        'doc_name', 'Manual edit',
+                        'extracted_at', to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')))) AS fact
+            FROM "pdr_ai_v2_proposal_profiles" p,
+                jsonb_array_elements(COALESCE(p."profile"->'facts', '[]'::jsonb)) WITH ORDINALITY AS f(value, ord)
+            WHERE f.value->>'source' = 'manual'
+                AND COALESCE(f.value->>'key', '') <> ''
+                AND COALESCE(f.value->>'value', '') <> ''
+        ) slugged
+    ) keyed
+    GROUP BY keyed."company_id"
 ) manual
 WHERE m."company_id" = manual."company_id";--> statement-breakpoint
 DELETE FROM "pdr_ai_v2_proposal_runs" WHERE "kind" = 'profile';--> statement-breakpoint

@@ -19,7 +19,8 @@ import {
 } from "./types";
 import { numberedFacts } from "./views";
 
-const MAX_SOURCES = 6;
+/** Every fact a summary rests on should be citable from it. */
+const MAX_SOURCES = 12;
 const MAX_FOCUS_AREAS = 6;
 
 const SummarySchema = z.object({

@@ -155,7 +155,7 @@ function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
     );
 }
 
-/** People, products and services, or projects: name, detail, excerpts. Hidden when empty. */
+/** People, products and services, projects or agreements: name, detail, excerpts. Hidden when empty. */
 export function EntriesSection({
     title,
     entries,
@@ -194,6 +194,11 @@ export function EntriesSection({
                             onReset={
                                 canEdit && detailPath && entry.source === "manual"
                                     ? () => onSave({ path: detailPath, value: "", reset: true })
+                                    : undefined
+                            }
+                            onRemove={
+                                canEdit
+                                    ? () => onSave({ path: `${entry.path}.name`, value: "" })
                                     : undefined
                             }
                         />

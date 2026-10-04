@@ -182,12 +182,13 @@ export async function getProfileRow(companyId: bigint): Promise<ProfileRow | nul
 export async function setBuildStatus(
     companyId: bigint,
     status: BuildStatus,
-    error: string | null = null
+    error: string | null = null,
+    startedAt: Date = new Date()
 ): Promise<void> {
     const set = {
         buildStatus: status,
         buildError: error,
-        ...(status === "building" ? { buildStartedAt: new Date() } : {}),
+        ...(status === "building" ? { buildStartedAt: startedAt } : {}),
     };
     await getDb()
         .insert(companyMetadata)
@@ -201,6 +202,34 @@ export async function setBuildStatus(
             target: companyMetadata.companyId,
             set: { ...set, updatedAt: new Date() },
         });
+}
+
+/**
+ * Start a build and return its token. Only the build holding the latest token
+ * may finish it ({@link finishBuild}), so a short refresh that ends first
+ * never marks a longer Rebuild done.
+ */
+export async function startBuild(companyId: bigint): Promise<Date> {
+    const startedAt = new Date();
+    await setBuildStatus(companyId, "building", null, startedAt);
+    return startedAt;
+}
+
+export async function finishBuild(
+    companyId: bigint,
+    startedAt: Date,
+    status: "idle" | "failed",
+    error: string | null = null
+): Promise<void> {
+    await getDb()
+        .update(companyMetadata)
+        .set({ buildStatus: status, buildError: error, updatedAt: new Date() })
+        .where(
+            and(
+                eq(companyMetadata.companyId, companyId),
+                eq(companyMetadata.buildStartedAt, startedAt)
+            )
+        );
 }
 
 function emptyEnvelope(companyId: bigint): CompanyMetadataJSON {
@@ -225,34 +254,45 @@ function emptyEnvelope(companyId: bigint): CompanyMetadataJSON {
     };
 }
 
+type Db = ReturnType<typeof getDb>;
+/** The database or an open transaction — whatever a read should go through. */
+export type Executor = Db | Parameters<Parameters<Db["transaction"]>[0]>[0];
+
 /**
  * Write the profile under the row lock. `finish` receives the row as it is
- * NOW (a person may have edited a fact while the build ran) and returns what
- * to store; it must be cheap — no model calls inside the lock.
+ * NOW and the transaction to read through, so what it stores reflects every
+ * source row and edit committed before the lock was taken. It must be cheap
+ * — database reads only, no model calls. Returning null writes nothing.
+ * `built` (default true) stamps `built_at`; an edit is not a build.
  */
 export async function saveProfileLocked(
     companyId: bigint,
-    finish: (current: CompanyMetadataJSON | null) => {
-        metadata: CompanyMetadataJSON;
-        diff: MetadataDiff;
-    },
+    finish: (
+        current: CompanyMetadataJSON | null,
+        tx: Executor
+    ) =>
+        | Promise<{ metadata: CompanyMetadataJSON; diff: MetadataDiff } | null>
+        | { metadata: CompanyMetadataJSON; diff: MetadataDiff }
+        | null,
     audit: {
         changedBy: string;
         documentId?: number | null;
         changeType?: "extraction" | "manual_override";
+        built?: boolean;
     }
-): Promise<{ metadata: CompanyMetadataJSON; diff: MetadataDiff }> {
+): Promise<{ metadata: CompanyMetadataJSON; diff: MetadataDiff } | null> {
     return getDb().transaction(async tx => {
         const [locked] = await tx
             .select({ metadata: companyMetadata.metadata })
             .from(companyMetadata)
             .where(eq(companyMetadata.companyId, companyId))
             .for("update");
-        const result = finish(locked?.metadata ?? null);
+        const result = await finish(locked?.metadata ?? null, tx);
+        if (!result) return null;
         const values = {
             schemaVersion: result.metadata.schema_version,
             metadata: result.metadata,
-            builtAt: new Date(),
+            ...(audit.built === false ? {} : { builtAt: new Date() }),
             ...(audit.documentId ? { lastExtractionDocumentId: BigInt(audit.documentId) } : {}),
         };
         if (locked) {
@@ -279,9 +319,10 @@ export async function saveProfileLocked(
 
 /** Source rows whose facts count, with the document title they were read from. */
 export async function listCountedSources(
-    companyId: bigint
+    companyId: bigint,
+    executor: Executor = getDb()
 ): Promise<Array<CompanyProfileSourceRow & { title: string }>> {
-    const rows = await getDb()
+    const rows = await executor
         .select({ row: companyProfileSources, title: document.title })
         .from(companyProfileSources)
         .innerJoin(document, eq(document.id, companyProfileSources.documentId))

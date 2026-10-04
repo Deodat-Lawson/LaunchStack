@@ -108,6 +108,18 @@ describe("profileView", () => {
         expect(view.evidence.some(e => e.documentId === 2)).toBe(false);
     });
 
+    it("hides a summary resting on any source the viewer cannot open", () => {
+        const m = sample();
+        m.profile!.summary!.sources.push({
+            doc_id: 9,
+            doc_name: "Board minutes",
+            extracted_at: NOW.toISOString(),
+            quote: "raising a $5m Series A in Q1",
+        });
+        expect(profileView(m).summary).not.toBeNull();
+        expect(profileView(m, { canSee: id => id !== 9 }).summary).toBeNull();
+    });
+
     it("shows manual edits as manual, hides removals", () => {
         const m = sample();
         applyFactEdit(m, { path: "company.headquarters", value: "Remote" }, NOW);

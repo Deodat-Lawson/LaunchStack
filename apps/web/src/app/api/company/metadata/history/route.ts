@@ -10,11 +10,12 @@ import { eq, desc } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { companyMetadataHistory } from "~/server/db/schema";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const ctx = await requireWorkspaceContext();
+        // Diffs carry excerpts from every document, whatever the viewer may open.
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
         const history = await db

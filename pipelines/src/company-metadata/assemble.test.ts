@@ -170,6 +170,26 @@ describe("assembleMetadata", () => {
     });
 });
 
+describe("a removed entry", () => {
+    it("stays removed when the source still names it", () => {
+        const built = assembleMetadata(
+            "7",
+            [{ documentId: 1, title: "Deck", facts: DECK }],
+            null,
+            NOW
+        );
+        const edited = structuredClone(built);
+        expect(applyFactEdit(edited, { path: "people.0.name", value: "" }, NOW).ok).toBe(true);
+        const rebuilt = assembleMetadata(
+            "7",
+            [{ documentId: 1, title: "Deck", facts: DECK }],
+            edited,
+            NOW
+        );
+        expect(rebuilt.people[0]?.name.status).toBe("deprecated");
+    });
+});
+
 describe("factsHash", () => {
     it("is stable for the same facts and changes when a fact changes", () => {
         const a = assembleMetadata("7", [{ documentId: 1, title: "Deck", facts: DECK }], null, NOW);

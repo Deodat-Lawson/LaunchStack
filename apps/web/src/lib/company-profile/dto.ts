@@ -94,6 +94,8 @@ export interface CompanyProfileDto {
     people: ProfileEntryDto[];
     services: ProfileEntryDto[];
     projects: ProfileEntryDto[];
+    /** Agreements the organisation is party to: contracts, NDAs, terms. */
+    legal: ProfileEntryDto[];
 
     evidence: ProfileEvidenceDto[];
     sources: ProfileSourceDto[];

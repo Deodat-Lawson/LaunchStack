@@ -22,6 +22,7 @@ export function ProfileRow({
     edited,
     onSave,
     onReset,
+    onRemove,
     clearHint,
     prominent = false,
 }: {
@@ -35,6 +36,8 @@ export function ProfileRow({
     onSave?: (value: string) => Promise<void>;
     /** Present on an edited value: drop the edit and show what the sources say again. */
     onReset?: () => Promise<void>;
+    /** Present on a person, product, project or agreement: take it off the profile. */
+    onRemove?: () => Promise<void>;
     /** What clearing the text does, under the editor. */
     clearHint: string;
     /** People and products lead with their name; facts lead with a quiet label. */
@@ -125,6 +128,18 @@ export function ProfileRow({
                         >
                             Cancel
                         </Button>
+                        {onRemove && (
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                type="button"
+                                className="text-danger"
+                                onClick={() => void run(onRemove)}
+                                disabled={busy}
+                            >
+                                Remove {label}
+                            </Button>
+                        )}
                         {edited && onReset && (
                             <Button
                                 size="sm"

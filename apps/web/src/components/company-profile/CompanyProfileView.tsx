@@ -414,6 +414,13 @@ function Body({
                 canEdit={p.canEdit}
                 onSave={onSaveFact}
             />
+            <EntriesSection
+                title="Agreements"
+                entries={p.legal}
+                evidence={p.evidence}
+                canEdit={p.canEdit}
+                onSave={onSaveFact}
+            />
 
             {p.evidence.length > 0 && (
                 <section aria-label="Evidence">

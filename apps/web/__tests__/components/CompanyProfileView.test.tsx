@@ -134,6 +134,7 @@ function readyProfile(over: Partial<CompanyProfileDto> = {}): CompanyProfileDto 
         ],
         services: [],
         projects: [],
+        legal: [],
         evidence: [
             {
                 n: 1,
@@ -431,6 +432,31 @@ describe("CompanyProfileView", () => {
             value: "",
             reset: true,
         });
+    });
+
+    it("lists agreements, and lets an editor take a person off the profile", async () => {
+        const base = readyProfile();
+        mockApi.patchFact.mockResolvedValue({ profile: base });
+        await renderWith({
+            ...base,
+            legal: [
+                {
+                    path: "legal.0",
+                    name: "MSA with Globex",
+                    detail: "Master services agreement, renews yearly",
+                    detailPath: "legal.0.summary",
+                    cites: [],
+                    source: "documents",
+                },
+            ],
+        });
+        const agreements = await screen.findByRole("region", { name: "Agreements" });
+        expect(within(agreements).getByText("MSA with Globex")).toBeInTheDocument();
+
+        const person = base.people[0]!;
+        await userEvent.click(screen.getByRole("button", { name: `Edit ${person.name}` }));
+        await userEvent.click(screen.getByRole("button", { name: `Remove ${person.name}` }));
+        expect(mockApi.patchFact).toHaveBeenCalledWith({ path: `${person.path}.name`, value: "" });
     });
 
     it("edits a person's detail by its detail path", async () => {

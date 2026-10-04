@@ -9,7 +9,7 @@ import { after } from "next/server";
 
 import {
     applyFactEdit,
-    assembleProfile,
+    catchUpAndAssemble,
     createEmptyMetadata,
     diffMetadata,
     getProfileRow,
@@ -18,8 +18,10 @@ import {
     rebuildProfile,
     recordOverride,
     refreshForDocument,
+    finishBuild,
     saveProfileLocked,
     setBuildStatus,
+    startBuild,
     type FactEdit,
     type ProfileBuildPorts,
     type SourceOverride,
@@ -101,16 +103,15 @@ export async function editFact(ctx: Ctx, edit: FactEdit): Promise<CompanyProfile
             const metadata = structuredClone(current ?? createEmptyMetadata(String(ctx.companyId)));
             const outcome = applyFactEdit(metadata, edit);
             if (!outcome.ok) {
+                // Nothing is written for a refused edit.
                 failure = outcome.error;
-                return {
-                    metadata: current ?? metadata,
-                    diff: { added: [], updated: [], deprecated: [] },
-                };
+                return null;
             }
             metadata.updated_at = new Date().toISOString();
             return { metadata, diff: diffMetadata(current, metadata) };
         },
-        { changedBy: ctx.authUserId, changeType: "manual_override" }
+        // An edit is not a build: "built …" keeps meaning when the sources were last read.
+        { changedBy: ctx.authUserId, changeType: "manual_override", built: false }
     );
     if (failure) throw new CompanyProfileError(failure, 400);
     // The sources' value was overwritten in place by the edit; reassembling brings it back.
@@ -118,22 +119,37 @@ export async function editFact(ctx: Ctx, edit: FactEdit): Promise<CompanyProfile
     return loadCompanyProfile(ctx);
 }
 
-/** Reassemble from the source rows after the response (no source is re-read). */
-async function reassembleAfterResponse(companyId: bigint, changedBy: string): Promise<void> {
-    await setBuildStatus(companyId, "building");
+/**
+ * Run `work` after the response while the profile says "building". Only this
+ * run's token can clear it, so a short refresh never ends a longer Rebuild.
+ */
+async function buildAfterResponse(
+    companyId: bigint,
+    label: string,
+    work: () => Promise<unknown>
+): Promise<void> {
+    const token = await startBuild(companyId);
     after(async () => {
         try {
-            await assembleProfile(companyId, createProfilePorts(), { changedBy });
-            await setBuildStatus(companyId, "idle");
+            await work();
+            await finishBuild(companyId, token, "idle");
         } catch (error) {
-            console.error("[company-profile] reassembly failed:", error);
-            await setBuildStatus(
+            console.error(`[company-profile] ${label} failed:`, error);
+            await finishBuild(
                 companyId,
+                token,
                 "failed",
-                error instanceof Error ? error.message.slice(0, 500) : "Reassembly failed"
+                error instanceof Error ? error.message.slice(0, 500) : `${label} failed`
             );
         }
     });
+}
+
+/** Reassemble after the response, reading only what is stale. */
+async function reassembleAfterResponse(companyId: bigint, changedBy: string): Promise<void> {
+    await buildAfterResponse(companyId, "reassembly", () =>
+        catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
+    );
 }
 
 /** Record a person's decision about one source, then re-read it and reassemble after the response. */
@@ -150,21 +166,10 @@ export async function setSourceOverride(
     if (!doc || !scopeAllows(scope, { id: doc.id, category: doc.folder }))
         throw new CompanyProfileError("Source not found", 404);
     await recordOverride(ctx.companyId, documentId, override, ctx.authUserId);
-    await setBuildStatus(ctx.companyId, "building");
     const companyId = ctx.companyId;
-    after(async () => {
-        try {
-            await refreshForDocument(companyId, documentId, createProfilePorts());
-            await setBuildStatus(companyId, "idle");
-        } catch (error) {
-            console.error("[company-profile] source refresh failed:", error);
-            await setBuildStatus(
-                companyId,
-                "failed",
-                error instanceof Error ? error.message.slice(0, 500) : "Reading the source failed"
-            );
-        }
-    });
+    await buildAfterResponse(companyId, "source refresh", () =>
+        refreshForDocument(companyId, documentId, createProfilePorts())
+    );
     return loadCompanyProfile(ctx);
 }
 
@@ -178,7 +183,7 @@ export function reassembleAfterDelete(companyId: bigint, changedBy: string): voi
         try {
             const row = await getProfileRow(companyId);
             if (!row?.builtAt) return;
-            await assembleProfile(companyId, createProfilePorts(), { changedBy });
+            await catchUpAndAssemble(companyId, createProfilePorts(), { changedBy });
         } catch (error) {
             console.error("[company-profile] reassembly after delete failed:", error);
         }

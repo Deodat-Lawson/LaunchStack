@@ -47,6 +47,7 @@ const VIEW: ProfileView = {
     ],
     services: [],
     projects: [],
+    legal: [],
     evidence: [
         {
             n: 1,

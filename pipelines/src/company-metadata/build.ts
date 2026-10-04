@@ -173,8 +173,14 @@ export async function readSource(
             reason: triage.reason,
             status: allCallsFailed ? "failed" : "done",
             error: allCallsFailed ? "Reading facts from this source failed" : null,
-            facts: counted ? (extracted?.facts ?? {}) : null,
-            factCount: extracted?.factCount ?? 0,
+            // A read that failed outright keeps what the source said last time;
+            // Rebuild retries it.
+            facts: allCallsFailed
+                ? (row?.facts ?? null)
+                : counted
+                  ? (extracted?.facts ?? {})
+                  : null,
+            factCount: allCallsFailed ? (row?.factCount ?? 0) : (extracted?.factCount ?? 0),
             passages,
         });
     } catch (error) {

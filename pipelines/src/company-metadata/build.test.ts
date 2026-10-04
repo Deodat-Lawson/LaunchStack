@@ -509,3 +509,21 @@ describe("catching up a workspace that was never read", () => {
         for (const [title, n] of counts) if (!/^Note [01]\.md$/.test(title)) expect(n).toBe(1);
     });
 });
+
+describe("a read that fails outright", () => {
+    it("keeps the source's last facts until a Rebuild reads it again", async () => {
+        await rebuildProfile(C, ports, { changedBy: "u1" });
+        store.docs.set(1, doc(1, "Acme deck.pdf", 12));
+        store.chunks.set("1:12", [chunk(103, `${DECK} Updated for October.`, "Acme deck.pdf")]);
+        generate.mockImplementationOnce(async input => {
+            calls.push({ schemaName: input.schemaName ?? "", prompt: input.prompt });
+            return { role: "about_us", reason: "Acme Robotics' own pitch deck.", subject: "Acme" };
+        });
+        generate.mockImplementationOnce(async () => {
+            throw new Error("provider down");
+        });
+        await refreshForDocument(C, 1, ports);
+        expect(row(1)).toMatchObject({ status: "failed", versionId: 12n });
+        expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
+    });
+});

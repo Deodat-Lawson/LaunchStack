@@ -75,12 +75,13 @@ export function deriveRecallPrompt(message: {
         /\[(?:Source|Conversation|Folder):[^\]]*\]\(#launchstack-(?:source|thread|folder)-[^)]+\)/g,
         ""
     );
+    // Only a machine provenance link identifies quoted context in plain text.
+    // A person can type ordinary Markdown blockquotes, which recall must preserve.
+    text = text.replace(
+        /(?:^|\n)(?:[ \t]*>[^\n]*(?:\n|$))+\s*\[(?:Source message|Quoted context)\]\(#(?:chat-message-[^)]+|launchstack-quoted-context)\)/g,
+        "\n"
+    );
     text = text.replace(/\[Source message\]\(#chat-message-[^)]+\)/g, "");
-    // Quoted context is a chip in rich mode and a blockquote in plain mode.
-    text = text
-        .split("\n")
-        .filter(line => !/^\s*>/.test(line))
-        .join("\n");
     for (const file of message.send?.attachments ?? []) {
         const label = `[${file.name}](${file.url})`;
         text = text.split(label).join("");

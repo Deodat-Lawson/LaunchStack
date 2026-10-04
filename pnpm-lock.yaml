@@ -342,6 +342,9 @@ importers:
       formdata-node:
         specifier: ^6.0.3
         version: 6.0.3
+      heic-to:
+        specifier: 1.5.2
+        version: 1.5.2
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
@@ -8489,6 +8492,9 @@ packages:
     resolution: {integrity: sha512-BjpmnZ95odv7KOIsydfNTAxfGOGaVc6xbYL4fozWl45PWjDqskix0LHAekmGkpnrCAI6+AZRvJIXNTAllj+e6w==}
     engines: {node: 0.8.x}
     deprecated: This module moved to @hapi/hawk. Please make sure to switch over as this distribution is no longer supported and may contain bugs and critical security issues.
+
+  heic-to@1.5.2:
+    resolution: {integrity: sha512-8Fns+lZHAWmz5U5IUxDeXKwIf3foBoKNPLxxFY4B0MkLjNuomEIHCoDbDE+x/llFK3NCEO1cu4+n3iUKY+Svmw==}
 
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
@@ -19562,6 +19568,8 @@ snapshots:
       cryptiles: 0.1.3
       hoek: 0.7.6
       sntp: 0.1.4
+
+  heic-to@1.5.2: {}
 
   help-me@5.0.0: {}
 

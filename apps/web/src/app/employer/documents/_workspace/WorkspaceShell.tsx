@@ -33,7 +33,7 @@ import {
     displayFolderPath,
 } from "~/lib/folders/path";
 import { buildContinuationContext, parseSessionTranscript } from "~/lib/session-transcript";
-import { HISTORY_KIND_META, type HistoryEntry, MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { HISTORY_KIND_META, type HistoryEntry } from "~/lib/workspace-history";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import {
     commandForEvent,
@@ -42,14 +42,17 @@ import {
     type ShortcutBindings,
 } from "~/lib/shortcuts/commands";
 import type { ShortcutHints } from "./ShortcutHint";
-import { useAIChat } from "../hooks/useAIChat";
+import { deriveRecallPrompt } from "~/lib/chat-turns";
+import { useChatRuntime } from "./useChatRuntime";
+import { backupChatEdit, removeChatEditBackup } from "./chatEditBackup";
+import { ChatQueue } from "./ChatQueue";
 import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
 import { useAgents } from "./collab/useMeetings";
 import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, type ComposerSeed } from "./AskPanel";
 import type { DocumentTargetData } from "./documentContextMenu";
-import { citationWithSource, quoteBlock, transcriptMarkdown } from "./transcript";
+import { citationWithSource, contextQuoteBlock, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -186,36 +189,6 @@ function showSettingsSection(section: string) {
  * rather than re-derived, so a reopened chat shows the citations that answer
  * actually carried even if the library has moved on since.
  */
-function toThreadMessage(stored: sessionApi.SessionMessagePayload): ThreadMessage {
-    return {
-        role: stored.role,
-        text: stored.text,
-        refs: stored.refs,
-        citations: stored.citations as ThreadMessage["citations"],
-        attachments: stored.attachments as ThreadMessage["attachments"],
-        model: stored.model ?? undefined,
-        tokens: stored.tokens ?? undefined,
-        // Only the handle is stored; the panel resolves the name and colour
-        // against the live roster, so a rename shows everywhere at once.
-        agent: stored.agentKey
-            ? { key: stored.agentKey, displayName: "", role: "", accent: null }
-            : undefined,
-    };
-}
-
-function toStoredMessage(message: ThreadMessage): sessionApi.SessionMessagePayload {
-    return {
-        role: message.role,
-        text: message.text,
-        refs: message.refs,
-        citations: message.citations,
-        attachments: message.attachments,
-        model: message.model ?? null,
-        tokens: message.tokens ?? null,
-        agentKey: message.agent?.key ?? null,
-    };
-}
-
 export function WorkspaceShell() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -607,8 +580,6 @@ export function WorkspaceShell() {
         }
     }, [composerWebSearch, composerThinking, composerAgentKey]);
 
-    const { sendQuery, loading: isSending } = useAIChat();
-
     // ---------------------------------------------------------------------
     // Session persistence
     // ---------------------------------------------------------------------
@@ -639,10 +610,37 @@ export function WorkspaceShell() {
         [router, searchParams]
     );
 
+    const chatRuntime = useChatRuntime({
+        scopeKey: `${userId}:${companyId}`,
+        thread,
+        setThread,
+        sessionIdRef,
+        hydratedSession,
+        setSessionParam,
+        continuation,
+        sources,
+        agents: chatAgents,
+        companyId: companyId ?? null,
+        refreshHistory,
+    });
+    const {
+        busy: isSending,
+        open: openChat,
+        newChat: newRuntimeChat,
+        fork: forkRuntime,
+    } = chatRuntime;
+    const [editingQueued, setEditingQueued] = useState<string | null>(null);
+    const composerDraftKey = `chat:${userId}:${companyId}:${chatRuntime.key}`;
+    const activeComposerKey = useRef(composerDraftKey);
+    activeComposerKey.current = composerDraftKey;
+
     /** Load a stored transcript into the composer. Runs once per session id. */
     useEffect(() => {
         if (!sessionParam || hydratedSession.current === sessionParam) return;
+        setComposerSeed(null);
+        setEditingQueued(null);
         hydratedSession.current = sessionParam;
+        if (openChat(sessionParam)) return;
         let cancelled = false;
         void (async () => {
             try {
@@ -656,7 +654,7 @@ export function WorkspaceShell() {
                     toast.error("That chat is no longer available");
                     return;
                 }
-                setThread((stored.messages ?? []).map(toThreadMessage));
+                openChat(sessionParam, stored);
                 setContinuation(stored.continuation ?? null);
                 if (stored.contextSourceIds.length > 0) setSelected(stored.contextSourceIds);
                 if (stored.agentKey !== undefined) setComposerAgentKey(stored.agentKey ?? null);
@@ -668,72 +666,26 @@ export function WorkspaceShell() {
         return () => {
             cancelled = true;
         };
-    }, [sessionParam, setSessionParam, setActiveFeatureId]);
-
-    /**
-     * Store a completed exchange.
-     *
-     * Both turns go together, after the answer lands, so the stored transcript
-     * is exactly what the person saw — including an error turn, which is part
-     * of that conversation whether or not it is flattering. A failure here is
-     * logged and swallowed: history is a convenience, and losing it must never
-     * interrupt the chat that is working.
-     */
-    const persistTurns = useCallback(
-        async (
-            turns: ThreadMessage[],
-            contextSourceIds: string[],
-            /** What was already on screen. Only matters for the first save. */
-            priorTurns: ThreadMessage[]
-        ) => {
-            try {
-                const openSessionId = sessionIdRef.current;
-                if (openSessionId) {
-                    await sessionApi.appendMessages(openSessionId, {
-                        messages: turns.map(toStoredMessage),
-                        contextSourceIds,
-                        agentKey: composerAgentKeyRef.current,
-                    });
-                } else {
-                    // Nothing is stored yet, so the whole thread belongs to the
-                    // new session — including the note that opens a continued
-                    // import, which would otherwise vanish on reopen. The tail
-                    // slice respects the endpoint's per-write cap.
-                    const opening = [...priorTurns, ...turns].slice(-MAX_SESSION_APPEND);
-                    const created = await sessionApi.createSession({
-                        messages: opening.map(toStoredMessage),
-                        contextSourceIds,
-                        continuation: continuationRef.current,
-                        agentKey: composerAgentKeyRef.current,
-                    });
-                    sessionIdRef.current = created.id;
-                    // Mark it hydrated before the URL changes: the transcript
-                    // is already on screen, and refetching it would be a
-                    // round trip to replace the thread with itself.
-                    hydratedSession.current = created.id;
-                    setSessionParam(created.id);
-                }
-                void refreshHistory();
-            } catch (error) {
-                console.error("[workspace] couldn't save this chat turn", error);
-            }
-        },
-        [refreshHistory, setSessionParam]
-    );
+    }, [sessionParam, setSessionParam, setActiveFeatureId, openChat]);
 
     const startNewChat = useCallback(() => {
+        setComposerSeed(null);
+        newRuntimeChat();
+        setEditingQueued(null);
         setThread([]);
         setContinuation(null);
         sessionIdRef.current = null;
         hydratedSession.current = null;
         setSessionParam(null);
         setActiveFeatureId("chat");
-    }, [setSessionParam, setActiveFeatureId]);
+    }, [setSessionParam, setActiveFeatureId, newRuntimeChat]);
 
     const resumeSession = useCallback(
         (id: string) => {
             setActiveFeatureId("chat");
             if (id === sessionIdRef.current) return;
+            setComposerSeed(null);
+            setEditingQueued(null);
             setSessionParam(id);
         },
         [setSessionParam, setActiveFeatureId]
@@ -830,185 +782,147 @@ export function WorkspaceShell() {
 
     const sendMessage = useCallback(
         async (send: ComposerSend) => {
-            // When continuing an imported session, every send carries the
-            // imported tail plus the newest in-app turns. The tail-slice cap
-            // keeps recency when the thread outgrows the budget.
-            const conversationHistory = continuation
-                ? [
-                      continuation.context,
-                      ...thread
-                          .slice(-8)
-                          .map(
-                              m =>
-                                  `${m.role === "user" ? "User" : "Assistant"}: ${m.text.slice(0, 1000)}`
-                          ),
-                  ]
-                      .join("\n\n")
-                      .slice(-12000)
-                : undefined;
-
-            const askedAgent = send.agentKey
-                ? chatAgents.find(a => a.id === send.agentKey)
-                : undefined;
-            const userTurn: ThreadMessage = {
-                role: "user",
-                text: send.text,
-                refs: send.refs,
-                attachments: send.attachments.length > 0 ? send.attachments : undefined,
-                agent: askedAgent
-                    ? {
-                          key: askedAgent.id,
-                          displayName: askedAgent.displayName,
-                          role: askedAgent.role,
-                          accent: askedAgent.accent ?? null,
-                          avatarUrl: askedAgent.avatarUrl ?? null,
-                      }
-                    : undefined,
-            };
-            setThread(prev => [...prev, userTurn]);
-
-            const numericIds = send.refs
-                .map(r => sources.find(s => s.id === r)?.documentId)
-                .filter((n): n is number => typeof n === "number");
-
-            const scope =
-                numericIds.length >= 2
-                    ? "selected"
-                    : numericIds.length === 1
-                      ? "document"
-                      : companyId
-                        ? "company"
-                        : "document";
-
-            const data = await sendQuery({
-                question: send.text,
-                searchScope: scope,
-                documentId: scope === "document" ? numericIds[0] : undefined,
-                selectedDocumentIds: scope === "selected" ? numericIds : undefined,
-                companyId: scope === "company" ? (companyId ?? undefined) : undefined,
-                enableWebSearch: send.webSearch,
-                thinkingMode: send.thinking,
-                conversationHistory,
-                agentKey: send.agentKey,
-                attachments: send.attachments.map(a => ({
-                    url: a.url,
-                    name: a.name,
-                    mimeType: a.mimeType,
-                    kind: a.kind,
-                })),
-            });
-
-            let assistantTurn: ThreadMessage;
-            if (data.success) {
-                const citations = (data.references ?? [])
-                    .map((r): ThreadReference | null => {
-                        const src = sources.find(s => s.documentId === Number(r.documentId));
-                        return src
-                            ? {
-                                  sourceId: src.id,
-                                  snippet: r.snippet ?? "",
-                                  page: r.page,
-                                  matchText: r.matchText,
-                              }
-                            : null;
-                    })
-                    .filter((c): c is ThreadReference => Boolean(c))
-                    .slice(0, 4);
-
-                assistantTurn = {
-                    role: "assistant",
-                    text: data.summarizedAnswer ?? "No answer.",
-                    citations,
-                    model: data.aiModel,
-                    tokens: data.tokenUsage?.totalTokens,
-                    tokenBreakdown: data.tokenUsage
-                        ? {
-                              inputTokens: data.tokenUsage.inputTokens,
-                              outputTokens: data.tokenUsage.outputTokens,
-                          }
-                        : undefined,
-                    chunksAnalyzed: data.chunksAnalyzed,
-                    agent: data.agent
-                        ? {
-                              key: data.agent.key,
-                              displayName: data.agent.displayName,
-                              role: data.agent.role,
-                              accent: data.agent.accent,
-                              avatarUrl: data.agent.avatarUrl ?? null,
-                              notes: data.agent.notes,
-                          }
-                        : undefined,
-                };
-            } else {
-                assistantTurn = {
-                    role: "assistant",
-                    text:
-                        data.message ??
-                        data.error ??
-                        "Couldn't reach the model. Try again in a moment.",
-                };
+            if (editingQueued) {
+                if (!chatRuntime.queue.items.some(item => item.id === editingQueued)) {
+                    toast.error(
+                        "That queued message was already sent or removed. Your edits remain in the composer."
+                    );
+                    return false;
+                }
+                const saved = await chatRuntime.modifyQueue(
+                    chatRuntime.queue.items.map(item =>
+                        item.id === editingQueued ? { ...item, send } : item
+                    )
+                );
+                if (saved) setEditingQueued(null);
+                return saved;
             }
-
-            setThread(prev => [...prev, assistantTurn]);
-            // `thread` here is the transcript as it stood before this send —
-            // exactly the "prior turns" a first save needs.
-            void persistTurns([userTurn, assistantTurn], send.refs, thread);
+            return chatRuntime.submit(send);
         },
-        [sources, sendQuery, companyId, continuation, thread, persistTurns, chatAgents]
+        [chatRuntime, editingQueued]
+    );
+
+    const editQueuedMessage = useCallback(
+        (id: string) => {
+            const item = chatRuntime.queue.items.find(queued => queued.id === id);
+            if (!item) return;
+            setEditingQueued(id);
+            setComposerSeed({
+                ...item.send,
+                mode: "replace",
+                nonce: Date.now(),
+                draftKey: composerDraftKey,
+            });
+            setActiveFeatureId("chat");
+        },
+        [chatRuntime.queue.items, setActiveFeatureId, composerDraftKey]
     );
 
     const seedComposer = useCallback(
         (text: string, mode: "append" | "replace") => {
             setActiveFeatureId("chat");
-            setComposerSeed({ text, mode, nonce: Date.now() });
+            setComposerSeed({ text, mode, nonce: Date.now(), draftKey: composerDraftKey });
         },
-        [setActiveFeatureId]
+        [setActiveFeatureId, composerDraftKey]
     );
 
     /**
      * Start a new chat that keeps the transcript up to and including `index`.
-     * The stored chat is left as it was; the next send creates the new one
-     * with these turns in front.
+     * The copied prefix is persisted immediately; reopening keeps its full context.
      */
     const branchFrom = useCallback(
-        (index: number) => {
-            setThread(prev => prev.slice(0, index + 1));
+        async (index: number) => {
+            setComposerSeed(null);
+            setEditingQueued(null);
+            const prefix = thread
+                .slice(0, index + 1)
+                .map((message, position) =>
+                    position === 0 && sessionIdRef.current
+                        ? { ...message, forkedFromSessionId: sessionIdRef.current }
+                        : message
+                );
+            const saving = forkRuntime(prefix);
             sessionIdRef.current = null;
             hydratedSession.current = null;
             setSessionParam(null);
             setActiveFeatureId("chat");
-            toast.success("Branched into a new chat", {
-                description: "The turns up to here come along; the original chat is untouched.",
-            });
+            if (await saving)
+                toast.success("Fork saved as a new chat", {
+                    description: "The turns up to here come along; the original chat is untouched.",
+                });
         },
-        [setSessionParam, setActiveFeatureId]
+        [setSessionParam, setActiveFeatureId, forkRuntime, thread]
     );
 
     /**
-     * Ask the question behind turn `index` again, as a new turn at the end.
+     * Retry the question behind turn `index` after rewinding its replaced suffix.
      * Appending, not replacing, keeps the screen and the stored chat the same.
      */
+    const payloadForMessage = useCallback(
+        (message: ThreadMessage): ComposerSend =>
+            message.send ?? {
+                text: message.text,
+                refs: message.refs ?? selected,
+                attachments: message.attachments ?? [],
+                webSearch: composerWebSearch,
+                thinking: composerThinking,
+                agentKey: message.agent?.key ?? composerAgentKey,
+            },
+        [selected, composerWebSearch, composerThinking, composerAgentKey]
+    );
+
     const askAgain = useCallback(
-        (index: number, overrides: { webSearch?: boolean; thinking?: boolean } = {}) => {
-            const turn = thread[index];
-            const question =
-                turn?.role === "user"
-                    ? turn
-                    : [...thread.slice(0, index)].reverse().find(m => m.role === "user");
-            if (!question) {
-                toast.error("There is no question to ask again");
-                return;
+        async (index: number, overrides: { webSearch?: boolean; thinking?: boolean } = {}) => {
+            let questionIndex = index;
+            while (questionIndex >= 0 && thread[questionIndex]?.role !== "user") questionIndex--;
+            const question = thread[questionIndex];
+            if (!question) return;
+            try {
+                const send = { ...payloadForMessage(question), ...overrides };
+                const backup = backupChatEdit(composerDraftKey, send);
+                if (!backup)
+                    throw new Error(
+                        "Couldn't save prompt recovery. Free browser storage before retrying; the original conversation is intact."
+                    );
+                const result = await chatRuntime.retry(questionIndex, send);
+                if (result === true || (typeof result === "object" && result.success))
+                    removeChatEditBackup(composerDraftKey, backup);
+            } catch (error) {
+                toast.error(
+                    error instanceof Error ? error.message : "Couldn't retry this response"
+                );
             }
-            void sendMessage({
-                text: question.text,
-                refs: question.refs ?? selected,
-                attachments: question.attachments ?? [],
-                webSearch: overrides.webSearch ?? composerWebSearch,
-                thinking: overrides.thinking ?? composerThinking,
-                agentKey: question.agent?.key ?? composerAgentKey,
-            });
         },
-        [thread, selected, sendMessage, composerWebSearch, composerThinking, composerAgentKey]
+        [thread, payloadForMessage, chatRuntime, composerDraftKey]
+    );
+
+    const editFromHere = useCallback(
+        async (index: number) => {
+            const question = thread[index];
+            if (question?.role !== "user") return;
+            try {
+                const send = payloadForMessage(question);
+                if (!backupChatEdit(composerDraftKey, send))
+                    throw new Error(
+                        "Couldn't save prompt recovery. Free browser storage before editing; the original conversation is intact."
+                    );
+                await chatRuntime.rewind(index);
+                if (activeComposerKey.current === composerDraftKey)
+                    setComposerSeed({
+                        ...send,
+                        mode: "append",
+                        nonce: Date.now(),
+                        draftKey: composerDraftKey,
+                    });
+                else
+                    toast.success(
+                        "The edited question is saved with prompts in its original conversation."
+                    );
+            } catch (error) {
+                toast.error(error instanceof Error ? error.message : "Couldn't edit this message");
+            }
+        },
+        [thread, payloadForMessage, chatRuntime, composerDraftKey]
     );
 
     const saveAnswerAsNote = useCallback(async (text: string) => {
@@ -1175,7 +1089,7 @@ export function WorkspaceShell() {
     const askAboutPassage = useCallback(
         (source: WorkspaceSource, quote: string) => {
             handleAskAbout(source);
-            seedComposer(quoteBlock(quote), "append");
+            seedComposer(contextQuoteBlock(quote), "append");
         },
         [handleAskAbout, seedComposer]
     );
@@ -1189,7 +1103,7 @@ export function WorkspaceShell() {
             setActiveFeatureId("chat");
             const from = home?.kind === "document" ? ` from “${home.source.title}”` : "";
             void sendMessage({
-                text: `${prefix}${from}:\n\n${quoteBlock(quote).trimEnd()}`,
+                text: `${prefix}${from}:\n\n${contextQuoteBlock(quote).trimEnd()}`,
                 refs: home?.kind === "document" ? [home.source.id] : selected,
                 attachments: [],
                 webSearch: composerWebSearch,
@@ -1771,21 +1685,21 @@ export function WorkspaceShell() {
                         id: "chat.message.ask-again.same",
                         label: "Ask again",
                         icon: "retry",
-                        onSelect: () => askAgain(index),
+                        onSelect: () => void askAgain(index),
                     },
                     {
                         type: "item",
                         id: "chat.message.ask-again.web",
                         label: "Ask again with web search",
                         icon: "globe",
-                        onSelect: () => askAgain(index, { webSearch: true }),
+                        onSelect: () => void askAgain(index, { webSearch: true }),
                     },
                     {
                         type: "item",
                         id: "chat.message.ask-again.think",
                         label: "Ask again with extended thinking",
                         icon: "brain",
-                        onSelect: () => askAgain(index, { thinking: true }),
+                        onSelect: () => void askAgain(index, { thinking: true }),
                     },
                 ];
             },
@@ -1846,7 +1760,7 @@ export function WorkspaceShell() {
                 const home = selectionHome(ctx);
                 const quote = (target.data as TextSelectionInfo).text;
                 if (home?.kind === "document") askAboutPassage(home.source, quote);
-                else seedComposer(quoteBlock(quote), "append");
+                else seedComposer(contextQuoteBlock(quote), "append");
             },
         },
         {
@@ -2315,6 +2229,85 @@ export function WorkspaceShell() {
                             thread={thread}
                             sendMessage={sendMessage}
                             isSending={isSending}
+                            draftKey={composerDraftKey}
+                            threadContextOptions={history.entries
+                                .filter(
+                                    entry => entry.kind === "chat" && entry.refId !== sessionParam
+                                )
+                                .map(entry => ({ id: entry.refId, title: entry.title }))}
+                            onOpenThreadContext={resumeSession}
+                            promptHistory={thread
+                                .map(deriveRecallPrompt)
+                                .filter((text): text is string => Boolean(text))}
+                            onStop={chatRuntime.stop}
+                            queuedCount={chatRuntime.queue.items.length}
+                            editingQueued={Boolean(editingQueued)}
+                            queuedEditUnavailable={Boolean(
+                                editingQueued &&
+                                    !chatRuntime.queue.items.some(item => item.id === editingQueued)
+                            )}
+                            onCancelQueueEdit={() => setEditingQueued(null)}
+                            onQueueSendOldest={() => {
+                                const oldest = chatRuntime.queue.items[0];
+                                if (oldest) void chatRuntime.sendNow(oldest.id);
+                            }}
+                            onQueueEditLatest={() => {
+                                const latest = chatRuntime.queue.items.at(-1);
+                                if (latest) editQueuedMessage(latest.id);
+                            }}
+                            queueContent={
+                                <ChatQueue
+                                    items={chatRuntime.queue.items}
+                                    held={chatRuntime.held}
+                                    busy={isSending}
+                                    editingId={editingQueued}
+                                    onEdit={editQueuedMessage}
+                                    onCancelEdit={() => setEditingQueued(null)}
+                                    onRemove={id => {
+                                        if (editingQueued === id) setEditingQueued(null);
+                                        void chatRuntime.modifyQueue(
+                                            chatRuntime.queue.items.filter(item => item.id !== id)
+                                        );
+                                    }}
+                                    onReorder={items => void chatRuntime.modifyQueue(items)}
+                                    onResume={() => void chatRuntime.resume()}
+                                    onSendNow={id => void chatRuntime.sendNow(id)}
+                                />
+                            }
+                            onRetryMessage={index => void askAgain(index)}
+                            onEditMessage={index => void editFromHere(index)}
+                            onOpenParentChat={
+                                thread[0]?.forkedFromSessionId
+                                    ? () => resumeSession(thread[0]!.forkedFromSessionId!)
+                                    : undefined
+                            }
+                            onForkMessage={branchFrom}
+                            onSaveMessage={index => {
+                                const message = thread[index];
+                                if (message) void saveAnswerAsNote(message.text);
+                            }}
+                            onImplementPlan={text => {
+                                startNewChat();
+                                void chatRuntime.submit({
+                                    text: `Carry out this plan using the available workspace tools and explain the result:\n\n${text}`,
+                                    refs: selected,
+                                    attachments: [],
+                                    webSearch: composerWebSearch,
+                                    thinking: composerThinking,
+                                    agentKey: composerAgentKey,
+                                    chatMode: "default",
+                                    origin: "plan-implementation",
+                                });
+                            }}
+                            title={
+                                history.entries.find(entry => entry.refId === sessionParam)
+                                    ?.title ?? "New chat"
+                            }
+                            onRename={
+                                sessionParam
+                                    ? title => handleRenameSession(sessionParam, title)
+                                    : undefined
+                            }
                             onOpenCitation={handleOpenCitation}
                             onOpenSource={handleOpenSource}
                             composerSeed={composerSeed}
@@ -2365,7 +2358,7 @@ export function WorkspaceShell() {
                                     // so pin only — a preview beside it would
                                     // show the same map twice.
                                     pinSource(editedMindmap);
-                                    seedComposer(quoteBlock(text), "append");
+                                    seedComposer(contextQuoteBlock(text), "append");
                                 }}
                             />
                         </div>

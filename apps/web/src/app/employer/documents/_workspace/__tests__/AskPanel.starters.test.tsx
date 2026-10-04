@@ -119,25 +119,34 @@ function renderPanel(overrides: {
     selected?: string[];
     isSending?: boolean;
     onStudioNavigate?: jest.Mock;
+    stateful?: boolean;
+    draftKey?: string;
 }) {
-    return render(
-        <AskPanel
-            sources={SOURCES}
-            selected={overrides.selected ?? []}
-            setSelected={overrides.setSelected ?? jest.fn()}
-            thread={[]}
-            sendMessage={overrides.sendMessage ?? jest.fn()}
-            isSending={overrides.isSending ?? false}
-            onOpenAdd={jest.fn()}
-            onNewChat={jest.fn()}
-            openPalette={jest.fn()}
-            onStudioNavigate={overrides.onStudioNavigate ?? jest.fn()}
-            webSearch={false}
-            onToggleWebSearch={jest.fn()}
-            thinking={false}
-            onToggleThinking={jest.fn()}
-        />
-    );
+    function PanelHarness() {
+        const [selected, setSelected] = React.useState(overrides.selected ?? []);
+        return (
+            <AskPanel
+                sources={SOURCES}
+                selected={overrides.stateful ? selected : (overrides.selected ?? [])}
+                setSelected={
+                    overrides.stateful ? setSelected : (overrides.setSelected ?? jest.fn())
+                }
+                draftKey={overrides.draftKey}
+                thread={[]}
+                sendMessage={overrides.sendMessage ?? jest.fn()}
+                isSending={overrides.isSending ?? false}
+                onOpenAdd={jest.fn()}
+                onNewChat={jest.fn()}
+                openPalette={jest.fn()}
+                onStudioNavigate={overrides.onStudioNavigate ?? jest.fn()}
+                webSearch={false}
+                onToggleWebSearch={jest.fn()}
+                thinking={false}
+                onToggleThinking={jest.fn()}
+            />
+        );
+    }
+    return render(<PanelHarness />);
 }
 
 describe("AskPanel starter questions", () => {
@@ -198,6 +207,22 @@ describe("AskPanel starter questions", () => {
 
         expect(setSelected).not.toHaveBeenCalled();
         expect(sendMessage).toHaveBeenCalledWith(expect.objectContaining({ refs: [] }));
+    });
+
+    it("keeps a genuinely pinned source through scoped composer hydration and broad starter sends", async () => {
+        const user = userEvent.setup();
+        const sendMessage = jest.fn();
+        renderPanel({
+            sendMessage,
+            selected: ["d9"],
+            stateful: true,
+            draftKey: "chat:starter:workspace:pinned",
+        });
+        await user.click(await screen.findByText(PAYLOAD.starters[1]!.question));
+        expect(sendMessage).toHaveBeenLastCalledWith(expect.objectContaining({ refs: ["d9"] }));
+        expect(screen.getByText("Onboarding handbook.docx")).toBeInTheDocument();
+        await user.click(screen.getByText(PAYLOAD.starters[1]!.question));
+        expect(sendMessage).toHaveBeenLastCalledWith(expect.objectContaining({ refs: ["d9"] }));
     });
 
     it("waits while a message is in flight", async () => {

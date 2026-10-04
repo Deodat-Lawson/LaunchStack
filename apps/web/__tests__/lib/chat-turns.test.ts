@@ -51,6 +51,32 @@ test("synthetic attachment and plan submissions never appear in recall", () => {
         ).toBeUndefined();
     expect(deriveRecallPrompt({ role: "assistant", text: "Answer" })).toBeUndefined();
 });
+test("recall preserves a person's literal Markdown blockquotes", () => {
+    const text = "> Keep this important phrase\n\nMy reply";
+    expect(deriveRecallPrompt({ role: "user", text })).toBe(text);
+    expect(
+        deriveRecallPrompt({
+            role: "user",
+            text: "Expanded",
+            send: {
+                text: "Expanded",
+                recallText: text,
+                origin: "user",
+                refs: [],
+                attachments: [],
+                webSearch: false,
+                thinking: false,
+                agentKey: null,
+            },
+        })
+    ).toBe(text);
+    expect(
+        deriveRecallPrompt({
+            role: "user",
+            text: "> Typed quotation\n\n> Machine context\n\n[Source message](#chat-message-1)\n\nMy reply",
+        })
+    ).toBe("> Typed quotation\n\nMy reply");
+});
 test("recall uses original typed text and strips attachment context without restoring files", () => {
     const file = {
         id: "file",

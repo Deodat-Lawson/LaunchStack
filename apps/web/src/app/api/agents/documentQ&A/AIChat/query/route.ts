@@ -47,6 +47,7 @@ import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypt
 import { env } from "~/env";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
 import { fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
+import { extractChatPdfText } from "~/server/chat-pdf-text";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
@@ -120,7 +121,6 @@ const qaAnnOptimizer = new ANNOptimizer({
  */
 const ATTACHMENT_TEXT_CAP_BYTES = 40_000;
 const ATTACHMENT_PER_FILE_CAP_BYTES = 30_000;
-const ATTACHMENT_PDF_MAX_PAGES = 40;
 
 function guessAttachmentKind(name: string, mime: string): "pdf" | "docx" | "plaintext" {
     const lower = name.toLowerCase();
@@ -134,42 +134,6 @@ function guessAttachmentKind(name: string, mime: string): "pdf" | "docx" | "plai
         return "docx";
     }
     return "plaintext";
-}
-
-/**
- * Extract text from a PDF via pdfjs-dist legacy build. No OCR — scanned PDFs
- * will produce empty output. For OCR, the user should add the file as a
- * Source and let the ingestion pipeline handle it.
- */
-async function extractPdfText(buffer: ArrayBuffer): Promise<string> {
-    const pdfjs = (await import("pdfjs-dist/legacy/build/pdf.mjs")) as {
-        getDocument: (src: { data: Uint8Array }) => { promise: Promise<PdfDoc> };
-    };
-    interface PdfDoc {
-        numPages: number;
-        getPage: (n: number) => Promise<PdfPage>;
-    }
-    interface PdfPage {
-        getTextContent: () => Promise<{ items: { str?: string }[] }>;
-    }
-    const data = new Uint8Array(buffer);
-    const doc = await pdfjs.getDocument({ data }).promise;
-    const pages: string[] = [];
-    const max = Math.min(doc.numPages, ATTACHMENT_PDF_MAX_PAGES);
-    for (let i = 1; i <= max; i++) {
-        const page = await doc.getPage(i);
-        const content = await page.getTextContent();
-        const text = content.items
-            .map(it => (typeof it.str === "string" ? it.str : ""))
-            .join(" ")
-            .replace(/\s+/g, " ")
-            .trim();
-        if (text) pages.push(`--- Page ${i} ---\n${text}`);
-    }
-    if (doc.numPages > max) {
-        pages.push(`[…${doc.numPages - max} more page(s) not extracted]`);
-    }
-    return pages.join("\n\n");
 }
 
 async function extractDocxText(buffer: ArrayBuffer): Promise<string> {
@@ -405,7 +369,8 @@ async function extractAttachmentText(
         mimeType === "application/octet-stream" || !mimeType
             ? guessAttachmentKind(att.name, att.mimeType)
             : guessAttachmentKind("", mimeType);
-    if (verifiedKind === "pdf") return await extractPdfText(content.buffer);
+    if (verifiedKind === "pdf")
+        return await extractChatPdfText(content.buffer, context.request.signal);
     if (verifiedKind === "docx") return await extractDocxText(content.buffer);
     if (mimeType.startsWith("image/"))
         throw new AttachmentReadError(

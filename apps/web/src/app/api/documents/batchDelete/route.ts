@@ -20,7 +20,11 @@ import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { deleteDocumentCore } from "~/server/services/document-delete";
+import {
+    deleteDocumentCore,
+    finishDocumentDelete,
+    type DocumentDeleteResult,
+} from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
@@ -65,23 +69,42 @@ export async function DELETE(request: Request) {
                 );
             }
 
-            await db.transaction(async tx => {
+            const outcomes = await db.transaction(async tx => {
+                const results: Array<{ id: number; outcome: DocumentDeleteResult }> = [];
                 for (const row of rows) {
-                    await deleteDocumentCore(tx, Number(row.id));
+                    const outcome = await deleteDocumentCore(tx, Number(row.id));
                     await recordAuditEvent(tx, {
                         companyId: ctx.data.companyId,
                         actorUserId: ctx.data.authUserId,
                         action: "document.deleted",
                         targetType: "document",
                         targetId: row.id,
-                        detail: { title: row.title, category: row.category },
+                        detail: {
+                            title: row.title,
+                            category: row.category,
+                            versions: outcome.deletedVersions,
+                            cancelledEvents: outcome.cancelledEvents,
+                        },
                     });
+                    results.push({ id: Number(row.id), outcome });
                 }
+                return results;
             });
+
+            // Stored files and the graph go after commit, per document, and a
+            // failure there is logged rather than failing the batch.
+            let files = 0;
+            let filesFailed = 0;
+            for (const { id, outcome } of outcomes) {
+                const cleanup = await finishDocumentDelete(id, outcome);
+                files += cleanup.filesDeleted;
+                filesFailed += cleanup.filesFailed;
+            }
 
             return NextResponse.json({
                 success: true,
                 deleted: uniqueIds.length,
+                cleanup: { files, filesFailed },
                 message: `Deleted ${uniqueIds.length} document${uniqueIds.length === 1 ? "" : "s"}`,
             });
         } catch (error) {

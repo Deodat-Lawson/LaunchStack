@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
-import { deleteDocumentCore } from "~/server/services/document-delete";
+import { deleteDocumentCore, finishDocumentDelete } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
@@ -48,22 +48,40 @@ export async function DELETE(request: Request) {
             );
         }
 
-        await db.transaction(async tx => {
-            await deleteDocumentCore(tx, documentId);
+        const result = await db.transaction(async tx => {
+            const outcome = await deleteDocumentCore(tx, documentId);
             await recordAuditEvent(tx, {
                 companyId: ctx.data.companyId,
                 actorUserId: ctx.data.authUserId,
                 action: "document.deleted",
                 targetType: "document",
                 targetId: documentId,
-                detail: { title: doc.title, category: doc.category },
+                detail: {
+                    title: doc.title,
+                    category: doc.category,
+                    versions: outcome.deletedVersions,
+                    cancelledEvents: outcome.cancelledEvents,
+                },
             });
+            return outcome;
         });
+
+        // Stored files and the graph cannot join the transaction; they go
+        // once the rows are committed, and a failure here is logged, not a
+        // failed delete.
+        const cleanup = await finishDocumentDelete(documentId, result);
 
         return NextResponse.json(
             {
                 success: true,
                 message: "Document and all related data deleted successfully",
+                deleted: {
+                    versions: result.deletedVersions,
+                    jobs: result.deletedJobs,
+                    cancelledEvents: result.cancelledEvents,
+                    files: cleanup.filesDeleted,
+                    filesFailed: cleanup.filesFailed,
+                },
             },
             { status: 200 }
         );

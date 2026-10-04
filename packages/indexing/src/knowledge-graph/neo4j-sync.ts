@@ -27,6 +27,38 @@ interface SyncResult {
  * Sync all entities, mentions, and relationships for a single document
  * from PostgreSQL into Neo4j.
  */
+/**
+ * Remove a deleted document's footprint from the graph: its Section nodes
+ * and every MENTIONED_IN edge into them. Entities are shared across the
+ * company's documents and stay; one that loses its last mention is simply
+ * no longer reachable from any section.
+ */
+export async function deleteDocumentFromNeo4j(documentId: number): Promise<{ sections: number }> {
+    const session = getNeo4jSession();
+    try {
+        const result = await session.run(
+            `MATCH (s:Section {documentId: $documentId})
+       DETACH DELETE s
+       RETURN count(s) AS deleted`,
+            { documentId }
+        );
+        const raw = result.records[0]?.get("deleted") as
+            | { toNumber?: () => number }
+            | number
+            | null;
+        const sections =
+            typeof raw === "number"
+                ? raw
+                : typeof raw?.toNumber === "function"
+                  ? raw.toNumber()
+                  : 0;
+        console.log(`[Neo4jSync] Removed ${sections} section node(s) for document ${documentId}`);
+        return { sections };
+    } finally {
+        await session.close();
+    }
+}
+
 export async function syncDocumentToNeo4j(
     documentId: number,
     companyId: bigint

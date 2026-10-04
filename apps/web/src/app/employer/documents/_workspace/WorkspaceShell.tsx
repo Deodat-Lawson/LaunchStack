@@ -1108,17 +1108,10 @@ export function WorkspaceShell() {
         [closeSource, refresh, sourceParam]
     );
 
-    const handleDeleteSource = useCallback(
-        async (source: WorkspaceSource) => {
-            try {
-                await removeSource(source);
-            } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to delete source");
-            }
-        },
-        [removeSource]
-    );
-
+    // Every delete, from the rail, the viewer or an embedded pane, goes
+    // through `requestDelete` and the confirmation dialog below: a document
+    // delete cascades to every version, stored file and citable passage, so
+    // no path may skip the question.
     const confirmDeleteSource = useCallback(async () => {
         if (!deleteTargets?.length) return;
         setDeleteBusy(true);
@@ -2336,7 +2329,7 @@ export function WorkspaceShell() {
                             sources={sources}
                             onClose={() => closeTab(paneId)}
                             onRename={handleRenameSource}
-                            onDelete={source => void handleDeleteSource(source)}
+                            onDelete={source => requestDelete([source])}
                             onRestrictAccess={openDocumentAccess}
                             onAskAbout={handleAskAbout}
                             onAskAboutPassage={askAboutPassage}
@@ -2580,7 +2573,7 @@ export function WorkspaceShell() {
                         setViewerHighlight(null);
                     }}
                     onRename={handleRenameSource}
-                    onDelete={source => void handleDeleteSource(source)}
+                    onDelete={source => requestDelete([source])}
                     onRestrictAccess={openDocumentAccess}
                     onAskAbout={handleAskAbout}
                     onAskAboutPassage={askAboutPassage}
@@ -2699,8 +2692,8 @@ function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; b
                   body: `“${source.title}” will leave the library. You can undo this right after.`,
               }
             : {
-                  title: "Delete this source?",
-                  body: `“${source.title}” will be removed from this workspace. This cannot be undone.`,
+                  title: "Delete this document?",
+                  body: `“${source.title}” will be deleted for good, with every version, its stored file, and every passage the assistant could cite from it. Notes you wrote about it stay in your notebook. This cannot be undone.`,
               };
     }
     const mindmaps = targets.filter(sourceApi.isMindmapSource).length;
@@ -2708,7 +2701,7 @@ function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; b
     const parts: string[] = [];
     if (documents > 0) {
         parts.push(
-            `${documents} ${documents === 1 ? "document" : "documents"} will be removed from this workspace — this cannot be undone`
+            `${documents} ${documents === 1 ? "document" : "documents"} will be deleted for good, with every version, stored file and citable passage; this cannot be undone`
         );
     }
     if (mindmaps > 0) {

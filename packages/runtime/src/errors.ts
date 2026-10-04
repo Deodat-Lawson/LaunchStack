@@ -79,7 +79,43 @@ export class ValidationError extends LaunchstackError {
     }
 }
 
+/**
+ * The source a job was working on no longer exists — deleted while the job
+ * was queued or running. Retrying can never succeed, so durable-work
+ * consumers dead-letter the event on the first attempt instead of burning
+ * every retry against a row that is gone.
+ */
+export class SourceGoneError extends LaunchstackError {
+    readonly retryable = false as const;
+    readonly sourceId?: number;
+
+    constructor(message: string, options?: { cause?: unknown; sourceId?: number }) {
+        super("LAUNCHSTACK_SOURCE_GONE", message, options);
+        this.name = "SourceGoneError";
+        this.sourceId = options?.sourceId;
+    }
+}
+
 /** Type-guard helper — useful in host error middleware that maps codes to statuses. */
 export function isLaunchstackError(value: unknown): value is LaunchstackError {
     return value instanceof LaunchstackError;
+}
+
+/**
+ * Whether an error (or anything in its `cause` chain) declares itself not
+ * worth retrying: a `SourceGoneError`, or a `ProviderError` the provider
+ * reported as permanent. Anything else is treated as transient.
+ */
+export function isNonRetryableError(value: unknown): boolean {
+    let current: unknown = value;
+    let depth = 0;
+    while (current instanceof Error && depth < 5) {
+        if (current instanceof LaunchstackError) {
+            const retryable = (current as { retryable?: boolean }).retryable;
+            if (retryable === false) return true;
+        }
+        current = current.cause;
+        depth += 1;
+    }
+    return false;
 }

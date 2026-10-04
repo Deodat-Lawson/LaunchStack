@@ -5,6 +5,8 @@
  * The retry policy lives here so it is unit-testable without a database;
  * apps/worker only supplies the loop, signals, and ports.
  */
+import { isNonRetryableError } from "@launchstack/runtime";
+
 import type { ClaimedEvent, ClockPort, LoggerPort, OutboxStorePort } from "../ports";
 import type { PipelineProcessor } from "./process-event";
 
@@ -122,7 +124,11 @@ export async function runOutboxTick(deps: OutboxTickDeps): Promise<OutboxTickRes
         } catch (error) {
             const message = describeError(error);
             const attempt = claimed.attemptCount + 1;
-            const exhausted = attempt >= policy.maxAttempts;
+            // A source deleted mid-pipeline (or a provider error declared
+            // permanent) can never succeed on retry: dead-letter it now
+            // rather than after eight attempts against a row that is gone.
+            const permanent = isNonRetryableError(error);
+            const exhausted = permanent || attempt >= policy.maxAttempts;
             const retryAt = exhausted
                 ? null
                 : new Date(clock.now().getTime() + retryDelayMs(attempt, policy));
@@ -130,8 +136,10 @@ export async function runOutboxTick(deps: OutboxTickDeps): Promise<OutboxTickRes
             if (exhausted) {
                 result.dead += 1;
                 logger.error(
-                    { ...fields, error: message },
-                    "outbox event dead after max attempts — see docs/runbooks/outbox.md"
+                    { ...fields, error: message, permanent },
+                    permanent
+                        ? "outbox event dead: non-retryable failure — see docs/runbooks/outbox.md"
+                        : "outbox event dead after max attempts — see docs/runbooks/outbox.md"
                 );
                 if (deps.onDead) {
                     try {

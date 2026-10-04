@@ -7,7 +7,7 @@
 import { and, asc, eq, gte, isNotNull, isNull, lt, ne, or } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
-import { document, documentContextChunks } from "@launchstack/store/schema";
+import { document, documentContextChunks, documentVersions } from "@launchstack/store/schema";
 import {
     companyMetadata,
     companyMetadataHistory,
@@ -29,6 +29,10 @@ export interface ProfileDocument {
     creationKey: string | null;
     ocrMetadata: unknown;
     mimeType: string | null;
+    /** Ingestion finished for the current version. */
+    indexed: boolean;
+    /** When the current version was created; null without one. */
+    versionCreatedAt: Date | null;
 }
 
 const documentColumns = {
@@ -40,6 +44,8 @@ const documentColumns = {
     creationKey: document.creationKey,
     ocrMetadata: document.ocrMetadata,
     mimeType: document.mimeType,
+    indexed: documentVersions.ocrProcessed,
+    versionCreatedAt: documentVersions.createdAt,
 };
 
 function toDocument(row: {
@@ -51,11 +57,14 @@ function toDocument(row: {
     creationKey: string | null;
     ocrMetadata: unknown;
     mimeType: string | null;
+    indexed: boolean | null;
+    versionCreatedAt: Date | null;
 }): ProfileDocument {
     return {
         ...row,
         id: Number(row.id),
         currentVersionId: row.currentVersionId === null ? null : Number(row.currentVersionId),
+        indexed: row.indexed === true,
     };
 }
 
@@ -63,6 +72,7 @@ export async function listWorkspaceDocuments(companyId: bigint): Promise<Profile
     const rows = await getDb()
         .select(documentColumns)
         .from(document)
+        .leftJoin(documentVersions, eq(documentVersions.id, document.currentVersionId))
         .where(eq(document.companyId, companyId))
         .orderBy(asc(document.id));
     return rows.map(toDocument);
@@ -75,6 +85,7 @@ export async function getWorkspaceDocument(
     const [row] = await getDb()
         .select(documentColumns)
         .from(document)
+        .leftJoin(documentVersions, eq(documentVersions.id, document.currentVersionId))
         .where(and(eq(document.companyId, companyId), eq(document.id, documentId)))
         .limit(1);
     return row ? toDocument(row) : null;

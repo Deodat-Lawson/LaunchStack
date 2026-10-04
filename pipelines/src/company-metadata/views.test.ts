@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { applyFactEdit } from "./edit";
 import { createEmptyMetadata, type MetadataFact } from "./types";
-import { profileView } from "./views";
+import { labelFor, profileView } from "./views";
 
 const NOW = new Date("2026-10-03T12:00:00Z");
 
@@ -140,5 +140,14 @@ describe("profileView", () => {
             facts: [],
             evidence: [],
         });
+    });
+});
+
+describe("labelFor", () => {
+    it("reads every key as words, policies included", () => {
+        expect(labelFor("company.headquarters")).toBe("Headquarters");
+        expect(labelFor("profile.facts.annual_budget")).toBe("Annual budget");
+        expect(labelFor("policies.uptime")).toBe("Uptime");
+        expect(labelFor("policies.refund_policy")).toBe("Refund policy");
     });
 });

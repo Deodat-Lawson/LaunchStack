@@ -106,7 +106,7 @@ export function labelFor(path: string, fact?: MetadataFact<unknown>): string {
             PROFILE_FACT_LABELS[b as keyof typeof PROFILE_FACT_LABELS] ??
             humanise(b)
         );
-    if (section === "policies" && a) return a;
+    if (section === "policies" && a) return humanise(a);
     return humanise(path.split(".").pop() ?? path);
 }
 

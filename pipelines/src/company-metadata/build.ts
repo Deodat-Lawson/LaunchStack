@@ -33,6 +33,7 @@ import {
     listSourceRows,
     saveProfileLocked,
     startBuild,
+    startBuildIfIdle,
     upsertSourceRow,
     type ProfileDocument,
 } from "./db";
@@ -61,6 +62,9 @@ export interface CompanyIdentityHint {
     name: string;
     known: string[];
 }
+
+/** A version with no text yet is still being ingested for this long; after that it is empty. */
+const INDEXING_GRACE_MS = 30 * 60 * 1000;
 
 /** Sources read at once during a rebuild; each source runs its own calls in parallel too. */
 const REBUILD_CONCURRENCY = 3;
@@ -116,6 +120,29 @@ export async function readSource(
     if (!options.force && isSourceFresh(row, doc, chunks.length)) return row;
 
     const now = (ports.now ?? (() => new Date()))();
+    // Just uploaded and not ingested yet: nothing to read, but not empty either.
+    // The row waits at this version; the indexed event reads it.
+    const stillIndexing =
+        chunks.length === 0 &&
+        doc.currentVersionId !== null &&
+        !doc.indexed &&
+        !!doc.versionCreatedAt &&
+        now.getTime() - doc.versionCreatedAt.getTime() < INDEXING_GRACE_MS;
+    if (stillIndexing)
+        return upsertSourceRow(companyId, doc.id, {
+            versionId: BigInt(doc.currentVersionId!),
+            readerVersion: READER_VERSION,
+            modelId: ports.modelId ?? null,
+            readAt: null,
+            status: "pending",
+            role: row?.role ?? null,
+            roleBy: row?.roleBy ?? null,
+            reason: "Still being processed — it is read as soon as it is.",
+            error: null,
+            facts: row?.facts ?? null,
+            factCount: row?.factCount ?? 0,
+            passages: null,
+        });
     const base = {
         versionId: doc.currentVersionId === null ? null : BigInt(doc.currentVersionId),
         readerVersion: READER_VERSION,
@@ -360,9 +387,29 @@ export async function refreshForDocument(
     documentId: number,
     ports: ProfileBuildPorts
 ): Promise<CompanyMetadataJSON> {
-    const identity = await identityOf(companyId, ports);
-    await readSource(companyId, documentId, ports, { identity });
-    return catchUpAndAssemble(companyId, ports, { changedBy: "system", documentId, identity });
+    // The profile says "building" from reading the source until it is
+    // reassembled: a screen waiting on it would otherwise see the source read
+    // and the profile not yet changed, and stop waiting. Inside a build that
+    // is already running (a Rebuild, a request's after-response work), that
+    // build owns the status.
+    const token = await startBuildIfIdle(companyId);
+    try {
+        const identity = await identityOf(companyId, ports);
+        await readSource(companyId, documentId, ports, { identity });
+        const metadata = await catchUpAndAssemble(companyId, ports, {
+            changedBy: "system",
+            documentId,
+            identity,
+        });
+        if (token) await finishBuild(companyId, token, "idle");
+        return metadata;
+    } catch (error) {
+        if (token) {
+            const message = error instanceof Error ? error.message : String(error);
+            await finishBuild(companyId, token, "failed", message.slice(0, 500));
+        }
+        throw error;
+    }
 }
 
 export interface RebuildResult {

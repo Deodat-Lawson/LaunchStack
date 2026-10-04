@@ -21,6 +21,8 @@ interface Doc {
     creationKey: string | null;
     ocrMetadata: unknown;
     mimeType: string | null;
+    indexed?: boolean;
+    versionCreatedAt?: Date | null;
 }
 
 const store = vi.hoisted(() => ({
@@ -103,6 +105,15 @@ vi.mock("./db", () => {
                 buildStatus: "building",
             };
             return at;
+        },
+        startBuildIfIdle: async () => {
+            if (store.profile?.buildStatus === "building") return null;
+            store.profile = {
+                metadata: store.profile?.metadata ?? null,
+                builtAt: store.profile?.builtAt ?? null,
+                buildStatus: "building",
+            };
+            return new Date();
         },
         finishBuild: async (_c: bigint, _at: Date, status: string) => {
             if (store.profile) store.profile = { ...store.profile, buildStatus: status };
@@ -344,6 +355,42 @@ describe("rebuildProfile", () => {
     });
 });
 
+describe("a source read after ingestion", () => {
+    it("keeps the profile building until its facts are in it", async () => {
+        await rebuildProfile(C, ports, { changedBy: "u1" });
+        store.docs.set(4, doc(4, "Acme one-pager.pdf", 41));
+        store.chunks.set("4:41", [chunk(401, DECK, "Acme one-pager.pdf")]);
+        const seen: string[] = [];
+        const real = generate.getMockImplementation()!;
+        generate.mockImplementationOnce(async input => {
+            seen.push(store.profile?.buildStatus ?? "none");
+            return real(input);
+        });
+
+        await refreshForDocument(C, 4, ports);
+
+        expect(seen).toEqual(["building"]);
+        expect(row(4).status).toBe("done");
+        expect(store.profile?.buildStatus).toBe("idle");
+    });
+
+    it("inside a running build, leaves the status to that build", async () => {
+        store.profile = { metadata: null, builtAt: null, buildStatus: "building" };
+        await refreshForDocument(C, 1, ports);
+        expect(store.profile.buildStatus).toBe("building");
+    });
+
+    it("a refresh that fails says so instead of staying building", async () => {
+        await rebuildProfile(C, ports, { changedBy: "u1" });
+        const broken = {
+            ...ports,
+            identity: () => Promise.reject(new Error("database gone")),
+        };
+        await expect(refreshForDocument(C, 1, broken)).rejects.toThrow("database gone");
+        expect(store.profile?.buildStatus).toBe("failed");
+    });
+});
+
 describe("a person's override and a changing workspace", () => {
     it("counting a set-aside source reads it for facts; setting it aside again removes them", async () => {
         await rebuildProfile(C, ports, { changedBy: "u1" });
@@ -525,5 +572,36 @@ describe("a read that fails outright", () => {
         await refreshForDocument(C, 1, ports);
         expect(row(1)).toMatchObject({ status: "failed", versionId: 12n });
         expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
+    });
+});
+
+describe("a file still being ingested", () => {
+    it("waits as pending instead of being filed as empty, and is read once it has text", async () => {
+        await rebuildProfile(C, ports, { changedBy: "u1" });
+        store.docs.set(5, {
+            ...doc(5, "Deck v2.pdf", 51),
+            indexed: false,
+            versionCreatedAt: new Date("2026-10-03T11:59:00Z"),
+        } as Doc);
+        await refreshForDocument(C, 5, ports);
+        expect(row(5)).toMatchObject({ status: "pending", role: null, versionId: 51n });
+        expect(row(5).reason).toContain("Still being processed");
+        // The profile was still assembled from everything else.
+        expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
+
+        store.docs.set(5, { ...doc(5, "Deck v2.pdf", 51), indexed: true } as Doc);
+        store.chunks.set("5:51", [chunk(501, DECK, "Deck v2.pdf")]);
+        await refreshForDocument(C, 5, ports);
+        expect(row(5)).toMatchObject({ status: "done", role: "about_us" });
+    });
+
+    it("is filed as having no text once ingestion has had its time", async () => {
+        store.docs.set(5, {
+            ...doc(5, "Broken.pdf", 51),
+            indexed: false,
+            versionCreatedAt: new Date("2026-10-03T10:00:00Z"),
+        } as Doc);
+        await refreshForDocument(C, 5, ports);
+        expect(row(5)).toMatchObject({ status: "done", role: "no_content" });
     });
 });

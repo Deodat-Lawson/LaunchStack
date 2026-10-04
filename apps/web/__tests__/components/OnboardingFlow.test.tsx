@@ -552,7 +552,7 @@ it("says so when the profile could not be built", async () => {
     await user.click(screen.getByRole("button", { name: "Skip this step" }));
     await user.click(screen.getByRole("button", { name: /Skip this step/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
-        "The profile could not be built: The model did not answer"
+        "The profile could not be built: The model did not answer. Your answers and sources are kept"
     );
 });
 
@@ -579,4 +579,39 @@ it("tells a screen reader how far reading has got", async () => {
     await user.click(screen.getByRole("button", { name: "Skip this step" }));
     await user.click(screen.getByRole("button", { name: /Skip this step/ }));
     expect(await screen.findByText("1 of 2 sources read. 1 fact so far.")).toBeInTheDocument();
+});
+
+it("going Back after a save and Continue again sends nothing new", async () => {
+    const user = userEvent.setup();
+    await renderLoaded();
+    await user.type(screen.getByLabelText("Website"), "acme.com");
+    await user.type(screen.getByLabelText(/idea you.re working on/), "Anvils by subscription.");
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await screen.findByRole("heading", { name: "Add documents about the company" });
+    await user.click(screen.getByRole("button", { name: "Back" }));
+    await user.click(await screen.findByRole("button", { name: "Continue" }));
+    await screen.findByRole("heading", { name: "Add documents about the company" });
+    expect(
+        calls.filter(c => c.url === "/api/company/onboarding" && c.method === "POST")
+    ).toHaveLength(1);
+    expect(calls.filter(c => c.url === "/api/upload/website")).toHaveLength(1);
+});
+
+it("shows nothing of the form until it knows who is asking", async () => {
+    onboardingState = { ...onboardingState, canEdit: false };
+    let answer!: () => void;
+    const gate = new Promise<void>(resolve => (answer = resolve));
+    const fetchMock = global.fetch as jest.Mock;
+    const real = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementationOnce(async (...args: Parameters<typeof fetch>) => {
+        await gate;
+        return real(...args);
+    });
+    render(<OnboardingFlow />);
+    expect(screen.getByText("Loading…")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Website")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Skip setup" })).toBeNull();
+    answer();
+    await screen.findByRole("heading", { name: "Setting up Acme" });
+    expect(screen.queryByLabelText("Website")).toBeNull();
 });

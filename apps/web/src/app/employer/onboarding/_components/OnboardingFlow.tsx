@@ -102,11 +102,6 @@ interface OnboardingResponse {
     canEdit?: boolean;
 }
 
-/**
- * Only what the person typed or changed. An answer shown as it was saved is
- * not sent again, and nothing that came from the documents is offered in the
- * first place, so Continue never turns a document's fact into the person's.
- */
 /** A value the documents supply, offered as a placeholder the person can write over. */
 function hint(value: string | null | undefined): string | null {
     if (!value) return null;
@@ -114,6 +109,11 @@ function hint(value: string | null | undefined): string | null {
     return `From your sources: ${short}`;
 }
 
+/**
+ * Only what the person typed or changed. An answer shown as it was saved is
+ * not sent again, and nothing that came from the documents is offered in the
+ * first place, so Continue never turns a document's fact into the person's.
+ */
 function changedAnswers(
     answers: Answers,
     website: string | null,
@@ -248,6 +248,21 @@ export function OnboardingFlow() {
                     const body = (await res.json().catch(() => ({}))) as { error?: string };
                     throw new Error(body.error ?? "Saving failed");
                 }
+                // What was just saved is now saved: Back and Continue again sends nothing.
+                setKnown(k =>
+                    k
+                        ? {
+                              ...k,
+                              saved: {
+                                  website: k.saved.website || payload.website !== undefined,
+                                  description:
+                                      k.saved.description || payload.description !== undefined,
+                                  idea: k.saved.idea || payload.idea !== undefined,
+                              },
+                              answers: { ...k.answers, ...payload },
+                          }
+                        : k
+                );
             }
             // Import the homepage when the address is new or not a source yet, once per
             // address; it keeps going while the person moves on.
@@ -300,6 +315,13 @@ export function OnboardingFlow() {
 
     const companyName = name ?? "your company";
 
+    // Nothing until it is known who is asking: a member must not see the admin's form flash by.
+    if (!loaded)
+        return (
+            <div className="text-ink-3 mx-auto w-full max-w-[680px] py-10 text-sm" aria-busy="true">
+                Loading…
+            </div>
+        );
     if (known && !known.canEdit) return <ReadOnly companyName={companyName} onLeave={leave} />;
 
     return (
@@ -625,6 +647,12 @@ const POLL_MS = 3000;
 const SHOWN_FACTS = 8;
 const POLL_FOR_MS = 5 * 60 * 1000;
 
+function failureLine(error: string | null): string {
+    const reason = error?.trim();
+    if (!reason) return "The profile could not be built.";
+    return `The profile could not be built: ${reason}${/[.!?]$/.test(reason) ? "" : "."}`;
+}
+
 /** For screen readers, as the page updates: how far reading has got. */
 function progressLine(profile: CompanyProfileDto): string {
     const read = profile.sources.filter(s => s.status !== "pending").length;
@@ -753,9 +781,8 @@ function UnderstoodStep({
 
                 {profile?.status === "failed" && (
                     <p role="alert" className="text-danger text-sm">
-                        The profile could not be built
-                        {profile.error ? `: ${profile.error}` : "."} Your answers and sources are
-                        kept; rebuild it from the company profile.
+                        {failureLine(profile.error)} Your answers and sources are kept; rebuild it
+                        from the company profile.
                     </p>
                 )}
 

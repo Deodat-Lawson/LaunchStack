@@ -19,7 +19,7 @@ const mockSaves: { metadata: CompanyMetadataJSON; options: Record<string, unknow
 /** Raw creation keys that have produced a document. */
 const mockImported = new Set<string>();
 
-jest.mock("~/server/services/document-creation", () => ({
+jest.mock("@launchstack/engine", () => ({
     findDocumentByCreationKey: (_companyId: bigint, key: string) =>
         Promise.resolve(mockImported.has(key) ? { id: 1 } : null),
 }));

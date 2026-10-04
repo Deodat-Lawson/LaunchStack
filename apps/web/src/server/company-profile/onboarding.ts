@@ -21,12 +21,12 @@ import {
     type FactEdit,
     type MetadataFact,
 } from "@launchstack/pipelines/company-metadata";
+import { findDocumentByCreationKey } from "@launchstack/engine";
 import { company } from "@launchstack/store/schema";
 import { readFact } from "@launchstack/tools/company-context/facts";
 
 import { normalizeWebsite } from "~/lib/company-profile/website";
 import { db } from "~/server/db";
-import { findDocumentByCreationKey } from "~/server/services/document-creation";
 
 export interface OnboardingAnswers {
     website?: string;

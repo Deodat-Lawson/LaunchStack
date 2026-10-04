@@ -207,7 +207,9 @@ export function EvidenceScreen() {
                                         shared={e.visibility === "shared"}
                                         className="@max-sm:hidden"
                                     />
-                                    <DropdownMenu>
+                                    {/* Not modal: its items open dialogs, and a modal menu that hands off to a
+                                        dialog leaves the page unclickable once the dialog closes. */}
+                                    <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
                                             <Button
                                                 variant="ghost"

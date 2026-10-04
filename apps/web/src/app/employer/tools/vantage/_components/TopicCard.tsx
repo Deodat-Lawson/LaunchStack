@@ -164,8 +164,10 @@ interface TopicMenuActions {
 
 /** Everything else a topic can do, behind ⋯ — the card's face stays two buttons. */
 function TopicMenu({ topic, busy, ...a }: TopicMenuActions & { topic: TopicDto; busy: boolean }) {
+    // Not modal: its items open dialogs, and a modal menu that hands off to a
+    // dialog leaves the page unclickable once the dialog closes.
     return (
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
                 <Button
                     variant="ghost"

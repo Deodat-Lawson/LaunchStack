@@ -249,8 +249,10 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 <ChevronRight className="size-4" />
                             </Button>
                         </div>
+                        {/* Not modal: "Add a topic" opens a dialog, and a modal menu that hands
+                            off to a dialog leaves the page unclickable once it closes. */}
                         {agenda && (
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" size="sm" disabled={busy}>
                                         More

@@ -152,6 +152,14 @@ export function SessionsBrowserPreview() {
                     headers: { "Content-Type": "application/json" },
                 });
             }
+            // "Remove the import" deletes the transcript's document.
+            if (url.includes("/api/deleteDocument") && init?.method === "DELETE") {
+                await new Promise(r => setTimeout(r, 300));
+                return new Response(JSON.stringify({ success: true }), {
+                    status: 200,
+                    headers: { "Content-Type": "application/json" },
+                });
+            }
             return original(input, init);
         };
         setReady(true);

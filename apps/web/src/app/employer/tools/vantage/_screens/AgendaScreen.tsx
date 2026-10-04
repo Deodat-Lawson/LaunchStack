@@ -397,7 +397,6 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                         }
                                         onEdit={() => setEditing(t)}
                                         onDecide={() => setDeciding(t)}
-                                        onShare={shared => share(t, shared)}
                                         onDelete={() => void remove(t)}
                                     />
                                 ))}
@@ -486,13 +485,8 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                             onRestore={() =>
                                                 void patch(
                                                     t,
-                                                    {
-                                                        status:
-                                                            t.origin === "founder"
-                                                                ? "kept"
-                                                                : "suggested",
-                                                    },
-                                                    "Restored"
+                                                    { status: "kept" },
+                                                    "Back on the agenda"
                                                 )
                                             }
                                             onDelete={() => void remove(t)}

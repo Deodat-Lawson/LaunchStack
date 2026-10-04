@@ -420,7 +420,7 @@ export function AgendaTopicRow({
     );
 }
 
-/** An ignored topic, folded away: its title and the way back. */
+/** An ignored topic, folded away: its title and the way back onto the agenda. */
 export function IgnoredTopicRow({
     topic,
     busy,
@@ -440,7 +440,7 @@ export function IgnoredTopicRow({
             </span>
             <Button size="sm" variant="outline" onClick={onRestore} disabled={busy}>
                 <RotateCcw aria-hidden="true" />
-                Restore
+                Add to agenda
             </Button>
             <Button
                 size="sm"

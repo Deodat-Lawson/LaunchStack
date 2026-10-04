@@ -13,6 +13,7 @@ import {
     Upload,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
@@ -279,6 +280,10 @@ export function DocumentViewer({
     const [activeVersionId, setActiveVersionId] = useState<number | null>(null);
     const [expectedMime, setExpectedMime] = useState<string | null>(null);
     const [reverting, setReverting] = useState(false);
+    /** A restore or delete that has been asked for, pending the confirm dialog. */
+    const [confirming, setConfirming] = useState<
+        { action: "restore"; versionId: number } | { action: "delete" } | null
+    >(null);
     const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
     const [fullDocError, setFullDocError] = useState<string | null>(null);
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
@@ -686,9 +691,13 @@ export function DocumentViewer({
         if (file) uploadNewVersion(file);
     };
 
+    const requestRestore = (versionId: number) => {
+        if (!source.documentId) return;
+        setConfirming({ action: "restore", versionId });
+    };
+
     const restoreVersion = async (versionId: number) => {
         if (!source.documentId) return;
-        if (!confirm("Restore this version as the current one?")) return;
         setReverting(true);
         try {
             const res = await fetch(
@@ -702,7 +711,7 @@ export function DocumentViewer({
             await refreshVersions();
             onVersionChanged?.();
         } catch (err) {
-            alert(err instanceof Error ? err.message : "Failed to restore version");
+            toast.error(err instanceof Error ? err.message : "Failed to restore version");
         } finally {
             setReverting(false);
         }
@@ -710,11 +719,7 @@ export function DocumentViewer({
 
     const deleteDocument = () => {
         if (!persisted) return;
-        const prompt = isMindmap
-            ? `Move "${source.title}" to the trash? You can undo it right after.`
-            : `Delete "${source.title}"? This cannot be undone.`;
-        if (!confirm(prompt)) return;
-        onDelete(source);
+        setConfirming({ action: "delete" });
     };
 
     const openOriginal = () => {
@@ -878,6 +883,7 @@ export function DocumentViewer({
 
     const currentVersion = versions.find(v => v.id === activeVersionId);
     const viewingOld = activeVersionId !== null && currentVersion && !currentVersion.isCurrent;
+    const restoring = confirming?.action === "restore";
 
     return (
         <div
@@ -890,7 +896,8 @@ export function DocumentViewer({
                 // An open overlay rail is the nearest thing to dismiss:
                 // Escape shuts it, and marking the event handled keeps the
                 // window listener from closing the whole preview as well.
-                if (e.key === "Escape" && narrow && overlayOpen) {
+                // A dialog over it (the confirm) has already handled it.
+                if (e.key === "Escape" && !e.defaultPrevented && narrow && overlayOpen) {
                     e.preventDefault();
                     setOverlayOpen(false);
                 }
@@ -1404,7 +1411,7 @@ export function DocumentViewer({
                                                 setActiveVersionId(v.id);
                                                 if (!v.isCurrent) previewVersion(v.id);
                                             }}
-                                            onRestore={() => void restoreVersion(v.id)}
+                                            onRestore={() => requestRestore(v.id)}
                                         >
                                             <button
                                                 onClick={() => {
@@ -1513,7 +1520,7 @@ export function DocumentViewer({
                                         </div>
                                         <button
                                             disabled={reverting}
-                                            onClick={() => void restoreVersion(currentVersion.id)}
+                                            onClick={() => requestRestore(currentVersion.id)}
                                             style={{
                                                 width: "100%",
                                                 padding: "6px",
@@ -1577,6 +1584,37 @@ export function DocumentViewer({
                     )}
                 </aside>
             </div>
+
+            <ConfirmDialog
+                open={confirming !== null}
+                onOpenChange={next => {
+                    if (!next) setConfirming(null);
+                }}
+                // Above the full-screen preview (z-80), like the header's menu.
+                layerClassName="z-[90]"
+                title={
+                    restoring
+                        ? "Restore this version?"
+                        : isMindmap
+                          ? `Move “${source.title}” to the trash?`
+                          : `Delete “${source.title}”?`
+                }
+                description={
+                    restoring
+                        ? "It becomes the current version, and answers cite it from now on. The other versions stay in the history."
+                        : isMindmap
+                          ? "You can undo it right after."
+                          : "This cannot be undone."
+                }
+                confirmLabel={restoring ? "Restore" : isMindmap ? "Move to trash" : "Delete"}
+                destructive={!restoring}
+                onConfirm={() => {
+                    const asked = confirming;
+                    setConfirming(null);
+                    if (asked?.action === "restore") void restoreVersion(asked.versionId);
+                    else if (asked?.action === "delete") onDelete(source);
+                }}
+            />
         </div>
     );
 }

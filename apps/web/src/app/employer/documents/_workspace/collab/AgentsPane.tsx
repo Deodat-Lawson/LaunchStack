@@ -30,6 +30,7 @@ import {
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import {
@@ -94,6 +95,12 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
         seed?: Partial<AgentDefinition>;
     } | null>(null);
     const [notice, setNotice] = useState<string | null>(null);
+    /** An imported file whose handle is taken, held until Replace or Cancel. */
+    const [conflict, setConflict] = useState<{
+        text: string;
+        fileName: string;
+        displayName: string;
+    } | null>(null);
     const importInput = useRef<HTMLInputElement>(null);
 
     const personas = useMemo(() => data?.personas ?? [], [data]);
@@ -201,26 +208,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
             conflict?: { displayName: string };
         };
         if (response.status === 409 && body.conflict) {
-            const replace = window.confirm(
-                `${body.conflict.displayName} already uses that handle. Replace it with the file's definition?`
-            );
-            if (!replace) return;
-            const again = await fetch("/api/collab/agents/import", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ file: text, replace: true }),
-            });
-            const replaced = (await again.json().catch(() => ({}))) as {
-                error?: string;
-                persona?: AgentPersonaRecord;
-            };
-            if (!again.ok) {
-                setNotice(replaced.error ?? "Could not import that file");
-                return;
-            }
-            setNotice(`${replaced.persona?.displayName ?? "Agent"} replaced from ${file.name}.`);
-            await refresh();
-            if (replaced.persona) setSelectedId(replaced.persona.dbId);
+            setConflict({ text, fileName: file.name, displayName: body.conflict.displayName });
             return;
         }
         if (!response.ok) {
@@ -230,6 +218,25 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
         setNotice(`${body.persona?.displayName ?? "Agent"} imported from ${file.name}.`);
         await refresh();
         if (body.persona) setSelectedId(body.persona.dbId);
+    };
+
+    const replaceFromFile = async (text: string, fileName: string) => {
+        const response = await fetch("/api/collab/agents/import", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file: text, replace: true }),
+        });
+        const replaced = (await response.json().catch(() => ({}))) as {
+            error?: string;
+            persona?: AgentPersonaRecord;
+        };
+        if (!response.ok) {
+            setNotice(replaced.error ?? "Could not import that file");
+            return;
+        }
+        setNotice(`${replaced.persona?.displayName ?? "Agent"} replaced from ${fileName}.`);
+        await refresh();
+        if (replaced.persona) setSelectedId(replaced.persona.dbId);
     };
 
     return (
@@ -380,6 +387,24 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                     setNotice(`${persona.displayName} saved.`);
                     await refresh();
                     setSelectedId(persona.dbId);
+                }}
+            />
+            <ConfirmDialog
+                open={conflict !== null}
+                onOpenChange={next => {
+                    if (!next) setConflict(null);
+                }}
+                title={`Replace ${conflict?.displayName ?? "this agent"}?`}
+                description={
+                    conflict
+                        ? `${conflict.displayName} already uses the handle in ${conflict.fileName}. Replacing swaps its definition for the file's.`
+                        : undefined
+                }
+                confirmLabel="Replace"
+                onConfirm={() => {
+                    const asked = conflict;
+                    setConflict(null);
+                    if (asked) void replaceFromFile(asked.text, asked.fileName);
                 }}
             />
         </div>

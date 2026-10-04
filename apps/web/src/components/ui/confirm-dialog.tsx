@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -9,6 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "~/components/ui/dialog";
+import { cn } from "~/lib/utils";
 
 /**
  * "Are you sure?", in the app rather than in the browser.
@@ -33,6 +36,7 @@ export function ConfirmDialog({
     confirmLabel = "Delete",
     cancelLabel = "Cancel",
     destructive = true,
+    layerClassName,
     onConfirm,
 }: {
     open: boolean;
@@ -43,14 +47,44 @@ export function ConfirmDialog({
     confirmLabel?: string;
     cancelLabel?: string;
     destructive?: boolean;
+    /**
+     * Stacking for both the backdrop and the panel, for a dialog asked from a
+     * surface that sits above the page's own layer — the full-screen document
+     * preview is z-80, and a dialog left at the default would open behind it.
+     */
+    layerClassName?: string;
     onConfirm: () => void;
 }) {
+    // Callers clear their pending item as the dialog closes, which would
+    // blank the title and description halfway through the fade-out. While
+    // closed, keep saying what was last asked.
+    const asked = { title, description, confirmLabel, destructive };
+    const [last, setLast] = useState(asked);
+    if (
+        open &&
+        (last.title !== title ||
+            last.description !== description ||
+            last.confirmLabel !== confirmLabel ||
+            last.destructive !== destructive)
+    ) {
+        setLast(asked);
+    }
+    const shown = open ? asked : last;
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[420px]" data-testid="confirm-dialog">
+            <DialogContent
+                className={cn("sm:max-w-[420px]", layerClassName)}
+                overlayClassName={layerClassName}
+                data-testid="confirm-dialog"
+                // No description: say so, rather than point at a missing one.
+                {...(shown.description ? {} : { "aria-describedby": undefined })}
+            >
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    {description && <DialogDescription>{description}</DialogDescription>}
+                    <DialogTitle>{shown.title}</DialogTitle>
+                    {shown.description && (
+                        <DialogDescription>{shown.description}</DialogDescription>
+                    )}
                 </DialogHeader>
                 <DialogFooter>
                     <Button
@@ -61,7 +95,7 @@ export function ConfirmDialog({
                         {cancelLabel}
                     </Button>
                     <Button
-                        variant={destructive ? "destructive" : "default"}
+                        variant={shown.destructive ? "destructive" : "default"}
                         onClick={() => {
                             // Close first: the caller's handler may navigate,
                             // and a dialog left mounted over a new screen is
@@ -71,7 +105,7 @@ export function ConfirmDialog({
                         }}
                         data-testid="confirm-accept"
                     >
-                        {confirmLabel}
+                        {shown.confirmLabel}
                     </Button>
                 </DialogFooter>
             </DialogContent>

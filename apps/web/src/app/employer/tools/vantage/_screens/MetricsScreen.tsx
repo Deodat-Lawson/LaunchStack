@@ -9,6 +9,7 @@ import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import {
     Dialog,
     DialogContent,
@@ -71,6 +72,8 @@ export function MetricsScreen() {
     const [defining, setDefining] = useState<MetricDefinitionDto | null | "new">(null);
     const [recording, setRecording] = useState<string | null>(null);
     const [importing, setImporting] = useState(false);
+    /** The metric a Remove has been asked for, pending the confirm dialog. */
+    const [removing, setRemoving] = useState<MetricDefinitionDto | null>(null);
 
     const definitions = useMemo(() => metrics.data?.definitions ?? [], [metrics.data]);
     const observations = useMemo(() => metrics.data?.observations ?? [], [metrics.data]);
@@ -96,7 +99,6 @@ export function MetricsScreen() {
     }, [definitions, observations]);
 
     const removeDefinition = async (d: MetricDefinitionDto) => {
-        if (!window.confirm(`Remove "${d.name}" and every number recorded against it?`)) return;
         try {
             await vantageApi.deleteMetric(d.id);
             toast("Metric removed");
@@ -255,9 +257,9 @@ export function MetricsScreen() {
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="text-danger"
-                                                onSelect={() => void removeDefinition(d)}
+                                                onSelect={() => setRemoving(d)}
                                             >
-                                                Remove metric
+                                                Remove metric…
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -369,6 +371,20 @@ export function MetricsScreen() {
                 open={importing}
                 onOpenChange={setImporting}
                 onDone={() => void refresh()}
+            />
+            <ConfirmDialog
+                open={removing !== null}
+                onOpenChange={next => {
+                    if (!next) setRemoving(null);
+                }}
+                title={`Remove “${removing?.name ?? ""}”?`}
+                description="Every number recorded against it goes too. This cannot be undone."
+                confirmLabel="Remove metric"
+                onConfirm={() => {
+                    const target = removing;
+                    setRemoving(null);
+                    if (target) void removeDefinition(target);
+                }}
             />
         </div>
     );

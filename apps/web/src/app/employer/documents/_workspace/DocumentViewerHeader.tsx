@@ -265,8 +265,11 @@ export function DocumentViewerHeader({
                 )
             )}
 
+            {/* Not modal: its items open dialogs (Delete's confirm, Restrict access),
+                and a modal menu that hands off to a dialog leaves the page
+                unclickable once the dialog closes. */}
             {overflow.length > 0 || !toggleInline ? (
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="outline"

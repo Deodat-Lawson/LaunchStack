@@ -54,16 +54,31 @@ function promptLabel(metadata: CompanyMetadataJSON, path: string, label: string)
     return label;
 }
 
+/**
+ * The excerpts a written statement cites (up to {@link MAX_SOURCES}), then
+ * one excerpt-less entry for every other document it rests on. Readers cite
+ * only the excerpts; who may see the statement is decided by all of them, so
+ * a restricted document past the excerpt cap still hides it.
+ */
 function unionSources(facts: MetadataFact<unknown>[]): MetadataSource[] {
     const seen = new Set<string>();
     const out: MetadataSource[] = [];
+    const rest = new Map<number, MetadataSource>();
     for (const fact of facts)
         for (const source of fact.sources) {
             const key = `${source.doc_id}|${source.page ?? ""}|${source.quote ?? ""}`;
-            if (seen.has(key) || out.length >= MAX_SOURCES) continue;
+            if (seen.has(key)) continue;
             seen.add(key);
-            out.push(source);
+            if (out.length < MAX_SOURCES) out.push(source);
+            else if (source.doc_id > 0 && !rest.has(source.doc_id))
+                rest.set(source.doc_id, {
+                    doc_id: source.doc_id,
+                    doc_name: source.doc_name,
+                    extracted_at: source.extracted_at,
+                });
         }
+    const cited = new Set(out.map(s => s.doc_id));
+    for (const [docId, source] of rest) if (!cited.has(docId)) out.push(source);
     return out;
 }
 

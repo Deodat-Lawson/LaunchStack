@@ -282,7 +282,16 @@ function readyProfile(now: number): CompanyProfileDto {
         people,
         services,
         projects: [],
-        legal: [],
+        legal: [
+            {
+                path: "legal.0",
+                name: "Hosting agreement with Northwind Cloud",
+                detail: "Two-year hosting agreement, renews each January.",
+                detailPath: "legal.0.summary",
+                cites: [],
+                source: "documents",
+            },
+        ],
         evidence,
         sources,
         counts: counts(sources),
@@ -433,7 +442,7 @@ function pruneEvidence(p: CompanyProfileDto): CompanyProfileDto {
     const cited = new Set<number>([
         ...p.summaryCites,
         ...p.facts.flatMap(f => f.cites),
-        ...[...p.people, ...p.services, ...p.projects].flatMap(e => e.cites),
+        ...[...p.people, ...p.services, ...p.projects, ...p.legal].flatMap(e => e.cites),
     ]);
     return { ...p, evidence: p.evidence.filter(e => cited.has(e.n)) };
 }
@@ -454,7 +463,10 @@ function patchFact(
             : p.facts.filter(f => f.path !== path);
         return pruneEvidence({ ...p, facts });
     }
-    for (const kind of ["people", "services", "projects"] as const) {
+    for (const kind of ["people", "services", "projects", "legal"] as const) {
+        // Clearing an entry's name takes it off the profile, as the server does.
+        if (!text && p[kind].some(e => `${e.path}.name` === path))
+            return pruneEvidence({ ...p, [kind]: p[kind].filter(e => `${e.path}.name` !== path) });
         if (p[kind].some(e => e.detailPath === path)) {
             const entries = p[kind].map(e =>
                 e.detailPath === path

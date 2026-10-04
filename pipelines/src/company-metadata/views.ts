@@ -125,7 +125,6 @@ export function profileView(
     const evidenceKey = new Map<string, number>();
     const documents = new Set<number>();
 
-    /** The fact if the viewer may see it, with the excerpt numbers it cites. */
     /**
      * The fact if the viewer may see it, with the excerpt numbers it cites.
      * `whole`: shown only when every source is visible — for what was

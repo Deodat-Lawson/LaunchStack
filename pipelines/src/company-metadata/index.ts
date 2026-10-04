@@ -62,10 +62,12 @@ export {
     isCounted,
     listSourceRows,
     listWorkspaceDocuments,
+    BUILD_STUCK_MS,
     finishBuild,
     saveProfileLocked,
     setBuildStatus,
     startBuild,
+    startBuildIfIdle,
     type ProfileDocument,
     type ProfileRow,
 } from "./db";

@@ -4,6 +4,7 @@
  * Settings › Company and Proposals › Profile render.
  */
 import {
+    BUILD_STUCK_MS,
     METADATA_SCHEMA_VERSION,
     READER_VERSION,
     isCounted,
@@ -20,7 +21,7 @@ import type {
 } from "~/lib/company-profile/dto";
 
 /** A build that has said "building" this long without finishing is treated as dead. */
-export const STUCK_BUILD_MS = 15 * 60 * 1000;
+export const STUCK_BUILD_MS = BUILD_STUCK_MS;
 
 export function sourceHref(documentId: number): string {
     return `/employer/documents?source=d${documentId}`;

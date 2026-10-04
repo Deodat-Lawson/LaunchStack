@@ -4,7 +4,7 @@
  * and write is scoped by `companyId`; a document of another workspace is
  * "not found".
  */
-import { and, asc, eq, isNotNull } from "drizzle-orm";
+import { and, asc, eq, gte, isNotNull, isNull, lt, ne, or } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 import { document, documentContextChunks } from "@launchstack/store/schema";
@@ -204,6 +204,87 @@ export async function setBuildStatus(
         });
 }
 
+/** A build or a claim older than this is treated as dead. */
+export const BUILD_STUCK_MS = 15 * 60 * 1000;
+
+/**
+ * Start a build only when none is running, and return its token — or null,
+ * in which case the caller does its work without touching the status, so a
+ * person's override made during a Rebuild never marks the Rebuild done.
+ */
+export async function startBuildIfIdle(companyId: bigint): Promise<Date | null> {
+    const startedAt = new Date();
+    const set = { buildStatus: "building" as const, buildError: null, buildStartedAt: startedAt };
+    const rows = await getDb()
+        .insert(companyMetadata)
+        .values({ companyId, metadata: emptyEnvelope(companyId), schemaVersion: "1.1.0", ...set })
+        .onConflictDoUpdate({
+            target: companyMetadata.companyId,
+            set: { ...set, updatedAt: startedAt },
+            setWhere: or(
+                ne(companyMetadata.buildStatus, "building"),
+                isNull(companyMetadata.buildStartedAt),
+                lt(companyMetadata.buildStartedAt, new Date(startedAt.getTime() - BUILD_STUCK_MS))
+            ),
+        })
+        .returning({ companyId: companyMetadata.companyId });
+    return rows.length > 0 ? startedAt : null;
+}
+
+/**
+ * Claim sources for reading. Returns the ids this caller now owns: a source
+ * another reader claimed within {@link BUILD_STUCK_MS} is left to it, so two
+ * events catching up the same workspace never read the same document twice.
+ * Reading the source ({@link upsertSourceRow} with status done/failed) ends
+ * the claim.
+ */
+export async function claimSources(
+    companyId: bigint,
+    documentIds: number[],
+    now: Date = new Date()
+): Promise<number[]> {
+    if (documentIds.length === 0) return [];
+    const rows = await getDb()
+        .insert(companyProfileSources)
+        .values(
+            documentIds.map(id => ({
+                companyId,
+                documentId: BigInt(id),
+                status: "pending" as const,
+                readAt: now,
+            }))
+        )
+        .onConflictDoUpdate({
+            target: [companyProfileSources.companyId, companyProfileSources.documentId],
+            set: { status: "pending", readAt: now, updatedAt: now },
+            setWhere: or(
+                ne(companyProfileSources.status, "pending"),
+                isNull(companyProfileSources.readAt),
+                lt(companyProfileSources.readAt, new Date(now.getTime() - BUILD_STUCK_MS))
+            ),
+        })
+        .returning({ documentId: companyProfileSources.documentId });
+    return rows.map(r => Number(r.documentId));
+}
+
+/** Sources some reader is reading right now. */
+export async function countActiveClaims(
+    companyId: bigint,
+    now: Date = new Date()
+): Promise<number> {
+    const rows = await getDb()
+        .select({ id: companyProfileSources.id })
+        .from(companyProfileSources)
+        .where(
+            and(
+                eq(companyProfileSources.companyId, companyId),
+                eq(companyProfileSources.status, "pending"),
+                gte(companyProfileSources.readAt, new Date(now.getTime() - BUILD_STUCK_MS))
+            )
+        );
+    return rows.length;
+}
+
 /**
  * Start a build and return its token. Only the build holding the latest token
  * may finish it ({@link finishBuild}), so a short refresh that ends first
@@ -329,7 +410,7 @@ export async function listCountedSources(
         .where(
             and(
                 eq(companyProfileSources.companyId, companyId),
-                eq(companyProfileSources.status, "done"),
+                // A source being re-read (or whose re-read failed) keeps its last facts.
                 isNotNull(companyProfileSources.facts)
             )
         )

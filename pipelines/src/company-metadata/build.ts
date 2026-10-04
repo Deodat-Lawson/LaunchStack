@@ -26,6 +26,9 @@ import {
     listCountedSources,
     listWorkspaceDocuments,
     loadVersionChunks,
+    BUILD_STUCK_MS,
+    claimSources,
+    countActiveClaims,
     finishBuild,
     listSourceRows,
     saveProfileLocked,
@@ -38,7 +41,12 @@ import { cleanPassages } from "./passages";
 import { READER_VERSION } from "./prompts";
 import { synthesizeProfile } from "./synthesize";
 import { sourceKindOf, triageSource } from "./triage";
-import type { CompanyMetadataJSON, CompanyProfileSourceRow, SourceOverride } from "./types";
+import {
+    createEmptyMetadata,
+    type CompanyMetadataJSON,
+    type CompanyProfileSourceRow,
+    type SourceOverride,
+} from "./types";
 
 export interface ProfileBuildPorts {
     generate: GenerateStructuredFn;
@@ -266,12 +274,20 @@ function writtenPart(
     };
 }
 
+/** Stale sources one event reads before handing the rest to the next event (or a Rebuild). */
+const CATCH_UP_PER_EVENT = 12;
+
 /**
  * Documents whose source row is missing or was read at another version or
  * under an older reader. A failed read is left to Rebuild, so one bad file
- * does not cost a model call on every event.
+ * does not cost a model call on every event. `unclaimed` leaves out sources
+ * another reader is reading right now.
  */
-export async function staleDocumentIds(companyId: bigint): Promise<number[]> {
+export async function staleDocumentIds(
+    companyId: bigint,
+    options: { unclaimed?: boolean; now?: Date } = {}
+): Promise<number[]> {
+    const now = options.now ?? new Date();
     const [docs, rows] = await Promise.all([
         listWorkspaceDocuments(companyId),
         listSourceRows(companyId),
@@ -280,20 +296,32 @@ export async function staleDocumentIds(companyId: bigint): Promise<number[]> {
     return docs
         .filter(doc => {
             const row = byDocument.get(doc.id);
-            return (
+            const stale =
                 !row ||
                 row.readerVersion !== READER_VERSION ||
-                (row.versionId === null ? null : Number(row.versionId)) !== doc.currentVersionId
-            );
+                (row.versionId === null ? null : Number(row.versionId)) !== doc.currentVersionId;
+            if (!stale || !options.unclaimed || !row) return stale;
+            const claimed =
+                row.status === "pending" &&
+                !!row.readAt &&
+                now.getTime() - row.readAt.getTime() < BUILD_STUCK_MS;
+            return !claimed;
         })
         .map(doc => doc.id);
 }
 
 /**
  * Read whatever is stale, then reassemble. Every per-event path (an upload,
- * a person's override or reset, a delete) comes through here, so a profile
- * is never assembled from a partial set of sources — on a workspace's first
- * event after this builder shipped, that means reading all of it once.
+ * a person's override, reset or edit, a delete) comes through here, so a
+ * profile is never assembled from a partial set of sources.
+ *
+ * Sources are claimed before they are read, so two events never read the
+ * same one, and one event reads at most {@link CATCH_UP_PER_EVENT} — a
+ * workspace's first event after this builder shipped (or after a
+ * READER_VERSION bump) must not hold up the worker for every workspace.
+ * While anything is left to read, or being read elsewhere, the previous
+ * profile stays as it is; whichever reader finishes the last source
+ * assembles. Rebuild reads everything at once.
  */
 export async function catchUpAndAssemble(
     companyId: bigint,
@@ -301,11 +329,22 @@ export async function catchUpAndAssemble(
     audit: { changedBy: string; documentId?: number | null; identity?: CompanyIdentityHint }
 ): Promise<CompanyMetadataJSON> {
     const identity = audit.identity ?? (await identityOf(companyId, ports));
-    const stale = await staleDocumentIds(companyId);
+    const candidates = await staleDocumentIds(companyId, { unclaimed: true });
+    const mine = await claimSources(companyId, candidates.slice(0, CATCH_UP_PER_EVENT));
     await runWithConcurrency(
-        stale.map(id => () => readSource(companyId, id, ports, { identity })),
+        mine.map(id => () => readSource(companyId, id, ports, { identity })),
         REBUILD_CONCURRENCY
     );
+    const [left, reading] = await Promise.all([
+        staleDocumentIds(companyId),
+        countActiveClaims(companyId),
+    ]);
+    if (left.length > 0 || reading > 0) {
+        console.info(
+            `[CompanyProfile] company ${companyId}: ${left.length} source(s) still to read, ${reading} being read — the profile is reassembled once they are`
+        );
+        return (await getProfileRow(companyId))?.metadata ?? createEmptyMetadata(String(companyId));
+    }
     return assembleProfile(companyId, ports, { ...audit, identity });
 }
 

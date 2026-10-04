@@ -21,7 +21,7 @@ import {
     finishBuild,
     saveProfileLocked,
     setBuildStatus,
-    startBuild,
+    startBuildIfIdle,
     type FactEdit,
     type ProfileBuildPorts,
     type SourceOverride,
@@ -114,33 +114,36 @@ export async function editFact(ctx: Ctx, edit: FactEdit): Promise<CompanyProfile
         { changedBy: ctx.authUserId, changeType: "manual_override", built: false }
     );
     if (failure) throw new CompanyProfileError(failure, 400);
-    // The sources' value was overwritten in place by the edit; reassembling brings it back.
-    if (edit.reset) await reassembleAfterResponse(ctx.companyId, ctx.authUserId);
+    // Reassemble after the response: a reset brings the sources' value back, and
+    // any edit changes the facts the summary was written from.
+    await reassembleAfterResponse(ctx.companyId, ctx.authUserId);
     return loadCompanyProfile(ctx);
 }
 
 /**
- * Run `work` after the response while the profile says "building". Only this
- * run's token can clear it, so a short refresh never ends a longer Rebuild.
+ * Run `work` after the response. When no build is running, the profile says
+ * "building" until it ends; during a Rebuild the status is left to the
+ * Rebuild, so this never marks it done early.
  */
 async function buildAfterResponse(
     companyId: bigint,
     label: string,
     work: () => Promise<unknown>
 ): Promise<void> {
-    const token = await startBuild(companyId);
+    const token = await startBuildIfIdle(companyId);
     after(async () => {
         try {
             await work();
-            await finishBuild(companyId, token, "idle");
+            if (token) await finishBuild(companyId, token, "idle");
         } catch (error) {
             console.error(`[company-profile] ${label} failed:`, error);
-            await finishBuild(
-                companyId,
-                token,
-                "failed",
-                error instanceof Error ? error.message.slice(0, 500) : `${label} failed`
-            );
+            if (token)
+                await finishBuild(
+                    companyId,
+                    token,
+                    "failed",
+                    error instanceof Error ? error.message.slice(0, 500) : `${label} failed`
+                );
         }
     });
 }

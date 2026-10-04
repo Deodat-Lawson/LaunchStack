@@ -59,15 +59,40 @@ vi.mock("./db", () => {
         },
         listCountedSources: async () =>
             [...store.rows.values()]
-                .filter(
-                    r =>
-                        store.docs.has(Number(r.documentId)) &&
-                        r.status === "done" &&
-                        r.facts !== null &&
-                        counted(r)
-                )
+                .filter(r => store.docs.has(Number(r.documentId)) && r.facts !== null && counted(r))
                 .map(r => ({ ...r, title: (store.docs.get(Number(r.documentId)) as Doc).title })),
         getProfileRow: async () => store.profile,
+        BUILD_STUCK_MS: 15 * 60 * 1000,
+        claimSources: async (companyId: bigint, ids: number[], now = new Date()) => {
+            const mine: number[] = [];
+            for (const id of ids) {
+                const r = store.rows.get(id);
+                const active =
+                    r?.status === "pending" &&
+                    r.readAt instanceof Date &&
+                    now.getTime() - r.readAt.getTime() < 15 * 60 * 1000;
+                if (active) continue;
+                store.rows.set(id, {
+                    override: null,
+                    facts: null,
+                    factCount: 0,
+                    ...r,
+                    companyId,
+                    documentId: BigInt(id),
+                    status: "pending",
+                    readAt: now,
+                });
+                mine.push(id);
+            }
+            return mine;
+        },
+        countActiveClaims: async () =>
+            [...store.rows.values()].filter(
+                r =>
+                    r.status === "pending" &&
+                    r.readAt instanceof Date &&
+                    Date.now() - r.readAt.getTime() < 15 * 60 * 1000
+            ).length,
         listSourceRows: async () =>
             [...store.rows.values()].filter(r => store.docs.has(Number(r.documentId))),
         startBuild: async () => {
@@ -415,5 +440,72 @@ describe("builds that overlap, and the first event after upgrading", () => {
         expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
         expect(metadata().markets.geographies?.map(f => f.value)).toEqual(["Texas"]);
         expect(row(2).role).toBe("third_party");
+    });
+});
+
+describe("catching up a workspace that was never read", () => {
+    const legacy = () => ({
+        buildStatus: "idle",
+        builtAt: new Date("2026-09-01"),
+        metadata: {
+            schema_version: "1.0.0",
+            company_id: "50",
+            updated_at: "",
+            company: { headquarters: { value: "Old HQ" } },
+            people: [],
+            services: [],
+            markets: {},
+            projects: [],
+            policies: {},
+            legal: [],
+            provenance: {
+                total_documents_processed: 30,
+                extraction_model: "",
+                extraction_version: "1.0.0",
+            },
+        },
+    });
+    const addNotes = (n: number) => {
+        for (let i = 0; i < n; i++) {
+            const id = 100 + i;
+            store.docs.set(id, doc(id, `Note ${i}.md`, 1000 + i));
+            store.chunks.set(`${id}:${1000 + i}`, [
+                chunk(
+                    id * 10,
+                    `Acme Robotics builds warehouse robots for mid-size grocers. Founded in 2019, we are headquartered in Baltimore, MD. Note ${i} of our planning notes for the quarter.`,
+                    `Note ${i}.md`
+                ),
+            ]);
+        }
+    };
+
+    it("reads a bounded number per event and keeps the old profile until everything is read", async () => {
+        addNotes(20); // 23 documents, none read
+        store.profile = legacy();
+        await refreshForDocument(C, 100, ports);
+        const roles = calls.filter(c => c.schemaName === "source_role").length;
+        expect(roles).toBeLessThanOrEqual(13); // its own document + 12
+        // Not everything is read: the profile is left as it was, not shrunk to what was.
+        expect((store.profile?.metadata as { schema_version: string }).schema_version).toBe(
+            "1.0.0"
+        );
+
+        await refreshForDocument(C, 101, ports); // the next event finishes the catch-up and assembles
+        expect(metadata().schema_version).toBe("1.1.0");
+        expect(metadata().company.headquarters?.value).toBe("Baltimore, MD");
+    });
+
+    it("two events at once never read the same source twice", async () => {
+        addNotes(6); // 9 documents
+        store.profile = legacy();
+        await Promise.all([refreshForDocument(C, 100, ports), refreshForDocument(C, 101, ports)]);
+        const sorted = calls
+            .filter(c => c.schemaName === "source_role")
+            .map(c => /DOCUMENT: "([^"]+)"/.exec(c.prompt)?.[1]);
+        // Each event reads its own upload; the rest are read once between them.
+        expect(sorted.length).toBeLessThanOrEqual(9 + 2);
+        const counts = new Map<string, number>();
+        for (const t of sorted) counts.set(t!, (counts.get(t!) ?? 0) + 1);
+        for (const [title, n] of counts) if (!/^Note [01]\.md$/.test(title)) expect(n).toBe(1);
     });
 });

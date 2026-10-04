@@ -6,7 +6,7 @@ import { SectionHeading } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
 
 import { vantageApi, type MetricObservationDto, type WeeklySignals } from "../api";
-import { setAside, type Outcome } from "../_lib/actions";
+import { setAside, SET_ASIDE_DAYS, type Outcome } from "../_lib/actions";
 import { fmtDate, fmtNumber } from "../_lib/format";
 import { SuggestionCard, SuggestionNudge } from "./Suggestion";
 
@@ -129,7 +129,11 @@ export function MetricSuggestions({
                                         variant="ghost"
                                         onClick={() =>
                                             void act(id, () =>
-                                                setAside(id, 30, "Ignored — both numbers stay")
+                                                setAside(
+                                                    id,
+                                                    SET_ASIDE_DAYS.conflict,
+                                                    "Ignored — both numbers stay"
+                                                )
                                             )
                                         }
                                     >
@@ -156,7 +160,11 @@ export function MetricSuggestions({
                                     variant="ghost"
                                     onClick={() =>
                                         void act(m.id, () =>
-                                            setAside(m.id, 7, "Hidden for the rest of the week")
+                                            setAside(
+                                                m.id,
+                                                SET_ASIDE_DAYS.nudge,
+                                                "Hidden for the rest of the week"
+                                            )
                                         )
                                     }
                                 >

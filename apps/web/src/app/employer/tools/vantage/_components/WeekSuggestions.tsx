@@ -15,6 +15,7 @@ import {
     markReady,
     resolveCommitment,
     setAside,
+    SET_ASIDE_DAYS,
     type Outcome,
 } from "../_lib/actions";
 import { dueWords, fmtDate, plural, weekRange } from "../_lib/format";
@@ -151,7 +152,13 @@ function Suggestion({
                                 size="sm"
                                 variant="ghost"
                                 onClick={() =>
-                                    void act(s.id, () => setAside(s.id, 1, "Hidden until tomorrow"))
+                                    void act(s.id, () =>
+                                        setAside(
+                                            s.id,
+                                            SET_ASIDE_DAYS.snooze,
+                                            "Hidden until tomorrow"
+                                        )
+                                    )
                                 }
                             >
                                 Not yet
@@ -194,7 +201,11 @@ function Suggestion({
                                 variant="ghost"
                                 onClick={() =>
                                     void act(s.id, () =>
-                                        setAside(s.id, 7, "Hidden for the rest of the week")
+                                        setAside(
+                                            s.id,
+                                            SET_ASIDE_DAYS.nudge,
+                                            "Hidden for the rest of the week"
+                                        )
                                     )
                                 }
                             >
@@ -233,7 +244,11 @@ function Suggestion({
                                 variant="ghost"
                                 onClick={() =>
                                     void act(s.id, () =>
-                                        setAside(s.id, 7, "Hidden for the rest of the week")
+                                        setAside(
+                                            s.id,
+                                            SET_ASIDE_DAYS.nudge,
+                                            "Hidden for the rest of the week"
+                                        )
                                     )
                                 }
                             >
@@ -293,7 +308,11 @@ export function CheckInSuggestion({
                     <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => void act(id, () => setAside(id, 1, "Asking again tomorrow"))}
+                        onClick={() =>
+                            void act(id, () =>
+                                setAside(id, SET_ASIDE_DAYS.snooze, "Asking again tomorrow")
+                            )
+                        }
                     >
                         <Clock aria-hidden="true" />
                         Not yet
@@ -357,7 +376,13 @@ export function CommitSuggestion({
                         size="sm"
                         variant="ghost"
                         onClick={() =>
-                            void act(id, () => setAside(id, 60, "Ignored — it stays on the agenda"))
+                            void act(id, () =>
+                                setAside(
+                                    id,
+                                    SET_ASIDE_DAYS.nextStep,
+                                    "Ignored — it stays on the agenda"
+                                )
+                            )
                         }
                     >
                         <X aria-hidden="true" />

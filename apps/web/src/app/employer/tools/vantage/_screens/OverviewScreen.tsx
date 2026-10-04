@@ -83,10 +83,13 @@ export function OverviewScreen() {
         onDrafted: () => overview.reload(),
     });
 
-    const groups = useMemo(
-        () => (data ? weekSuggestions(data, { today, hidden }) : []),
-        [data, today, hidden]
-    );
+    const groups = useMemo(() => {
+        if (!data) return [];
+        const all = weekSuggestions(data, { today, hidden });
+        // With nothing on file, the empty state already asks for a conversation
+        // and the numbers; the same two nudges beside it would say it twice.
+        return hasMaterial(data) || data.agenda ? all : all.filter(g => g.id !== "record");
+    }, [data, today, hidden]);
     const waiting = groups.reduce((n, g) => n + g.items.filter(s => !gone.has(s.id)).length, 0);
     const kept = agenda
         ? [...agenda.topics]
@@ -186,6 +189,18 @@ export function OverviewScreen() {
                                 </>
                             }
                         />
+                    ) : !agenda ? (
+                        // Drafting on arrival already ran for this visit and its result
+                        // did not show up here: offer it rather than claim "caught up".
+                        <EmptyState
+                            title={`No agenda for ${weekRange(data.agendaWeek, data.agendaWeekEnd)} yet`}
+                            body={`Vantage drafts it from ${readingWords(data)}: three to five topics, each with its sources, a decision to make and a next step.`}
+                            action={
+                                <Button size="sm" onClick={auto.draft}>
+                                    Draft it now
+                                </Button>
+                            }
+                        />
                     ) : null}
 
                     {!auto.drafting && waiting > 0 && (
@@ -199,9 +214,7 @@ export function OverviewScreen() {
                             onRecordNumbers={() => router.push(vantagePath("/metrics"))}
                         />
                     )}
-                    {!auto.drafting && waiting === 0 && (agenda !== null || material) && (
-                        <AllCaughtUp />
-                    )}
+                    {!auto.drafting && waiting === 0 && agenda !== null && <AllCaughtUp />}
                 </div>
             )}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -26,27 +26,37 @@ export interface Outcome {
     undo?: () => Promise<unknown>;
 }
 
+/** Fired after an Undo lands, so whichever Vantage screen is open re-reads. */
+const CHANGED = "vantage:changed";
+
 /**
  * Confirm a one-click answer with a way back. Every take-it-or-leave-it
- * click ends here, so a misclick costs one more click, not a hunt.
+ * click ends here, so a misclick costs one more click, not a hunt. An Undo
+ * that fails says so and offers to try again, since its toast is gone.
  */
 export function undoToast(message: string, undo: () => Promise<unknown>, description?: string) {
-    toast(message, {
-        description,
-        duration: 6000,
-        action: {
-            label: "Undo",
-            onClick: () => {
-                undo().catch((e: unknown) =>
-                    toast.error(e instanceof Error ? e.message : "Could not undo that")
-                );
-            },
-        },
-    });
+    const run = () => {
+        undo().then(
+            () => window.dispatchEvent(new Event(CHANGED)),
+            (e: unknown) =>
+                toast.error(e instanceof Error ? e.message : "Could not undo that", {
+                    description,
+                    duration: 10000,
+                    action: { label: "Try again", onClick: run },
+                })
+        );
+    };
+    toast(message, { description, duration: 6000, action: { label: "Undo", onClick: run } });
 }
 
 export function useOneClick(refresh: () => Promise<unknown> | void) {
     const [gone, setGone] = useState<ReadonlySet<string>>(() => new Set());
+    // An Undo clicked after moving to another screen still shows up there.
+    useEffect(() => {
+        const reread = () => void refresh();
+        window.addEventListener(CHANGED, reread);
+        return () => window.removeEventListener(CHANGED, reread);
+    }, [refresh]);
     const restore = useCallback(
         (id: string) =>
             setGone(g => {
@@ -56,35 +66,39 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
             }),
         []
     );
+    // Answers still on their way. A second click on the same suggestion while
+    // the first is in flight is ignored — a double-clicked Commit opens one
+    // commitment, not two. A ref, so two clicks in one frame both see it.
+    const running = useRef(new Set<string>());
     const act = useCallback(
         async (id: string, work: () => Promise<Outcome>) => {
+            if (running.current.has(id)) return;
+            running.current.add(id);
             setGone(g => new Set(g).add(id));
             let outcome: Outcome;
             try {
                 outcome = await work();
             } catch (e) {
+                running.current.delete(id);
                 restore(id);
                 toast.error(e instanceof Error ? e.message : "That did not work");
                 return;
             }
             // The card stays off the screen only until fresh data agrees; after
             // that the data decides, so a topic restored later comes back.
-            await refresh();
-            restore(id);
+            try {
+                await refresh();
+            } finally {
+                running.current.delete(id);
+                restore(id);
+            }
             const { message, description, undo } = outcome;
             if (!undo) {
                 toast(message, { description });
                 return;
             }
-            undoToast(
-                message,
-                async () => {
-                    await undo();
-                    restore(id);
-                    await refresh();
-                },
-                description
-            );
+            // The screen re-reads through the "changed" event once Undo lands.
+            undoToast(message, undo, description);
         },
         [refresh, restore]
     );
@@ -130,6 +144,13 @@ export async function resolveCommitment(
             }),
     };
 }
+
+/**
+ * How long a suggestion set aside stays out of sight on this browser: a
+ * snoozed check-in until tomorrow, a nudge for the week, an ignored next step
+ * or number conflict until it stops being one (two months as a backstop).
+ */
+export const SET_ASIDE_DAYS = { snooze: 1, nudge: 7, nextStep: 60, conflict: 60 } as const;
 
 /** Set a suggestion aside on this browser for `days` days (1 = until tomorrow). */
 export async function setAside(id: string, days: number, message: string): Promise<Outcome> {

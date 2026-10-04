@@ -261,8 +261,10 @@ export function TopicSuggestion({
 }
 
 /**
- * Vantage's proposed next step on a kept topic, as a one-click Commit.
- * Without a proposed owner, Commit asks for one in the decision dialog.
+ * The proposed next step on a kept topic, as a one-click Commit. Vantage's
+ * wears the suggestion mark and can be ignored; one the founder wrote is
+ * shown plainly as theirs. Without a proposed owner, Commit asks for one in
+ * the decision dialog.
  */
 export function NextStepSuggestion({
     topic,
@@ -280,14 +282,20 @@ export function NextStepSuggestion({
     className?: string;
 }) {
     const oneClick = canCommitInOneClick(topic);
+    const theirs = topic.origin === "founder";
     return (
         <div
             className={cn(
-                "border-line-2 from-brand-soft flex flex-col gap-2 rounded-lg border bg-gradient-to-b to-transparent px-3 py-2.5",
+                "border-line-2 flex flex-col gap-2 rounded-lg border px-3 py-2.5",
+                theirs ? "bg-panel-2" : "from-brand-soft bg-gradient-to-b to-transparent",
                 className
             )}
         >
-            <SuggestionMark>Suggested next step</SuggestionMark>
+            {theirs ? (
+                <span className="text-ink-3 text-[11.5px] font-medium">Your next step</span>
+            ) : (
+                <SuggestionMark>Suggested next step</SuggestionMark>
+            )}
             <div className="text-ink text-[13px] leading-snug">{topic.proposedNextStep}</div>
             <div className="text-ink-3 text-[12px]">
                 {topic.proposedOwner ?? "No owner proposed"}
@@ -298,16 +306,15 @@ export function NextStepSuggestion({
                     <Check aria-hidden="true" />
                     {oneClick ? "Commit" : "Commit…"}
                 </Button>
-                {onIgnore ? (
+                {onIgnore && !theirs && (
                     <Button size="sm" variant="ghost" onClick={onIgnore} disabled={busy}>
                         <X aria-hidden="true" />
                         Ignore
                     </Button>
-                ) : (
-                    <Button size="sm" variant="ghost" onClick={onDecide} disabled={busy}>
-                        Decide something else…
-                    </Button>
                 )}
+                <Button size="sm" variant="ghost" onClick={onDecide} disabled={busy}>
+                    Decide something else…
+                </Button>
             </div>
         </div>
     );
@@ -320,6 +327,9 @@ export function AgendaTopicRow({
     busy,
     onCommit,
     onDecide,
+    nextStepHidden = false,
+    onIgnoreNextStep,
+    onShowNextStep,
     ...menu
 }: TopicMenuActions & {
     topic: TopicDto;
@@ -327,6 +337,10 @@ export function AgendaTopicRow({
     busy: boolean;
     onCommit: () => void;
     onDecide: () => void;
+    /** Vantage's next step was ignored on this browser: offer a plain decision instead. */
+    nextStepHidden?: boolean;
+    onIgnoreNextStep?: () => void;
+    onShowNextStep?: () => void;
 }) {
     const [open, setOpen] = useState(false);
     const decided = Boolean(topic.decision);
@@ -380,18 +394,28 @@ export function AgendaTopicRow({
                             </div>
                             <p className="text-ink text-[13px]">{topic.decision}</p>
                         </div>
-                    ) : readyToCommit(topic) ? (
+                    ) : readyToCommit(topic) && !nextStepHidden ? (
                         <NextStepSuggestion
                             topic={topic}
                             busy={busy}
                             onCommit={onCommit}
                             onDecide={onDecide}
+                            onIgnore={onIgnoreNextStep}
                         />
                     ) : (
-                        <div>
+                        <div className="flex flex-wrap items-center gap-3">
                             <Button size="sm" variant="outline" onClick={onDecide} disabled={busy}>
                                 Record a decision
                             </Button>
+                            {readyToCommit(topic) && onShowNextStep && (
+                                <button
+                                    type="button"
+                                    onClick={onShowNextStep}
+                                    className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm text-[12px] underline-offset-2 outline-none hover:underline focus-visible:ring-2"
+                                >
+                                    Show Vantage&apos;s next step
+                                </button>
+                            )}
                         </div>
                     )}
                     <button

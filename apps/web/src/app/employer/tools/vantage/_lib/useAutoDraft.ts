@@ -10,32 +10,39 @@ import { vantageApi, type AgendaDto } from "../api";
  * it asks for the draft without waiting for a click, and the founder lands
  * on suggestions instead of a "Prepare" button.
  *
- * One request per week per page: the promise is shared by week, so a
- * re-render, React's double effect in development, or opening the agenda
- * while This week is still drafting all wait on the same call. A failure
- * forgets the week, so Retry (or the next visit) asks again.
+ * Two guards keep that to one request. While a draft is in flight, every
+ * caller for that week shares it — a re-render, React's double effect in
+ * development, or opening the agenda while This week is still drafting.
+ * And a screen drafts a week on its own at most once while it is open, so
+ * an answer that does not show up in the next read (a workspace switched
+ * mid-draft, say) cannot set off another request, let alone a loop; the
+ * screen offers "Draft it now" instead. A finished or failed draft is
+ * forgotten, so the next request — Retry, or another workspace's same
+ * week — really goes to the server.
  */
-const drafts = new Map<string, Promise<AgendaDto>>();
+const inFlight = new Map<string, Promise<AgendaDto>>();
 
-export function draftWeekOnce(week: string): Promise<AgendaDto> {
-    let pending = drafts.get(week);
+export function draftWeek(week: string): Promise<AgendaDto> {
+    let pending = inFlight.get(week);
     if (!pending) {
-        pending = vantageApi.prepare(week).then(r => r.agenda);
-        drafts.set(week, pending);
-        pending.catch(() => drafts.delete(week));
+        pending = vantageApi
+            .prepare(week)
+            .then(r => r.agenda)
+            .finally(() => inFlight.delete(week));
+        inFlight.set(week, pending);
     }
     return pending;
 }
 
-/** Tests only: forget every week. */
+/** Tests only: forget every draft in flight. */
 export function resetAutoDraftForTests() {
-    drafts.clear();
+    inFlight.clear();
 }
 
 export interface AutoDraft {
     drafting: boolean;
     error: string | null;
-    /** Ask again after a failure (or for a week that was not drafted on its own). */
+    /** Draft now: Retry after a failure, or a week that was not drafted on its own. */
     draft: () => void;
 }
 
@@ -61,7 +68,7 @@ export function useAutoDraft(args: {
         if (!week) return;
         setDrafting(true);
         setError(null);
-        void draftWeekOnce(week)
+        void draftWeek(week)
             .then(agenda => onDrafted.current(agenda))
             .catch((e: unknown) =>
                 setError(e instanceof Error ? e.message : "Vantage could not draft the week")
@@ -69,8 +76,12 @@ export function useAutoDraft(args: {
             .finally(() => setDrafting(false));
     }, [week]);
 
+    // Weeks this screen has drafted on its own since it opened.
+    const attempted = useRef(new Set<string>());
     useEffect(() => {
-        if (auto && week) draft();
+        if (!auto || !week || attempted.current.has(week)) return;
+        attempted.current.add(week);
+        draft();
     }, [auto, week, draft]);
 
     return { drafting, error, draft };

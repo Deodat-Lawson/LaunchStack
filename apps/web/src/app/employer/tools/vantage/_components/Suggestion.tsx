@@ -73,6 +73,7 @@ export function SuggestionCard({
 }) {
     const [open, setOpen] = useState(false);
     const detailsId = useId();
+    const titleId = useId();
     const refs = sources ?? [];
     const shown = refs.slice(0, MAX_CHIPS);
     const more = refs.length - shown.length;
@@ -94,7 +95,9 @@ export function SuggestionCard({
                     {meta && <span className="text-ink-3 ml-auto text-[11.5px]">{meta}</span>}
                     {menu && <div className={cn("-my-1 -mr-1.5", !meta && "ml-auto")}>{menu}</div>}
                 </div>
-                <div className="text-ink text-[14.5px] font-medium leading-snug">{title}</div>
+                <div id={titleId} className="text-ink text-[14.5px] font-medium leading-snug">
+                    {title}
+                </div>
                 {reason && (
                     <p className="text-ink-2 max-w-[72ch] text-[13px] leading-[1.5]">{reason}</p>
                 )}
@@ -104,7 +107,12 @@ export function SuggestionCard({
                         {more > 0 && <span className="text-ink-3 text-[11px]">+{more} more</span>}
                     </div>
                 )}
-                <div className="mt-1 flex flex-wrap items-center gap-2">
+                {/* Labelled by the title, so "Add to agenda" is heard with what it adds. */}
+                <div
+                    role="group"
+                    aria-labelledby={titleId}
+                    className="mt-1 flex flex-wrap items-center gap-2"
+                >
                     {actions}
                     {details && (
                         <button
@@ -149,6 +157,7 @@ export function SuggestionNudge({
     actions: React.ReactNode;
     className?: string;
 }) {
+    const titleId = useId();
     return (
         <article
             aria-label={label}
@@ -159,9 +168,17 @@ export function SuggestionNudge({
         >
             <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <SuggestionMark>{kicker}</SuggestionMark>
-                <div className="text-ink text-[13.5px]">{title}</div>
+                <div id={titleId} className="text-ink text-[13.5px]">
+                    {title}
+                </div>
             </div>
-            <div className="flex flex-wrap items-center gap-2">{actions}</div>
+            <div
+                role="group"
+                aria-labelledby={titleId}
+                className="flex flex-wrap items-center gap-2"
+            >
+                {actions}
+            </div>
         </article>
     );
 }

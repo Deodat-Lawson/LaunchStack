@@ -26,8 +26,16 @@ import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Sugges
 import { AgendaTopicRow, IgnoredTopicRow, TopicSuggestion } from "../_components/TopicCard";
 import { DecisionDialog, TopicDialog } from "../_components/TopicDialogs";
 import { WeekSteps } from "../_components/WeekSteps";
-import { commitToNextStep, ignoreTopic, keepTopic, useOneClick } from "../_lib/actions";
+import {
+    commitToNextStep,
+    ignoreTopic,
+    keepTopic,
+    setAside,
+    SET_ASIDE_DAYS,
+    useOneClick,
+} from "../_lib/actions";
 import { addDaysIso, fmtDate, plural, weekRange } from "../_lib/format";
+import { unhideSuggestion, useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
 import { draftedWords, hasMaterial } from "../_lib/suggestions";
 import { useAutoDraft } from "../_lib/useAutoDraft";
@@ -66,6 +74,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
     const [deciding, setDeciding] = useState<TopicDto | null>(null);
     const [showIgnored, setShowIgnored] = useState(false);
     const { act, gone } = useOneClick(res.reload);
+    const hidden = useHiddenSuggestions();
 
     const week = res.data?.week ?? weekParam ?? "";
     const agenda = res.data?.agenda ?? null;
@@ -79,10 +88,9 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
     const auto = useAutoDraft({
         week: isIsoWeek(week) ? week : null,
         auto: missing && nextMeeting && Boolean(ov.data && hasMaterial(ov.data)),
-        onDrafted: next => {
-            setAgenda(next);
-            return res.reload();
-        },
+        // Read the agenda back rather than trusting the draft's copy: the read
+        // is what this workspace has (the drafting state holds until it lands).
+        onDrafted: () => res.reload(),
     });
 
     const goTo = (w: string) => router.push(vantagePath(`/agenda?week=${w}`));
@@ -426,10 +434,21 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                         index={i}
                                         first={i === 0}
                                         last={i === kept.length - 1}
-                                        busy={busy}
+                                        busy={busy || gone.has(`commit:${t.id}`)}
                                         onCommit={() =>
                                             void act(`commit:${t.id}`, () => commitToNextStep(t))
                                         }
+                                        nextStepHidden={hidden.has(`commit:${t.id}`)}
+                                        onIgnoreNextStep={() =>
+                                            void act(`commit:${t.id}`, () =>
+                                                setAside(
+                                                    `commit:${t.id}`,
+                                                    SET_ASIDE_DAYS.nextStep,
+                                                    "Ignored — decide it your own way"
+                                                )
+                                            )
+                                        }
+                                        onShowNextStep={() => unhideSuggestion(`commit:${t.id}`)}
                                         onDecide={() => setDeciding(t)}
                                         onEdit={() => setEditing(t)}
                                         onMove={dir => void move(t, dir)}

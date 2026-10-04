@@ -202,6 +202,29 @@ describe("weekSuggestions — following through", () => {
         expect(held.topics.map(readyToCommit)).toEqual([true, false, false, false, false, false]);
     });
 
+    it("never suggests committing to a next step the founder wrote", () => {
+        const step = { status: "kept" as const, proposedNextStep: "Call Acme" };
+        const held = agenda({
+            id: "prev",
+            weekStart: LAST_WEEK,
+            status: "held",
+            topics: [
+                topic({ id: "mine", origin: "founder", ...step }),
+                topic({ id: "rules", position: 1, origin: "rules", ...step }),
+                topic({ id: "ai", position: 2, origin: "ai", ...step }),
+            ],
+        });
+
+        const items = group(
+            weekSuggestions(overview({ previousAgenda: held }), { today: TODAY }),
+            "follow-through"
+        );
+
+        expect(items.map(s => s.id)).toEqual(["commit:rules", "commit:ai"]);
+        // Still ready to commit — the agenda row offers it, unmarked.
+        expect(readyToCommit(held.topics[0]!)).toBe(true);
+    });
+
     it("suggests commits only from held agendas, previous week first", () => {
         const step = { status: "kept" as const, proposedNextStep: "Do the thing" };
         const draftPrevious = agenda({

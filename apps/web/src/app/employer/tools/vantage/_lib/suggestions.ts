@@ -22,7 +22,7 @@ export type WeekSuggestion =
     | { kind: "mark-ready"; id: string; agenda: AgendaDto; kept: number }
     /** A promise late or due within `CHECK_IN_DAYS`: did it happen? */
     | { kind: "check-in"; id: string; commitment: CommitmentDto; late: boolean }
-    /** A topic discussed at a held meeting, undecided, with a proposed next step. */
+    /** Vantage's topic, discussed at a held meeting, undecided, with a proposed next step. */
     | { kind: "commit"; id: string; topic: TopicDto; agenda: AgendaDto }
     /** Metrics with no number for the week. */
     | { kind: "record-numbers"; id: string; metrics: { metricId: string; name: string }[] }
@@ -85,7 +85,9 @@ export function weekSuggestions(
     const commits: WeekSuggestion[] = [];
     for (const a of [previousAgenda, agenda]) {
         if (!a || a.status !== "held") continue;
-        for (const topic of ordered(a).filter(readyToCommit))
+        // A next step the founder wrote is theirs, not a suggestion; the agenda
+        // row still offers Commit for it, unmarked.
+        for (const topic of ordered(a).filter(t => readyToCommit(t) && t.origin !== "founder"))
             commits.push({ kind: "commit", id: `commit:${topic.id}`, topic, agenda: a });
     }
     // "Did it happen?" is worth asking once it is late or nearly due; a

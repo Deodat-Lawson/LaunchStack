@@ -13,7 +13,13 @@ import "@testing-library/jest-dom";
 import { toast } from "sonner";
 
 import type * as VantageApi from "~/app/employer/tools/vantage/api";
-import type { CommitmentDto, OverviewDto, TopicDto } from "~/app/employer/tools/vantage/api";
+import type {
+    CommitmentDto,
+    OverviewDto,
+    TopicDto,
+    VantageAgendaStatus,
+    WeeklySignals,
+} from "~/app/employer/tools/vantage/api";
 
 jest.mock("sonner", () => ({ toast: Object.assign(jest.fn(), { error: jest.fn() }) }));
 
@@ -46,6 +52,7 @@ import {
     commitment,
     overview,
     ref,
+    signals,
     topic,
 } from "../vantage/factories";
 
@@ -113,6 +120,9 @@ const update = commitment({
 const server = {
     topics: [] as TopicDto[],
     commitments: [] as CommitmentDto[],
+    agendaStatus: "draft" as VantageAgendaStatus,
+    metricsWithoutData: [] as WeeklySignals["metricsWithoutData"],
+    daysSinceLastEntry: 2 as number | null,
 };
 
 function setTopic(id: string, change: Partial<TopicDto>): TopicDto {
@@ -124,7 +134,7 @@ function view(): OverviewDto {
     const on = (agendaId: string) => server.topics.filter(t => t.agendaId === agendaId);
     return overview({
         today: TODAY,
-        agenda: agenda({ id: "a-now", topics: on("a-now") }),
+        agenda: agenda({ id: "a-now", status: server.agendaStatus, topics: on("a-now") }),
         previousAgenda: agenda({
             id: "a-prev",
             weekStart: LAST_WEEK,
@@ -133,11 +143,15 @@ function view(): OverviewDto {
         }),
         // The overview carries open commitments only.
         checkIns: server.commitments.filter(c => c.status === "open"),
+        signals: signals({ metricsWithoutData: server.metricsWithoutData }),
+        daysSinceLastEntry: server.daysSinceLastEntry,
     });
 }
 
 const refreshed = jest.fn();
 const onDecide = jest.fn();
+const onLogEvidence = jest.fn();
+const onRecordNumbers = jest.fn();
 
 function Harness() {
     const [data, setData] = useState(view);
@@ -160,8 +174,8 @@ function Harness() {
                 gone={gone}
                 meetingWeek={{ start: WEEK, end: WEEK_END }}
                 onDecide={onDecide}
-                onLogEvidence={jest.fn()}
-                onRecordNumbers={jest.fn()}
+                onLogEvidence={onLogEvidence}
+                onRecordNumbers={onRecordNumbers}
             />
         </>
     );
@@ -199,10 +213,17 @@ function lastToast() {
     return { message, options };
 }
 
+/** Let every pending promise chain run (Undo re-reads through a window event). */
+const settle = () => act(() => new Promise<void>(r => setTimeout(r, 0)));
+
 async function clickUndo() {
     const { options } = lastToast();
     expect(options.action?.label).toBe("Undo");
-    await act(async () => options.action?.onClick());
+    const reads = refreshed.mock.calls.length;
+    act(() => options.action?.onClick());
+    await settle();
+    // The screen re-read because the Undo landed, not because the card asked.
+    expect(refreshed.mock.calls.length).toBe(reads + 1);
 }
 
 beforeEach(() => {
@@ -210,6 +231,9 @@ beforeEach(() => {
     jest.clearAllMocks();
     server.topics = [pricing, sso, ssoBeta, interviews, unowned];
     server.commitments = [update];
+    server.agendaStatus = "draft";
+    server.metricsWithoutData = [];
+    server.daysSinceLastEntry = 2;
     mockApi.patchTopic.mockImplementation((id: string, patch: Partial<TopicDto>) =>
         Promise.resolve({ topic: setTopic(id, patch) })
     );
@@ -225,6 +249,10 @@ beforeEach(() => {
     mockApi.undoDecision.mockImplementation((id: string) =>
         Promise.resolve({ topic: setTopic(id, { decision: null, commitmentId: null }) })
     );
+    mockApi.setAgendaStatus.mockImplementation((id: string, status: VantageAgendaStatus) => {
+        server.agendaStatus = status;
+        return Promise.resolve({ agenda: agenda({ id, status }) });
+    });
 });
 
 describe("topic suggestions", () => {
@@ -239,6 +267,12 @@ describe("topic suggestions", () => {
             expect(within(c).getByRole("button", { name: "Ignore" })).toBeVisible();
             expect(within(c).queryByRole("button", { name: /more for/i })).toBeNull();
         }
+        // The answers are a group named by what they answer.
+        expect(
+            within(screen.getByRole("group", { name: pricing.title })).getByRole("button", {
+                name: "Add to agenda",
+            })
+        ).toBeInTheDocument();
         expect(within(card(pricing.title)).getByText(pricing.whyItMatters)).toBeInTheDocument();
         expect(within(card(pricing.title)).getByText("Mixpanel export")).toBeInTheDocument();
     });
@@ -431,6 +465,42 @@ describe("commit suggestions", () => {
         });
     });
 
+    it("offers Try again when the Undo fails, and the retry brings the card back", async () => {
+        mockApi.undoDecision.mockRejectedValueOnce(new Error("Network down"));
+        renderCards();
+        const name = `Commit: ${ssoBeta.proposedNextStep}`;
+
+        await act(async () => {
+            fireEvent.click(within(card(name)).getByRole("button", { name: "Commit" }));
+        });
+        act(() => lastToast().options.action?.onClick());
+        await settle();
+
+        expect(queryCard(name)).toBeNull();
+        const failed = mockToast.error.mock.calls.at(-1) as unknown as [
+            string,
+            { action: { label: string; onClick: () => void } },
+        ];
+        expect(failed[0]).toBe("Network down");
+        expect(failed[1].action.label).toBe("Try again");
+
+        act(() => failed[1].action.onClick());
+        await settle();
+
+        expect(mockApi.undoDecision).toHaveBeenCalledTimes(2);
+        expect(card(name)).toBeInTheDocument();
+    });
+
+    it("are not offered for a next step the founder wrote", () => {
+        server.topics = server.topics.map(t =>
+            t.id === ssoBeta.id ? { ...t, origin: "founder" as const } : t
+        );
+        renderCards();
+
+        expect(queryCard(`Commit: ${ssoBeta.proposedNextStep}`)).toBeNull();
+        expect(card(`Commit: ${interviews.proposedNextStep}`)).toBeInTheDocument();
+    });
+
     it("asks for an owner instead of committing when none was proposed", () => {
         renderCards();
         const c = card(`Commit: ${unowned.proposedNextStep}`);
@@ -441,6 +511,107 @@ describe("commit suggestions", () => {
         expect(onDecide).toHaveBeenCalledWith(unowned);
         expect(mockApi.decide).not.toHaveBeenCalled();
         expect(card(`Commit: ${unowned.proposedNextStep}`)).toBeInTheDocument();
+    });
+});
+
+describe("nudges", () => {
+    const readyToMark = () => {
+        // Every suggestion on this week's draft answered, two topics kept.
+        server.topics = server.topics.map(t =>
+            t.agendaId === "a-now" ? { ...t, status: "kept" as const } : t
+        );
+    };
+
+    it("Mark ready marks the draft ready, and Undo puts it back to draft", async () => {
+        readyToMark();
+        renderCards();
+        const nudge = card("Mark the agenda ready");
+        expect(nudge).toHaveTextContent("2 topics are on the agenda");
+
+        fireEvent.click(within(nudge).getByRole("button", { name: "Mark ready" }));
+        expect(queryCard("Mark the agenda ready")).toBeNull();
+        await settle();
+
+        expect(mockApi.setAgendaStatus).toHaveBeenCalledWith("a-now", "ready");
+        expect(lastToast().message).toBe("Agenda marked ready for the meeting");
+        expect(queryCard("Mark the agenda ready")).toBeNull();
+
+        await clickUndo();
+
+        expect(mockApi.setAgendaStatus).toHaveBeenLastCalledWith("a-now", "draft");
+        expect(card("Mark the agenda ready")).toBeInTheDocument();
+    });
+
+    it("Not yet on Mark ready hides it until tomorrow without asking the server", async () => {
+        readyToMark();
+        renderCards();
+
+        await act(async () => {
+            fireEvent.click(
+                within(card("Mark the agenda ready")).getByRole("button", { name: "Not yet" })
+            );
+        });
+
+        expect(queryCard("Mark the agenda ready")).toBeNull();
+        expect(mockApi.setAgendaStatus).not.toHaveBeenCalled();
+        expect(JSON.parse(window.localStorage.getItem("vantage:hidden:v1") ?? "{}")).toEqual({
+            "ready:a-now": addDaysIso(TODAY, 1),
+        });
+    });
+
+    it("Enter numbers opens the numbers, and Ignore hides the nudge for the week", async () => {
+        server.metricsWithoutData = [
+            { metricId: "m1", key: "mrr", name: "MRR" },
+            { metricId: "m2", key: "signups", name: "Signups" },
+            { metricId: "m3", key: "churn", name: "Churn" },
+        ];
+        renderCards();
+        const nudge = card("Record this week's numbers");
+        expect(nudge).toHaveTextContent("No numbers yet this week for MRR, Signups and 1 more.");
+        expect(
+            within(
+                screen.getByRole("group", {
+                    name: "No numbers yet this week for MRR, Signups and 1 more.",
+                })
+            ).getByRole("button", { name: "Enter numbers" })
+        ).toBeInTheDocument();
+
+        fireEvent.click(within(nudge).getByRole("button", { name: "Enter numbers" }));
+        expect(onRecordNumbers).toHaveBeenCalledTimes(1);
+        expect(card("Record this week's numbers")).toBeInTheDocument();
+
+        await act(async () => {
+            fireEvent.click(within(nudge).getByRole("button", { name: "Ignore" }));
+        });
+
+        expect(queryCard("Record this week's numbers")).toBeNull();
+        expect(JSON.parse(window.localStorage.getItem("vantage:hidden:v1") ?? "{}")).toEqual({
+            [`numbers:${WEEK}`]: addDaysIso(TODAY, 7),
+        });
+        expect(lastToast().message).toBe("Hidden for the rest of the week");
+        for (const call of Object.values(mockApi)) expect(call).not.toHaveBeenCalled();
+    });
+
+    it("Log a conversation opens the log, and Ignore hides the nudge for the week", async () => {
+        server.daysSinceLastEntry = 9;
+        renderCards();
+        const nudge = card("Log a conversation");
+        expect(nudge).toHaveTextContent("Nothing logged for 9 days.");
+
+        fireEvent.click(within(nudge).getByRole("button", { name: "Log a conversation" }));
+        expect(onLogEvidence).toHaveBeenCalledTimes(1);
+
+        await act(async () => {
+            fireEvent.click(within(nudge).getByRole("button", { name: "Ignore" }));
+        });
+
+        expect(queryCard("Log a conversation")).toBeNull();
+        expect(JSON.parse(window.localStorage.getItem("vantage:hidden:v1") ?? "{}")).toEqual({
+            [`quiet:${WEEK}`]: addDaysIso(TODAY, 7),
+        });
+
+        await clickUndo();
+        expect(card("Log a conversation")).toBeInTheDocument();
     });
 });
 

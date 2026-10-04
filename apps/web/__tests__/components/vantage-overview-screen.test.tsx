@@ -3,9 +3,11 @@
 /**
  * This week drafts the week on arrival: with no agenda and something on
  * file, it asks for the draft once — even under React's double effect —
- * shows that it is drafting, and lands on suggestions. With nothing on file
- * it asks for something to read instead; with everything answered it says
- * so; and a failed draft can be tried again.
+ * shows that it is drafting, and lands on suggestions. A draft that does not
+ * show up in the next read is offered again ("Draft it now"), never claimed
+ * as "all caught up" and never retried on its own. With nothing on file it
+ * asks for something to read instead, without nudges that say it twice;
+ * with everything answered it says so; a failed draft can be tried again.
  */
 import React from "react";
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
@@ -51,7 +53,9 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
 import { OverviewScreen } from "~/app/employer/tools/vantage/_screens/OverviewScreen";
 import { resetAutoDraftForTests } from "~/app/employer/tools/vantage/_lib/useAutoDraft";
 
-import { WEEK, agenda, overview, topic } from "../vantage/factories";
+import { weekRange } from "~/app/employer/tools/vantage/_lib/format";
+
+import { WEEK, WEEK_END, agenda, overview, signals, topic } from "../vantage/factories";
 
 function deferred<T>() {
     let resolve!: (value: T) => void;
@@ -155,8 +159,12 @@ describe("OverviewScreen", () => {
         expect(mockPrepare).not.toHaveBeenCalled();
     });
 
-    it("asks for something to read, without drafting, when nothing is on file", async () => {
-        current = overview({ daysSinceLastEntry: null, lastEntryAt: null });
+    it("asks for something to read, without drafting or doubling its nudges, when nothing is on file", async () => {
+        current = overview({
+            daysSinceLastEntry: null,
+            lastEntryAt: null,
+            signals: signals({ metricsWithoutData: [{ metricId: "m", key: "mrr", name: "MRR" }] }),
+        });
 
         render(<OverviewScreen />);
 
@@ -164,6 +172,37 @@ describe("OverviewScreen", () => {
         expect(mockPrepare).not.toHaveBeenCalled();
         expect(screen.queryByText("Vantage is drafting your week…")).toBeNull();
         expect(screen.queryByText("You're all caught up")).toBeNull();
+        // The empty state already asks for a conversation and the numbers.
+        expect(screen.queryByRole("region", { name: "Keep the record current" })).toBeNull();
+        expect(screen.queryByRole("article", { name: "Log a conversation" })).toBeNull();
+        expect(screen.queryByRole("article", { name: "Record this week's numbers" })).toBeNull();
+    });
+
+    it("offers to draft again, not 'caught up', when the draft did not show up (workspace switch)", async () => {
+        current = withMaterial();
+
+        render(<OverviewScreen />);
+
+        const title = `No agenda for ${weekRange(WEEK, WEEK_END)} yet`;
+        expect(await screen.findByText(title)).toBeInTheDocument();
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+        expect(screen.queryByText("You're all caught up")).toBeNull();
+
+        // Re-reads that still have no agenda do not set off another draft.
+        const reads = mockOverview.mock.calls.length;
+        await act(async () => {
+            window.dispatchEvent(new Event("vantage:changed"));
+        });
+        await waitFor(() => expect(mockOverview.mock.calls.length).toBeGreaterThan(reads));
+        expect(screen.getByText(title)).toBeInTheDocument();
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+
+        current = { ...withMaterial(), agenda: drafted };
+        fireEvent.click(screen.getByRole("button", { name: "Draft it now" }));
+
+        expect(mockPrepare).toHaveBeenCalledTimes(2);
+        expect(await screen.findByRole("article", { name: pricing.title })).toBeInTheDocument();
+        expect(screen.queryByText(title)).toBeNull();
     });
 
     it("says you're all caught up when every topic is answered and nothing else waits", async () => {

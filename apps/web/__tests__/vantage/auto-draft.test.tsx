@@ -1,10 +1,12 @@
 /** @jest-environment jsdom */
 
 /**
- * Vantage drafts the week on arrival, once. Two screens asking at the same
- * time, a re-render, or React's double effect in development must share one
- * prepare request; a failure must be retryable; and nothing is asked for
- * when the screen says not to.
+ * Vantage drafts the week on arrival, and only once. While a draft is in
+ * flight every caller shares it — two screens, a re-render, React's double
+ * effect in development. A screen drafts a week on its own at most once
+ * while it is open, so an answer that does not show up in the next read (a
+ * workspace switched mid-draft) cannot loop. A finished or failed draft is
+ * forgotten: Retry and "Draft it now" really ask the server again.
  */
 import React from "react";
 import { act, renderHook, waitFor } from "@testing-library/react";
@@ -17,7 +19,7 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
 }));
 
 import {
-    draftWeekOnce,
+    draftWeek,
     resetAutoDraftForTests,
     useAutoDraft,
 } from "~/app/employer/tools/vantage/_lib/useAutoDraft";
@@ -61,22 +63,21 @@ describe("useAutoDraft", () => {
         expect(onDrafted).toHaveBeenCalledWith(drafted);
     });
 
-    it("keeps drafting until the screen's reload settles, so no no-agenda flash", async () => {
+    it("keeps drafting until the screen's reload after the draft settles", async () => {
         const reload = deferred<void>();
-        const onDrafted = jest.fn(() => reload.promise);
+        const { result } = renderHook(() =>
+            useAutoDraft({ week: WEEK, auto: true, onDrafted: () => reload.promise })
+        );
 
-        const { result } = renderHook(() => useAutoDraft({ week: WEEK, auto: true, onDrafted }));
-        await waitFor(() => expect(onDrafted).toHaveBeenCalledWith(drafted));
-
-        // The draft is back but the screen's fresh data is not: still drafting.
+        await act(async () => {});
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
         expect(result.current.drafting).toBe(true);
 
         await act(async () => reload.resolve());
         expect(result.current.drafting).toBe(false);
-        expect(result.current.error).toBeNull();
     });
 
-    it("shares one request between two screens and across re-renders", async () => {
+    it("shares one request between two screens and across re-renders while it is in flight", async () => {
         const first = jest.fn();
         const second = jest.fn();
 
@@ -101,15 +102,48 @@ describe("useAutoDraft", () => {
         expect(mockPrepare).toHaveBeenCalledTimes(1);
     });
 
-    it("survives being unmounted and mounted again with one request", async () => {
+    it("shares the draft with a screen opened again while it is still in flight", async () => {
+        const pending = deferred<{ agenda: AgendaDto }>();
+        mockPrepare.mockReturnValue(pending.promise);
         const onDrafted = jest.fn();
-        const first = renderHook(() => useAutoDraft({ week: WEEK, auto: true, onDrafted }));
-        first.unmount();
+        renderHook(() => useAutoDraft({ week: WEEK, auto: true, onDrafted })).unmount();
 
         renderHook(() => useAutoDraft({ week: WEEK, auto: true, onDrafted }));
+        await act(async () => pending.resolve({ agenda: drafted }));
 
-        await waitFor(() => expect(onDrafted).toHaveBeenCalled());
+        expect(onDrafted).toHaveBeenCalledWith(drafted);
         expect(mockPrepare).toHaveBeenCalledTimes(1);
+    });
+
+    it("drafts once per open screen when the agenda keeps not showing up (workspace switch)", async () => {
+        const onDrafted = jest.fn();
+        const { rerender } = renderHook(
+            ({ auto }: { auto: boolean }) => useAutoDraft({ week: WEEK, auto, onDrafted }),
+            { initialProps: { auto: true } }
+        );
+        await waitFor(() => expect(onDrafted).toHaveBeenCalledTimes(1));
+
+        // The read after the draft has an agenda (auto off), then — another
+        // workspace's data — none again (auto on), over and over.
+        for (let i = 0; i < 3; i++) {
+            rerender({ auto: false });
+            rerender({ auto: true });
+            await act(async () => {});
+        }
+
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+        expect(onDrafted).toHaveBeenCalledTimes(1);
+    });
+
+    it("asks the server again when drafted by hand after a successful draft", async () => {
+        const onDrafted = jest.fn();
+        const { result } = renderHook(() => useAutoDraft({ week: WEEK, auto: true, onDrafted }));
+        await waitFor(() => expect(onDrafted).toHaveBeenCalledTimes(1));
+
+        act(() => result.current.draft());
+
+        await waitFor(() => expect(onDrafted).toHaveBeenCalledTimes(2));
+        expect(mockPrepare).toHaveBeenCalledTimes(2);
     });
 
     it("asks nothing when auto is off or the week is not known, until asked", async () => {
@@ -126,7 +160,7 @@ describe("useAutoDraft", () => {
         expect(mockPrepare).toHaveBeenCalledTimes(1);
     });
 
-    it("drafts each week once", async () => {
+    it("drafts a new week on its own when the week changes", async () => {
         const onDrafted = jest.fn();
         const { rerender } = renderHook(
             ({ week }: { week: string }) => useAutoDraft({ week, auto: true, onDrafted }),
@@ -135,8 +169,11 @@ describe("useAutoDraft", () => {
         await waitFor(() => expect(onDrafted).toHaveBeenCalledTimes(1));
 
         rerender({ week: "2026-10-12" });
-
         await waitFor(() => expect(onDrafted).toHaveBeenCalledTimes(2));
+
+        rerender({ week: WEEK });
+        await act(async () => {});
+
         expect(mockPrepare.mock.calls).toEqual([[WEEK], ["2026-10-12"]]);
     });
 
@@ -159,6 +196,22 @@ describe("useAutoDraft", () => {
         expect(result.current.drafting).toBe(false);
     });
 
+    it("does not retry a failure on its own when auto flips", async () => {
+        mockPrepare.mockRejectedValueOnce(new Error("The model is busy"));
+        const { result, rerender } = renderHook(
+            ({ auto }: { auto: boolean }) =>
+                useAutoDraft({ week: WEEK, auto, onDrafted: jest.fn() }),
+            { initialProps: { auto: true } }
+        );
+        await waitFor(() => expect(result.current.error).toBe("The model is busy"));
+
+        rerender({ auto: false });
+        rerender({ auto: true });
+        await act(async () => {});
+
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+    });
+
     it("says the week could not be drafted when the failure has no message", async () => {
         mockPrepare.mockRejectedValueOnce("nope");
 
@@ -170,18 +223,33 @@ describe("useAutoDraft", () => {
     });
 });
 
-describe("draftWeekOnce", () => {
-    it("returns the same promise for the same week until it fails", async () => {
+describe("draftWeek", () => {
+    it("shares a request only while it is in flight", async () => {
+        const pending = deferred<{ agenda: AgendaDto }>();
+        mockPrepare.mockReturnValueOnce(pending.promise);
+
+        const first = draftWeek(WEEK);
+        expect(draftWeek(WEEK)).toBe(first);
+        pending.resolve({ agenda: drafted });
+        await expect(first).resolves.toBe(drafted);
+
+        const later = draftWeek(WEEK);
+        expect(later).not.toBe(first);
+        await expect(later).resolves.toBe(drafted);
+        expect(mockPrepare).toHaveBeenCalledTimes(2);
+    });
+
+    it("forgets a failed request, so the next call asks again", async () => {
         mockPrepare.mockRejectedValueOnce(new Error("down"));
 
-        const first = draftWeekOnce(WEEK);
-        expect(draftWeekOnce(WEEK)).toBe(first);
-        await expect(first).rejects.toThrow("down");
-
-        const retry = draftWeekOnce(WEEK);
-        expect(retry).not.toBe(first);
-        await expect(retry).resolves.toBe(drafted);
-        expect(draftWeekOnce(WEEK)).toBe(retry);
+        await expect(draftWeek(WEEK)).rejects.toThrow("down");
+        await expect(draftWeek(WEEK)).resolves.toBe(drafted);
         expect(mockPrepare).toHaveBeenCalledTimes(2);
+    });
+
+    it("keeps weeks apart", async () => {
+        await Promise.all([draftWeek(WEEK), draftWeek("2026-10-12"), draftWeek(WEEK)]);
+
+        expect(mockPrepare.mock.calls).toEqual([[WEEK], ["2026-10-12"]]);
     });
 });

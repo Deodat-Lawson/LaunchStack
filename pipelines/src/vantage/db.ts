@@ -1091,6 +1091,55 @@ export async function recordDecision(args: {
     });
 }
 
+/**
+ * Take back a decision just recorded — the Undo after a one-click commit.
+ * The topic is undecided again and the commitment that decision opened, when
+ * named, is removed with it, in one transaction. Only a commitment opened
+ * from this topic can go this way; anything else linked to it stays.
+ */
+export async function undoDecision(args: {
+    companyId: bigint;
+    topicId: string;
+    commitmentId?: string | null;
+}): Promise<TopicDto> {
+    const db = getDb();
+    return db.transaction(async tx => {
+        const [topic] = await tx
+            .update(vantageAgendaTopics)
+            .set({ decision: null, decidedAt: null })
+            .where(
+                and(
+                    eq(vantageAgendaTopics.id, args.topicId),
+                    eq(vantageAgendaTopics.companyId, args.companyId)
+                )
+            )
+            .returning();
+        if (!topic) throw new VantageError("That topic is not here.", 404, "not_found");
+        if (args.commitmentId) {
+            await tx
+                .delete(vantageCommitments)
+                .where(
+                    and(
+                        eq(vantageCommitments.id, args.commitmentId),
+                        eq(vantageCommitments.topicId, topic.id),
+                        eq(vantageCommitments.companyId, args.companyId)
+                    )
+                );
+        }
+        const [link] = await tx
+            .select({ id: vantageCommitments.id })
+            .from(vantageCommitments)
+            .where(
+                and(
+                    eq(vantageCommitments.topicId, topic.id),
+                    eq(vantageCommitments.companyId, args.companyId)
+                )
+            )
+            .limit(1);
+        return toTopicDto(topic, link?.id ?? null);
+    });
+}
+
 export async function updateAgendaStatus(args: {
     companyId: bigint;
     id: string;

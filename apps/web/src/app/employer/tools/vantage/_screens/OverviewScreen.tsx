@@ -1,24 +1,43 @@
 "use client";
 
-import { ArrowRight, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { ArrowRight } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolRouter } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
-import { SkeletonBlock, SkeletonRows } from "~/components/tools/SkeletonRows";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-import { EVIDENCE_KIND_LABEL, vantageApi, type VantageEvidenceKind } from "../api";
-import { CheckInRow } from "../_components/CheckInRow";
+import {
+    EVIDENCE_KIND_LABEL,
+    vantageApi,
+    type OverviewDto,
+    type TopicDto,
+    type VantageEvidenceKind,
+} from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
 import { KindPill, StatusWord } from "../_components/Primitives";
-import { agoWords, fmtChange, fmtDate, fmtNumber, plural, weekRange } from "../_lib/format";
+import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Suggestion";
+import { DecisionDialog } from "../_components/TopicDialogs";
+import { WeekSuggestions } from "../_components/WeekSuggestions";
+import { useOneClick } from "../_lib/actions";
+import {
+    agoWords,
+    fmtChange,
+    fmtDate,
+    fmtNumber,
+    plural,
+    todayIso,
+    weekRange,
+} from "../_lib/format";
+import { useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
+import { draftedWords, hasMaterial, weekSuggestions } from "../_lib/suggestions";
+import { useAutoDraft } from "../_lib/useAutoDraft";
 
 const AGENDA_WORD: Record<string, string> = {
     draft: "Draft",
@@ -27,71 +46,86 @@ const AGENDA_WORD: Record<string, string> = {
     closed: "Closed",
 };
 
+function readingWords(o: OverviewDto): string {
+    const parts = [
+        o.counts.evidenceThisWindow > 0 &&
+            plural(o.counts.evidenceThisWindow, "piece") + " of evidence",
+        o.counts.metricsWithData > 0 && plural(o.counts.metricsWithData, "metric"),
+        o.counts.openCommitments > 0 && plural(o.counts.openCommitments, "open commitment"),
+    ].filter(Boolean) as string[];
+    if (parts.length === 0) return "what is on file";
+    if (parts.length === 1) return parts[0]!;
+    return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}
+
 /**
- * The week at a glance: is the agenda ready, what changed, what to check in
- * on, what was logged lately — and the two things to do next. No tiles.
+ * This week: what Vantage prepared, as suggestions to take or leave. The
+ * week's draft is made on arrival when there is none yet; then come the
+ * topics it proposes for the meeting, the promises to settle and the gaps
+ * in the record — each answered with one click — and below them, quieter,
+ * the facts it read them from.
  */
 export function OverviewScreen() {
     const router = useToolRouter();
     const overview = useResource("vantage:overview", () => vantageApi.overview());
+    const hidden = useHiddenSuggestions();
+    const { act, gone } = useOneClick(overview.reload);
     const [adding, setAdding] = useState<VantageEvidenceKind | null>(null);
-    const [preparing, setPreparing] = useState(false);
+    const [deciding, setDeciding] = useState<TopicDto | null>(null);
+    const today = todayIso();
 
     const data = overview.data;
     const agenda = data?.agenda ?? null;
-    const signals = data?.signals;
-    const notable = signals?.metricChanges.filter(c => c.notable) ?? [];
-    const changes = signals?.metricChanges ?? [];
+    const material = data ? hasMaterial(data) : false;
+    const auto = useAutoDraft({
+        week: data?.agendaWeek ?? null,
+        auto: Boolean(data && !agenda && material),
+        onDrafted: () => overview.reload(),
+    });
 
-    const prepare = async () => {
-        setPreparing(true);
-        try {
-            await vantageApi.prepare(data?.agendaWeek);
-            toast("Draft agenda prepared");
-            router.push(vantagePath(`/agenda?week=${data?.agendaWeek ?? ""}`));
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not prepare the agenda");
-        } finally {
-            setPreparing(false);
-        }
-    };
+    const groups = useMemo(() => {
+        if (!data) return [];
+        const all = weekSuggestions(data, { today, hidden });
+        // With nothing on file, the empty state already asks for a conversation
+        // and the numbers; the same two nudges beside it would say it twice.
+        return hasMaterial(data) || data.agenda ? all : all.filter(g => g.id !== "record");
+    }, [data, today, hidden]);
+    const waiting = groups.reduce((n, g) => n + g.items.filter(s => !gone.has(s.id)).length, 0);
+    const kept = agenda
+        ? [...agenda.topics]
+              .filter(t => t.status === "kept")
+              .sort((a, b) => a.position - b.position)
+        : [];
+    const signals = data?.signals;
+    const changes = signals?.metricChanges ?? [];
 
     const sub = data
         ? [
-              `Next meeting: ${weekRange(data.agendaWeek, data.agendaWeekEnd)}`,
-              plural(data.counts.evidenceThisWindow, "item") + " of evidence in two weeks",
-              plural(data.counts.openCommitments, "open commitment"),
+              `Next meeting ${weekRange(data.agendaWeek, data.agendaWeekEnd)}`,
+              agenda ? draftedWords(agenda) : null,
               data.lastEntryAt ? `last entry ${agoWords(data.lastEntryAt)}` : "nothing logged yet",
-          ].join(" · ")
+          ]
+              .filter(Boolean)
+              .join(" · ")
         : undefined;
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
                 title="Your week,"
-                accent="with evidence"
+                accent="prepared by Vantage"
                 sub={sub}
                 actions={
                     <>
                         <Button variant="outline" size="sm" onClick={() => setAdding("note")}>
                             Add evidence
                         </Button>
-                        {agenda ? (
+                        {agenda && (
                             <Button asChild size="sm">
                                 <ToolLink href={vantagePath(`/agenda?week=${agenda.weekStart}`)}>
                                     Open the agenda
+                                    <ArrowRight aria-hidden="true" />
                                 </ToolLink>
-                            </Button>
-                        ) : (
-                            <Button
-                                size="sm"
-                                onClick={() => void prepare()}
-                                disabled={preparing || !data}
-                            >
-                                {preparing && (
-                                    <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                )}
-                                Prepare next week&apos;s agenda
                             </Button>
                         )}
                     </>
@@ -102,11 +136,93 @@ export function OverviewScreen() {
                 <InlineError message={overview.error} onRetry={() => void overview.reload()} />
             )}
 
-            <section>
-                <SectionHeading
-                    title="Next meeting"
-                    aside={
-                        agenda ? (
+            {overview.loading ? (
+                <SkeletonRows rows={3} height={112} />
+            ) : !data ? null : (
+                <div className="flex flex-col gap-6">
+                    {agenda?.summary && (
+                        <section
+                            aria-label="Vantage's read on your week"
+                            className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-4"
+                        >
+                            <SuggestionMark>Vantage&apos;s read on your week</SuggestionMark>
+                            <p className="text-ink mt-1.5 max-w-[72ch] text-[15px] leading-[1.55]">
+                                {agenda.summary}
+                            </p>
+                            <p className="text-ink-3 mt-2 text-[12px]">
+                                From {readingWords(data)}
+                                {waiting > 0
+                                    ? ` · ${plural(waiting, "suggestion")} waiting below — take or ignore each with one click`
+                                    : ""}
+                            </p>
+                        </section>
+                    )}
+
+                    {auto.drafting ? (
+                        <DraftingCard
+                            reading={`Reading ${readingWords(data)} to draft the meeting on ${weekRange(data.agendaWeek, data.agendaWeekEnd)}.`}
+                        />
+                    ) : auto.error ? (
+                        <EmptyState
+                            title="Vantage could not draft the week"
+                            body={auto.error}
+                            action={
+                                <Button size="sm" onClick={auto.draft}>
+                                    Try again
+                                </Button>
+                            }
+                        />
+                    ) : !agenda && !material ? (
+                        <EmptyState
+                            title="Give Vantage something to read"
+                            body="Log a conversation, a link or this week's numbers. Vantage drafts the meeting from whatever is there — three to five topics, each with its sources, a decision to make and a next step — and brings them here as suggestions."
+                            action={
+                                <>
+                                    <Button size="sm" onClick={() => setAdding("interview")}>
+                                        Log a conversation
+                                    </Button>
+                                    <Button size="sm" variant="outline" asChild>
+                                        <ToolLink href={vantagePath("/metrics")}>
+                                            Enter numbers
+                                        </ToolLink>
+                                    </Button>
+                                </>
+                            }
+                        />
+                    ) : !agenda ? (
+                        // Drafting on arrival already ran for this visit and its result
+                        // did not show up here: offer it rather than claim "caught up".
+                        <EmptyState
+                            title={`No agenda for ${weekRange(data.agendaWeek, data.agendaWeekEnd)} yet`}
+                            body={`Vantage drafts it from ${readingWords(data)}: three to five topics, each with its sources, a decision to make and a next step.`}
+                            action={
+                                <Button size="sm" onClick={auto.draft}>
+                                    Draft it now
+                                </Button>
+                            }
+                        />
+                    ) : null}
+
+                    {!auto.drafting && waiting > 0 && (
+                        <WeekSuggestions
+                            groups={groups}
+                            act={act}
+                            gone={gone}
+                            meetingWeek={{ start: data.agendaWeek, end: data.agendaWeekEnd }}
+                            onDecide={setDeciding}
+                            onLogEvidence={() => setAdding("interview")}
+                            onRecordNumbers={() => router.push(vantagePath("/metrics"))}
+                        />
+                    )}
+                    {!auto.drafting && waiting === 0 && agenda !== null && <AllCaughtUp />}
+                </div>
+            )}
+
+            {agenda && kept.length > 0 && (
+                <section>
+                    <SectionHeading
+                        title="On the agenda"
+                        aside={
                             <StatusWord
                                 tone={
                                     agenda.status === "held" || agenda.status === "closed"
@@ -118,127 +234,45 @@ export function OverviewScreen() {
                             >
                                 {AGENDA_WORD[agenda.status]}
                             </StatusWord>
-                        ) : undefined
-                    }
-                />
-                {overview.loading ? (
-                    <div className="border-line bg-panel rounded-lg border px-5 py-4">
-                        <SkeletonBlock lines={3} />
-                    </div>
-                ) : agenda ? (
-                    <ToolLink
-                        href={vantagePath(`/agenda?week=${agenda.weekStart}`)}
-                        className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 block rounded-lg border px-5 py-4 outline-none transition-colors focus-visible:ring-[3px]"
-                    >
-                        <div className="flex items-baseline justify-between gap-3">
-                            <div className="text-ink text-sm font-medium">
-                                {plural(
-                                    agenda.topics.filter(t => t.status !== "dismissed").length,
-                                    "topic"
-                                )}
-                                {" · "}
-                                {plural(
-                                    agenda.topics.filter(t => t.decision).length,
-                                    "decision"
-                                )}{" "}
-                                recorded
-                            </div>
-                            <span className="text-ink-3 inline-flex items-center gap-1 text-xs">
-                                Open <ArrowRight className="size-3" />
-                            </span>
-                        </div>
-                        {agenda.summary && (
-                            <p className="text-ink-2 mt-1.5 max-w-[70ch] text-[13px]">
-                                {agenda.summary}
-                            </p>
-                        )}
-                        <ol className="mt-3 flex flex-col gap-1">
-                            {agenda.topics
-                                .filter(t => t.status !== "dismissed")
-                                .slice(0, 5)
-                                .map((t, i) => (
-                                    <li key={t.id} className="text-ink flex gap-2 text-[13px]">
-                                        <span className="text-ink-3 w-4 shrink-0 font-mono tabular-nums">
-                                            {i + 1}
-                                        </span>
-                                        <span className="truncate">{t.title}</span>
-                                        {t.decision && (
-                                            <span className="text-success ml-auto shrink-0 text-[11.5px]">
-                                                decided
-                                            </span>
-                                        )}
-                                    </li>
-                                ))}
-                        </ol>
-                    </ToolLink>
-                ) : (
-                    <EmptyState
-                        title={
-                            data &&
-                            data.counts.evidenceThisWindow === 0 &&
-                            data.counts.metricsWithData === 0
-                                ? "Nothing to prepare from yet"
-                                : "No agenda for next week yet"
-                        }
-                        body={
-                            data &&
-                            data.counts.evidenceThisWindow === 0 &&
-                            data.counts.metricsWithData === 0
-                                ? "Add a few conversations, a number or two and any promises from the last meeting. Vantage prepares a draft from whatever is there — sparse is fine, it says what is unknown."
-                                : "Vantage looks across what changed, what is uncertain and what was promised, and drafts three to five topics — each with its evidence, a decision to make and a next step."
-                        }
-                        action={
-                            <>
-                                <Button
-                                    size="sm"
-                                    onClick={() => void prepare()}
-                                    disabled={preparing || !data}
-                                >
-                                    {preparing && (
-                                        <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                    )}
-                                    Prepare the draft
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => setAdding("interview")}
-                                >
-                                    Log a conversation
-                                </Button>
-                            </>
                         }
                     />
-                )}
-            </section>
+                    <ToolLink
+                        href={vantagePath(`/agenda?week=${agenda.weekStart}`)}
+                        className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 block rounded-lg border px-4 py-3 outline-none transition-colors focus-visible:ring-[3px]"
+                    >
+                        <ol className="flex flex-col gap-1">
+                            {kept.map((t, i) => (
+                                <li key={t.id} className="text-ink flex gap-2 text-[13px]">
+                                    <span className="text-ink-3 w-4 shrink-0 font-mono tabular-nums">
+                                        {i + 1}
+                                    </span>
+                                    <span className="truncate">{t.title}</span>
+                                    {t.decision && (
+                                        <span className="text-success ml-auto shrink-0 text-[11.5px]">
+                                            decided
+                                        </span>
+                                    )}
+                                </li>
+                            ))}
+                        </ol>
+                        <span className="text-ink-3 mt-2 inline-flex items-center gap-1 text-xs">
+                            Open the agenda <ArrowRight className="size-3" aria-hidden="true" />
+                        </span>
+                    </ToolLink>
+                </section>
+            )}
 
-            <section>
-                <SectionHeading
-                    title="What changed"
-                    aside={signals ? `since ${fmtDate(signals.since)}` : undefined}
-                />
-                {overview.loading ? (
-                    <SkeletonRows rows={3} height={40} />
-                ) : !signals ||
-                  (changes.length === 0 &&
-                      signals.metricConflicts.length === 0 &&
-                      signals.newEvidence.length === 0) ? (
-                    <p className="text-ink-3 text-[13px]">
-                        No numbers or evidence in the last two weeks.{" "}
-                        <ToolLink
-                            href={vantagePath("/metrics")}
-                            className="hover:text-ink underline underline-offset-2"
-                        >
-                            Enter this week&apos;s numbers
-                        </ToolLink>
-                        .
-                    </p>
-                ) : (
+            {data && (changes.length > 0 || (signals?.metricConflicts.length ?? 0) > 0) && (
+                <section>
+                    <SectionHeading
+                        title="What Vantage read: the numbers"
+                        aside={signals ? `since ${fmtDate(signals.since)}` : undefined}
+                    />
                     <div className="border-line bg-panel rounded-lg border">
-                        {signals.metricConflicts.map(x => (
+                        {signals?.metricConflicts.map(x => (
                             <div
                                 key={`${x.metricId}-${x.a.observationId}-${x.b.observationId}`}
-                                className="border-line-2 flex min-h-10 items-center gap-3 border-t px-4 py-2 first:border-t-0"
+                                className="border-line-2 flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1 border-t px-4 py-2 first:border-t-0"
                             >
                                 <StatusWord tone="warn">Conflict</StatusWord>
                                 <span className="text-ink text-[13px]">
@@ -259,23 +293,21 @@ export function OverviewScreen() {
                                 key={c.metricId}
                                 className="border-line-2 flex min-h-10 items-center gap-3 border-t px-4 py-2 first:border-t-0"
                             >
-                                <span className="text-ink w-44 shrink-0 truncate text-[13px] font-medium">
+                                <span className="text-ink @max-sm:w-28 w-44 shrink-0 truncate text-[13px] font-medium">
                                     {c.name}
                                 </span>
                                 <span className="text-ink font-mono text-[13px] tabular-nums">
                                     {fmtNumber(c.latest.value, c.unit)}
                                 </span>
-                                <span className="text-ink-3 text-[11.5px]">
+                                <span className="text-ink-3 @max-sm:hidden text-[11.5px]">
                                     {fmtDate(c.latest.periodStart)}–{fmtDate(c.latest.periodEnd)}
                                 </span>
                                 <span
                                     className={cn(
                                         "ml-auto font-mono text-[12px] tabular-nums",
-                                        c.direction === "new"
-                                            ? "text-ink-3"
-                                            : c.notable
-                                              ? "text-ink"
-                                              : "text-ink-3"
+                                        c.notable && c.direction !== "new"
+                                            ? "text-ink"
+                                            : "text-ink-3"
                                     )}
                                 >
                                     {c.direction === "new"
@@ -286,75 +318,20 @@ export function OverviewScreen() {
                                 </span>
                             </div>
                         ))}
-                        {signals.newEvidence.length > 0 && (
-                            <div className="border-line-2 flex min-h-10 flex-wrap items-center gap-2 border-t px-4 py-2">
-                                <span className="text-ink-3 text-[12px]">Logged:</span>
-                                {signals.newEvidence.map(n => (
-                                    <span key={n.kind} className="text-ink-2 text-[12.5px]">
-                                        {n.count} {EVIDENCE_KIND_LABEL[n.kind].toLowerCase()}
-                                        {n.count === 1 ? "" : "s"}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
                     </div>
-                )}
-                {notable.length > 0 && !agenda && (
-                    <p className="text-ink-3 mt-2 text-[12px]">
-                        {plural(notable.length, "notable change")} — worth a topic. Prepare the
-                        draft to see it framed as a decision.
-                    </p>
-                )}
-            </section>
+                </section>
+            )}
 
-            <section>
-                <SectionHeading
-                    title="Check in"
-                    aside={
-                        <ToolLink href={vantagePath("/commitments")} className="hover:text-ink">
-                            All commitments
-                        </ToolLink>
-                    }
-                />
-                {overview.loading ? (
-                    <SkeletonRows rows={2} height={44} />
-                ) : !data || data.checkIns.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">Nothing due or overdue this week.</p>
-                ) : (
-                    <div className="border-line bg-panel rounded-lg border">
-                        {data.checkIns.map(c => (
-                            <CheckInRow
-                                key={c.id}
-                                commitment={c}
-                                onChange={() => void overview.reload()}
-                            />
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            <section>
-                <SectionHeading
-                    title="Logged lately"
-                    aside={
-                        <ToolLink href={vantagePath("/evidence")} className="hover:text-ink">
-                            Evidence inbox
-                        </ToolLink>
-                    }
-                />
-                {overview.loading ? (
-                    <SkeletonRows rows={3} height={40} />
-                ) : !data || data.recentEvidence.length === 0 ? (
-                    <EmptyState
-                        title="The inbox is empty"
-                        body="A conversation, a link, a number with its date. Two minutes now is what makes Thursday's draft worth reading."
-                        action={
-                            <Button size="sm" variant="outline" onClick={() => setAdding("note")}>
-                                Add evidence
-                            </Button>
+            {data && data.recentEvidence.length > 0 && (
+                <section>
+                    <SectionHeading
+                        title="What Vantage read: the evidence"
+                        aside={
+                            <ToolLink href={vantagePath("/evidence")} className="hover:text-ink">
+                                Evidence inbox
+                            </ToolLink>
                         }
                     />
-                ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {data.recentEvidence.map(e => (
                             <div
@@ -365,19 +342,36 @@ export function OverviewScreen() {
                                 <span className="text-ink min-w-0 flex-1 truncate text-[13px]">
                                     {e.title}
                                 </span>
-                                <span className="text-ink-3 shrink-0 font-mono text-[11.5px] tabular-nums">
+                                <span className="text-ink-3 @max-sm:hidden shrink-0 font-mono text-[11.5px] tabular-nums">
                                     {e.observedAt}
                                 </span>
                             </div>
                         ))}
                     </div>
-                )}
-            </section>
+                    {signals && signals.newEvidence.length > 0 && (
+                        <p className="text-ink-3 mt-2 text-[12px]">
+                            In two weeks:{" "}
+                            {signals.newEvidence
+                                .map(
+                                    n =>
+                                        `${n.count} ${EVIDENCE_KIND_LABEL[n.kind].toLowerCase()}${n.count === 1 ? "" : "s"}`
+                                )
+                                .join(", ")}
+                        </p>
+                    )}
+                </section>
+            )}
 
             <EvidenceDialog
                 open={adding !== null}
                 onOpenChange={o => !o && setAdding(null)}
                 defaultKind={adding ?? "note"}
+                onSaved={() => void overview.reload()}
+            />
+            <DecisionDialog
+                open={deciding !== null}
+                onOpenChange={o => !o && setDeciding(null)}
+                topic={deciding}
                 onSaved={() => void overview.reload()}
             />
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -18,13 +18,27 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { cn } from "~/lib/utils";
 
 import { vantageApi, type AgendaDto, type TopicDto, type VantageAgendaStatus } from "../api";
 import { StatusWord } from "../_components/Primitives";
-import { TopicCard } from "../_components/TopicCard";
+import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Suggestion";
+import { AgendaTopicRow, IgnoredTopicRow, TopicSuggestion } from "../_components/TopicCard";
 import { DecisionDialog, TopicDialog } from "../_components/TopicDialogs";
+import { WeekSteps } from "../_components/WeekSteps";
+import {
+    commitToNextStep,
+    ignoreTopic,
+    keepTopic,
+    setAside,
+    SET_ASIDE_DAYS,
+    useOneClick,
+} from "../_lib/actions";
 import { addDaysIso, fmtDate, plural, weekRange } from "../_lib/format";
+import { unhideSuggestion, useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
+import { draftedWords, hasMaterial } from "../_lib/suggestions";
+import { useAutoDraft } from "../_lib/useAutoDraft";
 
 const STATUS_WORD: Record<VantageAgendaStatus, string> = {
     draft: "Draft",
@@ -38,11 +52,13 @@ function isIsoWeek(v: string | null): v is string {
 }
 
 /**
- * The agenda editor for one week. Topics in order, each expandable into
- * its six parts; the founder keeps, rewrites, dismisses, reorders and adds
- * topics, chooses what to share, and after the meeting records the
- * decision that opens a commitment. Regenerating replaces only untouched
- * suggestions.
+ * The agenda for one week, in the order the week runs. Vantage's drafted
+ * topics wait at the top as suggestions — Add to agenda or Ignore, one
+ * click each. What was added is the agenda: numbered, reorderable, shared
+ * or private, and each undecided topic carries Vantage's proposed next step
+ * as a one-click Commit. Ignored topics fold away with Restore. The next
+ * meeting's week drafts itself on arrival when there is no agenda yet;
+ * fresh suggestions replace only untouched ones.
  *
  * `week` is the tab's `?week=` (null for the default week by the Thursday
  * rule); the week arrows and past weeks move the tab to another `?week=`.
@@ -56,10 +72,36 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
     const [busy, setBusy] = useState(false);
     const [editing, setEditing] = useState<TopicDto | null | "new">(null);
     const [deciding, setDeciding] = useState<TopicDto | null>(null);
+    const [showIgnored, setShowIgnored] = useState(false);
+    const { act, gone } = useOneClick(res.reload);
+    const hidden = useHiddenSuggestions();
 
     const week = res.data?.week ?? weekParam ?? "";
     const agenda = res.data?.agenda ?? null;
     const history = res.data?.agendas ?? [];
+
+    // No agenda: is this the next meeting's week, with something on file to
+    // draft from? Then Vantage drafts it now instead of offering a button.
+    const missing = Boolean(res.data && !agenda);
+    const ov = useResource(missing ? "vantage:overview" : null, () => vantageApi.overview());
+    const nextMeeting = ov.data ? ov.data.agendaWeek === week : false;
+    const auto = useAutoDraft({
+        week: isIsoWeek(week) ? week : null,
+        // The overview read comes after the agendas read; if a draft landed in
+        // between (This week drafting as you switched tabs), it shows here.
+        auto: missing && nextMeeting && Boolean(ov.data && !ov.data.agenda && hasMaterial(ov.data)),
+        // Read the agenda back rather than trusting the draft's copy: the read
+        // is what this workspace has (the drafting state holds until it lands).
+        onDrafted: () => res.reload(),
+    });
+
+    // The overview has this week's agenda but the agendas read said none: it
+    // landed in between (This week drafting as you switched tabs). Read again.
+    const reloadAgenda = res.reload;
+    const landedMeanwhile = missing && nextMeeting && Boolean(ov.data?.agenda);
+    useEffect(() => {
+        if (landedMeanwhile) void reloadAgenda();
+    }, [landedMeanwhile, reloadAgenda]);
 
     const goTo = (w: string) => router.push(vantagePath(`/agenda?week=${w}`));
 
@@ -89,15 +131,12 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
         }
     };
 
-    const prepare = () =>
-        run(
-            async () => {
-                const { agenda: next } = await vantageApi.prepare(week);
-                setAgenda(next);
-                void res.reload();
-            },
-            agenda ? "Draft regenerated — your kept and edited topics stayed" : "Draft prepared"
-        );
+    const regenerate = () =>
+        run(async () => {
+            const { agenda: next } = await vantageApi.prepare(week);
+            setAgenda(next);
+            void res.reload();
+        }, "Fresh suggestions — your kept and edited topics stayed");
 
     const patch = (
         topic: TopicDto,
@@ -109,18 +148,33 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             setTopic(next);
         }, done);
 
+    const topics = useMemo(
+        () => (agenda ? [...agenda.topics].sort((a, b) => a.position - b.position) : []),
+        [agenda]
+    );
+    const suggested = topics.filter(
+        t => t.status === "suggested" && !t.decision && !gone.has(`topic:${t.id}`)
+    );
+    const kept = topics.filter(t => t.status === "kept");
+    const ignored = topics.filter(t => t.status === "dismissed");
+    const decided = kept.filter(t => t.decision).length;
+    const unsupported = [...suggested, ...kept].reduce(
+        (n, t) => n + t.facts.filter(f => f.unsupported).length,
+        0
+    );
+
+    /** Swap a kept topic with its kept neighbour; suggestions and ignored keep their places. */
     const move = (topic: TopicDto, dir: -1 | 1) =>
         run(async () => {
             if (!agenda) return;
-            const ordered = [...agenda.topics].sort((a, b) => a.position - b.position);
-            const i = ordered.findIndex(t => t.id === topic.id);
-            const j = i + dir;
-            if (i < 0 || j < 0 || j >= ordered.length) return;
-            [ordered[i], ordered[j]] = [ordered[j]!, ordered[i]!];
-            const { agenda: next } = await vantageApi.reorder(
-                agenda.id,
-                ordered.map(t => t.id)
-            );
+            const i = kept.findIndex(t => t.id === topic.id);
+            const other = kept[i + dir];
+            if (i < 0 || !other) return;
+            const ids = topics.map(t => t.id);
+            const a = ids.indexOf(topic.id);
+            const b = ids.indexOf(other.id);
+            [ids[a], ids[b]] = [ids[b]!, ids[a]!];
+            const { agenda: next } = await vantageApi.reorder(agenda.id, ids);
             setAgenda(next);
         });
 
@@ -160,39 +214,24 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                 : "Shared update copied — paste it anywhere"
         );
 
-    const topics = useMemo(
-        () => (agenda ? [...agenda.topics].sort((a, b) => a.position - b.position) : []),
-        [agenda]
-    );
-    const live = topics.filter(t => t.status !== "dismissed");
-    const dismissed = topics.filter(t => t.status === "dismissed");
-    const decided = live.filter(t => t.decision).length;
-    const unsupported = live.reduce((n, t) => n + t.facts.filter(f => f.unsupported).length, 0);
-    const mode = agenda?.modelMetadata?.mode as string | undefined;
-    const fallback = agenda?.modelMetadata?.fallback as string | undefined;
+    const share = (t: TopicDto, shared: boolean) =>
+        void patch(t, { shared }, shared ? "Shared with the program" : "Made private");
 
+    const drafted = agenda ? draftedWords(agenda) : null;
     const sub = agenda ? (
         <span className="inline-flex flex-wrap items-center gap-x-2">
             <span>{weekRange(agenda.weekStart, agenda.weekEnd)}</span>
-            <span>·</span>
-            <span>
-                {plural(live.length, "topic")}, {decided} decided,{" "}
-                {live.filter(t => t.shared).length} shared
-            </span>
-            {agenda.generatedAt && (
+            {drafted && (
                 <>
                     <span>·</span>
-                    <span>
-                        drafted {fmtDate(agenda.generatedAt)}
-                        {mode === "ai" ? " by the model" : mode === "rules" ? " by the rules" : ""}
-                        {fallback === "no-model"
-                            ? " (no chat model configured)"
-                            : fallback === "model-failed"
-                              ? " (the model call failed)"
-                              : ""}
-                    </span>
+                    <span>{drafted}</span>
                 </>
             )}
+            <span>·</span>
+            <span>
+                {plural(kept.length, "topic")} on the agenda, {decided} decided,{" "}
+                {kept.filter(t => t.shared).length} shared
+            </span>
         </span>
     ) : isIsoWeek(week) ? (
         weekRange(week, addDaysIso(week, 6))
@@ -228,8 +267,10 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 <ChevronRight className="size-4" />
                             </Button>
                         </div>
+                        {/* Not modal: "Add a topic" opens a dialog, and a modal menu that hands
+                            off to a dialog leaves the page unclickable once it closes. */}
                         {agenda && (
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" size="sm" disabled={busy}>
                                         More
@@ -239,8 +280,8 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                     <DropdownMenuItem onSelect={() => setEditing("new")}>
                                         Add a topic
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onSelect={() => void prepare()}>
-                                        Regenerate suggestions
+                                    <DropdownMenuItem onSelect={() => void regenerate()}>
+                                        Ask Vantage for fresh suggestions
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onSelect={() => void copyUpdate(false)}>
@@ -273,203 +314,220 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         )}
-                        {agenda ? (
-                            agenda.status === "draft" ? (
-                                <Button
-                                    size="sm"
-                                    onClick={() => void setStatus("ready")}
-                                    disabled={busy || live.length === 0}
-                                >
-                                    Mark ready
-                                </Button>
-                            ) : agenda.status === "ready" ? (
-                                <Button
-                                    size="sm"
-                                    onClick={() => void setStatus("held")}
-                                    disabled={busy}
-                                >
-                                    Meeting held
-                                </Button>
-                            ) : (
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => setEditing("new")}
-                                    disabled={busy}
-                                >
-                                    Add a topic
-                                </Button>
-                            )
-                        ) : (
+                        {agenda?.status === "draft" ? (
                             <Button
                                 size="sm"
-                                onClick={() => void prepare()}
-                                disabled={busy || !res.data}
+                                onClick={() => void setStatus("ready")}
+                                disabled={busy || kept.length === 0}
                             >
-                                {busy && (
-                                    <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                )}
-                                Prepare the draft
+                                Mark ready
                             </Button>
-                        )}
+                        ) : agenda?.status === "ready" ? (
+                            <Button
+                                size="sm"
+                                onClick={() => void setStatus("held")}
+                                disabled={busy}
+                            >
+                                Meeting held
+                            </Button>
+                        ) : null}
                     </>
                 }
             />
 
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
 
-            {res.loading ? (
-                <SkeletonRows rows={4} height={48} />
+            {/* Skeleton, not "No agenda", until the overview has answered (useResource
+                reports loading=false for the first render after its key turns
+                non-null) and while a re-read for a draft that landed is on its way. */}
+            {res.loading ||
+            (missing && ov.data === null && ov.error === null) ||
+            landedMeanwhile ? (
+                <SkeletonRows rows={4} height={64} />
             ) : !agenda ? (
-                <EmptyState
-                    title="No agenda for this week yet"
-                    body="Prepare a draft from the evidence, numbers and open commitments on file. Three to five topics, each with what happened, its sources, why it matters, the decision to make and a next step. You edit from there."
-                    action={
-                        <>
-                            <Button size="sm" onClick={() => void prepare()} disabled={busy}>
-                                {busy && (
-                                    <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                )}
-                                Prepare the draft
-                            </Button>
-                            <Button size="sm" variant="outline" asChild>
-                                <ToolLink href={vantagePath("/evidence")}>
-                                    Add evidence first
-                                </ToolLink>
-                            </Button>
-                        </>
-                    }
-                />
+                auto.drafting ? (
+                    <DraftingCard reading="Reading the evidence, numbers and open commitments on file. The topics land here as suggestions." />
+                ) : (
+                    <EmptyState
+                        title={
+                            auto.error
+                                ? "Vantage could not draft this week"
+                                : "No agenda for this week"
+                        }
+                        body={
+                            auto.error ??
+                            "Vantage drafts three to five topics from the evidence, numbers and open commitments on file — each with what happened, its sources, why it matters, the decision to make and a next step — and brings them here as suggestions for you to take or ignore."
+                        }
+                        action={
+                            <>
+                                <Button size="sm" onClick={auto.draft} disabled={!res.data}>
+                                    {auto.error ? "Try again" : "Draft this week"}
+                                </Button>
+                                <Button size="sm" variant="outline" asChild>
+                                    <ToolLink href={vantagePath("/evidence")}>
+                                        Add evidence first
+                                    </ToolLink>
+                                </Button>
+                            </>
+                        }
+                    />
+                )
             ) : (
                 <>
-                    <section className="flex flex-col gap-2">
-                        <div className="flex flex-wrap items-center gap-3">
-                            <StatusWord
-                                tone={
-                                    agenda.status === "draft"
-                                        ? "neutral"
-                                        : agenda.status === "ready"
-                                          ? "brand"
-                                          : "success"
-                                }
-                            >
-                                {STATUS_WORD[agenda.status]}
-                            </StatusWord>
-                            {unsupported > 0 && (
-                                <span className="text-warn text-[12px]">
-                                    {plural(unsupported, "fact")} without a source on file
-                                </span>
-                            )}
-                        </div>
-                        {agenda.summary && (
-                            <p className="text-ink-2 max-w-[70ch] text-[13.5px] leading-[1.5]">
-                                {agenda.summary}
-                            </p>
-                        )}
-                    </section>
+                    <WeekSteps agenda={agenda} />
 
-                    <section>
-                        <SectionHeading
-                            title="Topics"
-                            aside={
-                                busy ? (
-                                    <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                ) : (
-                                    `${live.length} of 5`
-                                )
-                            }
-                        />
-                        {live.length === 0 ? (
-                            <EmptyState
-                                title="Nothing to discuss yet"
-                                body={
-                                    agenda.summary ??
-                                    "The draft found nothing that merits a decision. Add evidence or numbers and regenerate, or write a topic yourself."
-                                }
-                                action={
-                                    <>
-                                        <Button size="sm" onClick={() => setEditing("new")}>
-                                            Add a topic
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => void prepare()}
-                                            disabled={busy}
-                                        >
-                                            Regenerate
-                                        </Button>
-                                    </>
+                    {(Boolean(agenda.summary) || unsupported > 0) && (
+                        <section
+                            aria-label="Vantage's read on the week"
+                            className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-4"
+                        >
+                            <SuggestionMark>Vantage&apos;s read on the week</SuggestionMark>
+                            {agenda.summary && (
+                                <p className="text-ink mt-1.5 max-w-[72ch] text-[14.5px] leading-[1.55]">
+                                    {agenda.summary}
+                                </p>
+                            )}
+                            {unsupported > 0 && (
+                                <p className="text-warn mt-2 text-[12px]">
+                                    {plural(unsupported, "fact")} without a source on file — open
+                                    Details on a topic to see which.
+                                </p>
+                            )}
+                        </section>
+                    )}
+
+                    {suggested.length > 0 ? (
+                        <section aria-label="Suggested by Vantage">
+                            <SectionHeading
+                                title="Suggested by Vantage"
+                                aside={
+                                    busy ? (
+                                        <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
+                                    ) : (
+                                        `${plural(suggested.length, "topic")} to review`
+                                    )
                                 }
                             />
+                            <div className="flex flex-col gap-2.5">
+                                {suggested.map(t => (
+                                    <TopicSuggestion
+                                        key={t.id}
+                                        topic={t}
+                                        busy={busy}
+                                        onKeep={() => void act(`topic:${t.id}`, () => keepTopic(t))}
+                                        onIgnore={() =>
+                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
+                                        }
+                                        onEdit={() => setEditing(t)}
+                                        onDecide={() => setDeciding(t)}
+                                        onDelete={() => void remove(t)}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    ) : agenda.status === "draft" && kept.length > 0 ? (
+                        <AllCaughtUp body="Every suggestion is answered. Mark the agenda ready when it says what the meeting should decide." />
+                    ) : null}
+
+                    <section aria-label="On the agenda">
+                        <SectionHeading
+                            title="On the agenda"
+                            aside={kept.length > 0 ? `${kept.length} of 5` : undefined}
+                        />
+                        {kept.length === 0 ? (
+                            <p className="text-ink-3 border-line rounded-lg border border-dashed px-4 py-3 text-[13px]">
+                                {suggested.length > 0
+                                    ? "Nothing yet. Add Vantage's suggestions above, or write a topic of your own."
+                                    : "Nothing on the agenda. Ask Vantage for fresh suggestions from the More menu, or write a topic of your own."}
+                            </p>
                         ) : (
                             <div className="border-line bg-panel rounded-lg border">
-                                {live.map((t, i) => (
-                                    <TopicCard
+                                {kept.map((t, i) => (
+                                    <AgendaTopicRow
                                         key={t.id}
                                         topic={t}
                                         index={i}
                                         first={i === 0}
-                                        last={i === live.length - 1}
-                                        busy={busy}
-                                        onKeep={() => void patch(t, { status: "kept" }, "Kept")}
-                                        onDismiss={() =>
-                                            void patch(t, { status: "dismissed" }, "Dismissed")
+                                        last={i === kept.length - 1}
+                                        busy={busy || gone.has(`commit:${t.id}`)}
+                                        onCommit={() =>
+                                            void act(`commit:${t.id}`, () => commitToNextStep(t))
                                         }
-                                        onEdit={() => setEditing(t)}
-                                        onDecide={() => setDeciding(t)}
-                                        onMove={dir => void move(t, dir)}
-                                        onShare={shared =>
-                                            void patch(
-                                                t,
-                                                { shared },
-                                                shared ? "Shared with the program" : "Made private"
+                                        nextStepHidden={hidden.has(`commit:${t.id}`)}
+                                        onIgnoreNextStep={() =>
+                                            void act(`commit:${t.id}`, () =>
+                                                setAside(
+                                                    `commit:${t.id}`,
+                                                    SET_ASIDE_DAYS.nextStep,
+                                                    "Ignored — decide it your own way"
+                                                )
                                             )
                                         }
+                                        onShowNextStep={() => unhideSuggestion(`commit:${t.id}`)}
+                                        onDecide={() => setDeciding(t)}
+                                        onEdit={() => setEditing(t)}
+                                        onMove={dir => void move(t, dir)}
+                                        onShare={shared => share(t, shared)}
+                                        onIgnore={() =>
+                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
+                                        }
                                         onDelete={() => void remove(t)}
                                     />
                                 ))}
                             </div>
                         )}
-                        {live.length > 0 && (
-                            <div className="mt-2 flex gap-2">
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => setEditing("new")}
-                                    disabled={busy}
-                                >
-                                    Add a topic
-                                </Button>
-                            </div>
-                        )}
+                        <div className="mt-2 flex gap-2">
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditing("new")}
+                                disabled={busy}
+                            >
+                                <Plus aria-hidden="true" />
+                                Write a topic
+                            </Button>
+                        </div>
                     </section>
 
-                    {dismissed.length > 0 && (
-                        <section>
-                            <SectionHeading
-                                title="Dismissed"
-                                aside={plural(dismissed.length, "topic")}
-                            />
-                            <div className="border-line bg-panel rounded-lg border">
-                                {dismissed.map((t, i) => (
-                                    <TopicCard
-                                        key={t.id}
-                                        topic={t}
-                                        index={live.length + i}
-                                        first
-                                        last
-                                        busy={busy}
-                                        onKeep={() => void patch(t, { status: "kept" }, "Restored")}
-                                        onDismiss={() => undefined}
-                                        onEdit={() => setEditing(t)}
-                                        onDecide={() => setDeciding(t)}
-                                        onMove={() => undefined}
-                                        onShare={shared => void patch(t, { shared })}
-                                        onDelete={() => void remove(t)}
-                                    />
-                                ))}
-                            </div>
+                    {ignored.length > 0 && (
+                        <section aria-label="Ignored">
+                            <button
+                                type="button"
+                                onClick={() => setShowIgnored(o => !o)}
+                                aria-expanded={showIgnored}
+                                className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 mb-2 inline-flex items-center gap-1.5 rounded-sm text-[13px] font-semibold outline-none focus-visible:ring-2"
+                            >
+                                Ignored
+                                <span className="text-ink-3 text-xs font-normal">
+                                    {plural(ignored.length, "topic")}
+                                </span>
+                                <ChevronDown
+                                    className={cn(
+                                        "size-3.5 transition-transform motion-reduce:transition-none",
+                                        showIgnored && "rotate-180"
+                                    )}
+                                    aria-hidden="true"
+                                />
+                            </button>
+                            {showIgnored && (
+                                <div className="border-line bg-panel rounded-lg border">
+                                    {ignored.map(t => (
+                                        <IgnoredTopicRow
+                                            key={t.id}
+                                            topic={t}
+                                            busy={busy}
+                                            onRestore={() =>
+                                                void patch(
+                                                    t,
+                                                    { status: "kept" },
+                                                    "Back on the agenda"
+                                                )
+                                            }
+                                            onDelete={() => void remove(t)}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </section>
                     )}
                 </>
@@ -486,7 +544,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 aria-current={h.weekStart === week ? "true" : undefined}
                                 className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 flex min-h-10 items-center gap-3 border-t px-4 py-2 outline-none first:border-t-0 focus-visible:ring-[3px]"
                             >
-                                <span className="text-ink w-40 text-[13px] font-medium">
+                                <span className="text-ink @max-sm:w-28 w-40 text-[13px] font-medium">
                                     {weekRange(h.weekStart, h.weekEnd)}
                                 </span>
                                 <span className="text-ink-3 text-[12px]">

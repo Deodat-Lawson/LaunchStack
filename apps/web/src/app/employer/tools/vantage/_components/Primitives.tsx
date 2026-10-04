@@ -109,7 +109,11 @@ export function EvidenceChips({
                     className="bg-panel-2 text-ink-2 inline-flex max-w-[280px] items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px]"
                 >
                     <span className="truncate">{r.label}</span>
-                    {r.date && <span className="text-ink-3 font-mono tabular-nums">{r.date}</span>}
+                    {r.date && (
+                        <span className="text-ink-3 shrink-0 whitespace-nowrap font-mono tabular-nums">
+                            {r.date}
+                        </span>
+                    )}
                 </span>
             ))}
             {unsupported && (

@@ -5,8 +5,8 @@
  * process even for API-only traffic. Its React Flight build installs a
  * process-wide `async_hooks` tracker (`pendingOperations`) and, unpatched,
  * starts a node for every promise and I/O resource in the process — linked
- * through `previous`/`awaited` into chains that are never released. The Calls
- * UI's 1 s polling grew live heap by ~1 GB/hour this way (react/react#36836
+ * through `previous`/`awaited` into chains that are never released. A 1 s
+ * polling client grew live heap by ~1 GB/hour this way (react/react#36836
  * describes the same retention; React 19.3 does not change it).
  * `patches/next@15.5.7.patch` starts tracking only inside a React render.
  *
@@ -28,9 +28,8 @@ require(runtime);
 async function poll(iterations) {
     for (let i = 0; i < iterations; i++) {
         await fs.stat(runtime);
-        const { promise, resolve } = Promise.withResolvers();
-        setTimeout(resolve, 0);
-        await promise;
+        // No Promise.withResolvers: CI runs the web tests on Node 20.
+        await new Promise((resolve) => setTimeout(resolve, 0));
     }
 }
 (async () => {

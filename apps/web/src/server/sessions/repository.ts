@@ -9,7 +9,8 @@
 
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, sql } from "drizzle-orm";
+import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 import {
     deriveSessionTitle,
@@ -31,6 +32,7 @@ export interface SessionOwner {
 }
 
 export interface SessionMessageInput {
+    metadata?: ChatTurnMetadata;
     role: "user" | "assistant";
     text: string;
     refs?: string[];
@@ -60,6 +62,8 @@ export interface SessionMessage extends SessionMessageInput {
 }
 
 export interface SessionDetail extends SessionSummary {
+    queuedMessages: ChatQueueItem[];
+    queueRevision: number;
     continuation: { title: string; context: string } | null;
     messages: SessionMessage[];
 }
@@ -83,6 +87,7 @@ function toSummary(row: WorkspaceSessionRow): SessionSummary {
 
 function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
     return {
+        metadata: row.metadata ?? undefined,
         seq: row.seq,
         role: row.role,
         text: row.text,
@@ -175,12 +180,15 @@ export async function createSession(
                     model: message.model ?? null,
                     tokens: message.tokens ?? null,
                     agentKey: message.agentKey ?? null,
+                    metadata: message.metadata ?? null,
                 }))
             );
         }
 
         return {
             ...toSummary(row!),
+            queuedMessages: [],
+            queueRevision: 0,
             continuation: input.continuation ?? null,
             messages: messages.map((message, index) => ({
                 ...message,
@@ -209,6 +217,8 @@ export async function getSession(
 
     return {
         ...toSummary(row),
+        queuedMessages: row.queuedMessages ?? [],
+        queueRevision: row.queueRevision ?? 0,
         continuation: row.continuation ?? null,
         messages: messages.map(toMessage),
     };
@@ -256,6 +266,7 @@ export async function appendMessages(
                 model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
+                metadata: message.metadata ?? null,
             }))
         );
 
@@ -292,6 +303,112 @@ export async function updateSession(
         .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
         .returning();
     return row ? toSummary(row) : null;
+}
+
+/** A row lock and revision protect queue edits/claims across browser tabs. */
+export async function changeQueue(
+    owner: SessionOwner,
+    sessionId: string,
+    revision: number,
+    change: { items: ChatQueueItem[] } | { claimId: string }
+): Promise<{
+    items: ChatQueueItem[];
+    revision: number;
+    claimed?: ChatQueueItem;
+    claimedMessage?: SessionMessage;
+    conflict?: boolean;
+} | null> {
+    return db.transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(workspaceSessions)
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
+            .for("update");
+        if (!row) return null;
+        const current = { items: row.queuedMessages ?? [], revision: row.queueRevision ?? 0 };
+        if (current.revision !== revision) return { ...current, conflict: true };
+        const claimed =
+            "claimId" in change
+                ? current.items.find(item => item.id === change.claimId)
+                : undefined;
+        if ("claimId" in change && !claimed) return { ...current, conflict: true };
+        const items =
+            "items" in change
+                ? change.items
+                : current.items.filter(item => item.id !== change.claimId);
+        const now = new Date();
+        let claimedMessage: SessionMessage | undefined;
+        if (claimed) {
+            const [message] = await tx
+                .insert(workspaceSessionMessages)
+                .values({
+                    sessionId,
+                    seq: row.messageCount,
+                    role: "user",
+                    text: clampText(claimed.send.text),
+                    refs: claimed.send.refs,
+                    attachments: claimed.send.attachments,
+                    agentKey: claimed.send.agentKey,
+                    metadata: {
+                        id: randomUUID(),
+                        send: claimed.send,
+                        intent: claimed.send.followUp === "interrupt" ? "interrupt" : "queued",
+                    },
+                    createdAt: now,
+                })
+                .returning();
+            if (!message) throw new Error("Couldn't persist the queued turn");
+            claimedMessage = toMessage(message);
+        }
+        await tx
+            .update(workspaceSessions)
+            .set({
+                queuedMessages: items,
+                queueRevision: revision + 1,
+                updatedAt: now,
+                ...(claimed
+                    ? {
+                          messageCount: row.messageCount + 1,
+                          lastMessageAt: now,
+                          contextSourceIds: claimed.send.refs,
+                          agentKey: claimed.send.agentKey,
+                      }
+                    : {}),
+            })
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
+        return { items, revision: revision + 1, ...(claimed ? { claimed, claimedMessage } : {}) };
+    });
+}
+
+/** Rewind only this owner's transcript; refuse stale edits instead of deleting new turns. */
+export async function truncateMessages(
+    owner: SessionOwner,
+    sessionId: string,
+    keepCount: number,
+    expectedCount: number
+): Promise<"missing" | "conflict" | "ok"> {
+    return db.transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(workspaceSessions)
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)))
+            .for("update");
+        if (!row) return "missing";
+        if (row.messageCount !== expectedCount || keepCount > row.messageCount) return "conflict";
+        await tx
+            .delete(workspaceSessionMessages)
+            .where(
+                and(
+                    eq(workspaceSessionMessages.sessionId, sessionId),
+                    gte(workspaceSessionMessages.seq, keepCount)
+                )
+            );
+        await tx
+            .update(workspaceSessions)
+            .set({ messageCount: keepCount, updatedAt: new Date() })
+            .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
+        return "ok";
+    });
 }
 
 /** Hard delete — the messages go with it via the cascade. There is no trash here. */

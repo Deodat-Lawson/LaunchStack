@@ -15,6 +15,7 @@ import {
 
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
+import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 /**
  * Persisted Ask sessions — the chat thread survives a reload, a new tab, and a
@@ -78,6 +79,8 @@ export const workspaceSessions = pgTable(
          * after the table shipped; declared last on purpose.
          */
         agentKey: varchar("agent_key", { length: 64 }),
+        queuedMessages: jsonb("queued_messages").$type<ChatQueueItem[]>().notNull().default([]),
+        queueRevision: integer("queue_revision").notNull().default(0),
     },
     table => ({
         // The sidebar's one query: this person's sessions in this workspace,
@@ -120,6 +123,7 @@ export const workspaceSessionMessages = pgTable(
             .notNull(),
         /** Which agent produced an assistant turn (or was addressed by a user turn). */
         agentKey: varchar("agent_key", { length: 64 }),
+        metadata: jsonb("metadata").$type<ChatTurnMetadata>(),
     },
     table => ({
         sessionSeqUnique: uniqueIndex("workspace_session_messages_session_seq_uq").on(

@@ -59,6 +59,11 @@ export function quoteBlock(text: string): string {
     return `${lines.map(line => `> ${line}`).join("\n")}\n\n`;
 }
 
+/** Mark inserted source context so recall can distinguish it from typed Markdown. */
+export function contextQuoteBlock(text: string): string {
+    return `${quoteBlock(text)}[Quoted context](#launchstack-quoted-context)\n\n`;
+}
+
 /** A filename-safe stem for a downloaded transcript. */
 export function transcriptFilename(thread: ThreadMessage[]): string {
     const first = thread.find(m => m.role === "user")?.text ?? "chat";

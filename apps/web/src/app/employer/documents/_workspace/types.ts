@@ -196,6 +196,15 @@ export interface EphemeralAttachment {
 }
 
 export interface ThreadMessage {
+    forkedFromSessionId?: string;
+    intent?: "queued" | "interrupt";
+    id?: string;
+    createdAt?: string;
+    status?: "streaming" | "complete" | "stopped" | "error";
+    stage?: string;
+    reasoning?: string;
+    elapsedMs?: number;
+    send?: ComposerSend;
     role: "user" | "assistant";
     text: string;
     /** Source IDs the user pinned for a user turn, or cited documents for an assistant turn. */
@@ -225,6 +234,8 @@ export interface ThreadMessage {
  * argument list to sendMessage further.
  */
 export interface ComposerSend {
+    recallText?: string;
+    origin?: "user" | "attachment" | "plan-implementation";
     text: string;
     refs: string[];
     attachments: EphemeralAttachment[];
@@ -232,6 +243,17 @@ export interface ComposerSend {
     thinking: boolean;
     /** The agent this turn is addressed to; null = the workspace's default assistant. */
     agentKey: string | null;
+    modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    reasoningEffort?: string;
+    chatMode?: "default" | "plan";
+    followUp?: "queue" | "interrupt";
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    threadRefs?: string[];
+}
+
+export interface QueuedChatMessage {
+    id: string;
+    send: ComposerSend;
 }
 
 /** How the transcript attributes an agent's answer. */

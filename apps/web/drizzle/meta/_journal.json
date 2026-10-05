@@ -183,6 +183,13 @@
       "when": 1791067895823,
       "tag": "20261003225135_company_profile_sources",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1791135190912,
+      "tag": "20261004173310_chatbox_parity",
+      "breakpoints": true
     }
   ]
 }

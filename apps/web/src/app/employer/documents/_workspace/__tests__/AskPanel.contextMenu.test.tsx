@@ -80,10 +80,6 @@ function Harness({
                 onNewChat={onNewChat}
                 openPalette={jest.fn()}
                 onStudioNavigate={jest.fn()}
-                webSearch={false}
-                onToggleWebSearch={jest.fn()}
-                thinking={false}
-                onToggleThinking={jest.fn()}
             />
         </ContextMenuProvider>
     );
@@ -105,7 +101,7 @@ describe("AskPanel context menus", () => {
         await user.click(screen.getByTestId("context-menu-item-quote"));
         await waitFor(() =>
             expect(screen.getByPlaceholderText(/Ask anything/)).toHaveValue(
-                "> Recall improved after the reranker.\n\n"
+                "> Recall improved after the reranker.\n\n[Source message](#chat-message-1)\n\n"
             )
         );
     });
@@ -158,7 +154,7 @@ describe("AskPanel context menus", () => {
         const user = userEvent.setup();
         const onNewChat = jest.fn();
         render(<Harness onNewChat={onNewChat} />);
-        fireEvent.contextMenu(screen.getByText(/Grounded answers only/));
+        fireEvent.contextMenu(screen.getByRole("main"));
         expect(screen.getByTestId("context-menu")).toHaveAttribute("aria-label", "Chat actions");
         await user.click(screen.getByTestId("context-menu-item-new-chat"));
         expect(onNewChat).toHaveBeenCalled();

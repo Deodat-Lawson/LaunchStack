@@ -1,4 +1,5 @@
 import type { HistoryEntry, HistoryKind } from "~/lib/workspace-history";
+import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 /**
  * The client's half of session persistence — every call the workspace makes to
@@ -9,6 +10,8 @@ import type { HistoryEntry, HistoryKind } from "~/lib/workspace-history";
  */
 
 export interface SessionMessagePayload {
+    metadata?: ChatTurnMetadata;
+    createdAt?: string;
     role: "user" | "assistant";
     text: string;
     refs?: string[];
@@ -21,6 +24,8 @@ export interface SessionMessagePayload {
 }
 
 export interface StoredSession {
+    queuedMessages?: ChatQueueItem[];
+    queueRevision?: number;
     id: string;
     title: string;
     messageCount: number;
@@ -107,4 +112,51 @@ export async function deleteSession(sessionId: string): Promise<void> {
         method: "DELETE",
     });
     if (!res.ok) throw await readError(res, "Failed to delete this chat");
+}
+
+export async function truncateMessages(
+    sessionId: string,
+    keepCount: number,
+    expectedCount: number
+): Promise<void> {
+    const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}/messages`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keepCount, expectedCount }),
+    });
+    if (!res.ok) throw await readError(res, "Failed to rewind this chat");
+}
+
+export interface QueueState {
+    items: ChatQueueItem[];
+    revision: number;
+    claimed?: ChatQueueItem;
+    claimedMessage?: SessionMessagePayload;
+    conflict?: boolean;
+}
+export async function updateQueue(
+    sessionId: string,
+    revision: number,
+    items: ChatQueueItem[]
+): Promise<QueueState> {
+    const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}/queue`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ revision, items }),
+    });
+    if (!res.ok && res.status !== 409) throw await readError(res, "Failed to save queued messages");
+    return (await res.json()) as QueueState;
+}
+export async function claimQueuedMessage(
+    sessionId: string,
+    revision: number,
+    id: string
+): Promise<QueueState> {
+    const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}/queue`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ revision, id }),
+    });
+    if (!res.ok && res.status !== 409) throw await readError(res, "Failed to send queued message");
+    return (await res.json()) as QueueState;
 }

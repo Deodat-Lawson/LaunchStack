@@ -73,9 +73,11 @@ jest.mock("~/app/employer/documents/_workspace/settings/IntegrationsPanel", () =
     IntegrationsPanel: () => <div data-testid="body-integrations">integrations body</div>,
 }));
 
-jest.mock("~/app/employer/metadata/MetadataView", () => ({
-    MetadataView: ({ bare }: { bare?: boolean }) => (
-        <div data-testid="body-company" data-bare={String(Boolean(bare))}>
+// The company section is the shared company profile, drawn as a section body
+// (the hub owns the title); its own test covers what it shows.
+jest.mock("~/components/company-profile/CompanyProfileView", () => ({
+    CompanyProfileView: ({ variant }: { variant: string }) => (
+        <div data-testid="body-company" data-variant={variant}>
             company body
         </div>
     ),
@@ -239,7 +241,7 @@ describe("SettingsHub", () => {
         });
 
         const body = await findBody("body-company");
-        expect(body).toHaveAttribute("data-bare", "true");
+        expect(body).toHaveAttribute("data-variant", "settings");
     });
 
     it("lets an explicit initialSection win over the hash", async () => {

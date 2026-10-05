@@ -554,13 +554,12 @@ export const TrackDocumentViewSchema = z.object({
 // ============================================================================
 
 export const CompanyOnboardingSchema = z.object({
+    /** "acme.com" or a full URL; anything that is not a web address is ignored. */
+    website: z.string().max(2048).trim().optional(),
     description: z.string().max(5000).trim().optional(),
+    /** What the company is building and for whom. */
+    idea: z.string().max(5000).trim().optional(),
     industry: z.string().max(256).trim().optional(),
-});
-
-export const CompanyMetadataExtractSchema = z.object({
-    debug: z.boolean().optional().default(false),
-    force: z.boolean().optional().default(false),
 });
 
 // ============================================================================

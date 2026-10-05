@@ -77,7 +77,9 @@ async function main() {
             console.log("\nTo generate metadata:");
             console.log("  1. Start the dev server: pnpm --filter @launchstack/web dev");
             console.log("  2. Upload documents through the employer flow");
-            console.log("  3. Call the extraction API: POST /api/company/metadata/extract");
+            console.log(
+                "  3. Rebuild the profile: POST /api/company/profile (Settings › Company › Rebuild)"
+            );
             process.exit(0);
         }
 

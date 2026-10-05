@@ -30,7 +30,7 @@ export type RequirementKind =
     | "deadline"
     | "budget";
 export type FindingSeverity = "blocker" | "warning" | "note";
-export type RunKind = "profile" | "funders" | "extract" | "draft" | "rewrite" | "review";
+export type RunKind = "funders" | "extract" | "draft" | "rewrite" | "review";
 export type RewritePreset = "tighten" | "specific" | "plainer" | "stronger" | "custom";
 export type RunStatus = "queued" | "running" | "completed" | "failed";
 export type StepStatus = "waiting" | "running" | "done" | "failed" | "skipped";
@@ -44,29 +44,6 @@ export interface EvidenceDto {
     url: string | null;
     /** Where the source opens in the Studio; null for web evidence. */
     href: string | null;
-}
-
-export interface ProfileFactDto {
-    key: string;
-    label: string;
-    value: string;
-    cites: number[];
-    source: "documents" | "profile" | "manual";
-}
-
-export interface ProfileDto {
-    status: ProfileStatus;
-    error: string | null;
-    builtAt: string | null;
-    summary: string | null;
-    applicantType: ApplicantType | null;
-    focusAreas: string[];
-    geography: string[];
-    facts: ProfileFactDto[];
-    evidence: EvidenceDto[];
-    builtFrom: { documents: number; snippets: number } | null;
-    /** How many sources the workspace has to read from. */
-    sources: number;
 }
 
 export interface FunderRow {
@@ -326,11 +303,6 @@ export const proposalsApi = {
     sources: (query?: string) =>
         call<{ sources: SourceOption[] }>(`/api/proposals/sources${q({ q: query })}`),
 
-    profile: () => call<{ profile: ProfileDto }>("/api/proposals/profile"),
-    buildProfile: () => call<{ run: RunDto }>("/api/proposals/profile", post()),
-    patchFact: (fact: { key: string; label?: string; value: string }) =>
-        call<{ profile: ProfileDto }>("/api/proposals/profile", patch(fact)),
-
     funders: (status?: FunderStatus | "all") =>
         call<{ funders: FunderRow[]; sources: { grantsGov: boolean; web: boolean } }>(
             `/api/proposals/funders${q({ status: status && status !== "all" ? status : undefined })}`
@@ -445,7 +417,6 @@ export const SECTION_STATUS_LABEL: Record<SectionStatus, string> = {
 };
 
 export const RUN_KIND_LABEL: Record<RunKind, string> = {
-    profile: "Building your profile",
     funders: "Finding funders",
     extract: "Reading the request",
     draft: "Drafting",

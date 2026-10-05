@@ -24,6 +24,10 @@ const compat = new FlatCompat({
 // warn-level hex ratchet on no-restricted-syntax) goes on its own rule id
 // instead of sharing one.
 
+const nativeConfirmMessage =
+    "window.confirm is suppressed in embedded web views and returns false unseen. " +
+    "Mount ConfirmDialog from ~/components/ui/confirm-dialog with the pending action in state.";
+
 // Deleted packages and renamed bricks (ADR-008), banned everywhere — so every
 // scoped no-restricted-imports below must include it.
 const legacyBan = {
@@ -726,7 +730,22 @@ const eslintConfig = [
                     message:
                         "users.role / users.status are legacy and unread (ADR-010). Use the membership row: user_company_memberships.role + status.",
                 })),
+                ...["window", "globalThis"].map(object => ({
+                    object,
+                    property: "confirm",
+                    message: nativeConfirmMessage,
+                })),
             ],
+        },
+    },
+    // window.confirm returns false unseen in embedded web views (the desktop
+    // shell, in-app browser panes), so the action it guards silently does
+    // nothing. Error-level: the count is zero and stays zero. A local
+    // function named `confirm` is not the global and is not flagged.
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-globals": ["error", { name: "confirm", message: nativeConfirmMessage }],
         },
     },
     // Colors come from tokens (var(--…) / semantic Tailwind classes), not

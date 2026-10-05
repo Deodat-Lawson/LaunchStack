@@ -41,10 +41,8 @@ export const OPPORTUNITY_STATUSES = ["candidate", "saved", "dismissed", "applied
 export const OpportunityStatusSchema = z.enum(OPPORTUNITY_STATUSES);
 export type OpportunityStatus = z.infer<typeof OpportunityStatusSchema>;
 
-export const PROFILE_STATUSES = ["empty", "building", "ready", "failed"] as const;
-export type ProfileStatus = (typeof PROFILE_STATUSES)[number];
-
-export const RUN_KINDS = ["profile", "funders", "extract", "draft", "rewrite", "review"] as const;
+/** The profile is built by the company profile (Settings › Company), not by a proposals run. */
+export const RUN_KINDS = ["funders", "extract", "draft", "rewrite", "review"] as const;
 export const RunKindSchema = z.enum(RUN_KINDS);
 export type RunKind = z.infer<typeof RunKindSchema>;
 
@@ -111,25 +109,6 @@ export const OrgProfileSchema = z.object({
     promptVersion: z.string(),
 });
 export type OrgProfile = z.infer<typeof OrgProfileSchema>;
-
-/** What the model returns for a profile; the tool adds evidence and provenance. */
-export const OrgProfileDraftSchema = z.object({
-    summary: z
-        .string()
-        .describe("Two to four sentences on who the organisation is and what it does."),
-    applicantType: ApplicantTypeSchema,
-    focusAreas: z.array(z.string()).max(10),
-    geography: z.array(z.string()).max(8),
-    facts: z.array(
-        z.object({
-            key: z.string(),
-            label: z.string(),
-            value: z.string(),
-            cites: z.array(z.number().int()),
-        })
-    ),
-});
-export type OrgProfileDraft = z.infer<typeof OrgProfileDraftSchema>;
 
 // ─── Opportunities ───────────────────────────────────────────────────────────
 
@@ -324,17 +303,6 @@ export const ProposalRunEventDataSchema = z.object({
 export type ProposalRunEventData = z.infer<typeof ProposalRunEventDataSchema>;
 
 // ─── Records ─────────────────────────────────────────────────────────────────
-
-export interface ProfileRecord {
-    id: string;
-    companyId: bigint;
-    status: ProfileStatus;
-    profile: OrgProfile | null;
-    error: string | null;
-    builtAt: Date | null;
-    createdAt: Date;
-    updatedAt: Date | null;
-}
 
 export interface OpportunityRecord {
     id: string;

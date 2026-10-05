@@ -208,8 +208,10 @@ import { PATCH as renameCategory } from "~/app/api/Categories/[id]/route";
 import { POST as updateUploadPreference } from "~/app/api/updateUploadPreference/route";
 import { POST as updateCompany } from "~/app/api/updateCompany/route";
 import { POST as companyOnboarding } from "~/app/api/company/onboarding/route";
-import { PATCH as patchMetadata } from "~/app/api/company/metadata/route";
-import { POST as extractMetadata } from "~/app/api/company/metadata/extract/route";
+import { GET as getCompanyMetadata } from "~/app/api/company/metadata/route";
+import { GET as getCompanyMetadataHistory } from "~/app/api/company/metadata/history/route";
+import { PATCH as patchProfileFact } from "~/app/api/company/profile/facts/route";
+import { PATCH as patchProfileSource } from "~/app/api/company/profile/sources/[documentId]/route";
 import { POST as repoExplainer } from "~/app/api/repo-explainer/route";
 import { GET as uploadBootstrap } from "~/app/api/employer/upload/bootstrap/route";
 import { DELETE as deleteDocument } from "~/app/api/deleteDocument/route";
@@ -314,19 +316,35 @@ const GATES: readonly Gate[] = [
         call: () => companyOnboarding(json("/api/company/onboarding", "POST", { industry: "x" })),
     },
     {
-        route: "PATCH /api/company/metadata",
+        route: "GET /api/company/metadata (raw export, excerpts from every folder)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => getCompanyMetadata(),
+    },
+    {
+        route: "GET /api/company/metadata/history",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => getCompanyMetadataHistory(),
+    },
+    {
+        route: "PATCH /api/company/profile/facts",
         permission: "settings.manage",
         deniedRole: "member",
         call: () =>
-            patchMetadata(
-                json("/api/company/metadata", "PATCH", { path: "company.name", value: "A" })
+            patchProfileFact(
+                json("/api/company/profile/facts", "PATCH", { path: "company.name", value: "A" })
             ),
     },
     {
-        route: "POST /api/company/metadata/extract",
+        route: "PATCH /api/company/profile/sources/[documentId]",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => extractMetadata(json("/api/company/metadata/extract", "POST", {})),
+        call: () =>
+            patchProfileSource(
+                json("/api/company/profile/sources/7", "PATCH", { override: "about_us" }),
+                { params: Promise.resolve({ documentId: "7" }) }
+            ),
     },
     {
         route: "POST /api/repo-explainer",

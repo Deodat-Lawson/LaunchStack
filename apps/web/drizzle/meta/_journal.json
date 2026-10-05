@@ -264,47 +264,54 @@
     {
       "idx": 37,
       "version": "7",
+      "when": 1791168983607,
+      "tag": "20261005025623_capture_paused_reason",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
       "when": 1791678804697,
       "tag": "20261011003324_per_link_join_approval",
       "breakpoints": true
     },
     {
-      "idx": 38,
+      "idx": 39,
       "version": "7",
       "when": 1791939425407,
       "tag": "20261014005705_private_by_default_sharing",
       "breakpoints": true
     },
     {
-      "idx": 39,
+      "idx": 40,
       "version": "7",
       "when": 1791941425860,
       "tag": "20261014013025_brand_channels",
       "breakpoints": true
     },
     {
-      "idx": 40,
+      "idx": 41,
       "version": "7",
       "when": 1792131847989,
       "tag": "20261016062407_mcp_server_oauth",
       "breakpoints": true
     },
     {
-      "idx": 41,
+      "idx": 42,
       "version": "7",
       "when": 1792253874646,
       "tag": "20261017161754_drive_folder_import",
       "breakpoints": true
     },
     {
-      "idx": 42,
+      "idx": 43,
       "version": "7",
       "when": 1792276629858,
       "tag": "20261017223709_workspace_model_endpoints",
       "breakpoints": true
     },
     {
-      "idx": 43,
+      "idx": 44,
       "version": "7",
       "when": 1792279509930,
       "tag": "20261017232509_scenario_simulation",

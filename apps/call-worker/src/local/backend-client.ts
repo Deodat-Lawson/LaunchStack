@@ -13,6 +13,13 @@ export interface LocalBackendClientOptions {
     token: string;
     timeoutMs?: number;
     fetch?: typeof fetch;
+    retryBudgetMs?: number;
+    retryBaseDelayMs?: number;
+    retryMaxDelayMs?: number;
+    random?: () => number;
+    now?: () => number;
+    sleep?: (milliseconds: number, signal?: AbortSignal) => Promise<void>;
+    onRetry?: (error: LocalBackendError, delayMs: number) => void;
 }
 
 export type LocalBackendPollInput = LocalCapturePollInput;
@@ -46,6 +53,23 @@ interface LocalBackendFinishBody extends LocalBackendFinishInput {
 
 type LocalBackendBody = LocalBackendPollBody | LocalBackendEventBody | LocalBackendFinishBody;
 
+export class LocalBackendError extends Error {
+    readonly retryable: boolean;
+    readonly status?: number;
+    readonly exhausted: boolean;
+
+    constructor(
+        message: string,
+        options: { retryable: boolean; status?: number; exhausted?: boolean; cause?: unknown }
+    ) {
+        super(message, { cause: options.cause });
+        this.name = "LocalBackendError";
+        this.retryable = options.retryable;
+        this.status = options.status;
+        this.exhausted = options.exhausted ?? false;
+    }
+}
+
 function validOrigin(value: string): string {
     let url: URL;
     try {
@@ -72,9 +96,9 @@ function nonempty(name: string, value: string): string {
     return normalized;
 }
 
-function checkedTimeout(value: number): number {
+function positiveOption(name: string, value: number): number {
     if (!Number.isFinite(value) || value <= 0) {
-        throw new RangeError("timeoutMs must be a positive finite number");
+        throw new RangeError(`${name} must be a positive finite number`);
     }
     return value;
 }
@@ -88,17 +112,47 @@ function abortReason(signal: AbortSignal): Error {
           });
 }
 
+function abortableDelay(milliseconds: number, signal?: AbortSignal): Promise<void> {
+    if (signal?.aborted) return Promise.reject(abortReason(signal));
+    return new Promise<void>((resolve, reject) => {
+        const timer = setTimeout(() => {
+            signal?.removeEventListener("abort", onAbort);
+            resolve();
+        }, milliseconds);
+        const onAbort = (): void => {
+            clearTimeout(timer);
+            signal?.removeEventListener("abort", onAbort);
+            reject(abortReason(signal!));
+        };
+        signal?.addEventListener("abort", onAbort, { once: true });
+    });
+}
+
 export class LocalBackendClient {
     private readonly endpoint: string;
     private readonly token: string;
     readonly timeoutMs: number;
     private readonly request: typeof fetch;
+    private readonly retryBudgetMs: number;
+    private readonly retryBaseDelayMs: number;
+    private readonly retryMaxDelayMs: number;
+    private readonly random: () => number;
+    private readonly now: () => number;
+    private readonly sleep: (milliseconds: number, signal?: AbortSignal) => Promise<void>;
+    private readonly onRetry?: (error: LocalBackendError, delayMs: number) => void;
 
     constructor(options: LocalBackendClientOptions) {
         this.endpoint = new URL(LOCAL_ENDPOINT_PATH, validOrigin(options.webOrigin)).toString();
         this.token = nonempty("Local backend token", options.token);
-        this.timeoutMs = checkedTimeout(options.timeoutMs ?? 30_000);
+        this.timeoutMs = positiveOption("timeoutMs", options.timeoutMs ?? 30_000);
         this.request = options.fetch ?? fetch;
+        this.retryBudgetMs = positiveOption("retryBudgetMs", options.retryBudgetMs ?? 120_000);
+        this.retryBaseDelayMs = positiveOption("retryBaseDelayMs", options.retryBaseDelayMs ?? 250);
+        this.retryMaxDelayMs = positiveOption("retryMaxDelayMs", options.retryMaxDelayMs ?? 5_000);
+        this.random = options.random ?? Math.random;
+        this.now = options.now ?? (() => performance.now());
+        this.sleep = options.sleep ?? abortableDelay;
+        this.onRetry = options.onRetry;
     }
 
     async poll(
@@ -123,14 +177,81 @@ export class LocalBackendClient {
         parseJson = false,
         externalSignal?: AbortSignal
     ): Promise<unknown> {
-        if (externalSignal?.aborted) throw abortReason(externalSignal);
+        const serializedBody = JSON.stringify(body);
+        const startedAt = this.now();
+        const budgetMs = body.kind === "poll" ? Infinity : this.retryBudgetMs;
+        let backoffMs = Math.min(this.retryBaseDelayMs, this.retryMaxDelayMs);
+        let lastError: LocalBackendError | undefined;
+        const exhausted = (): LocalBackendError =>
+            new LocalBackendError(
+                `Local backend ${body.kind} retry budget exhausted after ${this.retryBudgetMs}ms`,
+                { retryable: true, exhausted: true, status: lastError?.status, cause: lastError }
+            );
 
+        while (true) {
+            if (externalSignal?.aborted) {
+                const cause = abortReason(externalSignal);
+                throw new LocalBackendError(cause.message, { retryable: false, cause });
+            }
+            const remainingMs = budgetMs - (this.now() - startedAt);
+            if (remainingMs <= 0) throw exhausted();
+            try {
+                return await this.requestOnce(
+                    serializedBody,
+                    parseJson,
+                    Math.min(this.timeoutMs, remainingMs),
+                    externalSignal
+                );
+            } catch (error) {
+                if (!(error instanceof LocalBackendError) || !error.retryable) throw error;
+                lastError = error;
+            }
+
+            const remainingAfterRequestMs = budgetMs - (this.now() - startedAt);
+            if (remainingAfterRequestMs <= 0) throw exhausted();
+            const delayMs = Math.min(
+                Math.floor(this.random() * backoffMs),
+                remainingAfterRequestMs
+            );
+            if (this.onRetry) this.onRetry(lastError, delayMs);
+            else {
+                process.stdout.write(
+                    `${JSON.stringify({
+                        event: "call_worker_backend_retry",
+                        kind: body.kind,
+                        message: lastError.message,
+                        status: lastError.status,
+                        delayMs,
+                        observedAt: new Date().toISOString(),
+                    })}\n`
+                );
+            }
+            try {
+                await this.sleep(delayMs, externalSignal);
+            } catch (error) {
+                if (!externalSignal?.aborted) throw error;
+                const cause = abortReason(externalSignal);
+                throw new LocalBackendError(cause.message, { retryable: false, cause });
+            }
+            backoffMs = Math.min(this.retryMaxDelayMs, backoffMs * 2);
+        }
+    }
+
+    private async requestOnce(
+        serializedBody: string,
+        parseJson: boolean,
+        timeoutMs: number,
+        externalSignal?: AbortSignal
+    ): Promise<unknown> {
         const controller = new AbortController();
         let timedOut = false;
         let timeout: ReturnType<typeof setTimeout> | undefined;
         let removeAbortListener: (() => void) | undefined;
-        const timeoutError = (): Error =>
-            new Error(`Local backend request timed out after ${this.timeoutMs}ms`);
+        let responseStatus: number | undefined;
+        const timeoutError = (): LocalBackendError =>
+            new LocalBackendError(`Local backend request timed out after ${timeoutMs}ms`, {
+                retryable: true,
+            });
 
         const requestPromise = (async (): Promise<unknown> => {
             const response = await this.request(this.endpoint, {
@@ -139,22 +260,31 @@ export class LocalBackendClient {
                     authorization: `Bearer ${this.token}`,
                     "content-type": "application/json",
                 },
-                body: JSON.stringify(body),
+                body: serializedBody,
                 signal: controller.signal,
             });
+            responseStatus = response.status;
 
             const text = await response.text();
             if (!response.ok) {
                 const detail = text.trim().slice(0, 512);
-                throw new Error(
-                    `Local backend returned HTTP ${response.status}${detail ? `: ${detail}` : ""}`
+                throw new LocalBackendError(
+                    `Local backend returned HTTP ${response.status}${detail ? `: ${detail}` : ""}`,
+                    {
+                        retryable:
+                            response.status === 429 ||
+                            (response.status >= 500 && response.status <= 599),
+                        status: response.status,
+                    }
                 );
             }
             if (!parseJson || !text.trim()) return undefined;
             try {
                 return JSON.parse(text) as unknown;
             } catch {
-                throw new Error("Local backend returned invalid JSON");
+                throw new LocalBackendError("Local backend returned invalid JSON", {
+                    retryable: false,
+                });
             }
         })();
 
@@ -164,8 +294,7 @@ export class LocalBackendClient {
                 const error = timeoutError();
                 controller.abort(error);
                 reject(error);
-            }, this.timeoutMs);
-            timeout.unref?.();
+            }, timeoutMs);
         });
 
         const abortPromise = externalSignal
@@ -175,8 +304,12 @@ export class LocalBackendClient {
                       controller.abort(externalSignal.reason);
                       reject(reason);
                   };
-                  externalSignal.addEventListener("abort", onAbort, { once: true });
-                  removeAbortListener = () => externalSignal.removeEventListener("abort", onAbort);
+                  if (externalSignal.aborted) onAbort();
+                  else {
+                      externalSignal.addEventListener("abort", onAbort, { once: true });
+                      removeAbortListener = () =>
+                          externalSignal.removeEventListener("abort", onAbort);
+                  }
               })
             : undefined;
 
@@ -187,21 +320,28 @@ export class LocalBackendClient {
                 )
             );
         } catch (error) {
-            if (timedOut) {
-                throw new Error(`Local backend request timed out after ${this.timeoutMs}ms`, {
+            if (externalSignal?.aborted) {
+                const cause = abortReason(externalSignal);
+                throw new LocalBackendError(cause.message, { retryable: false, cause });
+            }
+            if (
+                responseStatus !== undefined &&
+                responseStatus >= 400 &&
+                responseStatus < 500 &&
+                responseStatus !== 429 &&
+                !(error instanceof LocalBackendError && error.status === responseStatus)
+            ) {
+                throw new LocalBackendError(`Local backend returned HTTP ${responseStatus}`, {
+                    retryable: false,
+                    status: responseStatus,
                     cause: error,
                 });
             }
-            if (externalSignal?.aborted) throw abortReason(externalSignal);
-            if (error instanceof Error && error.message.startsWith("Local backend returned")) {
-                throw error;
-            }
-            if (error instanceof Error && error.message === "Local backend returned invalid JSON") {
-                throw error;
-            }
-            throw new Error(
+            if (timedOut) throw timeoutError();
+            if (error instanceof LocalBackendError) throw error;
+            throw new LocalBackendError(
                 `Local backend request failed: ${error instanceof Error ? error.message : "unknown error"}`,
-                { cause: error }
+                { retryable: true, cause: error }
             );
         } finally {
             if (timeout !== undefined) clearTimeout(timeout);

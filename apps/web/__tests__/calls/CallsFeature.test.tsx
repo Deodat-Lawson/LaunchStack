@@ -1,11 +1,11 @@
 /** @jest-environment jsdom */
 
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { CallsFeature } from "~/app/calls/_components/CallsFeature";
-import { pausedCall } from "~/app/calls/_fixtures/callSnapshots";
+import { pausedCall, workerErrorPausedCall } from "~/app/calls/_fixtures/callSnapshots";
 import type { CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
 
 const mockRouterPush = jest.fn();
@@ -43,7 +43,13 @@ beforeEach(() => {
             if (typeof init.body !== "string") throw new Error("Expected a JSON command body");
             return mockCommand(JSON.parse(init.body) as Record<string, unknown>);
         }
-        return response(url === "/api/call-notes" ? snapshots : pausedCall);
+        return response(
+            url === "/api/call-notes"
+                ? snapshots
+                : (snapshots.find(
+                      snapshot => url === `/api/call-notes/${encodeURIComponent(snapshot.id)}`
+                  ) ?? pausedCall)
+        );
     }) as unknown as typeof fetch;
 });
 
@@ -58,6 +64,61 @@ it("starts a capture and opens the returned Call", async () => {
             expect.stringContaining(`call=${encodeURIComponent(pausedCall.id)}`)
         )
     );
+});
+
+it("resumes the same Call after a worker-error pause and preserves its Transcript", async () => {
+    snapshots = [workerErrorPausedCall];
+    mockSearchParams = new URLSearchParams(`feature=calls&call=${workerErrorPausedCall.id}`);
+    let finishResume: (response: MockResponse) => void = () => undefined;
+    mockCommand.mockReturnValueOnce(
+        new Promise<MockResponse>(resolve => {
+            finishResume = resolve;
+        })
+    );
+    render(<CallsFeature />);
+    const user = userEvent.setup();
+    const resume = await screen.findByRole("button", { name: "Resume capture" });
+    await waitFor(() => expect(resume).toBeEnabled());
+    expect(screen.getByRole("alert")).toHaveTextContent(/resume continues this call/i);
+
+    await user.click(resume);
+    expect(mockCommand).toHaveBeenCalledWith({
+        schemaVersion: "call-notes/v2",
+        kind: "resume_capture",
+        requestId: expect.any(String),
+        callId: workerErrorPausedCall.id,
+    });
+    expect(resume).toBeDisabled();
+    expect(resume).toHaveTextContent("Resuming…");
+    expect(screen.getByRole("button", { name: "Stop capture" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Start capture" })).toBeDisabled();
+    await user.click(resume);
+    expect(mockCommand).toHaveBeenCalledTimes(1);
+
+    const resumedCall: CallSnapshot = {
+        ...workerErrorPausedCall,
+        capture: {
+            ...workerErrorPausedCall.capture,
+            desiredMode: "running",
+            pausedReason: null,
+            lifecycle: "connecting",
+            activeAttemptId: "attempt-worker-error-2",
+            attemptCount: 2,
+        },
+    };
+    snapshots = [resumedCall];
+    await act(async () => finishResume(response(resumedCall)));
+    expect(screen.getByRole("status", { name: "Capture status" })).toHaveTextContent("Connecting");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Resume capture" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Stop capture" })).toBeEnabled();
+    expect(mockRouterPush).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Show transcript" }));
+    const transcript = screen.getByLabelText("Company transcript");
+    for (const segment of workerErrorPausedCall.transcript) {
+        expect(within(transcript).getByText(segment.text)).toBeInTheDocument();
+    }
 });
 
 it("does not start while the worker is offline and enables Start when it returns", async () => {
@@ -80,7 +141,7 @@ it("does not start while the worker is offline and enables Start when it returns
     }
 });
 
-it("keeps Stop available when worker availability is lost", async () => {
+it("disables Resume but keeps Stop available when worker availability is lost", async () => {
     workerAvailable = false;
     snapshots = [pausedCall];
     mockSearchParams = new URLSearchParams(`feature=calls&call=${pausedCall.id}`);
@@ -92,9 +153,15 @@ it("keeps Stop available when worker availability is lost", async () => {
         })
     );
     render(<CallsFeature />);
+    const user = userEvent.setup({ skipHover: true });
     const stop = await screen.findByRole("button", { name: /stop capture/i });
     expect(stop).toBeEnabled();
-    await userEvent.setup().click(stop);
+    const resume = screen.getByRole("button", { name: "Resume capture" });
+    expect(resume).toBeDisabled();
+    await waitFor(() => expect(resume).toHaveAttribute("title", expect.stringMatching(/offline/i)));
+    await user.click(resume);
+    expect(mockCommand).not.toHaveBeenCalled();
+    await user.click(stop);
     await waitFor(() =>
         expect(screen.getByRole("status", { name: "Capture status" })).toHaveTextContent(
             "Finalizing"

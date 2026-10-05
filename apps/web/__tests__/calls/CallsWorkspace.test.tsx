@@ -12,6 +12,7 @@ import {
     partialCall,
     pausedCall,
     redactedCall,
+    workerErrorPausedCall,
 } from "~/app/calls/_fixtures/callSnapshots";
 
 jest.mock("~/app/calls/_components/CallsChat", () => ({
@@ -72,11 +73,42 @@ describe("CallsWorkspace", () => {
         );
     });
 
-    it("shows Paused status for a selected paused capture", () => {
-        render(<CallsWorkspace calls={[pausedCall]} initialSelectedId={pausedCall.id} />);
+    it("shows Paused without an error alert for a user-paused capture", () => {
+        const userPausedCall = {
+            ...pausedCall,
+            capture: { ...pausedCall.capture, pausedReason: "user" as const },
+        };
+        render(<CallsWorkspace calls={[userPausedCall]} initialSelectedId={userPausedCall.id} />);
         expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
-            /paused/i
+            /^Paused$/
         );
+        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+
+    it("explains a worker-error pause and offers Resume without losing the Transcript", async () => {
+        const user = userEvent.setup();
+        render(
+            <CallsWorkspace
+                calls={[workerErrorPausedCall]}
+                initialSelectedId={workerErrorPausedCall.id}
+            />
+        );
+
+        expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
+            "Paused — capture error"
+        );
+        expect(screen.getByRole("alert")).toHaveTextContent(/local capture worker stopped/i);
+        expect(screen.getByRole("alert")).toHaveTextContent(/transcript so far is kept/i);
+        expect(screen.getByRole("alert")).toHaveTextContent(/resume continues this call/i);
+        expect(screen.getByRole("alert")).toHaveTextContent(/worker must be running/i);
+        expect(screen.getByRole("button", { name: "Resume capture" })).toBeEnabled();
+        expect(screen.getByRole("button", { name: "Stop capture" })).toBeEnabled();
+
+        await user.click(screen.getByRole("button", { name: "Show transcript" }));
+        const transcript = screen.getByLabelText("Company transcript");
+        for (const segment of workerErrorPausedCall.transcript) {
+            expect(within(transcript).getByText(segment.text)).toBeInTheDocument();
+        }
     });
 
     it("shows Failed status for a selected failed capture", () => {
@@ -84,6 +116,8 @@ describe("CallsWorkspace", () => {
         expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
             /failed/i
         );
+        expect(screen.getByRole("alert")).toHaveTextContent(/capture did not finish successfully/i);
+        expect(screen.queryByRole("button", { name: "Resume capture" })).not.toBeInTheDocument();
     });
 
     it("marks a partial call and renders the gap in the transcript timeline", async () => {
@@ -204,25 +238,29 @@ describe("CallsWorkspace", () => {
         expect(onStartCapture).toHaveBeenCalledTimes(1);
     });
 
-    it("disables Start while capturing and allows an owner to stop", async () => {
+    it("disables Start while capturing and allows an owner to resume or stop", async () => {
         const user = userEvent.setup();
         const onStartCapture = jest.fn();
+        const onResumeCapture = jest.fn();
         const onStopCapture = jest.fn();
         render(
             <CallsWorkspace
                 calls={[pausedCall]}
                 initialSelectedId={pausedCall.id}
                 onStartCapture={onStartCapture}
+                onResumeCapture={onResumeCapture}
                 onStopCapture={onStopCapture}
             />
         );
 
         expect(screen.getByRole("button", { name: /start capture/i })).toBeDisabled();
+        await user.click(screen.getByRole("button", { name: "Resume capture" }));
+        expect(onResumeCapture).toHaveBeenCalledWith(pausedCall.id);
         await user.click(screen.getByRole("button", { name: /stop capture/i }));
         expect(onStopCapture).toHaveBeenCalledWith(pausedCall.id);
     });
 
-    it("does not expose Stop to a viewer without capture control", () => {
+    it("does not expose Resume or Stop to a viewer without capture control", () => {
         const readOnlyActiveCall = {
             ...pausedCall,
             viewerCapabilities: { ...pausedCall.viewerCapabilities, canControlCapture: false },
@@ -235,6 +273,7 @@ describe("CallsWorkspace", () => {
         );
 
         expect(screen.queryByRole("button", { name: /stop capture/i })).toBeNull();
+        expect(screen.queryByRole("button", { name: "Resume capture" })).not.toBeInTheDocument();
     });
 
     it("shows command errors with a retry action", async () => {

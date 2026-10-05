@@ -13,8 +13,12 @@ The single company-scoped acquisition of live call evidence for a Call, shared b
 _Avoid_: User recording, personal capture, complete recording
 
 **Capture Attempt**:
-One continuous interval within a Capture, anchored to one Capture User. A later interval is a new attempt, and an attempt can end because of silence across the captured channels, user action, or source shutdown.
+One continuous interval within a Capture, anchored to one Capture User. A later interval is a new attempt, and an attempt can end because of silence across the captured channels, user action, source shutdown, or a Local Capture Worker failure.
 _Avoid_: New capture, retry job, continuous stream
+
+**Worker-error pause**:
+The state of a Capture whose Local Capture Worker failed or stopped reporting. The Call stays open with its Transcript, the outage is a Gap, and Resume continues the same Call with a new Capture Attempt. A worker failure never fails a Call; only stopping a Capture that saved no evidence does.
+_Avoid_: Failed capture, crashed call
 
 **Capture User**:
 The authenticated same-company user who starts and controls a Capture Attempt. The Capture User controls capture lifecycle but does not own the company Transcript; the first successful starter owns the Call Note.

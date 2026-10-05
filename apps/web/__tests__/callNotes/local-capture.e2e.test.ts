@@ -73,6 +73,7 @@ import { CallWorkerRuntime } from "../../../call-worker/src/worker";
 import type { CallWorkerConfig } from "../../../call-worker/src/config";
 import type { AudioSource, PcmFrame } from "../../../call-worker/src/local/audio";
 import { OpenAiCompatibleTranscriptionModel } from "../../../call-worker/src/local/transcription";
+import { LocalBackendClient } from "../../../call-worker/src/local/backend-client";
 import { createCallNotesTestDatabase } from "./testDb";
 
 const describeIfDatabase =
@@ -107,7 +108,7 @@ class ControlledAudioSource implements AudioSource {
     private readonly queue: PcmFrame[] = [];
     private notify: (() => void) | undefined;
 
-    speech(sample: number): void {
+    speech(sample: number, silenceFrames = 0): void {
         const origin = Date.now();
         for (let index = 0; index < 3; index += 1) {
             const pcm = new Uint8Array(640);
@@ -115,6 +116,13 @@ class ControlledAudioSource implements AudioSource {
             for (let offset = 0; offset < pcm.length; offset += 2)
                 view.setInt16(offset, sample, true);
             this.queue.push({ pcm, capturedAt: new Date(origin + index * 20), durationMs: 20 });
+        }
+        for (let index = 0; index < silenceFrames; index += 1) {
+            this.queue.push({
+                pcm: new Uint8Array(640),
+                capturedAt: new Date(origin + (3 + index) * 20),
+                durationMs: 20,
+            });
         }
         this.notify?.();
     }
@@ -289,8 +297,15 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
     let releaseModel: (() => void) | undefined;
     let releaseEnrichment: (() => void) | undefined;
     let enrichmentStreamAbort: AbortController | undefined;
+    let applicationNow: Date | undefined;
 
     beforeEach(async () => {
+        runtime = undefined;
+        runtimeRun = undefined;
+        releaseModel = undefined;
+        releaseEnrichment = undefined;
+        enrichmentStreamAbort = undefined;
+        applicationNow = undefined;
         mockAfterTasks.length = 0;
         mockTestDb = await createCallNotesTestDatabase();
         await seedOwner();
@@ -307,6 +322,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
                 documentNotes: createWebCallNotesDocumentNoteStore(mockTestDb.db),
                 detectedCalls: new LocalDetectedCallSource(),
                 callNoteIndex: { sync: mockCallNoteSync },
+                clock: { now: () => applicationNow ?? new Date() },
             })
         );
         host = await startHttpHost();
@@ -319,7 +335,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         await runtime?.close();
         await runtimeRun?.catch(() => undefined);
         await Promise.allSettled(mockAfterTasks);
-        if (host) {
+        if (host?.server.listening) {
             host.server.closeAllConnections();
             const closed = deferred();
             host.server.close(error => (error ? closed.reject(error) : closed.resolve()));
@@ -531,5 +547,149 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         while (host!.polls < idlePollTarget) await once(host!.events, "poll");
         expect(microphone.opened).toBe(1);
         expect(system.opened).toBe(1);
+    }, 30_000);
+
+    it("keeps audio before, during and after an HTTP outage longer than the capture lease on one Call", async () => {
+        const microphone = new ControlledAudioSource();
+        const retryObserved = deferred();
+        const duringAudioTranscribed = deferred();
+        const beforeText = "We began the conversation before the backend outage.";
+        const duringText = "These words were spoken while the backend was offline.";
+        const afterText = "The conversation continued after the backend returned.";
+        const transcription = new OpenAiCompatibleTranscriptionModel({
+            baseUrl: "https://transcription.example.test/v1",
+            model: "fixture-asr",
+            apiKey: "fixture-asr-token",
+            fetch: async (_input, init) => {
+                const form = init?.body as FormData;
+                const wav = new Uint8Array(await (form.get("file") as Blob).arrayBuffer());
+                const samples = new DataView(wav.buffer);
+                let sample = 0;
+                for (let offset = 44; offset < wav.byteLength; offset += 2) {
+                    sample = Math.max(sample, samples.getInt16(offset, true));
+                }
+                if (sample === 12_000) duringAudioTranscribed.resolve();
+                return Response.json({
+                    text:
+                        sample === 8_000 ? beforeText : sample === 12_000 ? duringText : afterText,
+                });
+            },
+        });
+        const backend = new LocalBackendClient({
+            webOrigin: host!.origin,
+            token: mockServerEnv.CALL_NOTES_INTERNAL_TOKEN,
+            timeoutMs: 1_000,
+            retryBudgetMs: 10_000,
+            retryBaseDelayMs: 10,
+            retryMaxDelayMs: 20,
+            random: () => 0.5,
+            onRetry: () => {
+                if (!host!.server.listening) retryObserved.resolve();
+            },
+        });
+        runtime = new CallWorkerRuntime(
+            { ...workerConfig(host!.origin), systemAudioEnabled: false, autoEnrich: false },
+            { sources: { microphone }, transcription, backend }
+        );
+        let runtimeFailure: unknown;
+        runtimeRun = runtime.run();
+        void runtimeRun.catch(error => {
+            runtimeFailure = error;
+        });
+        while (host!.polls < 1) await once(host!.events, "poll");
+        const startResponse = await fetch(`${host!.origin}/api/call-notes`, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                requestId: randomUUID(),
+                kind: "start_capture",
+                sourceOccurrenceKey: randomUUID(),
+                title: "Capture continues through a backend outage",
+            }),
+        });
+        expect(startResponse.status).toBe(200);
+        const started = CallSnapshotSchema.parse(await startResponse.json());
+        const readCall = async (): Promise<CallSnapshot> => {
+            const response = await fetch(`${host!.origin}/api/call-notes/${started.id}`);
+            expect(response.status).toBe(200);
+            return CallSnapshotSchema.parse(await response.json());
+        };
+        await eventually(readCall, call => call.capture.lifecycle === "live");
+        microphone.speech(8_000, 2);
+        const before = await eventually(readCall, call => call.transcript.length === 1);
+        expect(before.transcript[0]?.text).toBe(beforeText);
+
+        const port = new URL(host!.origin).port;
+        host!.server.closeAllConnections();
+        const closed = deferred();
+        host!.server.close(error => (error ? closed.reject(error) : closed.resolve()));
+        await closed.promise;
+        microphone.speech(12_000, 2);
+        await Promise.all([duringAudioTranscribed.promise, retryObserved.promise]);
+        // Only the server clock jumps: the real client remains retrying while
+        // its audio pipeline continues consuming and transcribing PCM.
+        applicationNow = new Date(Date.now() + 16_000);
+        const reapedResponse = await getCall(
+            new Request(`${host!.origin}/api/call-notes/${started.id}`),
+            { params: Promise.resolve({ callId: started.id }) }
+        );
+        const reaped = CallSnapshotSchema.parse(await reapedResponse.json());
+        expect(reaped).toMatchObject({
+            id: started.id,
+            status: "active",
+            capture: {
+                desiredMode: "paused",
+                pausedReason: "worker_error",
+                lifecycle: "interrupted",
+                activeAttemptId: null,
+            },
+        });
+        expect(reaped.transcript.map(segment => segment.text)).toEqual([beforeText]);
+        expect(reaped.gaps).toEqual([
+            expect.objectContaining({ kind: "worker_unavailable", endedAt: null }),
+        ]);
+        await new Promise<void>((resolve, reject) => {
+            host!.server.once("error", reject);
+            host!.server.listen(Number(port), "127.0.0.1", () => {
+                host!.server.off("error", reject);
+                resolve();
+            });
+        });
+        const recovered = await eventually(
+            readCall,
+            call => call.transcript.length === 2 && call.capture.lifecycle === "live"
+        );
+        expect(recovered.gaps).toEqual([]);
+        microphone.speech(16_000, 2);
+        const live = await eventually(
+            readCall,
+            call => call.transcript.length === 3 && call.capture.lifecycle === "live"
+        );
+        expect(runtimeFailure).toBeUndefined();
+        expect(live).toMatchObject({
+            id: started.id,
+            status: "active",
+            capture: {
+                desiredMode: "running",
+                pausedReason: null,
+                lifecycle: "live",
+                attemptCount: 1,
+            },
+            gaps: [],
+        });
+        expect(live.transcript.map(segment => segment.text)).toEqual([
+            beforeText,
+            duringText,
+            afterText,
+        ]);
+        expect(
+            live.transcript.every(segment => segment.attemptId === before.transcript[0]!.attemptId)
+        ).toBe(true);
+        expect(microphone.opened).toBe(1);
+        expect(microphone.closed).toBe(0);
+        const callsResponse = await fetch(`${host!.origin}/api/call-notes`);
+        const calls = (await callsResponse.json()) as unknown[];
+        expect(calls).toHaveLength(1);
     }, 30_000);
 });

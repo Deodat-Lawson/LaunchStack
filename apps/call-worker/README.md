@@ -105,6 +105,18 @@ pnpm --filter @launchstack/call-worker dev
 
 For a bundled run, use `pnpm --filter @launchstack/call-worker build`, then `pnpm --filter @launchstack/call-worker start` in the same configured shell. Leave the worker running; `call_worker_ready` with state `idle` indicates it is polling, not that microphone access has been verified. Sign in as the configured Capture User and use **Start capture** in Calls to open audio. Use the Calls controls to stop Capture; `Ctrl-C` shuts down the worker.
 
+## Outages, Pause, and Resume
+
+Backend transport errors, request timeouts, HTTP 429, and HTTP 5xx are retried with exponential backoff and full jitter: a 250 ms initial delay ceiling, capped at 5 seconds. A request times out after 30 seconds. Poll retries have no total budget, so an idle worker keeps waiting for the web server rather than exiting; `call_worker_backend_retry` records retries. Each event and finish request has a 120-second total retry budget, including requests and backoff. Other HTTP 4xx and invalid JSON are not retried. Invalid configuration or a rejected token terminates the worker with a non-zero exit status.
+
+During a backend outage, audio capture and transcription continue. At most eight utterances may hold audio for transcription; their PCM/WAV buffers are zeroed as soon as transcription settles. Completed transcription waits for ordered delivery as text-only segments, bounded at 600 undelivered segments, including an in-flight delivery. A 40-second outage fits the retry budget while capture is running, provided these bounds are not exceeded.
+
+If an audio/transcription failure, full delivery buffer, or exhausted event budget ends the Capture Attempt, the worker logs `call_worker_pipeline_failed`, stops reporting that Attempt in polls, and keeps polling. The server pauses the Capture with reason `worker_error`; the Call remains active and its already-ingested Transcript is retained. Resume opens a new Capture Attempt on the same Call.
+
+The buffer is memory-only, not a durable replay queue. When an Attempt gives up, queued segments that never reached the server are lost, along with unfinished transcription and any current buffered utterance. A segment committed by the server despite a lost acknowledgement remains in the Transcript; retries retain its event ID. Resume cannot recover the old worker's undelivered segments, and the missing interval is represented by a Gap.
+
+User Pause stops the audio sources, drains pending transcription and ordered delivery, and sends `attempt_ended` with reason `user_paused`. It sends neither `attempt_failed` nor finish and does not finalize the Call. The worker then idles until Resume assigns a new Attempt key. Pause and Stop drains use `CALL_NOTES_STOP_DRAIN_TIMEOUT_MS`; a drain that exceeds that limit is a worker error. Stop still drains and finishes the Call.
+
 ## Limits
 
 - macOS only; there is no Linux/Docker microphone fallback or capture container.

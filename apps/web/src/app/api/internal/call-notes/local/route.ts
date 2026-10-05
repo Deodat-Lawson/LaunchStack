@@ -63,7 +63,7 @@ const LocalCaptureEventSchema = z.discriminatedUnion("kind", [
     LocalCaptureEventBaseSchema.extend({
         kind: z.literal("attempt_ended"),
         sourceAttemptKey: SourceKeySchema,
-        reason: z.enum(["silence_timeout", "user_stopped", "source_stopped"]),
+        reason: z.enum(["silence_timeout", "user_stopped", "user_paused", "source_stopped"]),
     }).strict(),
     LocalCaptureEventBaseSchema.extend({
         kind: z.literal("attempt_failed"),
@@ -249,6 +249,7 @@ export async function POST(request: Request): Promise<Response> {
                     companyId: context.companyId,
                     userId: context.userId,
                     workerId: parsed.data.workerId,
+                    activeAttemptKey: parsed.data.activeAttemptKey,
                 });
                 return NextResponse.json(LocalCapturePollResultSchema.parse(result));
             }

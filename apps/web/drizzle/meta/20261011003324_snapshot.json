@@ -1,6 +1,6 @@
 {
   "id": "e09cb524-49f3-42e1-b0c4-b226461e7d8a",
-  "prevId": "ffc1b501-7eb5-4aa5-a66d-50bd88afcce4",
+  "prevId": "961c81b8-918e-453a-85b8-a0b8f430705b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -14780,6 +14780,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'running'"
+        },
+        "paused_reason": {
+          "name": "paused_reason",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": false
         },
         "lifecycle": {
           "name": "lifecycle",

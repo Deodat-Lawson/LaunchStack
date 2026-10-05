@@ -17561,6 +17561,12 @@
           "notNull": true,
           "default": "'running'"
         },
+        "paused_reason": {
+          "name": "paused_reason",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "lifecycle": {
           "name": "lifecycle",
           "type": "varchar(32)",

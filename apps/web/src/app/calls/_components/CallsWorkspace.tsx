@@ -16,6 +16,7 @@ import {
     Mic,
     Minus,
     Pause,
+    Play,
     RefreshCw,
     Search,
     Sparkles,
@@ -83,12 +84,13 @@ function dateLabel(iso: string): string {
 }
 
 function captureLabel(snapshot: CallSnapshot): string {
-    const { lifecycle, desiredMode } = snapshot.capture;
+    const { lifecycle, desiredMode, pausedReason } = snapshot.capture;
     if (lifecycle === "completed") return "Completed";
     if (lifecycle === "failed") return "Failed";
     if (lifecycle === "finalizing") return "Finalizing";
     if (desiredMode === "stopped") return "Stopping";
-    if (desiredMode === "paused") return "Paused";
+    if (desiredMode === "paused")
+        return pausedReason === "worker_error" ? "Paused — capture error" : "Paused";
     if (lifecycle === "interrupted") return "Reconnecting";
     if (lifecycle === "live") return "Live";
     return "Connecting";
@@ -121,7 +123,7 @@ function speakerLabel(segment: TranscriptSegment): string {
     return segment.speakerName ?? (segment.audioChannel === "microphone" ? "Me" : "Meeting");
 }
 
-export type CaptureCommand = "start" | "stop";
+export type CaptureCommand = "start" | "resume" | "stop";
 export type CallMutationStatus = {
     pending: boolean;
     error?: string;
@@ -134,6 +136,7 @@ export interface CallsWorkspaceProps {
     initialSelectedId?: string | null;
     onSelectCall?: (callId: string | null) => void;
     onStartCapture?: () => void;
+    onResumeCapture?: (callId: string) => void;
     onStopCapture?: (callId: string) => void;
     pendingCommand?: CaptureCommand | null;
     captureUnavailableReason?: string | null;
@@ -164,6 +167,7 @@ export function CallsWorkspace({
     initialSelectedId = null,
     onSelectCall,
     onStartCapture,
+    onResumeCapture,
     onStopCapture,
     pendingCommand = null,
     captureUnavailableReason = null,
@@ -209,6 +213,7 @@ export function CallsWorkspace({
                         snapshot={selected}
                         onHome={() => select(null)}
                         onStartCapture={onStartCapture}
+                        onResumeCapture={onResumeCapture}
                         onStopCapture={onStopCapture}
                         captureActive={captureActive}
                         pendingCommand={pendingCommand}
@@ -563,6 +568,7 @@ function CallPanel({
     snapshot,
     onHome,
     onStartCapture,
+    onResumeCapture,
     onStopCapture,
     captureActive,
     pendingCommand,
@@ -583,6 +589,7 @@ function CallPanel({
     snapshot: CallSnapshot;
     onHome: () => void;
     onStartCapture?: () => void;
+    onResumeCapture?: (callId: string) => void;
     onStopCapture?: (callId: string) => void;
     captureActive: boolean;
     pendingCommand: CaptureCommand | null;
@@ -683,6 +690,8 @@ function CallPanel({
         snapshot.capture.lifecycle === "finalizing" ||
         snapshot.capture.desiredMode === "stopped";
     const showStop = snapshot.viewerCapabilities.canControlCapture && isCaptureActive(snapshot);
+    const showResume = showStop && snapshot.capture.desiredMode === "paused";
+    const resumeDisabled = pendingCommand !== null || Boolean(captureUnavailableReason);
     const startDisabled =
         captureActive || pendingCommand !== null || Boolean(captureUnavailableReason);
     const mutationPending = mutationStatus?.pending ?? false;
@@ -707,6 +716,32 @@ function CallPanel({
                     <Home size={16} className="size-4" />
                 </Button>
                 <div className={styles.chromeGroup}>
+                    {showResume && (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span className="inline-flex">
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        className={cn(styles.pill, styles.captureButton)}
+                                        type="button"
+                                        aria-label="Resume capture"
+                                        onClick={() => onResumeCapture?.(snapshot.id)}
+                                        disabled={resumeDisabled}
+                                        title={captureUnavailableReason ?? undefined}
+                                    >
+                                        <Play size={14} className="size-3.5" />{" "}
+                                        {pendingCommand === "resume"
+                                            ? "Resuming…"
+                                            : "Resume capture"}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            {captureUnavailableReason && (
+                                <TooltipContent>{captureUnavailableReason}</TooltipContent>
+                            )}
+                        </Tooltip>
+                    )}
                     {showStop && (
                         <Button
                             variant="outline"
@@ -854,6 +889,14 @@ function CallPanel({
                             Stopping audio and saving pending Transcript segments…
                         </p>
                     )}
+                    {snapshot.capture.desiredMode === "paused" &&
+                        snapshot.capture.pausedReason === "worker_error" && (
+                            <p className={styles.workerNotice} role="alert">
+                                The Local Capture Worker stopped. The Transcript so far is kept.
+                                Resume continues this Call. The worker must be running before you
+                                resume.
+                            </p>
+                        )}
                     {snapshot.capture.lifecycle === "failed" && (
                         <p className={styles.workerNotice} role="alert">
                             Capture did not finish successfully. Saved evidence is retained. Check

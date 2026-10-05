@@ -9,7 +9,7 @@ function log(event: string, fields: Record<string, unknown> = {}): void {
 
 async function main(): Promise<void> {
     const config = loadCallWorkerConfig();
-    const runtime = config.captureEnabled ? new CallWorkerRuntime(config) : undefined;
+    const runtime = config.captureEnabled ? new CallWorkerRuntime(config, { log }) : undefined;
     const { promise: stopped, resolve: stop } = Promise.withResolvers<void>();
     let closing: Promise<void> | undefined;
 

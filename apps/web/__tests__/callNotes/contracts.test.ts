@@ -103,6 +103,7 @@ describe("Call Notes contract baseline", () => {
             capture: {
                 id: "capture-private",
                 desiredMode: "running",
+                pausedReason: null,
                 lifecycle: "completed",
                 outcome: "complete",
                 activeAttemptId: null,

@@ -29,7 +29,7 @@ type CaptureCommandRequest =
           title?: string;
       }
     | {
-          kind: "stop_capture";
+          kind: "stop_capture" | "resume_capture";
           requestId: string;
           callId: string;
       };
@@ -203,7 +203,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                     setCaptureUnavailableReason(
                         worker.available
                             ? null
-                            : "Local Capture Worker is offline. Start it on this Mac before starting Capture."
+                            : "Local Capture Worker is offline. Start it on this Mac before starting or resuming Capture."
                     );
             } catch {
                 if (active)
@@ -404,6 +404,14 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
         });
     }, [command, submitCapture, captureUnavailableReason]);
 
+    const resumeCapture = useCallback(
+        (callId: string) => {
+            if (command?.phase === "pending" || captureUnavailableReason) return;
+            void submitCapture({ kind: "resume_capture", requestId: requestId(), callId });
+        },
+        [command, submitCapture, captureUnavailableReason]
+    );
+
     const stopCapture = useCallback(
         (callId: string) => {
             if (command?.phase === "pending") return;
@@ -559,8 +567,8 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                 <div className="max-w-[560px]">
                     <h2 className="m-0 text-lg">Calls are unavailable</h2>
                     <p className="text-ink-3 m-0 mt-3 leading-[1.6]">
-                        Start and stop commands are sent to the configured local capture worker; no
-                        browser microphone access is requested.
+                        Capture commands are sent to the configured Local Capture Worker; no browser
+                        microphone access is requested.
                     </p>
                     <p className="text-ink-3 m-0 mt-2.5 leading-[1.6]">
                         The Call Notes service could not be reached. Confirm the app, worker, and
@@ -583,7 +591,9 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
         command?.phase === "pending"
             ? command.request.kind === "start_capture"
                 ? "start"
-                : "stop"
+                : command.request.kind === "resume_capture"
+                  ? "resume"
+                  : "stop"
             : null;
     const commandError =
         command?.phase === "failed" ? (command.error ?? "Capture command failed") : null;
@@ -601,6 +611,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             mutationStatus={mutationStatus}
             onRetryMutation={retryMutation}
             onStartCapture={startCapture}
+            onResumeCapture={resumeCapture}
             onStopCapture={stopCapture}
             onSelectCall={selectCall}
             noteDrafts={drafts}

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Capture survives worker and backend outages** — A failed Local Capture Worker no longer fails the Call:
+  - **Worker:** retries transport errors, timeouts, 429 and 5xx with backoff. Polls retry without limit; events and finish retry for up to 120 s. Up to 600 transcribed segments queue in order while the web app is unreachable. A failed pipeline no longer exits the process.
+  - **Pause instead of fail:** when the worker gives up, crashes, or stops renewing its lease, the Capture is paused with `pausedReason: "worker_error"`. The Call stays open with its Transcript, the outage is a Gap, and the Calls UI shows "Paused — capture error" with Resume. Resume continues the same Call with a new Capture Attempt.
+  - **Reattach:** a worker that was only unreachable reattaches to its attempt, and the presumed Gap is removed.
+  - **User Pause:** now drains and ends the attempt instead of failing it.
+  - **Migration:** `20261005025623_capture_paused_reason` adds `paused_reason`.
+  - **Older Calls:** Calls failed by a worker error before this release stay failed.
 - **Long-meeting note generation** — Large transcripts and owner-note bodies now use on-demand, size-bounded summaries before final composition, with two concurrent requests per enrichment and additional reduction only when needed. Short meetings retain the single-call path. Transcript/owner-note sources remain separate, oversized Unicode segments retain their text and attribution, and a failed summary cannot produce a partial-evidence proposal. Final streaming previews and explicit note acceptance are unchanged.
 - **Automatic note proposals after Stop** — Native JSON-schema streaming in the shared structured-output helper now sends the strict-converted schema with `strict: true`, matching the compaction summaries. Before, the final streamed proposal could come back without its required fields, so automatic enrichment after Stop failed while a manual retry of the same revision succeeded. Covered by a wire-level request test and the HTTP/PostgreSQL Stop-to-proposal E2E test.
 - **Main-branch reconciliation** — Call Notes now uses the current `@launchstack/pipelines`, store, LLM, retrieval, and better-auth workspace contracts. Preserved applied migration SQL while reconciling journal/snapshot history, including workspace sessions and Google Drive document origins; the resulting schema matches the final application schema and excludes retired Zoom and bookmark tables. Chat history persists the same filtered source context used for retrieval, including indexed Call Notes.

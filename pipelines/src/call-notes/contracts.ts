@@ -20,6 +20,14 @@ export type CallStatus = z.infer<typeof CallStatusSchema>;
 
 export const CaptureDesiredModeSchema = z.enum(["running", "paused", "stopped"]);
 
+/**
+ * Why a Capture is paused. "user": the Capture User paused it. "worker_error":
+ * the Local Capture Worker failed or stopped reporting; the Call stays open and
+ * Resume continues it with a new Capture Attempt.
+ */
+export const CapturePausedReasonSchema = z.enum(["user", "worker_error"]);
+export type CapturePausedReason = z.infer<typeof CapturePausedReasonSchema>;
+
 export const CaptureLifecycleSchema = z.enum([
     "connecting",
     "live",
@@ -103,7 +111,7 @@ export const CaptureEventSchema = z.discriminatedUnion("kind", [
     CaptureEventBaseSchema.extend({
         kind: z.literal("attempt_ended"),
         sourceAttemptKey: SourceKeySchema,
-        reason: z.enum(["silence_timeout", "user_stopped", "source_stopped"]),
+        reason: z.enum(["silence_timeout", "user_stopped", "user_paused", "source_stopped"]),
     }),
     CaptureEventBaseSchema.extend({
         kind: z.literal("attempt_failed"),
@@ -315,6 +323,7 @@ export const ViewerCapabilitiesSchema = z.object({
 export const CaptureSnapshotSchema = z.object({
     id: IdSchema,
     desiredMode: CaptureDesiredModeSchema,
+    pausedReason: CapturePausedReasonSchema.nullable(),
     lifecycle: CaptureLifecycleSchema,
     outcome: CaptureOutcomeSchema.nullable(),
     activeAttemptId: IdSchema.nullable(),
@@ -327,6 +336,12 @@ export const LocalCapturePollInputSchema = z
         companyId: CompanyIdSchema,
         userId: z.string().min(1).max(256),
         workerId: IdSchema,
+        /**
+         * The attempt whose audio pipeline this worker is still running. Lets the
+         * worker reattach to that attempt after the server reaped it during a
+         * backend outage; omitted when the worker is idle.
+         */
+        activeAttemptKey: SourceKeySchema.optional(),
     })
     .strict();
 export type LocalCapturePollInput = z.infer<typeof LocalCapturePollInputSchema>;

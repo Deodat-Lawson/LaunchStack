@@ -5,7 +5,11 @@ import type { CaptureEvent, LocalCaptureSession } from "@launchstack/pipelines/c
 
 import type { AudioSource, PcmFrame } from "./audio";
 import { LocalCapturePipeline, type LocalCaptureBackend } from "./pipeline";
-import type { LocalBackendEventInput, LocalBackendFinishInput } from "./backend-client";
+import {
+    LocalBackendClient,
+    type LocalBackendEventInput,
+    type LocalBackendFinishInput,
+} from "./backend-client";
 import type { TranscriptionInput, TranscriptionModel } from "./transcription";
 import { VoiceActivityDetector } from "./vad";
 
@@ -109,7 +113,7 @@ class GatedTranscription implements TranscriptionModel {
 function createPipeline(input: {
     source: ScriptedAudioSource;
     transcription: TranscriptionModel;
-    backend: RecordingBackend;
+    backend: LocalCaptureBackend;
     utteranceMaxMs?: number;
     audioPreRollMs?: number;
     audioReadyTimeoutMs?: number;
@@ -190,6 +194,34 @@ await test("LocalCapturePipeline keeps a silent session active until explicit st
     const ended = backend.events.find(event => event.kind === "attempt_ended");
     assert.equal(ended?.kind, "attempt_ended");
     if (ended?.kind === "attempt_ended") assert.equal(ended.reason, "user_stopped");
+});
+
+await test("LocalCapturePipeline reports a resumed attempt as connected when its audio is ready, not at the Capture start", async () => {
+    // Session startedAt is the Capture's start; this attempt's audio begins 10 minutes later.
+    const resumedAt = 30_000;
+    const source = new ScriptedAudioSource(
+        [pcmFrame(0, resumedAt), pcmFrame(0, resumedAt + 1)],
+        undefined,
+        true
+    );
+    const backend = new RecordingBackend();
+    const pipeline = createPipeline({
+        source,
+        transcription: new RecordingTranscription([]),
+        backend,
+    });
+
+    const running = pipeline.run();
+    await nextTurn();
+    await nextTurn();
+    await pipeline.stop();
+    await running;
+
+    const connected = backend.events.find(event => event.kind === "attempt_connected");
+    assert.equal(
+        connected?.occurredAt,
+        new Date(CAPTURE_START.getTime() + resumedAt * FRAME_DURATION_MS).toISOString()
+    );
 });
 
 await test("LocalCapturePipeline stop drains a pending transcript before durable finish", async () => {
@@ -362,4 +394,218 @@ await test("LocalCapturePipeline close is cancellation and never finalizes succe
         backend.events.some(event => event.kind === "attempt_failed"),
         true
     );
+});
+
+await test("LocalCapturePipeline buffers more than eight utterances through a 40-second backend outage", async () => {
+    const utterances = 12;
+    const source = new ScriptedAudioSource(
+        Array.from({ length: utterances * 2 }, (_, index) =>
+            pcmFrame(index % 2 === 0 ? 12_000 : 0, index)
+        ),
+        undefined,
+        true
+    );
+    const audioInputs: TranscriptionInput[] = [];
+    const transcription: TranscriptionModel = {
+        async transcribe(input) {
+            audioInputs.push(input);
+            return `utterance ${audioInputs.length}`;
+        },
+    };
+    const outageStarted = Promise.withResolvers<void>();
+    const releaseOutage = Promise.withResolvers<void>();
+    const delivered: CaptureEvent[] = [];
+    let elapsed = 0;
+    let finishes = 0;
+    const backend = new LocalBackendClient({
+        webOrigin: "http://localhost:3000",
+        token: "worker-secret",
+        random: () => 0.5,
+        now: () => elapsed,
+        onRetry: () => undefined,
+        sleep: async milliseconds => {
+            outageStarted.resolve();
+            await releaseOutage.promise;
+            elapsed += milliseconds;
+        },
+        fetch: async (_url, init) => {
+            const body = JSON.parse(typeof init?.body === "string" ? init.body : "{}") as {
+                kind: string;
+                event?: CaptureEvent;
+            };
+            if (body.event?.kind === "transcript_segment" && elapsed < 40_000) {
+                return new Response("web server restarting", { status: 503 });
+            }
+            if (body.event) delivered.push(body.event);
+            if (body.kind === "finish") finishes += 1;
+            return Response.json({ ok: true });
+        },
+    });
+    const pipeline = createPipeline({ source, transcription, backend });
+    const running = pipeline.run();
+    void running.catch(() => undefined);
+    try {
+        await Promise.race([outageStarted.promise, running]);
+        await nextTurn();
+        assert.equal(audioInputs.length, utterances);
+        assert.equal(delivered.filter(event => event.kind === "transcript_segment").length, 0);
+        assert.ok(audioInputs.every(input => input.audioWav.every(byte => byte === 0)));
+        releaseOutage.resolve();
+        await pipeline.stop();
+        await running;
+
+        const segments = delivered.filter(event => event.kind === "transcript_segment");
+        assert.deepEqual(
+            segments.map(segment => segment.text),
+            Array.from({ length: utterances }, (_, index) => `utterance ${index + 1}`)
+        );
+        assert.deepEqual(
+            segments.map(segment => segment.receiveOrder),
+            Array.from({ length: utterances }, (_, index) => index)
+        );
+        assert.ok(elapsed >= 40_000);
+        assert.equal(
+            delivered.some(event => event.kind === "attempt_failed"),
+            false
+        );
+        assert.equal(finishes, 1);
+    } finally {
+        releaseOutage.resolve();
+        await pipeline.close();
+        await running.catch(() => undefined);
+    }
+});
+
+await test("LocalCapturePipeline user pause drains transcripts and ends only its Capture Attempt", async () => {
+    const source = new ScriptedAudioSource(
+        [
+            pcmFrame(12_000, 0),
+            pcmFrame(0, 1),
+            pcmFrame(12_000, 2),
+            pcmFrame(0, 3),
+            pcmFrame(12_000, 4),
+        ],
+        undefined,
+        true
+    );
+    const backend = new RecordingBackend();
+    const deliveryStarted = Promise.withResolvers<void>();
+    const releaseDelivery = Promise.withResolvers<void>();
+    const releaseTranscription = Promise.withResolvers<string>();
+    let transcriptions = 0;
+    const transcription: TranscriptionModel = {
+        async transcribe() {
+            transcriptions += 1;
+            if (transcriptions === 1) return "already transcribed";
+            if (transcriptions === 2) return releaseTranscription.promise;
+            return "last partial utterance";
+        },
+    };
+    const originalEvent = backend.event.bind(backend);
+    backend.event = async input => {
+        if (input.event.kind === "transcript_segment") {
+            deliveryStarted.resolve();
+            await releaseDelivery.promise;
+        }
+        await originalEvent(input);
+    };
+    const pipeline = createPipeline({ source, transcription, backend });
+    const running = pipeline.run();
+    void running.catch(() => undefined);
+    try {
+        await deliveryStarted.promise;
+        await nextTurn();
+        let paused = false;
+        const pausing = pipeline.pause().then(() => {
+            paused = true;
+        });
+        await nextTurn();
+        assert.equal(paused, false);
+        assert.equal(backend.finishes.length, 0);
+        releaseTranscription.resolve("pending transcription");
+        await nextTurn();
+        assert.equal(paused, false);
+        releaseDelivery.resolve();
+        await pausing;
+        await running;
+
+        assert.deepEqual(eventKinds(backend), [
+            "attempt_connected",
+            "transcript_segment",
+            "transcript_segment",
+            "transcript_segment",
+            "attempt_ended",
+        ]);
+        assert.deepEqual(
+            backend.events
+                .filter(event => event.kind === "transcript_segment")
+                .map(event => event.text),
+            ["already transcribed", "pending transcription", "last partial utterance"]
+        );
+        const ended = backend.events.find(event => event.kind === "attempt_ended");
+        assert.equal(ended?.reason, "user_paused");
+        assert.equal(backend.finishes.length, 0);
+    } finally {
+        releaseTranscription.resolve("pending transcription");
+        releaseDelivery.resolve();
+        await pipeline.close();
+        await running.catch(() => undefined);
+    }
+});
+
+await test("LocalCapturePipeline rejects a full text-only delivery buffer with an explicit loss boundary", async () => {
+    const utterances = 601;
+    const source = new ScriptedAudioSource(
+        Array.from({ length: utterances * 2 }, (_, index) =>
+            pcmFrame(index % 2 === 0 ? 12_000 : 0, index)
+        ),
+        undefined,
+        true
+    );
+    const backend = new RecordingBackend();
+    const originalEvent = backend.event.bind(backend);
+    backend.event = async (input, signal) => {
+        if (input.event.kind === "transcript_segment") {
+            await new Promise<void>((_resolve, reject) => {
+                const abort = (): void =>
+                    reject(signal?.reason instanceof Error ? signal.reason : new Error("aborted"));
+                if (signal?.aborted) abort();
+                else signal?.addEventListener("abort", abort, { once: true });
+            });
+        }
+        await originalEvent(input, signal);
+    };
+    const transcription = new RecordingTranscription(
+        Array.from({ length: utterances }, (_, index) => `utterance ${index + 1}`)
+    );
+    const pipeline = createPipeline({ source, transcription, backend });
+
+    await assert.rejects(
+        pipeline.run(),
+        /transcript delivery buffer exceeded \(600 undelivered segments pending\)/
+    );
+    assert.equal(transcription.inputs.length, utterances);
+    assert.equal(backend.events.filter(event => event.kind === "transcript_segment").length, 0);
+    const failure = backend.events.find(event => event.kind === "attempt_failed");
+    assert.match(failure?.message ?? "", /600 undelivered segments pending/);
+    assert.equal(backend.finishes.length, 0);
+});
+
+await test("LocalCapturePipeline an already-paused session ends its Attempt without opening sources", async () => {
+    const source = new ScriptedAudioSource([], undefined, true);
+    const backend = new RecordingBackend();
+    const pipeline = createPipeline({
+        source,
+        transcription: new RecordingTranscription([]),
+        backend,
+        session: { ...SESSION, desiredMode: "paused" },
+    });
+
+    await pipeline.run();
+    assert.equal(source.framesStarted, 0);
+    assert.deepEqual(eventKinds(backend), ["attempt_ended"]);
+    const ended = backend.events[0];
+    assert.equal(ended?.kind, "attempt_ended");
+    if (ended?.kind === "attempt_ended") assert.equal(ended.reason, "user_paused");
+    assert.equal(backend.finishes.length, 0);
 });

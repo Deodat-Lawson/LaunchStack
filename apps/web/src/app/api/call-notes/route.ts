@@ -92,7 +92,10 @@ export async function POST(request: Request): Promise<Response> {
         // Actor, company, and capture source are always resolved server-side.
         const requestBody =
             body !== null && typeof body === "object" && !Array.isArray(body) ? body : {};
-        if ("kind" in requestBody && requestBody.kind === "start_capture") {
+        if (
+            "kind" in requestBody &&
+            (requestBody.kind === "start_capture" || requestBody.kind === "resume_capture")
+        ) {
             const unavailableResponse = localCaptureUnavailable(context);
             if (unavailableResponse) return unavailableResponse;
         }

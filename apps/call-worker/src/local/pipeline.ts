@@ -40,6 +40,7 @@ const DEFAULT_TRANSCRIPTION_TIMEOUT_MS = 20_000;
 const BEST_EFFORT_FAILURE_TIMEOUT_MS = 250;
 const ITERATOR_CLOSE_TIMEOUT_MS = 250;
 const MAX_PENDING_TRANSCRIPTIONS = 8;
+const MAX_PENDING_TRANSCRIPT_SEGMENTS = 600;
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 
 type CaptureEventWithoutId = DistributiveOmit<CaptureEvent, "eventId">;
@@ -134,8 +135,6 @@ interface TranscriptWorkResult {
     receivedAt: string;
     occurredAt: string;
     audioChannel: AudioChannel;
-    pcm: Uint8Array;
-    audioWav: Uint8Array;
 }
 
 function sha256(value: string | Uint8Array): string {
@@ -234,13 +233,16 @@ export class LocalCapturePipeline {
     private readonly streams: StreamState[];
     private readonly activeCapture: ActiveCapture;
     private runPromise?: Promise<void>;
-    private stopPromise?: Promise<void>;
+    private drainPromise?: Promise<void>;
     private closePromise?: Promise<void>;
     private lastFrameEnd?: Date;
     private receiveOrder = 0;
     private transcriptAppendTail: Promise<void> = Promise.resolve();
     private readonly pendingFlushes = new Set<Promise<void>>();
+    private pendingTranscriptions = 0;
+    private pendingTranscriptSegments = 0;
     private stopRequested = false;
+    private pauseRequested = false;
     private closeRequested = false;
     private captureLost = false;
     private fatalError?: unknown;
@@ -344,12 +346,22 @@ export class LocalCapturePipeline {
     }
 
     stop(): Promise<void> {
-        if (this.stopPromise) return this.stopPromise;
+        if (this.drainPromise) return this.drainPromise;
         if (this.closePromise) return this.closePromise;
         this.stopRequested = true;
         this.stopSources(new Error("local capture stopped by user"));
-        this.stopPromise = this.finishStop(this.run());
-        return this.stopPromise;
+        this.drainPromise = this.finishDrain(this.run());
+        return this.drainPromise;
+    }
+
+    pause(): Promise<void> {
+        if (this.drainPromise) return this.drainPromise;
+        if (this.closePromise) return this.closePromise;
+        this.stopRequested = true;
+        this.pauseRequested = true;
+        this.stopSources(new Error("local capture paused by user"));
+        this.drainPromise = this.finishDrain(this.run());
+        return this.drainPromise;
     }
 
     close(): Promise<void> {
@@ -357,8 +369,6 @@ export class LocalCapturePipeline {
         this.closeRequested = true;
         this.captureLost = true;
         const reason = new Error("local capture closed");
-        this.closeFailureCode =
-            this.options.session.desiredMode === "paused" ? "capture_paused" : "capture_closed";
         this.stopSources(reason);
         this.operationAbortController.abort(reason);
         const runPromise = this.run();
@@ -379,7 +389,7 @@ export class LocalCapturePipeline {
         }
     }
 
-    private async finishStop(runPromise: Promise<void>): Promise<void> {
+    private async finishDrain(runPromise: Promise<void>): Promise<void> {
         let timer: ReturnType<typeof setTimeout> | undefined;
         const timeoutPromise = new Promise<boolean>(resolve => {
             timer = setTimeout(() => resolve(false), this.stopDrainTimeoutMs);
@@ -396,15 +406,16 @@ export class LocalCapturePipeline {
             return;
         }
 
+        const mode = this.pauseRequested ? "pause" : "stop";
         const reason = new Error(
-            `local capture stop drain timed out after ${this.stopDrainTimeoutMs}ms`
+            `local capture ${mode} drain timed out after ${this.stopDrainTimeoutMs}ms`
         );
         this.stopTimeoutError = reason;
         this.captureLost = true;
-        this.closeFailureCode = "capture_stop_timeout";
+        this.closeFailureCode = `capture_${mode}_timeout`;
         this.stopSources(reason);
         this.operationAbortController.abort(reason);
-        await this.failActiveCall(reason, "capture_stop_timeout");
+        await this.failActiveCall(reason, this.closeFailureCode);
         void runPromise.catch(() => undefined);
         throw reason;
     }
@@ -442,12 +453,9 @@ export class LocalCapturePipeline {
                 this.stopSources(new Error("capture session is already stopped"));
             }
             if (this.options.session.desiredMode === "paused" && !this.closeRequested) {
-                this.closeRequested = true;
-                this.captureLost = true;
-                this.closeFailureCode = "capture_paused";
-                const reason = new Error("capture pause is not supported");
-                this.stopSources(reason);
-                this.operationAbortController.abort(reason);
+                this.stopRequested = true;
+                this.pauseRequested = true;
+                this.stopSources(new Error("capture session is already paused"));
             }
 
             if (!this.closeRequested && !this.stopRequested) {
@@ -481,10 +489,10 @@ export class LocalCapturePipeline {
                 !this.captureLost &&
                 !this.closeRequested &&
                 !this.activeCapture.failed &&
-                this.connected
+                (this.connected || this.pauseRequested)
             ) {
                 try {
-                    await this.finishCall();
+                    await this.finishCapture();
                 } catch (error) {
                     failure = error;
                     this.captureLost = true;
@@ -561,6 +569,7 @@ export class LocalCapturePipeline {
         try {
             const initial = await this.waitForInitialFrames(pending, stopPromise);
             if (!initial || this.sourceStopController.signal.aborted) return;
+            let readyAt = this.activeCapture.startedAt;
             for (const pendingFrame of initial) {
                 if (pendingFrame.result.done) {
                     throw new Error(
@@ -568,15 +577,20 @@ export class LocalCapturePipeline {
                     );
                 }
                 validatePcmFrame(pendingFrame.result.value);
+                if (pendingFrame.result.value.capturedAt > readyAt) {
+                    readyAt = pendingFrame.result.value.capturedAt;
+                }
             }
             if (this.sourceStopController.signal.aborted) return;
 
+            // The session's startedAt is the Capture's start; a resumed attempt
+            // connects later, when every channel has delivered audio.
             await this.appendEvent({
                 kind: "attempt_connected",
                 sourceAttemptKey: this.activeCapture.attemptKey,
                 sourceStreamKey: LOCAL_STREAM_KEY,
                 sourceOccurrenceKey: this.activeCapture.occurrenceKey,
-                occurredAt: this.activeCapture.startedAt.toISOString(),
+                occurredAt: readyAt.toISOString(),
             });
             this.connected = true;
             pending.clear();
@@ -746,48 +760,67 @@ export class LocalCapturePipeline {
             for (const frame of frames) frame.pcm.fill(0);
             return;
         }
-        if (this.pendingFlushes.size >= MAX_PENDING_TRANSCRIPTIONS) {
+        if (this.pendingTranscriptions >= MAX_PENDING_TRANSCRIPTIONS) {
             for (const frame of frames) frame.pcm.fill(0);
             throw new Error(
                 `transcription fell behind live audio (${MAX_PENDING_TRANSCRIPTIONS} utterances pending)`
             );
         }
 
+        this.pendingTranscriptions += 1;
+        let queued = false;
         const transcriptPromise = this.transcribeUtterance(
             state.channel,
             frames,
             startedAt,
             endedAt
-        );
+        )
+            .finally(() => {
+                this.pendingTranscriptions -= 1;
+            })
+            .then(result => {
+                this.assertOperationAvailable();
+                if (result.text) {
+                    if (this.pendingTranscriptSegments >= MAX_PENDING_TRANSCRIPT_SEGMENTS) {
+                        throw new Error(
+                            `transcript delivery buffer exceeded (${MAX_PENDING_TRANSCRIPT_SEGMENTS} undelivered segments pending)`
+                        );
+                    }
+                    this.pendingTranscriptSegments += 1;
+                    queued = true;
+                }
+                return result;
+            })
+            .catch(error => {
+                this.recordFatalFailure(error);
+                throw error;
+            });
+        // Transcription can reject while an earlier segment is still retrying delivery.
+        void transcriptPromise.catch(() => undefined);
         const orderedPromise = this.transcriptAppendTail
             .then(async () => {
                 const result = await transcriptPromise;
-                try {
-                    if (!result.text) return;
-                    this.assertOperationAvailable();
-                    await this.appendEvent({
-                        kind: "transcript_segment",
-                        sourceAttemptKey: result.sourceAttemptKey,
-                        sourceOccurrenceKey: result.sourceOccurrenceKey,
-                        sourcePacketHash: result.sourcePacketHash,
-                        sourceKind: "derived_asr",
-                        audioChannel: result.audioChannel,
-                        participant: null,
-                        sourceStartMs: result.sourceStartMs,
-                        sourceEndMs: result.sourceEndMs,
-                        receivedAt: result.receivedAt,
-                        receiveOrder: this.receiveOrder++,
-                        text: result.text,
-                        ...(this.options.language ? { language: this.options.language } : {}),
-                        occurredAt: result.occurredAt,
-                    });
-                } finally {
-                    result.pcm.fill(0);
-                    result.audioWav.fill(0);
-                }
+                if (!result.text) return;
+                this.assertOperationAvailable();
+                await this.appendEvent({
+                    kind: "transcript_segment",
+                    sourceAttemptKey: result.sourceAttemptKey,
+                    sourceOccurrenceKey: result.sourceOccurrenceKey,
+                    sourcePacketHash: result.sourcePacketHash,
+                    sourceKind: "derived_asr",
+                    audioChannel: result.audioChannel,
+                    participant: null,
+                    sourceStartMs: result.sourceStartMs,
+                    sourceEndMs: result.sourceEndMs,
+                    receivedAt: result.receivedAt,
+                    receiveOrder: this.receiveOrder++,
+                    text: result.text,
+                    ...(this.options.language ? { language: this.options.language } : {}),
+                    occurredAt: result.occurredAt,
+                });
             })
             .finally(() => {
-                for (const frame of frames) frame.pcm.fill(0);
+                if (queued) this.pendingTranscriptSegments -= 1;
             });
         this.transcriptAppendTail = orderedPromise.catch(() => undefined);
         const trackedPromise: Promise<void> = orderedPromise.then(
@@ -840,13 +873,11 @@ export class LocalCapturePipeline {
                 receivedAt: endedAt.toISOString(),
                 occurredAt: endedAt.toISOString(),
                 audioChannel,
-                pcm,
-                audioWav,
             };
-        } catch (error) {
+        } finally {
             pcm.fill(0);
             audioWav?.fill(0);
-            throw error;
+            for (const frame of frames) frame.pcm.fill(0);
         }
     }
 
@@ -870,7 +901,7 @@ export class LocalCapturePipeline {
         await this.transcriptAppendTail;
     }
 
-    private async finishCall(): Promise<void> {
+    private async finishCapture(): Promise<void> {
         if (this.finishPromise) return this.finishPromise;
         if (this.activeCapture.finished || this.activeCapture.failed) return;
 
@@ -882,9 +913,13 @@ export class LocalCapturePipeline {
                 kind: "attempt_ended",
                 sourceAttemptKey: this.activeCapture.attemptKey,
                 sourceOccurrenceKey: this.activeCapture.occurrenceKey,
-                reason: "user_stopped",
+                reason: this.pauseRequested ? "user_paused" : "user_stopped",
                 occurredAt: (this.lastFrameEnd ?? this.activeCapture.startedAt).toISOString(),
             });
+            if (this.pauseRequested) {
+                this.activeCapture.finished = true;
+                return;
+            }
             await this.appendEvent({
                 kind: "occurrence_ended",
                 sourceOccurrenceKey: this.activeCapture.occurrenceKey,

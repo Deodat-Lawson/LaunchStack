@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_call_notes_captures" ADD COLUMN "paused_reason" varchar(16);

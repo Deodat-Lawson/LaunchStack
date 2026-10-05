@@ -30,6 +30,7 @@ const baseCallInput = {
     capture: {
         id: "capture-northstar-1",
         desiredMode: "running",
+        pausedReason: null,
         lifecycle: "completed",
         outcome: "complete",
         activeAttemptId: null,
@@ -93,6 +94,7 @@ export const pausedCall: CallSnapshot = CallSnapshotSchema.parse({
     capture: {
         id: "capture-paused-1",
         desiredMode: "paused",
+        pausedReason: "user",
         lifecycle: "live",
         outcome: null,
         activeAttemptId: "attempt-paused-1",
@@ -100,6 +102,21 @@ export const pausedCall: CallSnapshot = CallSnapshotSchema.parse({
     },
     note: { ...baseCallInput.note, saveState: "saving" },
     enrichment: null,
+});
+
+// a Call paused after the Local Capture Worker stopped, retaining its Transcript
+export const workerErrorPausedCall: CallSnapshot = CallSnapshotSchema.parse({
+    ...pausedCall,
+    id: "call-worker-error",
+    sourceOccurrenceKey: "local-worker-error-1",
+    capture: {
+        ...pausedCall.capture,
+        id: "capture-worker-error-1",
+        pausedReason: "worker_error",
+        lifecycle: "interrupted",
+        activeAttemptId: null,
+    },
+    note: { ...pausedCall.note, saveState: "saved" },
 });
 
 // a capture that failed to connect
@@ -112,6 +129,7 @@ export const failedCall: CallSnapshot = CallSnapshotSchema.parse({
     capture: {
         id: "capture-failed-1",
         desiredMode: "running",
+        pausedReason: null,
         lifecycle: "failed",
         outcome: "failed",
         activeAttemptId: null,
@@ -133,6 +151,7 @@ export const partialCall: CallSnapshot = CallSnapshotSchema.parse({
     capture: {
         id: "capture-partial-1",
         desiredMode: "running",
+        pausedReason: null,
         lifecycle: "completed",
         outcome: "partial",
         activeAttemptId: null,

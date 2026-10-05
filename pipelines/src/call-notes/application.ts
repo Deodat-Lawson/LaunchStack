@@ -318,7 +318,7 @@ const LOCAL_CAPTURE_FAILURE_CODE = "worker_unavailable";
 const LOCAL_CAPTURE_FAILURE_MESSAGE = "Local capture worker became unavailable";
 const LOCAL_CAPTURE_STOP_DRAIN_TIMEOUT_MS = 30_000;
 
-type CallNotesExecutor = Pick<DbClient, "select" | "insert" | "update">;
+type CallNotesExecutor = Pick<DbClient, "select" | "insert" | "update" | "delete">;
 
 /** PostgreSQL-backed Call Notes policy, state machine, and snapshot boundary. */
 export class PostgresCallNotesApplication implements CallNotesApplication {
@@ -469,6 +469,218 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             });
     }
 
+    private async requireAvailableLocalWorker(
+        executor: CallNotesExecutor,
+        company: bigint,
+        userId: string,
+        now: Date
+    ): Promise<void> {
+        const [worker] = await executor
+            .select({ lastSeenAt: callNotesLocalCaptureWorkers.lastSeenAt })
+            .from(callNotesLocalCaptureWorkers)
+            .where(
+                and(
+                    eq(callNotesLocalCaptureWorkers.companyId, company),
+                    eq(callNotesLocalCaptureWorkers.userId, userId)
+                )
+            )
+            .orderBy(desc(callNotesLocalCaptureWorkers.lastSeenAt))
+            .limit(1);
+        if (
+            !worker ||
+            asDate(worker.lastSeenAt).getTime() <= now.getTime() - LOCAL_CAPTURE_TIMEOUT_MS
+        ) {
+            throw new CallNotesApplicationError(
+                "unavailable",
+                "Local capture worker is unavailable; start the worker and retry"
+            );
+        }
+    }
+
+    private async recordWorkerFailure(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attempt: CallNotesCaptureAttemptRow | null,
+        now: Date,
+        code: string,
+        message: string | null
+    ): Promise<void> {
+        const segments = await executor
+            .select({ receivedAt: callNotesTranscriptSegments.receivedAt })
+            .from(callNotesTranscriptSegments)
+            .where(
+                and(
+                    eq(callNotesTranscriptSegments.callId, capture.callId),
+                    eq(callNotesTranscriptSegments.companyId, capture.companyId)
+                )
+            );
+        const latestEvidenceAt = segments.reduce<Date | null>((latest, segment) => {
+            const receivedAt = asDate(segment.receivedAt);
+            return latest === null || receivedAt > latest ? receivedAt : latest;
+        }, null);
+        const gapStartCandidates = [
+            latestEvidenceAt,
+            attempt?.leaseExpiresAt
+                ? new Date(asDate(attempt.leaseExpiresAt).getTime() - LOCAL_CAPTURE_TIMEOUT_MS)
+                : null,
+            attempt?.endedAt,
+            attempt?.startedAt,
+            capture.updatedAt,
+            capture.startedAt,
+        ].filter((value): value is Date => value !== null && value !== undefined);
+        const gapStartedAt = gapStartCandidates.reduce(
+            (latest, candidate) => (candidate > latest ? candidate : latest),
+            gapStartCandidates[0] ?? now
+        );
+        const [openGap] = await executor
+            .select({ id: callNotesGaps.id })
+            .from(callNotesGaps)
+            .where(
+                and(
+                    eq(callNotesGaps.callId, capture.callId),
+                    eq(callNotesGaps.kind, "worker_unavailable"),
+                    isNull(callNotesGaps.endedAt),
+                    attempt
+                        ? eq(callNotesGaps.attemptId, attempt.id)
+                        : isNull(callNotesGaps.attemptId)
+                )
+            )
+            .limit(1);
+        if (!openGap) {
+            await executor.insert(callNotesGaps).values({
+                id: this.ids.next("gap"),
+                callId: capture.callId,
+                captureId: capture.id,
+                attemptId: attempt?.id ?? null,
+                companyId: capture.companyId,
+                kind: "worker_unavailable",
+                startedAt: gapStartedAt,
+                endedAt: null,
+                details: { code, message },
+            });
+        }
+        if (attempt && isActiveAttemptLifecycle(attempt.lifecycle)) {
+            await executor
+                .update(callNotesCaptureAttempts)
+                .set({
+                    lifecycle: "failed",
+                    endedAt: now,
+                    failureCode: code,
+                    failureMessage: message,
+                })
+                .where(eq(callNotesCaptureAttempts.id, attempt.id));
+        }
+    }
+
+    private async pauseCaptureForWorkerError(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attempt: CallNotesCaptureAttemptRow | null,
+        now: Date,
+        code: string,
+        message: string | null
+    ): Promise<void> {
+        await this.recordWorkerFailure(executor, capture, attempt, now, code, message);
+        await executor
+            .update(callNotesCaptures)
+            .set({
+                desiredMode: "paused",
+                pausedReason:
+                    capture.desiredMode === "paused" && capture.pausedReason === "user"
+                        ? "user"
+                        : "worker_error",
+                lifecycle: "interrupted",
+                activeAttemptId: null,
+                updatedAt: now,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        await executor
+            .update(callNotesCalls)
+            .set({ status: "active", updatedAt: now })
+            .where(
+                and(
+                    eq(callNotesCalls.id, capture.callId),
+                    eq(callNotesCalls.companyId, capture.companyId)
+                )
+            );
+    }
+
+    private async reinstateLocalCaptureAttempt(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attemptKey: string,
+        now: Date,
+        workerId?: string
+    ): Promise<boolean> {
+        if (
+            capture.activeAttemptId !== null ||
+            !(
+                (capture.desiredMode === "paused" && capture.pausedReason === "worker_error") ||
+                (capture.desiredMode === "running" && capture.lifecycle === "connecting")
+            )
+        ) {
+            return false;
+        }
+        const [attempt] = await executor
+            .select()
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    eq(callNotesCaptureAttempts.companyId, capture.companyId)
+                )
+            )
+            .orderBy(desc(callNotesCaptureAttempts.startedAt), desc(callNotesCaptureAttempts.id))
+            .for("update")
+            .limit(1);
+        if (
+            !attempt ||
+            attempt.sourceAttemptKey !== attemptKey ||
+            attempt.lifecycle !== "failed" ||
+            attempt.failureCode !== LOCAL_CAPTURE_FAILURE_CODE ||
+            attempt.leaseOwner === null ||
+            (workerId !== undefined && attempt.leaseOwner !== workerId)
+        ) {
+            return false;
+        }
+        const leaseExpiresAt = new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS);
+        await executor
+            .update(callNotesCaptureAttempts)
+            .set({
+                lifecycle: "live",
+                endedAt: null,
+                failureCode: null,
+                failureMessage: null,
+                leaseExpiresAt,
+            })
+            .where(eq(callNotesCaptureAttempts.id, attempt.id));
+        await executor
+            .update(callNotesCaptures)
+            .set({
+                activeAttemptId: attempt.id,
+                desiredMode: "running",
+                pausedReason: null,
+                lifecycle: "live",
+                updatedAt: now,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        await executor
+            .delete(callNotesGaps)
+            .where(
+                and(
+                    eq(callNotesGaps.captureId, capture.id),
+                    eq(callNotesGaps.attemptId, attempt.id),
+                    eq(callNotesGaps.kind, "worker_unavailable"),
+                    isNull(callNotesGaps.endedAt)
+                )
+            );
+        await executor
+            .update(callNotesCalls)
+            .set({ updatedAt: now })
+            .where(eq(callNotesCalls.id, capture.callId));
+        return true;
+    }
+
     private async reconcileStaleCaptures(
         executor: CallNotesExecutor,
         company: bigint,
@@ -488,6 +700,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .for("update");
         const finalizedCallIds: string[] = [];
         for (const capture of captures) {
+            if (capture.desiredMode === "paused" && capture.activeAttemptId === null) continue;
             const [call] = await executor
                 .select()
                 .from(callNotesCalls)
@@ -538,7 +751,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             }
 
             const claimedLocalAttempt = attempt?.leaseOwner != null;
-            let stale = missingActiveAttempt && (attempt === null || claimedLocalAttempt);
+            let stale = missingActiveAttempt;
             const [latestWorker] = await executor
                 .select({ lastSeenAt: callNotesLocalCaptureWorkers.lastSeenAt })
                 .from(callNotesLocalCaptureWorkers)
@@ -587,107 +800,27 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             }
             if (!stale) continue;
 
-            const segments = await executor
-                .select({
-                    id: callNotesTranscriptSegments.id,
-                    receivedAt: callNotesTranscriptSegments.receivedAt,
-                })
-                .from(callNotesTranscriptSegments)
-                .where(
-                    and(
-                        eq(callNotesTranscriptSegments.callId, call.id),
-                        eq(callNotesTranscriptSegments.companyId, company)
-                    )
+            if (capture.desiredMode === "stopped") {
+                await this.recordWorkerFailure(
+                    executor,
+                    capture,
+                    attempt,
+                    now,
+                    LOCAL_CAPTURE_FAILURE_CODE,
+                    LOCAL_CAPTURE_FAILURE_MESSAGE
                 );
-            const hasEvidence = segments.length > 0;
-            const outcome = hasEvidence ? "partial" : "failed";
-            const status: CallStatus = hasEvidence ? "completed" : "failed";
-            const latestEvidenceAt = segments.reduce<Date | null>((latest, segment) => {
-                const receivedAt = asDate(segment.receivedAt);
-                return latest === null || receivedAt > latest ? receivedAt : latest;
-            }, null);
-            const gapStartCandidates = [
-                latestEvidenceAt,
-                attempt?.leaseExpiresAt
-                    ? new Date(asDate(attempt.leaseExpiresAt).getTime() - LOCAL_CAPTURE_TIMEOUT_MS)
-                    : null,
-                attempt?.endedAt,
-                attempt?.startedAt,
-                capture.updatedAt,
-                capture.startedAt,
-            ].filter((value): value is Date => value !== null && value !== undefined);
-            const gapStartedAt = gapStartCandidates.reduce(
-                (latest, candidate) => (candidate > latest ? candidate : latest),
-                gapStartCandidates[0] ?? now
-            );
-            const gapPredicates = [
-                eq(callNotesGaps.callId, call.id),
-                eq(callNotesGaps.kind, "worker_unavailable"),
-                isNull(callNotesGaps.endedAt),
-                attempt ? eq(callNotesGaps.attemptId, attempt.id) : isNull(callNotesGaps.attemptId),
-            ];
-            const [openGap] = await executor
-                .select({ id: callNotesGaps.id })
-                .from(callNotesGaps)
-                .where(and(...gapPredicates))
-                .limit(1);
-            if (openGap) {
-                await executor
-                    .update(callNotesGaps)
-                    .set({ endedAt: now })
-                    .where(eq(callNotesGaps.id, openGap.id));
+                await this.finalizeOccurrence(call.id, company, capture, now, executor);
+                finalizedCallIds.push(call.id);
             } else {
-                await executor.insert(callNotesGaps).values({
-                    id: this.ids.next("gap"),
-                    callId: call.id,
-                    captureId: capture.id,
-                    attemptId: attempt?.id ?? null,
-                    companyId: company,
-                    kind: "worker_unavailable",
-                    startedAt: gapStartedAt,
-                    endedAt: now,
-                    details: {
-                        code: LOCAL_CAPTURE_FAILURE_CODE,
-                        message: LOCAL_CAPTURE_FAILURE_MESSAGE,
-                    },
-                });
+                await this.pauseCaptureForWorkerError(
+                    executor,
+                    capture,
+                    attempt,
+                    now,
+                    LOCAL_CAPTURE_FAILURE_CODE,
+                    LOCAL_CAPTURE_FAILURE_MESSAGE
+                );
             }
-            if (attempt && isActiveAttemptLifecycle(attempt.lifecycle)) {
-                await executor
-                    .update(callNotesCaptureAttempts)
-                    .set({
-                        lifecycle: "failed",
-                        endedAt: now,
-                        failureCode: LOCAL_CAPTURE_FAILURE_CODE,
-                        failureMessage: LOCAL_CAPTURE_FAILURE_MESSAGE,
-                    })
-                    .where(eq(callNotesCaptureAttempts.id, attempt.id));
-            }
-            await executor
-                .update(callNotesCaptures)
-                .set({
-                    activeAttemptId: null,
-                    lifecycle: hasEvidence ? "completed" : "failed",
-                    outcome,
-                    endedAt: now,
-                    updatedAt: now,
-                })
-                .where(eq(callNotesCaptures.id, capture.id));
-            await executor
-                .update(callNotesCalls)
-                .set({
-                    status,
-                    finalizedAt: now,
-                    updatedAt: now,
-                    ...(hasEvidence
-                        ? {}
-                        : {
-                              failureCode: LOCAL_CAPTURE_FAILURE_CODE,
-                              failureMessage: LOCAL_CAPTURE_FAILURE_MESSAGE,
-                          }),
-                })
-                .where(and(eq(callNotesCalls.id, call.id), eq(callNotesCalls.companyId, company)));
-            finalizedCallIds.push(call.id);
         }
         return finalizedCallIds;
     }
@@ -799,6 +932,27 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .limit(1);
                 if (!call || call.status === "completed" || call.status === "failed") continue;
 
+                if (parsed.activeAttemptKey !== undefined) {
+                    const reinstated = await this.reinstateLocalCaptureAttempt(
+                        executor,
+                        candidate,
+                        parsed.activeAttemptKey,
+                        now,
+                        parsed.workerId
+                    );
+                    if (reinstated) {
+                        return {
+                            callId: call.id,
+                            captureId: candidate.id,
+                            occurrenceKey: call.sourceOccurrenceKey,
+                            attemptKey: parsed.activeAttemptKey,
+                            startedAt: iso(candidate.startedAt),
+                            title: call.title,
+                            desiredMode: "running",
+                        } satisfies LocalCapturePollResult["capture"];
+                    }
+                }
+
                 if (candidate.activeAttemptId !== null) {
                     const [attempt] = await tx
                         .select()
@@ -813,10 +967,40 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                         .for("update")
                         .limit(1);
                     if (!attempt || !isActiveAttemptLifecycle(attempt.lifecycle)) continue;
-                    if (
-                        attempt.sourceAttemptKey !== parsed.workerId ||
-                        attempt.leaseOwner !== parsed.workerId
-                    ) {
+                    if (attempt.leaseOwner !== parsed.workerId) return null;
+                    const streamLost =
+                        parsed.activeAttemptKey === undefined
+                            ? attempt.lifecycle !== "connecting"
+                            : parsed.activeAttemptKey !== attempt.sourceAttemptKey;
+                    if (streamLost) {
+                        const message = "Local capture worker lost its capture stream";
+                        if (candidate.desiredMode === "stopped") {
+                            await this.recordWorkerFailure(
+                                executor,
+                                candidate,
+                                attempt,
+                                now,
+                                LOCAL_CAPTURE_FAILURE_CODE,
+                                message
+                            );
+                            await this.finalizeOccurrence(
+                                call.id,
+                                company,
+                                candidate,
+                                now,
+                                executor
+                            );
+                            finalizedCallIds.push(call.id);
+                        } else {
+                            await this.pauseCaptureForWorkerError(
+                                executor,
+                                candidate,
+                                attempt,
+                                now,
+                                LOCAL_CAPTURE_FAILURE_CODE,
+                                message
+                            );
+                        }
                         return null;
                     }
                     const [renewed] = await tx
@@ -862,7 +1046,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                         captureId: candidate.id,
                         callId: call.id,
                         companyId: company,
-                        sourceAttemptKey: parsed.workerId,
+                        sourceAttemptKey: `${parsed.workerId}:${attemptId}`,
                         sourceStreamKey: null,
                         lifecycle: "connecting",
                         leaseToken: this.ids.next("attempt_lease"),
@@ -881,6 +1065,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .update(callNotesCaptures)
                     .set({
                         activeAttemptId: attempt.id,
+                        pausedReason: null,
                         lifecycle: "connecting",
                         updatedAt: now,
                     })
@@ -937,96 +1122,113 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             )
             .limit(1);
         if (!call) throw new CallNotesApplicationError("not_found", "Call occurrence not found");
-        await this.reconcileStaleCaptureForCall(companyId, call.id);
-        const [capture] = await this.options.db
-            .select()
+        const [scope] = await this.options.db
+            .select({ captureUserId: callNotesCaptures.captureUserId })
             .from(callNotesCaptures)
             .where(
                 and(eq(callNotesCaptures.callId, call.id), eq(callNotesCaptures.companyId, company))
             )
             .limit(1);
-        if (!capture) throw new CallNotesApplicationError("unavailable", "Call capture is missing");
-        if (
-            call.status === "completed" ||
-            call.status === "failed" ||
-            capture.lifecycle === "completed" ||
-            capture.lifecycle === "failed"
-        ) {
-            throw new CallNotesApplicationError(
-                "forbidden",
-                "Capture event belongs to a terminal capture"
+        if (!scope) throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+        await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${companyId}:${scope.captureUserId}`}))`
             );
-        }
-
-        const attempts = await this.options.db
-            .select()
-            .from(callNotesCaptureAttempts)
-            .where(
-                and(
-                    eq(callNotesCaptureAttempts.captureId, capture.id),
-                    eq(callNotesCaptureAttempts.companyId, company)
+            const executor = tx as unknown as CallNotesExecutor;
+            const [capture] = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.callId, call.id),
+                        eq(callNotesCaptures.companyId, company)
+                    )
                 )
-            );
-        if (attempts.length === 0) {
-            throw new CallNotesApplicationError(
-                "forbidden",
-                "Call capture has not been claimed by a local worker"
-            );
-        }
-        if (parsed.kind === "occurrence_ended") {
-            if (capture.activeAttemptId !== null || capture.desiredMode !== "stopped") {
+                .for("update")
+                .limit(1);
+            if (!capture)
+                throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+            if (capture.lifecycle === "completed" || capture.lifecycle === "failed") {
                 throw new CallNotesApplicationError(
-                    "invalid_transition",
-                    "Capture attempt must end before the occurrence"
+                    "forbidden",
+                    "Capture event belongs to a terminal capture"
                 );
             }
-        } else {
+            const attempts = await tx
+                .select()
+                .from(callNotesCaptureAttempts)
+                .where(
+                    and(
+                        eq(callNotesCaptureAttempts.captureId, capture.id),
+                        eq(callNotesCaptureAttempts.companyId, company)
+                    )
+                )
+                .for("update");
+            if (attempts.length === 0) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Call capture has not been claimed by a local worker"
+                );
+            }
+            if (parsed.kind === "occurrence_ended") {
+                if (capture.activeAttemptId !== null || capture.desiredMode !== "stopped") {
+                    throw new CallNotesApplicationError(
+                        "invalid_transition",
+                        "Capture attempt must end before the occurrence"
+                    );
+                }
+                return;
+            }
             const attempt = attempts.find(
                 candidate => candidate.sourceAttemptKey === parsed.sourceAttemptKey
             );
-            if (!attempt) {
+            if (attempt?.leaseOwner == null) {
                 throw new CallNotesApplicationError(
                     "forbidden",
-                    "Capture event does not belong to the claimed worker attempt"
+                    "Capture event does not belong to a claimed worker attempt"
                 );
             }
             const now = this.clock.now();
-            const leaseExpired =
-                attempt.leaseExpiresAt === null ||
-                asDate(attempt.leaseExpiresAt).getTime() <= now.getTime();
+            const reinstated = await this.reinstateLocalCaptureAttempt(
+                executor,
+                capture,
+                attempt.sourceAttemptKey,
+                now
+            );
             const queuedTranscript =
                 parsed.kind === "transcript_segment" &&
                 capture.activeAttemptId === null &&
                 capture.desiredMode === "stopped" &&
                 capture.lifecycle === "finalizing" &&
-                attempt.lifecycle === "ended";
-            if (attempt.leaseOwner !== parsed.sourceAttemptKey && !queuedTranscript) {
-                throw new CallNotesApplicationError(
-                    "forbidden",
-                    "Capture event does not belong to the owned worker lease"
-                );
-            }
+                attempt.lifecycle === "ended" &&
+                attempt.endedAt !== null;
             if (
+                !reinstated &&
                 !queuedTranscript &&
                 (capture.activeAttemptId !== attempt.id ||
-                    !isActiveAttemptLifecycle(attempt.lifecycle) ||
-                    leaseExpired)
+                    !isActiveAttemptLifecycle(attempt.lifecycle))
             ) {
                 throw new CallNotesApplicationError(
                     "forbidden",
                     "Capture event does not belong to the active worker attempt"
                 );
             }
-            if (
-                queuedTranscript &&
-                (attempt.endedAt === null || capture.activeAttemptId !== null)
-            ) {
-                throw new CallNotesApplicationError(
-                    "forbidden",
-                    "Queued transcript evidence is not draining"
-                );
+            if (!queuedTranscript) {
+                // An event from the still-active pipeline proves liveness even
+                // when the last control poll's lease has expired.
+                await tx
+                    .update(callNotesCaptureAttempts)
+                    .set({ leaseExpiresAt: new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS) })
+                    .where(eq(callNotesCaptureAttempts.id, attempt.id));
             }
-        }
+            await this.touchLocalCaptureWorker(
+                executor,
+                companyId,
+                capture.captureUserId,
+                attempt.leaseOwner,
+                now
+            );
+        });
         await this.ingestCaptureEvent(companyId, parsed);
     }
     async ingestCaptureEvent(companyId: string, event: CaptureEvent): Promise<void> {
@@ -1375,26 +1577,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     return { callId: existing.id, finalizedCallIds };
                 }
 
-                const [worker] = await tx
-                    .select()
-                    .from(callNotesLocalCaptureWorkers)
-                    .where(
-                        and(
-                            eq(callNotesLocalCaptureWorkers.companyId, company),
-                            eq(callNotesLocalCaptureWorkers.userId, command.actorUserId)
-                        )
-                    )
-                    .orderBy(desc(callNotesLocalCaptureWorkers.lastSeenAt))
-                    .limit(1);
-                if (
-                    !worker ||
-                    asDate(worker.lastSeenAt).getTime() <= now.getTime() - LOCAL_CAPTURE_TIMEOUT_MS
-                ) {
-                    throw new CallNotesApplicationError(
-                        "unavailable",
-                        "Local capture worker is unavailable; start the worker and retry"
-                    );
-                }
+                await this.requireAvailableLocalWorker(executor, company, command.actorUserId, now);
 
                 const activeCaptures = await tx
                     .select()
@@ -1479,6 +1662,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     companyId: company,
                     captureUserId: command.actorUserId,
                     desiredMode: "running",
+                    pausedReason: null,
                     lifecycle: "connecting",
                     startedAt: now,
                     updatedAt: now,
@@ -1588,10 +1772,31 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             }
 
             if (capture.activeAttemptId === null) {
+                const [attempt] = await tx
+                    .select({ id: callNotesCaptureAttempts.id })
+                    .from(callNotesCaptureAttempts)
+                    .where(eq(callNotesCaptureAttempts.captureId, capture.id))
+                    .limit(1);
+                if (attempt) {
+                    await tx
+                        .update(callNotesCaptures)
+                        .set({ desiredMode: "stopped", pausedReason: null, updatedAt: now })
+                        .where(eq(callNotesCaptures.id, capture.id));
+                    await this.finalizeOccurrence(
+                        call.id,
+                        company,
+                        capture,
+                        now,
+                        tx as unknown as CallNotesExecutor
+                    );
+                    finalized.push(call.id);
+                    return finalized;
+                }
                 await tx
                     .update(callNotesCaptures)
                     .set({
                         desiredMode: "stopped",
+                        pausedReason: null,
                         lifecycle: "failed",
                         outcome: "failed",
                         activeAttemptId: null,
@@ -1617,6 +1822,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .update(callNotesCaptures)
                 .set({
                     desiredMode: "stopped",
+                    pausedReason: null,
                     lifecycle: "finalizing",
                     updatedAt: now,
                 })
@@ -1638,30 +1844,55 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         desiredMode: "paused" | "running"
     ): Promise<CallSnapshot> {
         const company = companyNumber(command.companyId);
-        const [capture] = await this.options.db
-            .select()
-            .from(callNotesCaptures)
-            .where(
-                and(
-                    eq(callNotesCaptures.callId, command.callId),
-                    eq(callNotesCaptures.companyId, company)
-                )
-            )
-            .limit(1);
-        if (!capture) throw new CallNotesApplicationError("not_found", "Capture not found");
-        if (capture.lifecycle === "completed" || capture.lifecycle === "failed") {
-            throw new CallNotesApplicationError("invalid_transition", "Capture has already ended");
-        }
-        if (capture.desiredMode === "stopped") {
-            throw new CallNotesApplicationError(
-                "invalid_transition",
-                "Stopped capture cannot be resumed"
+        await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
             );
-        }
-        await this.options.db
-            .update(callNotesCaptures)
-            .set({ desiredMode, updatedAt: this.clock.now() })
-            .where(eq(callNotesCaptures.id, capture.id));
+            const [capture] = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.callId, command.callId),
+                        eq(callNotesCaptures.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!capture) throw new CallNotesApplicationError("not_found", "Capture not found");
+            if (capture.lifecycle === "completed" || capture.lifecycle === "failed") {
+                throw new CallNotesApplicationError(
+                    "invalid_transition",
+                    "Capture has already ended"
+                );
+            }
+            if (capture.desiredMode === "stopped") {
+                throw new CallNotesApplicationError(
+                    "invalid_transition",
+                    "Stopped capture cannot be resumed"
+                );
+            }
+            const now = this.clock.now();
+            if (desiredMode === "running") {
+                await this.requireAvailableLocalWorker(
+                    tx as unknown as CallNotesExecutor,
+                    company,
+                    capture.captureUserId,
+                    now
+                );
+            }
+            await tx
+                .update(callNotesCaptures)
+                .set({
+                    desiredMode,
+                    pausedReason: desiredMode === "paused" ? "user" : null,
+                    ...(capture.activeAttemptId === null
+                        ? { lifecycle: desiredMode === "paused" ? "interrupted" : "connecting" }
+                        : {}),
+                    updatedAt: now,
+                })
+                .where(eq(callNotesCaptures.id, capture.id));
+        });
         return this.snapshot(command.callId, command.actorUserId);
     }
 
@@ -2163,7 +2394,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 );
                 await this.options.db
                     .update(callNotesCaptures)
-                    .set({ desiredMode: "paused", lifecycle: "interrupted", updatedAt: occurredAt })
+                    .set({
+                        desiredMode: "paused",
+                        pausedReason: "user",
+                        lifecycle: "interrupted",
+                        updatedAt: occurredAt,
+                    })
                     .where(eq(callNotesCaptures.id, capture.id));
                 return;
             case "attempt_resumed":
@@ -2171,7 +2407,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 await this.closeGap(callId, "user_paused", event.sourceAttemptKey, occurredAt);
                 await this.options.db
                     .update(callNotesCaptures)
-                    .set({ desiredMode: "running", lifecycle: "live", updatedAt: occurredAt })
+                    .set({
+                        desiredMode: "running",
+                        pausedReason: null,
+                        lifecycle: "live",
+                        updatedAt: occurredAt,
+                    })
                     .where(eq(callNotesCaptures.id, capture.id));
                 return;
             case "transport_interrupted":
@@ -2195,6 +2436,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 await this.options.db
                     .update(callNotesCaptures)
                     .set({
+                        pausedReason: capture.pausedReason,
                         lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "interrupted",
                         updatedAt: occurredAt,
                     })
@@ -2219,7 +2461,11 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     );
                 await this.options.db
                     .update(callNotesCaptures)
-                    .set({ lifecycle: "live", updatedAt: occurredAt })
+                    .set({
+                        lifecycle: "live",
+                        pausedReason: capture.pausedReason,
+                        updatedAt: occurredAt,
+                    })
                     .where(eq(callNotesCaptures.id, capture.id));
                 return;
             case "attempt_ended": {
@@ -2239,10 +2485,21 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     )
                     .returning({ id: callNotesCaptureAttempts.id });
                 if (!ended) return;
+                if (event.reason === "user_paused") {
+                    await this.openGap(
+                        callId,
+                        company,
+                        capture.id,
+                        event.sourceAttemptKey,
+                        "user_paused",
+                        occurredAt
+                    );
+                }
                 await this.options.db
                     .update(callNotesCaptures)
                     .set({
                         activeAttemptId: null,
+                        pausedReason: capture.pausedReason,
                         lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "interrupted",
                         updatedAt: serverNow,
                     })
@@ -2261,54 +2518,68 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 return;
             }
             case "attempt_failed": {
-                const [failedAttempt] = await this.options.db
-                    .update(callNotesCaptureAttempts)
-                    .set({
-                        lifecycle: "failed",
-                        endedAt: occurredAt,
-                        failureCode: event.code,
-                        failureMessage: event.message ?? null,
-                    })
-                    .where(
-                        and(
-                            eq(callNotesCaptureAttempts.captureId, capture.id),
-                            eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey),
-                            sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
-                        )
-                    )
-                    .returning({ id: callNotesCaptureAttempts.id });
-                if (!failedAttempt) return;
-                await this.openGap(
-                    callId,
-                    company,
-                    capture.id,
-                    event.sourceAttemptKey,
-                    "capture_unknown",
-                    occurredAt
-                );
-                await this.options.db
-                    .update(callNotesCaptures)
-                    .set({
-                        activeAttemptId: null,
-                        lifecycle: "failed",
-                        outcome: "failed",
-                        endedAt: occurredAt,
-                        updatedAt: occurredAt,
-                    })
-                    .where(eq(callNotesCaptures.id, capture.id));
-                await this.options.db
-                    .update(callNotesCalls)
-                    .set({
-                        status: "failed",
-                        failureCode: event.code,
-                        failureMessage: event.message ?? null,
-                        finalizedAt: occurredAt,
-                        updatedAt: occurredAt,
-                    })
-                    .where(
-                        and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company))
+                const finalized = await this.options.db.transaction(async tx => {
+                    await tx.execute(
+                        sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${company.toString()}:${capture.captureUserId}`}))`
                     );
-                await this.syncCallNoteIndex(company.toString(), callId);
+                    const [currentCapture] = await tx
+                        .select()
+                        .from(callNotesCaptures)
+                        .where(eq(callNotesCaptures.id, capture.id))
+                        .for("update")
+                        .limit(1);
+                    if (
+                        !currentCapture ||
+                        currentCapture.lifecycle === "completed" ||
+                        currentCapture.lifecycle === "failed"
+                    ) {
+                        return false;
+                    }
+                    const [attempt] = await tx
+                        .select()
+                        .from(callNotesCaptureAttempts)
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.captureId, currentCapture.id),
+                                eq(
+                                    callNotesCaptureAttempts.sourceAttemptKey,
+                                    event.sourceAttemptKey
+                                )
+                            )
+                        )
+                        .for("update")
+                        .limit(1);
+                    if (!attempt || !isActiveAttemptLifecycle(attempt.lifecycle)) return false;
+                    const executor = tx as unknown as CallNotesExecutor;
+                    if (currentCapture.desiredMode === "stopped") {
+                        await this.recordWorkerFailure(
+                            executor,
+                            currentCapture,
+                            attempt,
+                            occurredAt,
+                            event.code,
+                            event.message ?? null
+                        );
+                        await this.finalizeOccurrence(
+                            callId,
+                            company,
+                            currentCapture,
+                            occurredAt,
+                            executor
+                        );
+                        return true;
+                    }
+                    await this.pauseCaptureForWorkerError(
+                        executor,
+                        currentCapture,
+                        attempt,
+                        occurredAt,
+                        event.code,
+                        event.message ?? null
+                    );
+                    return false;
+                });
+                if (finalized) await this.syncCallNoteIndex(company.toString(), callId);
                 return;
             }
             case "participant_joined":
@@ -2344,6 +2615,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 return;
             case "occurrence_ended":
                 await this.finalizeOccurrence(callId, company, capture, occurredAt);
+                await this.syncCallNoteIndex(company.toString(), callId);
                 return;
             default:
                 throw new CallNotesApplicationError(
@@ -2379,11 +2651,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     sourceStreamKey: event.sourceStreamKey,
                 })
                 .where(eq(callNotesCaptureAttempts.id, existing.id));
-            await this.closeGap(callId, "capture_user_absent", event.sourceAttemptKey, occurredAt);
+            await this.closeOpenCallGaps(callId, occurredAt);
             await this.options.db
                 .update(callNotesCaptures)
                 .set({
                     activeAttemptId: existing.id,
+                    pausedReason: capture.pausedReason,
                     lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "live",
                     updatedAt: occurredAt,
                 })
@@ -2428,11 +2701,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             lifecycle: "live",
             startedAt: occurredAt,
         });
-        await this.closeGap(callId, "capture_user_absent", event.sourceAttemptKey, occurredAt);
+        await this.closeOpenCallGaps(callId, occurredAt);
         await this.options.db
             .update(callNotesCaptures)
             .set({
                 activeAttemptId: attemptId,
+                pausedReason: capture.pausedReason,
                 lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "live",
                 updatedAt: occurredAt,
             })
@@ -2615,6 +2889,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 capture,
                 capture.endedAt ?? asDate(event.occurredAt)
             );
+            await this.syncCallNoteIndex(company.toString(), callId);
         }
     }
 
@@ -2697,35 +2972,41 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .where(and(...predicates));
     }
 
+    private async closeOpenCallGaps(
+        callId: string,
+        endedAt: Date,
+        executor: CallNotesExecutor = this.options.db
+    ): Promise<void> {
+        // Gap starts and attempt connections come from different clocks (server
+        // reaper vs. worker); a gap never ends before it started.
+        await executor
+            .update(callNotesGaps)
+            .set({
+                endedAt: sql`greatest(${callNotesGaps.startedAt}, ${endedAt.toISOString()}::timestamptz)`,
+            })
+            .where(and(eq(callNotesGaps.callId, callId), isNull(callNotesGaps.endedAt)));
+    }
+
     private async finalizeOccurrence(
         callId: string,
         company: bigint,
         capture: CallNotesCaptureRow,
-        endedAt: Date
+        endedAt: Date,
+        executor: CallNotesExecutor = this.options.db
     ): Promise<void> {
-        const gaps = await this.options.db
+        const gaps = await executor
             .select()
             .from(callNotesGaps)
             .where(eq(callNotesGaps.callId, callId));
-        await this.options.db
-            .update(callNotesGaps)
-            .set({ endedAt })
-            .where(and(eq(callNotesGaps.callId, callId), isNull(callNotesGaps.endedAt)));
-        const attempts = await this.options.db
-            .select()
-            .from(callNotesCaptureAttempts)
-            .where(eq(callNotesCaptureAttempts.captureId, capture.id));
-        const segments = await this.options.db
+        await this.closeOpenCallGaps(callId, endedAt, executor);
+        const segments = await executor
             .select({ id: callNotesTranscriptSegments.id })
             .from(callNotesTranscriptSegments)
             .where(eq(callNotesTranscriptSegments.callId, callId));
         const hasGap = gaps.length > 0;
-        const allAttemptsFailed =
-            attempts.length > 0 && attempts.every(attempt => attempt.lifecycle === "failed");
-        const outcome =
-            allAttemptsFailed && segments.length === 0 ? "failed" : hasGap ? "partial" : "complete";
+        const outcome = segments.length === 0 ? "failed" : hasGap ? "partial" : "complete";
         const status: CallStatus = outcome === "failed" ? "failed" : "completed";
-        await this.options.db
+        await executor
             .update(callNotesCaptureAttempts)
             .set({
                 lifecycle: "ended",
@@ -2737,36 +3018,27 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
                 )
             );
-        await this.options.db
+        await executor
             .update(callNotesCaptures)
             .set({
                 activeAttemptId: null,
+                pausedReason: null,
                 lifecycle: outcome === "failed" ? "failed" : "completed",
                 outcome,
                 endedAt,
                 updatedAt: endedAt,
             })
             .where(eq(callNotesCaptures.id, capture.id));
-        await this.options.db
+        await executor
             .update(callNotesCalls)
-            .set({ status, finalizedAt: endedAt, updatedAt: endedAt })
+            .set({
+                status,
+                finalizedAt: endedAt,
+                updatedAt: endedAt,
+                failureCode: outcome === "failed" ? "empty_capture" : null,
+                failureMessage: outcome === "failed" ? "No transcript evidence" : null,
+            })
             .where(and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company)));
-        if (segments.length === 0 && outcome === "complete") {
-            await this.options.db
-                .update(callNotesCalls)
-                .set({
-                    status: "failed",
-                    failureCode: "empty_capture",
-                    failureMessage: "No transcript evidence",
-                    updatedAt: endedAt,
-                })
-                .where(eq(callNotesCalls.id, callId));
-            await this.options.db
-                .update(callNotesCaptures)
-                .set({ lifecycle: "failed", outcome: "failed" })
-                .where(eq(callNotesCaptures.id, capture.id));
-        }
-        await this.syncCallNoteIndex(company.toString(), callId);
     }
 
     private async transcriptRows(callId: string, company: bigint) {
@@ -2866,6 +3138,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             capture: {
                 id: capture.id,
                 desiredMode: capture.desiredMode,
+                pausedReason: capture.pausedReason,
                 lifecycle: capture.lifecycle,
                 outcome: capture.outcome,
                 activeAttemptId: capture.activeAttemptId,

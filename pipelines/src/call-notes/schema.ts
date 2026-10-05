@@ -18,6 +18,8 @@ import type { EnrichedNoteProposal, ModelMetadata } from "./contracts";
 
 export const callNotesCallStatusEnum = ["active", "finalizing", "completed", "failed"] as const;
 export const callNotesCaptureDesiredModeEnum = ["running", "paused", "stopped"] as const;
+/** Why a Capture is paused: the Capture User asked, or the worker failed. */
+export const callNotesCapturePausedReasonEnum = ["user", "worker_error"] as const;
 export const callNotesAudioChannelEnum = ["microphone", "system"] as const;
 export const callNotesCaptureLifecycleEnum = [
     "connecting",
@@ -163,6 +165,11 @@ export const callNotesCaptures = pgTable(
         })
             .notNull()
             .default("running"),
+        /** Set while desiredMode is "paused"; null otherwise. */
+        pausedReason: varchar("paused_reason", {
+            length: 16,
+            enum: callNotesCapturePausedReasonEnum,
+        }),
         lifecycle: varchar("lifecycle", {
             length: 32,
             enum: callNotesCaptureLifecycleEnum,

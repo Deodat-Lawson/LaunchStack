@@ -137,6 +137,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Dev server memory leak** — `next dev` no longer grows by about 1 GB of live heap per hour. Three causes, all measured with heap snapshots under a polling workload:
+  - The React Flight development runtime that Next loads into its router process tracked every async operation in the process and linked them into one chain that was never released (99% of the growth). `patches/next@15.5.7.patch` now starts that tracking only inside a React render (`app-page-turbo.runtime.dev.js`).
+  - Next's "show once" Turbopack warnings were deduplicated by object identity, so every request added an entry and printed the warning again. The patch keys them by issue content, and `apps/web` now resolves the same `@langchain/community` as `packages/retrieval` and declares `@langchain/ollama`, which removes the warnings themselves.
+  - The auth and middleware Postgres clients were created per module evaluation, so each dev recompile left an open pool pinning the previous module graph (about 30 MB per edit). They are now shared per process, like the engine's pool.
+  - Before: about 160 MB/min of retained heap while polling. After: live heap stays between 363 and 408 MB with polling, RAG/document/starter traffic and an HMR edit every 45 s. Regression tests cover tracker retention and the one-pool-per-process client.
+- **Bounded web-research cache** — `createTtlCache` now enforces `maxEntries`: it evicts expired entries and then the oldest writes. Before, only expired entries were pruned, so fresh entries (ask starters, grant search, trend search, competitor analysis) grew without bound.
 - The New meeting dialog was 512px wide whatever it asked for (the kit's
   `sm:max-w-lg` outranked its `max-w-none`), and the New meeting button
   opened on a blank room because its default workflow had been renamed

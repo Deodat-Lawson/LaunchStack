@@ -309,6 +309,23 @@ describe("branch hues", () => {
         }
     });
 
+    it("keep the first four branches — a typical map — mutually distinct", () => {
+        // Neighbours in the cycle are not the only pairs on screen: a map with
+        // four branches shows all four at once, so all of them must differ.
+        for (const theme of THEMES) {
+            const first = theme.cycle.slice(0, 4).map(h => swatchFor(h, theme.mode).stroke);
+            for (let i = 0; i < first.length; i++) {
+                for (let j = i + 1; j < first.length; j++) {
+                    const pair = `${theme.id}:${theme.cycle[i]}/${theme.cycle[j]}`;
+                    expect({ pair, far: deltaE(first[i]!, first[j]!) >= 0.1 }).toEqual({
+                        pair,
+                        far: true,
+                    });
+                }
+            }
+        }
+    });
+
     it("thin the connectors from the centre outward", () => {
         const theme = THEMES[0]!;
         const widths = [1, 2, 3].map(

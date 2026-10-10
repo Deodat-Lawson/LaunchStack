@@ -198,10 +198,13 @@ is the centre.
 under a violet root came out violet.)
 
 **Neighbouring branches are far apart.** Cycles alternate warm and cool, and a
-test holds every adjacent pair at ≥ 0.1 OKLab ΔE — several just-noticeable
+test holds every adjacent pair, and every pair among the first four (all
+of them are on screen in a typical map), at ≥ 0.1 OKLab ΔE — several just-noticeable
 differences, in lightness as well as hue — which is what keeps branches apart
 for readers with a colour-vision deficiency. Ocean was recast (blue centre;
-cyan, indigo, green branches) because its old teal and cyan failed this.
+cyan, indigo, green branches) because its old teal and cyan failed this, and
+Sunset traded amber and magenta — too close to orange and to pink once four
+branches are on screen — for violet and a teal.
 
 **Light and dark are one identity under two lightings** (as before): each light
 theme has a dark counterpart with the same root and cycle, read through the
@@ -212,7 +215,7 @@ dark swatch table, and new documents are seeded in the creator's app theme.
 | Launchstack / Midnight | violet (the brand) | blue, amber, teal, pink, green, orange                      |
 | Monochrome / Carbon    | graphite           | slate — hierarchy by weight alone, for print and formal use |
 | Ocean / Abyss          | blue               | cyan, indigo, green                                         |
-| Sunset / Ember         | red                | orange, pink, amber, magenta                                |
+| Sunset / Ember         | red                | orange, pink, violet, teal                                  |
 | Forest / Pine          | green              | teal, amber, lime                                           |
 
 Measured (WCAG contrast; minima over each theme's branch hues):
@@ -222,7 +225,7 @@ Measured (WCAG contrast; minima over each theme's branch hues):
 | Launchstack | 5.5          | 5.5             | 8.1          | 3.5                     | 16.9         |
 | Monochrome  | 7.3          | 7.5             | 13.4         | 3.7                     | 17.3         |
 | Ocean       | 4.6          | 4.5             | 8.6          | 3.5                     | 14.9         |
-| Sunset      | 5.3          | 5.3             | 8.1          | 3.5                     | 14.4         |
+| Sunset      | 5.3          | 5.3             | 8.5          | 3.5                     | 14.4         |
 | Forest      | 5.0          | 5.0             | 8.1          | 3.4                     | 14.9         |
 | Midnight    | 6.4          | 6.8             | 9.9          | 6.9                     | 16.0         |
 | Carbon      | 6.5          | 7.1             | 11.1         | 5.2                     | 16.5         |

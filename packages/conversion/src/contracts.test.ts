@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { PROTOCOL_VERSION } from "@launchstack/runtime/wire-version";
 import { evidenceDocumentSchema } from "./evidence-document";
 import { transcribeResponseSchema } from "./audio-transcription/wire";
+import { videoTranscribeResponseSchema } from "./video-transcription/wire";
 
 describe("evidence document", () => {
     it("accepts a document without confidence (never fabricated)", () => {
@@ -49,6 +50,21 @@ describe("transcription contract", () => {
             language: "en",
             confidence: 0.93,
             filename: "note.mp3",
+            segments: [{ start: 0, end: 1.5, text: "hello world" }],
+        });
+        expect(parsed.segments).toHaveLength(1);
+    });
+});
+
+describe("video transcription contract", () => {
+    it("carries timestamped segments, like an uploaded file's transcript", () => {
+        const parsed = videoTranscribeResponseSchema.parse({
+            text: "hello world",
+            language: "en",
+            confidence: 0.8,
+            title: "A Video",
+            duration: 12.5,
+            source_url: "https://www.youtube.com/watch?v=abc",
             segments: [{ start: 0, end: 1.5, text: "hello world" }],
         });
         expect(parsed.segments).toHaveLength(1);

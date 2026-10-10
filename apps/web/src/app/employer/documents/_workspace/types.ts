@@ -699,8 +699,8 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "files", label: "Files", Icon: IconFile, desc: "PDF, DOCX, XLSX, images" },
             { id: "folder", label: "Folder", Icon: IconFolder, desc: "Bulk — keeps structure" },
-            { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, WAV, M4A — transcribed" },
-            { id: "video", label: "Video", Icon: IconVideo, desc: "MP4, MOV — transcribed" },
+            { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, M4A — transcribed" },
+            { id: "video", label: "Video", Icon: IconVideo, desc: "MP4 — transcribed" },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
             {

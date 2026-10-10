@@ -42,13 +42,14 @@ async def transcribe(file: UploadFile, request: Request):
     """
     Transcribe an uploaded audio file to text.
 
-    Supported formats: mp3 (.mp3), mp4 (.mp4)
+    Supported formats: mp3 (.mp3), mp4 (.mp4), m4a (.m4a)
     """
     if not file.filename:
         raise HTTPException(status_code=400, detail="No filename provided")
 
-    # Validate file extension
-    allowed_extensions = {".mp3", ".mp4"}
+    # Validate file extension. The app accepts .m4a uploads (MPEG-4 audio),
+    # and ffmpeg decodes them the same as .mp4.
+    allowed_extensions = {".mp3", ".mp4", ".m4a"}
     file_ext = "." + file.filename.split(".")[-1].lower()
     if file_ext not in allowed_extensions:
         raise HTTPException(

@@ -27,6 +27,14 @@ import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopeAllows } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
+import { MEDIA_MIME_BY_EXTENSION } from "~/lib/media-document";
+import {
+    forwardRangeInit,
+    partialContentHeaders,
+    rangeNotSatisfiable,
+    relayedRangeResponse,
+    resolveByteRange,
+} from "~/server/storage/byte-range";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
     pdf: "application/pdf",
@@ -50,6 +58,7 @@ const MIME_BY_EXTENSION: Record<string, string> = {
     markdown: "text/markdown",
     html: "text/html",
     htm: "text/html",
+    ...MEDIA_MIME_BY_EXTENSION,
 };
 
 function inferMimeTypeFromFilename(filename: string): string {
@@ -134,7 +143,12 @@ export async function GET(request: Request, { params }: RouteParams) {
                 isPrivateBlobUrl(file.storageUrl);
 
             if (needsProxy) {
-                const blobRes = await fetchFile(file.storageUrl);
+                // A media element's Range goes on to storage, which slices.
+                const blobRes = await fetchFile(file.storageUrl, forwardRangeInit(request));
+                const relayed = relayedRangeResponse(blobRes);
+                if (relayed.status === 416) {
+                    return new NextResponse(null, relayed);
+                }
                 if (!blobRes.ok) {
                     return NextResponse.json(
                         { error: "Failed to retrieve file from storage" },
@@ -146,12 +160,10 @@ export async function GET(request: Request, { params }: RouteParams) {
                     file.mimeType?.trim() ??
                     inferMimeTypeFromFilename(file.filename);
                 return new NextResponse(blobRes.body, {
-                    status: 200,
+                    status: relayed.status,
                     headers: {
                         ...storedFileHeaders(mimeType),
-                        ...(blobRes.headers.get("content-length")
-                            ? { "Content-Length": blobRes.headers.get("content-length")! }
-                            : {}),
+                        ...relayed.headers,
                         "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
                         "Cache-Control": "private, max-age=31536000",
                     },
@@ -173,15 +185,29 @@ export async function GET(request: Request, { params }: RouteParams) {
         // Decode base64 data back to binary
         const binaryData = Buffer.from(file.fileData, "base64");
         const mimeType = file.mimeType?.trim() || inferMimeTypeFromFilename(file.filename);
+        const headers = {
+            ...storedFileHeaders(mimeType),
+            "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
+            "Cache-Control": "private, max-age=31536000", // Cache for 1 year (immutable content)
+        };
+
+        // Seeking in a video or audio file asks for a byte range.
+        const range = resolveByteRange(request.headers.get("range"), binaryData.length);
+        if (range.kind === "unsatisfiable") return rangeNotSatisfiable(binaryData.length);
+        if (range.kind === "partial") {
+            return new NextResponse(binaryData.subarray(range.start, range.end + 1), {
+                status: 206,
+                headers: { ...headers, ...partialContentHeaders(range, binaryData.length) },
+            });
+        }
 
         // Return file with appropriate headers
         return new NextResponse(binaryData, {
             status: 200,
             headers: {
-                ...storedFileHeaders(mimeType),
+                ...headers,
+                "Accept-Ranges": "bytes",
                 "Content-Length": binaryData.length.toString(),
-                "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
-                "Cache-Control": "private, max-age=31536000", // Cache for 1 year (immutable content)
             },
         });
     } catch (error) {

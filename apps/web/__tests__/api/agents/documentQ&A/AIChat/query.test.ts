@@ -46,7 +46,7 @@ function mockBuilder() {
     const builder: Record<string, unknown> = {
         then: (resolve: (value: unknown) => unknown) => resolve(rows),
     };
-    for (const method of ["from", "where", "limit", "orderBy", "leftJoin"]) {
+    for (const method of ["from", "where", "limit", "orderBy", "leftJoin", "innerJoin"]) {
         builder[method] = () => builder;
     }
     return builder;
@@ -72,6 +72,14 @@ jest.mock("@launchstack/store/schema", () => ({
         companyId: "document.companyId",
         sourceArchiveName: "document.sourceArchiveName",
         url: "document.url",
+        currentVersionId: "document.currentVersionId",
+    },
+    documentContextChunks: {
+        id: "chunks.id",
+        documentId: "chunks.documentId",
+        versionId: "chunks.versionId",
+        content: "chunks.content",
+        pageNumber: "chunks.pageNumber",
     },
     fileUploads: { id: "files.id", companyId: "files.companyId", storageUrl: "files.storageUrl" },
     documentVersions: { documentId: "versions.documentId", url: "versions.url" },
@@ -1392,5 +1400,161 @@ describe("chat attachment limits and ownership", () => {
             queryRequest({ question: "Review", searchScope: "none", attachments: [internal] })
         );
         expect(denied.status).toBe(404);
+    });
+});
+
+describe("selected passages", () => {
+    const PASSAGE = "Gross margin fell to 41% as freight costs doubled in the second half.";
+    const ANCHOR = `Results of operations. ${PASSAGE} Management expects freight to normalise.`;
+    const passage = { documentId: 42, title: "Owned Report", page: 2, text: PASSAGE };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        mockSelectCount.value = 0;
+        useContext({ role: "owner" });
+        mockBehavior = {};
+        mockMeteringEnabled = false;
+        mockUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
+        mockInvoke.mockReset().mockResolvedValue({ content: "answer", response_metadata: {} });
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+        (documentEnsembleSearch as jest.Mock).mockResolvedValue([
+            // The passage's own section, found again by retrieval…
+            { pageContent: ANCHOR, metadata: { page: 2, parentChunkId: 900 } },
+            // …and a different section the question is about.
+            { pageContent: "The FY25 forecast assumes 45% margin.", metadata: { page: 7 } },
+        ]);
+    });
+
+    function userPrompt(): string {
+        const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+        return messages[1]!.content;
+    }
+
+    it("searches on the typed question and labels the passage, its page and its surroundings", async () => {
+        const info = jest.spyOn(console, "info").mockImplementation(() => undefined);
+        // The document row, then the passage's page window from the index.
+        mockQueuedRows = [
+            [{ id: 42, title: "Owned Report" }],
+            [{ id: 900, content: ANCHOR, pageNumber: 2 }],
+        ];
+
+        const response = await POST(
+            queryRequest({
+                documentId: 42,
+                searchScope: "document",
+                question: "How does this compare with the FY25 forecast?",
+                passages: [passage],
+            })
+        );
+
+        expect(response.status).toBe(200);
+        expect(documentEnsembleSearch).toHaveBeenCalledWith(
+            "How does this compare with the FY25 forecast?",
+            expect.objectContaining({ documentId: 42 }),
+            expect.anything()
+        );
+        const prompt = userPrompt();
+        expect(prompt).toContain(
+            `User's question: "How does this compare with the FY25 forecast?"`
+        );
+        expect(prompt).toContain(
+            `Selected passage 1 — "Owned Report", page 2:\n"""\n${PASSAGE}\n"""\nSurrounding text (page 2):\n${ANCHOR}`
+        );
+        expect(prompt.indexOf("Selected passage 1")).toBeLessThan(
+            prompt.indexOf("Relevant document content")
+        );
+        // The passage's section is sent once, not again as a retrieved chunk.
+        expect(prompt.split(ANCHOR)).toHaveLength(2);
+        expect(prompt).toContain("=== Chunk #1, Page 7 ===\nThe FY25 forecast assumes 45% margin.");
+        expect(info).toHaveBeenCalledWith("[AIChat] passages", {
+            count: 1,
+            anchored: 1,
+            retrievalQuery: "How does this compare with the FY25 forecast?",
+        });
+        // The history row keeps what was typed.
+        expect(mockInsertValues).toHaveBeenCalledWith(
+            expect.objectContaining({ question: "How does this compare with the FY25 forecast?" })
+        );
+        info.mockRestore();
+    });
+
+    it("searches on the passage too when the question is only 'explain this'", async () => {
+        mockQueuedRows = [[{ id: 42, title: "Owned Report" }], []];
+
+        const response = await POST(
+            queryRequest({
+                documentId: 42,
+                searchScope: "document",
+                question: "Explain this passage.",
+                passages: [passage],
+            })
+        );
+
+        expect(response.status).toBe(200);
+        const [query] = (documentEnsembleSearch as jest.Mock).mock.calls[0] as [string];
+        expect(query).toContain("Explain this passage.");
+        expect(query).toContain(PASSAGE);
+    });
+
+    it("reads a passage from a document outside the scope as missing", async () => {
+        useContext({ role: "member", scope: FINANCE_HIDDEN });
+        // The pinned document is readable; the passage's document is not.
+        mockQueuedRows = [[{ id: 42, title: "Owned Report" }], []];
+
+        const response = await POST(
+            queryRequest({
+                documentId: 42,
+                searchScope: "document",
+                question: "How does this compare with the FY25 forecast?",
+                passages: [{ ...passage, documentId: 77 }],
+            })
+        );
+
+        expect(response.status).toBe(404);
+        expect(await response.json()).toEqual({
+            success: false,
+            message: "The document a selected passage came from was not found.",
+        });
+        expect(scopedDocumentWhere).toHaveBeenCalledWith(BigInt(5), FINANCE_HIDDEN);
+        expect(documentEnsembleSearch).not.toHaveBeenCalled();
+        expect(mockInvoke).not.toHaveBeenCalled();
+    });
+
+    it("includes the passage on a general turn with no pinned document", async () => {
+        // The passage's document passes the scope check, then its page window.
+        mockQueuedRows = [[{ id: 42 }], [{ id: 900, content: ANCHOR, pageNumber: 2 }]];
+
+        const response = await POST(
+            queryRequest({
+                searchScope: "none",
+                question: "Explain this passage.",
+                passages: [passage],
+            })
+        );
+
+        expect(response.status).toBe(200);
+        expect(documentEnsembleSearch).not.toHaveBeenCalled();
+        const prompt = userPrompt();
+        expect(prompt).toContain(`Selected passage 1 — "Owned Report", page 2:`);
+        expect(prompt).toContain(`Surrounding text (page 2):\n${ANCHOR}`);
+        const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+        expect(messages[0]!.content).toContain("The user did select passage(s)");
+    });
+
+    it("answers from a passage with no document without touching the database", async () => {
+        const response = await POST(
+            queryRequest({
+                searchScope: "none",
+                question: "What does this mean?",
+                passages: [{ title: "Pasted text", text: PASSAGE }],
+            })
+        );
+
+        expect(response.status).toBe(200);
+        expect(mockSelectCount.value).toBe(0);
+        const prompt = userPrompt();
+        expect(prompt).toContain(`Selected passage 1 — "Pasted text":\n"""\n${PASSAGE}\n"""`);
+        expect(prompt).not.toContain("Surrounding text");
     });
 });

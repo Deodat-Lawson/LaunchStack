@@ -170,7 +170,6 @@ x-shared-env: &shared-env
   # Investor relations: the SEC rejects requests without "name email".
   SEC_EDGAR_USER_AGENT: ${SEC_EDGAR_USER_AGENT:-}
   SERPER_API_KEY: ${SERPER_API_KEY:-}
-  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
 
 services:
   db:

@@ -28,14 +28,32 @@ export function isAudioFileName(filename?: string): boolean {
     return [".mp3", ".mp4", ".wav", ".flac", ".m4a", ".ogg", ".wma"].includes(ext);
 }
 
-/** Check if a file should be transcribed (MP3/MP4 only, by requirement). */
+/**
+ * MP3 and MPEG-4 (video, or audio-only .m4a) — the formats both transcription
+ * providers decode. Browsers disagree on what to call an .m4a: Chrome and
+ * Safari send `audio/x-m4a`, others `audio/mp4` or `audio/m4a`.
+ */
+const TRANSCRIBABLE_MIME_TYPES = new Set([
+    "audio/mpeg",
+    "audio/mp3",
+    "audio/mp4",
+    "audio/m4a",
+    "audio/x-m4a",
+    "video/mp4",
+]);
+const TRANSCRIBABLE_EXTENSIONS = new Set([".mp3", ".mp4", ".m4a"]);
+
+/** The client's placeholder for a type it could not name; the file name decides instead. */
+const GENERIC_MIME_TYPE = "application/octet-stream";
+
+/** Check if a file should be transcribed (MP3 and MPEG-4 audio/video). */
 export function shouldTranscribeFile(mimeType?: string, originalFilename?: string): boolean {
-    if (mimeType) {
-        return mimeType === "audio/mpeg" || mimeType === "video/mp4" || mimeType === "audio/mp4";
+    if (mimeType && mimeType !== GENERIC_MIME_TYPE) {
+        return TRANSCRIBABLE_MIME_TYPES.has(mimeType.toLowerCase());
     }
     if (originalFilename) {
         const ext = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
-        return ext === ".mp3" || ext === ".mp4";
+        return TRANSCRIBABLE_EXTENSIONS.has(ext);
     }
     return false;
 }
@@ -89,6 +107,7 @@ export async function transcribeAudioFromUrl(
             language: data.language,
             confidence: data.confidence,
             filename,
+            ...(data.segments ? { segments: data.segments } : {}),
         };
     } catch (error) {
         console.error(`[TranscribeAudio] Error transcribing ${filename}:`, error);

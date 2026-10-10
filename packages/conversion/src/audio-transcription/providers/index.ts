@@ -6,6 +6,8 @@ export interface TranscriptionResult {
     language: string;
     confidence: number;
     durationSeconds?: number;
+    /** Timestamped spans, when the provider reports them (Whisper does; Gemini does not). */
+    segments?: { start: number; end: number; text: string }[];
 }
 
 export interface TranscriptionProvider {

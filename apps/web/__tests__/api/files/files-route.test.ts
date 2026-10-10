@@ -97,8 +97,8 @@ const HIDES_BOARD = {
     allowedDocumentIds: [],
 };
 
-function request(path: string) {
-    return new Request(`http://localhost${path}`);
+function request(path: string, headers?: Record<string, string>) {
+    return new Request(`http://localhost${path}`, { headers });
 }
 
 const params = (id: string) => ({ params: Promise.resolve({ id }) });
@@ -307,7 +307,8 @@ describe("GET /api/files/[id] response headers", () => {
 
             const response = await serve({ ...S3_FILE, filename: "page.html" });
 
-            expect(fetchFileMock).toHaveBeenCalledWith(S3_FILE.storageUrl);
+            // No Range from the browser, so none is forwarded.
+            expect(fetchFileMock).toHaveBeenCalledWith(S3_FILE.storageUrl, undefined);
             expect(response.headers.get("Content-Security-Policy")).toBe("sandbox");
             expect(response.headers.get("Content-Type")).toBe("text/html");
             expect(await response.text()).toBe(SCRIPT);
@@ -334,6 +335,140 @@ describe("GET /api/files/[id] response headers", () => {
 
             expect(response.headers.get("Content-Security-Policy")).toBeNull();
             expect(response.headers.get("Content-Type")).toBe("application/pdf");
+        });
+    });
+});
+
+/**
+ * A `<video>`/`<audio>` element seeks by asking for a byte range; a server
+ * that ignores it leaves the player unable to seek.
+ */
+describe("GET /api/files/[id] byte ranges", () => {
+    const fetchFileMock = jest.mocked(fetchFile);
+    const BYTES = "0123456789";
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockAuthenticated();
+    });
+
+    function serveVideo(headers?: Record<string, string>, file?: Record<string, unknown>) {
+        setupFileQuery([
+            {
+                ...DB_FILE,
+                filename: "standup.mp4",
+                mimeType: "video/mp4",
+                fileData: Buffer.from(BYTES).toString("base64"),
+                ...file,
+            },
+        ]);
+        return GET(request("/api/files/123", headers), params("123"));
+    }
+
+    it("says ranges are accepted on a whole-file answer", async () => {
+        const response = await serveVideo();
+
+        expect(response.status).toBe(200);
+        expect(response.headers.get("Accept-Ranges")).toBe("bytes");
+        expect(response.headers.get("Content-Length")).toBe("10");
+        expect(await response.text()).toBe(BYTES);
+    });
+
+    it("serves the requested slice of a database-stored file as 206", async () => {
+        const response = await serveVideo({ Range: "bytes=2-5" });
+
+        expect(response.status).toBe(206);
+        expect(response.headers.get("Content-Range")).toBe("bytes 2-5/10");
+        expect(response.headers.get("Content-Length")).toBe("4");
+        expect(response.headers.get("Content-Type")).toBe("video/mp4");
+        expect(response.headers.get("Content-Disposition")).toMatch(/^inline;/);
+        expect(await response.text()).toBe("2345");
+    });
+
+    it("serves an open-ended seek to the end of the file", async () => {
+        const response = await serveVideo({ Range: "bytes=7-" });
+
+        expect(response.status).toBe(206);
+        expect(await response.text()).toBe("789");
+    });
+
+    it("answers 416 for a range past the end", async () => {
+        const response = await serveVideo({ Range: "bytes=50-" });
+
+        expect(response.status).toBe(416);
+        expect(response.headers.get("Content-Range")).toBe("bytes */10");
+    });
+
+    it("still checks ownership before serving any range", async () => {
+        mockAuthenticated({ companyId: BigInt(999) });
+
+        const response = await serveVideo({ Range: "bytes=0-1" });
+
+        expect(response.status).toBe(404);
+    });
+
+    it("infers a media type from the file name when none was stored", async () => {
+        const response = await serveVideo(undefined, { mimeType: null, filename: "memo.m4a" });
+
+        expect(response.headers.get("Content-Type")).toBe("audio/mp4");
+        expect(response.headers.get("Content-Security-Policy")).toBeNull();
+    });
+
+    describe("proxied from object storage", () => {
+        const S3_FILE = {
+            storageProvider: "s3",
+            storageUrl: "https://s3.example.test/documents/clip",
+            fileData: null,
+        };
+
+        it("forwards the range to storage and relays its 206", async () => {
+            fetchFileMock.mockResolvedValue(
+                new Response("2345", {
+                    status: 206,
+                    headers: {
+                        "content-type": "video/mp4",
+                        "content-range": "bytes 2-5/10",
+                        "content-length": "4",
+                    },
+                })
+            );
+
+            const response = await serveVideo({ Range: "bytes=2-5" }, S3_FILE);
+
+            expect(fetchFileMock).toHaveBeenCalledWith(S3_FILE.storageUrl, {
+                headers: { Range: "bytes=2-5" },
+            });
+            expect(response.status).toBe(206);
+            expect(response.headers.get("Content-Range")).toBe("bytes 2-5/10");
+            expect(response.headers.get("Content-Length")).toBe("4");
+            expect(response.headers.get("Accept-Ranges")).toBe("bytes");
+            expect(await response.text()).toBe("2345");
+        });
+
+        it("relays storage's 416 instead of reporting a storage failure", async () => {
+            fetchFileMock.mockResolvedValue(
+                new Response(null, { status: 416, headers: { "content-range": "bytes */10" } })
+            );
+
+            const response = await serveVideo({ Range: "bytes=50-" }, S3_FILE);
+
+            expect(response.status).toBe(416);
+            expect(response.headers.get("Content-Range")).toBe("bytes */10");
+        });
+
+        it("answers 200 when storage ignores the range", async () => {
+            fetchFileMock.mockResolvedValue(
+                new Response(BYTES, {
+                    status: 200,
+                    headers: { "content-type": "video/mp4", "content-length": "10" },
+                })
+            );
+
+            const response = await serveVideo({ Range: "bytes=2-5" }, S3_FILE);
+
+            expect(response.status).toBe(200);
+            expect(response.headers.get("Content-Range")).toBeNull();
+            expect(await response.text()).toBe(BYTES);
         });
     });
 });

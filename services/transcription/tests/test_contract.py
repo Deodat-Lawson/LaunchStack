@@ -88,6 +88,21 @@ class TestVideoTranscribeResponseContract:
         )
         jsonschema.validate(_wire(model), _load_schema(self.SCHEMA))
 
+    def test_segments_validate(self):
+        model = VideoTranscribeResponse(
+            text="hello world",
+            language="en",
+            confidence=0.42,
+            title="Some Video",
+            duration=3.0,
+            source_url="https://example.com/watch?v=abc",
+            segments=[
+                TranscriptSegment(start=0.0, end=1.5, text="hello"),
+                TranscriptSegment(start=1.5, end=3.0, text="world"),
+            ],
+        )
+        jsonschema.validate(_wire(model), _load_schema(self.SCHEMA))
+
     def test_null_duration_validates(self):
         model = VideoTranscribeResponse(
             text="a transcript",
@@ -99,6 +114,7 @@ class TestVideoTranscribeResponseContract:
         )
         payload = _wire(model)
         assert payload["duration"] is None  # null must be sent, not omitted
+        assert payload["segments"] == []  # default serializes, key is required
         jsonschema.validate(payload, _load_schema(self.SCHEMA))
 
 

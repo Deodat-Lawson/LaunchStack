@@ -41,9 +41,11 @@ jest.mock("~/server/storage/vercel-blob", () => ({
 
 // Each route proxies (rather than redirects) under a different backend: the
 // document route for S3, the version route for database storage.
+const mockIsS3Storage = jest.fn(() => true);
+
 jest.mock("~/lib/storage", () => ({
     fetchFile: jest.fn(),
-    isS3Storage: () => true,
+    isS3Storage: () => mockIsS3Storage(),
     isLocalStorage: () => true,
 }));
 
@@ -64,6 +66,7 @@ function storageReturns(body: string, type: string) {
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockIsS3Storage.mockReturnValue(true);
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: makeWorkspaceContext() });
 });
 
@@ -94,6 +97,86 @@ describe("GET /api/documents/[id]/content", () => {
 
         expect(response.headers.get("Content-Security-Policy")).toBeNull();
         expect(response.headers.get("Content-Type")).toBe("application/pdf");
+    });
+});
+
+/**
+ * The media player reads a recording through this route, seeking by byte
+ * range: through to object storage, or via a redirect to /api/files, which
+ * ranges database-stored bytes itself.
+ */
+describe("GET /api/documents/[id]/content — media playback", () => {
+    const get = (headers?: Record<string, string>) =>
+        getContent(new Request("http://localhost/api/documents/5/content", { headers }), {
+            params: Promise.resolve({ id: "5" }),
+        });
+
+    it("forwards a seek's range to object storage and relays the 206", async () => {
+        selectReturns([{ url: "https://s3.example.test/documents/clip", title: "standup.mp4" }]);
+        fetchFileMock.mockResolvedValue(
+            new Response("2345", {
+                status: 206,
+                headers: {
+                    "content-type": "video/mp4",
+                    "content-range": "bytes 2-5/10",
+                    "content-length": "4",
+                },
+            })
+        );
+
+        const response = await get({ Range: "bytes=2-5" });
+
+        expect(fetchFileMock).toHaveBeenCalledWith("https://s3.example.test/documents/clip", {
+            headers: { Range: "bytes=2-5" },
+        });
+        expect(response.status).toBe(206);
+        expect(response.headers.get("Content-Range")).toBe("bytes 2-5/10");
+        expect(response.headers.get("Accept-Ranges")).toBe("bytes");
+        expect(response.headers.get("Content-Type")).toBe("video/mp4");
+        expect(response.headers.get("Content-Security-Policy")).toBeNull();
+    });
+
+    it("relays storage's 416", async () => {
+        selectReturns([{ url: "https://s3.example.test/documents/clip", title: "standup.mp4" }]);
+        fetchFileMock.mockResolvedValue(
+            new Response(null, { status: 416, headers: { "content-range": "bytes */10" } })
+        );
+
+        const response = await get({ Range: "bytes=50-" });
+
+        expect(response.status).toBe(416);
+        expect(response.headers.get("Content-Range")).toBe("bytes */10");
+    });
+
+    it("redirects to a database-stored file by its same-origin path", async () => {
+        // NextResponse.redirect rejects a relative URL; this used to be a 500.
+        mockIsS3Storage.mockReturnValue(false);
+        selectReturns([{ url: "/api/files/7", title: "standup.mp4" }]);
+
+        const response = await get({ Range: "bytes=0-" });
+
+        expect(response.status).toBe(307);
+        expect(response.headers.get("Location")).toBe("/api/files/7");
+        expect(fetchFileMock).not.toHaveBeenCalled();
+    });
+
+    it("never treats a protocol-relative URL as a same-origin path", async () => {
+        mockIsS3Storage.mockReturnValue(false);
+        selectReturns([{ url: "//evil.example/clip.mp4", title: "clip.mp4" }]);
+
+        const response = await get();
+
+        expect(response.headers.get("Location")).toBeNull();
+    });
+
+    it("still redirects to an absolute public URL", async () => {
+        mockIsS3Storage.mockReturnValue(false);
+        selectReturns([{ url: "https://cdn.example.test/clip.mp4", title: "clip.mp4" }]);
+
+        const response = await get();
+
+        expect(response.status).toBe(307);
+        expect(response.headers.get("Location")).toBe("https://cdn.example.test/clip.mp4");
     });
 });
 
@@ -128,5 +211,32 @@ describe("GET /api/documents/[id]/versions/[versionId]/content", () => {
 
         expect(response.headers.get("Content-Security-Policy")).toBeNull();
         expect(response.headers.get("Content-Type")).toBe("application/pdf");
+    });
+
+    it("forwards a seek's range and relays the 206", async () => {
+        selectReturns(
+            [{ companyId: BigInt(5), title: "Standup" }],
+            [{ url: "/api/files/41", mimeType: "video/mp4", versionNumber: 2 }]
+        );
+        fetchFileMock.mockResolvedValue(
+            new Response("01", {
+                status: 206,
+                headers: { "content-range": "bytes 0-1/10", "content-length": "2" },
+            })
+        );
+
+        const response = await getVersionContent(
+            new Request("http://localhost/api/documents/5/versions/9/content", {
+                headers: { Range: "bytes=0-1" },
+            }),
+            { params: Promise.resolve({ id: "5", versionId: "9" }) }
+        );
+
+        expect(fetchFileMock).toHaveBeenCalledWith("/api/files/41", {
+            headers: { Range: "bytes=0-1" },
+        });
+        expect(response.status).toBe(206);
+        expect(response.headers.get("Content-Range")).toBe("bytes 0-1/10");
+        expect(response.headers.get("Content-Type")).toBe("video/mp4");
     });
 });

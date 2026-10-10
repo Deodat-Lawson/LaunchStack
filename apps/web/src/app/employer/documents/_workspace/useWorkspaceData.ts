@@ -12,6 +12,8 @@ import {
 import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
+import { transcriptMarkerOf } from "~/lib/media-document";
+import { mediaEmbedFor } from "~/lib/media-embed";
 import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
@@ -38,6 +40,11 @@ function folderColor(name: string): string {
 function mapDocType(doc: DocumentType): SourceTypeId {
     const t = getDocumentDisplayType(doc);
     if (t === "audio") return "audio";
+    if (t === "video") {
+        // A YouTube import is labelled as one; any other video is just video.
+        const marker = transcriptMarkerOf(doc.ocrMetadata);
+        return mediaEmbedFor(marker?.videoUrl)?.provider === "youtube" ? "youtube" : "video";
+    }
     if (t === "artifact") return "artifact";
     return "doc";
 }

@@ -205,6 +205,8 @@ export async function processDocumentUpload({
                 audioFilename: originalFilename || documentName,
                 audioDocumentId: audioLifecycle.document.id,
                 audioUrl: resolvedDocumentUrl,
+                // Tells the viewer whether the recording has a picture.
+                mediaMimeType: mimeType ?? null,
                 language: transcriptionResult.language,
                 confidence: transcriptionResult.confidence,
                 segments: transcriptionResult.segments,
@@ -330,6 +332,7 @@ export async function processVideoUrlUpload({
         videoUrl,
         language: transcriptionResult.language,
         confidence: transcriptionResult.confidence,
+        segments: transcriptionResult.segments,
         transcribedAt: new Date().toISOString(),
     };
 

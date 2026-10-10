@@ -35,14 +35,23 @@ jest.mock("@launchstack/store/credits", () => ({
     isMeteringEnforced: jest.fn(() => false),
 }));
 
-import { transcribeAudioFromUrl, shouldTranscribeFile } from "@launchstack/conversion";
-import { processDocumentUpload } from "~/server/services/document-upload";
+import {
+    transcribeAudioFromUrl,
+    shouldTranscribeFile,
+    isVideoUrl,
+    transcribeVideoFromUrl,
+} from "@launchstack/conversion";
+import { processDocumentUpload, processVideoUrlUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
+import { putFile } from "~/server/storage/vercel-blob";
 import { createDocumentLifecycle } from "~/server/services/document-creation";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
 
 const mockTranscribeAudioFromUrl = transcribeAudioFromUrl as jest.Mock;
+const mockIsVideoUrl = isVideoUrl as jest.Mock;
+const mockTranscribeVideoFromUrl = transcribeVideoFromUrl as jest.Mock;
+const mockPutFile = putFile as jest.Mock;
 const mockUploadFile = uploadFile as jest.Mock;
 const mockCreateDocumentLifecycle = createDocumentLifecycle as jest.Mock;
 const mockHasTokens = hasTokens as jest.Mock;
@@ -103,6 +112,93 @@ describe("processDocumentUpload audio lifecycle", () => {
             expect.objectContaining({ creationKey: "upload:meeting:audio-transcript" })
         );
         expect(mockUploadFile).toHaveBeenCalledTimes(1);
+    });
+});
+
+/**
+ * The transcript row's metadata is what the media viewer reads: which
+ * recording to play, whether it has a picture, and the timestamped lines.
+ */
+describe("transcript metadata for the media viewer", () => {
+    const SEGMENTS = [{ start: 0, end: 2.5, text: "Hello." }];
+
+    function lifecycle(id: number, title: string, url: string) {
+        return {
+            document: { id, title, url, category: "Media" },
+            jobId: `job-${id}`,
+            eventIds: [`event-${id}`],
+        };
+    }
+
+    it("links an upload's transcript to the recording, its type and its timestamps", async () => {
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce(lifecycle(12, "standup.mp4", "/api/files/4"))
+            .mockResolvedValueOnce(lifecycle(13, "standup.mp4 (Transcription)", "/api/files/5"));
+        mockTranscribeAudioFromUrl.mockResolvedValue({
+            text: "Hello.",
+            language: "en",
+            confidence: 0.9,
+            segments: SEGMENTS,
+        });
+        mockUploadFile.mockResolvedValue({ url: "/api/files/5" });
+
+        await processDocumentUpload({
+            user: { userId: "user-1", companyId: 7n },
+            documentName: "standup.mp4",
+            rawDocumentUrl: "https://blob.test/standup.mp4",
+            requestUrl: "https://app.test/upload",
+            category: "Media",
+            mimeType: "video/mp4",
+            originalFilename: "standup.mp4",
+        });
+
+        expect(mockCreateDocumentLifecycle).toHaveBeenNthCalledWith(
+            2,
+            expect.objectContaining({
+                mimeType: "text/plain",
+                ocrMetadata: expect.objectContaining({
+                    source: "transcription",
+                    audioDocumentId: 12,
+                    mediaMimeType: "video/mp4",
+                    segments: SEGMENTS,
+                }) as unknown,
+            })
+        );
+    });
+
+    it("keeps a URL import's timestamps beside the page it came from", async () => {
+        mockIsVideoUrl.mockReturnValue(true);
+        mockTranscribeVideoFromUrl.mockResolvedValue({
+            text: "Hello.",
+            language: "en",
+            confidence: 0.8,
+            title: "Launch",
+            duration: 95,
+            source_url: "https://youtu.be/dQw4w9WgXcQ",
+            segments: SEGMENTS,
+        });
+        mockPutFile.mockResolvedValue({ url: "https://blob.test/launch.txt" });
+        mockCreateDocumentLifecycle.mockResolvedValueOnce(
+            lifecycle(20, "Launch (Transcription)", "https://blob.test/launch.txt")
+        );
+
+        await processVideoUrlUpload({
+            user: { userId: "user-1", companyId: 7n },
+            videoUrl: "https://youtu.be/dQw4w9WgXcQ",
+            requestUrl: "https://app.test/upload",
+            category: "Media",
+        });
+
+        expect(mockCreateDocumentLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({
+                ocrMetadata: expect.objectContaining({
+                    source: "sidecar-ytdlp",
+                    videoUrl: "https://youtu.be/dQw4w9WgXcQ",
+                    videoDuration: 95,
+                    segments: SEGMENTS,
+                }) as unknown,
+            })
+        );
     });
 });
 

@@ -13,6 +13,7 @@ import {
     Presentation,
     Archive,
     Music,
+    Film,
     History,
     BookOpen,
     MessagesSquare,
@@ -57,7 +58,12 @@ import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
 import { CodeViewer } from "./CodeViewer";
-import { AudioViewer } from "./AudioViewer";
+
+// Audio and video play in the browser beside their transcript; only media
+// sources pay for the player.
+const MediaViewer = dynamic(() => import("./media/MediaViewer").then(m => m.MediaViewer), {
+    ssr: false,
+});
 
 interface DocumentViewerProps {
     document: DocumentType | null;
@@ -92,6 +98,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
+    video: "Video",
     unknown: "File",
 };
 
@@ -109,6 +116,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     code: FileCode,
     zip: Archive,
     audio: Music,
+    video: Film,
     unknown: FileText,
 };
 
@@ -299,7 +307,8 @@ export function DocumentViewer({
                     />
                 );
             case "audio":
-                return <AudioViewer document={document} />;
+            case "video":
+                return <MediaViewer document={document} highlight={highlight} />;
             case "zip":
             case "text":
                 return (

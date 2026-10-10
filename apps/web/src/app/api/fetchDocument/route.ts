@@ -9,6 +9,7 @@ import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { mediaMimeFromName } from "~/lib/media-document";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -82,7 +83,7 @@ const EXTENSION_REGEX = /(\.[a-z0-9]+)(?:\?|#|$)/i;
 function inferMimeFromName(name: string): string | undefined {
     const match = EXTENSION_REGEX.exec(name);
     if (!match?.[1]) return undefined;
-    return EXTENSION_TO_MIME[match[1].toLowerCase()];
+    return EXTENSION_TO_MIME[match[1].toLowerCase()] ?? mediaMimeFromName(name);
 }
 
 export async function POST(_request: Request) {

@@ -2,6 +2,13 @@
 
 import { isArtifactDocument } from "~/lib/artifact-document";
 import { isMindmapDocument } from "~/lib/mindmap-document";
+import {
+    hasTranscriptTitle,
+    mediaKindOfMime,
+    mediaKindOfName,
+    transcriptMarkerOf,
+    transcriptMediaKind,
+} from "~/lib/media-document";
 
 /** Display category for document preview (PDF, image, docx, xlsx, pptx, text, code, etc.) */
 export type DocumentDisplayType =
@@ -17,7 +24,8 @@ export type DocumentDisplayType =
     | "artifact" // An imported Claude artifact — rendered in a sandbox, not as its source
     | "code" // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
     | "zip" // ZIP archives (extracted content shown)
-    | "audio" // Audio files (.mp3, .m4a) and audio transcriptions
+    | "audio" // Audio files (.mp3, .m4a) and their transcripts — played, with the transcript beside
+    | "video" // Video files (.mp4) and their transcripts, including YouTube-style imports
     | "unknown";
 
 export interface DocumentType {
@@ -85,8 +93,12 @@ export function getDocumentDisplayType(doc: {
     // run on this origin, rendered from its marker in a sandboxed frame.
     if (isArtifactDocument(doc.ocrMetadata)) return "artifact";
 
-    // Check title first — transcription documents are stored as text/plain but should render as audio
-    if (doc.title.toLowerCase().includes("(transcription)")) return "audio";
+    // A transcript is stored as text/plain but reads as the recording it was
+    // made from: played, with the transcript beside it. Transcripts from
+    // before the marker are known only by their title.
+    const transcript = transcriptMarkerOf(doc.ocrMetadata);
+    if (transcript) return transcriptMediaKind(transcript);
+    if (hasTranscriptTitle(doc.title)) return "audio";
 
     const mime = (doc.mimeType ?? "").toLowerCase();
     if (mime) {
@@ -106,7 +118,8 @@ export function getDocumentDisplayType(doc: {
             mime === "application/vnd.oasis.opendocument.spreadsheet"
         )
             return "xlsx";
-        if (mime.startsWith("audio/") || mime === "video/mp4") return "audio";
+        const mediaKind = mediaKindOfMime(mime);
+        if (mediaKind) return mediaKind;
         // Before the code prefixes: "text/x-" would otherwise claim text/x-markdown.
         if (mime === "text/markdown" || mime === "text/x-markdown") return "markdown";
         if (CODE_MIME_PREFIXES.some(p => mime.startsWith(p) || mime === p)) return "code";
@@ -116,7 +129,8 @@ export function getDocumentDisplayType(doc: {
     const src = `${doc.url} ${doc.title}`.toLowerCase();
     if (/\b\.pdf\b/.test(src)) return "pdf";
     if (/\.(png|jpg|jpeg|gif|webp|tiff|tif|bmp|svg)\b/.test(src)) return "image";
-    if (/\.(mp3|m4a)\b/.test(src)) return "audio";
+    const mediaKind = mediaKindOfName(doc.title) ?? mediaKindOfName(doc.url);
+    if (mediaKind) return mediaKind;
     if (/\.(docx?|odt)\b/.test(src)) return "docx";
     if (/\.(pptx?|odp)\b/.test(src)) return "pptx";
     if (/\.(xlsx?|ods)\b/.test(src)) return "xlsx";

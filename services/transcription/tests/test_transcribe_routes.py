@@ -46,6 +46,14 @@ class TestTranscribe:
         assert resp.status_code == 200
         assert resp.json()["filename"] == "video.mp4"
 
+    def test_m4a_extension_accepted(self, client):
+        """The app accepts .m4a uploads (MPEG-4 audio) and sends them here."""
+        resp = client.post(
+            "/transcribe", files={"file": ("memo.m4a", b"fake-m4a-bytes")}
+        )
+        assert resp.status_code == 200
+        assert resp.json()["filename"] == "memo.m4a"
+
     def test_unsupported_extension_rejected_with_400(self, client, fake_transcriber):
         resp = client.post(
             "/transcribe", files={"file": ("notes.wav", b"fake-wav-bytes")}

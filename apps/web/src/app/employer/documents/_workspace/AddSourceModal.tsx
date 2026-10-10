@@ -1025,7 +1025,9 @@ interface FilesPanelProps {
 
 const FILE_ACCEPT: Record<FilesPanelProps["kind"], string> = {
     files: "",
-    audio: "audio/*",
+    // Ingestion transcribes MP3 and MPEG-4 audio only — don't let the picker
+    // offer formats that fail (a WAV or FLAC is refused at upload).
+    audio: "audio/mpeg,audio/mp4,audio/x-m4a,.mp3,.m4a",
     // Ingestion only accepts MP4 — don't let the picker offer formats that fail.
     video: "video/mp4,.mp4",
 };
@@ -1042,13 +1044,13 @@ const KIND_COPY: Record<
     },
     audio: {
         title: "Drop audio files",
-        hint: "MP3, WAV, M4A, FLAC — transcribed automatically",
+        hint: "MP3, M4A — transcribed automatically, playable in the viewer",
         browse: "Browse audio",
         IconEl: SOURCE_META.audio.Icon,
     },
     video: {
         title: "Drop video files",
-        hint: "MP4 only — transcribed automatically",
+        hint: "MP4 only — transcribed automatically, playable in the viewer",
         browse: "Browse video",
         IconEl: SOURCE_META.video.Icon,
     },

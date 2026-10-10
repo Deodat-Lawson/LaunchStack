@@ -5,7 +5,14 @@ import * as SliderPrimitive from "@radix-ui/react-slider";
 
 import { cn } from "~/lib/utils";
 
-function Slider({ className, ...props }: React.ComponentProps<typeof SliderPrimitive.Root>) {
+function Slider({
+    className,
+    thumbLabel,
+    ...props
+}: React.ComponentProps<typeof SliderPrimitive.Root> & {
+    /** Accessible name for the thumb(s) — Radix names a single thumb nothing. */
+    thumbLabel?: string;
+}) {
     return (
         <SliderPrimitive.Root
             data-slot="slider"
@@ -27,6 +34,7 @@ function Slider({ className, ...props }: React.ComponentProps<typeof SliderPrimi
             {(props.value ?? props.defaultValue ?? [0]).map((_, index) => (
                 <SliderPrimitive.Thumb
                     key={index}
+                    aria-label={thumbLabel}
                     data-slot="slider-thumb"
                     className="border-brand bg-panel focus-visible:ring-brand/50 block size-4 rounded-full border shadow-sm outline-none transition-[box-shadow] focus-visible:ring-[3px] disabled:pointer-events-none"
                 />

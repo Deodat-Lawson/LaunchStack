@@ -34,6 +34,12 @@ export interface ChatModelPreset {
     readonly verifiedOn: string;
     /** Anything an operator should know before adopting the entry verbatim. */
     readonly notes?: string;
+    /**
+     * Set when the vendor has retired the model for new keys or a newer entry
+     * supersedes it. The entry still resolves, so existing configuration keeps
+     * starting, but the config loader warns and names the replacement.
+     */
+    readonly deprecated?: { readonly since: string; readonly replacement: string };
     readonly behavior: ChatModelBehavior;
 }
 
@@ -58,9 +64,45 @@ const OPENAI_IMAGE_MIME_TYPES = ["image/png", "image/jpeg", "image/webp", "image
 
 const PRESETS: readonly ChatModelPreset[] = [
     {
+        name: "google/gemini-3.8-flash",
+        source: GOOGLE_OPENAI_COMPAT_DOC,
+        verifiedOn: "2026-10-04",
+        notes:
+            "The default for every chat route. Verified against Google's " +
+            "OpenAI-compatibility endpoint on the date above: reasoning_effort " +
+            "none/low/medium/high (minimal is rejected), json_object, json_schema, " +
+            "tool calling, streaming, temperature, max_tokens and image input. " +
+            "Google's endpoint wants the bare id (`gemini-3.8-flash`); OpenRouter " +
+            "wants the vendor-prefixed one.",
+        behavior: {
+            input: ["text", "image"],
+            image: {
+                mimeTypes: ["image/png", "image/jpeg", "image/webp", "image/heic"],
+            },
+            reasoning: {
+                mode: "effort",
+                levels: {
+                    none: { reasoning_effort: "none" },
+                    low: { reasoning_effort: "low" },
+                    medium: { reasoning_effort: "medium" },
+                    high: { reasoning_effort: "high" },
+                },
+                default: "medium",
+            },
+            nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+            parameters: {
+                temperature: "supported",
+                systemMessages: "supported",
+                streaming: "supported",
+                maxOutputTokens: "supported",
+            },
+        },
+    },
+    {
         name: "google/gemini-2.5-flash",
         source: GOOGLE_OPENAI_COMPAT_DOC,
         verifiedOn: "2026-05-01",
+        deprecated: { since: "2026-10-04", replacement: "google/gemini-3.8-flash" },
         notes:
             "Behavior via Google's OpenAI-compatibility endpoint " +
             "(https://generativelanguage.googleapis.com/v1beta/openai/), not the " +
@@ -93,6 +135,7 @@ const PRESETS: readonly ChatModelPreset[] = [
         name: "google/gemini-2.5-flash-lite",
         source: GOOGLE_OPENAI_COMPAT_DOC,
         verifiedOn: "2026-05-01",
+        deprecated: { since: "2026-10-04", replacement: "google/gemini-3.8-flash" },
         notes:
             "The cheap tier, for the `fast` route. Behavior is asserted from the " +
             "2.5 family's shared OpenAI-compatibility surface — it was NOT " +
@@ -129,6 +172,7 @@ const PRESETS: readonly ChatModelPreset[] = [
         name: "google/gemini-2.5-pro",
         source: GOOGLE_OPENAI_COMPAT_DOC,
         verifiedOn: "2026-05-01",
+        deprecated: { since: "2026-10-04", replacement: "google/gemini-3.8-flash" },
         notes:
             "The reasoning tier, for the `reasoning` route. Same caveat as " +
             "google/gemini-2.5-flash-lite: behavior is asserted from the 2.5 " +

@@ -668,10 +668,10 @@ export interface AddSourceTab {
 
 export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
-        // Authoring, not ingesting: these hand the user an editor rather than
-        // asking for a file. A mindmap becomes citable once it is published
-        // back here; a Google Doc is citable from the moment it is created and
-        // re-syncs as it is edited.
+        // Authoring, not ingesting: these hand the user somewhere to write
+        // rather than asking for a file. A mindmap becomes citable once it is
+        // published back here; a Google Doc is citable from the moment it is
+        // created and re-syncs as it is edited; pasted text is a note.
         group: "Create",
         items: [
             {
@@ -686,6 +686,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 Icon: IconGoogleDocs,
                 desc: "Write it in Google Docs",
             },
+            {
+                id: "paste",
+                label: "Paste text",
+                Icon: IconPaste,
+                desc: "Drop in notes or excerpts",
+            },
         ],
     },
     {
@@ -695,12 +701,6 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             { id: "folder", label: "Folder", Icon: IconFolder, desc: "Bulk — keeps structure" },
             { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, M4A — transcribed" },
             { id: "video", label: "Video", Icon: IconVideo, desc: "MP4 — transcribed" },
-            {
-                id: "paste",
-                label: "Paste text",
-                Icon: IconPaste,
-                desc: "Drop in notes or excerpts",
-            },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
             {

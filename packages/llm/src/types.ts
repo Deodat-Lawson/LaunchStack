@@ -63,11 +63,20 @@ export type ChatCapability = (typeof ChatCapabilities)[number];
  */
 export const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
 
-/** Default chat model — Gemini's general-purpose tier. */
-export const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
+/**
+ * Default model for every Gemini capability that names its own model
+ * (transcription, VLM enrichment). Google stopped serving the 2.5 family to
+ * new API keys, so a 2.5 default 404s on a fresh deployment.
+ */
+export const GEMINI_DEFAULT_MODEL = "gemini-3.8-flash";
 
-/** Default model for cheap, high-volume work (table summaries, classification). */
-export const GEMINI_FAST_MODEL = "gemini-2.5-flash-lite";
+/**
+ * Default model for cheap, high-volume work (table summaries, NER,
+ * reranking). There is no 3.8 Flash-Lite, so this is the same model as
+ * GEMINI_DEFAULT_MODEL; callers that never ask for reasoning get Gemini's own
+ * default thinking budget.
+ */
+export const GEMINI_FAST_MODEL = "gemini-3.8-flash";
 
 /**
  * Default embeddings model. Supports Matryoshka truncation, so it can serve

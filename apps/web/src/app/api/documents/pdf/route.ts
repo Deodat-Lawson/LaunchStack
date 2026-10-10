@@ -34,12 +34,32 @@ function fail(status: number, error: string, message?: string): NextResponse {
     return NextResponse.json({ success: false, error, message }, { status });
 }
 
-/** The extension Gotenberg's import filter will be picked from. */
+/** Office MIME types uploads store in `file_type`, by the extension each implies. */
+const OFFICE_MIME_EXTENSIONS: Readonly<Record<string, string>> = {
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "application/vnd.ms-powerpoint": "ppt",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "application/vnd.oasis.opendocument.text": "odt",
+    "application/vnd.oasis.opendocument.spreadsheet": "ods",
+    "application/vnd.oasis.opendocument.presentation": "odp",
+    "application/rtf": "rtf",
+    "application/pdf": "pdf",
+};
+
+/**
+ * The extension Gotenberg's import filter will be picked from. `file_type`
+ * holds a bare extension on older rows and a MIME type on uploads; a MIME
+ * type read as an extension refused every uploaded Word file with a 415.
+ */
 function documentExtension(fileType: string | null, title: string): string {
     const fromType = (fileType ?? "").toLowerCase().replace(/^\./, "");
-    if (fromType) return fromType;
+    if (fromType && !fromType.includes("/")) return fromType;
     const dot = title.lastIndexOf(".");
-    return dot === -1 ? "" : title.slice(dot + 1).toLowerCase();
+    if (dot !== -1) return title.slice(dot + 1).toLowerCase();
+    return OFFICE_MIME_EXTENSIONS[fromType] ?? "";
 }
 
 export async function GET(request: Request) {

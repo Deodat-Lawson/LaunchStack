@@ -34,7 +34,7 @@ export interface ImageToolConfig {
  * multimodal line can edit. Spelled the OpenRouter way because that is the
  * default endpoint; override with IMAGE_MODEL when pointing elsewhere.
  */
-export const DEFAULT_IMAGE_MODEL = "google/gemini-2.5-flash-image";
+export const DEFAULT_IMAGE_MODEL = "google/gemini-3.1-flash-image";
 
 export class ImageConfigError extends Error {
     readonly code = "image_not_configured";

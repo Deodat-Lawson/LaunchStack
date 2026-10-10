@@ -57,11 +57,13 @@ interface OpenAIEmbeddingResponse {
     object: string;
     data: Array<{
         object: string;
-        index: number;
+        /** Gemini omits a zero index (protobuf drops default values). */
+        index?: number;
         embedding: number[];
     }>;
     model: string;
-    usage: {
+    /** Absent from Gemini's OpenAI-compatible endpoint. */
+    usage?: {
         prompt_tokens: number;
         total_tokens: number;
     };
@@ -248,7 +250,7 @@ async function callEmbeddingAPI(
 
     const data = (await response.json()) as OpenAIEmbeddingResponse;
 
-    const sortedData = [...data.data].sort((a, b) => a.index - b.index);
+    const sortedData = [...data.data].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     const dim = config.dimensions;
     const embeddings = sortedData.map(item =>
         item.embedding.length > dim ? item.embedding.slice(0, dim) : item.embedding
@@ -256,7 +258,7 @@ async function callEmbeddingAPI(
 
     return {
         embeddings,
-        tokensUsed: data.usage.total_tokens,
+        tokensUsed: data.usage?.total_tokens ?? 0,
     };
 }
 

@@ -295,7 +295,7 @@ export const GUIDES: Guide[] = [
                 body: [
                     "This minimal example uses one model for every route. Add distinct models when you want a separate fast or reasoning tier. Unknown models require a complete behavior definition; the app does not infer capabilities from the model name.",
                 ],
-                code: "version: 1\nmodels:\n  primary:\n    id: gemini-2.5-flash\n    preset: google/gemini-2.5-flash\nroutes:\n  default: primary\n  fast: primary\n  reasoning: primary\n  vision: primary",
+                code: "version: 1\nmodels:\n  primary:\n    id: gemini-3.8-flash\n    preset: google/gemini-3.8-flash\nroutes:\n  default: primary\n  fast: primary\n  reasoning: primary\n  vision: primary",
                 file: "apps/web/config/chat-models.yaml",
                 note: "Compose mounts this file read-only into both app and worker. After a model edit, restart both processes. For host development, use an absolute CHAT_MODELS_CONFIG path if their working directories differ.",
             },

@@ -16,6 +16,7 @@ const readyMachine = {
         EMBEDDING_API_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai",
         EMBEDDING_API_KEY: "AIza-real-key-value",
         DEV_SEED_PASSWORD: "local-dev-password",
+        BETTER_AUTH_URL: "http://localhost:3000",
     },
     nodeMajor: 22,
     pnpmVersion: "10.15.1",
@@ -73,6 +74,14 @@ test("missing Docker is blocking and points at the platform installer", () => {
         daemon: false,
     });
     assert.ok(linux.missing.some(line => line.includes("daemon")));
+});
+
+test("a missing BETTER_AUTH_URL warns and does not block boot", () => {
+    const env = { ...readyMachine.env };
+    delete env.BETTER_AUTH_URL;
+    const report = assess({ ...readyMachine, env });
+    assert.deepEqual(report.missing, []);
+    assert.ok(report.warnings.some(line => line.includes("BETTER_AUTH_URL")));
 });
 
 test("the example .env placeholder secret blocks boot", () => {

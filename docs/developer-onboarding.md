@@ -78,6 +78,14 @@ openssl rand -base64 32
 
 Put that output in `BETTER_AUTH_SECRET`. Compose passes this variable through with no default. An empty or placeholder value makes the app refuse to start.
 
+Set the public origin the browser uses, or sign-up returns `Invalid origin`:
+
+```text
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+Compose forwards `BETTER_AUTH_URL` when it is in `.env`. Host `next dev` reads the same file.
+
 Leave `DATABASE_URL` on the line from `.env.example`:
 
 ```text
@@ -277,7 +285,7 @@ Public search that does not need a key: SEC EDGAR (`SEC_EDGAR_USER_AGENT`, a `na
 
 | Variable | Why it exists |
 |---|---|
-| `BETTER_AUTH_URL` | Public origin behind a reverse proxy. Dev infers localhost from the request. |
+| `BETTER_AUTH_URL` | Public origin. Local sign-up needs `http://localhost:3000`. Behind a proxy, set the outside origin (`https://app.example.com`). |
 | `MIGRATE_DATABASE_URL` | Direct Postgres URL when `DATABASE_URL` is a pooler (pgbouncer, Neon pooled, Supabase :6543). Migrations take a session advisory lock. |
 | `APP_PUBLIC_URL` | Origin the converter uses to fetch `/api/files/`. Compose uses the in-network name. |
 | `METRICS_SCRAPE_TOKEN` | Bearer token for `/api/metrics`. Unset locally means unauthenticated scrapes. Production returns 503 until it is set. |
@@ -301,7 +309,7 @@ The wizard is not built yet. `pnpm setup:check` is the read-only probe. A wizard
 3. If `docker compose version` fails, point at the Compose plugin (Desktop already includes it).
 4. If `docker info` fails, ask them to start Docker Desktop and re-run.
 5. If `.env` is missing, copy `.env.example` to `.env`.
-6. If `BETTER_AUTH_SECRET` is empty or still the placeholder `BETTER_AUTH_SECRET`, generate one and write it. Do not print it back.
+6. If `BETTER_AUTH_SECRET` is empty or still the placeholder `BETTER_AUTH_SECRET`, generate one and write it. Do not print it back. Set `BETTER_AUTH_URL=http://localhost:3000` when that line is missing, so browser sign-up is accepted.
 7. Leave `DATABASE_URL` on `localhost:5433` unless they chose a database that is not the Compose one.
 8. If `CHAT_API_KEY` is `AIza...` or chat has no credential, ask for a Google AI Studio key, an OpenAI-compatible URL plus key, or "skip — chat stays dark". Do not invent a key.
 9. Ask the same single question for embeddings: Gemini on a new database (`gemini-embedding-768`), an OpenAI-compatible embeddings URL, or skip. Skipping means uploads will not become searchable.

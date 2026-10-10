@@ -150,6 +150,14 @@ export function assess(facts) {
         ok.push("BETTER_AUTH_SECRET is set.");
     }
 
+    if (facts.envExists && !facts.env.BETTER_AUTH_URL?.trim()) {
+        warnings.push(
+            "BETTER_AUTH_URL is unset. Browser sign-up returns Invalid origin until it matches the origin you open, usually http://localhost:3000. Compose forwards this value from .env."
+        );
+    } else if (facts.env.BETTER_AUTH_URL?.trim()) {
+        ok.push("BETTER_AUTH_URL is set.");
+    }
+
     if (facts.envExists && !facts.env.DATABASE_URL?.trim()) {
         warnings.push(
             "DATABASE_URL is unset. Compose injects its own URL inside containers. Host commands (db:migrate, db:seed, psql) need postgresql://postgres:password@localhost:5433/pdr_ai_v2, which is the line in .env.example."

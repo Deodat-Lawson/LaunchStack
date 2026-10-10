@@ -138,6 +138,38 @@ x-shared-env: &shared-env
   # unless set — the published image must never answer these — but a local
   # stack can turn them on to look at UI without a session.
   ENABLE_DEV_ROUTES: ${ENABLE_DEV_ROUTES:-}
+  # Integrations. This block is an explicit allowlist, so a key set in the host
+  # .env (or synced from Key Vault) is invisible to the container unless it is
+  # listed here. Every one is optional and unset by default; a feature stays
+  # off until its credentials are present. Deliberately NOT listed because an
+  # empty string is not "unset" for them: SEARCH_PROVIDER (strict enum) and
+  # GOOGLE_DOCS_SETTLE_MINUTES (Number("") is 0, not the default).
+  # Sign in with Google / GitHub (better-auth callbacks under /api/auth).
+  AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
+  AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
+  AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
+  AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
+  # Workspace connectors: Google Drive + Gmail, GitHub, Slack.
+  GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
+  GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
+  GOOGLE_OAUTH_REDIRECT_URL: ${GOOGLE_OAUTH_REDIRECT_URL:-}
+  GOOGLE_DOCS_EDITING_ENABLED: ${GOOGLE_DOCS_EDITING_ENABLED:-}
+  GMAIL_CONNECTOR_ENABLED: ${GMAIL_CONNECTOR_ENABLED:-}
+  GITHUB_OAUTH_CLIENT_ID: ${GITHUB_OAUTH_CLIENT_ID:-}
+  GITHUB_OAUTH_CLIENT_SECRET: ${GITHUB_OAUTH_CLIENT_SECRET:-}
+  GITHUB_WEBHOOK_SECRET: ${GITHUB_WEBHOOK_SECRET:-}
+  SLACK_CLIENT_ID: ${SLACK_CLIENT_ID:-}
+  SLACK_CLIENT_SECRET: ${SLACK_CLIENT_SECRET:-}
+  SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
+  # Public origin of the app; the converter and the OAuth redirect derive from it.
+  APP_PUBLIC_URL: ${APP_PUBLIC_URL:-}
+  # Campaign email: HMAC key for unsubscribe links, and the send switch
+  # (anything but "true" is a dry run).
+  EMAIL_UNSUBSCRIBE_SECRET: ${EMAIL_UNSUBSCRIBE_SECRET:-}
+  EMAIL_SENDING_ENABLED: ${EMAIL_SENDING_ENABLED:-}
+  # Investor relations: the SEC rejects requests without "name email".
+  SEC_EDGAR_USER_AGENT: ${SEC_EDGAR_USER_AGENT:-}
+  SERPER_API_KEY: ${SERPER_API_KEY:-}
 
 services:
   db:

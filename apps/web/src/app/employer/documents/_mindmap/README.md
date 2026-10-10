@@ -147,16 +147,96 @@ dark-on-black.
 ### Contrast is a tested property, not a matter of taste
 
 `__tests__/theme.test.ts` asserts it over the whole palette rather than
-spot-checking: every swatch's ink clears 4.5:1 on its own fill, every theme's
-cycled stroke clears 3:1 on its own paper, and every label in a repainted
-document is readable in all ten themes. Two colours were moved to satisfy it
-(green's and amber's light strokes), and `readableInkOn()` picks a root topic's
+spot-checking: every swatch's ink clears 4.5:1 on its own fill, every topic
+label at every depth clears 4.5:1 on whatever is behind it — the central
+topic included, whose 18px bold label is just under WCAG's large-text line
+(18.66px bold) and so gets no 3:1 allowance — every outline and connector
+clears 3:1 on the paper (WCAG 1.4.11), and every label in a repainted document
+is readable in all ten themes. Two colours were moved to satisfy it (green's
+and amber's light strokes), and `readableInkOn()` picks the central topic's
 label colour by measurement instead of by mode — near-white loses on a bright
 violet root and wins on a mid violet one, and no fixed choice gets both.
 
 The same contract governs the app's own ink ladder in `tokens.css`: `--ink-3`
 is the smallest tier used for prose and must clear 4.5:1 on every surface in
 its block; `--ink-4` is de-emphasised UI and must clear 3:1.
+
+### Why the default themes look the way they do
+
+Every choice below is a convention with a reason, not a taste call, and the
+reason is what to argue with if one should change.
+
+**Colour means "belongs together", so it is assigned by branch.** Each main
+branch takes one hue from the theme's `cycle`, and every topic under it — and
+every connector into one — wears that hue. This is the mind-map convention
+(XMind's "Colored Branch", MindNode's themes taking branch colours from the
+first level, Miro filling nodes "with the same color as the branch", Buzan's
+"a colour per branch") and it rests on Gestalt similarity: a reader sees a
+limb as one thing before reading a word of it. Colouring by _depth_ instead,
+as this editor did until October 2026, made every main branch the same blue
+and every detail the same teal — the colour carried no information the layout
+did not already show.
+
+**Depth is shown by weight, so it reads without colour** (WCAG 1.4.1, and
+XMind's "colour intensity … from Center Topic to Main Topic, gradually
+decreasing"). `topicPaint` in `model/theme.ts` is the whole ladder:
+
+| Depth                  | Surface                        | Outline            | Label                                 | Line in         |
+| ---------------------- | ------------------------------ | ------------------ | ------------------------------------- | --------------- |
+| Central topic          | solid, in the theme's root hue | none               | measured (`readableInkOn`), 18px bold | —               |
+| Main branch            | tint of the branch hue         | 2px, branch hue    | branch ink, 15px bold                 | 3px, branch hue |
+| Subtopic               | the paper itself               | 1.5px, branch hue  | theme ink, 13.5px                     | 2px             |
+| Leaf (underline shape) | none                           | rule in branch hue | theme ink                             | 1.5px           |
+
+Connectors thin from the centre outward, Buzan's "thicker… becoming thinner as
+they radiate out". Details sit on the paper with neutral ink so they recede:
+the strongest coloured mark is the main branch, and the strongest mark of all
+is the centre.
+
+**The centre's hue is reserved.** A theme's `root` never appears in its
+`cycle`, so the anchor cannot be mistaken for a branch. (Before, a topic added
+under a violet root came out violet.)
+
+**Neighbouring branches are far apart.** Cycles alternate warm and cool, and a
+test holds every adjacent pair at ≥ 0.1 OKLab ΔE — several just-noticeable
+differences, in lightness as well as hue — which is what keeps branches apart
+for readers with a colour-vision deficiency. Ocean was recast (blue centre;
+cyan, indigo, green branches) because its old teal and cyan failed this.
+
+**Light and dark are one identity under two lightings** (as before): each light
+theme has a dark counterpart with the same root and cycle, read through the
+dark swatch table, and new documents are seeded in the creator's app theme.
+
+| Theme                  | Centre             | Branch hues                                                 |
+| ---------------------- | ------------------ | ----------------------------------------------------------- |
+| Launchstack / Midnight | violet (the brand) | blue, amber, teal, pink, green, orange                      |
+| Monochrome / Carbon    | graphite           | slate — hierarchy by weight alone, for print and formal use |
+| Ocean / Abyss          | blue               | cyan, indigo, green                                         |
+| Sunset / Ember         | red                | orange, pink, amber, magenta                                |
+| Forest / Pine          | green              | teal, amber, lime                                           |
+
+Measured (WCAG contrast; minima over each theme's branch hues):
+
+| Theme       | Centre label | Centre vs paper | Branch label | Outline / line vs paper | Detail label |
+| ----------- | ------------ | --------------- | ------------ | ----------------------- | ------------ |
+| Launchstack | 5.5          | 5.5             | 8.1          | 3.5                     | 16.9         |
+| Monochrome  | 7.3          | 7.5             | 13.4         | 3.7                     | 17.3         |
+| Ocean       | 4.6          | 4.5             | 8.6          | 3.5                     | 14.9         |
+| Sunset      | 5.3          | 5.3             | 8.1          | 3.5                     | 14.4         |
+| Forest      | 5.0          | 5.0             | 8.1          | 3.4                     | 14.9         |
+| Midnight    | 6.4          | 6.8             | 9.9          | 6.9                     | 16.0         |
+| Carbon      | 6.5          | 7.1             | 11.1         | 5.2                     | 16.5         |
+| Abyss       | 7.1          | 7.5             | 10.0         | 6.6                     | 15.5         |
+| Ember       | 5.5          | 5.9             | 9.9          | 6.8                     | 15.5         |
+| Pine        | 7.7          | 8.2             | 9.9          | 8.4                     | 15.7         |
+
+**Every path paints through the same function.** A topic's look depends on
+the theme _and_ its place in the tree, which no factory can know, so Tab,
+Enter, the Topic tool, a port drag, a palette drop, an outline import and the
+Theme picker all end in `paintTopics` / `applyThemeToPage`. Adding to a map
+follows the branch as it is (recolour a branch red and its new details are
+red); switching theme replaces every colour by branch position. The colour
+dots recolour a whole branch, in the tone for the board's lighting.
 
 ## Saving
 

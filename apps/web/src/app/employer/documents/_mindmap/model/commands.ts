@@ -54,10 +54,10 @@ import {
     type ViewportLike,
 } from "./geometry";
 import { computeLayout, suggestChildPosition, type LayoutKind, type LayoutOptions } from "./layout";
-import { branchSwatch, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } from "./palette";
+import { swatchFor, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } from "./palette";
 import { shapeDef, shapeTextBox } from "./shapes";
-import { applyThemeToDoc } from "./theme";
-import type { EditorStore } from "./store";
+import { applyThemeToDoc, paintTopics, recolourTopics, topicType } from "./theme";
+import type { CommitOptions, EditorStore } from "./store";
 import { layoutText } from "./text";
 import type {
     ArrowId,
@@ -91,6 +91,19 @@ export function docMode(store: EditorStore): ThemeMode {
     return themeMode(store.getState().doc.settings.paletteId);
 }
 
+/**
+ * Add nodes, painting any topic among them for the document's theme. A
+ * topic's colour depends on the theme *and* on where it sits in the tree,
+ * which no factory can know — so every path that adds one ends here or in
+ * `paintTopics` directly, and a central topic dropped on an Ocean board is
+ * Ocean's centre rather than a fixed violet.
+ */
+function addPainted(page: DiagramPage, nodes: DiagramNode[], paletteId: string): DiagramPage {
+    const next = addNodes(page, nodes);
+    const topics = nodes.filter(nd => nd.shape.startsWith("mind-")).map(nd => nd.id);
+    return topics.length ? paintTopics(next, topics, paletteId) : next;
+}
+
 export function insertShape(
     store: EditorStore,
     shape: ShapeId,
@@ -98,13 +111,17 @@ export function insertShape(
     opts: { text?: string; w?: number; h?: number; parentId?: string | null } = {}
 ): string {
     const node = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
-    store.updatePage(page => addNodes(page, [node]), { label: `Add ${shapeDef(shape).name}` });
+    const paletteId = store.getState().doc.settings.paletteId;
+    store.updatePage(page => addPainted(page, [node], paletteId), {
+        label: `Add ${shapeDef(shape).name}`,
+    });
     store.selectNodes([node.id]);
     return node.id;
 }
 
 export function insertNode(store: EditorStore, node: DiagramNode, label = "Add shape"): string {
-    store.updatePage(page => addNodes(page, [node]), { label });
+    const paletteId = store.getState().doc.settings.paletteId;
+    store.updatePage(page => addPainted(page, [node], paletteId), { label });
     store.selectNodes([node.id]);
     return node.id;
 }
@@ -655,18 +672,31 @@ export function styleEdgeSelection(
 }
 
 /** Apply a whole swatch (fill + stroke + ink) to the node selection. */
+/**
+ * Colour the selection with a swatch, in the tone for this document's paper —
+ * the light table on a dark board painted pale pastel boxes. Topics are
+ * recoloured as a branch (see `recolourTopics`); anything else takes the
+ * swatch as is.
+ */
 export function applySwatch(store: EditorStore, swatchId: string): void {
-    const sw = SWATCH_BY_ID[swatchId];
-    if (!sw) return;
+    if (!SWATCH_BY_ID[swatchId]) return;
     const ids = store.selectedNodeIds();
     if (ids.length === 0) return;
+    const { paletteId } = store.getState().doc.settings;
+    const sw = swatchFor(swatchId, docMode(store));
     store.updatePage(
-        page =>
-            mapNodes(page, ids, nd => ({
+        page => {
+            const topics = ids.filter(id => nodeById(page, id)?.shape.startsWith("mind-"));
+            const others = ids.filter(id => !topics.includes(id));
+            const recoloured = topics.length
+                ? recolourTopics(page, topics, swatchId, paletteId)
+                : page;
+            return mapNodes(recoloured, others, nd => ({
                 ...nd,
                 style: { ...nd.style, fill: sw.fill, stroke: sw.stroke },
                 textStyle: { ...nd.textStyle, color: sw.ink },
-            })),
+            }));
+        },
         { label: `Colour ${sw.name}` }
     );
 }
@@ -866,7 +896,9 @@ function autoArrangeIfOn(store: EditorStore): void {
     // Only a page that is nothing but topics: see `isMindmapPage`.
     if (!isMindmapPage(activePage(doc))) return;
     store.clearSelection();
-    runLayout(store, layout);
+    // Part of the edit that triggered it, not an edit of its own: one ⌘Z
+    // after Tab should take the new topic away, not just un-arrange it.
+    runLayout(store, layout, { transient: true });
 }
 
 // ---------------------------------------------------------------------------
@@ -909,11 +941,13 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
     const parent = nodeById(page, parentId);
     if (!parent) return null;
     const depth = depthOf(page, parentId) + 1;
-    const mode = themeMode(store.getState().doc.settings.paletteId);
-    const sw = branchSwatch(depth, mode);
+    const { paletteId } = store.getState().doc.settings;
+    const mode = themeMode(paletteId);
     const size = { w: depth === 1 ? 170 : 150, h: depth === 1 ? 56 : 48 };
     const at = suggestChildPosition(page, parentId, size, "right");
 
+    // Shape, size and type come from the depth; colour is painted below from
+    // the theme and the branch this topic joins (`paintTopics`).
     const child = createNode({
         shape: depth >= 3 ? "mind-leaf" : "mind-branch",
         mode,
@@ -922,12 +956,8 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
         w: size.w,
         h: size.h,
         text: "",
-        style:
-            depth >= 3 ? { fill: "none", stroke: sw.stroke } : { fill: sw.fill, stroke: sw.stroke },
         textStyle: defaultTextStyle({
-            color: sw.ink,
-            size: depth === 1 ? 15 : 13.5,
-            bold: depth === 1,
+            ...topicType(depth),
             align: depth >= 3 ? "left" : "center",
             valign: depth >= 3 ? "bottom" : "middle",
         }),
@@ -942,11 +972,13 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
         from: { nodeId: parentId, port: "auto" },
         to: { nodeId: child.id, port: "auto" },
         kind: siblingEdge?.kind ?? store.getState().doc.settings.defaultEdgeKind,
-        style: { stroke: sw.stroke, strokeWidth: Math.max(3 - depth * 0.5, 1.4) },
         endArrow: "none",
     });
 
-    store.updatePage(page2 => addEdges(addNodes(page2, [child]), [edge]), { label: "Add topic" });
+    store.updatePage(
+        page2 => paintTopics(addEdges(addNodes(page2, [child]), [edge]), [child.id], paletteId),
+        { label: "Add topic" }
+    );
     autoArrangeIfOn(store);
     store.selectNodes([child.id]);
     store.setEditing({ kind: "node", id: child.id });
@@ -1003,7 +1035,11 @@ export function expandAll(store: EditorStore): void {
 // Layout
 // ---------------------------------------------------------------------------
 
-export function runLayout(store: EditorStore, options: LayoutOptions): void {
+export function runLayout(
+    store: EditorStore,
+    options: LayoutOptions,
+    commit: CommitOptions = { label: `Layout: ${options.kind}` }
+): void {
     const page = activePage(store.getState().doc);
     const subset = store.selectedNodeIds();
     const positions = computeLayout(page, options, subset);
@@ -1016,7 +1052,7 @@ export function runLayout(store: EditorStore, options: LayoutOptions): void {
                 return pos ? { ...nd, x: pos.x, y: pos.y } : nd;
             }),
         }),
-        { label: `Layout: ${options.kind}` }
+        commit
     );
 }
 

@@ -254,6 +254,18 @@ export function swatchFor(id: string, mode: ThemeMode): Swatch {
     return table[id] ?? table.slate!;
 }
 
+/**
+ * Which swatch a stored colour came from, in either lighting — or null for a
+ * colour someone typed in. Lets a new subtopic take its branch's hue from the
+ * branch as it actually is, after a recolour, rather than from the theme.
+ */
+export function swatchIdOf(color: string): string | null {
+    for (const sw of [...SWATCHES, ...DARK_SWATCHES]) {
+        if (sw.stroke === color || sw.fill === color) return sw.id;
+    }
+    return null;
+}
+
 /** Neutral document defaults: white fill, mid-grey stroke, near-black ink. */
 export const PAPER = "oklch(1 0 0)";
 export const INK = "oklch(0.22 0.015 280)";
@@ -411,13 +423,32 @@ export function readableInkOn(background: string): string {
 /**
  * Named document themes. Applying one restyles every node/edge on the page in
  * a single history step (see `applyTheme` in `commands.ts`).
+ *
+ * A theme assigns colour by *role*, not by position on the page:
+ *
+ * - `root` is the central topic's hue. It appears nowhere else, so the anchor
+ *   of the map is the one thing on the board that cannot be confused with a
+ *   branch (and it is filled solid, the heaviest mark on the board).
+ * - `cycle` is handed out one hue per main branch, in the order the branches
+ *   were made. Every topic under a main branch, and every connector into one,
+ *   takes that branch's hue — colour means "these belong together", which is
+ *   the mind-map convention (XMind "Colored Branch", MindNode's branch colours,
+ *   Buzan's "a colour per branch") and the Gestalt similarity cue it rests on.
+ *   Adjacent entries are ordered warm/cool so neighbouring branches differ in
+ *   hue *and* lightness, which is what keeps them apart for colour-blind readers.
+ * - `edgeStroke` is for connectors that are not part of a topic tree — a
+ *   flowchart's arrows keep one quiet colour.
+ *
+ * The full rationale, with sources and measured contrast, is in the README.
  */
 export interface DocTheme {
     id: string;
     name: string;
-    /** Which swatch table the cycle is read from, and how the paper is lit. */
+    /** Which swatch table the hues are read from, and how the paper is lit. */
     mode: ThemeMode;
-    /** Swatch ids cycled across nodes, in order. */
+    /** Swatch id of the central topic. Never repeated in `cycle`. */
+    root: string;
+    /** Swatch ids handed out per main branch (and to non-topic shapes), in order. */
     cycle: string[];
     edgeStroke: string;
     background: string;
@@ -429,7 +460,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "default",
         name: "Launchstack",
         mode: "light",
-        cycle: ["violet", "blue", "teal", "green", "amber", "pink"],
+        root: "violet",
+        cycle: ["blue", "amber", "teal", "pink", "green", "orange"],
         edgeStroke: "oklch(0.55 0.03 280)",
         background: "oklch(0.992 0.003 80)",
         ink: INK,
@@ -438,7 +470,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "mono",
         name: "Monochrome",
         mode: "light",
-        cycle: ["slate", "graphite"],
+        root: "graphite",
+        cycle: ["slate"],
         edgeStroke: "oklch(0.45 0.01 280)",
         background: "oklch(1 0 0)",
         ink: INK,
@@ -447,7 +480,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "ocean",
         name: "Ocean",
         mode: "light",
-        cycle: ["blue", "cyan", "teal", "indigo"],
+        root: "blue",
+        cycle: ["cyan", "indigo", "green"],
         edgeStroke: "oklch(0.52 0.08 235)",
         background: "oklch(0.985 0.008 235)",
         ink: "oklch(0.26 0.05 245)",
@@ -456,7 +490,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "sunset",
         name: "Sunset",
         mode: "light",
-        cycle: ["orange", "amber", "red", "pink", "magenta"],
+        root: "red",
+        cycle: ["orange", "pink", "amber", "magenta"],
         edgeStroke: "oklch(0.55 0.10 40)",
         background: "oklch(0.99 0.01 70)",
         ink: "oklch(0.28 0.06 40)",
@@ -465,7 +500,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "forest",
         name: "Forest",
         mode: "light",
-        cycle: ["green", "lime", "teal", "amber"],
+        root: "green",
+        cycle: ["teal", "amber", "lime"],
         edgeStroke: "oklch(0.48 0.09 150)",
         background: "oklch(0.99 0.008 140)",
         ink: "oklch(0.26 0.05 150)",
@@ -478,7 +514,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "midnight",
         name: "Midnight",
         mode: "dark",
-        cycle: ["violet", "blue", "teal", "green", "amber", "pink"],
+        root: "violet",
+        cycle: ["blue", "amber", "teal", "pink", "green", "orange"],
         edgeStroke: "oklch(0.66 0.03 285)",
         background: "oklch(0.19 0.018 285)",
         ink: INK_DARK,
@@ -487,7 +524,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "carbon",
         name: "Carbon",
         mode: "dark",
-        cycle: ["slate", "graphite"],
+        root: "graphite",
+        cycle: ["slate"],
         edgeStroke: "oklch(0.68 0.01 280)",
         background: "oklch(0.17 0.004 280)",
         ink: INK_DARK,
@@ -496,7 +534,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "abyss",
         name: "Abyss",
         mode: "dark",
-        cycle: ["blue", "cyan", "teal", "indigo"],
+        root: "blue",
+        cycle: ["cyan", "indigo", "green"],
         edgeStroke: "oklch(0.68 0.08 235)",
         background: "oklch(0.19 0.03 240)",
         ink: "oklch(0.94 0.02 235)",
@@ -505,7 +544,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "ember",
         name: "Ember",
         mode: "dark",
-        cycle: ["orange", "amber", "red", "pink", "magenta"],
+        root: "red",
+        cycle: ["orange", "pink", "amber", "magenta"],
         edgeStroke: "oklch(0.70 0.10 45)",
         background: "oklch(0.19 0.025 40)",
         ink: "oklch(0.94 0.025 60)",
@@ -514,7 +554,8 @@ export const THEMES: readonly DocTheme[] = [
         id: "pine",
         name: "Pine",
         mode: "dark",
-        cycle: ["green", "lime", "teal", "amber"],
+        root: "green",
+        cycle: ["teal", "amber", "lime"],
         edgeStroke: "oklch(0.68 0.10 150)",
         background: "oklch(0.185 0.022 155)",
         ink: "oklch(0.94 0.02 150)",
@@ -522,6 +563,17 @@ export const THEMES: readonly DocTheme[] = [
 ];
 
 export const THEME_BY_ID: Record<string, DocTheme> = Object.fromEntries(THEMES.map(t => [t.id, t]));
+
+/**
+ * The theme a document is painted in. A document with no (or an unknown)
+ * palette id still has a paper, so fall back to the default board for its
+ * lighting rather than to nothing.
+ */
+export function themeFor(paletteId: string | null | undefined, mode?: ThemeMode): DocTheme {
+    const named = paletteId ? THEME_BY_ID[paletteId] : undefined;
+    if (named) return named;
+    return THEME_BY_ID[defaultThemeFor(mode ?? themeMode(paletteId))]!;
+}
 
 /**
  * Is this colour dark enough that chrome drawn on it must be light?

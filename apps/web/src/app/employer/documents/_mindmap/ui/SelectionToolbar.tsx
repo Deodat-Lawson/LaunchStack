@@ -15,7 +15,14 @@ import {
 } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
 import { nodesBounds, worldToScreen } from "../model/geometry";
-import { SWATCHES, swatchFor } from "../model/palette";
+import { SWATCH_BY_ID, swatchFor } from "../model/palette";
+
+/**
+ * The eight hues on the floating toolbar: one neutral and seven that are far
+ * apart round the wheel, so each dot is a different answer. (The first eight
+ * of the full table were two greys and four blues.)
+ */
+const PICKER = ["slate", "violet", "blue", "teal", "green", "amber", "orange", "pink"] as const;
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
 import { useEditor, useStore } from "./EditorContext";
@@ -95,9 +102,12 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             <span className="bg-line mx-0.5 h-5 w-px" />
 
             <div className="flex items-center gap-1 px-1" role="group" aria-label="Colour">
-                {SWATCHES.slice(0, 8).map(sw => {
+                {PICKER.map(id => SWATCH_BY_ID[id]!).map(sw => {
                     const tone = swatchFor(sw.id, mode);
-                    const active = first.style.stroke === tone.stroke;
+                    // A central topic wears its hue as the fill, not the outline.
+                    const worn =
+                        first.shape === "mind-root" ? first.style.fill : first.style.stroke;
+                    const active = worn === tone.stroke;
                     return (
                         <Tip key={sw.id} label={sw.name}>
                             <button

@@ -108,7 +108,7 @@ void test(
         };
         assert.ok(worker.scripts.dev);
         assert.match(read("apps/web/src/lib/storage.ts"), /"s3"\s*\|\s*"database"/);
-        assert.match(read("packages/llm/src/presets.ts"), /name: "google\/gemini-2.5-flash"/);
+        assert.match(read("packages/llm/src/presets.ts"), /name: "google\/gemini-3.8-flash"/);
         assert.match(
             read("packages/llm/src/embeddings/index-registry.ts"),
             /indexKey: "gemini-embedding-768"/

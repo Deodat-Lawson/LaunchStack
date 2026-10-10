@@ -63,7 +63,7 @@ speaks HTTP and nothing else.
 import { generateImages } from "@launchstack/llm/images";
 
 const { images, warnings, shape } = await generateImages(
-    { prompt: "a duck on a bicycle", modelId: "google/gemini-2.5-flash-image", aspectRatio: "16:9" },
+    { prompt: "a duck on a bicycle", modelId: "google/gemini-3.1-flash-image", aspectRatio: "16:9" },
     { baseUrl: process.env.CHAT_BASE_URL!, apiKey: process.env.CHAT_API_KEY! },
 );
 ```

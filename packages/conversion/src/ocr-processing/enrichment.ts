@@ -15,7 +15,7 @@ import { GEMINI_DEFAULT_MODEL } from "@launchstack/llm/types";
  *   1. Ollama — if a VLM Ollama base URL is configured. Defaults to
  *      "llava:13b"; callers can override via options.model. Self-hosted.
  *   2. OpenAI-compatible — if an auxiliary API key is configured. Uses
- *      gemini-2.5-flash by default; callers can override via options.model.
+ *      GEMINI_DEFAULT_MODEL by default; callers can override via options.model.
  *   3. Skip — return empty string.
  */
 

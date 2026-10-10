@@ -210,7 +210,7 @@ const serverSchema = z.object({
     // Legacy (deprecated by ADR-004): the ocr-worker service was removed;
     // this variable is ignored with a startup warning.
     OCR_WORKER_URL: optionalString(),
-    // Model for OCR vision classification (default: gemini-2.5-flash). Any OpenAI-compatible vision model.
+    // Model for OCR vision classification (default: gemini-3.8-flash). Any OpenAI-compatible vision model.
     OCR_VISION_MODEL: optionalString(),
     // The Marker provider was removed by ADR-004 (it always aliased Docling),
     // so it is deliberately absent here and rejected with an actionable error.
@@ -303,13 +303,13 @@ const serverSchema = z.object({
     EMBEDDING_MODEL: optionalString(),
     RERANK_API_BASE_URL: optionalString(),
     RERANK_API_KEY: optionalString(),
-    RERANK_MODEL: optionalString(), // required when RERANK_API_BASE_URL is set; else defaults to gemini-2.5-flash-lite
+    RERANK_MODEL: optionalString(), // required when RERANK_API_BASE_URL is set; else defaults to gemini-3.8-flash
     NER_API_BASE_URL: optionalString(), // e.g. https://api.siliconflow.cn/v1 (Qwen3.5-4B free)
     NER_API_KEY: optionalString(),
-    NER_MODEL: optionalString(), // default gemini-2.5-flash-lite; e.g. Qwen/Qwen3.5-4B
+    NER_MODEL: optionalString(), // default gemini-3.8-flash; e.g. Qwen/Qwen3.5-4B
     TRANSCRIPTION_API_BASE_URL: optionalString(), // defaults to the Gemini endpoint
     TRANSCRIPTION_API_KEY: optionalString(),
-    TRANSCRIPTION_MODEL: optionalString(), // defaults to gemini-2.5-flash
+    TRANSCRIPTION_MODEL: optionalString(), // defaults to gemini-3.8-flash
     GEMINI_TTS_VOICE: optionalString(), // Chirp 3: HD voice; defaults to en-US-Chirp3-HD-Kore
     // Transcription mode: "sidecar" routes uploads to the self-hosted
     // services/transcription deployment (TRANSCRIPTION_SERVICE_URL). It is the

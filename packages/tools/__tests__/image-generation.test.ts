@@ -37,7 +37,7 @@ function imageResponse(n = 1) {
 function configWith(fetchImpl: typeof globalThis.fetch): ImageToolConfig {
     return {
         source: "chat",
-        modelId: "google/gemini-2.5-flash-image",
+        modelId: "google/gemini-3.1-flash-image",
         endpoint: { baseUrl: "https://openrouter.ai/api/v1", apiKey: "k", fetch: fetchImpl },
     };
 }
@@ -130,7 +130,7 @@ describe("generate and persist", () => {
 
         expect(result.provenance).toMatchObject({
             tool: "image-generation.generate",
-            modelId: "google/gemini-2.5-flash-image",
+            modelId: "google/gemini-3.1-flash-image",
         });
         expect(result.provenance.durationMs).toBeGreaterThanOrEqual(0);
     });

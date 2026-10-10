@@ -18,10 +18,14 @@ import {
     activePage,
     addEdges,
     addNodes,
+    branchOf,
     childrenOf,
+    collapsedHidden,
     edgesForNodes,
     graphDescendants,
     graphIndex,
+    insertEdgesBeside,
+    isTopicShape,
     mapEdges,
     mapNodes,
     nodeById,
@@ -30,9 +34,12 @@ import {
     removeNodes,
     reorderNodes,
     selectionBounds,
+    topicInDirection,
+    topicParent,
     updatePage,
     withDescendants,
     isMindmapPage,
+    type NavDirection,
 } from "./doc";
 import {
     createEdge,
@@ -58,6 +65,7 @@ import { branchSwatch, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } fr
 import { shapeDef, shapeTextBox } from "./shapes";
 import { applyThemeToDoc } from "./theme";
 import type { EditorStore } from "./store";
+import { restyleMovedTopics } from "./topicStyle";
 import { layoutText } from "./text";
 import type {
     ArrowId,
@@ -145,37 +153,143 @@ export function deleteSelection(store: EditorStore): void {
  * remove or re-wire the boxes downstream of it.
  */
 export function deleteNodeReconnecting(store: EditorStore, nodeId: string): void {
-    store.updatePage(
-        page => {
-            const idx = graphIndex(page);
-            const parent = (idx.in.get(nodeId) ?? [])[0];
-            const children = idx.out.get(nodeId) ?? [];
-            let next = removeNodes(page, [nodeId]);
-            if (parent && children.length) {
-                const bridges = children
-                    .filter(childId => nodeById(next, childId))
-                    .map(childId =>
-                        createEdge({
-                            from: { nodeId: parent, port: "auto" },
-                            to: { nodeId: childId, port: "auto" },
-                            kind: page.edges[0]?.kind ?? "elbow",
-                        })
-                    );
-                next = addEdges(next, bridges);
-            }
-            return next;
-        },
-        { label: "Delete and reconnect" }
-    );
+    let moved: string[] = [];
+    store.group("Delete and reconnect", () => {
+        store.updatePage(
+            page => {
+                const result = removeReconnecting(page, nodeId);
+                moved = result.moved;
+                return result.page;
+            },
+            { label: "Delete and reconnect" }
+        );
+        restyleMovedTopics(store, topicsAmong(store, moved));
+        autoArrangeIfOn(store);
+    });
     store.clearSelection();
+}
+
+/**
+ * `page` without `nodeId`, its children bridged to its own parent in the slot
+ * it occupied — so the outline closes up in order instead of moving them to
+ * the end of the parent's list. Returns the children that moved up a level.
+ */
+function removeReconnecting(
+    page: DiagramPage,
+    nodeId: string
+): { page: DiagramPage; moved: string[] } {
+    const idx = graphIndex(page);
+    const parent = (idx.in.get(nodeId) ?? [])[0];
+    const removed = new Set(withDescendants(page, [nodeId]));
+    const children = (idx.out.get(nodeId) ?? []).filter(id => !removed.has(id));
+    if (!parent || removed.has(parent) || children.length === 0) {
+        return { page: removeNodes(page, [nodeId]), moved: [] };
+    }
+    const bridges = children.map(childId =>
+        createEdge({
+            from: { nodeId: parent, port: "auto" },
+            to: { nodeId: childId, port: "auto" },
+            kind: page.edges[0]?.kind ?? "elbow",
+        })
+    );
+    const slot = page.edges.find(e => e.from.nodeId === parent && e.to.nodeId === nodeId);
+    return {
+        page: removeNodes(insertEdgesBeside(page, bridges, slot?.id, "after"), [nodeId]),
+        moved: children,
+    };
 }
 
 /** Delete a node together with everything downstream of it. */
 export function deleteBranch(store: EditorStore, nodeId: string): void {
-    store.updatePage(page => removeNodes(page, [nodeId, ...graphDescendants(page, nodeId)]), {
-        label: "Delete branch",
+    store.group("Delete branch", () => {
+        store.updatePage(page => removeNodes(page, [nodeId, ...graphDescendants(page, nodeId)]), {
+            label: "Delete branch",
+        });
+        autoArrangeIfOn(store);
     });
     store.clearSelection();
+}
+
+/**
+ * What the Delete key does.
+ *
+ * A selection of nothing but topics goes with everything hanging off it: in an
+ * outline, deleting a heading deletes its section, and a subtree left floating
+ * without its parent is never what was meant. `keepChildren` (⌥⌫) lifts the
+ * children up a level instead. Afterwards the nearest surviving parent is
+ * selected, so the keyboard flow carries on from where the topic was.
+ *
+ * Anything else — a flowchart box, a sticky, a mixed selection — is
+ * `deleteSelection`, unchanged: there a connector is a relationship, not
+ * ownership, and removing one box must not take the boxes downstream with it.
+ */
+export function deleteTopicsOrSelection(
+    store: EditorStore,
+    opts: { keepChildren?: boolean } = {}
+): void {
+    const page = activePage(store.getState().doc);
+    const ids = selectedTopicIds(store);
+    if (!ids) {
+        deleteSelection(store);
+        return;
+    }
+
+    const doomed = opts.keepChildren ? new Set(ids) : branchOf(page, ids);
+    let next = topicParent(page, ids[0]!);
+    const seen = new Set<string>();
+    while (next && doomed.has(next) && !seen.has(next)) {
+        seen.add(next);
+        next = topicParent(page, next);
+    }
+
+    store.group(opts.keepChildren ? "Delete and reconnect" : "Delete", () => {
+        if (opts.keepChildren) {
+            const moved = new Set<string>();
+            store.updatePage(
+                p => {
+                    let out = p;
+                    for (const id of ids) {
+                        const result = removeReconnecting(out, id);
+                        out = result.page;
+                        for (const m of result.moved) moved.add(m);
+                    }
+                    return out;
+                },
+                { label: "Delete and reconnect" }
+            );
+            const survivors = [...moved].filter(id => !doomed.has(id));
+            restyleMovedTopics(store, topicsAmong(store, survivors));
+        } else {
+            store.updatePage(p => removeNodes(p, [...doomed]), { label: "Delete" });
+        }
+        autoArrangeIfOn(store);
+    });
+
+    if (next && nodeById(activePage(store.getState().doc), next)) store.selectNodes([next]);
+    else store.clearSelection();
+}
+
+/** The selection's ids when it is one or more topics and nothing else, else null. */
+function selectedTopicIds(store: EditorStore): string[] | null {
+    const { selection, doc } = store.getState();
+    if (selection.length === 0) return null;
+    const page = activePage(doc);
+    const ids: string[] = [];
+    for (const ref of selection) {
+        if (ref.kind !== "node") return null;
+        const nd = nodeById(page, ref.id);
+        if (!nd || !isTopicShape(nd.shape)) return null;
+        ids.push(nd.id);
+    }
+    return ids;
+}
+
+function topicsAmong(store: EditorStore, ids: readonly string[]): string[] {
+    const page = activePage(store.getState().doc);
+    return ids.filter(id => {
+        const nd = nodeById(page, id);
+        return nd !== undefined && isTopicShape(nd.shape);
+    });
 }
 
 // ---------------------------------------------------------------------------
@@ -904,7 +1018,12 @@ export function pauseAutoArrangeAfterManualMove(store: EditorStore): AutoLayoutS
     return layout;
 }
 
-export function addChildTopic(store: EditorStore, parentId: string): string | null {
+export function addChildTopic(
+    store: EditorStore,
+    parentId: string,
+    /** Insert beside this existing child instead of after the last one. */
+    place: { after?: string; before?: string } = {}
+): string | null {
     const page = activePage(store.getState().doc);
     const parent = nodeById(page, parentId);
     if (!parent) return null;
@@ -946,38 +1065,175 @@ export function addChildTopic(store: EditorStore, parentId: string): string | nu
         endArrow: "none",
     });
 
-    store.updatePage(page2 => addEdges(addNodes(page2, [child]), [edge]), { label: "Add topic" });
-    autoArrangeIfOn(store);
+    // Edge order is child order, so a sibling is inserted beside the topic it
+    // was made from rather than at the end of the parent's list.
+    const beside = place.after ?? place.before;
+    const anchor = beside
+        ? page.edges.find(e => e.from.nodeId === parentId && e.to.nodeId === beside)
+        : undefined;
+    store.group("Add topic", () => {
+        store.updatePage(
+            page2 =>
+                insertEdgesBeside(
+                    addNodes(page2, [child]),
+                    [edge],
+                    anchor?.id,
+                    place.after ? "after" : "before"
+                ),
+            { label: "Add topic" }
+        );
+        autoArrangeIfOn(store);
+    });
     store.selectNodes([child.id]);
     store.setEditing({ kind: "node", id: child.id });
     return child.id;
 }
 
-/** Add a sibling after `nodeId` — a child of the same parent. */
-export function addSiblingTopic(store: EditorStore, nodeId: string): string | null {
+/**
+ * Add a sibling right after `nodeId` (or before, for ⇧Enter) — a child of the
+ * same parent, in the slot next to it. A root topic has no siblings: it gets
+ * a child instead, because a second, unconnected centre is never what Enter
+ * on the centre meant.
+ */
+export function addSiblingTopic(
+    store: EditorStore,
+    nodeId: string,
+    side: "after" | "before" = "after"
+): string | null {
+    const page = activePage(store.getState().doc);
+    const nd = nodeById(page, nodeId);
+    if (!nd) return null;
+    const parent = isTopicShape(nd.shape)
+        ? topicParent(page, nodeId)
+        : ((graphIndex(page).in.get(nodeId) ?? [])[0] ?? null);
+    if (!parent) return addChildTopic(store, nodeId);
+    return addChildTopic(store, parent, side === "after" ? { after: nodeId } : { before: nodeId });
+}
+
+/**
+ * ⇧Tab: lift a topic, with its subtree, out of its parent P and into P's
+ * parent, in the slot right after P — the outliner's outdent. A child of the
+ * centre stays put: outdenting it would make a second centre.
+ */
+export function outdentTopic(store: EditorStore, nodeId: string): boolean {
+    const page = activePage(store.getState().doc);
+    const parent = topicParent(page, nodeId);
+    const grand = parent ? topicParent(page, parent) : null;
+    if (!parent || !grand) return false;
+    // A cross-linked map can have the grandparent downstream of the topic;
+    // re-parenting there would close a loop.
+    if (grand === nodeId || graphDescendants(page, nodeId).has(grand)) return false;
+    const link = page.edges.find(e => e.from.nodeId === parent && e.to.nodeId === nodeId);
+    const parentLink = page.edges.find(e => e.from.nodeId === grand && e.to.nodeId === parent);
+    if (!link) return false;
+
+    store.group("Outdent topic", () => {
+        store.updatePage(
+            p => {
+                const current = p.edges.find(e => e.id === link.id);
+                if (!current) return null;
+                const moved: DiagramEdge = {
+                    ...current,
+                    from: { nodeId: grand, port: "auto" },
+                    // The bends were drawn for the old parent.
+                    waypoints: [],
+                };
+                return insertEdgesBeside(
+                    removeEdges(p, [link.id]),
+                    [moved],
+                    parentLink?.id,
+                    "after"
+                );
+            },
+            { label: "Outdent topic" }
+        );
+        restyleMovedTopics(store, [nodeId]);
+        autoArrangeIfOn(store);
+    });
+    store.selectNodes([nodeId]);
+    return true;
+}
+
+/**
+ * ⌘↑ / ⌘↓: move a topic one place up or down among its siblings. Only ever
+ * moves an edge *earlier* in the list (the topic's, or the neighbour's it
+ * swaps with), so a topic's first incoming edge — which is what makes it its
+ * parent's child — stays first.
+ */
+export function moveTopicAmongSiblings(store: EditorStore, nodeId: string, dir: -1 | 1): boolean {
+    const page = activePage(store.getState().doc);
+    const parent = topicParent(page, nodeId);
+    if (!parent) return false;
+    // Its siblings' edges, in order — not every edge out of the parent: a
+    // cross-link to some other branch's topic is not a sibling to swap with.
+    const idx = graphIndex(page);
+    const siblings = page.edges.filter(
+        e =>
+            e.from.nodeId === parent &&
+            e.to.nodeId !== undefined &&
+            topicParent(page, e.to.nodeId, idx) === parent
+    );
+    const at = siblings.findIndex(e => e.to.nodeId === nodeId);
+    const other = siblings[at + dir];
+    const own = siblings[at];
+    if (at < 0 || !other || !own) return false;
+    // The edge that comes later jumps to just before the earlier one.
+    const [early, late] = dir === -1 ? [other, own] : [own, other];
+
+    store.group("Reorder topic", () => {
+        store.updatePage(
+            p => insertEdgesBeside(removeEdges(p, [late.id]), [late], early.id, "before"),
+            { label: "Reorder topic" }
+        );
+        autoArrangeIfOn(store);
+    });
+    store.selectNodes([nodeId]);
+    return true;
+}
+
+/**
+ * ⌘/: fold or unfold every selected node that has children. Mixed states
+ * fold, the way toggling a mixed lock locks.
+ */
+export function toggleCollapseSelection(store: EditorStore): void {
     const page = activePage(store.getState().doc);
     const idx = graphIndex(page);
-    const parent = (idx.in.get(nodeId) ?? [])[0];
-    if (!parent) {
-        // A root topic's "sibling" is another root: place it below.
-        const nd = nodeById(page, nodeId);
-        if (!nd) return null;
-        const clone = createNode({
-            shape: nd.shape,
-            x: nd.x,
-            y: nd.y + nd.h + 40,
-            w: nd.w,
-            h: nd.h,
-            style: { ...nd.style },
-            textStyle: { ...nd.textStyle },
-        });
-        store.updatePage(p => addNodes(p, [clone]), { label: "Add topic" });
-        autoArrangeIfOn(store);
-        store.selectNodes([clone.id]);
-        store.setEditing({ kind: "node", id: clone.id });
-        return clone.id;
+    const ids = store
+        .selectedNodeIds()
+        .filter(id => nodeById(page, id) && (idx.out.get(id) ?? []).length > 0);
+    if (ids.length === 0) return;
+    const collapse = ids.some(id => !nodeById(page, id)!.collapsed);
+    store.updatePage(p => mapNodes(p, ids, nd => ({ ...nd, collapsed: collapse })), {
+        label: collapse ? "Collapse branch" : "Expand branch",
+    });
+    // A selected topic inside a branch that just folded is gone from view;
+    // keep the selection to what can still be seen.
+    if (collapse) {
+        const state = store.getState();
+        const hidden = collapsedHidden(activePage(state.doc), state.folded);
+        const visible = state.selection.filter(ref => ref.kind !== "node" || !hidden.has(ref.id));
+        if (visible.length !== state.selection.length) store.setSelection(visible);
     }
-    return addChildTopic(store, parent);
+}
+
+/**
+ * Arrow keys on a topic: select the nearest visible topic that way (see
+ * `topicInDirection`) and pan just enough to keep it on screen. Returns the
+ * id it moved to, or null when there is nothing in that direction.
+ */
+export function selectTopicInDirection(
+    store: EditorStore,
+    fromId: string,
+    dir: NavDirection,
+    size?: { w: number; h: number }
+): string | null {
+    const state = store.getState();
+    const page = activePage(state.doc);
+    const id = topicInDirection(page, fromId, dir, collapsedHidden(page, state.folded));
+    if (!id) return null;
+    store.selectNodes([id]);
+    if (size) revealNode(store, id, size);
+    return id;
 }
 
 export function toggleCollapse(store: EditorStore, nodeId: string): void {
@@ -1203,6 +1459,36 @@ export function focusNode(
     if (!nd) return;
     store.selectNodes([nodeId]);
     centreOn(store, rectCenter(nodeBounds(nd)), size);
+}
+
+/**
+ * Pan the least distance that brings a node fully on screen, with `margin`
+ * screen pixels to spare. Unlike `focusNode` it does nothing when the node is
+ * already visible, so stepping through topics with the arrows never lurches.
+ */
+export function revealNode(
+    store: EditorStore,
+    nodeId: string,
+    size: { w: number; h: number },
+    margin = 48
+): void {
+    if (size.w <= 0 || size.h <= 0) return;
+    const nd = nodeById(activePage(store.getState().doc), nodeId);
+    if (!nd) return;
+    const { viewport } = store.getState();
+    const b = nodeBounds(nd);
+    const m = margin / viewport.zoom;
+    const shift = (start: number, length: number, viewStart: number, viewLength: number) => {
+        if (start - m < viewStart || length + 2 * m > viewLength) return start - m - viewStart;
+        if (start + length + m > viewStart + viewLength) {
+            return start + length + m - (viewStart + viewLength);
+        }
+        return 0;
+    };
+    const dx = shift(b.x, b.w, viewport.x, size.w / viewport.zoom);
+    const dy = shift(b.y, b.h, viewport.y, size.h / viewport.zoom);
+    if (dx === 0 && dy === 0) return;
+    store.setViewport({ x: viewport.x + dx, y: viewport.y + dy });
 }
 
 // ---------------------------------------------------------------------------

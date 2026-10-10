@@ -48,6 +48,34 @@ export function useIsActive(): () => boolean {
     return useContext(ActiveContext);
 }
 
+/**
+ * Each editor's label field, so the window keyboard handler can hand it a
+ * keystroke. Keyed by store rather than found with a DOM query: Studio keeps
+ * several editors mounted, and a background one may have a field of its own.
+ */
+const editorFields = new WeakMap<EditorStore, HTMLTextAreaElement>();
+
+export function registerEditorField(store: EditorStore, el: HTMLTextAreaElement | null): void {
+    if (el) editorFields.set(store, el);
+    else editorFields.delete(store);
+}
+
+/**
+ * Put focus back in the label field, caret at the end. For a keystroke that
+ * arrives while a label is open but focus has slipped elsewhere: moved during
+ * its keydown, the character lands in the field instead of vanishing. Returns
+ * whether there was a field to focus.
+ */
+export function focusEditorField(store: EditorStore): boolean {
+    const el = editorFields.get(store);
+    if (!el?.isConnected) return false;
+    if (document.activeElement !== el) {
+        el.focus({ preventScroll: true });
+        el.setSelectionRange(el.value.length, el.value.length);
+    }
+    return true;
+}
+
 export function useStore(): EditorStore {
     const store = useContext(StoreContext);
     if (!store) throw new Error("useStore must be used inside <EditorProvider>");

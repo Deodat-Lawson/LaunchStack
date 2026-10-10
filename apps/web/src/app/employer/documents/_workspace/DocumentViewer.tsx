@@ -83,7 +83,6 @@ export interface DocumentViewerProps {
     source: WorkspaceSource;
     /** When opened from a citation: the cited passage to locate + highlight. */
     highlight?: CitationHighlight | null;
-    onClose: () => void;
     // Source-shaped rather than id-shaped: a mindmap has no document id
     // until it is published, so the id could not identify one.
     onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
@@ -105,12 +104,6 @@ export interface DocumentViewerProps {
     /** Mindmaps only: open straight into the branch-by-branch presenter. */
     present?: boolean;
     onExitPresent?: () => void;
-    /**
-     * Render in the flow of a Studio column instead of covering the workspace.
-     * The overlay is still how a preview opens; this is how a document sits
-     * beside the chat it is being discussed in.
-     */
-    embedded?: boolean;
 }
 
 /**
@@ -247,8 +240,6 @@ export function DocumentViewer({
     highlight,
     present = false,
     onExitPresent,
-    embedded = false,
-    onClose,
     onRename,
     onDelete,
     onRestrictAccess,
@@ -564,18 +555,6 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
-    // ESC dismisses the overlay. A column is not dismissed — it is closed
-    // from its tab — and this listener is on the window, so an embedded
-    // viewer would close every open document at once, from anywhere.
-    useEffect(() => {
-        if (embedded) return;
-        const onEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape" && !e.defaultPrevented) onClose();
-        };
-        window.addEventListener("keydown", onEsc);
-        return () => window.removeEventListener("keydown", onEsc);
-    }, [onClose, embedded]);
-
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
         router.push(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
@@ -890,24 +869,22 @@ export function DocumentViewer({
             {...documentTarget}
             ref={rootRef}
             data-testid="document-viewer"
-            data-embedded={embedded ? "true" : undefined}
             data-narrow={narrow ? "true" : undefined}
             onKeyDown={e => {
                 // An open overlay rail is the nearest thing to dismiss:
-                // Escape shuts it, and marking the event handled keeps the
-                // window listener from closing the whole preview as well.
-                // A dialog over it (the confirm) has already handled it.
+                // Escape shuts it. A dialog over it (the confirm) has already
+                // handled it.
                 if (e.key === "Escape" && !e.defaultPrevented && narrow && overlayOpen) {
                     e.preventDefault();
                     setOverlayOpen(false);
                 }
             }}
             style={{
-                // Embedded, it is one column among several and must not
-                // escape its panel; as an overlay it owns the screen.
-                ...(embedded
-                    ? { position: "relative", flex: 1, minWidth: 0, minHeight: 0 }
-                    : { position: "fixed", inset: 0, zIndex: 80, animation: "lsw-fadeIn 180ms" }),
+                // A tab's panel: one column among several, which it must not escape.
+                position: "relative",
+                flex: 1,
+                minWidth: 0,
+                minHeight: 0,
                 background: "var(--bg)",
                 display: "flex",
                 flexDirection: "column",
@@ -915,9 +892,6 @@ export function DocumentViewer({
         >
             <DocumentViewerHeader
                 width={viewerWidth}
-                // In a column the tab's own close is the way out, and a
-                // "Library" button beside the chat would mean nothing.
-                onBack={embedded ? undefined : onClose}
                 kindIcon={<Icon size={13} />}
                 kindColor={meta.color}
                 title={

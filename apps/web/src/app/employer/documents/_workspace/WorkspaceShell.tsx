@@ -276,16 +276,19 @@ export function WorkspaceShell() {
     const [folderDialog, setFolderDialog] = useState<FolderDialogRequest | null>(null);
     const [deleteFolderPath, setDeleteFolderPath] = useState<string | null>(null);
     /**
-     * The open source lives in the URL (`?source=<id>`, plus `&edit=1` for a
-     * mindmap's editor) and is resolved against the loaded list here. Pushing
-     * rather than replacing is what gives the back button its meaning.
+     * `?source=<id>` is a way in, not where an open source lives: a deep link,
+     * a citation from another app, a shared present link. It opens the source
+     * as a tab and leaves the URL. The exception is `&edit=1`, which names the
+     * mindmap the Mindmap tab is editing for as long as it is open — pushed,
+     * so the back button leaves the editor.
      */
     const sourceParam = searchParams.get("source");
     const editParam = searchParams.get("edit") === "1";
-    /** `&present=1` opens a mindmap's preview straight into the presenter. */
+    /** `&present=1` opens a mindmap's tab straight into the presenter. */
     const presentParam = searchParams.get("present") === "1";
-    const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
-    const editing = editParam && viewerSource !== null && sourceApi.isMindmapSource(viewerSource);
+    /** The mindmap `?source=…&edit=1` names, once the list has resolved it. */
+    const [editingSource, setEditingSource] = useState<WorkspaceSource | null>(null);
+    const editing = editParam && editingSource !== null;
     /** Read by the shortcut listener so the editor's own keys win while it is open. */
     const editingRef = useRef(false);
     /** The latest `expandFeature`, for the keyboard handler declared before it. */
@@ -298,8 +301,16 @@ export function WorkspaceShell() {
         close: () => undefined as void,
         focusAdjacent: (_delta: -1 | 1) => undefined as void,
     });
-    /** Cited passage to locate + highlight when the viewer was opened from a citation. */
-    const [viewerHighlight, setViewerHighlight] = useState<CitationHighlight | null>(null);
+    /**
+     * What a source tab opens on, when it was opened for a reason: the cited
+     * passage to find and highlight, or a mindmap's presenter. One at a time —
+     * the latest citation wins.
+     */
+    const [sourceTabFocus, setSourceTabFocus] = useState<{
+        sourceId: string;
+        highlight?: CitationHighlight;
+        present?: boolean;
+    } | null>(null);
 
     const sourceUrl = useCallback(
         (id: string | null, edit = false) => {
@@ -314,28 +325,7 @@ export function WorkspaceShell() {
         },
         [searchParams]
     );
-    const openSource = useCallback(
-        (id: string, edit = false) => router.push(sourceUrl(id, edit)),
-        [router, sourceUrl]
-    );
     const closeSource = useCallback(() => router.push(sourceUrl(null)), [router, sourceUrl]);
-
-    useEffect(() => {
-        if (!sourceParam) {
-            setViewerSource(null);
-            return;
-        }
-        const found = sources.find(s => s.id === sourceParam) ?? null;
-        if (found) {
-            setViewerSource(found);
-            return;
-        }
-        if (sourcesLoading) return;
-        // The list is loaded and the id is not in it — trashed, or a bad link.
-        // Drop the param rather than holding an empty viewer open.
-        setViewerSource(null);
-        router.replace(sourceUrl(null));
-    }, [sourceParam, sources, sourcesLoading, router, sourceUrl]);
     const citationNonce = useRef(0);
     const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
     /** What the delete dialog is about: one source from its row, or a multi-selection. */
@@ -403,26 +393,94 @@ export function WorkspaceShell() {
     const editedMindmap = sources.find(source => source.id === editedMindmapId);
     /** `?source=…&edit=1` opens the map in the Mindmap tab and shows that tab. */
     useEffect(() => {
-        if (!editing || viewerSource?.id !== sourceParam) return;
+        if (!editing || editingSource?.id !== sourceParam) return;
         setEditedMindmapId(sourceParam);
         setActiveFeatureId("mindmap");
-    }, [editing, sourceParam, viewerSource?.id, setActiveFeatureId]);
+    }, [editing, sourceParam, editingSource?.id, setActiveFeatureId]);
     /**
-     * The editor owns the keyboard only while its column is the focused one
-     * and nothing is laid over it. Visible is not enough: with the map in one
-     * column and the chat in another, both are on screen, and the editor
-     * would otherwise eat Delete, the arrow keys and its single-letter tools
-     * while someone types next to it.
+     * The editor owns the keyboard only while its column is the focused one.
+     * Visible is not enough: with the map in one column and the chat in
+     * another, both are on screen, and the editor would otherwise eat Delete,
+     * the arrow keys and its single-letter tools while someone types next to
+     * it.
      */
     const mindmapGroupFocused = groupOf(layout, "mindmap")?.id === layout.activeGroupId;
     const mindmapTabActive =
-        activeFeatureId === "mindmap" &&
-        mindmapGroupFocused &&
-        Boolean(editedMindmap?.mindmapId) &&
-        !viewerSource;
+        activeFeatureId === "mindmap" && mindmapGroupFocused && Boolean(editedMindmap?.mindmapId);
     useEffect(() => {
         editingRef.current = mindmapTabActive;
     }, [mindmapTabActive]);
+
+    /**
+     * Open a source the one way sources open: as a tab in the focused pane,
+     * like any other — draggable to another pane, closable from its strip.
+     * Already open somewhere, it comes forward there instead of opening twice.
+     */
+    const openSourceTab = useCallback(
+        (id: string, focus?: { highlight?: CitationHighlight; present?: boolean }) => {
+            setSourceTabFocus(prev =>
+                focus ? { sourceId: id, ...focus } : prev?.sourceId === id ? null : prev
+            );
+            setActiveFeatureId(tabIdOfSource(id));
+        },
+        [setActiveFeatureId]
+    );
+    /** A source, or with `edit` a mindmap in its editor (which the URL still names). */
+    const openSource = useCallback(
+        (id: string, edit = false) => {
+            if (edit) router.push(sourceUrl(id, true));
+            else openSourceTab(id);
+        },
+        [router, sourceUrl, openSourceTab]
+    );
+
+    /**
+     * The browser's back button out of the editor's address shows the map's
+     * tab, with the editor kept in its own behind it. Closing the editor, or
+     * its Back button, lets go of the map first — those are not this.
+     */
+    const editingIdRef = useRef<string | null>(null);
+    useEffect(() => {
+        const wasEditing = editingIdRef.current;
+        editingIdRef.current = editing ? (editingSource?.id ?? null) : null;
+        if (wasEditing && !editing && editedMindmapId === wasEditing) openSourceTab(wasEditing);
+    }, [editing, editingSource?.id, editedMindmapId, openSourceTab]);
+
+    /**
+     * Resolve `?source=` against the loaded list. A mindmap with `&edit=1`
+     * stays named in the URL while its editor is open; anything else opens as
+     * a tab — in the presenter for `&present=1` — and the param is dropped.
+     */
+    useEffect(() => {
+        if (!sourceParam) {
+            setEditingSource(null);
+            return;
+        }
+        const found = sources.find(s => s.id === sourceParam) ?? null;
+        if (!found) {
+            if (sourcesLoading) return;
+            // The list is loaded and the id is not in it — trashed, or a bad link.
+            setEditingSource(null);
+            router.replace(sourceUrl(null));
+            return;
+        }
+        if (editParam && sourceApi.isMindmapSource(found)) {
+            setEditingSource(found);
+            return;
+        }
+        setEditingSource(null);
+        openSourceTab(found.id, presentParam ? { present: true } : undefined);
+        router.replace(sourceUrl(null));
+    }, [
+        sourceParam,
+        editParam,
+        presentParam,
+        sources,
+        sourcesLoading,
+        router,
+        sourceUrl,
+        openSourceTab,
+    ]);
     const [railHidden, setRailHidden] = useState(false);
     const railHiddenReady = useRef(false);
     const railWidth = useRailWidth();
@@ -938,34 +996,26 @@ export function WorkspaceShell() {
     }, []);
 
     const handleOpenSource = useCallback(
-        (source: WorkspaceSource) => {
-            setViewerHighlight(null);
-            // Already beside the chat: bring that column forward rather than
-            // laying an overlay over the split.
-            if (groupOf(layout, tabIdOfSource(source.id))) {
-                setActiveFeatureId(tabIdOfSource(source.id));
-                return;
-            }
-            openSource(source.id);
-        },
-        [openSource, layout, setActiveFeatureId]
+        (source: WorkspaceSource) => openSourceTab(source.id),
+        [openSourceTab]
     );
 
-    /** A citation click opens the cited document with the passage highlighted. */
+    /** A citation click opens the cited document's tab with the passage highlighted. */
     const handleOpenCitation = useCallback(
         (cite: ThreadReference) => {
             const src = sources.find(s => s.id === cite.sourceId);
             if (!src) return;
             citationNonce.current += 1;
-            setViewerHighlight({
-                text: cite.snippet,
-                matchText: cite.matchText,
-                page: cite.page ?? null,
-                nonce: citationNonce.current,
+            openSourceTab(src.id, {
+                highlight: {
+                    text: cite.snippet,
+                    matchText: cite.matchText,
+                    page: cite.page ?? null,
+                    nonce: citationNonce.current,
+                },
             });
-            openSource(src.id);
         },
-        [sources, openSource]
+        [sources, openSourceTab]
     );
 
     const handleRenameSource = useCallback(
@@ -1057,9 +1107,6 @@ export function WorkspaceShell() {
     const handleAskAbout = useCallback(
         (source: WorkspaceSource) => {
             pinSource(source);
-            // The overlay and the column would both be showing it otherwise.
-            if (sourceParam) closeSource();
-            setViewerHighlight(null);
             if (compactViewport) {
                 // No room for two columns: the document becomes a tab beside
                 // the chat's in the same strip, and the chat comes forward.
@@ -1069,7 +1116,7 @@ export function WorkspaceShell() {
             }
             pairTabs(tabIdOfSource(source.id), "chat");
         },
-        [pinSource, sourceParam, closeSource, pairTabs, compactViewport, setActiveFeatureId]
+        [pinSource, pairTabs, compactViewport, setActiveFeatureId]
     );
 
     /**
@@ -1446,15 +1493,11 @@ export function WorkspaceShell() {
     /** Put a source in a column of its own, beside whatever is open. */
     const openSourceBeside = useCallback(
         (source: WorkspaceSource) => {
-            // The overlay and the column would otherwise both be showing a
-            // document, one on top of the other.
-            closeSource();
-            setViewerHighlight(null);
             // "To the side" has no side on a phone; it opens as a tab.
             if (compactViewport) setActiveFeatureId(tabIdOfSource(source.id));
             else openBeside(tabIdOfSource(source.id));
         },
-        [closeSource, openBeside, compactViewport, setActiveFeatureId]
+        [openBeside, compactViewport, setActiveFeatureId]
     );
 
     // `?feature=X` expands that Studio feature full-width on the workspace (or opens
@@ -2289,19 +2332,35 @@ export function WorkspaceShell() {
                             onVersionChanged={() => void refresh()}
                             onEdit={source => openSource(source.id, true)}
                             onPublished={() => void refresh()}
+                            highlight={
+                                sourceTabFocus?.sourceId === sourceIdOfTab(paneId)
+                                    ? (sourceTabFocus.highlight ?? null)
+                                    : null
+                            }
+                            present={
+                                sourceTabFocus?.sourceId === sourceIdOfTab(paneId) &&
+                                sourceTabFocus.present === true
+                            }
+                            onExitPresent={() =>
+                                setSourceTabFocus(prev =>
+                                    prev?.sourceId === sourceIdOfTab(paneId) ? null : prev
+                                )
+                            }
                         />
                     ) : paneId === "mindmap" && editedMindmap?.mindmapId ? (
-                        // The editor stays mounted behind a source preview —
-                        // that is the point of tabs — so it is told when it is
-                        // covered rather than being torn down and rebuilt.
+                        // The editor stays mounted behind other tabs — that is
+                        // the point of tabs — so it is told when its column is
+                        // not the focused one rather than being torn down.
                         <div className="h-full min-h-0">
                             <MindmapEditorHost
                                 key={editedMindmap.mindmapId}
                                 mindmapId={editedMindmap.mindmapId}
-                                active={paneFocused && !viewerSource}
+                                active={paneFocused}
                                 onBack={() => {
                                     setEditedMindmapId(null);
-                                    openSource(editedMindmap.id);
+                                    // Leave the editor's address; the URL
+                                    // effect then shows the map in its tab.
+                                    router.push(sourceUrl(editedMindmap.id));
                                 }}
                                 onChanged={() => void refresh()}
                                 onAskAboutNode={text => {
@@ -2516,40 +2575,10 @@ export function WorkspaceShell() {
                 onClose={() => setAccessTarget(null)}
                 onSaved={() => void refresh()}
             />
-
-            {viewerSource && !editing && (
-                <DocumentViewer
-                    source={viewerSource}
-                    highlight={viewerHighlight}
-                    onClose={() => {
-                        closeSource();
-                        setViewerHighlight(null);
-                    }}
-                    onRename={handleRenameSource}
-                    onDelete={source => void handleDeleteSource(source)}
-                    onRestrictAccess={openDocumentAccess}
-                    onAskAbout={handleAskAbout}
-                    onAskAboutPassage={askAboutPassage}
-                    onVersionChanged={() => void refresh()}
-                    onEdit={source => openSource(source.id, true)}
-                    onPublished={() => void refresh()}
-                    present={presentParam}
-                    onExitPresent={() => router.replace(sourceUrl(viewerSource.id))}
-                />
-            )}
         </div>
     );
 }
 
-/**
- * A source in a column of its own, beside the chat rather than over it.
- *
- * The viewer is the same one the overlay uses; only its placement differs.
- * The source is looked up on every render because the library moves under it,
- * so a rename retitles the pane. The missing case is a belt to the shell's
- * braces: the shell closes a tab whose source has gone, and this keeps the
- * column readable for the render in between.
- */
 /** Below this, the sidebar is a drawer rather than a docked column. */
 const COMPACT_VIEWPORT_BELOW_PX = 768;
 
@@ -2567,6 +2596,12 @@ function useCompactViewport(): boolean {
     return compact;
 }
 
+/**
+ * A source in its tab. The source is looked up on every render because the
+ * library moves under it, so a rename retitles the pane. The missing case is a
+ * belt to the shell's braces: the shell closes a tab whose source has gone,
+ * and this keeps the column readable for the render in between.
+ */
 function EmbeddedSourcePane({
     sourceId,
     sources,
@@ -2584,6 +2619,9 @@ function EmbeddedSourcePane({
     onVersionChanged: () => void;
     onEdit: (source: WorkspaceSource) => void;
     onPublished: () => void;
+    highlight: CitationHighlight | null;
+    present: boolean;
+    onExitPresent: () => void;
 }) {
     const source = sources.find(item => item.id === sourceId);
 
@@ -2598,7 +2636,7 @@ function EmbeddedSourcePane({
         );
     }
 
-    return <DocumentViewer embedded source={source} onClose={onClose} {...viewerProps} />;
+    return <DocumentViewer source={source} {...viewerProps} />;
 }
 
 interface ExpandedFeatureViewProps {

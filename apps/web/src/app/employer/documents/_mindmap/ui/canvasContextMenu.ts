@@ -8,7 +8,7 @@ import {
     cutSelection,
     deleteBranch,
     deleteNodeReconnecting,
-    deleteSelection,
+    deleteTopicsOrSelection,
     duplicateSelection,
     fitNodeToText,
     groupSelection,
@@ -24,7 +24,7 @@ import {
     toggleLock,
     ungroupSelection,
 } from "../model/commands";
-import { activePage, graphIndex, nodeById } from "../model/doc";
+import { activePage, graphIndex, isTopicShape, nodeById, topicParent } from "../model/doc";
 import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
 import type { EditorState, EditorStore } from "../model/store";
@@ -79,14 +79,18 @@ function focusTier(
     const byId = new Map(everything.map(item => [item.id, item] as const));
     const pick = (id: string) => byId.get(id);
 
-    const addSibling: ActionMenuItem = {
-        type: "item",
-        id: "add-sibling",
-        label: "Add sibling topic",
-        icon: "plus",
-        shortcut: "↩",
-        onSelect: () => addSiblingTopic(store, singleNode.id),
-    };
+    // The centre has no siblings — Enter on it adds a child, which is the
+    // item above — so the menu only offers a sibling where there can be one.
+    const addSibling: ActionMenuItem | undefined = topicParent(page, singleNode.id)
+        ? {
+              type: "item",
+              id: "add-sibling",
+              label: "Add sibling topic",
+              icon: "plus",
+              shortcut: "↩",
+              onSelect: () => addSiblingTopic(store, singleNode.id),
+          }
+        : undefined;
     const addChild = pick("add-child");
     const connected: ActionMenuItem | undefined =
         addChild && addChild.type === "item"
@@ -129,6 +133,7 @@ function buildEverything(
     const hasChildren = singleNode
         ? (graphIndex(page).out.get(singleNode.id) ?? []).length > 0
         : false;
+    const singleTopic = singleNode ? isTopicShape(singleNode.shape) : false;
 
     const items: ActionMenuItem[] = [];
 
@@ -207,13 +212,15 @@ function buildEverything(
             onSelect: () => duplicateSelection(store),
         },
         {
+            // The Delete key's command, so the item and the key agree: topics
+            // go with their branch, anything else on its own.
             type: "item",
             id: "delete",
             label: "Delete",
             icon: "delete",
             shortcut: "⌫",
             danger: true,
-            onSelect: () => deleteSelection(store),
+            onSelect: () => deleteTopicsOrSelection(store),
         },
         { type: "separator", id: "sep-selection" }
     );
@@ -244,6 +251,7 @@ function buildEverything(
                     id: "collapse",
                     label: singleNode.collapsed ? "Expand branch" : "Collapse branch",
                     icon: singleNode.collapsed ? "open" : "hide",
+                    shortcut: "⌘/",
                     onSelect: () => toggleCollapse(store, singleNode.id),
                 },
                 {
@@ -251,17 +259,22 @@ function buildEverything(
                     id: "delete-reconnect",
                     label: "Delete and reconnect",
                     icon: "move",
+                    // ⌥⌫ is the topic binding; other shapes have no key for it.
+                    shortcut: singleTopic ? "⌥⌫" : undefined,
                     onSelect: () => deleteNodeReconnecting(store, singleNode.id),
-                },
-                {
+                }
+            );
+            // A topic's plain Delete already takes its branch.
+            if (!singleTopic) {
+                items.push({
                     type: "item",
                     id: "delete-branch",
                     label: "Delete whole branch",
                     icon: "delete",
                     danger: true,
                     onSelect: () => deleteBranch(store, singleNode.id),
-                }
-            );
+                });
+            }
         }
         items.push({ type: "separator", id: "sep-node" });
     }

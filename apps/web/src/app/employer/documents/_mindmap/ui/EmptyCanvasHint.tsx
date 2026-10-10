@@ -63,7 +63,7 @@ export function EmptyCanvasHint({
 
             <p className="text-ink-3 flex items-center gap-3 text-[12.5px]">
                 <span>
-                    <Key>Enter</Key> sibling
+                    <Key>Enter</Key> finish / next
                 </span>
                 <span className="text-line">·</span>
                 <span>

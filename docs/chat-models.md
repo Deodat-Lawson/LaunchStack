@@ -100,8 +100,8 @@ version: 1
 
 models:
   primary:
-    id: gemini-2.5-flash             # id your endpoint serves
-    preset: google/gemini-2.5-flash  # catalog entry to inherit behavior from
+    id: gemini-3.8-flash             # id your endpoint serves
+    preset: google/gemini-3.8-flash  # catalog entry to inherit behavior from
 
 routes:
   default: primary
@@ -329,21 +329,39 @@ routes:
   default: local
 ```
 
-### Separate models per route
+### Separate tiers per route
+
+Entries may share an `id`; a tier can differ from another by its reasoning
+default alone. This is how the shipped file splits Gemini 3.8 Flash, the only
+3.8 text model Google publishes.
 
 ```yaml
 version: 1
 
 models:
   workhorse:
-    id: gemini-2.5-flash
-    preset: google/gemini-2.5-flash
+    id: gemini-3.8-flash
+    preset: google/gemini-3.8-flash
   thinker:
-    id: gemini-2.5-pro
-    preset: google/gemini-2.5-pro
+    id: gemini-3.8-flash
+    preset: google/gemini-3.8-flash
+    behavior:
+      reasoning:
+        mode: effort
+        levels:
+          low: { reasoning_effort: "low" }
+          medium: { reasoning_effort: "medium" }
+          high: { reasoning_effort: "high" }
+        default: "high"
   cheap:
-    id: gemini-2.5-flash-lite
-    preset: google/gemini-2.5-flash-lite
+    id: gemini-3.8-flash
+    preset: google/gemini-3.8-flash
+    behavior:
+      reasoning:
+        mode: effort
+        levels:
+          none: { reasoning_effort: "none" }
+        default: "none"
 
 routes:
   default: workhorse

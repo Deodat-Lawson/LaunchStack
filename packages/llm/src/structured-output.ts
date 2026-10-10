@@ -99,7 +99,10 @@ function extractJson(text: string): unknown {
                 // Try the next candidate.
             }
         }
-        throw new Error("the response contained no parsable JSON value");
+        const excerpt = withoutFence.slice(0, 160).replace(/\s+/g, " ");
+        throw new Error(
+            `the response contained no parsable JSON value (${withoutFence.length} chars, starting "${excerpt}")`
+        );
     }
 }
 
@@ -145,6 +148,66 @@ async function invokeJsonFallback<T>(
             );
         }
     }
+}
+
+/** JSON Schema keywords that bound a size; they drive an endpoint's complexity limit. */
+const SIZE_BOUND_KEYWORDS = new Set([
+    "minItems",
+    "maxItems",
+    "minLength",
+    "maxLength",
+    "minimum",
+    "maximum",
+    "exclusiveMinimum",
+    "exclusiveMaximum",
+]);
+
+/**
+ * `const: x` → `enum: [x]`, which means the same. Gemini honours `enum` but
+ * not `const`: it returned "founder-weekly-review/v1" for a v2 literal, and the
+ * Zod parse refused every weekly review.
+ */
+function constAsEnum<T>(node: T): T {
+    if (Array.isArray(node)) return node.map(constAsEnum) as T;
+    if (!node || typeof node !== "object") return node;
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+        if (key === "const" && !("enum" in (node as Record<string, unknown>))) {
+            out.enum = [value];
+            continue;
+        }
+        out[key] = constAsEnum(value);
+    }
+    return out as T;
+}
+
+function withoutSizeBounds(node: unknown): unknown {
+    if (Array.isArray(node)) return node.map(withoutSizeBounds);
+    if (!node || typeof node !== "object") return node;
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+        // A property may itself be named "maximum"; only strip keyword positions.
+        if (SIZE_BOUND_KEYWORDS.has(key) && typeof value === "number") continue;
+        out[key] = withoutSizeBounds(value);
+    }
+    return out;
+}
+
+function statusOf(error: unknown): number | undefined {
+    const status = (error as { status?: unknown } | null)?.status;
+    return typeof status === "number" ? status : undefined;
+}
+
+const refusedSchemas = new Set<string>();
+
+function warnSchemaRefusedOnce(modelId: string, name: string): void {
+    const key = `${modelId}:${name}`;
+    if (refusedSchemas.has(key)) return;
+    refusedSchemas.add(key);
+    console.warn(
+        `[structured-output] ${modelId} refused the "${name}" JSON schema (HTTP 400); ` +
+            "using the prompt-based JSON path for it."
+    );
 }
 
 /** A structured result plus what it cost — the meterable envelope. */
@@ -197,12 +260,50 @@ export async function invokeStructuredWithUsage<T>(
 
     // `includeRaw` keeps the AIMessage that carries `usage_metadata`; without
     // it LangChain hands back only the parsed object.
-    const structured = resolved.chat.withStructuredOutput(schema, {
-        name: options.name,
-        method: LANGCHAIN_METHOD[native],
-        includeRaw: true,
-    });
-    const response = await structured.invoke(applyMessageBehavior(resolved.behavior, prompt));
+    // In json-schema mode LangChain hands a Zod schema to OpenAI's strict
+    // helper, which refuses any `.optional()` field that is not also
+    // `.nullable()` before a request is even sent. Send the plain JSON Schema
+    // instead: the endpoint still constrains the output, and the Zod parse
+    // below is what enforces it.
+    const invokeNative = (endpointSchema: z.ZodType<unknown> | Record<string, unknown>) =>
+        resolved.chat
+            .withStructuredOutput(endpointSchema, {
+                name: options.name,
+                method: LANGCHAIN_METHOD[native],
+                includeRaw: true,
+            })
+            .invoke(applyMessageBehavior(resolved.behavior, prompt));
+
+    let response: Awaited<ReturnType<typeof invokeNative>>;
+    if (native !== "json-schema") {
+        response = await invokeNative(schema);
+    } else {
+        // In json-schema mode LangChain hands a Zod schema to OpenAI's strict
+        // helper, which refuses any `.optional()` field that is not also
+        // `.nullable()` before a request is even sent. Send the plain JSON
+        // Schema instead; the Zod parse below is what enforces it.
+        const jsonSchema = constAsEnum(zodToJsonSchema(schema, { $refStrategy: "none" }));
+        try {
+            response = await invokeNative(jsonSchema);
+        } catch (error) {
+            if (statusOf(error) !== 400) throw error;
+            // Endpoints take a subset of JSON Schema and refuse one they judge
+            // too complex with a bare 400 — Gemini rejects the founder weekly
+            // review's anyOf + maxItems, and accepts it once the size bounds
+            // are gone. The bounds still hold: Zod checks them below. A 400
+            // that is not about the schema (a bad key) fails the prompt path
+            // too, so nothing is masked.
+            warnSchemaRefusedOnce(resolved.modelId, options.name);
+            try {
+                response = await invokeNative(
+                    withoutSizeBounds(jsonSchema) as Record<string, unknown>
+                );
+            } catch (relaxedError) {
+                if (statusOf(relaxedError) !== 400) throw relaxedError;
+                return invokeJsonFallback(resolved, schema, messages, options);
+            }
+        }
+    }
     const usage = normalizeTokenUsage(response.raw);
     if (response.parsed === undefined || response.parsed === null) {
         const detail =

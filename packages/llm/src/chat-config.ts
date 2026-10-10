@@ -26,6 +26,9 @@ import {
     type ChatRoute,
 } from "./types";
 
+/** Deprecated presets already reported by this process, so a reload stays quiet. */
+const reportedDeprecatedPresets = new Set<string>();
+
 /** Schema versions this build understands. */
 export const SUPPORTED_CHAT_CONFIG_VERSIONS = [1] as const;
 
@@ -300,6 +303,13 @@ function resolveModelBehavior(
             throw new ChatConfigurationError(
                 `${file}: model "${name}" references unknown preset "${model.preset}". ` +
                     `Available presets: ${listChatModelPresetNames().join(", ")}.`
+            );
+        }
+        if (preset.deprecated && !reportedDeprecatedPresets.has(preset.name)) {
+            reportedDeprecatedPresets.add(preset.name);
+            console.warn(
+                `${file}: model "${name}" uses preset "${preset.name}", deprecated since ` +
+                    `${preset.deprecated.since}. Move it to "${preset.deprecated.replacement}".`
             );
         }
         const override = behaviorOverrideSchema.safeParse(model.behavior ?? {});

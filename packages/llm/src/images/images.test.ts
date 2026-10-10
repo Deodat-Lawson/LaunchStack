@@ -88,14 +88,14 @@ describe("openrouter shape", () => {
         const { fetchImpl, calls } = fakeFetch(imagesResponse);
 
         const result = await generateImages(
-            { prompt: "a duck", modelId: "google/gemini-2.5-flash-image", aspectRatio: "16:9" },
+            { prompt: "a duck", modelId: "google/gemini-3.1-flash-image", aspectRatio: "16:9" },
             endpoint({ fetch: fetchImpl })
         );
 
         expect(result.shape).toBe("openrouter");
         expect(result.images[0]?.base64).toBe(PNG);
         expect(calls[0]?.url).toContain("/images");
-        expect(calls[0]?.body.model).toBe("google/gemini-2.5-flash-image");
+        expect(calls[0]?.body.model).toBe("google/gemini-3.1-flash-image");
     });
 
     it("carries input images, which is what makes editing possible", async () => {
@@ -104,7 +104,7 @@ describe("openrouter shape", () => {
         await generateImages(
             {
                 prompt: "make the hat red",
-                modelId: "google/gemini-2.5-flash-image",
+                modelId: "google/gemini-3.1-flash-image",
                 inputImages: [{ base64: PNG, mediaType: "image/png" }],
             },
             endpoint({ fetch: fetchImpl })
@@ -140,7 +140,7 @@ describe("openai-compatible shape", () => {
         const { fetchImpl, calls } = fakeFetch({ data: [{ b64_json: PNG }] });
 
         const result = await generateImages(
-            { prompt: "a duck", modelId: "gemini-2.5-flash-image" },
+            { prompt: "a duck", modelId: "gemini-3.1-flash-image" },
             endpoint({
                 baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
                 fetch: fetchImpl,
@@ -169,7 +169,7 @@ describe("google-native shape", () => {
         });
 
         const result = await generateImages(
-            { prompt: "a duck", modelId: "gemini-2.5-flash-image" },
+            { prompt: "a duck", modelId: "gemini-3.1-flash-image" },
             endpoint({
                 baseUrl: "https://generativelanguage.googleapis.com/v1beta",
                 fetch: fetchImpl,
@@ -178,7 +178,7 @@ describe("google-native shape", () => {
 
         expect(result.shape).toBe("google-native");
         expect(result.images[0]?.base64).toBe(PNG);
-        expect(calls[0]?.url).toContain("gemini-2.5-flash-image");
+        expect(calls[0]?.url).toContain("gemini-3.1-flash-image");
     });
 });
 

@@ -25,7 +25,9 @@ export const doclingConvertFile: DoclingConvert = async (config, file, filename)
 
     const form = new FormData();
     form.append("files", new Blob([new Uint8Array(file)]), filename);
-    form.append("to_formats", '["md"]');
+    // A list field in multipart is the field repeated, one value each. The
+    // JSON-array string this used to send is a 422 on docling-serve 1.36.
+    form.append("to_formats", "md");
     form.append("do_ocr", "true");
     form.append("do_table_structure", "true");
     form.append("image_export_mode", "placeholder");

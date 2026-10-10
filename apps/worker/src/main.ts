@@ -11,6 +11,7 @@
  * Boot order matters: the engine (shared composition root from apps/web)
  * must be configured before any port touches the DB or providers.
  */
+import { existsSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -42,6 +43,11 @@ async function main(): Promise<void> {
     // Startup-time resolution only — never mutated after boot.
     {
         const workerDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+        // The root .env is otherwise loaded only when ~/env is imported below —
+        // after this block — so a CHAT_MODELS_CONFIG set there lost to the
+        // default. Same precedence as dotenv: variables already set win.
+        const rootEnv = path.resolve(workerDir, "../../.env");
+        if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
         const resolved = resolveChatModelsConfig({
             configured: process.env.CHAT_MODELS_CONFIG,
             workerDir,

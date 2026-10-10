@@ -52,7 +52,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await signUpWithWorkspace(page);
     });
 
-    test("create → edit in place → back → preview → library, with a working back button", async ({
+    test("create → edit in place → back → preview tab → library, with a working back button", async ({
         page,
     }) => {
         await page.goto("/employer/documents");
@@ -81,11 +81,9 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await page.getByLabel("Mindmap title").press("Enter");
         await page.getByRole("button", { name: "Back", exact: true }).click();
 
-        // Back lands on the preview, not on a gallery.
-        await page.waitForURL(url => {
-            const params = new URL(url).searchParams;
-            return params.get("source") === sourceId && params.get("edit") === null;
-        });
+        // Back lands on the map's preview, in a tab of its own, and the URL
+        // lets go of the editor — not a gallery.
+        await page.waitForURL(url => new URL(url).searchParams.get("edit") === null);
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
         await expect(page.getByTestId("viewer-edit-mindmap")).toBeVisible();
         await expect(page.getByRole("button", { name: "Make citable" })).toBeVisible();
@@ -97,10 +95,10 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await page.goBack();
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
 
-        // Close the preview: the library, with the map in the rail under its
-        // new name.
-        await page.getByRole("button", { name: "Library" }).click();
-        await page.waitForURL(url => new URL(url).searchParams.get("source") === null);
+        // Close the preview from its tab: the library, with the map in the
+        // rail under its new name.
+        await page.getByTitle(`Close ${title}`).click();
+        await expect(page.getByTestId("mindmap-preview")).toHaveCount(0);
         const row = page.getByTestId(`source-row-${sourceId}`);
         await expect(row).toBeVisible();
         await expect(row).toContainText(title);
@@ -111,11 +109,16 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await expect(page.getByText(title).first()).toBeVisible();
         await page.keyboard.press("Escape");
 
-        // The rail reopens the preview; a deep link survives a reload.
+        // The rail reopens it as a tab, which survives a reload; a deep link
+        // opens the same tab.
         await row.getByTitle("Open").click();
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
         await page.reload();
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
+        await page.getByTitle(`Close ${title}`).click();
+        await page.goto(`/employer/documents?source=${sourceId}`);
+        await expect(page.getByTestId("mindmap-preview")).toBeVisible();
+        await page.waitForURL(url => new URL(url).searchParams.get("source") === null);
     });
 
     test("the old editor address redirects into the workspace", async ({ page }) => {

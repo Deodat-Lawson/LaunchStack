@@ -18,8 +18,8 @@ import { documentNotes, documentNoteEmbeddings } from "~/server/db/schema";
 import {
     createNotesEmbeddingsProvider,
     EMBEDDING_DIM,
-    EMBEDDING_MODEL,
     EMBEDDING_SHORT_DIM,
+    resolveEmbeddingConfig,
 } from "./embedding-config";
 
 /**
@@ -96,7 +96,7 @@ export async function embedNote(noteId: number): Promise<void> {
             tokenCount: approxTokens(embeddingText),
             embedding,
             embeddingShort,
-            modelVersion: EMBEDDING_MODEL,
+            modelVersion: resolveEmbeddingConfig().model,
         });
     } catch (err) {
         // Rethrow so the outbox handler records the failure and retries with

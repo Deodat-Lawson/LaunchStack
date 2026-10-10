@@ -249,8 +249,8 @@ bundled preset or declares its own behavior:
 version: 1
 models:
   primary:
-    id: gemini-2.5-flash
-    preset: google/gemini-2.5-flash
+    id: gemini-3.8-flash
+    preset: google/gemini-3.8-flash
 routes:
   default: primary
 ```

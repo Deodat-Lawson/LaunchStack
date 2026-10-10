@@ -34,6 +34,8 @@ with the strict direction `protocol ← evidence ← application ← adapters �
 
 ## Local dev
 
+The day-one path, including which environment variables are required, which Compose provides, and which need an external account, is [Developer onboarding](docs/developer-onboarding.md). `node scripts/dev/setup-doctor.mjs` is the read-only check.
+
 ### Requirements
 
 - Node.js **20+**
@@ -48,7 +50,7 @@ cd launchstack
 pnpm install
 cp .env.example .env                  # fill in DATABASE_URL + BETTER_AUTH_SECRET + OPENAI keys
 pnpm --filter @launchstack/web db:migrate      # apply BOTH migration sets (engine, then product)
-pnpm --filter @launchstack/core db:seed        # optional sample data
+pnpm --filter @launchstack/web db:seed         # optional: owner@/admin@/member@/viewer@launchstack.test
 pnpm --filter @launchstack/web dev             # Next.js app on :3000 (plain `next dev` — no background work)
 pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — required for ingestion
 ```

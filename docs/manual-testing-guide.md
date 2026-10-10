@@ -24,8 +24,8 @@ Before the first pass:
 2. **Database**
 
    ```bash
-   pnpm --filter @launchstack/core db:migrate   # apply schema
-   pnpm --filter @launchstack/core db:seed      # optional sample data
+   pnpm --filter @launchstack/web db:migrate    # apply schema
+   pnpm --filter @launchstack/web db:seed       # optional sample data
    ```
 
 3. **Enable Inngest** (required for background document processing)

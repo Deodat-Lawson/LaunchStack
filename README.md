@@ -20,7 +20,9 @@ To try Launchstack today, run the app below.
 
 ## Run it locally
 
-**Requirements:** Node ≥ 20 and pnpm 10.15.1 (`corepack enable` picks up the pinned version).
+New machines start with [Developer onboarding](docs/developer-onboarding.md): Docker Compose is the shared stack, and `node scripts/dev/setup-doctor.mjs` reports what is still missing. The commands below are the same path, written out.
+
+**Requirements:** Docker Desktop (or Docker Engine), plus Node ≥ 20 and pnpm 10.15.1 when you want hot reload (`corepack enable` picks up the pinned version).
 
 ```bash
 git clone https://github.com/Deodat-Lawson/LaunchStack.git
@@ -29,7 +31,7 @@ pnpm install
 cp .env.example .env
 ```
 
-`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL` and `BETTER_AUTH_SECRET` (generate one with `openssl rand -base64 32`). Chat needs no variable at all: with `CHAT_BASE_URL` unset it defaults to Google Gemini's OpenAI-compatible endpoint, authenticated with `GOOGLE_AI_API_KEY`. Set `CHAT_BASE_URL` (plus `CHAT_API_KEY`) to reach anything else. There is still no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat, and none of them is forwarded to the Gemini default — a key names who you are, not where the request goes, and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
+`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL` and `BETTER_AUTH_SECRET` (generate one with `openssl rand -base64 32`). Set `BETTER_AUTH_URL=http://localhost:3000` as well, or browser sign-up returns `Invalid origin`. Chat needs no variable at all: with `CHAT_BASE_URL` unset it defaults to Google Gemini's OpenAI-compatible endpoint, authenticated with `GOOGLE_AI_API_KEY`. Set `CHAT_BASE_URL` (plus `CHAT_API_KEY`) to reach anything else. There is still no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat, and none of them is forwarded to the Gemini default — a key names who you are, not where the request goes, and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
 
 ### With Docker (recommended)
 
@@ -50,7 +52,7 @@ runner enables it and exits non-zero on stock Postgres.
 
 ```bash
 pnpm --filter @launchstack/web    db:migrate   # apply BOTH migration sets (engine, then product)
-pnpm --filter @launchstack/core   db:seed      # optional: one company/user/document
+pnpm --filter @launchstack/web    db:seed      # optional: owner@/admin@/member@/viewer@launchstack.test
 pnpm --filter @launchstack/web    dev          # Next.js on :3000
 pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — ingestion runs here, not in web
 pnpm --filter @launchstack/landing dev         # optional: the public site on :3001 — where the logo and sign-out lead in dev
@@ -63,7 +65,7 @@ Inngest dev server is only needed for the Inngest-hosted background
 verticals (trend search, prospector, …), not for ingestion.
 
 `db:migrate` is the same command CI, Docker and the production image build run.
-Running it from `@launchstack/core` applies only the engine set — that is what a
+Running it from `@launchstack/store` applies only the engine set — that is what a
 consumer embedding the engine uses, not what a full app needs.
 Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#changing-the-database).
 

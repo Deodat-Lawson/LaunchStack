@@ -106,6 +106,13 @@ describe("the Create group", () => {
         expect(ADD_TABS[0]?.items.map(i => i.id)).toContain("mindmap");
     });
 
+    it("offers Paste text, which is writing a note rather than uploading", () => {
+        expect(ADD_TABS[0]?.items.map(i => i.id)).toContain("paste");
+        expect(ADD_TABS.find(g => g.group === "Upload")?.items.map(i => i.id)).not.toContain(
+            "paste"
+        );
+    });
+
     it("renders the Mindmap tab in the sidebar", async () => {
         mount();
         expect(screen.getByRole("button", { name: "Mindmap" })).toBeInTheDocument();

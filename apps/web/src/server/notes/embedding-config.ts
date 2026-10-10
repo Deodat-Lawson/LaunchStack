@@ -7,13 +7,21 @@
 
 import { generateEmbeddings, type EmbeddingsProvider } from "@launchstack/llm/embeddings";
 
-export const EMBEDDING_MODEL = "text-embedding-3-large";
+/** Model when the endpoint pair names none (AI_BASE_URL, or no EMBEDDING_MODEL). */
+export const DEFAULT_EMBEDDING_MODEL = "text-embedding-3-large";
+/**
+ * Notes keep their own 1536-wide column whatever EMBEDDING_INDEX documents use,
+ * so any model that can emit 1536 dimensions fits — text-embedding-3-large, or
+ * gemini-embedding-001 via Matryoshka truncation.
+ */
 export const EMBEDDING_DIM = 1536;
 export const EMBEDDING_SHORT_DIM = 512;
 
 export interface EmbeddingProviderConfig {
     apiKey: string | undefined;
     baseURL: string | undefined;
+    /** The model the endpoint serves; the OpenAI default 404s on Gemini. */
+    model: string;
 }
 
 /**
@@ -28,9 +36,15 @@ export interface EmbeddingProviderConfig {
  */
 export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
     if (process.env.EMBEDDING_API_BASE_URL) {
+        const configuredModel = process.env.EMBEDDING_MODEL?.trim();
         return {
             apiKey: process.env.EMBEDDING_API_KEY,
             baseURL: process.env.EMBEDDING_API_BASE_URL,
+            // Blank counts as unset, which `??` would not do.
+            model:
+                configuredModel !== undefined && configuredModel.length > 0
+                    ? configuredModel
+                    : DEFAULT_EMBEDDING_MODEL,
         };
     }
 
@@ -38,10 +52,11 @@ export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
         return {
             apiKey: process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY,
             baseURL: process.env.AI_BASE_URL,
+            model: DEFAULT_EMBEDDING_MODEL,
         };
     }
 
-    return { apiKey: undefined, baseURL: undefined };
+    return { apiKey: undefined, baseURL: undefined, model: DEFAULT_EMBEDDING_MODEL };
 }
 
 /**
@@ -52,13 +67,13 @@ export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
  * an endpoint just returns nothing).
  */
 export function createNotesEmbeddingsProvider(): EmbeddingsProvider | null {
-    const { apiKey, baseURL } = resolveEmbeddingConfig();
+    const { apiKey, baseURL, model } = resolveEmbeddingConfig();
     if (!apiKey || !baseURL) return null;
 
     const config = {
         apiKey,
         baseUrl: baseURL,
-        model: EMBEDDING_MODEL,
+        model,
         dimensions: EMBEDDING_DIM,
     };
 

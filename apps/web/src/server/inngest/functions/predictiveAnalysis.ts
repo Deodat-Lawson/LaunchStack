@@ -45,16 +45,26 @@ export const predictiveAnalysisJob = inngest.createFunction(
                 .where(eq(document.id, documentId))
                 .limit(1);
 
-            return results[0] ?? null;
+            const row = results[0];
+            // Step output is JSON: a bigint does not survive it (it came back
+            // undefined, slipped past the null check, and broke load-chunks).
+            return row
+                ? {
+                      ...row,
+                      companyId: row.companyId.toString(),
+                      currentVersionId: row.currentVersionId?.toString() ?? null,
+                  }
+                : null;
         });
         if (!docDetails) {
             throw new Error(`Document ${documentId} not found`);
         }
 
-        const currentVersionId = docDetails.currentVersionId;
-        if (currentVersionId === null) {
+        if (docDetails.currentVersionId == null) {
             throw new Error(`Document ${documentId} has no current version`);
         }
+        const currentVersionId = BigInt(docDetails.currentVersionId);
+        const companyId = BigInt(docDetails.companyId);
         const chunks = await step.run("load-chunks", async () => {
             const rlmChunks = await db
                 .select({
@@ -95,12 +105,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
                 const existingDocs = await db
                     .selectDistinct({ title: document.title, url: document.url })
                     .from(document)
-                    .where(
-                        and(
-                            eq(document.companyId, docDetails.companyId),
-                            ne(document.id, documentId)
-                        )
-                    );
+                    .where(and(eq(document.companyId, companyId), ne(document.id, documentId)));
                 return existingDocs.map(row => `${row.title || row.url}`);
             });
         }
@@ -119,7 +124,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
                     existingDocuments,
                     title: docDetails.title,
                     category: docDetails.category,
-                    companyId: Number(docDetails.companyId),
+                    companyId: Number(companyId),
                     documentId,
                 },
                 timeoutMs ?? 60000,

@@ -65,8 +65,15 @@ export async function ingestDocument(
     console.log(`[IngestionRouter] Selected adapter: ${adapter.name}`);
 
     let resolvedInput: string | Buffer = input;
+    // Root-relative references are internal files (/api/files/{id}) — the
+    // shape transcripts and archive members are stored with. Only the storage
+    // port can resolve and sign them; an adapter's bare fetch() cannot even
+    // parse one ("Invalid URL").
     const isUrl =
-        typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"));
+        typeof input === "string" &&
+        (input.startsWith("http://") ||
+            input.startsWith("https://") ||
+            (input.startsWith("/") && !input.startsWith("//")));
     if (isUrl && !adapter.needsUrl) {
         console.log(`[IngestionRouter] Pre-fetching URL via fetchFile`);
         const res = await getStoragePort().download(input);

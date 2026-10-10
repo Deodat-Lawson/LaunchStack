@@ -15,6 +15,7 @@
         "typecheck": "pnpm -r typecheck",
         "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
         "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+        "setup:check": "node scripts/dev/setup-doctor.mjs",
         "postinstall": "echo 'postinstall: no-op'",
         "changeset": "changeset",
         "version": "changeset version",

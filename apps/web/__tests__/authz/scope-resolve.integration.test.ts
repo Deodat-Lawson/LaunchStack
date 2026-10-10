@@ -6,7 +6,10 @@
  * Gated like the founder-weekly-review suites: runs only when
  * LAUNCHSTACK_TEST_DATABASE_URL (or DATABASE_URL) points at a local server.
  */
-import { eq } from "drizzle-orm";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { eq, sql } from "drizzle-orm";
 
 import { category, company, document } from "@launchstack/store/schema";
 import type { DbClient } from "@launchstack/store/client";
@@ -240,9 +243,23 @@ describeDb("resolveDocumentScope (integration)", () => {
         return rows.map(r => r.title).sort();
     }
 
-    it("gives an owner everything without touching the grant tables", async () => {
-        const scope = await scopeFor(ids.owner, "owner");
-        expect(scope.kind).toBe("everything");
+    it("gives an owner no way past a restriction until the ADR-014 carry-over grants exist", async () => {
+        // Private means private (ADR-014): with no grant, an owner sees what a member sees.
+        expect((await scopeFor(ids.owner, "owner")).kind).toBe("except");
+        expect(await visibleTitles(ids.owner, "owner")).toEqual(["Handbook"]);
+
+        // The migration's data statements give owners and admins back what was
+        // restricted before ADR-014, through explicit role grants.
+        const migration = readFileSync(
+            join(__dirname, "../../drizzle/20261010233832_private_by_default_sharing.sql"),
+            "utf8"
+        );
+        const carryOver = migration
+            .split("--> statement-breakpoint")
+            .filter(stmt => stmt.includes("system:adr-014"));
+        expect(carryOver).toHaveLength(2);
+        for (const stmt of carryOver) await test.db.execute(sql.raw(stmt));
+
         expect(await visibleTitles(ids.owner, "owner")).toEqual([
             "Board deck",
             "Budget",
@@ -250,6 +267,8 @@ describeDb("resolveDocumentScope (integration)", () => {
             "Ledger",
             "Plan",
         ]);
+        // A plain member is unaffected.
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Handbook"]);
     });
 
     it("hides the restricted folder, its subfolders, and the restricted document from a plain member", async () => {

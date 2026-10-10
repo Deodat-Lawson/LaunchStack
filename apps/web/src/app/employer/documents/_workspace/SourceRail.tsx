@@ -41,6 +41,9 @@ import {
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
+import { InboxBell } from "./team/InboxBell";
+import { TeamPanel } from "./team/TeamPanel";
+import type { TeamRailProps, TeamTarget } from "./team/types";
 import { SOURCE_DRAG_MIME } from "./dragData";
 import {
     buildBlankRailMenuItems,
@@ -611,10 +614,15 @@ export interface SourceRailProps {
      * with no tab strip — which is what the minimal embeddings want.
      */
     history?: Omit<HistoryRailProps, "query">;
+    /**
+     * The team layer (ADR-014): the Team tab and the inbox bell. Shown only
+     * alongside History, in the full workspace.
+     */
+    team?: Omit<TeamRailProps, "query">;
 }
 
-/** Which half of the rail is showing. Persisted, so a habit survives a reload. */
-type RailTab = "sources" | "history";
+/** Which part of the rail is showing. Persisted, so a habit survives a reload. */
+type RailTab = "sources" | "history" | "team";
 
 const RAIL_TAB_KEY = "workspace.railTab.v1";
 
@@ -778,6 +786,7 @@ export function SourceRail({
     width = 280,
     shortcuts,
     history,
+    team,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
@@ -790,7 +799,8 @@ export function SourceRail({
     const [cut, setCut] = useState<string[]>([]);
     useEffect(() => {
         try {
-            if (localStorage.getItem(RAIL_TAB_KEY) === "history") setTab("history");
+            const saved = localStorage.getItem(RAIL_TAB_KEY);
+            if (saved === "history" || saved === "team") setTab(saved);
         } catch {
             // Private mode / corrupt storage — Sources is the safe default.
         }
@@ -806,8 +816,22 @@ export function SourceRail({
         }
     }, [tab]);
 
+    /** Opening something from the inbox or the Team tab shows where it lives. */
+    const teamOpen = useCallback(
+        (target: TeamTarget) => {
+            if (target.type === "chat") {
+                if (history) setTab("history");
+            } else {
+                setTab("sources");
+            }
+            team?.onOpenTarget(target);
+        },
+        [team, history]
+    );
+
     // A rail without history props can never sit on a tab that isn't there.
-    const activeTab: RailTab = history ? tab : "sources";
+    const activeTab: RailTab =
+        tab === "team" ? (team ? "team" : "sources") : history ? tab : "sources";
 
     const folderFor = useCallback(
         (path: string): WorkspaceFolder =>
@@ -1133,6 +1157,7 @@ export function SourceRail({
                         {logoLabel}
                     </span>
                 </LandingLogoLink>
+                {team && <InboxBell onOpenTarget={teamOpen} />}
                 {onClose && (
                     <button
                         onClick={onClose}
@@ -1205,6 +1230,7 @@ export function SourceRail({
                         [
                             { id: "sources", label: "Sources" },
                             { id: "history", label: "History" },
+                            ...(team ? [{ id: "team", label: "Team" } as const] : []),
                         ] as const
                     ).map(item => {
                         const selected = activeTab === item.id;
@@ -1262,7 +1288,13 @@ export function SourceRail({
                         // as context, move them, reopen a chat. ⌘K is the search
                         // that jumps; calling this one search too made it read
                         // as a smaller copy of that.
-                        placeholder={activeTab === "history" ? "Filter history" : "Filter sources"}
+                        placeholder={
+                            activeTab === "history"
+                                ? "Filter history"
+                                : activeTab === "team"
+                                  ? "Filter people"
+                                  : "Filter sources"
+                        }
                         style={{
                             flex: 1,
                             background: "transparent",
@@ -1315,7 +1347,9 @@ export function SourceRail({
                 </div>
             )}
 
-            {activeTab === "history" && history ? (
+            {activeTab === "team" && team ? (
+                <TeamPanel {...team} onOpenTarget={teamOpen} query={search} />
+            ) : activeTab === "history" && history ? (
                 <HistoryRail {...history} query={search} />
             ) : (
                 <div

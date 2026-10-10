@@ -12,6 +12,7 @@ import {
     folderGrants,
     folderSettings,
     userCompanyMemberships,
+    workspaceActivity,
     workspaceAuditEvents,
 } from "~/server/db/schema";
 
@@ -37,12 +38,17 @@ describe("PUT /api/workspace/folders/[categoryId]/access", () => {
             { id: 1, principalType: "user", principalId: "8", level: "view" },
             { id: 2, principalType: "group", principalId: "2", level: "edit" },
         ]);
-        fakeDb.onSelect(userCompanyMemberships, [{ userId: 8n, role: "member", status: "active" }]);
+        fakeDb.onSelect(userCompanyMemberships, [
+            { userId: 7n, role: "owner", status: "active" },
+            { userId: 8n, role: "member", status: "active" },
+        ]);
 
         const res = await PUT(
             jsonRequest("/api/workspace/folders/3/access", "PUT", {
                 visibility: "restricted",
                 grants: [
+                    // Restricting needs a manage grant for yourself: no role reads past it (ADR-014).
+                    { principalType: "user", principalId: "7", level: "manage" },
                     { principalType: "user", principalId: "8", level: "edit" },
                     { principalType: "role", principalId: "Member", level: "view" },
                 ],
@@ -54,6 +60,7 @@ describe("PUT /api/workspace/folders/[categoryId]/access", () => {
         expect(fakeDb.insertedInto(workspaceAuditEvents).map(e => e.action)).toEqual([
             "folder.visibility_changed",
             "folder.grant_added",
+            "folder.grant_added",
             "folder.grant_changed",
             "folder.grant_removed",
         ]);
@@ -61,10 +68,19 @@ describe("PUT /api/workspace/folders/[categoryId]/access", () => {
             expect.objectContaining({ categoryId: 3n, visibility: "restricted" }),
         ]);
         expect(fakeDb.insertedInto(folderGrants)).toEqual([
+            expect.objectContaining({ principalType: "user", principalId: "7", level: "manage" }),
             expect.objectContaining({
                 principalType: "role",
                 principalId: "member",
                 level: "view",
+            }),
+        ]);
+        // One team-feed line for the save.
+        expect(fakeDb.insertedInto(workspaceActivity)).toEqual([
+            expect.objectContaining({
+                verb: "shared",
+                targetType: "folder",
+                targetLabel: "Finance",
             }),
         ]);
         expect(fakeDb.updatesOf(folderGrants)).toEqual([{ level: "edit" }]);
@@ -86,6 +102,24 @@ describe("PUT /api/workspace/folders/[categoryId]/access", () => {
         );
 
         expect(res.status).toBe(400);
+        expect(fakeDb.inserts).toHaveLength(0);
+    });
+
+    it("refuses an owner who would lock themselves out of a restricted folder", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "owner", userPk: 7n })));
+        fakeDb.onSelect(category, [FINANCE]);
+        fakeDb.onSelect(folderSettings, []);
+        fakeDb.onSelect(userCompanyMemberships, [{ userId: 8n, role: "member", status: "active" }]);
+
+        const res = await PUT(
+            jsonRequest("/api/workspace/folders/3/access", "PUT", {
+                visibility: "restricted",
+                grants: [{ principalType: "user", principalId: "8", level: "edit" }],
+            }),
+            params({ categoryId: "3" })
+        );
+
+        expect(res.status).toBe(403);
         expect(fakeDb.inserts).toHaveLength(0);
     });
 
@@ -158,7 +192,8 @@ describe("GET /api/workspace/folders/[categoryId]/access", () => {
         fakeDb.onSelect(category, [FINANCE]);
         fakeDb.onSelect(folderSettings, [{ visibility: "restricted" }]);
         fakeDb.onSelect(folderGrants, [
-            { id: 1, principalType: "user", principalId: "8", level: "view" },
+            { id: 1, principalType: "user", principalId: "7", level: "manage" },
+            { id: 2, principalType: "user", principalId: "8", level: "view" },
         ]);
         fakeDb.onSelect(userCompanyMemberships, [
             { userId: 7n, role: "owner", status: "active" },
@@ -179,16 +214,12 @@ describe("GET /api/workspace/folders/[categoryId]/access", () => {
             canManage: boolean;
             grants: { principalName: string; level: string }[];
         };
-        // The owner (folders.manage) and the granted member; not the guest or the viewer.
+        // Exactly the two people granted — the owner only through their own grant
+        // (ADR-014: no role reads past a restriction); not the guest or the viewer.
         expect(body).toMatchObject({ visibility: "restricted", audienceCount: 2, canManage: true });
         expect(body.grants).toEqual([
-            {
-                id: 1,
-                principalType: "user",
-                principalId: "8",
-                principalName: "Former member",
-                level: "view",
-            },
+            expect.objectContaining({ id: 1, principalId: "7", level: "manage" }),
+            expect.objectContaining({ id: 2, principalId: "8", level: "view" }),
         ]);
     });
 });

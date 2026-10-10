@@ -1,8 +1,10 @@
 /**
  * Who can see a folder. A folder is the engine `category` row; with no
- * `folder_settings` row it is visible to the whole workspace, with one it is
- * restricted to the principals in `folder_grants` (plus anyone holding
- * `folders.manage`, who sees everything anyway).
+ * `folder_settings` row it follows its parent (workspace-wide at the top),
+ * with one it is restricted to the principals in `folder_grants`. Changing
+ * that needs manage level on the folder (`~/server/workspace/item-access`):
+ * a grant on it or its governing folder, or `folders.manage` while nothing
+ * above restricts it. No role reads or manages past a restriction (ADR-014).
  */
 
 import { and, eq } from "drizzle-orm";
@@ -14,10 +16,22 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import type { FolderVisibility } from "~/lib/authz/permissions";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
-import { normalizeFolderPath } from "~/lib/folders/path";
+import { folderParentPath, normalizeFolderPath } from "~/lib/folders/path";
 import { createFolder } from "~/server/folders";
 
+import {
+    canManageFolderPath,
+    folderAccess,
+    folderOwner,
+    inheritedAudience,
+    workspaceName,
+    type InheritedAudience,
+    type OwnerView,
+} from "./item-access";
+
+import { recordActivity } from "./activity";
 import { forbidden, notFound } from "./errors";
+import { notifyShared } from "./notifications";
 import {
     activeMemberPrincipals,
     callerGroupIds,
@@ -34,10 +48,16 @@ import {
 
 export interface FolderAccessView {
     folder: { id: number; name: string };
+    /** `restricted` only when the folder has its own audience; inheriting reads `workspace`. */
     visibility: FolderVisibility;
     grants: GrantView[];
     audienceCount: number;
     canManage: boolean;
+    /** What "not restricted" means here: the workspace, or the restricted folder above. */
+    inheritsFrom: InheritedAudience;
+    /** Who made it (null for folders from before ADR-014). */
+    owner: OwnerView | null;
+    workspaceName: string;
 }
 
 interface FolderRef {
@@ -81,42 +101,48 @@ export async function folderGrantRows(categoryId: number): Promise<GrantRow[]> {
     return rows.map(r => ({ ...r, id: Number(r.id) }));
 }
 
-/** `folders.manage`, or a manage-level grant on this folder reaching the caller. */
+/** Manage level on this folder: a grant on it or its governing folder, or `folders.manage` when nothing restricts it. */
 export async function canManageFolder(ctx: WorkspaceContext, categoryId: number): Promise<boolean> {
-    if (ctx.can("folders.manage")) return true;
-    const [groupIds, grants] = await Promise.all([
-        callerGroupIds(ctx.userPk),
-        folderGrantRows(categoryId),
-    ]);
-    return hasManageGrant(ctx, groupIds, grants);
+    const folder = await loadFolder(ctx.companyId, categoryId);
+    return canManageFolderPath(ctx, folder.name);
 }
 
 async function requireVisibleFolder(ctx: WorkspaceContext, categoryId: number): Promise<FolderRef> {
     const folder = await loadFolder(ctx.companyId, categoryId);
-    if (!ctx.can("folders.manage")) {
-        const scope = await ctx.documentScope();
-        if (!scopeAllowsCategory(scope, folder.name)) throw notFound("Folder not found.");
-    }
+    const scope = await ctx.documentScope();
+    if (!scopeAllowsCategory(scope, folder.name)) throw notFound("Folder not found.");
     return folder;
 }
 
-async function buildView(
-    ctx: WorkspaceContext,
-    folder: FolderRef,
-    groupIds: ReadonlySet<string>
-): Promise<FolderAccessView> {
-    const [restricted, grants, members] = await Promise.all([
+async function buildView(ctx: WorkspaceContext, folder: FolderRef): Promise<FolderAccessView> {
+    const [restricted, grants, members, inheritsFrom, owner, wsName, access] = await Promise.all([
         folderRestricted(folder.id),
         folderGrantRows(folder.id),
         activeMemberPrincipals(ctx.companyId),
+        inheritedAudience(ctx.companyId, folderParentPath(folder.name)),
+        folderOwner(folder.id),
+        workspaceName(ctx.companyId),
+        folderAccess(ctx, folder.name),
     ]);
     const names = await principalNames(ctx.companyId, grants);
+    // An inheriting folder is seen by whoever sees the folder it inherits from.
+    let audienceCount = members.filter(m => canSeeFolder(m, restricted, grants)).length;
+    if (!restricted && inheritsFrom.restricted && inheritsFrom.path) {
+        const governing = await findFolderByPath(ctx.companyId, inheritsFrom.path);
+        if (governing) {
+            const governingGrants = await folderGrantRows(governing.id);
+            audienceCount = members.filter(m => canSeeFolder(m, true, governingGrants)).length;
+        }
+    }
     return {
         folder,
         visibility: restricted ? "restricted" : "workspace",
         grants: toGrantViews(grants, names),
-        audienceCount: members.filter(m => canSeeFolder(m, restricted, grants)).length,
-        canManage: ctx.can("folders.manage") || hasManageGrant(ctx, groupIds, grants),
+        audienceCount,
+        canManage: access.level === "manage",
+        inheritsFrom,
+        owner,
+        workspaceName: wsName,
     };
 }
 
@@ -125,8 +151,7 @@ export async function getFolderAccess(
     categoryId: number
 ): Promise<FolderAccessView> {
     const folder = await requireVisibleFolder(ctx, categoryId);
-    const groupIds = await callerGroupIds(ctx.userPk);
-    return buildView(ctx, folder, groupIds);
+    return buildView(ctx, folder);
 }
 
 async function findFolderByPath(companyId: bigint, path: string): Promise<FolderRef | null> {
@@ -153,17 +178,23 @@ export async function getFolderAccessByPath(
     const existing = await findFolderByPath(ctx.companyId, path);
     if (existing) return getFolderAccess(ctx, existing.id);
 
-    if (!ctx.can("folders.manage")) {
-        const scope = await ctx.documentScope();
-        if (!scopeAllowsCategory(scope, path)) throw notFound("Folder not found.");
-    }
-    const members = await activeMemberPrincipals(ctx.companyId);
+    const scope = await ctx.documentScope();
+    if (!scopeAllowsCategory(scope, path)) throw notFound("Folder not found.");
+    const [members, inheritsFrom, wsName, access] = await Promise.all([
+        activeMemberPrincipals(ctx.companyId),
+        inheritedAudience(ctx.companyId, folderParentPath(path)),
+        workspaceName(ctx.companyId),
+        folderAccess(ctx, path),
+    ]);
     return {
         folder: { id: 0, name: path },
         visibility: "workspace",
         grants: [],
         audienceCount: members.filter(m => canSeeFolder(m, false, [])).length,
-        canManage: ctx.can("folders.manage"),
+        canManage: access.level === "manage",
+        inheritsFrom,
+        owner: null,
+        workspaceName: wsName,
     };
 }
 
@@ -175,8 +206,8 @@ export async function setFolderAccessByPath(
     const path = normalizeFolderPath(rawPath);
     let folder = await findFolderByPath(ctx.companyId, path);
     if (!folder) {
-        if (!ctx.can("folders.manage")) {
-            throw forbidden("Only someone who can manage folders can store this folder.");
+        if (!(await canManageFolderPath(ctx, path))) {
+            throw forbidden("You do not manage this folder.");
         }
         await createFolder(ctx.companyId, path);
         folder = await findFolderByPath(ctx.companyId, path);
@@ -201,17 +232,18 @@ export async function setFolderAccess(
         folderRestricted(folder.id),
     ]);
 
-    const manager = ctx.can("folders.manage");
-    if (!manager && !hasManageGrant(ctx, groupIds, existing)) {
+    if (!(await canManageFolderPath(ctx, folder.name))) {
         throw forbidden("You do not manage this folder.");
     }
 
     const desired = await validatePrincipals(ctx.companyId, input.grants);
-    if (!manager && !hasManageGrant(ctx, groupIds, desired)) {
-        throw forbidden("You cannot remove your own manage access to this folder.");
+    const wantRestricted = input.visibility === "restricted";
+    // Restricting a folder hides it from everyone not granted — the person
+    // doing it included, since no role reads past a restriction.
+    if (wantRestricted && !hasManageGrant(ctx, groupIds, desired)) {
+        throw forbidden("Keep a manage-level grant for yourself, or you will lose access.");
     }
 
-    const wantRestricted = input.visibility === "restricted";
     const diff = diffGrants(existing, desired);
     const categoryKey = BigInt(folder.id);
 
@@ -262,6 +294,16 @@ export async function setFolderAccess(
                 level: grant.level,
                 grantedBy: ctx.authUserId,
             });
+            await notifyShared(tx, {
+                companyId: ctx.companyId,
+                actorUserId: ctx.authUserId,
+                targetType: "folder",
+                targetId: folder.id,
+                targetLabel: folder.name,
+                targetPath: folder.name,
+                level: grant.level,
+                principals: [grant],
+            });
             await recordAuditEvent(tx, {
                 companyId: ctx.companyId,
                 actorUserId: ctx.authUserId,
@@ -309,7 +351,28 @@ export async function setFolderAccess(
                 },
             });
         }
+
+        // The team feed: one line per save, naming what changed.
+        const opened = wantRestricted !== currentlyRestricted && !wantRestricted;
+        const closed = wantRestricted !== currentlyRestricted && wantRestricted;
+        if (opened || diff.added.length > 0 || closed || diff.removed.length > 0) {
+            await recordActivity(tx, {
+                companyId: ctx.companyId,
+                actorUserId: ctx.authUserId,
+                verb: opened || diff.added.length > 0 ? "shared" : "unshared",
+                targetType: "folder",
+                targetId: folder.id,
+                targetLabel: folder.name,
+                targetPath: folder.name,
+                detail: {
+                    everyone: opened,
+                    restricted: closed,
+                    added: diff.added.map(principalNameOf),
+                    removed: diff.removed.map(principalNameOf),
+                },
+            });
+        }
     });
 
-    return buildView(ctx, folder, groupIds);
+    return buildView(ctx, folder);
 }

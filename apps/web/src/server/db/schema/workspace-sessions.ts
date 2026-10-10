@@ -4,9 +4,11 @@ import {
     bigint,
     bigserial,
     boolean,
+    doublePrecision,
     index,
     integer,
     jsonb,
+    primaryKey,
     text,
     timestamp,
     uniqueIndex,
@@ -24,9 +26,11 @@ import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
  * Scoping is deliberately narrower than Sources: a session belongs to **one
  * person inside one workspace**, not to the workspace. A half-finished
  * question is a draft, and a colleague seeing your drafts in their sidebar is
- * a surprise nobody asked for. Pipeline runs, which are workspace work, stay
- * workspace-wide — the History feed merges both, and each side keeps its own
- * scope (`~/server/history`).
+ * a surprise nobody asked for. The owner may share one, read-only, with
+ * people, groups, roles or the whole workspace (`workspace_session_grants`,
+ * ADR-014); readers continue it as a fork of their own. Pipeline runs, which
+ * are workspace work, stay workspace-wide — the History feed merges both, and
+ * each side keeps its own scope (`~/server/history`).
  *
  * Sessions are the *transcript*, never the answer's evidence. Citations are
  * stored as the source ids and snippets the turn actually showed, so reopening
@@ -43,7 +47,7 @@ export const workspaceSessions = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        /** Auth subject id of the owner — the only person who can read this session. */
+        /** Auth subject id of the owner — the only person who can write to this session. */
         userId: varchar("user_id", { length: 256 }).notNull(),
 
         /** Derived from the opening question, or renamed by hand. */
@@ -62,6 +66,7 @@ export const workspaceSessions = pgTable(
 
         /** Denormalised for the sidebar, which must not read the messages to draw a row. */
         messageCount: integer("message_count").notNull().default(0),
+        /** Superseded by `workspace_session_user_state.pinned_at` (ADR-014); no longer read. */
         pinned: boolean("pinned").notNull().default(false),
 
         lastMessageAt: timestamp("last_message_at", { withTimezone: true })
@@ -81,6 +86,10 @@ export const workspaceSessions = pgTable(
         agentKey: varchar("agent_key", { length: 64 }),
         queuedMessages: jsonb("queued_messages").$type<ChatQueueItem[]>().notNull().default([]),
         queueRevision: integer("queue_revision").notNull().default(0),
+        /** When the owner first shared it; null while it is private. */
+        sharedAt: timestamp("shared_at", { withTimezone: true }),
+        /** The chat this one was forked from ("Continue in a new chat"); a plain id, never a FK. */
+        forkedFromSessionId: varchar("forked_from_session_id", { length: 64 }),
     },
     table => ({
         // The sidebar's one query: this person's sessions in this workspace,
@@ -133,5 +142,80 @@ export const workspaceSessionMessages = pgTable(
     })
 );
 
+/**
+ * Who, besides the owner, may read a session. Mirrors `folder_grants`, plus a
+ * `workspace` principal (`principal_id = '*'`) for "Everyone at <workspace>".
+ * Level is `view` today; the column leaves room for a later `contribute`.
+ */
+export const workspaceSessionGrants = pgTable(
+    "workspace_session_grants",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        sessionId: varchar("session_id", { length: 64 })
+            .notNull()
+            .references(() => workspaceSessions.id, { onDelete: "cascade" }),
+        /** `user` (users.id) | `group` (workspace_groups.id) | `role` (slug) | `workspace` (`*`). */
+        principalType: varchar("principal_type", { length: 16 }).notNull(),
+        principalId: varchar("principal_id", { length: 64 }).notNull(),
+        level: varchar("level", { length: 16 }).notNull().default("view"),
+        grantedBy: varchar("granted_by", { length: 256 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        principalUnique: uniqueIndex("workspace_session_grants_session_principal_uq").on(
+            table.sessionId,
+            table.principalType,
+            table.principalId
+        ),
+        // "Chats shared with me": every grant in the workspace naming one of my principals.
+        companyPrincipalIdx: index("workspace_session_grants_company_principal_idx").on(
+            table.companyId,
+            table.principalType,
+            table.principalId
+        ),
+    })
+);
+
+/**
+ * One person's view of one chat — theirs or one shared with them: pinned and
+ * in which order, archived, last opened. Keeping it per person means the
+ * owner's pins never reorder a reader's sidebar.
+ */
+export const workspaceSessionUserState = pgTable(
+    "workspace_session_user_state",
+    {
+        sessionId: varchar("session_id", { length: 64 })
+            .notNull()
+            .references(() => workspaceSessions.id, { onDelete: "cascade" }),
+        /** Auth subject id. */
+        userId: varchar("user_id", { length: 256 }).notNull(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        pinnedAt: timestamp("pinned_at", { withTimezone: true }),
+        /** Manual order among pinned chats, ascending. Gaps are fine; reorders rewrite. */
+        pinRank: doublePrecision("pin_rank"),
+        archivedAt: timestamp("archived_at", { withTimezone: true }),
+        lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        pk: primaryKey({ columns: [table.sessionId, table.userId] }),
+        companyUserIdx: index("workspace_session_user_state_company_user_idx").on(
+            table.companyId,
+            table.userId
+        ),
+    })
+);
+
 export type WorkspaceSessionRow = InferSelectModel<typeof workspaceSessions>;
+export type WorkspaceSessionGrantRow = InferSelectModel<typeof workspaceSessionGrants>;
+export type WorkspaceSessionUserStateRow = InferSelectModel<typeof workspaceSessionUserState>;
 export type WorkspaceSessionMessageRow = InferSelectModel<typeof workspaceSessionMessages>;

@@ -134,6 +134,19 @@ export interface Grant {
     principalId: string;
     principalName: string;
     level: GrantLevel;
+    /** A person's auth subject id, for their photo. */
+    authUserId?: string | null;
+}
+
+/** What "not restricted" means for an item: the workspace, or the restricted folder above it. */
+export interface InheritedAudience {
+    path: string | null;
+    restricted: boolean;
+}
+
+export interface OwnerRef {
+    authUserId: string;
+    name: string;
 }
 
 export interface GrantInput {
@@ -148,6 +161,9 @@ export interface FolderAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience;
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface DocumentAccess {
@@ -156,10 +172,13 @@ export interface DocumentAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience & { folder: string | null };
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface Principals {
-    users: { id: number; name: string; email: string }[];
+    users: { id: number; authUserId?: string; name: string; email: string }[];
     groups: { id: number; name: string }[];
     roles: { slug: string; name: string }[];
 }

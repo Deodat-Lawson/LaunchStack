@@ -9,9 +9,10 @@
  *   3. the grants on those folders and documents whose principal is the
  *      caller, one of their groups, or their role.
  *
- * Anyone holding `folders.manage` sees everything — they could grant
- * themselves anything anyway, and pretending otherwise would only hide
- * folders from the people who administer them.
+ * Nobody reads past a restriction by role (ADR-014): private means private,
+ * Owners and Admins included. `folders.manage` governs workspace-wide folders;
+ * a restricted folder is reached only through a grant — to the person, one of
+ * their groups, or their role.
  */
 
 import { and, eq, inArray, notInArray, or, sql, type SQL } from "drizzle-orm";
@@ -69,7 +70,6 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
 
     const role = normalizeRoleSlug(subject.role);
     const isGuest = role === "guest";
-    if (!isGuest && subject.permissions.has("folders.manage")) return SCOPE_EVERYTHING;
 
     // 1. What is restricted in this workspace?
     const [restrictedFolders, restrictedDocuments] = await Promise.all([

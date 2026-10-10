@@ -146,7 +146,7 @@ async function existingPaths(companyId: bigint): Promise<Set<string>> {
     return new Set((await listFolders(companyId)).map(folder => folder.path));
 }
 
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /** Insert a `category` row for the path and each ancestor that lacks one. */
 async function ensureFolderRows(tx: Tx, companyId: bigint, path: string): Promise<string[]> {
@@ -173,11 +173,17 @@ function assertAcceptablePath(path: string): void {
 
 export async function createFolder(
     companyId: bigint,
-    rawPath: string
+    rawPath: string,
+    /** Runs in the same transaction with the paths that were new (ADR-014 defaults). */
+    onCreated?: (tx: Tx, created: string[]) => Promise<void>
 ): Promise<{ path: string; created: string[] }> {
     const path = normalizeFolderPath(rawPath);
     assertAcceptablePath(path);
-    const created = await db.transaction(tx => ensureFolderRows(tx, companyId, path));
+    const created = await db.transaction(async tx => {
+        const inserted = await ensureFolderRows(tx, companyId, path);
+        if (onCreated) await onCreated(tx, inserted);
+        return inserted;
+    });
     return { path, created };
 }
 
@@ -256,10 +262,15 @@ export interface DeleteFolderResult {
     deletedFolders: number;
 }
 
-/** Remove a folder and its subfolders; the sources inside move up one level. */
+/**
+ * Remove a folder and its subfolders; the sources inside move up one level.
+ * `beforeMove` runs first in the same transaction — ADR-014 uses it to carry a
+ * deleted folder's restriction onto the documents it re-homes.
+ */
 export async function deleteFolder(
     companyId: bigint,
-    rawPath: string
+    rawPath: string,
+    beforeMove?: (tx: Tx, path: string) => Promise<void>
 ): Promise<DeleteFolderResult> {
     const path = normalizeFolderPath(rawPath);
     if (isUnfiledFolder(path)) {
@@ -271,6 +282,7 @@ export async function deleteFolder(
     const destination = folderParentPath(path) ?? UNFILED_FOLDER;
 
     return db.transaction(async tx => {
+        if (beforeMove) await beforeMove(tx, path);
         const moved = await tx
             .update(document)
             .set({ category: destination })

@@ -46,7 +46,8 @@ import { deriveRecallPrompt } from "~/lib/chat-turns";
 import { useChatRuntime } from "./useChatRuntime";
 import { backupChatEdit, removeChatEditBackup } from "./chatEditBackup";
 import { ChatQueue } from "./ChatQueue";
-import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
+import { ShareDialog, type ShareTarget } from "./access/ShareDialog";
+import type { TeamTarget } from "./team/types";
 import { useAgents } from "./collab/useMeetings";
 import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
@@ -333,7 +334,8 @@ export function WorkspaceShell() {
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
     /** The folder or document whose access dialog is open. */
-    const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
+    /** What the Share dialog is open for — a folder, a file, or a chat (ADR-014). */
+    const [accessTarget, setAccessTarget] = useState<ShareTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
     /**
      * Which apps are open, in which pane, and which one each pane shows — and
@@ -1214,6 +1216,55 @@ export function WorkspaceShell() {
         setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
     }, []);
 
+    /**
+     * Open what a notification or an activity row points at. A file that was
+     * just shared is not in the loaded list yet, so the list is refetched once
+     * before giving up on it.
+     */
+    const openTeamTarget = useCallback(
+        async (target: TeamTarget) => {
+            setRailDrawerOpen(false);
+            if (target.type === "chat") {
+                resumeSession(target.id);
+                return;
+            }
+            if (target.type === "folder") {
+                setActiveFolder(target.path);
+                return;
+            }
+            const known = sources.find(s => s.documentId === target.id);
+            if (known) {
+                handleOpenSource(known);
+                return;
+            }
+            // Just shared with me: not in the loaded list yet. The tab opens by
+            // id and fills in once the refetch lands.
+            await refresh();
+            openSourceTab(`d${target.id}`);
+        },
+        [sources, refresh, handleOpenSource, openSourceTab, resumeSession]
+    );
+
+    const shareTeamTarget = useCallback((target: TeamTarget & { name: string }) => {
+        if (target.type === "chat")
+            setAccessTarget({ kind: "chat", id: target.id, name: target.name });
+        else if (target.type === "folder")
+            setAccessTarget({
+                kind: "folder",
+                path: target.path,
+                name: displayFolderPath(target.path),
+            });
+        else setAccessTarget({ kind: "document", id: target.id, name: target.name });
+    }, []);
+
+    const teamRail = useMemo(
+        () => ({
+            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            onShare: shareTeamTarget,
+        }),
+        [openTeamTarget, shareTeamTarget]
+    );
+
     // Folder structure needs `folders.manage`, like every other write to the
     // library. Members see the tree; owners and admins shape it.
     const canManageFolders = can("folders.manage");
@@ -2022,6 +2073,7 @@ export function WorkspaceShell() {
                             onClose={() =>
                                 compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                             }
+                            team={teamRail}
                             history={{
                                 entries: history.entries,
                                 loading: history.loading,
@@ -2108,6 +2160,7 @@ export function WorkspaceShell() {
                         onClose={() =>
                             compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                         }
+                        team={teamRail}
                         history={{
                             entries: history.entries,
                             loading: history.loading,
@@ -2570,10 +2623,14 @@ export function WorkspaceShell() {
                 }}
             />
 
-            <AccessDialog
+            <ShareDialog
                 target={accessTarget}
                 onClose={() => setAccessTarget(null)}
-                onSaved={() => void refresh()}
+                onSaved={() => {
+                    void refresh();
+                    void refreshHistory();
+                }}
+                selfAuthId={userId ?? null}
             />
         </div>
     );

@@ -9,7 +9,7 @@ import { cn } from "~/lib/utils";
 import {
     addChildTopic,
     applySwatch,
-    deleteSelection,
+    deleteTopicsOrSelection,
     docMode,
     styleTextSelection,
 } from "../model/commands";
@@ -159,7 +159,7 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             <Tip label="Delete" hint="⌫">
                 <button
                     type="button"
-                    onClick={() => deleteSelection(store)}
+                    onClick={() => deleteTopicsOrSelection(store)}
                     className="text-ink-2 hover:bg-danger/10 hover:text-danger flex size-7 items-center justify-center rounded-md transition-colors"
                     aria-label="Delete"
                 >

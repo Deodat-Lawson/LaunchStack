@@ -2,14 +2,14 @@
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { addChildTopic, addSiblingTopic, setEdgeLabel, setNodeText } from "../model/commands";
+import { addChildTopic, outdentTopic, setEdgeLabel, setNodeText } from "../model/commands";
 import { activePage, nodeById, nodeLookup, removeNodes } from "../model/doc";
 import { worldToScreen } from "../model/geometry";
 import { labelAnchor, routeEdge } from "../model/routing";
 import { shapeTextBox } from "../model/shapes";
 import { fontFamilyCss, layoutText } from "../model/text";
 import type { EditorState } from "../model/store";
-import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { registerEditorField, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * In-place text editing.
@@ -20,9 +20,12 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  * wrong. It is styled to match the shape's own typography so the swap is
  * invisible.
  *
- * Enter commits and adds a sibling topic, Tab commits and adds a child —
- * the two keystrokes that make outlining a mindmap fast. Shift+Enter inserts a
- * newline instead.
+ * Enter finishes the label and does nothing else, on every shape: the topic
+ * stays selected, and a second Enter (handled by `useKeyboard`) makes the next
+ * one. XMind, MindNode and MindMeister all work this way, and it means Enter
+ * can never hand anyone a box they did not ask for. Tab commits and adds a
+ * child; ⇧Tab commits and outdents. ⇧Enter and ⌥Enter insert a newline.
+ * Escape commits too.
  */
 
 const selectEditing = (s: EditorState) => s.editing;
@@ -36,7 +39,9 @@ export function TextEditorOverlay() {
     const ref = useRef<HTMLTextAreaElement | null>(null);
     const [value, setValue] = useState("");
     /** Set when a keystroke already decided what happens after committing. */
-    const followUp = useRef<"child" | "sibling" | null>(null);
+    const followUp = useRef<"child" | "outdent" | null>(null);
+    /** Where to put the caret after the next render (⌥Enter's newline). */
+    const caretAfterRender = useRef<number | null>(null);
     /**
      * Whether this editing session has been settled (committed or cancelled).
      * Clicking the canvas clears `editing` at pointerdown, which unmounts the
@@ -66,25 +71,56 @@ export function TextEditorOverlay() {
             el.select();
         }
     };
-    const attachRef = useCallback((el: HTMLTextAreaElement | null) => {
-        ref.current = el;
-        if (el && document.activeElement !== el) {
-            el.focus({ preventScroll: true });
-            el.select();
-        }
-    }, []);
+    const attachRef = useCallback(
+        (el: HTMLTextAreaElement | null) => {
+            ref.current = el;
+            // How `useKeyboard` hands a stray keystroke back to the field if
+            // focus ever slips out of it mid-edit.
+            registerEditorField(store, el);
+            if (el && document.activeElement !== el) {
+                el.focus({ preventScroll: true });
+                el.select();
+            }
+        },
+        [store]
+    );
 
     useLayoutEffect(() => {
         if (!editing) return;
-        if (node) setValue(node.text);
-        else if (edge) setValue(edge.labels[editing.index ?? 0]?.text ?? "");
-        else setValue("");
+        const seed = node ? editing.seed : undefined;
+        const initial =
+            seed ?? (node ? node.text : edge ? (edge.labels[editing.index ?? 0]?.text ?? "") : "");
+        setValue(initial);
         settled.current = false;
         // The element is reused when the edit target changes, so the callback
         // ref won't re-fire — focus here too, and re-assert a frame later in
         // case something in the same gesture pulled focus away.
         takeFocus();
-        const id = requestAnimationFrame(takeFocus);
+        // Typing on a selected shape opens the session with that keystroke as
+        // the whole label. Its keydown was left to run, so the browser is
+        // about to type the same character into this field: write the seed in
+        // now and select it, so the delivery replaces it instead of doubling
+        // it. If nothing is delivered (jsdom, or a browser that had already
+        // moved on), the seed is the keystroke.
+        const el = ref.current;
+        if (seed !== undefined && el) {
+            el.value = seed;
+            el.select();
+        }
+        const id = requestAnimationFrame(() => {
+            takeFocus();
+            // Nothing landed on the seed: put the caret after it, so the next
+            // key adds to the word rather than replacing it.
+            const field = ref.current;
+            if (
+                seed !== undefined &&
+                field?.value === seed &&
+                field.selectionStart === 0 &&
+                field.selectionEnd === seed.length
+            ) {
+                field.setSelectionRange(seed.length, seed.length);
+            }
+        });
         return () => {
             cancelAnimationFrame(id);
             // The session is ending from outside (canvas click, target
@@ -109,6 +145,10 @@ export function TextEditorOverlay() {
         const el = ref.current;
         if (el && el.scrollHeight > el.clientHeight) {
             el.style.height = `${el.scrollHeight}px`;
+        }
+        if (el && caretAfterRender.current !== null) {
+            el.setSelectionRange(caretAfterRender.current, caretAfterRender.current);
+            caretAfterRender.current = null;
         }
     });
 
@@ -141,7 +181,7 @@ export function TextEditorOverlay() {
         store.setEditing(null);
         if (next && node) {
             if (next === "child") addChildTopic(store, node.id);
-            else addSiblingTopic(store, node.id);
+            else outdentTopic(store, node.id);
         }
     };
 
@@ -207,7 +247,13 @@ export function TextEditorOverlay() {
             onChange={e => setValue(e.target.value)}
             onBlur={commit}
             onKeyDown={e => {
+                // Nothing typed here may reach the canvas's window shortcuts.
+                // The Enter that commits is default-prevented as well, which
+                // `useKeyboard` also checks: it must never go on to make a
+                // sibling too.
                 e.stopPropagation();
+                // An IME composing a word owns Enter: it confirms the word.
+                if (e.nativeEvent.isComposing) return;
                 if (e.key === "Escape") {
                     e.preventDefault();
                     // Escape means "I'm done", not "throw that away": people
@@ -222,20 +268,35 @@ export function TextEditorOverlay() {
                     }
                     return;
                 }
-                if (e.key === "Enter" && !e.shiftKey) {
+                if (e.key === "Enter") {
+                    // ⇧Enter: the textarea's own newline.
+                    if (e.shiftKey) return;
                     e.preventDefault();
-                    // Only mindmap topics chain; a sticky note's Enter is a
-                    // newline, which is what people expect from a sticky.
-                    followUp.current = node?.shape.startsWith("mind-") === true ? "sibling" : null;
+                    if (e.altKey) {
+                        // ⌥Enter is a newline too, for hands trained on Word
+                        // and Slack. The browser types nothing for it, so
+                        // splice one in at the caret.
+                        const el = e.currentTarget;
+                        const at = el.selectionStart;
+                        setValue(value.slice(0, at) + "\n" + value.slice(el.selectionEnd));
+                        caretAfterRender.current = at + 1;
+                        return;
+                    }
+                    // Enter (or ⌘Enter) finishes the label, and only that.
+                    // The shape stays selected, so the next Enter — outside
+                    // the field now — is the one that makes a sibling.
+                    followUp.current = null;
                     commit();
+                    if (node && !store.isSelected("node", node.id)) store.selectNodes([node.id]);
                     return;
                 }
                 if (e.key === "Tab") {
                     e.preventDefault();
-                    followUp.current = node ? "child" : null;
+                    followUp.current = node ? (e.shiftKey ? "outdent" : "child") : null;
                     commit();
                 }
             }}
+            data-mindmap-editor=""
             spellCheck
             style={{
                 position: "absolute",

@@ -96,6 +96,56 @@ a relationship, not ownership: removing one box in a flowchart must not remove
 the boxes downstream. "Delete and reconnect" and "Delete whole branch" are
 separate commands on the context menu.
 
+Topics are the one exception, because in an outline the edges _are_ ownership:
+when the selection is nothing but topics, Delete takes each with its branch
+(`branchOf` — everything that would be left without a parent, so a topic
+another branch merely cross-links to survives) and ⌥Delete lifts the children
+up a level instead (`deleteTopicsOrSelection`). Any selection with a
+non-topic in it falls back to the plain delete above.
+
+Child order is edge order: the layouts read a node's children off
+`page.edges`, so inserting, outdenting and reordering topics are edits to
+where an edge sits in that list (`insertEdgesBeside`), not to coordinates. A
+topic's parent is its first incoming edge from another topic (`topicParent`),
+and the reorder only ever moves an edge earlier so that stays true.
+
+## Keyboard
+
+`ui/useKeyboard.ts` is the whole map, and its `SHORTCUTS` table is the
+shortcuts dialog. With a topic selected the keys are an outliner's, after
+XMind, MindNode and MindMeister:
+
+| Key              | While typing a label             | With a topic selected                                 |
+| ---------------- | -------------------------------- | ----------------------------------------------------- |
+| Enter            | Finish the label — only that     | Add a sibling right after it (a child, on the centre) |
+| ⇧Enter           | New line                         | Add a sibling right before it                         |
+| ⌥Enter           | New line                         | —                                                     |
+| Tab / ⇧Tab       | Finish, then add child / outdent | Add child / outdent                                   |
+| Esc              | Finish the label                 | Clear the selection                                   |
+| Arrows           | —                                | Go to the nearest visible topic that way (⌥ nudges)   |
+| ⌘↑ / ⌘↓          | —                                | Move among its siblings                               |
+| ⌘/               | —                                | Collapse / expand                                     |
+| Delete / ⌥Delete | —                                | Delete with its branch / keep its children            |
+| Any character    | —                                | Start typing; the character replaces the label        |
+
+Enter finishing and nothing else is the point of the table: one Enter used to
+commit _and_ create, which put boxes on the canvas nobody asked for. Now the
+label field swallows its Enter — propagation stopped, and default-prevented,
+which the window handler also checks — the topic stays selected, and the
+second Enter is the window's. Other shapes keep a canvas's keys: Enter and typing open their text,
+arrows nudge, Delete removes only the selection.
+
+Type-to-edit does not prevent the keystroke. The field mounts and focuses
+during the keydown and the browser delivers the character into it; the
+character is also written in as a selected `seed`, so a delivery replaces it
+rather than doubling it, and a missing one (jsdom) still leaves it there. If
+focus ever slips out of an open field, the next character pulls it back in
+(`focusEditorField`) and Enter or Esc still finish the label.
+
+Every structural edit — add, outdent, reorder, delete — runs its auto-arrange
+pass inside `store.group`, so one ⌘Z takes back the edit and the layout
+together.
+
 ## Colours are data, not tokens
 
 Shape fills and strokes are literal OKLCH values stored in the document, not

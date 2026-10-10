@@ -67,7 +67,7 @@ test.describe("the demo path", () => {
         await signUpWithWorkspace(page);
     });
 
-    test("template → three topics → present, in nine interactions or fewer", async ({ page }) => {
+    test("template → three topics → present, in ten interactions or fewer", async ({ page }) => {
         const m = new Meter(page);
 
         await page.goto("/employer/documents");
@@ -88,10 +88,13 @@ test.describe("the demo path", () => {
         // `exact`: a substring match would catch "Open Knowledge" on the rail.
         await expect(page.getByRole("button", { name: "Pen", exact: true })).toHaveCount(0);
 
-        // 4: select the centre. 5–6: Tab and Enter grow the tree; typing is free.
+        // 4: select the centre. 5: Tab adds a child; typing is free. 6: Enter
+        // finishes "Budget" and nothing more. 7: Enter again, on the
+        // still-selected topic, adds the sibling right after it.
         await m.clickAt(page.getByText("Central idea").first());
         await m.key("Tab");
         await m.type("Budget");
+        await m.key("Enter");
         await m.key("Enter");
         await m.type("Timeline");
         await page.keyboard.press("Escape");
@@ -129,7 +132,7 @@ test.describe("the demo path", () => {
             }
         }
 
-        // 7: Present. 8–9: two steps through the branches.
+        // 8: Present. 9–10: two steps through the branches.
         await m.click(page.getByRole("button", { name: /Present/ }));
         await expect(page.getByText("Overview")).toBeVisible();
         await m.key("ArrowRight");
@@ -137,6 +140,10 @@ test.describe("the demo path", () => {
         await m.key("ArrowRight");
         await expect(page.getByText(/Branch 2 of/)).toBeVisible();
 
-        expect(m.n, "interactions on the demo path").toBeLessThanOrEqual(9);
+        // The budget was nine while Enter both finished a topic and started
+        // the next. It now only finishes (the XMind convention, and the one
+        // people asked for), so a sibling costs one more key — a deliberate
+        // trade, not drift.
+        expect(m.n, "interactions on the demo path").toBeLessThanOrEqual(10);
     });
 });

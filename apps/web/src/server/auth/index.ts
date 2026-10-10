@@ -7,7 +7,8 @@
  * - Its own postgres.js client rather than the engine's. Middleware imports
  *   this module to read sessions, and the engine barrel would drag the whole
  *   LLM/storage dependency graph into the middleware bundle. Same pattern as
- *   the role-routing client middleware already owns.
+ *   the role-routing client middleware already owns; both are shared per
+ *   process so dev recompiles don't leave open pools behind.
  *
  * - Lazily built behind a Proxy (the ~/server/db pattern), so importing this
  *   module costs nothing until the first auth call. Tests that mock callers
@@ -25,9 +26,9 @@ import { nextCookies } from "better-auth/next-js";
 import { lastLoginMethod } from "better-auth/plugins";
 import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
 
 import { authAccount, authSession, authUser, authVerification } from "~/server/db/schema/auth";
+import { sharedPostgresClient } from "~/server/db/shared-client";
 import { sendAuthEmail } from "./email";
 import { enabledSocialProviders } from "./providers";
 
@@ -36,7 +37,7 @@ import { enabledSocialProviders } from "./providers";
 // dotenv + import.meta resolution in with it; the variables read here are
 // still declared and validated in env.ts via the app's other import paths.
 const buildAuth = () => {
-    const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+    const client = sharedPostgresClient("auth", process.env.DATABASE_URL!, 5);
     const db = drizzle(client, {
         schema: { authUser, authSession, authAccount, authVerification },
     });

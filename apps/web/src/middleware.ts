@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
+import { sharedPostgresClient } from "~/server/db/shared-client";
 import { getSessionFromHeaders } from "~/server/auth";
 
 // Same matching semantics as the Clerk helper this file used to import:
@@ -99,13 +99,13 @@ const employerTwin = (pathname: string): string => {
     return `/employer${rest}`;
 };
 
-// Lazy singleton for middleware (postgres.js works with standard PostgreSQL)
+// Lazy singleton for middleware over a per-process client (see shared-client).
 let _middlewareDb: ReturnType<
     typeof drizzle<{ users: typeof users; userCompanyMemberships: typeof userCompanyMemberships }>
 > | null = null;
 const getDb = () => {
     if (!_middlewareDb) {
-        const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+        const client = sharedPostgresClient("middleware", process.env.DATABASE_URL!, 5);
         _middlewareDb = drizzle(client, { schema: { users, userCompanyMemberships } });
     }
     return _middlewareDb;

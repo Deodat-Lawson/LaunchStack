@@ -1,8 +1,9 @@
 /**
- * A small in-memory TTL cache with sha256 keys and size-triggered pruning —
- * the 45 lines that previously existed twice (trend-search's result cache and
+ * A small in-memory TTL cache with sha256 keys and a hard size cap — the 45
+ * lines that previously existed twice (trend-search's result cache and
  * marketing's competitor cache) with different constants. Callers own key
- * normalization; this module owns hashing, expiry, and pruning.
+ * normalization; this module owns hashing, expiry, and eviction. Writing past
+ * `maxEntries` drops expired entries first, then the oldest writes.
  */
 
 import { createHash } from "node:crypto";
@@ -36,8 +37,16 @@ export function createTtlCache<T>(opts: { ttlMs: number; maxEntries: number }): 
             return entry.value;
         },
         set(key, value) {
-            if (cache.size > opts.maxEntries) prune();
-            cache.set(hash(key), { value, expiresAt: Date.now() + opts.ttlMs });
+            const k = hash(key);
+            // A rewrite is the newest write, not a second entry.
+            cache.delete(k);
+            if (cache.size >= opts.maxEntries) prune();
+            // Map iterates in insertion order, so the first keys are the oldest writes.
+            for (const oldest of cache.keys()) {
+                if (cache.size < opts.maxEntries) break;
+                cache.delete(oldest);
+            }
+            cache.set(k, { value, expiresAt: Date.now() + opts.ttlMs });
         },
     };
 }

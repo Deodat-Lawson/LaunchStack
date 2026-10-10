@@ -29,7 +29,12 @@ import {
     buildVersionMenuItems,
     type DocumentTargetData,
 } from "./documentContextMenu";
-import { SOURCE_META, type CitationHighlight, type WorkspaceSource } from "./types";
+import {
+    SOURCE_META,
+    type CitationHighlight,
+    type PassageSelection,
+    type WorkspaceSource,
+} from "./types";
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
@@ -91,11 +96,11 @@ export interface DocumentViewerProps {
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     /**
-     * "Ask AI" on a selected passage: the passage goes to the chat as a quote
-     * and the document stays in view beside it. Absent, the PDF selection
+     * "Ask AI" on a selected passage: the passage (with its page) goes to the
+     * chat as a card above the question, and the document stays in view. Absent, the PDF selection
      * popup offers only "+ Note".
      */
-    onAskAboutPassage?: (source: WorkspaceSource, quote: string) => void;
+    onAskAboutPassage?: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged?: () => void;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
@@ -1045,7 +1050,7 @@ export function DocumentViewer({
                                     }}
                                     onAskAi={
                                         onAskAboutPassage
-                                            ? quote => onAskAboutPassage(source, quote)
+                                            ? selection => onAskAboutPassage(source, selection)
                                             : undefined
                                     }
                                     onNotePinClick={id => {

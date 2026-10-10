@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { readChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import type { SourceReference } from "~/app/api/agents/documentQ&A/services";
+import type { ChatPassagePayload } from "~/lib/chat-passages";
 
 export type { SourceReference };
 
@@ -27,17 +28,20 @@ export interface AIChatRequest {
     enableWebSearch?: boolean;
     conversationHistory?: string;
     aiPersona?:
-        | "general"
-        | "learning-coach"
-        | "financial-expert"
-        | "legal-expert"
-        | "math-reasoning";
+        "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning";
     /** Auto enables reasoning only when the selected model and agent allow it. */
     thinkingMode?: boolean | "auto";
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     attachments?: AIChatAttachmentPayload[];
+    /**
+     * Passages the reader selected and is asking about. They travel beside
+     * the question so the question stays what was typed: the server labels
+     * them in the prompt, adds the text around them, and searches the rest
+     * of the document with the question.
+     */
+    passages?: ChatPassagePayload[];
     /** Handle of the workspace agent answering this turn; null = the default assistant. */
     agentKey?: string | null;
 }
@@ -160,6 +164,7 @@ export function useAIChat() {
                         chatMode: params.chatMode,
                         stream: options.stream ? true : undefined,
                         attachments: params.attachments,
+                        passages: params.passages?.length ? params.passages : undefined,
                         agentKey: params.agentKey ?? undefined,
                     }),
                 });

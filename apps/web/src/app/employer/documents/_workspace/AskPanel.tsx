@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
@@ -65,6 +66,7 @@ import { WORKSPACE_HEADER_HEIGHT_PX } from "./workspaceHeader";
 import { Composer } from "./ChatComposer";
 import { ChatAttachmentChip as AttachmentChip } from "./ChatAttachmentChip";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { PassageCard } from "./PassageCard";
 import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
 
@@ -108,6 +110,8 @@ export interface ComposerSeed {
     modelRoute?: ComposerSend["modelRoute"];
     modelRoutes?: ComposerSend["modelRoutes"];
     threadRefs?: string[];
+    /** Passages to ask about; appended alongside any typed text, never into it. */
+    passages?: ChatPassage[];
     reasoningEffort?: string;
     chatMode?: ComposerSend["chatMode"];
 }
@@ -115,6 +119,11 @@ export interface ComposerSeed {
 async function copyWithToast(text: string, what = "Copied"): Promise<void> {
     if (await copyText(text)) toast.success(what);
     else toast.error("Couldn't copy");
+}
+
+/** A passage as a citation, so showing it in its document reuses the citation jump. */
+function passageCitation(passage: ChatPassage): ThreadReference {
+    return { sourceId: passage.sourceId, snippet: passage.text, page: passage.page };
 }
 
 interface SourceChipProps {
@@ -286,8 +295,11 @@ function QuestionProse({ text }: { text: string }) {
     );
 }
 
-function QuestionBody({ text }: { text: string }) {
+function QuestionBody({ text: raw }: { text: string }) {
     const [expanded, setExpanded] = useState(false);
+    // Older turns pasted a passage in as a quote followed by a machine link
+    // that only marked where it came from; the link is never shown.
+    const text = useMemo(() => raw.replace(QUOTED_CONTEXT_MARKER, "").trim(), [raw]);
     const long = text.length > 900 || text.split("\n").length > 12;
     const { lead, quote, trail } = useMemo(() => parseQuotedMessage(text), [text]);
     const prose: React.CSSProperties = {
@@ -517,6 +529,7 @@ const Message = React.memo(function Message({
                   : { ...msg.agent, displayName: msg.agent.displayName || `@${msg.agent.key}` };
           })()
         : null;
+    const passages = msg.role === "user" ? (msg.send?.passages ?? []).filter(isChatPassage) : [];
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
@@ -609,6 +622,22 @@ const Message = React.memo(function Message({
                         </span>
                     )}
                 </div>
+                {passages.length > 0 && (
+                    <div className="mb-3 flex flex-col gap-1.5" data-testid="question-passages">
+                        {passages.map((passage, i) => (
+                            <PassageCard
+                                key={`${i}:${passage.sourceId}`}
+                                passage={passage}
+                                onOpen={
+                                    onOpenCitation &&
+                                    sources.some(source => source.id === passage.sourceId)
+                                        ? () => onOpenCitation(passageCitation(passage))
+                                        : undefined
+                                }
+                            />
+                        ))}
+                    </div>
+                )}
                 <QuestionBody text={msg.text} />
                 {refs.length > 0 && (
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
@@ -1705,6 +1734,11 @@ export function AskPanel({
                     queuedEditUnavailable={queuedEditUnavailable}
                     onCancelQueueEdit={onCancelQueueEdit}
                     onOpenSource={onOpenSource}
+                    onOpenPassage={
+                        onOpenCitation
+                            ? passage => onOpenCitation(passageCitation(passage))
+                            : undefined
+                    }
                     seed={seed?.draftKey === suppliedDraftKey ? seed : null}
                     agents={agents}
                     agentKey={agentKey}

@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { toast } from "sonner";
+import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { conversationContext } from "~/lib/chat-turns";
-import { MAX_SESSION_APPEND } from "~/lib/workspace-history";
+import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
 import type { ComposerSend, ThreadMessage, WorkspaceSource } from "./types";
@@ -324,6 +325,9 @@ export function useChatRuntime(input: {
                         const opening = [...prior, user];
                         const created = await sessions.createSession({
                             messages: opening.slice(0, MAX_SESSION_APPEND).map(storedMessage),
+                            ...(send.passages?.length
+                                ? { title: deriveSessionTitle(send.text, send.passages) }
+                                : {}),
                             contextSourceIds: send.refs,
                             continuation: context.continuation,
                             agentKey: send.agentKey,
@@ -382,7 +386,11 @@ export function useChatRuntime(input: {
             const scope = ids.length > 1 ? "selected" : ids.length === 1 ? "document" : "none";
             const response = await requestRef.current(
                 {
-                    question: send.text || "Please examine the attached files.",
+                    question:
+                        send.text ||
+                        (send.passages?.length
+                            ? DEFAULT_PASSAGE_QUESTION
+                            : "Please examine the attached files."),
                     searchScope: scope,
                     companyId: companyId ?? undefined,
                     documentId: scope === "document" ? ids[0] : undefined,
@@ -405,6 +413,7 @@ export function useChatRuntime(input: {
                         mimeType,
                         kind,
                     })),
+                    passages: send.passages?.map(toPassagePayload),
                 },
                 { stream: true, onEvent, signal, independent: true }
             );

@@ -14,7 +14,21 @@ import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
 import { transcriptMarkerOf } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
-import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import type {
+    ItemAccessView,
+    SourceAddedBy,
+    SourceCitability,
+    SourceTypeId,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "./types";
+
+/** A row of the documents list: the document, plus what ADR-014 says about it for the caller. */
+type DocumentRow = DocumentType & {
+    createdAt?: string;
+    access?: ItemAccessView | null;
+    addedBy?: SourceAddedBy | null;
+};
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -71,7 +85,7 @@ function humanDate(raw: unknown): string {
     return d.toLocaleDateString();
 }
 
-function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSource {
+function mapDocument(doc: DocumentRow): WorkspaceSource {
     return {
         id: `d${doc.id}`,
         documentId: doc.id,
@@ -83,6 +97,8 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        access: doc.access ?? undefined,
+        addedBy: doc.addedBy ?? null,
     };
 }
 
@@ -103,7 +119,11 @@ export function mindmapCitability(
  * there is one, so the retrieval layer's citations — which name document ids —
  * resolve to the map rather than to a Markdown copy of it.
  */
-export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+export function mapMindmap(
+    map: MindmapSummary,
+    /** The published copy's access, when the caller can see it: the map is shared as that file is. */
+    published?: Pick<DocumentRow, "access" | "addedBy">
+): WorkspaceSource {
     const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
     return {
         id: `m${map.id}`,
@@ -120,6 +140,8 @@ export function mapMindmap(map: MindmapSummary): WorkspaceSource {
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
+        access: published?.access ?? undefined,
+        addedBy: published?.addedBy ?? null,
     };
 }
 
@@ -129,6 +151,8 @@ export interface UseWorkspaceDataResult {
     loading: boolean;
     error: string | null;
     companyId: number | null;
+    /** The active workspace's name — "Everyone at <name>". */
+    workspaceName: string | null;
     /**
      * What the signed-in person may do here. `can` answers false until the
      * permissions have loaded, so anything gated on it fails closed.
@@ -150,10 +174,12 @@ interface FolderRow {
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while the folder is only implied. */
     categoryId?: number | null;
+    /** The caller's access (ADR-014); absent from servers that predate it. */
+    access?: ItemAccessView;
 }
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
-    const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
+    const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
@@ -161,7 +187,13 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [error, setError] = useState<string | null>(null);
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
-    const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
+    const {
+        companyId,
+        workspaceName,
+        permissions,
+        can,
+        loaded: permissionsLoaded,
+    } = usePermissions();
 
     const refresh = useCallback(async () => {
         if (!userId) return;
@@ -179,7 +211,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 fetch("/api/mindmaps?scope=active").catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
-            const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
+            const docs = (await docsRes.json()) as DocumentRow[];
             setDocuments(docs);
 
             // Folders that exist while empty only come from here; the rest are
@@ -217,10 +249,16 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
+        const byId = new Map(documents.map(d => [d.id, d] as const));
         return [
             ...optimistic,
             ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
-            ...mindmaps.map(mapMindmap),
+            ...mindmaps.map(map =>
+                mapMindmap(
+                    map,
+                    map.publishedDocumentId !== null ? byId.get(map.publishedDocumentId) : undefined
+                )
+            ),
         ];
     }, [documents, mindmaps, optimistic]);
 
@@ -240,6 +278,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 color: folderColor(folderLeafName(path)),
                 restricted: row?.restricted === true,
                 categoryId: row?.categoryId ?? null,
+                access: row?.access,
             };
         });
     }, [sources, folderRows]);
@@ -254,6 +293,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         loading,
         error,
         companyId,
+        workspaceName,
         permissions,
         can,
         permissionsLoaded,

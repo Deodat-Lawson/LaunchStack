@@ -5,16 +5,17 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
     Folder as IconFolder,
-    Lock,
     PanelRightClose,
     Pencil,
     Sparkles,
     Trash2,
     Upload,
+    Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
+import { usePeople } from "~/lib/profile/use-people";
 import { GoogleDriveBanner } from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { getMindmap } from "../_mindmap/lib/api";
@@ -22,6 +23,8 @@ import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
+import { canChangeSource } from "./sourceContextMenu";
+import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
 import {
@@ -87,7 +90,7 @@ export interface DocumentViewerProps {
     // until it is published, so the id could not identify one.
     onRename: (source: WorkspaceSource, title: string) => Promise<boolean>;
     onDelete: (source: WorkspaceSource) => void;
-    /** "Restrict access" — who can see this document. */
+    /** "Share" — the Share dialog: who can open this file, and at what level. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
     /**
@@ -259,6 +262,20 @@ export function DocumentViewer({
     const persisted = isMindmap
         ? typeof source.mindmapId === "number" && source.mindmapId > 0
         : typeof source.documentId === "number" && source.documentId > 0;
+    // ADR-014: a file shared with you to view opens, but does not rename or delete.
+    const editable = canChangeSource(source);
+    // "Added by Ada · 2h ago", under the title — the name as they appear in
+    // this workspace now. A map's published copy was made by whoever
+    // published it, not whoever drew it, so maps say nothing here.
+    const adder = !isMindmap ? (source.addedBy ?? null) : null;
+    const adderLook = usePeople(adder && adder.authUserId !== userId ? [adder.authUserId] : []);
+    const addedLine = adder
+        ? `Added by ${
+              adder.authUserId === userId
+                  ? "you"
+                  : (adderLook[adder.authUserId]?.displayName ?? adder.name)
+          }${source.added ? ` · ${source.added}` : ""}`
+        : null;
     const [mindmapDoc, setMindmapDoc] = useState<{ doc: MindmapDoc; key: string } | null>(null);
     const [mindmapError, setMindmapError] = useState<string | null>(null);
     const [revisions, setRevisions] = useState<RevisionRow[]>([]);
@@ -743,6 +760,7 @@ export function DocumentViewer({
                     isMindmap,
                     askable: !isMindmap || source.citability !== "none",
                     persisted,
+                    editable,
                     originalUrl: fullDoc?.url ?? null,
                 },
                 {
@@ -840,12 +858,16 @@ export function DocumentViewer({
         ...(onRestrictAccess
             ? [
                   {
-                      id: "restrict",
-                      label: source.restricted ? "Change who can see this" : "Restrict access",
-                      icon: <Lock className="size-3.5" />,
+                      id: "share",
+                      label: "Share",
+                      icon: <Users className="size-3.5" />,
                       onSelect: () => onRestrictAccess(source),
-                      iconOnly: true,
-                      tone: source.restricted ? ("on" as const) : undefined,
+                      disabled: !persisted,
+                      // Who can open it now, on hover: "Only you", "Shared with 3"…
+                      hint: source.access
+                          ? `Share · ${audienceLabel(source.access, null)}`
+                          : "Share",
+                      testId: "viewer-share",
                   },
               ]
             : []),
@@ -856,6 +878,8 @@ export function DocumentViewer({
             onSelect: deleteDocument,
             iconOnly: true,
             tone: "danger",
+            disabled: !editable,
+            hint: editable ? undefined : "You can view this file but not change it.",
             testId: "viewer-delete",
         },
     ];
@@ -904,16 +928,24 @@ export function DocumentViewer({
                             setDirty(true);
                         }}
                         onBlur={() => void saveTitle()}
+                        readOnly={!editable}
+                        title={editable ? undefined : "You can view this file but not change it."}
                         // A class, not an imperative style: the old onFocus
                         // painted the field grey and nothing painted it back.
-                        className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none"
+                        className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none read-only:focus:bg-transparent"
                     />
                 }
                 meta={
                     <>
                         <span>{meta.label}</span>
                         <span>·</span>
-                        <span className="mono">{source.size || source.added || ""}</span>
+                        {addedLine ? (
+                            <span className="truncate" data-testid="viewer-added-by">
+                                {addedLine}
+                            </span>
+                        ) : (
+                            <span className="mono">{source.size || source.added || ""}</span>
+                        )}
                         <span>·</span>
                     </>
                 }

@@ -96,6 +96,24 @@ function mount(props: Partial<React.ComponentProps<typeof AddSourceModal>> = {})
     );
 }
 
+describe("who will see it (ADR-014)", () => {
+    it("says a loose file stays yours until you share it", async () => {
+        mount({ defaultCategory: "Unfiled", initialTab: "paste" });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Only you will see it until you share it."
+        );
+        await settleStatus();
+    });
+
+    it("says a filed one goes to whoever can open the folder", async () => {
+        mount({ defaultCategory: "Strategy", initialTab: "paste" });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Visible to everyone who can open Strategy."
+        );
+        await settleStatus();
+    });
+});
+
 describe("the Create group", () => {
     it("is listed first, before Upload and Connect", () => {
         expect(ADD_TABS[0]?.group).toBe("Create");

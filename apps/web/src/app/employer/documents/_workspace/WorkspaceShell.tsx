@@ -47,6 +47,7 @@ import { useChatRuntime } from "./useChatRuntime";
 import { backupChatEdit, removeChatEditBackup } from "./chatEditBackup";
 import { ChatQueue } from "./ChatQueue";
 import { ShareDialog, type ShareTarget } from "./access/ShareDialog";
+import { moveOutcomeMessage } from "./railSections";
 import type { TeamTarget } from "./team/types";
 import { useAgents } from "./collab/useMeetings";
 import type { ChatAgentOption } from "./collab/types";
@@ -227,6 +228,7 @@ export function WorkspaceShell() {
         sources,
         folders,
         companyId,
+        workspaceName,
         can,
         permissionsLoaded,
         refresh,
@@ -1191,10 +1193,17 @@ export function WorkspaceShell() {
             if (!src) return;
             if ((src.folder ?? "Unfiled") === folderName) return;
             try {
-                await sourceApi.moveSource(src, folderName);
+                const moved = await sourceApi.moveSource(src, folderName);
                 await refresh();
+                // Say what the move did to who can see it (ADR-014: a file
+                // private to you takes the folder's audience; Unfiled makes
+                // it yours alone).
+                const leaf = folderLeafName(folderName);
+                toast.success(`Moved to ${leaf}`, {
+                    description: moveOutcomeMessage(moved.access, leaf) ?? undefined,
+                });
             } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to move source");
+                toast.error(err instanceof Error ? err.message : "Couldn't move that");
             }
         },
         [sources, refresh]
@@ -1265,10 +1274,18 @@ export function WorkspaceShell() {
         [openTeamTarget, shareTeamTarget]
     );
 
-    // Folder structure needs `folders.manage`, like every other write to the
-    // library. Members see the tree; owners and admins shape it.
-    const canManageFolders = can("folders.manage");
+    // ADR-014: anyone who can add sources can make a folder (a new top-level
+    // one is private to them). Renaming, moving or deleting one is per folder
+    // — its `access.canManage` — and filing a file needs edit on the file and
+    // on the folder; the rail checks both per row.
+    const canAddFolders = can("documents.upload");
+    const canFileSources = can("documents.edit");
     const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
+    /** Where an upload may land: folders the caller can add to (and Unfiled). */
+    const uploadFolderPaths = useMemo(
+        () => folders.filter(f => f.access?.canEdit !== false).map(f => f.name),
+        [folders]
+    );
 
     /** One call for every folder mutation; resolves to an error message or null. */
     const folderRequest = useCallback(
@@ -2028,7 +2045,7 @@ export function WorkspaceShell() {
                                 openSourceBeside(source);
                             }}
                             onNewFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? parentPath =>
                                           setFolderDialog({
                                               mode: "create",
@@ -2037,18 +2054,18 @@ export function WorkspaceShell() {
                                     : undefined
                             }
                             onRenameFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? folder =>
                                           setFolderDialog({ mode: "rename", path: folder.name })
                                     : undefined
                             }
                             onMoveFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? (path, target) => void handleMoveFolder(path, target)
                                     : undefined
                             }
                             onDeleteFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? folder => setDeleteFolderPath(folder.name)
                                     : undefined
                             }
@@ -2062,7 +2079,7 @@ export function WorkspaceShell() {
                                 openAdd();
                             }}
                             onMoveToFolder={
-                                canManageFolders
+                                canFileSources
                                     ? (id, name) => void handleMoveToFolder(id, name)
                                     : undefined
                             }
@@ -2074,6 +2091,8 @@ export function WorkspaceShell() {
                                 compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                             }
                             team={teamRail}
+                            workspaceName={workspaceName}
+                            selfAuthId={userId ?? null}
                             history={{
                                 entries: history.entries,
                                 loading: history.loading,
@@ -2116,7 +2135,7 @@ export function WorkspaceShell() {
                             openSourceBeside(source);
                         }}
                         onNewFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? parentPath =>
                                       setFolderDialog({
                                           mode: "create",
@@ -2125,19 +2144,17 @@ export function WorkspaceShell() {
                                 : undefined
                         }
                         onRenameFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? folder => setFolderDialog({ mode: "rename", path: folder.name })
                                 : undefined
                         }
                         onMoveFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? (path, target) => void handleMoveFolder(path, target)
                                 : undefined
                         }
                         onDeleteFolder={
-                            canManageFolders
-                                ? folder => setDeleteFolderPath(folder.name)
-                                : undefined
+                            canAddFolders ? folder => setDeleteFolderPath(folder.name) : undefined
                         }
                         onShareFolder={openFolderAccess}
                         onRestrictAccess={openDocumentAccess}
@@ -2149,7 +2166,7 @@ export function WorkspaceShell() {
                             openAdd();
                         }}
                         onMoveToFolder={
-                            canManageFolders
+                            canFileSources
                                 ? (id, name) => void handleMoveToFolder(id, name)
                                 : undefined
                         }
@@ -2161,6 +2178,8 @@ export function WorkspaceShell() {
                             compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                         }
                         team={teamRail}
+                        workspaceName={workspaceName}
+                        selfAuthId={userId ?? null}
                         history={{
                             entries: history.entries,
                             loading: history.loading,
@@ -2514,10 +2533,14 @@ export function WorkspaceShell() {
                     setAddFolder(null);
                 }}
                 userId={userId ?? null}
-                defaultCategory={addFolder ?? activeFolder ?? UNFILED_FOLDER}
-                folders={folderPaths}
+                defaultCategory={
+                    [addFolder, activeFolder].find(
+                        (path): path is string => !!path && uploadFolderPaths.includes(path)
+                    ) ?? UNFILED_FOLDER
+                }
+                folders={uploadFolderPaths}
                 onCreateFolder={
-                    canManageFolders
+                    canAddFolders
                         ? path => {
                               void handleCreateFolder(path).then(failure => {
                                   if (failure) toast.error(failure);

@@ -23,6 +23,7 @@ import {
     Ellipsis as IconMore,
     Search as IconSearch,
     Shield as IconShield,
+    Users,
     X as IconX,
 } from "lucide-react";
 import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
@@ -40,6 +41,8 @@ import {
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
+import { usePeople } from "~/lib/profile/use-people";
+import { cn } from "~/lib/utils";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { InboxBell } from "./team/InboxBell";
 import { TeamPanel } from "./team/TeamPanel";
@@ -50,8 +53,24 @@ import {
     buildSelectionMenuItems,
     buildFolderMenuItems,
     buildSourceMenuItems,
+    canChangeSource,
 } from "./sourceContextMenu";
-import { SOURCE_META, type WorkspaceFolder, type WorkspaceSource } from "./types";
+import {
+    PRIVATE_EMPTY_HINT,
+    RAIL_SECTION_LABELS,
+    RAIL_SECTION_ORDER,
+    audienceLabel,
+    showsAudienceGlyph,
+    sourceAudience,
+    splitRailSections,
+    type RailSection,
+} from "./railSections";
+import {
+    SOURCE_META,
+    type SourceAudience,
+    type WorkspaceFolder,
+    type WorkspaceSource,
+} from "./types";
 
 /** What is being dragged over the rail: a source into a folder, or a folder into a folder. */
 type RailDrag = { kind: "source"; id: string } | { kind: "folder"; path: string };
@@ -62,6 +81,31 @@ async function copyText(value: string): Promise<void> {
     } catch {
         // Private mode / missing permission — the action still closes the menu.
     }
+}
+
+/** What a row's audience glyph says: Lock for only you, Users for specific people. */
+interface Glyph {
+    kind: Exclude<SourceAudience, "workspace">;
+    label: string;
+}
+
+/**
+ * Who can see a row, as a small icon with its words for screen readers and on
+ * hover. Everyone-in-the-workspace rows carry none ("nothing = everyone").
+ */
+function AudienceGlyph({ glyph, className }: { glyph: Glyph; className?: string }) {
+    const Icon = glyph.kind === "private" ? Lock : Users;
+    return (
+        <span
+            role="img"
+            aria-label={glyph.label}
+            title={glyph.label}
+            data-audience={glyph.kind}
+            className={cn("text-ink-3 inline-flex shrink-0 items-center", className)}
+        >
+            <Icon className="size-2.5" aria-hidden />
+        </span>
+    );
 }
 
 interface TagChipProps {
@@ -175,6 +219,10 @@ interface SourceRowProps {
     onOpenBeside?: (source: WorkspaceSource) => void;
     /** The row's actions; absent when the rail is read-only. */
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
+    /** Who can see it, when the row should say so. */
+    glyph?: Glyph | null;
+    /** "Added by Ada · 2h ago", shown on hover. */
+    addedLine?: string | null;
 }
 
 function SourceRow({
@@ -184,6 +232,8 @@ function SourceRow({
     onOpen,
     onOpenBeside,
     menuItems,
+    glyph,
+    addedLine,
 }: SourceRowProps) {
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
@@ -237,35 +287,23 @@ function SourceRow({
                     if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
                     else onOpen?.(source);
                 }}
-                title={onOpenBeside ? "Open · ⌘-click to open beside" : "Open"}
+                title={[addedLine, onOpenBeside ? "⌘-click to open beside" : null]
+                    .filter(Boolean)
+                    .join("\n")}
                 className="flex min-w-0 flex-1 cursor-pointer items-center gap-2"
             >
                 <Icon size={14} style={{ color: meta.color, flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                        style={{
-                            fontSize: 13,
-                            fontWeight: selected ? 600 : 400,
-                            color: selected ? "var(--accent-ink)" : "var(--ink)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            lineHeight: 1.35,
-                        }}
-                    >
-                        {source.restricted && (
-                            <Lock
-                                size={10}
-                                aria-label="Restricted"
-                                style={{
-                                    display: "inline-block",
-                                    verticalAlign: "-1px",
-                                    marginRight: 4,
-                                    color: "var(--ink-3)",
-                                }}
-                            />
-                        )}
-                        {source.title}
+                <div className="min-w-0 flex-1">
+                    <div className="flex min-w-0 items-center gap-1">
+                        <span
+                            className={cn(
+                                "min-w-0 flex-1 truncate text-[13px] leading-[1.35]",
+                                selected ? "text-brand-ink font-semibold" : "text-ink"
+                            )}
+                        >
+                            {source.title}
+                        </span>
+                        {glyph && <AudienceGlyph glyph={glyph} />}
                     </div>
                     {(visibleTags.length > 0 ||
                         (source.syncing ?? false) ||
@@ -379,8 +417,8 @@ function collectItemIds(node: SourceNode): string[] {
 
 interface FolderHeaderProps {
     node: SourceNode;
-    /** The folder, or an ancestor, is restricted to the people granted access. */
-    restricted?: boolean;
+    /** Who can see it, when the row should say so (a top-level folder, or one unlike its parent). */
+    glyph?: Glyph | null;
     collapsed: boolean;
     onToggle: () => void;
     onSelectAll: (ids: string[], add: boolean) => void;
@@ -396,7 +434,7 @@ interface FolderHeaderProps {
 
 function FolderHeader({
     node,
-    restricted,
+    glyph,
     collapsed,
     onToggle,
     onSelectAll,
@@ -498,13 +536,7 @@ function FolderHeader({
                 >
                     {node.name}
                 </span>
-                {restricted && (
-                    <Lock
-                        size={10}
-                        aria-label="Restricted folder"
-                        style={{ color: "var(--ink-3)", flexShrink: 0 }}
-                    />
-                )}
+                {glyph && <AudienceGlyph glyph={glyph} />}
                 {menuItems && (
                     <button
                         type="button"
@@ -567,17 +599,23 @@ export interface SourceRailProps {
     onOpenSource?: (source: WorkspaceSource) => void;
     /** Open it in a column beside the chat instead of over the workspace. */
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
-    /** Create a folder; `parentPath` names the folder it goes inside, null or undefined for the top level. */
+    /**
+     * Create a folder; `parentPath` names the folder it goes inside, null or
+     * undefined for the top level. Offered inside a folder only when the
+     * caller can add to it (ADR-014 edit).
+     */
     onNewFolder?: (parentPath?: string | null) => void;
+    /** Rename, move and delete are offered per folder, where the caller manages it. */
     onRenameFolder?: (folder: WorkspaceFolder) => void;
-    /** "Share folder…" — who in the workspace can see this folder. */
+    /** "Share…" — the Share dialog for a folder: who can open it and everything inside. */
     onShareFolder?: (folder: WorkspaceFolder) => void;
     /** Move a folder (and everything in it) under `targetParent`; null means the top level. */
     onMoveFolder?: (path: string, targetParent: string | null) => void;
     onDeleteFolder?: (folder: WorkspaceFolder) => void;
+    /** File a source; offered per file where the caller can edit it, into folders they can add to. */
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
-    /** "Restrict access…" — who can see this one document. */
+    /** "Share…" — the Share dialog for one file. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
     /** Delete several at once — the multi-selection menu's Delete. */
@@ -619,6 +657,10 @@ export interface SourceRailProps {
      * alongside History, in the full workspace.
      */
     team?: Omit<TeamRailProps, "query">;
+    /** "Everyone at <name>" on a workspace-wide row's glyph. */
+    workspaceName?: string | null;
+    /** The signed-in person's auth id: their own files read "Added by you". */
+    selfAuthId?: string | null;
 }
 
 /** Which part of the rail is showing. Persisted, so a habit survives a reload. */
@@ -644,8 +686,17 @@ interface BranchContext {
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
     sourceMenuItems: (source: WorkspaceSource) => ActionMenuItem[];
     folderMenuItems: (node: SourceNode) => ActionMenuItem[];
-    /** True when the folder, or an ancestor, is restricted to the people granted access. */
-    isRestricted: (path: string) => boolean;
+    /** The folder's audience glyph; `topLevel` rows always say, nested ones only when unlike their parent. */
+    folderGlyph: (path: string, topLevel: boolean) => Glyph | null;
+    sourceGlyph: (source: WorkspaceSource, topLevel: boolean) => Glyph | null;
+    /** "Added by Ada · 2h ago". */
+    addedLine: (source: WorkspaceSource) => string | null;
+    /** May the caller rename, move or delete this folder (ADR-014 manage)? */
+    canManageFolder: (path: string) => boolean;
+    /** May the caller add to this folder — a file dropped on it, a subfolder (edit)? */
+    canEditFolder: (path: string) => boolean;
+    /** May the source being dragged be filed here: the caller edits both it and the folder. */
+    canDropSource: (sourceId: string, path: string) => boolean;
 }
 
 /** Every folder path in a subtree, the root included. */
@@ -653,7 +704,16 @@ function collectFolderPaths(node: SourceNode): string[] {
     return [node.path, ...node.children.flatMap(collectFolderPaths)];
 }
 
-function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchContext }) {
+function SourceRows({
+    items,
+    ctx,
+    topLevel = false,
+}: {
+    items: WorkspaceSource[];
+    ctx: BranchContext;
+    /** Loose files at a section's top level always show who can see them. */
+    topLevel?: boolean;
+}) {
     return (
         <>
             {items.map(s => (
@@ -684,6 +744,8 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
                         onOpen={ctx.onOpenSource}
                         onOpenBeside={ctx.onOpenSourceBeside}
                         menuItems={ctx.sourceMenuItems}
+                        glyph={ctx.sourceGlyph(s, topLevel)}
+                        addedLine={ctx.addedLine(s)}
                     />
                 </div>
             ))}
@@ -691,15 +753,26 @@ function SourceRows({ items, ctx }: { items: WorkspaceSource[]; ctx: BranchConte
     );
 }
 
-function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
+function FolderBranch({
+    node,
+    ctx,
+    topLevel = false,
+}: {
+    node: SourceNode;
+    ctx: BranchContext;
+    /** The first row of a section (or of a scoped view) — it always says who can see it. */
+    topLevel?: boolean;
+}) {
     const isCollapsed = !!ctx.collapsed[node.path];
     const isDragOver = ctx.dragOverFolder === node.path;
-    // A folder cannot be dropped on itself, inside itself, or under Unfiled.
+    // A folder cannot be dropped on itself, inside itself, or under Unfiled;
+    // nothing lands in a folder the caller cannot add to (ADR-014 edit).
     const acceptsDrag =
-        ctx.drag?.kind === "source" ||
+        (ctx.drag?.kind === "source" && ctx.canDropSource(ctx.drag.id, node.path)) ||
         (ctx.drag?.kind === "folder" &&
             node.path !== UNFILED_FOLDER &&
-            !isFolderOrDescendant(node.path, ctx.drag.path));
+            !isFolderOrDescendant(node.path, ctx.drag.path) &&
+            ctx.canEditFolder(node.path));
     const isUnfiled = node.path === UNFILED_FOLDER;
     return (
         <div
@@ -729,14 +802,14 @@ function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
         >
             <FolderHeader
                 node={node}
-                restricted={ctx.isRestricted(node.path)}
+                glyph={ctx.folderGlyph(node.path, topLevel)}
                 selected={ctx.selected}
                 collapsed={isCollapsed}
                 onToggle={() => ctx.toggleCollapsed(node.path)}
                 onSelectAll={ctx.selectMany}
                 menuItems={() => ctx.folderMenuItems(node)}
                 dragOver={isDragOver}
-                draggable={ctx.canDragFolders && !isUnfiled}
+                draggable={ctx.canDragFolders && !isUnfiled && ctx.canManageFolder(node.path)}
                 onDragStart={() => ctx.setDrag({ kind: "folder", path: node.path })}
                 onDragEnd={() => {
                     ctx.setDrag(null);
@@ -752,6 +825,77 @@ function FolderBranch({ node, ctx }: { node: SourceNode; ctx: BranchContext }) {
                 </div>
             )}
         </div>
+    );
+}
+
+/** Drag-over key for the Private section: dropping a file there files it loose (Unfiled), private to you. */
+const PRIVATE_DROP_KEY = "section:private";
+
+/**
+ * One of the rail's three sections (ADR-014 §6): a small sentence-case
+ * label with a count, then its top-level folders and loose files. Private
+ * also takes a dropped file — that is how a file goes back to being only
+ * yours — and when empty says where new files land.
+ */
+function RailSectionBlock({
+    section,
+    ctx,
+    showEmptyHint,
+}: {
+    section: RailSection;
+    ctx: BranchContext;
+    /** Browsing (no filter): an empty Private section explains itself. */
+    showEmptyHint: boolean;
+}) {
+    const label = RAIL_SECTION_LABELS[section.id];
+    const empty = section.folders.length === 0 && section.items.length === 0;
+    const takesDrop =
+        section.id === "private" &&
+        ctx.drag?.kind === "source" &&
+        ctx.canDropSource(ctx.drag.id, UNFILED_FOLDER);
+    const dragOver = takesDrop && ctx.dragOverFolder === PRIVATE_DROP_KEY;
+    return (
+        <section
+            aria-label={label}
+            data-testid={`rail-section-${section.id}`}
+            className={cn(
+                "mt-3 rounded-md border border-transparent first:mt-1",
+                dragOver && "border-brand bg-brand-soft border-dashed"
+            )}
+            onDragEnter={e => {
+                if (!takesDrop) return;
+                e.preventDefault();
+                ctx.setDragOverFolder(PRIVATE_DROP_KEY);
+            }}
+            onDragOver={e => {
+                if (takesDrop) e.preventDefault();
+            }}
+            onDrop={e => {
+                if (!takesDrop) return;
+                e.preventDefault();
+                e.stopPropagation();
+                ctx.dropOnFolder(UNFILED_FOLDER);
+            }}
+        >
+            <h3 className="text-ink-3 flex items-center gap-1.5 px-2.5 pb-0.5 text-[11px] font-medium">
+                <span>{label}</span>
+                <span className="mono text-ink-4 text-[10px]">{section.count}</span>
+            </h3>
+            {empty ? (
+                showEmptyHint && (
+                    <p className="text-ink-3 px-2.5 py-1 text-xs leading-snug">
+                        {PRIVATE_EMPTY_HINT}
+                    </p>
+                )
+            ) : (
+                <>
+                    {section.folders.map(node => (
+                        <FolderBranch key={node.path} node={node} ctx={ctx} topLevel />
+                    ))}
+                    <SourceRows items={section.items} ctx={ctx} topLevel />
+                </>
+            )}
+        </section>
     );
 }
 
@@ -787,6 +931,8 @@ export function SourceRail({
     shortcuts,
     history,
     team,
+    workspaceName,
+    selfAuthId,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
@@ -841,6 +987,85 @@ export function SourceRail({
                 color: "var(--ink-3)",
             },
         [folders]
+    );
+
+    // ADR-014, per item. A folder or file the server has not described
+    // (a staged upload, an implied folder) is not refused here: the server
+    // still decides, and the rail does not hide what it cannot judge.
+    const canManageFolder = useCallback(
+        (path: string) => folderFor(path).access?.canManage !== false,
+        [folderFor]
+    );
+    const canEditFolder = useCallback(
+        (path: string) => path === UNFILED_FOLDER || folderFor(path).access?.canEdit !== false,
+        [folderFor]
+    );
+
+    const folderGlyph = useCallback(
+        (path: string, topLevel: boolean): Glyph | null => {
+            const folder = folderFor(path);
+            const access = folder.access;
+            if (!access) {
+                // From a server without per-caller access: the old lock.
+                return folder.restricted && topLevel
+                    ? { kind: "shared", label: "Only people with access" }
+                    : null;
+            }
+            if (!showsAudienceGlyph(access, topLevel) || access.audience === "workspace") {
+                return null;
+            }
+            return { kind: access.audience, label: audienceLabel(access, workspaceName) };
+        },
+        [folderFor, workspaceName]
+    );
+
+    const sourceGlyph = useCallback(
+        (source: WorkspaceSource, topLevel: boolean): Glyph | null => {
+            const audience = sourceAudience(source);
+            if (audience === "workspace") return null;
+            const access = source.access ?? {
+                audience,
+                // A staged upload or a legacy restricted row: it is its own.
+                ownAudience: true,
+                principalCount: 0,
+            };
+            if (!showsAudienceGlyph(access, topLevel)) return null;
+            return { kind: audience, label: audienceLabel(access, workspaceName) };
+        },
+        [workspaceName]
+    );
+
+    // Names as people appear in this workspace now, not as they were when
+    // they uploaded.
+    const adderIds = useMemo(
+        () =>
+            sources.flatMap(s =>
+                s.addedBy?.authUserId && s.addedBy.authUserId !== selfAuthId
+                    ? [s.addedBy.authUserId]
+                    : []
+            ),
+        [sources, selfAuthId]
+    );
+    const people = usePeople(adderIds);
+    const addedLine = useCallback(
+        (source: WorkspaceSource): string | null => {
+            const by = source.addedBy;
+            if (!by) return null;
+            const name =
+                by.authUserId === selfAuthId
+                    ? "you"
+                    : (people[by.authUserId]?.displayName ?? by.name);
+            return source.added ? `Added by ${name} · ${source.added}` : `Added by ${name}`;
+        },
+        [people, selfAuthId]
+    );
+
+    const canDropSource = useCallback(
+        (sourceId: string, path: string) => {
+            const source = sources.find(s => s.id === sourceId);
+            return Boolean(source) && canChangeSource(source!) && canEditFolder(path);
+        },
+        [sources, canEditFolder]
     );
 
     /**
@@ -915,10 +1140,12 @@ export function SourceRail({
     const pasteCut = useCallback(
         (target: string) => {
             if (!onMoveToFolder) return;
-            cut.forEach(id => onMoveToFolder(id, target));
+            cut.forEach(id => {
+                if (canDropSource(id, target)) onMoveToFolder(id, target);
+            });
             setCut([]);
         },
-        [cut, onMoveToFolder]
+        [cut, onMoveToFolder, canDropSource]
     );
 
     const folderMenuItems = useCallback(
@@ -934,6 +1161,8 @@ export function SourceRail({
                       ? "all"
                       : "some";
             const subtree = collectFolderPaths(node);
+            const manages = !isUnfiled && canManageFolder(path);
+            const edits = canEditFolder(path);
             return buildFolderMenuItems(path, {
                 onOpen:
                     activeFolder === path
@@ -942,9 +1171,9 @@ export function SourceRail({
                               setActiveFolder(path);
                               setActiveTag(null);
                           },
-                onAddSource: onAddToFolder ? () => onAddToFolder(path) : undefined,
+                onAddSource: onAddToFolder && edits ? () => onAddToFolder(path) : undefined,
                 cutCount: cut.length,
-                onPaste: onMoveToFolder ? () => pasteCut(path) : undefined,
+                onPaste: onMoveToFolder && edits ? () => pasteCut(path) : undefined,
                 onCollapseAll:
                     subtree.length > 1 || node.items.length > 0
                         ? collapse =>
@@ -957,17 +1186,13 @@ export function SourceRail({
                               })
                         : undefined,
                 allCollapsed: subtree.every(p => collapsed[p]),
-                onNewSubfolder: onNewFolder && !isUnfiled ? () => onNewFolder(path) : undefined,
+                onNewSubfolder:
+                    onNewFolder && !isUnfiled && edits ? () => onNewFolder(path) : undefined,
                 onRename:
-                    onRenameFolder && !isUnfiled
-                        ? () => onRenameFolder(folderFor(path))
-                        : undefined,
-                onMove:
-                    onMoveFolder && !isUnfiled ? target => onMoveFolder(path, target) : undefined,
+                    onRenameFolder && manages ? () => onRenameFolder(folderFor(path)) : undefined,
+                onMove: onMoveFolder && manages ? target => onMoveFolder(path, target) : undefined,
                 onDelete:
-                    onDeleteFolder && !isUnfiled
-                        ? () => onDeleteFolder(folderFor(path))
-                        : undefined,
+                    onDeleteFolder && manages ? () => onDeleteFolder(folderFor(path)) : undefined,
                 onShare:
                     onShareFolder && !isUnfiled ? () => onShareFolder(folderFor(path)) : undefined,
                 onSelectAll: add => {
@@ -981,7 +1206,8 @@ export function SourceRail({
                     });
                 },
                 selectState,
-                folders: folders.map(f => f.name),
+                // A folder moves only into one the caller can add to.
+                folders: folders.filter(f => f.access?.canEdit !== false).map(f => f.name),
             });
         },
         [
@@ -992,6 +1218,8 @@ export function SourceRail({
             setActiveTag,
             folders,
             folderFor,
+            canManageFolder,
+            canEditFolder,
             collapsed,
             cut.length,
             pasteCut,
@@ -1090,6 +1318,14 @@ export function SourceRail({
         [folders, filtered, activeFolder, search, activeTag]
     );
 
+    // Browsing the whole library splits it by audience; inside one folder
+    // the view is that folder's subtree, as before.
+    const sections = useMemo(
+        () => splitRailSections(tree, path => folderFor(path).access?.audience),
+        [tree, folderFor]
+    );
+    const filtering = Boolean(search) || Boolean(activeTag);
+
     const toggle = (id: string) => {
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
     };
@@ -1107,7 +1343,7 @@ export function SourceRail({
 
     const dropOnFolder = (target: string) => {
         if (drag?.kind === "source") {
-            onMoveToFolder?.(drag.id, target);
+            if (canDropSource(drag.id, target)) onMoveToFolder?.(drag.id, target);
         } else if (
             drag?.kind === "folder" &&
             onMoveFolder &&
@@ -1124,7 +1360,12 @@ export function SourceRail({
         selected,
         collapsed,
         toggleCollapsed,
-        isRestricted: path => folderFor(path).restricted === true,
+        folderGlyph,
+        sourceGlyph,
+        addedLine,
+        canManageFolder,
+        canEditFolder,
+        canDropSource,
         toggleSelected: toggle,
         selectMany,
         drag,
@@ -1373,11 +1614,33 @@ export function SourceRail({
                     }}
                     style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}
                 >
-                    <SourceRows items={tree.items} ctx={branchCtx} />
-                    {tree.children.map(node => (
-                        <FolderBranch key={node.path} node={node} ctx={branchCtx} />
-                    ))}
-                    {filtered.length === 0 && (
+                    {activeFolder ? (
+                        <>
+                            <SourceRows items={tree.items} ctx={branchCtx} />
+                            {tree.children.map(node => (
+                                <FolderBranch key={node.path} node={node} ctx={branchCtx} />
+                            ))}
+                        </>
+                    ) : (
+                        RAIL_SECTION_ORDER.map(id => {
+                            const section = sections[id];
+                            const empty =
+                                section.folders.length === 0 && section.items.length === 0;
+                            // Empty sections stay out of the way — except
+                            // Private while browsing, which says where new
+                            // files land.
+                            if (empty && (id !== "private" || filtering)) return null;
+                            return (
+                                <RailSectionBlock
+                                    key={id}
+                                    section={section}
+                                    ctx={branchCtx}
+                                    showEmptyHint={!filtering}
+                                />
+                            );
+                        })
+                    )}
+                    {filtered.length === 0 && (Boolean(activeFolder) || filtering) && (
                         <div
                             style={{
                                 padding: "32px 14px",

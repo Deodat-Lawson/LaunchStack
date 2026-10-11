@@ -45,6 +45,13 @@ export function useAutosave(
     const lastThumbnailAt = useRef(0);
     /** Set when a save was requested while another was still running. */
     const queued = useRef(false);
+    /**
+     * Callers who asked while a save was running, waiting on the follow-up
+     * that carries their changes. "Save, then leave" must not leave first:
+     * the workspace refreshes its list as the editor goes, and a rename still
+     * queued here came back under its old name.
+     */
+    const waiting = useRef<Array<() => void>>([]);
 
     const buildThumbnail = useCallback(async (): Promise<string | null> => {
         const el = getSvgElement();
@@ -66,7 +73,7 @@ export function useAutosave(
         async (options: { snapshot?: boolean; label?: string } = {}): Promise<void> => {
             if (inFlight.current) {
                 queued.current = true;
-                return;
+                return new Promise<void>(resolve => waiting.current.push(resolve));
             }
             const state = store.getState();
             if (!state.dirty && !options.snapshot) return;
@@ -121,7 +128,8 @@ export function useAutosave(
                 inFlight.current = false;
                 if (queued.current) {
                     queued.current = false;
-                    void save();
+                    const resolvers = waiting.current.splice(0);
+                    void save().finally(() => resolvers.forEach(resolve => resolve()));
                 }
             }
         },

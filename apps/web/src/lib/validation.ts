@@ -965,7 +965,39 @@ export const AppendSessionMessagesSchema = z.object({
 export const UpdateSessionSchema = z
     .object({
         title: z.string().min(1).max(300).optional(),
-        pinned: z.boolean().optional(),
         agentKey: SessionAgentKeySchema,
     })
     .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+
+/**
+ * Chat sharing (ADR-014): people, groups or roles at `view`, plus "Everyone at
+ * <workspace>" as `general`. Chats have no other level.
+ */
+export const ChatSharingSchema = z.object({
+    general: z.enum(["private", "workspace"]),
+    grants: z
+        .array(
+            z.object({
+                principalType: z.enum(PRINCIPAL_TYPES),
+                principalId: z.string().trim().min(1).max(64),
+                level: z.literal("view").default("view"),
+            })
+        )
+        .max(200),
+});
+
+/** One person's organisation of one chat: pin, archive, mark read. */
+export const SessionStateSchema = z
+    .object({
+        pinned: z.boolean().optional(),
+        archived: z.boolean().optional(),
+        seen: z.literal(true).optional(),
+    })
+    .refine(data => data.pinned !== undefined || data.archived !== undefined || data.seen, {
+        message: "No fields to update",
+    });
+
+/** The caller's pinned chats, top first. */
+export const PinOrderSchema = z.object({
+    ids: z.array(z.string().min(1).max(64)).max(500),
+});

@@ -30,6 +30,8 @@ import {
     ArrowDown,
     ChevronUp,
     ChevronDown,
+    Lock,
+    Users,
     Zap as IconBolt,
     ChevronRight as IconChevronRight,
     Plus as IconPlus,
@@ -38,7 +40,9 @@ import {
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
+import { usePeople } from "~/lib/profile/use-people";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
@@ -257,6 +261,10 @@ interface MessageProps {
     onImplementPlan?: (text: string) => void;
     isPlan?: boolean;
     active?: boolean;
+    /** Someone else's chat: no verbs that write into a composer that isn't there. */
+    readOnly?: boolean;
+    /** Who asked the questions, when it isn't you (a chat shared with you). */
+    asker?: { name: string; email?: string; avatarUrl?: string | null };
 }
 
 /**
@@ -399,6 +407,8 @@ const Message = React.memo(function Message({
     onCite,
     isPlan,
     active,
+    readOnly = false,
+    asker,
 }: MessageProps) {
     const isUser = msg.role === "user";
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -443,16 +453,18 @@ const Message = React.memo(function Message({
             >
                 <Copy size={14} />
             </button>
-            <button
-                type="button"
-                title="Quote in reply"
-                aria-label="Quote in reply"
-                className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
-                onClick={() => onQuote(isUser ? msg.text : plainTextOfAnswer(msg.text))}
-            >
-                <Quote size={14} />
-            </button>
-            {isUser && (
+            {!readOnly && (
+                <button
+                    type="button"
+                    title="Quote in reply"
+                    aria-label="Quote in reply"
+                    className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
+                    onClick={() => onQuote(isUser ? msg.text : plainTextOfAnswer(msg.text))}
+                >
+                    <Quote size={14} />
+                </button>
+            )}
+            {isUser && !readOnly && (
                 <button
                     type="button"
                     title={onEditMessage ? "Edit from here" : "Edit and ask again"}
@@ -573,21 +585,32 @@ const Message = React.memo(function Message({
                         marginBottom: 8,
                     }}
                 >
-                    <div
-                        style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: "50%",
-                            background: "var(--ink)",
-                            color: "var(--panel)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <IconUser size={12} />
-                    </div>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>You</span>
+                    {asker ? (
+                        // Someone else's chat: their question, under their name.
+                        <ProfileAvatar
+                            name={asker.name}
+                            email={asker.email}
+                            src={asker.avatarUrl}
+                            className="size-[22px]"
+                            fallbackClassName="text-[9px]"
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: 22,
+                                height: 22,
+                                borderRadius: "50%",
+                                background: "var(--ink)",
+                                color: "var(--panel)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <IconUser size={12} />
+                        </div>
+                    )}
+                    <span className="text-[13px] font-semibold">{asker?.name ?? "You"}</span>
                     {msg.intent && (
                         <span className="border-line bg-panel text-ink-3 rounded border px-1.5 py-0.5 text-[10px] font-normal">
                             {msg.intent === "interrupt" ? "Immediate follow-up" : "Queued"}
@@ -935,6 +958,17 @@ const Message = React.memo(function Message({
                     })}
                 </div>
             )}
+            {(msg.hiddenCitations ?? 0) > 0 && (
+                <p
+                    className="text-ink-3 m-0 mt-2 flex items-center gap-1.5 text-[11px]"
+                    data-testid="hidden-citations"
+                >
+                    <Lock className="size-3 shrink-0" aria-hidden />
+                    {msg.hiddenCitations === 1
+                        ? "1 source you can’t open is hidden."
+                        : `${msg.hiddenCitations} sources you can’t open are hidden.`}
+                </p>
+            )}
             {actions}
             {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
                 <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
@@ -1127,6 +1161,64 @@ export interface AskPanelProps {
     onSaveMessage?: (index: number) => void;
     onImplementPlan?: (text: string) => void;
     disabled?: boolean;
+    /**
+     * Someone else's chat, shared with you to read (ADR-014 §4). The header
+     * says whose it is, and the composer gives way to "Continue in a new chat".
+     */
+    readOnly?: {
+        ownerAuthUserId: string;
+        /** Citations removed across the transcript because you can't open their source. */
+        hiddenCitations?: number;
+        onContinue: () => Promise<unknown> | void;
+    };
+    /** Open the Share dialog for this chat — yours, and saved. */
+    onShare?: () => void;
+}
+
+/** The composer's place when you're reading someone else's chat. */
+function ReadOnlyBar({ onContinue }: { onContinue: () => Promise<unknown> | void }) {
+    const [continuing, setContinuing] = useState(false);
+    return (
+        <div
+            data-testid="read-only-bar"
+            className="border-line bg-panel mx-auto flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3"
+            style={{ maxWidth: CHAT_COLUMN_MAX_PX }}
+        >
+            <span className="text-ink-2 min-w-0 flex-1 text-[13px]">
+                You can read this chat.
+                <span className="text-ink-3"> Continue it to ask your own follow-ups.</span>
+            </span>
+            <Button
+                size="sm"
+                disabled={continuing}
+                onClick={() => {
+                    setContinuing(true);
+                    void Promise.resolve(onContinue()).finally(() => setContinuing(false));
+                }}
+            >
+                <GitBranch className="size-3.5" />
+                {continuing ? "Continuing…" : "Continue in a new chat"}
+            </Button>
+        </div>
+    );
+}
+
+/** "Shared by Ada" under the title of a chat shared with you. */
+function SharedByLine({ ownerAuthUserId }: { ownerAuthUserId: string }) {
+    const people = usePeople([ownerAuthUserId]);
+    const owner = people[ownerAuthUserId];
+    return (
+        <span className="inline-flex min-w-0 items-center gap-1.5" data-testid="shared-by">
+            <ProfileAvatar
+                name={owner?.displayName}
+                email={owner?.email}
+                src={owner?.avatarUrl}
+                className="size-4"
+                fallbackClassName="text-[8px]"
+            />
+            <span className="truncate">Shared by {owner?.displayName ?? "a teammate"}</span>
+        </span>
+    );
 }
 
 export function AskPanel({
@@ -1169,6 +1261,8 @@ export function AskPanel({
     onSaveMessage,
     onImplementPlan,
     disabled = false,
+    readOnly,
+    onShare,
 }: AskPanelProps) {
     const draftKey = suppliedDraftKey ?? "new-chat";
     const { scrollRef, contentRef, following, currentIndex, onScroll, latest, navigate } =
@@ -1226,10 +1320,33 @@ export function AskPanel({
         if (composerSeed && (!composerSeed.draftKey || composerSeed.draftKey === suppliedDraftKey))
             setSeed({ ...composerSeed, draftKey: suppliedDraftKey });
     }, [composerSeed, suppliedDraftKey]);
+    /** Reading someone else's chat: there is no composer here to put text into. */
+    const ownerId = readOnly?.ownerAuthUserId ?? null;
+    const ownerLook = usePeople(ownerId ? [ownerId] : [])[ownerId ?? ""];
+    const asker = useMemo(
+        () =>
+            ownerId
+                ? {
+                      name: ownerLook?.displayName ?? "Teammate",
+                      email: ownerLook?.email,
+                      avatarUrl: ownerLook?.avatarUrl ?? null,
+                  }
+                : undefined,
+        [ownerId, ownerLook]
+    );
+    const readOnlyRef = useRef(Boolean(readOnly));
+    readOnlyRef.current = Boolean(readOnly);
+    const noComposer = useCallback(() => {
+        if (!readOnlyRef.current) return false;
+        toast.info("Continue this chat in a new one to reply.");
+        return true;
+    }, []);
     const cite = useCallback(
-        (text: string) =>
-            setSeed({ text, mode: "append", nonce: Date.now(), draftKey: seedScope.current }),
-        []
+        (text: string) => {
+            if (noComposer()) return;
+            setSeed({ text, mode: "append", nonce: Date.now(), draftKey: seedScope.current });
+        },
+        [noComposer]
     );
     const messageActions = useRef({
         onEditMessage,
@@ -1274,25 +1391,31 @@ export function AskPanel({
     }, [thread]);
     const quoteThread = useRef(thread);
     quoteThread.current = thread;
-    const quote = useCallback((text: string) => {
-        const index = quoteThread.current.findIndex(
-            message => plainTextOfAnswer(message.text) === text
-        );
-        const anchor =
-            index >= 0
-                ? `[Source message](#chat-message-${quoteThread.current[index]?.id ?? index})`
-                : "[Quoted context](#launchstack-quoted-context)";
-        setSeed({
-            text: `${quoteBlock(text)}${anchor}\n\n`,
-            mode: "append",
-            nonce: Date.now(),
-            draftKey: seedScope.current,
-        });
-    }, []);
+    const quote = useCallback(
+        (text: string) => {
+            if (noComposer()) return;
+            const index = quoteThread.current.findIndex(
+                message => plainTextOfAnswer(message.text) === text
+            );
+            const anchor =
+                index >= 0
+                    ? `[Source message](#chat-message-${quoteThread.current[index]?.id ?? index})`
+                    : "[Quoted context](#launchstack-quoted-context)";
+            setSeed({
+                text: `${quoteBlock(text)}${anchor}\n\n`,
+                mode: "append",
+                nonce: Date.now(),
+                draftKey: seedScope.current,
+            });
+        },
+        [noComposer]
+    );
     const edit = useCallback(
-        (text: string) =>
-            setSeed({ text, mode: "replace", nonce: Date.now(), draftKey: seedScope.current }),
-        []
+        (text: string) => {
+            if (noComposer()) return;
+            setSeed({ text, mode: "replace", nonce: Date.now(), draftKey: seedScope.current });
+        },
+        [noComposer]
     );
 
     const paneTarget = useContextTarget({
@@ -1419,11 +1542,39 @@ export function AskPanel({
                             )}
                         </div>
                     )}
-                    <div className="truncate" style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                        {subText}
+                    <div className="text-ink-3 flex min-w-0 items-center gap-1 truncate text-[11px]">
+                        {readOnly ? (
+                            <>
+                                <SharedByLine ownerAuthUserId={readOnly.ownerAuthUserId} />
+                                <span className="shrink-0">· {subText}</span>
+                                {(readOnly.hiddenCitations ?? 0) > 0 && (
+                                    <span
+                                        className="shrink-0"
+                                        title="Citations to sources you can't open are hidden."
+                                    >
+                                        · {readOnly.hiddenCitations} hidden
+                                    </span>
+                                )}
+                            </>
+                        ) : (
+                            subText
+                        )}
                     </div>
                 </div>
 
+                {onShare && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-[30px] gap-1.5 px-2.5 text-xs"
+                        title="Share this chat"
+                        onClick={onShare}
+                        data-testid="chat-share"
+                    >
+                        <Users className="size-3.5" />
+                        <span className="hidden sm:inline">Share</span>
+                    </Button>
+                )}
                 {onOpenParentChat && (
                     <Button
                         variant="ghost"
@@ -1581,6 +1732,8 @@ export function AskPanel({
                                         isPlan={planModes[i]}
                                         active={isSending}
                                         agents={agents}
+                                        readOnly={Boolean(readOnly)}
+                                        asker={asker}
                                     />
                                 );
                             })}
@@ -1630,7 +1783,7 @@ export function AskPanel({
                             <button
                                 type="button"
                                 key={msg.id ?? i}
-                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? "You" : "Assistant"} — ${msg.text.slice(0, 80)}`}
+                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? (asker?.name ?? "You") : "Assistant"} — ${msg.text.slice(0, 80)}`}
                                 aria-current={i === currentIndex ? "true" : undefined}
                                 title={msg.text.slice(0, 160)}
                                 className="my-1 h-2 min-w-2 rounded-full focus-visible:outline"
@@ -1679,52 +1832,58 @@ export function AskPanel({
                     flexShrink: 0,
                 }}
             >
-                {queueContent && (
-                    <div className="mx-auto mb-2" style={{ maxWidth: CHAT_COLUMN_MAX_PX }}>
-                        {queueContent}
-                    </div>
+                {readOnly ? (
+                    <ReadOnlyBar onContinue={readOnly.onContinue} />
+                ) : (
+                    <>
+                        {queueContent && (
+                            <div className="mx-auto mb-2" style={{ maxWidth: CHAT_COLUMN_MAX_PX }}>
+                                {queueContent}
+                            </div>
+                        )}
+                        <Composer
+                            sources={sources}
+                            selected={selected}
+                            setSelected={setSelected}
+                            onSend={handleSend}
+                            disabled={disabled}
+                            draftKey={suppliedDraftKey}
+                            promptHistory={promptHistory}
+                            active={isSending}
+                            onStop={onStop}
+                            onNewChat={onNewChat}
+                            queuedCount={queuedCount}
+                            onQueueEditLatest={onQueueEditLatest}
+                            onQueueSendOldest={onQueueSendOldest}
+                            threadContextOptions={threadContextOptions}
+                            folderContextOptions={folderContextOptions}
+                            onOpenThreadContext={onOpenThreadContext}
+                            editingQueued={editingQueued}
+                            queuedEditUnavailable={queuedEditUnavailable}
+                            onCancelQueueEdit={onCancelQueueEdit}
+                            onOpenSource={onOpenSource}
+                            seed={seed?.draftKey === suppliedDraftKey ? seed : null}
+                            agents={agents}
+                            agentKey={agentKey}
+                            onChangeAgent={onChangeAgent ?? (() => undefined)}
+                        />
+                        <div
+                            style={{
+                                maxWidth: CHAT_COLUMN_MAX_PX,
+                                margin: "8px auto 0",
+                                textAlign: "center",
+                                fontSize: 11,
+                                color: "var(--ink-3)",
+                            }}
+                        >
+                            {agentKey && agents.find(a => a.id === agentKey)
+                                ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
+                                : selected.length
+                                  ? "Answers use your selected sources and cite what they rely on."
+                                  : "General chat · add sources to ground your answers."}
+                        </div>
+                    </>
                 )}
-                <Composer
-                    sources={sources}
-                    selected={selected}
-                    setSelected={setSelected}
-                    onSend={handleSend}
-                    disabled={disabled}
-                    draftKey={suppliedDraftKey}
-                    promptHistory={promptHistory}
-                    active={isSending}
-                    onStop={onStop}
-                    onNewChat={onNewChat}
-                    queuedCount={queuedCount}
-                    onQueueEditLatest={onQueueEditLatest}
-                    onQueueSendOldest={onQueueSendOldest}
-                    threadContextOptions={threadContextOptions}
-                    folderContextOptions={folderContextOptions}
-                    onOpenThreadContext={onOpenThreadContext}
-                    editingQueued={editingQueued}
-                    queuedEditUnavailable={queuedEditUnavailable}
-                    onCancelQueueEdit={onCancelQueueEdit}
-                    onOpenSource={onOpenSource}
-                    seed={seed?.draftKey === suppliedDraftKey ? seed : null}
-                    agents={agents}
-                    agentKey={agentKey}
-                    onChangeAgent={onChangeAgent ?? (() => undefined)}
-                />
-                <div
-                    style={{
-                        maxWidth: CHAT_COLUMN_MAX_PX,
-                        margin: "8px auto 0",
-                        textAlign: "center",
-                        fontSize: 11,
-                        color: "var(--ink-3)",
-                    }}
-                >
-                    {agentKey && agents.find(a => a.id === agentKey)
-                        ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
-                        : selected.length
-                          ? "Answers use your selected sources and cite what they rely on."
-                          : "General chat · add sources to ground your answers."}
-                </div>
             </div>
         </main>
     );

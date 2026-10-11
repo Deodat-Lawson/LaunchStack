@@ -1,0 +1,160 @@
+import {
+    activitySentence,
+    activityTarget,
+    badgeCount,
+    inboxSentence,
+    inboxTarget,
+    joinNames,
+    shortAgo,
+} from "../team/format";
+import type { ActivityRow, InboxEntry } from "../team/api";
+
+/** The team layer's sentences, pinned (ADR-014 §7). */
+
+function row(over: Partial<ActivityRow>): ActivityRow {
+    return {
+        id: 1,
+        actorUserId: "user-ada",
+        verb: "added",
+        targetType: "document",
+        targetId: "42",
+        targetLabel: "Q3 plan.pdf",
+        targetPath: "Finance",
+        detail: null,
+        at: "2026-10-10T10:00:00Z",
+        openable: true,
+        ...over,
+    };
+}
+
+describe("shortAgo", () => {
+    const now = Date.parse("2026-10-10T12:00:00Z");
+    it.each([
+        ["2026-10-10T11:59:30Z", "now"],
+        ["2026-10-10T11:55:00Z", "5m"],
+        ["2026-10-10T10:00:00Z", "2h"],
+        ["2026-10-07T12:00:00Z", "3d"],
+    ])("%s → %s", (iso, expected) => {
+        expect(shortAgo(iso, now)).toBe(expected);
+    });
+
+    it("falls back to a date after a week", () => {
+        expect(shortAgo("2026-09-01T12:00:00Z", now)).toMatch(/Sep|9/);
+    });
+});
+
+describe("joinNames", () => {
+    it("reads like a sentence", () => {
+        expect(joinNames(["Ada"])).toBe("Ada");
+        expect(joinNames(["Ada", "Sales team"])).toBe("Ada and Sales team");
+        expect(joinNames(["Ada", "Ben", "Cy", "Dee"])).toBe("Ada, Ben and 2 others");
+        expect(joinNames(["Ada", "Ben", "Cy"])).toBe("Ada, Ben and 1 other");
+    });
+});
+
+describe("activitySentence", () => {
+    it.each<[Partial<ActivityRow>, string]>([
+        [{}, "Ada added Q3 plan.pdf"],
+        [
+            {
+                verb: "shared",
+                targetType: "folder",
+                targetLabel: "Finance",
+                detail: { added: ["Sales team"] },
+            },
+            "Ada shared Finance with Sales team",
+        ],
+        [{ verb: "shared", detail: { everyone: true } }, "Ada shared Q3 plan.pdf with everyone"],
+        [
+            { verb: "moved", targetLabel: "Board deck", targetPath: "Finance" },
+            "Ada moved Board deck to Finance",
+        ],
+        [
+            { verb: "moved", targetLabel: "Board deck", targetPath: null },
+            "Ada moved Board deck to Unfiled",
+        ],
+        [
+            {
+                verb: "moved",
+                targetType: "folder",
+                targetLabel: "Q3",
+                targetPath: "Archive/Q3",
+            },
+            "Ada moved Q3 to Archive",
+        ],
+        [
+            {
+                verb: "renamed",
+                targetType: "folder",
+                targetLabel: "Q4",
+                targetPath: "Finance/Q4",
+                detail: { from: "Finance/Q3", to: "Finance/Q4" },
+            },
+            "Ada renamed Q3 to Q4",
+        ],
+        [{ verb: "unshared", detail: { removed: ["Ben"] } }, "Ada removed Ben from Q3 plan.pdf"],
+        [
+            {
+                verb: "created_folder",
+                targetType: "folder",
+                targetLabel: "Board",
+                targetPath: "Board",
+            },
+            "Ada created the folder Board",
+        ],
+        [
+            { verb: "created_group", targetType: "group", targetLabel: "Design" },
+            "Ada created the group Design",
+        ],
+        [{ verb: "deleted" }, "Ada deleted Q3 plan.pdf"],
+    ])("case %#", (over, expected) => {
+        expect(activitySentence("Ada", row(over))).toBe(expected);
+    });
+});
+
+describe("activityTarget", () => {
+    it("opens documents by id, folders by path, chats by id", () => {
+        expect(activityTarget(row({}))).toEqual({ type: "document", id: 42 });
+        expect(
+            activityTarget(row({ targetType: "folder", targetId: null, targetPath: "Finance/Q3" }))
+        ).toEqual({ type: "folder", path: "Finance/Q3" });
+        expect(activityTarget(row({ targetType: "chat", targetId: "s1" }))).toEqual({
+            type: "chat",
+            id: "s1",
+        });
+    });
+
+    it("opens nothing that is gone", () => {
+        expect(activityTarget(row({ openable: false }))).toBeNull();
+    });
+});
+
+describe("inbox", () => {
+    const entry: InboxEntry = {
+        id: 1,
+        kind: "shared",
+        actorUserId: "user-ada",
+        targetType: "folder",
+        targetId: "7",
+        targetLabel: "Finance/Board",
+        detail: { via: "group", groupName: "Sales team", path: "Finance/Board" },
+        at: "2026-10-10T10:00:00Z",
+        read: false,
+    };
+
+    it("says who it reached through", () => {
+        expect(inboxSentence("Ada", entry)).toBe("Ada shared “Board” with Sales team");
+        expect(inboxSentence("Ada", { ...entry, detail: { via: "direct" } })).toBe(
+            "Ada shared “Board” with you"
+        );
+    });
+
+    it("opens a folder by its path", () => {
+        expect(inboxTarget(entry)).toEqual({ type: "folder", path: "Finance/Board" });
+    });
+
+    it("caps the badge", () => {
+        expect(badgeCount(3)).toBe("3");
+        expect(badgeCount(12)).toBe("9+");
+    });
+});

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { GroupMembersSchema } from "~/lib/validation";
 import { addGroupMembers, removeGroupMembers } from "~/server/workspace/groups";
 import {
@@ -12,8 +12,11 @@ import {
 
 type Params = { params: Promise<{ id: string }> };
 
+// The group's creator or a `groups.manage` holder may change who is in it; the
+// service answers 403 for anyone else (ADR-014).
+
 export async function POST(request: Request, { params }: Params) {
-    const ctx = await requireWorkspacePermission("groups.manage");
+    const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
     if (id === null) return invalidIdResponse();
@@ -27,7 +30,7 @@ export async function POST(request: Request, { params }: Params) {
 }
 
 export async function DELETE(request: Request, { params }: Params) {
-    const ctx = await requireWorkspacePermission("groups.manage");
+    const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
     if (id === null) return invalidIdResponse();

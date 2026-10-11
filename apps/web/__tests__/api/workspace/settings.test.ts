@@ -24,33 +24,30 @@ beforeEach(() => {
 describe("/api/workspace/settings", () => {
     it("returns defaults when the workspace has no row", async () => {
         const res = await GET();
-        await expect(res.json()).resolves.toEqual({
-            joinPolicy: "approval",
-            auditRetentionDays: null,
-        });
+        await expect(res.json()).resolves.toEqual({ auditRetentionDays: null });
     });
 
     it("creates the row on first change and audits what changed", async () => {
         const res = await PATCH(
-            jsonRequest("/api/workspace/settings", "PATCH", { joinPolicy: "open" })
+            jsonRequest("/api/workspace/settings", "PATCH", { auditRetentionDays: 90 })
         );
 
         expect(res.status).toBe(200);
-        await expect(res.json()).resolves.toEqual({ joinPolicy: "open", auditRetentionDays: null });
+        await expect(res.json()).resolves.toEqual({ auditRetentionDays: 90 });
         expect(fakeDb.insertedInto(workspaceSettings)).toEqual([
-            { companyId: 5n, joinPolicy: "open", auditRetentionDays: null },
+            { companyId: 5n, auditRetentionDays: 90 },
         ]);
         expect(fakeDb.insertedInto(workspaceAuditEvents)).toEqual([
             expect.objectContaining({
                 action: "settings.changed",
-                detail: { changes: { joinPolicy: { from: "approval", to: "open" } } },
+                detail: { changes: { auditRetentionDays: { from: null, to: 90 } } },
             }),
         ]);
     });
 
-    it("rejects an unknown join policy and an empty patch", async () => {
+    it("rejects the retired join policy and an empty patch", async () => {
         expect(
-            (await PATCH(jsonRequest("/api/workspace/settings", "PATCH", { joinPolicy: "anyone" })))
+            (await PATCH(jsonRequest("/api/workspace/settings", "PATCH", { joinPolicy: "open" })))
                 .status
         ).toBe(400);
         expect((await PATCH(jsonRequest("/api/workspace/settings", "PATCH", {}))).status).toBe(400);

@@ -1,22 +1,18 @@
 "use client";
 
-import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { SignUpForm } from "~/app/_components/CredentialsForm";
-import {
-    AlertCircle,
-    ArrowRight,
-    CheckCircle2,
-    ChevronDown,
-    Rocket,
-    Ticket,
-    Users,
-} from "lucide-react";
+import { AlertCircle, ArrowRight, ChevronDown, Rocket, Ticket, Users } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { safeNextPath, withNext } from "~/components/auth/next-path";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label as FieldLabel } from "~/components/ui/label";
+import { inviteDestination } from "~/lib/invite-link";
 
 /**
  * Sign-up page.
@@ -26,7 +22,8 @@ import { safeNextPath, withNext } from "~/components/auth/next-path";
  *
  *   1. Start solo (default, one click) — auto-provisions a workspace using
  *      the user's name. No form to fill out.
- *   2. Join with an invite code — a short inline form for team members.
+ *   2. I have an invite — paste the link (or its code) and go to the join
+ *      page, which handles joining for everyone, signed in or not.
  *   3. Advanced / team setup — expanded form with company name, staff count,
  *      and optional BYOK embedding keys for self-host users.
  *
@@ -69,11 +66,8 @@ const SignupPage: React.FC = () => {
     const [isSuggestingName, setIsSuggestingName] = useState(true);
 
     // ── Invite flow ──
-    const [inviteCode, setInviteCode] = useState("");
+    const [inviteLink, setInviteLink] = useState("");
     const [inviteError, setInviteError] = useState<string | null>(null);
-    const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
-    const [isJoining, setIsJoining] = useState(false);
-    const autoJoinTriggered = useRef(false);
 
     // ── Team flow ──
     const [teamName, setTeamName] = useState("");
@@ -111,55 +105,6 @@ const SignupPage: React.FC = () => {
         };
     }, [userId]);
 
-    // ── Join performed (shared by inline form + auto-join from ?code=) ──
-    const performJoin = useCallback(
-        async (code: string) => {
-            if (!userId || !user) return;
-            setIsJoining(true);
-            setInviteError(null);
-            setInviteSuccess(null);
-
-            try {
-                // One account can belong to several workspaces, so someone who
-                // is already registered joins exactly the way a new person does.
-                const response = await fetch("/api/signup/join", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        name: user.name,
-                        email: user.email,
-                        inviteCode: code,
-                    }),
-                });
-                const raw: unknown = await response.json();
-
-                if (!response.ok) {
-                    const msg =
-                        typeof raw === "object" && raw !== null && "message" in raw
-                            ? (raw as { message: string }).message
-                            : "Invalid or expired invite code.";
-                    setInviteError(msg);
-                    setIsJoining(false);
-                    return;
-                }
-
-                const data = raw as {
-                    data?: { redirectPath?: string };
-                    message?: string;
-                };
-                setInviteSuccess(data.message ?? "You're in!");
-                setTimeout(() => {
-                    router.push(data.data?.redirectPath ?? "/employer/documents");
-                }, 1200);
-            } catch (err) {
-                console.error("Join failed:", err);
-                setInviteError("Something went wrong. Check your connection and try again.");
-                setIsJoining(false);
-            }
-        },
-        [userId, user, router]
-    );
-
     // ── Suggest a workspace name that is actually available ──
     useEffect(() => {
         if (!isAuthLoaded || !userId) return;
@@ -185,19 +130,6 @@ const SignupPage: React.FC = () => {
             cancelled = true;
         };
     }, [isAuthLoaded, userId, user]);
-
-    // ── Auto-join when arriving via ?code=XYZ ──
-    useEffect(() => {
-        if (!isAuthLoaded || autoJoinTriggered.current) return;
-        const codeFromUrl = searchParams.get("code");
-        if (!codeFromUrl) return;
-        setMode("invite");
-        setInviteCode(codeFromUrl.toUpperCase());
-        if (userId && user) {
-            autoJoinTriggered.current = true;
-            void performJoin(codeFromUrl);
-        }
-    }, [isAuthLoaded, userId, user, searchParams, performJoin]);
 
     // ── Hand an invited person back to the invitation once signed in ──
     useEffect(() => {
@@ -289,17 +221,17 @@ const SignupPage: React.FC = () => {
         }
     };
 
-    // ── Invite: validate + join ──
-    const submitInvite = async (e: React.FormEvent) => {
+    // ── Invite: the join page does the joining ──
+    const submitInvite = (e: React.FormEvent) => {
         e.preventDefault();
-        const code = inviteCode.trim();
-        if (!code) {
-            setInviteError("Enter your invite code to continue.");
+        const destination = inviteDestination(inviteLink);
+        if (!destination) {
+            setInviteError(
+                "That doesn't look like an invite link. Paste the whole link you were sent."
+            );
             return;
         }
-        setInviteError(null);
-        // No separate validate step — /api/signup/join handles it in one hop.
-        await performJoin(code);
+        router.push(destination);
     };
 
     // ────────────────────────── Render ──────────────────────────
@@ -382,16 +314,13 @@ const SignupPage: React.FC = () => {
 
                     {mode === "invite" && (
                         <InviteCard
-                            code={inviteCode}
-                            setCode={setInviteCode}
-                            onSubmit={e => void submitInvite(e)}
-                            isJoining={isJoining}
-                            error={inviteError}
-                            success={inviteSuccess}
-                            onClear={() => {
+                            value={inviteLink}
+                            onChange={value => {
+                                setInviteLink(value);
                                 setInviteError(null);
-                                setInviteSuccess(null);
                             }}
+                            onSubmit={submitInvite}
+                            error={inviteError}
                         />
                     )}
 
@@ -576,7 +505,7 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
         },
         {
             key: "invite",
-            label: "Use an invite code",
+            label: "I have an invite",
             sub: "Join an existing workspace",
             Icon: Ticket,
         },
@@ -761,114 +690,50 @@ function SoloCard({
 // ────────────────────────── Invite card ──────────────────────────
 
 function InviteCard({
-    code,
-    setCode,
+    value,
+    onChange,
     onSubmit,
-    isJoining,
     error,
-    success,
-    onClear,
 }: {
-    code: string;
-    setCode: (v: string) => void;
+    value: string;
+    onChange: (value: string) => void;
     onSubmit: (e: React.FormEvent) => void;
-    isJoining: boolean;
     error: string | null;
-    success: string | null;
-    onClear: () => void;
 }) {
-    if (success) {
-        return (
-            <div style={cardStyle}>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        color: "var(--ok)",
-                        fontSize: 14,
-                        fontWeight: 600,
-                        marginBottom: 6,
-                    }}
-                >
-                    <CheckCircle2 style={{ width: 16, height: 16 }} /> {success}
-                </div>
-                <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>
-                    Taking you to your workspace…
-                </div>
-            </div>
-        );
-    }
+    const empty = value.trim().length === 0;
     return (
-        <form onSubmit={onSubmit} style={cardStyle}>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    marginBottom: 8,
-                }}
-            >
-                <div
-                    style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: 8,
-                        background: "var(--accent-soft)",
-                        color: "var(--accent)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Ticket style={{ width: 14, height: 14 }} />
+        <form
+            onSubmit={onSubmit}
+            className="border-line bg-panel flex flex-col gap-3 rounded-[14px] border p-5 [animation:lsw-fadeIn_180ms]"
+        >
+            <div className="flex items-center gap-2.5">
+                <div className="bg-brand-soft text-brand flex size-7 items-center justify-center rounded-lg">
+                    <Ticket className="size-3.5" aria-hidden />
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700 }}>Enter your invite code</div>
+                <FieldLabel htmlFor="invite-link" className="text-ink text-sm font-bold">
+                    Paste your invite link
+                </FieldLabel>
             </div>
-            <div
-                style={{
-                    fontSize: 12.5,
-                    color: "var(--ink-3)",
-                    marginBottom: 12,
-                    lineHeight: 1.55,
-                }}
-            >
-                Ask whoever invited you for the 8–12 character code they got from Launchstack.
-            </div>
-            <input
-                value={code}
-                onChange={e => {
-                    setCode(e.target.value.toUpperCase());
-                    onClear();
-                }}
-                placeholder="ABCD-1234"
-                maxLength={16}
+            <p className="text-ink-3 m-0 text-[12.5px] leading-relaxed">
+                Open the link someone sent you, or paste it here. The code on its own works too.
+            </p>
+            <Input
+                id="invite-link"
+                value={value}
+                onChange={e => onChange(e.target.value)}
+                placeholder="https://…/join/…"
                 autoComplete="off"
-                style={{
-                    ...inputStyle,
-                    letterSpacing: "0.08em",
-                    fontFamily: "var(--font-mono)",
-                    textTransform: "uppercase",
-                    marginBottom: 10,
-                }}
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                className="mono"
+                aria-invalid={error ? true : undefined}
             />
             {error && <ErrorBanner>{error}</ErrorBanner>}
-            <button
-                type="submit"
-                disabled={isJoining || code.trim().length === 0}
-                style={primaryButtonStyle(isJoining || code.trim().length === 0)}
-            >
-                {isJoining ? (
-                    <>
-                        <Spinner /> Joining…
-                    </>
-                ) : (
-                    <>
-                        Join workspace
-                        <ArrowRight style={{ width: 14, height: 14 }} />
-                    </>
-                )}
-            </button>
+            <Button type="submit" disabled={empty} className="w-full">
+                Continue
+                <ArrowRight aria-hidden />
+            </Button>
         </form>
     );
 }

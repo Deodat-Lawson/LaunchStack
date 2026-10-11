@@ -72,6 +72,13 @@ seven-day expiry, email must match at accept) are pre-approval; join links
 `join_policy`. Existing accounts can join further workspaces. A link never
 mints an owner.
 
+> **Amended 2026-10-11.** Approval moved from the workspace to the link:
+> `invite_codes.requires_approval` (default false — the link is the admin's
+> approval), and `workspace_settings.join_policy` is no longer read. New codes
+> are 128 bits and links live at `/join/<code>`; legacy 8-character codes
+> always need approval. See `docs/design/workspace-roles-and-file-access.md`
+> §3.2.
+
 **Escalation rules** are pure functions (`lib/authz/escalation.ts`): assign
 only permissions you hold; owner-only permissions never enter a custom role;
 only an Owner makes or unmakes an Owner, while an Admin may make other

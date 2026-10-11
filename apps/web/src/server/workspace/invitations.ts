@@ -18,6 +18,7 @@ import {
     workspaceInvitations,
 } from "~/server/db/schema";
 import { sendAuthEmail } from "~/server/auth/email";
+import { workspaceLooks } from "~/server/profile/store";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
@@ -52,6 +53,8 @@ export interface InvitationPreview {
     email: string;
     expiresAt: string;
     status: InvitationStatus;
+    /** Who sent it, as they appear in that workspace; null if unknown. */
+    invitedBy: string | null;
 }
 
 export interface AcceptInvitationResult {
@@ -176,7 +179,7 @@ async function deliver(
     row: Pick<InvitationRow, "email" | "role" | "expiresAt">,
     token: string,
     origin: string
-): Promise<string> {
+): Promise<{ acceptUrl: string; emailSent: boolean }> {
     const acceptUrl = `${origin}/invite/${token}`;
     const [workspaceRows, inviterRows, names] = await Promise.all([
         db
@@ -193,7 +196,7 @@ async function deliver(
     ]);
     const workspaceName = workspaceRows[0]?.name ?? "a workspace";
     const inviterName = inviterRows[0]?.name ?? "A workspace admin";
-    await sendAuthEmail({
+    const { delivered } = await sendAuthEmail({
         to: row.email,
         subject: `You're invited to ${workspaceName} on LaunchStack`,
         text: invitationEmailText({
@@ -204,7 +207,7 @@ async function deliver(
             expiresAt: row.expiresAt,
         }),
     });
-    return acceptUrl;
+    return { acceptUrl, emailSent: delivered };
 }
 
 // ---------------------------------------------------------------------------
@@ -228,7 +231,7 @@ export async function createInvitation(
     ctx: WorkspaceContext,
     input: { email: string; role: string; groupIds?: number[] },
     origin: string
-): Promise<{ invitation: InvitationView; acceptUrl: string }> {
+): Promise<{ invitation: InvitationView; acceptUrl: string; emailSent: boolean }> {
     const email = input.email.trim().toLowerCase();
     const role = await requireAssignableRole(ctx, input.role);
 
@@ -296,17 +299,17 @@ export async function createInvitation(
         return inserted;
     });
 
-    const acceptUrl = await deliver(ctx, row, token, origin);
+    const { acceptUrl, emailSent } = await deliver(ctx, row, token, origin);
     const [invitation] = await toViews(ctx.companyId, [row]);
     if (!invitation) throw new Error("Invitation view missing");
-    return { invitation, acceptUrl };
+    return { invitation, acceptUrl, emailSent };
 }
 
 export async function resendInvitation(
     ctx: WorkspaceContext,
     id: number,
     origin: string
-): Promise<{ invitation: InvitationView; acceptUrl: string }> {
+): Promise<{ invitation: InvitationView; acceptUrl: string; emailSent: boolean }> {
     const row = await loadInvitation(ctx.companyId, id);
     const status = invitationStatus(row);
     if (status === "accepted") throw conflict("This invitation was already accepted.");
@@ -331,10 +334,10 @@ export async function resendInvitation(
     });
 
     const refreshed = { ...row, expiresAt };
-    const acceptUrl = await deliver(ctx, refreshed, token, origin);
+    const { acceptUrl, emailSent } = await deliver(ctx, refreshed, token, origin);
     const [invitation] = await toViews(ctx.companyId, [refreshed]);
     if (!invitation) throw new Error("Invitation view missing");
-    return { invitation, acceptUrl };
+    return { invitation, acceptUrl, emailSent };
 }
 
 export async function revokeInvitation(
@@ -375,6 +378,7 @@ export async function previewInvitation(token: string): Promise<InvitationPrevie
             expiresAt: workspaceInvitations.expiresAt,
             acceptedAt: workspaceInvitations.acceptedAt,
             revokedAt: workspaceInvitations.revokedAt,
+            invitedBy: workspaceInvitations.invitedBy,
             workspaceName: company.name,
             workspaceSlug: company.slug,
         })
@@ -384,7 +388,11 @@ export async function previewInvitation(token: string): Promise<InvitationPrevie
         .limit(1);
     if (!row) throw notFound("This invitation does not exist.");
 
-    const resolved = await resolveRole(row.companyId, row.role);
+    const [resolved, looks] = await Promise.all([
+        resolveRole(row.companyId, row.role),
+        workspaceLooks(row.companyId, [row.invitedBy]),
+    ]);
+    const inviter = looks.get(row.invitedBy);
     return {
         workspaceName: row.workspaceName,
         workspaceSlug: row.workspaceSlug ?? null,
@@ -393,6 +401,7 @@ export async function previewInvitation(token: string): Promise<InvitationPrevie
         email: row.email,
         expiresAt: row.expiresAt.toISOString(),
         status: invitationStatus(row),
+        invitedBy: inviter && inviter.displayName !== inviter.email ? inviter.displayName : null,
     };
 }
 

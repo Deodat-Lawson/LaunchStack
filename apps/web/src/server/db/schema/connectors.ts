@@ -45,7 +45,16 @@ import { company, document, documentVersions } from "@launchstack/store/schema";
 import { users } from "./identity";
 
 /** Providers a workspace can connect. Route segments and DB values alike. */
-export const CONNECTOR_PROVIDERS = ["google-drive", "slack", "github", "gmail"] as const;
+export const CONNECTOR_PROVIDERS = [
+    "google-drive",
+    "slack",
+    "github",
+    "gmail",
+    // Brand's social accounts (Growth › Brand › Accounts): LinkedIn is an
+    // OAuth grant; Bluesky stores an app password where a token would go.
+    "linkedin",
+    "bluesky",
+] as const;
 export type ConnectorProvider = (typeof CONNECTOR_PROVIDERS)[number];
 
 export function isConnectorProvider(value: string): value is ConnectorProvider {

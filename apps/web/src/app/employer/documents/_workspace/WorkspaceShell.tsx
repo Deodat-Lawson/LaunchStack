@@ -1550,11 +1550,15 @@ export function WorkspaceShell() {
                 github: "github",
                 gmail: "gmail",
             };
+            // LinkedIn returns into Growth › Brand › Accounts (`feature=growth`
+            // above), so it has no Add-source tab to reopen.
             const label: Record<string, string> = {
                 "google-drive": "Google Drive",
                 slack: "Slack",
                 github: "GitHub",
                 gmail: "Gmail",
+                linkedin: "LinkedIn",
+                bluesky: "Bluesky",
             };
             const tab = tabByProvider[connectorParam];
             const name = label[connectorParam] ?? connectorParam;
@@ -1564,6 +1568,14 @@ export function WorkspaceShell() {
             }
             if (connectorResultParam === "connected") {
                 toast.success(`${name} connected`);
+            } else if (connectorResultParam === "no-channels") {
+                toast.warning(
+                    `${name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.`
+                );
+            } else if (connectorResultParam === "partial") {
+                toast.warning(
+                    `${name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.`
+                );
             } else if (connectorResultParam === "denied") {
                 toast.info(`${name} connection was cancelled`);
             } else {

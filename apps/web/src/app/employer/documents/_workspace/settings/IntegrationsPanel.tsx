@@ -26,6 +26,8 @@ const PROVIDER_LABELS: Record<string, string> = {
     slack: "Slack",
     github: "GitHub",
     gmail: "Gmail",
+    linkedin: "LinkedIn",
+    bluesky: "Bluesky",
 };
 
 interface ConnectorsOverview {
@@ -238,6 +240,15 @@ const RECONNECT_TAB: Record<string, string> = {
     github: "github",
 };
 
+/** Social accounts are connected from Growth › Brand › Accounts, not Add source. */
+const BRAND_ACCOUNTS_HREF = "/employer/documents?feature=growth&at=/brand/accounts";
+
+function reconnectHref(provider: string): string | null {
+    if (provider === "linkedin" || provider === "bluesky") return BRAND_ACCOUNTS_HREF;
+    const tab = RECONNECT_TAB[provider];
+    return tab ? `/employer/documents?add=1&tab=${tab}` : null;
+}
+
 export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const router = useRouter();
     const { data, loading, refresh } = useAgents();
@@ -329,7 +340,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     ) : (
                         connectors.data?.connections.map(row => {
                             const label = PROVIDER_LABELS[row.provider] ?? row.provider;
-                            const reconnectTab = RECONNECT_TAB[row.provider];
+                            const reconnectTo = reconnectHref(row.provider);
                             return (
                                 <ContextTarget
                                     key={row.id}
@@ -339,17 +350,14 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                         label: `Actions for ${label}`,
                                         data: row,
                                         items: () => [
-                                            ...(reconnectTab
+                                            ...(reconnectTo
                                                 ? [
                                                       {
                                                           type: "item" as const,
                                                           id: "reconnect",
                                                           label: "Reconnect…",
                                                           icon: "refresh" as const,
-                                                          onSelect: () =>
-                                                              router.push(
-                                                                  `/employer/documents?add=1&tab=${reconnectTab}`
-                                                              ),
+                                                          onSelect: () => router.push(reconnectTo),
                                                       },
                                                   ]
                                                 : []),

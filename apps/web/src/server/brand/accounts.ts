@@ -1,74 +1,216 @@
 /**
- * The Accounts screen's view of each network: whether this deployment can
- * publish there, under which identity when the credential says, the hard
- * limit Compose enforces, and what connecting takes. Presence only; the
- * credential itself never leaves the publish tool's config module.
+ * The Accounts screen's whole picture: which networks this deployment lets a
+ * workspace connect (and what the operator still has to do), the sign-ins
+ * the workspace made, and the channels they bring. Presence and identity
+ * only — no token or app password ever leaves the server.
  */
+import { and, asc, eq, inArray } from "drizzle-orm";
+
 import { platformLimit } from "@launchstack/pipelines/marketing/posts";
 import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
 import { describePublishConfig } from "@launchstack/tools/social-publish";
 
-export interface BrandAccount {
+import { env } from "~/env";
+import { db } from "~/server/db";
+import { connectorConnections, type ConnectorConnection } from "~/server/db/schema/connectors";
+import { users } from "~/server/db/schema/identity";
+import {
+    connectorCallbackPath,
+    isConnectorConfigured,
+    linkedInRequestedScopes,
+} from "~/server/services/connectors/config";
+
+import { linkedInGrantFeatures } from "./capabilities";
+import {
+    NETWORK_LABELS,
+    connectionProblem,
+    deploymentChannels,
+    listChannelRows,
+    toChannelView,
+    type BrandChannelView,
+} from "./channels";
+
+export const BRAND_CONNECTION_PROVIDERS = ["linkedin", "bluesky"] as const;
+export type BrandConnectionProvider = (typeof BRAND_CONNECTION_PROVIDERS)[number];
+
+export interface BrandNetworkView {
     platform: MarketingPlatform;
     label: string;
-    configured: boolean;
-    identity: string | null;
-    /** Hard character limit Compose enforces; null when the network has none that matters. */
-    limit: number | null;
-    /** What connecting takes, in order. */
-    requires: string[];
-    /** One line on cost and access. */
+    connect: "oauth" | "app-password" | "deployment";
+    available: boolean;
+    pages: boolean;
+    setup: string[];
     note: string;
+    limit: number | null;
 }
 
-const META: Record<MarketingPlatform, Pick<BrandAccount, "label" | "requires" | "note">> = {
-    linkedin: {
-        label: "LinkedIn",
-        requires: [
-            "A LinkedIn developer app owned by the company",
-            "Community Management API access (registered entity; the page's super admin verifies the app)",
-            "An access token in LINKEDIN_ACCESS_TOKEN",
-        ],
-        note: "Free to post. Access is reviewed by LinkedIn: a development tier first, the standard tier after a screencast review.",
-    },
-    x: {
-        label: "X",
-        requires: [
-            "An X developer account on pay-per-use",
-            "A bearer token in TWITTER_BEARER_TOKEN",
-        ],
-        note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. No free tier for new developers.",
-    },
-    bluesky: {
-        label: "Bluesky",
-        requires: [
-            "The account's handle in BLUESKY_HANDLE",
-            "An app password in BLUESKY_APP_PASSWORD",
-        ],
-        note: "Free, no review. Reading back is free too.",
-    },
-    reddit: {
-        label: "Reddit",
-        requires: [
-            "A Reddit script app (client id and secret)",
-            "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT",
-        ],
-        note: "Free for this volume. Posts go to the account's own profile; each subreddit has its own rules.",
-    },
-};
+export interface BrandConnectionView {
+    id: number;
+    platform: BrandConnectionProvider;
+    accountName: string | null;
+    status: "active" | "revoked";
+    error: string | null;
+    connectedAt: string;
+    connectedBy: string | null;
+    expiresAt: string | null;
+    refreshable: boolean;
+    scopes: string[];
+}
 
-/** The order Compose and Accounts list networks in: the free ones first. */
-const ORDER: MarketingPlatform[] = ["linkedin", "x", "bluesky", "reddit"];
+export interface BrandAccountsView {
+    networks: BrandNetworkView[];
+    connections: BrandConnectionView[];
+    channels: BrandChannelView[];
+    canManage: boolean;
+}
 
-export function listBrandAccounts(): BrandAccount[] {
+/** The order networks are listed in: the ones a workspace connects itself first. */
+const ORDER: MarketingPlatform[] = ["linkedin", "bluesky", "x", "reddit"];
+
+function redirectUrl(): string {
+    const base = env.server.APP_PUBLIC_URL ?? "<APP_PUBLIC_URL>";
+    return `${base.replace(/\/+$/, "")}${connectorCallbackPath("linkedin")}`;
+}
+
+export function listBrandNetworks(): BrandNetworkView[] {
     const config = describePublishConfig();
-    return ORDER.map(platform => ({
-        platform,
-        label: META[platform].label,
-        configured: config[platform].configured,
-        identity: config[platform].identity,
-        limit: platformLimit(platform),
-        requires: META[platform].requires,
-        note: META[platform].note,
-    }));
+    const secretsKey = Boolean(env.server.EMBEDDING_SECRETS_KEY);
+    const pages = linkedInGrantFeatures(linkedInRequestedScopes()).pages;
+    const networks: Record<MarketingPlatform, BrandNetworkView> = {
+        linkedin: {
+            platform: "linkedin",
+            label: "LinkedIn",
+            connect: "oauth",
+            available: isConnectorConfigured("linkedin"),
+            pages,
+            setup: [
+                "Create an app at developer.linkedin.com, associated with the company's LinkedIn Page",
+                "For Pages, analytics and comments: request the Community Management API on an app with no other products (registered company; a Page super admin verifies the app). For profiles only: add Share on LinkedIn and Sign In with LinkedIn using OpenID Connect",
+                `Add the redirect URL ${redirectUrl()} under the app's Auth tab`,
+                "Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET, and LINKEDIN_OAUTH_SCOPES to the scopes the Auth tab lists",
+                ...(secretsKey
+                    ? []
+                    : ["Set EMBEDDING_SECRETS_KEY so sign-ins are stored encrypted"]),
+            ],
+            note: pages
+                ? "Free to post. Pages, numbers and comments come with LinkedIn's Community Management API: 500 calls a day until LinkedIn's standard-tier review."
+                : "Free to post. This app covers members' own profiles; Pages need LinkedIn's Community Management API. Sign-ins last 60 days.",
+            limit: platformLimit("linkedin"),
+        },
+        bluesky: {
+            platform: "bluesky",
+            label: "Bluesky",
+            connect: "app-password",
+            available: secretsKey,
+            pages: false,
+            setup: secretsKey
+                ? []
+                : ["Set EMBEDDING_SECRETS_KEY so app passwords are stored encrypted"],
+            note: "Free, no review. Each workspace signs in with its own app password.",
+            limit: platformLimit("bluesky"),
+        },
+        x: {
+            platform: "x",
+            label: "X",
+            connect: "deployment",
+            available: config.x.configured,
+            pages: false,
+            setup: config.x.configured
+                ? []
+                : [
+                      "An X developer account on pay-per-use",
+                      "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
+                  ],
+            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator for the whole deployment.",
+            limit: platformLimit("x"),
+        },
+        reddit: {
+            platform: "reddit",
+            label: "Reddit",
+            connect: "deployment",
+            available: config.reddit.configured,
+            pages: false,
+            setup: config.reddit.configured
+                ? []
+                : [
+                      "A Reddit script app (client id and secret)",
+                      "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
+                  ],
+            note: "Free for this volume. Posts go to the account's own profile. Set by the operator for the whole deployment.",
+            limit: platformLimit("reddit"),
+        },
+    };
+    return ORDER.map(platform => {
+        const network = networks[platform];
+        return { ...network, setup: network.available ? [] : network.setup };
+    });
 }
+
+export async function listBrandConnections(companyId: bigint): Promise<ConnectorConnection[]> {
+    return db
+        .select()
+        .from(connectorConnections)
+        .where(
+            and(
+                eq(connectorConnections.companyId, companyId),
+                inArray(connectorConnections.provider, [...BRAND_CONNECTION_PROVIDERS])
+            )
+        )
+        .orderBy(asc(connectorConnections.createdAt));
+}
+
+/** Every channel a workspace can post to, its own first, then the deployment's. */
+export async function listBrandChannels(
+    companyId: bigint,
+    connections?: ConnectorConnection[]
+): Promise<BrandChannelView[]> {
+    const conns = connections ?? (await listBrandConnections(companyId));
+    const byId = new Map(conns.map(c => [c.id, c]));
+    const rows = await listChannelRows(companyId);
+    const own = rows.map(row =>
+        toChannelView(
+            row,
+            byId.get(row.connectionId),
+            platformLimit(row.platform as MarketingPlatform)
+        )
+    );
+    const ownPlatforms = new Set(rows.map(r => r.platform));
+    return [...own, ...deploymentChannels(ownPlatforms, platformLimit)];
+}
+
+export async function listBrandAccounts(
+    companyId: bigint,
+    canManage: boolean
+): Promise<BrandAccountsView> {
+    const connections = await listBrandConnections(companyId);
+    const grantors = connections
+        .map(c => c.grantedByUserId)
+        .filter((id): id is bigint => id !== null && id !== undefined);
+    const names = new Map<string, string>();
+    if (grantors.length > 0) {
+        const rows = await db
+            .select({ id: users.id, name: users.name })
+            .from(users)
+            .where(inArray(users.id, grantors.map(Number)));
+        for (const row of rows) names.set(String(row.id), row.name);
+    }
+    return {
+        networks: listBrandNetworks(),
+        connections: connections.map(c => ({
+            id: c.id,
+            platform: c.provider as BrandConnectionProvider,
+            accountName: c.providerAccountEmail ?? null,
+            status: connectionProblem(c) ? "revoked" : "active",
+            error: connectionProblem(c),
+            connectedAt: c.createdAt.toISOString(),
+            connectedBy: c.grantedByUserId ? (names.get(String(c.grantedByUserId)) ?? null) : null,
+            expiresAt: c.accessTokenExpiresAt?.toISOString() ?? null,
+            refreshable: Boolean(c.refreshTokenCiphertext),
+            scopes: c.scopes.split(/\s+/).filter(Boolean),
+        })),
+        channels: await listBrandChannels(companyId, connections),
+        canManage,
+    };
+}
+
+export { NETWORK_LABELS };

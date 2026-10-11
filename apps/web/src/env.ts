@@ -160,6 +160,23 @@ const serverSchema = z.object({
     // the deployment-global PAT fallback used by the repo explainer.
     GITHUB_OAUTH_CLIENT_ID: optionalString(),
     GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
+    // LinkedIn app client pair for Growth › Brand: a workspace signs in and
+    // posts as its members and the Pages they administer. Redirect URI to
+    // register: <APP_PUBLIC_URL>/api/connectors/linkedin/oauth/callback.
+    // LINKEDIN_OAUTH_SCOPES must list exactly the scopes the app's Auth tab
+    // shows (space-separated); unset means the self-serve set
+    // "openid profile email w_member_social" (profiles only, no Pages).
+    LINKEDIN_CLIENT_ID: optionalString(),
+    LINKEDIN_CLIENT_SECRET: optionalString(),
+    LINKEDIN_OAUTH_SCOPES: optionalString(),
+    // Overrides for LinkedIn's endpoints and API version. Only a dev
+    // stand-in (/dev/stand-ins/linkedin) or a version rotation needs them.
+    LINKEDIN_OAUTH_BASE_URL: optionalString(),
+    LINKEDIN_API_BASE_URL: optionalString(),
+    LINKEDIN_API_VERSION: optionalString(),
+    // Bluesky PDS and public AppView; default bsky.social / public.api.bsky.app.
+    BLUESKY_SERVICE_URL: optionalString(),
+    BLUESKY_APPVIEW_URL: optionalString(),
     // services/transcription (ADR-004) — Whisper transcription + yt-dlp
     // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
     // or when transcribing video-platform URLs.
@@ -498,6 +515,14 @@ function parseServerEnv() {
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
         GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+        LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
+        LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
+        LINKEDIN_OAUTH_SCOPES: process.env.LINKEDIN_OAUTH_SCOPES,
+        LINKEDIN_OAUTH_BASE_URL: process.env.LINKEDIN_OAUTH_BASE_URL,
+        LINKEDIN_API_BASE_URL: process.env.LINKEDIN_API_BASE_URL,
+        LINKEDIN_API_VERSION: process.env.LINKEDIN_API_VERSION,
+        BLUESKY_SERVICE_URL: process.env.BLUESKY_SERVICE_URL,
+        BLUESKY_APPVIEW_URL: process.env.BLUESKY_APPVIEW_URL,
         SIDECAR_URL: process.env.SIDECAR_URL,
         SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
         ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,

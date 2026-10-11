@@ -1,7 +1,13 @@
 /**
  * Shared bits for `/api/brand/*`: the workspace context and the error
- * mapping. BrandPostError carries its own status and code, which the shared
- * route handler already understands.
+ * mapping. Errors that carry their own status and code (BrandPostError,
+ * BrandConnectError, BrandMediaError, BrandCommentError) pass through the
+ * shared route handler as expected outcomes.
+ *
+ * Who may do what: any member composes, schedules, publishes and answers
+ * comments; connecting, disconnecting and switching channels speaks for the
+ * company on a network, so it takes `connectors.manage`, like every other
+ * workspace connection.
  */
 import { type NextResponse } from "next/server";
 
@@ -13,6 +19,8 @@ export { error, json };
 export interface BrandCtx {
     companyId: bigint;
     userId: string;
+    userPk: bigint;
+    canManage: boolean;
 }
 
 export async function brandContext(): Promise<
@@ -22,8 +30,30 @@ export async function brandContext(): Promise<
     if (!result.success) return { ok: false, response: result.response };
     return {
         ok: true,
-        ctx: { companyId: result.data.companyId, userId: result.data.authUserId },
+        ctx: {
+            companyId: result.data.companyId,
+            userId: result.data.authUserId,
+            userPk: result.data.userPk,
+            canManage: result.data.can("connectors.manage"),
+        },
     };
+}
+
+/** The context, or a 403 when the member may not manage the workspace's accounts. */
+export async function brandManageContext(): Promise<
+    { ok: true; ctx: BrandCtx } | { ok: false; response: NextResponse }
+> {
+    const auth = await brandContext();
+    if (!auth.ok) return auth;
+    if (!auth.ctx.canManage) {
+        return {
+            ok: false,
+            response: error("Only workspace admins can change connected accounts.", 403, {
+                code: "forbidden",
+            }),
+        };
+    }
+    return auth;
 }
 
 export function handleBrandError(scope: string, err: unknown): NextResponse {

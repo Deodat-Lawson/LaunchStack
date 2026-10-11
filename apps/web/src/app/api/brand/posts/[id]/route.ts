@@ -5,6 +5,8 @@ import { z } from "zod";
 
 import { deleteBrandPost, updateBrandPost } from "@launchstack/pipelines/marketing/posts";
 
+import { toPostViews } from "~/server/brand/post-views";
+
 import { brandContext, error, handleBrandError, json, readBody } from "../../_http";
 
 const PatchSchema = z.object({
@@ -32,7 +34,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             ...rest,
             ...(when !== undefined ? { scheduledAt: when } : {}),
         });
-        return json({ post });
+        const [view] = await toPostViews(auth.ctx.companyId, [post]);
+        return json({ post: view });
     } catch (err) {
         return handleBrandError("PATCH post", err);
     }

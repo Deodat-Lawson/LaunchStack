@@ -41,6 +41,7 @@ export interface BlueskyProfile {
     handle: string;
     displayName: string | null;
     avatarUrl: string | null;
+    followers: number | null;
 }
 
 export interface BlueskyPostRef {
@@ -75,6 +76,14 @@ const STUB = "bluesky client: not implemented yet";
 /** Sign in once and read the profile: proves the app password and names the account. */
 export async function verifyBlueskyCredentials(
     _creds: BlueskyCredentials,
+    _opts?: BlueskyOptions
+): Promise<BlueskyProfile> {
+    throw new Error(STUB);
+}
+
+/** A public profile from the AppView (no sign-in): name, avatar, followers. */
+export async function getBlueskyProfile(
+    _actor: string,
     _opts?: BlueskyOptions
 ): Promise<BlueskyProfile> {
     throw new Error(STUB);

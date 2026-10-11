@@ -14,6 +14,13 @@ import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
+import type { AccessSubject } from "~/server/workspace/item-access";
+import {
+    accessViewOf,
+    classifyFolders,
+    loadFolderAccessFacts,
+    type AccessView,
+} from "~/server/workspace/source-access";
 import {
     FOLDER_SEPARATOR,
     UNFILED_FOLDER,
@@ -51,6 +58,11 @@ export interface FolderRecord {
     restricted: boolean;
 }
 
+/** A folder as one person's rail sees it: who else can, and what they may do with it. */
+export interface VisibleFolderRecord extends FolderRecord {
+    access: AccessView;
+}
+
 /** Escape a literal for a LIKE pattern (Postgres escapes with a backslash by default). */
 export function escapeLikeLiteral(value: string): string {
     return value.replace(/[\\%_]/g, match => `\\${match}`);
@@ -84,7 +96,8 @@ function rewritePrefix(
     return sql<string>`${to} || substr(${column}, ${from.length + 1})`;
 }
 
-export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
+/** The rows behind the tree: persisted folders, document counts, restricted settings. */
+async function loadFolderTable(companyId: bigint) {
     const [rows, counts, restrictedRows] = await Promise.all([
         db
             .select({ id: category.id, name: category.name })
@@ -114,6 +127,18 @@ export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
         documentCounts.set(path, (documentCounts.get(path) ?? 0) + Number(row.count));
     }
     const restrictedIds = new Set(restrictedRows.map(row => Number(row.categoryId)));
+    // The id the access rules read for a path: the first row, as
+    // `loadFolderLineage` takes it (the table has no unique (company, name)).
+    const idByPath = new Map<string, number>();
+    for (const row of [...rows].sort((a, b) => Number(a.id) - Number(b.id))) {
+        const path = normalizeFolderPath(row.name);
+        if (!idByPath.has(path)) idByPath.set(path, Number(row.id));
+    }
+    return { persisted, documentCounts, restrictedIds, idByPath };
+}
+
+function toRecords(table: Awaited<ReturnType<typeof loadFolderTable>>): FolderRecord[] {
+    const { persisted, documentCounts, restrictedIds } = table;
     const restrictedPaths = [...persisted.entries()]
         .filter(([, id]) => restrictedIds.has(id))
         .map(([path]) => path);
@@ -128,18 +153,51 @@ export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
     }));
 }
 
+export async function listFolders(companyId: bigint): Promise<FolderRecord[]> {
+    return toRecords(await loadFolderTable(companyId));
+}
+
 /**
- * `listFolders`, minus every folder the caller may not see. Document counts
- * count what the caller can read, so a folder that is empty *for them* reads
- * as empty.
+ * `listFolders`, minus every folder the caller may not see. With `subject`,
+ * each folder also carries the caller's `access` (ADR-014): its audience
+ * (workspace, shared, private), whether it sets that itself or inherits it,
+ * and whether they may edit or manage it — worked out in memory from one
+ * read of the workspace's grants, not a lookup per folder.
  */
 export async function listVisibleFolders(
     companyId: bigint,
     scope: DocumentScope
-): Promise<FolderRecord[]> {
-    const all = await listFolders(companyId);
-    if (scope.kind === "everything") return all;
-    return all.filter(folder => scopeAllowsCategory(scope, folder.path));
+): Promise<FolderRecord[]>;
+export async function listVisibleFolders(
+    companyId: bigint,
+    scope: DocumentScope,
+    subject: AccessSubject
+): Promise<VisibleFolderRecord[]>;
+export async function listVisibleFolders(
+    companyId: bigint,
+    scope: DocumentScope,
+    subject?: AccessSubject
+): Promise<FolderRecord[] | VisibleFolderRecord[]> {
+    const table = await loadFolderTable(companyId);
+    const all = toRecords(table);
+    const visible =
+        scope.kind === "everything"
+            ? all
+            : all.filter(folder => scopeAllowsCategory(scope, folder.path));
+    if (!subject) return visible;
+    const facts = await loadFolderAccessFacts(companyId, {
+        idByPath: table.idByPath,
+        restrictedIds: table.restrictedIds,
+    });
+    const access = classifyFolders(
+        visible.map(folder => folder.path),
+        facts,
+        subject
+    );
+    return visible.map(folder => ({
+        ...folder,
+        access: accessViewOf(access.get(folder.path)!),
+    }));
 }
 
 async function existingPaths(companyId: bigint): Promise<Set<string>> {

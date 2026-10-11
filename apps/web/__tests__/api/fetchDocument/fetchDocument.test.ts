@@ -49,6 +49,18 @@ jest.mock("~/lib/authz/scope", () => ({
         mockScopedDocumentWhere(companyId, scope),
 }));
 
+// Who can see each document and who added it — ADR-014's rail sections. The
+// classification is pure and tested in source-access.test; here the route
+// only has to attach what it is handed, row by row.
+const mockSubject = { userPk: "7", role: "owner", groupIds: new Set<string>() };
+const mockDescribe = jest.fn();
+jest.mock("~/server/workspace/item-access", () => ({
+    accessSubject: () => Promise.resolve(mockSubject),
+}));
+jest.mock("~/server/workspace/source-access", () => ({
+    describeDocumentAccess: (...args: unknown[]) => mockDescribe(...args),
+}));
+
 import { POST } from "~/app/api/fetchDocument/route";
 import { db } from "~/server/db";
 
@@ -100,6 +112,38 @@ describe("POST /api/fetchDocument", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockScopedDocumentWhere.mockReturnValue(SCOPE_MARKER);
+        mockDescribe.mockResolvedValue({ access: new Map(), addedBy: new Map() });
+    });
+
+    it("says, per document, who can see it, what the caller may do, and who added it", async () => {
+        mockAuthenticated(BigInt(1));
+        mockDocumentQuery([docRow(1, { category: "Unfiled" }), docRow(2)]);
+        const privateToMe = {
+            audience: "private",
+            ownAudience: true,
+            principalCount: 1,
+            canEdit: true,
+            canManage: true,
+        };
+        mockDescribe.mockResolvedValue({
+            access: new Map([[1, privateToMe]]),
+            addedBy: new Map([[1, { authUserId: "test-user-123", name: "Ada" }]]),
+        });
+
+        const response = await POST(
+            new Request("http://localhost/api/fetchDocument", { method: "POST" })
+        );
+        const json = await response.json();
+
+        expect(mockDescribe).toHaveBeenCalledWith(BigInt(1), mockSubject, [
+            { id: 1, category: "Unfiled" },
+            { id: 2, category: "General" },
+        ]);
+        expect(json[0].access).toEqual(privateToMe);
+        expect(json[0].addedBy).toEqual({ authUserId: "test-user-123", name: "Ada" });
+        // A row the classifier had nothing for stays backward compatible.
+        expect(json[1].access).toBeNull();
+        expect(json[1].addedBy).toBeNull();
     });
 
     it("should successfully fetch documents for authenticated user", async () => {

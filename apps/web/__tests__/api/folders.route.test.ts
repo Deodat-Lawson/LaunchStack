@@ -28,7 +28,9 @@ jest.mock("~/server/folders", () => ({
 
 const mockCanEdit = jest.fn();
 const mockCanManage = jest.fn();
+const mockSubject = { userPk: "1", role: "employee", groupIds: new Set<string>() };
 jest.mock("~/server/workspace/item-access", () => ({
+    accessSubject: () => Promise.resolve(mockSubject),
     canEditFolderPath: (...args: unknown[]) => mockCanEdit(...args),
     canManageFolderPath: (...args: unknown[]) => mockCanManage(...args),
     folderAccess: jest.fn().mockResolvedValue({ audience: "workspace" }),
@@ -84,39 +86,41 @@ beforeEach(() => {
 });
 
 describe("/api/folders", () => {
-    it("lists folders for any verified member", async () => {
+    it("lists folders for any verified member, each with the caller's access", async () => {
         mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
             data: ctx("employee"),
         });
-        jest.mocked(listVisibleFolders).mockResolvedValue([
-            {
-                path: "Contracts",
-                documentCount: 2,
-                persisted: true,
-                categoryId: 7,
-                restricted: false,
+        const folder = {
+            path: "Contracts",
+            documentCount: 2,
+            persisted: true,
+            categoryId: 7,
+            restricted: false,
+            access: {
+                audience: "workspace" as const,
+                ownAudience: false,
+                governingPath: null,
+                principalCount: 0,
+                canEdit: true,
+                canManage: false,
             },
-        ]);
+        };
+        jest.mocked(listVisibleFolders).mockResolvedValue([folder]);
 
         const response = await GET(request("GET"));
 
         expect(response.status).toBe(200);
         await expect(response.json()).resolves.toEqual({
             success: true,
-            data: {
-                folders: [
-                    {
-                        path: "Contracts",
-                        documentCount: 2,
-                        persisted: true,
-                        categoryId: 7,
-                        restricted: false,
-                    },
-                ],
-            },
+            data: { folders: [folder] },
         });
-        expect(listVisibleFolders).toHaveBeenCalledWith(BigInt(42), { kind: "everything" });
+        // One subject (the caller's groups) for the whole list, not a read per folder.
+        expect(listVisibleFolders).toHaveBeenCalledWith(
+            BigInt(42),
+            { kind: "everything" },
+            mockSubject
+        );
     });
 
     it("refuses folder writes from someone who cannot add sources", async () => {

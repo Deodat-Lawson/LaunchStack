@@ -94,6 +94,8 @@ export interface AddSourceModalProps {
     folders: string[];
     /** Folders whose audience is limited to people with access — the note under the picker says so. */
     restrictedFolders?: string[];
+    /** Folders only the caller can open — a file saved there is theirs alone. */
+    privateFolders?: string[];
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
     /** Optional: persist a new folder name the user typed in the picker. */
@@ -199,6 +201,7 @@ export function AddSourceModal({
     defaultCategory,
     folders,
     restrictedFolders = [],
+    privateFolders = [],
     onUploaded,
     onCreateFolder,
     initialTab,
@@ -531,7 +534,7 @@ export function AddSourceModal({
                                 ) : (
                                     <Users className="size-3 shrink-0" aria-hidden />
                                 )}
-                                {isUnfiledFolder(folder)
+                                {isUnfiledFolder(folder) || privateFolders.includes(folder)
                                     ? "Only you will see it until you share it."
                                     : `Visible to everyone who can open ${folderLeafName(folder)}.`}
                             </p>

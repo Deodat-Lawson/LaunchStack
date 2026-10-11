@@ -105,6 +105,19 @@ describe("who will see it (ADR-014)", () => {
         await settleStatus();
     });
 
+    it("says a file saved in a folder only you can open stays yours", async () => {
+        mount({
+            defaultCategory: "Strategy",
+            initialTab: "paste",
+            restrictedFolders: ["Strategy"],
+            privateFolders: ["Strategy"],
+        });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Only you will see it until you share it."
+        );
+        await settleStatus();
+    });
+
     it("says a filed one goes to whoever can open the folder", async () => {
         mount({ defaultCategory: "Strategy", initialTab: "paste" });
         expect(screen.getByTestId("add-source-audience")).toHaveTextContent(

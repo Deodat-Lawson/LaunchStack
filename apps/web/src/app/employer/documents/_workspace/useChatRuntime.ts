@@ -76,6 +76,8 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
         agentKey: message.agent?.key ?? null,
         metadata: {
             forkedFromSessionId: message.forkedFromSessionId,
+            // The server keeps this only for a question it already attributed.
+            askedBy: message.askedBy,
             intent: message.intent,
             id: message.id,
             status: message.status === "streaming" ? undefined : message.status,

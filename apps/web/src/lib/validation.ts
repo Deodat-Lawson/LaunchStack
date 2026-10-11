@@ -925,6 +925,8 @@ export const SessionMessageSchema = z.object({
     metadata: z
         .object({
             forkedFromSessionId: z.string().max(128).optional(),
+            /** Kept only when it copies an asker the server already recorded. */
+            askedBy: z.string().max(256).optional(),
             intent: z.enum(["queued", "interrupt"]).optional(),
             id: z.string().max(128).optional(),
             status: z.enum(["complete", "stopped", "error"]).optional(),

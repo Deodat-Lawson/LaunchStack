@@ -9,7 +9,7 @@
 
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
 import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 import {
@@ -24,6 +24,7 @@ import {
     type WorkspaceSessionMessageRow,
     type WorkspaceSessionRow,
 } from "~/server/db/schema";
+import type { Executor } from "~/server/workspace/db-types";
 
 export interface SessionOwner {
     companyId: bigint;
@@ -99,16 +100,61 @@ function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
     };
 }
 
+const askerKey = (askedBy: string, text: string) => `${askedBy}\u0000${text}`;
+
 /**
- * What a client may store about a turn. `askedBy` names who asked a question
- * and only the server's fork sets it (ADR-014); taken from a client it would
- * let a chat's owner put words in a teammate's mouth for everyone reading it.
+ * What a client may store about each turn. `askedBy` names who asked a
+ * question, and the server's fork is what records it (ADR-014): taken from a
+ * client as-is it would let a chat's owner put words in a teammate's mouth for
+ * everyone reading. A client write keeps it only when it copies a question the
+ * caller already holds in one of their own chats, word for word and under the
+ * same asker — "Fork new chat from here" on a chat continued from a teammate's.
  */
-function clientMetadata(metadata: ChatTurnMetadata | undefined): ChatTurnMetadata | null {
-    if (!metadata) return null;
-    const rest = { ...metadata };
-    delete rest.askedBy;
-    return rest;
+async function clientMetadata(
+    executor: Executor,
+    owner: SessionOwner,
+    messages: readonly SessionMessageInput[]
+): Promise<(ChatTurnMetadata | null)[]> {
+    const claimed = messages.filter(
+        m => m.role === "user" && typeof m.metadata?.askedBy === "string"
+    );
+    const proven = new Set<string>();
+    if (claimed.length > 0) {
+        const rows = await executor
+            .select({
+                text: workspaceSessionMessages.text,
+                askedBy: sql<string>`${workspaceSessionMessages.metadata}->>'askedBy'`,
+            })
+            .from(workspaceSessionMessages)
+            .innerJoin(
+                workspaceSessions,
+                eq(workspaceSessions.id, workspaceSessionMessages.sessionId)
+            )
+            .where(
+                and(
+                    ownedBy(owner),
+                    eq(workspaceSessionMessages.role, "user"),
+                    inArray(workspaceSessionMessages.text, [
+                        ...new Set(claimed.map(m => clampText(m.text))),
+                    ]),
+                    isNotNull(sql`${workspaceSessionMessages.metadata}->>'askedBy'`)
+                )
+            );
+        for (const row of rows) proven.add(askerKey(row.askedBy, row.text));
+    }
+    return messages.map(message => {
+        if (!message.metadata) return null;
+        const metadata = { ...message.metadata };
+        const askedBy = metadata.askedBy;
+        if (
+            message.role !== "user" ||
+            typeof askedBy !== "string" ||
+            !proven.has(askerKey(askedBy, clampText(message.text)))
+        ) {
+            delete metadata.askedBy;
+        }
+        return metadata;
+    });
 }
 
 /** Trim to the storage cap. Truncating beats refusing to save the turn at all. */
@@ -162,6 +208,7 @@ export async function createSession(
     const now = new Date();
 
     return db.transaction(async tx => {
+        const metadata = await clientMetadata(tx, owner, messages);
         const [row] = await tx
             .insert(workspaceSessions)
             .values({
@@ -192,7 +239,7 @@ export async function createSession(
                     model: message.model ?? null,
                     tokens: message.tokens ?? null,
                     agentKey: message.agentKey ?? null,
-                    metadata: clientMetadata(message.metadata),
+                    metadata: metadata[index] ?? null,
                 }))
             );
         }
@@ -204,6 +251,7 @@ export async function createSession(
             continuation: input.continuation ?? null,
             messages: messages.map((message, index) => ({
                 ...message,
+                metadata: metadata[index] ?? undefined,
                 seq: index,
                 createdAt: iso(now),
             })),
@@ -273,6 +321,7 @@ export async function appendMessages(
             .for("update");
         if (!existing) return null;
 
+        const metadata = await clientMetadata(tx, owner, messages);
         await tx.insert(workspaceSessionMessages).values(
             messages.map((message, index) => ({
                 sessionId,
@@ -285,7 +334,7 @@ export async function appendMessages(
                 model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
-                metadata: clientMetadata(message.metadata),
+                metadata: metadata[index] ?? null,
             }))
         );
 

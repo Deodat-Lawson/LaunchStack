@@ -555,6 +555,44 @@ describeDb("shared chats (integration)", () => {
             expect(read?.messages.map(m => m.metadata?.askedBy)).toEqual([undefined, undefined]);
             expect(read?.messages[1]?.metadata?.id).toBe("s1");
         });
+
+        it("keeps the asker when you copy a question you already hold, and only then", async () => {
+            const bea = { companyId, userId: "auth_bea" };
+            // Bea's continued copy (above) holds Ada's question, attributed to Ada.
+            const copy = await createSession(bea, {
+                messages: [
+                    {
+                        role: "user",
+                        text: "What is the cap?",
+                        metadata: { id: "c0", askedBy: "auth_ada" },
+                    },
+                    {
+                        role: "user",
+                        text: "Ada never asked this",
+                        metadata: { id: "c1", askedBy: "auth_ada" },
+                    },
+                ],
+            });
+            expect(copy.messages.map(m => m.metadata?.askedBy)).toEqual(["auth_ada", undefined]);
+            const read = await readSession(ctx("bea"), copy.id);
+            expect(read?.messages.map(m => m.metadata?.askedBy)).toEqual(["auth_ada", undefined]);
+
+            // Cy holds no such question, so the same claim is dropped for him.
+            const cy = await createSession(
+                { companyId, userId: "auth_cy" },
+                {
+                    messages: [
+                        {
+                            role: "user",
+                            text: "What is the cap?",
+                            metadata: { id: "c2", askedBy: "auth_ada" },
+                        },
+                    ],
+                }
+            );
+            const cyRead = await readSession(ctx("cy"), cy.id);
+            expect(cyRead?.messages[0]?.metadata?.askedBy).toBeUndefined();
+        });
     });
 
     describe("organising History", () => {

@@ -2754,6 +2754,9 @@ export function WorkspaceShell() {
                         : undefined
                 }
                 restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
+                privateFolders={folders
+                    .filter(f => f.access?.audience === "private")
+                    .map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
                 }}

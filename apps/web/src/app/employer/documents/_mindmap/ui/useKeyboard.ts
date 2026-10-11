@@ -156,10 +156,11 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
             }
 
             if (state.presenting) {
-                // Presentation mode only listens for movement and exit.
-                if (key === "ArrowRight" || key === "ArrowDown" || key === " ") {
-                    e.preventDefault();
-                }
+                // Presentation mode only listens for movement and exit — and
+                // movement belongs to the Presenter and the page stepper, which
+                // claim a key (preventDefault) only when they actually move.
+                // Claiming it here, unconditionally, is what left → dead in
+                // Present: both of them skip a key that is already claimed.
                 return;
             }
 

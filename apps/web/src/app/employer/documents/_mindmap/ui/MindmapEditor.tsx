@@ -256,10 +256,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const doc = store.getState().doc;
             const index = doc.pages.findIndex(p => p.id === doc.activePageId);
             const next = doc.pages[index + delta];
-            if (!next) return;
+            if (!next) return false;
             setActivePage(store, next.id);
             // The new page has its own content; frame it before it is shown.
             requestAnimationFrame(() => frame(stageSize));
+            return true;
         },
         [stageSize, frame, store]
     );
@@ -268,12 +269,12 @@ export function MindmapEditor(props: MindmapEditorProps) {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
             if (!isActive() || e.defaultPrevented) return;
+            // Claim the key only when a page actually turned; on a one-page
+            // map there is nothing to turn, and the key is the Presenter's.
             if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
-                e.preventDefault();
-                stepPage(1);
+                if (stepPage(1)) e.preventDefault();
             } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
-                e.preventDefault();
-                stepPage(-1);
+                if (stepPage(-1)) e.preventDefault();
             }
         };
         window.addEventListener("keydown", onKey);

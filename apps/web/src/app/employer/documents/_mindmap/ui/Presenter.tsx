@@ -90,18 +90,23 @@ export function Presenter({
             // unfolds the map, so hiding the tab would lose the presentation.
             if (isActive && !isActive()) return;
             if (e.defaultPrevented) return;
-            if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
-                e.preventDefault();
-                go(step + 1);
-            }
-            if (e.key === "ArrowLeft" || e.key === "PageUp") {
-                e.preventDefault();
-                go(step - 1);
-            }
+            const forward = e.key === "ArrowRight" || e.key === " " || e.key === "PageDown";
+            const back = e.key === "ArrowLeft" || e.key === "PageUp";
+            if (!forward && !back) return;
+            const next = step + (forward ? 1 : -1);
+            // Past either end, leave the key unclaimed so the editor's page
+            // stepper can turn to the next page instead.
+            if (next < 0 || next > branches.length + 1) return;
+            e.preventDefault();
+            go(next);
         };
-        window.addEventListener("keydown", onKey);
-        return () => window.removeEventListener("keydown", onKey);
-    }, [go, step, isActive]);
+        // Capture phase, so the branch steps run before the editor's own
+        // window listeners whatever order they were registered in — this
+        // listener re-registers after every step, so in the bubble phase its
+        // place in the queue (and whether → worked) changed as you presented.
+        window.addEventListener("keydown", onKey, { capture: true });
+        return () => window.removeEventListener("keydown", onKey, { capture: true });
+    }, [go, step, isActive, branches.length]);
 
     const last = branches.length + 1;
     const label =

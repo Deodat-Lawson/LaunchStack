@@ -2,6 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
 import {
     FOLDER_VISIBILITIES,
@@ -101,6 +102,14 @@ const AttachmentPayloadSchema = z.object({
     kind: z.enum(["image", "text"]),
 });
 
+/** A selected passage as the chat endpoint receives it (`ChatPassagePayload`). */
+const ChatPassagePayloadSchema = z.object({
+    documentId: z.number().int().positive().optional(),
+    title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+    page: z.number().int().positive().optional(),
+    text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+});
+
 export const QuestionSchema = z
     .object({
         documentId: z.number().int().positive().optional(),
@@ -136,6 +145,12 @@ export const QuestionSchema = z
         // enforced separately by the route.
         attachments: z.array(AttachmentPayloadSchema).max(100).optional(),
         /**
+         * Passages the reader selected in a document and is asking about.
+         * They travel beside the question (which holds only what was typed);
+         * the route authorizes each `documentId` against the caller's scope.
+         */
+        passages: z.array(ChatPassagePayloadSchema).max(MAX_PASSAGES).optional(),
+        /**
          * Handle of the workspace agent answering this turn. Its standing
          * instructions, style, route and tool policy shape the answer; the
          * route resolves it against the caller's roster.
@@ -169,6 +184,7 @@ export const QuestionSchema = z
             embeddingIndexKey: data.embeddingIndexKey,
             thinkingMode: data.thinkingMode ?? false,
             attachments: data.attachments,
+            passages: data.passages,
             agentKey: data.agentKey ?? null,
         };
     });
@@ -891,6 +907,19 @@ export const ChatSendPayloadSchema = z.object({
         .max(4)
         .optional(),
     threadRefs: z.array(z.string().min(1).max(64)).max(20).optional(),
+    /** Selected passages (`ChatPassage`), so a saved or queued turn keeps them. */
+    passages: z
+        .array(
+            z.object({
+                sourceId: z.string().min(1).max(64),
+                documentId: z.number().int().positive().optional(),
+                title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+                page: z.number().int().positive().optional(),
+                text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+            })
+        )
+        .max(MAX_PASSAGES)
+        .optional(),
 });
 
 export const ChatQueueSchema = z

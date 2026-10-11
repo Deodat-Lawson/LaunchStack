@@ -1,5 +1,6 @@
 import {
     deriveSessionTitle,
+    tidySessionTitle,
     filterHistory,
     groupHistoryByRecency,
     relativeTime,
@@ -28,6 +29,24 @@ function entry(id: string, at: string, over: Partial<HistoryEntry> = {}): Histor
     };
 }
 
+describe("tidySessionTitle", () => {
+    it("drops the quote markers a pasted passage left in an old title", () => {
+        expect(
+            tidySessionTitle("> sentence. We discover that the retrieval unit > choice signifi…")
+        ).toBe("sentence. We discover that the retrieval unit choice signifi…");
+    });
+
+    it("tidies an old right-click title with the quote after a colon", () => {
+        expect(
+            tidySessionTitle("Explain this passage from “Report.pdf”: > Revenue rose > in Q3…")
+        ).toBe("Explain this passage from “Report.pdf”: Revenue rose in Q3…");
+    });
+
+    it("leaves an ordinary title alone, chevrons included", () => {
+        expect(tidySessionTitle("Is revenue > cost?")).toBe("Is revenue > cost?");
+    });
+});
+
 describe("deriveSessionTitle", () => {
     it("uses the opening question verbatim when it fits", () => {
         expect(deriveSessionTitle("What is the indemnity cap?")).toBe("What is the indemnity cap?");
@@ -50,6 +69,46 @@ describe("deriveSessionTitle", () => {
         // The boundary cut must not slice a word in half.
         expect(title.slice(0, -1).trim()).toBe(title.slice(0, -1));
         expect(title.startsWith("Summarise every indemnity")).toBe(true);
+    });
+
+    it("names a chat after the question, not a passage pasted above it", () => {
+        expect(
+            deriveSessionTitle(
+                "> sentence. We discover that the retrieval unit\n> choice significantly impacts\n\n[Quoted context](#launchstack-quoted-context)\n\nWhat is the novel retrieval unit?"
+            )
+        ).toBe("What is the novel retrieval unit?");
+    });
+
+    it("names a short question about a passage with the passage's opening words", () => {
+        expect(
+            deriveSessionTitle("Explain this passage.", [
+                { text: "Propositions are atomic expressions within text." },
+            ])
+        ).toBe("Explain this passage: “Propositions are atomic expressions within text.”");
+        expect(
+            deriveSessionTitle("What is the novel retrieval unit they propose?", [
+                { text: "ignored when the question says enough" },
+            ])
+        ).toBe("What is the novel retrieval unit they propose?");
+    });
+
+    it("names rich-editor context chips by their names, not their links", () => {
+        expect(
+            deriveSessionTitle(
+                "[Source: 2312.06648v3.pdf](#launchstack-source-d17) How large are the recall gains?"
+            )
+        ).toBe("2312.06648v3.pdf How large are the recall gains?");
+        expect(
+            deriveSessionTitle("[Source: Q3 \\[draft\\].pdf](#launchstack-source-d9) Totals?")
+        ).toBe("Q3 [draft].pdf Totals?");
+    });
+
+    it("falls back to the quoted words when nothing else was sent", () => {
+        expect(
+            deriveSessionTitle(
+                "> Propositions are atomic expressions\n\n[Quoted context](#launchstack-quoted-context)"
+            )
+        ).toBe("Propositions are atomic expressions");
     });
 
     it("still truncates when there is no word boundary to break on", () => {

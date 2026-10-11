@@ -14,6 +14,8 @@
  * what keeps the wire shape from drifting between them.
  */
 
+import { QUOTE_MARKER, withoutQuotedContext } from "~/lib/chat-passages";
+
 export const HISTORY_KINDS = [
     "chat",
     "trend-search",
@@ -126,8 +128,28 @@ export const SESSION_TITLE_MAX = 72;
  * title that costs a request is a title that sometimes never arrives, and the
  * first thing you asked is what you will scan the list for anyway.
  */
-export function deriveSessionTitle(firstMessage: string): string {
-    const flat = firstMessage.replace(/\s+/g, " ").trim();
+export function deriveSessionTitle(
+    firstMessage: string,
+    passages: readonly { text: string }[] = []
+): string {
+    // A question about a selected passage that says little on its own
+    // ("Explain this passage.") is named with the passage's opening words,
+    // or every such chat would share one title.
+    const passage = passages[0]?.text.replace(/\s+/g, " ").trim();
+    if (passage && firstMessage.trim().split(/\s+/).length <= 4)
+        return deriveSessionTitle(`${firstMessage.trim().replace(/[.:!?]+$/, "")}: “${passage}”`);
+    // A quoted passage is context, not the question: name the chat after what
+    // was asked. Only when nothing but the quote was sent does it name it.
+    const unquoted = withoutQuotedContext(firstMessage);
+    const flat = (unquoted.trim() ? unquoted : firstMessage.replace(/^[ \t]*>[ \t]?/gm, ""))
+        .replace(QUOTE_MARKER, "")
+        // Rich-editor context chips arrive as machine links; keep their names.
+        .replace(
+            /\[(?:Source|Conversation|Folder): ((?:\\.|[^\]\\\n]){1,300})\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\)/g,
+            (_link, name: string) => name.replace(/\\(.)/g, "$1")
+        )
+        .replace(/\s+/g, " ")
+        .trim();
     if (flat.length === 0) return "New chat";
     if (flat.length <= SESSION_TITLE_MAX) return flat;
     const cut = flat.slice(0, SESSION_TITLE_MAX);
@@ -136,6 +158,23 @@ export function deriveSessionTitle(firstMessage: string): string {
     // otherwise a long unbroken token would be truncated to almost nothing.
     const body = lastSpace > SESSION_TITLE_MAX * 0.6 ? cut.slice(0, lastSpace) : cut;
     return `${body.replace(/[\s,.;:!?-]+$/, "")}…`;
+}
+
+/**
+ * A title stored before passages travelled beside the question can start with
+ * the pasted quote's `>` markers ("> sentence. We discover … > choice …").
+ * It reads as the quoted words, without the markers; renaming replaces it.
+ */
+export function tidySessionTitle(title: string): string {
+    // "> quote…" (Ask AI) or "Explain this passage from “x”: > quote…" (the
+    // old right-click actions); a chevron mid-question is left alone.
+    if (!/^\s*>|:\s+>\s/.test(title)) return title;
+    return (
+        title
+            .replace(/(^|\s)>(?=\s|$)/g, "$1")
+            .replace(/\s+/g, " ")
+            .trim() || title
+    );
 }
 
 // ---------------------------------------------------------------------------

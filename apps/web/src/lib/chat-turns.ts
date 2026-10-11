@@ -1,3 +1,5 @@
+import { passagesAsText, type ChatPassage } from "~/lib/chat-passages";
+
 /** Persisted chat controls contain no provider credentials or executable instructions. */
 export interface ChatSendPayload {
     text: string;
@@ -21,6 +23,7 @@ export interface ChatSendPayload {
     followUp?: "queue" | "interrupt";
     modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
     threadRefs?: string[];
+    passages?: ChatPassage[];
 }
 
 export interface ChatSendResult {
@@ -45,9 +48,19 @@ export interface ChatQueueItem {
     send: ChatSendPayload;
 }
 
-/** Preserve recent complete context for ordinary and imported conversations alike. */
+/**
+ * Preserve recent complete context for ordinary and imported conversations alike.
+ *
+ * A user turn asked about selected passages carries them beside its text, so
+ * they are written back in here: a follow-up has to know what "this" was.
+ */
 export function conversationContext(
-    messages: { role: "user" | "assistant"; text: string; status?: string }[],
+    messages: {
+        role: "user" | "assistant";
+        text: string;
+        status?: string;
+        send?: { passages?: ChatPassage[] };
+    }[],
     imported?: string,
     maxChars = 60_000
 ): string | undefined {
@@ -55,7 +68,11 @@ export function conversationContext(
         imported,
         ...messages
             .filter(m => m.status !== "error")
-            .map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.text}`),
+            .map(m => {
+                const passages = m.role === "user" ? (m.send?.passages ?? []) : [];
+                const text = passages.length ? `${passagesAsText(passages)}\n\n${m.text}` : m.text;
+                return `${m.role === "user" ? "User" : "Assistant"}: ${text}`;
+            }),
     ]
         .filter(Boolean)
         .join("\n\n");

@@ -1,6 +1,7 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
+import type { ChatPassage } from "~/lib/chat-passages";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -249,6 +250,15 @@ export interface ComposerSend {
     followUp?: "queue" | "interrupt";
     modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
     threadRefs?: string[];
+    /** Passages selected in a document and asked about; never pasted into `text`. */
+    passages?: ChatPassage[];
+}
+
+/** What a document viewer hands over when the reader asks about a selection. */
+export interface PassageSelection {
+    text: string;
+    /** 1-based page, when the viewer knows it (PDFs do). */
+    page?: number;
 }
 
 export interface QueuedChatMessage {

@@ -59,10 +59,12 @@ const THREAD: ThreadMessage[] = [
 function Harness({
     onOpenCitation = jest.fn(),
     onNewChat = jest.fn(),
+    onEditMessage,
     thread = THREAD,
 }: {
     onOpenCitation?: (c: ThreadReference) => void;
     onNewChat?: () => void;
+    onEditMessage?: (index: number) => void;
     thread?: ThreadMessage[];
 }) {
     const [selected, setSelected] = useState<string[]>([]);
@@ -78,6 +80,7 @@ function Harness({
                 onOpenCitation={onOpenCitation}
                 onOpenAdd={jest.fn()}
                 onNewChat={onNewChat}
+                onEditMessage={onEditMessage}
                 openPalette={jest.fn()}
                 onStudioNavigate={jest.fn()}
             />
@@ -116,6 +119,50 @@ describe("AskPanel context menus", () => {
                 "How did recall change?"
             )
         );
+    });
+
+    it("edits a question about a passage without touching the chat, passage included", async () => {
+        const user = userEvent.setup();
+        const onEditMessage = jest.fn();
+        const passage = {
+            sourceId: "d1",
+            title: "Retrieval Plan",
+            page: 2,
+            text: "Recall improved after the reranker landed.",
+        };
+        render(
+            <Harness
+                onEditMessage={onEditMessage}
+                thread={[
+                    {
+                        role: "user",
+                        text: "Why did recall change?",
+                        send: {
+                            text: "Why did recall change?",
+                            refs: [],
+                            attachments: [],
+                            webSearch: true,
+                            thinking: true,
+                            agentKey: null,
+                            passages: [passage],
+                        },
+                    },
+                    { role: "assistant", text: "Because of the reranker." },
+                ]}
+            />
+        );
+        fireEvent.contextMenu(screen.getByText("Why did recall change?"));
+        await user.click(screen.getByTestId("context-menu-item-edit"));
+        await waitFor(() =>
+            expect(screen.getByPlaceholderText(/Ask about this passage/)).toHaveValue(
+                "Why did recall change?"
+            )
+        );
+        // The composer card carries the passage again; the chat is untouched.
+        expect(
+            screen.getAllByText("Recall improved after the reranker landed.").length
+        ).toBeGreaterThanOrEqual(2);
+        expect(onEditMessage).not.toHaveBeenCalled();
     });
 
     it("opens the cited passage and toggles the source's context from a citation", async () => {

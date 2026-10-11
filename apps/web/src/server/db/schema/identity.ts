@@ -73,14 +73,17 @@ export const users = pgTable(
 // ============================================================================
 // Join links
 // ============================================================================
-// A shareable code that mints a membership in the role it carries. Never an
-// owner. Expiry and use limits are checked at accept time.
+// A shareable link (`/join/<code>`) that mints a membership in the role it
+// carries. Never an owner. Expiry and use limits are checked at accept time.
+// Codes are 32 hex characters (128 bits) since links could admit people
+// straight in; the 8-character codes issued before that keep working until
+// revoked. Hex, so a code survives being retyped in either case.
 
 export const inviteCodes = pgTable(
     "invite_codes",
     {
         id: bigserial("id", { mode: "number" }).primaryKey(),
-        code: varchar("code", { length: 12 }).notNull().unique(),
+        code: varchar("code", { length: 64 }).notNull().unique(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -98,6 +101,12 @@ export const inviteCodes = pgTable(
         expiresAt: timestamp("expires_at", { withTimezone: true }),
         maxUses: integer("max_uses"),
         useCount: integer("use_count").default(0).notNull(),
+        /**
+         * Whether people who use the link wait on the pending list. The link
+         * itself is the admin's approval otherwise. Replaced the workspace-wide
+         * `workspace_settings.join_policy`, which the migration folded in here.
+         */
+        requiresApproval: boolean("requires_approval").default(false).notNull(),
     },
     table => ({
         codeIdx: index("invite_codes_code_idx").on(table.code),

@@ -16,7 +16,6 @@ import { eq } from "drizzle-orm";
 
 import { company } from "@launchstack/store/schema";
 import { workspaceSettings } from "~/server/db/schema";
-import { isJoinPolicy } from "~/lib/authz/permissions";
 import type { Executor } from "~/server/workspace/db-types";
 
 export interface SettingBinding {
@@ -28,7 +27,7 @@ export interface SettingBinding {
 async function upsertWorkspaceSettings(
     executor: Executor,
     companyId: bigint,
-    patch: { joinPolicy?: string; auditRetentionDays?: number | null }
+    patch: { auditRetentionDays: number | null }
 ): Promise<void> {
     const [existing] = await executor
         .select({ companyId: workspaceSettings.companyId })
@@ -46,20 +45,6 @@ async function upsertWorkspaceSettings(
 }
 
 export const SETTING_BINDINGS: Readonly<Record<string, SettingBinding>> = {
-    "workspace.joinPolicy": {
-        async read(executor, companyId) {
-            const [row] = await executor
-                .select({ joinPolicy: workspaceSettings.joinPolicy })
-                .from(workspaceSettings)
-                .where(eq(workspaceSettings.companyId, companyId))
-                .limit(1);
-            return row && isJoinPolicy(row.joinPolicy) ? row.joinPolicy : "approval";
-        },
-        async write(executor, companyId, value) {
-            const joinPolicy = isJoinPolicy(value) ? value : "approval";
-            await upsertWorkspaceSettings(executor, companyId, { joinPolicy });
-        },
-    },
     "workspace.auditRetentionDays": {
         async read(executor, companyId) {
             const [row] = await executor

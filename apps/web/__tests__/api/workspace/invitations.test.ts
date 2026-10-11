@@ -5,7 +5,9 @@ jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspacePermission: jest.fn(),
 }));
 jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
-jest.mock("~/server/auth/email", () => ({ sendAuthEmail: jest.fn().mockResolvedValue(undefined) }));
+jest.mock("~/server/auth/email", () => ({
+    sendAuthEmail: jest.fn().mockResolvedValue({ delivered: false }),
+}));
 
 import { company } from "@launchstack/store/schema";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -142,8 +144,11 @@ describe("POST /api/workspace/invitations", () => {
         const body = (await res.json()) as {
             invitation: { email: string; status: string; roleName: string; invitedBy: unknown };
             acceptUrl: string;
+            emailSent: boolean;
         };
         expect(body.acceptUrl).toMatch(/^http:\/\/localhost\/invite\/[A-Za-z0-9_-]{40,}$/);
+        // The console adapter delivers nothing, and the UI must say so.
+        expect(body.emailSent).toBe(false);
         expect(body.invitation).toMatchObject({
             email: "bob@example.com",
             status: "pending",
@@ -313,7 +318,46 @@ describe("GET /api/workspace/invitations/preview", () => {
             email: "bob@example.com",
             expiresAt: FUTURE.toISOString(),
             status: "pending",
+            invitedBy: null,
         });
+    });
+
+    it("names who sent it, by name only", async () => {
+        fakeDb.onSelect(workspaceInvitations, [
+            {
+                companyId: 5n,
+                email: "bob@example.com",
+                role: "member",
+                expiresAt: FUTURE,
+                acceptedAt: null,
+                revokedAt: null,
+                invitedBy: "user-a",
+                workspaceName: "Acme",
+                workspaceSlug: "acme",
+            },
+        ]);
+        fakeDb.onSelect(users, [
+            {
+                userPk: 1,
+                authUserId: "user-a",
+                name: "Ada Admin",
+                email: "ada@example.com",
+                displayName: null,
+                title: null,
+                pronouns: null,
+                timeZone: null,
+                bio: null,
+                workspaceDisplayName: null,
+                workspaceTitle: null,
+                membershipId: 9,
+            },
+        ]);
+
+        const res = await PREVIEW(
+            new Request("http://localhost/api/workspace/invitations/preview?token=tok")
+        );
+
+        await expect(res.json()).resolves.toMatchObject({ invitedBy: "Ada Admin" });
     });
 
     it("answers 404 for an unknown token", async () => {

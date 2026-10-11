@@ -41,10 +41,12 @@ describe("POST /api/signup/join (alias of join-links/accept)", () => {
                 expiresAt: null,
                 maxUses: null,
                 useCount: 4,
+                requiresApproval: true,
             },
         ]);
         fakeDb.onSelect(users, [{ id: 12 }]);
         fakeDb.onSelect(userCompanyMemberships, []);
+        fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
         const res = await POST(
             request({ name: "Amy", email: "amy@example.com", inviteCode: "abcd1234" })

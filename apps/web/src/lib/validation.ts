@@ -6,7 +6,6 @@ import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-h
 import {
     FOLDER_VISIBILITIES,
     GRANT_LEVELS,
-    JOIN_POLICIES,
     PERMISSIONS,
     PRINCIPAL_TYPES,
 } from "~/lib/authz/permissions";
@@ -354,7 +353,7 @@ export const EmployerCompanySignupSchema = z.object({
 export const JoinWithInviteSchema = z.object({
     name: z.string().trim().min(1, "Name is required").max(256),
     email: z.string().trim().toLowerCase().email("Valid email is required"),
-    inviteCode: z.string().trim().min(1, "Invite code is required").max(12),
+    inviteCode: z.string().trim().min(1, "Invite code is required").max(64),
 });
 
 // ============================================================================
@@ -400,10 +399,20 @@ export const CreateJoinLinkSchema = z.object({
     role: RoleSlugSchema,
     expiresInDays: z.number().int().min(1).max(365).nullable().optional(),
     maxUses: z.number().int().min(1).max(10_000).nullable().optional(),
+    requiresApproval: z.boolean().optional(),
 });
 
+export const UpdateJoinLinkSchema = z
+    .object({
+        role: RoleSlugSchema.optional(),
+        requiresApproval: z.boolean().optional(),
+    })
+    .refine(v => v.role !== undefined || v.requiresApproval !== undefined, {
+        message: "Nothing to change",
+    });
+
 export const AcceptJoinLinkSchema = z.object({
-    code: z.string().trim().min(1, "Join code is required").max(12),
+    code: z.string().trim().min(1, "Join code is required").max(64),
     name: z.string().trim().min(1).max(256).optional(),
     email: EmailSchema.optional(),
 });
@@ -467,10 +476,9 @@ export const DocumentAccessSchema = z.object({
 
 export const WorkspaceSettingsPatchSchema = z
     .object({
-        joinPolicy: z.enum(JOIN_POLICIES).optional(),
         auditRetentionDays: z.number().int().min(1).max(3650).nullable().optional(),
     })
-    .refine(v => v.joinPolicy !== undefined || v.auditRetentionDays !== undefined, {
+    .refine(v => v.auditRetentionDays !== undefined, {
         message: "Nothing to change",
     });
 

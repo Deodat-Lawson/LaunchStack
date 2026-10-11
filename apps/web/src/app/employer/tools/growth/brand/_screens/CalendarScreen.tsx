@@ -14,8 +14,9 @@ import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { plural } from "~/lib/tools/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { useResource } from "~/lib/tools/useResource";
-import { NetworkMark } from "../_components/NetworkMark";
-import { PostActions, PostStatus } from "../_components/PostRow";
+import { ChannelAvatar } from "../_components/ChannelAvatar";
+import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
+import { MediaMark, PostActions, PostMetricsInline, PostStatus } from "../_components/PostRow";
 import {
     addDays,
     dayNumber,
@@ -30,9 +31,14 @@ import {
 } from "../_lib/time";
 import { brandApi, type BrandPost } from "../api";
 
-/** A post on a day: time, network, first words. The status is a colour only where it is one. */
+/**
+ * A post on a day: time, the channel it goes out as, first words, an image
+ * mark, and once it is out its numbers. The status is a colour only where
+ * it is one.
+ */
 function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) {
     const at = postMoment(post);
+    const quiet = post.status === "cancelled" || post.status === "draft";
     return (
         <PostActions post={post} onChange={onChange}>
             <button
@@ -44,18 +50,33 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
                     post.status === "publishing" && "border-brand",
                     post.status === "published" && "border-success",
                     post.status === "failed" && "border-danger",
-                    (post.status === "draft" || post.status === "cancelled") && "border-line"
+                    quiet && "border-line"
                 )}
             >
-                <span className="flex items-center gap-1.5">
-                    <NetworkMark
-                        platform={post.platform}
-                        size={14}
-                        muted={post.status === "cancelled" || post.status === "draft"}
-                    />
-                    <span className="text-ink-2 font-mono text-[11px] tabular-nums">
+                <span className="flex min-w-0 items-center gap-1.5">
+                    {post.channel ? (
+                        <ChannelAvatar
+                            name={post.channel.name}
+                            kind={post.channel.kind}
+                            avatarUrl={post.channel.avatarUrl}
+                            size={14}
+                            muted={quiet}
+                        />
+                    ) : (
+                        <NetworkMark platform={post.platform} size={14} muted={quiet} />
+                    )}
+                    <span className="text-ink-2 shrink-0 font-mono text-[11px] tabular-nums">
                         {post.status === "draft" ? "draft" : timeOfDay(at)}
                     </span>
+                    <MediaMark count={post.media.length} className="ml-auto shrink-0" />
+                </span>
+                <span
+                    className={cn(
+                        "truncate text-[11.5px] leading-tight",
+                        quiet ? "text-ink-3" : "text-ink-2"
+                    )}
+                >
+                    {post.channel?.name ?? NETWORK_LABEL[post.platform]}
                 </span>
                 <span
                     className={cn(
@@ -65,6 +86,9 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
                 >
                     {post.body}
                 </span>
+                {post.status === "published" && post.metrics && (
+                    <PostMetricsInline metrics={post.metrics} className="text-[11px]" />
+                )}
                 {(post.status === "failed" || post.status === "publishing" || isDue(post)) && (
                     <PostStatus post={post} className="text-[11px]" />
                 )}

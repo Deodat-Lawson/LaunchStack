@@ -1,17 +1,20 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Eye, ImageIcon, MessageSquare, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { plural } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
 
-import { NETWORK_LABEL, NetworkMark } from "./NetworkMark";
+import { compact } from "../_lib/numbers";
 import { STATUS_WORD, dayAndMonth, isDue, postMoment, timeOfDay, toLocalInput } from "../_lib/time";
-import { brandApi, type BrandPost } from "../api";
+import { brandApi, type BrandPost, type BrandPostMetrics } from "../api";
+import { ChannelAvatar, ChannelLabel } from "./ChannelAvatar";
+import { NETWORK_LABEL, NetworkMark } from "./NetworkMark";
 
 /** Status as a dot and a word; semantic colour only where the status is one. */
 export function PostStatus({ post, className }: { post: BrandPost; className?: string }) {
@@ -32,7 +35,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
         >
             <span
                 className={cn(
-                    "size-[7px] rounded-full",
+                    "size-[7px] shrink-0 rounded-full",
                     post.status === "published" && "bg-success",
                     post.status === "publishing" &&
                         "bg-brand animate-pulse motion-reduce:animate-none",
@@ -43,6 +46,58 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                 )}
             />
             {word}
+        </span>
+    );
+}
+
+/** "2.1K · 64 · 9" with an icon per number and the words for a screen reader. */
+export function PostMetricsInline({
+    metrics,
+    className,
+}: {
+    metrics: BrandPostMetrics;
+    className?: string;
+}) {
+    const items = [
+        metrics.impressions !== null
+            ? { icon: Eye, n: metrics.impressions, word: "impression" }
+            : null,
+        { icon: ThumbsUp, n: metrics.reactions, word: "reaction" },
+        { icon: MessageSquare, n: metrics.comments, word: "comment" },
+    ].filter(Boolean) as Array<{ icon: typeof Eye; n: number; word: string }>;
+    return (
+        <span
+            className={cn(
+                "text-ink-3 inline-flex items-center gap-2 text-[11.5px] tabular-nums",
+                className
+            )}
+        >
+            {items.map(({ icon: Icon, n, word }) => (
+                <span
+                    key={word}
+                    className="inline-flex items-center gap-0.5"
+                    title={plural(n, word)}
+                >
+                    <Icon className="size-3" aria-hidden />
+                    <span aria-hidden>{compact(n)}</span>
+                    <span className="sr-only">{plural(n, word)}</span>
+                </span>
+            ))}
+        </span>
+    );
+}
+
+/** A small image mark when a post carries images, with the count past one. */
+export function MediaMark({ count, className }: { count: number; className?: string }) {
+    if (count === 0) return null;
+    return (
+        <span
+            className={cn("text-ink-3 inline-flex items-center gap-0.5 text-[11px]", className)}
+            title={plural(count, "image")}
+        >
+            <ImageIcon className="size-3" aria-hidden />
+            {count > 1 && <span className="tabular-nums">{count}</span>}
+            <span className="sr-only">{plural(count, "image")}</span>
         </span>
     );
 }
@@ -85,13 +140,16 @@ export function PostActions({
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>{children}</PopoverTrigger>
-            <PopoverContent align="start" className="w-[320px] p-3">
+            <PopoverContent align="start" className="w-[340px] p-3">
                 <div className="flex items-center gap-2">
-                    <NetworkMark platform={post.platform} size={18} />
-                    <span className="text-ink text-[13px] font-medium">
-                        {NETWORK_LABEL[post.platform]}
-                    </span>
-                    <PostStatus post={post} className="ml-auto" />
+                    <ChannelLabel
+                        channel={post.channel}
+                        platform={post.platform}
+                        size={22}
+                        network
+                        className="min-w-0 flex-1"
+                    />
+                    <PostStatus post={post} className="shrink-0" />
                 </div>
                 {post.title && (
                     <div className="text-ink mt-2 text-[13px] font-medium">{post.title}</div>
@@ -99,6 +157,19 @@ export function PostActions({
                 <p className="text-ink-2 mt-2 max-h-40 overflow-y-auto whitespace-pre-wrap text-[13px] leading-[1.45]">
                     {post.body}
                 </p>
+                {post.media.length > 0 && (
+                    <div className="mt-2 flex gap-1.5">
+                        {post.media.map(m => (
+                            // eslint-disable-next-line @next/next/no-img-element -- same-origin media the network serves back; next/image needs known sizes
+                            <img
+                                key={m.id}
+                                src={m.url}
+                                alt={m.alt ?? ""}
+                                className="border-line size-14 rounded-md border object-cover"
+                            />
+                        ))}
+                    </div>
+                )}
                 <div className="text-ink-3 mt-2 text-xs">
                     {post.status === "published" && post.publishedAt
                         ? `Went out ${dayAndMonth(new Date(post.publishedAt))} at ${timeOfDay(new Date(post.publishedAt))}`
@@ -107,6 +178,7 @@ export function PostActions({
                           : "No time set"}
                     {post.source?.kind === "campaign" ? " · from a campaign" : ""}
                 </div>
+                {post.metrics && <PostMetricsInline metrics={post.metrics} className="mt-1.5" />}
                 {post.error && <p className="text-danger mt-2 text-xs">{post.error}</p>}
 
                 {editable && (
@@ -184,8 +256,8 @@ export function PostActions({
                     {post.postUrl && (
                         <Button asChild size="sm" variant="outline" className="ml-auto">
                             <a href={post.postUrl} target="_blank" rel="noreferrer">
-                                Open
-                                <ExternalLink className="size-3.5" />
+                                Open on {NETWORK_LABEL[post.platform]}
+                                <ExternalLink className="size-3.5" aria-hidden />
                             </a>
                         </Button>
                     )}
@@ -195,34 +267,59 @@ export function PostActions({
     );
 }
 
-/** One post as a list row: when, where, what, status. Click for the actions. */
+/** One post as a list row: when, where, what, status (or its numbers once out). Click for the actions. */
 export function PostRow({ post, onChange }: { post: BrandPost; onChange: () => void }) {
     const at = postMoment(post);
+    const muted = post.status === "cancelled";
     return (
         <PostActions post={post} onChange={onChange}>
             <button
                 type="button"
-                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[92px_20px_minmax(0,1fr)_auto] grid w-full grid-cols-[150px_20px_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
+                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[72px_22px_minmax(0,1fr)_auto] grid w-full grid-cols-[164px_minmax(0,170px)_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
             >
                 <span className="text-ink-2 text-[13px] tabular-nums">
                     <span className="@max-md:hidden">{dayAndMonth(at)} · </span>
                     {timeOfDay(at)}
                 </span>
-                <NetworkMark
-                    platform={post.platform}
-                    size={18}
-                    muted={post.status === "cancelled"}
-                />
-                <span
-                    className={cn(
-                        "text-ink truncate text-[13px]",
-                        post.status === "cancelled" && "text-ink-3 line-through"
-                    )}
-                >
-                    {post.title ? `${post.title} — ` : ""}
-                    {post.body}
+                <span className="@max-md:hidden flex min-w-0 items-center">
+                    <ChannelLabel
+                        channel={post.channel}
+                        platform={post.platform}
+                        size={20}
+                        showKind={false}
+                        muted={muted}
+                    />
                 </span>
-                <PostStatus post={post} />
+                <span className="@max-md:inline-flex hidden">
+                    {post.channel ? (
+                        <ChannelAvatar
+                            name={post.channel.name}
+                            kind={post.channel.kind}
+                            avatarUrl={post.channel.avatarUrl}
+                            size={20}
+                            muted={muted}
+                        />
+                    ) : (
+                        <NetworkMark platform={post.platform} size={20} muted={muted} />
+                    )}
+                </span>
+                <span className="flex min-w-0 items-center gap-2">
+                    <span
+                        className={cn(
+                            "text-ink truncate text-[13px]",
+                            muted && "text-ink-3 line-through"
+                        )}
+                    >
+                        {post.title ? `${post.title} — ` : ""}
+                        {post.body}
+                    </span>
+                    <MediaMark count={post.media.length} className="shrink-0" />
+                </span>
+                {post.status === "published" && post.metrics ? (
+                    <PostMetricsInline metrics={post.metrics} />
+                ) : (
+                    <PostStatus post={post} />
+                )}
             </button>
         </PostActions>
     );

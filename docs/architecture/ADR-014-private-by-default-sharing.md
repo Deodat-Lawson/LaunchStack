@@ -38,10 +38,21 @@ How other products answer this (sources in the 2026-10-10 brief):
 - A **new file in a folder** inherits the folder. The uploader gets a
   `manage` grant on the document (no restriction), so they can share it on
   its own.
-- **Moving** a file that is private only to its mover into a folder drops its
-  own restriction, so it takes the folder's audience (Drive's rule). A file
-  with its own audience keeps it. Moving a file to Unfiled makes it private
-  to the mover unless it already has its own audience.
+- **Moving never widens who can see something by accident.** A folder or
+  file leaving the restricted folder it inherited its audience from takes
+  that audience with it, as its own. The exception follows Drive: when that
+  audience was only the mover and the item is filed into another folder (not
+  the top level, not Unfiled), it joins the destination's audience. A file
+  with its own audience keeps it, unless that audience is only the mover and
+  it is filed into a folder. A file sent to Unfiled with nothing restricting
+  it becomes private to the mover. (QA found that, without the carry, an
+  editor could publish an owner's files by moving a subfolder out.)
+- A folder that springs into being with an API upload (a path that did not
+  exist) gets the same defaults as one made by hand.
+- Every folder write — `/api/folders` and the legacy `/api/Categories` routes —
+  goes through `server/workspace/folder-actions.ts`. Folder names are paths
+  shared by the workspace: creating one already held by a folder you can't
+  see makes "Name (2)" instead of silently doing nothing.
 - Existing files and folders are untouched: what was workspace-wide stays
   workspace-wide.
 
@@ -147,7 +158,9 @@ parent's stays inside the parent and shows a badge.
   - **Groups**: members can create groups. The creator manages their group;
     `groups.manage` manages all groups.
   - **Activity**: who added, shared, moved, renamed or deleted what. Rows come
-    from `workspace_activity` and are filtered to what the reader can see now.
+    from `workspace_activity` and are filtered to what the reader can see now —
+    folders by id (a renamed or deleted private folder's old name never
+    shows), deleted items only to their actor unless they were workspace-wide.
 - **Inbox**: `workspace_notifications`, written in the same transaction as
   the grant. Sharing with a person, or with a group they belong to, notifies
   them. A bell in the rail header shows the unread count.

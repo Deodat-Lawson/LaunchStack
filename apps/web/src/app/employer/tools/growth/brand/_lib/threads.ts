@@ -43,8 +43,10 @@ function rootOf(comment: BrandComment, byId: Map<string, BrandComment>): BrandCo
     const seen = new Set<string>([current.id]);
     while (current.parentId) {
         const parent = byId.get(current.parentId);
-        // A parent we were not sent (filtered out, deleted) or a cycle: stop here.
-        if (!parent || seen.has(parent.id)) break;
+        // A parent we were not sent (filtered out, deleted): the chain starts here.
+        if (!parent) break;
+        // A cycle (bad data): the comment stands alone, so nothing is shown twice.
+        if (seen.has(parent.id)) return comment;
         seen.add(parent.id);
         current = parent;
     }

@@ -155,7 +155,7 @@ export function CalendarScreen() {
                     }
                     actions={
                         <>
-                            {due.length > 0 && (
+                            {due.length > 0 && res.data?.canPublish !== false && (
                                 <Button
                                     size="sm"
                                     variant="outline"

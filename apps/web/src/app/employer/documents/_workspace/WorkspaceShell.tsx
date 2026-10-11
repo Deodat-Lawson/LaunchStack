@@ -67,6 +67,7 @@ import { PaneLauncher } from "./PaneLauncher";
 import { useLayoutPersistence } from "./useLayoutPersistence";
 import * as sessionApi from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
+import { useSharedChatLive } from "./useSharedChatLive";
 import { StudioDrawer } from "./StudioDrawer";
 import { AccountMenu } from "./AccountMenu";
 import { CollapsedRail } from "./CollapsedRail";
@@ -640,7 +641,29 @@ export function WorkspaceShell() {
         refresh: refreshHistory,
         renameEntry: renameHistoryEntry,
         removeEntry: removeHistoryEntry,
+        markSeen: markHistorySeen,
     } = history;
+    /**
+     * How I reach each chat I've opened (ADR-014): my own, or someone else's
+     * shared with me to read. Learned from the read; a chat this tab created
+     * is mine and never appears here.
+     */
+    const [chatAccess, setChatAccess] = useState<
+        Record<string, sessionApi.SessionAccess & { hiddenCitations: number }>
+    >({});
+    const chatAccessRef = useRef(chatAccess);
+    chatAccessRef.current = chatAccess;
+    const historyEntriesRef = useRef(history.entries);
+    historyEntriesRef.current = history.entries;
+    /** Someone else's chat — read live, never written to from here. */
+    const isSharedWithMe = useCallback(
+        (id: string) =>
+            chatAccessRef.current[id]?.level === "view" ||
+            historyEntriesRef.current.some(
+                entry => entry.kind === "chat" && entry.refId === id && Boolean(entry.sharedBy)
+            ),
+        []
+    );
 
     useEffect(() => {
         sessionIdRef.current = sessionParam;
@@ -689,19 +712,29 @@ export function WorkspaceShell() {
         setComposerSeed(null);
         setEditingQueued(null);
         hydratedSession.current = sessionParam;
-        if (openChat(sessionParam)) return;
+        // Someone else's chat is read live (ADR-014): always fetch it, never
+        // reopen what this tab cached.
+        if (!isSharedWithMe(sessionParam) && openChat(sessionParam)) return;
         let cancelled = false;
         void (async () => {
             try {
                 const stored = await sessionApi.fetchSession(sessionParam);
                 if (cancelled) return;
                 if (!stored) {
-                    // Deleted here or in another tab. Drop the param rather
-                    // than sitting on a link to nothing.
+                    // Deleted here or in another tab, or no longer shared.
+                    // Drop the param rather than sitting on a link to nothing.
                     hydratedSession.current = null;
                     setSessionParam(null);
                     toast.error("That chat is no longer available");
                     return;
+                }
+                const access = stored.access;
+                if (access) {
+                    setChatAccess(prev => ({
+                        ...prev,
+                        [sessionParam]: { ...access, hiddenCitations: stored.hiddenCitations ?? 0 },
+                    }));
+                    if (access.level === "view") markHistorySeen(sessionParam);
                 }
                 openChat(sessionParam, stored);
                 setContinuation(stored.continuation ?? null);
@@ -715,7 +748,14 @@ export function WorkspaceShell() {
         return () => {
             cancelled = true;
         };
-    }, [sessionParam, setSessionParam, setActiveFeatureId, openChat]);
+    }, [
+        sessionParam,
+        setSessionParam,
+        setActiveFeatureId,
+        openChat,
+        isSharedWithMe,
+        markHistorySeen,
+    ]);
 
     const startNewChat = useCallback(() => {
         setComposerSeed(null);
@@ -762,6 +802,63 @@ export function WorkspaceShell() {
         },
         [removeHistoryEntry, refreshHistory, startNewChat]
     );
+
+    /**
+     * "Continue in a new chat" (ADR-014): the server copies a chat I can read
+     * into a private one of mine — citations already filtered to what I can
+     * open — and the composer moves to it.
+     */
+    const continueInNewChat = useCallback(
+        async (id: string) => {
+            try {
+                const fork = await sessionApi.forkSession(id);
+                void refreshHistory();
+                resumeSession(fork.id);
+                toast.success("Continued in a new chat", {
+                    description: "This copy is yours and private. The original is unchanged.",
+                });
+            } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Couldn't continue that chat");
+            }
+        },
+        [refreshHistory, resumeSession]
+    );
+
+    /** The open chat is someone else's: whose, so the panel can say so; undefined when it's mine. */
+    const openChatAccess = sessionParam ? chatAccess[sessionParam] : undefined;
+    const openChatSharer =
+        openChatAccess?.level === "view"
+            ? openChatAccess.ownerAuthUserId
+            : sessionParam
+              ? history.entries.find(entry => entry.kind === "chat" && entry.refId === sessionParam)
+                    ?.sharedBy
+              : undefined;
+    const readOnlyChatRef = useRef(false);
+    readOnlyChatRef.current = Boolean(openChatSharer);
+
+    useSharedChatLive({
+        sessionId: openChatSharer ? sessionParam : null,
+        shownCount: () => thread.length,
+        onFresh: (id, stored) => {
+            if (sessionIdRef.current !== id) return;
+            setChatAccess(prev =>
+                stored.access
+                    ? {
+                          ...prev,
+                          [id]: { ...stored.access, hiddenCitations: stored.hiddenCitations ?? 0 },
+                      }
+                    : prev
+            );
+            openChat(id, stored);
+            markHistorySeen(id);
+        },
+        onGone: id => {
+            if (sessionIdRef.current !== id) return;
+            toast.info("That chat is no longer shared with you");
+            startNewChat();
+            void refreshHistory();
+        },
+    });
 
     /**
      * Delete a pipeline run — a partner discovery, a trend search, a repo
@@ -1752,7 +1849,8 @@ export function WorkspaceShell() {
             label: "Ask again",
             icon: "retry",
             order: 10,
-            appliesTo: target => target.kind === "chat-message",
+            // Someone else's chat is read-only here; it is continued as a fork.
+            appliesTo: target => target.kind === "chat-message" && !readOnlyChatRef.current,
             disabled: () => (isSending ? "Wait for the current answer." : false),
             run: target => void askAgain((target.data as { index: number }).index),
         },
@@ -1762,7 +1860,8 @@ export function WorkspaceShell() {
             icon: "branch",
             order: 11,
             appliesTo: target =>
-                target.kind === "chat-message" || target.kind === "chat-user-message",
+                (target.kind === "chat-message" || target.kind === "chat-user-message") &&
+                !readOnlyChatRef.current,
             run: target => branchFrom((target.data as { index: number }).index),
         },
         {
@@ -1961,6 +2060,54 @@ export function WorkspaceShell() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
+    /** The History tab's props — one object for the docked rail and the drawer. */
+    const historyRail = useMemo(
+        () => ({
+            entries: history.entries,
+            loading: history.loading,
+            error: history.error,
+            degraded: history.degraded,
+            activeSessionId: sessionParam,
+            onNewChat: startNewChat,
+            onResumeSession: resumeSession,
+            onOpenRun: (entry: HistoryEntry) => {
+                if (entry.href) navigateStudio(entry.href);
+            },
+            onRenameSession: handleRenameSession,
+            onDeleteSession: handleDeleteSession,
+            onDeleteRun: handleDeleteRun,
+            onRefresh: () => void refreshHistory(),
+            onSetPinned: history.setPinned,
+            onSetArchived: history.setArchived,
+            onReorderPins: history.reorderPins,
+            onShareSession: (entry: HistoryEntry) =>
+                setAccessTarget({ kind: "chat", id: entry.refId, name: entry.title }),
+            onContinueSession: (entry: HistoryEntry) => void continueInNewChat(entry.refId),
+            archived: history.archived,
+            onArchivedOpenChange: history.setArchivedOpen,
+        }),
+        [
+            history.entries,
+            history.loading,
+            history.error,
+            history.degraded,
+            history.setPinned,
+            history.setArchived,
+            history.reorderPins,
+            history.archived,
+            history.setArchivedOpen,
+            sessionParam,
+            startNewChat,
+            resumeSession,
+            navigateStudio,
+            handleRenameSession,
+            handleDeleteSession,
+            handleDeleteRun,
+            refreshHistory,
+            continueInNewChat,
+        ]
+    );
+
     if (!isLoaded) return <LoadingPage label="Opening your workspace…" />;
     if (!isSignedIn) return <LoadingPage label="Opening your workspace…" />;
 
@@ -2074,22 +2221,7 @@ export function WorkspaceShell() {
                                 compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                             }
                             team={teamRail}
-                            history={{
-                                entries: history.entries,
-                                loading: history.loading,
-                                error: history.error,
-                                degraded: history.degraded,
-                                activeSessionId: sessionParam,
-                                onNewChat: startNewChat,
-                                onResumeSession: resumeSession,
-                                onOpenRun: entry => {
-                                    if (entry.href) navigateStudio(entry.href);
-                                },
-                                onRenameSession: handleRenameSession,
-                                onDeleteSession: handleDeleteSession,
-                                onDeleteRun: handleDeleteRun,
-                                onRefresh: () => void refreshHistory(),
-                            }}
+                            history={historyRail}
                         />
                     </SheetContent>
                 </Sheet>
@@ -2161,22 +2293,7 @@ export function WorkspaceShell() {
                             compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                         }
                         team={teamRail}
-                        history={{
-                            entries: history.entries,
-                            loading: history.loading,
-                            error: history.error,
-                            degraded: history.degraded,
-                            activeSessionId: sessionParam,
-                            onNewChat: startNewChat,
-                            onResumeSession: resumeSession,
-                            onOpenRun: entry => {
-                                if (entry.href) navigateStudio(entry.href);
-                            },
-                            onRenameSession: handleRenameSession,
-                            onDeleteSession: handleDeleteSession,
-                            onDeleteRun: handleDeleteRun,
-                            onRefresh: () => void refreshHistory(),
-                        }}
+                        history={historyRail}
                     />
                     <RailResizeHandle
                         width={railWidth.width}
@@ -2327,14 +2444,40 @@ export function WorkspaceShell() {
                                     onSendNow={id => void chatRuntime.sendNow(id)}
                                 />
                             }
-                            onRetryMessage={index => void askAgain(index)}
-                            onEditMessage={index => void editFromHere(index)}
+                            onRetryMessage={
+                                openChatSharer ? undefined : index => void askAgain(index)
+                            }
+                            onEditMessage={
+                                openChatSharer ? undefined : index => void editFromHere(index)
+                            }
                             onOpenParentChat={
                                 thread[0]?.forkedFromSessionId
                                     ? () => resumeSession(thread[0]!.forkedFromSessionId!)
                                     : undefined
                             }
-                            onForkMessage={branchFrom}
+                            onForkMessage={openChatSharer ? undefined : branchFrom}
+                            readOnly={
+                                openChatSharer && sessionParam
+                                    ? {
+                                          ownerAuthUserId: openChatSharer,
+                                          hiddenCitations: openChatAccess?.hiddenCitations ?? 0,
+                                          onContinue: () => continueInNewChat(sessionParam),
+                                      }
+                                    : undefined
+                            }
+                            onShare={
+                                sessionParam && !openChatSharer
+                                    ? () =>
+                                          setAccessTarget({
+                                              kind: "chat",
+                                              id: sessionParam,
+                                              name:
+                                                  history.entries.find(
+                                                      entry => entry.refId === sessionParam
+                                                  )?.title ?? "This chat",
+                                          })
+                                    : undefined
+                            }
                             onSaveMessage={index => {
                                 const message = thread[index];
                                 if (message) void saveAnswerAsNote(message.text);
@@ -2353,11 +2496,12 @@ export function WorkspaceShell() {
                                 });
                             }}
                             title={
-                                history.entries.find(entry => entry.refId === sessionParam)
-                                    ?.title ?? "New chat"
+                                [...history.entries, ...history.archived.entries].find(
+                                    entry => entry.refId === sessionParam
+                                )?.title ?? "New chat"
                             }
                             onRename={
-                                sessionParam
+                                sessionParam && !openChatSharer
                                     ? title => handleRenameSession(sessionParam, title)
                                     : undefined
                             }

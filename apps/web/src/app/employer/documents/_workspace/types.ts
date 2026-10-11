@@ -210,6 +210,11 @@ export interface ThreadMessage {
     /** Source IDs the user pinned for a user turn, or cited documents for an assistant turn. */
     refs?: string[];
     citations?: ThreadReference[];
+    /**
+     * Reading someone else's chat (ADR-014): citations the server removed
+     * because you can't open their source. Never stored.
+     */
+    hiddenCitations?: number;
     model?: string;
     /**
      * Total LLM tokens for the turn. Named for what it is: this used to be set

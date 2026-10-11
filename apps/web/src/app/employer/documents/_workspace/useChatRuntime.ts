@@ -526,33 +526,38 @@ export function useChatRuntime(input: {
         emit(context);
     }, [get, emit]);
 
+    /**
+     * Show a conversation. With no `stored`, only one this tab already holds.
+     * With `stored`, a fresh copy from the server — which replaces what this
+     * tab holds unless a reply is still streaming into it (a chat shared with
+     * you is read live, so reopening it must show where it went next).
+     */
     const open = useCallback(
         (id: string, stored?: sessions.StoredSession): boolean => {
             const existing = contexts.current.get(id);
-            if (existing) {
+            if (existing && (!stored || existing.busy)) {
                 keyRef.current = existing.key;
                 currentInput.current.sessionIdRef.current = id;
                 emit(existing);
                 return true;
             }
             if (!stored) return false;
+            if (existing) {
+                existing.messages = threadFromStored(stored);
+                existing.queue = {
+                    items: stored.queuedMessages ?? [],
+                    revision: stored.queueRevision ?? 0,
+                };
+                existing.continuation = stored.continuation ?? null;
+                keyRef.current = existing.key;
+                currentInput.current.sessionIdRef.current = id;
+                emit(existing);
+                return true;
+            }
             const context: Conversation = {
                 key: readIdentity(scopeKey).sessions[id] ?? id,
                 sessionId: id,
-                messages: (stored.messages ?? []).map(message => ({
-                    ...message.metadata,
-                    createdAt: message.createdAt,
-                    role: message.role,
-                    text: message.text,
-                    refs: message.refs,
-                    attachments: message.attachments as ThreadMessage["attachments"],
-                    citations: message.citations as ThreadMessage["citations"],
-                    model: message.model ?? undefined,
-                    tokens: message.tokens ?? undefined,
-                    agent: message.agentKey
-                        ? { key: message.agentKey, displayName: "", role: "", accent: null }
-                        : undefined,
-                })),
+                messages: threadFromStored(stored),
                 queue: { items: stored.queuedMessages ?? [], revision: stored.queueRevision ?? 0 },
                 busy: false,
                 held: Boolean(stored.queuedMessages?.length),
@@ -748,6 +753,25 @@ export function useChatRuntime(input: {
         rewind,
         retry,
     };
+}
+
+/** A stored transcript as the thread the panel renders. */
+function threadFromStored(stored: sessions.StoredSession): ThreadMessage[] {
+    return (stored.messages ?? []).map(message => ({
+        ...message.metadata,
+        createdAt: message.createdAt,
+        role: message.role,
+        text: message.text,
+        refs: message.refs,
+        attachments: message.attachments as ThreadMessage["attachments"],
+        citations: message.citations as ThreadMessage["citations"],
+        hiddenCitations: message.hiddenCitations,
+        model: message.model ?? undefined,
+        tokens: message.tokens ?? undefined,
+        agent: message.agentKey
+            ? { key: message.agentKey, displayName: "", role: "", accent: null }
+            : undefined,
+    }));
 }
 
 function applyResponse(

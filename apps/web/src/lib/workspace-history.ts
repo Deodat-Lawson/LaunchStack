@@ -230,6 +230,81 @@ export function relativeTime(iso: string, now: Date = new Date()): string {
 }
 
 // ---------------------------------------------------------------------------
+// Sections (ADR-014 §5)
+// ---------------------------------------------------------------------------
+
+export interface HistorySections {
+    /** Pinned chats — mine or shared with me — in this person's manual order. */
+    pinned: HistoryEntry[];
+    /** Other people's chats shared with me, not pinned, newest activity first. */
+    shared: HistoryEntry[];
+    /** Everything else — my chats and the workspace's runs — under date headings. */
+    recent: HistoryGroup[];
+}
+
+const newestFirst = (a: HistoryEntry, b: HistoryEntry) => Date.parse(b.at) - Date.parse(a.at);
+
+/** Manual order; a pin with no rank yet sorts after the ranked ones, newest first. */
+export function byPinOrder(a: HistoryEntry, b: HistoryEntry): number {
+    const ra = a.pinRank ?? Number.POSITIVE_INFINITY;
+    const rb = b.pinRank ?? Number.POSITIVE_INFINITY;
+    if (ra !== rb) return ra < rb ? -1 : 1;
+    return newestFirst(a, b);
+}
+
+/**
+ * The History rail as Codex lays it out: Pinned on top in manual order, then
+ * Shared with you, then recents by date. Each entry lands in exactly one
+ * section; a pinned shared chat is Pinned.
+ */
+export function sectionHistory(entries: HistoryEntry[], now: Date = new Date()): HistorySections {
+    const pinned = entries.filter(entry => entry.pinned).sort(byPinOrder);
+    const shared = entries.filter(entry => !entry.pinned && entry.sharedBy).sort(newestFirst);
+    const rest = entries.filter(entry => !entry.pinned && !entry.sharedBy);
+    return { pinned, shared, recent: groupHistoryByRecency(rest, now) };
+}
+
+/**
+ * Move `id` to `toIndex` in a pinned order (clamped). Returns a new array, or
+ * the same one when nothing moves, so callers can skip a pointless save.
+ */
+export function movePin(order: readonly string[], id: string, toIndex: number): readonly string[] {
+    const from = order.indexOf(id);
+    if (from < 0) return order;
+    const to = Math.max(0, Math.min(order.length - 1, toIndex));
+    if (to === from) return order;
+    const next = order.filter(other => other !== id);
+    next.splice(to, 0, id);
+    return next;
+}
+
+/**
+ * Drop `id` just before (or after) `targetId` — what a drag onto a pinned row
+ * means. Same array back when the drop changes nothing.
+ */
+export function placePin(
+    order: readonly string[],
+    id: string,
+    targetId: string,
+    after: boolean
+): readonly string[] {
+    if (id === targetId || !order.includes(id) || !order.includes(targetId)) return order;
+    const next = order.filter(other => other !== id);
+    next.splice(next.indexOf(targetId) + (after ? 1 : 0), 0, id);
+    return next.every((other, index) => other === order[index]) ? order : next;
+}
+
+/** Restate a pinned order as ranks 0..n-1 on the entries it names. */
+export function applyPinOrder(entries: HistoryEntry[], order: readonly string[]): HistoryEntry[] {
+    const rank = new Map(order.map((refId, index) => [refId, index]));
+    return entries.map(entry =>
+        entry.kind === "chat" && entry.pinned && rank.has(entry.refId)
+            ? { ...entry, pinRank: rank.get(entry.refId)! }
+            : entry
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Filtering
 // ---------------------------------------------------------------------------
 

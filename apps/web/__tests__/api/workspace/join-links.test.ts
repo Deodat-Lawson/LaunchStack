@@ -94,7 +94,8 @@ describe("POST /api/workspace/join-links/accept", () => {
             redirectTo: "/employer/pending-approval",
             alreadyMember: false,
         });
-        expect(res.cookies.get("pdr_active_company")?.value).toBe("5");
+        // Still waiting there, so their active workspace stays put.
+        expect(res.cookies.get("pdr_active_company")).toBeUndefined();
         expect(fakeDb.insertedInto(userCompanyMemberships)).toEqual([
             { userId: 1000n, companyId: 5n, role: "member", status: "pending" },
         ]);
@@ -236,7 +237,7 @@ describe("POST /api/workspace/join-links", () => {
                 targetType: "join_link",
                 detail: expect.objectContaining({
                     // Only a prefix: audit readers may not all hold the link.
-                    code: inserted?.code?.slice(0, 6),
+                    code: String(inserted?.code).slice(0, 6),
                     role: "viewer",
                     maxUses: 10,
                 }),

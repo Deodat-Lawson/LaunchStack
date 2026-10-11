@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link2, Mail } from "lucide-react";
+import { ChevronDown, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
@@ -10,6 +10,7 @@ import { buildInvitationMenuItems } from "./peopleContextMenu";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
@@ -19,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
+import { Switch } from "~/components/ui/switch";
 import {
     Table,
     TableBody,
@@ -28,16 +30,26 @@ import {
     TableRow,
 } from "~/components/ui/table";
 import { INVITABLE_BUILTIN_ROLES, ROLE_LABELS, type Permission } from "~/lib/authz/permissions";
+import { cn } from "~/lib/utils";
 
 import {
     errorMessage,
     peopleApi,
     type Group,
     type Invitation,
+    type InvitationSent,
     type JoinLink,
-    type Role,
 } from "./api";
-import { plural, relativeTime, untilTime } from "./format";
+import { relativeTime, untilTime } from "./format";
+import {
+    defaultRole,
+    InviteLinkCard,
+    isOpenEnded,
+    joinLinkState,
+    joinLinkTerms,
+    pickInviteLink,
+    type RoleOption,
+} from "./InviteLinkCard";
 import {
     ConfirmDialog,
     CopyButton,
@@ -51,8 +63,6 @@ import {
 interface InvitationsTabProps {
     can: (permission: Permission | undefined) => boolean;
 }
-
-type RoleOption = Pick<Role, "slug" | "name" | "assignable">;
 
 const FALLBACK_ROLES: RoleOption[] = INVITABLE_BUILTIN_ROLES.map(slug => ({
     slug,
@@ -143,6 +153,37 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
         void load();
     }, [canInvite, load]);
 
+    // Link changes land locally from the server's answer at once, then the
+    // list is re-read so a link another admin changed shows up too.
+    const reloadLinks = useCallback(() => {
+        peopleApi.joinLinks
+            .list()
+            .then(res => setLinks(res.links))
+            .catch(() => undefined);
+    }, []);
+
+    const saveLink = useCallback(
+        (link: JoinLink, replaces?: number) => {
+            setLinks(prev =>
+                prev.some(l => l.id === link.id)
+                    ? prev.map(l => (l.id === link.id ? link : l))
+                    : [link, ...prev.filter(l => l.id !== replaces)]
+            );
+            reloadLinks();
+        },
+        [reloadLinks]
+    );
+
+    const removeLink = useCallback(
+        (id: number) => {
+            setLinks(prev => prev.filter(l => l.id !== id));
+            reloadLinks();
+        },
+        [reloadLinks]
+    );
+
+    const { primary, others } = useMemo(() => pickInviteLink(links), [links]);
+
     // Owner is never handed out by invitation or link — ownership is transferred.
     const assignable = useMemo(
         () => roles.filter(r => r.assignable && r.slug !== "owner"),
@@ -167,10 +208,18 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
         <div className="flex flex-col gap-6">
             <TabIntro
                 title="Invitations"
-                description="Invite one person by email, or create a join link anyone can use. Both hand out a role you choose. Invitations expire; links can be capped or revoked."
+                description="Share one invite link to bring people in, or invite someone by email. Both hand out a role you choose. Invitations expire; links can be reset or turned off."
             />
 
             {error && <ErrorNote message={error} onRetry={() => void load()} />}
+
+            <InviteLinkCard
+                link={primary}
+                roles={assignable}
+                loading={loading}
+                onSaved={saveLink}
+                onRemoved={removeLink}
+            />
 
             <InviteForm
                 roles={assignable}
@@ -191,11 +240,12 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
                 )}
             </Panel>
 
-            <JoinLinks
-                links={links}
+            <MoreLinks
+                links={others}
                 roles={assignable}
                 loading={loading}
-                onChanged={() => void load()}
+                onSaved={saveLink}
+                onRemoved={removeLink}
             />
         </div>
     );
@@ -219,9 +269,7 @@ function InviteForm({
     const [groupIds, setGroupIds] = useState<number[]>([]);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [result, setResult] = useState<{ invitation: Invitation; acceptUrl: string } | null>(
-        null
-    );
+    const [result, setResult] = useState<InvitationSent | null>(null);
 
     // Default to the first assignable role once roles arrive — Member usually.
     useEffect(() => {
@@ -254,7 +302,11 @@ function InviteForm({
             onCreated(res.invitation);
             setEmail("");
             setGroupIds([]);
-            toast.success(`Invitation sent to ${trimmed}`);
+            toast.success(
+                res.emailSent
+                    ? `Invitation emailed to ${trimmed}`
+                    : "Invitation created — copy the link to send it"
+            );
         } catch (err) {
             setError(errorMessage(err, "The invitation wasn't sent."));
         } finally {
@@ -349,32 +401,75 @@ function InviteForm({
                 </div>
             </form>
 
-            {result && (
-                <div className="bg-success-soft mt-4 rounded-[10px] px-4 py-3">
-                    <div className="text-success text-[13px] font-semibold">
-                        Invitation sent to {result.invitation.email}
-                    </div>
-                    <p className="text-ink-2 m-0 mt-1 text-[12.5px] leading-relaxed">
-                        The link was also emailed. Self-hosted instances may not send mail, so share
-                        it directly to be safe — it expires {untilTime(result.invitation.expiresAt)}
-                        .
-                    </p>
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <Input
-                            readOnly
-                            value={result.acceptUrl}
-                            aria-label="Invitation link"
-                            className="bg-panel min-w-0 flex-1 font-mono text-xs"
-                            onFocus={e => e.currentTarget.select()}
-                        />
-                        <CopyButton value={result.acceptUrl} label="Copy link" />
-                        <Button variant="ghost" size="sm" onClick={() => setResult(null)}>
-                            Done
-                        </Button>
-                    </div>
-                </div>
-            )}
+            {result && <SentNotice sent={result} className="mt-4" onDone={() => setResult(null)} />}
         </Panel>
+    );
+}
+
+/**
+ * What happened to an invitation just created or resent. Says plainly when no
+ * email went out — the server has no mail provider — so the admin knows the
+ * link is theirs to send.
+ */
+function SentNotice({
+    sent,
+    renewed = false,
+    className,
+    onDone,
+}: {
+    sent: InvitationSent;
+    /** A resend: the token is new and the earlier link no longer works. */
+    renewed?: boolean;
+    className?: string;
+    onDone: () => void;
+}) {
+    const { invitation, acceptUrl, emailSent } = sent;
+    const expires = `It expires ${untilTime(invitation.expiresAt)}.`;
+    const earlier = renewed ? " The earlier link no longer works." : "";
+    return (
+        <div
+            role="status"
+            className={cn(
+                "rounded-[10px] px-4 py-3",
+                emailSent ? "bg-success-soft" : "bg-warn-soft",
+                className
+            )}
+        >
+            <div
+                className={cn(
+                    "text-[13px] font-semibold",
+                    emailSent ? "text-success" : "text-warn"
+                )}
+            >
+                {emailSent
+                    ? `Invitation emailed to ${invitation.email}.`
+                    : "Email isn't set up on this server, so nothing was sent."}
+            </div>
+            <p className="text-ink-2 m-0 mt-1 whitespace-normal text-[12.5px] leading-relaxed">
+                {emailSent
+                    ? `You can also share the link yourself. ${expires}${earlier}`
+                    : `Copy this link and send it to ${invitation.email} yourself. ${expires}${earlier}`}
+            </p>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Input
+                    readOnly
+                    value={acceptUrl}
+                    aria-label={`Invitation link for ${invitation.email}`}
+                    className="bg-panel min-w-0 flex-1 font-mono text-xs"
+                    onFocus={e => e.currentTarget.select()}
+                />
+                <div className="flex items-center gap-2">
+                    <CopyButton
+                        value={acceptUrl}
+                        label="Copy link"
+                        variant={emailSent ? "outline" : "default"}
+                    />
+                    <Button variant="ghost" size="sm" onClick={onDone}>
+                        Done
+                    </Button>
+                </div>
+            </div>
+        </div>
     );
 }
 
@@ -393,14 +488,18 @@ function InvitationList({
     const [revoking, setRevoking] = useState<Invitation | null>(null);
     const [revokeBusy, setRevokeBusy] = useState(false);
     const [revokeError, setRevokeError] = useState<string | null>(null);
-    const [resent, setResent] = useState<{ id: number; acceptUrl: string } | null>(null);
+    const [resent, setResent] = useState<InvitationSent | null>(null);
 
     const resend = async (invitation: Invitation) => {
         setBusyId(invitation.id);
         try {
             const res = await peopleApi.invitations.resend(invitation.id);
-            setResent({ id: invitation.id, acceptUrl: res.acceptUrl });
-            toast.success(`Invitation resent to ${invitation.email}`);
+            setResent(res);
+            toast.success(
+                res.emailSent
+                    ? `Invitation resent to ${invitation.email}`
+                    : "New invitation link ready — copy it to send it"
+            );
             onChanged();
         } catch (err) {
             toast.error(errorMessage(err, "The invitation wasn't resent."));
@@ -517,32 +616,14 @@ function InvitationList({
                                             )}
                                         </TableCell>
                                     </InvitationRow>
-                                    {resent?.id === inv.id && (
-                                        <TableRow className="bg-success-soft/60 hover:bg-success-soft/60">
-                                            <TableCell colSpan={6}>
-                                                <div className="flex flex-wrap items-center gap-2">
-                                                    <span className="text-ink-2 text-[12.5px]">
-                                                        New link (also emailed):
-                                                    </span>
-                                                    <Input
-                                                        readOnly
-                                                        value={resent.acceptUrl}
-                                                        aria-label="Invitation link"
-                                                        className="bg-panel min-w-0 flex-1 font-mono text-xs"
-                                                        onFocus={e => e.currentTarget.select()}
-                                                    />
-                                                    <CopyButton
-                                                        value={resent.acceptUrl}
-                                                        label="Copy link"
-                                                    />
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => setResent(null)}
-                                                    >
-                                                        Done
-                                                    </Button>
-                                                </div>
+                                    {resent?.invitation.id === inv.id && (
+                                        <TableRow className="hover:bg-transparent">
+                                            <TableCell colSpan={6} className="whitespace-normal">
+                                                <SentNotice
+                                                    sent={resent}
+                                                    renewed
+                                                    onDone={() => setResent(null)}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -582,33 +663,43 @@ function InvitationStatus({ status }: { status: Invitation["status"] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Join links
+// More links — every active link except the invite link above
 // ---------------------------------------------------------------------------
 
-function JoinLinks({
+function MoreLinks({
     links,
     roles,
     loading,
-    onChanged,
+    onSaved,
+    onRemoved,
 }: {
     links: JoinLink[];
     roles: RoleOption[];
     loading: boolean;
-    onChanged: () => void;
+    onSaved: (link: JoinLink, replaces?: number) => void;
+    onRemoved: (id: number) => void;
 }) {
+    // Folded away until there is something in it; the reader's choice wins.
+    const [openChoice, setOpenChoice] = useState<boolean | null>(null);
+    const open = openChoice ?? links.length > 0;
+
     const [role, setRole] = useState("");
     const [expiresInDays, setExpiresInDays] = useState("");
     const [maxUses, setMaxUses] = useState("");
+    const [requiresApproval, setRequiresApproval] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [revoking, setRevoking] = useState<JoinLink | null>(null);
-    const [revokeBusy, setRevokeBusy] = useState(false);
-    const [revokeError, setRevokeError] = useState<string | null>(null);
+    const [pending, setPending] = useState<{ link: JoinLink; action: "reset" | "revoke" } | null>(
+        null
+    );
+    const [pendingOpen, setPendingOpen] = useState(false);
+    const [pendingBusy, setPendingBusy] = useState(false);
+    const [pendingError, setPendingError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!role && roles.length > 0) {
-            const member = roles.find(r => r.slug === "member");
-            setRole((member ?? roles[0]!).slug);
+        if (!role) {
+            const fallback = defaultRole(roles);
+            if (fallback) setRole(fallback);
         }
     }, [roles, role]);
 
@@ -638,11 +729,22 @@ function JoinLinks({
         setBusy(true);
         setError(null);
         try {
-            await peopleApi.joinLinks.create({ role, expiresInDays: days, maxUses: uses });
-            toast.success("Join link created");
+            const res = await peopleApi.joinLinks.create({
+                role,
+                expiresInDays: days,
+                maxUses: uses,
+                requiresApproval,
+            });
+            onSaved(res.link);
+            // An open-ended link becomes the one the card at the top shows.
+            toast.success(
+                isOpenEnded(res.link)
+                    ? "Link created — it's the invite link at the top now"
+                    : "Link created"
+            );
             setExpiresInDays("");
             setMaxUses("");
-            onChanged();
+            setRequiresApproval(false);
         } catch (err) {
             setError(errorMessage(err, "The link wasn't created."));
         } finally {
@@ -650,201 +752,217 @@ function JoinLinks({
         }
     };
 
-    const revoke = async () => {
-        if (!revoking) return;
-        setRevokeBusy(true);
-        setRevokeError(null);
+    const ask = (link: JoinLink, action: "reset" | "revoke") => {
+        setPendingError(null);
+        setPending({ link, action });
+        setPendingOpen(true);
+    };
+
+    const confirmPending = async () => {
+        if (!pending) return;
+        const { link, action } = pending;
+        setPendingBusy(true);
+        setPendingError(null);
         try {
-            await peopleApi.joinLinks.revoke(revoking.id);
-            toast.success("Join link revoked");
-            setRevoking(null);
-            onChanged();
+            if (action === "reset") {
+                const res = await peopleApi.joinLinks.reset(link.id);
+                onSaved(res.link, link.id);
+                toast.success("Link reset — the old one no longer works");
+            } else {
+                await peopleApi.joinLinks.revoke(link.id);
+                onRemoved(link.id);
+                toast.success("Join link revoked");
+            }
+            setPendingOpen(false);
         } catch (err) {
-            setRevokeError(errorMessage(err, "The link wasn't revoked."));
+            setPendingError(
+                errorMessage(
+                    err,
+                    action === "reset" ? "The link wasn't reset." : "The link wasn't revoked."
+                )
+            );
         } finally {
-            setRevokeBusy(false);
+            setPendingBusy(false);
         }
     };
 
-    const sorted = useMemo(
-        () =>
-            [...links].sort(
-                (a, b) =>
-                    Number(b.isActive) - Number(a.isActive) ||
-                    b.createdAt.localeCompare(a.createdAt)
-            ),
-        [links]
-    );
-
     return (
-        <div>
-            <div className="mb-3 flex items-center gap-2">
-                <Link2 className="text-ink-3 h-4 w-4" />
-                <h3 className="text-ink m-0 text-sm font-semibold">Join links</h3>
-                <span className="text-ink-3 text-[12.5px]">
-                    Anyone with the link can ask to join. Whether they wait for approval is a
-                    workspace setting.
+        <Collapsible open={open} onOpenChange={setOpenChoice}>
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+                <CollapsibleTrigger asChild>
+                    <Button variant="ghost" size="sm" className="-ml-2 self-start">
+                        <ChevronDown
+                            className={cn("transition-transform", !open && "-rotate-90")}
+                        />
+                        More links
+                        {links.length > 0 && <Badge variant="secondary">{links.length}</Badge>}
+                    </Button>
+                </CollapsibleTrigger>
+                <span className="text-ink-3 text-[12.5px] leading-relaxed">
+                    Extra links with their own role, expiry or use cap. Each link decides whether
+                    people join straight in or wait for approval.
                 </span>
             </div>
 
-            <Panel className="p-5">
-                <form onSubmit={e => void create(e)} className="flex flex-col gap-4">
-                    <div className="grid gap-4 sm:grid-cols-3">
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="link-role">Role</Label>
-                            <Select value={role} onValueChange={setRole} disabled={busy}>
-                                <SelectTrigger id="link-role" aria-label="Role the link hands out">
-                                    <SelectValue placeholder="Choose a role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {roles.map(r => (
-                                        <SelectItem key={r.slug} value={r.slug}>
-                                            {r.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+            <CollapsibleContent>
+                <Panel className="p-5">
+                    <form onSubmit={e => void create(e)} className="flex flex-col gap-4">
+                        <div className="grid gap-4 sm:grid-cols-3">
+                            <div className="flex flex-col gap-1.5">
+                                <Label htmlFor="link-role">Role</Label>
+                                <Select value={role} onValueChange={setRole} disabled={busy}>
+                                    <SelectTrigger
+                                        id="link-role"
+                                        aria-label="Role the link hands out"
+                                    >
+                                        <SelectValue placeholder="Choose a role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {roles.map(r => (
+                                            <SelectItem key={r.slug} value={r.slug}>
+                                                {r.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                                <Label htmlFor="link-expires">Expires in (days)</Label>
+                                <Input
+                                    id="link-expires"
+                                    inputMode="numeric"
+                                    placeholder="Never"
+                                    value={expiresInDays}
+                                    onChange={e => setExpiresInDays(e.target.value)}
+                                    disabled={busy}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                                <Label htmlFor="link-max">Max uses</Label>
+                                <Input
+                                    id="link-max"
+                                    inputMode="numeric"
+                                    placeholder="Unlimited"
+                                    value={maxUses}
+                                    onChange={e => setMaxUses(e.target.value)}
+                                    disabled={busy}
+                                />
+                            </div>
                         </div>
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="link-expires">Expires in (days)</Label>
-                            <Input
-                                id="link-expires"
-                                inputMode="numeric"
-                                placeholder="Never"
-                                value={expiresInDays}
-                                onChange={e => setExpiresInDays(e.target.value)}
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                id="link-approval"
+                                checked={requiresApproval}
+                                onCheckedChange={setRequiresApproval}
                                 disabled={busy}
                             />
+                            <Label htmlFor="link-approval" className="text-ink-2 text-[13px]">
+                                Require approval
+                            </Label>
                         </div>
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="link-max">Max uses</Label>
-                            <Input
-                                id="link-max"
-                                inputMode="numeric"
-                                placeholder="Unlimited"
-                                value={maxUses}
-                                onChange={e => setMaxUses(e.target.value)}
-                                disabled={busy}
-                            />
+                        {error && <ErrorNote message={error} />}
+                        <div>
+                            <Button type="submit" variant="outline" disabled={busy}>
+                                {busy ? "Creating…" : "Create link"}
+                            </Button>
                         </div>
-                    </div>
-                    {error && <ErrorNote message={error} />}
-                    <div>
-                        <Button type="submit" variant="outline" disabled={busy}>
-                            {busy ? "Creating…" : "Create join link"}
-                        </Button>
-                    </div>
-                </form>
-            </Panel>
+                    </form>
+                </Panel>
 
-            <Panel className="mt-3">
-                {loading ? (
-                    <LoadingNote label="Loading join links…" />
-                ) : sorted.length === 0 ? (
-                    <EmptyState
-                        title="No join links"
-                        body="Create one above to let people join without an individual invitation."
-                    />
-                ) : (
-                    <div className="overflow-x-auto">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-panel-2/50">
-                                    <TableHead>Code</TableHead>
-                                    <TableHead>Role</TableHead>
-                                    <TableHead>Uses</TableHead>
-                                    <TableHead>Expires</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">
-                                        <span className="sr-only">Actions</span>
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {sorted.map(link => {
-                                    const expired =
-                                        link.expiresAt !== null &&
-                                        new Date(link.expiresAt).getTime() < Date.now();
-                                    const usedUp =
-                                        link.maxUses !== null && link.useCount >= link.maxUses;
-                                    const live = link.isActive && !expired && !usedUp;
-                                    return (
-                                        <TableRow
-                                            key={link.id}
-                                            className={live ? undefined : "opacity-60"}
+                <Panel className="mt-3">
+                    {loading ? (
+                        <LoadingNote label="Loading links…" />
+                    ) : links.length === 0 ? (
+                        <EmptyState
+                            title="No other links"
+                            body="The invite link above is the only one. Create another here when a group needs its own role, an expiry or a cap."
+                        />
+                    ) : (
+                        <ul className="divide-line m-0 list-none divide-y p-0">
+                            {links.map(link => {
+                                const state = joinLinkState(link);
+                                return (
+                                    <li
+                                        key={link.id}
+                                        className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-4"
+                                    >
+                                        <div
+                                            className={cn(
+                                                "min-w-0 flex-1",
+                                                state !== "live" && "opacity-60"
+                                            )}
                                         >
-                                            <TableCell className="text-ink font-mono text-[12.5px]">
-                                                {link.code}
-                                            </TableCell>
-                                            <TableCell className="text-ink-2">
-                                                {link.roleName}
-                                            </TableCell>
-                                            <TableCell className="text-ink-2 whitespace-nowrap text-sm">
-                                                {link.maxUses !== null
-                                                    ? `${link.useCount} of ${link.maxUses}`
-                                                    : plural(link.useCount, "use")}
-                                            </TableCell>
-                                            <TableCell className="text-ink-3 whitespace-nowrap text-sm">
-                                                {untilTime(link.expiresAt)}
-                                            </TableCell>
-                                            <TableCell>
-                                                {!link.isActive ? (
-                                                    <Badge variant="secondary">Revoked</Badge>
-                                                ) : expired ? (
-                                                    <Badge variant="secondary">Expired</Badge>
-                                                ) : usedUp ? (
-                                                    <Badge variant="secondary">Used up</Badge>
-                                                ) : (
-                                                    <Badge variant="success">Active</Badge>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <span className="text-ink text-sm font-medium">
+                                                    {link.roleName}
+                                                </span>
+                                                {link.requiresApproval && (
+                                                    <Badge variant="warn">Needs approval</Badge>
                                                 )}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-1">
-                                                    <CopyButton
-                                                        value={link.url}
-                                                        label="Copy URL"
-                                                        variant="ghost"
-                                                    />
-                                                    <CopyButton
-                                                        value={link.code}
-                                                        label="Copy code"
-                                                        variant="ghost"
-                                                    />
-                                                    {link.isActive && (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="text-danger hover:text-danger"
-                                                            onClick={() => {
-                                                                setRevokeError(null);
-                                                                setRevoking(link);
-                                                            }}
-                                                        >
-                                                            Revoke
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </div>
-                )}
-            </Panel>
+                                                {state !== "live" && (
+                                                    <Badge variant="secondary">
+                                                        {state === "expired"
+                                                            ? "Expired"
+                                                            : "Used up"}
+                                                    </Badge>
+                                                )}
+                                            </div>
+                                            <div
+                                                className="text-ink-3 mt-0.5 truncate font-mono text-xs"
+                                                title={link.url}
+                                            >
+                                                {link.url}
+                                            </div>
+                                            <div className="text-ink-3 mt-0.5 text-[12.5px]">
+                                                {joinLinkTerms(link)}
+                                            </div>
+                                        </div>
+                                        <div className="-ml-2 flex flex-wrap gap-1 sm:ml-0 sm:justify-end">
+                                            <CopyButton
+                                                value={link.url}
+                                                label="Copy link"
+                                                variant="ghost"
+                                            />
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => ask(link, "reset")}
+                                            >
+                                                Reset
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-danger hover:text-danger"
+                                                onClick={() => ask(link, "revoke")}
+                                            >
+                                                Revoke
+                                            </Button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )}
+                </Panel>
+            </CollapsibleContent>
 
             <ConfirmDialog
-                open={revoking !== null}
-                title="Revoke this join link?"
-                body="Anyone who has the link can no longer use it. People who already joined keep their membership."
-                confirmLabel="Revoke link"
-                danger
-                busy={revokeBusy}
-                error={revokeError}
-                onConfirm={() => void revoke()}
-                onClose={() => setRevoking(null)}
+                open={pendingOpen}
+                title={pending?.action === "reset" ? "Reset this link?" : "Revoke this link?"}
+                body={
+                    pending?.action === "reset"
+                        ? "The current link stops working right away and a new one with the same terms replaces it. People who already joined keep their access."
+                        : "Anyone who has the link can no longer use it. People who already joined keep their access."
+                }
+                confirmLabel={pending?.action === "reset" ? "Reset link" : "Revoke link"}
+                busyLabel={pending?.action === "reset" ? "Resetting…" : "Revoking…"}
+                danger={pending?.action !== "reset"}
+                busy={pendingBusy}
+                error={pendingError}
+                onConfirm={() => void confirmPending()}
+                onClose={() => setPendingOpen(false)}
             />
-        </div>
+        </Collapsible>
     );
 }

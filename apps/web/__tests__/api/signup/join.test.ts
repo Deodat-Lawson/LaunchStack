@@ -64,7 +64,8 @@ describe("POST /api/signup/join (alias of join-links/accept)", () => {
         expect(fakeDb.insertedInto(userCompanyMemberships)).toEqual([
             { userId: 12n, companyId: 9n, role: "member", status: "pending" },
         ]);
-        expect(res.cookies.get("pdr_active_company")?.value).toBe("9");
+        // Still waiting on approval there, so their active workspace stays put.
+        expect(res.cookies.get("pdr_active_company")).toBeUndefined();
     });
 
     it("answers 401 without a session", async () => {

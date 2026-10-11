@@ -4,12 +4,14 @@ import {
     AtSign,
     Building2,
     CalendarDays,
+    ChartColumn,
     Database,
     Handshake,
     History,
     House,
     LayoutDashboard,
     Megaphone,
+    MessagesSquare,
     SquarePen,
     Target,
     Users,
@@ -26,9 +28,11 @@ import { SegmentSwitcher } from "./_components/SegmentSwitcher";
 import { useGrowthPaths } from "./_lib/paths";
 import { GROWTH_HOME, GROWTH_ROOTS, growthScreenFor, type GrowthScreen } from "./_lib/screens";
 import { AccountsScreen } from "./brand/_screens/AccountsScreen";
+import { AnalyticsScreen } from "./brand/_screens/AnalyticsScreen";
 import { CalendarScreen } from "./brand/_screens/CalendarScreen";
 import { CampaignsScreen } from "./brand/_screens/CampaignsScreen";
 import { ComposeScreen } from "./brand/_screens/ComposeScreen";
+import { EngagementScreen } from "./brand/_screens/EngagementScreen";
 import { OverviewScreen } from "./brand/_screens/OverviewScreen";
 import { RunSheet } from "./prospects/_components/RunSheet";
 import { ProspectsProvider, useProspects } from "./prospects/_lib/context";
@@ -103,6 +107,8 @@ function useGrowthGroups(): ToolNavGroup[] {
                 { to: paths.brand(""), label: "Overview", icon: LayoutDashboard, exact: true },
                 { to: paths.brand("/compose"), label: "Compose", icon: SquarePen },
                 { to: paths.brand("/calendar"), label: "Calendar", icon: CalendarDays },
+                { to: paths.brand("/analytics"), label: "Analytics", icon: ChartColumn },
+                { to: paths.brand("/engagement"), label: "Engagement", icon: MessagesSquare },
                 { to: paths.brand("/campaigns"), label: "Campaigns", icon: Megaphone },
                 { to: paths.brand("/accounts"), label: "Accounts", icon: AtSign },
             ],
@@ -162,6 +168,10 @@ function GrowthScreenView({ screen }: { screen: GrowthScreen }) {
             return <ComposeScreen />;
         case "brand-calendar":
             return <CalendarScreen />;
+        case "brand-analytics":
+            return <AnalyticsScreen />;
+        case "brand-engagement":
+            return <EngagementScreen />;
         case "brand-campaigns":
             return <CampaignsScreen />;
         case "brand-accounts":

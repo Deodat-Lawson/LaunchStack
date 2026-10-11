@@ -214,8 +214,6 @@ import { PATCH as patchProfileFact } from "~/app/api/company/profile/facts/route
 import { PATCH as patchProfileSource } from "~/app/api/company/profile/sources/[documentId]/route";
 import { POST as repoExplainer } from "~/app/api/repo-explainer/route";
 import { GET as uploadBootstrap } from "~/app/api/employer/upload/bootstrap/route";
-import { DELETE as deleteDocument } from "~/app/api/deleteDocument/route";
-import { DELETE as batchDelete } from "~/app/api/documents/batchDelete/route";
 import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[versionId]/route";
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";

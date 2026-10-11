@@ -661,6 +661,11 @@ export interface SourceRailProps {
     workspaceName?: string | null;
     /** The signed-in person's auth id: their own files read "Added by you". */
     selfAuthId?: string | null;
+    /**
+     * The library is still loading: draw no sections yet, so the rail never
+     * flashes "Files you add start here" over a library that has files.
+     */
+    loading?: boolean;
 }
 
 /** Which part of the rail is showing. Persisted, so a habit survives a reload. */
@@ -879,7 +884,10 @@ function RailSectionBlock({
         >
             <h3 className="text-ink-3 flex items-center gap-1.5 px-2.5 pb-0.5 text-[11px] font-medium">
                 <span>{label}</span>
-                <span className="mono text-ink-4 text-[10px]">{section.count}</span>
+                {/* Files in the section; a section of empty folders shows none rather than "0". */}
+                {section.count > 0 && (
+                    <span className="mono text-ink-4 text-[10px]">{section.count}</span>
+                )}
             </h3>
             {empty ? (
                 showEmptyHint && (
@@ -933,6 +941,7 @@ export function SourceRail({
     team,
     workspaceName,
     selfAuthId,
+    loading = false,
 }: SourceRailProps) {
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
@@ -1621,7 +1630,7 @@ export function SourceRail({
                                 <FolderBranch key={node.path} node={node} ctx={branchCtx} />
                             ))}
                         </>
-                    ) : (
+                    ) : loading && sources.length === 0 && folders.length === 0 ? null : (
                         RAIL_SECTION_ORDER.map(id => {
                             const section = sections[id];
                             const empty =

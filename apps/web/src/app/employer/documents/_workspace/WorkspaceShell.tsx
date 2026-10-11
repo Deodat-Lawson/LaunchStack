@@ -2243,6 +2243,7 @@ export function WorkspaceShell() {
                             workspaceName={workspaceName}
                             selfAuthId={userId ?? null}
                             history={historyRail}
+                            loading={sourcesLoading}
                         />
                     </SheetContent>
                 </Sheet>
@@ -2315,6 +2316,7 @@ export function WorkspaceShell() {
                         workspaceName={workspaceName}
                         selfAuthId={userId ?? null}
                         history={historyRail}
+                        loading={sourcesLoading}
                     />
                     <RailResizeHandle
                         width={railWidth.width}

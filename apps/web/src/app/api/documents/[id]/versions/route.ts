@@ -8,7 +8,9 @@
  *
  *   Enforces:
  *     - Auth (`documents.upload`, the document in the caller's read scope,
- *       and edit access to its folder when that folder is restricted)
+ *       and edit access to the document itself — ADR-014: a grant on the
+ *       document wins over its folder, and a view grant does not let you
+ *       replace it)
  *     - Exact MIME match against the document's `file_type` (locked in on v1)
  *     - Sequential version numbering (max + 1, atomically)
  *
@@ -41,7 +43,8 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import {
     authorizeInternalFileRef,
@@ -94,7 +97,8 @@ async function authorizeDocumentAccess(
           ok: true;
           userId: string;
           companyId: bigint;
-          canEditFolder: (categoryName: string) => Promise<boolean>;
+          /** May the caller replace this document (ADR-014 `canEditDocument`)? */
+          canEditDocument: () => Promise<boolean>;
           doc: typeof document.$inferSelect;
       }
     | { ok: false; response: NextResponse }
@@ -125,7 +129,7 @@ async function authorizeDocumentAccess(
         ok: true,
         userId: ctx.data.authUserId,
         companyId: ctx.data.companyId,
-        canEditFolder: categoryName => canEditFolder(ctx.data, categoryName),
+        canEditDocument: () => canEditDocument(ctx.data, { id: doc.id, category: doc.category }),
         doc,
     };
 }
@@ -142,10 +146,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
             const { userId, doc } = authResult;
 
-            // A new version is an upload into the document's folder; a
-            // restricted folder needs edit access to it.
-            if (!(await authResult.canEditFolder(doc.category))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            // A new version replaces the file: it takes edit access to the
+            // document (its own grant, or its folder's level).
+            if (!(await authResult.canEditDocument())) {
+                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
             }
 
             // Phase 1 of Drive-linked files: a linked document's editing

@@ -38,5 +38,27 @@ export function getLinkedInAccessToken(): string | undefined {
  * rotated within that window as new versions ship; override via env.
  */
 export function getLinkedInApiVersion(): string {
-    return process.env.LINKEDIN_API_VERSION ?? "202506";
+    return process.env.LINKEDIN_API_VERSION?.trim() || "202609";
+}
+
+/**
+ * Where LinkedIn calls go. Production leaves it unset; a dev stand-in (for
+ * example http://localhost:3042/dev/stand-ins/linkedin) is pointed at here.
+ */
+export function getLinkedInApiBaseUrl(): string {
+    return withoutTrailingSlash(process.env.LINKEDIN_API_BASE_URL, "https://api.linkedin.com");
+}
+
+/** The Bluesky PDS that signs in and writes (createSession, uploadBlob, createRecord). */
+export function getBlueskyServiceUrl(): string {
+    return withoutTrailingSlash(process.env.BLUESKY_SERVICE_URL, "https://bsky.social");
+}
+
+/** The public Bluesky AppView for unauthenticated reads (profiles, post counts, threads). */
+export function getBlueskyAppViewUrl(): string {
+    return withoutTrailingSlash(process.env.BLUESKY_APPVIEW_URL, "https://public.api.bsky.app");
+}
+
+function withoutTrailingSlash(value: string | undefined, fallback: string): string {
+    return (value?.trim() || fallback).replace(/\/+$/, "");
 }

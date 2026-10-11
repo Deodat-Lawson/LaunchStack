@@ -1,0 +1,176 @@
+/** Comments on LinkedIn posts (socialActions/comments): reading them and replying. */
+import { decodeId, encodeUrn, linkedInContext, linkedInRequest, mapLimit, readJson } from "./http";
+import type { LinkedInClientOptions, LinkedInComment } from "./types";
+
+interface CommentElement {
+    commentUrn?: string;
+    $URN?: string;
+    id?: string;
+    actor?: string;
+    "actor~"?: {
+        localizedName?: string;
+        localizedFirstName?: string;
+        localizedLastName?: string;
+    };
+    message?: { text?: string };
+    created?: { actor?: string; time?: number };
+    parentComment?: string;
+    object?: string;
+    commentsSummary?: { aggregatedTotalComments?: number; totalFirstLevelComments?: number };
+}
+
+const DEFAULT_COUNT = 50;
+
+function toComment(
+    el: CommentElement,
+    fallback: { objectUrn: string; parentCommentUrn?: string | null }
+): LinkedInComment | null {
+    const objectUrn = el.object ?? fallback.objectUrn;
+    const urn =
+        el.commentUrn ?? el.$URN ?? (el.id ? `urn:li:comment:(${objectUrn},${el.id})` : null);
+    if (!urn) return null;
+    const id = el.id ?? /,([^,()]+)\)$/.exec(urn)?.[1] ?? urn;
+    const decorated = el["actor~"];
+    const actorName =
+        decorated?.localizedName?.trim() ||
+        [decorated?.localizedFirstName, decorated?.localizedLastName]
+            .filter(Boolean)
+            .join(" ")
+            .trim() ||
+        null;
+    return {
+        urn,
+        id,
+        objectUrn,
+        parentCommentUrn: el.parentComment ?? fallback.parentCommentUrn ?? null,
+        actorUrn: el.actor ?? el.created?.actor ?? "",
+        actorName,
+        text: el.message?.text ?? "",
+        createdAt: new Date(el.created?.time ?? 0),
+    };
+}
+
+function hasReplies(el: CommentElement): boolean {
+    const summary = el.commentsSummary;
+    return (summary?.aggregatedTotalComments ?? summary?.totalFirstLevelComments ?? 0) > 0;
+}
+
+/**
+ * Comments on a post, newest first. LinkedIn lists first-level comments on
+ * the post; when a comment reports replies of its own (`commentsSummary`),
+ * those are read too (`includeReplies`, default on), each tolerated if it
+ * fails. `actorName` is filled only when LinkedIn decorates the actor
+ * (`actor~`); otherwise it is null and the host resolves names it knows.
+ */
+export async function listLinkedInComments(
+    opts: LinkedInClientOptions & { postUrn: string; count?: number; includeReplies?: boolean }
+): Promise<LinkedInComment[]> {
+    const ctx = linkedInContext(opts);
+    const count = opts.count ?? DEFAULT_COUNT;
+
+    const res = await linkedInRequest(ctx, {
+        path: `/rest/socialActions/${encodeUrn(opts.postUrn)}/comments?count=${count}`,
+        what: "read the post's comments",
+    });
+    const data = await readJson<{ elements?: CommentElement[] }>(res);
+    const elements = data?.elements ?? [];
+
+    const comments: LinkedInComment[] = [];
+    const threads: LinkedInComment[] = [];
+    for (const el of elements) {
+        const comment = toComment(el, { objectUrn: opts.postUrn });
+        if (!comment) continue;
+        comments.push(comment);
+        if (opts.includeReplies !== false && hasReplies(el)) threads.push(comment);
+    }
+
+    const replies = await mapLimit(threads, 4, async parent => {
+        try {
+            const r = await linkedInRequest(ctx, {
+                path: `/rest/socialActions/${encodeUrn(parent.urn)}/comments?count=${count}`,
+                what: "read replies to a comment",
+            });
+            const nested = await readJson<{ elements?: CommentElement[] }>(r);
+            return (nested?.elements ?? [])
+                .map(el =>
+                    toComment(el, { objectUrn: parent.objectUrn, parentCommentUrn: parent.urn })
+                )
+                .filter((c): c is LinkedInComment => c !== null);
+        } catch {
+            return [];
+        }
+    });
+
+    const seen = new Set<string>();
+    return [...comments, ...replies.flat()]
+        .filter(c => (seen.has(c.urn) ? false : (seen.add(c.urn), true)))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+}
+
+/**
+ * Comment on a post as `actorUrn`; with `parentCommentUrn`, a reply to that
+ * comment (posted to the parent comment's thread, `object` still the post).
+ * Returns LinkedIn's echo of the comment when it sends one; otherwise the id
+ * from `x-restli-id` and what was sent.
+ */
+export async function createLinkedInComment(
+    opts: LinkedInClientOptions & {
+        actorUrn: string;
+        postUrn: string;
+        parentCommentUrn?: string | null;
+        text: string;
+    }
+): Promise<LinkedInComment> {
+    const ctx = linkedInContext(opts);
+    const parent = opts.parentCommentUrn?.trim() || null;
+    const target = parent ?? opts.postUrn;
+
+    const res = await linkedInRequest(ctx, {
+        method: "POST",
+        path: `/rest/socialActions/${encodeUrn(target)}/comments`,
+        json: {
+            actor: opts.actorUrn,
+            object: opts.postUrn,
+            message: { text: opts.text },
+            ...(parent ? { parentComment: parent } : {}),
+        },
+        what: parent ? "reply to the comment" : "comment on the post",
+    });
+
+    // x-restli-id carries the new comment's id (sometimes its full URN).
+    const header = decodeId(res.headers.get("x-restli-id"));
+    const headerUrn = header?.startsWith("urn:li:comment:") ? header : null;
+    const headerId = headerUrn ? (/,([^,()]+)\)$/.exec(headerUrn)?.[1] ?? null) : header;
+
+    const echoed = await readJson<CommentElement>(res);
+    const fromBody = echoed
+        ? toComment(
+              {
+                  ...echoed,
+                  commentUrn: echoed.commentUrn ?? headerUrn ?? undefined,
+                  id: echoed.id ?? headerId ?? undefined,
+              },
+              { objectUrn: opts.postUrn, parentCommentUrn: parent }
+          )
+        : null;
+    if (fromBody) {
+        return {
+            ...fromBody,
+            actorUrn: fromBody.actorUrn || opts.actorUrn,
+            text: fromBody.text || opts.text,
+            createdAt: echoed?.created?.time ? fromBody.createdAt : new Date(),
+        };
+    }
+
+    const id = headerId ?? "";
+    return {
+        urn: headerUrn ?? (id ? `urn:li:comment:(${opts.postUrn},${id})` : ""),
+        id,
+        objectUrn: opts.postUrn,
+        parentCommentUrn: parent,
+        actorUrn: opts.actorUrn,
+        actorName: null,
+        text: opts.text,
+        createdAt: new Date(),
+    };
+}
